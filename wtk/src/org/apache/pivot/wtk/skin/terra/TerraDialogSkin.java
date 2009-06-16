@@ -17,10 +17,12 @@
 package org.apache.pivot.wtk.skin.terra;
 
 import org.apache.pivot.util.Vote;
+import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dialog;
 import org.apache.pivot.wtk.DialogStateListener;
 import org.apache.pivot.wtk.Keyboard;
+import org.apache.pivot.wtk.Window;
 
 
 /**
@@ -29,6 +31,27 @@ import org.apache.pivot.wtk.Keyboard;
  * @author gbrown
  */
 public class TerraDialogSkin extends TerraFrameSkin implements DialogStateListener {
+    private class RepositionCallback implements Runnable {
+        private static final float GOLDEN_SECTION = 0.382f;
+
+        public void run() {
+            Dialog dialog = (Dialog)getComponent();
+            Component owner = dialog.getOwner();
+
+            if (owner == null) {
+                owner = dialog.getDisplay();
+            }
+
+            int deltaWidth = owner.getWidth() - getWidth();
+            int deltaHeight = owner.getHeight() - getHeight();
+
+            int x = Math.max(0, Math.round(owner.getX() + 0.5f * deltaWidth));
+            int y = Math.max(0, Math.round(owner.getY() + GOLDEN_SECTION * deltaHeight));
+
+            dialog.setLocation(x, y);
+        }
+    }
+
     @Override
     public void install(Component component) {
         super.install(component);
@@ -65,6 +88,13 @@ public class TerraDialogSkin extends TerraFrameSkin implements DialogStateListen
         }
 
         return consumed;
+    }
+
+    @Override
+    public void windowOpened(Window window) {
+        super.windowOpened(window);
+
+        ApplicationContext.queueCallback(new RepositionCallback());
     }
 
     public Vote previewDialogClose(Dialog dialog, boolean result) {

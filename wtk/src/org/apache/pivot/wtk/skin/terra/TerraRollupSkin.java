@@ -51,22 +51,22 @@ public class TerraRollupSkin extends RollupSkin {
      *
      * @author tvolkert
      */
-    private class ExpansionTransition extends Transition {
+    public class ExpandTransition extends Transition {
         private int height1;
         private int height2;
-        private boolean reverse;
+        private boolean collapse;
 
         private int originalPreferredHeight;
         private int height;
 
         private Easing easing = new Quadratic();
 
-        public ExpansionTransition(int height1, int height2, boolean reverse, int duration, int rate) {
+        public ExpandTransition(int height1, int height2, boolean collapse, int duration, int rate) {
             super(duration, rate, false);
 
             this.height1 = height1;
             this.height2 = height2;
-            this.reverse = reverse;
+            this.collapse = collapse;
         }
 
         public int getHeight() {
@@ -99,7 +99,7 @@ public class TerraRollupSkin extends RollupSkin {
                 int duration = getDuration();
 
                 height = (int)(height1 + (height2 - height1) * percentComplete);
-                if (reverse) {
+                if (collapse) {
                     height = (int)easing.easeIn(elapsedTime, height1, height2 - height1, duration);
                 } else {
                     height = (int)easing.easeOut(elapsedTime, height1, height2 - height1, duration);
@@ -220,8 +220,8 @@ public class TerraRollupSkin extends RollupSkin {
     private HeadingMouseButtonHandler headingMouseButtonHandler = new HeadingMouseButtonHandler();
 
     // Animation support
-    private ExpansionTransition expandTransition = null;
-    private ExpansionTransition collapseTransition = null;
+    private ExpandTransition expandTransition = null;
+    private ExpandTransition collapseTransition = null;
 
     // Styles
     private Color buttonColor;
@@ -231,8 +231,8 @@ public class TerraRollupSkin extends RollupSkin {
     private boolean headingToggles;
     private boolean useBullet;
 
-    private static final int EXPANSION_DURATION = 250;
-    private static final int EXPANSION_RATE = 30;
+    private static final int EXPAND_DURATION = 250;
+    private static final int EXPAND_RATE = 30;
 
     public TerraRollupSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
@@ -516,7 +516,7 @@ public class TerraRollupSkin extends RollupSkin {
                 // Start a collapse transition, return false, and set the
                 // expanded state when the transition is complete
                 if (collapseTransition == null) {
-                    int duration = EXPANSION_DURATION;
+                    int duration = EXPAND_DURATION;
                     int height1 = getHeight();
 
                     if (expandTransition != null) {
@@ -533,8 +533,8 @@ public class TerraRollupSkin extends RollupSkin {
                     if (duration > 0) {
                         int height2 = getPreferredHeight(-1, false);
 
-                        collapseTransition = new ExpansionTransition(height1, height2,
-                            true, duration, EXPANSION_RATE);
+                        collapseTransition = new ExpandTransition(height1, height2,
+                            true, duration, EXPAND_RATE);
                         collapseTransition.start(new TransitionListener() {
                             public void transitionCompleted(Transition transition) {
                                 rollup.setExpanded(false);
@@ -572,8 +572,8 @@ public class TerraRollupSkin extends RollupSkin {
                 int height1 = getHeight();
                 int height2 = getPreferredHeight(-1, true);
 
-                expandTransition = new ExpansionTransition(height1, height2,
-                    false, EXPANSION_DURATION, EXPANSION_RATE);
+                expandTransition = new ExpandTransition(height1, height2,
+                    false, EXPAND_DURATION, EXPAND_RATE);
                 expandTransition.start(new TransitionListener() {
                     public void transitionCompleted(Transition transition) {
                         ApplicationContext.queueCallback(new Runnable() {

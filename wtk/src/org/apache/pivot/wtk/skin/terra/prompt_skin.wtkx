@@ -16,7 +16,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<FlowPane orientation="vertical" styles="{spacing:8, horizontalAlignment:'justify'}"
+<FlowPane orientation="vertical" styles="{spacing:8, horizontalAlignment:'justify',
+    verticalAlignment:'bottom'}"
     preferredWidth="300"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:collections="org.apache.pivot.collections"

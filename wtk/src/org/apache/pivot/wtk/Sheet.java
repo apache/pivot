@@ -54,16 +54,6 @@ public class Sheet extends Window {
     private boolean result = false;
     private SheetCloseListener sheetCloseListener = null;
 
-    private ComponentListener ownerListener = new ComponentListener.Adapter() {
-        public void sizeChanged(Component component, int previousWidth, int previousHeight) {
-            alignToOwnerContent();
-        }
-
-        public void locationChanged(Component component, int previousX, int previousY) {
-            alignToOwnerContent();
-        }
-    };
-
     private SheetStateListenerList sheetStateListeners = new SheetStateListenerList();
 
     /**
@@ -86,13 +76,6 @@ public class Sheet extends Window {
     }
 
     @Override
-    public void setSize(int width, int height) {
-        super.setSize(width, height);
-
-        alignToOwnerContent();
-    }
-
-    @Override
     public final void setOwner(Window owner) {
         if (owner == null) {
             throw new UnsupportedOperationException("A sheet must have an owner.");
@@ -111,7 +94,6 @@ public class Sheet extends Window {
 
         if (isOpen()) {
             Window owner = getOwner();
-            owner.getComponentListeners().add(ownerListener);
 
             Component content = owner.getContent();
             if (content.isBlocked()) {
@@ -119,13 +101,6 @@ public class Sheet extends Window {
             }
 
             content.setEnabled(false);
-
-            // Defer alignment until the display has laid this window out
-            ApplicationContext.queueCallback(new Runnable() {
-                public void run() {
-                    alignToOwnerContent();
-                }
-            });
         }
     }
 
@@ -157,8 +132,6 @@ public class Sheet extends Window {
                     this.result = result;
 
                     Window owner = getOwner();
-                    owner.getComponentListeners().remove(ownerListener);
-
                     Component content = owner.getContent();
                     content.setEnabled(true);
 
@@ -185,14 +158,6 @@ public class Sheet extends Window {
 
     public boolean getResult() {
         return result;
-    }
-
-    private void alignToOwnerContent() {
-        Window owner = getOwner();
-        Component content = owner.getContent();
-        Point contentLocation = content.mapPointToAncestor(owner.getDisplay(), 0, 0);
-        setLocation(contentLocation.x + (content.getWidth() - getWidth()) / 2,
-            contentLocation.y);
     }
 
     public ListenerList<SheetStateListener> getSheetStateListeners() {

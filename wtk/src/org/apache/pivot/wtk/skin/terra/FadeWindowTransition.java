@@ -28,18 +28,20 @@ import org.apache.pivot.wtk.effects.FadeTransition;
  */
 public class FadeWindowTransition extends FadeTransition {
     private DropShadowDecorator dropShadowDecorator;
+    private float initialShadowOpacity;
 
     public FadeWindowTransition(Component component, int duration, int rate,
         DropShadowDecorator dropShadowDecorator) {
         super(component, duration, rate);
 
         this.dropShadowDecorator = dropShadowDecorator;
+        initialShadowOpacity = dropShadowDecorator.getShadowOpacity();
     }
 
     @Override
     protected void update() {
         super.update();
-        dropShadowDecorator.setShadowOpacity(1.0f - getPercentComplete());
+        dropShadowDecorator.setShadowOpacity(initialShadowOpacity * (1.0f - getPercentComplete()));
 
         Component component = getComponent();
         Container parent = component.getParent();

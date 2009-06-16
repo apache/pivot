@@ -51,26 +51,6 @@ public class Dialog extends Frame {
         }
     }
 
-    private class RepositionCallback implements Runnable {
-        private static final float GOLDEN_SECTION = 0.382f;
-
-        public void run() {
-            Component owner = getOwner();
-
-            if (owner == null) {
-                owner = getDisplay();
-            }
-
-            int deltaWidth = owner.getWidth() - getWidth();
-            int deltaHeight = owner.getHeight() - getHeight();
-
-            int x = Math.max(0, Math.round(owner.getX() + 0.5f * deltaWidth));
-            int y = Math.max(0, Math.round(owner.getY() + GOLDEN_SECTION * deltaHeight));
-
-            setLocation(x, y);
-        }
-    }
-
     private boolean modal = false;
     private DialogCloseListener dialogCloseListener = null;
     private Window disabledOwner = null;
@@ -116,8 +96,6 @@ public class Dialog extends Frame {
         if (isOpen()) {
             this.dialogCloseListener = dialogCloseListener;
             this.modal = false;
-
-            ApplicationContext.queueCallback(new RepositionCallback());
         }
     }
 

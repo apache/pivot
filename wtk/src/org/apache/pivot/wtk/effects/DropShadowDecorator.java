@@ -41,9 +41,11 @@ public class DropShadowDecorator implements Decorator {
     private int yOffset;
 
     private Color shadowColor = Color.BLACK;
-    private float shadowOpacity = 0.25f;
+    private float shadowOpacity = DEFAULT_SHADOW_OPACITY;
 
     private BufferedImage shadowImage = null;
+
+    public static final float DEFAULT_SHADOW_OPACITY = 0.25f;
 
     public DropShadowDecorator() {
         this(5, 5, 5);

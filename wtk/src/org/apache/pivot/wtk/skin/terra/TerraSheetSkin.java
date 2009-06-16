@@ -23,6 +23,7 @@ import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.ComponentListener;
 import org.apache.pivot.wtk.ComponentMouseButtonListener;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
@@ -30,14 +31,15 @@ import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Orientation;
+import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Sheet;
 import org.apache.pivot.wtk.SheetStateListener;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.effects.DropShadowDecorator;
-import org.apache.pivot.wtk.effects.SlideTransition;
 import org.apache.pivot.wtk.effects.Transition;
 import org.apache.pivot.wtk.effects.TransitionListener;
+import org.apache.pivot.wtk.effects.easing.Quadratic;
 import org.apache.pivot.wtk.skin.WindowSkin;
 
 
@@ -50,6 +52,20 @@ import org.apache.pivot.wtk.skin.WindowSkin;
  * @author tvolkert
  */
 public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
+    public class WindowStateTransition extends Transition {
+        private final boolean close;
+
+        public WindowStateTransition(boolean close) {
+            super(TRANSITION_DURATION, TRANSITION_RATE);
+            this.close = close;
+        }
+
+        @Override
+        public void update() {
+            invalidateComponent();
+        }
+    }
+
     private Color borderColor;
     private Insets padding;
     private boolean resizable;
@@ -57,8 +73,18 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     // Derived colors
     private Color bevelColor;
 
-    private SlideTransition openTransition = null;
-    private SlideTransition closeTransition = null;
+    private WindowStateTransition windowStateTransition = null;
+    private Quadratic easing = new Quadratic();
+
+    private ComponentListener ownerComponentListener = new ComponentListener.Adapter() {
+        public void sizeChanged(Component component, int previousWidth, int previousHeight) {
+            alignToOwnerContent();
+        }
+
+        public void locationChanged(Component component, int previousX, int previousY) {
+            alignToOwnerContent();
+        }
+    };
 
     private ComponentMouseButtonListener ownerMouseButtonListener =
         new ComponentMouseButtonListener.Adapter() {
@@ -78,8 +104,8 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
 
     private DropShadowDecorator dropShadowDecorator = null;
 
-    private static final int SLIDE_DURATION = 250;
-    private static final int SLIDE_RATE = 30;
+    private static final int TRANSITION_DURATION = 250;
+    private static final int TRANSITION_RATE = 30;
 
     public TerraSheetSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
@@ -159,6 +185,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         }
 
         preferredHeight += (padding.top + padding.bottom + 2);
+        preferredHeight = getEasedPreferredHeight(preferredHeight);
 
         return preferredHeight;
     }
@@ -180,10 +207,28 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
 
         preferredWidth += (padding.left + padding.right + 2);
         preferredHeight += (padding.top + padding.bottom + 2);
+        preferredHeight = getEasedPreferredHeight(preferredHeight);
 
         Dimensions preferredSize = new Dimensions(preferredWidth, preferredHeight);
 
         return preferredSize;
+    }
+
+    private int getEasedPreferredHeight(int preferredHeight) {
+        if (windowStateTransition != null
+            && windowStateTransition.isRunning()) {
+            if (windowStateTransition.close) {
+                float scale = easing.easeIn(windowStateTransition.getElapsedTime(), 0, 1,
+                    windowStateTransition.getDuration());
+                preferredHeight = (int)((1.0f - scale) * preferredHeight);
+            } else {
+                float scale = easing.easeOut(windowStateTransition.getElapsedTime(), 0, 1,
+                    windowStateTransition.getDuration());
+                preferredHeight = (int)(scale * preferredHeight);
+            }
+        }
+
+        return preferredHeight;
     }
 
     public void layout() {
@@ -221,6 +266,13 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
 
         graphics.setPaint(bevelColor);
         GraphicsUtilities.drawLine(graphics, 1, height - 2, width - 2, Orientation.HORIZONTAL);
+    }
+
+    @Override
+    public void sizeChanged(Component component, int previousWidth, int previousHeight) {
+        super.sizeChanged(component, previousWidth, previousHeight);
+
+        alignToOwnerContent();
     }
 
     @Override
@@ -315,16 +367,18 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     public void windowOpened(final Window window) {
         super.windowOpened(window);
 
+        dropShadowDecorator.setShadowOpacity(DropShadowDecorator.DEFAULT_SHADOW_OPACITY);
+
         Window owner = window.getOwner();
+        owner.getComponentListeners().add(ownerComponentListener);
         owner.getComponentMouseButtonListeners().add(ownerMouseButtonListener);
 
         ApplicationContext.queueCallback(new Runnable() {
             public void run() {
-                openTransition = new SlideTransition(window, 0, 0,
-                    -window.getHeight(), 0, false, SLIDE_DURATION, SLIDE_RATE);
-                openTransition.start(new TransitionListener() {
+                windowStateTransition = new WindowStateTransition(false);
+                windowStateTransition.start(new TransitionListener() {
                     public void transitionCompleted(Transition transition) {
-                        openTransition = null;
+                        windowStateTransition = null;
                     }
                 });
             }
@@ -336,40 +390,23 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         // when the transition is complete
         Vote vote = Vote.APPROVE;
 
+        // Don't start the transition if the sheet is being closed as a result
+        // of the owner closing
         Window owner = sheet.getOwner();
         if (!owner.isClosing()
-            && closeTransition == null) {
-            int duration = SLIDE_DURATION;
-            int beginX = 0;
-            int beginY = 0;
+            && windowStateTransition == null) {
+            windowStateTransition = new WindowStateTransition(true);
+            windowStateTransition.start(new TransitionListener() {
+                public void transitionCompleted(Transition transition) {
+                    sheet.close(result);
+                    windowStateTransition = null;
+                }
+            });
 
-            if (openTransition != null) {
-                // Stop the open transition
-                openTransition.stop();
-
-                // Record its progress so we can reverse it at the right point
-                duration = openTransition.getElapsedTime();
-                beginX = openTransition.getX();
-                beginY = openTransition.getY();
-
-                openTransition = null;
-            }
-
-            if (duration > 0) {
-                closeTransition = new SlideTransition(sheet, beginX, 0,
-                    beginY, -sheet.getHeight(), true, duration, SLIDE_RATE);
-                closeTransition.start(new TransitionListener() {
-                    public void transitionCompleted(Transition transition) {
-                        sheet.close(result);
-                        closeTransition = null;
-                    }
-                });
-
-                vote = Vote.DEFER;
-            }
+            vote = Vote.DEFER;
         } else {
-            vote = (closeTransition != null
-                && closeTransition.isRunning()) ? Vote.DEFER : Vote.APPROVE;
+            vote = (windowStateTransition != null
+                && windowStateTransition.isRunning()) ? Vote.DEFER : Vote.APPROVE;
         }
 
         return vote;
@@ -377,14 +414,25 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
 
     public void sheetCloseVetoed(Sheet sheet, Vote reason) {
         if (reason == Vote.DENY
-            && closeTransition != null) {
-            closeTransition.stop();
-            closeTransition = null;
+            && windowStateTransition != null) {
+            windowStateTransition.stop();
+            windowStateTransition = null;
         }
     }
 
     public void sheetClosed(Sheet sheet) {
         Window owner = sheet.getOwner();
+        owner.getComponentListeners().remove(ownerComponentListener);
         owner.getComponentMouseButtonListeners().remove(ownerMouseButtonListener);
+    }
+
+    public void alignToOwnerContent() {
+        Sheet sheet = (Sheet)getComponent();
+
+        Window owner = sheet.getOwner();
+        Component content = owner.getContent();
+        Point contentLocation = content.mapPointToAncestor(owner.getDisplay(), 0, 0);
+        sheet.setLocation(contentLocation.x + (content.getWidth() - getWidth()) / 2,
+            contentLocation.y);
     }
 }

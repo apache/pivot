@@ -38,9 +38,6 @@ public abstract class Transition {
     private long currentTime = 0;
     private ApplicationContext.ScheduledCallback transitionCallback = null;
 
-    public static final int DEFAULT_DURATION = 0;
-    public static final int DEFAULT_RATE = 15;
-
     private final Runnable updateCallback = new Runnable() {
         public void run() {
             currentTime = System.currentTimeMillis();
@@ -64,11 +61,16 @@ public abstract class Transition {
     };
 
     /**
-     * Creates a new, non-repeating transition with the default duration
-     * and rate.
+     * Creates a new non-repeating transition with the given duration, rate.
+     *
+     * @param duration
+     * Transition duration, in milliseconds.
+     *
+     * @param rate
+     * Transition rate, in frames per second.
      */
-    public Transition() {
-        this(DEFAULT_DURATION, DEFAULT_RATE, false);
+    public Transition(int duration, int rate) {
+        this(duration, rate, false);
     }
 
     /**
@@ -79,6 +81,9 @@ public abstract class Transition {
      *
      * @param rate
      * Transition rate, in frames per second.
+     *
+     * @param repeat
+     * <tt>true</tt> if the transition should repeat; <tt>false</tt>, otherwise.
      */
     public Transition(int duration, int rate, boolean repeat) {
         if (duration <= 0) {
