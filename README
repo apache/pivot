@@ -16,44 +16,37 @@ in their associated libraries:
 Distribution JARs
 =================
 
-* Core (pivot-core-incubating.jar):
+* Core (pivot-core-1.3-incubating.jar):
   A set of common, non-UI-specific classes.
 
-* WTK (pivot-wtk-incubating.jar, pivot-wtk-incubating.terra.jar):
+* WTK (pivot-wtk-1.3-incubating.jar, pivot-wtk-1.3-incubating.terra.jar):
   Classes for user interface development, including windows, dialogs, buttons,
   lists, text input, layout, drag and drop, XML markup, etc.
 
-* Web (pivot-web-incubating.jar, pivot-web-incubating.server.jar):
+* Web (pivot-web-1.3-incubating.jar, pivot-web-1.3-incubating.server.jar):
   Classes to facilitate communication with and implementation of remote data
   services.
 
-* Charting (pivot-charts-incubating.jar):
+* Charting (pivot-charts-1.3-incubating.jar):
   Classes for adding interactive charting capabilities to Pivot applications.
 
-* Tools (pivot-tools-incubating.jar):
+* Tools (pivot-tools-1.3-incubating.jar):
   Development tools and utility applications.
-
-* StAX (stax-1.2.0.jar, stax-api-1.0.jar)
-  Streaming API for XML reference implementation.*
 
 To begin developing with Pivot, simply include the necessary libraries on your
 project classpath.
 
-* Pivot includes a repackaged version of the StAX libraries, which includes a
-service descriptor for the javax.xml.stream.XMLInputFactory class (the code is
-otherwise unchanged). This modified version is recommended for web deployment
-to avoid needless requests to the web server: the service resolution
-process employed by many JDK factory methods looks on the classpath for a
-service descriptor file; since an applet's classpath also contains its codebase,
-the JRE will look for this file on the web server if it is not found in an
-archive JAR. Such requests can have a noticeable impact on runtime performance,
-especially for slow or unresponsive web servers.
-
-Another alternative is to set the codebase_lookup applet parameter to false.
-However, this parameter precludes the use of dynamically generated WTKX on the
-server.
-
-These libraries are not necessary or recommended for desktop deployment.
+NOTE Pivot uses the StAX API to load and process WTKX source files. Like many
+APIs in the JDK, StAX uses a service discovery mechanism to locate and
+instantiate an appropriate parser. When deploying Pivot applications in a web
+browser, this may incur unnecessary requests to the web server. The service
+resolution process looks on the classpath for an appropriate service descriptor
+file; since an applet's classpath also contains its codebase, the JRE will look
+for this file on the web server if it is not found in an archive JAR. Such
+requests can have a noticeable impact on runtime performance, especially for
+slow or unresponsive web servers. As a result, it is recommended that all Pivot
+applications deployed via the web set the codebase_lookup applet parameter to
+false.
 
 
 Dependencies
@@ -66,7 +59,7 @@ Pivot requires Java 6 or greater.
 
   http://code.google.com/p/pivot-jfree/
 
-  Version 1.1 of this provider is compatible with Pivot 1.2. Please note that
+  Version 1.3 of this provider is compatible with Pivot 1.3. Please note that
   this provider has a dependency on JFreeChart, which is licensed under LGPL.
 
 * Scripting support requires a compatible script engine. See
@@ -80,4 +73,4 @@ Documentation
 
 Pivot home page: http://incubator.apache.org/pivot
 Wiki:            http://cwiki.apache.org/PIVOT/
-Javadoc:         http://incubator.apache.org/pivot/1.2/docs/api/index.html
+Javadoc:         http://incubator.apache.org/pivot/1.3/docs/api/index.html
