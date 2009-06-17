@@ -196,10 +196,11 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
     private URL location = null;
     private Resources resources = null;
 
+    private HashMap<String, Object> initialBindings = new HashMap<String, Object>();
+
     private Object root = null;
     private HashMap<String, Object> namedObjects = new HashMap<String, Object>();
     private HashMap<String, WTKXSerializer> includeSerializers = new HashMap<String, WTKXSerializer>();
-    private boolean clearNamespacesOnRead = true;
 
     private ScriptEngineManager scriptEngineManager = null;
 
@@ -309,13 +310,19 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             throw new IllegalArgumentException("inputStream is null.");
         }
 
-        Object object = null;
+        // Clear the root object
+        root = null;
 
         // Clear any previous named objects and include serializers
-        if (clearNamespacesOnRead) {
-            namedObjects.clear();
-            includeSerializers.clear();
+        namedObjects.clear();
+        includeSerializers.clear();
+
+        // Add the initial bindings
+        for (String key : initialBindings) {
+            namedObjects.put(key, initialBindings.get(key));
         }
+
+        initialBindings.clear();
 
         // Parse the XML stream
         Element element = null;
@@ -810,8 +817,8 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                         // If this is the top of the stack, return this element's value;
                         // otherwise, move up the stack
                         if (element.parent == null) {
-                            object = element.value;
-                            namedObjects.put(ROOT_OBJECT_ID, object);
+                            root = element.value;
+                            namedObjects.put(ROOT_OBJECT_ID, root);
                         } else {
                             element = element.parent;
                         }
@@ -830,13 +837,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         // subsequent call to this method
         location = null;
 
-        // Set the root object
-        root = object;
-
-        // Reset the clear namespaces flag
-        clearNamespacesOnRead = true;
-
-        return object;
+        return root;
     }
 
     public void writeObject(Object object, OutputStream outputStream) throws IOException,
@@ -909,19 +910,24 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         WTKXSerializer serializer = this;
         String[] path = name.split("\\.");
 
-        int i = 0;
-        int n = path.length - 1;
-        while (i < n && serializer != null) {
-            String namespace = path[i++];
-            serializer = serializer.includeSerializers.get(namespace);
-        }
-
-        String id = path[i];
-
         Object object = null;
-        if (serializer != null
-            && serializer.namedObjects.containsKey(id)) {
-            object = serializer.namedObjects.get(id);
+
+        if (root == null) {
+            object = initialBindings.get(name);
+        } else {
+            int i = 0;
+            int n = path.length - 1;
+            while (i < n && serializer != null) {
+                String namespace = path[i++];
+                serializer = serializer.includeSerializers.get(namespace);
+            }
+
+            String id = path[i];
+
+            if (serializer != null
+                && serializer.namedObjects.containsKey(id)) {
+                object = serializer.namedObjects.get(id);
+            }
         }
 
         return object;
@@ -932,15 +938,11 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             throw new IllegalArgumentException("id is null.");
         }
 
-        if (clearNamespacesOnRead) {
-            includeSerializers.clear();
-            namedObjects.clear();
+        if (root != null) {
+            throw new IllegalStateException("Object has already been read.");
         }
 
-        clearNamespacesOnRead = false;
-
-        includeSerializers.remove(id);
-        return namedObjects.put(id, value);
+        return initialBindings.put(id, value);
     }
 
     public Object remove(String id) {
@@ -948,15 +950,11 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             throw new IllegalArgumentException("id is null.");
         }
 
-        if (clearNamespacesOnRead) {
-            includeSerializers.clear();
-            namedObjects.clear();
+        if (root != null) {
+            throw new IllegalStateException("Object has already been read.");
         }
 
-        clearNamespacesOnRead = false;
-
-        includeSerializers.remove(id);
-        return namedObjects.remove(id);
+        return initialBindings.remove(id);
     }
 
     public boolean containsKey(String name) {
@@ -967,22 +965,38 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         WTKXSerializer serializer = this;
         String[] path = name.split("\\.");
 
-        int i = 0;
-        int n = path.length - 1;
-        while (i < n && serializer != null) {
-            String namespace = path[i++];
-            serializer = serializer.includeSerializers.get(namespace);
+        boolean result = false;
+
+        if (root == null) {
+            result = initialBindings.containsKey(name);
+        } else {
+            int i = 0;
+            int n = path.length - 1;
+            while (i < n && serializer != null) {
+                String namespace = path[i++];
+                serializer = serializer.includeSerializers.get(namespace);
+            }
+
+            String id = path[i];
+
+            result = (serializer != null
+                && serializer.namedObjects.containsKey(id));
         }
 
-        String id = path[i];
-
-        return serializer != null
-            && serializer.namedObjects.containsKey(id);
+        return result;
     }
 
     public boolean isEmpty() {
-        return namedObjects.isEmpty()
-            && includeSerializers.isEmpty();
+        boolean empty = false;
+
+        if (root == null) {
+            empty = initialBindings.isEmpty();
+        } else {
+            empty = namedObjects.isEmpty()
+                && includeSerializers.isEmpty();
+        }
+
+        return empty;
     }
 
     /**
