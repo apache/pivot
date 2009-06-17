@@ -737,6 +737,31 @@ limitations under the License.
             </fileset>
         </copy>
 
+        <!-- Sign demo dependencies -->
+        <mkdir dir="demos/lib/signed"/>
+        <copy todir="demos/lib/signed">
+            <fileset dir="demos/lib" includes="*.jar"/>
+        </copy>
+
+        <signjar keystore="${keystore.location}" storepass="${keystore.passwd}" alias="${keystore.alias}"
+            preservelastmodified="true" lazy="true">
+            <path>
+                <fileset dir="demos/lib/signed" includes="*.jar" />
+            </path>
+        </signjar>
+
+        <copy todir="demos/www/lib">
+            <fileset dir="demos/lib" includes="*.jar" />
+        </copy>
+
+        <copy todir="demos/www/lib">
+            <fileset dir="demos/lib/signed" includes="*.jar" />
+            <mapper type="glob" from="*.jar" to="*.signed.jar"/>
+        </copy>
+
+        <delete dir="demos/lib/signed"/>
+
+        <!-- Generate demo HTML files -->
         <copy todir="demos/www" filtering="true">
             <fileset dir="demos/www">
                 <include name="*.template.html"/>
@@ -760,6 +785,7 @@ limitations under the License.
             </fileset>
         </copy>
 
+        <!-- Generate tutorial HTML files -->
         <copy todir="tutorials/www" filtering="true">
             <fileset dir="tutorials/www">
                 <include name="*.template.html"/>
@@ -797,6 +823,7 @@ limitations under the License.
             </fileset>
         </copy>
 
+        <!-- Generate web test HTML files -->
         <copy todir="web/www" filtering="true">
             <fileset dir="web/www">
                 <include name="*.template.html"/>
