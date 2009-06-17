@@ -75,17 +75,9 @@ public final class BrowserApplicationContext extends ApplicationContext {
                 // Create the application context
                 applicationContext = new BrowserApplicationContext();
 
-                // Get the startup properties
+                // Load properties specified on the query string
                 properties = new HashMap<String, String>();
 
-                // Load properties specified as applet parameters
-                String[][] parameterInfo = getParameterInfo();
-                for (int i = 0; i < parameterInfo.length; i++) {
-                    String[] parameter = parameterInfo[i];
-                    properties.put(parameter[0], parameter[1]);
-                }
-
-                // Load properties specified on the query string
                 URL documentBase = getDocumentBase();
                 if (documentBase != null) {
                     String queryString = documentBase.getQuery();
