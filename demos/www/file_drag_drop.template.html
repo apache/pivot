@@ -20,6 +20,10 @@ limitations under the License.
 <title>Pivot File Drag &amp; Drop Demo</title>
 </head>
 <body>
+<p>This application demonstrates Pivot's support for drag and drop. Users can
+drag files from the desktop or local file system into the applet for upload to
+a web or other server.</p>
+
 <script src="http://java.com/js/deployJava.js"></script>
 <script>
 var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
@@ -30,5 +34,8 @@ var parameters = {applicationClassName:"org.apache.pivot.demos.dnd.FileDropTarge
 var version = "1.6";
 deployJava.runApplet(attributes, parameters, version);
 </script>
+
+<p>Note that the application doesn't actually perform the upload - it merely
+serves as a demonstration of Pivot's ability to interact with the native OS.</p>
 </body>
 </html>

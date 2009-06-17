@@ -20,6 +20,14 @@ limitations under the License.
 <title>Pivot RSS Feed Demo</title>
 </head>
 <body>
+<p>This application demonstrates how to build a simple RSS client in Pivot. It
+uses a custom list view item renderer to present the news data. Double-clicking
+an item in the list will open the article in a new window.</p>
+
+<p>Note that this applet requires Java 6 Update 10 or later, since it relies on
+the existence of a crossdomain.xml file on the server in order for an unsigned
+applet to request the news feed.</p>
+
 <script src="http://java.com/js/deployJava.js"></script>
 <script>
 var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",

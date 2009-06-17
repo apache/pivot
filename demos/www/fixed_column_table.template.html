@@ -17,27 +17,21 @@ limitations under the License.
 
 <html>
 <head>
-<title>Pivot Stock Tracker Demo</title>
+<title>Pivot Fixed-Column Table Demo</title>
 </head>
 <body>
-<p>This sample application retrieves live (delayed by 15 minutes) stock quote
-data from Yahoo! Finance as a CSV file and presents it in a table view component
-(the applet is signed to allow it to communicate with the Yahoo web service):</p>
+<p>Demonstrates how to create a table with fixed columns in Pivot. Fixed
+columns are handy when displaying tables with many columns.</p>
 
 <script src="http://java.com/js/deployJava.js"></script>
 <script>
 var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
-    archive:"lib/@project_name@-core-@version@.signed.jar,lib/@project_name@-web-@version@.signed.jar,lib/@project_name@-wtk-@version@.signed.jar,lib/@project_name@-wtk-@version@.terra.signed.jar,lib/@project_name@-tutorials-@version@.signed.jar",
-    width:480, height:360};
-var parameters = {applicationClassName:"org.apache.pivot.tutorials.stocktracker.StockTracker",
+    archive:"lib/@project_name@-core-@version@.jar,lib/@project_name@-wtk-@version@.jar,lib/@project_name@-wtk-@version@.terra.jar,lib/@project_name@-demos-@version@.jar",
+    width:300, height:170};
+var parameters = {applicationClassName:"org.apache.pivot.demos.tables.FixedColumnTable",
     codebase_lookup:false};
 var version = "1.6";
 deployJava.runApplet(attributes, parameters, version);
 </script>
-
-<p>Users can add or remove stock symbols using the text input and buttons at
-the bottom of the applet. Selecting a row in the table shows additional
-information about the stock in the form on the right. The data is automatically
-updated every 15 seconds.</p>
 </body>
 </html>
