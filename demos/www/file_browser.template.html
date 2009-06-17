@@ -17,15 +17,15 @@ limitations under the License.
 
 <html>
 <head>
-<title>Pivot "Kitchen Sink" Demo</title>
+<title>Pivot File Browser Demo</title>
 </head>
 <body>
 <script src="http://java.com/js/deployJava.js"></script>
 <script>
 var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
-    archive:"lib/@project_name@-core-@version@.jar,lib/@project_name@-wtk-@version@.jar,lib/@project_name@-wtk-@version@.terra.jar,lib/@project_name@-tutorials-@version@.jar",
-    width:1024, height:768};
-var parameters = {applicationClassName:"org.apache.pivot.tutorials.KitchenSink",
+    archive:"lib/@project_name@-core-@version@.signed.jar,lib/@project_name@-wtk-@version@.signed.jar,lib/@project_name@-wtk-@version@.terra.signed.jar,lib/@project_name@-tutorials-@version@.signed.jar",
+    width:240, height:320};
+var parameters = {applicationClassName:"org.apache.pivot.tutorials.filebrowser.FileBrowser",
     codebase_lookup:false};
 var version = "1.6";
 deployJava.runApplet(attributes, parameters, version);

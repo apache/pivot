@@ -66,6 +66,10 @@ public class DOMTest implements Application {
     }
 
     public void sayHello(String helloText) {
-        Alert.alert(helloText, window);
+        if (window.isBlocked()) {
+            System.out.println("I'm already saying hello!");
+        } else {
+            Alert.alert(helloText, window);
+        }
     }
 }
