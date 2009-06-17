@@ -23,7 +23,6 @@ limitations under the License.
 
     <!-- Properties that affect the directories that are created as part of the build -->
     <property name="folder.bin" value="ant-bin"/>
-    <property name="folder.deploy" value="deploy"/>
     <property name="folder.dist" value="dist"/>
     <property name="folder.doc" value="doc"/>
     <property name="folder.install" value="install"/>
@@ -106,11 +105,19 @@ limitations under the License.
 
     <target name="clean" description="Removes all build artifacts"
         depends="charts-clean, core-clean, web-clean, web-test-clean, wtk-clean, tutorials-clean, demos-clean, tools-clean">
-        <delete dir="${folder.deploy}"/>
         <delete dir="${folder.dist}"/>
         <delete dir="${folder.doc}"/>
         <delete dir="${folder.install}"/>
         <delete dir="${folder.lib}"/>
+
+        <delete dir="demos/www/lib"/>
+        <delete file="${folder.lib}/${ant.project.name}_demos.war"/>
+
+        <delete dir="tutorials/www/lib"/>
+        <delete file="${folder.lib}/${ant.project.name}_tutorials.war"/>
+
+        <delete dir="web/www/lib"/>
+        <delete file="${folder.lib}/${ant.project.name}_web_test.war"/>
     </target>
 
     <!-- Javadoc -->
@@ -120,7 +127,6 @@ limitations under the License.
             classpath="${java.class.path}">
             <classpath>
                 <fileset dir="charts/lib" includes="**/*.jar"/>
-                <fileset dir="wtk/lib" includes="**/*.jar"/>
                 <fileset dir="web/lib" includes="**/*.jar"/>
                 <path refid="classpath.javalib"/>
             </classpath>
@@ -338,49 +344,8 @@ limitations under the License.
         </javac>
     </target>
 
-    <target name="web-test-war" depends="core-package, web-package, wtk-package, web-test">
-        <jar destfile="web/www/lib/${ant.project.name}-web.test.jar" index="${compiler.indexJars}">
-            <fileset dir="web/${folder.bin}"
-                includes="org/apache/pivot/web/test/**"
-                excludes="org/apache/pivot/web/test/server/**"/>
-            <fileset dir="web/test">
-                <exclude name="org/apache/pivot/web/test/server/**"/>
-                <exclude name="**/*.java"/>
-                <exclude name="**/package.html"/>
-            </fileset>
-        </jar>
-
-        <copy todir="web/www/lib">
-            <fileset dir="${folder.lib}">
-                <include name="${jar.core}"/>
-                <include name="${jar.web}"/>
-                <include name="${jar.wtk}"/>
-                <include name="${jar.wtk.terra}"/>
-            </fileset>
-            <fileset dir="wtk/lib" includes="*.jar"/>
-        </copy>
-
-        <war destfile="${folder.lib}/${ant.project.name}_web_test.war" webxml="web/web.xml">
-            <fileset dir="web/www"/>
-            <classes dir="web/${folder.bin}">
-                <include name="org/apache/pivot/web/test/server/**"/>
-            </classes>
-            <classes dir="web/test">
-                <include name="org/apache/pivot/web/test/server/**"/>
-                <exclude name="**/*.java"/>
-                <exclude name="**/package.html"/>
-            </classes>
-            <lib dir="${folder.lib}">
-                <include name="${jar.core}"/>
-                <include name="${jar.web.server}"/>
-            </lib>
-        </war>
-    </target>
-
     <target name="web-test-clean">
-        <delete dir="web/www/lib" includes="*.jar"/>
         <delete dir="web/${folder.bin}"/>
-        <delete file="${folder.lib}/${ant.project.name}_web_test.war"/>
     </target>
 
     <!-- WTK -->
@@ -414,7 +379,6 @@ limitations under the License.
             <compilerarg value="${compilerarg.default}"/>
             <classpath>
                 <pathelement location="core/${folder.bin}"/>
-                <fileset dir="wtk/lib" includes="**/*.jar"/>
                 <path refid="classpath.javalib"/>
             </classpath>
         </javac>
@@ -638,7 +602,6 @@ limitations under the License.
 
                 <!-- Exclude folders containing compilation artifacts -->
                 <exclude name="**/${folder.bin}/**"/>
-                <exclude name="${folder.deploy}/**"/>
                 <exclude name="${folder.dist}/**"/>
                 <exclude name="${folder.doc}/**"/>
                 <exclude name="${folder.install}/**"/>
@@ -715,40 +678,97 @@ limitations under the License.
         <checksum file="${folder.install}/${folder.release}.tar.gz" algorithm="sha"/>
     </target>
 
-    <!-- Generate deployment files for online tutorials -->
-    <target name="deploy"
-        depends="clean, package">
-        <mkdir dir="${folder.deploy}"/>
-
-        <!-- Copy JARs to deployment directory -->
-        <copy todir="${folder.deploy}">
-            <fileset dir="${folder.lib}" includes="*.jar" excludes="*.server.jar"/>
-            <fileset dir="charts/lib" includes="*.jar"/>
-            <fileset dir="demos/lib" includes="*.jar"/>
-            <fileset dir="wtk/lib" includes="*.jar"/>
-        </copy>
-
+    <!-- Generate deployment files -->
+    <target name="deploy" depends="clean, package">
         <!-- Sign JARS -->
-        <mkdir dir="${folder.deploy}/signed"/>
-        <copy todir="${folder.deploy}/signed">
-            <fileset dir="${folder.deploy}" includes="*.jar" />
+        <mkdir dir="${folder.lib}/signed"/>
+        <copy todir="${folder.lib}/signed">
+            <fileset dir="${folder.lib}">
+                <include name="*.jar"/>
+                <exclude name="*.server.jar"/>
+            </fileset>
         </copy>
 
         <signjar keystore="${keystore.location}" storepass="${keystore.passwd}" alias="${keystore.alias}"
             preservelastmodified="true" lazy="true">
             <path>
-                <fileset dir="${folder.deploy}/signed" includes="*.jar" />
+                <fileset dir="${folder.lib}/signed" includes="*.jar" />
             </path>
         </signjar>
 
-        <!-- Rename signed JARs to *.signed.jar and copy to deployment directory -->
-        <copy todir="${folder.deploy}">
-            <fileset dir="${folder.deploy}/signed" includes="*.jar" />
+        <copy todir="${folder.lib}">
+            <fileset dir="${folder.lib}/signed" includes="*.jar" />
             <mapper type="glob" from="*.jar" to="*.signed.jar"/>
         </copy>
 
-        <!-- Clean up -->
-        <delete dir="${folder.deploy}/signed"/>
+        <delete dir="${folder.lib}/signed"/>
+
+        <!-- Create demos WAR -->
+        <mkdir dir="demos/www/lib"/>
+        <copy todir="demos/www/lib">
+            <fileset dir="${folder.lib}">
+                <include name="*.jar"/>
+                <exclude name="*.server.jar"/>
+            </fileset>
+        </copy>
+
+        <war destfile="${folder.lib}/${ant.project.name}_demos.war" webxml="demos/web.xml">
+            <fileset dir="demos/www"/>
+        </war>
+
+        <!-- Create tutorials WAR -->
+        <mkdir dir="tutorials/www/lib"/>
+        <copy todir="tutorials/www/lib">
+            <fileset dir="${folder.lib}">
+                <include name="*.jar"/>
+                <exclude name="*-demos*.jar"/>
+                <exclude name="*.server.jar"/>
+            </fileset>
+        </copy>
+
+        <war destfile="${folder.lib}/${ant.project.name}_tutorials.war" webxml="tutorials/web.xml">
+            <fileset dir="tutorials/www"/>
+        </war>
+
+        <!-- Create web-test WAR -->
+        <mkdir dir="web/www/lib"/>
+
+        <jar destfile="web/www/lib/${ant.project.name}-web-${version}.test.jar" index="${compiler.indexJars}">
+            <fileset dir="web/${folder.bin}"
+                includes="org/apache/pivot/web/test/**"
+                excludes="org/apache/pivot/web/test/server/**"/>
+            <fileset dir="web/test">
+                <exclude name="org/apache/pivot/web/test/server/**"/>
+                <exclude name="**/*.java"/>
+                <exclude name="**/package.html"/>
+            </fileset>
+        </jar>
+
+        <copy todir="web/www/lib">
+            <fileset dir="${folder.lib}">
+                <include name="*.jar"/>
+                <exclude name="*-charts*.jar"/>
+                <exclude name="*-demos*.jar"/>
+                <exclude name="*-tutorials*.jar"/>
+                <exclude name="*.server.jar"/>
+            </fileset>
+        </copy>
+
+        <war destfile="${folder.lib}/${ant.project.name}_web_test.war" webxml="web/web.xml">
+            <fileset dir="web/www"/>
+            <classes dir="web/${folder.bin}">
+                <include name="org/apache/pivot/web/test/server/**"/>
+            </classes>
+            <classes dir="web/test">
+                <include name="org/apache/pivot/web/test/server/**"/>
+                <exclude name="**/*.java"/>
+                <exclude name="**/package.html"/>
+            </classes>
+            <lib dir="${folder.lib}">
+                <include name="${jar.core}"/>
+                <include name="${jar.web.server}"/>
+            </lib>
+        </war>
     </target>
 
     <!-- Remove trailing white space in all source files -->
