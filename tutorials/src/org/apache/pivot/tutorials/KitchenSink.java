@@ -40,7 +40,6 @@ import org.apache.pivot.wtk.Border;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.ComponentMouseButtonListener;
-import org.apache.pivot.wtk.ComponentStateListener;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.DragSource;
 import org.apache.pivot.wtk.DropAction;
@@ -196,17 +195,6 @@ public class KitchenSink implements Application, Application.About {
                 watermarkDecorator.setFont(watermarkDecorator.getFont().deriveFont(Font.BOLD, 24));
 
                 textArea.getDecorators().add(watermarkDecorator);
-
-                textArea.getComponentStateListeners().add(new ComponentStateListener() {
-                    public void enabledChanged(Component component) {
-                        // No-op
-                    }
-
-                    public void focusedChanged(Component component, boolean temporary) {
-                        component.getDecorators().remove(watermarkDecorator);
-                        component.getComponentStateListeners().remove(this);
-                    }
-                });
             }
 
             return Vote.APPROVE;
