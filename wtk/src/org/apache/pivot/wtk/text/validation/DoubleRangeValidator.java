@@ -13,6 +13,8 @@
  */
 package org.apache.pivot.wtk.text.validation;
 
+import java.util.Locale;
+
 /**
  * A validator for a double value limited to a range.
  *
@@ -26,11 +28,23 @@ public class DoubleRangeValidator extends DoubleValidator {
         this.maxValue = 1;
     }
 
+    public DoubleRangeValidator(Locale locale) {
+        super(locale);
+        this.minValue = 0;
+        this.maxValue = 1;
+    }
+    
     public DoubleRangeValidator(double minValue, double maxValue) {
         this.minValue = minValue;
         this.maxValue = maxValue;
     }
 
+    public DoubleRangeValidator(Locale locale, double minValue, double maxValue) {
+        super(locale);
+        this.minValue = minValue;
+        this.maxValue = maxValue;
+    }
+    
     public double getMinimum() {
         return minValue;
     }
@@ -57,5 +71,9 @@ public class DoubleRangeValidator extends DoubleValidator {
         }
 
         return valid;
+    }
+    
+    private final Double textToObject(String text) {
+        return parseNumber(text).doubleValue();
     }
 }

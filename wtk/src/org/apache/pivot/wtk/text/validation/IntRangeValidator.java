@@ -13,6 +13,8 @@
  */
 package org.apache.pivot.wtk.text.validation;
 
+import java.util.Locale;
+
 /**
  * A validator for an int value limited to a range.
  *
@@ -26,11 +28,23 @@ public class IntRangeValidator extends IntValidator {
         this.maxValue = 1;
     }
 
+    public IntRangeValidator(Locale locale) {
+        super(locale);
+        this.minValue = 0;
+        this.maxValue = 1;
+    }
+    
     public IntRangeValidator(int minValue, int maxValue) {
         this.minValue = minValue;
         this.maxValue = maxValue;
     }
 
+    public IntRangeValidator(Locale locale, int minValue, int maxValue) {
+        super(locale);
+        this.minValue = minValue;
+        this.maxValue = maxValue;
+    }
+    
     public int getMinimum() {
         return minValue;
     }
@@ -57,5 +71,9 @@ public class IntRangeValidator extends IntValidator {
         }
 
         return valid;
+    }
+    
+    private final Integer textToObject(String text) {
+        return parseNumber(text).intValue();
     }
 }

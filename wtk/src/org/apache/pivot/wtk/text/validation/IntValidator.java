@@ -13,6 +13,8 @@
  */
 package org.apache.pivot.wtk.text.validation;
 
+import java.util.Locale;
+
 /**
  * A validator for an int value.
  *
@@ -23,7 +25,9 @@ public class IntValidator extends DecimalValidator {
         format.setParseIntegerOnly(true);
     }
 
-    protected final Integer textToObject(String text) {
-        return parse(text).intValue();
+    public IntValidator(Locale locale) {
+        super(locale);
+        format.setParseIntegerOnly(true);
     }
+    
 }

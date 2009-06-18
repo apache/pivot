@@ -23,10 +23,10 @@ import java.text.ParsePosition;
  *
  * @author Noel Grandin
  */
-public abstract class FormattedValidator<F extends Format> implements Validator {
+public class FormattedValidator<F extends Format> implements Validator {
     protected final F format;
 
-    protected FormattedValidator(F format) {
+    public FormattedValidator(F format) {
         this.format = format;
     }
 

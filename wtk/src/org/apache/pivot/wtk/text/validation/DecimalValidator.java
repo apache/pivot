@@ -16,24 +16,29 @@ package org.apache.pivot.wtk.text.validation;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.Locale;
 
 /**
  * A validator for decimal values.
  *
  * @author Noel Grandin
  */
-public abstract class DecimalValidator extends FormattedValidator<NumberFormat> {
+public class DecimalValidator extends FormattedValidator<NumberFormat> {
 
-    protected DecimalValidator(DecimalFormat format) {
+    public DecimalValidator(DecimalFormat format) {
         super(format);
     }
 
-    protected DecimalValidator() {
+    public DecimalValidator() {
         super(NumberFormat.getInstance());
     }
 
-    /** helper for textToObject */
-    protected final Number parse(String text) {
+    public DecimalValidator(Locale locale) {
+        super(NumberFormat.getInstance(locale));
+    }
+    
+    /** helper method that wraps the ParseException in a RuntimeException. */
+    protected final Number parseNumber(String text) {
         try {
             return format.parse(text);
         } catch (ParseException ex) {

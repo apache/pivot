@@ -13,6 +13,8 @@
  */
 package org.apache.pivot.wtk.text.validation;
 
+import java.util.Locale;
+
 /**
  * A validator for a double value.
  *
@@ -22,7 +24,7 @@ public class DoubleValidator extends DecimalValidator {
     public DoubleValidator() {
     }
 
-    protected final Double textToObject(String text) {
-        return parse(text).doubleValue();
+    public DoubleValidator(Locale locale) {
+        super(locale);
     }
 }

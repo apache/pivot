@@ -13,6 +13,8 @@
  */
 package org.apache.pivot.wtk.text.validation;
 
+import java.util.Locale;
+
 /**
  * A validator for a float value limited to a range.
  *
@@ -26,11 +28,23 @@ public class FloatRangeValidator extends FloatValidator {
         this.maxValue = 1;
     }
 
+    public FloatRangeValidator(Locale locale) {
+        super(locale);
+        this.minValue = 0;
+        this.maxValue = 1;
+    }
+    
     public FloatRangeValidator(float minValue, float maxValue) {
         this.minValue = minValue;
         this.maxValue = maxValue;
     }
 
+    public FloatRangeValidator(Locale locale, float minValue, float maxValue) {
+        super(locale);
+        this.minValue = minValue;
+        this.maxValue = maxValue;
+    }
+    
     public float getMinimum() {
         return minValue;
     }
@@ -57,5 +71,9 @@ public class FloatRangeValidator extends FloatValidator {
         }
 
         return valid;
+    }
+    
+    private final Float textToObject(String text) {
+        return parseNumber(text).floatValue();
     }
 }
