@@ -58,6 +58,7 @@ import org.apache.pivot.serialization.Serializer;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.util.ThreadUtilities;
+import org.apache.pivot.util.Vote;
 
 /**
  * Loads an object hierarchy from an XML document.
@@ -310,13 +311,6 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             throw new IllegalArgumentException("inputStream is null.");
         }
 
-        // Clear the root object
-        root = null;
-
-        // Clear any previous named objects and include serializers
-        namedObjects.clear();
-        includeSerializers.clear();
-
         // Add the initial bindings
         for (String key : initialBindings) {
             namedObjects.put(key, initialBindings.get(key));
@@ -479,6 +473,13 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
 
                         // Set the current element
                         element = new Element(element, elementType, attributes, value);
+
+                        // If this is the root, set it
+                        if (element.parent == null) {
+                            root = element.value;
+                            namedObjects.put(ROOT_OBJECT_ID, root);
+                        }
+
                         break;
                     }
 
@@ -677,6 +678,11 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                     }
                                 }
 
+                                if (element.value != null
+                                    && language == null) {
+                                    language = "javascript";
+                                }
+
                                 Bindings bindings;
                                 if (element.parent.value instanceof ListenerList<?>) {
                                     // Don't pollute the engine namespace with the listener functions
@@ -774,7 +780,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                     InvocationHandler handler = new InvocationHandler() {
                                         public Object invoke(Object proxy, Method method, Object[] args)
                                             throws Throwable {
-                                            Object result = null;
+                                            Object result;
                                             String methodName = method.getName();
 
                                             Bindings bindings = scriptEngine.getBindings(ScriptContext.ENGINE_SCOPE);
@@ -787,6 +793,16 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                                 }
 
                                                 result = invocable.invokeFunction(methodName, args);
+                                            } else {
+                                                Class<?> returnType = method.getReturnType();
+
+                                                if (returnType == Vote.class) {
+                                                    result = Vote.APPROVE;
+                                                } else if (returnType == Boolean.TYPE) {
+                                                    result = false;
+                                                } else {
+                                                    result = null;
+                                                }
                                             }
 
                                             return result;
@@ -814,12 +830,8 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                             }
                         }
 
-                        // If this is the top of the stack, return this element's value;
-                        // otherwise, move up the stack
-                        if (element.parent == null) {
-                            root = element.value;
-                            namedObjects.put(ROOT_OBJECT_ID, root);
-                        } else {
+                        // Move up the stack
+                        if (element.parent != null) {
                             element = element.parent;
                         }
 
@@ -847,47 +859,6 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
 
     public String getMIMEType(Object object) {
         return MIME_TYPE;
-    }
-
-    /**
-     * Retrieves a included serializer by its ID.
-     *
-     * @param id
-     * The ID of the serializer, relative to this loader. The serializer's ID
-     * is the concatentation of its parent IDs and its ID, separated by periods
-     * (e.g. "foo.bar.baz").
-     *
-     * @return The named serializer, or <tt>null</tt> if a serializer with the
-     * given name does not exist.
-     */
-    public WTKXSerializer getSerializer(String id) {
-        if (id == null) {
-            throw new IllegalArgumentException("id is null.");
-        }
-
-        WTKXSerializer serializer = this;
-        String[] namespacePath = id.split("\\.");
-
-        int i = 0;
-        int n = namespacePath.length;
-        while (i < n && serializer != null) {
-            String namespace = namespacePath[i++];
-            serializer = serializer.includeSerializers.get(namespace);
-        }
-
-        return serializer;
-    }
-
-    /**
-     * Retrieves the root of the object hierarchy most recently processed by
-     * this serializer.
-     *
-     * @return
-     * The root object, or <tt>null</tt> if this serializer has not yet read an
-     * object from an input stream.
-     */
-    public Object getRoot() {
-        return root;
     }
 
     /**
@@ -938,9 +909,9 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             throw new IllegalArgumentException("id is null.");
         }
 
-        if (root != null) {
-            throw new IllegalStateException("Object has already been read.");
-        }
+        root = null;
+        namedObjects.clear();
+        includeSerializers.clear();
 
         return initialBindings.put(id, value);
     }
@@ -951,7 +922,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         }
 
         if (root != null) {
-            throw new IllegalStateException("Object has already been read.");
+            throw new IllegalStateException();
         }
 
         return initialBindings.remove(id);
@@ -997,6 +968,47 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         }
 
         return empty;
+    }
+
+    /**
+     * Retrieves the root of the object hierarchy most recently processed by
+     * this serializer.
+     *
+     * @return
+     * The root object, or <tt>null</tt> if this serializer has not yet read an
+     * object from an input stream.
+     */
+    public Object getRoot() {
+        return root;
+    }
+
+    /**
+     * Retrieves an include serializer by its ID.
+     *
+     * @param id
+     * The ID of the serializer, relative to this loader. The serializer's ID
+     * is the concatentation of its parent IDs and its ID, separated by periods
+     * (e.g. "foo.bar.baz").
+     *
+     * @return The named serializer, or <tt>null</tt> if a serializer with the
+     * given name does not exist.
+     */
+    public WTKXSerializer getSerializer(String id) {
+        if (id == null) {
+            throw new IllegalArgumentException("id is null.");
+        }
+
+        WTKXSerializer serializer = this;
+        String[] namespacePath = id.split("\\.");
+
+        int i = 0;
+        int n = namespacePath.length;
+        while (i < n && serializer != null) {
+            String namespace = namespacePath[i++];
+            serializer = serializer.includeSerializers.get(namespace);
+        }
+
+        return serializer;
     }
 
     /**

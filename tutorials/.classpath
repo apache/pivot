@@ -5,6 +5,5 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/core"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/web"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/wtk"/>
-	<classpathentry kind="lib" path="/wtk/src"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

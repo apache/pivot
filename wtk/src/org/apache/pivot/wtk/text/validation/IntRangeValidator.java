@@ -33,7 +33,7 @@ public class IntRangeValidator extends IntValidator {
         this.minValue = 0;
         this.maxValue = 1;
     }
-    
+
     public IntRangeValidator(int minValue, int maxValue) {
         this.minValue = minValue;
         this.maxValue = maxValue;
@@ -44,7 +44,7 @@ public class IntRangeValidator extends IntValidator {
         this.minValue = minValue;
         this.maxValue = maxValue;
     }
-    
+
     public int getMinimum() {
         return minValue;
     }
@@ -72,7 +72,7 @@ public class IntRangeValidator extends IntValidator {
 
         return valid;
     }
-    
+
     private final Integer textToObject(String text) {
         return parseNumber(text).intValue();
     }

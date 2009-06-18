@@ -509,7 +509,19 @@ public class TableView extends Component {
             Comparable<Object> comparable = (Comparable<Object>)row1.get(columnName);
             Object value = row2.get(columnName);
 
-            return (comparable.compareTo(value)) * (sortDirection == SortDirection.ASCENDING ? 1 : -1);
+            int result;
+            if (comparable == null
+                && value == null) {
+                result = 0;
+            } else if (comparable == null) {
+                result = 1;
+            } else if (value == null) {
+                result = -1;
+            } else {
+                result = (comparable.compareTo(value)) * (sortDirection == SortDirection.ASCENDING ? 1 : -1);
+            }
+
+            return result;
         }
     }
 

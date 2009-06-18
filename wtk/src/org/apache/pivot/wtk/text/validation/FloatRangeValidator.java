@@ -33,7 +33,7 @@ public class FloatRangeValidator extends FloatValidator {
         this.minValue = 0;
         this.maxValue = 1;
     }
-    
+
     public FloatRangeValidator(float minValue, float maxValue) {
         this.minValue = minValue;
         this.maxValue = maxValue;
@@ -44,7 +44,7 @@ public class FloatRangeValidator extends FloatValidator {
         this.minValue = minValue;
         this.maxValue = maxValue;
     }
-    
+
     public float getMinimum() {
         return minValue;
     }
@@ -72,7 +72,7 @@ public class FloatRangeValidator extends FloatValidator {
 
         return valid;
     }
-    
+
     private final Float textToObject(String text) {
         return parseNumber(text).floatValue();
     }

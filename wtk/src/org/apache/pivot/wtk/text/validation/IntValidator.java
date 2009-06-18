@@ -29,5 +29,5 @@ public class IntValidator extends DecimalValidator {
         super(locale);
         format.setParseIntegerOnly(true);
     }
-    
+
 }

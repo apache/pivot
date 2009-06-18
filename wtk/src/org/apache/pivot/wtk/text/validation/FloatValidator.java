@@ -17,7 +17,7 @@ import java.util.Locale;
 
 /**
  * A validator for a float value.
- * 
+ *
  * @author Noel Grandin
  */
 public class FloatValidator extends DecimalValidator {

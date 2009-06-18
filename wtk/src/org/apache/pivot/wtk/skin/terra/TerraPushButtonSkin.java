@@ -182,7 +182,8 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         Color borderColor = null;
 
         if (!toolbar
-            || highlighted) {
+            || highlighted
+            || pushButton.isFocused()) {
             if (pushButton.isEnabled()) {
                 backgroundColor = this.backgroundColor;
                 bevelColor = (pressed
@@ -222,7 +223,8 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         contentGraphics.dispose();
 
         // Paint the focus state
-        if (pushButton.isFocused()) {
+        if (pushButton.isFocused()
+            && !toolbar) {
             BasicStroke dashStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND,
                 BasicStroke.JOIN_ROUND, 1.0f, new float[] {0.0f, 2.0f}, 0.0f);
 
@@ -239,7 +241,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
 
     @Override
     public boolean isFocusable() {
-        return !toolbar;
+        return true;
     }
 
     public Font getFont() {

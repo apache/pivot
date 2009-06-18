@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<Window title="Search Demo" maximized="true"
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:content="org.apache.pivot.wtk.content"
+    xmlns="org.apache.pivot.wtk">
+    <content>
+        <TablePane styles="{padding:6, verticalSpacing:6}">
+            <columns>
+                <TablePane.Column width="1*"/>
+            </columns>
+            <rows>
+                <TablePane.Row height="-1">
+                    <TablePane>
+                        <columns>
+                            <TablePane.Column width="-1"/>
+                            <TablePane.Column width="1*"/>
+                        </columns>
+                        <rows>
+                            <TablePane.Row height="-1">
+                                <FlowPane styles="{verticalAlignment:'center'}">
+                                    <TextInput textSize="32" wtkx:id="termTextInput">
+                                        <componentKeyListeners>
+                                            <wtkx:script>
+                                            <![CDATA[
+                                            importPackage(org.apache.pivot.wtk);
+                                            function keyPressed(component, keyCode, keyLocation) {
+                                                var term = termTextInput.getText();
+
+                                                if (keyCode == Keyboard.KeyCode.ENTER) {
+                                                    if (!application.isQueryExecuting()
+                                                        && term.length() > 0) {
+                                                        searchButton.press();
+                                                    }
+                                                }
+
+                                                return false;
+                                            }
+                                            ]]>
+                                            </wtkx:script>
+                                        </componentKeyListeners>
+                                        <textInputTextListeners>
+                                            <wtkx:script>
+                                            <![CDATA[
+                                            function textChanged(textInput) {
+                                                var term = termTextInput.getText();
+                                                searchButton.setEnabled(term.length() > 0);
+                                            }
+                                            ]]>
+                                            </wtkx:script>
+                                        </textInputTextListeners>
+                                    </TextInput>
+                                    <PushButton wtkx:id="searchButton" enabled="false"
+                                        styles="{toolbar:true, padding:1}">
+                                        <buttonPressListeners>
+                                            <wtkx:script>
+                                            <![CDATA[
+                                            function buttonPressed(button) {
+                                                if (application.isQueryExecuting()) {
+                                                    application.abortQuery();
+                                                } else {
+                                                    application.executeQuery(termTextInput.getText());
+                                                }
+                                            }
+                                            ]]>
+                                            </wtkx:script>
+                                        </buttonPressListeners>
+                                        <componentKeyListeners>
+                                            <wtkx:script>
+                                            <![CDATA[
+                                            importPackage(org.apache.pivot.wtk);
+                                            function keyPressed(component, keyCode, keyLocation) {
+                                                if (keyCode == Keyboard.KeyCode.ESCAPE) {
+                                                    if (application.isQueryExecuting()) {
+                                                        application.abortQuery();
+                                                    }
+                                                }
+
+                                                return false;
+                                            }
+                                            ]]>
+                                            </wtkx:script>
+                                        </componentKeyListeners>
+                                    </PushButton>
+                                </FlowPane>
+                                <Label wtkx:id="statusLabel" styles="{horizontalAlignment:'right',
+                                    verticalAlignment:'center'}"/>
+                            </TablePane.Row>
+                        </rows>
+                    </TablePane>
+                </TablePane.Row>
+
+                <TablePane.Row height="1*">
+                    <TablePane styles="{horizontalSpacing:6}">
+                        <columns>
+                            <TablePane.Column width="1*"/>
+                            <TablePane.Column width="-1"/>
+                        </columns>
+                        <rows>
+                            <TablePane.Row height="1*">
+                                <StackPane>
+                                    <Border styles="{padding:0}">
+                                        <content>
+                                            <ScrollPane horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fillToCapacity">
+                                                <view>
+                                                    <TableView wtkx:id="resultsTableView">
+                                                        <columns>
+                                                            <TableView.Column name="itemName" width="3*" headerData="Name"/>
+                                                            <TableView.Column name="itemParentName" width="3*" headerData="Album"/>
+                                                            <TableView.Column name="artistName" width="3*" headerData="Artist"/>
+                                                            <TableView.Column name="mediaType" width="2*" headerData="Kind"/>
+                                                        </columns>
+
+                                                        <tableViewSelectionListeners>
+                                                            <wtkx:script>
+                                                            <![CDATA[
+                                                            function selectedRangeAdded(tableView, rangeStart, rangeEnd) {
+                                                                application.updateArtwork();
+                                                            }
+
+                                                            function selectedRangeRemoved(tableView, rangeStart, rangeEnd) {
+                                                                application.updateArtwork();
+                                                            }
+
+                                                            function selectedRangesChanged(tableView, previousSelectedRanges) {
+                                                                application.updateArtwork();
+                                                            }
+                                                            ]]>
+                                                            </wtkx:script>
+                                                        </tableViewSelectionListeners>
+                                                    </TableView>
+                                                </view>
+                                                <columnHeader>
+                                                    <TableViewHeader tableView="$resultsTableView">
+                                                        <tableViewHeaderPressListeners>
+                                                            <TableView.SortHandler/>
+                                                        </tableViewHeaderPressListeners>
+                                                    </TableViewHeader>
+                                                </columnHeader>
+                                            </ScrollPane>
+                                        </content>
+                                    </Border>
+
+                                    <FlowPane wtkx:id="activityIndicatorFlowPane" visible="false"
+                                        styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                                        <ActivityIndicator wtkx:id="activityIndicator"
+                                            preferredWidth="96" preferredHeight="96"/>
+                                    </FlowPane>
+                                </StackPane>
+
+                                <FlowPane orientation="vertical">
+                                    <Border styles="{padding:0}">
+                                        <content>
+                                            <ImageView wtkx:id="artworkImageView"
+                                                preferredWidth="120" preferredHeight="120"/>
+                                        </content>
+                                    </Border>
+                                </FlowPane>
+                            </TablePane.Row>
+                        </rows>
+                    </TablePane>
+                </TablePane.Row>
+            </rows>
+        </TablePane>
+    </content>
+</Window>
