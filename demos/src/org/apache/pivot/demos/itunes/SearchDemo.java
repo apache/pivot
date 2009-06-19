@@ -240,7 +240,7 @@ public class SearchDemo implements Application {
             }));
         }
 
-        previewButton.setEnabled(artworkImageView.getImage() != null);
+        previewButton.setEnabled(result != null);
     }
 
     public static void main(String[] args) {
