@@ -53,16 +53,22 @@ import org.apache.pivot.wtk.skin.WindowSkin;
  */
 public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     public class WindowStateTransition extends Transition {
-        private final boolean close;
+        private boolean close;
 
         public WindowStateTransition(boolean close) {
-            super(TRANSITION_DURATION, TRANSITION_RATE);
+            super(TRANSITION_DURATION, TRANSITION_RATE, false, close);
             this.close = close;
         }
 
         @Override
         public void update() {
             invalidateComponent();
+        }
+
+        @Override
+        public void reverse() {
+            super.reverse();
+            close = !close;
         }
     }
 
@@ -214,18 +220,19 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         return preferredSize;
     }
 
-    private int getEasedPreferredHeight(int preferredHeight) {
+    public int getEasedPreferredHeight(int preferredHeight) {
         if (windowStateTransition != null
             && windowStateTransition.isRunning()) {
+            float scale;
             if (windowStateTransition.close) {
-                float scale = easing.easeIn(windowStateTransition.getElapsedTime(), 0, 1,
+                scale = easing.easeIn(windowStateTransition.getElapsedTime(), 0, 1,
                     windowStateTransition.getDuration());
-                preferredHeight = (int)((1.0f - scale) * preferredHeight);
             } else {
-                float scale = easing.easeOut(windowStateTransition.getElapsedTime(), 0, 1,
+                scale = easing.easeOut(windowStateTransition.getElapsedTime(), 0, 1,
                     windowStateTransition.getDuration());
-                preferredHeight = (int)(scale * preferredHeight);
             }
+
+            preferredHeight = (int)(scale * preferredHeight);
         }
 
         return preferredHeight;
@@ -393,18 +400,26 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         // Don't start the transition if the sheet is being closed as a result
         // of the owner closing
         Window owner = sheet.getOwner();
-        if (!owner.isClosing()
-            && windowStateTransition == null) {
-            windowStateTransition = new WindowStateTransition(true);
-            windowStateTransition.start(new TransitionListener() {
+        if (!owner.isClosing()) {
+            TransitionListener transitionListener = new TransitionListener() {
                 public void transitionCompleted(Transition transition) {
                     sheet.close(result);
                     windowStateTransition = null;
                 }
-            });
+            };
 
-            vote = Vote.DEFER;
-        } else {
+            if (windowStateTransition == null) {
+                // Start the close transition
+                windowStateTransition = new WindowStateTransition(true);
+                windowStateTransition.start(transitionListener);
+            } else {
+                // Reverse the open transition
+                if (!windowStateTransition.close
+                    && windowStateTransition.isRunning()) {
+                    windowStateTransition.reverse(transitionListener);
+                }
+            }
+
             vote = (windowStateTransition != null
                 && windowStateTransition.isRunning()) ? Vote.DEFER : Vote.APPROVE;
         }

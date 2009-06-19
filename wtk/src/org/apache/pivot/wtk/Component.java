@@ -2308,8 +2308,6 @@ public abstract class Component implements ConstrainedVisual {
      * @param attributes
      */
     protected void setAttributes(Attributes attributes) {
-        assert (parent != null);
-
         if (this.attributes != null) {
             this.attributes.setComponent(null);
         }

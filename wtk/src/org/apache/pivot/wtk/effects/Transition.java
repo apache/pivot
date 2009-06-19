@@ -86,6 +86,22 @@ public abstract class Transition {
      * <tt>true</tt> if the transition should repeat; <tt>false</tt>, otherwise.
      */
     public Transition(int duration, int rate, boolean repeat) {
+        this(duration, rate, repeat, false);
+    }
+
+    /**
+     * Creates a new transition with the given duration, rate, and repeat.
+     *
+     * @param duration
+     * Transition duration, in milliseconds.
+     *
+     * @param rate
+     * Transition rate, in frames per second.
+     *
+     * @param repeat
+     * <tt>true</tt> if the transition should repeat; <tt>false</tt>, otherwise.
+     */
+    public Transition(int duration, int rate, boolean repeat, boolean reversed) {
         if (duration <= 0) {
             throw new IllegalArgumentException("duration must be positive.");
         }
@@ -93,6 +109,7 @@ public abstract class Transition {
         this.duration = duration;
         this.rate = rate;
         this.repeat = repeat;
+        this.reversed = reversed;
     }
 
     /**
@@ -239,9 +256,9 @@ public abstract class Transition {
     }
 
     /**
-     * Starts the transition. Calls {@link #update()} to establish the
-     * initial state and starts a timer that will repeatedly call
-     * {@link #update()} at the current rate.
+     * Starts the transition with no listener.
+     *
+     * @see #start(TransitionListener)
      */
     public final void start() {
         start(null);
@@ -306,13 +323,28 @@ public abstract class Transition {
     protected abstract void update();
 
     /**
-     * Reverses a currently running transition. Updates the start time so the
-     * reverse duration is the same as the current elapsed time.
+     * Reverses the transition with no listener.
+     *
+     * @see #reverse(TransitionListener)
      */
     public void reverse() {
-        if (transitionListener == null) {
+        reverse(null);
+    }
+
+    /**
+     * Reverses the transition. Updates the start time so the reverse duration
+     * is the same as the current elapsed time.
+     *
+     * @param transitionListener
+     * The listener to get notified when the transition completes, or
+     * <tt>null</tt> if no notification is necessary
+     */
+    public void reverse(TransitionListener transitionListener) {
+        if (this.transitionCallback == null) {
             throw new IllegalStateException("Transition is not currently running.");
         }
+
+        this.transitionListener = transitionListener;
 
         if (repeat) {
             throw new IllegalStateException("Transition is repeating.");

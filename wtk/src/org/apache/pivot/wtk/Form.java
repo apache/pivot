@@ -31,15 +31,13 @@ import org.apache.pivot.util.ListenerList;
  * an optional text label associated with it and may be flagged as requiring
  * attention using one of several flag types and an optional flag message (for
  * use during form validation, for example).
- * <p>
- * TODO Add a label alignment attribute (vertical).
  *
  * @author gbrown
  */
 public class Form extends Container {
     /**
-     * Class representing a menu section. A section is a grouping of menu
-     * items within a menu.
+     * Class representing a form section. A section is a grouping of components
+     * within a form.
      *
      * @author gbrown
      */
