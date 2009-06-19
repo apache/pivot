@@ -28,7 +28,7 @@ import org.apache.pivot.wtk.ApplicationContext;
 public abstract class Transition {
     private int duration;
     private int rate;
-    private boolean repeat;
+    private boolean repeating;
 
     private boolean reversed = false;
 
@@ -44,7 +44,7 @@ public abstract class Transition {
 
             long endTime = startTime + duration;
             if (currentTime >= endTime) {
-                if (repeat) {
+                if (repeating) {
                     startTime = endTime;
                 } else {
                     currentTime = endTime;
@@ -82,11 +82,11 @@ public abstract class Transition {
      * @param rate
      * Transition rate, in frames per second.
      *
-     * @param repeat
+     * @param repeating
      * <tt>true</tt> if the transition should repeat; <tt>false</tt>, otherwise.
      */
-    public Transition(int duration, int rate, boolean repeat) {
-        this(duration, rate, repeat, false);
+    public Transition(int duration, int rate, boolean repeating) {
+        this(duration, rate, repeating, false);
     }
 
     /**
@@ -101,14 +101,14 @@ public abstract class Transition {
      * @param repeat
      * <tt>true</tt> if the transition should repeat; <tt>false</tt>, otherwise.
      */
-    public Transition(int duration, int rate, boolean repeat, boolean reversed) {
+    public Transition(int duration, int rate, boolean repeating, boolean reversed) {
         if (duration <= 0) {
             throw new IllegalArgumentException("duration must be positive.");
         }
 
         this.duration = duration;
         this.rate = rate;
-        this.repeat = repeat;
+        this.repeating = repeating;
         this.reversed = reversed;
     }
 
@@ -322,6 +322,10 @@ public abstract class Transition {
      */
     protected abstract void update();
 
+    public boolean isRepeating() {
+        return repeating;
+    }
+
     /**
      * Reverses the transition with no listener.
      *
@@ -345,10 +349,6 @@ public abstract class Transition {
         }
 
         this.transitionListener = transitionListener;
-
-        if (repeat) {
-            throw new IllegalStateException("Transition is repeating.");
-        }
 
         long repeatDuration = currentTime - startTime;
         long endTime = currentTime + repeatDuration;

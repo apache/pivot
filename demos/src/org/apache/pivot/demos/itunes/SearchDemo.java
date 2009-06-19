@@ -51,6 +51,7 @@ public class SearchDemo implements Application {
     @WTKX private FlowPane activityIndicatorFlowPane;
     @WTKX private ActivityIndicator activityIndicator;
     @WTKX private ImageView artworkImageView;
+    @WTKX private PushButton previewButton;
 
     private GetQuery getQuery = null;
 
@@ -238,6 +239,8 @@ public class SearchDemo implements Application {
                 }
             }));
         }
+
+        previewButton.setEnabled(artworkImageView.getImage() != null);
     }
 
     public static void main(String[] args) {

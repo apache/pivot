@@ -780,9 +780,9 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                     InvocationHandler handler = new InvocationHandler() {
                                         public Object invoke(Object proxy, Method method, Object[] args)
                                             throws Throwable {
-                                            Object result;
-                                            String methodName = method.getName();
+                                            Object result = null;
 
+                                            String methodName = method.getName();
                                             Bindings bindings = scriptEngine.getBindings(ScriptContext.ENGINE_SCOPE);
                                             if (bindings.containsKey(methodName)) {
                                                 Invocable invocable;
@@ -793,16 +793,16 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                                 }
 
                                                 result = invocable.invokeFunction(methodName, args);
-                                            } else {
-                                                Class<?> returnType = method.getReturnType();
+                                            }
 
-                                                if (returnType == Vote.class) {
-                                                    result = Vote.APPROVE;
-                                                } else if (returnType == Boolean.TYPE) {
-                                                    result = false;
-                                                } else {
-                                                    result = null;
-                                                }
+                                            // If the function didn't return a value, return the default
+                                            Class<?> returnType = method.getReturnType();
+                                            if (returnType == Vote.class
+                                                && result == null) {
+                                                result = Vote.APPROVE;
+                                            } else if (returnType == Boolean.TYPE
+                                                && result == null) {
+                                                result = false;
                                             }
 
                                             return result;

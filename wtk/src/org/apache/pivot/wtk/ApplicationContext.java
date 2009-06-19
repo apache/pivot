@@ -43,6 +43,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.Timer;
@@ -1234,6 +1235,15 @@ public abstract class ApplicationContext {
      */
     public static ResourceCacheDictionary getResourceCache() {
         return resourceCacheDictionary;
+    }
+
+    /**
+     * Opens the resource at the given location.
+     *
+     * @param location
+     */
+    public static void open(String location) throws MalformedURLException {
+        open(new URL(location));
     }
 
     /**

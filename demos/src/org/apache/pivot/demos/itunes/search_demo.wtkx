@@ -121,11 +121,28 @@ limitations under the License.
                                                 <view>
                                                     <TableView wtkx:id="resultsTableView">
                                                         <columns>
-                                                            <TableView.Column name="itemName" width="3*" headerData="Name"/>
-                                                            <TableView.Column name="itemParentName" width="3*" headerData="Album"/>
-                                                            <TableView.Column name="artistName" width="3*" headerData="Artist"/>
-                                                            <TableView.Column name="mediaType" width="2*" headerData="Kind"/>
+                                                            <TableView.Column name="itemName" width="1*" headerData="Name"/>
+                                                            <TableView.Column name="itemParentName" width="1*" headerData="Album"/>
+                                                            <TableView.Column name="artistName" width="1*" headerData="Artist"/>
                                                         </columns>
+                                                        <componentMouseButtonListeners>
+                                                            <wtkx:script>
+                                                            <![CDATA[
+                                                            importPackage(org.apache.pivot.wtk);
+                                                            var selectedResult;
+
+                                                            function mouseClick(component, button, x, y, count) {
+                                                                if (count == 1) {
+                                                                    selectedResult = resultsTableView.getSelectedRow();
+                                                                } else if (count == 2) {
+                                                                    if (selectedResult == resultsTableView.getSelectedRow()) {
+                                                                        ApplicationContext.open(selectedResult.get("previewUrl"));
+                                                                    }
+                                                                }
+                                                            }
+                                                            ]]>
+                                                            </wtkx:script>
+                                                        </componentMouseButtonListeners>
 
                                                         <tableViewSelectionListeners>
                                                             <wtkx:script>
@@ -164,13 +181,28 @@ limitations under the License.
                                     </FlowPane>
                                 </StackPane>
 
-                                <FlowPane orientation="vertical">
+                                <FlowPane orientation="vertical" styles="{horizontalAlignment:'justify'}">
                                     <Border styles="{padding:0}">
                                         <content>
                                             <ImageView wtkx:id="artworkImageView"
                                                 preferredWidth="120" preferredHeight="120"/>
                                         </content>
                                     </Border>
+                                    <FlowPane styles="{horizontalAlignment:'center'}">
+                                        <PushButton wtkx:id="previewButton" buttonData="Preview" enabled="false">
+                                            <buttonPressListeners>
+                                                <wtkx:script>
+                                                <![CDATA[
+                                                importPackage(org.apache.pivot.wtk);
+                                                function buttonPressed(button) {
+                                                    var selectedResult = resultsTableView.getSelectedRow();
+                                                    ApplicationContext.open(selectedResult.get("previewUrl"));
+                                                }
+                                                ]]>
+                                                </wtkx:script>
+                                            </buttonPressListeners>
+                                        </PushButton>
+                                    </FlowPane>
                                 </FlowPane>
                             </TablePane.Row>
                         </rows>
