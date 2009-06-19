@@ -114,8 +114,10 @@ limitations under the License.
         <delete>
             <fileset dir="demos/www">
                 <include name="*.html"/>
-                <exclude name="index.html"/>
                 <exclude name="*.template.html"/>
+                <include name="*.jnlp"/>
+                <exclude name="*.template.jnlp"/>
+                <exclude name="index.html"/>
             </fileset>
         </delete>
         <delete file="${folder.lib}/${ant.project.name}_demos.war"/>
@@ -124,8 +126,10 @@ limitations under the License.
         <delete>
             <fileset dir="tutorials/www">
                 <include name="*.html"/>
-                <exclude name="index.html"/>
                 <exclude name="*.template.html"/>
+                <include name="*.jnlp"/>
+                <exclude name="*.template.jnlp"/>
+                <exclude name="index.html"/>
             </fileset>
         </delete>
         <delete file="${folder.lib}/${ant.project.name}_tutorials.war"/>
@@ -134,8 +138,10 @@ limitations under the License.
         <delete>
             <fileset dir="web/www">
                 <include name="*.html"/>
-                <exclude name="index.html"/>
                 <exclude name="*.template.html"/>
+                <include name="*.jnlp"/>
+                <exclude name="*.template.jnlp"/>
+                <exclude name="index.html"/>
             </fileset>
         </delete>
         <delete file="${folder.lib}/${ant.project.name}_web_test.war"/>
@@ -728,7 +734,7 @@ limitations under the License.
         <filter token="project_name" value="${ant.project.name}"/>
         <filter token="version" value="${version}"/>
 
-        <!-- Create demos WAR -->
+        <!-- Deploy demos -->
         <mkdir dir="demos/www/lib"/>
         <copy todir="demos/www/lib">
             <fileset dir="${folder.lib}">
@@ -761,7 +767,7 @@ limitations under the License.
 
         <delete dir="demos/lib/signed"/>
 
-        <!-- Generate demo HTML files -->
+        <!-- Generate demo HTML and JNLP files -->
         <copy todir="demos/www" filtering="true">
             <fileset dir="demos/www">
                 <include name="*.template.html"/>
@@ -769,13 +775,21 @@ limitations under the License.
             <mapper type="glob" from="*.template.html" to="*.html"/>
         </copy>
 
+        <copy todir="demos/www" filtering="true">
+            <fileset dir="demos/www">
+                <include name="*.template.jnlp"/>
+            </fileset>
+            <mapper type="glob" from="*.template.jnlp" to="*.jnlp"/>
+        </copy>
+
+        <!-- Generate demos WAR -->
         <war destfile="${folder.lib}/${ant.project.name}_demos.war" webxml="demos/web.xml">
             <fileset dir="demos/www">
                 <exclude name="*.template.html"/>
             </fileset>
         </war>
 
-        <!-- Create tutorials WAR -->
+        <!-- Deploy tutorials -->
         <mkdir dir="tutorials/www/lib"/>
         <copy todir="tutorials/www/lib">
             <fileset dir="${folder.lib}">
@@ -785,7 +799,7 @@ limitations under the License.
             </fileset>
         </copy>
 
-        <!-- Generate tutorial HTML files -->
+        <!-- Generate tutorial HTML and JNLP files -->
         <copy todir="tutorials/www" filtering="true">
             <fileset dir="tutorials/www">
                 <include name="*.template.html"/>
@@ -793,13 +807,21 @@ limitations under the License.
             <mapper type="glob" from="*.template.html" to="*.html"/>
         </copy>
 
+        <copy todir="tutorials/www" filtering="true">
+            <fileset dir="tutorials/www">
+                <include name="*.template.jnlp"/>
+            </fileset>
+            <mapper type="glob" from="*.template.jnlp" to="*.jnlp"/>
+        </copy>
+
+        <!-- Generate tutorials WAR -->
         <war destfile="${folder.lib}/${ant.project.name}_tutorials.war" webxml="tutorials/web.xml">
             <fileset dir="tutorials/www">
                 <exclude name="*.template.html"/>
             </fileset>
         </war>
 
-        <!-- Create web-test WAR -->
+        <!-- Deploy web test -->
         <mkdir dir="web/www/lib"/>
 
         <jar destfile="web/www/lib/${ant.project.name}-web-${version}.test.jar" index="${compiler.indexJars}">
@@ -823,7 +845,7 @@ limitations under the License.
             </fileset>
         </copy>
 
-        <!-- Generate web test HTML files -->
+        <!-- Generate web test HTML and JNLP files -->
         <copy todir="web/www" filtering="true">
             <fileset dir="web/www">
                 <include name="*.template.html"/>
@@ -831,6 +853,14 @@ limitations under the License.
             <mapper type="glob" from="*.template.html" to="*.html"/>
         </copy>
 
+        <copy todir="web/www" filtering="true">
+            <fileset dir="web/www">
+                <include name="*.template.jnlp"/>
+            </fileset>
+            <mapper type="glob" from="*.template.jnlp" to="*.jnlp"/>
+        </copy>
+
+        <!-- Generate web test WAR -->
         <war destfile="${folder.lib}/${ant.project.name}_web_test.war" webxml="web/web.xml">
             <fileset dir="web/www">
                 <exclude name="*.template.html"/>
