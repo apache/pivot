@@ -21,6 +21,7 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.Proxy;
 import java.net.URL;
 import java.net.URLEncoder;
 
@@ -136,6 +137,7 @@ public abstract class Query<V> extends IOTask<V> {
 
     private URL locationContext = null;
     private HostnameVerifier hostnameVerifier = null;
+    private Proxy proxy = null;
 
     private QueryDictionary parameters = new QueryDictionary();
     private QueryDictionary requestHeaders = new QueryDictionary();
@@ -210,6 +212,28 @@ public abstract class Query<V> extends IOTask<V> {
 
     public void setHostnameVerifier(HostnameVerifier hostnameVerifier) {
         this.hostnameVerifier = hostnameVerifier;
+    }
+
+    /**
+     * Gets the proxy associated with this query.
+     *
+     * @return
+     * This query's proxy, or <tt>null</tt> if the query is using the default
+     * JVM proxy settings
+     */
+    public Proxy getProxy() {
+        return proxy;
+    }
+
+    /**
+     * Sets the proxy associated with this query.
+     *
+     * @param proxy
+     * This query's proxy, or <tt>null</tt> to use the default JVM proxy
+     * settings
+     */
+    public void setProxy(Proxy proxy) {
+        this.proxy = proxy;
     }
 
     public URL getLocation() {
@@ -367,7 +391,11 @@ public abstract class Query<V> extends IOTask<V> {
             responseHeaders.clear();
 
             // Open a connection
-            connection = (HttpURLConnection) location.openConnection();
+            if (proxy == null) {
+                connection = (HttpURLConnection) location.openConnection();
+            } else {
+                connection = (HttpURLConnection) location.openConnection(proxy);
+            }
             connection.setRequestMethod(method.toString());
             connection.setAllowUserInteraction(false);
             connection.setInstanceFollowRedirects(false);
