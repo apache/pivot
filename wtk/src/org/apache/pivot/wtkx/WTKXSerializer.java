@@ -219,7 +219,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
     public static final String INCLUDE_TAG = "include";
     public static final String INCLUDE_SRC_ATTRIBUTE = "src";
     public static final String INCLUDE_RESOURCES_ATTRIBUTE = "resources";
-    public static final String INCLUDE_ASYNCHRONOUS_ATTRIBUTE = "aysnchronous";
+    public static final String INCLUDE_ASYNCHRONOUS_ATTRIBUTE = "asynchronous";
 
     public static final String SCRIPT_TAG = "script";
     public static final String SCRIPT_SRC_ATTRIBUTE = "src";
