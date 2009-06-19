@@ -155,6 +155,16 @@ public abstract class Query<V> extends IOTask<V> {
     private static final String HTTPS_PROTOCOL = "https";
     private static final String URL_ENCODING = "UTF-8";
 
+    static {
+        try {
+            // See http://java.sun.com/javase/6/docs/technotes/guides/net/proxies.html
+            // For more info on this system property
+            System.setProperty("java.net.useSystemProxies", "true");
+        } catch (SecurityException exception) {
+            // No-op
+        }
+    }
+
     /**
      * Creates a new web query.
      *
