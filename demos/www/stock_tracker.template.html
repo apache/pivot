@@ -28,9 +28,13 @@ data from Yahoo! Finance as a CSV file and presents it in a table view component
 <script>
 var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
     archive:"lib/@project_name@-core-@version@.signed.jar,lib/@project_name@-web-@version@.signed.jar,lib/@project_name@-wtk-@version@.signed.jar,lib/@project_name@-wtk-@version@.terra.signed.jar,lib/@project_name@-tutorials-@version@.signed.jar",
-    width:480, height:360};
-var parameters = {applicationClassName:"org.apache.pivot.tutorials.stocktracker.StockTracker",
-    codebase_lookup:false};
+    width:480,
+    height:360
+};
+var parameters = {application_class_name:"org.apache.pivot.tutorials.stocktracker.StockTracker",
+    startup_properties:"language:en",
+    codebase_lookup:false
+};
 var version = "1.6";
 deployJava.runApplet(attributes, parameters, version);
 </script>

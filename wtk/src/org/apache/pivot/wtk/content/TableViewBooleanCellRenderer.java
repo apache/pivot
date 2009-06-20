@@ -36,8 +36,6 @@ public class TableViewBooleanCellRenderer extends FlowPane
     private Checkbox checkbox = new Checkbox();
 
     public TableViewBooleanCellRenderer() {
-        super();
-
         add(checkbox);
 
         getStyles().put("verticalAlignment", VerticalAlignment.CENTER);

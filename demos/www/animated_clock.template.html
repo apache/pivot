@@ -27,9 +27,12 @@ animated clock. The clock is drawn using Pivot's drawing API.</p>
 <script>
 var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
     archive:"lib/@project_name@-core-@version@.jar,lib/@project_name@-wtk-@version@.jar,lib/@project_name@-wtk-@version@.terra.jar,lib/@project_name@-demos-@version@.jar",
-    width:320, height:320};
-var parameters = {applicationClassName:"org.apache.pivot.demos.clock.ClockDemo",
-    codebase_lookup:false};
+    width:320,
+    height:320
+};
+var parameters = {application_class_name:"org.apache.pivot.demos.clock.ClockDemo",
+    codebase_lookup:false
+};
 var version = "1.6";
 deployJava.runApplet(attributes, parameters, version);
 </script>

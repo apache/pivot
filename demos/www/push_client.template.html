@@ -43,9 +43,12 @@ a log of messages in the space below the horizontal rule.</p>
 <script>
 var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
     archive:"lib/@project_name@-core-@version@.signed.jar,lib/@project_name@-web-@version@.signed.jar,lib/@project_name@-wtk-@version@.signed.jar,lib/@project_name@-wtk-@version@.terra.signed.jar,lib/@project_name@-demos-@version@.signed.jar,lib/smack.signed.jar,lib/smackx.signed.jar",
-    width:320, height:240};
-var parameters = {applicationClassName:"org.apache.pivot.demos.dom.IMClient",
-    codebase_lookup:false};
+    width:320,
+    height:240
+};
+var parameters = {application_class_name:"org.apache.pivot.demos.dom.IMClient",
+    codebase_lookup:false
+};
 var version = "1.6";
 deployJava.runApplet(attributes, parameters, version);
 </script>

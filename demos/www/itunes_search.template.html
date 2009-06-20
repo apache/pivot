@@ -27,9 +27,12 @@ iTunes Music Store and presents the results in a table view.</p>
 <script>
 var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
     archive:"lib/@project_name@-core-@version@.jar,lib/@project_name@-wtk-@version@.jar,lib/@project_name@-wtk-@version@.terra.jar,lib/@project_name@-demos-@version@.jar",
-    width:800, height:600};
-var parameters = {applicationClassName:"org.apache.pivot.demos.itunes.SearchDemo",
-    codebase_lookup:false};
+    width:800,
+    height:600
+};
+var parameters = {application_class_name:"org.apache.pivot.demos.itunes.SearchDemo",
+    codebase_lookup:false
+};
 var version = "1.6";
 deployJava.runApplet(attributes, parameters, version);
 </script>

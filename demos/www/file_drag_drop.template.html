@@ -28,9 +28,12 @@ a web or other server.</p>
 <script>
 var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
     archive:"lib/@project_name@-core-@version@.signed.jar,lib/@project_name@-wtk-@version@.signed.jar,lib/@project_name@-wtk-@version@.terra.signed.jar,lib/@project_name@-demos-@version@.signed.jar",
-    width:380, height:260};
-var parameters = {applicationClassName:"org.apache.pivot.demos.dnd.FileDropTargetDemo",
-    codebase_lookup:false};
+    width:380,
+    height:260
+};
+var parameters = {application_class_name:"org.apache.pivot.demos.dnd.FileDropTargetDemo",
+    codebase_lookup:false
+};
 var version = "1.6";
 deployJava.runApplet(attributes, parameters, version);
 </script>

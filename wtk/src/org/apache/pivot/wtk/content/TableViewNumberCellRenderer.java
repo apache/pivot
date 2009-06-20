@@ -22,7 +22,6 @@ import java.text.NumberFormat;
 import org.apache.pivot.beans.BeanDictionary;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.wtk.HorizontalAlignment;
-import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.TableView;
 
 
@@ -39,7 +38,6 @@ public class TableViewNumberCellRenderer extends TableViewCellRenderer {
 
     public TableViewNumberCellRenderer() {
         getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
-        getStyles().put("padding", new Insets(2, 2, 2, 6));
     }
 
     public NumberFormat getNumberFormat() {

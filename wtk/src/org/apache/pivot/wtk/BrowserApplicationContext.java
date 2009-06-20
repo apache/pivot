@@ -19,10 +19,8 @@ package org.apache.pivot.wtk;
 import java.applet.Applet;
 import java.awt.Graphics;
 import java.io.File;
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLDecoder;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
@@ -75,31 +73,23 @@ public final class BrowserApplicationContext extends ApplicationContext {
                 // Create the application context
                 applicationContext = new BrowserApplicationContext();
 
-                // Load properties specified on the query string
+                // Load properties specified in the startup properties parameter
                 properties = new HashMap<String, String>();
 
-                URL documentBase = getDocumentBase();
-                if (documentBase != null) {
-                    String queryString = documentBase.getQuery();
-                    if (queryString != null) {
-                        String[] arguments = queryString.split("&");
+                String startupProperties = getParameter(STARTUP_PROPERTIES_PARAMETER);
+                if (startupProperties != null) {
+                    String[] arguments = startupProperties.split(";");
 
-                        for (int i = 0, n = arguments.length; i < n; i++) {
-                            String argument = arguments[i];
-                            String[] property = argument.split("=");
+                    for (int i = 0, n = arguments.length; i < n; i++) {
+                        String argument = arguments[i];
+                        String[] property = argument.split(":");
 
-                            if (property.length == 2) {
-                                String key, value;
-                                try {
-                                    final String encoding = "UTF-8";
-                                    key = URLDecoder.decode(property[0], encoding);
-                                    value = URLDecoder.decode(property[1], encoding);
-                                    properties.put(key, value);
-                                } catch (UnsupportedEncodingException exception) {
-                                }
-                            } else {
-                                System.err.println(argument + " is not a valid startup property.");
-                            }
+                        if (property.length == 2) {
+                            String key = property[0].trim();
+                            String value = property[1].trim();
+                            properties.put(key, value);
+                        } else {
+                            System.err.println(argument + " is not a valid startup property.");
                         }
                     }
                 }
@@ -184,7 +174,8 @@ public final class BrowserApplicationContext extends ApplicationContext {
         private HashMap<String, String> properties = null;
         private Application application = null;
 
-        public static final String APPLICATION_CLASS_NAME_PARAMETER = "applicationClassName";
+        public static final String APPLICATION_CLASS_NAME_PARAMETER = "application_class_name";
+        public static final String STARTUP_PROPERTIES_PARAMETER = "startup_properties";
 
         private static final long serialVersionUID = 0;
 
@@ -248,7 +239,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
      * Retrieves a named application.
      *
      * @param name
-     *            The name of the applet hosting the application.
+     * The name of the applet hosting the application.
      */
     public static Application getApplication(String name) {
         if (name == null) {

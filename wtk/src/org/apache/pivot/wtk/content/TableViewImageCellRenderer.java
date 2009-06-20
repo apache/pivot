@@ -33,8 +33,6 @@ public class TableViewImageCellRenderer extends ImageView implements CellRendere
     public static int DEFAULT_HEIGHT = 16;
 
     public TableViewImageCellRenderer() {
-        super();
-
         setPreferredHeight(DEFAULT_HEIGHT);
     }
 

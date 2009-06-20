@@ -29,9 +29,12 @@ code:</p>
 <script>
 var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
     archive:"lib/@project_name@-core-@version@.signed.jar,lib/@project_name@-wtk-@version@.signed.jar,lib/@project_name@-wtk-@version@.terra.signed.jar,lib/@project_name@-demos-@version@.signed.jar,lib/groovy-engine.signed.jar,lib/groovy-all-1.6.3.signed.jar",
-    width:640, height:480};
-var parameters = {applicationClassName:"org.apache.pivot.demos.scripting.ScriptingDemo",
-    codebase_lookup:false};
+    width:640,
+    height:480
+};
+var parameters = {application_class_name:"org.apache.pivot.demos.scripting.ScriptingDemo",
+    codebase_lookup:false
+};
 var version = "1.6";
 deployJava.runApplet(attributes, parameters, version);
 </script>
