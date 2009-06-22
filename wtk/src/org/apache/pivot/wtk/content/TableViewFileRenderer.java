@@ -95,25 +95,37 @@ public class TableViewFileRenderer extends Label implements TableView.CellRender
      * prefixes (1KB = 1024 bytes).
      *
      * @param length
-     * The length of the file, in bytes.
+     * The length of the file, in bytes. May be <tt>-1</tt> to indicate an
+     * unknown file size.
+     *
+     * @return
+     * The formatted file size, or null if <tt>length</tt> is <tt>-1</tt>.
      */
     public static String format(long length) {
-        double size = length;
+        String formattedSize;
 
-        int i = -1;
-        do {
-            size /= KILOBYTE;
-            i++;
-        } while (size > KILOBYTE);
-
-        NumberFormat numberFormat = NumberFormat.getNumberInstance();
-        if (i == 0
-            && size > 1) {
-            numberFormat.setMaximumFractionDigits(0);
+        if (length == -1) {
+            formattedSize = null;
         } else {
-            numberFormat.setMaximumFractionDigits(1);
+            double size = length;
+
+            int i = -1;
+            do {
+                size /= KILOBYTE;
+                i++;
+            } while (size > KILOBYTE);
+
+            NumberFormat numberFormat = NumberFormat.getNumberInstance();
+            if (i == 0
+                && size > 1) {
+                numberFormat.setMaximumFractionDigits(0);
+            } else {
+                numberFormat.setMaximumFractionDigits(1);
+            }
+
+            formattedSize = numberFormat.format(size) + " " + ABBREVIATIONS[i] + "B";
         }
 
-        return numberFormat.format(size) + " " + ABBREVIATIONS[i] + "B";
+        return formattedSize;
     }
 }

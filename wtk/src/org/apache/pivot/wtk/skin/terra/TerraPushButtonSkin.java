@@ -34,7 +34,6 @@ import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.skin.PushButtonSkin;
 
-
 /**
  * Terra push button skin.
  *
@@ -501,5 +500,15 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         }
 
         repaintComponent();
+    }
+
+    @Override
+    public void mouseOut(Component component) {
+        super.mouseOut(component);
+
+        if (toolbar
+            && component.isFocused()) {
+            Component.clearFocus();
+        }
     }
 }

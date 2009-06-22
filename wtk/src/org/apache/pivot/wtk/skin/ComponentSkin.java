@@ -30,6 +30,7 @@ import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.Cursor;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Direction;
+import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Point;
@@ -55,9 +56,18 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
             if (tooltipText != null) {
                 Tooltip tooltip = new Tooltip(tooltipText);
 
-                // TODO Ensure that the tooltip stays on screen
-                Point mouseLocation = component.getDisplay().getMouseLocation();
-                tooltip.setLocation(mouseLocation.x + 16, mouseLocation.y);
+                Point location = component.getDisplay().getMouseLocation();
+                int x = location.x;
+                int y = location.y;
+
+                // Ensure that the tooltip stays on screen
+                Display display = component.getDisplay();
+                int tooltipHeight = tooltip.getPreferredHeight();
+                if (y + tooltipHeight > display.getHeight()) {
+                    y -= tooltipHeight;
+                }
+
+                tooltip.setLocation(x + 16, y);
                 tooltip.open(component.getWindow());
             }
         }

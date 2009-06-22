@@ -43,6 +43,11 @@ public abstract class ActivityIndicatorSkin extends ComponentSkin
         super.uninstall();
     }
 
+    @Override
+    public boolean isFocusable() {
+        return false;
+    }
+
     public void layout() {
         // No-op
     }
