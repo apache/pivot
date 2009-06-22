@@ -18,7 +18,7 @@ limitations under the License.
 
 <Window title="File Drop Target Demo" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
-    xmlns:dnd="org.apache.pivot.demos.dnd"
+    xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
     <content>
         <TablePane>
@@ -35,19 +35,19 @@ limitations under the License.
                                     <TableView wtkx:id="fileTableView" selectMode="multi"
                                         styles="{showHorizontalGridLines:false}">
                                         <columns>
-                                            <TableView.Column name="name" width="180" headerData="File">
+                                            <TableView.Column name="name" width="3*" headerData="File">
                                                 <cellRenderer>
-                                                    <dnd:FileCellRenderer/>
+                                                    <content:TableViewFileRenderer/>
                                                 </cellRenderer>
                                             </TableView.Column>
-                                            <TableView.Column name="size" width="60" headerData="Size">
+                                            <TableView.Column name="size" width="1*" headerData="Size">
                                                 <cellRenderer>
-                                                    <dnd:FileCellRenderer/>
+                                                    <content:TableViewFileRenderer/>
                                                 </cellRenderer>
                                             </TableView.Column>
-                                            <TableView.Column name="lastModified" width="120" headerData="Modified">
+                                            <TableView.Column name="lastModified" width="2*" headerData="Modified">
                                                 <cellRenderer>
-                                                    <dnd:FileCellRenderer/>
+                                                    <content:TableViewFileRenderer/>
                                                 </cellRenderer>
                                             </TableView.Column>
                                         </columns>

@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<jnlp spec="6.0" version="@version@">
+<jnlp spec="6.0" href="kitchen_sink.jnlp" version="@version@">
     <information>
         <title>Pivot "Kitchen Sink" Demo</title>
         <vendor>Apache Pivot (Incubating)</vendor>
@@ -25,7 +25,7 @@ limitations under the License.
         <offline-allowed/>
     </information>
     <resources>
-        <java version="1.6+" initial-heap-size="64m" java-vm-args="-client"/>
+        <java version="1.6+" initial-heap-size="64m"/>
         <jar href="lib/@project_name@-core-@version@.jar"/>
         <jar href="lib/@project_name@-wtk-@version@.jar"/>
         <jar href="lib/@project_name@-wtk-@version@.terra.jar"/>

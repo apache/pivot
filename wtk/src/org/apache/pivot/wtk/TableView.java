@@ -27,8 +27,6 @@ import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.content.TableViewCellRenderer;
-import org.apache.pivot.wtk.content.TableViewHeaderData;
-
 
 /**
  * Component that displays a sequence of items partitioned into columns,
@@ -534,12 +532,6 @@ public class TableView extends Component {
             TableView tableView = tableViewHeader.getTableView();
             TableView.ColumnSequence columns = tableView.getColumns();
             TableView.Column column = columns.get(index);
-
-            Object headerData = column.getHeaderData();
-            if (!(headerData instanceof TableViewHeaderData)) {
-                headerData = new TableViewHeaderData((String)headerData);
-                column.setHeaderData(headerData);
-            }
 
             SortDirection sortDirection = column.getSortDirection();
 
