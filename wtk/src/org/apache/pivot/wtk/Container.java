@@ -445,22 +445,64 @@ public abstract class Container extends Component
      }
 
     /**
+     * Tests for the existence of any focusable descendants in this container.
+     *
      * @return
-     * <tt>false</tt>; containers are not focusable.
+     * <tt>true</tt> if this container has any focusable descedants;
+     * <tt>false</tt>, otherwise.
      */
     @Override
     public final boolean isFocusable() {
-        return false;
+        boolean focusable = false;
+
+        if (isShowing()
+            && !isBlocked()) {
+            for (int i = 0, n = getLength(); i < n; i++) {
+                Component component = components.get(i);
+                focusable = component.isFocusable();
+
+                if (focusable) {
+                    break;
+                }
+            }
+        }
+
+        return focusable;
     }
 
-    @Override
     /**
-     * Requests that focus be set to the first focusable component in this
+     * Requests that focus be set to the first focusable descendant in this
      * container.
      */
-    public void requestFocus() {
-        if (getLength() > 0) {
-            get(0).requestFocus();
+    @Override
+    protected void requestFocus(boolean temporary) {
+        if (!isShowing()) {
+            throw new IllegalArgumentException("Container is not showing.");
+        }
+
+        if (isBlocked()) {
+            throw new IllegalArgumentException("Container is blocked.");
+        }
+
+        for (int i = 0, n = getLength(); i < n; i++) {
+            Component component = components.get(i);
+
+            if (component instanceof Container) {
+                Container container = (Container)component;
+                if (container.isShowing()
+                    && !container.isBlocked()) {
+                    container.requestFocus();
+                    if (container.containsFocus()) {
+                        break;
+                    }
+                }
+            } else {
+                if (component.isFocusable()
+                    && component.isShowing()
+                    && !component.isBlocked()) {
+                    component.requestFocus();
+                }
+            }
         }
     }
 

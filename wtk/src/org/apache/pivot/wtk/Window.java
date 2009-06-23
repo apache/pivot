@@ -240,7 +240,7 @@ public class Window extends Container {
 
         if (parent == null
             && isActive()) {
-            setActiveWindow(null);
+            clearActive();
         }
 
         super.setParent(parent);
@@ -271,12 +271,6 @@ public class Window extends Container {
     public void setDisplayable(boolean displayable) {
         super.setDisplayable(displayable);
 
-        if (!displayable) {
-            if (isActive()) {
-                setActiveWindow(null);
-            }
-        }
-
         // Show/hide owned windows
         for (Window ownedWindow : ownedWindows) {
             ownedWindow.setDisplayable(displayable);
@@ -299,7 +293,7 @@ public class Window extends Container {
             if (isEnabled() == enabled) {
                 if (!enabled
                     && isActive()) {
-                    setActiveWindow(null);
+                    clearActive();
                 }
 
                 // Enable/disable owned windows
@@ -506,7 +500,7 @@ public class Window extends Container {
                 closing = true;
 
                 if (isActive()) {
-                    setActiveWindow(null);
+                    clearActive();
                 }
 
                 // Close all owned windows (create a copy of the owned window
@@ -653,7 +647,7 @@ public class Window extends Container {
      * <tt>true</tt> if the window is active; <tt>false</tt>; otherwise.
      */
     public boolean isActive() {
-        return activeWindow == this;
+        return (activeWindow == this);
     }
 
     /**
@@ -662,25 +656,26 @@ public class Window extends Container {
      * @param active
      */
     protected void setActive(boolean active) {
-        if (active) {
-            // If this window is still an ancestor of the active descendant
-            // and the active descendant can be focused, restore focus to it;
-            // otherwise, clear the active descendant
-            if (activeDescendant != null) {
-                if (isAncestor(activeDescendant)
-                    && !activeDescendant.isBlocked()
-                    && activeDescendant.isShowing()) {
-                    activeDescendant.requestFocus(true);
-                } else {
-                    activeDescendant = null;
-                }
-            }
-        } else {
-            // Temporarily clear the focus
-            clearFocus(true);
+        windowListeners.activeChanged(this);
+    }
+
+    /**
+     * Requests that this window become active.
+     */
+    public void requestActive() {
+        if (isAuxilliary()) {
+            throw new IllegalArgumentException("Window is auxilliary.");
         }
 
-        windowListeners.activeChanged(this);
+        if (!isOpen()) {
+            throw new IllegalArgumentException("Window is not open.");
+        }
+
+        if (!isEnabled()) {
+            throw new IllegalArgumentException("Window is not enabled.");
+        }
+
+        setActiveWindow(this);
     }
 
     /**
@@ -702,24 +697,10 @@ public class Window extends Container {
      * @param activeWindow
      * The window to activate, or <tt>null</tt> to clear the active window.
      */
-    public static void setActiveWindow(Window activeWindow) {
+    private static void setActiveWindow(Window activeWindow) {
         Window previousActiveWindow = Window.activeWindow;
 
         if (previousActiveWindow != activeWindow) {
-            if (activeWindow != null) {
-                if (activeWindow.isAuxilliary()) {
-                    throw new IllegalArgumentException("activeWindow is auxilliary.");
-                }
-
-                if (!activeWindow.isOpen()) {
-                    throw new IllegalArgumentException("activeWindow is not open.");
-                }
-
-                if (!activeWindow.isEnabled()) {
-                    throw new IllegalArgumentException("activeWindow is not enabled.");
-                }
-            }
-
             // Set the active window
             Window.activeWindow = activeWindow;
 
@@ -738,6 +719,13 @@ public class Window extends Container {
     }
 
     /**
+     * Clears the active window.
+     */
+    public static void clearActive() {
+        setActiveWindow(null);
+    }
+
+    /**
      * Returns the window descendant that currently has the focus.
      */
     public Component getActiveDescendant() {
@@ -752,6 +740,23 @@ public class Window extends Container {
      */
     protected void setActiveDescendant(Component activeDescendant) {
         this.activeDescendant = activeDescendant;
+    }
+
+    @Override
+    protected void requestFocus(boolean temporary) {
+        // If this window is still an ancestor of the active descendant
+        // and the active descendant can be focused, restore focus to it;
+        // otherwise, clear the active descendant
+        if (activeDescendant != null
+            && isAncestor(activeDescendant)
+            && !activeDescendant.isBlocked()
+            && activeDescendant.isShowing()) {
+            activeDescendant.requestFocus(temporary);
+        } else {
+            activeDescendant = null;
+
+            super.requestFocus(temporary);
+        }
     }
 
     /**
@@ -814,9 +819,14 @@ public class Window extends Container {
                 }
             } else {
                 // Activate the window
-                if (window.isEnabled()
-                    && !window.isAuxilliary()) {
-                    setActiveWindow(window);
+                if (window.isShowing()
+                    && !window.isBlocked()) {
+                    if (!window.isAuxilliary()) {
+                        window.requestActive();
+                    }
+
+                    // Restore focus to the window
+                    window.requestFocus(true);
                 }
 
                 // This was the last owned window for the current window; move
@@ -850,7 +860,8 @@ public class Window extends Container {
         }
 
         if (isActive()) {
-            setActiveWindow(null);
+            clearActive();
+            clearFocus(true);
         }
 
         Display display = getDisplay();

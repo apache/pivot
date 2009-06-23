@@ -2004,7 +2004,7 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Requests that focus be given to this component.
      */
-    public void requestFocus() {
+    public final void requestFocus() {
         requestFocus(false);
     }
 
@@ -2136,13 +2136,6 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     /**
-     * Returns the component dictionary.
-     */
-    public static ComponentDictionary getComponents() {
-        return componentDictionary;
-    }
-
-    /**
      * Clears the focus.
      *
      * @param temporary
@@ -2150,6 +2143,13 @@ public abstract class Component implements ConstrainedVisual {
      */
     protected static void clearFocus(boolean temporary) {
         setFocusedComponent(null, temporary);
+    }
+
+    /**
+     * Returns the component dictionary.
+     */
+    public static ComponentDictionary getComponents() {
+        return componentDictionary;
     }
 
     /**
