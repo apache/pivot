@@ -30,6 +30,7 @@ import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Insets;
+import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.skin.PushButtonSkin;
@@ -510,5 +511,15 @@ public class TerraPushButtonSkin extends PushButtonSkin {
             && component.isFocused()) {
             Component.clearFocus();
         }
+    }
+
+    @Override
+    public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+        if (!toolbar
+            && component.isFocusable()) {
+            component.requestFocus();
+        }
+
+        return super.mouseClick(component, button, x, y, count);
     }
 }

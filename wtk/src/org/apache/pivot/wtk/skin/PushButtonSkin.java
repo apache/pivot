@@ -75,11 +75,6 @@ public abstract class PushButtonSkin extends ButtonSkin {
         boolean consumed = super.mouseClick(component, button, x, y, count);
 
         PushButton pushButton = (PushButton)getComponent();
-
-        if (pushButton.isFocusable()) {
-            pushButton.requestFocus();
-        }
-
         pushButton.press();
 
         return consumed;
