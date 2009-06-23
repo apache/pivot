@@ -380,14 +380,10 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         owner.getComponentListeners().add(ownerComponentListener);
         owner.getComponentMouseButtonListeners().add(ownerMouseButtonListener);
 
-        ApplicationContext.queueCallback(new Runnable() {
-            public void run() {
-                windowStateTransition = new WindowStateTransition(false);
-                windowStateTransition.start(new TransitionListener() {
-                    public void transitionCompleted(Transition transition) {
-                        windowStateTransition = null;
-                    }
-                });
+        windowStateTransition = new WindowStateTransition(false);
+        windowStateTransition.start(new TransitionListener() {
+            public void transitionCompleted(Transition transition) {
+                windowStateTransition = null;
             }
         });
     }
