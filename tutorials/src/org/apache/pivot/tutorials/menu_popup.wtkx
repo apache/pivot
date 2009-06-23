@@ -24,15 +24,15 @@ limitations under the License.
                 <Menu.Section>
                     <Menu.Item buttonData="IMG_0725_2.jpg" toggleButton="true"
                         group="imageMenuGroup" action="selectImageAction">
-                        <userData image="org/apache/pivot/tutorials/IMG_0725_2.jpg"/>
+                        <userData image="IMG_0725_2.jpg"/>
                     </Menu.Item>
                     <Menu.Item buttonData="IMG_0735_2.jpg" toggleButton="true"
                         group="imageMenuGroup" action="selectImageAction">
-                        <userData image="org/apache/pivot/tutorials/IMG_0735_2.jpg"/>
+                        <userData image="IMG_0735_2.jpg"/>
                     </Menu.Item>
                     <Menu.Item buttonData="IMG_0767_2.jpg" toggleButton="true"
                         group="imageMenuGroup" action="selectImageAction">
-                        <userData image="org/apache/pivot/tutorials/IMG_0767_2.jpg"/>
+                        <userData image="IMG_0767_2.jpg"/>
                     </Menu.Item>
                 </Menu.Section>
             </sections>

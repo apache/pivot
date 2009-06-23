@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.wtk.skin;
 
+import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentKeyListener;
 import org.apache.pivot.wtk.Direction;
@@ -35,7 +36,37 @@ import org.apache.pivot.wtk.WindowStateListener;
  * @author gbrown
  */
 public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.ItemListener {
+    protected MenuPopup menuPopup = new MenuPopup();
+
+    private ComponentKeyListener menuPopupComponentKeyListener = new ComponentKeyListener() {
+        public boolean keyTyped(Component component, char character) {
+            return false;
+        }
+
+        public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+            MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
+
+            if (keyCode == Keyboard.KeyCode.LEFT
+                || (keyCode == Keyboard.KeyCode.TAB
+                    && Keyboard.isPressed(Keyboard.Modifier.SHIFT))) {
+                menuBarItem.transferFocus(Direction.BACKWARD);
+            } else if (keyCode == Keyboard.KeyCode.RIGHT
+                || keyCode == Keyboard.KeyCode.TAB) {
+                menuBarItem.transferFocus(Direction.FORWARD);
+            } else if (keyCode == Keyboard.KeyCode.ESCAPE) {
+                Component.clearFocus();
+            }
+
+            return false;
+        }
+
+        public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+            return false;
+        }
+    };
+
     private WindowStateListener menuPopupWindowListener = new WindowStateListener.Adapter() {
+        @Override
         public void windowClosed(Window window, Display display) {
             MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
             if (menuBarItem.isFocused()) {
@@ -51,9 +82,8 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
         }
     };
 
-    protected MenuPopup menuPopup = new MenuPopup();
-
     public MenuBarItemSkin() {
+        menuPopup.getComponentKeyListeners().add(menuPopupComponentKeyListener);
         menuPopup.getWindowStateListeners().add(menuPopupWindowListener);
     }
 
@@ -173,10 +203,9 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
     public void focusedChanged(Component component, boolean temporary) {
         super.focusedChanged(component, temporary);
 
-        final MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
-
         if (component.isFocused()) {
             if (!menuPopup.isOpen()) {
+                MenuBar.Item menuBarItem = (MenuBar.Item)component;
                 Display display = menuBarItem.getDisplay();
                 Point menuBarItemLocation = menuBarItem.mapPointToAncestor(display, 0, getHeight());
 
@@ -184,37 +213,24 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
 
                 menuPopup.setLocation(menuBarItemLocation.x, menuBarItemLocation.y);
                 menuPopup.open(menuBarItem);
-
-                // Listen for key events from the popup
-                menuPopup.getComponentKeyListeners().add(new ComponentKeyListener() {
-                    public boolean keyTyped(Component component, char character) {
-                        return false;
-                    }
-
-                    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
-                        if (keyCode == Keyboard.KeyCode.LEFT
-                            || (keyCode == Keyboard.KeyCode.TAB
-                                && Keyboard.isPressed(Keyboard.Modifier.SHIFT))) {
-                            menuBarItem.transferFocus(Direction.BACKWARD);
-                        } else if (keyCode == Keyboard.KeyCode.RIGHT
-                            || keyCode == Keyboard.KeyCode.TAB) {
-                            menuBarItem.transferFocus(Direction.FORWARD);
-                        } else if (keyCode == Keyboard.KeyCode.ESCAPE) {
-                            Component.clearFocus();
-                        }
-
-                        return false;
-                    }
-
-                    public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
-                        return false;
-                    }
-                });
             }
         } else {
             if (!temporary
                 && !menuPopup.containsFocus()) {
                 menuPopup.close();
+            }
+        }
+    }
+
+    public void buttonPressed(Button button) {
+        MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
+        MenuBar menuBar = menuBarItem.getMenuBar();
+
+        if (menuPopup.isOpen()) {
+            if (menuBar.isActive()) {
+                Component.clearFocus();
+            } else {
+                menuBar.setActive(true);
             }
         }
     }

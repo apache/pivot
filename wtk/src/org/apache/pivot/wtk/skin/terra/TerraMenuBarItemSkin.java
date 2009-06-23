@@ -80,7 +80,8 @@ public class TerraMenuBarItemSkin extends MenuBarItemSkin {
         int width = getWidth();
         int height = getHeight();
 
-        boolean highlight = menuPopup.isOpen();
+        boolean highlight = menuPopup.isOpen()
+            || menuBarItem.isFocused();
 
         // Paint highlight state
         if (highlight) {

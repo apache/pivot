@@ -2098,15 +2098,8 @@ public abstract class Component implements ConstrainedVisual {
         Component previousFocusedComponent = Component.focusedComponent;
 
         if (previousFocusedComponent != focusedComponent) {
-            // System.out.println("Transferring focus from " + previousFocusedComponent + " to " + focusedComponent);
-
             // Set the focused component
             Component.focusedComponent = focusedComponent;
-
-            // Notify the components of the state change
-            if (previousFocusedComponent != null) {
-                previousFocusedComponent.setFocused(false, temporary);
-            }
 
             if (focusedComponent == null) {
                 if (previousFocusedComponent != null
@@ -2114,8 +2107,12 @@ public abstract class Component implements ConstrainedVisual {
                     previousFocusedComponent.getWindow().setFocusDescendant(null);
                 }
             } else {
-                focusedComponent.setFocused(true, temporary);
                 focusedComponent.getWindow().setFocusDescendant(focusedComponent);
+                focusedComponent.setFocused(true, temporary);
+            }
+
+            if (previousFocusedComponent != null) {
+                previousFocusedComponent.setFocused(false, temporary);
             }
 
             componentClassListeners.focusedComponentChanged(previousFocusedComponent);

@@ -971,7 +971,8 @@ public class TerraTextInputSkin extends ComponentSkin
                 }
             }
         } else {
-            if (Mouse.isPressed(Mouse.Button.LEFT)) {
+            if (Mouse.isPressed(Mouse.Button.LEFT)
+                && Mouse.getCapturer() == null) {
                 // Capture the mouse so we can select text
                 Mouse.capture(component);
             }

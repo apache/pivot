@@ -97,33 +97,9 @@ public class TerraPaletteSkin extends WindowSkin {
 
     private Insets padding = new Insets(4);
 
-    private WindowListener ownerListener = new WindowListener() {
-        public void titleChanged(Window window, String previousTitle) {
-            // No-op
-        }
-
-        public void iconChanged(Window window, Image previousIcon) {
-            // No-op
-        }
-
-        public void contentChanged(Window window, Component previousContent) {
-            // No-op
-        }
-
-        public void ownerChanged(Window window, Window previousOwner) {
-            // No-op
-        }
-
+    private WindowListener ownerListener = new WindowListener.Adapter() {
         public void activeChanged(Window window) {
             getComponent().setDisplayable(window.isActive());
-        }
-
-        public void maximizedChanged(Window window) {
-            // No-op
-        }
-
-        public void windowMoved(Window window, int from, int to) {
-            // No-op
         }
     };
 

@@ -253,7 +253,7 @@ public abstract class Container extends Component
         // If this container is being removed from the component hierarchy
         // and contains the focused component, clear the focus
         if (parent == null
-            && isAncestor(getFocusedComponent())) {
+            && containsFocus()) {
             clearFocus(true);
         }
 
@@ -503,7 +503,8 @@ public abstract class Container extends Component
      */
     public boolean containsFocus() {
         Component focusedComponent = getFocusedComponent();
-        return (focusedComponent != null && isAncestor(focusedComponent));
+        return (focusedComponent != null
+            && isAncestor(focusedComponent));
     }
 
     /**

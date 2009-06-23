@@ -499,10 +499,6 @@ public class Window extends Container {
             if (vote.isApproved()) {
                 closing = true;
 
-                if (isActive()) {
-                    clearActive();
-                }
-
                 // Close all owned windows (create a copy of the owned window
                 // list so owned windows can remove themselves from the list
                 // without interrupting the iteration)
@@ -726,18 +722,23 @@ public class Window extends Container {
     }
 
     /**
-     * Returns the window descendant that currently has the focus.
+     * Returns the window descendant to which focus will be restored by a call
+     * to {@link #requestFocus()}.
      */
     public Component getFocusDescendant() {
         return focusDescendant;
     }
 
     /**
-     * Sets the window descendant that currently has the focus.
+     * Sets the window descendant to which focus will be restored by a call to
+     * {@link #requestFocus()}.
      *
-     * @param activeDescendant
+     * @param focusDescendant
      */
     protected void setFocusDescendant(Component focusDescendant) {
+        assert(focusDescendant == null
+            || focusDescendant.getWindow() == this);
+
         this.focusDescendant = focusDescendant;
     }
 
@@ -753,8 +754,7 @@ public class Window extends Container {
             focusDescendant.requestFocus(temporary);
         } else {
             focusDescendant = null;
-
-            super.requestFocus(temporary);
+            Component.clearFocus(true);
         }
 
         return containsFocus();
@@ -824,10 +824,8 @@ public class Window extends Container {
                     && !window.isBlocked()) {
                     if (!window.isAuxilliary()) {
                         window.requestActive();
+                        window.requestFocus(true);
                     }
-
-                    // Restore focus to the window
-                    window.requestFocus(true);
                 }
 
                 // This was the last owned window for the current window; move

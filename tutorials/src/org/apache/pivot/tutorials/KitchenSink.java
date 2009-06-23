@@ -29,7 +29,6 @@ import org.apache.pivot.collections.Map;
 import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.CalendarDate;
-import org.apache.pivot.util.ThreadUtilities;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Action;
 import org.apache.pivot.wtk.ActivityIndicator;
@@ -272,37 +271,34 @@ public class KitchenSink implements Application, Application.About {
 
         private MenuPopup menuPopup = null;
 
-        {   new Action("selectImageAction") {
-                public String getDescription() {
-                    return "Select Image Action";
-                }
-
-                public void perform() {
-                    Button.Group imageMenuGroup = Button.getGroup("imageMenuGroup");
-                    Button selectedItem = imageMenuGroup.getSelection();
-
-                    String imageName = (String)selectedItem.getUserData().get("image");
-
-                    ClassLoader classLoader = ThreadUtilities.getClassLoader();
-                    URL imageURL = classLoader.getResource(imageName);
-
-                    // If the image has not been added to the resource cache yet,
-                    // add it
-                    Image image = (Image)ApplicationContext.getResourceCache().get(imageURL);
-
-                    if (image == null) {
-                        image = Image.load(imageURL);
-                        ApplicationContext.getResourceCache().put(imageURL, image);
-                    }
-
-                    // Update the image
-                    menuImageView.setImage(image);
-                }
-            };
-        }
-
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
+                new Action("selectImageAction") {
+                    public String getDescription() {
+                        return "Select Image Action";
+                    }
+
+                    public void perform() {
+                        Button.Group imageMenuGroup = Button.getGroup("imageMenuGroup");
+                        Button selectedItem = imageMenuGroup.getSelection();
+
+                        String imageName = (String)selectedItem.getUserData().get("image");
+                        URL imageURL = getClass().getResource(imageName);
+
+                        // If the image has not been added to the resource cache yet,
+                        // add it
+                        Image image = (Image)ApplicationContext.getResourceCache().get(imageURL);
+
+                        if (image == null) {
+                            image = Image.load(imageURL);
+                            ApplicationContext.getResourceCache().put(imageURL, image);
+                        }
+
+                        // Update the image
+                        menuImageView.setImage(image);
+                    }
+                };
+
                 WTKXSerializer wtkxSerializer = new WTKXSerializer();
                 try {
                     component = (Component)wtkxSerializer.readObject(this, "menus.wtkx");
