@@ -70,7 +70,7 @@ public class Sheet extends Window {
      * The sheet's content component.
      */
     public Sheet(Component content) {
-        super(content, false);
+        super(content, true);
 
         installSkin(Sheet.class);
     }
