@@ -734,7 +734,7 @@ public class Window extends Container {
      * Restores the focus to the focus descendant. If the window does not
      * have a focus descendant, the focus is cleared.
      */
-    public void restoreFocus() {
+    protected void restoreFocus() {
         // If this window is still an ancestor of the focus descendant
         // and the focus descendant can be focused, restore focus to it;
         // otherwise, clear the focus descendant
@@ -810,11 +810,10 @@ public class Window extends Container {
             } else {
                 // Activate the window
                 if (window.isShowing()
-                    && !window.isBlocked()) {
-                    if (!window.isAuxilliary()) {
-                        setActiveWindow(window);
-                        window.restoreFocus();
-                    }
+                    && !window.isBlocked()
+                    && !window.isAuxilliary()) {
+                    setActiveWindow(window);
+                    restoreFocus();
                 }
 
                 // This was the last owned window for the current window; move
@@ -851,7 +850,9 @@ public class Window extends Container {
             setActiveWindow(null);
         }
 
-        clearFocus(true);
+        if (containsFocus()) {
+            clearFocus(true);
+        }
 
         Display display = getDisplay();
 
