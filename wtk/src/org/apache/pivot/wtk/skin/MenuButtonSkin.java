@@ -28,7 +28,6 @@ import org.apache.pivot.wtk.MenuPopup;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtk.WindowStateListener;
 
 /**
  * Abstract base class for menu button skins.
@@ -39,19 +38,6 @@ public abstract class MenuButtonSkin extends ButtonSkin
     implements MenuButtonListener {
     protected boolean pressed = false;
     protected MenuPopup menuPopup = new MenuPopup();
-
-    private WindowStateListener menuPopupWindowStateListener = new WindowStateListener.Adapter() {
-        public void windowClosed(Window window, Display display) {
-            MenuButton menuButton = (MenuButton)getComponent();
-            menuButton.requestFocus();
-
-            repaintComponent();
-        }
-    };
-
-    public MenuButtonSkin() {
-        menuPopup.getWindowStateListeners().add(menuPopupWindowStateListener);
-    }
 
     @Override
     public void install(Component component) {
@@ -130,16 +116,7 @@ public abstract class MenuButtonSkin extends ButtonSkin
     @Override
     public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         MenuButton menuButton = (MenuButton)getComponent();
-
-        if (menuButton.isFocusable()) {
-            menuButton.requestFocus();
-        }
-
         menuButton.press();
-
-        if (menuPopup.isShowing()) {
-            menuPopup.requestFocus();
-        }
 
         return true;
     }
@@ -178,6 +155,7 @@ public abstract class MenuButtonSkin extends ButtonSkin
     }
 
     // Button events
+    @Override
     public void buttonPressed(Button button) {
         if (menuPopup.isOpen()) {
             menuPopup.close();

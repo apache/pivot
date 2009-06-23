@@ -30,10 +30,14 @@ import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
+import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.MenuButton;
+import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Theme;
+import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtk.WindowStateListener;
 import org.apache.pivot.wtk.skin.MenuButtonSkin;
 
 
@@ -59,6 +63,17 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     private Color pressedBevelColor;
     private Color disabledBevelColor;
 
+    private WindowStateListener menuPopupWindowStateListener = new WindowStateListener.Adapter() {
+        public void windowClosed(Window window, Display display) {
+            if (toolbar) {
+                repaintComponent();
+            } else {
+                MenuButton menuButton = (MenuButton)getComponent();
+                menuButton.requestFocus();
+            }
+        }
+    };
+
     private static final int TRIGGER_WIDTH = 10;
 
     public TerraMenuButtonSkin() {
@@ -79,6 +94,8 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         bevelColor = TerraTheme.brighten(backgroundColor);
         pressedBevelColor = TerraTheme.darken(backgroundColor);
         disabledBevelColor = disabledBackgroundColor;
+
+        menuPopup.getWindowStateListeners().add(menuPopupWindowStateListener);
     }
 
     public int getPreferredWidth(int height) {
@@ -130,6 +147,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
 
         if (!toolbar
             || highlighted
+            || menuButton.isFocused()
             || menuPopup.isOpen()) {
             if (menuButton.isEnabled()) {
                 backgroundColor = this.backgroundColor;
@@ -195,7 +213,8 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         triggerGraphics.dispose();
 
         // Paint the focus state
-        if (menuButton.isFocused()) {
+        if (menuButton.isFocused()
+            && !toolbar) {
             BasicStroke dashStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND,
                 BasicStroke.JOIN_ROUND, 1.0f, new float[] {0.0f, 2.0f}, 0.0f);
 
@@ -212,7 +231,8 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
 
     @Override
     public boolean isFocusable() {
-        return !toolbar;
+        return !toolbar
+            || menuPopup.isClosed();
     }
 
     public Font getFont() {
@@ -429,5 +449,24 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         }
 
         repaintComponent();
+    }
+
+    @Override
+    public void mouseOut(Component component) {
+        super.mouseOut(component);
+
+        if (toolbar
+            && component.isFocused()) {
+            Component.clearFocus();
+        }
+    }
+
+    @Override
+    public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+        if (!toolbar) {
+            component.requestFocus();
+        }
+
+        return super.mouseClick(component, button, x, y, count);
     }
 }

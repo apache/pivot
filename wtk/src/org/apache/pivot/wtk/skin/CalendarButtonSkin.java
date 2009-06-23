@@ -83,9 +83,7 @@ public abstract class CalendarButtonSkin extends ButtonSkin
             switch (keyCode) {
                 case Keyboard.KeyCode.ESCAPE: {
                     calendarPopup.close();
-                    if (calendarButton.isShowing()) {
-                        calendarButton.requestFocus();
-                    }
+                    calendarButton.requestFocus();
                     break;
                 }
 
@@ -102,7 +100,7 @@ public abstract class CalendarButtonSkin extends ButtonSkin
                         Direction direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ?
                             Direction.BACKWARD : Direction.FORWARD;
                         calendarButton.transferFocus(direction);
-                    } else if (calendarButton.isShowing()) {
+                    } else {
                         calendarButton.requestFocus();
                     }
 
@@ -273,10 +271,6 @@ public abstract class CalendarButtonSkin extends ButtonSkin
 
         calendarButton.requestFocus();
         calendarButton.press();
-
-        if (calendar.isShowing()) {
-            calendar.requestFocus();
-        }
 
         return consumed;
     }

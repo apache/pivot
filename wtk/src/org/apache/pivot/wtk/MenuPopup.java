@@ -134,6 +134,7 @@ public class MenuPopup extends Window {
         super.close();
 
         if (isClosed()) {
+            setFocusDescendant(null);
             affiliate = null;
         }
     }

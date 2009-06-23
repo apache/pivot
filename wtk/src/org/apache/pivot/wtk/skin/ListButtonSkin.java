@@ -82,9 +82,7 @@ public abstract class ListButtonSkin extends ButtonSkin
             switch (keyCode) {
                 case Keyboard.KeyCode.ESCAPE: {
                     listViewPopup.close();
-                    if (listButton.isShowing()) {
-                        listButton.requestFocus();
-                    }
+                    listButton.requestFocus();
                     break;
                 }
 
@@ -102,7 +100,7 @@ public abstract class ListButtonSkin extends ButtonSkin
                         Direction direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ?
                             Direction.BACKWARD : Direction.FORWARD;
                         listButton.transferFocus(direction);
-                    } else if (listButton.isShowing()) {
+                    } else {
                         listButton.requestFocus();
                     }
 
@@ -276,10 +274,6 @@ public abstract class ListButtonSkin extends ButtonSkin
 
         listButton.requestFocus();
         listButton.press();
-
-        if (listView.isShowing()) {
-            listView.requestFocus();
-        }
 
         return consumed;
     }
