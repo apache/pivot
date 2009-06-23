@@ -177,8 +177,8 @@ public class Dialog extends Frame {
                 // Disabling the owner tree also disabled this dialog; re-enable it
                 // and make it the active window
                 setEnabled(true);
-                requestActive();
-                requestFocus(true);
+                setActiveWindow(this);
+                restoreFocus();
             }
         }
     }

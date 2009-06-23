@@ -162,7 +162,7 @@ public class LargeData implements Application {
         throws Exception {
         basePath = properties.get(BASE_PATH_KEY);
         if (basePath == null) {
-            throw new IllegalArgumentException("basePath is required.");
+            throw new IllegalArgumentException(BASE_PATH_KEY + " is required.");
         }
 
         WTKXSerializer wtkxSerializer = new WTKXSerializer();

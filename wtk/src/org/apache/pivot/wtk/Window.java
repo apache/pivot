@@ -240,7 +240,7 @@ public class Window extends Container {
 
         if (parent == null
             && isActive()) {
-            clearActive();
+            setActiveWindow(null);
         }
 
         super.setParent(parent);
@@ -293,7 +293,7 @@ public class Window extends Container {
             if (isEnabled() == enabled) {
                 if (!enabled
                     && isActive()) {
-                    clearActive();
+                    setActiveWindow(null);
                 }
 
                 // Enable/disable owned windows
@@ -656,25 +656,6 @@ public class Window extends Container {
     }
 
     /**
-     * Requests that this window become active.
-     */
-    public void requestActive() {
-        if (isAuxilliary()) {
-            throw new IllegalArgumentException("Window is auxilliary.");
-        }
-
-        if (!isOpen()) {
-            throw new IllegalArgumentException("Window is not open.");
-        }
-
-        if (!isEnabled()) {
-            throw new IllegalArgumentException("Window is not enabled.");
-        }
-
-        setActiveWindow(this);
-    }
-
-    /**
      * Returns the currently active window.
      *
      * @return
@@ -693,7 +674,21 @@ public class Window extends Container {
      * @param activeWindow
      * The window to activate, or <tt>null</tt> to clear the active window.
      */
-    private static void setActiveWindow(Window activeWindow) {
+    public static void setActiveWindow(Window activeWindow) {
+        if (activeWindow != null) {
+            if (activeWindow.isAuxilliary()) {
+                throw new IllegalArgumentException("activeWindow is auxilliary.");
+            }
+
+            if (!activeWindow.isOpen()) {
+                throw new IllegalArgumentException("activeWindow is not open.");
+            }
+
+            if (!activeWindow.isEnabled()) {
+                throw new IllegalArgumentException("activeWindow is not enabled.");
+            }
+        }
+
         Window previousActiveWindow = Window.activeWindow;
 
         if (previousActiveWindow != activeWindow) {
@@ -715,15 +710,8 @@ public class Window extends Container {
     }
 
     /**
-     * Clears the active window.
-     */
-    public static void clearActive() {
-        setActiveWindow(null);
-    }
-
-    /**
      * Returns the window descendant to which focus will be restored by a call
-     * to {@link #requestFocus()}.
+     * to {@link #restoreFocus()}.
      */
     public Component getFocusDescendant() {
         return focusDescendant;
@@ -731,7 +719,7 @@ public class Window extends Container {
 
     /**
      * Sets the window descendant to which focus will be restored by a call to
-     * {@link #requestFocus()}.
+     * {@link #restoreFocus()}.
      *
      * @param focusDescendant
      */
@@ -742,8 +730,11 @@ public class Window extends Container {
         this.focusDescendant = focusDescendant;
     }
 
-    @Override
-    protected boolean requestFocus(boolean temporary) {
+    /**
+     * Restores the focus to the focus descendant. If the window does not
+     * have a focus descendant, the focus is cleared.
+     */
+    public void restoreFocus() {
         // If this window is still an ancestor of the focus descendant
         // and the focus descendant can be focused, restore focus to it;
         // otherwise, clear the focus descendant
@@ -751,13 +742,11 @@ public class Window extends Container {
             && isAncestor(focusDescendant)
             && !focusDescendant.isBlocked()
             && focusDescendant.isShowing()) {
-            focusDescendant.requestFocus(temporary);
+            focusDescendant.requestFocus(true);
         } else {
             focusDescendant = null;
             Component.clearFocus(true);
         }
-
-        return containsFocus();
     }
 
     /**
@@ -823,8 +812,8 @@ public class Window extends Container {
                 if (window.isShowing()
                     && !window.isBlocked()) {
                     if (!window.isAuxilliary()) {
-                        window.requestActive();
-                        window.requestFocus(true);
+                        setActiveWindow(window);
+                        window.restoreFocus();
                     }
                 }
 
@@ -859,9 +848,10 @@ public class Window extends Container {
         }
 
         if (isActive()) {
-            clearActive();
-            clearFocus(true);
+            setActiveWindow(null);
         }
+
+        clearFocus(true);
 
         Display display = getDisplay();
 
