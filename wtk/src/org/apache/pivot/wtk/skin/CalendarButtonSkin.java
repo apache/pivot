@@ -66,9 +66,7 @@ public abstract class CalendarButtonSkin extends ButtonSkin
             calendarButton.setSelectedDate(date);
 
             calendarPopup.close();
-            if (calendarButton.isShowing()) {
-                calendarButton.requestFocus();
-            }
+            calendarButton.requestFocus();
 
             return true;
         }

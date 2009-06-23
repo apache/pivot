@@ -194,9 +194,7 @@ public class TerraMenuPopupSkin extends WindowSkin
         if (keyCode == Keyboard.KeyCode.ESCAPE) {
             MenuPopup menuPopup = (MenuPopup)getComponent();
             Component affiliate = menuPopup.getAffiliate();
-            if (affiliate != null
-                && affiliate.isFocusable()
-                && affiliate.isShowing()) {
+            if (affiliate != null) {
                 affiliate.requestFocus();
             }
 

@@ -16,7 +16,6 @@
  */
 package org.apache.pivot.wtk.skin;
 
-import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentKeyListener;
 import org.apache.pivot.wtk.Direction;
@@ -36,8 +35,6 @@ import org.apache.pivot.wtk.WindowStateListener;
  * @author gbrown
  */
 public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.ItemListener {
-    protected MenuPopup menuPopup = new MenuPopup();
-
     private WindowStateListener menuPopupWindowListener = new WindowStateListener.Adapter() {
         public void windowClosed(Window window, Display display) {
             MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
@@ -53,6 +50,8 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
             }
         }
     };
+
+    protected MenuPopup menuPopup = new MenuPopup();
 
     public MenuBarItemSkin() {
         menuPopup.getWindowStateListeners().add(menuPopupWindowListener);
@@ -216,19 +215,6 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
             if (!temporary
                 && !menuPopup.containsFocus()) {
                 menuPopup.close();
-            }
-        }
-    }
-
-    public void buttonPressed(Button button) {
-        MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
-        MenuBar menuBar = menuBarItem.getMenuBar();
-
-        if (menuPopup.isOpen()) {
-            if (menuBar.isActive()) {
-                Component.clearFocus();
-            } else {
-                menuBar.setActive(true);
             }
         }
     }

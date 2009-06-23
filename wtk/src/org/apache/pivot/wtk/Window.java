@@ -742,7 +742,7 @@ public class Window extends Container {
     }
 
     @Override
-    protected void requestFocus(boolean temporary) {
+    protected boolean requestFocus(boolean temporary) {
         // If this window is still an ancestor of the focus descendant
         // and the focus descendant can be focused, restore focus to it;
         // otherwise, clear the focus descendant
@@ -756,6 +756,8 @@ public class Window extends Container {
 
             super.requestFocus(temporary);
         }
+
+        return containsFocus();
     }
 
     /**

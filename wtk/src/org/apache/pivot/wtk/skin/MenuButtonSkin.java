@@ -43,11 +43,7 @@ public abstract class MenuButtonSkin extends ButtonSkin
     private WindowStateListener menuPopupWindowStateListener = new WindowStateListener.Adapter() {
         public void windowClosed(Window window, Display display) {
             MenuButton menuButton = (MenuButton)getComponent();
-
-            if (menuButton.isFocusable()
-                && menuButton.isShowing()) {
-                menuButton.requestFocus();
-            }
+            menuButton.requestFocus();
 
             repaintComponent();
         }

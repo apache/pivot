@@ -103,9 +103,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
             closeTransition = null;
             if (focusButtonOnClose) {
                 ListButton listButton = (ListButton)getComponent();
-                if (listButton.isShowing()) {
-                    listButton.requestFocus();
-                }
+                listButton.requestFocus();
             }
         }
     };

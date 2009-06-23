@@ -1972,7 +1972,9 @@ public abstract class Component implements ConstrainedVisual {
      * <tt>true</tt> if the component is enabled and visible.
      */
     public boolean isFocusable() {
-        return skin.isFocusable();
+        return skin.isFocusable()
+            && isShowing()
+            && !isBlocked();
     }
 
     /**
@@ -2004,8 +2006,8 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Requests that focus be given to this component.
      */
-    public final void requestFocus() {
-        requestFocus(false);
+    public final boolean requestFocus() {
+        return requestFocus(false);
     }
 
     /**
@@ -2015,20 +2017,12 @@ public abstract class Component implements ConstrainedVisual {
      * If <tt>true</tt>, indicates that focus is being restored from a
      * temporary loss.
      */
-    protected void requestFocus(boolean temporary) {
-        if (!isFocusable()) {
-            throw new IllegalArgumentException("Component is not focusable.");
+    protected boolean requestFocus(boolean temporary) {
+        if (isFocusable()) {
+            setFocusedComponent(this, temporary);
         }
 
-        if (!isShowing()) {
-            throw new IllegalArgumentException("Component is not showing.");
-        }
-
-        if (isBlocked()) {
-            throw new IllegalArgumentException("Component is blocked.");
-        }
-
-        setFocusedComponent(this, temporary);
+        return isFocused();
     }
 
     /**
@@ -2073,9 +2067,7 @@ public abstract class Component implements ConstrainedVisual {
                 }
             }
         } while (component != null
-            && !(component.isFocusable()
-                && !component.isBlocked()
-                && component.isShowing()));
+            && !component.isFocusable());
 
         // Focus the component (which may be null)
         setFocusedComponent(component, false);
@@ -2106,6 +2098,8 @@ public abstract class Component implements ConstrainedVisual {
         Component previousFocusedComponent = Component.focusedComponent;
 
         if (previousFocusedComponent != focusedComponent) {
+            // System.out.println("Transferring focus from " + previousFocusedComponent + " to " + focusedComponent);
+
             // Set the focused component
             Component.focusedComponent = focusedComponent;
 

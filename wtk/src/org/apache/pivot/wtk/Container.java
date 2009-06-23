@@ -445,29 +445,12 @@ public abstract class Container extends Component
      }
 
     /**
-     * Tests for the existence of any focusable descendants in this container.
-     *
      * @return
-     * <tt>true</tt> if this container has any focusable descedants;
-     * <tt>false</tt>, otherwise.
+     * <tt>false</tt>; containers are not focusable.
      */
     @Override
     public final boolean isFocusable() {
-        boolean focusable = false;
-
-        if (isShowing()
-            && !isBlocked()) {
-            for (int i = 0, n = getLength(); i < n; i++) {
-                Component component = components.get(i);
-                focusable = component.isFocusable();
-
-                if (focusable) {
-                    break;
-                }
-            }
-        }
-
-        return focusable;
+        return false;
     }
 
     /**
@@ -475,35 +458,17 @@ public abstract class Container extends Component
      * container.
      */
     @Override
-    protected void requestFocus(boolean temporary) {
-        if (!isShowing()) {
-            throw new IllegalArgumentException("Container is not showing.");
-        }
-
-        if (isBlocked()) {
-            throw new IllegalArgumentException("Container is blocked.");
-        }
-
-        for (int i = 0, n = getLength(); i < n; i++) {
-            Component component = components.get(i);
-
-            if (component instanceof Container) {
-                Container container = (Container)component;
-                if (container.isShowing()
-                    && !container.isBlocked()) {
-                    container.requestFocus();
-                    if (container.containsFocus()) {
-                        break;
-                    }
-                }
-            } else {
-                if (component.isFocusable()
-                    && component.isShowing()
-                    && !component.isBlocked()) {
-                    component.requestFocus();
-                }
+    protected boolean requestFocus(boolean temporary) {
+        if (isShowing()
+            && !isBlocked()) {
+            FocusTraversalPolicy focusTraversalPolicy = getFocusTraversalPolicy();
+            Component component = focusTraversalPolicy.getNextComponent(this, null, Direction.FORWARD);
+            if (component != null) {
+                component.requestFocus();
             }
         }
+
+        return containsFocus();
     }
 
     /**

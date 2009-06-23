@@ -1389,9 +1389,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                 }
             }
 
-            if (treeView.isFocusable()) {
-                treeView.requestFocus();
-            }
+            treeView.requestFocus();
         }
 
         return consumed;

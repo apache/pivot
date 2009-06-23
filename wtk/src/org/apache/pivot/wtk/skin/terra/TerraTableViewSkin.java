@@ -863,9 +863,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             }
         }
 
-        if (tableView.isFocusable()) {
-            tableView.requestFocus();
-        }
+        tableView.requestFocus();
 
         return consumed;
     }

@@ -18,6 +18,7 @@ package org.apache.pivot.demos.itunes;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Comparator;
 import java.util.Locale;
 
 import org.apache.pivot.collections.List;
@@ -140,8 +141,14 @@ public class SearchDemo implements Application {
             public void taskExecuted(Task<Object> task) {
                 if (task == getQuery) {
                     Map<String, Object> result = (Map<String, Object>)task.getResult();
-
                     List<Object> results = (List<Object>)result.get("results");
+
+                    // Preserve any existing sort
+                    List<Object> tableData = (List<Object>)resultsTableView.getTableData();
+                    Comparator<Object> comparator = tableData.getComparator();
+                    results.setComparator(comparator);
+
+                    // Update the table data
                     resultsTableView.setTableData(results);
                     statusLabel.setText("Found " + results.getLength() + " matching items.");
 

@@ -596,9 +596,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             }
         }
 
-        if (listView.isFocusable()) {
-            listView.requestFocus();
-        }
+        listView.requestFocus();
 
         return consumed;
     }

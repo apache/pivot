@@ -107,4 +107,9 @@ public final class Display extends Container {
 
         super.insert(component, index);
     }
+
+    @Override
+    public FocusTraversalPolicy getFocusTraversalPolicy() {
+        return null;
+    }
 }
