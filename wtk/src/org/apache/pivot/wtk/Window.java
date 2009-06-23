@@ -199,7 +199,7 @@ public class Window extends Container {
     private String title = null;
     private Image icon = null;
     private Component content = null;
-    private Component activeDescendant = null;
+    private Component focusDescendant = null;
 
     private boolean opening = false;
     private boolean closing = false;
@@ -728,32 +728,31 @@ public class Window extends Container {
     /**
      * Returns the window descendant that currently has the focus.
      */
-    public Component getActiveDescendant() {
-        return activeDescendant;
+    public Component getFocusDescendant() {
+        return focusDescendant;
     }
 
     /**
-     * Sets the window's active descendant, the descendant that currently
-     * has the focus.
+     * Sets the window descendant that currently has the focus.
      *
      * @param activeDescendant
      */
-    protected void setActiveDescendant(Component activeDescendant) {
-        this.activeDescendant = activeDescendant;
+    protected void setFocusDescendant(Component focusDescendant) {
+        this.focusDescendant = focusDescendant;
     }
 
     @Override
     protected void requestFocus(boolean temporary) {
-        // If this window is still an ancestor of the active descendant
-        // and the active descendant can be focused, restore focus to it;
-        // otherwise, clear the active descendant
-        if (activeDescendant != null
-            && isAncestor(activeDescendant)
-            && !activeDescendant.isBlocked()
-            && activeDescendant.isShowing()) {
-            activeDescendant.requestFocus(temporary);
+        // If this window is still an ancestor of the focus descendant
+        // and the focus descendant can be focused, restore focus to it;
+        // otherwise, clear the focus descendant
+        if (focusDescendant != null
+            && isAncestor(focusDescendant)
+            && !focusDescendant.isBlocked()
+            && focusDescendant.isShowing()) {
+            focusDescendant.requestFocus(temporary);
         } else {
-            activeDescendant = null;
+            focusDescendant = null;
 
             super.requestFocus(temporary);
         }
