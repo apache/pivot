@@ -54,6 +54,25 @@ public class Sheet extends Window {
     private boolean result = false;
     private SheetCloseListener sheetCloseListener = null;
 
+    private ComponentMouseButtonListener ownerMouseButtonListener =
+        new ComponentMouseButtonListener.Adapter() {
+        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+            Window owner = (Window)component;
+            Component ownerContent = owner.getContent();
+
+            if (ownerContent != null
+                && !ownerContent.isEnabled()
+                && owner.getComponentAt(x, y) == ownerContent) {
+                ApplicationContext.beep();
+
+                moveToFront();
+                restoreFocus();
+            }
+
+            return false;
+        }
+    };
+
     private SheetStateListenerList sheetStateListeners = new SheetStateListenerList();
 
     /**
@@ -101,6 +120,8 @@ public class Sheet extends Window {
             }
 
             content.setEnabled(false);
+
+            owner.getComponentMouseButtonListeners().add(ownerMouseButtonListener);
         }
     }
 
@@ -132,6 +153,8 @@ public class Sheet extends Window {
                     this.result = result;
 
                     Window owner = getOwner();
+                    owner.getComponentMouseButtonListeners().remove(ownerMouseButtonListener);
+
                     Component content = owner.getContent();
                     content.setEnabled(true);
 

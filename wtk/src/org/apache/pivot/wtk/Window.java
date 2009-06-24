@@ -735,16 +735,18 @@ public class Window extends Container {
      * have a focus descendant, the focus is cleared.
      */
     protected void restoreFocus() {
-        // If this window is still an ancestor of the focus descendant
-        // and the focus descendant can be focused, restore focus to it;
-        // otherwise, clear the focus descendant
-        if (focusDescendant != null
-            && isAncestor(focusDescendant)
-            && !focusDescendant.isBlocked()
-            && focusDescendant.isShowing()) {
-            focusDescendant.requestFocus(true);
-        } else {
-            focusDescendant = null;
+        assert(isShowing()
+            && !isBlocked());
+
+        if (focusDescendant != null) {
+            if (isAncestor(focusDescendant)) {
+                focusDescendant.requestFocus(true);
+            } else {
+                focusDescendant = null;
+            }
+        }
+
+        if (focusDescendant == null) {
             Component.clearFocus(true);
         }
     }
@@ -813,7 +815,7 @@ public class Window extends Container {
                     && !window.isBlocked()
                     && !window.isAuxilliary()) {
                     setActiveWindow(window);
-                    restoreFocus();
+                    window.restoreFocus();
                 }
 
                 // This was the last owned window for the current window; move

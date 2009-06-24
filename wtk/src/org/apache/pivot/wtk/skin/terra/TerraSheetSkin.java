@@ -21,15 +21,12 @@ import java.awt.Graphics2D;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.util.Vote;
-import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentListener;
-import org.apache.pivot.wtk.ComponentMouseButtonListener;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
-import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Sheet;
@@ -89,22 +86,6 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
 
         public void locationChanged(Component component, int previousX, int previousY) {
             alignToOwnerContent();
-        }
-    };
-
-    private ComponentMouseButtonListener ownerMouseButtonListener =
-        new ComponentMouseButtonListener.Adapter() {
-        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
-            Window owner = (Window)component;
-            Component ownerContent = owner.getContent();
-
-            if (ownerContent != null
-                && !ownerContent.isEnabled()
-                && owner.getComponentAt(x, y) == ownerContent) {
-                ApplicationContext.beep();
-            }
-
-            return false;
         }
     };
 
@@ -378,7 +359,6 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
 
         Window owner = window.getOwner();
         owner.getComponentListeners().add(ownerComponentListener);
-        owner.getComponentMouseButtonListeners().add(ownerMouseButtonListener);
 
         windowStateTransition = new WindowStateTransition(false);
         windowStateTransition.start(new TransitionListener() {
@@ -434,7 +414,6 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     public void sheetClosed(Sheet sheet) {
         Window owner = sheet.getOwner();
         owner.getComponentListeners().remove(ownerComponentListener);
-        owner.getComponentMouseButtonListeners().remove(ownerMouseButtonListener);
     }
 
     public void alignToOwnerContent() {
