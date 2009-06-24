@@ -68,65 +68,67 @@ public class TreeViewNodeRenderer extends FlowPane implements TreeView.NodeRende
     public void render(Object node, TreeView treeView, boolean expanded,
         boolean selected, TreeView.NodeCheckState checkState,
         boolean highlighted, boolean disabled) {
-        Image icon = null;
-        String text = null;
+        if (node != null) {
+            Image icon = null;
+            String text = null;
 
-        if (node instanceof TreeNode) {
-            TreeNode treeNode = (TreeNode)node;
+            if (node instanceof TreeNode) {
+                TreeNode treeNode = (TreeNode)node;
 
-            if (expanded
-                && treeNode instanceof TreeBranch) {
-                TreeBranch treeBranch = (TreeBranch)treeNode;
-                icon = treeBranch.getExpandedIcon();
+                if (expanded
+                    && treeNode instanceof TreeBranch) {
+                    TreeBranch treeBranch = (TreeBranch)treeNode;
+                    icon = treeBranch.getExpandedIcon();
 
-                if (icon == null) {
-                    icon = treeBranch.getIcon();
-                }
-            } else {
-                icon = treeNode.getIcon();
-            }
-
-            text = treeNode.getText();
-        } else if (node instanceof Image) {
-            icon = (Image)node;
-        } else {
-            if (node != null) {
-                text = node.toString();
-            }
-        }
-
-        // Update the image view
-        imageView.setImage(icon);
-        imageView.getStyles().put("opacity",
-            (treeView.isEnabled() && !disabled) ? 1.0f : 0.5f);
-
-        // Update the label
-        label.setText(text);
-
-        if (text == null) {
-            label.setDisplayable(false);
-        } else {
-            label.setDisplayable(true);
-
-            Font font = (Font)treeView.getStyles().get("font");
-            label.getStyles().put("font", font);
-
-            Color color;
-            if (treeView.isEnabled() && !disabled) {
-                if (selected) {
-                    if (treeView.isFocused()) {
-                        color = (Color)treeView.getStyles().get("selectionColor");
-                    } else {
-                        color = (Color)treeView.getStyles().get("inactiveSelectionColor");
+                    if (icon == null) {
+                        icon = treeBranch.getIcon();
                     }
                 } else {
-                    color = (Color)treeView.getStyles().get("color");
+                    icon = treeNode.getIcon();
                 }
+
+                text = treeNode.getText();
+            } else if (node instanceof Image) {
+                icon = (Image)node;
             } else {
-                color = (Color)treeView.getStyles().get("disabledColor");
+                if (node != null) {
+                    text = node.toString();
+                }
             }
 
-            label.getStyles().put("color", color);
+            // Update the image view
+            imageView.setImage(icon);
+            imageView.getStyles().put("opacity",
+                (treeView.isEnabled() && !disabled) ? 1.0f : 0.5f);
+
+            // Update the label
+            label.setText(text);
+
+            if (text == null) {
+                label.setDisplayable(false);
+            } else {
+                label.setDisplayable(true);
+
+                Font font = (Font)treeView.getStyles().get("font");
+                label.getStyles().put("font", font);
+
+                Color color;
+                if (treeView.isEnabled() && !disabled) {
+                    if (selected) {
+                        if (treeView.isFocused()) {
+                            color = (Color)treeView.getStyles().get("selectionColor");
+                        } else {
+                            color = (Color)treeView.getStyles().get("inactiveSelectionColor");
+                        }
+                    } else {
+                        color = (Color)treeView.getStyles().get("color");
+                    }
+                } else {
+                    color = (Color)treeView.getStyles().get("disabledColor");
+                }
+
+                label.getStyles().put("color", color);
+            }
         }
     }
 

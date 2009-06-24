@@ -109,7 +109,7 @@ public class JSONViewer implements Application {
         TreeNode treeNode;
 
         if (value instanceof Map<?, ?>) {
-            TreeBranch treeBranch = new TreeBranch();
+            TreeBranch treeBranch = new TreeBranch("{}");
 
             Map<String, Object> map = (Map<String, Object>)value;
             for (String key : map) {
@@ -127,7 +127,7 @@ public class JSONViewer implements Application {
 
             treeNode = treeBranch;
         } else if (value instanceof List<?>) {
-            TreeBranch treeBranch = new TreeBranch();
+            TreeBranch treeBranch = new TreeBranch("[]");
 
             List<Object> list = (List<Object>)value;
             for (int i = 0, n = list.getLength(); i < n; i++) {
@@ -146,8 +146,12 @@ public class JSONViewer implements Application {
             treeNode = treeBranch;
         } else if (value instanceof String) {
             treeNode = new TreeNode("\"" + value.toString() + "\"");
+        } else if (value instanceof Number) {
+            treeNode = new TreeNode(value.toString());
+        } else if (value instanceof Boolean) {
+            treeNode = new TreeNode(value.toString());
         } else {
-            treeNode = new TreeNode(value == null ? "null" : value.toString());
+            treeNode = new TreeNode("null");
         }
 
         return treeNode;
