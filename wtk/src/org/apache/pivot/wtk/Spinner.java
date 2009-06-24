@@ -24,6 +24,7 @@ import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.content.SpinnerItemRenderer;
 
@@ -275,7 +276,11 @@ public class Spinner extends Container {
             throw new IllegalArgumentException("spinnerData is null.");
         }
 
-        setSpinnerData(JSONSerializer.parseList(spinnerData));
+        try {
+            setSpinnerData(JSONSerializer.parseList(spinnerData));
+        } catch (SerializationException exception) {
+            throw new IllegalArgumentException(exception);
+        }
     }
 
     @Override

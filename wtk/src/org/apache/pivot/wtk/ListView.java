@@ -24,6 +24,7 @@ import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.content.ListViewItemRenderer;
 
@@ -460,7 +461,11 @@ public class ListView extends Component {
             throw new IllegalArgumentException("listData is null.");
         }
 
-        setListData(JSONSerializer.parseList(listData));
+        try {
+            setListData(JSONSerializer.parseList(listData));
+        } catch (SerializationException exception) {
+            throw new IllegalArgumentException(exception);
+        }
     }
 
     @Override

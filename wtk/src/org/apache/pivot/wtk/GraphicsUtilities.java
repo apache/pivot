@@ -28,6 +28,7 @@ import java.awt.geom.AffineTransform;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.wtk.Orientation;
 
 
@@ -242,7 +243,11 @@ public final class GraphicsUtilities {
             || value.startsWith("0X")) {
             paint = decodeColor(value);
         } else {
-            paint = decodePaint(JSONSerializer.parseMap(value));
+            try {
+                paint = decodePaint(JSONSerializer.parseMap(value));
+            } catch (SerializationException exception) {
+                throw new IllegalArgumentException(exception);
+            }
         }
 
         return paint;

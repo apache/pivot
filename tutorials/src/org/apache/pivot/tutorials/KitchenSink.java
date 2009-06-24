@@ -715,8 +715,13 @@ public class KitchenSink implements Application, Application.About {
                         Button.Group messageTypeGroup = Button.getGroup("messageType");
                         Button selection = messageTypeGroup.getSelection();
 
-                        Map<String, ?> userData =
-                            JSONSerializer.parseMap((String)selection.getUserData().get("messageInfo"));
+                        Map<String, ?> userData;
+                        try {
+                            userData = JSONSerializer.parseMap((String)selection.getUserData().get("messageInfo"));
+                        } catch (SerializationException exception) {
+                            throw new RuntimeException(exception);
+                        }
+
                         String messageType = (String)userData.get("type");
 
                         if (messageType.equals("custom")) {
@@ -751,8 +756,13 @@ public class KitchenSink implements Application, Application.About {
                         Button.Group messageTypeGroup = Button.getGroup("messageType");
                         Button selection = messageTypeGroup.getSelection();
 
-                        Map<String, ?> userData =
-                            JSONSerializer.parseMap((String)selection.getUserData().get("messageInfo"));
+                        Map<String, ?> userData;
+                        try {
+                            userData = JSONSerializer.parseMap((String)selection.getUserData().get("messageInfo"));
+                        } catch (SerializationException exception) {
+                            throw new RuntimeException(exception);
+                        }
+
                         String messageType = (String)userData.get("type");
 
                         if (messageType.equals("custom")) {

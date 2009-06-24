@@ -18,6 +18,7 @@ package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ListenerList;
 
 
@@ -132,7 +133,11 @@ public class Slider extends Container {
             throw new IllegalArgumentException("bounds is null.");
         }
 
-        setBounds(JSONSerializer.parseMap(bounds));
+        try {
+            setBounds(JSONSerializer.parseMap(bounds));
+        } catch (SerializationException exception) {
+            throw new IllegalArgumentException(exception);
+        }
     }
 
     public int getValue() {

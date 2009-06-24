@@ -25,6 +25,7 @@ import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.content.TableViewCellRenderer;
 
@@ -965,7 +966,11 @@ public class TableView extends Component {
             throw new IllegalArgumentException("tableData is null.");
         }
 
-        setTableData(JSONSerializer.parseList(tableData));
+        try {
+            setTableData(JSONSerializer.parseList(tableData));
+        } catch (SerializationException exception) {
+            throw new IllegalArgumentException(exception);
+        }
     }
 
     /**

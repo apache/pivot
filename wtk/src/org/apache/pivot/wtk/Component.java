@@ -2280,7 +2280,11 @@ public abstract class Component implements ConstrainedVisual {
             throw new IllegalArgumentException("styles is null.");
         }
 
-        setStyles(JSONSerializer.parseMap(styles));
+        try {
+            setStyles(JSONSerializer.parseMap(styles));
+        } catch (SerializationException exception) {
+            throw new IllegalArgumentException(exception);
+        }
     }
 
     /**

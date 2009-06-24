@@ -25,6 +25,7 @@ import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.serialization.SerializationException;
 
 
 public class JSONSerializerTest {
@@ -87,7 +88,7 @@ public class JSONSerializerTest {
         System.out.println("Output: " + writer);
     }
 
-    public static void test1() {
+    public static void test1() throws SerializationException {
         JSONSerializer jsonSerializer = new JSONSerializer();
 
         for (int i = 0, n = testStrings.length; i < n; i++) {
@@ -186,7 +187,7 @@ public class JSONSerializerTest {
         }
     }
 
-    public static void test4() {
+    public static void test4() throws SerializationException {
         Object root = JSONSerializer.parse("{a:{b:{c:'hello', d:'world'}, e:[1, 2, 3], f:false}, h:null}");
         testGet(root, "a");
         testGet(root, "a.b");

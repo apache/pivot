@@ -22,6 +22,7 @@ import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 
@@ -293,15 +294,6 @@ public class Form extends Container {
             this(messageType, null);
         }
 
-        public Flag(String flag) {
-            this(JSONSerializer.parseMap(flag));
-        }
-
-        public Flag(Dictionary<String, ?> flag) {
-            this(MessageType.decode((String)flag.get(MESSAGE_TYPE_KEY)),
-                (String)flag.get(MESSAGE_KEY));
-        }
-
         /**
          * Creates a new flag with the given type and message.
          *
@@ -340,6 +332,20 @@ public class Form extends Container {
          */
         public String getMessage() {
             return message;
+        }
+
+        public static Flag decode(String flag) {
+            Dictionary<String, ?> map;
+            try {
+                map = JSONSerializer.parseMap(flag);
+            } catch (SerializationException exception) {
+                throw new IllegalArgumentException(exception);
+            }
+
+            Flag value = new Flag(MessageType.decode((String)map.get(MESSAGE_TYPE_KEY)),
+                (String)map.get(MESSAGE_KEY));
+
+            return value;
         }
     }
 
@@ -520,6 +526,6 @@ public class Form extends Container {
             throw new IllegalArgumentException("flag is null.");
         }
 
-        setFlag(component, new Flag(flag));
+        setFlag(component, Flag.decode(flag));
     }
 }

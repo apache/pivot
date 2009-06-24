@@ -20,6 +20,7 @@ import java.util.Locale;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.CalendarDate;
 import org.apache.pivot.util.ListenerList;
 
@@ -280,7 +281,11 @@ public class Calendar extends Container {
             throw new IllegalArgumentException("locale is null.");
         }
 
-        setLocale(JSONSerializer.parseMap(locale));
+        try {
+            setLocale(JSONSerializer.parseMap(locale));
+        } catch (SerializationException exception) {
+            throw new IllegalArgumentException(exception);
+        }
     }
 
     /**

@@ -1046,13 +1046,14 @@ public class JSONSerializer implements Serializer<Object> {
      * @return
      * The parsed object.
      */
-    public static Object parse(String json) {
+    public static Object parse(String json)
+        throws SerializationException {
         JSONSerializer jsonSerializer = new JSONSerializer();
 
         Object object;
         try {
             object = jsonSerializer.readObject(new StringReader(json));
-        } catch(Exception exception) {
+        } catch(IOException exception) {
             throw new RuntimeException(exception);
         }
 
@@ -1068,7 +1069,8 @@ public class JSONSerializer implements Serializer<Object> {
      * @return
      * The parsed string.
      */
-    public static String parseString(String json) {
+    public static String parseString(String json)
+        throws SerializationException {
         return (String)parse(json);
     }
 
@@ -1081,7 +1083,8 @@ public class JSONSerializer implements Serializer<Object> {
      * @return
      * The parsed number.
      */
-    public static Number parseNumber(String json) {
+    public static Number parseNumber(String json)
+        throws SerializationException {
         return (Number)parse(json);
     }
 
@@ -1094,7 +1097,8 @@ public class JSONSerializer implements Serializer<Object> {
      * @return
      * The parsed short.
      */
-    public static Short parseShort(String json) {
+    public static Short parseShort(String json)
+        throws SerializationException {
         return (Short)parse(json);
     }
 
@@ -1107,7 +1111,8 @@ public class JSONSerializer implements Serializer<Object> {
      * @return
      * The parsed integer.
      */
-    public static Integer parseInteger(String json) {
+    public static Integer parseInteger(String json)
+        throws SerializationException {
         return (Integer)parse(json);
     }
 
@@ -1120,7 +1125,8 @@ public class JSONSerializer implements Serializer<Object> {
      * @return
      * The parsed number.
      */
-    public static Long parseLong(String json) {
+    public static Long parseLong(String json)
+        throws SerializationException {
         return (Long)parse(json);
     }
 
@@ -1133,7 +1139,8 @@ public class JSONSerializer implements Serializer<Object> {
      * @return
      * The parsed float.
      */
-    public static Float parseFloat(String json) {
+    public static Float parseFloat(String json)
+        throws SerializationException {
         return (Float)parse(json);
     }
 
@@ -1146,7 +1153,8 @@ public class JSONSerializer implements Serializer<Object> {
      * @return
      * The parsed double.
      */
-    public static Double parseDouble(String json) {
+    public static Double parseDouble(String json)
+        throws SerializationException {
         return (Double)parse(json);
     }
 
@@ -1159,7 +1167,8 @@ public class JSONSerializer implements Serializer<Object> {
      * @return
      * The parsed boolean.
      */
-    public static Boolean parseBoolean(String json) {
+    public static Boolean parseBoolean(String json)
+        throws SerializationException {
         return (Boolean)parse(json);
     }
 
@@ -1172,7 +1181,8 @@ public class JSONSerializer implements Serializer<Object> {
      * @return
      * The parsed list.
      */
-    public static List<?> parseList(String json) {
+    public static List<?> parseList(String json)
+        throws SerializationException {
         return (List<?>)parse(json);
     }
 
@@ -1186,7 +1196,8 @@ public class JSONSerializer implements Serializer<Object> {
      * The parsed map.
      */
     @SuppressWarnings("unchecked")
-    public static Map<String, ?> parseMap(String json) {
+    public static Map<String, ?> parseMap(String json)
+        throws SerializationException {
         return (Map<String, ?>)parse(json);
     }
 

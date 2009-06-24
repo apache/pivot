@@ -19,6 +19,7 @@ package org.apache.pivot.wtk;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ListenerList;
 
 
@@ -316,7 +317,11 @@ public class SplitPane extends Container {
             throw new IllegalArgumentException("splitBounds is null.");
         }
 
-        setSplitBounds(JSONSerializer.parseMap(splitBounds));
+        try {
+            setSplitBounds(JSONSerializer.parseMap(splitBounds));
+        } catch (SerializationException exception) {
+            throw new IllegalArgumentException(exception);
+        }
     }
 
     public boolean isLocked() {

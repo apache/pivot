@@ -21,6 +21,7 @@ import static org.junit.Assert.assertTrue;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.serialization.BinarySerializer;
 import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.concurrent.Task;
 import org.apache.pivot.util.concurrent.TaskGroup;
 import org.apache.pivot.util.concurrent.TaskListener;
@@ -42,7 +43,7 @@ public class WebQueryTestClient {
     final static boolean SECURE = false;
 
     @Test
-    public void basicTest() {
+    public void basicTest() throws SerializationException {
         final BasicAuthentication authentication = new BasicAuthentication("foo", "bar");
 
         TaskGroup queryGroup = new TaskGroup();
