@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.wtk;
 
+import java.io.Serializable;
+
 import org.apache.pivot.collections.Dictionary;
 
 /**
@@ -23,7 +25,9 @@ import org.apache.pivot.collections.Dictionary;
  *
  * @author gbrown
  */
-public final class Insets {
+public final class Insets implements Serializable {
+    private static final long serialVersionUID = 0;
+
     public final int top;
     public final int left;
     public final int bottom;
