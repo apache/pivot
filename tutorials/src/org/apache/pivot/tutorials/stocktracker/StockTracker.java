@@ -182,7 +182,7 @@ public class StockTracker implements Application {
             window.close();
         }
 
-        return true;
+        return false;
     }
 
     public void suspend() {

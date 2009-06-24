@@ -38,7 +38,7 @@ public class ToggleButtons implements Application {
             window.close();
         }
 
-        return true;
+        return false;
     }
 
     public void suspend() {

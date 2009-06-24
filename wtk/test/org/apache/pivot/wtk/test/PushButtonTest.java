@@ -49,7 +49,7 @@ public class PushButtonTest implements Application {
             window.close();
         }
 
-        return true;
+        return false;
     }
 
     public void suspend() {

@@ -90,7 +90,7 @@ public class CardPaneTest implements Application {
             frame.close();
         }
 
-        return true;
+        return false;
     }
 
     public void resume() {

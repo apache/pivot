@@ -37,7 +37,7 @@ public class Labels implements Application {
             window.close();
         }
 
-        return true;
+        return false;
     }
 
     public void suspend() {

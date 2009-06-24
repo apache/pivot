@@ -65,7 +65,7 @@ public class DecoratorDemo implements Application {
             translucentFrame.close();
         }
 
-        return true;
+        return false;
     }
 
     public void suspend() {

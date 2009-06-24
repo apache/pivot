@@ -134,7 +134,7 @@ public class ListViewSelectionTest implements Application {
     }
 
     public boolean shutdown(boolean optional) {
-        return true;
+        return false;
     }
 
     public void suspend() {

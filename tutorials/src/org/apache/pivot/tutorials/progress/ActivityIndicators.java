@@ -61,7 +61,7 @@ public class ActivityIndicators implements Application {
             window.close();
         }
 
-        return true;
+        return false;
     }
 
     public void suspend() {

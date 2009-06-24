@@ -1525,7 +1525,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             if (showBranchControls) {
                 Sequence<Path> paths = treeView.getSelectedPaths();
 
-                if (paths != null) {
+                if (paths != null
+                    && paths.getLength() > 0) {
                     Path path = paths.get(paths.getLength() - 1);
                     NodeInfo nodeInfo = getNodeInfoAt(path);
 
@@ -1548,7 +1549,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             if (showBranchControls) {
                 Sequence<Path> paths = treeView.getSelectedPaths();
 
-                if (paths != null) {
+                if (paths != null
+                    && paths.getLength() > 0) {
                     Path path = paths.get(paths.getLength() - 1);
                     NodeInfo nodeInfo = getNodeInfoAt(path);
 

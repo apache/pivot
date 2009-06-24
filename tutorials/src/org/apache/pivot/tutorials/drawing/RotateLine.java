@@ -59,7 +59,7 @@ public class RotateLine implements Application {
             window.close();
         }
 
-        return true;
+        return false;
     }
 
     public void suspend() {

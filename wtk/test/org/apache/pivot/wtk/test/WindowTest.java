@@ -126,8 +126,11 @@ public class WindowTest implements Application {
     }
 
     public boolean shutdown(boolean optional) {
-        window1.close();
-        return true;
+        if (window1 != null) {
+            window1.close();
+        }
+
+        return false;
     }
 
     public void suspend() {

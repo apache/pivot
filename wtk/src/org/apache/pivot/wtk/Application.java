@@ -20,6 +20,9 @@ import org.apache.pivot.collections.Map;
 
 /**
  * Represents the entry point into a WTK application.
+ * <p>
+ * These methods are called by the application context. In general, they should
+ * not be invoked directly by the application.
  *
  * @author gbrown
  */
@@ -54,10 +57,10 @@ public interface Application {
      *
      * @param optional
      * If <tt>true</tt>, the shutdown may be canceled by returning a value of
-     * <tt>false</tt>.
+     * <tt>true</tt>.
      *
      * @return
-     * <tt>true</tt> to continue shutdown, <tt>false</tt> to cancel.
+     * <tt>true</tt> to cancel shutdown, <tt>false</tt> to continue.
      */
     public boolean shutdown(boolean optional) throws Exception;
 

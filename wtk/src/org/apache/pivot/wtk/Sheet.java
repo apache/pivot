@@ -66,7 +66,6 @@ public class Sheet extends Window {
                 ApplicationContext.beep();
 
                 moveToFront();
-                restoreFocus();
             }
 
             return false;
@@ -173,6 +172,13 @@ public class Sheet extends Window {
                 sheetStateListeners.sheetCloseVetoed(this, vote);
             }
         }
+    }
+
+    @Override
+    public void moveToFront() {
+        super.moveToFront();
+
+        restoreFocus();
     }
 
     public SheetCloseListener getSheetCloseListener() {

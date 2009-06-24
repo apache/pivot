@@ -38,7 +38,7 @@ public class HelloWTKX implements Application {
             window.close();
         }
 
-        return true;
+        return false;
     }
 
     public void suspend() {

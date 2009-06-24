@@ -80,7 +80,7 @@ public class ListButtons implements Application {
             window.close();
         }
 
-        return true;
+        return false;
     }
 
     public void suspend() {

@@ -39,7 +39,7 @@ public class AccordionTest implements Application {
             frame.close();
         }
 
-        return true;
+        return false;
     }
 
     public void suspend() {

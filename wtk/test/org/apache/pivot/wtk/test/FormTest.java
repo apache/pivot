@@ -36,8 +36,11 @@ public class FormTest implements Application {
     }
 
     public boolean shutdown(boolean optional) {
-        frame.close();
-        return true;
+        if (frame != null) {
+            frame.close();
+        }
+
+        return false;
     }
 
     public void resume() {

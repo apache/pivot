@@ -152,17 +152,17 @@ public final class DesktopApplicationContext extends ApplicationContext {
      * Terminates the application context.
      */
     public static void exit() {
-        boolean shutdown = true;
+        boolean cancelShutdown = true;
 
         try {
-            shutdown = application.shutdown(true);
+            cancelShutdown = application.shutdown(true);
         } catch(Exception exception) {
             exception.printStackTrace();
             Alert.alert(MessageType.ERROR, exception.getMessage(),
                 applicationContext.getDisplay());
         }
 
-        if (shutdown) {
+        if (!cancelShutdown) {
             destroyTimer();
             windowedHostFrame.dispose();
             fullScreenHostFrame.dispose();

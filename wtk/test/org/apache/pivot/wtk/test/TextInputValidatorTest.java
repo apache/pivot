@@ -108,8 +108,11 @@ public class TextInputValidatorTest implements Application {
     }
 
     public boolean shutdown(boolean optional) {
-        window.close();
-        return true;
+        if (window != null) {
+            window.close();
+        }
+
+        return false;
     }
 
     public void resume() {

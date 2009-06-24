@@ -86,7 +86,11 @@ public class SearchDemo implements Application {
 
     @Override
     public boolean shutdown(boolean optional) {
-        return true;
+        if (window != null) {
+            window.close();
+        }
+
+        return false;
     }
 
     @Override

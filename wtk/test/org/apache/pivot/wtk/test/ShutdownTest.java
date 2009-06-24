@@ -26,12 +26,14 @@ import org.apache.pivot.wtk.DialogCloseListener;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.MessageType;
 
-public class ReflectionDecoratorTest implements Application {
+public class ShutdownTest implements Application {
     Display display = null;
-    boolean shutdown = false;
+    boolean cancelShutdown = true;
 
     public void startup(Display display, Map<String, String> properties) {
         this.display = display;
+        cancelShutdown = true;
+
         System.out.println("startup()");
     }
 
@@ -39,29 +41,33 @@ public class ReflectionDecoratorTest implements Application {
         System.out.println("shutdown()");
 
         ArrayList<String> options = new ArrayList<String>();
-        options.add("OK");
-        options.add("Cancel");
+        options.add("Yes");
+        options.add("No");
 
-        Alert alert = new Alert(MessageType.QUESTION, "Shutdown?", options);
+        Alert alert = new Alert(MessageType.QUESTION, "Cancel shutdown?", options);
         alert.open(display, new DialogCloseListener() {
             public void dialogClosed(Dialog dialog) {
                 Alert alert = (Alert)dialog;
 
                 if (alert.getResult()) {
-                    if (alert.getSelectedOption() == 0) {
-                        shutdown = true;
+                    if (alert.getSelectedOption() == 1) {
+                        cancelShutdown = false;
                         DesktopApplicationContext.exit();
                     }
                 }
             }
         });
 
-        return shutdown;
+        return cancelShutdown;
     }
 
     public void suspend() {
     }
 
     public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(ShutdownTest.class, args);
     }
 }

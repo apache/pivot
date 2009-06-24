@@ -841,7 +841,7 @@ public class KitchenSink implements Application, Application.About {
             window.close();
         }
 
-        return true;
+        return false;
     }
 
     public void suspend() {

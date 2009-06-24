@@ -109,8 +109,6 @@ public class FileBrowser implements Application {
             window.close();
         }
 
-        window = null;
-
         return false;
     }
 

@@ -389,7 +389,7 @@ public class DragAndDropDemo implements Application {
             window.close();
         }
 
-        return true;
+        return false;
     }
 
     public void suspend() {

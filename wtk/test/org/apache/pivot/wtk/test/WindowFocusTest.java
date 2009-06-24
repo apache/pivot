@@ -49,15 +49,11 @@ public class WindowFocusTest implements Application {
             frame1.close();
         }
 
-        frame1 = null;
-
         if (frame2 != null) {
             frame2.close();
         }
 
-        frame2 = null;
-
-        return true;
+        return false;
     }
 
     @Override

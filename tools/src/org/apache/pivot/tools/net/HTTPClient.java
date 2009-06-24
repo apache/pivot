@@ -33,6 +33,7 @@ import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentMouseButtonListener;
+import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.ListButton;
@@ -380,8 +381,11 @@ public class HTTPClient implements Application {
     }
 
     public boolean shutdown(boolean optional) throws Exception {
-        // No-op
-        return true;
+        if (window != null) {
+            window.close();
+        }
+
+        return false;
     }
 
     public void suspend() throws Exception {
@@ -390,5 +394,9 @@ public class HTTPClient implements Application {
 
     public void resume() throws Exception {
         // No-op
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(HTTPClient.class, args);
     }
 }

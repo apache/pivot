@@ -70,7 +70,7 @@ public class Checkboxes implements Application {
             window.close();
         }
 
-        return true;
+        return false;
     }
 
     public void suspend() {

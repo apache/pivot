@@ -54,7 +54,7 @@ public class PushButtons implements Application {
             window.close();
         }
 
-        return true;
+        return false;
     }
 
     public void suspend() {

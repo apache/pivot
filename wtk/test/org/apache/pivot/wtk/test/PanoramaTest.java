@@ -51,8 +51,14 @@ public class PanoramaTest implements Application {
     }
 
     public boolean shutdown(boolean optional) {
-        frame1.close();
-        frame2.close();
+        if (frame1 != null) {
+            frame1.close();
+        }
+
+        if (frame2 != null) {
+            frame2.close();
+        }
+
         return false;
     }
 
