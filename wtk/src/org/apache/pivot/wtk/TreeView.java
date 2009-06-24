@@ -1031,7 +1031,7 @@ public class TreeView extends Component {
                 Path path = selectedPaths.get(i);
 
                 // Monitor the path's parent
-                monitorBranch(new Path(path, 0, path.getLength() - 1));
+                monitorBranch(new Path(path, path.getLength() - 1));
 
                 // Update the selection
                 this.selectedPaths.add(new Path(path));
@@ -1150,7 +1150,7 @@ public class TreeView extends Component {
 
         if (selectedPaths.indexOf(path) < 0) {
             // Monitor the path's parent
-            monitorBranch(new Path(path, 0, path.getLength() - 1));
+            monitorBranch(new Path(path, path.getLength() - 1));
 
             // Update the selection
             selectedPaths.add(new Path(path));
@@ -1253,7 +1253,7 @@ public class TreeView extends Component {
             || (index >= 0 && !disabled)) {
             if (disabled) {
                 // Monitor the path's parent
-                monitorBranch(new Path(path, 0, path.getLength() - 1));
+                monitorBranch(new Path(path, path.getLength() - 1));
 
                 // Update the disabled paths
                 disabledPaths.add(new Path(path));
@@ -1478,7 +1478,7 @@ public class TreeView extends Component {
                 // anything so we know which events to fire after we're done
                 ancestorCheckStates = new ArrayList<NodeCheckState>(path.getLength() - 1);
 
-                Path ancestorPath = new Path(path, 0, path.getLength() - 1);
+                Path ancestorPath = new Path(path, path.getLength() - 1);
 
                 for (int i = ancestorPath.getLength() - 1; i >= 0; i--) {
                     ancestorCheckStates.insert(getNodeCheckState(ancestorPath), 0);
@@ -1489,7 +1489,7 @@ public class TreeView extends Component {
 
             if (checked) {
                 // Monitor the path's parent
-                monitorBranch(new Path(path, 0, path.getLength() - 1));
+                monitorBranch(new Path(path, path.getLength() - 1));
 
                 // Update the checked paths
                 checkedPaths.add(new Path(path));
@@ -1503,7 +1503,7 @@ public class TreeView extends Component {
 
             if (showMixedCheckmarkState) {
                 // Notify listeners of any changes to our ancestors' check states
-                Path ancestorPath = new Path(path, 0, path.getLength() - 1);
+                Path ancestorPath = new Path(path, path.getLength() - 1);
 
                 for (int i = ancestorPath.getLength() - 1; i >= 0; i--) {
                     NodeCheckState ancestorPreviousCheckState = ancestorCheckStates.get(i);

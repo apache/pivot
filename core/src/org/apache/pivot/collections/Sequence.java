@@ -52,15 +52,15 @@ public interface Sequence<T> {
                 this.elements = new ArrayList<Integer>(elements);
             }
 
-            public Path(Sequence<Integer> elements) {
-                this(elements, 0, elements.getLength());
+            public Path(Path path) {
+                this(path, path.getLength());
             }
 
-            public Path(Sequence<Integer> elements, int index, int count) {
-                this.elements = new ArrayList<Integer>(count);
+            public Path(Path path, int depth) {
+                elements = new ArrayList<Integer>(depth);
 
-                for (int i = index, n = index + count; i < n; i++) {
-                    this.elements.add(elements.get(i));
+                for (int i = 0; i < depth; i++) {
+                    elements.add(path.get(i));
                 }
             }
 

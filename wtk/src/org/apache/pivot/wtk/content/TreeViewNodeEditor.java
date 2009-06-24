@@ -259,7 +259,7 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
         if (n == 1) {
             parentData = (List<TreeNode>)treeData;
         } else {
-            Path parentPath = new Path(path, 0, n - 1);
+            Path parentPath = new Path(path, n - 1);
             parentData = (List<TreeNode>)Sequence.Tree.get(treeData, parentPath);
         }
 
@@ -275,7 +275,7 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
             parentData.add(treeNode);
 
             // Re-select the node, and make sure it's visible
-            Path newPath = new Path(path, 0, n - 1);
+            Path newPath = new Path(path, n - 1);
             newPath.add(parentData.indexOf(treeNode));
             treeView.setSelectedPath(newPath);
             treeView.scrollAreaToVisible(treeView.getNodeBounds(newPath));
