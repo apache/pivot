@@ -204,9 +204,9 @@ public class ArrayList<T> implements List<T>, Serializable {
             }
 
             items[index] = item;
-
-            listListeners.itemUpdated(this, index, previousItem);
         }
+
+        listListeners.itemUpdated(this, index, previousItem);
 
         return previousItem;
     }

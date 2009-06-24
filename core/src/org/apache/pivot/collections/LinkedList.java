@@ -216,9 +216,9 @@ public class LinkedList<T> implements List<T>, Serializable {
 
             // Update the item
             node.item = item;
-
-            listListeners.itemUpdated(this, index, previousItem);
         }
+
+        listListeners.itemUpdated(this, index, previousItem);
 
         return previousItem;
     }
