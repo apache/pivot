@@ -183,7 +183,7 @@ class LocalManifestAdapter implements Transferable {
     }
 
     public DataFlavor[] getTransferDataFlavors() {
-        return transferDataFlavors.toArray();
+        return transferDataFlavors.toArray(DataFlavor[].class);
     }
 
     public boolean isDataFlavorSupported(DataFlavor dataFlavor) {

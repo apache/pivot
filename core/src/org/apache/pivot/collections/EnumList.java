@@ -17,6 +17,7 @@
 package org.apache.pivot.collections;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -112,10 +113,7 @@ public class EnumList<E extends Enum<E>> implements List<E>, Serializable {
 
     @SuppressWarnings("unchecked")
     public E[] toArray() {
-        Object[] array = new Object[items.length];
-        System.arraycopy(items, 0, array, 0, items.length);
-
-        return (E[])array;
+        return Arrays.copyOf(items, items.length);
     }
 
     public Comparator<E> getComparator() {

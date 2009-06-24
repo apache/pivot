@@ -332,11 +332,8 @@ public class ArrayList<T> implements List<T>, Serializable {
     }
 
     @SuppressWarnings("unchecked")
-    public T[] toArray() {
-        Object[] array = new Object[length];
-        System.arraycopy(items, 0, array, 0, length);
-
-        return (T[])array;
+    public T[] toArray(Class<? extends T[]> type) {
+        return Arrays.copyOf(items, length, type);
     }
 
     public Comparator<T> getComparator() {
