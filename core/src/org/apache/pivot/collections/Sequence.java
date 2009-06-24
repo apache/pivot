@@ -39,40 +39,45 @@ public interface Sequence<T> {
          * data.
          *
          * @author tvolkert
+         * @author gbrown
          */
         public static class Path implements Sequence<Integer>, Iterable<Integer> {
-            private ArrayList<Integer> path;
+            private ArrayList<Integer> elements;
 
             public Path() {
-                path = new ArrayList<Integer>();
+                elements = new ArrayList<Integer>();
             }
 
-            public Path(Sequence<Integer> sequence) {
-                this(sequence, 0, sequence.getLength());
+            public Path(Integer... elements) {
+                this.elements = new ArrayList<Integer>(elements);
             }
 
-            public Path(Sequence<Integer> sequence, int index, int count) {
-                path = new ArrayList<Integer>(count);
+            public Path(Sequence<Integer> elements) {
+                this(elements, 0, elements.getLength());
+            }
+
+            public Path(Sequence<Integer> elements, int index, int count) {
+                this.elements = new ArrayList<Integer>(count);
 
                 for (int i = index, n = index + count; i < n; i++) {
-                    path.add(sequence.get(i));
+                    this.elements.add(elements.get(i));
                 }
             }
 
-            public Path(int initialCapacity) {
-                path = new ArrayList<Integer>(initialCapacity);
+            private Path(ArrayList<Integer> elements) {
+                this.elements = elements;
             }
 
             public int add(Integer item) {
-                return path.add(item);
+                return elements.add(item);
             }
 
             public void insert(Integer item, int index) {
-                path.insert(item, index);
+                elements.insert(item, index);
             }
 
             public Integer update(int index, Integer item) {
-                return path.update(index, item);
+                return elements.update(index, item);
             }
 
             public int remove(Integer item) {
@@ -80,23 +85,27 @@ public interface Sequence<T> {
             }
 
             public Sequence<Integer> remove(int index, int count) {
-                return path.remove(index, count);
+                return elements.remove(index, count);
             }
 
             public Integer get(int index) {
-                return path.get(index);
+                return elements.get(index);
             }
 
             public int indexOf(Integer item) {
-                return path.indexOf(item);
+                return elements.indexOf(item);
             }
 
             public int getLength() {
-                return path.getLength();
+                return elements.getLength();
             }
 
             public Iterator<Integer> iterator() {
-                return new ImmutableIterator<Integer>(path.iterator());
+                return new ImmutableIterator<Integer>(elements.iterator());
+            }
+
+            public static Path forDepth(int depth) {
+                return new Path(new ArrayList<Integer>(depth));
             }
         }
 

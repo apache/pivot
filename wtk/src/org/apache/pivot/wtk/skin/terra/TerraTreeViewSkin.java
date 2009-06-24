@@ -112,7 +112,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
         @SuppressWarnings("unchecked")
         public Path getPath() {
-            Path path = new Path(depth);
+            Path path = Path.forDepth(depth);
 
             NodeInfo nodeInfo = this;
 

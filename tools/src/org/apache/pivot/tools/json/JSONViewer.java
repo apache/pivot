@@ -20,6 +20,7 @@ import java.io.IOException;
 
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
+import org.apache.pivot.collections.Sequence.Tree.Path;
 import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.wtk.Application;
@@ -94,6 +95,7 @@ public class JSONViewer implements Application {
                 TreeBranch treeData = new TreeBranch();
                 treeData.add(build(value));
                 treeView.setTreeData(treeData);
+                treeView.expandBranch(new Path(0));
             } else {
                 Prompt.prompt("Clipboard does not contain a JSON object or array.", window);
             }

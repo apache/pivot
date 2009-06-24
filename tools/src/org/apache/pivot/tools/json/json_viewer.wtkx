@@ -18,7 +18,6 @@ limitations under the License.
 
 <Window title="JSON Viewer" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
-    xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
     <content>
         <ScrollPane horizontalScrollBarPolicy="fillToCapacity"
