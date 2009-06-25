@@ -20,11 +20,12 @@ limitations under the License.
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
+    <wtkx:script src="json_viewer.js"/>
     <content>
         <ScrollPane horizontalScrollBarPolicy="fillToCapacity"
             verticalScrollBarPolicy="fillToCapacity">
             <view>
-                <TreeView wtkx:id="treeView">
+                <TreeView wtkx:id="treeView" dropTarget="$treeViewDropTarget">
                     <nodeRenderer>
                         <content:TreeViewNodeRenderer showIcon="false"/>
                     </nodeRenderer>

@@ -16,30 +16,32 @@
  */
 package org.apache.pivot.tools.json;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence.Tree.Path;
+import org.apache.pivot.io.FileList;
 import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Clipboard;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.DropAction;
 import org.apache.pivot.wtk.Manifest;
 import org.apache.pivot.wtk.Prompt;
 import org.apache.pivot.wtk.TreeView;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.TreeBranch;
 import org.apache.pivot.wtk.content.TreeNode;
-import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class JSONViewer implements Application {
     private Window window = null;
-
-    @WTKX private TreeView treeView;
+    private TreeView treeView = null;
 
     public static final String APPLICATION_KEY = "application";
 
@@ -50,7 +52,7 @@ public class JSONViewer implements Application {
         wtkxSerializer.put(APPLICATION_KEY, this);
 
         window = (Window)wtkxSerializer.readObject(this, "json_viewer.wtkx");
-        wtkxSerializer.bind(this, JSONViewer.class);
+        treeView = (TreeView)wtkxSerializer.get("treeView");
 
         window.open(display);
         window.requestFocus();
@@ -78,30 +80,61 @@ public class JSONViewer implements Application {
 
         if (clipboardContent != null
             && clipboardContent.containsText()) {
+            String json = null;
             try {
-                setJSON(clipboardContent.getText());
+                json = clipboardContent.getText();
+                setValue(JSONSerializer.parse(json));
             } catch (IOException exception) {
+                Prompt.prompt(exception.getMessage(), window);
+            } catch(SerializationException exception) {
                 Prompt.prompt(exception.getMessage(), window);
             }
         }
     }
 
-    public void setJSON(String json) {
-        try {
-            Object value = JSONSerializer.parse(json);
+    public DropAction drop(Manifest dragContent) {
+        DropAction dropAction = null;
 
-            if (value instanceof Map<?, ?>
-                || value instanceof List<?>) {
-                TreeBranch treeData = new TreeBranch();
-                treeData.add(build(value));
-                treeView.setTreeData(treeData);
-                treeView.expandBranch(new Path(0));
+        try {
+            FileList fileList = dragContent.getFileList();
+            if (fileList.getLength() == 1) {
+                File file = fileList.get(0);
+
+                JSONSerializer jsonSerializer = new JSONSerializer();
+                FileInputStream fileInputStream = null;
+                try {
+                    try {
+                        fileInputStream = new FileInputStream(file);
+                        setValue(jsonSerializer.readObject(fileInputStream));
+                    } finally {
+                        if (fileInputStream != null) {
+                            fileInputStream.close();
+                        }
+                    }
+                } catch (IOException exception) {
+                    Prompt.prompt(exception.getMessage(), window);
+                } catch (SerializationException exception) {
+                    Prompt.prompt(exception.getMessage(), window);
+                }
+
+                dropAction = DropAction.COPY;
             } else {
-                Prompt.prompt("Clipboard does not contain a JSON object or array.", window);
+                Prompt.prompt("Multiple files not supported.", window);
             }
-        } catch (SerializationException exception) {
+        } catch(IOException exception) {
             Prompt.prompt(exception.getMessage(), window);
         }
+
+        return dropAction;
+    }
+
+    private void setValue(Object value) {
+        assert (value instanceof Map<?, ?>
+            || value instanceof List<?>);
+        TreeBranch treeData = new TreeBranch();
+        treeData.add(build(value));
+        treeView.setTreeData(treeData);
+        treeView.expandBranch(new Path(0));
     }
 
     @SuppressWarnings("unchecked")
