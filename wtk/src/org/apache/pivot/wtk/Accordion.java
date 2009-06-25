@@ -25,6 +25,7 @@ import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.ThreadUtilities;
 import org.apache.pivot.util.Vote;
+import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.wtk.media.Image;
 
 
@@ -332,7 +333,12 @@ public class Accordion extends Container {
         Image iconImage = (Image)ApplicationContext.getResourceCache().get(icon);
 
         if (iconImage == null) {
-            iconImage = Image.load(icon);
+            try {
+                iconImage = Image.load(icon);
+            } catch (TaskExecutionException exception) {
+                throw new IllegalArgumentException(exception);
+            }
+
             ApplicationContext.getResourceCache().put(icon, iconImage);
         }
 

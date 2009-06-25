@@ -23,6 +23,7 @@ import java.awt.geom.AffineTransform;
 import java.net.URL;
 
 import org.apache.pivot.util.ThreadUtilities;
+import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.FlowPane;
@@ -188,7 +189,11 @@ public class WatermarkDecorator implements Decorator {
             throw new IllegalArgumentException("image is null.");
         }
 
-        setImage(Image.load(image));
+        try {
+            setImage(Image.load(image));
+        } catch (TaskExecutionException exception) {
+            throw new IllegalArgumentException(exception);
+        }
     }
 
     /**

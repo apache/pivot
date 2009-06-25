@@ -65,7 +65,7 @@ public class SearchDemo implements Application {
     public static final String MEDIA = "all";
     public static final int LIMIT = 100;
 
-    public SearchDemo() {
+    public SearchDemo() throws Exception {
         searchImage = Image.load(getClass().getResource("magnifier.png"));
         cancelImage = Image.load(getClass().getResource("cancel.png"));
     }

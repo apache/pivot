@@ -19,6 +19,7 @@ package org.apache.pivot.wtk.content;
 import java.net.URL;
 
 import org.apache.pivot.util.ThreadUtilities;
+import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.media.Image;
 
@@ -61,7 +62,12 @@ public class ListItem {
         Image icon = (Image)ApplicationContext.getResourceCache().get(iconURL);
 
         if (icon == null) {
-            icon = Image.load(iconURL);
+            try {
+                icon = Image.load(iconURL);
+            } catch (TaskExecutionException exception) {
+                throw new IllegalArgumentException(exception);
+            }
+
             ApplicationContext.getResourceCache().put(iconURL, icon);
         }
 

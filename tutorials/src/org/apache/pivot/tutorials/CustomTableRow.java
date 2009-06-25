@@ -18,6 +18,7 @@ package org.apache.pivot.tutorials;
 
 import java.net.URL;
 
+import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.media.Image;
 
@@ -46,7 +47,12 @@ public class CustomTableRow {
         Image b = (Image)ApplicationContext.getResourceCache().get(bURL);
 
         if (b == null) {
-            b = Image.load(bURL);
+            try {
+                b = Image.load(bURL);
+            } catch (TaskExecutionException exception) {
+                throw new RuntimeException(exception);
+            }
+
             ApplicationContext.getResourceCache().put(bURL, b);
         }
 

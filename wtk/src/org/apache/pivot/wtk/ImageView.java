@@ -20,6 +20,7 @@ import java.net.URL;
 
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.ThreadUtilities;
+import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.wtk.media.Image;
 
 
@@ -98,7 +99,11 @@ public class ImageView extends Component {
         }
 
         // TODO Support asynchronous loading?
-        setImage(Image.load(image));
+        try {
+            setImage(Image.load(image));
+        } catch (TaskExecutionException exception) {
+            throw new IllegalArgumentException(exception);
+        }
     }
 
     /**

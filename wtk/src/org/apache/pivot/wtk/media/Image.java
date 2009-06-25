@@ -18,10 +18,12 @@ package org.apache.pivot.wtk.media;
 
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
 import org.apache.pivot.io.IOTask;
+import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.concurrent.Dispatcher;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
@@ -104,7 +106,9 @@ public abstract class Image implements Visual {
                         inputStream.close();
                     }
                 }
-            } catch(Exception exception) {
+            } catch (IOException exception) {
+                throw new TaskExecutionException(exception);
+            } catch (SerializationException exception) {
                 throw new TaskExecutionException(exception);
             }
 
@@ -122,17 +126,9 @@ public abstract class Image implements Visual {
         return imageListeners;
     }
 
-    public static Image load(URL url) {
+    public static Image load(URL url) throws TaskExecutionException {
         LoadTask loadTask = new LoadTask(url);
-
-        Image image = null;
-        try {
-            image = loadTask.execute();
-        } catch(TaskExecutionException exception) {
-            throw new RuntimeException(exception);
-        }
-
-        return image;
+        return loadTask.execute();
     }
 
     public static Image.LoadTask load(URL url, TaskListener<Image> loadListener) {

@@ -21,6 +21,7 @@ import java.awt.Font;
 import java.io.File;
 
 import org.apache.pivot.io.Folder;
+import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.wtk.FlowPane;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.ImageView;
@@ -42,10 +43,17 @@ public class TreeViewFileRenderer extends FlowPane implements TreeView.NodeRende
     public static final int ICON_WIDTH = 16;
     public static final int ICON_HEIGHT = 16;
 
-    private static final Image folderImage =
-        Image.load(TreeViewFileRenderer.class.getResource("folder.png"));
-    private static final Image fileImage =
-        Image.load(TreeViewFileRenderer.class.getResource("page_white.png"));
+    public static final Image FOLDER_IMAGE;
+    public static final Image FILE_IMAGE;
+
+    static {
+        try {
+            FOLDER_IMAGE = Image.load(TreeViewFileRenderer.class.getResource("folder.png"));
+            FILE_IMAGE = Image.load(TreeViewFileRenderer.class.getResource("page_white.png"));
+        } catch (TaskExecutionException exception) {
+            throw new RuntimeException(exception);
+        }
+    }
 
     public TreeViewFileRenderer() {
         super();
@@ -105,7 +113,7 @@ public class TreeViewFileRenderer extends FlowPane implements TreeView.NodeRende
             File file = (File)node;
 
             // Update the image view
-            Image icon = (file instanceof Folder) ? folderImage : fileImage;
+            Image icon = (file instanceof Folder) ? FOLDER_IMAGE : FILE_IMAGE;
 
             imageView.setImage(icon);
             imageView.getStyles().put("opacity",

@@ -30,6 +30,7 @@ import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.CalendarDate;
 import org.apache.pivot.util.Vote;
+import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.wtk.Action;
 import org.apache.pivot.wtk.ActivityIndicator;
 import org.apache.pivot.wtk.Alert;
@@ -290,7 +291,12 @@ public class KitchenSink implements Application, Application.About {
                         Image image = (Image)ApplicationContext.getResourceCache().get(imageURL);
 
                         if (image == null) {
-                            image = Image.load(imageURL);
+                            try {
+                                image = Image.load(imageURL);
+                            } catch (TaskExecutionException exception) {
+                                throw new RuntimeException(exception);
+                            }
+
                             ApplicationContext.getResourceCache().put(imageURL, image);
                         }
 

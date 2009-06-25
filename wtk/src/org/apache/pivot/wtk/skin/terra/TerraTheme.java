@@ -26,6 +26,7 @@ import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
+import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.wtk.Accordion;
 import org.apache.pivot.wtk.ActivityIndicator;
 import org.apache.pivot.wtk.Alert;
@@ -304,7 +305,12 @@ public final class TerraTheme extends Theme {
             messageIcon = (Image)ApplicationContext.getResourceCache().get(location);
 
             if (messageIcon == null) {
-                messageIcon = Image.load(location);
+                try {
+                    messageIcon = Image.load(location);
+                } catch (TaskExecutionException exception) {
+                    throw new RuntimeException(exception);
+                }
+
                 ApplicationContext.getResourceCache().put(location, messageIcon);
             }
         }
@@ -357,7 +363,12 @@ public final class TerraTheme extends Theme {
             smallMessageIcon = (Image)ApplicationContext.getResourceCache().get(location);
 
             if (smallMessageIcon == null) {
-                smallMessageIcon = Image.load(location);
+                try {
+                    smallMessageIcon = Image.load(location);
+                } catch (TaskExecutionException exception) {
+                    throw new RuntimeException(exception);
+                }
+
                 ApplicationContext.getResourceCache().put(location, smallMessageIcon);
             }
         }

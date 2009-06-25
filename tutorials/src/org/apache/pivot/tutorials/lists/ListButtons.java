@@ -19,6 +19,7 @@ package org.apache.pivot.tutorials.lists;
 import java.net.URL;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.ThreadUtilities;
+import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.DesktopApplicationContext;
@@ -54,7 +55,12 @@ public class ListButtons implements Application {
                 Image image = (Image)ApplicationContext.getResourceCache().get(imageURL);
 
                 if (image == null) {
-                    image = Image.load(imageURL);
+                    try {
+                        image = Image.load(imageURL);
+                    } catch (TaskExecutionException exception) {
+                        throw new RuntimeException(exception);
+                    }
+
                     ApplicationContext.getResourceCache().put(imageURL, image);
                 }
 

@@ -26,6 +26,7 @@ import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.ThreadUtilities;
 import org.apache.pivot.util.Vote;
+import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.wtk.media.Image;
 
 
@@ -581,7 +582,11 @@ public class Window extends Container {
             throw new IllegalArgumentException("icon is null.");
         }
 
-        setIcon(Image.load(icon));
+        try {
+            setIcon(Image.load(icon));
+        } catch (TaskExecutionException exception) {
+            throw new IllegalArgumentException(exception);
+        }
     }
 
     /**
