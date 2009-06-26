@@ -31,19 +31,25 @@ import org.apache.pivot.wtk.Clipboard;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.DropAction;
+import org.apache.pivot.wtk.HorizontalAlignment;
+import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.Manifest;
 import org.apache.pivot.wtk.Prompt;
 import org.apache.pivot.wtk.TreeView;
+import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.TreeBranch;
 import org.apache.pivot.wtk.content.TreeNode;
+import org.apache.pivot.wtk.effects.OverlayDecorator;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class JSONViewer implements Application {
     private Window window = null;
     private TreeView treeView = null;
+    private OverlayDecorator promptDecorator = new OverlayDecorator();
 
     public static final String APPLICATION_KEY = "application";
+    public static final String WINDOW_TITLE = "JSON Viewer";
 
     @Override
     public void startup(Display display, Map<String, String> properties)
@@ -54,6 +60,13 @@ public class JSONViewer implements Application {
         window = (Window)wtkxSerializer.readObject(this, "json_viewer.wtkx");
         treeView = (TreeView)wtkxSerializer.get("treeView");
 
+        Label prompt = new Label("Drag or paste JSON here");
+        prompt.getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
+        prompt.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
+        promptDecorator.setOverlay(prompt);
+        treeView.getDecorators().add(promptDecorator);
+
+        window.setTitle(WINDOW_TITLE);
         window.open(display);
         window.requestFocus();
     }
@@ -89,6 +102,8 @@ public class JSONViewer implements Application {
             } catch(SerializationException exception) {
                 Prompt.prompt(exception.getMessage(), window);
             }
+
+            window.setTitle(WINDOW_TITLE);
         }
     }
 
@@ -117,6 +132,8 @@ public class JSONViewer implements Application {
                     Prompt.prompt(exception.getMessage(), window);
                 }
 
+                window.setTitle(WINDOW_TITLE + " - " + file.getName());
+
                 dropAction = DropAction.COPY;
             } else {
                 Prompt.prompt("Multiple files not supported.", window);
@@ -131,6 +148,12 @@ public class JSONViewer implements Application {
     private void setValue(Object value) {
         assert (value instanceof Map<?, ?>
             || value instanceof List<?>);
+        // Remove prompt decorator
+        if (promptDecorator != null) {
+            treeView.getDecorators().remove(promptDecorator);
+            promptDecorator = null;
+        }
+
         TreeBranch treeData = new TreeBranch();
         treeData.add(build(value));
         treeView.setTreeData(treeData);

@@ -24,7 +24,6 @@ import java.awt.geom.AffineTransform;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 
-
 /**
  * Decorator that applies a "shade" to a component. The shade is a rectangle
  * of the same size as the component that is painted over the component using a

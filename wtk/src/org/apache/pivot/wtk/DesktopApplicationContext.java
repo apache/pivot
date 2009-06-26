@@ -137,6 +137,8 @@ public final class DesktopApplicationContext extends ApplicationContext {
     private static HostFrame windowedHostFrame = null;
     private static HostFrame fullScreenHostFrame = null;
 
+    private static Runnable updateFrameTitleBarCallback = null;
+
     private static final String DEFAULT_HOST_FRAME_TITLE = "Pivot";
 
     private static final String X_ARGUMENT = "x";
@@ -369,26 +371,50 @@ public final class DesktopApplicationContext extends ApplicationContext {
         // Open the windowed host
         windowedHostFrame.setVisible(true);
 
+        final WindowListener rootOwnerListener = new WindowListener.Adapter() {
+            @Override
+            public void titleChanged(Window window, String previousTitle) {
+                updateFrameTitleBar(window);
+            }
+
+            @Override
+            public void iconChanged(Window window, Image previousIcon) {
+                updateFrameTitleBar(window);
+            }
+        };
+
         Window.getWindowClassListeners().add(new WindowClassListener() {
             public void activeWindowChanged(Window previousActiveWindow) {
-                ApplicationContext.queueCallback(new Runnable() {
-                    public void run() {
-                        Window activeWindow = Window.getActiveWindow();
+                if (previousActiveWindow != null) {
+                    Window previousRootOwner = previousActiveWindow.getRootOwner();
+                    previousRootOwner.getWindowListeners().remove(rootOwnerListener);
+                }
 
-                        if (activeWindow == null) {
-                            windowedHostFrame.setTitle(DEFAULT_HOST_FRAME_TITLE);
-                        } else {
-                            Window rootOwner = activeWindow.getRootOwner();
-                            windowedHostFrame.setTitle(rootOwner.getTitle());
+                Window activeWindow = Window.getActiveWindow();
 
-                            Image rootIcon = rootOwner.getIcon();
-                            if (rootIcon instanceof Picture) {
-                                Picture rootPicture = (Picture)rootIcon;
-                                windowedHostFrame.setIconImage(rootPicture.getBufferedImage());
+                if (activeWindow != null) {
+                    Window rootOwner = activeWindow.getRootOwner();
+                    rootOwner.getWindowListeners().add(rootOwnerListener);
+                }
+
+                if (updateFrameTitleBarCallback == null) {
+                    updateFrameTitleBarCallback = new Runnable() {
+                        public void run() {
+                            Window activeWindow = Window.getActiveWindow();
+                            if (activeWindow == null) {
+                                windowedHostFrame.setTitle(DEFAULT_HOST_FRAME_TITLE);
+                                windowedHostFrame.setIconImage(null);
+                            } else {
+                                Window rootOwner = activeWindow.getRootOwner();
+                                updateFrameTitleBar(rootOwner);
                             }
+
+                            updateFrameTitleBarCallback = null;
                         }
-                    }
-                });
+                    };
+
+                    queueCallback(updateFrameTitleBarCallback);
+                }
             }
         });
 
@@ -396,27 +422,14 @@ public final class DesktopApplicationContext extends ApplicationContext {
         setFullScreen(fullScreen);
     }
 
-    /**
-     * Utility method to make it easier to define <tt>main()</tt> entry-points
-     * into applications. For example:
-     *
-     * <code>
-     * public class MyApp implements Application {
-     *   public static void main(String[] args) throws Exception {
-     *     DesktopApplicationContext.main(MyApp.class, args);
-     *   }
-     * }
-     * </code>
-     *
-     * @param applicationClass
-     * @param applicationArgs
-     */
-    public static final void main(Class<? extends Application> applicationClass,
-        String[] applicationArgs) {
-        String[] args = new String[applicationArgs.length + 1];
-        System.arraycopy(applicationArgs, 0, args, 1, applicationArgs.length);
-        args[0] = applicationClass.getName();
-        main(args);
+    private static void updateFrameTitleBar(Window rootOwner) {
+        windowedHostFrame.setTitle(rootOwner.getTitle());
+
+        Image icon = rootOwner.getIcon();
+        if (icon instanceof Picture) {
+            Picture rootPicture = (Picture)icon;
+            windowedHostFrame.setIconImage(rootPicture.getBufferedImage());
+        }
     }
 
     /**
@@ -472,5 +485,28 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
             displayHost.requestFocus();
         }
+    }
+
+    /**
+     * Utility method to make it easier to define <tt>main()</tt> entry-points
+     * into applications. For example:
+     *
+     * <code>
+     * public class MyApp implements Application {
+     *   public static void main(String[] args) throws Exception {
+     *     DesktopApplicationContext.main(MyApp.class, args);
+     *   }
+     * }
+     * </code>
+     *
+     * @param applicationClass
+     * @param applicationArgs
+     */
+    public static final void main(Class<? extends Application> applicationClass,
+        String[] applicationArgs) {
+        String[] args = new String[applicationArgs.length + 1];
+        System.arraycopy(applicationArgs, 0, args, 1, applicationArgs.length);
+        args[0] = applicationClass.getName();
+        main(args);
     }
 }
