@@ -38,7 +38,6 @@ import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TableViewHeader;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class LargeData implements Application {
@@ -135,13 +134,12 @@ public class LargeData implements Application {
     private String basePath = null;
 
     private Window window = null;
-
-    @WTKX private ListButton fileListButton;
-    @WTKX private PushButton loadDataButton;
-    @WTKX private PushButton cancelButton;
-    @WTKX private Label statusLabel;
-    @WTKX private TableView tableView;
-    @WTKX private TableViewHeader tableViewHeader;
+    private ListButton fileListButton;
+    private PushButton loadDataButton;
+    private PushButton cancelButton;
+    private Label statusLabel;
+    private TableView tableView;
+    private TableViewHeader tableViewHeader;
 
     private CSVSerializer csvSerializer;
     private int pageSize = 0;
@@ -167,7 +165,12 @@ public class LargeData implements Application {
 
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "large_data.wtkx");
-        wtkxSerializer.bind(this, LargeData.class);
+        fileListButton = (ListButton)wtkxSerializer.get("fileListButton");
+        loadDataButton = (PushButton)wtkxSerializer.get("loadDataButton");
+        cancelButton = (PushButton)wtkxSerializer.get("cancelButton");
+        statusLabel = (Label)wtkxSerializer.get("statusLabel");
+        tableView = (TableView)wtkxSerializer.get("tableView");
+        tableViewHeader = (TableViewHeader)wtkxSerializer.get("tableViewHeader");
 
         loadDataButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {

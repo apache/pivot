@@ -182,8 +182,14 @@ public final class DesktopApplicationContext extends ApplicationContext {
             throw new IllegalStateException();
         }
 
-        // Get the application class name and startup properties
-        String applicationClassName = null;
+        // Get the application class name
+        if (args.length == 0) {
+            System.err.println("Application class name is required.");
+        }
+
+        String applicationClassName = args[0];
+
+        // Get the startup properties
         properties = new HashMap<String, String>();
 
         int x = 0;
@@ -194,44 +200,39 @@ public final class DesktopApplicationContext extends ApplicationContext {
         boolean resizable = true;
         boolean fullScreen = false;
 
-        for (int i = 0, n = args.length; i < n; i++) {
+        for (int i = 1, n = args.length; i < n; i++) {
             String arg = args[i];
 
-            if (i == 0) {
-                applicationClassName = arg;
+            if (!arg.startsWith("--")) {
+                throw new IllegalArgumentException("Startup property names must begin with \"--\".");
+            }
+
+            arg = arg.substring(2);
+            String[] property = arg.split("=");
+
+            if (property.length == 2) {
+                String key = property[0];
+                String value = property[1];
+
+                if (key.equals(X_ARGUMENT)) {
+                    x = Integer.parseInt(value);
+                } else if (key.equals(Y_ARGUMENT)) {
+                    y = Integer.parseInt(value);
+                } else if (key.equals(WIDTH_ARGUMENT)) {
+                    width = Integer.parseInt(value);
+                } else if (key.equals(HEIGHT_ARGUMENT)) {
+                    height = Integer.parseInt(value);
+                } else if (key.equals(CENTER_ARGUMENT)) {
+                    center = Boolean.parseBoolean(value);
+                } else if (key.equals(RESIZABLE_ARGUMENT)) {
+                    resizable = Boolean.parseBoolean(value);
+                } else if (key.equals(FULL_SCREEN_ARGUMENT)) {
+                    fullScreen = Boolean.parseBoolean(value);
+                } else {
+                    properties.put(key, value);
+                }
             } else {
-                String[] property;
-                if (arg.startsWith("--")) {
-                    arg = arg.substring(2);
-                    property = arg.split("=");
-                } else {
-                    property = arg.split(":");
-                }
-
-                if (property.length == 2) {
-                    String key = property[0];
-                    String value = property[1];
-
-                    if (key.equals(X_ARGUMENT)) {
-                        x = Integer.parseInt(value);
-                    } else if (key.equals(Y_ARGUMENT)) {
-                        y = Integer.parseInt(value);
-                    } else if (key.equals(WIDTH_ARGUMENT)) {
-                        width = Integer.parseInt(value);
-                    } else if (key.equals(HEIGHT_ARGUMENT)) {
-                        height = Integer.parseInt(value);
-                    } else if (key.equals(CENTER_ARGUMENT)) {
-                        center = Boolean.parseBoolean(value);
-                    } else if (key.equals(RESIZABLE_ARGUMENT)) {
-                        resizable = Boolean.parseBoolean(value);
-                    } else if (key.equals(FULL_SCREEN_ARGUMENT)) {
-                        fullScreen = Boolean.parseBoolean(value);
-                    } else {
-                        properties.put(key, value);
-                    }
-                } else {
-                    System.err.println(arg + " is not a valid startup property.");
-                }
+                System.err.println(arg + " is not a valid startup property.");
             }
         }
 
@@ -269,17 +270,13 @@ public final class DesktopApplicationContext extends ApplicationContext {
         applicationContext = new DesktopApplicationContext();
 
         // Load the application
-        if (applicationClassName == null) {
-            System.err.println("Application class name is required.");
-        } else {
-            try {
-                Class<?> applicationClass = Class.forName(applicationClassName);
-                application = (Application)applicationClass.newInstance();
-            } catch(Exception exception) {
-                Alert.alert(MessageType.ERROR, exception.getMessage(),
-                    applicationContext.getDisplay());
-                exception.printStackTrace();
-            }
+        try {
+            Class<?> applicationClass = Class.forName(applicationClassName);
+            application = (Application)applicationClass.newInstance();
+        } catch(Exception exception) {
+            Alert.alert(MessageType.ERROR, exception.getMessage(),
+                applicationContext.getDisplay());
+            exception.printStackTrace();
         }
 
         DisplayHost displayHost = applicationContext.getDisplayHost();

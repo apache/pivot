@@ -27,14 +27,13 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.FlowPane;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.Sheet;
-import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class CardPaneTest implements Application {
     private Frame frame = null;
     private Sheet sheet = null;
 
-    @WTKX private CardPane cardPane;
+    private CardPane cardPane;
 
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
@@ -46,7 +45,7 @@ public class CardPaneTest implements Application {
 
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         sheet = (Sheet)wtkxSerializer.readObject(this, "card_pane_test.wtkx");
-        wtkxSerializer.bind(this, CardPaneTest.class);
+        cardPane = (CardPane)wtkxSerializer.get("cardPane");
 
         Button.Group sizeGroup = Button.getGroup("sizeGroup");
         sizeGroup.getGroupListeners().add(new Button.GroupListener() {

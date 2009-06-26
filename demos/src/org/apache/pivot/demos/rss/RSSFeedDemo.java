@@ -51,7 +51,6 @@ import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -224,10 +223,9 @@ public class RSSFeedDemo implements Application {
     private XPath xpath;
 
     private Window window = null;
-
-    @WTKX private ListView feedListView;
-    @WTKX private CardPane cardPane;
-    @WTKX private Label statusLabel;
+    private ListView feedListView;
+    private CardPane cardPane;
+    private Label statusLabel;
 
     public static final String FEED_URI = "http://feeds.dzone.com/javalobby/frontpage?format=xml";
 
@@ -262,7 +260,9 @@ public class RSSFeedDemo implements Application {
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "rss_feed_demo.wtkx");
-        wtkxSerializer.bind(this, RSSFeedDemo.class);
+        feedListView = (ListView)wtkxSerializer.get("feedListView");
+        cardPane = (CardPane)wtkxSerializer.get("cardPane");
+        statusLabel = (Label)wtkxSerializer.get("statusLabel");
 
         feedListView.setItemRenderer(new RSSItemRenderer());
         feedListView.getComponentMouseButtonListeners().add(new FeedViewMouseButtonHandler());

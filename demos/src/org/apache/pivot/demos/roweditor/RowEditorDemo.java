@@ -28,7 +28,6 @@ import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.CalendarDateSpinnerData;
 import org.apache.pivot.wtk.content.TableViewRowEditor;
-import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 /**
@@ -38,14 +37,13 @@ import org.apache.pivot.wtkx.WTKXSerializer;
  */
 public class RowEditorDemo implements Application {
     private Window window = null;
-
-    @WTKX TableView tableView;
+    private TableView tableView;
 
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "demo.wtkx");
-        wtkxSerializer.bind(this, RowEditorDemo.class);
+        tableView = (TableView)wtkxSerializer.get("tableView");
 
         TableViewRowEditor tableViewRowEditor = new TableViewRowEditor();
         tableView.setRowEditor(tableViewRowEditor);

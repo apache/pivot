@@ -27,16 +27,14 @@ import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TableViewHeader;
 import org.apache.pivot.wtk.TableViewSelectionListener;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class FixedColumnTable implements Application {
     private Window window = null;
-
-    @WTKX private TableView primaryTableView;
-    @WTKX private TableViewHeader primaryTableViewHeader;
-    @WTKX private TableView fixedTableView;
-    @WTKX private TableViewHeader fixedTableViewHeader;
+    private TableView primaryTableView;
+    private TableViewHeader primaryTableViewHeader;
+    private TableView fixedTableView;
+    private TableViewHeader fixedTableViewHeader;
 
     private boolean synchronizingSelection = false;
 
@@ -44,7 +42,10 @@ public class FixedColumnTable implements Application {
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "fixed_column_table.wtkx");
-        wtkxSerializer.bind(this, FixedColumnTable.class);
+        primaryTableView = (TableView)wtkxSerializer.get("primaryTableView");
+        primaryTableViewHeader = (TableViewHeader)wtkxSerializer.get("primaryTableViewHeader");
+        fixedTableView = (TableView)wtkxSerializer.get("fixedTableView");
+        fixedTableViewHeader = (TableViewHeader)wtkxSerializer.get("fixedTableViewHeader");
 
         // Keep selection state in sync
         primaryTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener() {
