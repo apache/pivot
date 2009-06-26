@@ -1561,6 +1561,10 @@ public class TreeView extends Component {
             throw new IllegalArgumentException("path is null.");
         }
 
+        if (path.getLength() == 0) {
+            throw new IllegalArgumentException("path is empty.");
+        }
+
         int index = expandedPaths.indexOf(path);
 
         if (expanded && index < 0) {
