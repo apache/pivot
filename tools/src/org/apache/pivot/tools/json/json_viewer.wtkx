@@ -22,28 +22,32 @@ limitations under the License.
     xmlns="org.apache.pivot.wtk">
     <wtkx:script src="json_viewer.js"/>
     <content>
-        <ScrollPane horizontalScrollBarPolicy="fillToCapacity"
-            verticalScrollBarPolicy="fillToCapacity">
-            <view>
-                <TreeView wtkx:id="treeView" dropTarget="$treeViewDropTarget">
-                    <nodeRenderer>
-                        <content:TreeViewNodeRenderer showIcon="false"/>
-                    </nodeRenderer>
-                    <componentKeyListeners>
-                        <wtkx:script>
-                        <![CDATA[
-                        importPackage(org.apache.pivot.wtk);
-                        function keyPressed(component, keyCode, keyLocation) {
-                            if (keyCode == Keyboard.KeyCode.V
-                                && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
-                                application.paste();
-                            }
-                        }
-                        ]]>
-                        </wtkx:script>
-                    </componentKeyListeners>
-                </TreeView>
-            </view>
-        </ScrollPane>
+        <Border styles="{color:10}">
+            <content>
+                <ScrollPane horizontalScrollBarPolicy="fillToCapacity"
+                    verticalScrollBarPolicy="fillToCapacity">
+                    <view>
+                        <TreeView wtkx:id="treeView" dropTarget="$treeViewDropTarget">
+                            <nodeRenderer>
+                                <content:TreeViewNodeRenderer showIcon="false"/>
+                            </nodeRenderer>
+                            <componentKeyListeners>
+                                <wtkx:script>
+                                <![CDATA[
+                                importPackage(org.apache.pivot.wtk);
+                                function keyPressed(component, keyCode, keyLocation) {
+                                    if (keyCode == Keyboard.KeyCode.V
+                                        && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
+                                        application.paste();
+                                    }
+                                }
+                                ]]>
+                                </wtkx:script>
+                            </componentKeyListeners>
+                        </TreeView>
+                    </view>
+                </ScrollPane>
+            </content>
+        </Border>
     </content>
 </Window>

@@ -37,7 +37,7 @@ import org.apache.pivot.wtkx.WTKXSerializer;
  */
 public class RowEditorDemo implements Application {
     private Window window = null;
-    private TableView tableView;
+    private TableView tableView = null;
 
     public void startup(Display display, Map<String, String> properties)
         throws Exception {

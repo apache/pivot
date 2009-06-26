@@ -80,7 +80,6 @@ import org.apache.pivot.wtk.effects.WatermarkDecorator;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.text.Document;
 import org.apache.pivot.wtk.text.PlainTextSerializer;
-import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class KitchenSink implements Application, Application.About {
@@ -118,10 +117,9 @@ public class KitchenSink implements Application, Application.About {
 
     private class ListsRollupStateHandler extends RollupStateHandler {
         private Component component = null;
-
-        @WTKX private ListView editableListView;
-        @WTKX private ListView iconListView;
-        @WTKX private ListView checkedListView;
+        private ListView editableListView = null;
+        private ListView iconListView = null;
+        private ListView checkedListView = null;
 
         @SuppressWarnings("unchecked")
         public Vote previewExpandedChange(Rollup rollup) {
@@ -135,8 +133,11 @@ public class KitchenSink implements Application, Application.About {
                     throw new RuntimeException(exception);
                 }
 
+                editableListView = (ListView)wtkxSerializer.get("editableListView");
+                iconListView = (ListView)wtkxSerializer.get("iconListView");
+                checkedListView = (ListView)wtkxSerializer.get("checkedListView");
+
                 rollup.setContent(component);
-                wtkxSerializer.bind(this, ListsRollupStateHandler.class);
 
                 List<ListItem> listData = (List<ListItem>)editableListView.getListData();
                 listData.setComparator(new Comparator<ListItem>() {
@@ -161,8 +162,7 @@ public class KitchenSink implements Application, Application.About {
 
     private class TextRollupStateHandler extends RollupStateHandler {
         private Component component = null;
-
-        @WTKX private TextArea textArea;
+        private TextArea textArea = null;
 
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
@@ -175,8 +175,8 @@ public class KitchenSink implements Application, Application.About {
                     throw new RuntimeException(exception);
                 }
 
+                textArea = (TextArea)wtkxSerializer.get("textArea");
                 rollup.setContent(component);
-                wtkxSerializer.bind(this, TextRollupStateHandler.class);
 
                 PlainTextSerializer plainTextSerializer = new PlainTextSerializer("UTF-8");
                 InputStream inputStream = getClass().getResourceAsStream("text_area.txt");
@@ -266,9 +266,8 @@ public class KitchenSink implements Application, Application.About {
 
     private class MenusRollupStateHandler extends RollupStateHandler {
         private Component component = null;
-
-        @WTKX private ImageView menuImageView;
-        @WTKX(id="menuBar.helpAboutMenuItem") private Menu.Item helpAboutMenuItem;
+        private ImageView menuImageView = null;
+        private Menu.Item helpAboutMenuItem = null;
 
         private MenuPopup menuPopup = null;
 
@@ -314,6 +313,9 @@ public class KitchenSink implements Application, Application.About {
                     throw new RuntimeException(exception);
                 }
 
+                menuImageView = (ImageView)wtkxSerializer.get("menuImageView");
+                helpAboutMenuItem  = (Menu.Item)wtkxSerializer.get("menuBar.helpAboutMenuItem");
+
                 rollup.setContent(component);
                 wtkxSerializer.bind(this, MenusRollupStateHandler.class);
 
@@ -351,10 +353,9 @@ public class KitchenSink implements Application, Application.About {
 
     private class MetersRollupStateHandler extends RollupStateHandler {
         private Component component = null;
-
-        @WTKX private ActivityIndicator activityIndicator1;
-        @WTKX private ActivityIndicator activityIndicator2;
-        @WTKX private ActivityIndicator activityIndicator3;
+        private ActivityIndicator activityIndicator1 = null;
+        private ActivityIndicator activityIndicator2 = null;
+        private ActivityIndicator activityIndicator3 = null;
 
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
@@ -367,8 +368,11 @@ public class KitchenSink implements Application, Application.About {
                     throw new RuntimeException(exception);
                 }
 
+                activityIndicator1 = (ActivityIndicator)wtkxSerializer.get("activityIndicator1");
+                activityIndicator2 = (ActivityIndicator)wtkxSerializer.get("activityIndicator2");
+                activityIndicator3 = (ActivityIndicator)wtkxSerializer.get("activityIndicator3");
+
                 rollup.setContent(component);
-                wtkxSerializer.bind(this, MetersRollupStateHandler.class);
 
                 metersRollup.getRollupStateListeners().add(new RollupStateListener() {
                     public Vote previewExpandedChange(Rollup rollup) {
@@ -394,13 +398,13 @@ public class KitchenSink implements Application, Application.About {
     private class SpinnersRollupStateHandler extends RollupStateHandler {
         private Component component = null;
 
-        @WTKX private Spinner numericSpinner;
-        @WTKX private Spinner dateSpinner;
+        private Spinner numericSpinner = null;
+        private Spinner dateSpinner = null;
 
-        @WTKX private Slider redSlider;
-        @WTKX private Slider greenSlider;
-        @WTKX private Slider blueSlider;
-        @WTKX private Border colorBorder;
+        private Slider redSlider = null;
+        private Slider greenSlider = null;
+        private Slider blueSlider = null;
+        private Border colorBorder = null;
 
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
@@ -413,8 +417,15 @@ public class KitchenSink implements Application, Application.About {
                     throw new RuntimeException(exception);
                 }
 
+                numericSpinner = (Spinner)wtkxSerializer.get("numericSpinner");
+                dateSpinner = (Spinner)wtkxSerializer.get("dateSpinner");
+
+                redSlider = (Slider)wtkxSerializer.get("redSlider");
+                greenSlider = (Slider)wtkxSerializer.get("greenSlider");
+                blueSlider = (Slider)wtkxSerializer.get("blueSlider");
+                colorBorder = (Border)wtkxSerializer.get("colorBorder");
+
                 rollup.setContent(component);
-                wtkxSerializer.bind(this, SpinnersRollupStateHandler.class);
 
                 initializeNumericSpinner(numericSpinner);
                 initializeDateSpinner(dateSpinner);
@@ -458,10 +469,9 @@ public class KitchenSink implements Application, Application.About {
 
     private class TablesRollupStateHandler extends RollupStateHandler {
         private Component component = null;
-
-        @WTKX private TableView sortableTableView;
-        @WTKX private TableView customTableView;
-        @WTKX private TableViewHeader sortableTableViewHeader;
+        private TableView sortableTableView = null;
+        private TableView customTableView = null;
+        private TableViewHeader sortableTableViewHeader = null;
 
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
@@ -474,8 +484,11 @@ public class KitchenSink implements Application, Application.About {
                     throw new RuntimeException(exception);
                 }
 
+                sortableTableView = (TableView)wtkxSerializer.get("sortableTableView");
+                customTableView = (TableView)wtkxSerializer.get("customTableView");
+                sortableTableViewHeader = (TableViewHeader)wtkxSerializer.get("sortableTableViewHeader");
+
                 rollup.setContent(component);
-                wtkxSerializer.bind(this, TablesRollupStateHandler.class);
 
                 // Set table header data
                 TableView.ColumnSequence columns = sortableTableView.getColumns();
@@ -534,8 +547,7 @@ public class KitchenSink implements Application, Application.About {
 
     private class TreesRollupStateHandler extends RollupStateHandler {
         private Component component = null;
-
-        @WTKX private TreeView editableTreeView;
+        private TreeView editableTreeView = null;
 
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
@@ -548,8 +560,9 @@ public class KitchenSink implements Application, Application.About {
                     throw new RuntimeException(exception);
                 }
 
+                editableTreeView = (TreeView)wtkxSerializer.get("editableTreeView");
+
                 rollup.setContent(component);
-                wtkxSerializer.bind(this, TreesRollupStateHandler.class);
 
                 TreeBranch treeData = (TreeBranch)editableTreeView.getTreeData();
                 treeData.setComparator(new TreeNodeComparator());
@@ -561,10 +574,9 @@ public class KitchenSink implements Application, Application.About {
 
     private class DragDropRollupStateHandler extends RollupStateHandler {
         private Component component = null;
-
-        @WTKX private ImageView imageView1;
-        @WTKX private ImageView imageView2;
-        @WTKX private ImageView imageView3;
+        private ImageView imageView1 = null;
+        private ImageView imageView2 = null;
+        private ImageView imageView3 = null;
 
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
@@ -577,8 +589,11 @@ public class KitchenSink implements Application, Application.About {
                     throw new RuntimeException(exception);
                 }
 
+                imageView1 = (ImageView)wtkxSerializer.get("imageView1");
+                imageView2 = (ImageView)wtkxSerializer.get("imageView2");
+                imageView3 = (ImageView)wtkxSerializer.get("imageView3");
+
                 rollup.setContent(component);
-                wtkxSerializer.bind(this, DragDropRollupStateHandler.class);
 
                 DragSource imageDragSource = new DragSource() {
                     private Image image = null;
@@ -698,9 +713,8 @@ public class KitchenSink implements Application, Application.About {
 
     private class AlertsRollupStateHandler extends RollupStateHandler {
         private Component component = null;
-
-        @WTKX private PushButton alertButton;
-        @WTKX private PushButton promptButton;
+        private PushButton alertButton = null;
+        private PushButton promptButton = null;
 
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
@@ -713,8 +727,10 @@ public class KitchenSink implements Application, Application.About {
                     throw new RuntimeException(exception);
                 }
 
+                alertButton = (PushButton)wtkxSerializer.get("alertButton");
+                promptButton = (PushButton)wtkxSerializer.get("promptButton");
+
                 rollup.setContent(component);
-                wtkxSerializer.bind(this, AlertsRollupStateHandler.class);
 
                 alertButton.getButtonPressListeners().add(new ButtonPressListener() {
                     public void buttonPressed(Button button) {
@@ -804,20 +820,19 @@ public class KitchenSink implements Application, Application.About {
     }
 
     private Window window = null;
-
-    @WTKX private Rollup buttonsRollup;
-    @WTKX private Rollup listsRollup;
-    @WTKX private Rollup textRollup;
-    @WTKX private Rollup calendarsRollup;
-    @WTKX private Rollup navigationRollup;
-    @WTKX private Rollup splittersRollup;
-    @WTKX private Rollup menusRollup;
-    @WTKX private Rollup metersRollup;
-    @WTKX private Rollup spinnersRollup;
-    @WTKX private Rollup tablesRollup;
-    @WTKX private Rollup treesRollup;
-    @WTKX private Rollup dragDropRollup;
-    @WTKX private Rollup alertsRollup;
+    private Rollup buttonsRollup;
+    private Rollup listsRollup;
+    private Rollup textRollup;
+    private Rollup calendarsRollup;
+    private Rollup navigationRollup;
+    private Rollup splittersRollup;
+    private Rollup menusRollup;
+    private Rollup metersRollup;
+    private Rollup spinnersRollup;
+    private Rollup tablesRollup;
+    private Rollup treesRollup;
+    private Rollup dragDropRollup;
+    private Rollup alertsRollup;
 
     public static void main(String[] args) {
         DesktopApplicationContext.main(KitchenSink.class, args);
@@ -828,18 +843,43 @@ public class KitchenSink implements Application, Application.About {
         window = (Window)wtkxSerializer.readObject(this, "kitchen_sink.wtkx");
         wtkxSerializer.bind(this, KitchenSink.class);
 
+        buttonsRollup = (Rollup)wtkxSerializer.get("buttonsRollup");
         buttonsRollup.getRollupStateListeners().add(new ButtonsRollupStateHandler());
+
+        listsRollup = (Rollup)wtkxSerializer.get("listsRollup");
         listsRollup.getRollupStateListeners().add(new ListsRollupStateHandler());
+
+        textRollup = (Rollup)wtkxSerializer.get("textRollup");
         textRollup.getRollupStateListeners().add(new TextRollupStateHandler());
+
+        calendarsRollup = (Rollup)wtkxSerializer.get("calendarsRollup");
         calendarsRollup.getRollupStateListeners().add(new CalendarsRollupStateHandler());
+
+        navigationRollup = (Rollup)wtkxSerializer.get("navigationRollup");
         navigationRollup.getRollupStateListeners().add(new NavigationRollupStateHandler());
+
+        splittersRollup = (Rollup)wtkxSerializer.get("splittersRollup");
         splittersRollup.getRollupStateListeners().add(new SplittersRollupStateHandler());
+
+        menusRollup = (Rollup)wtkxSerializer.get("menusRollup");
         menusRollup.getRollupStateListeners().add(new MenusRollupStateHandler());
+
+        metersRollup = (Rollup)wtkxSerializer.get("metersRollup");
         metersRollup.getRollupStateListeners().add(new MetersRollupStateHandler());
+
+        spinnersRollup = (Rollup)wtkxSerializer.get("spinnersRollup");
         spinnersRollup.getRollupStateListeners().add(new SpinnersRollupStateHandler());
+
+        tablesRollup = (Rollup)wtkxSerializer.get("tablesRollup");
         tablesRollup.getRollupStateListeners().add(new TablesRollupStateHandler());
+
+        treesRollup = (Rollup)wtkxSerializer.get("treesRollup");
         treesRollup.getRollupStateListeners().add(new TreesRollupStateHandler());
+
+        dragDropRollup = (Rollup)wtkxSerializer.get("dragDropRollup");
         dragDropRollup.getRollupStateListeners().add(new DragDropRollupStateHandler());
+
+        alertsRollup = (Rollup)wtkxSerializer.get("alertsRollup");
         alertsRollup.getRollupStateListeners().add(new AlertsRollupStateHandler());
 
         window.open(display);

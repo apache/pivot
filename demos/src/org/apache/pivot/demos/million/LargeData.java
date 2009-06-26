@@ -134,12 +134,12 @@ public class LargeData implements Application {
     private String basePath = null;
 
     private Window window = null;
-    private ListButton fileListButton;
-    private PushButton loadDataButton;
-    private PushButton cancelButton;
-    private Label statusLabel;
-    private TableView tableView;
-    private TableViewHeader tableViewHeader;
+    private ListButton fileListButton = null;
+    private PushButton loadDataButton = null;
+    private PushButton cancelButton = null;
+    private Label statusLabel = null;
+    private TableView tableView = null;
+    private TableViewHeader tableViewHeader = null;
 
     private CSVSerializer csvSerializer;
     private int pageSize = 0;

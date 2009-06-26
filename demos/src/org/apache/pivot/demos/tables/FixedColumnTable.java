@@ -31,10 +31,10 @@ import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class FixedColumnTable implements Application {
     private Window window = null;
-    private TableView primaryTableView;
-    private TableViewHeader primaryTableViewHeader;
-    private TableView fixedTableView;
-    private TableViewHeader fixedTableViewHeader;
+    private TableView primaryTableView = null;
+    private TableViewHeader primaryTableViewHeader = null;
+    private TableView fixedTableView = null;
+    private TableViewHeader fixedTableViewHeader = null;
 
     private boolean synchronizingSelection = false;
 

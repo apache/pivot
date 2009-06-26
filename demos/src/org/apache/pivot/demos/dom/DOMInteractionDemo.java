@@ -28,7 +28,7 @@ import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Window;
 
-public class DOMTest implements Application {
+public class DOMInteractionDemo implements Application {
     private Window window = null;
     private PushButton helloButton = null;
 
@@ -42,7 +42,7 @@ public class DOMTest implements Application {
 
         helloButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
-                BrowserApplicationContext.eval("sayHello(\"Hello from Java!\")", DOMTest.this);
+                BrowserApplicationContext.eval("sayHello(\"Hello from Pivot!\")", DOMInteractionDemo.this);
             }
         });
 

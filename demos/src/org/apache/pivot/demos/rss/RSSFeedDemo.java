@@ -223,9 +223,9 @@ public class RSSFeedDemo implements Application {
     private XPath xpath;
 
     private Window window = null;
-    private ListView feedListView;
-    private CardPane cardPane;
-    private Label statusLabel;
+    private ListView feedListView = null;
+    private CardPane cardPane = null;
+    private Label statusLabel = null;
 
     public static final String FEED_URI = "http://feeds.dzone.com/javalobby/frontpage?format=xml";
 
