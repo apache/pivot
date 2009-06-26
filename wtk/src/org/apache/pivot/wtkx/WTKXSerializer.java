@@ -1014,9 +1014,8 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
     /**
      * Applies WTKX binding annotations to an object.
      * <p>
-     * If this method will be called by untrusted code, a bind processor must
-     * be applied at compile time. See {@link BindProcessor} for more
-     * information.
+     * NOTE This method uses reflection to set internal member variables. As
+     * a result, it may only be called from trusted code.
      *
      * @param t
      * @param type
@@ -1025,61 +1024,43 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
      * If an error occurs during binding
      */
     public <T> void bind(T t, Class<? super T> type) throws BindException {
-        Method __bindMethod = null;
-        try {
-            __bindMethod = type.getDeclaredMethod("__bind", new Class<?>[] {type, WTKXSerializer.class});
-            assert ((__bindMethod.getModifiers() & Modifier.STATIC) > 0);
-        } catch (NoSuchMethodException exception) {
-            // No-op
-        }
+        Field[] fields = type.getDeclaredFields();
 
-        if (__bindMethod == null) {
-            Field[] fields = type.getDeclaredFields();
+        // Process bind annotations
+        for (int j = 0, n = fields.length; j < n; j++) {
+            Field field = fields[j];
+            String fieldName = field.getName();
+            int fieldModifiers = field.getModifiers();
 
-            // Process bind annotations
-            for (int j = 0, n = fields.length; j < n; j++) {
-                Field field = fields[j];
-                String fieldName = field.getName();
-                int fieldModifiers = field.getModifiers();
+            WTKX wtkxAnnotation = field.getAnnotation(WTKX.class);
+            if (wtkxAnnotation != null) {
+                // Ensure that we can write to the field
+                if ((fieldModifiers & Modifier.FINAL) > 0) {
+                    throw new BindException(fieldName + " is final.");
+                }
 
-                WTKX wtkxAnnotation = field.getAnnotation(WTKX.class);
-                if (wtkxAnnotation != null) {
-                    // Ensure that we can write to the field
-                    if ((fieldModifiers & Modifier.FINAL) > 0) {
-                        throw new BindException(fieldName + " is final.");
-                    }
-
-                    if ((fieldModifiers & Modifier.PUBLIC) == 0) {
-                        try {
-                            field.setAccessible(true);
-                        } catch (SecurityException exception) {
-                            throw new BindException(fieldName + " is not accessible.");
-                        }
-                    }
-
-                    String id = wtkxAnnotation.id();
-                    if (id.equals("\0")) {
-                        id = field.getName();
-                    }
-
-                    if (containsKey(id)) {
-                        // Set the value into the field
-                        Object value = get(id);
-                        try {
-                            field.set(t, value);
-                        } catch (IllegalAccessException exception) {
-                            throw new BindException(exception);
-                        }
+                if ((fieldModifiers & Modifier.PUBLIC) == 0) {
+                    try {
+                        field.setAccessible(true);
+                    } catch (SecurityException exception) {
+                        throw new BindException(fieldName + " is not accessible.");
                     }
                 }
-            }
-        } else {
-            try {
-                __bindMethod.invoke(null, new Object[] {t, this});
-            } catch (IllegalAccessException exception) {
-                throw new BindException(exception);
-            } catch (InvocationTargetException exception) {
-                throw new BindException(exception);
+
+                String id = wtkxAnnotation.id();
+                if (id.equals("\0")) {
+                    id = field.getName();
+                }
+
+                if (containsKey(id)) {
+                    // Set the value into the field
+                    Object value = get(id);
+                    try {
+                        field.set(t, value);
+                    } catch (IllegalAccessException exception) {
+                        throw new BindException(exception);
+                    }
+                }
             }
         }
     }
