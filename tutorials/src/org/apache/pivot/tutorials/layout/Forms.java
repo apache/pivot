@@ -30,22 +30,24 @@ import org.apache.pivot.wtk.Prompt;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class Forms implements Application {
     private Window window = null;
-
-    @WTKX private FlowPane nameFlowPane;
-    @WTKX private TextInput lastNameTextInput;
-    @WTKX private TextInput firstNameTextInput;
-    @WTKX private PushButton submitButton;
-    @WTKX private Label errorLabel;
+    private FlowPane nameFlowPane = null;
+    private TextInput lastNameTextInput = null;
+    private TextInput firstNameTextInput = null;
+    private PushButton submitButton = null;
+    private Label errorLabel = null;
 
     public void startup(Display display, Map<String, String> properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "forms.wtkx");
-        wtkxSerializer.bind(this, Forms.class);
+        nameFlowPane = (FlowPane)wtkxSerializer.get("nameFlowPane");
+        lastNameTextInput = (TextInput)wtkxSerializer.get("lastNameTextInput");
+        firstNameTextInput = (TextInput)wtkxSerializer.get("firstNameTextInput");
+        submitButton = (PushButton)wtkxSerializer.get("submitButton");
+        errorLabel = (Label)wtkxSerializer.get("errorLabel");
 
         submitButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {

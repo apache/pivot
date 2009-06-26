@@ -23,30 +23,32 @@ import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.effects.Transition;
 import org.apache.pivot.wtk.effects.TransitionListener;
-import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class Transitions implements Application {
     private Window window = null;
-
-    @WTKX private Button button1;
-    @WTKX private Button button2;
-    @WTKX private Button button3;
-    @WTKX private Button button4;
+    private PushButton button1 = null;
+    private PushButton button2 = null;
+    private PushButton button3 = null;
+    private PushButton button4 = null;
 
     private CollapseTransition collapseTransition = null;
 
-    public static int TRANSITION_DURATION = 2000;
+    public static int TRANSITION_DURATION = 250;
     public static int TRANSITION_RATE = 30;
 
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "transitions.wtkx");
-        wtkxSerializer.bind(this, Transitions.class);
+        button1 = (PushButton)wtkxSerializer.get("button1");
+        button2 = (PushButton)wtkxSerializer.get("button2");
+        button3 = (PushButton)wtkxSerializer.get("button3");
+        button4 = (PushButton)wtkxSerializer.get("button4");
 
         ButtonPressListener buttonPressListener = new ButtonPressListener() {
             public void buttonPressed(final Button button) {

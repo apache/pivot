@@ -31,18 +31,16 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class Accordions implements Application {
     private Window window = null;
-
-    @WTKX private Accordion accordion;
-    @WTKX(id="shippingPanel.nextButton") private PushButton shippingNextButton;
-    @WTKX(id="paymentPanel.nextButton") private PushButton paymentNextButton;
-    @WTKX(id="summaryPanel.confirmOrderButton") private PushButton confirmOrderButton;
-    @WTKX(id="summaryPanel.activityIndicator") private ActivityIndicator activityIndicator;
-    @WTKX(id="summaryPanel.processingOrderLabel") private Label processingOrderLabel;
+    private Accordion accordion = null;
+    private PushButton shippingNextButton = null;
+    private PushButton paymentNextButton = null;
+    private PushButton confirmOrderButton = null;
+    private ActivityIndicator activityIndicator = null;
+    private Label processingOrderLabel = null;
 
     private AccordionSelectionListener accordionSelectionListener = new AccordionSelectionListener() {
         private int selectedIndex = -1;
@@ -82,7 +80,7 @@ public class Accordions implements Application {
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "accordions.wtkx");
-        wtkxSerializer.bind(this, Accordions.class);
+        accordion = (Accordion)wtkxSerializer.get("accordion");
 
         accordion.getAccordionSelectionListeners().add(accordionSelectionListener);
 
@@ -92,9 +90,13 @@ public class Accordions implements Application {
             }
         };
 
+        shippingNextButton = (PushButton)wtkxSerializer.get("shippingPanel.nextButton");
         shippingNextButton.getButtonPressListeners().add(nextButtonPressListener);
+
+        paymentNextButton = (PushButton)wtkxSerializer.get("paymentPanel.nextButton");
         paymentNextButton.getButtonPressListeners().add(nextButtonPressListener);
 
+        confirmOrderButton = (PushButton)wtkxSerializer.get("summaryPanel.confirmOrderButton");
         confirmOrderButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
                 // Pretend to submit or cancel the order
@@ -103,6 +105,9 @@ public class Accordions implements Application {
                 updateConfirmOrderButton();
             }
         });
+
+        activityIndicator = (ActivityIndicator)wtkxSerializer.get("summaryPanel.activityIndicator");
+        processingOrderLabel = (Label)wtkxSerializer.get("summaryPanel.processingOrderLabel");
 
         updateAccordion();
         updateConfirmOrderButton();

@@ -25,25 +25,21 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.MessageType;
 import org.apache.pivot.wtk.PushButton;
-import org.apache.pivot.wtk.RadioButton;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class RadioButtons implements Application {
     private Window window = null;
-
-    @WTKX private RadioButton oneButton;
-    @WTKX private PushButton selectButton;
+    private PushButton selectButton = null;
 
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "radio_buttons.wtkx");
-        wtkxSerializer.bind(this, RadioButtons.class);
+        selectButton = (PushButton)wtkxSerializer.get("selectButton");
 
         // Get a reference to the button group
-        final Button.Group numbersGroup = oneButton.getGroup();
+        final Button.Group numbersGroup = Button.getGroup("numbers");
 
         // Add a button press listener
         selectButton.getButtonPressListeners().add(new ButtonPressListener() {

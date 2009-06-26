@@ -317,7 +317,6 @@ public class KitchenSink implements Application, Application.About {
                 helpAboutMenuItem  = (Menu.Item)wtkxSerializer.get("menuBar.helpAboutMenuItem");
 
                 rollup.setContent(component);
-                wtkxSerializer.bind(this, MenusRollupStateHandler.class);
 
                 try {
                     menuPopup = (MenuPopup)wtkxSerializer.readObject(this, "menu_popup.wtkx");

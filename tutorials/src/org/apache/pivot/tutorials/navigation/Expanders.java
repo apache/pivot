@@ -23,21 +23,21 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Expander;
 import org.apache.pivot.wtk.ExpanderListener;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class Expanders implements Application {
     private Window window = null;
-
-    @WTKX private Expander stocksExpander;
-    @WTKX private Expander weatherExpander;
-    @WTKX private Expander calendarExpander;
+    private Expander stocksExpander = null;
+    private Expander weatherExpander = null;
+    private Expander calendarExpander = null;
 
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "expanders.wtkx");
-        wtkxSerializer.bind(this, Expanders.class);
+        stocksExpander = (Expander)wtkxSerializer.get("stocksExpander");
+        weatherExpander = (Expander)wtkxSerializer.get("weatherExpander");
+        calendarExpander = (Expander)wtkxSerializer.get("calendarExpander");
 
         ExpanderListener expanderListener = new ExpanderListener.Adapter() {
             public void expandedChanged(Expander expander) {

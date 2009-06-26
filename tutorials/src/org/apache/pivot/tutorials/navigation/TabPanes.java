@@ -28,23 +28,25 @@ import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.RadioButton;
 import org.apache.pivot.wtk.TabPane;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class TabPanes implements Application {
     private Window window = null;
-
-    @WTKX private TabPane tabPane;
-    @WTKX private Checkbox collapsibleCheckbox;
-    @WTKX private RadioButton horizontalRadioButton;
-    @WTKX private RadioButton verticalRadioButton;
-    @WTKX private FlowPane cornerFlowPane;
+    private TabPane tabPane = null;
+    private Checkbox collapsibleCheckbox = null;
+    private RadioButton horizontalRadioButton = null;
+    private RadioButton verticalRadioButton = null;
+    private FlowPane cornerFlowPane = null;
 
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "tab_panes.wtkx");
-        wtkxSerializer.bind(this, TabPanes.class);
+        tabPane = (TabPane)wtkxSerializer.get("tabPane");
+        collapsibleCheckbox = (Checkbox)wtkxSerializer.get("collapsibleCheckbox");
+        horizontalRadioButton = (RadioButton)wtkxSerializer.get("horizontalRadioButton");
+        verticalRadioButton = (RadioButton)wtkxSerializer.get("verticalRadioButton");
+        cornerFlowPane = (FlowPane)wtkxSerializer.get("cornerFlowPane");
 
         ButtonStateListener checkboxStateListener = new ButtonStateListener() {
             public void stateChanged(Button button, Button.State previousState) {

@@ -25,22 +25,23 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class ActivityIndicators implements Application {
     private Window window = null;
-
-    @WTKX private ActivityIndicator activityIndicator1;
-    @WTKX private ActivityIndicator activityIndicator2;
-    @WTKX private ActivityIndicator activityIndicator3;
-    @WTKX private PushButton activityButton;
+    private ActivityIndicator activityIndicator1 = null;
+    private ActivityIndicator activityIndicator2 = null;
+    private ActivityIndicator activityIndicator3 = null;
+    private PushButton activityButton = null;
 
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "activity_indicators.wtkx");
-        wtkxSerializer.bind(this, ActivityIndicators.class);
+        activityIndicator1 = (ActivityIndicator)wtkxSerializer.get("activityIndicator1");
+        activityIndicator2 = (ActivityIndicator)wtkxSerializer.get("activityIndicator2");
+        activityIndicator3 = (ActivityIndicator)wtkxSerializer.get("activityIndicator3");
+        activityButton = (PushButton)wtkxSerializer.get("activityButton");
 
         activityButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {

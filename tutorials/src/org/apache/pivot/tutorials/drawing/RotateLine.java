@@ -25,13 +25,11 @@ import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.media.Drawing;
 import org.apache.pivot.wtk.media.drawing.Shape;
-import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class RotateLine implements Application {
     private Drawing drawing = null;
-
-    @WTKX private Shape.Rotate rotation;
+    private Shape.Rotate rotation = null;
 
     private Window window = null;
 
@@ -39,7 +37,7 @@ public class RotateLine implements Application {
         throws Exception{
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         drawing = (Drawing)wtkxSerializer.readObject(this, "rotate_line.wtkd");
-        wtkxSerializer.bind(this, RotateLine.class);
+        rotation = (Shape.Rotate)wtkxSerializer.get("rotation");
 
         ApplicationContext.scheduleRecurringCallback(new Runnable() {
             public void run() {

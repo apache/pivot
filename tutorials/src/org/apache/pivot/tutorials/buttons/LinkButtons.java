@@ -25,20 +25,20 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.LinkButton;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class LinkButtons implements Application {
     private Window window = null;
-
-    @WTKX private CardPane cardPane;
-    @WTKX private LinkButton nextButton;
-    @WTKX private LinkButton previousButton;
+    private CardPane cardPane = null;
+    private LinkButton nextButton = null;
+    private LinkButton previousButton = null;
 
     public void startup(Display display, Map<String, String> properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "link_buttons.wtkx");
-        wtkxSerializer.bind(this, LinkButtons.class);
+        cardPane = (CardPane)wtkxSerializer.get("cardPane");
+        nextButton = (LinkButton)wtkxSerializer.get("nextButton");
+        previousButton = (LinkButton)wtkxSerializer.get("previousButton");
 
         nextButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {

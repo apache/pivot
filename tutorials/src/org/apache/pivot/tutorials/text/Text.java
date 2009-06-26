@@ -24,13 +24,11 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextInputCharacterListener;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class Text implements Application {
     private Window window = null;
-
-    @WTKX private TextInput stateTextInput;
+    private TextInput stateTextInput = null;
 
     private ArrayList<String> states;
 
@@ -126,11 +124,12 @@ public class Text implements Application {
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "text.wtkx");
-        wtkxSerializer.bind(this, Text.class);
+        stateTextInput = (TextInput)wtkxSerializer.get("stateTextInput");
 
         stateTextInput.getTextInputCharacterListeners().add(textInputCharacterListener);
 
         window.open(display);
+        stateTextInput.requestFocus();
     }
 
     public boolean shutdown(boolean optional) {

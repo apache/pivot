@@ -30,7 +30,6 @@ import org.apache.pivot.wtk.Meter;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.TaskAdapter;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class Meters implements Application {
@@ -63,8 +62,8 @@ public class Meters implements Application {
     }
 
     private Window window = null;
-    @WTKX private Meter meter;
-    @WTKX private PushButton progressButton;
+    private Meter meter = null;
+    private PushButton progressButton = null;
 
     private SampleTask sampleTask = null;
 
@@ -72,7 +71,8 @@ public class Meters implements Application {
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "meters.wtkx");
-        wtkxSerializer.bind(this, Meters.class);
+        meter = (Meter)wtkxSerializer.get("meter");
+        progressButton = (PushButton)wtkxSerializer.get("progressButton");
 
         progressButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {

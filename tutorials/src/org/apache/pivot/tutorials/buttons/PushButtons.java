@@ -26,18 +26,16 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.MessageType;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class PushButtons implements Application {
     private Window window = null;
-
-    @WTKX private PushButton pushButton;
+    private PushButton pushButton = null;
 
     public void startup(Display display, Map<String, String> properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "push_buttons.wtkx");
-        wtkxSerializer.bind(this, PushButtons.class);
+        pushButton = (PushButton)wtkxSerializer.get("pushButton");
 
         // Add a button press listener
         pushButton.getButtonPressListeners().add(new ButtonPressListener() {

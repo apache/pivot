@@ -29,17 +29,15 @@ import org.apache.pivot.wtk.Form;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class DataBinding implements Application {
     private Window window = null;
-
-    @WTKX private Form form;
-    @WTKX private PushButton loadJavaButton;
-    @WTKX private PushButton loadJSONButton;
-    @WTKX private PushButton clearButton;
-    @WTKX private Label sourceLabel;
+    private Form form = null;
+    private PushButton loadJavaButton = null;
+    private PushButton loadJSONButton = null;
+    private PushButton clearButton = null;
+    private Label sourceLabel = null;
 
     private static final Contact CONTACT = new Contact("101", "Joe Smith",
         new Address("123 Main St.", "Cambridge", "MA", "02142"),
@@ -50,7 +48,11 @@ public class DataBinding implements Application {
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "data_binding.wtkx");
-        wtkxSerializer.bind(this, DataBinding.class);
+        form = (Form)wtkxSerializer.get("form");
+        loadJavaButton = (PushButton)wtkxSerializer.get("loadJavaButton");
+        loadJSONButton = (PushButton)wtkxSerializer.get("loadJSONButton");
+        clearButton = (PushButton)wtkxSerializer.get("clearButton");
+        sourceLabel = (Label)wtkxSerializer.get("sourceLabel");
 
         loadJavaButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {

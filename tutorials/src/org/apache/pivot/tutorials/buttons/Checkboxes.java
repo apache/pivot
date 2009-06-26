@@ -25,23 +25,26 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class Checkboxes implements Application {
     private Window window = null;
-
-    @WTKX private Checkbox bellCheckbox;
-    @WTKX private Checkbox clockCheckbox;
-    @WTKX private Checkbox houseCheckbox;
-    @WTKX private ImageView bellImageView;
-    @WTKX private ImageView clockImageView;
-    @WTKX private ImageView houseImageView;
+    private Checkbox bellCheckbox = null;
+    private Checkbox clockCheckbox = null;
+    private Checkbox houseCheckbox = null;
+    private ImageView bellImageView = null;
+    private ImageView clockImageView = null;
+    private ImageView houseImageView = null;
 
     public void startup(Display display, Map<String, String> properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "checkboxes.wtkx");
-        wtkxSerializer.bind(this, Checkboxes.class);
+        bellCheckbox = (Checkbox)wtkxSerializer.get("bellCheckbox");
+        clockCheckbox = (Checkbox)wtkxSerializer.get("clockCheckbox");
+        houseCheckbox = (Checkbox)wtkxSerializer.get("houseCheckbox");
+        bellImageView = (ImageView)wtkxSerializer.get("bellImageView");
+        clockImageView = (ImageView)wtkxSerializer.get("clockImageView");
+        houseImageView = (ImageView)wtkxSerializer.get("houseImageView");
 
         // Wire up event listeners
         bellCheckbox.getButtonPressListeners().add(new ButtonPressListener() {

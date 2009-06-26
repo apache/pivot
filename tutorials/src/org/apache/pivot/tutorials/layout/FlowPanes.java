@@ -28,28 +28,36 @@ import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.RadioButton;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class FlowPanes implements Application {
     private Window window = null;
-
-    @WTKX private FlowPane flowPane;
-    @WTKX private RadioButton horizontalOrientationButton;
-    @WTKX private RadioButton verticalOrientationButton;
-    @WTKX private RadioButton horizontalAlignmentRightButton;
-    @WTKX private RadioButton horizontalAlignmentLeftButton;
-    @WTKX private RadioButton horizontalAlignmentCenterButton;
-    @WTKX private RadioButton horizontalAlignmentJustifyButton;
-    @WTKX private RadioButton verticalAlignmentTopButton;
-    @WTKX private RadioButton verticalAlignmentBottomButton;
-    @WTKX private RadioButton verticalAlignmentCenterButton;
-    @WTKX private RadioButton verticalAlignmentJustifyButton;
+    private FlowPane flowPane = null;
+    private RadioButton horizontalOrientationButton = null;
+    private RadioButton verticalOrientationButton = null;
+    private RadioButton horizontalAlignmentRightButton = null;
+    private RadioButton horizontalAlignmentLeftButton = null;
+    private RadioButton horizontalAlignmentCenterButton = null;
+    private RadioButton horizontalAlignmentJustifyButton = null;
+    private RadioButton verticalAlignmentTopButton = null;
+    private RadioButton verticalAlignmentBottomButton = null;
+    private RadioButton verticalAlignmentCenterButton = null;
+    private RadioButton verticalAlignmentJustifyButton = null;
 
     public void startup(Display display, Map<String, String> properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "flow_panes.wtkx");
-        wtkxSerializer.bind(this, FlowPanes.class);
+        flowPane = (FlowPane)wtkxSerializer.get("flowPane");
+        horizontalOrientationButton = (RadioButton)wtkxSerializer.get("horizontalOrientationButton");
+        verticalOrientationButton = (RadioButton)wtkxSerializer.get("verticalOrientationButton");
+        horizontalAlignmentRightButton = (RadioButton)wtkxSerializer.get("horizontalAlignmentRightButton");
+        horizontalAlignmentLeftButton = (RadioButton)wtkxSerializer.get("horizontalAlignmentLeftButton");
+        horizontalAlignmentCenterButton = (RadioButton)wtkxSerializer.get("horizontalAlignmentCenterButton");
+        horizontalAlignmentJustifyButton = (RadioButton)wtkxSerializer.get("horizontalAlignmentJustifyButton");
+        verticalAlignmentTopButton = (RadioButton)wtkxSerializer.get("verticalAlignmentTopButton");
+        verticalAlignmentBottomButton = (RadioButton)wtkxSerializer.get("verticalAlignmentBottomButton");
+        verticalAlignmentCenterButton = (RadioButton)wtkxSerializer.get("verticalAlignmentCenterButton");
+        verticalAlignmentJustifyButton = (RadioButton)wtkxSerializer.get("verticalAlignmentJustifyButton");
 
         ButtonStateListener radioButtonStateListener = new ButtonStateListener() {
             public void stateChanged(Button button, Button.State previousState) {

@@ -30,26 +30,31 @@ import org.apache.pivot.wtk.LinkButton;
 import org.apache.pivot.wtk.RadioButton;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.skin.CardPaneSkin;
-import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class CardPanes implements Application {
     private Window window = null;
-
-    @WTKX private CardPane cardPane;
-    @WTKX private LinkButton previousButton;
-    @WTKX private LinkButton nextButton;
-    @WTKX private Checkbox sizeToSelectionCheckbox;
-    @WTKX private RadioButton crossfadeRadioButton;
-    @WTKX private RadioButton horizontalSlideRadioButton;
-    @WTKX private RadioButton verticalSlideRadioButton;
-    @WTKX private RadioButton noneRadioButton;
+    private CardPane cardPane = null;
+    private LinkButton previousButton = null;
+    private LinkButton nextButton = null;
+    private Checkbox sizeToSelectionCheckbox = null;
+    private RadioButton crossfadeRadioButton = null;
+    private RadioButton horizontalSlideRadioButton = null;
+    private RadioButton verticalSlideRadioButton = null;
+    private RadioButton noneRadioButton = null;
 
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "card_panes.wtkx");
-        wtkxSerializer.bind(this, CardPanes.class);
+        cardPane = (CardPane)wtkxSerializer.get("cardPane");
+        previousButton = (LinkButton)wtkxSerializer.get("previousButton");
+        nextButton = (LinkButton)wtkxSerializer.get("nextButton");
+        sizeToSelectionCheckbox = (Checkbox)wtkxSerializer.get("sizeToSelectionCheckbox");
+        crossfadeRadioButton = (RadioButton)wtkxSerializer.get("crossfadeRadioButton");
+        horizontalSlideRadioButton = (RadioButton)wtkxSerializer.get("horizontalSlideRadioButton");
+        verticalSlideRadioButton = (RadioButton)wtkxSerializer.get("verticalSlideRadioButton");
+        noneRadioButton = (RadioButton)wtkxSerializer.get("noneRadioButton");
 
         cardPane.getCardPaneListeners().add(new CardPaneListener.Adapter() {
             public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex) {
