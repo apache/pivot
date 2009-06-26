@@ -35,6 +35,21 @@ public enum DropAction {
     }
 
     public static DropAction decode(String value) {
-        return valueOf(value.toUpperCase());
+        if (value == null) {
+            throw new IllegalArgumentException();
+        }
+
+        DropAction dropAction;
+        if (value.equals("copy")) {
+            dropAction = COPY;
+        } else if (value.equals("move")) {
+            dropAction = MOVE;
+        } else if (value.equals("link")) {
+            dropAction = LINK;
+        } else {
+            dropAction = valueOf(value);
+        }
+
+        return dropAction;
     }
 }

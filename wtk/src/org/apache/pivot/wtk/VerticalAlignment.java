@@ -32,6 +32,23 @@ public enum VerticalAlignment {
     JUSTIFY;
 
     public static VerticalAlignment decode(String value) {
-        return valueOf(value.toUpperCase());
+        if (value == null) {
+            throw new IllegalArgumentException();
+        }
+
+        VerticalAlignment verticalAlignment;
+        if (value.equals("top")) {
+            verticalAlignment = TOP;
+        } else if (value.equals("bottom")) {
+            verticalAlignment = BOTTOM;
+        } else if (value.equals("center")) {
+            verticalAlignment = CENTER;
+        } else if (value.equals("justify")) {
+            verticalAlignment = JUSTIFY;
+        } else {
+            verticalAlignment = valueOf(value);
+        }
+
+        return verticalAlignment;
     }
 }

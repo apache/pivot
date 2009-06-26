@@ -32,6 +32,23 @@ public enum HorizontalAlignment {
     JUSTIFY;
 
     public static HorizontalAlignment decode(String value) {
-        return valueOf(value.toUpperCase());
+        if (value == null) {
+            throw new IllegalArgumentException();
+        }
+
+        HorizontalAlignment horizontalAlignment;
+        if (value.equals("right")) {
+            horizontalAlignment = RIGHT;
+        } else if (value.equals("left")) {
+            horizontalAlignment = LEFT;
+        } else if (value.equals("center")) {
+            horizontalAlignment = CENTER;
+        } else if (value.equals("justify")) {
+            horizontalAlignment = JUSTIFY;
+        } else {
+            horizontalAlignment = valueOf(value);
+        }
+
+        return horizontalAlignment;
     }
 }

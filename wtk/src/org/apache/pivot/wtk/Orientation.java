@@ -26,6 +26,19 @@ public enum Orientation {
     VERTICAL;
 
     public static Orientation decode(String value) {
-        return valueOf(value.toUpperCase());
+        if (value == null) {
+            throw new IllegalArgumentException();
+        }
+
+        Orientation orientation;
+        if (value.equals("horizontal")) {
+            orientation = HORIZONTAL;
+        } else if (value.equals("vertical")) {
+            orientation = VERTICAL;
+        } else {
+            orientation = valueOf(value);
+        }
+
+        return orientation;
     }
 }

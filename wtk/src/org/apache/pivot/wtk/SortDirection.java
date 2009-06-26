@@ -27,6 +27,19 @@ public enum SortDirection {
     DESCENDING;
 
     public static SortDirection decode(String value) {
-        return valueOf(value.toUpperCase());
+        if (value == null) {
+            throw new IllegalArgumentException();
+        }
+
+        SortDirection sortDirection;
+        if (value.equals("ascending")) {
+            sortDirection = ASCENDING;
+        } else if (value.equals("descending")) {
+            sortDirection = DESCENDING;
+        } else {
+            sortDirection = valueOf(value);
+        }
+
+        return sortDirection;
     }
 }

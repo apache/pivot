@@ -39,42 +39,40 @@ public enum Cursor {
 
     public static Cursor decode(String value) {
         if (value == null) {
-            throw new IllegalArgumentException("value is null.");
+            throw new IllegalArgumentException();
         }
 
         Cursor cursor = null;
-
-        if (value.equalsIgnoreCase("default")) {
+        if (value.equals("default")) {
             cursor = Cursor.DEFAULT;
-        } else if (value.equalsIgnoreCase("hand")) {
+        } else if (value.equals("hand")) {
             cursor = Cursor.HAND;
-        } else if (value.equalsIgnoreCase("text")) {
+        } else if (value.equals("text")) {
             cursor = Cursor.TEXT;
-        } else if (value.equalsIgnoreCase("wait")) {
+        } else if (value.equals("wait")) {
             cursor = Cursor.WAIT;
-        } else if (value.equalsIgnoreCase("crosshair")) {
+        } else if (value.equals("crosshair")) {
             cursor = Cursor.CROSSHAIR;
-        } else if (value.equalsIgnoreCase("move")) {
+        } else if (value.equals("move")) {
             cursor = Cursor.MOVE;
-        } else if (value.equalsIgnoreCase("resizeNorth")) {
+        } else if (value.equals("resizeNorth")) {
             cursor = Cursor.RESIZE_NORTH;
-        } else if (value.equalsIgnoreCase("resizeSouth")) {
+        } else if (value.equals("resizeSouth")) {
             cursor = Cursor.RESIZE_SOUTH;
-        } else if (value.equalsIgnoreCase("resizeEast")) {
+        } else if (value.equals("resizeEast")) {
             cursor = Cursor.RESIZE_EAST;
-        } else if (value.equalsIgnoreCase("resizeWest")) {
+        } else if (value.equals("resizeWest")) {
             cursor = Cursor.RESIZE_WEST;
-        } else if (value.equalsIgnoreCase("resizeNorthEast")) {
+        } else if (value.equals("resizeNorthEast")) {
             cursor = Cursor.RESIZE_NORTH_EAST;
-        } else if (value.equalsIgnoreCase("resizeNorthWest")) {
+        } else if (value.equals("resizeNorthWest")) {
             cursor = Cursor.RESIZE_NORTH_WEST;
-        } else if (value.equalsIgnoreCase("resizeSouthEast")) {
+        } else if (value.equals("resizeSouthEast")) {
             cursor = Cursor.RESIZE_SOUTH_EAST;
-        } else if (value.equalsIgnoreCase("resizeSouthWest")) {
+        } else if (value.equals("resizeSouthWest")) {
             cursor = Cursor.RESIZE_SOUTH_WEST;
         } else {
-            throw new IllegalArgumentException("\"" + value
-                + "\" is not a valid cursor.");
+            cursor = valueOf(value);
         }
 
         return cursor;

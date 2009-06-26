@@ -26,6 +26,19 @@ public enum Direction {
     BACKWARD;
 
     public static Direction decode(String value) {
-        return valueOf(value.toUpperCase());
+        if (value == null) {
+            throw new IllegalArgumentException();
+        }
+
+        Direction direction;
+        if (value.equals("forward")) {
+            direction = FORWARD;
+        } else if (value.equals("backward")) {
+            direction = BACKWARD;
+        } else {
+            direction = valueOf(value);
+        }
+
+        return direction;
     }
 }

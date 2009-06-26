@@ -56,7 +56,22 @@ public class ListView extends Component {
         MULTI;
 
         public static SelectMode decode(String value) {
-            return valueOf(value.toUpperCase());
+            if (value == null) {
+                throw new IllegalArgumentException();
+            }
+
+            SelectMode selectMode;
+            if (value.equals("none")) {
+                selectMode = NONE;
+            } else if (value.equals("single")) {
+                selectMode = SINGLE;
+            } else if (value.equals("multi")) {
+                selectMode = MULTI;
+            } else {
+                selectMode = valueOf(value);
+            }
+
+            return selectMode;
         }
     }
 

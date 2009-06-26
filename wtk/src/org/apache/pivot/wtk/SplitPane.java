@@ -50,7 +50,20 @@ public class SplitPane extends Container {
         BOTTOM_RIGHT;
 
         public static Region decode(String value) {
-            return valueOf(value.toUpperCase());
+            if (value == null) {
+                throw new IllegalArgumentException();
+            }
+
+            Region region;
+            if (value.equals("topLeft")) {
+                region = TOP_LEFT;
+            } else if (value.equals("bottomRight")) {
+                region = BOTTOM_RIGHT;
+            } else {
+                region = valueOf(value);
+            }
+
+            return region;
         }
     }
 

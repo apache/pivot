@@ -69,6 +69,21 @@ public enum Vote {
     }
 
     public static Vote decode(String value) {
-        return valueOf(value.toUpperCase());
+        if (value == null) {
+            throw new IllegalArgumentException();
+        }
+
+        Vote vote;
+        if (value.equals("approve")) {
+            vote = APPROVE;
+        } else if (value.equals("deny")) {
+            vote = DENY;
+        } else if (value.equals("defer")) {
+            vote = DEFER;
+        } else {
+            vote = valueOf(value);
+        }
+
+        return vote;
     }
 }

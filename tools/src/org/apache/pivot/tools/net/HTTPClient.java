@@ -66,7 +66,20 @@ public class HTTPClient implements Application {
         HTTPS;
 
         public static Protocol decode(String value) {
-            return valueOf(value.toUpperCase());
+            if (value == null) {
+                throw new IllegalArgumentException();
+            }
+
+            Protocol protocol;
+            if (value.equals("http")) {
+                protocol = HTTP;
+            } else if (value.equals("https")) {
+                protocol = HTTPS;
+            } else {
+                protocol = valueOf(value);
+            }
+
+            return protocol;
         }
 
         public boolean isSecure() {

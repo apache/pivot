@@ -41,7 +41,22 @@ public class Arc extends Shape {
         PIE;
 
         public static Type decode(String value) {
-            return valueOf(value.toUpperCase());
+            if (value == null) {
+                throw new IllegalArgumentException();
+            }
+
+            Type type;
+            if (value.equals("chord")) {
+                type = CHORD;
+            } else if (value.equals("open")) {
+                type = OPEN;
+            } else if (value.equals("pie")) {
+                type = PIE;
+            } else {
+                type = valueOf(value);
+            }
+
+            return type;
         }
     }
 

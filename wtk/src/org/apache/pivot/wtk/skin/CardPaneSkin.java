@@ -47,18 +47,19 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         VERTICAL_SLIDE;
 
         public static SelectionChangeEffect decode(String value) {
-            SelectionChangeEffect selectionChangeEffect;
-
             if (value == null) {
-                selectionChangeEffect = null;
-            } else if (value.equals("crossfade")) {
+                throw new IllegalArgumentException();
+            }
+
+            SelectionChangeEffect selectionChangeEffect;
+            if (value.equals("crossfade")) {
                 selectionChangeEffect = CROSSFADE;
             } else if (value.equals("horizontalSlide")) {
                 selectionChangeEffect = HORIZONTAL_SLIDE;
             } else if (value.equals("verticalSlide")) {
                 selectionChangeEffect = VERTICAL_SLIDE;
             } else {
-                throw new IllegalArgumentException();
+                selectionChangeEffect = valueOf(value);
             }
 
             return selectionChangeEffect;

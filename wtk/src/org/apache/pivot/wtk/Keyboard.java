@@ -45,7 +45,24 @@ public final class Keyboard {
         }
 
         public static Modifier decode(String value) {
-            return valueOf(value.toUpperCase());
+            if (value == null) {
+                throw new IllegalArgumentException();
+            }
+
+            Modifier modifier;
+            if (value.equals("shift")) {
+                modifier = SHIFT;
+            } else if (value.equals("ctrl")) {
+                modifier = CTRL;
+            } else if (value.equals("alt")) {
+                modifier = ALT;
+            } else if (value.equals("meta")) {
+                modifier = META;
+            } else {
+                modifier = valueOf(value);
+            }
+
+            return modifier;
         }
     }
 
@@ -61,7 +78,24 @@ public final class Keyboard {
         KEYPAD;
 
         public static KeyLocation decode(String value) {
-            return valueOf(value.toUpperCase());
+            if (value == null) {
+                throw new IllegalArgumentException();
+            }
+
+            KeyLocation keyLocation;
+            if (value.equals("standard")) {
+                keyLocation = STANDARD;
+            } else if (value.equals("left")) {
+                keyLocation = LEFT;
+            } else if (value.equals("right")) {
+                keyLocation = RIGHT;
+            } else if (value.equals("keypad")) {
+                keyLocation = KEYPAD;
+            } else {
+                keyLocation = valueOf(value);
+            }
+
+            return keyLocation;
         }
     }
 

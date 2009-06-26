@@ -55,7 +55,22 @@ public class TreeView extends Component {
         MULTI;
 
         public static SelectMode decode(String value) {
-            return valueOf(value.toUpperCase());
+            if (value == null) {
+                throw new IllegalArgumentException();
+            }
+
+            SelectMode selectMode;
+            if (value.equals("none")) {
+                selectMode = NONE;
+            } else if (value.equals("single")) {
+                selectMode = SINGLE;
+            } else if (value.equals("multi")) {
+                selectMode = MULTI;
+            } else {
+                selectMode = valueOf(value);
+            }
+
+            return selectMode;
         }
     }
 
@@ -88,7 +103,22 @@ public class TreeView extends Component {
         MIXED;
 
         public static NodeCheckState decode(String value) {
-            return valueOf(value.toUpperCase());
+            if (value == null) {
+                throw new IllegalArgumentException();
+            }
+
+            NodeCheckState nodeCheckState;
+            if (value.equals("checked")) {
+                nodeCheckState = CHECKED;
+            } else if (value.equals("unchecked")) {
+                nodeCheckState = UNCHECKED;
+            } else if (value.equals("mixed")) {
+                nodeCheckState = MIXED;
+            } else {
+                nodeCheckState = valueOf(value);
+            }
+
+            return nodeCheckState;
         }
     }
 

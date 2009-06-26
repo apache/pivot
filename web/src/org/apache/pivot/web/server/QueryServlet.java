@@ -48,18 +48,35 @@ public abstract class QueryServlet extends HttpServlet {
     static final long serialVersionUID = -646654620936816287L;
 
     /**
-     * The supported HTTP methods.
+     * Supported HTTP methods.
      *
      * @author tvolkert
      */
-    protected enum Method {
+    public enum Method {
         GET,
         POST,
         PUT,
         DELETE;
 
         public static Method decode(String value) {
-            return valueOf(value.toUpperCase());
+            if (value == null) {
+                throw new IllegalArgumentException();
+            }
+
+            Method method;
+            if (value.equals("get")) {
+                method = GET;
+            } else if (value.equals("post")) {
+                method = POST;
+            } else if (value.equals("put")) {
+                method = PUT;
+            } else if (value.equals("delete")) {
+                method = DELETE;
+            } else {
+                method = valueOf(value);
+            }
+
+            return method;
         }
     }
 

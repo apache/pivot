@@ -495,7 +495,20 @@ public class Path extends Shape
         }
 
         public static WindingRule decode(String value) {
-            return valueOf(value.toUpperCase());
+            if (value == null) {
+                throw new IllegalArgumentException();
+            }
+
+            WindingRule windingRule;
+            if (value.equals("nonZero")) {
+                windingRule = NON_ZERO;
+            } else if (value.equals("evenOdd")) {
+                windingRule = EVEN_ODD;
+            } else {
+                windingRule = valueOf(value);
+            }
+
+            return windingRule;
         }
     }
 

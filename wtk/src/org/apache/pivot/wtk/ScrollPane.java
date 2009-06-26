@@ -41,24 +41,22 @@ public class ScrollPane extends Viewport {
 
         public static ScrollBarPolicy decode(String value) {
             if (value == null) {
-                throw new IllegalArgumentException("value is null.");
+                throw new IllegalArgumentException();
             }
 
             ScrollBarPolicy scrollBarPolicy = null;
-
-            if (value.equalsIgnoreCase("auto")) {
+            if (value.equals("auto")) {
                 scrollBarPolicy = AUTO;
-            } else if (value.equalsIgnoreCase("never")) {
+            } else if (value.equals("never")) {
                 scrollBarPolicy = NEVER;
-            } else if (value.equalsIgnoreCase("always")) {
+            } else if (value.equals("always")) {
                 scrollBarPolicy = ALWAYS;
-            } else if (value.equalsIgnoreCase("fill")) {
+            } else if (value.equals("fill")) {
                 scrollBarPolicy = FILL;
-            } else if (value.equalsIgnoreCase("fillToCapacity")) {
+            } else if (value.equals("fillToCapacity")) {
                 scrollBarPolicy = FILL_TO_CAPACITY;
             } else {
-                throw new IllegalArgumentException("\"" + value
-                    + "\" is not a valid scroll bar policy.");
+                scrollBarPolicy = valueOf(value);
             }
 
             return scrollBarPolicy;

@@ -33,7 +33,6 @@ import org.apache.pivot.io.IOTask;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
 
-
 /**
  * An asynchronous operation that executes an HTTP request.
  *
@@ -55,7 +54,30 @@ public class Request extends IOTask<Response> {
         TRACE;
 
         public static Method decode(String value) {
-            return valueOf(value.toUpperCase());
+            if (value == null) {
+                throw new IllegalArgumentException();
+            }
+
+            Method method;
+            if (value.equals("get")) {
+                method = GET;
+            } else if (value.equals("post")) {
+                method = POST;
+            } else if (value.equals("put")) {
+                method = PUT;
+            } else if (value.equals("delete")) {
+                method = DELETE;
+            } else if (value.equals("options")) {
+                method = OPTIONS;
+            } else if (value.equals("head")) {
+                method = HEAD;
+            } else if (value.equals("trace")) {
+                method = TRACE;
+            } else {
+                method = valueOf(value);
+            }
+
+            return method;
         }
 
         public boolean supportsOutput() {

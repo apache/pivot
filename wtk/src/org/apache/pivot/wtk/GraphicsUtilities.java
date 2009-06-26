@@ -59,7 +59,7 @@ public final class GraphicsUtilities {
             } else if (value.equals("radialGradient")) {
                 paintType = RADIAL_GRADIENT;
             } else {
-                throw new IllegalArgumentException("\"" + value + "\" is not a valid paint type.");
+                paintType = valueOf(value);
             }
 
             return paintType;

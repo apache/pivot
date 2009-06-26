@@ -46,7 +46,22 @@ public abstract class Button extends Component {
         MIXED;
 
         public static State decode(String value) {
-            return valueOf(value.toUpperCase());
+            if (value == null) {
+                throw new IllegalArgumentException();
+            }
+
+            State state;
+            if (value.equals("selected")) {
+                state = SELECTED;
+            } else if (value.equals("unselected")) {
+                state = UNSELECTED;
+            } else if (value.equals("mixed")) {
+                state = MIXED;
+            } else {
+                state = valueOf(value);
+            }
+
+            return state;
         }
     }
 

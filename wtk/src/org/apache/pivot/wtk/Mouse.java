@@ -43,7 +43,22 @@ public final class Mouse {
         }
 
         public static Button decode(String value) {
-            return valueOf(value.toUpperCase());
+            if (value == null) {
+                throw new IllegalArgumentException();
+            }
+
+            Button button;
+            if (value.equals("left")) {
+                button = LEFT;
+            } else if (value.equals("right")) {
+                button = RIGHT;
+            } else if (value.equals("middle")) {
+                button = MIDDLE;
+            } else {
+                button = valueOf(value);
+            }
+
+            return button;
         }
     }
 
