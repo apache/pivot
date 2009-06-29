@@ -39,18 +39,7 @@ limitations under the License.
     <property name="compiler.target" value="1.6"/>
     <property name="compiler.encoding" value="UTF-8"/>
     <property name="compiler.indexJars" value="true"/>
-    <condition property="compiler.sun">
-        <and>
-            <available classname="com.sun.tools.javac.code.Flags" classpathref="classpath.javalib"/>
-            <available classname="com.sun.tools.javac.tree.JCTree" classpathref="classpath.javalib"/>
-            <available classname="com.sun.tools.javac.tree.TreeTranslator" classpathref="classpath.javalib"/>
-            <available classname="com.sun.tools.javac.util.Context" classpathref="classpath.javalib"/>
-            <available classname="com.sun.source.util.Trees" classpathref="classpath.javalib"/>
-        </and>
-    </condition>
-
-    <!-- Compiler argument properties -->
-    <property name="compilerarg.default" value="-Xlint"/>
+    <property name="compiler.arg" value="-Xlint"/>
 
     <!-- Dynamic properties -->
     <property file="build.properties"/>
@@ -68,18 +57,91 @@ limitations under the License.
     <property name="jar.demos" value="${ant.project.name}-demos-${version}.jar" />
     <property name="jar.tools" value="${ant.project.name}-tools-${version}.jar" />
 
-    <!-- JDK version check -->
-    <fail message="Building Pivot requires JDK 1.6 or greater.">
-        <condition>
-            <not>
-                <or>
-                    <equals arg1="${ant.java.version}" arg2="1.6"/>
-                    <equals arg1="${ant.java.version}" arg2="1.7"/>
-                </or>
-            </not>
-        </condition>
-    </fail>
+    <!-- Compile macro -->
+    <macrodef name="compile">
+        <attribute name="project"/>
+        <attribute name="srcDir" default="src"/>
+        <element name="classpath-elements" optional="true" implicit="true"/>
 
+        <sequential>
+            <!-- JDK version check -->
+            <fail message="Building Pivot requires JDK 1.6 or greater.">
+                <condition>
+                    <not>
+                        <or>
+                            <equals arg1="${ant.java.version}" arg2="1.6"/>
+                            <equals arg1="${ant.java.version}" arg2="1.7"/>
+                        </or>
+                    </not>
+                </condition>
+            </fail>
+
+            <!-- JUnit check -->
+            <fail message="JUnit 4 not found. Please see the BUILD file for more information.">
+                <condition>
+                    <not>
+                        <and>
+                            <available classname="junit.framework.TestCase"/>
+                            <available classname="org.junit.Test"/>
+                        </and>
+                    </not>
+                </condition>
+            </fail>
+
+            <mkdir dir="@{project}/${folder.bin}"/>
+            <javac srcdir="@{project}/@{srcDir}"
+                destDir="@{project}/${folder.bin}"
+                includejavaruntime="true"
+                deprecation="${compiler.deprecation}"
+                debug="${compiler.debug}"
+                target="${compiler.target}"
+                encoding="${compiler.encoding}"
+                failonerror="true">
+                <compilerarg line="${compiler.arg}"/>
+                <classpath>
+                    <classpath-elements/>
+                </classpath>
+            </javac>
+        </sequential>
+    </macrodef>
+
+    <!-- Package macro -->
+    <macrodef name="package">
+        <attribute name="jarFile"/>
+        <attribute name="title"/>
+        <element name="jar-elements" implicit="true"/>
+
+        <sequential>
+            <mkdir dir="${folder.lib}"/>
+            <jar destfile="${folder.lib}/@{jarFile}" index="${compiler.indexJars}">
+                <manifest>
+                    <attribute name="Sealed" value="true"/>
+                    <attribute name="Implementation-Vendor-Id" value="org.apache"/>
+                    <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
+                    <attribute name="Implementation-Title" value="@{title}"/>
+                    <attribute name="Implementation-Version" value="${version}"/>
+                </manifest>
+                <jar-elements/>
+            </jar>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="clean-www">
+        <attribute name="project"/>
+        <sequential>
+            <delete>
+                <dirset dir="@{project}/www" includes="lib"/>
+                <fileset dir="@{project}/www">
+                    <include name="*.html"/>
+                    <include name="*.jnlp"/>
+                    <exclude name="*.template.*"/>
+                    <exclude name="index.html"/>
+                </fileset>
+            </delete>
+        </sequential>
+    </macrodef>
+
+    <!-- Aggregate targets -->
     <target name="build" description="Compiles all packages"
         depends="charts, charts-test, core, core-test, web, web-test, wtk, wtk-test, tutorials, demos, tools"/>
 
@@ -87,47 +149,15 @@ limitations under the License.
         depends="charts-package, core-package, web-package, wtk-package, tutorials-package, demos-package, tools-package"/>
 
     <target name="clean" description="Removes all build artifacts"
-        depends="charts-clean, core-clean, web-clean, web-test-clean, wtk-clean, tutorials-clean, demos-clean, tools-clean">
+        depends="charts-clean, core-clean, web-clean, wtk-clean, tutorials-clean, demos-clean, tools-clean">
         <delete dir="${folder.dist}"/>
         <delete dir="${folder.doc}"/>
         <delete dir="${folder.install}"/>
         <delete dir="${folder.lib}"/>
 
-        <delete dir="demos/www/lib"/>
-        <delete>
-            <fileset dir="demos/www">
-                <include name="*.html"/>
-                <exclude name="*.template.html"/>
-                <include name="*.jnlp"/>
-                <exclude name="*.template.jnlp"/>
-                <exclude name="index.html"/>
-            </fileset>
-        </delete>
-        <delete file="${folder.lib}/${ant.project.name}_demos.war"/>
-
-        <delete dir="tutorials/www/lib"/>
-        <delete>
-            <fileset dir="tutorials/www">
-                <include name="*.html"/>
-                <exclude name="*.template.html"/>
-                <include name="*.jnlp"/>
-                <exclude name="*.template.jnlp"/>
-                <exclude name="index.html"/>
-            </fileset>
-        </delete>
-        <delete file="${folder.lib}/${ant.project.name}_tutorials.war"/>
-
-        <delete dir="web/www/lib"/>
-        <delete>
-            <fileset dir="web/www">
-                <include name="*.html"/>
-                <exclude name="*.template.html"/>
-                <include name="*.jnlp"/>
-                <exclude name="*.template.jnlp"/>
-                <exclude name="index.html"/>
-            </fileset>
-        </delete>
-        <delete file="${folder.lib}/${ant.project.name}_web_test.war"/>
+        <clean-www project="demos"/>
+        <clean-www project="tutorials"/>
+        <clean-www project="web"/>
     </target>
 
     <!-- Javadoc -->
@@ -152,39 +182,20 @@ limitations under the License.
 
     <!-- Charts -->
     <target name="charts" depends="core, wtk">
-        <mkdir dir="charts/${folder.bin}"/>
-        <javac srcdir="charts/src"
-            destDir="charts/${folder.bin}"
-            deprecation="${compiler.deprecation}"
-            debug="${compiler.debug}"
-            target="${compiler.target}"
-            encoding="${compiler.encoding}"
-            failonerror="true">
-            <compilerarg value="${compilerarg.default}"/>
-            <classpath>
-                <pathelement location="core/${folder.bin}"/>
-                <pathelement location="wtk/${folder.bin}"/>
-                <fileset dir="charts/lib" includes="**/*.jar"/>
-            </classpath>
-        </javac>
+        <compile project="charts">
+            <pathelement location="core/${folder.bin}"/>
+            <pathelement location="wtk/${folder.bin}"/>
+        </compile>
     </target>
 
     <target name="charts-package" depends="charts">
-        <mkdir dir="${folder.lib}"/>
-        <jar destfile="${folder.lib}/${jar.charts}" index="${compiler.indexJars}">
-            <manifest>
-                <attribute name="Sealed" value="true"/>
-                <attribute name="Implementation-Vendor-Id" value="org.apache"/>
-                <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
-                <attribute name="Implementation-Title" value="Apache Pivot Charts"/>
-                <attribute name="Implementation-Version" value="${version}"/>
-            </manifest>
+        <package jarFile="${jar.charts}" title="Apache Pivot Charts">
             <fileset dir="charts/${folder.bin}"/>
             <fileset dir="charts/src">
                 <exclude name="**/*.java"/>
                 <exclude name="**/package.html"/>
             </fileset>
-        </jar>
+        </package>
     </target>
 
     <target name="charts-clean">
@@ -192,55 +203,27 @@ limitations under the License.
         <delete file="${folder.lib}/${jar.charts}"/>
     </target>
 
-    <!-- Charts Test -->
     <target name="charts-test" depends="charts, core, wtk">
-        <mkdir dir="charts/${folder.bin}"/>
-        <javac srcdir="charts/test"
-            destDir="charts/${folder.bin}"
-            deprecation="${compiler.deprecation}"
-            debug="${compiler.debug}"
-            target="${compiler.target}"
-            encoding="${compiler.encoding}"
-            failonerror="true">
-            <compilerarg value="${compilerarg.default}"/>
-            <classpath>
-                <pathelement location="charts/${folder.bin}"/>
-                <pathelement location="core/${folder.bin}"/>
-                <pathelement location="wtk/${folder.bin}"/>
-            </classpath>
-        </javac>
+        <compile project="charts" srcDir="test">
+            <pathelement location="charts/${folder.bin}"/>
+            <pathelement location="core/${folder.bin}"/>
+            <pathelement location="wtk/${folder.bin}"/>
+        </compile>
     </target>
 
     <!-- Core -->
     <target name="core">
-        <mkdir dir="core/${folder.bin}"/>
-        <javac srcdir="core/src"
-            destDir="core/${folder.bin}"
-            deprecation="${compiler.deprecation}"
-            debug="${compiler.debug}"
-            target="${compiler.target}"
-            encoding="${compiler.encoding}"
-            failonerror="true">
-            <compilerarg value="${compilerarg.default}"/>
-        </javac>
+        <compile project="core"/>
     </target>
 
     <target name="core-package" depends="core">
-        <mkdir dir="${folder.lib}"/>
-        <jar destfile="${folder.lib}/${jar.core}" index="${compiler.indexJars}">
-            <manifest>
-                <attribute name="Sealed" value="true"/>
-                <attribute name="Implementation-Vendor-Id" value="org.apache"/>
-                <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
-                <attribute name="Implementation-Title" value="Apache Pivot Core"/>
-                <attribute name="Implementation-Version" value="${version}"/>
-            </manifest>
+        <package jarFile="${jar.core}" title="Apache Pivot Core">
             <fileset dir="core/${folder.bin}"/>
             <fileset dir="core/src">
                 <exclude name="**/*.java"/>
                 <exclude name="**/package.html"/>
             </fileset>
-        </jar>
+        </package>
     </target>
 
     <target name="core-clean">
@@ -248,85 +231,38 @@ limitations under the License.
         <delete file="${folder.lib}/${jar.core}"/>
     </target>
 
-    <!-- Core Test -->
     <target name="core-test" depends="core">
-        <fail message="JUnit 4 not found. Please see the BUILD file for more information.">
-            <condition>
-                <not>
-                    <and>
-                        <available classname="junit.framework.TestCase"/>
-                        <available classname="org.junit.Test"/>
-                    </and>
-                </not>
-            </condition>
-        </fail>
-
-        <mkdir dir="core/${folder.bin}"/>
-        <javac srcdir="core/test"
-            destDir="core/${folder.bin}"
-            deprecation="${compiler.deprecation}"
-            debug="${compiler.debug}"
-            target="${compiler.target}"
-            encoding="${compiler.encoding}"
-            failonerror="true">
-            <compilerarg value="${compilerarg.default}"/>
-            <classpath>
-                <pathelement location="core/${folder.bin}"/>
-            </classpath>
-        </javac>
+        <compile project="core" srcDir="test">
+            <pathelement location="core/${folder.bin}"/>
+        </compile>
     </target>
 
     <!-- Web -->
     <target name="web" depends="core">
-        <mkdir dir="web/${folder.bin}"/>
-        <javac srcdir="web/src"
-            destDir="web/${folder.bin}"
-            deprecation="${compiler.deprecation}"
-            debug="${compiler.debug}"
-            target="${compiler.target}"
-            encoding="${compiler.encoding}"
-            failonerror="true">
-            <compilerarg value="${compilerarg.default}"/>
-            <classpath>
-                <pathelement location="core/${folder.bin}"/>
-                <fileset dir="web/lib" includes="**/*.jar"/>
-            </classpath>
-        </javac>
+        <compile project="web">
+            <pathelement location="core/${folder.bin}"/>
+            <fileset dir="web/lib" includes="**/*.jar"/>
+        </compile>
     </target>
 
     <target name="web-package" depends="web">
-        <mkdir dir="${folder.lib}"/>
-        <jar destfile="${folder.lib}/${jar.web}" index="${compiler.indexJars}">
-            <manifest>
-                <attribute name="Sealed" value="true"/>
-                <attribute name="Implementation-Vendor-Id" value="org.apache"/>
-                <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
-                <attribute name="Implementation-Title" value="Apache Pivot Web Queries"/>
-                <attribute name="Implementation-Version" value="${version}"/>
-            </manifest>
+        <package jarFile="${jar.web}" title="Apache Pivot Web Queries">
             <fileset dir="web/${folder.bin}" excludes="org/apache/pivot/web/server/**"/>
             <fileset dir="web/src">
                 <exclude name="org/apache/pivot/web/server/**"/>
                 <exclude name="**/*.java"/>
                 <exclude name="**/package.html"/>
             </fileset>
-        </jar>
+        </package>
 
-        <jar destfile="${folder.lib}/${jar.web.server}" index="${compiler.indexJars}">
-            <manifest>
-                <attribute name="Sealed" value="true"/>
-                <attribute name="Implementation-Vendor-Id" value="org.apache"/>
-                <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
-                <attribute name="Implementation-Title" value="Apache Pivot Web Queries Server"/>
-                <attribute name="Implementation-Version" value="${version}"/>
-            </manifest>
+        <package jarFile="${jar.web.server}" title="Apache Pivot Web Queries Server">
             <fileset dir="web/${folder.bin}" includes="org/apache/pivot/web/server/*"/>
             <fileset dir="web/src">
                 <include name="org/apache/pivot/web/server/**"/>
                 <exclude name="**/*.java"/>
                 <exclude name="**/package.html"/>
             </fileset>
-        </jar>
+        </package>
     </target>
 
     <target name="web-clean">
@@ -335,27 +271,12 @@ limitations under the License.
         <delete file="${folder.lib}/${jar.web.server}"/>
     </target>
 
-    <!-- Web Test -->
     <target name="web-test" depends="core, web, wtk">
-        <mkdir dir="web/${folder.bin}"/>
-        <javac srcdir="web/test"
-            destDir="web/${folder.bin}"
-            deprecation="${compiler.deprecation}"
-            debug="${compiler.debug}"
-            target="${compiler.target}"
-            encoding="${compiler.encoding}"
-            failonerror="true">
-            <compilerarg value="${compilerarg.default}"/>
-            <classpath>
-                <pathelement location="core/${folder.bin}"/>
-                <pathelement location="web/${folder.bin}"/>
-                <fileset dir="web/lib" includes="**/*.jar"/>
-            </classpath>
-        </javac>
-    </target>
-
-    <target name="web-test-clean">
-        <delete dir="web/${folder.bin}"/>
+        <compile project="web" srcDir="test">
+            <pathelement location="core/${folder.bin}"/>
+            <pathelement location="web/${folder.bin}"/>
+            <fileset dir="web/lib" includes="**/*.jar"/>
+        </compile>
     </target>
 
     <!-- WTK -->
@@ -369,34 +290,14 @@ limitations under the License.
             </condition>
         </fail>
 
-        <mkdir dir="wtk/${folder.bin}"/>
-        <javac srcdir="wtk/src"
-            destDir="wtk/${folder.bin}"
-            includejavaruntime="true"
-            deprecation="${compiler.deprecation}"
-            debug="${compiler.debug}"
-            target="${compiler.target}"
-            encoding="${compiler.encoding}"
-            failonerror="true">
-            <exclude name="${wtk.exclude}"/>
-            <compilerarg value="${compilerarg.default}"/>
-            <classpath>
-                <pathelement location="core/${folder.bin}"/>
-                <path refid="classpath.javalib"/>
-            </classpath>
-        </javac>
+        <compile project="wtk">
+            <pathelement location="core/${folder.bin}"/>
+            <path refid="classpath.javalib"/>
+        </compile>
     </target>
 
     <target name="wtk-package" depends="wtk">
-        <mkdir dir="${folder.lib}"/>
-        <jar destfile="${folder.lib}/${jar.wtk}" index="${compiler.indexJars}">
-            <manifest>
-                <attribute name="Sealed" value="true"/>
-                <attribute name="Implementation-Vendor-Id" value="org.apache"/>
-                <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
-                <attribute name="Implementation-Title" value="Apache Pivot WTK"/>
-                <attribute name="Implementation-Version" value="${version}"/>
-            </manifest>
+        <package jarFile="${jar.wtk}" title="Apache Pivot WTK">
             <fileset dir="wtk/${folder.bin}">
                 <exclude name="org/apache/pivot/wtk/skin/terra/**"/>
                 <exclude name="org/apache/pivot/wtk/skin/obsidian/**"/>
@@ -408,16 +309,9 @@ limitations under the License.
                 <exclude name="**/*.java"/>
                 <exclude name="**/package.html"/>
             </fileset>
-        </jar>
+        </package>
 
-        <jar destfile="${folder.lib}/${jar.wtk.terra}" index="${compiler.indexJars}">
-            <manifest>
-                <attribute name="Sealed" value="true"/>
-                <attribute name="Implementation-Vendor-Id" value="org.apache"/>
-                <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
-                <attribute name="Implementation-Title" value="Apache Pivot WTK Terra Theme"/>
-                <attribute name="Implementation-Version" value="${version}"/>
-            </manifest>
+        <package jarFile="${jar.wtk.terra}" title="Apache Pivot WTK Terra Theme">
             <fileset dir="wtk/${folder.bin}" includes="org/apache/pivot/wtk/skin/terra/**"/>
             <fileset dir="wtk/src">
                 <include name="org/apache/pivot/wtk/skin/terra/**"/>
@@ -425,23 +319,16 @@ limitations under the License.
                 <exclude name="**/*.java"/>
                 <exclude name="**/package.html"/>
             </fileset>
-        </jar>
+        </package>
 
-        <jar destfile="${folder.lib}/${jar.wtk.obsidian}" index="${compiler.indexJars}">
-            <manifest>
-                <attribute name="Sealed" value="true"/>
-                <attribute name="Implementation-Vendor-Id" value="org.apache"/>
-                <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
-                <attribute name="Implementation-Title" value="Apache Pivot WTK Obsidian Theme"/>
-                <attribute name="Implementation-Version" value="${version}"/>
-            </manifest>
+        <package jarFile="${jar.wtk.obsidian}" title="Apache Pivot WTK Obsidian Theme">
             <fileset dir="wtk/${folder.bin}" includes="org/apache/pivot/wtk/skin/obsidian/**"/>
             <fileset dir="wtk/src">
                 <include name="org/apache/pivot/wtk/skin/obsidian/**"/>
                 <exclude name="**/*.java"/>
                 <exclude name="**/package.html"/>
             </fileset>
-        </jar>
+        </package>
     </target>
 
     <target name="wtk-clean">
@@ -451,58 +338,29 @@ limitations under the License.
         <delete file="${folder.lib}/${jar.wtk.obsidian}"/>
     </target>
 
-    <!-- WTK Test -->
     <target name="wtk-test" depends="core, wtk">
-        <mkdir dir="wtk/${folder.bin}"/>
-        <javac srcdir="wtk/test"
-            destDir="wtk/${folder.bin}"
-            deprecation="${compiler.deprecation}"
-            debug="${compiler.debug}"
-            target="${compiler.target}"
-            encoding="${compiler.encoding}"
-            failonerror="true">
-            <compilerarg line="${compilerarg.default}"/>
-            <classpath>
-                <pathelement location="core/${folder.bin}"/>
-                <pathelement location="wtk/${folder.bin}"/>
-            </classpath>
-        </javac>
+        <compile project="wtk" srcDir="test">
+            <pathelement location="core/${folder.bin}"/>
+            <pathelement location="wtk/${folder.bin}"/>
+        </compile>
     </target>
 
     <!-- Tutorials -->
-    <target name="tutorials" depends="core, wtk, web, charts">
-        <mkdir dir="tutorials/${folder.bin}"/>
-        <javac srcdir="tutorials/src"
-            destDir="tutorials/${folder.bin}"
-            deprecation="${compiler.deprecation}"
-            debug="${compiler.debug}"
-            target="${compiler.target}"
-            encoding="${compiler.encoding}"
-            failonerror="true">
-            <compilerarg line="${compilerarg.default}"/>
-            <classpath>
-                <pathelement location="core/${folder.bin}"/>
-                <pathelement location="web/${folder.bin}"/>
-                <pathelement location="wtk/${folder.bin}"/>
-            </classpath>
-        </javac>
+    <target name="tutorials" depends="core, wtk, web">
+        <compile project="tutorials">
+            <pathelement location="core/${folder.bin}"/>
+            <pathelement location="web/${folder.bin}"/>
+            <pathelement location="wtk/${folder.bin}"/>
+        </compile>
     </target>
 
     <target name="tutorials-package" depends="tutorials">
-        <mkdir dir="${folder.lib}"/>
-        <jar destfile="${folder.lib}/${jar.tutorials}" index="${compiler.indexJars}">
-            <manifest>
-                <attribute name="Sealed" value="true"/>
-                <attribute name="Implementation-Vendor-Id" value="org.apache"/>
-                <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
-                <attribute name="Implementation-Title" value="Apache Pivot Tutorials"/>
-                <attribute name="Implementation-Version" value="${version}"/>
-            </manifest>
+        <package jarFile="${jar.tutorials}" title="Apache Pivot Tutorials">
             <fileset dir="tutorials/${folder.bin}"/>
             <fileset dir="tutorials/src">
                 <exclude name="**/*.java"/>
             </fileset>
-        </jar>
+        </package>
     </target>
 
     <target name="tutorials-clean">
@@ -512,33 +370,22 @@ limitations under the License.
 
     <!-- Demos -->
     <target name="demos" depends="core, wtk, web">
-        <mkdir dir="demos/${folder.bin}"/>
-        <javac srcdir="demos/src"
-            destDir="demos/${folder.bin}"
-            deprecation="${compiler.deprecation}"
-            debug="${compiler.debug}"
-            target="${compiler.target}"
-            encoding="${compiler.encoding}"
-            failonerror="true">
-            <compilerarg line="${compilerarg.default}"/>
-            <classpath>
-                <pathelement location="core/${folder.bin}"/>
-                <pathelement location="web/${folder.bin}"/>
-                <pathelement location="wtk/${folder.bin}"/>
-                <fileset dir="demos/lib" includes="**/*.jar"/>
-            </classpath>
-        </javac>
+        <compile project="demos">
+            <pathelement location="core/${folder.bin}"/>
+            <pathelement location="web/${folder.bin}"/>
+            <pathelement location="wtk/${folder.bin}"/>
+            <fileset dir="demos/lib" includes="**/*.jar"/>
+        </compile>
     </target>
 
     <target name="demos-package" depends="demos">
-        <mkdir dir="${folder.lib}"/>
-        <jar destfile="${folder.lib}/${jar.demos}" index="${compiler.indexJars}">
+        <package jarFile="${jar.demos}" title="Apache Pivot Demos">
             <fileset dir="demos/${folder.bin}"/>
             <fileset dir="demos/src">
                 <exclude name="**/*.java"/>
                 <exclude name="**/package.html"/>
             </fileset>
-        </jar>
+        </package>
     </target>
 
     <target name="demos-clean">
@@ -548,38 +395,20 @@ limitations under the License.
 
     <!-- Tools -->
     <target name="tools" depends="core, wtk, web">
-        <mkdir dir="tools/${folder.bin}"/>
-        <javac srcdir="tools/src"
-            destDir="tools/${folder.bin}"
-            deprecation="${compiler.deprecation}"
-            debug="${compiler.debug}"
-            target="${compiler.target}"
-            encoding="${compiler.encoding}"
-            failonerror="true">
-            <compilerarg value="${compilerarg.default}"/>
-            <classpath>
-                <pathelement location="core/${folder.bin}"/>
-                <pathelement location="web/${folder.bin}"/>
-                <pathelement location="wtk/${folder.bin}"/>
-            </classpath>
-        </javac>
+        <compile project="tools">
+            <pathelement location="core/${folder.bin}"/>
+            <pathelement location="web/${folder.bin}"/>
+            <pathelement location="wtk/${folder.bin}"/>
+        </compile>
     </target>
 
     <target name="tools-package" depends="tools">
-        <mkdir dir="${folder.lib}"/>
-        <jar destfile="${folder.lib}/${jar.tools}" index="${compiler.indexJars}">
-            <manifest>
-                <attribute name="Sealed" value="true"/>
-                <attribute name="Implementation-Vendor-Id" value="org.apache"/>
-                <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
-                <attribute name="Implementation-Title" value="Apache Pivot Tools"/>
-                <attribute name="Implementation-Version" value="${version}"/>
-            </manifest>
+        <package jarFile="${jar.tools}" title="Apache Pivot Tools">
             <fileset dir="tools/${folder.bin}"/>
             <fileset dir="tools/src">
                 <exclude name="**/*.java"/>
             </fileset>
-        </jar>
+        </package>
     </target>
 
     <target name="tools-clean">
