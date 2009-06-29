@@ -22,7 +22,7 @@ limitations under the License.
     xmlns="org.apache.pivot.wtk">
     <wtkx:script src="json_viewer.js"/>
     <content>
-        <Border styles="{color:10}">
+        <Border styles="{padding:0, color:10}">
             <content>
                 <ScrollPane horizontalScrollBarPolicy="fillToCapacity"
                     verticalScrollBarPolicy="fillToCapacity">

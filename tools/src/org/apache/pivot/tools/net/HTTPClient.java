@@ -65,23 +65,6 @@ public class HTTPClient implements Application {
         HTTP,
         HTTPS;
 
-        public static Protocol decode(String value) {
-            if (value == null) {
-                throw new IllegalArgumentException();
-            }
-
-            Protocol protocol;
-            if (value.equals("http")) {
-                protocol = HTTP;
-            } else if (value.equals("https")) {
-                protocol = HTTPS;
-            } else {
-                protocol = valueOf(value);
-            }
-
-            return protocol;
-        }
-
         public boolean isSecure() {
             return (this == HTTPS);
         }
@@ -132,7 +115,7 @@ public class HTTPClient implements Application {
     private Request getRequest() {
         ListButton protocolListButton = (ListButton)serializer.get("request.protocol");
         ListItem protocolListItem = (ListItem)protocolListButton.getSelectedItem();
-        Protocol protocol = Protocol.decode(protocolListItem.getText());
+        Protocol protocol = Protocol.valueOf(protocolListItem.getText().toUpperCase());
         boolean secure = protocol.isSecure();
 
         TextInput hostTextInput = (TextInput)serializer.get("request.host");

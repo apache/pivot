@@ -57,27 +57,6 @@ public abstract class QueryServlet extends HttpServlet {
         POST,
         PUT,
         DELETE;
-
-        public static Method decode(String value) {
-            if (value == null) {
-                throw new IllegalArgumentException();
-            }
-
-            Method method;
-            if (value.equals("get")) {
-                method = GET;
-            } else if (value.equals("post")) {
-                method = POST;
-            } else if (value.equals("put")) {
-                method = PUT;
-            } else if (value.equals("delete")) {
-                method = DELETE;
-            } else {
-                method = valueOf(value);
-            }
-
-            return method;
-        }
     }
 
     /**
@@ -373,7 +352,7 @@ public abstract class QueryServlet extends HttpServlet {
                 queryPath = request.getRequestURI();
                 port = request.getLocalPort();
                 secure = url.getProtocol().equalsIgnoreCase(HTTPS_PROTOCOL);
-                method = Method.decode(request.getMethod());
+                method = Method.valueOf(request.getMethod().toUpperCase());
 
                 if (queryPath.startsWith(contextPath)) {
                     queryPath = queryPath.substring(contextPath.length());

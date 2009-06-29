@@ -65,27 +65,6 @@ public abstract class Query<V> extends IOTask<V> {
         POST,
         PUT,
         DELETE;
-
-        public static Method decode(String value) {
-            if (value == null) {
-                throw new IllegalArgumentException();
-            }
-
-            Method method;
-            if (value.equals("get")) {
-                method = GET;
-            } else if (value.equals("post")) {
-                method = POST;
-            } else if (value.equals("put")) {
-                method = PUT;
-            } else if (value.equals("delete")) {
-                method = DELETE;
-            } else {
-                method = valueOf(value);
-            }
-
-            return method;
-        }
     }
 
     /**
