@@ -409,7 +409,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
             throw new IllegalArgumentException("textDecoration is null.");
         }
 
-        setTextDecoration(TextDecoration.decode(textDecoration));
+        setTextDecoration(TextDecoration.valueOf(textDecoration.toUpperCase()));
     }
 
     public HorizontalAlignment getHorizontalAlignment() {
@@ -434,7 +434,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
             throw new IllegalArgumentException("horizontalAlignment is null.");
         }
 
-        setHorizontalAlignment(HorizontalAlignment.decode(horizontalAlignment));
+        setHorizontalAlignment(HorizontalAlignment.valueOf(horizontalAlignment.toUpperCase()));
     }
 
     public VerticalAlignment getVerticalAlignment() {
@@ -459,7 +459,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
             throw new IllegalArgumentException("verticalAlignment is null.");
         }
 
-        setVerticalAlignment(VerticalAlignment.decode(verticalAlignment));
+        setVerticalAlignment(VerticalAlignment.valueOf(verticalAlignment.toUpperCase()));
     }
 
     public Insets getPadding() {

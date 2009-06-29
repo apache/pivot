@@ -54,7 +54,7 @@ limitations under the License.
                 
 	            <Rectangle x="0" y="0"
 	                width="160" height="120" 
-                    fill="{paintType:'radialGradient', 
+                    fill="{paintType:'radial_gradient', 
                         centerX:50, centerY:50, radius:50,
                         stops: [{color:'#ffffff', offset:0.0}, {color:'#000000', offset:1.0}]}"
 	                stroke="#00ff00" strokeThickness="4"

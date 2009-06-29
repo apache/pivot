@@ -27,7 +27,7 @@ limitations under the License.
                 <Label text="Sortable" styles="{fontBold:true}"/>
                 <Border styles="{padding:0, color:10}">
                     <content>
-                        <ScrollPane wtkx:id="sortableScrollPane" horizontalScrollBarPolicy="fillToCapacity"
+                        <ScrollPane wtkx:id="sortableScrollPane" horizontalScrollBarPolicy="fill_to_capacity"
                             preferredWidth="276" preferredHeight="160">
                             <view>
                                 <TableView wtkx:id="sortableTableView" selectMode="multi">
@@ -54,7 +54,7 @@ limitations under the License.
                 <Label text="Custom Content" styles="{fontBold:true}"/>
                 <Border styles="{padding:0, color:10}">
                     <content>
-                        <ScrollPane horizontalScrollBarPolicy="fillToCapacity" preferredWidth="160">
+                        <ScrollPane horizontalScrollBarPolicy="fill_to_capacity" preferredWidth="160">
                             <view>
                                 <TableView wtkx:id="customTableView" selectMode="multi"
                                     styles="{showHorizontalGridLines:false}">

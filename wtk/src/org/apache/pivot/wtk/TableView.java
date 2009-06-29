@@ -332,8 +332,11 @@ public class TableView extends Component {
          * sort direction
          */
         public final void setSortDirection(String sortDirection) {
-            setSortDirection(sortDirection == null ? (SortDirection)null :
-                SortDirection.decode(sortDirection));
+            if (sortDirection == null) {
+                setSortDirection((SortDirection)null);
+            } else {
+                setSortDirection(SortDirection.valueOf(sortDirection.toUpperCase()));
+            }
         }
 
         /**
@@ -417,26 +420,7 @@ public class TableView extends Component {
         /**
          * Multiple indexes may be concurrently selected.
          */
-        MULTI;
-
-        public static SelectMode decode(String value) {
-            if (value == null) {
-                throw new IllegalArgumentException();
-            }
-
-            SelectMode selectMode;
-            if (value.equals("none")) {
-                selectMode = NONE;
-            } else if (value.equals("single")) {
-                selectMode = SINGLE;
-            } else if (value.equals("multi")) {
-                selectMode = MULTI;
-            } else {
-                selectMode = valueOf(value);
-            }
-
-            return selectMode;
-        }
+        MULTI
     }
 
     /**
@@ -1370,7 +1354,7 @@ public class TableView extends Component {
             throw new IllegalArgumentException("selectMode is null.");
         }
 
-        setSelectMode(SelectMode.decode(selectMode));
+        setSelectMode(SelectMode.valueOf(selectMode.toUpperCase()));
     }
 
     /**

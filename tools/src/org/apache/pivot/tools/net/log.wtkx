@@ -21,7 +21,7 @@ limitations under the License.
         xmlns:net="org.apache.pivot.tools.net"
         styles="{thickness:1, color:7, backgroundColor:11, padding:0}">
   <content>
-    <ScrollPane horizontalScrollBarPolicy="fillToCapacity">
+    <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
       <view>
         <TableView wtkx:id="tableView">
           <columns>

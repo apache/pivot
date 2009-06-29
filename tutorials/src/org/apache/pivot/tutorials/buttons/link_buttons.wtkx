@@ -21,7 +21,7 @@ limitations under the License.
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
     <content>
-        <CardPane wtkx:id="cardPane" selectedIndex="0" styles="{selectionChangeEffect:'horizontalSlide'}">
+        <CardPane wtkx:id="cardPane" selectedIndex="0" styles="{selectionChangeEffect:'horizontal_slide'}">
             <FlowPane orientation="vertical" styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
                 <ImageView image="org/apache/pivot/tutorials/IMG_0735_2.jpg"/>
                 <LinkButton wtkx:id="nextButton">

@@ -47,24 +47,7 @@ public class SplitPane extends Container {
      */
     public enum Region {
         TOP_LEFT,
-        BOTTOM_RIGHT;
-
-        public static Region decode(String value) {
-            if (value == null) {
-                throw new IllegalArgumentException();
-            }
-
-            Region region;
-            if (value.equals("topLeft")) {
-                region = TOP_LEFT;
-            } else if (value.equals("bottomRight")) {
-                region = BOTTOM_RIGHT;
-            } else {
-                region = valueOf(value);
-            }
-
-            return region;
-        }
+        BOTTOM_RIGHT
     }
 
     private static class SplitPaneListenerList extends ListenerList<SplitPaneListener>
@@ -243,7 +226,7 @@ public class SplitPane extends Container {
             throw new IllegalArgumentException("orientation is null.");
         }
 
-        setOrientation(Orientation.decode(orientation));
+        setOrientation(Orientation.valueOf(orientation.toUpperCase()));
     }
 
     public Region getPrimaryRegion() {
@@ -267,7 +250,7 @@ public class SplitPane extends Container {
             throw new IllegalArgumentException("primaryRegion is null.");
         }
 
-        setPrimaryRegion(Region.decode(primaryRegion));
+        setPrimaryRegion(Region.valueOf(primaryRegion.toUpperCase()));
     }
 
     public int getSplitLocation() {

@@ -23,22 +23,5 @@ package org.apache.pivot.wtk;
  */
 public enum Orientation {
     HORIZONTAL,
-    VERTICAL;
-
-    public static Orientation decode(String value) {
-        if (value == null) {
-            throw new IllegalArgumentException();
-        }
-
-        Orientation orientation;
-        if (value.equals("horizontal")) {
-            orientation = HORIZONTAL;
-        } else if (value.equals("vertical")) {
-            orientation = VERTICAL;
-        } else {
-            orientation = valueOf(value);
-        }
-
-        return orientation;
-    }
+    VERTICAL
 }

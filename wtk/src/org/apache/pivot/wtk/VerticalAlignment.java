@@ -22,33 +22,23 @@ package org.apache.pivot.wtk;
  * @author gbrown
  */
 public enum VerticalAlignment {
+    /**
+     * Align to top.
+     */
     TOP,
+
+    /**
+     * Align to bottom.
+     */
     BOTTOM,
+
+    /**
+     * Align to center.
+     */
     CENTER,
 
     /**
-     * Stretch the contents to fill the available space.
+     * Stretch to fill the available space.
      */
-    JUSTIFY;
-
-    public static VerticalAlignment decode(String value) {
-        if (value == null) {
-            throw new IllegalArgumentException();
-        }
-
-        VerticalAlignment verticalAlignment;
-        if (value.equals("top")) {
-            verticalAlignment = TOP;
-        } else if (value.equals("bottom")) {
-            verticalAlignment = BOTTOM;
-        } else if (value.equals("center")) {
-            verticalAlignment = CENTER;
-        } else if (value.equals("justify")) {
-            verticalAlignment = JUSTIFY;
-        } else {
-            verticalAlignment = valueOf(value);
-        }
-
-        return verticalAlignment;
-    }
+    JUSTIFY
 }

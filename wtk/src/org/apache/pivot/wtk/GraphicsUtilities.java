@@ -42,28 +42,7 @@ public final class GraphicsUtilities {
         SOLID_COLOR,
         GRADIENT,
         LINEAR_GRADIENT,
-        RADIAL_GRADIENT;
-
-        public static PaintType decode(String value) {
-            if (value == null) {
-                throw new IllegalArgumentException();
-            }
-
-            PaintType paintType;
-            if (value.equals("solidColor")) {
-                paintType = SOLID_COLOR;
-            } else if (value.equals("gradient")) {
-                paintType = GRADIENT;
-            } else if (value.equals("linearGradient")) {
-                paintType = LINEAR_GRADIENT;
-            } else if (value.equals("radialGradient")) {
-                paintType = RADIAL_GRADIENT;
-            } else {
-                paintType = valueOf(value);
-            }
-
-            return paintType;
-        }
+        RADIAL_GRADIENT
     }
 
     public static final String PAINT_TYPE_KEY = "paintType";
@@ -261,7 +240,7 @@ public final class GraphicsUtilities {
         }
 
         Paint paint;
-        switch(PaintType.decode(paintType)) {
+        switch(PaintType.valueOf(paintType.toUpperCase())) {
             case SOLID_COLOR: {
                 String color = JSONSerializer.getString(value, COLOR_KEY);
                 paint = decodeColor(color);

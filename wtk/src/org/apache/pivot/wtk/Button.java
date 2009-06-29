@@ -16,21 +16,16 @@
  */
 package org.apache.pivot.wtk;
 
+import java.util.Iterator;
+
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
+import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 
 
 /**
  * Abstract base class for button components.
- * <p>
- * TODO Ensure that button group names are unique across applications?
- * Applets downloaded from different domains won't clash, but multiple instances
- * of the same application from the same domain would. Put the groups in the
- * application context?
- * <p>
- * TODO Allow callers to remove a button group (possibly by exposing group
- * dictionary interface).
  *
  * @author gbrown
  */
@@ -43,26 +38,7 @@ public abstract class Button extends Component {
     public enum State {
         SELECTED,
         UNSELECTED,
-        MIXED;
-
-        public static State decode(String value) {
-            if (value == null) {
-                throw new IllegalArgumentException();
-            }
-
-            State state;
-            if (value.equals("selected")) {
-                state = SELECTED;
-            } else if (value.equals("unselected")) {
-                state = UNSELECTED;
-            } else if (value.equals("mixed")) {
-                state = MIXED;
-            } else {
-                state = valueOf(value);
-            }
-
-            return state;
-        }
+        MIXED
     }
 
     /**
@@ -127,6 +103,69 @@ public abstract class Button extends Component {
          */
         public void selectionChanged(Group group, Button previousSelection);
     }
+
+    /**
+     * Named group dictionary.
+     *
+     * @author gbrown
+     */
+    public static class NamedGroupDictionary
+        implements Dictionary<String, Group>, Iterable<String> {
+        private NamedGroupDictionary() {
+        }
+
+        public Group get(String name) {
+            return namedGroups.get(name);
+        }
+
+        public Group put(String name, Group group) {
+            boolean update = containsKey(name);
+            Group previousGroup = namedGroups.put(name, group);
+
+            if (update) {
+                namedGroupDictionaryListeners.groupUpdated(name, previousGroup);
+            }
+            else {
+                namedGroupDictionaryListeners.groupAdded(name);
+            }
+
+            return previousGroup;
+        }
+
+        public Group remove(String name) {
+            Group group = null;
+
+            if (containsKey(name)) {
+                group = namedGroups.remove(name);
+                namedGroupDictionaryListeners.groupRemoved(name, group);
+            }
+
+            return group;
+        }
+
+        public boolean containsKey(String name) {
+            return namedGroups.containsKey(name);
+        }
+
+        public boolean isEmpty() {
+            return namedGroups.isEmpty();
+        }
+
+        public Iterator<String> iterator() {
+            return new ImmutableIterator<String>(namedGroups.iterator());
+        }
+    }
+
+    /**
+     * Named group dictionary listener interface.
+     *
+     * @author gbrown
+     */
+    public interface NamedGroupDictionaryListener {
+        public void groupAdded(String name);
+        public void groupUpdated(String name, Group previousGroup);
+        public void groupRemoved(String name, Group group);
+    };
 
     /**
      * Button listener list.
@@ -212,6 +251,27 @@ public abstract class Button extends Component {
         }
     }
 
+    private static class NamedGroupDictionaryListenerList extends ListenerList<NamedGroupDictionaryListener>
+        implements NamedGroupDictionaryListener {
+        public void groupAdded(String name) {
+            for (NamedGroupDictionaryListener listener : this) {
+                listener.groupAdded(name);
+            }
+        }
+
+        public void groupUpdated(String name, Group previousGroup) {
+            for (NamedGroupDictionaryListener listener : this) {
+                listener.groupUpdated(name, previousGroup);
+            }
+        }
+
+        public void groupRemoved(String name, Group group) {
+            for (NamedGroupDictionaryListener listener : this) {
+                listener.groupRemoved(name, group);
+            }
+        }
+    }
+
     private Object buttonData = null;
     private DataRenderer dataRenderer = null;
     private Action action = null;
@@ -233,7 +293,9 @@ public abstract class Button extends Component {
     private ButtonStateListenerList buttonStateListeners = new ButtonStateListenerList();
     private ButtonPressListenerList buttonPressListeners = new ButtonPressListenerList();
 
-    private static HashMap<String, Group> groups = new HashMap<String, Group>();
+    private static HashMap<String, Group> namedGroups = new HashMap<String, Group>();
+    private static NamedGroupDictionary namedGroupDictionary = new NamedGroupDictionary();
+    private static NamedGroupDictionaryListenerList namedGroupDictionaryListeners = new NamedGroupDictionaryListenerList();
 
     public Button() {
         this(null);
@@ -434,7 +496,7 @@ public abstract class Button extends Component {
             throw new IllegalArgumentException("state is null.");
         }
 
-        setState(State.decode(state));
+        setState(State.valueOf(state.toUpperCase()));
     }
 
     /**
@@ -542,11 +604,11 @@ public abstract class Button extends Component {
             throw new IllegalArgumentException("group is null.");
         }
 
-        if (!groups.containsKey(group)) {
-            groups.put(group, new Group());
+        if (!namedGroups.containsKey(group)) {
+            namedGroups.put(group, new Group());
         }
 
-        setGroup(groups.get(group));
+        setGroup(namedGroups.get(group));
     }
 
     public String getSelectedKey() {
@@ -586,9 +648,6 @@ public abstract class Button extends Component {
         if (stateKey != null
             && context.containsKey(stateKey)) {
             Object value = context.get(stateKey);
-            if (value instanceof String) {
-                value = State.decode((String)value);
-            }
 
             if (!(value instanceof State)) {
                 throw new IllegalArgumentException("value must be an instance of "
@@ -611,10 +670,6 @@ public abstract class Button extends Component {
         }
     }
 
-    public static Group getGroup(String groupName) {
-        return groups.get(groupName);
-    }
-
     public ListenerList<ButtonListener> getButtonListeners() {
         return buttonListeners;
     }
@@ -625,5 +680,13 @@ public abstract class Button extends Component {
 
     public ListenerList<ButtonPressListener> getButtonPressListeners() {
         return buttonPressListeners;
+    }
+
+    public static NamedGroupDictionary getNamedGroups() {
+        return namedGroupDictionary;
+    }
+
+    public static ListenerList<NamedGroupDictionaryListener> getNamedGroupDictionaryListeners() {
+        return namedGroupDictionaryListeners;
     }
 }

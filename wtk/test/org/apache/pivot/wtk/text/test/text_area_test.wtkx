@@ -29,7 +29,7 @@ limitations under the License.
                 <TablePane.Row height="1*">
                     <Border styles="{padding:0}">
                         <content>
-                            <ScrollPane horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fillToCapacity">
+                            <ScrollPane horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fill_to_capacity">
                                 <view>
                                     <TextArea wtkx:id="textArea">
                                        <document>
@@ -64,7 +64,7 @@ limitations under the License.
                 <TablePane.Row height="1*">
                     <Border styles="{padding:0}">
                         <content>
-                            <ScrollPane horizontalScrollBarPolicy="fillToCapacity">
+                            <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
                                 <view>
                                     <TreeView wtkx:id="treeView">
                                         <nodeRenderer>

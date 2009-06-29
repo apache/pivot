@@ -1074,7 +1074,7 @@ public class TerraTabPaneSkin extends ContainerSkin
             throw new IllegalArgumentException("tabOrientation is null.");
         }
 
-        setTabOrientation(Orientation.decode(tabOrientation));
+        setTabOrientation(Orientation.valueOf(tabOrientation.toUpperCase()));
     }
 
     public boolean isCollapsible() {

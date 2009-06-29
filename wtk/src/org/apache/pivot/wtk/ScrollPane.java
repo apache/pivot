@@ -37,30 +37,7 @@ public class ScrollPane extends Viewport {
         NEVER,
         ALWAYS,
         FILL,
-        FILL_TO_CAPACITY;
-
-        public static ScrollBarPolicy decode(String value) {
-            if (value == null) {
-                throw new IllegalArgumentException();
-            }
-
-            ScrollBarPolicy scrollBarPolicy = null;
-            if (value.equals("auto")) {
-                scrollBarPolicy = AUTO;
-            } else if (value.equals("never")) {
-                scrollBarPolicy = NEVER;
-            } else if (value.equals("always")) {
-                scrollBarPolicy = ALWAYS;
-            } else if (value.equals("fill")) {
-                scrollBarPolicy = FILL;
-            } else if (value.equals("fillToCapacity")) {
-                scrollBarPolicy = FILL_TO_CAPACITY;
-            } else {
-                scrollBarPolicy = valueOf(value);
-            }
-
-            return scrollBarPolicy;
-        }
+        FILL_TO_CAPACITY
     }
 
     private static class ScrollPaneListenerList extends ListenerList<ScrollPaneListener>
@@ -116,7 +93,7 @@ public class ScrollPane extends Viewport {
          *
          * @author tvolkert
          */
-        public static enum Placement {
+        public enum Placement {
             TOP_LEFT,
             BOTTOM_LEFT,
             BOTTOM_RIGHT,
@@ -192,7 +169,7 @@ public class ScrollPane extends Viewport {
             throw new IllegalArgumentException("horizontalScrollBarPolicy is null.");
         }
 
-        setHorizontalScrollBarPolicy(ScrollBarPolicy.decode(horizontalScrollBarPolicy));
+        setHorizontalScrollBarPolicy(ScrollBarPolicy.valueOf(horizontalScrollBarPolicy.toUpperCase()));
     }
 
     public ScrollBarPolicy getVerticalScrollBarPolicy() {
@@ -218,7 +195,7 @@ public class ScrollPane extends Viewport {
             throw new IllegalArgumentException("verticalScrollBarPolicy is null.");
         }
 
-        setVerticalScrollBarPolicy(ScrollBarPolicy.decode(verticalScrollBarPolicy));
+        setVerticalScrollBarPolicy(ScrollBarPolicy.valueOf(verticalScrollBarPolicy.toUpperCase()));
     }
 
     public Component getRowHeader() {

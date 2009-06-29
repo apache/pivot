@@ -23,22 +23,5 @@ package org.apache.pivot.wtk;
  */
 public enum TextDecoration {
     UNDERLINE,
-    STRIKETHROUGH;
-
-    public static TextDecoration decode(String value) {
-        if (value == null) {
-            throw new IllegalArgumentException();
-        }
-
-        TextDecoration textDecoration;
-        if (value.equals("underline")) {
-            textDecoration = UNDERLINE;
-        } else if (value.equals("strikethrough")) {
-            textDecoration = STRIKETHROUGH;
-        } else {
-            textDecoration = valueOf(value);
-        }
-
-        return textDecoration;
-    }
+    STRIKETHROUGH
 }

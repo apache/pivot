@@ -45,17 +45,6 @@ import org.apache.pivot.wtk.skin.ContainerSkin;
  */
 public class TerraScrollBarSkin extends ContainerSkin
     implements ScrollBarListener, ScrollBarValueListener {
-
-    /**
-     * The types of scroll that are supported.
-     *
-     * @author tvolkert
-     */
-    protected enum IncrementType {
-        UNIT,
-        BLOCK;
-    }
-
     /**
      * Encapsulates the code needed to perform timer-controlled scrolling. This
      * class is used by <tt>TerraScrollBarSkin</tt> (automatic block increment
@@ -66,7 +55,7 @@ public class TerraScrollBarSkin extends ContainerSkin
      */
     protected class AutomaticScroller {
         public int direction;
-        public IncrementType incrementType;
+        public Mouse.ScrollType incrementType;
         public int stopValue;
 
         private ApplicationContext.ScheduledCallback scheduledScrollCallback = null;
@@ -91,7 +80,7 @@ public class TerraScrollBarSkin extends ContainerSkin
          * If automatic scrolling of any scroll bar is already in progress.
          * Only one scroll bar may be automatically scrolled at one time
          */
-        public void start(int direction, IncrementType incrementType, int stopValue) {
+        public void start(int direction, Mouse.ScrollType incrementType, int stopValue) {
             if (scheduledScrollCallback != null) {
                 throw new IllegalStateException("Already running");
             }
@@ -131,7 +120,7 @@ public class TerraScrollBarSkin extends ContainerSkin
 
             int adjustment;
 
-            if (incrementType == IncrementType.UNIT) {
+            if (incrementType == Mouse.ScrollType.UNIT) {
                 adjustment = direction * scrollBar.getUnitIncrement();
             } else {
                 adjustment = direction * scrollBar.getBlockIncrement();
@@ -315,7 +304,7 @@ public class TerraScrollBarSkin extends ContainerSkin
 
                 // Start the automatic scroller. It'll be stopped when we
                 // mouse up or mouse out
-                automaticScroller.start(scrollButton.getDirection(), IncrementType.UNIT, -1);
+                automaticScroller.start(scrollButton.getDirection(), Mouse.ScrollType.UNIT, -1);
 
                 pressed = true;
                 repaintComponent();
@@ -1066,7 +1055,7 @@ public class TerraScrollBarSkin extends ContainerSkin
             }
 
             // Start the automatic scroller
-            automaticScroller.start(direction, IncrementType.BLOCK, realStopValue);
+            automaticScroller.start(direction, Mouse.ScrollType.BLOCK, realStopValue);
             consumed = true;
         }
 

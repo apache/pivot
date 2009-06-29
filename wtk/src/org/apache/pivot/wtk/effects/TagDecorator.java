@@ -104,7 +104,7 @@ public class TagDecorator implements Decorator {
             throw new IllegalArgumentException("horizontalAlignment is null.");
         }
 
-        setHorizontalAlignment(HorizontalAlignment.decode(horizontalAlignment));
+        setHorizontalAlignment(HorizontalAlignment.valueOf(horizontalAlignment.toUpperCase()));
     }
 
     public VerticalAlignment getVerticalAlignment() {
@@ -128,7 +128,7 @@ public class TagDecorator implements Decorator {
             throw new IllegalArgumentException("verticalAlignment is null.");
         }
 
-        setVerticalAlignment(VerticalAlignment.decode(verticalAlignment));
+        setVerticalAlignment(VerticalAlignment.valueOf(verticalAlignment.toUpperCase()));
     }
 
     public int getXOffset() {

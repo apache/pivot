@@ -200,7 +200,7 @@ public class Text extends Shape {
             throw new IllegalArgumentException();
         }
 
-        setAlignment(HorizontalAlignment.decode(alignment));
+        setAlignment(HorizontalAlignment.valueOf(alignment.toUpperCase()));
     }
 
     @Override

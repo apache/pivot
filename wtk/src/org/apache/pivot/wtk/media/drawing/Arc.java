@@ -23,7 +23,6 @@ import java.awt.geom.Arc2D;
 
 import org.apache.pivot.util.ListenerList;
 
-
 /**
  * Shape representing an arc.
  *
@@ -38,26 +37,7 @@ public class Arc extends Shape {
     public enum Type {
         CHORD,
         OPEN,
-        PIE;
-
-        public static Type decode(String value) {
-            if (value == null) {
-                throw new IllegalArgumentException();
-            }
-
-            Type type;
-            if (value.equals("chord")) {
-                type = CHORD;
-            } else if (value.equals("open")) {
-                type = OPEN;
-            } else if (value.equals("pie")) {
-                type = PIE;
-            } else {
-                type = valueOf(value);
-            }
-
-            return type;
-        }
+        PIE
     }
 
     private static class ArcListenerList extends ListenerList<ArcListener>
@@ -198,7 +178,7 @@ public class Arc extends Shape {
             throw new IllegalArgumentException("type is null.");
         }
 
-        setType(Type.decode(type));
+        setType(Type.valueOf(type.toUpperCase()));
     }
 
     @Override

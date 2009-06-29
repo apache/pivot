@@ -39,7 +39,7 @@ public class BufferedImageSerializer implements Serializer<BufferedImage> {
      *
      * @author tvolkert
      */
-    public static enum Format {
+    public enum Format {
         PNG("png", "image/png"),
         JPEG("jpeg", "image/jpeg"),
         BMP("bmp", "image/bmp"),

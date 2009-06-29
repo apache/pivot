@@ -25,7 +25,7 @@ limitations under the License.
                 <content>
                     <ScrollPane preferredWidth="80" preferredHeight="110"
                         horizontalScrollBarPolicy="fill"
-                        verticalScrollBarPolicy="fillToCapacity">
+                        verticalScrollBarPolicy="fill_to_capacity">
                         <view>
                             <ListView wtkx:id="listView" selectMode="multi"
                                 listData="['One', 'Two', 'Three', 'Four', 'Five',

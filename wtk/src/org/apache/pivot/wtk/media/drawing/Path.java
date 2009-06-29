@@ -460,7 +460,7 @@ public class Path extends Shape
      *
      * @author tvolkert
      */
-    public static enum WindingRule {
+    public enum WindingRule {
         /**
          * A <tt>NON_ZERO</tt> winding rule means that if a ray is drawn in any
          * direction from a given point to infinity and the places where the
@@ -469,14 +469,14 @@ public class Path extends Shape
          * ray from left to right does not equal the number of times that the
          * path crosses the ray from right to left.
          */
-        NON_ZERO (GeneralPath.WIND_NON_ZERO),
+        NON_ZERO(GeneralPath.WIND_NON_ZERO),
 
         /**
          * An <tt>EVEN_ODD</tt> winding rule means that enclosed regions of the
          * path alternate between interior and exterior areas as traversed from
          * the outside of the path towards a point inside the region.
          */
-        EVEN_ODD (GeneralPath.WIND_EVEN_ODD);
+        EVEN_ODD(GeneralPath.WIND_EVEN_ODD);
 
         private int constantValue;
 
@@ -492,23 +492,6 @@ public class Path extends Shape
          */
         private int getConstantValue() {
             return constantValue;
-        }
-
-        public static WindingRule decode(String value) {
-            if (value == null) {
-                throw new IllegalArgumentException();
-            }
-
-            WindingRule windingRule;
-            if (value.equals("nonZero")) {
-                windingRule = NON_ZERO;
-            } else if (value.equals("evenOdd")) {
-                windingRule = EVEN_ODD;
-            } else {
-                windingRule = valueOf(value);
-            }
-
-            return windingRule;
         }
     }
 
@@ -581,7 +564,7 @@ public class Path extends Shape
     }
 
     public final void setWindingRule(String windingRule) {
-        setWindingRule(WindingRule.decode(windingRule));
+        setWindingRule(WindingRule.valueOf(windingRule.toUpperCase()));
     }
 
     /**

@@ -43,7 +43,7 @@ limitations under the License.
                                     <TablePane.Row height="1*">
                                         <Border styles="{color:10}">
                                             <content>
-                                                <ScrollPane horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fillToCapacity">
+                                                <ScrollPane horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fill_to_capacity">
                                                     <view>
                                                         <Label wtkx:id="label"
                                                             styles="{horizontalAlignment:'left', verticalAlignment:'top', wrapText:true}" />
@@ -107,7 +107,7 @@ limitations under the License.
                                     <TablePane.Row height="1*">
                                         <Border styles="{color:10, padding:0}">
                                             <content>
-                                                <ScrollPane horizontalScrollBarPolicy="fillToCapacity" verticalScrollBarPolicy="fillToCapacity">
+                                                <ScrollPane horizontalScrollBarPolicy="fill_to_capacity" verticalScrollBarPolicy="fill_to_capacity">
                                                     <view>
                                                         <ListView wtkx:id="listView" selectMode="none"/>
                                                     </view>

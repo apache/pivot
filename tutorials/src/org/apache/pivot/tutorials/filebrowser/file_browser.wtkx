@@ -23,7 +23,7 @@ limitations under the License.
     <content>
         <Border styles="{color:10, padding:0}">
             <content>
-                <ScrollPane preferredWidth="240" horizontalScrollBarPolicy="fillToCapacity">
+                <ScrollPane preferredWidth="240" horizontalScrollBarPolicy="fill_to_capacity">
                     <view>
                        <TreeView wtkx:id="folderTreeView">
                            <nodeRenderer>

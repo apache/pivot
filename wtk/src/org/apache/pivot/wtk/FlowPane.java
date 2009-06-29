@@ -63,7 +63,7 @@ public class FlowPane extends Container {
             throw new IllegalArgumentException();
         }
 
-        setOrientation(Orientation.decode(orientation));
+        setOrientation(Orientation.valueOf(orientation.toUpperCase()));
     }
 
     public ListenerList<FlowPaneListener> getFlowPaneListeners() {

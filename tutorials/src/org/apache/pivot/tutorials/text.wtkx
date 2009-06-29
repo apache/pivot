@@ -61,7 +61,7 @@ limitations under the License.
                             <TablePane.Row height="1*">
                                 <Border styles="{padding:0, color:10}">
                                     <content>
-                                        <ScrollPane horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fillToCapacity">
+                                        <ScrollPane horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fill_to_capacity">
                                             <view>
                                                 <TextArea wtkx:id="textArea" editable="true"
                                                     styles="{breakOnWhitespaceOnly:true}"/>

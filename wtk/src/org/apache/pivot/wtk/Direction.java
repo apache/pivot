@@ -23,22 +23,5 @@ package org.apache.pivot.wtk;
  */
 public enum Direction {
     FORWARD,
-    BACKWARD;
-
-    public static Direction decode(String value) {
-        if (value == null) {
-            throw new IllegalArgumentException();
-        }
-
-        Direction direction;
-        if (value.equals("forward")) {
-            direction = FORWARD;
-        } else if (value.equals("backward")) {
-            direction = BACKWARD;
-        } else {
-            direction = valueOf(value);
-        }
-
-        return direction;
-    }
+    BACKWARD
 }

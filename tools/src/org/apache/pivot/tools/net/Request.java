@@ -44,7 +44,7 @@ public class Request extends IOTask<Response> {
      *
      * @author tvolkert
      */
-    public static enum Method {
+    public enum Method {
         GET,
         POST,
         PUT,
@@ -52,33 +52,6 @@ public class Request extends IOTask<Response> {
         OPTIONS,
         HEAD,
         TRACE;
-
-        public static Method decode(String value) {
-            if (value == null) {
-                throw new IllegalArgumentException();
-            }
-
-            Method method;
-            if (value.equals("get")) {
-                method = GET;
-            } else if (value.equals("post")) {
-                method = POST;
-            } else if (value.equals("put")) {
-                method = PUT;
-            } else if (value.equals("delete")) {
-                method = DELETE;
-            } else if (value.equals("options")) {
-                method = OPTIONS;
-            } else if (value.equals("head")) {
-                method = HEAD;
-            } else if (value.equals("trace")) {
-                method = TRACE;
-            } else {
-                method = valueOf(value);
-            }
-
-            return method;
-        }
 
         public boolean supportsOutput() {
             return (this == POST || this == PUT);
@@ -174,7 +147,7 @@ public class Request extends IOTask<Response> {
      *
      */
     public Request(String method, String protocol, String host, int port, String path) {
-        this.method = Method.decode(method);
+        this.method = Method.valueOf(method.toUpperCase());
 
         try {
             location = new URL(protocol, host, port, path);

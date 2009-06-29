@@ -47,7 +47,7 @@ public class CardPaneTest implements Application {
         sheet = (Sheet)wtkxSerializer.readObject(this, "card_pane_test.wtkx");
         cardPane = (CardPane)wtkxSerializer.get("cardPane");
 
-        Button.Group sizeGroup = Button.getGroup("sizeGroup");
+        Button.Group sizeGroup = Button.getNamedGroups().get("sizeGroup");
         sizeGroup.getGroupListeners().add(new Button.GroupListener() {
             public void selectionChanged(Button.Group buttonGroup, Button previousSelection) {
                 final Button selection = buttonGroup.getSelection();

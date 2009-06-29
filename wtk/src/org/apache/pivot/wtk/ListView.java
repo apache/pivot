@@ -53,26 +53,7 @@ public class ListView extends Component {
         /**
          * Multiple indexes may be concurrently selected.
          */
-        MULTI;
-
-        public static SelectMode decode(String value) {
-            if (value == null) {
-                throw new IllegalArgumentException();
-            }
-
-            SelectMode selectMode;
-            if (value.equals("none")) {
-                selectMode = NONE;
-            } else if (value.equals("single")) {
-                selectMode = SINGLE;
-            } else if (value.equals("multi")) {
-                selectMode = MULTI;
-            } else {
-                selectMode = valueOf(value);
-            }
-
-            return selectMode;
-        }
+        MULTI
     }
 
     /**
@@ -944,7 +925,7 @@ public class ListView extends Component {
             throw new IllegalArgumentException("selectMode is null.");
         }
 
-        setSelectMode(SelectMode.decode(selectMode));
+        setSelectMode(SelectMode.valueOf(selectMode.toUpperCase()));
     }
 
     /**

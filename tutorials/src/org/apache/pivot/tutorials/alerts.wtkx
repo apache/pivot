@@ -24,19 +24,19 @@ limitations under the License.
             <FlowPane orientation="vertical" styles="{spacing: 12}">
                 <FlowPane orientation="vertical" styles="{padding: 6, spacing: 6}">
                     <RadioButton buttonData="Error" group="messageType" selected="true">
-                        <userData messageInfo="{type:'error', message:'This is an error message.'}"/>
+                        <userData messageInfo="{messageType:'error', message:'This is an error message.'}"/>
                     </RadioButton>
                     <RadioButton buttonData="Warning" group="messageType">
-                        <userData messageInfo="{type:'warning', message:'This is a warning message.'}"/>
+                        <userData messageInfo="{messageType:'warning', message:'This is a warning message.'}"/>
                     </RadioButton>
                     <RadioButton buttonData="Question" group="messageType">
-                        <userData messageInfo="{type:'question', message:'This is a question message.'}"/>
+                        <userData messageInfo="{messageType:'question', message:'This is a question message.'}"/>
                     </RadioButton>
                     <RadioButton buttonData="Info" group="messageType">
-                        <userData messageInfo="{type:'info', message:'This is an info message.'}"/>
+                        <userData messageInfo="{messageType:'info', message:'This is an info message.'}"/>
                     </RadioButton>
                     <RadioButton buttonData="Custom" group="messageType">
-                        <userData messageInfo="{type:'custom', message:'This is a custom message.'}"/>
+                        <userData messageInfo="{message:'This is a custom message.'}"/>
                     </RadioButton>
 
                     <FlowPane>

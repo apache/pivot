@@ -26,28 +26,5 @@ public enum MessageType {
     WARNING,
     QUESTION,
     INFO,
-    APPLICATION;
-
-    public static MessageType decode(String value) {
-        if (value == null) {
-            throw new IllegalArgumentException();
-        }
-
-        MessageType messageType;
-        if (value.equals("error")) {
-            messageType = ERROR;
-        } else if (value.equals("warning")) {
-            messageType = WARNING;
-        } else if (value.equals("question")) {
-            messageType = QUESTION;
-        } else if (value.equals("info")) {
-            messageType = INFO;
-        } else if (value.equals("application")) {
-            messageType = APPLICATION;
-        } else {
-            messageType = valueOf(value);
-        }
-
-        return messageType;
-    }
+    APPLICATION
 }

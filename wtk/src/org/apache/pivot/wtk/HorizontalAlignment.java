@@ -22,33 +22,23 @@ package org.apache.pivot.wtk;
  * @author gbrown
  */
 public enum HorizontalAlignment {
+    /**
+     * Align to the right.
+     */
     RIGHT,
+
+    /**
+     * Align to the left.
+     */
     LEFT,
+
+    /**
+     * Align to center.
+     */
     CENTER,
 
     /**
-     * Stretch the contents to fill the available space.
+     * Stretch to fill the available space.
      */
-    JUSTIFY;
-
-    public static HorizontalAlignment decode(String value) {
-        if (value == null) {
-            throw new IllegalArgumentException();
-        }
-
-        HorizontalAlignment horizontalAlignment;
-        if (value.equals("right")) {
-            horizontalAlignment = RIGHT;
-        } else if (value.equals("left")) {
-            horizontalAlignment = LEFT;
-        } else if (value.equals("center")) {
-            horizontalAlignment = CENTER;
-        } else if (value.equals("justify")) {
-            horizontalAlignment = JUSTIFY;
-        } else {
-            horizontalAlignment = valueOf(value);
-        }
-
-        return horizontalAlignment;
-    }
+    JUSTIFY
 }

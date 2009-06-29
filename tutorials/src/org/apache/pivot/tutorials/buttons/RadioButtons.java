@@ -39,7 +39,7 @@ public class RadioButtons implements Application {
         selectButton = (PushButton)wtkxSerializer.get("selectButton");
 
         // Get a reference to the button group
-        final Button.Group numbersGroup = Button.getGroup("numbers");
+        final Button.Group numbersGroup = Button.getNamedGroups().get("numbers");
 
         // Add a button press listener
         selectButton.getButtonPressListeners().add(new ButtonPressListener() {

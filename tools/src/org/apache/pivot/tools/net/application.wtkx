@@ -33,7 +33,7 @@ limitations under the License.
                 <TablePane.Row height="1*">
                     <Border styles="{thickness:0, padding:2}">
                         <content>
-                            <SplitPane orientation="vertical" splitLocation="400" primaryRegion="topLeft">
+                            <SplitPane orientation="vertical" splitLocation="400" primaryRegion="top_left">
                                 <top>
                                     <wtkx:include wtkx:id="request" src="request.wtkx" />
                                 </top>

@@ -558,7 +558,7 @@ public class FlowPaneSkin extends ContainerSkin
             throw new IllegalArgumentException("horizontalAlignment is null.");
         }
 
-        setHorizontalAlignment(HorizontalAlignment.decode(horizontalAlignment));
+        setHorizontalAlignment(HorizontalAlignment.valueOf(horizontalAlignment.toUpperCase()));
     }
 
     public VerticalAlignment getVerticalAlignment() {
@@ -579,7 +579,7 @@ public class FlowPaneSkin extends ContainerSkin
             throw new IllegalArgumentException("verticalAlignment is null.");
         }
 
-        setVerticalAlignment(VerticalAlignment.decode(verticalAlignment));
+        setVerticalAlignment(VerticalAlignment.valueOf(verticalAlignment.toUpperCase()));
     }
 
     public Insets getPadding() {

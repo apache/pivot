@@ -342,7 +342,12 @@ public class Form extends Container {
                 throw new IllegalArgumentException(exception);
             }
 
-            Flag value = new Flag(MessageType.decode((String)map.get(MESSAGE_TYPE_KEY)),
+            String messageType = (String)map.get(MESSAGE_TYPE_KEY);
+            if (messageType == null) {
+                throw new IllegalArgumentException(MESSAGE_TYPE_KEY + " is required.");
+            }
+
+            Flag value = new Flag(MessageType.valueOf(messageType.toUpperCase()),
                 (String)map.get(MESSAGE_KEY));
 
             return value;

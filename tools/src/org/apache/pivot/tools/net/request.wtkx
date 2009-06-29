@@ -73,7 +73,7 @@ limitations under the License.
                   <content>
                     <ScrollPane preferredWidth="400" preferredHeight="150"
                                 horizontalScrollBarPolicy="fill"
-                                verticalScrollBarPolicy="fillToCapacity">
+                                verticalScrollBarPolicy="fill_to_capacity">
                       <view>
                         <TextArea wtkx:id="body" text="Content" />
                       </view>

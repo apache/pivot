@@ -1924,7 +1924,11 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     public final void setCursor(String cursor) {
-        setCursor((cursor == null) ? null : Cursor.decode(cursor));
+        if (cursor == null) {
+            setCursor((Cursor)null);
+        } else {
+            setCursor(Cursor.valueOf(cursor.toUpperCase()));
+        }
     }
 
     /**

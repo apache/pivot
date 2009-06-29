@@ -61,7 +61,7 @@ public class HTTPClient implements Application {
      *
      * @author tvolkert
      */
-    private static enum Protocol {
+    public enum Protocol {
         HTTP,
         HTTPS;
 

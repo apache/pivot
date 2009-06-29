@@ -22,8 +22,8 @@ limitations under the License.
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
     <content>
-        <ScrollPane horizontalScrollBarPolicy="fillToCapacity"
-            verticalScrollBarPolicy="fillToCapacity">
+        <ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
+            verticalScrollBarPolicy="fill_to_capacity">
             <view>
                 <TreeView wtkx:id="folderTreeView">
                     <nodeRenderer>

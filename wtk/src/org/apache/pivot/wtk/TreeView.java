@@ -52,26 +52,7 @@ public class TreeView extends Component {
         /**
          * Multiple paths may be concurrently selected.
          */
-        MULTI;
-
-        public static SelectMode decode(String value) {
-            if (value == null) {
-                throw new IllegalArgumentException();
-            }
-
-            SelectMode selectMode;
-            if (value.equals("none")) {
-                selectMode = NONE;
-            } else if (value.equals("single")) {
-                selectMode = SINGLE;
-            } else if (value.equals("multi")) {
-                selectMode = MULTI;
-            } else {
-                selectMode = valueOf(value);
-            }
-
-            return selectMode;
-        }
+        MULTI
     }
 
     /**
@@ -100,26 +81,7 @@ public class TreeView extends Component {
          * be reported if <tt>showMixedCheckmarkState</tt> is true. Otherwise,
          * the node will be reported as {@link #UNCHECKED}.
          */
-        MIXED;
-
-        public static NodeCheckState decode(String value) {
-            if (value == null) {
-                throw new IllegalArgumentException();
-            }
-
-            NodeCheckState nodeCheckState;
-            if (value.equals("checked")) {
-                nodeCheckState = CHECKED;
-            } else if (value.equals("unchecked")) {
-                nodeCheckState = UNCHECKED;
-            } else if (value.equals("mixed")) {
-                nodeCheckState = MIXED;
-            } else {
-                nodeCheckState = valueOf(value);
-            }
-
-            return nodeCheckState;
-        }
+        MIXED
     }
 
     /**
@@ -1013,7 +975,7 @@ public class TreeView extends Component {
             throw new IllegalArgumentException("selectMode is null.");
         }
 
-        setSelectMode(SelectMode.decode(selectMode));
+        setSelectMode(SelectMode.valueOf(selectMode.toUpperCase()));
     }
 
     /**

@@ -37,8 +37,8 @@ limitations under the License.
                 <TablePane.Row height="1*">
                     <Border styles="{padding:0, color:10}">
                         <content>
-                            <ScrollPane horizontalScrollBarPolicy="fillToCapacity"
-                                verticalScrollBarPolicy="fillToCapacity">
+                            <ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
+                                verticalScrollBarPolicy="fill_to_capacity">
                                 <view>
                                     <TableView wtkx:id="stocksTableView" selectMode="multi"
                                         styles="{showHorizontalGridLines:false}">

@@ -24,22 +24,5 @@ package org.apache.pivot.wtk;
  */
 public enum SortDirection {
     ASCENDING,
-    DESCENDING;
-
-    public static SortDirection decode(String value) {
-        if (value == null) {
-            throw new IllegalArgumentException();
-        }
-
-        SortDirection sortDirection;
-        if (value.equals("ascending")) {
-            sortDirection = ASCENDING;
-        } else if (value.equals("descending")) {
-            sortDirection = DESCENDING;
-        } else {
-            sortDirection = valueOf(value);
-        }
-
-        return sortDirection;
-    }
+    DESCENDING
 }

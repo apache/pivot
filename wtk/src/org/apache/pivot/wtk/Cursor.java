@@ -35,46 +35,5 @@ public enum Cursor {
     RESIZE_NORTH_EAST,
     RESIZE_NORTH_WEST,
     RESIZE_SOUTH_EAST,
-    RESIZE_SOUTH_WEST;
-
-    public static Cursor decode(String value) {
-        if (value == null) {
-            throw new IllegalArgumentException();
-        }
-
-        Cursor cursor = null;
-        if (value.equals("default")) {
-            cursor = Cursor.DEFAULT;
-        } else if (value.equals("hand")) {
-            cursor = Cursor.HAND;
-        } else if (value.equals("text")) {
-            cursor = Cursor.TEXT;
-        } else if (value.equals("wait")) {
-            cursor = Cursor.WAIT;
-        } else if (value.equals("crosshair")) {
-            cursor = Cursor.CROSSHAIR;
-        } else if (value.equals("move")) {
-            cursor = Cursor.MOVE;
-        } else if (value.equals("resizeNorth")) {
-            cursor = Cursor.RESIZE_NORTH;
-        } else if (value.equals("resizeSouth")) {
-            cursor = Cursor.RESIZE_SOUTH;
-        } else if (value.equals("resizeEast")) {
-            cursor = Cursor.RESIZE_EAST;
-        } else if (value.equals("resizeWest")) {
-            cursor = Cursor.RESIZE_WEST;
-        } else if (value.equals("resizeNorthEast")) {
-            cursor = Cursor.RESIZE_NORTH_EAST;
-        } else if (value.equals("resizeNorthWest")) {
-            cursor = Cursor.RESIZE_NORTH_WEST;
-        } else if (value.equals("resizeSouthEast")) {
-            cursor = Cursor.RESIZE_SOUTH_EAST;
-        } else if (value.equals("resizeSouthWest")) {
-            cursor = Cursor.RESIZE_SOUTH_WEST;
-        } else {
-            cursor = valueOf(value);
-        }
-
-        return cursor;
-    }
+    RESIZE_SOUTH_WEST
 }

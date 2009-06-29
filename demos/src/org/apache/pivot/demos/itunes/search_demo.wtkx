@@ -117,7 +117,7 @@ limitations under the License.
                                 <StackPane>
                                     <Border styles="{padding:0}">
                                         <content>
-                                            <ScrollPane horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fillToCapacity">
+                                            <ScrollPane horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fill_to_capacity">
                                                 <view>
                                                     <TableView wtkx:id="resultsTableView">
                                                         <columns>

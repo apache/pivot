@@ -339,7 +339,7 @@ public class TerraFormSkin extends ContainerSkin
             throw new IllegalArgumentException("fieldAlignment is null.");
         }
 
-        setFieldAlignment(HorizontalAlignment.decode(fieldAlignment));
+        setFieldAlignment(HorizontalAlignment.valueOf(fieldAlignment.toUpperCase()));
     }
 
     public int getHorizontalSpacing() {

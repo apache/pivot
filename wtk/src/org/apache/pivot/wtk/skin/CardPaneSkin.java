@@ -44,26 +44,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     public enum SelectionChangeEffect {
         CROSSFADE,
         HORIZONTAL_SLIDE,
-        VERTICAL_SLIDE;
-
-        public static SelectionChangeEffect decode(String value) {
-            if (value == null) {
-                throw new IllegalArgumentException();
-            }
-
-            SelectionChangeEffect selectionChangeEffect;
-            if (value.equals("crossfade")) {
-                selectionChangeEffect = CROSSFADE;
-            } else if (value.equals("horizontalSlide")) {
-                selectionChangeEffect = HORIZONTAL_SLIDE;
-            } else if (value.equals("verticalSlide")) {
-                selectionChangeEffect = VERTICAL_SLIDE;
-            } else {
-                selectionChangeEffect = valueOf(value);
-            }
-
-            return selectionChangeEffect;
-        }
+        VERTICAL_SLIDE
     }
 
     /**
@@ -349,7 +330,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
             throw new IllegalArgumentException();
         }
 
-        setSelectionChangeEffect(SelectionChangeEffect.decode(selectionChangeEffect));
+        setSelectionChangeEffect(SelectionChangeEffect.valueOf(selectionChangeEffect.toUpperCase()));
     }
 
     @Override

@@ -247,7 +247,7 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
             throw new IllegalArgumentException("horizontalAlignment is null.");
         }
 
-        setHorizontalAlignment(HorizontalAlignment.decode(horizontalAlignment));
+        setHorizontalAlignment(HorizontalAlignment.valueOf(horizontalAlignment.toUpperCase()));
     }
 
     public VerticalAlignment getVerticalAlignment() {
@@ -276,7 +276,7 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
             throw new IllegalArgumentException("verticalAlignment is null.");
         }
 
-        setVerticalAlignment(VerticalAlignment.decode(verticalAlignment));
+        setVerticalAlignment(VerticalAlignment.valueOf(verticalAlignment.toUpperCase()));
     }
 
     // MovieViewListener methods

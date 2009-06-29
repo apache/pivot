@@ -279,7 +279,7 @@ public class KitchenSink implements Application, Application.About {
                     }
 
                     public void perform() {
-                        Button.Group imageMenuGroup = Button.getGroup("imageMenuGroup");
+                        Button.Group imageMenuGroup = Button.getNamedGroups().get("imageMenuGroup");
                         Button selectedItem = imageMenuGroup.getSelection();
 
                         String imageName = (String)selectedItem.getUserData().get("image");
@@ -733,7 +733,7 @@ public class KitchenSink implements Application, Application.About {
 
                 alertButton.getButtonPressListeners().add(new ButtonPressListener() {
                     public void buttonPressed(Button button) {
-                        Button.Group messageTypeGroup = Button.getGroup("messageType");
+                        Button.Group messageTypeGroup = Button.getNamedGroups().get("messageType");
                         Button selection = messageTypeGroup.getSelection();
 
                         Map<String, ?> userData;
@@ -743,9 +743,9 @@ public class KitchenSink implements Application, Application.About {
                             throw new RuntimeException(exception);
                         }
 
-                        String messageType = (String)userData.get("type");
+                        String messageType = (String)userData.get("messageType");
 
-                        if (messageType.equals("custom")) {
+                        if (messageType == null) {
                             ArrayList<String> options = new ArrayList<String>();
                             options.add("OK");
                             options.add("Cancel");
@@ -767,14 +767,14 @@ public class KitchenSink implements Application, Application.About {
                             alert.open(window);
                         } else {
                             String message = (String)userData.get("message");
-                            Alert.alert(MessageType.decode(messageType), message, window);
+                            Alert.alert(MessageType.valueOf(messageType.toUpperCase()), message, window);
                         }
                     }
                 });
 
                 promptButton.getButtonPressListeners().add(new ButtonPressListener() {
                     public void buttonPressed(Button button) {
-                        Button.Group messageTypeGroup = Button.getGroup("messageType");
+                        Button.Group messageTypeGroup = Button.getNamedGroups().get("messageType");
                         Button selection = messageTypeGroup.getSelection();
 
                         Map<String, ?> userData;
@@ -784,9 +784,9 @@ public class KitchenSink implements Application, Application.About {
                             throw new RuntimeException(exception);
                         }
 
-                        String messageType = (String)userData.get("type");
+                        String messageType = (String)userData.get("messageType");
 
-                        if (messageType.equals("custom")) {
+                        if (messageType == null) {
                             ArrayList<String> options = new ArrayList<String>();
                             options.add("OK");
                             options.add("Cancel");
@@ -808,7 +808,7 @@ public class KitchenSink implements Application, Application.About {
                             prompt.open(window);
                         } else {
                             String message = (String)userData.get("message");
-                            Prompt.prompt(MessageType.decode(messageType), message, window);
+                            Prompt.prompt(MessageType.valueOf(messageType.toUpperCase()), message, window);
                         }
                     }
                 });

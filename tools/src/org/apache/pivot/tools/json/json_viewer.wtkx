@@ -24,8 +24,8 @@ limitations under the License.
     <content>
         <Border styles="{padding:0, color:10}">
             <content>
-                <ScrollPane horizontalScrollBarPolicy="fillToCapacity"
-                    verticalScrollBarPolicy="fillToCapacity">
+                <ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
+                    verticalScrollBarPolicy="fill_to_capacity">
                     <view>
                         <TreeView wtkx:id="treeView" dropTarget="$treeViewDropTarget">
                             <nodeRenderer>

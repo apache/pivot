@@ -27,7 +27,7 @@ limitations under the License.
                 <Border styles="{padding:0, color:10}">
                     <content>
                         <ScrollPane wtkx:id="editableTreeViewScrollPane" preferredWidth="160" preferredHeight="240"
-                            horizontalScrollBarPolicy="fillToCapacity"
+                            horizontalScrollBarPolicy="fill_to_capacity"
                             styles="{backgroundColor:null}">
                             <view>
                                 <TreeView wtkx:id="editableTreeView">
@@ -97,7 +97,7 @@ limitations under the License.
                 <Border styles="{padding:0, color:10}">
                     <content>
                         <ScrollPane preferredWidth="160" preferredHeight="240"
-                            horizontalScrollBarPolicy="fillToCapacity"
+                            horizontalScrollBarPolicy="fill_to_capacity"
                             styles="{backgroundColor:null}">
                             <view>
                                 <TreeView selectMode="multi">
@@ -160,7 +160,7 @@ limitations under the License.
                 <Border styles="{padding:0, color:10}">
                     <content>
                         <ScrollPane preferredWidth="160" preferredHeight="240"
-                            horizontalScrollBarPolicy="fillToCapacity"
+                            horizontalScrollBarPolicy="fill_to_capacity"
                             styles="{backgroundColor:null}">
                             <view>
                                 <TreeView checkmarksEnabled="true" showMixedCheckmarkState="true">

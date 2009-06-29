@@ -33,23 +33,4 @@ public enum DropAction {
     public boolean isSelected(int dropActions) {
         return ((dropActions & getMask()) > 0);
     }
-
-    public static DropAction decode(String value) {
-        if (value == null) {
-            throw new IllegalArgumentException();
-        }
-
-        DropAction dropAction;
-        if (value.equals("copy")) {
-            dropAction = COPY;
-        } else if (value.equals("move")) {
-            dropAction = MOVE;
-        } else if (value.equals("link")) {
-            dropAction = LINK;
-        } else {
-            dropAction = valueOf(value);
-        }
-
-        return dropAction;
-    }
 }

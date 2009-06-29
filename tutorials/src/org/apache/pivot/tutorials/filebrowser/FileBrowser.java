@@ -102,6 +102,7 @@ public class FileBrowser implements Application {
         });
 
         window.open(display);
+        folderTreeView.requestFocus();
     }
 
     public boolean shutdown(boolean optional) throws Exception {
