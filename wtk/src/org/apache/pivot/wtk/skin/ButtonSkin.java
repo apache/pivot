@@ -74,7 +74,7 @@ public abstract class ButtonSkin extends ComponentSkin
     public void focusedChanged(Component component, boolean temporary) {
         super.focusedChanged(component, temporary);
 
-        repaintComponent(!component.isFocused());
+        repaintComponent();
     }
 
     // Component mouse events

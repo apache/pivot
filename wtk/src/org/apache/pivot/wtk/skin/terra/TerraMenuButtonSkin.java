@@ -231,8 +231,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
 
     @Override
     public boolean isFocusable() {
-        return !toolbar
-            || menuPopup.isClosed();
+        return true;
     }
 
     public Font getFont() {
