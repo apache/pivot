@@ -41,6 +41,9 @@ limitations under the License.
     <property name="compiler.indexJars" value="true"/>
     <property name="compiler.arg" value="-Xlint"/>
 
+    <!-- Test properties -->
+    <property name="test.verbose" value="false"/>
+
     <!-- Dynamic properties -->
     <property file="build.properties"/>
     <property name="folder.release" value="apache-${ant.project.name}-${version}"/>
@@ -85,18 +88,6 @@ limitations under the License.
                 </condition>
             </fail>
 
-            <!-- JUnit check -->
-            <fail message="JUnit 4 not found. Please see the BUILD file for more information.">
-                <condition>
-                    <not>
-                        <and>
-                            <available classname="junit.framework.TestCase"/>
-                            <available classname="org.junit.Test"/>
-                        </and>
-                    </not>
-                </condition>
-            </fail>
-
             <mkdir dir="@{project}/${folder.bin}"/>
             <javac srcdir="@{project}/@{srcDir}"
                 destDir="@{project}/${folder.bin}"
@@ -111,6 +102,49 @@ limitations under the License.
                     <classpath-elements/>
                 </classpath>
             </javac>
+        </sequential>
+    </macrodef>
+
+    <!-- Test macro -->
+    <macrodef name="test">
+        <attribute name="project"/>
+        <element name="classpath-elements" optional="true" implicit="true"/>
+
+        <sequential>
+            <!-- JUnit check -->
+            <fail message="JUnit 4 not found. Please see the BUILD file for more information.">
+                <condition>
+                    <not>
+                        <available classname="org.junit.Test"/>
+                    </not>
+                </condition>
+            </fail>
+
+            <compile project="@{project}" srcDir="test">
+                <classpath-elements/>
+            </compile>
+
+            <echo message="@{project}: Executing test cases"/>
+
+            <condition property="test.formatter">
+                <or>
+                    <equals arg1="${test.verbose}" arg2="on" casesensitive="false"/>
+                    <equals arg1="${test.verbose}" arg2="true" casesensitive="false"/>
+                    <equals arg1="${test.verbose}" arg2="yes" casesensitive="false"/>
+                </or>
+            </condition>
+
+            <junit fork="true">
+                <classpath>
+                    <classpath-elements/>
+                </classpath>
+
+                <formatter type="plain" usefile="false" if="test.formatter"/>
+
+                <batchtest>
+                    <fileset dir="@{project}/test" includes="**/*Test.java"/>
+                </batchtest>
+            </junit>
         </sequential>
     </macrodef>
 
@@ -152,7 +186,7 @@ limitations under the License.
 
     <!-- Aggregate targets -->
     <target name="build" description="Compiles all packages"
-        depends="charts, charts-test, core, core-test, web, web-test, wtk, wtk-test, tutorials, demos, tools"/>
+        depends="charts, core, core-test, web, web-test, wtk, wtk-test, tutorials, demos, tools"/>
 
     <target name="package"
         depends="charts-package, core-package, web-package, wtk-package, tutorials-package, demos-package, tools-package"/>
@@ -212,14 +246,6 @@ limitations under the License.
         <delete file="${folder.lib}/${jar.charts}"/>
     </target>
 
-    <target name="charts-test" depends="charts, core, wtk">
-        <compile project="charts" srcDir="test">
-            <pathelement location="charts/${folder.bin}"/>
-            <pathelement location="core/${folder.bin}"/>
-            <pathelement location="wtk/${folder.bin}"/>
-        </compile>
-    </target>
-
     <!-- Core -->
     <target name="core">
         <compile project="core"/>
@@ -241,9 +267,9 @@ limitations under the License.
     </target>
 
     <target name="core-test" depends="core">
-        <compile project="core" srcDir="test">
+        <test project="core">
             <pathelement location="core/${folder.bin}"/>
-        </compile>
+        </test>
     </target>
 
     <!-- Web -->
@@ -281,11 +307,11 @@ limitations under the License.
     </target>
 
     <target name="web-test" depends="core, web, wtk">
-        <compile project="web" srcDir="test">
+        <test project="web">
             <pathelement location="core/${folder.bin}"/>
             <pathelement location="web/${folder.bin}"/>
             <fileset dir="web/lib" includes="**/*.jar"/>
-        </compile>
+        </test>
     </target>
 
     <!-- WTK -->
@@ -348,10 +374,10 @@ limitations under the License.
     </target>
 
     <target name="wtk-test" depends="core, wtk">
-        <compile project="wtk" srcDir="test">
+        <test project="wtk">
             <pathelement location="core/${folder.bin}"/>
             <pathelement location="wtk/${folder.bin}"/>
-        </compile>
+        </test>
     </target>
 
     <!-- Tutorials -->
