@@ -57,6 +57,15 @@ limitations under the License.
     <property name="jar.demos" value="${ant.project.name}-demos-${version}.jar" />
     <property name="jar.tools" value="${ant.project.name}-tools-${version}.jar" />
 
+    <!-- Ant version check -->
+    <fail message="Building Pivot requires Apache Ant 1.7 or greater.">
+        <condition>
+            <not>
+                <contains string="${ant.version}" substring="1.7"/>
+            </not>
+        </condition>
+    </fail>
+
     <!-- Compile macro -->
     <macrodef name="compile">
         <attribute name="project"/>
@@ -118,7 +127,7 @@ limitations under the License.
                     <attribute name="Sealed" value="true"/>
                     <attribute name="Implementation-Vendor-Id" value="org.apache"/>
                     <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
-                    <attribute name="Implementation-Title" value="@{title}"/>
+                    <attribute name="Implementation-Title" value="Apache Pivot @{title}"/>
                     <attribute name="Implementation-Version" value="${version}"/>
                 </manifest>
                 <jar-elements/>
@@ -189,7 +198,7 @@ limitations under the License.
     </target>
 
     <target name="charts-package" depends="charts">
-        <package jarFile="${jar.charts}" title="Apache Pivot Charts">
+        <package jarFile="${jar.charts}" title="Charts">
             <fileset dir="charts/${folder.bin}"/>
             <fileset dir="charts/src">
                 <exclude name="**/*.java"/>
@@ -217,7 +226,7 @@ limitations under the License.
     </target>
 
     <target name="core-package" depends="core">
-        <package jarFile="${jar.core}" title="Apache Pivot Core">
+        <package jarFile="${jar.core}" title="Core">
             <fileset dir="core/${folder.bin}"/>
             <fileset dir="core/src">
                 <exclude name="**/*.java"/>
@@ -246,7 +255,7 @@ limitations under the License.
     </target>
 
     <target name="web-package" depends="web">
-        <package jarFile="${jar.web}" title="Apache Pivot Web Queries">
+        <package jarFile="${jar.web}" title="Web Queries">
             <fileset dir="web/${folder.bin}" excludes="org/apache/pivot/web/server/**"/>
             <fileset dir="web/src">
                 <exclude name="org/apache/pivot/web/server/**"/>
@@ -255,7 +264,7 @@ limitations under the License.
             </fileset>
         </package>
 
-        <package jarFile="${jar.web.server}" title="Apache Pivot Web Queries Server">
+        <package jarFile="${jar.web.server}" title="Web Queries Server">
             <fileset dir="web/${folder.bin}" includes="org/apache/pivot/web/server/*"/>
             <fileset dir="web/src">
                 <include name="org/apache/pivot/web/server/**"/>
@@ -297,7 +306,7 @@ limitations under the License.
     </target>
 
     <target name="wtk-package" depends="wtk">
-        <package jarFile="${jar.wtk}" title="Apache Pivot WTK">
+        <package jarFile="${jar.wtk}" title="WTK">
             <fileset dir="wtk/${folder.bin}">
                 <exclude name="org/apache/pivot/wtk/skin/terra/**"/>
                 <exclude name="org/apache/pivot/wtk/skin/obsidian/**"/>
@@ -311,7 +320,7 @@ limitations under the License.
             </fileset>
         </package>
 
-        <package jarFile="${jar.wtk.terra}" title="Apache Pivot WTK Terra Theme">
+        <package jarFile="${jar.wtk.terra}" title="WTK Terra Theme">
             <fileset dir="wtk/${folder.bin}" includes="org/apache/pivot/wtk/skin/terra/**"/>
             <fileset dir="wtk/src">
                 <include name="org/apache/pivot/wtk/skin/terra/**"/>
@@ -321,7 +330,7 @@ limitations under the License.
             </fileset>
         </package>
 
-        <package jarFile="${jar.wtk.obsidian}" title="Apache Pivot WTK Obsidian Theme">
+        <package jarFile="${jar.wtk.obsidian}" title="WTK Obsidian Theme">
             <fileset dir="wtk/${folder.bin}" includes="org/apache/pivot/wtk/skin/obsidian/**"/>
             <fileset dir="wtk/src">
                 <include name="org/apache/pivot/wtk/skin/obsidian/**"/>
@@ -355,7 +364,7 @@ limitations under the License.
     </target>
 
     <target name="tutorials-package" depends="tutorials">
-        <package jarFile="${jar.tutorials}" title="Apache Pivot Tutorials">
+        <package jarFile="${jar.tutorials}" title="Tutorials">
             <fileset dir="tutorials/${folder.bin}"/>
             <fileset dir="tutorials/src">
                 <exclude name="**/*.java"/>
@@ -379,7 +388,7 @@ limitations under the License.
     </target>
 
     <target name="demos-package" depends="demos">
-        <package jarFile="${jar.demos}" title="Apache Pivot Demos">
+        <package jarFile="${jar.demos}" title="Demos">
             <fileset dir="demos/${folder.bin}"/>
             <fileset dir="demos/src">
                 <exclude name="**/*.java"/>
@@ -403,7 +412,7 @@ limitations under the License.
     </target>
 
     <target name="tools-package" depends="tools">
-        <package jarFile="${jar.tools}" title="Apache Pivot Tools">
+        <package jarFile="${jar.tools}" title="Tools">
             <fileset dir="tools/${folder.bin}"/>
             <fileset dir="tools/src">
                 <exclude name="**/*.java"/>
