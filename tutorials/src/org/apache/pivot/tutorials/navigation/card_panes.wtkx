@@ -73,6 +73,8 @@ limitations under the License.
                                     group="selectionChangeEffect"/>
                                 <RadioButton wtkx:id="verticalSlideRadioButton" buttonData="Vertical Slide"
                                     group="selectionChangeEffect"/>
+                                <RadioButton wtkx:id="flipRadioButton" buttonData="Flip"
+                                    group="selectionChangeEffect"/>
                                 <RadioButton wtkx:id="noneRadioButton" buttonData="None"
                                     group="selectionChangeEffect"/>
                             </FlowPane>

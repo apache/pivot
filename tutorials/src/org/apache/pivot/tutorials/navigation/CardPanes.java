@@ -41,6 +41,7 @@ public class CardPanes implements Application {
     private RadioButton crossfadeRadioButton = null;
     private RadioButton horizontalSlideRadioButton = null;
     private RadioButton verticalSlideRadioButton = null;
+    private RadioButton flipRadioButton = null;
     private RadioButton noneRadioButton = null;
 
     public void startup(Display display, Map<String, String> properties)
@@ -54,6 +55,7 @@ public class CardPanes implements Application {
         crossfadeRadioButton = (RadioButton)wtkxSerializer.get("crossfadeRadioButton");
         horizontalSlideRadioButton = (RadioButton)wtkxSerializer.get("horizontalSlideRadioButton");
         verticalSlideRadioButton = (RadioButton)wtkxSerializer.get("verticalSlideRadioButton");
+        flipRadioButton = (RadioButton)wtkxSerializer.get("flipRadioButton");
         noneRadioButton = (RadioButton)wtkxSerializer.get("noneRadioButton");
 
         cardPane.getCardPaneListeners().add(new CardPaneListener.Adapter() {
@@ -93,6 +95,7 @@ public class CardPanes implements Application {
         crossfadeRadioButton.getButtonStateListeners().add(radioButtonStateListener);
         horizontalSlideRadioButton.getButtonStateListeners().add(radioButtonStateListener);
         verticalSlideRadioButton.getButtonStateListeners().add(radioButtonStateListener);
+        flipRadioButton.getButtonStateListeners().add(radioButtonStateListener);
         noneRadioButton.getButtonStateListeners().add(radioButtonStateListener);
 
         updateCardPane();
@@ -127,6 +130,9 @@ public class CardPanes implements Application {
         } else if (verticalSlideRadioButton.isSelected()) {
             cardPane.getStyles().put("selectionChangeEffect",
                 CardPaneSkin.SelectionChangeEffect.VERTICAL_SLIDE);
+        } else if (flipRadioButton.isSelected()) {
+            cardPane.getStyles().put("selectionChangeEffect",
+                CardPaneSkin.SelectionChangeEffect.FLIP);
         } else {
             cardPane.getStyles().put("selectionChangeEffect", null);
         }
