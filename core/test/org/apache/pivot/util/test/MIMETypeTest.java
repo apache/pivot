@@ -16,14 +16,18 @@
  */
 package org.apache.pivot.util.test;
 
+import static org.junit.Assert.assertEquals;
+
 import org.apache.pivot.util.MIMEType;
+import org.junit.Test;
 
 public class MIMETypeTest {
-    public static void main(String[] args) {
+    @Test
+    public void testMIMEType() {
         MIMEType mimeType = MIMEType.decode("foo; a=123; b=456; c=789");
-        System.out.println("Base type: " + mimeType.getBaseType());
-        System.out.println("a: " + mimeType.get("a"));
-        System.out.println("b: " + mimeType.get("b"));
-        System.out.println("c: " + mimeType.get("c"));
+        assertEquals(mimeType.getBaseType(), "foo");
+        assertEquals(mimeType.get("a"), "123");
+        assertEquals(mimeType.get("b"), "456");
+        assertEquals(mimeType.get("c"), "789");
     }
 }
