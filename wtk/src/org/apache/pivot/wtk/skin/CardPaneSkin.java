@@ -24,6 +24,7 @@ import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.effects.FadeDecorator;
+import org.apache.pivot.wtk.effects.ScaleDecorator;
 import org.apache.pivot.wtk.effects.Transition;
 import org.apache.pivot.wtk.effects.TransitionListener;
 import org.apache.pivot.wtk.effects.easing.Easing;
@@ -44,7 +45,8 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     public enum SelectionChangeEffect {
         CROSSFADE,
         HORIZONTAL_SLIDE,
-        VERTICAL_SLIDE
+        VERTICAL_SLIDE,
+        FLIP;
     }
 
     /**
@@ -57,7 +59,11 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         public final Component toCard;
 
         public SelectionChangeTransition(int from, int to) {
-            super(SELECTION_CHANGE_DURATION, SELECTION_CHANGE_RATE, false);
+            this(from, to, SELECTION_CHANGE_DURATION);
+        }
+
+        public SelectionChangeTransition(int from, int to, int duration) {
+            super(duration, SELECTION_CHANGE_RATE, false);
 
             CardPane cardPane = (CardPane)getComponent();
             fromCard = (from == -1) ? null : cardPane.get(from);
@@ -70,7 +76,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
      *
      * @author gbrown
      */
-    public class CrossfadeTransition extends SelectionChangeTransition {
+    public final class CrossfadeTransition extends SelectionChangeTransition {
         private FadeDecorator fadeOutDecorator = new FadeDecorator();
         private FadeDecorator fadeInDecorator = new FadeDecorator();
 
@@ -126,7 +132,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
      *
      * @author gbrown
      */
-    public class SlideTransition extends SelectionChangeTransition {
+    public final class SlideTransition extends SelectionChangeTransition {
         private int direction;
         private Easing slideEasing = new Quartic();
 
@@ -166,6 +172,52 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
             } else {
                 fromCard.setLocation(0, dy);
                 toCard.setLocation(0, -height * direction + dy);
+            }
+        }
+    }
+
+    /**
+     * Class that performs flip selection change transitions.
+     *
+     * @author tvolkert
+     */
+    public final class FlipTransition extends SelectionChangeTransition {
+        private double theta;
+        private ScaleDecorator scaleDecorator = new ScaleDecorator();
+
+        public FlipTransition(int from, int to) {
+            super(from, to, 350);
+        }
+
+        @Override
+        public void start(TransitionListener transitionListener) {
+            theta = 0;
+            getComponent().getDecorators().add(scaleDecorator);
+
+            super.start(transitionListener);
+        }
+
+        @Override
+        public void stop() {
+            getComponent().getDecorators().remove(scaleDecorator);
+
+            super.stop();
+        }
+
+        @Override
+        protected void update() {
+            float percentComplete = getPercentComplete();
+
+            if (percentComplete < 1f) {
+                theta = Math.PI * percentComplete;
+
+                float scaleY = (float)Math.abs(Math.cos(theta));
+                scaleDecorator.setScaleY(Math.max(scaleY, 0.01f));
+
+                fromCard.setVisible(theta < Math.PI / 2);
+                toCard.setVisible(theta >= Math.PI / 2);
+
+                repaintComponent();
             }
         }
     }
@@ -376,7 +428,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
             && selectionChangeTransition == null) {
             int previousSelectedIndex = cardPane.getSelectedIndex();
 
-            switch(selectionChangeEffect) {
+            switch (selectionChangeEffect) {
                 case CROSSFADE: {
                     selectionChangeTransition = new CrossfadeTransition(previousSelectedIndex, selectedIndex);
                     break;
@@ -387,6 +439,14 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
                     if (previousSelectedIndex != -1
                         && selectedIndex != -1) {
                         selectionChangeTransition = new SlideTransition(previousSelectedIndex, selectedIndex);
+                    }
+                    break;
+                }
+
+                case FLIP: {
+                    if (previousSelectedIndex != -1
+                        && selectedIndex != -1) {
+                        selectionChangeTransition = new FlipTransition(previousSelectedIndex, selectedIndex);
                     }
                     break;
                 }
