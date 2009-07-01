@@ -72,17 +72,15 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
                         createTimer();
 
-                        try {
-                            application.startup(applicationContext.getDisplay(),
-                                new ImmutableMap<String, String>(properties));
-                        } catch(Exception exception) {
-                            exception.printStackTrace();
-                            String message = exception.getMessage();
-                            if (message == null) {
-                                message = exception.getClass().getName();
+                        if (application != null) {
+                            try {
+                                application.startup(applicationContext.getDisplay(),
+                                    new ImmutableMap<String, String>(properties));
+                            } catch(Exception exception) {
+                                exception.printStackTrace();
+                                Alert.alert(MessageType.ERROR, exception.getMessage(),
+                                    applicationContext.getDisplay());
                             }
-
-                            Alert.alert(MessageType.ERROR, message, applicationContext.getDisplay());
                         }
 
                         break;
@@ -154,14 +152,16 @@ public final class DesktopApplicationContext extends ApplicationContext {
      * Terminates the application context.
      */
     public static void exit() {
-        boolean cancelShutdown = true;
+        boolean cancelShutdown = false;
 
-        try {
-            cancelShutdown = application.shutdown(true);
-        } catch(Exception exception) {
-            exception.printStackTrace();
-            Alert.alert(MessageType.ERROR, exception.getMessage(),
-                applicationContext.getDisplay());
+        if (application != null) {
+            try {
+                cancelShutdown = application.shutdown(true);
+            } catch(Exception exception) {
+                exception.printStackTrace();
+                Alert.alert(MessageType.ERROR, exception.getMessage(),
+                    applicationContext.getDisplay());
+            }
         }
 
         if (!cancelShutdown) {
@@ -266,6 +266,54 @@ public final class DesktopApplicationContext extends ApplicationContext {
             }
         }
 
+        // Add a listener for active window changes
+        final WindowListener rootOwnerListener = new WindowListener.Adapter() {
+            @Override
+            public void titleChanged(Window window, String previousTitle) {
+                updateFrameTitleBar(window);
+            }
+
+            @Override
+            public void iconChanged(Window window, Image previousIcon) {
+                updateFrameTitleBar(window);
+            }
+        };
+
+        Window.getWindowClassListeners().add(new WindowClassListener() {
+            public void activeWindowChanged(Window previousActiveWindow) {
+                if (previousActiveWindow != null) {
+                    Window previousRootOwner = previousActiveWindow.getRootOwner();
+                    previousRootOwner.getWindowListeners().remove(rootOwnerListener);
+                }
+
+                Window activeWindow = Window.getActiveWindow();
+
+                if (activeWindow != null) {
+                    Window rootOwner = activeWindow.getRootOwner();
+                    rootOwner.getWindowListeners().add(rootOwnerListener);
+                }
+
+                if (updateFrameTitleBarCallback == null) {
+                    updateFrameTitleBarCallback = new Runnable() {
+                        public void run() {
+                            Window activeWindow = Window.getActiveWindow();
+                            if (activeWindow == null) {
+                                windowedHostFrame.setTitle(DEFAULT_HOST_FRAME_TITLE);
+                                windowedHostFrame.setIconImage(null);
+                            } else {
+                                Window rootOwner = activeWindow.getRootOwner();
+                                updateFrameTitleBar(rootOwner);
+                            }
+
+                            updateFrameTitleBarCallback = null;
+                        }
+                    };
+
+                    queueCallback(updateFrameTitleBarCallback);
+                }
+            }
+        });
+
         // Create the application context
         applicationContext = new DesktopApplicationContext();
 
@@ -367,53 +415,6 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
         // Open the windowed host
         windowedHostFrame.setVisible(true);
-
-        final WindowListener rootOwnerListener = new WindowListener.Adapter() {
-            @Override
-            public void titleChanged(Window window, String previousTitle) {
-                updateFrameTitleBar(window);
-            }
-
-            @Override
-            public void iconChanged(Window window, Image previousIcon) {
-                updateFrameTitleBar(window);
-            }
-        };
-
-        Window.getWindowClassListeners().add(new WindowClassListener() {
-            public void activeWindowChanged(Window previousActiveWindow) {
-                if (previousActiveWindow != null) {
-                    Window previousRootOwner = previousActiveWindow.getRootOwner();
-                    previousRootOwner.getWindowListeners().remove(rootOwnerListener);
-                }
-
-                Window activeWindow = Window.getActiveWindow();
-
-                if (activeWindow != null) {
-                    Window rootOwner = activeWindow.getRootOwner();
-                    rootOwner.getWindowListeners().add(rootOwnerListener);
-                }
-
-                if (updateFrameTitleBarCallback == null) {
-                    updateFrameTitleBarCallback = new Runnable() {
-                        public void run() {
-                            Window activeWindow = Window.getActiveWindow();
-                            if (activeWindow == null) {
-                                windowedHostFrame.setTitle(DEFAULT_HOST_FRAME_TITLE);
-                                windowedHostFrame.setIconImage(null);
-                            } else {
-                                Window rootOwner = activeWindow.getRootOwner();
-                                updateFrameTitleBar(rootOwner);
-                            }
-
-                            updateFrameTitleBarCallback = null;
-                        }
-                    };
-
-                    queueCallback(updateFrameTitleBarCallback);
-                }
-            }
-        });
 
         // Go to full-screen mode, if requested
         setFullScreen(fullScreen);
