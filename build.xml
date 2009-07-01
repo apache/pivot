@@ -127,11 +127,7 @@ limitations under the License.
             <echo message="@{project}: Executing test cases"/>
 
             <condition property="test.formatter">
-                <or>
-                    <equals arg1="${test.verbose}" arg2="on" casesensitive="false"/>
-                    <equals arg1="${test.verbose}" arg2="true" casesensitive="false"/>
-                    <equals arg1="${test.verbose}" arg2="yes" casesensitive="false"/>
-                </or>
+                <istrue value="${test.verbose}"/>
             </condition>
 
             <junit fork="true">
@@ -139,7 +135,7 @@ limitations under the License.
                     <classpath-elements/>
                 </classpath>
 
-                <formatter type="plain" usefile="false" if="test.formatter"/>
+                <formatter type="brief" usefile="false" if="test.formatter"/>
 
                 <batchtest>
                     <fileset dir="@{project}/test" includes="**/*Test.java"/>
@@ -171,6 +167,7 @@ limitations under the License.
 
     <macrodef name="clean-www">
         <attribute name="project"/>
+
         <sequential>
             <delete>
                 <dirset dir="@{project}/www" includes="lib"/>
@@ -186,10 +183,13 @@ limitations under the License.
 
     <!-- Aggregate targets -->
     <target name="build" description="Compiles all packages"
-        depends="charts, core, core-test, web, web-test, wtk, wtk-test, tutorials, demos, tools"/>
+        depends="charts, core, web, wtk, tutorials, demos, tools"/>
 
     <target name="package"
         depends="charts-package, core-package, web-package, wtk-package, tutorials-package, demos-package, tools-package"/>
+
+    <target name="test"
+        depends="core-test, web-test, wtk-test"/>
 
     <target name="clean" description="Removes all build artifacts"
         depends="charts-clean, core-clean, web-clean, wtk-clean, tutorials-clean, demos-clean, tools-clean">
@@ -197,10 +197,6 @@ limitations under the License.
         <delete dir="${folder.doc}"/>
         <delete dir="${folder.install}"/>
         <delete dir="${folder.lib}"/>
-
-        <clean-www project="demos"/>
-        <clean-www project="tutorials"/>
-        <clean-www project="web"/>
     </target>
 
     <!-- Javadoc -->
@@ -304,6 +300,7 @@ limitations under the License.
         <delete dir="web/${folder.bin}"/>
         <delete file="${folder.lib}/${jar.web}"/>
         <delete file="${folder.lib}/${jar.web.server}"/>
+        <clean-www project="web"/>
     </target>
 
     <target name="web-test" depends="core, web, wtk">
@@ -374,10 +371,10 @@ limitations under the License.
     </target>
 
     <target name="wtk-test" depends="core, wtk">
-        <test project="wtk">
+        <compile project="wtk" srcDir="test">
             <pathelement location="core/${folder.bin}"/>
             <pathelement location="wtk/${folder.bin}"/>
-        </test>
+        </compile>
     </target>
 
     <!-- Tutorials -->
@@ -401,6 +398,7 @@ limitations under the License.
     <target name="tutorials-clean">
         <delete dir="tutorials/${folder.bin}"/>
         <delete file="${folder.lib}/${jar.tutorials}"/>
+        <clean-www project="tutorials"/>
     </target>
 
     <!-- Demos -->
@@ -426,6 +424,7 @@ limitations under the License.
     <target name="demos-clean">
         <delete dir="demos/${folder.bin}"/>
         <delete file="${folder.lib}/${jar.demos}"/>
+        <clean-www project="demos"/>
     </target>
 
     <!-- Tools -->

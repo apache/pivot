@@ -21,7 +21,10 @@ import java.io.StringWriter;
 
 import org.apache.pivot.collections.List;
 import org.apache.pivot.serialization.CSVSerializer;
+import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class CSVSerializerTest {
     public static String[] testStrings = {
@@ -32,24 +35,25 @@ public class CSVSerializerTest {
         "2,4,6,8,10"
     };
 
-    public static void main(String[] args) {
+    @Test
+    public void testCSVSerializer() {
         CSVSerializer csvSerializer = new CSVSerializer();
         csvSerializer.getKeys().add("A");
         csvSerializer.getKeys().add("B");
         csvSerializer.getKeys().add("C");
         csvSerializer.getKeys().add("D");
 
-        for (int i = 0, n = testStrings.length; i < n; i++) {
-            try {
-                System.out.println("Input: " + testStrings[i]);
+        try {
+            for (int i = 0, n = testStrings.length; i < n; i++) {
                 List<?> objects = csvSerializer.readObject(new StringReader(testStrings[i]));
 
                 StringWriter writer = new StringWriter();
                 csvSerializer.writeObject(objects, writer);
-                System.out.println("Output: " + writer);
-            } catch(Exception exception) {
-                System.out.println(exception);
+
+                assertEquals(testStrings[i], writer.toString());
             }
+        } catch (Exception exception) {
+            fail(exception.getMessage());
         }
     }
 }

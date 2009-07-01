@@ -21,44 +21,41 @@ import java.io.ByteArrayOutputStream;
 
 import org.apache.pivot.serialization.BinarySerializer;
 import org.apache.pivot.serialization.Serializer;
+import org.junit.Test;
+
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.fail;
 
 public class BinarySerializerTest {
-
-    public static void main(String[] args) {
+    @Test
+    public void testBinarySerializer() {
         Serializer<Object> serializer = new BinarySerializer();
 
-        Object[] testData = {
+        Object[] outputData = {
             "Hello World",
             123.456,
             true
         };
+        Object[] inputData;
 
-        ByteArrayOutputStream outputStream = null;
         try {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             try {
-                outputStream = new ByteArrayOutputStream();
-                serializer.writeObject(testData, outputStream);
+                serializer.writeObject(outputData, outputStream);
             } finally {
                 outputStream.close();
             }
-        } catch(Exception exception) {
-            System.out.println(exception);
-        }
 
-        ByteArrayInputStream inputStream = null;
-        try {
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
             try {
-                inputStream = new ByteArrayInputStream(outputStream.toByteArray());
-                testData = (Object[])serializer.readObject(inputStream);
-
-                for (int i = 0, n = testData.length; i < n; i++) {
-                    System.out.println("[" + i + "] " + testData[i]);
-                }
+                inputData = (Object[])serializer.readObject(inputStream);
             } finally {
                 inputStream.close();
             }
+
+            assertArrayEquals(outputData, inputData);
         } catch(Exception exception) {
-            System.out.println(exception);
+            fail(exception.getMessage());
         }
     }
 }
