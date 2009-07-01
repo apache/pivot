@@ -80,11 +80,13 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     private Quadratic easing = new Quadratic();
 
     private ComponentListener ownerComponentListener = new ComponentListener.Adapter() {
-        public void sizeChanged(Component component, int previousWidth, int previousHeight) {
+        public void locationChanged(Component component, int previousX, int previousY) {
             alignToOwnerContent();
         }
+    };
 
-        public void locationChanged(Component component, int previousX, int previousY) {
+    private ComponentListener ownerContentComponentListener = new ComponentListener.Adapter() {
+        public void sizeChanged(Component component, int previousWidth, int previousHeight) {
             alignToOwnerContent();
         }
     };
@@ -360,6 +362,9 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         Window owner = window.getOwner();
         owner.getComponentListeners().add(ownerComponentListener);
 
+        Component ownerContent = owner.getContent();
+        ownerContent.getComponentListeners().add(ownerContentComponentListener);
+
         windowStateTransition = new WindowStateTransition(false);
         windowStateTransition.start(new TransitionListener() {
             public void transitionCompleted(Transition transition) {
@@ -414,6 +419,9 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     public void sheetClosed(Sheet sheet) {
         Window owner = sheet.getOwner();
         owner.getComponentListeners().remove(ownerComponentListener);
+
+        Component ownerContent = owner.getContent();
+        ownerContent.getComponentListeners().remove(ownerContentComponentListener);
     }
 
     public void alignToOwnerContent() {

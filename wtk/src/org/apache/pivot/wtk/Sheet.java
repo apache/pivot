@@ -108,11 +108,14 @@ public class Sheet extends Window {
 
     @Override
     public void open(Display display) {
+        Window owner = getOwner();
+        if (owner == null) {
+            throw new IllegalStateException("Sheet does not have an owner.");
+        }
+
         super.open(display);
 
         if (isOpen()) {
-            Window owner = getOwner();
-
             Component content = owner.getContent();
             if (content.isBlocked()) {
                 throw new IllegalStateException("Owner content is already blocked.");

@@ -27,7 +27,9 @@ import org.apache.pivot.wtk.Dialog;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.HorizontalAlignment;
+import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.Palette;
+import org.apache.pivot.wtk.Sheet;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.effects.ReflectionDecorator;
 
@@ -65,7 +67,12 @@ public class WindowTest implements Application {
         });
 
         display.getStyles().put("backgroundColor", "#aaaaff");
+        window1.setContent(new Label("Hello Bar"));
         window1.open(display);
+
+        Sheet sheet = new Sheet();
+        sheet.setContent(new Label("Hello Foo"));
+        sheet.open(window1);
 
         Frame window1a = new Frame();
         window1a.setTitle("Window 1 A");
