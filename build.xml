@@ -169,8 +169,8 @@ limitations under the License.
         <attribute name="project"/>
 
         <sequential>
+            <delete dir="@{project}/www/lib"/>
             <delete>
-                <dirset dir="@{project}/www" includes="lib"/>
                 <fileset dir="@{project}/www">
                     <include name="*.html"/>
                     <include name="*.jnlp"/>
