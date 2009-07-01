@@ -26,6 +26,7 @@ import org.apache.pivot.collections.List;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.CardPane;
+import org.apache.pivot.wtk.CardPaneListener;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentKeyListener;
 import org.apache.pivot.wtk.ComponentListener;
@@ -45,11 +46,8 @@ import org.apache.pivot.wtk.Viewport;
 import org.apache.pivot.wtk.ViewportListener;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.WindowStateListener;
-import org.apache.pivot.wtk.effects.FlipTransition;
-import org.apache.pivot.wtk.effects.Transition;
-import org.apache.pivot.wtk.effects.TransitionListener;
 import org.apache.pivot.wtk.media.Image;
-
+import org.apache.pivot.wtk.skin.CardPaneSkin;
 
 /**
  * Default table view row editor.
@@ -127,14 +125,12 @@ public class TableViewRowEditor implements TableView.RowEditor {
 
     /**
      * Responsible for "edit initialization" and "edit finalization" tasks when
-     * the edit popup is opened and closed, respectively.  Also responsible for
-     * running the flip transition to close the popup.
+     * the edit popup is opened and closed, respectively.
      *
      * @author tvolkert
      */
     private WindowStateListener popupStateHandler = new WindowStateListener.Adapter() {
-        private boolean closeTransitionStarted = false;
-        private boolean closeTransitionComplete = false;
+        private boolean closing = false;
 
         @Override
         public void windowOpened(Window window) {
@@ -150,48 +146,50 @@ public class TableViewRowEditor implements TableView.RowEditor {
                 editorScrollPane.setScrollLeft(tableViewScrollPane.getScrollLeft());
             }
 
-            // Start the "flip open" transition
-            flipTransition = new FlipTransition(FLIP_DURATION, editorCardPane, 0, Math.PI);
+            // Reset to the image card
+            editorCardPane.getStyles().put("selectionChangeEffect", (CardPaneSkin.SelectionChangeEffect)null);
+            editorCardPane.setSelectedIndex(IMAGE_CARD_INDEX);
 
-            flipTransition.start(new TransitionListener() {
-                public void transitionCompleted(Transition transition) {
+            // Set the editor focus after the flip has completed
+            editorCardPane.getCardPaneListeners().add(new CardPaneListener.Adapter() {
+                @Override
+                public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex) {
                     Component focusComponent = editorTablePane.getCellComponent(0, columnIndex);
                     focusComponent.requestFocus();
+                    editorCardPane.getCardPaneListeners().remove(this);
                 }
             });
+
+            // Flip to the editor card
+            editorCardPane.getStyles().put("selectionChangeEffect", CardPaneSkin.SelectionChangeEffect.FLIP);
+            editorCardPane.setSelectedIndex(EDITOR_CARD_INDEX);
         }
 
         @Override
         public Vote previewWindowClose(Window window) {
-            Vote vote = (closeTransitionComplete ? Vote.APPROVE : Vote.DEFER);
+            Vote vote = Vote.APPROVE;
 
-            if (!closeTransitionStarted) {
-                closeTransitionStarted = true;
+            if (editorCardPane.getSelectedIndex() != IMAGE_CARD_INDEX) {
+                vote = Vote.DEFER;
 
-                // Restore focus to the table view
-                tableView.requestFocus();
+                if (!closing) {
+                    closing = true;
 
-                int duration = FLIP_DURATION;
-                double beginTheta = Math.PI;
+                    // Restore focus to the table view
+                    tableView.requestFocus();
 
-                // If we're still flipping open, then start the reverse flip at
-                // the point where we're stopping the current flip
-                if (flipTransition.isRunning()) {
-                    flipTransition.stop();
-                    duration = flipTransition.getElapsedTime();
-                    beginTheta = flipTransition.getCurrentTheta();
+                    // Flip to the image card
+                    editorCardPane.setSelectedIndex(IMAGE_CARD_INDEX);
+
+                    // Close the popup when the selected index changes
+                    editorCardPane.getCardPaneListeners().add(new CardPaneListener.Adapter() {
+                        @Override
+                        public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex) {
+                            popup.close();
+                            editorCardPane.getCardPaneListeners().remove(this);
+                        }
+                    });
                 }
-
-                flipTransition.setDuration(duration);
-                flipTransition.setBeginTheta(beginTheta);
-                flipTransition.setEndTheta(0);
-
-                flipTransition.start(new TransitionListener() {
-                    public void transitionCompleted(Transition transition) {
-                        closeTransitionComplete = true;
-                        popup.close();
-                    }
-                });
             }
 
             return vote;
@@ -207,13 +205,11 @@ public class TableViewRowEditor implements TableView.RowEditor {
             tableView.getTableViewRowListeners().remove(tableViewRowHandler);
 
             // Reset flags
-            closeTransitionStarted = false;
-            closeTransitionComplete = false;
+            closing = false;
 
             // Free memory
             tableView = null;
             tableViewScrollPane = null;
-            flipTransition = null;
 
             TablePane.ColumnSequence tablePaneColumns = editorTablePane.getColumns();
             TablePane.Row tablePaneRow = editorTablePane.getRows().get(0);
@@ -376,11 +372,8 @@ public class TableViewRowEditor implements TableView.RowEditor {
     // Cell editors specified by the caller
     private HashMap<String, Component> cellEditors = new HashMap<String, Component>();
 
-    // Transition
-    private FlipTransition flipTransition = null;
-
-    // The duration in milliseconds of a full (non-interrupted) transition
-    private static final int FLIP_DURATION = 350;
+    private static final int IMAGE_CARD_INDEX = 0;
+    private static final int EDITOR_CARD_INDEX = 1;
 
     /**
      * Creates a new <tt>TableViewRowEditor</tt>. This object should only be
