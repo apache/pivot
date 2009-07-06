@@ -98,8 +98,12 @@ public abstract class Transition {
      * @param rate
      * Transition rate, in frames per second.
      *
-     * @param repeat
+     * @param repeating
      * <tt>true</tt> if the transition should repeat; <tt>false</tt>, otherwise.
+     *
+     * @param reversed
+     * <tt>true</tt> if the transition should run in reverse; <tt>false</tt>
+     * otherwise.
      */
     public Transition(int duration, int rate, boolean repeating, boolean reversed) {
         if (duration <= 0) {
