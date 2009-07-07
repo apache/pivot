@@ -26,7 +26,6 @@ import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.VerticalAlignment;
 
-
 /**
  * Flow pane skin.
  * <p>
@@ -310,7 +309,8 @@ public class FlowPaneSkin extends ContainerSkin
 
         Orientation orientation = flowPane.getOrientation();
         if (orientation == Orientation.HORIZONTAL) {
-            int preferredWidth = getPreferredWidth(-1);
+            int preferredWidth = (verticalAlignment == VerticalAlignment.JUSTIFY) ?
+                getPreferredWidth(height) : getPreferredWidth(-1);
 
             // Determine the fixed width (used in scaling components
             // when justified horizontally)
@@ -424,7 +424,8 @@ public class FlowPaneSkin extends ContainerSkin
                 }
             }
         } else {
-            int preferredHeight = getPreferredHeight(-1);
+            int preferredHeight = (horizontalAlignment == HorizontalAlignment.JUSTIFY) ?
+                getPreferredHeight(width) : getPreferredHeight(-1);
 
             // Determine the fixed height (used in scaling components
             // when justified vertically)

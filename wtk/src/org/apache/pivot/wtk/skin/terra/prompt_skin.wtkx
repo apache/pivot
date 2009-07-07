@@ -18,13 +18,13 @@ limitations under the License.
 
 <FlowPane orientation="vertical" styles="{spacing:8, horizontalAlignment:'justify',
     verticalAlignment:'bottom'}"
-    preferredWidth="300"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:collections="org.apache.pivot.collections"
     xmlns="org.apache.pivot.wtk">
     <Border styles="{padding:12, backgroundColor:4, color:7}">
         <content>
-            <TablePane styles="{horizontalSpacing:12, verticalSpacing:12}">
+            <TablePane preferredWidth="280"
+                styles="{horizontalSpacing:12, verticalSpacing:12}">
                 <columns>
                     <TablePane.Column width="-1"/>
                     <TablePane.Column width="1*"/>

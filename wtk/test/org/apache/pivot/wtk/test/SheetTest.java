@@ -16,8 +16,10 @@
  */
 package org.apache.pivot.wtk.test;
 
+import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Vote;
+import org.apache.pivot.wtk.Alert;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
@@ -27,6 +29,8 @@ import org.apache.pivot.wtk.FlowPane;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Label;
+import org.apache.pivot.wtk.MessageType;
+import org.apache.pivot.wtk.Prompt;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Sheet;
 import org.apache.pivot.wtk.TablePane;
@@ -54,11 +58,24 @@ public class SheetTest implements Application {
         tablePane.getRows().add(new TablePane.Row(1, true));
         tablePane.getRows().add(new TablePane.Row(-1));
 
-        Label sheetContent = new Label("Sheet Content");
+        final Label sheetContent = new Label("Sheet Content");
+        sheetContent.getStyles().put("wrapText", true);
         sheetContent.getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
         sheetContent.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
 
         tablePane.getRows().get(0).add(sheetContent);
+
+        Label promptBody = new Label("Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an AS IS BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.");
+        promptBody.getStyles().put("wrapText", true);
+
+        final Prompt prompt = new Prompt(MessageType.INFO, "Prompt", new ArrayList<String>("OK"), promptBody);
+        prompt.setTitle("Prompt");
+
+        Label alertBody = new Label("Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an AS IS BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.");
+        alertBody.getStyles().put("wrapText", true);
+
+        final Alert alert = new Alert(MessageType.INFO, "Alert", new ArrayList<String>("OK"), alertBody);
+        alert.setTitle("Alert");
 
         FlowPane flowPane = new FlowPane();
         tablePane.getRows().get(1).add(flowPane);
@@ -79,7 +96,9 @@ public class SheetTest implements Application {
 
         windowContent.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
-                sheet.open(frame);
+                // sheet.open(frame);
+                prompt.open(frame);
+                // alert.open(frame);
             }
         });
 
