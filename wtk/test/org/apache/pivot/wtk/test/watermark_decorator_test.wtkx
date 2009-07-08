@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<Window wtkx:id="window"
+    title="Watermark Decorator Test"
+    maximized="true"
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns="org.apache.pivot.wtk">
+    <content>
+        <TablePane styles="{verticalSpacing:1, showHorizontalGridLines:true}">
+            <columns>
+                <TablePane.Column width="1*" />
+            </columns>
+            <rows>
+                <TablePane.Row height="-1">
+                    <FlowPane styles="{padding:10}">
+                        <PushButton buttonData="Toggle Watermark" toggleButton="true">
+                            <buttonStateListeners>
+                                <wtkx:script language="javascript">
+                                    <![CDATA[
+                                    importPackage(org.apache.pivot.wtk.effects);
+
+                                    function stateChanged(button, previousState) {
+                                        if (button.isSelected()) {
+                                            cardPane.getDecorators().add(new WatermarkDecorator("Only below the line"));
+                                        } else {
+                                            cardPane.getDecorators().removeAll();
+                                        }
+                                    }
+                                    ]]>
+                                </wtkx:script>
+                            </buttonStateListeners>
+                        </PushButton>
+                    </FlowPane>
+                </TablePane.Row>
+                <TablePane.Row height="1*">
+                    <CardPane wtkx:id="cardPane" selectedIndex="0">
+                        <FlowPane />
+                    </CardPane>
+                </TablePane.Row>
+            </rows>
+        </TablePane>
+    </content>
+</Window>
