@@ -18,6 +18,7 @@ package org.apache.pivot.wtk.test;
 
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtkx.WTKXSerializer;
@@ -44,5 +45,9 @@ public class WatermarkDecoratorTest implements Application {
     }
 
     public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(WatermarkDecoratorTest.class, args);
     }
 }
