@@ -216,6 +216,7 @@ limitations under the License.
             <packageset dir="wtk/src" includes="**/*"/>
 
             <link href="http://java.sun.com/javase/6/docs/api"/>
+            <link href="http://java.sun.com/j2ee/1.4/docs/api"/>
         </javadoc>
     </target>
 
