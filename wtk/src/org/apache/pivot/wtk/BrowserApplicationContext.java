@@ -114,10 +114,10 @@ public final class BrowserApplicationContext extends ApplicationContext {
                     try {
                         Class<?> applicationClass = Class.forName(applicationClassName);
                         application = (Application) applicationClass.newInstance();
-                    } catch (Exception exception) {
-                        Alert.alert(MessageType.ERROR, exception.getMessage(),
+                    } catch (Throwable throwable) {
+                        Alert.alert(MessageType.ERROR, throwable.getMessage(),
                             applicationContext.getDisplay());
-                        exception.printStackTrace();
+                        throwable.printStackTrace();
                     }
                 }
 
