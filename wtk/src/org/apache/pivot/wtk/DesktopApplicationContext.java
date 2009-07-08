@@ -137,7 +137,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
     private static Runnable updateFrameTitleBarCallback = null;
 
-    private static final String DEFAULT_HOST_FRAME_TITLE = "Pivot";
+    private static final String DEFAULT_HOST_FRAME_TITLE = "Apache Pivot";
 
     private static final String X_ARGUMENT = "x";
     private static final String Y_ARGUMENT = "y";
