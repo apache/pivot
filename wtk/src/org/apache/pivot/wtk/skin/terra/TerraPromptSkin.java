@@ -44,6 +44,7 @@ public class TerraPromptSkin extends TerraSheetSkin
 
     public TerraPromptSkin() {
         setResizable(false);
+        setPadding(0);
     }
 
     @Override
