@@ -42,7 +42,6 @@ public class TaskSequence extends Task<Void>
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public Void execute() throws TaskExecutionException {
         for (Task<?> task : tasks) {
             task.execute();

@@ -268,7 +268,6 @@ public class ArrayList<T> implements List<T>, Serializable {
         return (T)items[index];
     }
 
-    @SuppressWarnings("unchecked")
     public int indexOf(T item) {
         int index = -1;
 
@@ -331,7 +330,6 @@ public class ArrayList<T> implements List<T>, Serializable {
         return items.length;
     }
 
-    @SuppressWarnings("unchecked")
     public T[] toArray(Class<? extends T[]> type) {
         return Arrays.copyOf(items, length, type);
     }
@@ -340,7 +338,6 @@ public class ArrayList<T> implements List<T>, Serializable {
         return comparator;
     }
 
-    @SuppressWarnings("unchecked")
     public void setComparator(Comparator<T> comparator) {
         Comparator<T> previousComparator = this.comparator;
 

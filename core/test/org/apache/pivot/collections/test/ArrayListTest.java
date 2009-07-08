@@ -27,7 +27,6 @@ import org.junit.Test;
 
 public class ArrayListTest {
     @Test
-    @SuppressWarnings("unchecked")
     public void basicTest() {
         ArrayList<String> list = new ArrayList<String>();
         list.insert("B", 0);

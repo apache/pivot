@@ -111,7 +111,6 @@ public class EnumList<E extends Enum<E>> implements List<E>, Serializable {
         return items.length;
     }
 
-    @SuppressWarnings("unchecked")
     public E[] toArray() {
         return Arrays.copyOf(items, items.length);
     }
