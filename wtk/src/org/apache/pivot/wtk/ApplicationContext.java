@@ -830,6 +830,10 @@ public abstract class ApplicationContext {
 
                             if (mouseCapturer == null) {
                                 // The mouse is not captured, so propagate the event to the display
+                                if (!display.isMouseOver()) {
+                                    display.mouseOver();
+                                }
+
                                 display.mouseMove(x, y);
 
                                 int dragThreshold = Platform.getDragThreshold();

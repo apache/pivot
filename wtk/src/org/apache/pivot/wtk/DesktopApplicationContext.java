@@ -21,6 +21,7 @@ import java.awt.Graphics;
 import java.awt.GraphicsDevice;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.lang.reflect.InvocationHandler;
@@ -88,6 +89,32 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
                     case WindowEvent.WINDOW_CLOSING: {
                         exit();
+                        break;
+                    }
+
+                    case WindowEvent.WINDOW_DEACTIVATED: {
+                        java.awt.Window oppositeWindow = event.getOppositeWindow();
+
+                        if (oppositeWindow instanceof java.awt.Dialog) {
+                            java.awt.Dialog dialog = (java.awt.Dialog)oppositeWindow;
+
+                            switch (dialog.getModalityType()) {
+                            case APPLICATION_MODAL:
+                            case DOCUMENT_MODAL:
+                            case TOOLKIT_MODAL:
+                                applicationContext.getDisplay().setEnabled(false);
+
+                                dialog.addWindowListener(new WindowAdapter() {
+                                    public void windowClosed(WindowEvent event) {
+                                        applicationContext.getDisplay().setEnabled(true);
+                                        event.getWindow().removeWindowListener(this);
+                                    }
+                                });
+
+                                break;
+                            }
+                        }
+
                         break;
                     }
                 }
