@@ -281,6 +281,7 @@ public class WatermarkDecorator implements Decorator {
         double cosTheta = Math.cos(theta);
 
         Graphics2D watermarkGraphics = (Graphics2D)graphics.create();
+        watermarkGraphics.clipRect(0, 0, component.getWidth(), component.getHeight());
         watermarkGraphics.setComposite(AlphaComposite.getInstance
             (AlphaComposite.SRC_OVER, opacity));
         watermarkGraphics.rotate(theta);
