@@ -40,6 +40,7 @@ public class BoxPaneSkin extends ContainerSkin
     private VerticalAlignment verticalAlignment = VerticalAlignment.TOP;
     private Insets padding = new Insets(0);
     private int spacing = 4;
+    private boolean fill = false;
 
     @Override
     public void install(Component component) {
@@ -60,85 +61,40 @@ public class BoxPaneSkin extends ContainerSkin
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 
-        // Include padding in constraint
-        if (height != -1) {
-            height = Math.max(height - (padding.top + padding.bottom), 0);
-        }
-
         BoxPane boxPane = (BoxPane)getComponent();
-        int n = boxPane.getLength();
 
         Orientation orientation = boxPane.getOrientation();
         if (orientation == Orientation.HORIZONTAL) {
-            // Preferred width is the sum of the preferred widths of all
-            // components, plus spacing
-            int displayableComponentCount = 0;
+            // Include padding in constraint
+            if (height != -1) {
+                height = Math.max(height - (padding.top + padding.bottom), 0);
+            }
 
-            for (int i = 0; i < n; i++) {
-                Component component = boxPane.get(i);
+            // Preferred width is the sum of the preferred widths of all components
+            int i = 0;
+            for (int j = 0, n = boxPane.getLength(); j < n; j++) {
+                Component component = boxPane.get(j);
 
                 if (component.isDisplayable()) {
                     preferredWidth += component.getPreferredWidth(height);
-                    displayableComponentCount++;
+                    i++;
                 }
             }
 
-            if (displayableComponentCount > 1) {
-                preferredWidth += spacing * (displayableComponentCount - 1);
+            // Include spacing
+            if (i > 1) {
+                preferredWidth += spacing * (i - 1);
             }
         } else {
             // Preferred width is the maximum preferred width of all components
-            int maxComponentWidth = 0;
-
-            // Determine the fixed and total preferred heights, if necessary
-            int totalSpacing = 0;
-            int totalPreferredHeight = 0;
-
-            if (horizontalAlignment == HorizontalAlignment.JUSTIFY
-                && height != -1) {
-                int displayableComponentCount = 0;
-                for (int i = 0; i < n; i++) {
-                    Component component = boxPane.get(i);
-
-                    if (component.isDisplayable()) {
-                        totalPreferredHeight += component.getPreferredHeight(-1);
-                        displayableComponentCount++;
-                    }
-                }
-
-                if (displayableComponentCount > 1) {
-                    totalSpacing = spacing * (displayableComponentCount - 1);
-                }
-            }
-
-            for (int i = 0; i < n; i++) {
+            for (int i = 0, n = boxPane.getLength(); i < n; i++) {
                 Component component = boxPane.get(i);
 
                 if (component.isDisplayable()) {
-                    int componentHeight = -1;
-
-                    if (verticalAlignment == VerticalAlignment.JUSTIFY
-                        && height != -1) {
-                        int preferredHeight = component.getPreferredHeight(-1);
-
-                        if (height > totalSpacing
-                            && preferredHeight > totalSpacing) {
-                            double heightScale = (double)preferredHeight
-                                / (double)totalPreferredHeight;
-
-                            componentHeight = (int)Math.round((height - totalSpacing)
-                                * heightScale);
-                        } else {
-                            componentHeight = 0;
-                        }
-                    }
-
-                    maxComponentWidth = Math.max(maxComponentWidth,
-                        component.getPreferredWidth(componentHeight));
+                    preferredWidth = Math.max(preferredWidth,
+                        component.getPreferredWidth(-1));
                 }
             }
-
-            preferredWidth += maxComponentWidth;
         }
 
         // Include left and right padding values
@@ -150,85 +106,40 @@ public class BoxPaneSkin extends ContainerSkin
     public int getPreferredHeight(int width) {
         int preferredHeight = 0;
 
-        // Include padding in constraint
-        if (width != -1) {
-            width = Math.max(width - (padding.left + padding.right), 0);
-        }
-
         BoxPane boxPane = (BoxPane)getComponent();
-        int n = boxPane.getLength();
 
         Orientation orientation = boxPane.getOrientation();
         if (orientation == Orientation.VERTICAL) {
-            // Preferred height is the sum of the preferred heights of all
-            // components, plus padding and spacing
-            int displayableComponentCount = 0;
+            // Include padding in constraint
+            if (width != -1) {
+                width = Math.max(width - (padding.left + padding.right), 0);
+            }
 
-            for (int i = 0; i < n; i++) {
+            // Preferred height is the sum of the preferred heights of all components
+            int i = 0;
+            for (int j = 0, n = boxPane.getLength(); j < n; j++) {
                 Component component = boxPane.get(i);
 
                 if (component.isDisplayable()) {
                     preferredHeight += component.getPreferredHeight(width);
-                    displayableComponentCount++;
+                    i++;
                 }
             }
 
-            if (displayableComponentCount > 1) {
-                preferredHeight += spacing * (displayableComponentCount - 1);
+            // Include spacing
+            if (i > 1) {
+                preferredHeight += spacing * (i - 1);
             }
         } else {
-            // Preferred height is the maximum preferred height of all
-            // components, plus padding
-            int maxComponentHeight = 0;
-
-            // Determine the fixed and total preferred widths, if necessary
-            int totalSpacing = 0;
-            int totalPreferredWidth = 0;
-
-            if (horizontalAlignment == HorizontalAlignment.JUSTIFY
-                && width != -1) {
-                int displayableComponentCount = 0;
-
-                for (int i = 0; i < n; i++) {
-                    Component component = boxPane.get(i);
-
-                    if (component.isDisplayable()) {
-                        totalPreferredWidth += component.getPreferredWidth(-1);
-                        displayableComponentCount++;
-                    }
-                }
-
-                if (displayableComponentCount > 1) {
-                    totalSpacing = spacing * (displayableComponentCount - 1);
-                }
-            }
-
-            for (int i = 0; i < n; i++) {
+            // Preferred height is the maximum preferred height of all components
+            for (int i = 0, n = boxPane.getLength(); i < n; i++) {
                 Component component = boxPane.get(i);
 
                 if (component.isDisplayable()) {
-                    int componentWidth = -1;
-
-                    if (horizontalAlignment == HorizontalAlignment.JUSTIFY
-                        && width != -1) {
-                        int preferredWidth = component.getPreferredWidth(-1);
-
-                        if (width > totalSpacing
-                            && preferredWidth > totalSpacing) {
-                            double widthScale = (double)preferredWidth
-                                / (double)totalPreferredWidth;
-
-                            componentWidth = (int)Math.round((width - totalSpacing)
-                                * widthScale);
-                        }
-                    }
-
-                    maxComponentHeight = Math.max(maxComponentHeight,
-                        component.getPreferredHeight(componentWidth));
+                    preferredHeight = Math.max(preferredHeight,
+                        component.getPreferredHeight(-1));
                 }
             }
-
-            preferredHeight += maxComponentHeight;
         }
 
         // Include top and bottom padding values
@@ -245,48 +156,44 @@ public class BoxPaneSkin extends ContainerSkin
 
         switch (boxPane.getOrientation()) {
             case HORIZONTAL: {
-                // Preferred width is the sum of the preferred widths of all
-                // components, plus spacing and padding
-                int displayableComponentCount = 0;
-
-                for (int i = 0, n = boxPane.getLength(); i < n; i++) {
-                    Component component = boxPane.get(i);
+                // Preferred width is the sum of the preferred widths of all components
+                int i = 0;
+                for (int j = 0, n = boxPane.getLength(); j < n; j++) {
+                    Component component = boxPane.get(j);
 
                     if (component.isDisplayable()) {
                         Dimensions preferredSize = component.getPreferredSize();
                         preferredWidth += preferredSize.width;
                         preferredHeight = Math.max(preferredSize.height, preferredHeight);
-                        displayableComponentCount++;
+                        i++;
                     }
                 }
 
                 // Include spacing
-                if (displayableComponentCount > 1) {
-                    preferredWidth += spacing * (displayableComponentCount - 1);
+                if (i > 1) {
+                    preferredWidth += spacing * (i - 1);
                 }
 
                 break;
             }
 
             case VERTICAL: {
-                // Preferred height is the sum of the preferred heights of all
-                // components, plus spacing and padding
-                int displayableComponentCount = 0;
-
-                for (int i = 0, n = boxPane.getLength(); i < n; i++) {
-                    Component component = boxPane.get(i);
+                // Preferred height is the sum of the preferred heights of all components
+                int i = 0;
+                for (int j = 0, n = boxPane.getLength(); j < n; j++) {
+                    Component component = boxPane.get(j);
 
                     if (component.isDisplayable()) {
                         Dimensions preferredSize = component.getPreferredSize();
                         preferredWidth = Math.max(preferredSize.width, preferredWidth);
                         preferredHeight += preferredSize.height;
-                        displayableComponentCount++;
+                        i++;
                     }
                 }
 
                 // Include spacing
-                if (displayableComponentCount > 1) {
-                    preferredHeight += spacing * (displayableComponentCount - 1);
+                if (i > 1) {
+                    preferredHeight += spacing * (i - 1);
                 }
 
                 break;
@@ -309,29 +216,7 @@ public class BoxPaneSkin extends ContainerSkin
 
         Orientation orientation = boxPane.getOrientation();
         if (orientation == Orientation.HORIZONTAL) {
-            int preferredWidth = (verticalAlignment == VerticalAlignment.JUSTIFY) ?
-                getPreferredWidth(height) : getPreferredWidth(-1);
-
-            // Determine the fixed width (used in scaling components
-            // when justified horizontally)
-            int fixedWidth = 0;
-            if (horizontalAlignment == HorizontalAlignment.JUSTIFY) {
-                fixedWidth = padding.left + padding.right;
-
-                int displayableComponentCount = 0;
-
-                for (int i = 0; i < n; i++) {
-                    Component component = boxPane.get(i);
-
-                    if (component.isDisplayable()) {
-                        displayableComponentCount++;
-                    }
-                }
-
-                if (displayableComponentCount > 1) {
-                    fixedWidth += spacing * (displayableComponentCount - 1);
-                }
-            }
+            int preferredWidth = (fill) ? getPreferredWidth(height) : getPreferredWidth(-1);
 
             // Determine the starting x-coordinate
             int componentX = 0;
@@ -359,36 +244,15 @@ public class BoxPaneSkin extends ContainerSkin
                     int componentHeight = 0;
                     int componentY = 0;
 
-                    // If the contents are horizontally justified, scale the
-                    // component's width to match the available space
-                    if (horizontalAlignment == HorizontalAlignment.JUSTIFY) {
-                        if (width > fixedWidth
-                            && preferredWidth > fixedWidth) {
-                            double widthScale = ((double)(width - fixedWidth)
-                                / (double)(preferredWidth - fixedWidth));
-
-                            componentWidth = (int)Math.max(Math.round(component.getPreferredWidth(-1)
-                                * widthScale), 0);
-
-                            if (verticalAlignment == VerticalAlignment.JUSTIFY) {
-                                componentY = padding.top;
-                                componentHeight = Math.max(height - (padding.top
-                                    + padding.bottom), 0);
-                            } else {
-                                componentHeight = component.getPreferredHeight(componentWidth);
-                            }
-                        }
+                    if (fill) {
+                        componentY = padding.top;
+                        componentHeight = Math.max(height - (padding.top
+                            + padding.bottom), 0);
+                        componentWidth = component.getPreferredWidth(componentHeight);
                     } else {
-                        if (verticalAlignment == VerticalAlignment.JUSTIFY) {
-                            componentY = padding.top;
-                            componentHeight = Math.max(height - (padding.top
-                                + padding.bottom), 0);
-                            componentWidth = component.getPreferredWidth(componentHeight);
-                        } else {
-                            Dimensions preferredComponentSize = component.getPreferredSize();
-                            componentWidth = preferredComponentSize.width;
-                            componentHeight = preferredComponentSize.height;
-                        }
+                        Dimensions preferredComponentSize = component.getPreferredSize();
+                        componentWidth = preferredComponentSize.width;
+                        componentHeight = preferredComponentSize.height;
                     }
 
                     switch (verticalAlignment) {
@@ -424,29 +288,7 @@ public class BoxPaneSkin extends ContainerSkin
                 }
             }
         } else {
-            int preferredHeight = (horizontalAlignment == HorizontalAlignment.JUSTIFY) ?
-                getPreferredHeight(width) : getPreferredHeight(-1);
-
-            // Determine the fixed height (used in scaling components
-            // when justified vertically)
-            int fixedHeight = 0;
-            if (verticalAlignment == VerticalAlignment.JUSTIFY) {
-                fixedHeight = padding.top + padding.bottom;
-
-                int displayableComponentCount = 0;
-
-                for (int i = 0; i < n; i++) {
-                    Component component = boxPane.get(i);
-
-                    if (component.isDisplayable()) {
-                        displayableComponentCount++;
-                    }
-                }
-
-                if (displayableComponentCount > 1) {
-                    fixedHeight += spacing * (displayableComponentCount - 1);
-                }
-            }
+            int preferredHeight = (fill) ? getPreferredHeight(width) : getPreferredHeight(-1);
 
             // Determine the starting y-coordinate
             int componentY = 0;
@@ -474,36 +316,15 @@ public class BoxPaneSkin extends ContainerSkin
                     int componentHeight = 0;
                     int componentX = 0;
 
-                    // If the contents are vertically justified, scale the
-                    // component's height to match the available space
-                    if (verticalAlignment == VerticalAlignment.JUSTIFY) {
-                        if (height > fixedHeight
-                            && preferredHeight > fixedHeight) {
-                            double heightScale = (double)(height - fixedHeight)
-                                / (double)(preferredHeight - fixedHeight);
-
-                            componentHeight = (int)Math.max(Math.round(component.getPreferredHeight(-1)
-                                * heightScale), 0);
-
-                            if (horizontalAlignment == HorizontalAlignment.JUSTIFY) {
-                                componentX = padding.left;
-                                componentWidth = Math.max(width - (padding.left
-                                    + padding.right), 0);
-                            } else {
-                                componentWidth = component.getPreferredWidth(componentHeight);
-                            }
-                        }
+                    if (fill) {
+                        componentX = padding.left;
+                        componentWidth = Math.max(width - (padding.left
+                            + padding.right), 0);
+                        componentHeight = component.getPreferredHeight(componentWidth);
                     } else {
-                        if (horizontalAlignment == HorizontalAlignment.JUSTIFY) {
-                            componentX = padding.left;
-                            componentWidth = Math.max(width - (padding.left
-                                + padding.right), 0);
-                            componentHeight = component.getPreferredHeight(componentWidth);
-                        } else {
-                            Dimensions preferredComponentSize = component.getPreferredSize();
-                            componentWidth = preferredComponentSize.width;
-                            componentHeight = preferredComponentSize.height;
-                        }
+                        Dimensions preferredComponentSize = component.getPreferredSize();
+                        componentWidth = preferredComponentSize.width;
+                        componentHeight = preferredComponentSize.height;
                     }
 
                     switch (horizontalAlignment) {
@@ -631,6 +452,15 @@ public class BoxPaneSkin extends ContainerSkin
         }
 
         setSpacing(spacing.intValue());
+    }
+
+    public boolean getFill() {
+        return fill;
+    }
+
+    public void setFill(boolean fill) {
+        this.fill = fill;
+        invalidateComponent();
     }
 
     // Box pane events

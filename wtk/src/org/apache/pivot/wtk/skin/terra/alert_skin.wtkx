@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<BoxPane orientation="vertical" styles="{spacing:8, horizontalAlignment:'justify'}"
+<BoxPane orientation="vertical" styles="{spacing:8, fill:true}"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:collections="org.apache.pivot.collections"
     xmlns="org.apache.pivot.wtk">
@@ -34,7 +34,7 @@ limitations under the License.
                             <ImageView wtkx:id="typeImageView"/>
                         </BoxPane>
                         <BoxPane wtkx:id="messageBoxPane" orientation="vertical"
-                            styles="{spacing:10, horizontalAlignment:'justify'}">
+                            styles="{spacing:10, fill:true}">
                             <Label wtkx:id="messageLabel" styles="{fontBold:true, wrapText:true}"/>
                         </BoxPane>
                     </TablePane.Row>
@@ -43,5 +43,5 @@ limitations under the License.
         </content>
     </Border>
     <BoxPane wtkx:id="buttonBoxPane"
-        styles="{horizontalAlignment:'right', verticalAlignment:'justify'}"/>
+        styles="{horizontalAlignment:'right', fill:true}"/>
 </BoxPane>

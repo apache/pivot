@@ -24,7 +24,7 @@ limitations under the License.
             <content>
                 <ScrollPane horizontalScrollBarPolicy="fill">
                     <view>
-                        <BoxPane orientation="vertical" styles="{horizontalAlignment:'justify',
+                        <BoxPane orientation="vertical" styles="{fill:true,
                             padding:{left:2, right:2}}">
                             <Expander wtkx:id="stocksExpander" title="Stocks">
                                 <content>

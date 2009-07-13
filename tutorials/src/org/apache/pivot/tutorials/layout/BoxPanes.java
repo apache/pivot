@@ -20,6 +20,7 @@ import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonStateListener;
+import org.apache.pivot.wtk.Checkbox;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.BoxPane;
@@ -38,11 +39,10 @@ public class BoxPanes implements Application {
     private RadioButton horizontalAlignmentRightButton = null;
     private RadioButton horizontalAlignmentLeftButton = null;
     private RadioButton horizontalAlignmentCenterButton = null;
-    private RadioButton horizontalAlignmentJustifyButton = null;
     private RadioButton verticalAlignmentTopButton = null;
     private RadioButton verticalAlignmentBottomButton = null;
     private RadioButton verticalAlignmentCenterButton = null;
-    private RadioButton verticalAlignmentJustifyButton = null;
+    private Checkbox fillCheckbox = null;
 
     public void startup(Display display, Map<String, String> properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -53,30 +53,26 @@ public class BoxPanes implements Application {
         horizontalAlignmentRightButton = (RadioButton)wtkxSerializer.get("horizontalAlignmentRightButton");
         horizontalAlignmentLeftButton = (RadioButton)wtkxSerializer.get("horizontalAlignmentLeftButton");
         horizontalAlignmentCenterButton = (RadioButton)wtkxSerializer.get("horizontalAlignmentCenterButton");
-        horizontalAlignmentJustifyButton = (RadioButton)wtkxSerializer.get("horizontalAlignmentJustifyButton");
         verticalAlignmentTopButton = (RadioButton)wtkxSerializer.get("verticalAlignmentTopButton");
         verticalAlignmentBottomButton = (RadioButton)wtkxSerializer.get("verticalAlignmentBottomButton");
         verticalAlignmentCenterButton = (RadioButton)wtkxSerializer.get("verticalAlignmentCenterButton");
-        verticalAlignmentJustifyButton = (RadioButton)wtkxSerializer.get("verticalAlignmentJustifyButton");
+        fillCheckbox = (Checkbox)wtkxSerializer.get("fillCheckbox");
 
-        ButtonStateListener radioButtonStateListener = new ButtonStateListener() {
+        ButtonStateListener buttonStateListener = new ButtonStateListener() {
             public void stateChanged(Button button, Button.State previousState) {
-                if (button.isSelected()) {
-                    updateBoxPaneState();
-                }
+                updateBoxPaneState();
             }
         };
 
-        horizontalOrientationButton.getButtonStateListeners().add(radioButtonStateListener);
-        verticalOrientationButton.getButtonStateListeners().add(radioButtonStateListener);
-        horizontalAlignmentLeftButton.getButtonStateListeners().add(radioButtonStateListener);
-        horizontalAlignmentRightButton.getButtonStateListeners().add(radioButtonStateListener);
-        horizontalAlignmentCenterButton.getButtonStateListeners().add(radioButtonStateListener);
-        horizontalAlignmentJustifyButton.getButtonStateListeners().add(radioButtonStateListener);
-        verticalAlignmentTopButton.getButtonStateListeners().add(radioButtonStateListener);
-        verticalAlignmentBottomButton.getButtonStateListeners().add(radioButtonStateListener);
-        verticalAlignmentCenterButton.getButtonStateListeners().add(radioButtonStateListener);
-        verticalAlignmentJustifyButton.getButtonStateListeners().add(radioButtonStateListener);
+        horizontalOrientationButton.getButtonStateListeners().add(buttonStateListener);
+        verticalOrientationButton.getButtonStateListeners().add(buttonStateListener);
+        horizontalAlignmentLeftButton.getButtonStateListeners().add(buttonStateListener);
+        horizontalAlignmentRightButton.getButtonStateListeners().add(buttonStateListener);
+        horizontalAlignmentCenterButton.getButtonStateListeners().add(buttonStateListener);
+        verticalAlignmentTopButton.getButtonStateListeners().add(buttonStateListener);
+        verticalAlignmentBottomButton.getButtonStateListeners().add(buttonStateListener);
+        verticalAlignmentCenterButton.getButtonStateListeners().add(buttonStateListener);
+        fillCheckbox.getButtonStateListeners().add(buttonStateListener);
 
         updateBoxPaneState();
 
@@ -116,8 +112,6 @@ public class BoxPanes implements Application {
             horizontalAlignment = HorizontalAlignment.RIGHT;
         } else if (horizontalAlignmentCenterButton.isSelected()) {
             horizontalAlignment = HorizontalAlignment.CENTER;
-        } else if (horizontalAlignmentJustifyButton.isSelected()) {
-            horizontalAlignment = HorizontalAlignment.JUSTIFY;
         }
 
         if (horizontalAlignment != null) {
@@ -131,13 +125,13 @@ public class BoxPanes implements Application {
             verticalAlignment = VerticalAlignment.BOTTOM;
         } else if (verticalAlignmentCenterButton.isSelected()) {
             verticalAlignment = VerticalAlignment.CENTER;
-        } else if (verticalAlignmentJustifyButton.isSelected()) {
-            verticalAlignment = VerticalAlignment.JUSTIFY;
         }
 
         if (verticalAlignment != null) {
             boxPane.getStyles().put("verticalAlignment", verticalAlignment);
         }
+
+        boxPane.getStyles().put("fill", fillCheckbox.isSelected());
     }
 
     public static void main(String[] args) {

@@ -30,9 +30,8 @@ limitations under the License.
             </columns>
             <rows>
                 <TablePane.Row height="-1">
-                    <BoxPane styles="{horizontalAlignment:'justify', padding:8}">
-                        <Label text="Double click on a row to edit its contents." styles="{horizontalAlignment:'center', fontSize:14, wrapText:true}"/>
-                    </BoxPane>
+                    <Label text="Double click on a row to edit its contents."
+                        styles="{horizontalAlignment:'center', fontBold:true, wrapText:true}"/>
                 </TablePane.Row>
                 <TablePane.Row height="1*">
                     <Border styles="{padding:0}">

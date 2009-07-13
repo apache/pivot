@@ -181,7 +181,7 @@ limitations under the License.
                                     </BoxPane>
                                 </StackPane>
 
-                                <BoxPane orientation="vertical" styles="{horizontalAlignment:'justify'}">
+                                <BoxPane orientation="vertical" styles="{fill:true}">
                                     <Border styles="{padding:0}">
                                         <content>
                                             <ImageView wtkx:id="artworkImageView"

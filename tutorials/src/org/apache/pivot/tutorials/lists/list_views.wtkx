@@ -34,7 +34,7 @@ limitations under the License.
                     </ScrollPane>
                 </content>
             </Border>
-            <BoxPane orientation="vertical" preferredWidth="120" styles="{horizontalAlignment:'justify'}">
+            <BoxPane orientation="vertical" preferredWidth="120" styles="{fill:true}">
                 <Label text="You selected:"/>
                 <Label wtkx:id="selectionLabel" styles="{wrapText:true}"/>
             </BoxPane>

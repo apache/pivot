@@ -224,7 +224,7 @@ public class TerraExpanderSkin extends ContainerSkin
         titleBarBoxPane = new BoxPane(Orientation.HORIZONTAL);
         titleBarBoxPane.getComponentMouseButtonListeners().add(titleBarMouseListener);
 
-        titleBarBoxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.JUSTIFY);
+        titleBarBoxPane.getStyles().put("fill", true);
         titleBarBoxPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
         titleBarBoxPane.getStyles().put("padding", new Insets(3));
         titleBarBoxPane.getStyles().put("spacing", 3);

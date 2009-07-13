@@ -20,8 +20,7 @@ limitations under the License.
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
     <content>
-        <BoxPane orientation="vertical" styles="{padding:4, spacing:10,
-            horizontalAlignment:'justify'}">
+        <BoxPane orientation="vertical" styles="{padding:4, spacing:10, fill:true}">
             <Separator heading="Section 1"/>
             <Label text="This is the content of section 1."/>
             <Separator heading="Section 2"/>

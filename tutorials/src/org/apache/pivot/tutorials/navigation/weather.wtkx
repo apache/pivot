@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<BoxPane orientation="vertical" styles="{horizontalAlignment:'justify', padding:{bottom:8}}"
+<BoxPane orientation="vertical" styles="{fill:true, padding:{bottom:8}}"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
     <Label text="Boston, MA" styles="{fontBold:true}"/>

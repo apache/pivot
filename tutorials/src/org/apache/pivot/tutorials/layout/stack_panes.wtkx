@@ -22,7 +22,7 @@ limitations under the License.
     <content>
         <StackPane>
             <ImageView image="@background.png"
-                styles="{horizontalAlignment:'justify', verticalAlignment:'justify'}"/>
+                styles="{fill:true, preserveAspectRatio:false}"/>
             <Label text="StackPane Demo"
                 styles="{font:'Helvetica bold 64', color:'#ffffff', wrapText:true,
                     horizontalAlignment:'center', verticalAlignment:'center'}"/>

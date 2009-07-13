@@ -182,8 +182,7 @@ public class Text extends Shape {
     }
 
     public void setAlignment(HorizontalAlignment alignment) {
-        if (alignment == null
-            || alignment == HorizontalAlignment.JUSTIFY) {
+        if (alignment == null) {
             throw new IllegalArgumentException();
         }
 

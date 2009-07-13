@@ -35,10 +35,5 @@ public enum VerticalAlignment {
     /**
      * Align to center.
      */
-    CENTER,
-
-    /**
-     * Stretch to fill the available space.
-     */
-    JUSTIFY
+    CENTER
 }

@@ -126,7 +126,7 @@ limitations under the License.
         <content>
             <BoxPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:6}">
                 <Label text="Expanders" styles="{fontBold:true}"/>
-                <BoxPane orientation="vertical" styles="{horizontalAlignment:'justify'}">
+                <BoxPane orientation="vertical" styles="{fill:true}">
                     <Expander title="One" expanded="false">
                         <content>
                             <Label preferredWidth="100" preferredHeight="20" text="Un"

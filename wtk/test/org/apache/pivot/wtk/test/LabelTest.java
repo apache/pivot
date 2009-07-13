@@ -61,7 +61,7 @@ public class LabelTest implements Application {
         label2.getStyles().put("textDecoration", TextDecoration.UNDERLINE);
         boxPane.add(label2);
 
-        boxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.JUSTIFY);
+        boxPane.getStyles().put("fill", true);
         boxPane.getStyles().put("padding", new Insets(10));
 
         window.setContent(boxPane);

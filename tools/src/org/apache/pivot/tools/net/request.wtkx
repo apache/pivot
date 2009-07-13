@@ -24,7 +24,7 @@ limitations under the License.
   <content>
     <ScrollPane>
       <view>
-        <BoxPane orientation="vertical" styles="{horizontalAlignment:'justify', padding:4}">
+        <BoxPane orientation="vertical" styles="{fill:true, padding:4}">
           <TablePane styles="{horizontalSpacing:6, verticalSpacing:6}">
             <columns>
               <TablePane.Column width="-1" />

@@ -23,7 +23,7 @@ limitations under the License.
     </columns>
     <rows>
         <TablePane.Row height="1*">
-            <BoxPane orientation="vertical" styles="{padding:6, spacing:8, horizontalAlignment:'justify'}">
+            <BoxPane orientation="vertical" styles="{padding:6, spacing:8, fill:true}">
                 <Label text="Ship to:" styles="{textDecoration:'underline'}"/>
                 <BoxPane orientation="vertical" styles="{padding:{left:8}}">
                     <Label text="Joe Shopper"/>

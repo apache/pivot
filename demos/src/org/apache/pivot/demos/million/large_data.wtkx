@@ -28,7 +28,7 @@ limitations under the License.
             </columns>
             <rows>
                 <TablePane.Row height="-1">
-                    <BoxPane orientation="vertical" styles="{horizontalAlignment:'justify'}">
+                    <BoxPane orientation="vertical" styles="{fill:true}">
                         <BoxPane>
                             <ListButton wtkx:id="fileListButton"
                                 listData="['10e0.csv', '10e1.csv', '10e2.csv', '10e3.csv', '10e4.csv', '10e5.csv']" selectedIndex="0"/>

@@ -37,7 +37,7 @@ limitations under the License.
                             </BoxPane>
                         </content>
                     </Border>
-                    <BoxPane orientation="vertical" styles="{padding:6, spacing:8}">
+                    <BoxPane orientation="vertical" styles="{padding:6, spacing:8, fill:true}">
                         <Label text="Orientation" styles="{fontBold:true}"/>
                         <RadioButton wtkx:id="horizontalOrientationButton" buttonData="Horizontal" group="orientation" selected="true"/>
                         <RadioButton wtkx:id="verticalOrientationButton" buttonData="Vertical" group="orientation"/>
@@ -46,13 +46,15 @@ limitations under the License.
                         <RadioButton wtkx:id="horizontalAlignmentLeftButton" buttonData="Left" group="horizontalAlignment" selected="true"/>
                         <RadioButton wtkx:id="horizontalAlignmentRightButton" buttonData="Right" group="horizontalAlignment"/>
                         <RadioButton wtkx:id="horizontalAlignmentCenterButton" buttonData="Center" group="horizontalAlignment"/>
-                        <RadioButton wtkx:id="horizontalAlignmentJustifyButton" buttonData="Justify" group="horizontalAlignment"/>
 
                         <Label text="Vertical Alignment" styles="{fontBold:true}"/>
                         <RadioButton wtkx:id="verticalAlignmentTopButton" buttonData="Top" group="verticalAlignment" selected="true"/>
                         <RadioButton wtkx:id="verticalAlignmentBottomButton" buttonData="Bottom" group="verticalAlignment"/>
                         <RadioButton wtkx:id="verticalAlignmentCenterButton" buttonData="Center" group="verticalAlignment"/>
-                        <RadioButton wtkx:id="verticalAlignmentJustifyButton" buttonData="Justify" group="verticalAlignment"/>
+
+                        <BoxPane styles="{padding:{top:8}}">
+                            <Checkbox wtkx:id="fillCheckbox" buttonData="Fill"/>
+                        </BoxPane>
                     </BoxPane>
                 </TablePane.Row>
             </rows>

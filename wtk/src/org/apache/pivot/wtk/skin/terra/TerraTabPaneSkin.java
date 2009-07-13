@@ -390,7 +390,7 @@ public class TerraTabPaneSkin extends ContainerSkin
 
         buttonBevelColor = TerraTheme.brighten(inactiveTabColor);
 
-        setButtonSpacing(2);
+        buttonBoxPane.getStyles().put("fill", true);
 
         buttonPanorama.getStyles().put("buttonBackgroundColor", borderColor);
         buttonPanorama.getStyles().put("buttonPadding", 6);
@@ -405,6 +405,8 @@ public class TerraTabPaneSkin extends ContainerSkin
                 tabPane.setSelectedIndex(index);
             }
         });
+
+        setButtonSpacing(2);
     }
 
     public void install(Component component) {
@@ -1057,12 +1059,10 @@ public class TerraTabPaneSkin extends ContainerSkin
         switch (tabOrientation) {
             case HORIZONTAL: {
                 buttonBoxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
-                buttonBoxPane.getStyles().put("verticalAlignment", VerticalAlignment.JUSTIFY);
                 break;
             }
 
             case VERTICAL: {
-                buttonBoxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.JUSTIFY);
                 buttonBoxPane.getStyles().put("verticalAlignment", VerticalAlignment.TOP);
                 break;
             }

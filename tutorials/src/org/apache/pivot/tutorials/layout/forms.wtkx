@@ -69,15 +69,23 @@ limitations under the License.
                             <Separator/>
                         </TablePane.Row>
                         <TablePane.Row height="-1">
-                            <BoxPane styles="{horizontalAlignment:'justify'}">
-                                <BoxPane>
-                                    <Label wtkx:id="errorLabel" styles="{color:'#ff0000'}"/>
-                                </BoxPane>
-                                <BoxPane styles="{horizontalAlignment:'right'}">
-                                    <PushButton wtkx:id="submitButton" buttonData="Submit"
-                                        styles="{preferredAspectRatio:3}"/>
-                                </BoxPane>
-                            </BoxPane>
+                            <TablePane>
+                                <columns>
+                                    <TablePane.Column width="1*"/>
+                                    <TablePane.Column width="-1"/>
+                                </columns>
+                                <rows>
+                                    <TablePane.Row>
+                                        <BoxPane styles="{verticalAlignment:'center'}">
+                                            <Label wtkx:id="errorLabel" styles="{color:'#ff0000'}"/>
+                                        </BoxPane>
+                                        <BoxPane styles="{horizontalAlignment:'right', verticalAlignment:'center'}">
+                                            <PushButton wtkx:id="submitButton" buttonData="Submit"
+                                                styles="{preferredAspectRatio:3}"/>
+                                        </BoxPane>
+                                    </TablePane.Row>
+                                </rows>
+                            </TablePane>
                         </TablePane.Row>
                     </rows>
                 </TablePane>
