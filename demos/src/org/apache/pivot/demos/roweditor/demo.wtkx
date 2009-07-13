@@ -29,10 +29,6 @@ limitations under the License.
                 <TablePane.Column width="1*"/>
             </columns>
             <rows>
-                <TablePane.Row height="-1">
-                    <Label text="Double click on a row to edit its contents."
-                        styles="{horizontalAlignment:'center', fontBold:true, wrapText:true}"/>
-                </TablePane.Row>
                 <TablePane.Row height="1*">
                     <Border styles="{padding:0}">
                         <content>
@@ -69,6 +65,12 @@ limitations under the License.
                             </ScrollPane>
                         </content>
                     </Border>
+                </TablePane.Row>
+                <TablePane.Row height="-1">
+                    <BoxPane orientation="vertical" styles="{padding:6, fill:true}">
+                        <Label text="Double click on a row to edit its contents."
+                            styles="{horizontalAlignment:'center', fontBold:true}"/>
+                    </BoxPane>
                 </TablePane.Row>
             </rows>
         </TablePane>

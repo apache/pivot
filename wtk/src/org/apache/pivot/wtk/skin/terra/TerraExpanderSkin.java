@@ -40,8 +40,8 @@ import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.LinkButton;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Orientation;
+import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.Theme;
-import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.content.ButtonDataRenderer;
 import org.apache.pivot.wtk.effects.Transition;
 import org.apache.pivot.wtk.effects.TransitionListener;
@@ -172,7 +172,7 @@ public class TerraExpanderSkin extends ContainerSkin
     private Image collapseImage = new CollapseImage();
     private Image expandImage = new ExpandImage();
 
-    private BoxPane titleBarBoxPane = null;
+    private TablePane titleBarTablePane = null;
     private BoxPane titleBoxPane = null;
     private BoxPane buttonBoxPane = null;
 
@@ -221,13 +221,16 @@ public class TerraExpanderSkin extends ContainerSkin
         // Set the derived colors
         titleBarBevelColor = TerraTheme.brighten(titleBarBackgroundColor);
 
-        titleBarBoxPane = new BoxPane(Orientation.HORIZONTAL);
-        titleBarBoxPane.getComponentMouseButtonListeners().add(titleBarMouseListener);
+        // Create the title bar components
+        titleBarTablePane = new TablePane();
+        titleBarTablePane.getColumns().add(new TablePane.Column(1, true));
+        titleBarTablePane.getColumns().add(new TablePane.Column(-1));
 
-        titleBarBoxPane.getStyles().put("fill", true);
-        titleBarBoxPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
-        titleBarBoxPane.getStyles().put("padding", new Insets(3));
-        titleBarBoxPane.getStyles().put("spacing", 3);
+        titleBarTablePane.getStyles().put("padding", new Insets(3));
+        titleBarTablePane.getStyles().put("horizontalSpacing", 3);
+
+        TablePane.Row titleRow = new TablePane.Row(-1);
+        titleBarTablePane.getRows().add(titleRow);
 
         titleBoxPane = new BoxPane(Orientation.HORIZONTAL);
         titleBoxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
@@ -235,12 +238,15 @@ public class TerraExpanderSkin extends ContainerSkin
         buttonBoxPane = new BoxPane(Orientation.HORIZONTAL);
         buttonBoxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
 
-        titleBarBoxPane.add(titleBoxPane);
-        titleBarBoxPane.add(buttonBoxPane);
+        titleRow.add(titleBoxPane);
+        titleRow.add(buttonBoxPane);
 
         titleLabel.getStyles().put("color", theme.getColor(15));
         titleLabel.getStyles().put("fontBold", true);
         titleBoxPane.add(titleLabel);
+
+        // Listen for click events on the title bar
+        titleBarTablePane.getComponentMouseButtonListeners().add(titleBarMouseListener);
     }
 
     @Override
@@ -249,7 +255,7 @@ public class TerraExpanderSkin extends ContainerSkin
 
         Expander expander = (Expander)component;
         expander.getExpanderListeners().add(this);
-        expander.add(titleBarBoxPane);
+        expander.add(titleBarTablePane);
 
         Image buttonData = expander.isExpanded() ? collapseImage : expandImage;
         shadeButton = new ShadeButton(buttonData);
@@ -263,7 +269,7 @@ public class TerraExpanderSkin extends ContainerSkin
     public void uninstall() {
         Expander expander = (Expander)getComponent();
         expander.getExpanderListeners().remove(this);
-        expander.remove(titleBarBoxPane);
+        expander.remove(titleBarTablePane);
 
         shadeButton.getButtonPressListeners().remove(this);
         buttonBoxPane.remove(shadeButton);
@@ -276,14 +282,14 @@ public class TerraExpanderSkin extends ContainerSkin
         Expander expander = (Expander)getComponent();
         Component content = expander.getContent();
 
-        int preferredWidth = titleBarBoxPane.getPreferredWidth(-1);
+        int preferredWidth = titleBarTablePane.getPreferredWidth(-1);
 
         if (content != null) {
             int contentHeight = -1;
 
             if (height >= 0) {
                 int reservedHeight = 2 + padding.top + padding.bottom
-                    + titleBarBoxPane.getPreferredHeight(-1);
+                    + titleBarTablePane.getPreferredHeight(-1);
 
                 if (expander.isExpanded()) {
                     // Title bar border is only drawn when expander is expanded
@@ -306,7 +312,7 @@ public class TerraExpanderSkin extends ContainerSkin
         Expander expander = (Expander)getComponent();
         Component content = expander.getContent();
 
-        int preferredHeight = titleBarBoxPane.getPreferredHeight(-1);
+        int preferredHeight = titleBarTablePane.getPreferredHeight(-1);
 
         if (content != null
             && (expander.isExpanded()
@@ -340,7 +346,7 @@ public class TerraExpanderSkin extends ContainerSkin
         Expander expander = (Expander)getComponent();
         Component content = expander.getContent();
 
-        Dimensions titleBarSize = titleBarBoxPane.getPreferredSize();
+        Dimensions titleBarSize = titleBarTablePane.getPreferredSize();
 
         int preferredWidth = titleBarSize.width;
         int preferredHeight = titleBarSize.height;
@@ -381,9 +387,9 @@ public class TerraExpanderSkin extends ContainerSkin
         int width = getWidth();
         int height = getHeight();
 
-        int titleBarHeight = titleBarBoxPane.getPreferredHeight(-1);
-        titleBarBoxPane.setSize(Math.max(width - 2, 0), titleBarHeight);
-        titleBarBoxPane.setLocation(1, 1);
+        int titleBarHeight = titleBarTablePane.getPreferredHeight(-1);
+        titleBarTablePane.setSize(Math.max(width - 2, 0), titleBarHeight);
+        titleBarTablePane.setLocation(1, 1);
 
         if ((expander.isExpanded()
             || (expandTransition != null
@@ -410,15 +416,15 @@ public class TerraExpanderSkin extends ContainerSkin
         if (expander.isExpanded()
             || (expandTransition != null
                 && !expandTransition.isReversed())) {
-            int titleBarHeight = titleBarBoxPane.getPreferredHeight(-1);
+            int titleBarHeight = titleBarTablePane.getPreferredHeight(-1);
             graphics.setPaint(titleBarBorderColor);
             GraphicsUtilities.drawLine(graphics, 0, 1 + titleBarHeight, width, Orientation.HORIZONTAL);
         }
 
-        int titleBarX = titleBarBoxPane.getX();
-        int titleBarY = titleBarBoxPane.getY();
-        int titleBarWidth = titleBarBoxPane.getWidth();
-        int titleBarHeight = titleBarBoxPane.getHeight();
+        int titleBarX = titleBarTablePane.getX();
+        int titleBarY = titleBarTablePane.getY();
+        int titleBarWidth = titleBarTablePane.getWidth();
+        int titleBarHeight = titleBarTablePane.getHeight();
 
         graphics.setPaint(new GradientPaint(titleBarX + titleBarWidth / 2, titleBarY, titleBarBevelColor,
             titleBarX + titleBarWidth / 2, titleBarY + titleBarHeight, titleBarBackgroundColor));
