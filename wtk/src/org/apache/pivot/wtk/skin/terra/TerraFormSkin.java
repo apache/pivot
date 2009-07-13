@@ -23,7 +23,6 @@ import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Form;
 import org.apache.pivot.wtk.FormAttributeListener;
 import org.apache.pivot.wtk.FormListener;
-import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.MessageType;
@@ -31,7 +30,6 @@ import org.apache.pivot.wtk.Separator;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.skin.ContainerSkin;
-
 
 /**
  * Form skin.
@@ -44,8 +42,8 @@ public class TerraFormSkin extends ContainerSkin
     private ArrayList<ArrayList<Label>> labels = new ArrayList<ArrayList<Label>>();
     private ArrayList<ArrayList<ImageView>> flagImageViews = new ArrayList<ArrayList<ImageView>>();
 
-    private boolean rightAlignLabels = true;
-    private HorizontalAlignment fieldAlignment = HorizontalAlignment.LEFT;
+    private boolean rightAlignLabels = false;
+    private boolean fill = false;
     private int horizontalSpacing = 6;
     private int verticalSpacing = 6;
     private int flagImageOffset = 4;
@@ -131,7 +129,7 @@ public class TerraFormSkin extends ContainerSkin
         // If justified and constrained, determine field width constraint
         int fieldWidth = -1;
 
-        if (fieldAlignment == HorizontalAlignment.JUSTIFY
+        if (fill
             && width != -1) {
             int maximumLabelWidth = 0;
 
@@ -261,7 +259,7 @@ public class TerraFormSkin extends ContainerSkin
                     label.setSize(label.getPreferredSize());
 
                     Dimensions fieldSize = null;
-                    if (fieldAlignment == HorizontalAlignment.JUSTIFY) {
+                    if (fill) {
                         fieldSize = new Dimensions(availableFieldWidth,
                             field.getPreferredHeight(availableFieldWidth));
                     } else {
@@ -278,28 +276,7 @@ public class TerraFormSkin extends ContainerSkin
                     int labelX = rightAlignLabels ? maximumLabelWidth - label.getWidth() : 0;
                     label.setLocation(labelX, rowY);
 
-                    int fieldX = 0;
-                    switch(fieldAlignment) {
-                        case LEFT:
-                        case JUSTIFY: {
-                            fieldX = maximumLabelWidth + horizontalSpacing;
-                            break;
-                        }
-
-                        case RIGHT: {
-                            fieldX = maximumLabelWidth + horizontalSpacing
-                                + Math.max(0, Math.max(availableFieldWidth, maximumFieldWidth)
-                                    - field.getWidth());
-                            break;
-                        }
-
-                        case CENTER: {
-                            fieldX = maximumLabelWidth + horizontalSpacing
-                                + Math.max(0, (Math.max(availableFieldWidth, maximumFieldWidth)
-                                    - field.getWidth()) / 2);
-                            break;
-                        }
-                    }
+                    int fieldX = maximumLabelWidth + horizontalSpacing;
 
                     field.setLocation(fieldX, rowY);
                     flagImageView.setLocation(fieldX + field.getWidth() + flagImageOffset,
@@ -323,23 +300,16 @@ public class TerraFormSkin extends ContainerSkin
 
     public void setRightAlignLabels(boolean rightAlignLabels) {
         this.rightAlignLabels = rightAlignLabels;
+        invalidateComponent();
     }
 
-    public HorizontalAlignment getFieldAlignment() {
-        return fieldAlignment;
+    public boolean getFill() {
+        return fill;
     }
 
-    public void setFieldAlignment(HorizontalAlignment fieldAlignment) {
-        this.fieldAlignment = fieldAlignment;
-        repaintComponent();
-    }
-
-    public final void setFieldAlignment(String fieldAlignment) {
-        if (fieldAlignment == null) {
-            throw new IllegalArgumentException("fieldAlignment is null.");
-        }
-
-        setFieldAlignment(HorizontalAlignment.valueOf(fieldAlignment.toUpperCase()));
+    public void setFill(boolean fill) {
+        this.fill = fill;
+        invalidateComponent();
     }
 
     public int getHorizontalSpacing() {
