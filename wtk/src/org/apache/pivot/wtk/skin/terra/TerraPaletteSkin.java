@@ -29,6 +29,7 @@ import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.ComponentMouseButtonListener;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.BoxPane;
@@ -41,6 +42,7 @@ import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Palette;
 import org.apache.pivot.wtk.Point;
+import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.Window;
@@ -84,7 +86,7 @@ public class TerraPaletteSkin extends WindowSkin {
 
     private Image closeImage = new CloseImage();
 
-    private BoxPane titleBarBoxPane = new BoxPane();
+    private TablePane titleBarTablePane = new TablePane();
     private BoxPane titleBoxPane = new BoxPane();
     private BoxPane buttonBoxPane = new BoxPane();
 
@@ -124,18 +126,23 @@ public class TerraPaletteSkin extends WindowSkin {
         // Set the derived colors
         titleBarBevelColor = TerraTheme.brighten(titleBarBackgroundColor);
 
-        // The title bar box pane contains two nested box panes: one for
+        // The title bar table pane contains two nested box panes: one for
         // the title contents and the other for the buttons
-        titleBarBoxPane.add(titleBoxPane);
-        titleBarBoxPane.add(buttonBoxPane);
+        titleBarTablePane.getColumns().add(new TablePane.Column(1, true));
+        titleBarTablePane.getColumns().add(new TablePane.Column(-1));
 
-        titleBarBoxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.JUSTIFY);
-        titleBarBoxPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
-        titleBarBoxPane.getStyles().put("padding", new Insets(2, 3, 2, 3));
+        TablePane.Row titleRow = new TablePane.Row(-1);
+        titleBarTablePane.getRows().add(titleRow);
+
+        titleRow.add(titleBoxPane);
+        titleRow.add(buttonBoxPane);
+
+        titleBarTablePane.getStyles().put("padding", new Insets(2, 3, 2, 3));
 
         // Initialize the title box pane
         titleBoxPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
         titleBoxPane.add(titleLabel);
+        titleBoxPane.getStyles().put("padding", new Insets(0, 0, 0, 3));
 
         Font font = theme.getFont();
         titleLabel.getStyles().put("fontBold", true);
@@ -146,6 +153,15 @@ public class TerraPaletteSkin extends WindowSkin {
         buttonBoxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
         buttonBoxPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
         buttonBoxPane.add(closeButton);
+
+        closeButton.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
+            @Override
+            public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+                // Consume the event so we don't process it as a click on
+                // the title bar and try to move the window
+                return true;
+            }
+        });
 
         closeButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
@@ -160,7 +176,7 @@ public class TerraPaletteSkin extends WindowSkin {
         super.install(component);
 
         Palette palette = (Palette)component;
-        palette.add(titleBarBoxPane);
+        palette.add(titleBarTablePane);
 
         // Attach the drop-shadow decorator
         dropShadowDecorator = new DropShadowDecorator(3, 3, 3);
@@ -173,7 +189,7 @@ public class TerraPaletteSkin extends WindowSkin {
     @Override
     public void uninstall() {
         Palette palette = (Palette)getComponent();
-        palette.remove(titleBarBoxPane);
+        palette.remove(titleBarTablePane);
 
         // Detach the drop shadow decorator
         palette.getDecorators().remove(dropShadowDecorator);
@@ -188,7 +204,7 @@ public class TerraPaletteSkin extends WindowSkin {
         Palette palette = (Palette)getComponent();
         Component content = palette.getContent();
 
-        Dimensions preferredTitleBarSize = titleBarBoxPane.getPreferredSize();
+        Dimensions preferredTitleBarSize = titleBarTablePane.getPreferredSize();
         preferredWidth = preferredTitleBarSize.width;
 
         if (content != null
@@ -217,7 +233,7 @@ public class TerraPaletteSkin extends WindowSkin {
             width = Math.max(width - 2, 0);
         }
 
-        preferredHeight = titleBarBoxPane.getPreferredHeight(width);
+        preferredHeight = titleBarTablePane.getPreferredHeight(width);
 
         if (content != null
             && content.isDisplayable()) {
@@ -240,7 +256,7 @@ public class TerraPaletteSkin extends WindowSkin {
         Palette palette = (Palette)getComponent();
         Component content = palette.getContent();
 
-        Dimensions preferredTitleBarSize = titleBarBoxPane.getPreferredSize();
+        Dimensions preferredTitleBarSize = titleBarTablePane.getPreferredSize();
 
         preferredWidth = preferredTitleBarSize.width;
         preferredHeight = preferredTitleBarSize.height;
@@ -266,9 +282,9 @@ public class TerraPaletteSkin extends WindowSkin {
         int height = getHeight();
 
         // Size/position title bar
-        titleBarBoxPane.setLocation(1, 1);
-        titleBarBoxPane.setSize(Math.max(width - 2, 0),
-            Math.max(titleBarBoxPane.getPreferredHeight(width - 2), 0));
+        titleBarTablePane.setLocation(1, 1);
+        titleBarTablePane.setSize(Math.max(width - 2, 0),
+            Math.max(titleBarTablePane.getPreferredHeight(width - 2), 0));
 
         // Size/position content
         Component content = palette.getContent();
@@ -278,10 +294,10 @@ public class TerraPaletteSkin extends WindowSkin {
                 content.setVisible(true);
 
                 content.setLocation(padding.left + 1,
-                    titleBarBoxPane.getHeight() + padding.top + 3);
+                    titleBarTablePane.getHeight() + padding.top + 3);
 
                 int contentWidth = Math.max(width - (padding.left + padding.right + 2), 0);
-                int contentHeight = Math.max(height - (titleBarBoxPane.getHeight()
+                int contentHeight = Math.max(height - (titleBarTablePane.getHeight()
                     + padding.top + padding.bottom + 4), 0);
 
                 content.setSize(contentWidth, contentHeight);
@@ -298,7 +314,7 @@ public class TerraPaletteSkin extends WindowSkin {
 
         int width = getWidth();
         int height = getHeight();
-        int titleBarHeight = titleBarBoxPane.getHeight();
+        int titleBarHeight = titleBarTablePane.getHeight();
 
         graphics.setStroke(new BasicStroke());
 
@@ -393,7 +409,7 @@ public class TerraPaletteSkin extends WindowSkin {
 
         if (button == Mouse.Button.LEFT
             && !maximized) {
-            Bounds titleBarBounds = titleBarBoxPane.getBounds();
+            Bounds titleBarBounds = titleBarTablePane.getBounds();
 
             if (titleBarBounds.contains(x, y)) {
                 dragOffset = new Point(x, y);

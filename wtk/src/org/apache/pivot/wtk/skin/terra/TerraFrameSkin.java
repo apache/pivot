@@ -41,6 +41,7 @@ import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.PushButton;
+import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.Window;
@@ -210,9 +211,9 @@ public class TerraFrameSkin extends WindowSkin {
     private Image closeImage = new CloseImage();
     private Image resizeImage = new ResizeImage();
 
-    private BoxPane titleBarBoxPane = new BoxPane();
+    private TablePane titleBarTablePane = new TablePane();
     private BoxPane titleBoxPane = new BoxPane();
-    private BoxPane frameButtonBoxPane = new BoxPane();
+    private BoxPane buttonBoxPane = new BoxPane();
 
     private ImageView iconImageView = new ImageView();
     private Label titleLabel = new Label();
@@ -264,26 +265,31 @@ public class TerraFrameSkin extends WindowSkin {
         titleBarBevelColor = TerraTheme.brighten(titleBarBackgroundColor);
         inactiveTitleBarBevelColor = TerraTheme.brighten(inactiveTitleBarBackgroundColor);
 
-        // The title bar box pane contains two nested box panes: one for
+        // The title bar table pane contains two nested box panes: one for
         // the title contents and the other for the buttons
-        titleBarBoxPane.add(titleBoxPane);
-        titleBarBoxPane.add(frameButtonBoxPane);
+        titleBarTablePane.getColumns().add(new TablePane.Column(1, true));
+        titleBarTablePane.getColumns().add(new TablePane.Column(-1));
 
-        titleBarBoxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.JUSTIFY);
-        titleBarBoxPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
-        titleBarBoxPane.getStyles().put("padding", new Insets(2));
+        TablePane.Row titleRow = new TablePane.Row(-1);
+        titleBarTablePane.getRows().add(titleRow);
+
+        titleRow.add(titleBoxPane);
+        titleRow.add(buttonBoxPane);
+
+        titleBarTablePane.getStyles().put("padding", new Insets(2));
 
         // Initialize the title box pane
         titleBoxPane.add(iconImageView);
         titleBoxPane.add(titleLabel);
         titleBoxPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
+        titleBoxPane.getStyles().put("padding", new Insets(0, 0, 0, 2));
 
         titleLabel.getStyles().put("fontBold", true);
         iconImageView.getStyles().put("backgroundColor", null);
 
         // Initialize the button box pane
-        frameButtonBoxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
-        frameButtonBoxPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
+        buttonBoxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
+        buttonBoxPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
     }
 
     @Override
@@ -296,16 +302,16 @@ public class TerraFrameSkin extends WindowSkin {
         dropShadowDecorator = new DropShadowDecorator();
         window.getDecorators().add(dropShadowDecorator);
 
-        window.add(titleBarBoxPane);
+        window.add(titleBarTablePane);
 
         // Create the frame buttons
         minimizeButton = new FrameButton(minimizeImage);
         maximizeButton = new FrameButton(maximizeImage);
         closeButton = new FrameButton(closeImage);
 
-        frameButtonBoxPane.add(minimizeButton);
-        frameButtonBoxPane.add(maximizeButton);
-        frameButtonBoxPane.add(closeButton);
+        buttonBoxPane.add(minimizeButton);
+        buttonBoxPane.add(maximizeButton);
+        buttonBoxPane.add(closeButton);
 
         ButtonPressListener buttonPressListener = new ButtonPressListener() {
             public void buttonPressed(Button button) {
@@ -342,11 +348,11 @@ public class TerraFrameSkin extends WindowSkin {
         window.getDecorators().remove(dropShadowDecorator);
         dropShadowDecorator = null;
 
-        window.remove(titleBarBoxPane);
+        window.remove(titleBarTablePane);
 
-        frameButtonBoxPane.remove(minimizeButton);
-        frameButtonBoxPane.remove(maximizeButton);
-        frameButtonBoxPane.remove(closeButton);
+        buttonBoxPane.remove(minimizeButton);
+        buttonBoxPane.remove(maximizeButton);
+        buttonBoxPane.remove(closeButton);
 
         minimizeButton = null;
         maximizeButton = null;
@@ -361,7 +367,7 @@ public class TerraFrameSkin extends WindowSkin {
         Window window = (Window)getComponent();
         Component content = window.getContent();
 
-        Dimensions preferredTitleBarSize = titleBarBoxPane.getPreferredSize();
+        Dimensions preferredTitleBarSize = titleBarTablePane.getPreferredSize();
         preferredWidth = preferredTitleBarSize.width;
 
         if (content != null
@@ -390,7 +396,7 @@ public class TerraFrameSkin extends WindowSkin {
             width = Math.max(width - 2, 0);
         }
 
-        preferredHeight = titleBarBoxPane.getPreferredHeight(width);
+        preferredHeight = titleBarTablePane.getPreferredHeight(width);
 
         if (content != null
             && content.isDisplayable()) {
@@ -413,7 +419,7 @@ public class TerraFrameSkin extends WindowSkin {
         Window window = (Window)getComponent();
         Component content = window.getContent();
 
-        Dimensions preferredTitleBarSize = titleBarBoxPane.getPreferredSize();
+        Dimensions preferredTitleBarSize = titleBarTablePane.getPreferredSize();
 
         preferredWidth = preferredTitleBarSize.width;
         preferredHeight = preferredTitleBarSize.height;
@@ -439,9 +445,9 @@ public class TerraFrameSkin extends WindowSkin {
         int height = getHeight();
 
         // Size/position title bar
-        titleBarBoxPane.setLocation(1, 1);
-        titleBarBoxPane.setSize(Math.max(width - 2, 0),
-            Math.max(titleBarBoxPane.getPreferredHeight(width - 2), 0));
+        titleBarTablePane.setLocation(1, 1);
+        titleBarTablePane.setSize(Math.max(width - 2, 0),
+            Math.max(titleBarTablePane.getPreferredHeight(width - 2), 0));
 
         // Size/position resize handle
         resizeHandle.setSize(resizeHandle.getPreferredSize());
@@ -462,10 +468,10 @@ public class TerraFrameSkin extends WindowSkin {
                 content.setVisible(true);
 
                 content.setLocation(padding.left + 1,
-                    titleBarBoxPane.getHeight() + padding.top + 3);
+                    titleBarTablePane.getHeight() + padding.top + 3);
 
                 int contentWidth = Math.max(width - (padding.left + padding.right + 2), 0);
-                int contentHeight = Math.max(height - (titleBarBoxPane.getHeight()
+                int contentHeight = Math.max(height - (titleBarTablePane.getHeight()
                     + padding.top + padding.bottom + 4), 0);
 
                 content.setSize(contentWidth, contentHeight);
@@ -484,7 +490,7 @@ public class TerraFrameSkin extends WindowSkin {
 
         int width = getWidth();
         int height = getHeight();
-        int titleBarHeight = titleBarBoxPane.getHeight();
+        int titleBarHeight = titleBarTablePane.getHeight();
 
         // Draw the title area
         Color titleBarBackgroundColor = window.isActive() ?
@@ -632,12 +638,12 @@ public class TerraFrameSkin extends WindowSkin {
 
                     if (window.isPreferredWidthSet()) {
                         preferredWidth = Math.max(location.x - window.getX() + resizeOffset.x,
-                            titleBarBoxPane.getPreferredWidth(-1) + 2);
+                            titleBarTablePane.getPreferredWidth(-1) + 2);
                     }
 
                     if (window.isPreferredHeightSet()) {
                         preferredHeight = Math.max(location.y - window.getY() + resizeOffset.y,
-                            titleBarBoxPane.getHeight() + resizeHandle.getHeight() + 7);
+                            titleBarTablePane.getHeight() + resizeHandle.getHeight() + 7);
                     }
 
                     window.setPreferredSize(preferredWidth, preferredHeight);
@@ -679,7 +685,7 @@ public class TerraFrameSkin extends WindowSkin {
 
         if (button == Mouse.Button.LEFT
             && !maximized) {
-            Bounds titleBarBounds = titleBarBoxPane.getBounds();
+            Bounds titleBarBounds = titleBarTablePane.getBounds();
 
             if (titleBarBounds.contains(x, y)) {
                 dragOffset = new Point(x, y);
