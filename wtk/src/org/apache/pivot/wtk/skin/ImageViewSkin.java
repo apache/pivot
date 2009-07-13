@@ -33,14 +33,10 @@ import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.media.ImageListener;
 
-
 /**
  * Image view skin.
  * <p>
- * TODO Add rotation style.
- * <p>
- * TODO If horizontal or vertical alignment is "justify", but not both, scale
- * aspect-correct.
+ * TODO Add a rotation (float) style.
  *
  * @author gbrown
  */
@@ -49,6 +45,9 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
     private float opacity = 1.0f;
     private HorizontalAlignment horizontalAlignment = HorizontalAlignment.CENTER;
     private VerticalAlignment verticalAlignment = VerticalAlignment.CENTER;
+
+    private boolean fill = false;
+    private boolean preserveAspectRatio = true;
 
     private int imageX = 0;
     private int imageY = 0;
@@ -127,12 +126,30 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
 
             Dimensions imageSize = image.getSize();
 
-            if (horizontalAlignment == HorizontalAlignment.JUSTIFY) {
-                imageX = 0;
-                scaleX = (float)width / (float)imageSize.width;
-            } else {
-                scaleX = 1.0f;
+            if (fill) {
+                // Scale to fit
+                if (preserveAspectRatio) {
+                    if (width > height) {
+                        imageY = 0;
+                        scaleY = (float)height / (float)imageSize.height;
 
+                        imageX = (int)(width - imageSize.width * scaleY) / 2;
+                        scaleX = scaleY;
+                    } else {
+                        imageX = 0;
+                        scaleX = (float)width / (float)imageSize.width;
+
+                        imageY = (int)(height - imageSize.height * scaleX) / 2;
+                        scaleY = scaleX;
+                    }
+                } else {
+                    imageX = 0;
+                    scaleX = (float)width / (float)imageSize.width;
+
+                    imageY = 0;
+                    scaleY = (float)height / (float)imageSize.height;
+                }
+            } else {
                 if (horizontalAlignment == HorizontalAlignment.CENTER) {
                     imageX = (width - imageSize.width) / 2;
                 } else if (horizontalAlignment == HorizontalAlignment.RIGHT) {
@@ -140,13 +157,8 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
                 } else {
                     imageX = 0;
                 }
-            }
 
-            if (verticalAlignment == VerticalAlignment.JUSTIFY) {
-                imageY = 0;
-                scaleY = (float)height / (float)imageSize.height;
-            } else {
-                scaleY = 1.0f;
+                scaleX = 1.0f;
 
                 if (verticalAlignment == VerticalAlignment.CENTER) {
                     imageY = (height - imageSize.height) / 2;
@@ -155,6 +167,8 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
                 } else {
                     imageY = 0;
                 }
+
+                scaleY = 1.0f;
             }
         }
     }
@@ -305,6 +319,26 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
         }
 
         setVerticalAlignment(VerticalAlignment.valueOf(verticalAlignment.toUpperCase()));
+    }
+
+    public boolean getFill() {
+        return fill;
+    }
+
+    public void setFill(boolean fill) {
+        this.fill = fill;
+        layout();
+        repaintComponent();
+    }
+
+    public boolean getPreserveAspectRatio() {
+        return preserveAspectRatio;
+    }
+
+    public void setPreserveAspectRatio(boolean preserveAspectRatio) {
+        this.preserveAspectRatio = preserveAspectRatio;
+        layout();
+        repaintComponent();
     }
 
     // Image view events
