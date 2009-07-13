@@ -23,7 +23,6 @@ import java.awt.RenderingHints;
 import java.awt.geom.RoundRectangle2D;
 
 import org.apache.pivot.util.Vote;
-import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentMouseButtonListener;
 import org.apache.pivot.wtk.Cursor;
@@ -39,74 +38,54 @@ import org.apache.pivot.wtk.effects.easing.Quadratic;
 import org.apache.pivot.wtk.skin.ComponentSkin;
 import org.apache.pivot.wtk.skin.RollupSkin;
 
-
 /**
- * Terra theme's rollup skin.
+ * Terra rollup skin.
  *
  * @author tvolkert
+ * @author gbrown
  */
 public class TerraRollupSkin extends RollupSkin {
     /**
-     * Provides expand/collapse animation.
+     * Expand/collapse transition.
      *
-     * @author tvolkert
+     * @author gbrown
      */
     public class ExpandTransition extends Transition {
-        private int height1;
-        private int height2;
-        private boolean collapse;
-
-        private int originalPreferredHeight;
-        private int height;
-
         private Easing easing = new Quadratic();
 
-        public ExpandTransition(int height1, int height2, boolean collapse, int duration, int rate) {
-            super(duration, rate, false);
-
-            this.height1 = height1;
-            this.height2 = height2;
-            this.collapse = collapse;
+        public ExpandTransition(boolean reversed) {
+            super(EXPAND_DURATION, EXPAND_RATE, false, reversed);
         }
 
-        public int getHeight() {
-            return height;
+        public float getScale() {
+            int elapsedTime = getElapsedTime();
+            int duration = getDuration();
+
+            float scale;
+            if (isReversed()) {
+                scale = easing.easeIn(elapsedTime, 0, 1, duration);
+            } else {
+                scale = easing.easeOut(elapsedTime, 0, 1, duration);
+            }
+
+            return scale;
         }
 
         @Override
         public void start(TransitionListener transitionListener) {
-            Rollup rollup = (Rollup)getComponent();
-            originalPreferredHeight = rollup.isPreferredHeightSet() ?
-                rollup.getPreferredHeight() : -1;
-
+            getComponent().setEnabled(false);
             super.start(transitionListener);
         }
 
         @Override
         public void stop() {
-            Rollup rollup = (Rollup)getComponent();
-            rollup.setPreferredHeight(originalPreferredHeight);
-
+            getComponent().setEnabled(true);
             super.stop();
         }
 
         @Override
         protected void update() {
-            float percentComplete = getPercentComplete();
-
-            if (percentComplete < 1f) {
-                int elapsedTime = getElapsedTime();
-                int duration = getDuration();
-
-                height = (int)(height1 + (height2 - height1) * percentComplete);
-                if (collapse) {
-                    height = (int)easing.easeIn(elapsedTime, height1, height2 - height1, duration);
-                } else {
-                    height = (int)easing.easeOut(elapsedTime, height1, height2 - height1, duration);
-                }
-
-                getComponent().setPreferredHeight(height);
-            }
+            invalidateComponent();
         }
     }
 
@@ -184,22 +163,19 @@ public class TerraRollupSkin extends RollupSkin {
         }
     }
 
-    /**
-     * Responsible for expanding and collapsing the rollup when the user clicks
-     * on the heading component. This only applies if <tt>headingToggles</tt>
-     * is <tt>true</tt>.
-     *
-     * @author tvolkert
-     */
-    private class HeadingMouseButtonHandler implements ComponentMouseButtonListener {
-        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
-            return false;
-        }
+    private RollupButton rollupButton = null;
 
-        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
-            return false;
-        }
+    // Styles
+    private Color buttonColor;
+    private int spacing;
+    private int buffer;
+    private boolean justify;
+    private boolean headingToggles;
+    private boolean useBullet;
 
+    private ExpandTransition expandTransition = null;
+
+    private ComponentMouseButtonListener headingMouseButtonListener = new ComponentMouseButtonListener.Adapter() {
         public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
             boolean consumed = false;
 
@@ -211,25 +187,7 @@ public class TerraRollupSkin extends RollupSkin {
 
             return consumed;
         }
-    }
-
-    // Skin components
-    private RollupButton rollupButton = null;
-
-    // Internal handlers
-    private HeadingMouseButtonHandler headingMouseButtonHandler = new HeadingMouseButtonHandler();
-
-    // Animation support
-    private ExpandTransition expandTransition = null;
-    private ExpandTransition collapseTransition = null;
-
-    // Styles
-    private Color buttonColor;
-    private int spacing;
-    private int buffer;
-    private boolean justify;
-    private boolean headingToggles;
-    private boolean useBullet;
+    };
 
     private static final int EXPAND_DURATION = 250;
     private static final int EXPAND_RATE = 30;
@@ -267,7 +225,7 @@ public class TerraRollupSkin extends RollupSkin {
         // Uninitialize state
         Component heading = rollup.getHeading();
         if (heading != null) {
-            heading.getComponentMouseButtonListeners().remove(headingMouseButtonHandler);
+            heading.getComponentMouseButtonListeners().remove(headingMouseButtonListener);
         }
 
         // Remove the rollup button
@@ -290,7 +248,10 @@ public class TerraRollupSkin extends RollupSkin {
             preferredWidth = heading.getPreferredWidth(-1);
         }
 
-        if (rollup.isExpanded() && content != null) {
+        if (content != null
+            && (rollup.isExpanded()
+                || (expandTransition != null
+                    && !expandTransition.isReversed()))) {
             preferredWidth = Math.max(preferredWidth, content.getPreferredWidth(-1));
         }
 
@@ -301,23 +262,6 @@ public class TerraRollupSkin extends RollupSkin {
 
     @Override
     public int getPreferredHeight(int width) {
-        Rollup rollup = (Rollup)getComponent();
-        return getPreferredHeight(width, rollup.isExpanded());
-    }
-
-    /**
-     * Gets the preferred height of the rollup assuming the specified expansion
-     * state. We use this to transition from one expansion state to another
-     * because it allows us to have foreknowledge of the height value to which
-     * we are transitioning.
-     *
-     * @param width
-     * The width constraint.
-     *
-     * @param expanded
-     * The supposed expansion state.
-     */
-    private int getPreferredHeight(int width, boolean expanded) {
         Rollup rollup = (Rollup)getComponent();
 
         Component heading = rollup.getHeading();
@@ -336,8 +280,15 @@ public class TerraRollupSkin extends RollupSkin {
             preferredHeight += heading.getPreferredHeight(width);
         }
 
-        if (expanded && content != null) {
-            preferredHeight += spacing + content.getPreferredHeight(width);
+        if (content != null) {
+            if (expandTransition == null) {
+                if (rollup.isExpanded()) {
+                    preferredHeight += spacing + content.getPreferredHeight(width);
+                }
+            } else {
+                float scale = expandTransition.getScale();
+                preferredHeight += (int)(scale * (spacing + content.getPreferredHeight(width)));
+            }
         }
 
         preferredHeight = Math.max(preferredHeight, rollupButton.getPreferredHeight(-1));
@@ -377,7 +328,9 @@ public class TerraRollupSkin extends RollupSkin {
         }
 
         if (content != null) {
-            if (rollup.isExpanded()) {
+            if (rollup.isExpanded()
+                || (expandTransition != null
+                    && !expandTransition.isReversed())) {
                 int contentWidth, contentHeight;
                 if (justify) {
                     contentWidth = justifiedWidth;
@@ -397,6 +350,7 @@ public class TerraRollupSkin extends RollupSkin {
         }
 
         y = (heading == null ? 0 : (heading.getHeight() - rollupButtonSize.height) / 2 + 1);
+
         rollupButton.setLocation(0, y);
     }
 
@@ -478,13 +432,13 @@ public class TerraRollupSkin extends RollupSkin {
     @Override
     public void headingChanged(Rollup rollup, Component previousHeading) {
         if (previousHeading != null) {
-            previousHeading.getComponentMouseButtonListeners().remove(headingMouseButtonHandler);
+            previousHeading.getComponentMouseButtonListeners().remove(headingMouseButtonListener);
         }
 
         Component heading = rollup.getHeading();
 
         if (heading != null) {
-            heading.getComponentMouseButtonListeners().add(headingMouseButtonHandler);
+            heading.getComponentMouseButtonListeners().add(headingMouseButtonListener);
         }
 
         invalidateComponent();
@@ -505,49 +459,30 @@ public class TerraRollupSkin extends RollupSkin {
         }
     }
 
-    // RollupStateListener methods
-
+    // Rollup state events
     @Override
     public Vote previewExpandedChange(final Rollup rollup) {
-        Vote vote = Vote.APPROVE;
+        Vote vote;
 
-        if (rollup.getDisplay() != null) {
-            if (rollup.isExpanded()) {
-                // Start a collapse transition, return false, and set the
-                // expanded state when the transition is complete
-                if (collapseTransition == null) {
-                    int duration = EXPAND_DURATION;
-                    int height1 = getHeight();
+        if (rollup.isShowing()
+            && expandTransition == null
+            && rollup.getContent() != null) {
+            final boolean expanded = rollup.isExpanded();
+            expandTransition = new ExpandTransition(expanded);
 
-                    if (expandTransition != null) {
-                        // Stop the expand transition
-                        expandTransition.stop();
-
-                        // Record its progress so we can reverse it at the right point
-                        duration = expandTransition.getElapsedTime();
-                        height1 = expandTransition.getHeight();
-
-                        expandTransition = null;
-                    }
-
-                    if (duration > 0) {
-                        int height2 = getPreferredHeight(-1, false);
-
-                        collapseTransition = new ExpandTransition(height1, height2,
-                            true, duration, EXPAND_RATE);
-                        collapseTransition.start(new TransitionListener() {
-                            public void transitionCompleted(Transition transition) {
-                                rollup.setExpanded(false);
-                                collapseTransition = null;
-                            }
-                        });
-
-                        vote = Vote.DEFER;
-                    }
-                } else {
-                    vote = collapseTransition.isRunning() ? Vote.DEFER : Vote.APPROVE;
+            expandTransition.start(new TransitionListener() {
+                public void transitionCompleted(Transition transition) {
+                    rollup.setExpanded(!expanded);
+                    expandTransition = null;
                 }
-            }
+            });
+        }
+
+        if (expandTransition == null
+            || !expandTransition.isRunning()) {
+            vote = Vote.APPROVE;
+        } else {
+            vote = Vote.DEFER;
         }
 
         return vote;
@@ -556,36 +491,19 @@ public class TerraRollupSkin extends RollupSkin {
     @Override
     public void expandedChangeVetoed(Rollup rollup, Vote reason) {
         if (reason == Vote.DENY
-            && collapseTransition != null) {
-            collapseTransition.stop();
-            collapseTransition = null;
+            && expandTransition != null) {
+            // NOTE We stop, rather than end, the transition so the completion
+            // event isn't fired; if the event fires, the listener will set
+            // the expanded state
+            expandTransition.stop();
+            expandTransition = null;
+
+            invalidateComponent();
         }
     }
 
     @Override
     public void expandedChanged(final Rollup rollup) {
         invalidateComponent();
-
-        if (rollup.getDisplay() != null) {
-            if (rollup.isExpanded()) {
-                // Start an expansion transition
-                int height1 = getHeight();
-                int height2 = getPreferredHeight(-1, true);
-
-                expandTransition = new ExpandTransition(height1, height2,
-                    false, EXPAND_DURATION, EXPAND_RATE);
-                expandTransition.start(new TransitionListener() {
-                    public void transitionCompleted(Transition transition) {
-                        ApplicationContext.queueCallback(new Runnable() {
-                            public void run() {
-                                rollup.scrollAreaToVisible(0, 0, rollup.getWidth(), rollup.getHeight());
-                            }
-                        });
-
-                        expandTransition = null;
-                    }
-                });
-            }
-        }
     }
 }

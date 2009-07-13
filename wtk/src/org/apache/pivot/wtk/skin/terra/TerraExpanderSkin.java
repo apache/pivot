@@ -50,21 +50,23 @@ import org.apache.pivot.wtk.effects.easing.Quadratic;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.skin.ContainerSkin;
 
-
 /**
- * Expander skin.
+ * Terra expander skin.
  *
  * @author gbrown
  */
 public class TerraExpanderSkin extends ContainerSkin
     implements ButtonPressListener, ExpanderListener {
+    /**
+     * Expand/collapse transition.
+     *
+     * @author gbrown
+     */
     public class ExpandTransition extends Transition {
-        private boolean expand;
         private Easing easing = new Quadratic();
 
-        public ExpandTransition(boolean expand, int duration, int rate) {
-            super(duration, rate, false);
-            this.expand = expand;
+        public ExpandTransition(boolean reversed) {
+            super(EXPAND_DURATION, EXPAND_RATE, false, reversed);
         }
 
         public float getScale() {
@@ -72,10 +74,10 @@ public class TerraExpanderSkin extends ContainerSkin
             int duration = getDuration();
 
             float scale;
-            if (expand) {
-                scale = easing.easeOut(elapsedTime, 0, 1, duration);
+            if (isReversed()) {
+                scale = easing.easeIn(elapsedTime, 0, 1, duration);
             } else {
-                scale = easing.easeIn(elapsedTime, 1, -1, duration);
+                scale = easing.easeOut(elapsedTime, 0, 1, duration);
             }
 
             return scale;
@@ -167,16 +169,28 @@ public class TerraExpanderSkin extends ContainerSkin
         }
     }
 
-    private class TitleBarMouseHandler
-        implements ComponentMouseButtonListener {
-        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
-            return false;
-        }
+    private Image collapseImage = new CollapseImage();
+    private Image expandImage = new ExpandImage();
 
-        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
-            return false;
-        }
+    private BoxPane titleBarBoxPane = null;
+    private BoxPane titleBoxPane = null;
+    private BoxPane buttonBoxPane = null;
 
+    private Label titleLabel = new Label();
+    private ShadeButton shadeButton = null;
+
+    private Color titleBarBackgroundColor;
+    private Color titleBarBorderColor;
+    private Color shadeButtonColor;
+    private Color shadeButtonBackgroundColor;
+    private Color borderColor;
+    private Insets padding;
+
+    private Color titleBarBevelColor;
+
+    private ExpandTransition expandTransition = null;
+
+    private ComponentMouseButtonListener titleBarMouseListener = new ComponentMouseButtonListener.Adapter() {
         public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
             boolean consumed = false;
 
@@ -188,31 +202,7 @@ public class TerraExpanderSkin extends ContainerSkin
 
             return consumed;
         }
-    }
-
-    private Image collapseImage = new CollapseImage();
-    private Image expandImage = new ExpandImage();
-
-    private BoxPane titleBarBoxPane = null;
-    private BoxPane titleBoxPane = null;
-    private BoxPane buttonBoxPane = null;
-
-    private Label titleLabel = new Label();
-    private ShadeButton shadeButton = null;
-
-    private TitleBarMouseHandler titleBarMouseHandler = new TitleBarMouseHandler();
-
-    private Color titleBarBackgroundColor;
-    private Color titleBarBorderColor;
-    private Color shadeButtonColor;
-    private Color shadeButtonBackgroundColor;
-    private Color borderColor;
-    private Insets padding;
-
-    // Derived colors
-    private Color titleBarBevelColor;
-
-    private ExpandTransition expandTransition = null;
+    };
 
     private static final int EXPAND_DURATION = 250;
     private static final int EXPAND_RATE = 30;
@@ -232,7 +222,7 @@ public class TerraExpanderSkin extends ContainerSkin
         titleBarBevelColor = TerraTheme.brighten(titleBarBackgroundColor);
 
         titleBarBoxPane = new BoxPane(Orientation.HORIZONTAL);
-        titleBarBoxPane.getComponentMouseButtonListeners().add(titleBarMouseHandler);
+        titleBarBoxPane.getComponentMouseButtonListeners().add(titleBarMouseListener);
 
         titleBarBoxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.JUSTIFY);
         titleBarBoxPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
@@ -321,7 +311,7 @@ public class TerraExpanderSkin extends ContainerSkin
         if (content != null
             && (expander.isExpanded()
                 || (expandTransition != null
-                    && expandTransition.expand))) {
+                    && !expandTransition.isReversed()))) {
             // Title bar border is only drawn when content is non-null and
             // expander is expanded or expanding
             preferredHeight += 1;
@@ -363,7 +353,7 @@ public class TerraExpanderSkin extends ContainerSkin
 
             if (expander.isExpanded()
                 || (expandTransition != null
-                    && expandTransition.expand)) {
+                    && !expandTransition.isReversed())) {
                 // Title bar border is only drawn when expander is expanded
                 // or expanding
                 preferredHeight += 1;
@@ -397,7 +387,7 @@ public class TerraExpanderSkin extends ContainerSkin
 
         if ((expander.isExpanded()
             || (expandTransition != null
-                && expandTransition.expand))
+                && !expandTransition.isReversed()))
             && content != null) {
             int contentWidth = Math.max(width - (2 + padding.left + padding.right), 0);
             int contentHeight = Math.max(height - (3 + padding.top + padding.bottom + titleBarHeight), 0);
@@ -419,7 +409,7 @@ public class TerraExpanderSkin extends ContainerSkin
         Expander expander = (Expander)getComponent();
         if (expander.isExpanded()
             || (expandTransition != null
-                && expandTransition.expand)) {
+                && !expandTransition.isReversed())) {
             int titleBarHeight = titleBarBoxPane.getPreferredHeight(-1);
             graphics.setPaint(titleBarBorderColor);
             GraphicsUtilities.drawLine(graphics, 0, 1 + titleBarHeight, width, Orientation.HORIZONTAL);
@@ -611,13 +601,13 @@ public class TerraExpanderSkin extends ContainerSkin
         if (expander.isShowing()
             && expandTransition == null
             && expander.getContent() != null) {
-            final boolean expand = !expander.isExpanded();
-            shadeButton.setButtonData(expand ? collapseImage : expandImage);
-            expandTransition = new ExpandTransition(expand, EXPAND_DURATION, EXPAND_RATE);
+            final boolean expanded = expander.isExpanded();
+            shadeButton.setButtonData(expanded ? collapseImage : expandImage);
+            expandTransition = new ExpandTransition(expanded);
 
             expandTransition.start(new TransitionListener() {
                 public void transitionCompleted(Transition transition) {
-                    expander.setExpanded(expand);
+                    expander.setExpanded(!expanded);
                     expandTransition = null;
                 }
             });

@@ -49,23 +49,14 @@ import org.apache.pivot.wtk.skin.WindowSkin;
  * @author tvolkert
  */
 public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
-    public class WindowStateTransition extends Transition {
-        private boolean close;
-
-        public WindowStateTransition(boolean close) {
-            super(TRANSITION_DURATION, TRANSITION_RATE, false, close);
-            this.close = close;
+    public class OpenTransition extends Transition {
+        public OpenTransition(boolean reversed) {
+            super(TRANSITION_DURATION, TRANSITION_RATE, false, reversed);
         }
 
         @Override
         public void update() {
             invalidateComponent();
-        }
-
-        @Override
-        public void reverse() {
-            super.reverse();
-            close = !close;
         }
     }
 
@@ -76,7 +67,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     // Derived colors
     private Color bevelColor;
 
-    private WindowStateTransition windowStateTransition = null;
+    private OpenTransition openTransition = null;
     private Quadratic easing = new Quadratic();
 
     private ComponentListener ownerComponentListener = new ComponentListener.Adapter() {
@@ -204,15 +195,15 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     }
 
     public int getEasedPreferredHeight(int preferredHeight) {
-        if (windowStateTransition != null
-            && windowStateTransition.isRunning()) {
+        if (openTransition != null
+            && openTransition.isRunning()) {
             float scale;
-            if (windowStateTransition.close) {
-                scale = easing.easeIn(windowStateTransition.getElapsedTime(), 0, 1,
-                    windowStateTransition.getDuration());
+            if (openTransition.isReversed()) {
+                scale = easing.easeIn(openTransition.getElapsedTime(), 0, 1,
+                    openTransition.getDuration());
             } else {
-                scale = easing.easeOut(windowStateTransition.getElapsedTime(), 0, 1,
-                    windowStateTransition.getDuration());
+                scale = easing.easeOut(openTransition.getElapsedTime(), 0, 1,
+                    openTransition.getDuration());
             }
 
             preferredHeight = (int)(scale * preferredHeight);
@@ -365,10 +356,10 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         Component ownerContent = owner.getContent();
         ownerContent.getComponentListeners().add(ownerContentComponentListener);
 
-        windowStateTransition = new WindowStateTransition(false);
-        windowStateTransition.start(new TransitionListener() {
+        openTransition = new OpenTransition(false);
+        openTransition.start(new TransitionListener() {
             public void transitionCompleted(Transition transition) {
-                windowStateTransition = null;
+                openTransition = null;
             }
         });
     }
@@ -385,24 +376,24 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
             TransitionListener transitionListener = new TransitionListener() {
                 public void transitionCompleted(Transition transition) {
                     sheet.close(result);
-                    windowStateTransition = null;
+                    openTransition = null;
                 }
             };
 
-            if (windowStateTransition == null) {
+            if (openTransition == null) {
                 // Start the close transition
-                windowStateTransition = new WindowStateTransition(true);
-                windowStateTransition.start(transitionListener);
+                openTransition = new OpenTransition(true);
+                openTransition.start(transitionListener);
             } else {
                 // Reverse the open transition
-                if (!windowStateTransition.close
-                    && windowStateTransition.isRunning()) {
-                    windowStateTransition.reverse(transitionListener);
+                if (!openTransition.isReversed()
+                    && openTransition.isRunning()) {
+                    openTransition.reverse(transitionListener);
                 }
             }
 
-            vote = (windowStateTransition != null
-                && windowStateTransition.isRunning()) ? Vote.DEFER : Vote.APPROVE;
+            vote = (openTransition != null
+                && openTransition.isRunning()) ? Vote.DEFER : Vote.APPROVE;
         }
 
         return vote;
@@ -410,9 +401,9 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
 
     public void sheetCloseVetoed(Sheet sheet, Vote reason) {
         if (reason == Vote.DENY
-            && windowStateTransition != null) {
-            windowStateTransition.stop();
-            windowStateTransition = null;
+            && openTransition != null) {
+            openTransition.stop();
+            openTransition = null;
         }
     }
 
