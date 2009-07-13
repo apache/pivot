@@ -34,7 +34,6 @@ import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentMouseButtonListener;
 import org.apache.pivot.wtk.Cursor;
 import org.apache.pivot.wtk.Dimensions;
-import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Insets;
@@ -52,7 +51,6 @@ import org.apache.pivot.wtk.content.NumericSpinnerData;
 import org.apache.pivot.wtk.content.SpinnerItemRenderer;
 import org.apache.pivot.wtk.skin.ButtonSkin;
 import org.apache.pivot.wtk.skin.CalendarSkin;
-
 
 /**
  * Terra calendar skin.
@@ -244,7 +242,7 @@ public class TerraCalendarSkin extends CalendarSkin
                                 rowIndex = 5;
                             }
 
-                            TablePane.Row row = tablePane.getRows().get(rowIndex + 2);
+                            TablePane.Row row = calendarTablePane.getRows().get(rowIndex + 2);
                             nextButton = row.get(columnIndex);
                         } while (!nextButton.isEnabled());
 
@@ -259,7 +257,7 @@ public class TerraCalendarSkin extends CalendarSkin
                                 rowIndex = 0;
                             }
 
-                            TablePane.Row row = tablePane.getRows().get(rowIndex + 2);
+                            TablePane.Row row = calendarTablePane.getRows().get(rowIndex + 2);
                             nextButton = row.get(columnIndex);
                         } while (!nextButton.isEnabled());
 
@@ -268,7 +266,7 @@ public class TerraCalendarSkin extends CalendarSkin
                     }
 
                     case Keyboard.KeyCode.LEFT: {
-                        TablePane.Row row = tablePane.getRows().get(rowIndex + 2);
+                        TablePane.Row row = calendarTablePane.getRows().get(rowIndex + 2);
 
                         do {
                             columnIndex--;
@@ -284,7 +282,7 @@ public class TerraCalendarSkin extends CalendarSkin
                     }
 
                     case Keyboard.KeyCode.RIGHT: {
-                        TablePane.Row row = tablePane.getRows().get(rowIndex + 2);
+                        TablePane.Row row = calendarTablePane.getRows().get(rowIndex + 2);
 
                         do {
                             columnIndex++;
@@ -352,7 +350,7 @@ public class TerraCalendarSkin extends CalendarSkin
         }
     }
 
-    private TablePane tablePane;
+    private TablePane calendarTablePane;
     private Spinner monthSpinner;
     private Spinner yearSpinner;
 
@@ -390,9 +388,9 @@ public class TerraCalendarSkin extends CalendarSkin
         selectionBevelColor = TerraTheme.brighten(selectionBackgroundColor);
 
         // Create the table pane
-        tablePane = new TablePane();
+        calendarTablePane = new TablePane();
         for (int i = 0; i < 7; i++) {
-            tablePane.getColumns().add(new TablePane.Column(1, true));
+            calendarTablePane.getColumns().add(new TablePane.Column(1, true));
         }
 
         // Month spinner
@@ -430,33 +428,36 @@ public class TerraCalendarSkin extends CalendarSkin
         monthSpinner.getComponentMouseButtonListeners().add(spinnerMouseButtonListener);
         yearSpinner.getComponentMouseButtonListeners().add(spinnerMouseButtonListener);
 
-        TablePane.Row row;
+        // Add the month/year table pane
+        TablePane monthYearTablePane = new TablePane();
+        monthYearTablePane.getStyles().put("padding", 3);
+        monthYearTablePane.getStyles().put("horizontalSpacing", 4);
 
-        // Add the month/year box pane
-        BoxPane monthYearBoxPane = new BoxPane();
-        monthYearBoxPane.getStyles().put("padding", 3);
-        monthYearBoxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.JUSTIFY);
+        monthYearTablePane.getColumns().add(new TablePane.Column(1, true));
+        monthYearTablePane.getColumns().add(new TablePane.Column(-1));
 
-        monthYearBoxPane.add(monthSpinner);
-        monthYearBoxPane.add(yearSpinner);
+        TablePane.Row monthYearRow = new TablePane.Row(-1);
+        monthYearTablePane.getRows().add(monthYearRow);
+        monthYearRow.add(monthSpinner);
+        monthYearRow.add(yearSpinner);
 
-        row = new TablePane.Row();
-        row.add(monthYearBoxPane);
-        tablePane.getRows().add(row);
+        TablePane.Row calendarRow = new TablePane.Row();
+        calendarRow.add(monthYearTablePane);
+        calendarTablePane.getRows().add(calendarRow);
 
-        TablePane.setColumnSpan(monthYearBoxPane, 7);
+        TablePane.setColumnSpan(monthYearTablePane, 7);
 
         // Add the day labels
-        row = new TablePane.Row();
+        calendarRow = new TablePane.Row();
         for (int i = 0; i < 7; i++) {
             Label label = new Label();
             label.getStyles().put("fontBold", true);
             label.getStyles().put("padding", new Insets(2, 2, 4, 2));
             label.getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
-            row.add(label);
+            calendarRow.add(label);
         }
 
-        tablePane.getRows().add(row);
+        calendarTablePane.getRows().add(calendarRow);
 
         // Add the buttons
         dateButtonGroup = new Button.Group();
@@ -483,17 +484,17 @@ public class TerraCalendarSkin extends CalendarSkin
         });
 
         for (int j = 0; j < 6; j++) {
-            row = new TablePane.Row(1, true);
+            calendarRow = new TablePane.Row(1, true);
 
             for (int i = 0; i < 7; i++) {
                 DateButton dateButton = new DateButton();
                 dateButtons[j][i] = dateButton;
                 dateButton.setGroup(dateButtonGroup);
 
-                row.add(dateButton);
+                calendarRow.add(dateButton);
             }
 
-            tablePane.getRows().add(row);
+            calendarTablePane.getRows().add(calendarRow);
         }
     }
 
@@ -502,7 +503,7 @@ public class TerraCalendarSkin extends CalendarSkin
         super.install(component);
 
         Calendar calendar = (Calendar)component;
-        calendar.add(tablePane);
+        calendar.add(calendarTablePane);
 
         yearSpinner.setSelectedIndex(calendar.getYear());
         monthSpinner.setSelectedIndex(calendar.getMonth());
@@ -513,29 +514,29 @@ public class TerraCalendarSkin extends CalendarSkin
     @Override
     public void uninstall() {
         Calendar calendar = (Calendar)getComponent();
-        calendar.remove(tablePane);
+        calendar.remove(calendarTablePane);
 
         super.uninstall();
     }
 
     @Override
     public int getPreferredWidth(int height) {
-        return tablePane.getPreferredWidth(height);
+        return calendarTablePane.getPreferredWidth(height);
     }
 
     @Override
     public int getPreferredHeight(int width) {
-        return tablePane.getPreferredHeight(width);
+        return calendarTablePane.getPreferredHeight(width);
     }
 
     @Override
     public Dimensions getPreferredSize() {
-        return tablePane.getPreferredSize();
+        return calendarTablePane.getPreferredSize();
     }
 
     public void layout() {
-        tablePane.setSize(getWidth(), getHeight());
-        tablePane.setLocation(0, 0);
+        calendarTablePane.setSize(getWidth(), getHeight());
+        calendarTablePane.setLocation(0, 0);
     }
 
     @Override
@@ -543,12 +544,12 @@ public class TerraCalendarSkin extends CalendarSkin
         super.paint(graphics);
 
         int width = getWidth();
-        Bounds monthYearRowBounds = tablePane.getRowBounds(0);
+        Bounds monthYearRowBounds = calendarTablePane.getRowBounds(0);
         graphics.setColor(highlightBackgroundColor);
         graphics.fillRect(monthYearRowBounds.x, monthYearRowBounds.y,
             monthYearRowBounds.width, monthYearRowBounds.height);
 
-        Bounds labelRowBounds = tablePane.getRowBounds(1);
+        Bounds labelRowBounds = calendarTablePane.getRowBounds(1);
 
         graphics.setColor(dividerColor);
         int dividerY = labelRowBounds.y + labelRowBounds.height - 2;
@@ -556,7 +557,7 @@ public class TerraCalendarSkin extends CalendarSkin
     }
 
     private void updateLabels() {
-        TablePane.Row row = tablePane.getRows().get(1);
+        TablePane.Row row = calendarTablePane.getRows().get(1);
 
         Calendar calendar = (Calendar)getComponent();
         Locale locale = calendar.getLocale();
@@ -656,7 +657,7 @@ public class TerraCalendarSkin extends CalendarSkin
                 int rowIndex = cellIndex / 7;
                 int columnIndex = cellIndex % 7;
 
-                TablePane.Row row = tablePane.getRows().get(rowIndex + 2);
+                TablePane.Row row = calendarTablePane.getRows().get(rowIndex + 2);
                 DateButton dateButton = (DateButton)row.get(columnIndex);
                 dateButton.setSelected(true);
             } else {
