@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<FlowPane styles="{backgroundPaint:{paintType:'gradient',
+<BoxPane styles="{backgroundPaint:{paintType:'gradient',
     color:'#ff0000',
     startX:0, startY:0, startColor:'#ffffff',
     endX:400, endY:400, endColor:'#000000'}}"

@@ -20,7 +20,7 @@ import java.awt.Color;
 import java.awt.Font;
 
 import org.apache.pivot.wtk.Button;
-import org.apache.pivot.wtk.FlowPane;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Label;
@@ -33,7 +33,7 @@ import org.apache.pivot.wtk.media.Image;
  *
  * @author gbrown
  */
-public class ButtonDataRenderer extends FlowPane implements Button.DataRenderer {
+public class ButtonDataRenderer extends BoxPane implements Button.DataRenderer {
     protected ImageView imageView = new ImageView();
     protected Label label = new Label();
 

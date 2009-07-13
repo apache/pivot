@@ -28,7 +28,7 @@ limitations under the License.
             </columns>
             <rows>
                 <TablePane.Row height="-1">
-                    <FlowPane styles="{padding:10}">
+                    <BoxPane styles="{padding:10}">
                         <PushButton buttonData="Toggle Watermark" toggleButton="true">
                             <buttonStateListeners>
                                 <wtkx:script language="javascript">
@@ -46,11 +46,11 @@ limitations under the License.
                                 </wtkx:script>
                             </buttonStateListeners>
                         </PushButton>
-                    </FlowPane>
+                    </BoxPane>
                 </TablePane.Row>
                 <TablePane.Row height="1*">
                     <CardPane wtkx:id="cardPane" selectedIndex="0">
-                        <FlowPane />
+                        <BoxPane />
                     </CardPane>
                 </TablePane.Row>
             </rows>

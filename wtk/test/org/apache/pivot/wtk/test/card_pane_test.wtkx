@@ -25,11 +25,11 @@ limitations under the License.
             </columns>
             <rows>
                 <TablePane.Row height="-1">
-                    <FlowPane>
+                    <BoxPane>
                         <PushButton buttonData="320x240" toggleButton="true" group="sizeGroup"/>
                         <PushButton buttonData="640x480" toggleButton="true" group="sizeGroup"/>
                         <PushButton buttonData="800x600" toggleButton="true" group="sizeGroup"/>
-                    </FlowPane>
+                    </BoxPane>
                 </TablePane.Row>
                 <TablePane.Row height="1*">
                     <CardPane wtkx:id="cardPane" styles="{sizeToSelection:true, selectionChangeEffect:'crossfade'}">

@@ -53,10 +53,10 @@ limitations under the License.
                                         </Border>
                                     </TablePane.Row>
                                     <TablePane.Row>
-                                        <FlowPane styles="{padding:4, spacing:4, horizontalAlignment:'center'}">
+                                        <BoxPane styles="{padding:4, spacing:4, horizontalAlignment:'center'}">
                                             <PushButton wtkx:id="copyTextButton" buttonData="Copy"/>
                                             <PushButton wtkx:id="pasteTextButton" buttonData="Paste"/>
-                                        </FlowPane>
+                                        </BoxPane>
                                     </TablePane.Row>
                                 </rows>
                             </TablePane>
@@ -83,10 +83,10 @@ limitations under the License.
                                         </Border>
                                     </TablePane.Row>
                                     <TablePane.Row>
-                                        <FlowPane styles="{padding:4, spacing:4, horizontalAlignment:'center'}">
+                                        <BoxPane styles="{padding:4, spacing:4, horizontalAlignment:'center'}">
                                             <PushButton wtkx:id="copyImageButton" buttonData="Copy"/>
                                             <PushButton wtkx:id="pasteImageButton" buttonData="Paste"/>
-                                        </FlowPane>
+                                        </BoxPane>
                                     </TablePane.Row>
                                 </rows>
                             </TablePane>
@@ -116,10 +116,10 @@ limitations under the License.
                                         </Border>
                                     </TablePane.Row>
                                     <TablePane.Row>
-                                        <FlowPane styles="{padding:4, spacing:4, horizontalAlignment:'center'}">
+                                        <BoxPane styles="{padding:4, spacing:4, horizontalAlignment:'center'}">
                                             <PushButton wtkx:id="copyFilesButton" buttonData="Copy"/>
                                             <PushButton wtkx:id="pasteFilesButton" buttonData="Paste"/>
-                                        </FlowPane>
+                                        </BoxPane>
                                     </TablePane.Row>
                                 </rows>
                             </TablePane>

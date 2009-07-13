@@ -22,8 +22,8 @@ limitations under the License.
     xmlns:tutorials="org.apache.pivot.tutorials"
     xmlns="org.apache.pivot.wtk">
     <content>
-        <FlowPane styles="{padding:4, spacing:8}">
-            <FlowPane orientation="vertical">
+        <BoxPane styles="{padding:4, spacing:8}">
+            <BoxPane orientation="vertical">
                 <Label text="Sortable" styles="{fontBold:true}"/>
                 <Border styles="{padding:0, color:10}">
                     <content>
@@ -48,9 +48,9 @@ limitations under the License.
                     </content>
                 </Border>
 
-            </FlowPane>
+            </BoxPane>
 
-            <FlowPane orientation="vertical">
+            <BoxPane orientation="vertical">
                 <Label text="Custom Content" styles="{fontBold:true}"/>
                 <Border styles="{padding:0, color:10}">
                     <content>
@@ -93,7 +93,7 @@ limitations under the License.
                         </ScrollPane>
                     </content>
                 </Border>
-            </FlowPane>
-        </FlowPane>
+            </BoxPane>
+        </BoxPane>
     </content>
 </Border>

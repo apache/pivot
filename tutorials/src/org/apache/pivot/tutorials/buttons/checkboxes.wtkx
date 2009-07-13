@@ -29,23 +29,23 @@ limitations under the License.
 
             <rows>
                 <TablePane.Row height="24">
-                    <FlowPane styles="{verticalAlignment:'center'}">
+                    <BoxPane styles="{verticalAlignment:'center'}">
                         <Checkbox wtkx:id="bellCheckbox" buttonData="Bell"/>
-                    </FlowPane>
+                    </BoxPane>
                     <ImageView wtkx:id="bellImageView" image="org/apache/pivot/tutorials/bell.png" displayable="false"/>
                 </TablePane.Row>
 
                 <TablePane.Row height="24">
-                    <FlowPane styles="{verticalAlignment:'center'}">
+                    <BoxPane styles="{verticalAlignment:'center'}">
                         <Checkbox wtkx:id="clockCheckbox" buttonData="Clock"/>
-                    </FlowPane>
+                    </BoxPane>
                     <ImageView wtkx:id="clockImageView" image="org/apache/pivot/tutorials/clock.png" displayable="false"/>
                 </TablePane.Row>
 
                 <TablePane.Row height="24">
-                    <FlowPane styles="{verticalAlignment:'center'}">
+                    <BoxPane styles="{verticalAlignment:'center'}">
                         <Checkbox wtkx:id="houseCheckbox" buttonData="House"/>
-                    </FlowPane>
+                    </BoxPane>
                     <ImageView wtkx:id="houseImageView" image="org/apache/pivot/tutorials/house.png" displayable="false"/>
                 </TablePane.Row>
             </rows>

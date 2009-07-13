@@ -20,9 +20,9 @@ limitations under the License.
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
     <content>
-        <FlowPane styles="{padding:4, verticalAlignment:'center'}">
+        <BoxPane styles="{padding:4, verticalAlignment:'center'}">
             <ImageView image="org/apache/pivot/tutorials/clock.png" cursor="crosshair"/>
             <Label text="What time is it?"/>
-        </FlowPane>
+        </BoxPane>
     </content>
 </Window>

@@ -29,10 +29,10 @@ limitations under the License.
                 <TablePane.Row height="1*">
                     <Border styles="{padding:12}">
                         <content>
-                            <FlowPane>
+                            <BoxPane>
                                 <TabPane wtkx:id="tabPane">
                                     <tabs>
-                                        <FlowPane TabPane.icon="org/apache/pivot/tutorials/bell.png" TabPane.name="Bell"
+                                        <BoxPane TabPane.icon="org/apache/pivot/tutorials/bell.png" TabPane.name="Bell"
                                             styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
                                             <Border>
                                                 <content>
@@ -40,9 +40,9 @@ limitations under the License.
                                                         styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
                                                 </content>
                                             </Border>
-                                        </FlowPane>
+                                        </BoxPane>
 
-                                        <FlowPane TabPane.icon="org/apache/pivot/tutorials/clock.png" TabPane.name="Clock"
+                                        <BoxPane TabPane.icon="org/apache/pivot/tutorials/clock.png" TabPane.name="Clock"
                                             styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
                                             <Border>
                                                 <content>
@@ -50,9 +50,9 @@ limitations under the License.
                                                         styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
                                                 </content>
                                             </Border>
-                                        </FlowPane>
+                                        </BoxPane>
 
-                                        <FlowPane TabPane.icon="org/apache/pivot/tutorials/house.png" TabPane.name="House"
+                                        <BoxPane TabPane.icon="org/apache/pivot/tutorials/house.png" TabPane.name="House"
                                             styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
                                             <Border>
                                                 <content>
@@ -60,30 +60,30 @@ limitations under the License.
                                                         styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
                                                 </content>
                                             </Border>
-                                        </FlowPane>
+                                        </BoxPane>
 
-                                        <FlowPane TabPane.icon="org/apache/pivot/tutorials/star.png" TabPane.name="Star" enabled="false"/>
+                                        <BoxPane TabPane.icon="org/apache/pivot/tutorials/star.png" TabPane.name="Star" enabled="false"/>
                                     </tabs>
                                     <corner>
-                                        <FlowPane wtkx:id="cornerFlowPane" styles="{horizontalAlignment:'right'}">
+                                        <BoxPane wtkx:id="cornerBoxPane" styles="{horizontalAlignment:'right'}">
                                             <TextInput/>
-                                        </FlowPane>
+                                        </BoxPane>
                                     </corner>
                                 </TabPane>
-                            </FlowPane>
+                            </BoxPane>
                         </content>
                     </Border>
 
                     <Border>
                         <content>
-                            <FlowPane orientation="vertical" styles="{padding:4, spacing:6}">
+                            <BoxPane orientation="vertical" styles="{padding:4, spacing:6}">
                                 <Checkbox wtkx:id="collapsibleCheckbox" buttonData="Collapsible"/>
                                 <Label text="Tab orientation:"/>
                                 <RadioButton wtkx:id="horizontalRadioButton" buttonData="Horizontal" selected="true"
                                     group="tabOrientation"/>
                                 <RadioButton wtkx:id="verticalRadioButton" buttonData="Vertical"
                                     group="tabOrientation"/>
-                            </FlowPane>
+                            </BoxPane>
                         </content>
                     </Border>
                 </TablePane.Row>

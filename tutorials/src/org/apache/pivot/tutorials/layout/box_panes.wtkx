@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="Flow Panes" maximized="true"
+<Window title="Box Panes" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
     <content>
@@ -30,14 +30,14 @@ limitations under the License.
                 <TablePane.Row height="-1">
                     <Border styles="{padding:6, color:'#999999'}">
                         <content>
-                            <FlowPane wtkx:id="flowPane">
+                            <BoxPane wtkx:id="boxPane">
                                 <PushButton buttonData="One"/>
                                 <PushButton buttonData="Two"/>
                                 <PushButton buttonData="Three"/>
-                            </FlowPane>
+                            </BoxPane>
                         </content>
                     </Border>
-                    <FlowPane orientation="vertical" styles="{padding:6, spacing:8}">
+                    <BoxPane orientation="vertical" styles="{padding:6, spacing:8}">
                         <Label text="Orientation" styles="{fontBold:true}"/>
                         <RadioButton wtkx:id="horizontalOrientationButton" buttonData="Horizontal" group="orientation" selected="true"/>
                         <RadioButton wtkx:id="verticalOrientationButton" buttonData="Vertical" group="orientation"/>
@@ -53,7 +53,7 @@ limitations under the License.
                         <RadioButton wtkx:id="verticalAlignmentBottomButton" buttonData="Bottom" group="verticalAlignment"/>
                         <RadioButton wtkx:id="verticalAlignmentCenterButton" buttonData="Center" group="verticalAlignment"/>
                         <RadioButton wtkx:id="verticalAlignmentJustifyButton" buttonData="Justify" group="verticalAlignment"/>
-                    </FlowPane>
+                    </BoxPane>
                 </TablePane.Row>
             </rows>
         </TablePane>

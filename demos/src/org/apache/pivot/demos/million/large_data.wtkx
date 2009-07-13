@@ -28,16 +28,16 @@ limitations under the License.
             </columns>
             <rows>
                 <TablePane.Row height="-1">
-                    <FlowPane orientation="vertical" styles="{horizontalAlignment:'justify'}">
-                        <FlowPane>
+                    <BoxPane orientation="vertical" styles="{horizontalAlignment:'justify'}">
+                        <BoxPane>
                             <ListButton wtkx:id="fileListButton"
                                 listData="['10e0.csv', '10e1.csv', '10e2.csv', '10e3.csv', '10e4.csv', '10e5.csv']" selectedIndex="0"/>
                             <PushButton wtkx:id="loadDataButton" buttonData="Load Data" styles="{preferredAspectRatio:3}"/>
                             <PushButton wtkx:id="cancelButton" buttonData="Cancel" enabled="false" styles="{preferredAspectRatio:3}"/>
-                        </FlowPane>
+                        </BoxPane>
                         <Label wtkx:id="statusLabel"/>
                         <Separator/>
-                    </FlowPane>
+                    </BoxPane>
                 </TablePane.Row>
                 <TablePane.Row height="1*">
                     <Border styles="{padding:0}">

@@ -16,31 +16,31 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<FlowPane xmlns:wtkx="http://pivot.apache.org/wtkx"
+<BoxPane xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
     <Border>
         <content>
-            <FlowPane styles="{padding:{top:2, left:4, bottom:8, right:4}, spacing:10}">
-                <FlowPane orientation="vertical">
+            <BoxPane styles="{padding:{top:2, left:4, bottom:8, right:4}, spacing:10}">
+                <BoxPane orientation="vertical">
                     <Label text="English (US)" styles="{fontBold:true}"/>
                     <Border styles="{padding:0}">
                         <content>
                             <Calendar locale="{language:'en', country:'us'}"/>
                         </content>
                     </Border>
-                </FlowPane>
+                </BoxPane>
 
-                <FlowPane orientation="vertical">
+                <BoxPane orientation="vertical">
                     <Label text="Français (FR)" styles="{fontBold:true}"/>
                     <Border styles="{padding:0}">
                         <content>
                             <Calendar locale="{language:'fr', country:'fr'}"/>
                         </content>
                     </Border>
-                </FlowPane>
+                </BoxPane>
 
-                <FlowPane orientation="vertical">
+                <BoxPane orientation="vertical">
                     <Label text="Calendar Buttons" styles="{fontBold:true}"/>
                     <Form>
                         <sections>
@@ -53,10 +53,10 @@ limitations under the License.
                             </Form.Section>
                         </sections>
                     </Form>
-                </FlowPane>
+                </BoxPane>
 
-            </FlowPane>
+            </BoxPane>
         </content>
     </Border>
-</FlowPane>
+</BoxPane>
 

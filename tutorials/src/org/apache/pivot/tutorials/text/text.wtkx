@@ -20,9 +20,9 @@ limitations under the License.
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
     <content>
-        <FlowPane styles="{padding:4, verticalAlignment:'center'}">
+        <BoxPane styles="{padding:4, verticalAlignment:'center'}">
             <Label text="State:"/>
             <TextInput wtkx:id="stateTextInput" textSize="20"/>
-        </FlowPane>
+        </BoxPane>
     </content>
 </Window>

@@ -24,7 +24,7 @@ import org.apache.pivot.wtk.CardPane;
 import org.apache.pivot.wtk.CardPaneListener;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.FlowPane;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.Sheet;
 import org.apache.pivot.wtkx.WTKXSerializer;
@@ -37,7 +37,7 @@ public class CardPaneTest implements Application {
 
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        frame = new Frame(new FlowPane());
+        frame = new Frame(new BoxPane());
         frame.getStyles().put("padding", 0);
         frame.setTitle("Component Pane Test");
         frame.setPreferredSize(800, 600);

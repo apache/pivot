@@ -21,7 +21,7 @@ import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentMouseListener;
 import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.FlowPane;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.LinkButton;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.Window;
@@ -32,12 +32,12 @@ public class LinkButtonTest implements Application {
     private Window window = new Window();
 
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        FlowPane flowPane = new FlowPane();
-        flowPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
-        flowPane.getStyles().put("spacing", 8);
-        flowPane.getComponentMouseListeners().add(new ComponentMouseListener() {
+        BoxPane boxPane = new BoxPane();
+        boxPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
+        boxPane.getStyles().put("spacing", 8);
+        boxPane.getComponentMouseListeners().add(new ComponentMouseListener() {
             public boolean mouseMove(Component component, int x, int y) {
-                System.out.println("FLOW PANE " + x + ", " + y);
+                System.out.println("BOX PANE " + x + ", " + y);
                 return false;
             }
 
@@ -53,7 +53,7 @@ public class LinkButtonTest implements Application {
         LinkButton linkButton = null;
 
         linkButton = new LinkButton("ABCDE");
-        flowPane.add(linkButton);
+        boxPane.add(linkButton);
         linkButton.getComponentMouseListeners().add(new ComponentMouseListener() {
             public boolean mouseMove(Component component, int x, int y) {
                 return true;
@@ -67,12 +67,12 @@ public class LinkButtonTest implements Application {
         });
 
         linkButton = new LinkButton(image);
-        flowPane.add(linkButton);
+        boxPane.add(linkButton);
 
         linkButton = new LinkButton(new ButtonData(image, "12345"));
-        flowPane.add(linkButton);
+        boxPane.add(linkButton);
 
-        window.setContent(flowPane);
+        window.setContent(boxPane);
         window.open(display);
     }
 

@@ -26,7 +26,7 @@ import org.apache.pivot.util.ThreadUtilities;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
-import org.apache.pivot.wtk.FlowPane;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.Orientation;
@@ -43,7 +43,7 @@ public class WatermarkDecorator implements Decorator {
     private float opacity = 0.075f;
     private double theta = Math.PI / 4;
 
-    private FlowPane flowPane = new FlowPane(Orientation.HORIZONTAL);
+    private BoxPane boxPane = new BoxPane(Orientation.HORIZONTAL);
     private ImageView imageView = new ImageView();
     private Label label = new Label();
 
@@ -90,10 +90,10 @@ public class WatermarkDecorator implements Decorator {
      * The image to paint over the decorated component
      */
     public WatermarkDecorator(String text, Image image) {
-        flowPane.add(imageView);
-        flowPane.add(label);
+        boxPane.add(imageView);
+        boxPane.add(label);
 
-        flowPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
+        boxPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
         imageView.getStyles().put("opacity", opacity);
 
         Font font = (Font)label.getStyles().get("font");
@@ -259,11 +259,11 @@ public class WatermarkDecorator implements Decorator {
     }
 
     /**
-     * Sets this decorator's flow pane to its preferred size and validates it.
+     * Sets this decorator's box pane to its preferred size and validates it.
      */
     private void validate() {
-        flowPane.setSize(flowPane.getPreferredSize());
-        flowPane.validate();
+        boxPane.setSize(boxPane.getPreferredSize());
+        boxPane.validate();
     }
 
     public Graphics2D prepare(Component component, Graphics2D graphics) {
@@ -287,8 +287,8 @@ public class WatermarkDecorator implements Decorator {
         watermarkGraphics.rotate(theta);
 
         // Calculate the separation in between each repetition of the watermark
-        int dX = (int)(1.5 * flowPane.getWidth());
-        int dY = 2 * flowPane.getHeight();
+        int dX = (int)(1.5 * boxPane.getWidth());
+        int dY = 2 * boxPane.getHeight();
 
         // Prepare the origin of our graphics context
         int x = 0;
@@ -297,7 +297,7 @@ public class WatermarkDecorator implements Decorator {
 
         for (int yStop = (int)(height * cosTheta), p = 0; y < yStop; y += dY, p = 1 - p) {
             for (int xStop = (int)(height * sinTheta + width * cosTheta); x < xStop; x += dX) {
-                flowPane.paint(watermarkGraphics);
+                boxPane.paint(watermarkGraphics);
                 watermarkGraphics.translate(dX, 0);
             }
 
@@ -306,7 +306,7 @@ public class WatermarkDecorator implements Decorator {
             x = 0;
 
             // Shift the x back and forth to add randomness feel to pattern
-            watermarkGraphics.translate((int)((0.5f - p) * flowPane.getWidth()), 0);
+            watermarkGraphics.translate((int)((0.5f - p) * boxPane.getWidth()), 0);
         }
 
         watermarkGraphics.dispose();

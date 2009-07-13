@@ -24,7 +24,7 @@ limitations under the License.
     </wtkx:define>
 
     <content>
-        <FlowPane orientation="vertical">
+        <BoxPane orientation="vertical">
             <Label wtkx:id="fooLabel"/>
             <Label wtkx:id="barLabel"/>
             <PushButton buttonData="Click Me">
@@ -38,7 +38,7 @@ limitations under the License.
                     </wtkx:script>
                 </buttonPressListeners>
             </PushButton>
-        </FlowPane>
+        </BoxPane>
     </content>
 
     <wtkx:script language="javascript">

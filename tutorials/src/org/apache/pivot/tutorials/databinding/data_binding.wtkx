@@ -22,29 +22,29 @@ limitations under the License.
     <content>
         <Border styles="{thickness:0, padding:8}">
             <content>
-                <FlowPane orientation="vertical" styles="{spacing:10, horizontalAlignment:'justify'}">
+                <BoxPane orientation="vertical" styles="{spacing:10, horizontalAlignment:'justify'}">
                     <Form wtkx:id="form">
                         <sections>
                             <Form.Section>
                                 <Label Form.name="ID" textKey="id"/>
                                 <Label Form.name="Name" textKey="name"/>
 
-                                <FlowPane Form.name="Address" orientation="vertical" contextKey="address">
+                                <BoxPane Form.name="Address" orientation="vertical" contextKey="address">
                                     <Label textKey="street"/>
-                                    <FlowPane>
+                                    <BoxPane>
                                         <Label textKey="city"/>
                                         <Label textKey="state"/>
                                         <Label textKey="zip"/>
-                                    </FlowPane>
-                                </FlowPane>
+                                    </BoxPane>
+                                </BoxPane>
 
                                 <Label Form.name="Phone" textKey="phoneNumber"/>
                                 <Label Form.name="Email" textKey="emailAddress"/>
 
-                                <FlowPane Form.name="IM" contextKey="imAccount">
+                                <BoxPane Form.name="IM" contextKey="imAccount">
                                     <Label textKey="id"/>
                                     <Label textKey="type"/>
-                                </FlowPane>
+                                </BoxPane>
 
                                 <Label wtkx:id="sourceLabel" Form.name="Source" styles="{fontItalic:true}"/>
                             </Form.Section>
@@ -53,12 +53,12 @@ limitations under the License.
 
                     <Separator/>
 
-                    <FlowPane styles="{horizontalAlignment:'right'}">
+                    <BoxPane styles="{horizontalAlignment:'right'}">
                         <PushButton wtkx:id="loadJavaButton" buttonData="Load Java"/>
                         <PushButton wtkx:id="loadJSONButton" buttonData="Load JSON"/>
                         <PushButton wtkx:id="clearButton" buttonData="Clear"/>
-                    </FlowPane>
-                </FlowPane>
+                    </BoxPane>
+                </BoxPane>
             </content>
         </Border>
     </content>

@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<FlowPane xmlns:wtkx="http://pivot.apache.org/wtkx"
+<BoxPane xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:collections="org.apache.pivot.collections"
     xmlns:content="org.apache.pivot.wtk.content" xmlns="org.apache.pivot.wtk">
     <ListButton selectedIndex="0">
@@ -47,4 +47,4 @@ limitations under the License.
             <content:ListViewColorRenderer/>
         </itemRenderer>
     </ListButton>
-</FlowPane>
+</BoxPane>

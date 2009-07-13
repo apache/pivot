@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<FlowPane orientation="vertical" styles="{spacing:8, horizontalAlignment:'justify'}"
+<BoxPane orientation="vertical" styles="{spacing:8, horizontalAlignment:'justify'}"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:collections="org.apache.pivot.collections"
     xmlns="org.apache.pivot.wtk">
@@ -30,18 +30,18 @@ limitations under the License.
                 </columns>
                 <rows>
                     <TablePane.Row height="-1">
-                        <FlowPane styles="{verticalAlignment:'top'}">
+                        <BoxPane styles="{verticalAlignment:'top'}">
                             <ImageView wtkx:id="typeImageView"/>
-                        </FlowPane>
-                        <FlowPane wtkx:id="messageFlowPane" orientation="vertical"
+                        </BoxPane>
+                        <BoxPane wtkx:id="messageBoxPane" orientation="vertical"
                             styles="{spacing:10, horizontalAlignment:'justify'}">
                             <Label wtkx:id="messageLabel" styles="{fontBold:true, wrapText:true}"/>
-                        </FlowPane>
+                        </BoxPane>
                     </TablePane.Row>
                 </rows>
             </TablePane>
         </content>
     </Border>
-    <FlowPane wtkx:id="buttonFlowPane"
+    <BoxPane wtkx:id="buttonBoxPane"
         styles="{horizontalAlignment:'right', verticalAlignment:'justify'}"/>
-</FlowPane>
+</BoxPane>

@@ -29,7 +29,7 @@ limitations under the License.
                             horizontalScrollBarPolicy="auto"
                             verticalScrollBarPolicy="auto">
                             <view>
-                                <FlowPane orientation="vertical" styles="{padding:6}">
+                                <BoxPane orientation="vertical" styles="{padding:6}">
                                     <Rollup wtkx:id="buttonsRollup">
                                         <heading>
                                             <Label text="Buttons" styles="{fontBold:true, fontSize:12, color:13}"/>
@@ -95,7 +95,7 @@ limitations under the License.
                                             <Label text="Alerts &amp; Prompts" styles="{fontBold:true, fontSize:12, color:13}"/>
                                         </heading>
                                     </Rollup>
-                                </FlowPane>
+                                </BoxPane>
                             </view>
                         </ScrollPane>
                     </content>

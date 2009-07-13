@@ -21,8 +21,8 @@ limitations under the License.
     xmlns:tutorials="org.apache.pivot.tutorials"
     xmlns="org.apache.pivot.wtk">
     <content>
-        <FlowPane styles="{padding:4, spacing:10}">
-            <FlowPane orientation="vertical">
+        <BoxPane styles="{padding:4, spacing:10}">
+            <BoxPane orientation="vertical">
                 <Label text="Editable" styles="{fontBold:true}"/>
                 <Border styles="{padding:0, color:10}">
                     <content>
@@ -90,9 +90,9 @@ limitations under the License.
                         </ScrollPane>
                     </content>
                 </Border>
-            </FlowPane>
+            </BoxPane>
 
-            <FlowPane orientation="vertical">
+            <BoxPane orientation="vertical">
                 <Label text="Multi-Select" styles="{fontBold:true}"/>
                 <Border styles="{padding:0, color:10}">
                     <content>
@@ -153,9 +153,9 @@ limitations under the License.
                         </ScrollPane>
                     </content>
                 </Border>
-            </FlowPane>
+            </BoxPane>
 
-            <FlowPane orientation="vertical">
+            <BoxPane orientation="vertical">
                 <Label text="Checked" styles="{fontBold:true}"/>
                 <Border styles="{padding:0, color:10}">
                     <content>
@@ -479,7 +479,7 @@ limitations under the License.
                         </ScrollPane>
                     </content>
                 </Border>
-            </FlowPane>
-        </FlowPane>
+            </BoxPane>
+        </BoxPane>
     </content>
 </Border>

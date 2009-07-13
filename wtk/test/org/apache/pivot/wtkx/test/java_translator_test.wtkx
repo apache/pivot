@@ -16,42 +16,42 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<FlowPane xmlns:wtkx="http://pivot.apache.org/wtkx"
+<BoxPane xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
     <Border>
         <content>
-            <FlowPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
-                <FlowPane orientation="vertical">
+            <BoxPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
+                <BoxPane orientation="vertical">
                     <Label text="Basic Push Buttons" styles="{fontBold:true}"/>
-                    <FlowPane>
+                    <BoxPane>
                         <PushButton buttonData="One"/>
                         <PushButton buttonData="Two"/>
                         <PushButton buttonData="Three" enabled="false"/>
-                    </FlowPane>
-                </FlowPane>
+                    </BoxPane>
+                </BoxPane>
 
-                <FlowPane orientation="vertical">
+                <BoxPane orientation="vertical">
                     <Label text="Ungrouped Toggle Buttons" styles="{fontBold:true}"/>
-                    <FlowPane>
+                    <BoxPane>
                         <PushButton buttonData="One" toggleButton="true"/>
                         <PushButton buttonData="Two" toggleButton="true"/>
                         <PushButton buttonData="Three" toggleButton="true" enabled="false"/>
-                    </FlowPane>
-                </FlowPane>
+                    </BoxPane>
+                </BoxPane>
 
-                <FlowPane orientation="vertical">
+                <BoxPane orientation="vertical">
                     <Label text="Grouped Toggle Buttons" styles="{fontBold:true}"/>
-                    <FlowPane>
+                    <BoxPane>
                         <PushButton buttonData="One" toggleButton="true" group="toggleButtons"/>
                         <PushButton buttonData="Two" toggleButton="true" group="toggleButtons"/>
                         <PushButton buttonData="Three" toggleButton="true" group="toggleButtons" selected="true" enabled="false"/>
-                    </FlowPane>
-                </FlowPane>
+                    </BoxPane>
+                </BoxPane>
 
-                <FlowPane orientation="vertical">
+                <BoxPane orientation="vertical">
                     <Label text="Image Buttons" styles="{fontBold:true}"/>
-                    <FlowPane>
+                    <BoxPane>
                         <PushButton>
                             <buttonData>
                                 <content:ButtonData icon="@bell.png" text="Bell"/>
@@ -70,12 +70,12 @@ limitations under the License.
                                 <content:ButtonData icon="@house.png" text="House"/>
                             </buttonData>
                         </PushButton>
-                    </FlowPane>
-                </FlowPane>
+                    </BoxPane>
+                </BoxPane>
 
-                <FlowPane orientation="vertical">
+                <BoxPane orientation="vertical">
                     <Label text="Toolbar Buttons" styles="{fontBold:true}"/>
-                    <FlowPane>
+                    <BoxPane>
                         <PushButton styles="{toolbar:true}">
                             <buttonData>
                                 <content:ButtonData icon="@bell.png"/>
@@ -91,27 +91,27 @@ limitations under the License.
                                 <content:ButtonData icon="@house.png"/>
                             </buttonData>
                         </PushButton>
-                    </FlowPane>
-                </FlowPane>
-            </FlowPane>
+                    </BoxPane>
+                </BoxPane>
+            </BoxPane>
         </content>
     </Border>
 
     <Border>
         <content>
-            <FlowPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
-                <FlowPane orientation="vertical">
+            <BoxPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
+                <BoxPane orientation="vertical">
                     <Label text="Basic Radio Buttons" styles="{fontBold:true}"/>
-                    <FlowPane>
+                    <BoxPane>
                         <RadioButton buttonData="One" group="radioButtons"/>
                         <RadioButton buttonData="Two" group="radioButtons"/>
                         <RadioButton buttonData="Three" group="radioButtons" selected="true" enabled="false"/>
-                    </FlowPane>
-                </FlowPane>
+                    </BoxPane>
+                </BoxPane>
 
-                <FlowPane orientation="vertical">
+                <BoxPane orientation="vertical">
                     <Label text="Image Radio Buttons" styles="{fontBold:true}"/>
-                    <FlowPane orientation="vertical">
+                    <BoxPane orientation="vertical">
                         <RadioButton group="imageRadioButtons">
                             <buttonData>
                                 <content:ButtonData icon="@bell.png" text="Bell"/>
@@ -127,27 +127,27 @@ limitations under the License.
                                 <content:ButtonData icon="@house.png" text="House"/>
                             </buttonData>
                         </RadioButton>
-                    </FlowPane>
-                </FlowPane>
-            </FlowPane>
+                    </BoxPane>
+                </BoxPane>
+            </BoxPane>
         </content>
     </Border>
 
     <Border>
         <content>
-            <FlowPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
-                <FlowPane orientation="vertical">
+            <BoxPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
+                <BoxPane orientation="vertical">
                     <Label text="Basic Checkboxes" styles="{fontBold:true}"/>
-                    <FlowPane>
+                    <BoxPane>
                         <Checkbox buttonData="One"/>
                         <Checkbox buttonData="Two"/>
                         <Checkbox buttonData="Three" selected="true" enabled="false"/>
-                    </FlowPane>
-                </FlowPane>
+                    </BoxPane>
+                </BoxPane>
 
-                <FlowPane orientation="vertical">
+                <BoxPane orientation="vertical">
                     <Label text="Image Checkboxes" styles="{fontBold:true}"/>
-                    <FlowPane orientation="vertical">
+                    <BoxPane orientation="vertical">
                         <Checkbox>
                             <buttonData>
                                 <content:ButtonData icon="@clock.png" text="Clock"/>
@@ -163,36 +163,36 @@ limitations under the License.
                                 <content:ButtonData icon="@house.png" text="House"/>
                             </buttonData>
                         </Checkbox>
-                    </FlowPane>
-                </FlowPane>
+                    </BoxPane>
+                </BoxPane>
 
-                <FlowPane orientation="vertical">
+                <BoxPane orientation="vertical">
                     <Label text="Tri-state Checkboxes" styles="{fontBold:true}"/>
-                    <FlowPane orientation="vertical">
+                    <BoxPane orientation="vertical">
                         <Checkbox buttonData="Read" triState="true" state="selected"/>
                         <Checkbox buttonData="Write" triState="true" state="unselected"/>
                         <Checkbox buttonData="Execute" triState="true" state="mixed" enabled="false"/>
-                    </FlowPane>
-                </FlowPane>
-            </FlowPane>
+                    </BoxPane>
+                </BoxPane>
+            </BoxPane>
         </content>
     </Border>
 
     <Border>
         <content>
-            <FlowPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
-                <FlowPane orientation="vertical">
+            <BoxPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
+                <BoxPane orientation="vertical">
                     <Label text="Basic Link Buttons" styles="{fontBold:true}"/>
-                    <FlowPane>
+                    <BoxPane>
                         <LinkButton buttonData="One"/>
                         <LinkButton buttonData="Two"/>
                         <LinkButton buttonData="Three" enabled="false"/>
-                    </FlowPane>
-                </FlowPane>
+                    </BoxPane>
+                </BoxPane>
 
-                <FlowPane orientation="vertical">
+                <BoxPane orientation="vertical">
                     <Label text="Image Link Buttons" styles="{fontBold:true}"/>
-                    <FlowPane orientation="vertical">
+                    <BoxPane orientation="vertical">
                         <LinkButton>
                             <buttonData>
                                 <content:ButtonData icon="@bell.png" text="Bell"/>
@@ -208,10 +208,10 @@ limitations under the License.
                                 <content:ButtonData icon="@house.png" text="House"/>
                             </buttonData>
                         </LinkButton>
-                    </FlowPane>
-                </FlowPane>
-            </FlowPane>
+                    </BoxPane>
+                </BoxPane>
+            </BoxPane>
         </content>
     </Border>
-</FlowPane>
+</BoxPane>
 

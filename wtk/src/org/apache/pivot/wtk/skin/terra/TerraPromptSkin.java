@@ -21,7 +21,7 @@ import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Component;
-import org.apache.pivot.wtk.FlowPane;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.Prompt;
@@ -78,14 +78,14 @@ public class TerraPromptSkin extends TerraSheetSkin
         messageLabel.setText(message);
 
         // Set the body
-        FlowPane messageFlowPane = (FlowPane)wtkxSerializer.get("messageFlowPane");
+        BoxPane messageBoxPane = (BoxPane)wtkxSerializer.get("messageBoxPane");
         Component body = prompt.getBody();
         if (body != null) {
-            messageFlowPane.add(body);
+            messageBoxPane.add(body);
         }
 
         // Add the option buttons
-        FlowPane buttonFlowPane = (FlowPane)wtkxSerializer.get("buttonFlowPane");
+        BoxPane buttonBoxPane = (BoxPane)wtkxSerializer.get("buttonBoxPane");
 
         for (int i = 0, n = prompt.getOptionCount(); i < n; i++) {
             Object option = prompt.getOption(i);
@@ -111,7 +111,7 @@ public class TerraPromptSkin extends TerraSheetSkin
                 }
             });
 
-            buttonFlowPane.add(optionButton);
+            buttonBoxPane.add(optionButton);
             optionButtons.add(optionButton);
         }
     }

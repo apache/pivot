@@ -16,12 +16,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<FlowPane xmlns:wtkx="http://pivot.apache.org/wtkx"
+<BoxPane xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:validation="org.apache.pivot.wtk.text.validation"
     xmlns="org.apache.pivot.wtk">
     <Border>
         <content>
-            <FlowPane orientation="vertical" styles="{horizontalAlignment:'justify', padding:{top:2, left:4, bottom:12, right:4}}">
+            <BoxPane orientation="vertical" styles="{horizontalAlignment:'justify', padding:{top:2, left:4, bottom:12, right:4}}">
                 <Label text="Text Input" styles="{fontBold:true}"/>
                 <Form>
                     <sections>
@@ -42,7 +42,7 @@ limitations under the License.
                         </Form.Section>
                     </sections>
                 </Form>
-            </FlowPane>
+            </BoxPane>
         </content>
     </Border>
 
@@ -78,13 +78,13 @@ limitations under the License.
         <right>
             <Border>
                 <content>
-                    <FlowPane orientation="vertical" styles="{horizontalAlignment:'justify', padding:{top:2, left:4, bottom:8, right:4}}">
+                    <BoxPane orientation="vertical" styles="{horizontalAlignment:'justify', padding:{top:2, left:4, bottom:8, right:4}}">
                         <Label text="Label Wrapping" styles="{fontBold:true}"/>
                         <Label text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
                             styles="{wrapText:true}"/>
-                    </FlowPane>
+                    </BoxPane>
                 </content>
             </Border>
         </right>
     </SplitPane>
-</FlowPane>
+</BoxPane>

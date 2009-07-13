@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<FlowPane xmlns:wtkx="http://pivot.apache.org/wtkx"
+<BoxPane xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
     <Border styles="{padding:0}">
         <content>
@@ -33,5 +33,5 @@ limitations under the License.
             <ImageView wtkx:id="imageView3" preferredWidth="48" preferredHeight="48"/>
         </content>
     </Border>
-</FlowPane>
+</BoxPane>
 

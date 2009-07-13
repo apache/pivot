@@ -20,11 +20,11 @@ limitations under the License.
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
     <content>
-        <FlowPane styles="{padding:4, spacing:4}">
+        <BoxPane styles="{padding:4, spacing:4}">
             <PushButton wtkx:id="button1" buttonData="One"/>
             <PushButton wtkx:id="button2" buttonData="Two"/>
             <PushButton wtkx:id="button3" buttonData="Three"/>
             <PushButton wtkx:id="button4" buttonData="Four"/>
-        </FlowPane>
+        </BoxPane>
     </content>
 </Window>

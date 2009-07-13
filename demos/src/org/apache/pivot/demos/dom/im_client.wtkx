@@ -29,9 +29,9 @@ limitations under the License.
                                 <TextInput wtkx:id="usernameTextInput" Form.name="Username" />
                                 <TextInput wtkx:id="passwordTextInput" Form.name="Password" password="true" />
                                 <TextInput wtkx:id="domainTextInput" Form.name="Domain"/>
-                                <FlowPane>
+                                <BoxPane>
                                     <PushButton wtkx:id="loginButton" buttonData="Login"/>
-                                </FlowPane>
+                                </BoxPane>
                                 <Label wtkx:id="errorMessageLabel" styles="{color:'#ff0000', wrapText:true}"/>
                             </Form.Section>
                         </sections>

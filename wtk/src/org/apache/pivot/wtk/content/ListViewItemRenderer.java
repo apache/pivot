@@ -20,7 +20,7 @@ import java.awt.Color;
 import java.awt.Font;
 
 import org.apache.pivot.wtk.Bounds;
-import org.apache.pivot.wtk.FlowPane;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Insets;
@@ -35,7 +35,7 @@ import org.apache.pivot.wtk.media.Image;
  *
  * @author gbrown
  */
-public class ListViewItemRenderer extends FlowPane implements ListView.ItemRenderer {
+public class ListViewItemRenderer extends BoxPane implements ListView.ItemRenderer {
     protected ImageView imageView = new ImageView();
     protected Label label = new Label();
 

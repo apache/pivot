@@ -30,7 +30,7 @@ import org.apache.pivot.wtk.ActivityIndicator;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.FlowPane;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.PushButton;
@@ -49,7 +49,7 @@ public class SearchDemo implements Application {
     @WTKX private PushButton searchButton;
     @WTKX private Label statusLabel;
     @WTKX private TableView resultsTableView;
-    @WTKX private FlowPane activityIndicatorFlowPane;
+    @WTKX private BoxPane activityIndicatorBoxPane;
     @WTKX private ActivityIndicator activityIndicator;
     @WTKX private ImageView artworkImageView;
     @WTKX private PushButton previewButton;
@@ -213,7 +213,7 @@ public class SearchDemo implements Application {
     private void updateActivityState() {
         boolean active = (getQuery != null);
 
-        activityIndicatorFlowPane.setVisible(active);
+        activityIndicatorBoxPane.setVisible(active);
         activityIndicator.setActive(active);
 
         termTextInput.setEnabled(!active);

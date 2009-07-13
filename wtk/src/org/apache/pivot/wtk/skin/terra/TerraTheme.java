@@ -37,7 +37,7 @@ import org.apache.pivot.wtk.CalendarButton;
 import org.apache.pivot.wtk.Checkbox;
 import org.apache.pivot.wtk.Dialog;
 import org.apache.pivot.wtk.Expander;
-import org.apache.pivot.wtk.FlowPane;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Form;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.Label;
@@ -153,7 +153,7 @@ public final class TerraTheme extends Theme {
         componentSkinMap.put(Dialog.class, TerraDialogSkin.class);
         componentSkinMap.put(Expander.class, TerraExpanderSkin.class);
         componentSkinMap.put(Form.class, TerraFormSkin.class);
-        componentSkinMap.put(FlowPane.class, TerraFlowPaneSkin.class);
+        componentSkinMap.put(BoxPane.class, TerraBoxPaneSkin.class);
         componentSkinMap.put(Frame.class, TerraFrameSkin.class);
         componentSkinMap.put(Label.class, TerraLabelSkin.class);
         componentSkinMap.put(LinkButton.class, TerraLinkButtonSkin.class);

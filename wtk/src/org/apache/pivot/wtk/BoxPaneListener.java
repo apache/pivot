@@ -17,15 +17,15 @@
 package org.apache.pivot.wtk;
 
 /**
- * Flow pane listener interface.
+ * Box pane listener interface.
  *
  * @author gbrown
  */
-public interface FlowPaneListener {
+public interface BoxPaneListener {
     /**
-     * Called when a flow pane's orientation has changed.
+     * Called when a box pane's orientation has changed.
      *
-     * @param flowPane
+     * @param boxPane
      */
-    public void orientationChanged(FlowPane flowPane);
+    public void orientationChanged(BoxPane boxPane);
 }

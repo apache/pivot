@@ -19,7 +19,7 @@ package org.apache.pivot.wtk.content;
 import org.apache.pivot.beans.BeanDictionary;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.wtk.Checkbox;
-import org.apache.pivot.wtk.FlowPane;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.VerticalAlignment;
@@ -31,7 +31,7 @@ import org.apache.pivot.wtk.VerticalAlignment;
  *
  * @author gbrown
  */
-public class TableViewBooleanCellRenderer extends FlowPane
+public class TableViewBooleanCellRenderer extends BoxPane
     implements TableView.CellRenderer {
     private Checkbox checkbox = new Checkbox();
 

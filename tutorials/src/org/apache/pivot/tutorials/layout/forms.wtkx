@@ -31,28 +31,28 @@ limitations under the License.
                             <Form styles="{rightAlignLabels:true}">
                                 <sections>
                                     <Form.Section>
-                                        <FlowPane wtkx:id="nameFlowPane" Form.name="Name">
+                                        <BoxPane wtkx:id="nameBoxPane" Form.name="Name">
                                             <TextInput wtkx:id="lastNameTextInput" prompt="Last"/>
                                             <TextInput wtkx:id="firstNameTextInput" prompt="First"/>
-                                        </FlowPane>
+                                        </BoxPane>
                                     </Form.Section>
                                     <Form.Section heading="Addresses">
-                                        <FlowPane Form.name="Home" orientation="vertical">
+                                        <BoxPane Form.name="Home" orientation="vertical">
                                             <TextInput prompt="Street" textSize="24"/>
-                                            <FlowPane>
+                                            <BoxPane>
                                                 <TextInput prompt="City"/>
                                                 <TextInput prompt="State" textSize="6"/>
                                                 <TextInput prompt="Zip" textSize="10"/>
-                                            </FlowPane>
-                                        </FlowPane>
-                                        <FlowPane Form.name="Work" orientation="vertical">
+                                            </BoxPane>
+                                        </BoxPane>
+                                        <BoxPane Form.name="Work" orientation="vertical">
                                             <TextInput prompt="Street" textSize="24"/>
-                                            <FlowPane>
+                                            <BoxPane>
                                                 <TextInput prompt="City"/>
                                                 <TextInput prompt="State" textSize="6"/>
                                                 <TextInput prompt="Zip" textSize="10"/>
-                                            </FlowPane>
-                                        </FlowPane>
+                                            </BoxPane>
+                                        </BoxPane>
                                     </Form.Section>
                                     <Form.Section heading="Phone Numbers">
                                         <TextInput Form.name="Home"/>
@@ -69,15 +69,15 @@ limitations under the License.
                             <Separator/>
                         </TablePane.Row>
                         <TablePane.Row height="-1">
-                            <FlowPane styles="{horizontalAlignment:'justify'}">
-                                <FlowPane>
+                            <BoxPane styles="{horizontalAlignment:'justify'}">
+                                <BoxPane>
                                     <Label wtkx:id="errorLabel" styles="{color:'#ff0000'}"/>
-                                </FlowPane>
-                                <FlowPane styles="{horizontalAlignment:'right'}">
+                                </BoxPane>
+                                <BoxPane styles="{horizontalAlignment:'right'}">
                                     <PushButton wtkx:id="submitButton" buttonData="Submit"
                                         styles="{preferredAspectRatio:3}"/>
-                                </FlowPane>
-                            </FlowPane>
+                                </BoxPane>
+                            </BoxPane>
                         </TablePane.Row>
                     </rows>
                 </TablePane>

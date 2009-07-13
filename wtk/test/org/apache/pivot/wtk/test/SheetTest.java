@@ -25,7 +25,7 @@ import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.FlowPane;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Label;
@@ -77,14 +77,14 @@ public class SheetTest implements Application {
         final Alert alert = new Alert(MessageType.INFO, "Alert", new ArrayList<String>("OK"), alertBody);
         alert.setTitle("Alert");
 
-        FlowPane flowPane = new FlowPane();
-        tablePane.getRows().get(1).add(flowPane);
+        BoxPane boxPane = new BoxPane();
+        tablePane.getRows().get(1).add(boxPane);
 
-        flowPane.getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
+        boxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
 
         final PushButton closeButton = new PushButton("Close");
         closeButton.getStyles().put("preferredAspectRatio", 3);
-        flowPane.add(closeButton);
+        boxPane.add(closeButton);
 
         sheet = new Sheet(tablePane);
 

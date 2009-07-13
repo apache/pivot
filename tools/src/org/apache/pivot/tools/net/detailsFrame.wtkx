@@ -59,11 +59,11 @@ limitations under the License.
           </Border>
         </TablePane.Row>
         <TablePane.Row height="-1">
-          <FlowPane styles="{spacing:6,horizontalAlignment:'right'}">
+          <BoxPane styles="{spacing:6,horizontalAlignment:'right'}">
             <PushButton wtkx:id="previousButton" buttonData="Previous" styles="{preferredAspectRatio:3, padding:5, backgroundColor:16, borderColor:13, color:4, fontBold:true}"/>
             <PushButton wtkx:id="nextButton" buttonData="Next" styles="{preferredAspectRatio:3, padding:5, backgroundColor:16, borderColor:13, color:4, fontBold:true}"/>
             <PushButton wtkx:id="closeButton" buttonData="Close" styles="{preferredAspectRatio:3, padding:5, backgroundColor:16, borderColor:13, color:4, fontBold:true}"/>
-          </FlowPane>
+          </BoxPane>
         </TablePane.Row>
       </rows>
     </TablePane>

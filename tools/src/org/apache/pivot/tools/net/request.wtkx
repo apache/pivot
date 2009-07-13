@@ -24,7 +24,7 @@ limitations under the License.
   <content>
     <ScrollPane>
       <view>
-        <FlowPane orientation="vertical" styles="{horizontalAlignment:'justify', padding:4}">
+        <BoxPane orientation="vertical" styles="{horizontalAlignment:'justify', padding:4}">
           <TablePane styles="{horizontalSpacing:6, verticalSpacing:6}">
             <columns>
               <TablePane.Column width="-1" />
@@ -33,7 +33,7 @@ limitations under the License.
             <rows>
               <TablePane.Row height="-1">
                 <Label text="Transport:" styles="{horizontalAlignment:'right'}" />
-                <FlowPane styles="{verticalAlignment:'center'}">
+                <BoxPane styles="{verticalAlignment:'center'}">
                   <ListButton wtkx:id="protocol" selectedIndex="0">
                     <listData>
                       <collections:ArrayList>
@@ -46,11 +46,11 @@ limitations under the License.
                   <TextInput wtkx:id="host" prompt="Host" textSize="40" styles="{backgroundColor:4}" />
                   <Label text=":" />
                   <TextInput wtkx:id="port" prompt="Port" textSize="4" styles="{backgroundColor:4}" />
-                </FlowPane>
+                </BoxPane>
               </TablePane.Row>
               <TablePane.Row height="-1">
                 <Label text="Request:" styles="{horizontalAlignment:'right'}" />
-                <FlowPane styles="{verticalAlignment:'center'}">
+                <BoxPane styles="{verticalAlignment:'center'}">
                   <ListButton wtkx:id="method" selectedIndex="0">
                     <listData>
                       <collections:ArrayList>
@@ -65,7 +65,7 @@ limitations under the License.
                     </listData>
                   </ListButton>
                   <TextInput wtkx:id="path" prompt="/path" styles="{backgroundColor:4}" />
-                </FlowPane>
+                </BoxPane>
               </TablePane.Row>
               <TablePane.Row height="-1">
                 <Label text="HTTP Body:" styles="{horizontalAlignment:'right'}" />
@@ -83,10 +83,10 @@ limitations under the License.
               </TablePane.Row>
             </rows>
           </TablePane>
-          <FlowPane styles="{horizontalAlignment:'right'}">
+          <BoxPane styles="{horizontalAlignment:'right'}">
             <PushButton wtkx:id="submit" buttonData="Submit" />
-          </FlowPane>
-        </FlowPane>
+          </BoxPane>
+        </BoxPane>
       </view>
     </ScrollPane>
   </content>

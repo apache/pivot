@@ -34,7 +34,7 @@ limitations under the License.
                         </columns>
                         <rows>
                             <TablePane.Row height="-1">
-                                <FlowPane styles="{verticalAlignment:'center'}">
+                                <BoxPane styles="{verticalAlignment:'center'}">
                                     <TextInput textSize="32" wtkx:id="termTextInput">
                                         <componentKeyListeners>
                                             <wtkx:script>
@@ -98,7 +98,7 @@ limitations under the License.
                                             </wtkx:script>
                                         </componentKeyListeners>
                                     </PushButton>
-                                </FlowPane>
+                                </BoxPane>
                                 <Label wtkx:id="statusLabel" styles="{horizontalAlignment:'right',
                                     verticalAlignment:'center'}"/>
                             </TablePane.Row>
@@ -174,21 +174,21 @@ limitations under the License.
                                         </content>
                                     </Border>
 
-                                    <FlowPane wtkx:id="activityIndicatorFlowPane" visible="false"
+                                    <BoxPane wtkx:id="activityIndicatorBoxPane" visible="false"
                                         styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
                                         <ActivityIndicator wtkx:id="activityIndicator"
                                             preferredWidth="96" preferredHeight="96"/>
-                                    </FlowPane>
+                                    </BoxPane>
                                 </StackPane>
 
-                                <FlowPane orientation="vertical" styles="{horizontalAlignment:'justify'}">
+                                <BoxPane orientation="vertical" styles="{horizontalAlignment:'justify'}">
                                     <Border styles="{padding:0}">
                                         <content>
                                             <ImageView wtkx:id="artworkImageView"
                                                 preferredWidth="120" preferredHeight="120"/>
                                         </content>
                                     </Border>
-                                    <FlowPane styles="{horizontalAlignment:'center'}">
+                                    <BoxPane styles="{horizontalAlignment:'center'}">
                                         <PushButton wtkx:id="previewButton" buttonData="Preview" enabled="false">
                                             <buttonPressListeners>
                                                 <wtkx:script>
@@ -202,8 +202,8 @@ limitations under the License.
                                                 </wtkx:script>
                                             </buttonPressListeners>
                                         </PushButton>
-                                    </FlowPane>
-                                </FlowPane>
+                                    </BoxPane>
+                                </BoxPane>
                             </TablePane.Row>
                         </rows>
                     </TablePane>

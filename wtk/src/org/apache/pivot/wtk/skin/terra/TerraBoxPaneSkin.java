@@ -17,14 +17,14 @@
 package org.apache.pivot.wtk.skin.terra;
 
 import org.apache.pivot.wtk.Theme;
-import org.apache.pivot.wtk.skin.FlowPaneSkin;
+import org.apache.pivot.wtk.skin.BoxPaneSkin;
 
 /**
- * Terra flow pane skin.
+ * Terra box pane skin.
  *
  * @author gbrown
  */
-public class TerraFlowPaneSkin extends FlowPaneSkin {
+public class TerraBoxPaneSkin extends BoxPaneSkin {
     public final void setBackgroundColor(int backgroundColor) {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
         setBackgroundColor(theme.getColor(backgroundColor));

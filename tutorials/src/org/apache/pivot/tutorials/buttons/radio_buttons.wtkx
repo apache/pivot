@@ -20,11 +20,11 @@ limitations under the License.
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
     <content>
-        <FlowPane orientation="vertical" styles="{padding:4}">
+        <BoxPane orientation="vertical" styles="{padding:4}">
             <RadioButton wtkx:id="oneButton" buttonData="One" group="numbers" selected="true"/>
             <RadioButton wtkx:id="twoButton" buttonData="Two" group="numbers"/>
             <RadioButton wtkx:id="threeButton" buttonData="Three" group="numbers"/>
             <PushButton wtkx:id="selectButton" buttonData="Select"/>
-        </FlowPane>
+        </BoxPane>
     </content>
 </Window>

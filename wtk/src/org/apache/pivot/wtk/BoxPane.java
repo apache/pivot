@@ -24,27 +24,27 @@ import org.apache.pivot.util.ListenerList;
  *
  * @author gbrown
  */
-public class FlowPane extends Container {
-    private static class FlowPaneListenerList extends ListenerList<FlowPaneListener>
-        implements FlowPaneListener {
-        public void orientationChanged(FlowPane flowPane) {
-            for (FlowPaneListener listener : this) {
-                listener.orientationChanged(flowPane);
+public class BoxPane extends Container {
+    private static class BoxPaneListenerList extends ListenerList<BoxPaneListener>
+        implements BoxPaneListener {
+        public void orientationChanged(BoxPane boxPane) {
+            for (BoxPaneListener listener : this) {
+                listener.orientationChanged(boxPane);
             }
         }
     }
 
     private Orientation orientation = null;
-    private FlowPaneListenerList flowPaneListeners = new FlowPaneListenerList();
+    private BoxPaneListenerList boxPaneListeners = new BoxPaneListenerList();
 
-    public FlowPane() {
+    public BoxPane() {
         this(Orientation.HORIZONTAL);
     }
 
-    public FlowPane(Orientation orientation) {
+    public BoxPane(Orientation orientation) {
         this.orientation = orientation;
 
-        installSkin(FlowPane.class);
+        installSkin(BoxPane.class);
     }
 
     public Orientation getOrientation() {
@@ -54,7 +54,7 @@ public class FlowPane extends Container {
     public void setOrientation(Orientation orientation) {
         if (this.orientation != orientation) {
             this.orientation = orientation;
-            flowPaneListeners.orientationChanged(this);
+            boxPaneListeners.orientationChanged(this);
         }
     }
 
@@ -66,7 +66,7 @@ public class FlowPane extends Container {
         setOrientation(Orientation.valueOf(orientation.toUpperCase()));
     }
 
-    public ListenerList<FlowPaneListener> getFlowPaneListeners() {
-        return flowPaneListeners;
+    public ListenerList<BoxPaneListener> getBoxPaneListeners() {
+        return boxPaneListeners;
     }
 }

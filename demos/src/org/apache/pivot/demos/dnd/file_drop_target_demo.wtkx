@@ -61,10 +61,10 @@ limitations under the License.
                     </Border>
                 </TablePane.Row>
                 <TablePane.Row height="-1">
-                    <FlowPane styles="{padding:6, horizontalAlignment:'right', verticalAlignment:'center'}">
+                    <BoxPane styles="{padding:6, horizontalAlignment:'right', verticalAlignment:'center'}">
                         <PushButton wtkx:id="uploadButton" buttonData="Upload"
                            enabled="false" styles="{preferredAspectRatio:3}"/>
-                    </FlowPane>
+                    </BoxPane>
                 </TablePane.Row>
             </rows>
         </TablePane>

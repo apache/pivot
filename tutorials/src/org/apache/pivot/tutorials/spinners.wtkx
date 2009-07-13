@@ -16,12 +16,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<FlowPane xmlns:wtkx="http://pivot.apache.org/wtkx"
+<BoxPane xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
     <Border>
         <content>
-            <FlowPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:8, right:4}}">
+            <BoxPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:8, right:4}}">
                 <Label text="Spinners" styles="{fontBold:true}"/>
                 <Form>
                     <sections>
@@ -35,13 +35,13 @@ limitations under the License.
                         </Form.Section>
                     </sections>
                 </Form>
-            </FlowPane>
+            </BoxPane>
         </content>
     </Border>
 
     <Border>
         <content>
-            <FlowPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:8, right:4}}">
+            <BoxPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:8, right:4}}">
                 <Label text="Sliders" styles="{fontBold:true}"/>
                 <Form>
                     <sections>
@@ -53,8 +53,8 @@ limitations under the License.
                         </Form.Section>
                     </sections>
                 </Form>
-            </FlowPane>
+            </BoxPane>
         </content>
     </Border>
-</FlowPane>
+</BoxPane>
 

@@ -23,7 +23,7 @@ import org.apache.pivot.wtk.BrowserApplicationContext;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.FlowPane;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Window;
@@ -34,11 +34,11 @@ public class DOMInteractionDemo implements Application {
 
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        FlowPane flowPane = new FlowPane();
-        flowPane.getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
+        BoxPane boxPane = new BoxPane();
+        boxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
 
         helloButton = new PushButton("Say Hello");
-        flowPane.add(helloButton);
+        boxPane.add(helloButton);
 
         helloButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
@@ -46,7 +46,7 @@ public class DOMInteractionDemo implements Application {
             }
         });
 
-        window = new Window(flowPane);
+        window = new Window(boxPane);
         window.setMaximized(true);
         window.open(display);
     }

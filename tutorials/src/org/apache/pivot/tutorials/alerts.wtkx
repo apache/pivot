@@ -16,13 +16,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<FlowPane xmlns:wtkx="http://pivot.apache.org/wtkx"
+<BoxPane xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
     <Border>
         <content>
-            <FlowPane orientation="vertical" styles="{spacing: 12}">
-                <FlowPane orientation="vertical" styles="{padding: 6, spacing: 6}">
+            <BoxPane orientation="vertical" styles="{spacing: 12}">
+                <BoxPane orientation="vertical" styles="{padding: 6, spacing: 6}">
                     <RadioButton buttonData="Error" group="messageType" selected="true">
                         <userData messageInfo="{messageType:'error', message:'This is an error message.'}"/>
                     </RadioButton>
@@ -39,13 +39,13 @@ limitations under the License.
                         <userData messageInfo="{message:'This is a custom message.'}"/>
                     </RadioButton>
 
-                    <FlowPane>
+                    <BoxPane>
                         <PushButton wtkx:id="alertButton" buttonData="Show Alert"/>
                         <PushButton wtkx:id="promptButton" buttonData="Show Prompt"/>
-                    </FlowPane>
-                </FlowPane>
-            </FlowPane>
+                    </BoxPane>
+                </BoxPane>
+            </BoxPane>
         </content>
     </Border>
-</FlowPane>
+</BoxPane>
 

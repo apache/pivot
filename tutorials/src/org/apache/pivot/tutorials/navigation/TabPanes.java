@@ -23,7 +23,7 @@ import org.apache.pivot.wtk.ButtonStateListener;
 import org.apache.pivot.wtk.Checkbox;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.FlowPane;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.RadioButton;
 import org.apache.pivot.wtk.TabPane;
@@ -36,7 +36,7 @@ public class TabPanes implements Application {
     private Checkbox collapsibleCheckbox = null;
     private RadioButton horizontalRadioButton = null;
     private RadioButton verticalRadioButton = null;
-    private FlowPane cornerFlowPane = null;
+    private BoxPane cornerBoxPane = null;
 
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
@@ -46,7 +46,7 @@ public class TabPanes implements Application {
         collapsibleCheckbox = (Checkbox)wtkxSerializer.get("collapsibleCheckbox");
         horizontalRadioButton = (RadioButton)wtkxSerializer.get("horizontalRadioButton");
         verticalRadioButton = (RadioButton)wtkxSerializer.get("verticalRadioButton");
-        cornerFlowPane = (FlowPane)wtkxSerializer.get("cornerFlowPane");
+        cornerBoxPane = (BoxPane)wtkxSerializer.get("cornerBoxPane");
 
         ButtonStateListener checkboxStateListener = new ButtonStateListener() {
             public void stateChanged(Button button, Button.State previousState) {
@@ -92,11 +92,11 @@ public class TabPanes implements Application {
         if (horizontalRadioButton.isSelected()) {
             tabPane.getStyles().put("tabOrientation", Orientation.HORIZONTAL);
             if (tabPane.getCorner() == null) {
-                tabPane.setCorner(cornerFlowPane);
+                tabPane.setCorner(cornerBoxPane);
             }
         } else {
             tabPane.getStyles().put("tabOrientation", Orientation.VERTICAL);
-            if (tabPane.getCorner() == cornerFlowPane) {
+            if (tabPane.getCorner() == cornerBoxPane) {
                 tabPane.setCorner(null);
             }
         }

@@ -19,7 +19,7 @@ package org.apache.pivot.wtk.test;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.FlowPane;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Label;
@@ -48,23 +48,23 @@ public class LabelTest implements Application {
             + "listen very hard the tune will come to you at last when all are "
             + "one and one is all: to be a rock and not to roll.";
 
-        FlowPane flowPane = new FlowPane(Orientation.HORIZONTAL);
+        BoxPane boxPane = new BoxPane(Orientation.HORIZONTAL);
 
         Label label1 = new Label(line1);
         label1.getStyles().put("wrapText", true);
         label1.getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
-        flowPane.add(label1);
+        boxPane.add(label1);
 
         Label label2 = new Label(line2);
         label2.getStyles().put("wrapText", true);
         label2.getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
         label2.getStyles().put("textDecoration", TextDecoration.UNDERLINE);
-        flowPane.add(label2);
+        boxPane.add(label2);
 
-        flowPane.getStyles().put("horizontalAlignment", HorizontalAlignment.JUSTIFY);
-        flowPane.getStyles().put("padding", new Insets(10));
+        boxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.JUSTIFY);
+        boxPane.getStyles().put("padding", new Insets(10));
 
-        window.setContent(flowPane);
+        window.setContent(boxPane);
         window.setPreferredWidth(200);
 
         window.open(display);

@@ -23,17 +23,17 @@ limitations under the License.
     </columns>
     <rows>
         <TablePane.Row height="1*">
-            <FlowPane orientation="vertical" styles="{padding:6, spacing:8}">
+            <BoxPane orientation="vertical" styles="{padding:6, spacing:8}">
                 <Label text="Bill to:" styles="{fontBold:true}"/>
                 <wtkx:include src="address.wtkx"/>
-            </FlowPane>
+            </BoxPane>
         </TablePane.Row>
         <TablePane.Row height="-1">
-            <FlowPane styles="{horizontalAlignment:'right', backgroundColor:11,
+            <BoxPane styles="{horizontalAlignment:'right', backgroundColor:11,
                 padding:4}">
                 <PushButton wtkx:id="nextButton" buttonData="Next"
                     styles="{preferredAspectRatio:3}"/>
-            </FlowPane>
+            </BoxPane>
         </TablePane.Row>
     </rows>
 </TablePane>

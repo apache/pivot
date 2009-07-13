@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<FlowPane wtkx:id="rootPane" orientation="vertical"
+<BoxPane wtkx:id="rootPane" orientation="vertical"
     styles="{horizontalAlignment:'justify'}"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
@@ -34,4 +34,4 @@ limitations under the License.
             </Form.Section>
         </sections>
     </Form>
-</FlowPane>
+</BoxPane>

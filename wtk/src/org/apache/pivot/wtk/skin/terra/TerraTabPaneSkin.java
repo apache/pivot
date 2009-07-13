@@ -29,7 +29,7 @@ import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentStateListener;
 import org.apache.pivot.wtk.Dimensions;
-import org.apache.pivot.wtk.FlowPane;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Insets;
@@ -333,7 +333,7 @@ public class TerraTabPaneSkin extends ContainerSkin
     }
 
     protected Panorama buttonPanorama = new Panorama();
-    protected FlowPane buttonFlowPane = new FlowPane();
+    protected BoxPane buttonBoxPane = new BoxPane();
     private Button.Group tabButtonGroup = new Button.Group();
 
     private Color activeTabColor;
@@ -357,7 +357,7 @@ public class TerraTabPaneSkin extends ContainerSkin
         public void enabledChanged(Component component) {
             TabPane tabPane = (TabPane)getComponent();
             int i = tabPane.getTabs().indexOf(component);
-            buttonFlowPane.get(i).setEnabled(component.isEnabled());
+            buttonBoxPane.get(i).setEnabled(component.isEnabled());
         }
     };
 
@@ -394,12 +394,12 @@ public class TerraTabPaneSkin extends ContainerSkin
 
         buttonPanorama.getStyles().put("buttonBackgroundColor", borderColor);
         buttonPanorama.getStyles().put("buttonPadding", 6);
-        buttonPanorama.setView(buttonFlowPane);
+        buttonPanorama.setView(buttonBoxPane);
 
         tabButtonGroup.getGroupListeners().add(new Button.GroupListener() {
             public void selectionChanged(Group group, Button previousSelection) {
                 Button button = tabButtonGroup.getSelection();
-                int index = (button == null) ? -1 : buttonFlowPane.indexOf(button);
+                int index = (button == null) ? -1 : buttonBoxPane.indexOf(button);
 
                 TabPane tabPane = (TabPane)getComponent();
                 tabPane.setSelectedIndex(index);
@@ -429,7 +429,7 @@ public class TerraTabPaneSkin extends ContainerSkin
 
             TabButton tabButton = new TabButton(tab);
             tabButton.setGroup(tabButtonGroup);
-            buttonFlowPane.add(tabButton);
+            buttonBoxPane.add(tabButton);
 
             // Listen for state changes on the tab
             tabButton.setEnabled(tab.isEnabled());
@@ -1029,11 +1029,11 @@ public class TerraTabPaneSkin extends ContainerSkin
     }
 
     public int getButtonSpacing() {
-        return (Integer)buttonFlowPane.getStyles().get("spacing");
+        return (Integer)buttonBoxPane.getStyles().get("spacing");
     }
 
     public void setButtonSpacing(int buttonSpacing) {
-        buttonFlowPane.getStyles().put("spacing", buttonSpacing);
+        buttonBoxPane.getStyles().put("spacing", buttonSpacing);
     }
 
     public Orientation getTabOrientation() {
@@ -1048,22 +1048,22 @@ public class TerraTabPaneSkin extends ContainerSkin
         this.tabOrientation = tabOrientation;
 
         // Invalidate the tab buttons since their preferred sizes have changed
-        for (Component tabButton : buttonFlowPane) {
+        for (Component tabButton : buttonBoxPane) {
             tabButton.invalidate();
         }
 
-        buttonFlowPane.setOrientation(tabOrientation);
+        buttonBoxPane.setOrientation(tabOrientation);
 
         switch (tabOrientation) {
             case HORIZONTAL: {
-                buttonFlowPane.getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
-                buttonFlowPane.getStyles().put("verticalAlignment", VerticalAlignment.JUSTIFY);
+                buttonBoxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
+                buttonBoxPane.getStyles().put("verticalAlignment", VerticalAlignment.JUSTIFY);
                 break;
             }
 
             case VERTICAL: {
-                buttonFlowPane.getStyles().put("horizontalAlignment", HorizontalAlignment.JUSTIFY);
-                buttonFlowPane.getStyles().put("verticalAlignment", VerticalAlignment.TOP);
+                buttonBoxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.JUSTIFY);
+                buttonBoxPane.getStyles().put("verticalAlignment", VerticalAlignment.TOP);
                 break;
             }
         }
@@ -1097,7 +1097,7 @@ public class TerraTabPaneSkin extends ContainerSkin
         // Create a new button for the tab
         TabButton tabButton = new TabButton(tab);
         tabButton.setGroup(tabButtonGroup);
-        buttonFlowPane.insert(tabButton, index);
+        buttonBoxPane.insert(tabButton, index);
 
         // Listen for state changes on the tab
         tabButton.setEnabled(tab.isEnabled());
@@ -1117,7 +1117,7 @@ public class TerraTabPaneSkin extends ContainerSkin
         }
 
         // Remove the buttons
-        Sequence<Component> removedButtons = buttonFlowPane.remove(index, removed.getLength());
+        Sequence<Component> removedButtons = buttonBoxPane.remove(index, removed.getLength());
 
         for (int i = 0, n = removed.getLength(); i < n; i++) {
             TabButton tabButton = (TabButton)removedButtons.get(i);
@@ -1208,7 +1208,7 @@ public class TerraTabPaneSkin extends ContainerSkin
                 button.setSelected(false);
             }
         } else {
-            Button button = (Button)buttonFlowPane.get(selectedIndex);
+            Button button = (Button)buttonBoxPane.get(selectedIndex);
             button.setSelected(true);
 
             Component selectedTab = tabPane.getTabs().get(selectedIndex);

@@ -23,14 +23,14 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
-public class FlowPaneTest implements Application {
+public class BoxPaneTest implements Application {
     private Frame frame = null;
 
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        frame = new Frame((Component)wtkxSerializer.readObject(getClass().getResource("flow_pane_test.wtkx")));
-        frame.setTitle("Flow Pane Test");
+        frame = new Frame((Component)wtkxSerializer.readObject(getClass().getResource("box_pane_test.wtkx")));
+        frame.setTitle("Box Pane Test");
         frame.setPreferredSize(480, 360);
         frame.open(display);
     }

@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<FlowPane xmlns:wtkx="http://pivot.apache.org/wtkx"
+<BoxPane xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
     <Border>
@@ -56,20 +56,20 @@ limitations under the License.
                                     <TabPane selectedIndex="-1" styles="{tabOrientation:'horizontal', collapsible:true}"
                                         tooltipText="Click a tab to expand/collapse">
                                         <tabs>
-                                            <FlowPane TabPane.icon="@anchor.png" TabPane.name="Anchor"
+                                            <BoxPane TabPane.icon="@anchor.png" TabPane.name="Anchor"
                                                 styles="{horizontalAlignment:'center', verticalAlignment:'top'}">
                                                 <Label text="Collapsible"/>
-                                            </FlowPane>
+                                            </BoxPane>
 
-                                            <FlowPane TabPane.icon="@cup.png" TabPane.name="Cup"
+                                            <BoxPane TabPane.icon="@cup.png" TabPane.name="Cup"
                                                 styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
                                                 <Label text="Collapsible"/>
-                                            </FlowPane>
+                                            </BoxPane>
 
-                                            <FlowPane TabPane.icon="@star.png" TabPane.name="Star"
+                                            <BoxPane TabPane.icon="@star.png" TabPane.name="Star"
                                                 styles="{horizontalAlignment:'center', verticalAlignment:'bottom'}">
                                                 <Label text="Collapsible"/>
-                                            </FlowPane>
+                                            </BoxPane>
                                         </tabs>
                                     </TabPane>
                                 </TablePane.Row>
@@ -97,20 +97,20 @@ limitations under the License.
                                     <TabPane selectedIndex="-1" styles="{tabOrientation:'vertical', collapsible:true}"
                                         tooltipText="Click a tab to expand/collapse">
                                         <tabs>
-                                            <FlowPane TabPane.icon="@anchor.png" TabPane.name="Anchor"
+                                            <BoxPane TabPane.icon="@anchor.png" TabPane.name="Anchor"
                                                 styles="{horizontalAlignment:'left', verticalAlignment:'center'}">
                                                 <Label text="Collapsible"/>
-                                            </FlowPane>
+                                            </BoxPane>
 
-                                            <FlowPane TabPane.icon="@cup.png" TabPane.name="Cup"
+                                            <BoxPane TabPane.icon="@cup.png" TabPane.name="Cup"
                                                 styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
                                                 <Label text="Collapsible"/>
-                                            </FlowPane>
+                                            </BoxPane>
 
-                                            <FlowPane TabPane.icon="@star.png" TabPane.name="Star"
+                                            <BoxPane TabPane.icon="@star.png" TabPane.name="Star"
                                                 styles="{horizontalAlignment:'right', verticalAlignment:'center'}">
                                                 <Label text="Collapsible"/>
-                                            </FlowPane>
+                                            </BoxPane>
                                         </tabs>
                                     </TabPane>
                                 </TablePane.Row>
@@ -124,9 +124,9 @@ limitations under the License.
 
     <Border>
         <content>
-            <FlowPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:6}">
+            <BoxPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:6}">
                 <Label text="Expanders" styles="{fontBold:true}"/>
-                <FlowPane orientation="vertical" styles="{horizontalAlignment:'justify'}">
+                <BoxPane orientation="vertical" styles="{horizontalAlignment:'justify'}">
                     <Expander title="One" expanded="false">
                         <content>
                             <Label preferredWidth="100" preferredHeight="20" text="Un"
@@ -147,14 +147,14 @@ limitations under the License.
                                 styles="{horizontalAlignment:'center', verticalAlignment:'center', fontItalic:true}"/>
                         </content>
                     </Expander>
-                </FlowPane>
-            </FlowPane>
+                </BoxPane>
+            </BoxPane>
         </content>
     </Border>
 
     <Border>
         <content>
-            <FlowPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:6}">
+            <BoxPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:6}">
                 <Label text="Accordion" styles="{fontBold:true}"/>
                 <Accordion selectedIndex="1" preferredWidth="110" preferredHeight="180">
                     <panels>
@@ -166,27 +166,27 @@ limitations under the License.
                           styles="{horizontalAlignment:'center', verticalAlignment:'center', fontItalic:true}"/>
                     </panels>
                 </Accordion>
-            </FlowPane>
+            </BoxPane>
         </content>
     </Border>
 
     <Border>
         <content>
-            <FlowPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:6}">
+            <BoxPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:6}">
                 <Label text="Rollups" styles="{fontBold:true}"/>
                 <Rollup>
                     <heading>
                         <Label text="Colors"/>
                     </heading>
                     <content>
-                        <FlowPane orientation="vertical">
+                        <BoxPane orientation="vertical">
                             <Label text="Red" styles="{color:'#ff0000'}"/>
                             <Label text="Orange" styles="{color:'#ffa500'}"/>
                             <Label text="Yellow" styles="{color:'#ffff00'}"/>
                             <Label text="Green" styles="{color:'#00ff00'}"/>
                             <Label text="Blue" styles="{color:'#0000ff'}"/>
                             <Label text="Purple" styles="{color:'#800080'}"/>
-                        </FlowPane>
+                        </BoxPane>
                     </content>
                 </Rollup>
                 <Rollup expanded="true">
@@ -194,14 +194,14 @@ limitations under the License.
                         <Label text="Shapes"/>
                     </heading>
                     <content>
-                        <FlowPane orientation="vertical">
+                        <BoxPane orientation="vertical">
                             <Checkbox buttonData="Circle"/>
                             <Checkbox buttonData="Ellipse" selected="true"/>
                             <Checkbox buttonData="Square" selected="true"/>
                             <Checkbox buttonData="Rectangle"/>
                             <Checkbox buttonData="Hexagon"/>
                             <Checkbox buttonData="Octagon" selected="true"/>
-                        </FlowPane>
+                        </BoxPane>
                     </content>
                 </Rollup>
                 <Rollup>
@@ -209,7 +209,7 @@ limitations under the License.
                         <Label text="Images"/>
                     </heading>
                     <content>
-                        <FlowPane orientation="vertical">
+                        <BoxPane orientation="vertical">
                             <RadioButton group="images" selected="true">
                                 <buttonData>
                                     <content:ButtonData text="Anchor" icon="@anchor.png"/>
@@ -240,11 +240,11 @@ limitations under the License.
                                     <content:ButtonData text="Star" icon="@star.png"/>
                                 </buttonData>
                             </RadioButton>
-                        </FlowPane>
+                        </BoxPane>
                     </content>
                 </Rollup>
-            </FlowPane>
+            </BoxPane>
         </content>
     </Border>
-</FlowPane>
+</BoxPane>
 

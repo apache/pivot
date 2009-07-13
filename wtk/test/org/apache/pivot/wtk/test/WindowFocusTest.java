@@ -20,7 +20,7 @@ import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.FlowPane;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.TextInput;
 
@@ -30,15 +30,15 @@ public class WindowFocusTest implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        FlowPane flowPane1 = new FlowPane();
-        flowPane1.add(new TextInput());
-        frame1 = new Frame(flowPane1);
+        BoxPane boxPane1 = new BoxPane();
+        boxPane1.add(new TextInput());
+        frame1 = new Frame(boxPane1);
         frame1.setPreferredSize(320, 240);
         frame1.open(display);
 
-        FlowPane flowPane2 = new FlowPane();
-        flowPane2.add(new TextInput());
-        frame2 = new Frame(flowPane2);
+        BoxPane boxPane2 = new BoxPane();
+        boxPane2.add(new TextInput());
+        frame2 = new Frame(boxPane2);
         frame2.setPreferredSize(320, 240);
         frame2.open(display);
     }

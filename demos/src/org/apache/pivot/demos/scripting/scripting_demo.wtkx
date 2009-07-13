@@ -42,7 +42,7 @@ limitations under the License.
     <content>
         <Border>
             <content>
-                <FlowPane orientation="vertical" styles="{padding:6}">
+                <BoxPane orientation="vertical" styles="{padding:6}">
                     <PushButton wtkx:id="pushButton" buttonData="Click Me!">
                         <buttonPressListeners>
                             <wtkx:script language="javascript">
@@ -69,7 +69,7 @@ limitations under the License.
                             <ListView listData="$listData" selectedIndex="0"/>
                         </content>
                     </Border>
-                </FlowPane>
+                </BoxPane>
             </content>
         </Border>
     </content>

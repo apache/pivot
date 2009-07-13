@@ -20,11 +20,11 @@ limitations under the License.
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
     <content>
-        <FlowPane orientation="vertical"
+        <BoxPane orientation="vertical"
             styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
-            <FlowPane orientation="vertical">
+            <BoxPane orientation="vertical">
                 <Label text="Menu Buttons" styles="{fontBold:true}" />
-                <FlowPane orientation="vertical">
+                <BoxPane orientation="vertical">
                     <MenuButton buttonData="File">
                         <menu>
                             <Menu>
@@ -170,8 +170,8 @@ limitations under the License.
                             </Menu>
                         </menu>
                     </MenuButton>
-                </FlowPane>
-            </FlowPane>
-        </FlowPane>
+                </BoxPane>
+            </BoxPane>
+        </BoxPane>
     </content>
 </Border>

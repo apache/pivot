@@ -23,7 +23,7 @@ import org.apache.pivot.wtk.AlertListener;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Component;
-import org.apache.pivot.wtk.FlowPane;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.PushButton;
@@ -80,14 +80,14 @@ public class TerraAlertSkin extends TerraDialogSkin
         messageLabel.setText(message);
 
         // Set the body
-        FlowPane messageFlowPane = (FlowPane)wtkxSerializer.get("messageFlowPane");
+        BoxPane messageBoxPane = (BoxPane)wtkxSerializer.get("messageBoxPane");
         Component body = alert.getBody();
         if (body != null) {
-            messageFlowPane.add(body);
+            messageBoxPane.add(body);
         }
 
         // Add the option buttons
-        FlowPane buttonFlowPane = (FlowPane)wtkxSerializer.get("buttonFlowPane");
+        BoxPane buttonBoxPane = (BoxPane)wtkxSerializer.get("buttonBoxPane");
 
         for (int i = 0, n = alert.getOptionCount(); i < n; i++) {
             Object option = alert.getOption(i);
@@ -113,7 +113,7 @@ public class TerraAlertSkin extends TerraDialogSkin
                 }
             });
 
-            buttonFlowPane.add(optionButton);
+            buttonBoxPane.add(optionButton);
             optionButtons.add(optionButton);
         }
     }

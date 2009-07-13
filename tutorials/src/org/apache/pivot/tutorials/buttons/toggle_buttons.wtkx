@@ -21,7 +21,7 @@ limitations under the License.
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
     <content>
-        <FlowPane styles="{padding:4, horizontalAlignment:'center',
+        <BoxPane styles="{padding:4, horizontalAlignment:'center',
             verticalAlignment:'center'}">
             <PushButton toggleButton="true">
                 <buttonData>
@@ -38,7 +38,7 @@ limitations under the License.
                     <content:ButtonData text="Star" icon="org/apache/pivot/tutorials/star.png"/>
                 </buttonData>
             </PushButton>
-        </FlowPane>
+        </BoxPane>
     </content>
 </Window>
 

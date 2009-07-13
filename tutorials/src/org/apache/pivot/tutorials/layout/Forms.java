@@ -22,7 +22,7 @@ import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.FlowPane;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Form;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.MessageType;
@@ -34,7 +34,7 @@ import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class Forms implements Application {
     private Window window = null;
-    private FlowPane nameFlowPane = null;
+    private BoxPane nameBoxPane = null;
     private TextInput lastNameTextInput = null;
     private TextInput firstNameTextInput = null;
     private PushButton submitButton = null;
@@ -43,7 +43,7 @@ public class Forms implements Application {
     public void startup(Display display, Map<String, String> properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "forms.wtkx");
-        nameFlowPane = (FlowPane)wtkxSerializer.get("nameFlowPane");
+        nameBoxPane = (BoxPane)wtkxSerializer.get("nameBoxPane");
         lastNameTextInput = (TextInput)wtkxSerializer.get("lastNameTextInput");
         firstNameTextInput = (TextInput)wtkxSerializer.get("firstNameTextInput");
         submitButton = (PushButton)wtkxSerializer.get("submitButton");
@@ -60,7 +60,7 @@ public class Forms implements Application {
                     flag = new Form.Flag(MessageType.ERROR, "Name is required.");
                 }
 
-                Form.setFlag(nameFlowPane, flag);
+                Form.setFlag(nameBoxPane, flag);
 
                 if (flag == null) {
                     errorLabel.setText(null);

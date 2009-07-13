@@ -34,7 +34,7 @@ import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentMouseButtonListener;
 import org.apache.pivot.wtk.Cursor;
 import org.apache.pivot.wtk.Dimensions;
-import org.apache.pivot.wtk.FlowPane;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Insets;
@@ -432,19 +432,19 @@ public class TerraCalendarSkin extends CalendarSkin
 
         TablePane.Row row;
 
-        // Add the month/year flow pane
-        FlowPane monthYearFlowPane = new FlowPane();
-        monthYearFlowPane.getStyles().put("padding", 3);
-        monthYearFlowPane.getStyles().put("horizontalAlignment", HorizontalAlignment.JUSTIFY);
+        // Add the month/year box pane
+        BoxPane monthYearBoxPane = new BoxPane();
+        monthYearBoxPane.getStyles().put("padding", 3);
+        monthYearBoxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.JUSTIFY);
 
-        monthYearFlowPane.add(monthSpinner);
-        monthYearFlowPane.add(yearSpinner);
+        monthYearBoxPane.add(monthSpinner);
+        monthYearBoxPane.add(yearSpinner);
 
         row = new TablePane.Row();
-        row.add(monthYearFlowPane);
+        row.add(monthYearBoxPane);
         tablePane.getRows().add(row);
 
-        TablePane.setColumnSpan(monthYearFlowPane, 7);
+        TablePane.setColumnSpan(monthYearBoxPane, 7);
 
         // Add the day labels
         row = new TablePane.Row();

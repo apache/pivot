@@ -16,11 +16,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<FlowPane styles="{verticalAlignment:'center'}"
+<BoxPane styles="{verticalAlignment:'center'}"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
     <PushButton wtkx:id="pushButton" buttonData="Button" action="buttonAction"/>
     <Spinner wtkx:id="spinner" preferredWidth="60"
         spinnerData="['One', 'Two', 'Three', 'Four', 'Five']" circular="true"
         selectedIndex="0"/>
-</FlowPane>
+</BoxPane>

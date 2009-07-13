@@ -16,9 +16,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<FlowPane styles="{horizontalAlignment:'justify', verticalAlignment:'center'}"
+<BoxPane styles="{horizontalAlignment:'justify', verticalAlignment:'center'}"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
     <Label text="Some very long text...fill in more here to reproduce fill in more here to reproduce fill in more here to reproduce"
         styles="{wrapText:true, horizontalAlignment:'center'}" />
-</FlowPane>
+</BoxPane>

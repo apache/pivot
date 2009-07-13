@@ -21,10 +21,10 @@ limitations under the License.
     <sections>
         <Form.Section>
             <TextInput Form.name="Name"/>
-            <FlowPane Form.name="Address" orientation="vertical">
+            <BoxPane Form.name="Address" orientation="vertical">
                 <TextInput/>
                 <TextInput/>
-            </FlowPane>
+            </BoxPane>
             <TextInput Form.name="City"/>
             <ListButton Form.name="State"
                 listData="[

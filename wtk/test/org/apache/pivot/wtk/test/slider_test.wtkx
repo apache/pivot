@@ -16,8 +16,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<FlowPane xmlns:wtkx="http://pivot.apache.org/wtkx"
+<BoxPane xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
     <Slider wtkx:id="slider" bounds="{minimum:-100, maximum:100}" value="0"/>
     <Label wtkx:id="valueLabel"/>
-</FlowPane>
+</BoxPane>

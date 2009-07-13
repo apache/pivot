@@ -24,7 +24,7 @@ limitations under the License.
             <content>
                 <ScrollPane horizontalScrollBarPolicy="fill">
                     <view>
-                        <FlowPane orientation="vertical" styles="{horizontalAlignment:'justify',
+                        <BoxPane orientation="vertical" styles="{horizontalAlignment:'justify',
                             padding:{left:2, right:2}}">
                             <Expander wtkx:id="stocksExpander" title="Stocks">
                                 <content>
@@ -41,7 +41,7 @@ limitations under the License.
                                     <wtkx:include src="calendar.wtkx"/>
                                 </content>
                             </Expander>
-                        </FlowPane>
+                        </BoxPane>
                     </view>
                 </ScrollPane>
             </content>

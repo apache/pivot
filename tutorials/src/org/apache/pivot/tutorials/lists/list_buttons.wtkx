@@ -28,11 +28,11 @@ limitations under the License.
             </columns>
             <rows>
                 <TablePane.Row height="340">
-                    <FlowPane orientation="vertical" styles="{verticalAlignment:'top', padding: 4}">
+                    <BoxPane orientation="vertical" styles="{verticalAlignment:'top', padding: 4}">
                         <Label text="Picture:"/>
                         <ListButton wtkx:id="listButton"
                             listData="['IMG_0725_2.jpg', 'IMG_0735_2.jpg', 'IMG_0767_2.jpg']"/>
-                    </FlowPane>
+                    </BoxPane>
 
                     <ImageView wtkx:id="imageView" styles="{backgroundColor:'#404040'}"/>
                 </TablePane.Row>

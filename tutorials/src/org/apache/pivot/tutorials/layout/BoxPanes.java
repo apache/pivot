@@ -22,7 +22,7 @@ import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonStateListener;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.FlowPane;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.RadioButton;
@@ -30,9 +30,9 @@ import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
-public class FlowPanes implements Application {
+public class BoxPanes implements Application {
     private Window window = null;
-    private FlowPane flowPane = null;
+    private BoxPane boxPane = null;
     private RadioButton horizontalOrientationButton = null;
     private RadioButton verticalOrientationButton = null;
     private RadioButton horizontalAlignmentRightButton = null;
@@ -46,8 +46,8 @@ public class FlowPanes implements Application {
 
     public void startup(Display display, Map<String, String> properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "flow_panes.wtkx");
-        flowPane = (FlowPane)wtkxSerializer.get("flowPane");
+        window = (Window)wtkxSerializer.readObject(this, "box_panes.wtkx");
+        boxPane = (BoxPane)wtkxSerializer.get("boxPane");
         horizontalOrientationButton = (RadioButton)wtkxSerializer.get("horizontalOrientationButton");
         verticalOrientationButton = (RadioButton)wtkxSerializer.get("verticalOrientationButton");
         horizontalAlignmentRightButton = (RadioButton)wtkxSerializer.get("horizontalAlignmentRightButton");
@@ -62,7 +62,7 @@ public class FlowPanes implements Application {
         ButtonStateListener radioButtonStateListener = new ButtonStateListener() {
             public void stateChanged(Button button, Button.State previousState) {
                 if (button.isSelected()) {
-                    updateFlowPaneState();
+                    updateBoxPaneState();
                 }
             }
         };
@@ -78,7 +78,7 @@ public class FlowPanes implements Application {
         verticalAlignmentCenterButton.getButtonStateListeners().add(radioButtonStateListener);
         verticalAlignmentJustifyButton.getButtonStateListeners().add(radioButtonStateListener);
 
-        updateFlowPaneState();
+        updateBoxPaneState();
 
         window.open(display);
     }
@@ -97,7 +97,7 @@ public class FlowPanes implements Application {
     public void resume() {
     }
 
-    private void updateFlowPaneState() {
+    private void updateBoxPaneState() {
         Orientation orientation = null;
         if (horizontalOrientationButton.isSelected()) {
             orientation = Orientation.HORIZONTAL;
@@ -106,7 +106,7 @@ public class FlowPanes implements Application {
         }
 
         if (orientation != null) {
-            flowPane.setOrientation(orientation);
+            boxPane.setOrientation(orientation);
         }
 
         HorizontalAlignment horizontalAlignment = null;
@@ -121,7 +121,7 @@ public class FlowPanes implements Application {
         }
 
         if (horizontalAlignment != null) {
-            flowPane.getStyles().put("horizontalAlignment", horizontalAlignment);
+            boxPane.getStyles().put("horizontalAlignment", horizontalAlignment);
         }
 
         VerticalAlignment verticalAlignment = null;
@@ -136,11 +136,11 @@ public class FlowPanes implements Application {
         }
 
         if (verticalAlignment != null) {
-            flowPane.getStyles().put("verticalAlignment", verticalAlignment);
+            boxPane.getStyles().put("verticalAlignment", verticalAlignment);
         }
     }
 
     public static void main(String[] args) {
-        DesktopApplicationContext.main(FlowPanes.class, args);
+        DesktopApplicationContext.main(BoxPanes.class, args);
     }
 }

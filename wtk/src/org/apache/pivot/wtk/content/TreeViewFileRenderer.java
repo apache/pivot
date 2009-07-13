@@ -22,7 +22,7 @@ import java.io.File;
 
 import org.apache.pivot.io.Folder;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
-import org.apache.pivot.wtk.FlowPane;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Label;
@@ -36,7 +36,7 @@ import org.apache.pivot.wtk.media.Image;
  *
  * @author gbrown
  */
-public class TreeViewFileRenderer extends FlowPane implements TreeView.NodeRenderer {
+public class TreeViewFileRenderer extends BoxPane implements TreeView.NodeRenderer {
     private ImageView imageView = new ImageView();
     private Label label = new Label();
 

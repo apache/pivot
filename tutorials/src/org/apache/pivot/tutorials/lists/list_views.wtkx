@@ -20,7 +20,7 @@ limitations under the License.
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
     <content>
-        <FlowPane styles="{padding:4, spacing:4}">
+        <BoxPane styles="{padding:4, spacing:4}">
             <Border styles="{padding:0, color:10}">
                 <content>
                     <ScrollPane preferredWidth="80" preferredHeight="110"
@@ -34,11 +34,11 @@ limitations under the License.
                     </ScrollPane>
                 </content>
             </Border>
-            <FlowPane orientation="vertical" preferredWidth="120" styles="{horizontalAlignment:'justify'}">
+            <BoxPane orientation="vertical" preferredWidth="120" styles="{horizontalAlignment:'justify'}">
                 <Label text="You selected:"/>
                 <Label wtkx:id="selectionLabel" styles="{wrapText:true}"/>
-            </FlowPane>
-        </FlowPane>
+            </BoxPane>
+        </BoxPane>
     </content>
 </Window>
 

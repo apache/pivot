@@ -22,23 +22,23 @@ limitations under the License.
     xmlns="org.apache.pivot.wtk">
     <content>
         <CardPane wtkx:id="cardPane" selectedIndex="0" styles="{selectionChangeEffect:'horizontal_slide'}">
-            <FlowPane orientation="vertical" styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+            <BoxPane orientation="vertical" styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
                 <ImageView image="org/apache/pivot/tutorials/IMG_0735_2.jpg"/>
                 <LinkButton wtkx:id="nextButton">
                     <buttonData>
                         <content:ButtonData text="Next" icon="@resultset_next.png"/>
                     </buttonData>
                 </LinkButton>
-            </FlowPane>
+            </BoxPane>
 
-            <FlowPane orientation="vertical" styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+            <BoxPane orientation="vertical" styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
                 <ImageView image="org/apache/pivot/tutorials/IMG_0767_2.jpg"/>
                 <LinkButton wtkx:id="previousButton">
                     <buttonData>
                         <content:ButtonData text="Previous" icon="@resultset_previous.png"/>
                     </buttonData>
                 </LinkButton>
-            </FlowPane>
+            </BoxPane>
         </CardPane>
     </content>
 </Window>

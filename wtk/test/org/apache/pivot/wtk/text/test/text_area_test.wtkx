@@ -42,14 +42,14 @@ limitations under the License.
                     </Border>
                 </TablePane.Row>
                 <TablePane.Row height="-1">
-                    <FlowPane>
+                    <BoxPane>
                         <Label>
                             <text><![CDATA[Selection:]]></text>
                         </Label>
                         <Label wtkx:id="selectionStartLabel"/>
                         <Label text=":"/>
                         <Label wtkx:id="selectionLengthLabel"/>
-                    </FlowPane>
+                    </BoxPane>
                 </TablePane.Row>
             </rows>
         </TablePane>

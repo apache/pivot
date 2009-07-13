@@ -44,7 +44,7 @@ import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentMouseButtonListener;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.FlowPane;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.ListView;
@@ -97,7 +97,7 @@ public class RSSFeedDemo implements Application {
     }
 
     // Prepares an RSS feed news item for presentation in a list view
-    private class RSSItemRenderer extends FlowPane implements ListView.ItemRenderer {
+    private class RSSItemRenderer extends BoxPane implements ListView.ItemRenderer {
         private Label titleLabel = new Label();
         private Label categoriesHeadingLabel = new Label("subject:");
         private Label categoriesLabel = new Label();
@@ -111,17 +111,17 @@ public class RSSFeedDemo implements Application {
 
             add(titleLabel);
 
-            FlowPane categoriesFlowPane = new FlowPane();
-            add(categoriesFlowPane);
+            BoxPane categoriesBoxPane = new BoxPane();
+            add(categoriesBoxPane);
 
-            categoriesFlowPane.add(categoriesHeadingLabel);
-            categoriesFlowPane.add(categoriesLabel);
+            categoriesBoxPane.add(categoriesHeadingLabel);
+            categoriesBoxPane.add(categoriesLabel);
 
-            FlowPane submitterFlowPane = new FlowPane();
-            add(submitterFlowPane);
+            BoxPane submitterBoxPane = new BoxPane();
+            add(submitterBoxPane);
 
-            submitterFlowPane.add(submitterHeadingLabel);
-            submitterFlowPane.add(submitterLabel);
+            submitterBoxPane.add(submitterHeadingLabel);
+            submitterBoxPane.add(submitterLabel);
         }
 
         @Override
