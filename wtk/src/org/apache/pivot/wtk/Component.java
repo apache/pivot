@@ -628,7 +628,7 @@ public abstract class Component implements ConstrainedVisual {
     private static int nextHandle = 0;
 
     // Map of all components by handle
-    private static HashMap<Integer, Component> components = new HashMap<Integer, Component>(true);
+    private static HashMap<Integer, Component> components = new HashMap<Integer, Component>();
     private static ComponentDictionary componentDictionary = new ComponentDictionary();
 
     // Class event listeners
@@ -639,16 +639,6 @@ public abstract class Component implements ConstrainedVisual {
      */
     public Component() {
         handle = nextHandle++;
-        components.put(handle, this);
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        try {
-            components.remove(handle);
-        } finally {
-            super.finalize();
-        }
     }
 
     /**
@@ -759,6 +749,12 @@ public abstract class Component implements ConstrainedVisual {
         if (parent == null
             && isFocused()) {
             clearFocus();
+        }
+
+        if (parent == null) {
+            components.remove(handle);
+        } else {
+            components.put(handle, this);
         }
 
         Container previousParent = this.parent;
