@@ -781,8 +781,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
                     int x = 0;
                     for (NodeView nodeView : row) {
-                        // TODO Use node's vertical alignment properties to
-                        // determine y-value
+                        // TODO Align to baseline
                         int y = rowHeight - nodeView.getHeight();
 
                         nodeView.setLocation(x, y + height);
