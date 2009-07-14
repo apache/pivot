@@ -545,6 +545,13 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                     } else {
                                         element.value = serializer.readObject(new URL(location, src));
                                     }
+
+                                    if (id == null
+                                        && !serializer.isEmpty()) {
+                                        System.err.println(WTKX_PREFIX + ":" + INCLUDE_TAG
+                                            + " \"" + src + "\" is missing an " + ID_ATTRIBUTE
+                                            + " attribute.");
+                                    }
                                 } else {
                                     // Process attributes looking for wtkx:id and all property setters
                                     for (Attribute attribute : element.attributes) {
