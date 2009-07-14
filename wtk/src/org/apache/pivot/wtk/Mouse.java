@@ -134,6 +134,9 @@ public final class Mouse {
         if (descendant == null) {
             // The mouse is no longer over the capturer
             capturer.mouseOut();
+            Mouse.setCursor(display);
+
+            // Allow the mouse to re-enter the display
             display.mouseMove(location.x, location.y);
         }
 
