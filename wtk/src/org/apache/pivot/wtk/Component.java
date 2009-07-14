@@ -881,7 +881,12 @@ public abstract class Component implements ConstrainedVisual {
             if (height == -1) {
                 preferredWidth = getPreferredSize().width;
             } else {
-                preferredWidth = skin.getPreferredWidth(height);
+                if (preferredSize != null
+                    && preferredSize.height == height) {
+                    preferredWidth = preferredSize.width;
+                } else {
+                    preferredWidth = skin.getPreferredWidth(height);
+                }
             }
         } else {
             preferredWidth = this.preferredWidth;
@@ -951,7 +956,12 @@ public abstract class Component implements ConstrainedVisual {
             if (width == -1) {
                 preferredHeight = getPreferredSize().height;
             } else {
-                preferredHeight = skin.getPreferredHeight(width);
+                if (preferredSize != null
+                    && preferredSize.width == width) {
+                    preferredHeight = preferredSize.height;
+                } else {
+                    preferredHeight = skin.getPreferredHeight(width);
+                }
             }
         } else {
             preferredHeight = this.preferredHeight;

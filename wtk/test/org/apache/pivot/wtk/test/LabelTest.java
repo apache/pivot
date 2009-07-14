@@ -18,21 +18,22 @@ package org.apache.pivot.wtk.test;
 
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.BoxPane;
+import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.TextDecoration;
-import org.apache.pivot.wtk.Window;
 
 public class LabelTest implements Application {
-    private Window window = null;
+    private Frame frame = null;
 
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        window = new Window();
-        window.setTitle("Label Test");
+        frame = new Frame();
+        frame.setTitle("Label Test");
 
         String line1 = "There's a lady who's sure all that glitters is gold, and "
             + "she's buying a stairway to heaven. When she gets there she knows, "
@@ -48,7 +49,7 @@ public class LabelTest implements Application {
             + "listen very hard the tune will come to you at last when all are "
             + "one and one is all: to be a rock and not to roll.";
 
-        BoxPane boxPane = new BoxPane(Orientation.HORIZONTAL);
+        BoxPane boxPane = new BoxPane(Orientation.VERTICAL);
 
         Label label1 = new Label(line1);
         label1.getStyles().put("wrapText", true);
@@ -64,15 +65,15 @@ public class LabelTest implements Application {
         boxPane.getStyles().put("fill", true);
         boxPane.getStyles().put("padding", new Insets(10));
 
-        window.setContent(boxPane);
-        window.setPreferredWidth(200);
+        frame.setContent(boxPane);
+        frame.setPreferredSize(240, 320);
 
-        window.open(display);
+        frame.open(display);
     }
 
     public boolean shutdown(boolean optional) {
-        if (window != null) {
-            window.close();
+        if (frame != null) {
+            frame.close();
         }
 
         return false;
@@ -82,5 +83,9 @@ public class LabelTest implements Application {
     }
 
     public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(LabelTest.class, args);
     }
 }
