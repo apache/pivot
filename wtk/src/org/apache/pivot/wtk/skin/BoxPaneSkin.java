@@ -76,7 +76,7 @@ public class BoxPaneSkin extends ContainerSkin
                 Component component = boxPane.get(i);
 
                 if (component.isDisplayable()) {
-                    preferredWidth += component.getPreferredWidth(height);
+                    preferredWidth += component.getPreferredWidth(fill ? height : -1);
                     j++;
                 }
             }
@@ -121,7 +121,7 @@ public class BoxPaneSkin extends ContainerSkin
                 Component component = boxPane.get(i);
 
                 if (component.isDisplayable()) {
-                    preferredHeight += component.getPreferredHeight(width);
+                    preferredHeight += component.getPreferredHeight(fill ? width : -1);
                     j++;
                 }
             }
@@ -216,7 +216,7 @@ public class BoxPaneSkin extends ContainerSkin
 
         Orientation orientation = boxPane.getOrientation();
         if (orientation == Orientation.HORIZONTAL) {
-            int preferredWidth = (fill) ? getPreferredWidth(height) : getPreferredWidth(-1);
+            int preferredWidth = getPreferredWidth(fill ? height : -1);
 
             // Determine the starting x-coordinate
             int x = 0;
@@ -286,7 +286,7 @@ public class BoxPaneSkin extends ContainerSkin
                 }
             }
         } else {
-            int preferredHeight = (fill) ? getPreferredHeight(width) : getPreferredHeight(-1);
+            int preferredHeight = getPreferredHeight(fill ? width : -1);
 
             // Determine the starting y-coordinate
             int y = 0;
