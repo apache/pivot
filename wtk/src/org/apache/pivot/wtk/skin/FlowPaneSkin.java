@@ -87,52 +87,44 @@ public class FlowPaneSkin extends ContainerSkin {
                 }
             }
         } else {
-            // Include padding in width constraint
-            width = Math.max(width - (padding.left + padding.right), 0);
+            int contentWidth = Math.max(width - (padding.left + padding.right), 0);
 
             // Break the components into multiple rows
             int rowCount = 0;
-            int rowHeight = 0;
 
-            int fieldCount = 0;
             int rowWidth = 0;
-
+            int rowHeight = 0;
             for (int i = 0, n = flowPane.getLength(); i < n; i++) {
                 Component component = flowPane.get(i);
 
                 if (component.isDisplayable()) {
                     Dimensions componentSize = component.getPreferredSize();
 
-                    if (rowWidth + componentSize.width > width
+                    if (rowWidth + componentSize.width > contentWidth
                         && rowWidth > 0) {
                         // The component is too big to fit in the remaining space,
                         // and it is not the only component in this row; wrap
                         preferredHeight += rowHeight;
 
                         rowCount++;
-                        rowHeight = 0;
-
-                        fieldCount = 0;
                         rowWidth = 0;
+                        rowHeight = 0;
                     }
 
+                    rowWidth += componentSize.width + horizontalSpacing;
                     rowHeight = Math.max(rowHeight, componentSize.height);
-                    rowWidth += componentSize.width;
-
-                    if (fieldCount > 0) {
-                        rowWidth += horizontalSpacing;
-                    }
-
-                    fieldCount++;
                 }
             }
 
             // Add the last row
-            preferredHeight += rowHeight;
+            if (rowHeight > 0) {
+                preferredHeight += rowHeight;
+                rowCount++;
+            }
 
             // Include spacing
             if (rowCount > 0) {
-                preferredHeight += verticalSpacing * rowCount;
+                preferredHeight += verticalSpacing * (rowCount - 1);
             }
         }
 
@@ -177,6 +169,7 @@ public class FlowPaneSkin extends ContainerSkin {
     public void layout() {
         FlowPane flowPane = (FlowPane)getComponent();
         int width = getWidth();
+        int contentWidth = Math.max(width - (padding.left + padding.right), 0);
 
         // Break the components into multiple rows
         ArrayList<ArrayList<Component>> rows = new ArrayList<ArrayList<Component>>();
@@ -191,7 +184,7 @@ public class FlowPaneSkin extends ContainerSkin {
                 Dimensions componentSize = component.getPreferredSize();
                 component.setSize(componentSize);
 
-                if (rowWidth + componentSize.width > width
+                if (rowWidth + componentSize.width > contentWidth
                     && rowWidth > 0) {
                     // The component is too big to fit in the remaining space,
                     // and it is not the only component in this row
@@ -202,11 +195,7 @@ public class FlowPaneSkin extends ContainerSkin {
 
                 // Add the component to the row
                 row.add(component);
-                rowWidth += componentSize.width;
-
-                if (row.getLength() > 0) {
-                    rowWidth += horizontalSpacing;
-                }
+                rowWidth += componentSize.width + horizontalSpacing;
             }
         }
 

@@ -21,7 +21,7 @@ limitations under the License.
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
     <content>
-        <FlowPane styles="{alignment:'center', backgroundColor:'#ffffff'}">
+        <FlowPane styles="{alignment:'left', backgroundColor:'#ff0000', padding:4}">
             <PushButton buttonData="0" styles="{preferredAspectRatio:15}"/>
             <PushButton buttonData="1" styles="{preferredAspectRatio:1.5}"/>
             <PushButton buttonData="2" displayable="false" styles="{preferredAspectRatio:1.5}"/>
