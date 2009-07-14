@@ -169,7 +169,7 @@ public class TerraRollupSkin extends RollupSkin {
     private Color buttonColor;
     private int spacing;
     private int buffer;
-    private boolean justify;
+    private boolean fill;
     private boolean headingToggles;
     private boolean useBullet;
 
@@ -198,7 +198,7 @@ public class TerraRollupSkin extends RollupSkin {
         buttonColor = theme.getColor(9);
         spacing = 4;
         buffer = 4;
-        justify = false;
+        fill = false;
         headingToggles = true;
         useBullet = false;
     }
@@ -270,7 +270,7 @@ public class TerraRollupSkin extends RollupSkin {
         int preferredHeight = 0;
 
         // Calculate our internal width constraint
-        if (justify && width >= 0) {
+        if (fill && width >= 0) {
             width = Math.max(width - rollupButton.getPreferredWidth(-1) - buffer, 0);
         } else {
             width = -1;
@@ -311,7 +311,7 @@ public class TerraRollupSkin extends RollupSkin {
 
         if (heading != null) {
             int headingWidth, headingHeight;
-            if (justify) {
+            if (fill) {
                 headingWidth = justifiedWidth;
                 headingHeight = heading.getPreferredHeight(headingWidth);
             } else {
@@ -332,7 +332,7 @@ public class TerraRollupSkin extends RollupSkin {
                 || (expandTransition != null
                     && !expandTransition.isReversed())) {
                 int contentWidth, contentHeight;
-                if (justify) {
+                if (fill) {
                     contentWidth = justifiedWidth;
                     contentHeight = content.getPreferredHeight(contentWidth);
                 } else {
@@ -397,12 +397,12 @@ public class TerraRollupSkin extends RollupSkin {
         invalidateComponent();
     }
 
-    public boolean getJustify() {
-        return justify;
+    public boolean getFill() {
+        return fill;
     }
 
-    public void setJustify(boolean justify) {
-        this.justify = justify;
+    public void setFill(boolean fill) {
+        this.fill = fill;
         invalidateComponent();
     }
 
