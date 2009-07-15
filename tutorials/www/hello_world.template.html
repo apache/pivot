@@ -1,0 +1,146 @@
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<html>
+<head>
+<title>Hello, World!</title>
+<link rel="stylesheet" href="tutorial.css">
+</head>
+<body>
+<h1>Hello, World!</h1>
+
+<p>Below is the output of the traditional "hello world" application written in Pivot:</p>
+
+<script>
+var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
+    archive:"lib/@project_name@-core-@version@.jar,lib/@project_name@-wtk-@version@.jar,lib/@project_name@-wtk-@version@.terra.jar,lib/@project_name@-tutorials-@version@.jar",
+    width:240,
+    height:80
+};
+var parameters = {application_class_name:"org.apache.pivot.tutorials.HelloWorld",
+    codebase_lookup:false
+};
+deployJava.writeAppletTag(attributes, parameters);
+</script>
+
+<p>This version of the application was written entirely in Java and is shown below; a WTKX implementation is demonstrated next:</p>
+
+<pre class="java">
+package org.apache.pivot.tutorials;
+
+import java.awt.Color;
+import java.awt.Font;
+
+import org.apache.pivot.collections.Map;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.DesktopApplicationContext;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.HorizontalAlignment;
+import org.apache.pivot.wtk.Label;
+import org.apache.pivot.wtk.VerticalAlignment;
+import org.apache.pivot.wtk.Window;
+
+public class HelloJava implements Application {
+    private Window window = null;
+
+    public void startup(Display display, Map<String, String> properties) {
+        Label label = new Label();
+        label.setText("Hello World!");
+        label.getStyles().put("font", new Font("Arial", Font.BOLD, 24));
+        label.getStyles().put("color", Color.RED);
+        label.getStyles().put("horizontalAlignment",
+            HorizontalAlignment.CENTER);
+        label.getStyles().put("verticalAlignment",
+            VerticalAlignment.CENTER);
+
+        window = new Window();
+        window.setContent(label);
+        window.setTitle("Hello World!");
+        window.setMaximized(true);
+        window.open(display);
+    }
+
+    public boolean shutdown(boolean optional) {
+        if (window != null) {
+            window.close();
+        }
+
+        return false;
+    }
+
+    public void suspend() {
+    }
+
+    public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(HelloJava.class, args);
+    }
+}
+</pre>
+
+<p>The program demonstrates some of the fundamental features of the Pivot platform: the <tt>Application</tt> interface, the <tt>Window</tt> class, and styles.
+
+<h3>The Application Interface</h3>
+<p>The Application interface is the entry point into a Pivot application. It is similar to the <tt>main()</tt> method used in C and Java programming or the lifecycle methods used in traditional Java applet development. It defines the following four methods:</p>
+
+<ul>
+<li><tt>startup()</tt> - called when an application is starting up</li>
+<li><tt>shutdown()</tt> - called when a running application is shutting down</li>
+<li><tt>suspend()</tt> - called when an application is temporarily deactivated</li>
+<li><tt>resume()</tt> - called when a suspended application is resumed</li>
+</ul>
+
+<p>However, unlike <tt>main()</tt> or the applet lifecycle methods, which require a separate code base for each environment, <tt>Application</tt> defines a single interface that is used for both web deployment or desktop execution, allowing the same program to run unmodified in either environment.</p>
+
+<p>A Pivot application can be run in the browser using the <tt>&lt;applet&gt;</tt> tag, as shown below; the class name of the Pivot application is specified by the "applicationClassName" applet parameter:</p>
+
+<pre class="html">
+&lt;applet code="org.apache.pivot.wtk.BrowserApplicationContext$HostApplet"
+    archive="lib/pivot-core-@version@.jar,lib/pivot-wtk-@version@.jar,
+    lib/pivot-wtk-@version@.terra.jar, lib/pivot-tutorials-@version@.jar"
+    width="160" height="80"&gt;
+    &lt;param name="applicationClassName"
+        value="org.apache.pivot.tutorials.HelloJava"&gt;
+    &lt;param name="image" value=""&gt;
+&lt;/applet&gt;
+</pre>
+
+<p>The same application can be run from the command line using the following syntax (minus the line breaks) on UNIX-based systems; the class name is the first argument to the DesktopApplicationContext loader application:</p>
+
+<p class="command"><tt>java -cp pivot-core-@version@.jar:pivot-wtk-@version@.jar:pivot-wtk-@version@.terra.jar:pivot-tutorials-@version@.jar org.apache.pivot.wtk.DesktopApplicationContext org.apache.pivot.tutorials.HelloJava</tt></p>
+
+<p>and the following on Windows systems:</p>
+
+<p class="command"><tt>java -cp pivot-core-@version@.jar;pivot-wtk-@version@.jar;pivot-wtk-@version@.terra.jar;pivot-tutorials-@version@.jar org.apache.pivot.wtk.DesktopApplicationContext org.apache.pivot.tutorials.HelloJava</tt></p>
+
+<p>The application itself defines a convenience <tt>main()</tt> method that delegates to <tt>DesktopApplicationContext.main()</tt>; this allows Pivot applications to be bundled as executable JARs and makes launching applications from within an IDE easier.</p>
+
+<h3>The Window Class</h3>
+<p>A window is the top-level entry point into an application's user interface. Almost all Pivot applications will use at least one window.</p>
+
+<p>The window in the sample application is an instance of <tt>Window</tt>, the most basic window type. It is simply an undecorated area of the screen into which other components may be placed. Other window types, such as <tt>Dialog</tt> and <tt>Frame</tt>, add additional features and behaviors such as title bars and modality.</p>
+
+<p>The window used by "Hello World" is "maximized": it automatically fills the entire area of the display. A maximized, decorationless window is commonly used as a top-level application window, particularly for applications that will be primarily run in a web browser. However, windows can also be given an explicit size, can be resized by the user, or can take on the default size of their content. Windows are discussed in more detail in the <a href="windows.html">Windows</a> section.</p>
+
+<h3>Styles</h3>
+<p>Styles are a means of customizing a component's appearance. Style properties are defined by a component's skin and are accessed via a component's styles collection. For example, the example application sets the font, color, and alignment styles on the "Hello World" label. Though skins are not required to provide styling support, most will provide similar capabilities.</p>
+
+<p>Next: <a href="hello_wtkx.html">Hello, WTKX!</a></p>
+</body>
+</html>
