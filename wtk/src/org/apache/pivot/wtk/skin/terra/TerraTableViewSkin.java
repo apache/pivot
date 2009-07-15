@@ -855,10 +855,10 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                         && tableView.isFocused()) {
                         // Edit the row
                         editIndex = rowIndex;
-                    } else {
-                        // Select the row
-                        tableView.setSelectedIndex(rowIndex);
                     }
+
+                    // Select the row
+                    tableView.setSelectedIndex(rowIndex);
                 }
             }
         }

@@ -17,31 +17,51 @@ limitations under the License.
 
 <html>
 <head>
-<title>Hello, WTKX!</title>
+<title>Radio Buttons</title>
 <link rel="stylesheet" href="tutorial.css">
 <script src="http://java.com/js/deployJava.js"></script>
 </head>
 <body>
-<h1>Hello, WTKX!</h1>
+<h1>Radio Buttons</h1>
 
-<p>Below is the output of the "hello world" application written using WTKX. Note that, with the exception of the actual text, it is identical to the output of the Java version:</p>
+<p>Separators are simple components that are similar to a horizontal rule in HTML. They have an optional heading and are generally used to partition content, as shown in the sample application below:</p>
 
 <script>
 var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
     archive:"lib/@project_name@-core-@version@.jar,lib/@project_name@-wtk-@version@.jar,lib/@project_name@-wtk-@version@.terra.jar,lib/@project_name@-tutorials-@version@.jar",
-    width:240,
-    height:80
+    width:320,
+    height:240,
+    style:"border:solid 1px #999999"
 };
-var parameters = {application_class_name:"org.apache.pivot.tutorials.HelloWTKX",
+var parameters = {application_class_name:"org.apache.pivot.tutorials.separators.Separators",
     codebase_lookup:false
 };
 deployJava.writeAppletTag(attributes, parameters);
 </script>
 
-<p>The following is the Java source code for the WTKX version. The content of the user interface is defined entirely by the WTKX source file. It is loaded using an instance of the <tt>WTKXSerializer</tt> class defined in the <tt>org.apache.pivot.wtkx</tt> package.</p>
+<p>The WTKX for this sample is as follows. Note that the box pane sets the "fill" style to true; otherwise, the separator would not grow to fill the horizontal space:</p>
+
+<pre class="xml">
+&lt;Window title="Separators" maximized="true"
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns="org.apache.pivot.wtk"&gt;
+    &lt;content&gt;
+        &lt;BoxPane orientation="vertical" styles="{padding:4, spacing:10, fill:true}"&gt;
+            &lt;Separator heading="Section 1"/&gt;
+            &lt;Label text="This is the content of section 1."/&gt;
+            &lt;Separator heading="Section 2"/&gt;
+            &lt;Label text="This is the content of section 2."/&gt;
+            &lt;Separator heading="Section 3"/&gt;
+            &lt;Label text="This is the content of section 3."/&gt;
+        &lt;/BoxPane&gt;
+    &lt;/content&gt;
+&lt;/Window&gt;
+</pre>
+
+<p>The Java code simply serves to load the WTKX:</p>
 
 <pre class="java">
-package org.apache.pivot.tutorials;
+package org.apache.pivot.tutorials.separators;
 
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
@@ -50,13 +70,13 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
-public class HelloWTKX implements Application {
+public class Separators implements Application {
     private Window window = null;
 
     public void startup(Display display, Map&lt;String, String&gt; properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "hello.wtkx");
+        window = (Window)wtkxSerializer.readObject(this, "separators.wtkx");
         window.open(display);
     }
 
@@ -75,27 +95,12 @@ public class HelloWTKX implements Application {
     }
 
     public static void main(String[] args) {
-        DesktopApplicationContext.main(HelloWTKX.class, args);
+        DesktopApplicationContext.main(Separators.class, args);
     }
 }
 </pre>
 
-<p>The WTKX that is used to create the UI is shown below:</p>
-
-<pre class="xml">
-&lt;Window title="Hello WTKX!" maximized="true"
-    xmlns:wtkx="http://pivot.apache.org/wtkx"
-    xmlns="org.apache.pivot.wtk"&gt;
-    &lt;content&gt;
-        &lt;Label text="Hello WTKX!"
-            styles="{font:'Arial bold 24', color:'#ff0000',
-                horizontalAlignment:'center', verticalAlignment:'center'}"/&gt;
-    &lt;/content&gt;
-&lt;/Window&gt;
-</pre>
-
-<p>Most Pivot applications will be constructed this way, by declaring the structure of the UI in WTKX rather than in Java. However, event handlers, which allow an application to respond to user input, are often defined in Java (though they can also be defined within script blocks in the WTKX file). Event handlers are discussed in more detail in later sections.</p>
-
-<p>Next: <a href="component_and_container.html">Component & Container</a></p>
+<p>Next: <a href="layout_containers.html">Layout Containers</a></p>
 </body>
 </html>
+
