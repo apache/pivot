@@ -19,6 +19,14 @@ limitations under the License.
 <head>
 <title>Platform Overview</title>
 <link rel="stylesheet" href="tutorial.css">
+<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shCore.js"></script>
+<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushJava.js"></script>
+<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushXml.js"></script>
+<link type="text/css" rel="stylesheet" href="http://alexgorbatchev.com/pub/sh/current/styles/shCore.css"/>
+<link type="text/css" rel="stylesheet" href="http://alexgorbatchev.com/pub/sh/current/styles/shThemeDefault.css"/>
+<script type="text/javascript">
+    SyntaxHighlighter.all();
+</script>
 </head>
 <body>
 <h1>Platform Overview</h1>
@@ -272,7 +280,7 @@ Non-container components are generally used to present data to the user, retriev
 
 <p>The following is a simple WTKX example that would create two buttons, labeled "OK" and "Cancel", arranged in a horizontal line:</p>
 
-<pre class="xml">
+<pre class="brush:xml">
 &lt;BoxPane xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk"&gt;
     &lt;PushButton buttonData="OK"/&gt;
@@ -282,7 +290,7 @@ Non-container components are generally used to present data to the user, retriev
 
 <p>Note that the button text is specified using the "buttonData" attribute. Simple string-based data such as this is often sufficient; however, some component properties, including button data, cannot always be easily expressed using XML attributes. For example, a designer may want to create a button containing both an image and a label. WTKX supports the expression of typed data directly in XML using XML namespaces, allowing developers to pass complex data types to components without needing to write Java code to do so. XML namespace prefixes are translated to Java package names by the loader; an instance of <tt>org.apache.pivot.wtk.content.ButtonData</tt>, which defines "icon" and "text" properties, is instantiated and passed as the data to each button as follows:</p>
 
-<pre class="xml">
+<pre class="brush:xml">
 &lt;BoxPane xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk"&gt;

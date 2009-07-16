@@ -79,7 +79,7 @@ deployJava.writeAppletTag(attributes, parameters);
 &lt;/Window&gt;
 </pre>
 
-The Java source is as follows. The main application class defines an inner class that extends the {{pivot.util.concurrent.Task}} class to simulate a background operation. This task simply sleeps for 100ms at a time and updates the meter when it wakes up to reflect the current count. Since all UI updates must be performed on the UI thread, the task queues a callback to set the meter's percent complete; a {{pivot.wtk.TaskAdapter}} is used to process the task notifications for the same reason:
+The Java source is as follows. The main application class defines an inner class that extends the <tt>pivot.util.concurrent.Task</tt> class to simulate a background operation. This task simply sleeps for 100ms at a time and updates the meter when it wakes up to reflect the current count. Since all UI updates must be performed on the UI thread, the task queues a callback to set the meter's percent complete; a <tt>pivot.wtk.TaskAdapter</tt> is used to process the task notifications for the same reason:
 
 <pre class="brush:java">
 package org.apache.pivot.tutorials.progress;
@@ -101,7 +101,7 @@ import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class Meters implements Application {
-    public class SampleTask extends Task<Void> {
+    public class SampleTask extends Task&lt;Void&gt; {
         private int percentage = 0;
 
         public Void execute() throws TaskExecutionException {
@@ -149,12 +149,12 @@ public class Meters implements Application {
                     // task adapter so the result handlers are called on the
                     // UI thread
                     sampleTask = new SampleTask();
-                    sampleTask.execute(new TaskAdapter<Void>(new TaskListener<Void>() {
-                        public void taskExecuted(Task<Void> task) {
+                    sampleTask.execute(new TaskAdapter&lt;Void&gt;(new TaskListener&lt;Void&gt;() {
+                        public void taskExecuted(Task&lt;Void&gt; task) {
                             reset();
                         }
 
-                        public void executeFailed(Task<Void> task) {
+                        public void executeFailed(Task&lt;Void&gt; task) {
                             reset();
                         }
 
