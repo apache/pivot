@@ -20,6 +20,8 @@ limitations under the License.
 <title>Flow Panes</title>
 <link rel="stylesheet" href="tutorial.css">
 <script src="http://java.com/js/deployJava.js"></script>
+
+<!-- NOTE: Syntax highlighting script is LGPL -->
 <script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shCore.js"></script>
 <script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushJava.js"></script>
 <script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushXml.js"></script>
@@ -31,8 +33,143 @@ limitations under the License.
 </head>
 <body>
 <h1>Flow Panes</h1>
+<p>Flow panes arrange components in a horizontal line, wrapping when the contents don't fit on a single line. Components may be aligned to left, right, or center when there is space left over within a given line. The following example demonstrates the use of the <tt>FlowPane</tt> container:</p>
 
-<p>This section is not yet complete.</>
+<script>
+var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
+    archive:"lib/@project_name@-core-@version@.jar,lib/@project_name@-wtk-@version@.jar,lib/@project_name@-wtk-@version@.terra.jar,lib/@project_name@-tutorials-@version@.jar",
+    width:360,
+    height:240
+};
+var parameters = {application_class_name:"org.apache.pivot.tutorials.layout.BoxPanes",
+    codebase_lookup:false
+};
+deployJava.writeAppletTag(attributes, parameters);
+</script>
+
+<p>The WTKX source for this example is shown below:</p>
+
+<pre class="brush:xml">
+&lt;Window title="Flow Panes" maximized="true"
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns="org.apache.pivot.wtk"&gt;
+    &lt;content&gt;
+        &lt;SplitPane splitLocation="300"&gt;
+            &lt;left&gt;
+                &lt;Border styles="{padding:0}"&gt;
+                    &lt;content&gt;
+                        &lt;FlowPane wtkx:id="flowPane"&gt;
+                            &lt;PushButton buttonData="0" styles="{preferredAspectRatio:1.5}"/&gt;
+                            &lt;PushButton buttonData="1" styles="{preferredAspectRatio:1.5}"/&gt;
+                            &lt;PushButton buttonData="2" styles="{preferredAspectRatio:1.5}"/&gt;
+                            &lt;PushButton buttonData="3" preferredWidth="20" preferredHeight="20"/&gt;
+                            &lt;PushButton buttonData="4" preferredWidth="30" preferredHeight="30"/&gt;
+                            &lt;PushButton buttonData="5" preferredWidth="40" preferredHeight="40"/&gt;
+                            &lt;PushButton buttonData="6" styles="{preferredAspectRatio:1.5}"/&gt;
+                            &lt;PushButton buttonData="7" styles="{preferredAspectRatio:1.5}"/&gt;
+                        &lt;/FlowPane&gt;
+                    &lt;/content&gt;
+                &lt;/Border&gt;
+            &lt;/left&gt;
+            &lt;right&gt;
+                &lt;Border styles="{padding:{top:2, left:6}}"&gt;
+                    &lt;content&gt;
+                        &lt;BoxPane orientation="vertical"&gt;
+                            &lt;Label text="Alignment" styles="{fontBold:true}"/&gt;
+                            &lt;RadioButton wtkx:id="leftRadioButton" buttonData="Left" group="alignment" selected="true"/&gt;
+                            &lt;RadioButton wtkx:id="rightRadioButton" buttonData="Right" group="alignment"/&gt;
+                            &lt;RadioButton wtkx:id="centerRadioButton" buttonData="Center" group="alignment"/&gt;
+                        &lt;/BoxPane&gt;
+                    &lt;/content&gt;
+                &lt;/Border&gt;
+            &lt;/right&gt;
+        &lt;/SplitPane&gt;
+    &lt;/content&gt;
+&lt;/Window&gt;
+</pre>
+
+<p>The Java source is as follows. It wires up the event handlers that respond to changes in the radio buttons' state:</p>
+
+<pre class="brush:java">
+package org.apache.pivot.tutorials.layout;
+
+import org.apache.pivot.collections.Map;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.Button;
+import org.apache.pivot.wtk.ButtonStateListener;
+import org.apache.pivot.wtk.DesktopApplicationContext;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.FlowPane;
+import org.apache.pivot.wtk.HorizontalAlignment;
+import org.apache.pivot.wtk.RadioButton;
+import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtkx.WTKXSerializer;
+
+public class FlowPanes implements Application {
+    private Window window = null;
+    private FlowPane flowPane = null;
+    private RadioButton leftRadioButton = null;
+    private RadioButton rightRadioButton = null;
+    private RadioButton centerRadioButton = null;
+
+    public void startup(Display display, Map&lt;String, String&gt; properties) throws Exception {
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        window = (Window)wtkxSerializer.readObject(this, "flow_panes.wtkx");
+        flowPane = (FlowPane)wtkxSerializer.get("flowPane");
+        leftRadioButton = (RadioButton)wtkxSerializer.get("leftRadioButton");
+        rightRadioButton = (RadioButton)wtkxSerializer.get("rightRadioButton");
+        centerRadioButton = (RadioButton)wtkxSerializer.get("centerRadioButton");
+
+        ButtonStateListener buttonStateListener = new ButtonStateListener() {
+            public void stateChanged(Button button, Button.State previousState) {
+                updateFlowPaneState();
+            }
+        };
+
+        leftRadioButton.getButtonStateListeners().add(buttonStateListener);
+        rightRadioButton.getButtonStateListeners().add(buttonStateListener);
+        centerRadioButton.getButtonStateListeners().add(buttonStateListener);
+
+        updateFlowPaneState();
+
+        window.open(display);
+    }
+
+    public boolean shutdown(boolean optional) {
+        if (window != null) {
+            window.close();
+        }
+
+        return false;
+    }
+
+    public void suspend() {
+    }
+
+    public void resume() {
+    }
+
+    private void updateFlowPaneState() {
+        HorizontalAlignment alignment = null;
+
+        if (leftRadioButton.isSelected()) {
+            alignment = HorizontalAlignment.LEFT;
+        } else if (rightRadioButton.isSelected()) {
+            alignment = HorizontalAlignment.RIGHT;
+        } else if (centerRadioButton.isSelected()) {
+            alignment = HorizontalAlignment.CENTER;
+        }
+
+        if (alignment != null) {
+            flowPane.getStyles().put("alignment", alignment);
+        }
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(FlowPanes.class, args);
+    }
+}
+</pre>
 
 <p>Next: <a href="box_panes.html">Box Panes</a></p>
 </body>
