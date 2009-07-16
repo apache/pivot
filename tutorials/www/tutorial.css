@@ -1,17 +1,15 @@
 p.caption {
     font-style:italic;
+    padding-top:0px;
 }
 
 p.command {
     padding-left:24px;
 }
 
-pre.java {
+pre.snippet {
+    margin-left:24px;
+    margin-right:24px;
     padding:4px;
-    border:solid 1px #999999;
-}
-
-pre.xml {
-    padding:4px;
-    border:solid 1px #999999;
+    background-color:#eeeeee;
 }

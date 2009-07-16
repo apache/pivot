@@ -21,15 +21,21 @@ limitations under the License.
     xmlns="org.apache.pivot.wtk">
     <Label textKey="companyName" styles="{fontBold:true, fontSize:12}" />
     <Separator />
-    <Form styles="{rightAlignLabels:true, fieldAlignment:'right'}">
+    <Form styles="{rightAlignLabels:true, fill:true}">
         <sections>
             <Form.Section>
-                <Label Form.name="%value" textKey="value" />
-                <Label wtkx:id="changeLabel" Form.name="%change" textKey="change" />
-                <Label Form.name="%openingValue" textKey="openingValue" />
-                <Label Form.name="%highValue" textKey="highValue" />
-                <Label Form.name="%lowValue" textKey="lowValue" />
-                <Label Form.name="%volume" textKey="volume" />
+                <Label Form.name="%value" textKey="value"
+                    styles="{horizontalAlignment:'right'}"/>
+                <Label wtkx:id="changeLabel" Form.name="%change" textKey="change"
+                    styles="{horizontalAlignment:'right'}"/>
+                <Label Form.name="%openingValue" textKey="openingValue"
+                    styles="{horizontalAlignment:'right'}"/>
+                <Label Form.name="%highValue" textKey="highValue"
+                    styles="{horizontalAlignment:'right'}"/>
+                <Label Form.name="%lowValue" textKey="lowValue"
+                    styles="{horizontalAlignment:'right'}"/>
+                <Label Form.name="%volume" textKey="volume"
+                    styles="{horizontalAlignment:'right'}"/>
             </Form.Section>
         </sections>
     </Form>

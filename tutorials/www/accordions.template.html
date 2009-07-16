@@ -111,7 +111,7 @@ public class Accordions implements Application {
             // transition looks smoother
             if (selectedIndex != -1) {
                 int previousSelectedIndex = accordion.getSelectedIndex();
-                if (selectedIndex > previousSelectedIndex) {
+                if (selectedIndex &gt; previousSelectedIndex) {
                     accordion.getPanels().get(selectedIndex).setEnabled(true);
                 } else {
                     accordion.getPanels().get(previousSelectedIndex).setEnabled(false);
@@ -191,7 +191,7 @@ public class Accordions implements Application {
     private void updateAccordion() {
         int selectedIndex = accordion.getSelectedIndex();
 
-        Sequence<Component> panels = accordion.getPanels();
+        Sequence&lt;Component&gt; panels = accordion.getPanels();
         for (int i = 0, n = panels.getLength(); i &lt; n; i++) {
             panels.get(i).setEnabled(i &lt;= selectedIndex);
         }
