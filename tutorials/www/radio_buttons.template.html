@@ -20,6 +20,14 @@ limitations under the License.
 <title>Radio Buttons</title>
 <link rel="stylesheet" href="tutorial.css">
 <script src="http://java.com/js/deployJava.js"></script>
+<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shCore.js"></script>
+<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushJava.js"></script>
+<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushXml.js"></script>
+<link type="text/css" rel="stylesheet" href="http://alexgorbatchev.com/pub/sh/current/styles/shCore.css"/>
+<link type="text/css" rel="stylesheet" href="http://alexgorbatchev.com/pub/sh/current/styles/shThemeDefault.css"/>
+<script type="text/javascript">
+    SyntaxHighlighter.all();
+</script>
 </head>
 <body>
 <h1>Radio Buttons</h1>
@@ -41,7 +49,7 @@ deployJava.writeAppletTag(attributes, parameters);
 
 <p>The WTKX source for the example is below:</p>
 
-<pre class="xml">
+<pre class="brush:xml;">
 &lt;Window title="Radio Buttons" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk"&gt;
@@ -60,7 +68,7 @@ deployJava.writeAppletTag(attributes, parameters);
 
 <p><tt>numbersGroup</tt> is defined as a final local variable so the handler method will have access to it. When called, the handler gets a reference to the currently selected button from the button group and displays an alert containing the data of the selected button.</p>
 
-<pre class="java">
+<pre class="brush:java;">
 package org.apache.pivot.tutorials.buttons;
 
 import org.apache.pivot.collections.Map;

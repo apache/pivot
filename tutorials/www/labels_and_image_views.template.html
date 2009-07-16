@@ -20,6 +20,14 @@ limitations under the License.
 <title>Labels &amp; Image Views</title>
 <link rel="stylesheet" href="tutorial.css">
 <script src="http://java.com/js/deployJava.js"></script>
+<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shCore.js"></script>
+<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushJava.js"></script>
+<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushXml.js"></script>
+<link type="text/css" rel="stylesheet" href="http://alexgorbatchev.com/pub/sh/current/styles/shCore.css"/>
+<link type="text/css" rel="stylesheet" href="http://alexgorbatchev.com/pub/sh/current/styles/shThemeDefault.css"/>
+<script type="text/javascript">
+    SyntaxHighlighter.all();
+</script>
 </head>
 <body>
 <h1>Labels &amp; Image Views</h1>
@@ -40,7 +48,7 @@ deployJava.writeAppletTag(attributes, parameters);
 
 <p>Below is the WTKX source used to generate the applet's contents. Note that the <tt>ImageView</tt> element defines a cursor attribute with a value of "crosshair". Move the mouse pointer over the image to see the effect.
 
-<pre class="xml">
+<pre class="brush:xml">
 &lt;Window title="Labels" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk"&gt;
@@ -59,7 +67,7 @@ deployJava.writeAppletTag(attributes, parameters);
 
 <p>The application code used in this example is not significantly different from the code used in the "Hello, World!" example. It simply loads the WTKX file and opens the window:</p>
 
-<pre class="java">
+<pre class="brush:java">
 package org.apache.pivot.tutorials.labels;
 
 import org.apache.pivot.collections.Map;

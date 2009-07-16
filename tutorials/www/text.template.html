@@ -20,6 +20,14 @@ limitations under the License.
 <title>Text</title>
 <link rel="stylesheet" href="tutorial.css">
 <script src="http://java.com/js/deployJava.js"></script>
+<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shCore.js"></script>
+<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushJava.js"></script>
+<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushXml.js"></script>
+<link type="text/css" rel="stylesheet" href="http://alexgorbatchev.com/pub/sh/current/styles/shCore.css"/>
+<link type="text/css" rel="stylesheet" href="http://alexgorbatchev.com/pub/sh/current/styles/shThemeDefault.css"/>
+<script type="text/javascript">
+    SyntaxHighlighter.all();
+</script>
 </head>
 <body>
 <h1>Text</h1>
@@ -43,7 +51,7 @@ deployJava.writeAppletTag(attributes, parameters);
 
 <p>The example helps simplify the task of entering the name of a U.S. state. As soon as enough characters are entered to uniquely identify a state's name, the application automatically populates the component with the full name of the state. Some states, such as Florida, can be identified by a single character. Others, such as Washington, Wisconsin, and Wyoming, require two; Alaska and Alabama require 4.</p>
 
-<pre class="xml">
+<pre class="brush:xml">
 &lt;Window title="Text Input" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk"&gt;
@@ -58,7 +66,7 @@ deployJava.writeAppletTag(attributes, parameters);
 
 <p>The WTKX source for this example is quite short, consisting of only a <tt>BoxPane</tt>, <tt>Label</tt>, and <tt>TextInput</tt>. Most of the demo's functionality is defined in the Java source, shown below. The application's constructor first establishes a sorted list of state names. In <tt>startup()</tt>, the application attaches a <tt>TextInputCharacterListener</tt> to the text input. In the listener's <tt>charactersInserted()</tt> method, the handler attempts to identify the state whose name matches the entered text. If found, it is set as the text property of the text input.</p>
 
-<pre class="java">
+<pre class="brush:java">
 package org.apache.pivot.tutorials.text;
 
 import org.apache.pivot.collections.ArrayList;

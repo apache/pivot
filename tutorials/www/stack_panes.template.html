@@ -17,7 +17,7 @@ limitations under the License.
 
 <html>
 <head>
-<title>Hello, WTKX!</title>
+<title>Stack Panes</title>
 <link rel="stylesheet" href="tutorial.css">
 <script src="http://java.com/js/deployJava.js"></script>
 <script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shCore.js"></script>
@@ -30,26 +30,46 @@ limitations under the License.
 </script>
 </head>
 <body>
-<h1>Hello, WTKX!</h1>
+<h1>Stack Panes</h1>
 
-<p>Below is the output of the "hello world" application written using WTKX. Note that, with the exception of the actual text, it is identical to the output of the Java version:</p>
+<p>Stack panes arrange their children in layers, like a stack of transparencies. Unlike <a href="card_panes.html">card panes</a>, which show only a single component at a time, stack panes always display all of their child components. Components with a higher z-index (position within the stack pane) are painted on top of components with a lower z-index.</p>
+
+<p>The following example shows a stack pane containing an image view and a label. The label is layered on top of the image:</p>
 
 <script>
 var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
     archive:"lib/@project_name@-core-@version@.jar,lib/@project_name@-wtk-@version@.jar,lib/@project_name@-wtk-@version@.terra.jar,lib/@project_name@-tutorials-@version@.jar",
-    width:240,
-    height:80
+    width:480,
+    height:360
 };
-var parameters = {application_class_name:"org.apache.pivot.tutorials.HelloWTKX",
+var parameters = {application_class_name:"org.apache.pivot.tutorials.layout.StackPanes",
     codebase_lookup:false
 };
 deployJava.writeAppletTag(attributes, parameters);
 </script>
 
-<p>The following is the Java source code for the WTKX version. The content of the user interface is defined entirely by the WTKX source file. It is loaded using an instance of the <tt>WTKXSerializer</tt> class defined in the <tt>org.apache.pivot.wtkx</tt> package.</p>
+<p>The WTKX source for the example is as follows:</p>
+
+<pre class="brush:xml">
+&lt;Window title="Stack Panes" maximized="true"
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns="org.apache.pivot.wtk"&gt;
+    &lt;content&gt;
+        &lt;StackPane&gt;
+            &lt;ImageView image="@background.png"
+                styles="{fill:true, preserveAspectRatio:false}"/&gt;
+            &lt;Label text="StackPane Demo"
+                styles="{font:'Helvetica bold 64', color:'#ffffff', wrapText:true,
+                    horizontalAlignment:'center', verticalAlignment:'center'}"/&gt;
+        &lt;/StackPane&gt;
+    &lt;/content&gt;
+&lt;/Window&gt;
+</pre>
+
+<p>The Java code for this example doesn't really do anything interesting; it just loads the WTKX:</p>
 
 <pre class="brush:java">
-package org.apache.pivot.tutorials;
+package org.apache.pivot.tutorials.layout;
 
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
@@ -58,13 +78,12 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
-public class HelloWTKX implements Application {
+public class StackPanes implements Application {
     private Window window = null;
 
-    public void startup(Display display, Map&lt;String, String&gt; properties)
-        throws Exception {
+    public void startup(Display display, Map&lt;String, String&gt; properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "hello.wtkx");
+        window = (Window)wtkxSerializer.readObject(this, "stack_panes.wtkx");
         window.open(display);
     }
 
@@ -83,27 +102,11 @@ public class HelloWTKX implements Application {
     }
 
     public static void main(String[] args) {
-        DesktopApplicationContext.main(HelloWTKX.class, args);
+        DesktopApplicationContext.main(StackPanes.class, args);
     }
 }
 </pre>
 
-<p>The WTKX that is used to create the UI is shown below:</p>
-
-<pre class="brush:xml">
-&lt;Window title="Hello WTKX!" maximized="true"
-    xmlns:wtkx="http://pivot.apache.org/wtkx"
-    xmlns="org.apache.pivot.wtk"&gt;
-    &lt;content&gt;
-        &lt;Label text="Hello WTKX!"
-            styles="{font:'Arial bold 24', color:'#ff0000',
-                horizontalAlignment:'center', verticalAlignment:'center'}"/&gt;
-    &lt;/content&gt;
-&lt;/Window&gt;
-</pre>
-
-<p>Most Pivot applications will be constructed this way, by declaring the structure of the UI in WTKX rather than in Java. However, event handlers, which allow an application to respond to user input, are often defined in Java (though they can also be defined within script blocks in the WTKX file). Event handlers are discussed in more detail in later sections.</p>
-
-<p>Next: <a href="component_and_container.html">Component & Container</a></p>
+<p>Next: <a href="split_panes.html">Split Panes</a></p>
 </body>
 </html>

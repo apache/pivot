@@ -20,6 +20,14 @@ limitations under the License.
 <title>Hello, World!</title>
 <link rel="stylesheet" href="tutorial.css">
 <script src="http://java.com/js/deployJava.js"></script>
+<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shCore.js"></script>
+<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushJava.js"></script>
+<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushXml.js"></script>
+<link type="text/css" rel="stylesheet" href="http://alexgorbatchev.com/pub/sh/current/styles/shCore.css"/>
+<link type="text/css" rel="stylesheet" href="http://alexgorbatchev.com/pub/sh/current/styles/shThemeDefault.css"/>
+<script type="text/javascript">
+    SyntaxHighlighter.all();
+</script>
 </head>
 <body>
 <h1>Hello, World!</h1>
@@ -40,7 +48,7 @@ deployJava.writeAppletTag(attributes, parameters);
 
 <p>This version of the application was written entirely in Java and is shown below; a WTKX implementation is demonstrated next:</p>
 
-<pre class="java">
+<pre class="brush:java">
 package org.apache.pivot.tutorials;
 
 import java.awt.Color;

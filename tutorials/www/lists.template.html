@@ -20,6 +20,14 @@ limitations under the License.
 <title>Lists</title>
 <link rel="stylesheet" href="tutorial.css">
 <script src="http://java.com/js/deployJava.js"></script>
+<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shCore.js"></script>
+<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushJava.js"></script>
+<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushXml.js"></script>
+<link type="text/css" rel="stylesheet" href="http://alexgorbatchev.com/pub/sh/current/styles/shCore.css"/>
+<link type="text/css" rel="stylesheet" href="http://alexgorbatchev.com/pub/sh/current/styles/shThemeDefault.css"/>
+<script type="text/javascript">
+    SyntaxHighlighter.all();
+</script>
 </head>
 <body>
 <h1>Lists</h1>
@@ -44,7 +52,7 @@ deployJava.writeAppletTag(attributes, parameters);
 
 <p>Also note that the list's contents are specified in the WTKX document itself, as a JSON array of strings in the <tt>listData</tt> attribute. List items can also be defined programmatically using an instance of <tt>pivot.wtk.content.ListItem</tt> in a nested <tt>listData</tt> element.</p>
 
-<pre class="xml">
+<pre class="brush:xml">
 &lt;Window title="List Views" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk"&gt;
@@ -74,7 +82,7 @@ deployJava.writeAppletTag(attributes, parameters);
 
 <p>The Java code for the example also uses the list data to populate the label component as the list selection changes. A <tt>ListView</tt>'s selection is represented by a sorted list of <tt>pivot.wtk.Span</tt> objects that contain the currently selected ranges; the application retrieves the list of currently selected ranges and then constructs the label's text by appending each selected item to the string:</p>
 
-<pre class="java">
+<pre class="brush:java">
 package org.apache.pivot.tutorials.lists;
 
 import org.apache.pivot.collections.Map;

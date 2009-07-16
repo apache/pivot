@@ -20,6 +20,14 @@ limitations under the License.
 <title>List Buttons</title>
 <link rel="stylesheet" href="tutorial.css">
 <script src="http://java.com/js/deployJava.js"></script>
+<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shCore.js"></script>
+<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushJava.js"></script>
+<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushXml.js"></script>
+<link type="text/css" rel="stylesheet" href="http://alexgorbatchev.com/pub/sh/current/styles/shCore.css"/>
+<link type="text/css" rel="stylesheet" href="http://alexgorbatchev.com/pub/sh/current/styles/shThemeDefault.css"/>
+<script type="text/javascript">
+    SyntaxHighlighter.all();
+</script>
 </head>
 <body>
 <h1>List Buttons</h1>
@@ -41,7 +49,7 @@ deployJava.writeAppletTag(attributes, parameters);
 
 <p>The WTKX source for the example is below. Like the previous example, list data is specified as an attribute containing a JSON array of strings; this value is used to load the image displayed to the right of the list button. Like <tt>ListView</tt>, <tt>ListButtons</tt> can also be populated programmatically using instances of <tt>ListItem</tt>.</p>
 
-<pre class="xml">
+<pre class="brush:xml">
 &lt;Window title="List Buttons" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk"&gt;
@@ -70,7 +78,7 @@ deployJava.writeAppletTag(attributes, parameters);
 
 <p>The Java source for the example is below:</p>
 
-<pre class="java">
+<pre class="brush:java">
 package org.apache.pivot.tutorials.lists;
 
 import java.net.URL;

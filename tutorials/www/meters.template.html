@@ -1,0 +1,212 @@
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<html>
+<head>
+<title>Meters</title>
+<link rel="stylesheet" href="tutorial.css">
+<script src="http://java.com/js/deployJava.js"></script>
+<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shCore.js"></script>
+<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushJava.js"></script>
+<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushXml.js"></script>
+<link type="text/css" rel="stylesheet" href="http://alexgorbatchev.com/pub/sh/current/styles/shCore.css"/>
+<link type="text/css" rel="stylesheet" href="http://alexgorbatchev.com/pub/sh/current/styles/shThemeDefault.css"/>
+<script type="text/javascript">
+    SyntaxHighlighter.all();
+</script>
+</head>
+<body>
+<h1>Meters</h1>
+
+<p>Meters are used to report progress to the user, generally the completion percentage of a background task such as a file load operation. An example is shown below. Clicking the Start button initiates a background task that simulates a long-running operation. Periodically, the task updates the meter to reflect its progress:</p>
+
+<script>
+var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
+    archive:"lib/@project_name@-core-@version@.jar,lib/@project_name@-wtk-@version@.jar,lib/@project_name@-wtk-@version@.terra.jar,lib/@project_name@-tutorials-@version@.jar",
+    width:300,
+    height:100
+};
+var parameters = {application_class_name:"org.apache.pivot.tutorials.progress.Meters",
+    codebase_lookup:false
+};
+deployJava.writeAppletTag(attributes, parameters);
+</script>
+
+<p>The WTKX source for the example is shown below:</p>
+
+<pre class="brush:xml">
+&lt;Window title="Meters" maximized="true"
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns="org.apache.pivot.wtk"&gt;
+    &lt;content&gt;
+        &lt;TablePane&gt;
+            &lt;columns&gt;
+                &lt;TablePane.Column width="1*"/&gt;
+            &lt;/columns&gt;
+            &lt;rows&gt;
+                &lt;TablePane.Row height="1*"&gt;
+                    &lt;Border&gt;
+                        &lt;content&gt;
+                            &lt;BoxPane styles="{horizontalAlignment:'center', verticalAlignment:'center'}"&gt;
+                                &lt;Label text="Progress:"/&gt;
+                                &lt;Meter wtkx:id="meter" preferredWidth="200" preferredHeight="16"/&gt;
+                            &lt;/BoxPane&gt;
+                        &lt;/content&gt;
+                    &lt;/Border&gt;
+                &lt;/TablePane.Row&gt;
+                &lt;TablePane.Row height="-1"&gt;
+                    &lt;BoxPane styles="{horizontalAlignment:'center', padding:6}"&gt;
+                        &lt;PushButton wtkx:id="progressButton" styles="{preferredAspectRatio:3}"/&gt;
+                    &lt;/BoxPane&gt;
+                &lt;/TablePane.Row&gt;
+            &lt;/rows&gt;
+        &lt;/TablePane&gt;
+    &lt;/content&gt;
+&lt;/Window&gt;
+</pre>
+
+The Java source is as follows. The main application class defines an inner class that extends the {{pivot.util.concurrent.Task}} class to simulate a background operation. This task simply sleeps for 100ms at a time and updates the meter when it wakes up to reflect the current count. Since all UI updates must be performed on the UI thread, the task queues a callback to set the meter's percent complete; a {{pivot.wtk.TaskAdapter}} is used to process the task notifications for the same reason:
+
+<pre class="brush:java">
+package org.apache.pivot.tutorials.progress;
+
+import org.apache.pivot.collections.Map;
+import org.apache.pivot.util.concurrent.Task;
+import org.apache.pivot.util.concurrent.TaskExecutionException;
+import org.apache.pivot.util.concurrent.TaskListener;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.ApplicationContext;
+import org.apache.pivot.wtk.Button;
+import org.apache.pivot.wtk.ButtonPressListener;
+import org.apache.pivot.wtk.DesktopApplicationContext;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.Meter;
+import org.apache.pivot.wtk.PushButton;
+import org.apache.pivot.wtk.TaskAdapter;
+import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtkx.WTKXSerializer;
+
+public class Meters implements Application {
+    public class SampleTask extends Task<Void> {
+        private int percentage = 0;
+
+        public Void execute() throws TaskExecutionException {
+            // Simulate a long-running operation
+            percentage = 0;
+
+            while (percentage &lt; 100
+                && !abort) {
+                try {
+                    Thread.sleep(100);
+                    percentage++;
+
+                    // Update the meter on the UI thread
+                    ApplicationContext.queueCallback(new Runnable() {
+                        public void run() {
+                            meter.setPercentage((double)percentage / 100);
+                        }
+                    });
+                } catch(InterruptedException exception) {
+                    throw new TaskExecutionException(exception);
+                }
+            }
+
+            return null;
+        }
+    }
+
+    private Window window = null;
+    private Meter meter = null;
+    private PushButton progressButton = null;
+
+    private SampleTask sampleTask = null;
+
+    public void startup(Display display, Map&lt;String, String&gt; properties)
+        throws Exception {
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        window = (Window)wtkxSerializer.readObject(this, "meters.wtkx");
+        meter = (Meter)wtkxSerializer.get("meter");
+        progressButton = (PushButton)wtkxSerializer.get("progressButton");
+
+        progressButton.getButtonPressListeners().add(new ButtonPressListener() {
+            public void buttonPressed(Button button) {
+                if (sampleTask == null) {
+                    // Create and start the simulated task; wrap it in a
+                    // task adapter so the result handlers are called on the
+                    // UI thread
+                    sampleTask = new SampleTask();
+                    sampleTask.execute(new TaskAdapter<Void>(new TaskListener<Void>() {
+                        public void taskExecuted(Task<Void> task) {
+                            reset();
+                        }
+
+                        public void executeFailed(Task<Void> task) {
+                            reset();
+                        }
+
+                        private void reset() {
+                            // Reset the meter and button
+                            sampleTask = null;
+                            meter.setPercentage(0);
+                            updateProgressButton();
+                        }
+                    }));
+                } else {
+                    // Cancel the task
+                    sampleTask.abort();
+                }
+
+                updateProgressButton();
+            }
+        });
+
+        updateProgressButton();
+
+        window.open(display);
+    }
+
+    public boolean shutdown(boolean optional) {
+        if (window != null) {
+            window.close();
+        }
+
+        return false;
+    }
+
+    public void suspend() {
+    }
+
+    public void resume() {
+    }
+
+    private void updateProgressButton() {
+        if (sampleTask == null) {
+            progressButton.setButtonData("Start");
+        } else {
+            progressButton.setButtonData("Cancel");
+        }
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(Meters.class, args);
+    }
+}
+</pre>
+
+<p>Next: <a href="activity_indicators.html">Activity Indicators</a></p>
+</body>
+</html>

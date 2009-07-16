@@ -1,0 +1,78 @@
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<html>
+<head>
+<title>Table Panes</title>
+<link rel="stylesheet" href="tutorial.css">
+<script src="http://java.com/js/deployJava.js"></script>
+<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shCore.js"></script>
+<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushJava.js"></script>
+<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushXml.js"></script>
+<link type="text/css" rel="stylesheet" href="http://alexgorbatchev.com/pub/sh/current/styles/shCore.css"/>
+<link type="text/css" rel="stylesheet" href="http://alexgorbatchev.com/pub/sh/current/styles/shThemeDefault.css"/>
+<script type="text/javascript">
+    SyntaxHighlighter.all();
+</script>
+</head>
+<body>
+<h1>Table Panes</h1>
+
+<p>TablePane has a "columns" collection and a "rows" collection. In WTKX, a table pane might be defined as follows:</p>
+
+<pre class="xml">
+&lt;TablePane&gt;
+    &lt;columns&gt;
+        &lt;TablePane.Column width="120"/&gt;
+        &lt;TablePane.Column width="240"/&gt;
+    &lt;/columns&gt;
+    &lt;rows&gt;
+        &lt;TablePane.Row height="80"&gt;
+            &lt;ImageView image="a.png"/&gt;
+            &lt;ImageView image="b.png"/&gt;
+        &lt;/TablePane.Row&gt;
+        &lt;TablePane.Row height="160"&gt;
+            &lt;ImageView image="c.png"/&gt;
+            &lt;ImageView image="d.png"/&gt;
+        &lt;/TablePane.Row&gt;
+    &lt;/rows&gt;
+&lt;/TablePane&gt;
+</pre>
+
+<p>This table pane would contain four <tt>ImageView</tt> cells, with column widths and row heights as specified. It is analogous to defining a table in HTML, only the table's columns must be defined up front (so they don't have to be inferred), and the equivalent of a &lt;td&gt; tag is not required, since any component can be a cell.</p>
+
+<p>In Java, it would look like this:</p>
+
+<pre class="java">
+TablePane tablePane = new TablePane();
+tablePane.getColumns().add(new TablePane.Column(120));
+tablePane.getColumns().add(new TablePane.Column(240));
+
+TablePane.Row row1 = new TablePane.Row(80);
+row1.add(new ImageView(Image.load(getClass().getResource("a.png"))));
+row1.add(new ImageView(Image.load(getClass().getResource("b.png"))));
+tablePane.getRows().add(row1);
+
+TablePane.Row row2 = new TablePane.Row(160);
+row2.add(new ImageView(Image.load(getClass().getResource("c.png"))));
+row2.add(new ImageView(Image.load(getClass().getResource("d.png"))));
+tablePane.getRows().add(row2);
+</pre>
+
+<p>Next: <a href="borders.html">Borders</a></p>
+</body>
+</html>
