@@ -42,6 +42,7 @@ public class CardPanes implements Application {
     private RadioButton horizontalSlideRadioButton = null;
     private RadioButton verticalSlideRadioButton = null;
     private RadioButton flipRadioButton = null;
+    private RadioButton zoomRadioButton = null;
     private RadioButton noneRadioButton = null;
 
     public void startup(Display display, Map<String, String> properties)
@@ -56,6 +57,7 @@ public class CardPanes implements Application {
         horizontalSlideRadioButton = (RadioButton)wtkxSerializer.get("horizontalSlideRadioButton");
         verticalSlideRadioButton = (RadioButton)wtkxSerializer.get("verticalSlideRadioButton");
         flipRadioButton = (RadioButton)wtkxSerializer.get("flipRadioButton");
+        zoomRadioButton = (RadioButton)wtkxSerializer.get("zoomRadioButton");
         noneRadioButton = (RadioButton)wtkxSerializer.get("noneRadioButton");
 
         cardPane.getCardPaneListeners().add(new CardPaneListener.Adapter() {
@@ -96,6 +98,7 @@ public class CardPanes implements Application {
         horizontalSlideRadioButton.getButtonStateListeners().add(radioButtonStateListener);
         verticalSlideRadioButton.getButtonStateListeners().add(radioButtonStateListener);
         flipRadioButton.getButtonStateListeners().add(radioButtonStateListener);
+        zoomRadioButton.getButtonStateListeners().add(radioButtonStateListener);
         noneRadioButton.getButtonStateListeners().add(radioButtonStateListener);
 
         updateCardPane();
@@ -133,6 +136,9 @@ public class CardPanes implements Application {
         } else if (flipRadioButton.isSelected()) {
             cardPane.getStyles().put("selectionChangeEffect",
                 CardPaneSkin.SelectionChangeEffect.FLIP);
+        } else if (zoomRadioButton.isSelected()) {
+            cardPane.getStyles().put("selectionChangeEffect",
+                CardPaneSkin.SelectionChangeEffect.ZOOM);
         } else {
             cardPane.getStyles().put("selectionChangeEffect", null);
         }

@@ -46,7 +46,8 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         CROSSFADE,
         HORIZONTAL_SLIDE,
         VERTICAL_SLIDE,
-        FLIP;
+        FLIP,
+        ZOOM
     }
 
     /**
@@ -55,6 +56,8 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
      * @author gbrown
      */
     public abstract class SelectionChangeTransition extends Transition {
+        public final int from;
+        public final int to;
         public final Component fromCard;
         public final Component toCard;
 
@@ -65,6 +68,9 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         public SelectionChangeTransition(int from, int to, int duration) {
             super(duration, SELECTION_CHANGE_RATE, false);
 
+            this.from = from;
+            this.to = to;
+
             CardPane cardPane = (CardPane)getComponent();
             fromCard = (from == -1) ? null : cardPane.get(from);
             toCard = (to == -1) ? null : cardPane.get(to);
@@ -72,11 +78,11 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     }
 
     /**
-     * Class that performs selection change transitions.
+     * Class that performs cross-fade selection change transitions.
      *
      * @author gbrown
      */
-    public final class CrossfadeTransition extends SelectionChangeTransition {
+    public class CrossfadeTransition extends SelectionChangeTransition {
         private FadeDecorator fadeOutDecorator = new FadeDecorator();
         private FadeDecorator fadeInDecorator = new FadeDecorator();
 
@@ -132,7 +138,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
      *
      * @author gbrown
      */
-    public final class SlideTransition extends SelectionChangeTransition {
+    public class SlideTransition extends SelectionChangeTransition {
         private int direction;
         private Easing slideEasing = new Quartic();
 
@@ -181,7 +187,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
      *
      * @author tvolkert
      */
-    public final class FlipTransition extends SelectionChangeTransition {
+    public class FlipTransition extends SelectionChangeTransition {
         private double theta;
         private ScaleDecorator scaleDecorator = new ScaleDecorator();
 
@@ -219,6 +225,63 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 
                 repaintComponent();
             }
+        }
+    }
+
+    /**
+     * Class that performs zoom change transitions.
+     *
+     * @author gbrown
+     */
+    public class ZoomTransition extends CrossfadeTransition {
+        private ScaleDecorator fromScaleDecorator = new ScaleDecorator();
+        private ScaleDecorator toScaleDecorator = new ScaleDecorator();
+
+        public ZoomTransition(int from, int to) {
+            super(from, to);
+        }
+
+        @Override
+        public void start(TransitionListener transitionListener) {
+            if (fromCard != null) {
+                fromCard.getDecorators().add(fromScaleDecorator);
+            }
+
+            if (toCard != null) {
+                toCard.getDecorators().add(toScaleDecorator);
+                toCard.setVisible(true);
+            }
+
+            super.start(transitionListener);
+        }
+
+        @Override
+        public void stop() {
+            super.stop();
+
+            if (fromCard != null) {
+                fromCard.getDecorators().remove(fromScaleDecorator);
+                fromCard.setVisible(false);
+            }
+
+            if (toCard != null) {
+                toCard.getDecorators().remove(toScaleDecorator);
+            }
+        }
+
+        @Override
+        protected void update() {
+            float percentComplete = getPercentComplete();
+
+            if (from < to) {
+                fromScaleDecorator.setScale(1.0f - percentComplete);
+                toScaleDecorator.setScale(2.0f - percentComplete);
+            } else {
+                fromScaleDecorator.setScale(1.0f + percentComplete);
+                toScaleDecorator.setScale(percentComplete);
+            }
+
+            super.update();
         }
     }
 
@@ -447,6 +510,14 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
                     if (previousSelectedIndex != -1
                         && selectedIndex != -1) {
                         selectionChangeTransition = new FlipTransition(previousSelectedIndex, selectedIndex);
+                    }
+                    break;
+                }
+
+                case ZOOM: {
+                    if (previousSelectedIndex != -1
+                        && selectedIndex != -1) {
+                        selectionChangeTransition = new ZoomTransition(previousSelectedIndex, selectedIndex);
                     }
                     break;
                 }
