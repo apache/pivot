@@ -34,7 +34,99 @@ limitations under the License.
 <body>
 <h1>Sliders</h1>
 
-<p>This section is not yet complete.</p>
+<p>Sliders allow a user to interactively select one of a range of values by dragging the mouse. The following example demonstrates the use of the <tt>Slider</tt> component. It allows the user to select a value from 0 - 255 and displays the value in a <tt>Label</tt> component:</p>
+
+<script>
+var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
+    archive:"lib/@project_name@-core-@version@.jar,lib/@project_name@-wtk-@version@.jar,lib/@project_name@-wtk-@version@.terra.jar,lib/@project_name@-tutorials-@version@.jar",
+    width:160,
+    height:30
+};
+var parameters = {application_class_name:"org.apache.pivot.tutorials.boundedrange.Sliders",
+    codebase_lookup:false
+};
+deployJava.writeAppletTag(attributes, parameters);
+</script>
+
+<p>The WTKX source for the example is as follows:</p>
+
+<pre class="brush:xml">
+&lt;Window title="Sliders" maximized="true"
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns="org.apache.pivot.wtk"&gt;
+    &lt;content&gt;
+        &lt;Border&gt;
+            &lt;content&gt;
+                &lt;BoxPane styles="{verticalAlignment:'center'}"&gt;
+                    &lt;Slider wtkx:id="slider" bounds="{minimum:0, maximum:255}" value="0"/&gt;
+                    &lt;Label wtkx:id="label"/&gt;
+                &lt;/BoxPane&gt;
+            &lt;/content&gt;
+        &lt;/Border&gt;
+    &lt;/content&gt;
+&lt;/Window&gt;
+</pre>
+
+<p>The Java source loads the WTKX and attaches a <tt>SliderValueListener</tt> to the slider. When the slider value changes, the <tt>updateLabel()</tt> method is called to set the current value:</p>
+
+<pre class="brush:java">
+package org.apache.pivot.tutorials.boundedrange;
+
+import org.apache.pivot.collections.Map;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.DesktopApplicationContext;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.Label;
+import org.apache.pivot.wtk.Slider;
+import org.apache.pivot.wtk.SliderValueListener;
+import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtkx.WTKXSerializer;
+
+public class Sliders implements Application {
+    private Window window = null;
+    private Slider slider = null;
+    private Label label = null;
+
+    public void startup(Display display, Map&lt;String, String&gt; properties) throws Exception {
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        window = (Window)wtkxSerializer.readObject(this, "sliders.wtkx");
+        slider = (Slider)wtkxSerializer.get("slider");
+        label = (Label)wtkxSerializer.get("label");
+
+        slider.getSliderValueListeners().add(new SliderValueListener() {
+            @Override
+            public void valueChanged(Slider slider, int previousValue) {
+                updateLabel();
+            }
+        });
+
+        updateLabel();
+        window.open(display);
+    }
+
+    public boolean shutdown(boolean optional) {
+        if (window != null) {
+            window.close();
+        }
+
+        return false;
+    }
+
+    public void suspend() {
+    }
+
+    public void resume() {
+    }
+
+    private void updateLabel() {
+        label.setText(Integer.toString(slider.getValue()));
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(Sliders.class, args);
+    }
+}
+</pre>
 
 <p>Next: <a href="menus.html">Menus</a></p>
 </body>
