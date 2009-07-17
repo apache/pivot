@@ -140,7 +140,7 @@ public class SearchDemo implements Application {
         statusLabel.setText("Searching...");
         updateActivityState();
 
-        getQuery.execute(new TaskListener<Object>() {
+        getQuery.execute(new TaskAdapter<Object>(new TaskListener<Object>() {
             @Override
             public void taskExecuted(Task<Object> task) {
                 if (task == getQuery) {
@@ -179,7 +179,7 @@ public class SearchDemo implements Application {
                     termTextInput.requestFocus();
                 }
             }
-        });
+        }));
     }
 
     /**
