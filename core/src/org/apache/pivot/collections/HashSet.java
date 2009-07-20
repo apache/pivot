@@ -51,6 +51,15 @@ public class HashSet<E> implements Set<E>, Serializable {
         }
     }
 
+    public HashSet(E... elements) {
+        hashSet = new java.util.HashSet<E>();
+
+        for (int i = 0; i < elements.length; i++) {
+            E element = elements[i];
+            add(element);
+        }
+    }
+
     public HashSet(Comparator<E> comparator) {
         throw new UnsupportedOperationException("HashSet auto-sorting is not yet supported.");
 

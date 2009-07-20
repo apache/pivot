@@ -51,6 +51,15 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         this(false, map);
     }
 
+    public HashMap(Pair<K, V>... pairs) {
+        this(false);
+
+        for (int i = 0; i < pairs.length; i++) {
+            Pair<K, V> pair = pairs[i];
+            put(pair.key, pair.value);
+        }
+    }
+
     public HashMap(boolean weak, Map<K, V> map) {
         hashMap = (weak) ? new java.util.WeakHashMap<K, V>() : new java.util.HashMap<K, V>();
 

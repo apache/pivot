@@ -28,6 +28,25 @@ import org.apache.pivot.util.ListenerList;
  */
 public interface Map<K, V> extends Dictionary<K, V>, Collection<K> {
     /**
+     * Class representing a key/value pair.
+     *
+     * @author gbrown
+     */
+    public static final class Pair<K, V> {
+        public final K key;
+        public final V value;
+
+        public Pair(K key, V value) {
+            if (key == null) {
+                throw new IllegalArgumentException();
+            }
+
+            this.key = key;
+            this.value = value;
+        }
+    }
+
+    /**
      * Map listener list.
      *
      * @author gbrown
