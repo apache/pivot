@@ -33,12 +33,12 @@ public interface Application {
      *
      * @author gbrown
      */
-    public interface About {
+    public interface AboutHandler {
         /**
          * Called to notify the application that it should present it's
          * "about" information.
          */
-        public void handleAbout();
+        public void aboutRequested();
     }
 
     /**

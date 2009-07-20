@@ -82,7 +82,7 @@ import org.apache.pivot.wtk.text.Document;
 import org.apache.pivot.wtk.text.PlainTextSerializer;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
-public class KitchenSink implements Application, Application.About {
+public class KitchenSink implements Application, Application.AboutHandler {
     private abstract class RollupStateHandler
         implements RollupStateListener {
         public void expandedChangeVetoed(Rollup rollup, Vote reason) {
@@ -341,7 +341,7 @@ public class KitchenSink implements Application, Application.About {
 
                 helpAboutMenuItem.getButtonPressListeners().add(new ButtonPressListener() {
                     public void buttonPressed(Button button) {
-                        handleAbout();
+                        aboutRequested();
                     }
                 });
             }
@@ -905,7 +905,7 @@ public class KitchenSink implements Application, Application.About {
     public void resume() {
     }
 
-    public void handleAbout() {
+    public void aboutRequested() {
         String about = "Origin: " + ApplicationContext.getOrigin()
             + "; JVM version: " + ApplicationContext.getJVMVersion();
 

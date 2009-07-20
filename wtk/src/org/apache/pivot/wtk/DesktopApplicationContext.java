@@ -427,7 +427,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                 Object eawtApplication = eawtApplicationClass.newInstance();
 
                 setEnabledAboutMenuMethod.invoke(eawtApplication,
-                    application instanceof Application.About);
+                    application instanceof Application.AboutHandler);
 
                 Object eawtApplicationListener =
                     Proxy.newProxyInstance(DesktopApplicationContext.class.getClassLoader(),
@@ -459,13 +459,13 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
     /**
      * Invokes the application's about handler. The application must implement
-     * the {@link Application.About} interface.
+     * the {@link Application.AboutHandler} interface.
      */
     public static void handleAbout() {
-        assert (application instanceof Application.About);
+        assert (application instanceof Application.AboutHandler);
 
-        Application.About aboutApplication = (Application.About)application;
-        aboutApplication.handleAbout();
+        Application.AboutHandler aboutHandler = (Application.AboutHandler)application;
+        aboutHandler.aboutRequested();
     }
 
     /**
