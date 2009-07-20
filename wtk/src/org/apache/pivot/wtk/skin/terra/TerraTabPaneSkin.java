@@ -894,6 +894,11 @@ public class TerraTabPaneSkin extends ContainerSkin
         setActiveTabColor(GraphicsUtilities.decodeColor(activeTabColor));
     }
 
+    public final void setActiveTabColor(int activeTabColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setActiveTabColor(theme.getColor(activeTabColor));
+    }
+
     public Color getInactiveTabColor() {
         return inactiveTabColor;
     }
@@ -916,6 +921,11 @@ public class TerraTabPaneSkin extends ContainerSkin
         setInactiveTabColor(GraphicsUtilities.decodeColor(inactiveTabColor));
     }
 
+    public final void setInactiveTabColor(int inactiveTabColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setInactiveTabColor(theme.getColor(inactiveTabColor));
+    }
+
     public Color getBorderColor() {
         return borderColor;
     }
@@ -936,6 +946,11 @@ public class TerraTabPaneSkin extends ContainerSkin
         }
 
         setBorderColor(GraphicsUtilities.decodeColor(borderColor));
+    }
+
+    public final void setBorderColor(int borderColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setBorderColor(theme.getColor(borderColor));
     }
 
     public Insets getPadding() {
@@ -1011,6 +1026,11 @@ public class TerraTabPaneSkin extends ContainerSkin
         }
 
         setButtonColor(GraphicsUtilities.decodeColor(buttonColor));
+    }
+
+    public final void setButtonColor(int buttonColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setButtonColor(theme.getColor(buttonColor));
     }
 
     public Insets getButtonPadding() {
