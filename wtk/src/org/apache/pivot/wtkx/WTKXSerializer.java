@@ -41,6 +41,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import javax.script.SimpleBindings;
+import javax.xml.stream.Location;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;
@@ -153,13 +154,18 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
 
         public final Element parent;
         public final Type type;
+        public final String tagName;
+        public final int lineNumber;
         public final List<Attribute> attributes;
 
         public Object value;
 
-        public Element(Element parent, Type type, List<Attribute> attributes, Object value) {
+        public Element(Element parent, Type type, String tagName, int lineNumber,
+            List<Attribute> attributes, Object value) {
             this.parent = parent;
             this.type = type;
+            this.tagName = tagName;
+            this.lineNumber = lineNumber;
             this.attributes = attributes;
             this.value = value;
         }
@@ -196,7 +202,6 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
 
     private URL location = null;
     private Resources resources = null;
-
     private HashMap<String, Object> initialBindings = new HashMap<String, Object>();
 
     private Object root = null;
@@ -206,6 +211,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
     private ScriptEngineManager scriptEngineManager = null;
 
     private XMLInputFactory xmlInputFactory;
+    private Element element = null;
 
     private WTKXSerializerListenerList wtkxSerializerListeners = new WTKXSerializerListenerList();
 
@@ -319,7 +325,8 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         initialBindings.clear();
 
         // Parse the XML stream
-        Element element = null;
+        element = null;
+
         try {
             XMLStreamReader reader = xmlInputFactory.createXMLStreamReader(inputStream);
 
@@ -472,7 +479,15 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                         }
 
                         // Set the current element
-                        element = new Element(element, elementType, attributes, value);
+                        String tagName = localName;
+                        if (prefix != null
+                            && prefix.length() > 0) {
+                            tagName = prefix + ":" + tagName;
+                        }
+
+                        Location xmlStreamLocation = reader.getLocation();
+                        element = new Element(element, elementType, tagName, xmlStreamLocation.getLineNumber(),
+                            attributes, value);
 
                         // If this is the root, set it
                         if (element.parent == null) {
@@ -1016,6 +1031,39 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         }
 
         return serializer;
+    }
+
+    /**
+     * Returns the name of the element currently being processed.
+     *
+     * @return
+     * The name of the element currently being processed, or <tt>null</tt> if
+     * no element is currently being processed.
+     */
+    public String getTagName() {
+        return (element == null ? null : element.tagName);
+    }
+
+    /**
+     * Returns the line number of the element currently being processed.
+     *
+     * @return
+     * The line number of the element currently being processed, or <tt>-1</tt>
+     * if no element is currently being processed.
+     */
+    public int getLineNumber() {
+        return (element == null ? null : element.lineNumber);
+    }
+
+    /**
+     * Returns the location of the WTKX currently being processed.
+     *
+     * @return
+     * The location of the WTKX, or <tt>null</tt> if no WTKX is currently being
+     * processed or the location is not known.
+     */
+    public URL getLocation() {
+        return location;
     }
 
     /**

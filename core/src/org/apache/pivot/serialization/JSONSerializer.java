@@ -21,6 +21,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.LineNumberReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
@@ -48,6 +49,7 @@ public class JSONSerializer implements Serializer<Object> {
 
     private int c = -1;
     private boolean alwaysDelimitMapKeys = false;
+    private LineNumberReader lineNumberReader = null;
 
     public static final String MIME_TYPE = "application/json";
     public static final int BUFFER_SIZE = 2048;
@@ -115,9 +117,22 @@ public class JSONSerializer implements Serializer<Object> {
         c = reader.read();
 
         // Read the root value
-        Object object = readValue(reader);
+        lineNumberReader = new LineNumberReader(reader);
+        Object object = readValue(lineNumberReader);
+        lineNumberReader = null;
 
         return object;
+    }
+
+    /**
+     * Returns the line number currently being processed.
+     *
+     * @return
+     * The line number currently being processed, or <tt>-1</tt> if no line is
+     * currently being processed.
+     */
+    public int getLineNumber() {
+        return (lineNumberReader == null ? -1 : lineNumberReader.getLineNumber() + 1);
     }
 
     private Object readValue(Reader reader)

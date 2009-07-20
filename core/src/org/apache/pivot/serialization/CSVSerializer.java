@@ -21,6 +21,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.LineNumberReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
@@ -125,14 +126,15 @@ public class CSVSerializer implements Serializer<List<?>> {
 
     private Charset charset;
 
+    int c = -1;
+    private Class<?> itemClass = HashMap.class;
     private ArrayList<String> keys = new ArrayList<String>();
     private KeySequence keySequence = new KeySequence();
+    private LineNumberReader lineNumberReader = null;
 
     public static final String MIME_TYPE = "text/csv";
     public static final int BUFFER_SIZE = 2048;
 
-    int c = -1;
-    private Class<?> itemClass = HashMap.class;
 
     public CSVSerializer() {
         this(Charset.defaultCharset());
@@ -220,23 +222,38 @@ public class CSVSerializer implements Serializer<List<?>> {
         // Move to the first character
         c = reader.read();
 
+        lineNumberReader = new LineNumberReader(reader);
+
         while (c != -1) {
-            Object item = readItem(reader);
+            Object item = readItem(lineNumberReader);
             while (item != null) {
                 items.add(item);
 
                 // Move to next line
                 while (c != -1
                     && (c == '\r' || c == '\n')) {
-                    c = reader.read();
+                    c = lineNumberReader.read();
                 }
 
                 // Read the next item
-                item = readItem(reader);
+                item = readItem(lineNumberReader);
             }
         }
 
+        lineNumberReader = null;
+
         return items;
+    }
+
+    /**
+     * Returns the line number currently being processed.
+     *
+     * @return
+     * The line number currently being processed, or <tt>-1</tt> if no line is
+     * currently being processed.
+     */
+    public int getLineNumber() {
+        return (lineNumberReader == null ? -1 : lineNumberReader.getLineNumber() + 1);
     }
 
     /**
