@@ -35,7 +35,7 @@ public interface Application {
      */
     public interface AboutHandler {
         /**
-         * Called to notify the application that it should present it's
+         * Called to notify the application that it should present its
          * "about" information.
          */
         public void aboutRequested();

@@ -16,20 +16,31 @@
  */
 package org.apache.pivot.wtk.media;
 
+import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 
 /**
  * Image representing a bitmapped picture.
- * <p>
- * TODO Add a resize() method that will scale the image?
- * <p>
- * TODO Provide access to the raster data and fire regionInvalidated() when
- * modified?
  *
  * @author gbrown
  */
 public class Picture extends Image {
+    /**
+     * Enum defing the algorithms to apply when resizing a picture.
+     *
+     * @author gbrown
+     */
+    public enum Interpolation {
+        NEAREST_NEIGHBOR,
+        BILINEAR,
+        BICUBIC
+    }
+
+    // TODO Provide API access to the raster data and fire regionInvalidated()
+    // when modified?
     private BufferedImage bufferedImage = null;
 
     public Picture(BufferedImage bufferedImage) {
@@ -46,6 +57,90 @@ public class Picture extends Image {
 
     public int getHeight() {
         return bufferedImage.getHeight();
+    }
+
+    public void resample(int size) {
+        resample(size, Interpolation.NEAREST_NEIGHBOR);
+    }
+
+    public void resample(int size, Interpolation interpolation) {
+        int width = getWidth();
+        int height = getHeight();
+
+        float aspectRatio = (float)width / (float)height;
+        if (aspectRatio > 1) {
+            width = size;
+            height = (int)(size / aspectRatio);
+        } else {
+            width = (int)(size * aspectRatio);
+            height = size;
+        }
+
+        resample(width, height, interpolation);
+    }
+
+    public void resample(int width, int height) {
+        resample(width, height, Interpolation.NEAREST_NEIGHBOR);
+    }
+
+    public void resample(int width, int height, Interpolation interpolation) {
+        if (interpolation == null) {
+            throw new IllegalArgumentException("interpolation is null.");
+        }
+
+        int previousWidth = getWidth();
+        int previousHeight = getHeight();
+
+        if (previousWidth != width
+            || previousHeight != height) {
+            int type = bufferedImage.getType();
+
+            float scaleX = ((float)width / (float)previousWidth);
+            float scaleY = ((float)height / (float)previousHeight);
+
+            java.awt.image.BufferedImage bufferedImage = new BufferedImage(width, height, type);
+            Graphics2D bufferedImageGraphics = (Graphics2D)bufferedImage.getGraphics();
+
+            // Clear the background
+            if (this.bufferedImage.getTransparency() != Transparency.OPAQUE) {
+                bufferedImageGraphics.setComposite(AlphaComposite.Clear);
+                bufferedImageGraphics.fillRect(0, 0, width, height);
+
+                bufferedImageGraphics.setComposite(AlphaComposite.SrcOver);
+            }
+
+            // Set the interpolation
+            Object interpolationHint = 0;
+            switch (interpolation) {
+                case NEAREST_NEIGHBOR: {
+                    interpolationHint = RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR;
+                    break;
+                }
+
+                case BILINEAR: {
+                    interpolationHint = RenderingHints.VALUE_INTERPOLATION_BILINEAR;
+                    break;
+                }
+
+                case BICUBIC: {
+                    interpolationHint = RenderingHints.VALUE_INTERPOLATION_BICUBIC;
+                    break;
+                }
+            }
+
+            bufferedImageGraphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, interpolationHint);
+
+            // Draw the image
+            bufferedImageGraphics.scale(scaleX, scaleY);
+            paint(bufferedImageGraphics);
+
+            bufferedImageGraphics.dispose();
+
+            // Set the scaled image as the new instance
+            this.bufferedImage = bufferedImage;
+
+            imageListeners.sizeChanged(this, previousWidth, previousHeight);
+        }
     }
 
     public void paint(Graphics2D graphics) {

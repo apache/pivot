@@ -38,6 +38,7 @@ import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.WindowStateListener;
 import org.apache.pivot.wtk.media.Image;
+import org.apache.pivot.wtk.media.Picture;
 
 public class SheetTest implements Application {
     private Frame frame = null;
@@ -45,7 +46,10 @@ public class SheetTest implements Application {
 
     public void startup(final Display display, Map<String, String> properties)
         throws Exception {
-        PushButton windowContent = new PushButton(Image.load(getClass().getResource("IMG_0767_2.jpg")));
+        Picture picture = (Picture)Image.load(getClass().getResource("IMG_0767_2.jpg"));
+        picture.resample(120);
+
+        PushButton windowContent = new PushButton(picture);
         windowContent.setPreferredSize(480, 360);
 
         frame = new Frame(windowContent);
