@@ -146,7 +146,7 @@ public class LargeData implements Application {
 
     private volatile boolean abort = false;
 
-    private static final String BASE_PATH_KEY = "base-path";
+    private static final String BASE_PATH_KEY = "basePath";
 
     public LargeData() {
         csvSerializer = new CSVSerializer("ISO-8859-1");

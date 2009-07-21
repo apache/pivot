@@ -77,11 +77,11 @@ public final class BrowserApplicationContext extends ApplicationContext {
 
                 String startupProperties = getParameter(STARTUP_PROPERTIES_PARAMETER);
                 if (startupProperties != null) {
-                    String[] arguments = startupProperties.split(";");
+                    String[] arguments = startupProperties.split("&");
 
                     for (int i = 0, n = arguments.length; i < n; i++) {
                         String argument = arguments[i];
-                        String[] property = argument.split(":");
+                        String[] property = argument.split("=");
 
                         if (property.length == 2) {
                             String key = property[0].trim();
