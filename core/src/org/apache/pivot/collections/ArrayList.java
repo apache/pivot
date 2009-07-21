@@ -214,11 +214,9 @@ public class ArrayList<T> implements List<T>, Serializable {
     public int remove(T item) {
         int index = indexOf(item);
 
-        if (index == -1) {
-            throw new IllegalArgumentException("item is not an element of this list.");
+        if (index >= 0) {
+           remove(index, 1);
         }
-
-        remove(index, 1);
 
         return index;
     }
