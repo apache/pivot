@@ -45,13 +45,15 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
      */
     private class PropertyIterator implements Iterator<String> {
         private Method[] methods = null;
+        private Field[] fields = null;
 
-        int i = 0;
+        int i = 0, j = 0;
         private String nextProperty = null;
 
         public PropertyIterator() {
             Class<?> type = bean.getClass();
             methods = type.getMethods();
+            fields = type.getFields();
             nextProperty();
         }
 
@@ -101,6 +103,15 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
                         && isReadOnly(nextProperty)) {
                         nextProperty = null;
                     }
+                }
+            }
+
+            if (nextProperty == null) {
+                while (j < fields.length
+                    && nextProperty == null) {
+                    Field field = fields[j++];
+
+                    // TODO
                 }
             }
         }
@@ -160,6 +171,7 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
      * The value returned by the method, or <tt>null</tt> if no such method
      * exists.
      */
+    @Override
     public Object get(String key) {
         if (key == null) {
             throw new IllegalArgumentException("key is null.");
@@ -176,6 +188,21 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
                 // No-op
             } catch(InvocationTargetException exception) {
                 // No-op
+            }
+        } else {
+            Field field = getField(key);
+
+            if (field != null) {
+                int modifiers = field.getModifiers();
+
+                if ((modifiers & Modifier.PUBLIC) != 0
+                    && (modifiers & Modifier.STATIC) == 0) {
+                    try {
+                        value = field.get(bean);
+                    } catch(IllegalAccessException exception) {
+                        // No-op
+                    }
+                }
             }
         }
 
@@ -200,6 +227,7 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
      * @throws PropertyNotFoundException
      * If the given property does not exist or is read-only.
      */
+    @Override
     public Object put(String key, Object value) {
         if (key == null) {
             throw new IllegalArgumentException("key is null.");
@@ -222,22 +250,34 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
         Method setterMethod = getSetterMethod(key, valueType);
 
         if (setterMethod == null) {
-            throw new PropertyNotFoundException("Property \"" + key + "\""
-                + " of type " + valueType.getName()
-                + " does not exist or is read-only.");
-        }
+            Field field = getField(key);
 
-        try {
-            setterMethod.invoke(bean, new Object[] {value});
-        } catch(IllegalAccessException exception) {
-            throw new RuntimeException(exception);
-        } catch(InvocationTargetException exception) {
-            Throwable cause = exception.getCause();
+            if (field == null
+                || !field.getType().isAssignableFrom(valueType)
+                || (field.getModifiers() & Modifier.FINAL) != 0) {
+                throw new PropertyNotFoundException("Property \"" + key + "\""
+                    + " of type " + valueType.getName()
+                    + " does not exist or is read-only.");
+            }
 
-            if (cause instanceof RuntimeException) {
-                throw (RuntimeException)cause;
-            } else {
-                throw new RuntimeException(cause);
+            try {
+                field.set(bean, value);
+            } catch(IllegalAccessException exception) {
+                throw new RuntimeException(exception);
+            }
+        } else {
+            try {
+                setterMethod.invoke(bean, new Object[] {value});
+            } catch(IllegalAccessException exception) {
+                throw new RuntimeException(exception);
+            } catch(InvocationTargetException exception) {
+                Throwable cause = exception.getCause();
+
+                if (cause instanceof RuntimeException) {
+                    throw (RuntimeException)cause;
+                } else {
+                    throw new RuntimeException(cause);
+                }
             }
         }
 
@@ -248,6 +288,7 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
      * @throws UnsupportedOperationException
      * This method is not supported.
      */
+    @Override
     public Object remove(String key) {
         throw new UnsupportedOperationException();
     }
@@ -262,17 +303,20 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
      * @return
      * <tt>true</tt> if the property exists; <tt>false</tt>, otherwise.
      */
+    @Override
     public boolean containsKey(String key) {
         if (key == null) {
             throw new IllegalArgumentException("key is null.");
         }
 
-        return (getGetterMethod(key) != null);
+        return (getGetterMethod(key) != null
+            || getField(key) != null);
     }
 
     /**
      * Verifies that the bean contains at least one property.
      */
+    @Override
     public boolean isEmpty() {
         return !iterator().hasNext();
     }
@@ -309,6 +353,7 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
      * @return
      * A property iterator for this bean.
      */
+    @Override
     public Iterator<String> iterator() {
         return new PropertyIterator();
     }
@@ -324,6 +369,21 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
      */
     private Method getGetterMethod(String key) {
         return getGetterMethod(bean.getClass(), key);
+    }
+
+    /**
+     * Returns the public, non-static field for a property. Note that fields
+     * will only be consulted for bean properties after bean methods.
+     *
+     * @param key
+     * The property name
+     *
+     * @return
+     * The field, or <tt>null</tt> if the field does not exist, or is
+     * non-public or static
+     */
+    private Field getField(String key) {
+        return getField(bean.getClass(), key);
     }
 
     /**
@@ -356,7 +416,19 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
             throw new IllegalArgumentException("key is null.");
         }
 
-        return (getSetterMethod(type, key, getType(type, key)) == null);
+        boolean isReadOnly = true;
+
+        Method setterMethod = getSetterMethod(type, key, getType(type, key));
+
+        if (setterMethod != null) {
+            isReadOnly = false;
+        } else {
+            Field field = getField(type, key);
+            isReadOnly = (field == null
+                || (field.getModifiers() & Modifier.FINAL) != 0);
+        }
+
+        return isReadOnly;
     }
 
     /**
@@ -377,9 +449,21 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
             throw new IllegalArgumentException("key is null.");
         }
 
+        Class<?> propertyType = null;
+
         Method getterMethod = getGetterMethod(type, key);
 
-        return (getterMethod == null) ? null : getterMethod.getReturnType();
+        if (getterMethod != null) {
+            propertyType = getterMethod.getReturnType();
+        } else {
+            Field field = getField(type, key);
+
+            if (field != null) {
+                propertyType = field.getType();
+            }
+        }
+
+        return propertyType;
     }
 
     /**
@@ -414,6 +498,40 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
         }
 
         return method;
+    }
+
+    /**
+     * Returns the public, non-static field for a property. Note that fields
+     * will only be consulted for bean properties after bean methods.
+     *
+     * @param type
+     * The bean class
+     *
+     * @param key
+     * The property name
+     *
+     * @return
+     * The field, or <tt>null</tt> if the field does not exist, or is
+     * non-public or static
+     */
+    public static Field getField(Class<?> type, String key) {
+        Field field = null;
+
+        try {
+            field = type.getField(key);
+
+            int modifiers = field.getModifiers();
+
+            if ((modifiers & Modifier.PUBLIC) == 0
+                || (modifiers & Modifier.STATIC) != 0) {
+                // Exclude non-public or static fields
+                field = null;
+            }
+        } catch (NoSuchFieldException exception) {
+            // No-op
+        }
+
+        return field;
     }
 
     /**
