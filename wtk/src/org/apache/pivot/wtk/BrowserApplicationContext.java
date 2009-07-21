@@ -70,9 +70,6 @@ public final class BrowserApplicationContext extends ApplicationContext {
                     }
                 }
 
-                // Create the application context
-                applicationContext = new BrowserApplicationContext();
-
                 // Load properties specified in the startup properties parameter
                 properties = new HashMap<String, String>();
 
@@ -94,6 +91,9 @@ public final class BrowserApplicationContext extends ApplicationContext {
                     }
                 }
 
+                // Create the application context
+                applicationContext = new BrowserApplicationContext();
+
                 // Add the display host to the applet
                 DisplayHost displayHost = applicationContext.getDisplayHost();
                 setLayout(new java.awt.BorderLayout());
@@ -105,7 +105,15 @@ public final class BrowserApplicationContext extends ApplicationContext {
                 // Clear the background
                 setBackground(null);
 
+                // Start the timer and add this applet to the host applet list
+                if (hostApplets.getLength() == 0) {
+                    createTimer();
+                }
+
+                hostApplets.add(HostApplet.this);
+
                 // Load the application
+                Application application;
                 String applicationClassName = getParameter(APPLICATION_CLASS_NAME_PARAMETER);
                 if (applicationClassName == null) {
                     Alert.alert(MessageType.ERROR, "Application class name is required.",
@@ -113,19 +121,14 @@ public final class BrowserApplicationContext extends ApplicationContext {
                 } else {
                     try {
                         Class<?> applicationClass = Class.forName(applicationClassName);
-                        application = (Application) applicationClass.newInstance();
+                        application = (Application)applicationClass.newInstance();
+                        applicationContext.setApplication(application);
                     } catch (Throwable throwable) {
                         Alert.alert(MessageType.ERROR, throwable.getMessage(),
                             applicationContext.getDisplay());
                         throwable.printStackTrace();
                     }
                 }
-
-                if (hostApplets.getLength() == 0) {
-                    createTimer();
-                }
-
-                hostApplets.add(HostApplet.this);
             }
         }
 
@@ -135,6 +138,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
                 DisplayHost displayHost = applicationContext.getDisplayHost();
                 displayHost.requestFocus();
 
+                Application application = applicationContext.getApplication();
                 if (application != null) {
                     try {
                         application.startup(applicationContext.getDisplay(),
@@ -150,12 +154,15 @@ public final class BrowserApplicationContext extends ApplicationContext {
 
         private class StopCallback implements Runnable {
             public void run() {
-                try {
-                    application.shutdown(false);
-                } catch (Exception exception) {
-                    Alert.alert(MessageType.ERROR, exception.getMessage(),
-                        applicationContext.getDisplay());
-                    exception.printStackTrace();
+                Application application = applicationContext.getApplication();
+                if (application != null) {
+                    try {
+                        application.shutdown(false);
+                    } catch (Exception exception) {
+                        Alert.alert(MessageType.ERROR, exception.getMessage(),
+                            applicationContext.getDisplay());
+                        exception.printStackTrace();
+                    }
                 }
             }
         }
@@ -172,7 +179,6 @@ public final class BrowserApplicationContext extends ApplicationContext {
 
         private BrowserApplicationContext applicationContext = null;
         private HashMap<String, String> properties = null;
-        private Application application = null;
 
         public static final String APPLICATION_CLASS_NAME_PARAMETER = "application_class_name";
         public static final String STARTUP_PROPERTIES_PARAMETER = "startup_properties";
@@ -180,7 +186,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
         private static final long serialVersionUID = 0;
 
         public Application getApplication() {
-            return application;
+            return applicationContext.getApplication();
         }
 
         @Override

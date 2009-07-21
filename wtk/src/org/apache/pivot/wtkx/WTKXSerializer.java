@@ -563,8 +563,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
 
                                     if (id == null
                                         && !serializer.isEmpty()) {
-                                        System.err.println(WTKX_PREFIX + ":" + INCLUDE_TAG
-                                            + " \"" + src + "\" is missing an " + ID_ATTRIBUTE
+                                        System.err.println("Include \"" + src + "\" is missing an " + ID_ATTRIBUTE
                                             + " attribute.");
                                     }
                                 } else {

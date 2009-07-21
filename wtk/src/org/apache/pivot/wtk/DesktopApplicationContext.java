@@ -73,6 +73,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
                         createTimer();
 
+                        Application application = applicationContext.getApplication();
                         if (application != null) {
                             try {
                                 application.startup(applicationContext.getDisplay(),
@@ -126,6 +127,8 @@ public final class DesktopApplicationContext extends ApplicationContext {
             super.processWindowStateEvent(event);
 
             if (this == windowedHostFrame) {
+                Application application = applicationContext.getApplication();
+
                 switch(event.getID()) {
                     case WindowEvent.WINDOW_ICONIFIED: {
                         try {
@@ -157,7 +160,6 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
     private static DesktopApplicationContext applicationContext = null;
     private static HashMap<String, String> properties = null;
-    private static Application application = null;
 
     private static HostFrame windowedHostFrame = null;
     private static HostFrame fullScreenHostFrame = null;
@@ -181,6 +183,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
     public static void exit() {
         boolean cancelShutdown = false;
 
+        Application application = applicationContext.getApplication();
         if (application != null) {
             try {
                 cancelShutdown = application.shutdown(true);
@@ -205,7 +208,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
      * @param args
      */
     public static void main(String[] args) {
-        if (application != null) {
+        if (applicationContext != null) {
             throw new IllegalStateException();
         }
 
@@ -343,17 +346,6 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
         // Create the application context
         applicationContext = new DesktopApplicationContext();
-
-        // Load the application
-        try {
-            Class<?> applicationClass = Class.forName(applicationClassName);
-            application = (Application)applicationClass.newInstance();
-        } catch(Exception exception) {
-            Alert.alert(MessageType.ERROR, exception.getMessage(),
-                applicationContext.getDisplay());
-            exception.printStackTrace();
-        }
-
         DisplayHost displayHost = applicationContext.getDisplayHost();
 
         // Create the windowed host frame
@@ -361,7 +353,6 @@ public final class DesktopApplicationContext extends ApplicationContext {
         windowedHostFrame.add(displayHost);
 
         windowedHostFrame.setTitle(DEFAULT_HOST_FRAME_TITLE);
-
         windowedHostFrame.setSize(width, height);
         windowedHostFrame.setResizable(resizable);
 
@@ -387,6 +378,18 @@ public final class DesktopApplicationContext extends ApplicationContext {
         // Create the full-screen host frame
         fullScreenHostFrame = new HostFrame();
         fullScreenHostFrame.setUndecorated(true);
+
+        // Load the application
+        Application application = null;
+        try {
+            Class<?> applicationClass = Class.forName(applicationClassName);
+            application = (Application)applicationClass.newInstance();
+            applicationContext.setApplication(application);
+        } catch(Exception exception) {
+            Alert.alert(MessageType.ERROR, exception.getMessage(),
+                applicationContext.getDisplay());
+            exception.printStackTrace();
+        }
 
         // Hook into OS X application menu
         String osName = System.getProperty("os.name");
@@ -462,8 +465,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
      * the {@link Application.AboutHandler} interface.
      */
     public static void handleAbout() {
-        assert (application instanceof Application.AboutHandler);
-
+        Application application = applicationContext.getApplication();
         Application.AboutHandler aboutHandler = (Application.AboutHandler)application;
         aboutHandler.aboutRequested();
     }

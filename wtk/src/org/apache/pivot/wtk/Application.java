@@ -42,6 +42,29 @@ public interface Application {
     }
 
     /**
+     * Optional interface that allows an application to handle unprocessed
+     * key events (keystrokes that are processed when no component has the
+     * input focus).
+     *
+     * @author gbrown
+     */
+    public interface UnprocessedKeyHandler {
+        public void keyTyped(char character);
+        public void keyPressed(int keyCode, Keyboard.KeyLocation keyLocation);
+        public void keyReleased(int keyCode, Keyboard.KeyLocation keyLocation);
+    }
+
+    /**
+     * Optional interface that allows an application to handle uncaught
+     * exceptions thrown during a user input event.
+     *
+     * @author gbrown
+     */
+    public interface UncaughtExceptionHandler {
+        public void uncaughtExceptionThrown(Exception exception);
+    }
+
+    /**
      * Called when the application is starting up.
      *
      * @param display

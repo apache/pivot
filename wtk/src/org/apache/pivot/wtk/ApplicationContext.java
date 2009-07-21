@@ -737,17 +737,27 @@ public abstract class ApplicationContext {
             int eventID = event.getID();
             if (eventID == MouseEvent.MOUSE_ENTERED
                 || eventID == MouseEvent.MOUSE_EXITED) {
-                switch(eventID) {
-                    case MouseEvent.MOUSE_ENTERED: {
-                        mouseLocation = new Point(x, y);
-                        display.mouseOver();
-                        break;
-                    }
+                try {
+                    switch(eventID) {
+                        case MouseEvent.MOUSE_ENTERED: {
+                            mouseLocation = new Point(x, y);
+                            display.mouseOver();
+                            break;
+                        }
 
-                    case MouseEvent.MOUSE_EXITED: {
-                        display.mouseOut();
-                        mouseLocation = null;
-                        break;
+                        case MouseEvent.MOUSE_EXITED: {
+                            display.mouseOut();
+                            mouseLocation = null;
+                            break;
+                        }
+                    }
+                } catch (Exception exception) {
+                    if (application instanceof Application.UncaughtExceptionHandler) {
+                        Application.UncaughtExceptionHandler uncaughtExceptionHandler =
+                            (Application.UncaughtExceptionHandler)application;
+                        uncaughtExceptionHandler.uncaughtExceptionThrown(exception);
+                    } else {
+                        Thread.dumpStack();
                     }
                 }
             } else {
@@ -764,46 +774,56 @@ public abstract class ApplicationContext {
                 }
 
                 // Delegate the event to the owner
-                switch (eventID) {
-                    case MouseEvent.MOUSE_PRESSED: {
-                        requestFocus();
-                        dragLocation = new Point(x, y);
-                        mouseOwner.mouseDown(button, x, y);
-                        break;
-                    }
-
-                    case MouseEvent.MOUSE_RELEASED: {
-                        if (dragDescendant == null) {
-                            mouseOwner.mouseUp(button, x, y);
-                        } else {
-                            DragSource dragSource = dragDescendant.getDragSource();
-
-                            repaintDragRepresentation();
-
-                            if (dropDescendant == null) {
-                                dragSource.endDrag(dragDescendant, null);
-                            } else {
-                                DropTarget dropTarget = dropDescendant.getDropTarget();
-                                DropAction dropAction = dropTarget.drop(dropDescendant, dragManifest,
-                                    dragSource.getSupportedDropActions(), x, y, getUserDropAction(event));
-                                dragSource.endDrag(dragDescendant, dropAction);
-                            }
-
-                            setCursor(java.awt.Cursor.getDefaultCursor());
-
-                            // Clear the drag state
-                            dragDescendant = null;
-                            dragManifest = null;
-
-                            // Clear the drop state
-                            userDropAction = null;
-                            dropDescendant = null;
+                try {
+                    switch (eventID) {
+                        case MouseEvent.MOUSE_PRESSED: {
+                            requestFocus();
+                            dragLocation = new Point(x, y);
+                            mouseOwner.mouseDown(button, x, y);
+                            break;
                         }
 
-                        // Clear the drag location
-                        dragLocation = null;
+                        case MouseEvent.MOUSE_RELEASED: {
+                            if (dragDescendant == null) {
+                                mouseOwner.mouseUp(button, x, y);
+                            } else {
+                                DragSource dragSource = dragDescendant.getDragSource();
 
-                        break;
+                                repaintDragRepresentation();
+
+                                if (dropDescendant == null) {
+                                    dragSource.endDrag(dragDescendant, null);
+                                } else {
+                                    DropTarget dropTarget = dropDescendant.getDropTarget();
+                                    DropAction dropAction = dropTarget.drop(dropDescendant, dragManifest,
+                                        dragSource.getSupportedDropActions(), x, y, getUserDropAction(event));
+                                    dragSource.endDrag(dragDescendant, dropAction);
+                                }
+
+                                setCursor(java.awt.Cursor.getDefaultCursor());
+
+                                // Clear the drag state
+                                dragDescendant = null;
+                                dragManifest = null;
+
+                                // Clear the drop state
+                                userDropAction = null;
+                                dropDescendant = null;
+                            }
+
+                            // Clear the drag location
+                            dragLocation = null;
+
+                            break;
+                        }
+                    }
+                } catch (Exception exception) {
+                    if (application instanceof Application.UncaughtExceptionHandler) {
+                        Application.UncaughtExceptionHandler uncaughtExceptionHandler =
+                            (Application.UncaughtExceptionHandler)application;
+                        uncaughtExceptionHandler.uncaughtExceptionThrown(exception);
+                    } else {
+                        Thread.dumpStack();
                     }
                 }
             }
@@ -821,132 +841,142 @@ public abstract class ApplicationContext {
                 mouseLocation = new Point(x, y);
 
                 // Process the event
-                switch (event.getID()) {
-                    case MouseEvent.MOUSE_MOVED:
-                    case MouseEvent.MOUSE_DRAGGED: {
-                        if (dragDescendant == null) {
-                            // A drag is not active
-                            Component mouseCapturer = Mouse.getCapturer();
+                try {
+                    switch (event.getID()) {
+                        case MouseEvent.MOUSE_MOVED:
+                        case MouseEvent.MOUSE_DRAGGED: {
+                            if (dragDescendant == null) {
+                                // A drag is not active
+                                Component mouseCapturer = Mouse.getCapturer();
 
-                            if (mouseCapturer == null) {
-                                // The mouse is not captured, so propagate the event to the display
-                                if (!display.isMouseOver()) {
-                                    display.mouseOver();
-                                }
-
-                                display.mouseMove(x, y);
-
-                                int dragThreshold = Platform.getDragThreshold();
-
-                                if (dragLocation != null
-                                    && (Math.abs(x - dragLocation.x) > dragThreshold
-                                        || Math.abs(y - dragLocation.y) > dragThreshold)) {
-                                    // The user has dragged the mouse past the drag threshold; try
-                                    // to find a drag source
-                                    dragDescendant = display.getDescendantAt(dragLocation.x,
-                                        dragLocation.y);
-
-                                    while (dragDescendant != null
-                                        && dragDescendant.getDragSource() == null) {
-                                        dragDescendant = dragDescendant.getParent();
+                                if (mouseCapturer == null) {
+                                    // The mouse is not captured, so propagate the event to the display
+                                    if (!display.isMouseOver()) {
+                                        display.mouseOver();
                                     }
 
-                                    if (dragDescendant == null
-                                        || dragDescendant.isBlocked()) {
-                                        // There was nothing to drag, so clear the drag location
-                                        dragDescendant = null;
-                                        dragLocation = null;
-                                    } else {
-                                        DragSource dragSource = dragDescendant.getDragSource();
-                                        dragLocation = dragDescendant.mapPointFromAncestor(display, x, y);
+                                    display.mouseMove(x, y);
 
-                                        if (dragSource.beginDrag(dragDescendant, dragLocation.x, dragLocation.y)) {
-                                            // A drag has started
-                                            if (dragSource.isNative()) {
-                                                // Clear the drag state since it is not used for
-                                                // native drags
-                                                dragDescendant = null;
-                                                dragLocation = null;
+                                    int dragThreshold = Platform.getDragThreshold();
 
-                                                startNativeDrag(dragSource, event);
-                                            } else {
-                                                if (dragSource.getRepresentation() != null
-                                                    && dragSource.getOffset() == null) {
-                                                    throw new IllegalStateException("Drag offset is required when a "
-                                                        + " respresentation is specified.");
-                                                }
+                                    if (dragLocation != null
+                                        && (Math.abs(x - dragLocation.x) > dragThreshold
+                                            || Math.abs(y - dragLocation.y) > dragThreshold)) {
+                                        // The user has dragged the mouse past the drag threshold; try
+                                        // to find a drag source
+                                        dragDescendant = display.getDescendantAt(dragLocation.x,
+                                            dragLocation.y);
 
-                                                if (display.isMouseOver()) {
-                                                    display.mouseOut();
-                                                }
+                                        while (dragDescendant != null
+                                            && dragDescendant.getDragSource() == null) {
+                                            dragDescendant = dragDescendant.getParent();
+                                        }
 
-                                                // Get the drag content
-                                                dragManifest = dragSource.getContent();
-
-                                                // Get the initial user drop action
-                                                userDropAction = getUserDropAction(event);
-
-                                                // Repaint the drag visual
-                                                dragLocation = new Point(x, y);
-                                                repaintDragRepresentation();
-                                            }
-                                        } else {
-                                            // Clear the drag state
+                                        if (dragDescendant == null
+                                            || dragDescendant.isBlocked()) {
+                                            // There was nothing to drag, so clear the drag location
                                             dragDescendant = null;
                                             dragLocation = null;
+                                        } else {
+                                            DragSource dragSource = dragDescendant.getDragSource();
+                                            dragLocation = dragDescendant.mapPointFromAncestor(display, x, y);
+
+                                            if (dragSource.beginDrag(dragDescendant, dragLocation.x, dragLocation.y)) {
+                                                // A drag has started
+                                                if (dragSource.isNative()) {
+                                                    // Clear the drag state since it is not used for
+                                                    // native drags
+                                                    dragDescendant = null;
+                                                    dragLocation = null;
+
+                                                    startNativeDrag(dragSource, event);
+                                                } else {
+                                                    if (dragSource.getRepresentation() != null
+                                                        && dragSource.getOffset() == null) {
+                                                        throw new IllegalStateException("Drag offset is required when a "
+                                                            + " respresentation is specified.");
+                                                    }
+
+                                                    if (display.isMouseOver()) {
+                                                        display.mouseOut();
+                                                    }
+
+                                                    // Get the drag content
+                                                    dragManifest = dragSource.getContent();
+
+                                                    // Get the initial user drop action
+                                                    userDropAction = getUserDropAction(event);
+
+                                                    // Repaint the drag visual
+                                                    dragLocation = new Point(x, y);
+                                                    repaintDragRepresentation();
+                                                }
+                                            } else {
+                                                // Clear the drag state
+                                                dragDescendant = null;
+                                                dragLocation = null;
+                                            }
                                         }
                                     }
+                                } else {
+                                    // Delegate the event to the capturer
+                                    Point location = mouseCapturer.mapPointFromAncestor(display, x, y);
+                                    mouseCapturer.mouseMove(location.x, location.y);
                                 }
                             } else {
-                                // Delegate the event to the capturer
-                                Point location = mouseCapturer.mapPointFromAncestor(display, x, y);
-                                mouseCapturer.mouseMove(location.x, location.y);
-                            }
-                        } else {
-                            if (dragLocation != null) {
-                                DragSource dragSource = dragDescendant.getDragSource();
+                                if (dragLocation != null) {
+                                    DragSource dragSource = dragDescendant.getDragSource();
 
-                                // Get the previous and current drop descendant and call
-                                // move or exit/enter as appropriate
-                                Component previousDropDescendant = dropDescendant;
-                                dropDescendant = getDropDescendant(x, y);
+                                    // Get the previous and current drop descendant and call
+                                    // move or exit/enter as appropriate
+                                    Component previousDropDescendant = dropDescendant;
+                                    dropDescendant = getDropDescendant(x, y);
 
-                                DropAction dropAction = null;
+                                    DropAction dropAction = null;
 
-                                if (previousDropDescendant == dropDescendant) {
-                                    if (dropDescendant != null) {
-                                        DropTarget dropTarget = dropDescendant.getDropTarget();
+                                    if (previousDropDescendant == dropDescendant) {
+                                        if (dropDescendant != null) {
+                                            DropTarget dropTarget = dropDescendant.getDropTarget();
 
-                                        Point dropLocation = dropDescendant.mapPointFromAncestor(display, x, y);
-                                        dropAction = dropTarget.dragMove(dropDescendant, dragManifest,
-                                            dragSource.getSupportedDropActions(),
-                                            dropLocation.x, dropLocation.y, userDropAction);
+                                            Point dropLocation = dropDescendant.mapPointFromAncestor(display, x, y);
+                                            dropAction = dropTarget.dragMove(dropDescendant, dragManifest,
+                                                dragSource.getSupportedDropActions(),
+                                                dropLocation.x, dropLocation.y, userDropAction);
+                                        }
+                                    } else {
+                                        if (previousDropDescendant != null) {
+                                            DropTarget previousDropTarget = previousDropDescendant.getDropTarget();
+                                            previousDropTarget.dragExit(previousDropDescendant);
+                                        }
+
+                                        if (dropDescendant != null) {
+                                            DropTarget dropTarget = dropDescendant.getDropTarget();
+                                            dropAction = dropTarget.dragEnter(dropDescendant, dragManifest,
+                                                dragSource.getSupportedDropActions(), userDropAction);
+                                        }
                                     }
-                                } else {
-                                    if (previousDropDescendant != null) {
-                                        DropTarget previousDropTarget = previousDropDescendant.getDropTarget();
-                                        previousDropTarget.dragExit(previousDropDescendant);
-                                    }
 
-                                    if (dropDescendant != null) {
-                                        DropTarget dropTarget = dropDescendant.getDropTarget();
-                                        dropAction = dropTarget.dragEnter(dropDescendant, dragManifest,
-                                            dragSource.getSupportedDropActions(), userDropAction);
-                                    }
+                                    // Update cursor
+                                    setCursor(getDropCursor(dropAction));
+
+                                    // Repaint the drag visual
+                                    repaintDragRepresentation();
+
+                                    dragLocation = new Point(x, y);
+                                    repaintDragRepresentation();
                                 }
-
-                                // Update cursor
-                                setCursor(getDropCursor(dropAction));
-
-                                // Repaint the drag visual
-                                repaintDragRepresentation();
-
-                                dragLocation = new Point(x, y);
-                                repaintDragRepresentation();
                             }
-                        }
 
-                        break;
+                            break;
+                        }
+                    }
+                } catch (Exception exception) {
+                    if (application instanceof Application.UncaughtExceptionHandler) {
+                        Application.UncaughtExceptionHandler uncaughtExceptionHandler =
+                            (Application.UncaughtExceptionHandler)application;
+                        uncaughtExceptionHandler.uncaughtExceptionThrown(exception);
+                    } else {
+                        Thread.dumpStack();
                     }
                 }
             }
@@ -975,34 +1005,44 @@ public abstract class ApplicationContext {
             }
 
             // Process the event
-            switch (event.getID()) {
-                case MouseEvent.MOUSE_WHEEL: {
-                    if (Keyboard.isPressed(Keyboard.Modifier.CTRL)
-                        && Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
-                        // Mouse wheel scaling
-                        if (event.getWheelRotation() < 0) {
-                            scaleUp();
-                        } else {
-                            scaleDown();
-                        }
-                    } else if (dragDescendant == null) {
-                        // Determine the mouse owner
-                        Component mouseOwner;
-                        Component mouseCapturer = Mouse.getCapturer();
-                        if (mouseCapturer == null) {
-                            mouseOwner = display;
-                        } else {
-                            mouseOwner = mouseCapturer;
-                            Point location = mouseOwner.mapPointFromAncestor(display, x, y);
-                            x = location.x;
-                            y = location.y;
-                        }
+            try {
+                switch (event.getID()) {
+                    case MouseEvent.MOUSE_WHEEL: {
+                        if (Keyboard.isPressed(Keyboard.Modifier.CTRL)
+                            && Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                            // Mouse wheel scaling
+                            if (event.getWheelRotation() < 0) {
+                                scaleUp();
+                            } else {
+                                scaleDown();
+                            }
+                        } else if (dragDescendant == null) {
+                            // Determine the mouse owner
+                            Component mouseOwner;
+                            Component mouseCapturer = Mouse.getCapturer();
+                            if (mouseCapturer == null) {
+                                mouseOwner = display;
+                            } else {
+                                mouseOwner = mouseCapturer;
+                                Point location = mouseOwner.mapPointFromAncestor(display, x, y);
+                                x = location.x;
+                                y = location.y;
+                            }
 
-                        // Delegate the event to the owner
-                        mouseOwner.mouseWheel(scrollType, event.getScrollAmount(),
-                            event.getWheelRotation(), x, y);
+                            // Delegate the event to the owner
+                            mouseOwner.mouseWheel(scrollType, event.getScrollAmount(),
+                                event.getWheelRotation(), x, y);
+                        }
+                        break;
                     }
-                    break;
+                }
+            } catch (Exception exception) {
+                if (application instanceof Application.UncaughtExceptionHandler) {
+                    Application.UncaughtExceptionHandler uncaughtExceptionHandler =
+                        (Application.UncaughtExceptionHandler)application;
+                    uncaughtExceptionHandler.uncaughtExceptionThrown(exception);
+                } else {
+                    Thread.dumpStack();
                 }
             }
         }
@@ -1063,8 +1103,9 @@ public abstract class ApplicationContext {
 
                 switch (event.getID()) {
                     case KeyEvent.KEY_PRESSED: {
-                        int keyCode = event.getKeyCode();
                         boolean consumed = false;
+
+                        int keyCode = event.getKeyCode();
 
                         if (Keyboard.isPressed(Keyboard.Modifier.CTRL)
                             && Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
@@ -1078,8 +1119,24 @@ public abstract class ApplicationContext {
                             }
                         }
 
-                        if (focusedComponent != null) {
-                            consumed = focusedComponent.keyPressed(keyCode, keyLocation);
+                        try {
+                            if (focusedComponent == null) {
+                                if (application instanceof Application.UnprocessedKeyHandler) {
+                                    Application.UnprocessedKeyHandler unprocessedKeyHandler =
+                                        (Application.UnprocessedKeyHandler)application;
+                                    unprocessedKeyHandler.keyPressed(keyCode, keyLocation);
+                                }
+                            } else {
+                                consumed = focusedComponent.keyPressed(keyCode, keyLocation);
+                            }
+                        } catch (Exception exception) {
+                            if (application instanceof Application.UncaughtExceptionHandler) {
+                                Application.UncaughtExceptionHandler uncaughtExceptionHandler =
+                                    (Application.UncaughtExceptionHandler)application;
+                                uncaughtExceptionHandler.uncaughtExceptionThrown(exception);
+                            } else {
+                                Thread.dumpStack();
+                            }
                         }
 
                         if (consumed) {
@@ -1090,11 +1147,28 @@ public abstract class ApplicationContext {
                     }
 
                     case KeyEvent.KEY_RELEASED: {
-                        int keyCode = event.getKeyCode();
                         boolean consumed = false;
 
-                        if (focusedComponent != null) {
-                            consumed = focusedComponent.keyReleased(keyCode, keyLocation);
+                        int keyCode = event.getKeyCode();
+
+                        try {
+                            if (focusedComponent == null) {
+                                if (application instanceof Application.UnprocessedKeyHandler) {
+                                    Application.UnprocessedKeyHandler unprocessedKeyHandler =
+                                        (Application.UnprocessedKeyHandler)application;
+                                    unprocessedKeyHandler.keyReleased(keyCode, keyLocation);
+                                }
+                            } else {
+                                consumed = focusedComponent.keyReleased(keyCode, keyLocation);
+                            }
+                        } catch (Exception exception) {
+                            if (application instanceof Application.UncaughtExceptionHandler) {
+                                Application.UncaughtExceptionHandler uncaughtExceptionHandler =
+                                    (Application.UncaughtExceptionHandler)application;
+                                uncaughtExceptionHandler.uncaughtExceptionThrown(exception);
+                            } else {
+                                Thread.dumpStack();
+                            }
                         }
 
                         if (consumed) {
@@ -1107,9 +1181,26 @@ public abstract class ApplicationContext {
                     case KeyEvent.KEY_TYPED: {
                         boolean consumed = false;
 
-                        if (focusedComponent != null) {
-                            char keyChar = event.getKeyChar();
-                            consumed = focusedComponent.keyTyped(keyChar);
+                        char keyChar = event.getKeyChar();
+
+                        try {
+                            if (focusedComponent == null) {
+                                if (application instanceof Application.UnprocessedKeyHandler) {
+                                    Application.UnprocessedKeyHandler unprocessedKeyHandler =
+                                        (Application.UnprocessedKeyHandler)application;
+                                    unprocessedKeyHandler.keyTyped(keyChar);
+                                }
+                            } else {
+                                consumed = focusedComponent.keyTyped(keyChar);
+                            }
+                        } catch (Exception exception) {
+                            if (application instanceof Application.UncaughtExceptionHandler) {
+                                Application.UncaughtExceptionHandler uncaughtExceptionHandler =
+                                    (Application.UncaughtExceptionHandler)application;
+                                uncaughtExceptionHandler.uncaughtExceptionThrown(exception);
+                            } else {
+                                Thread.dumpStack();
+                            }
                         }
 
                         if (consumed) {
@@ -1201,6 +1292,8 @@ public abstract class ApplicationContext {
     private DisplayHost displayHost;
     private Display display;
 
+    private Application application = null;
+
     protected static URL origin = null;
 
     private static HashMap<URL, Object> resourceCache = new HashMap<URL, Object>();
@@ -1217,6 +1310,14 @@ public abstract class ApplicationContext {
         // Create the display host and display
         displayHost = new DisplayHost();
         display = new Display(displayHost);
+    }
+
+    protected Application getApplication() {
+        return application;
+    }
+
+    protected void setApplication(Application application) {
+        this.application = application;
     }
 
     protected DisplayHost getDisplayHost() {
