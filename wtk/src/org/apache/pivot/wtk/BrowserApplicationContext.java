@@ -19,8 +19,10 @@ package org.apache.pivot.wtk;
 import java.applet.Applet;
 import java.awt.Graphics;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLDecoder;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
@@ -83,7 +85,12 @@ public final class BrowserApplicationContext extends ApplicationContext {
 
                         if (property.length == 2) {
                             String key = property[0].trim();
-                            String value = property[1].trim();
+                            String value;
+                            try {
+                                value = URLDecoder.decode(property[1].trim(), "UTF-8");
+                            } catch (UnsupportedEncodingException exception) {
+                                throw new RuntimeException(exception);
+                            }
                             properties.put(key, value);
                         } else {
                             System.err.println(argument + " is not a valid startup property.");

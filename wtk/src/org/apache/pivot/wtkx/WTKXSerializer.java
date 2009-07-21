@@ -1218,6 +1218,10 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                             }
 
                             resolvedValue = resources.get(attributeValue.substring(1));
+
+                            if (resolvedValue == null) {
+                                resolvedValue = attributeValue;
+                            }
                         }
                     }
                 } else if (attributeValue.charAt(0) == OBJECT_REFERENCE_PREFIX) {
@@ -1226,6 +1230,10 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                             resolvedValue = attributeValue.substring(1);
                         } else {
                             resolvedValue = get(attributeValue.substring(1));
+
+                            if (resolvedValue == null) {
+                                resolvedValue = attributeValue;
+                            }
                         }
                     }
                 } else {
