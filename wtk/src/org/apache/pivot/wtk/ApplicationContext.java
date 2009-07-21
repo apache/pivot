@@ -757,7 +757,7 @@ public abstract class ApplicationContext {
                             (Application.UncaughtExceptionHandler)application;
                         uncaughtExceptionHandler.uncaughtExceptionThrown(exception);
                     } else {
-                        Thread.dumpStack();
+                        exception.printStackTrace();
                     }
                 }
             } else {
@@ -823,7 +823,7 @@ public abstract class ApplicationContext {
                             (Application.UncaughtExceptionHandler)application;
                         uncaughtExceptionHandler.uncaughtExceptionThrown(exception);
                     } else {
-                        Thread.dumpStack();
+                        exception.printStackTrace();
                     }
                 }
             }
@@ -976,7 +976,7 @@ public abstract class ApplicationContext {
                             (Application.UncaughtExceptionHandler)application;
                         uncaughtExceptionHandler.uncaughtExceptionThrown(exception);
                     } else {
-                        Thread.dumpStack();
+                        exception.printStackTrace();
                     }
                 }
             }
@@ -1042,7 +1042,7 @@ public abstract class ApplicationContext {
                         (Application.UncaughtExceptionHandler)application;
                     uncaughtExceptionHandler.uncaughtExceptionThrown(exception);
                 } else {
-                    Thread.dumpStack();
+                    exception.printStackTrace();
                 }
             }
         }
@@ -1135,7 +1135,7 @@ public abstract class ApplicationContext {
                                     (Application.UncaughtExceptionHandler)application;
                                 uncaughtExceptionHandler.uncaughtExceptionThrown(exception);
                             } else {
-                                Thread.dumpStack();
+                                exception.printStackTrace();
                             }
                         }
 
@@ -1167,7 +1167,7 @@ public abstract class ApplicationContext {
                                     (Application.UncaughtExceptionHandler)application;
                                 uncaughtExceptionHandler.uncaughtExceptionThrown(exception);
                             } else {
-                                Thread.dumpStack();
+                                exception.printStackTrace();
                             }
                         }
 
@@ -1199,7 +1199,7 @@ public abstract class ApplicationContext {
                                     (Application.UncaughtExceptionHandler)application;
                                 uncaughtExceptionHandler.uncaughtExceptionThrown(exception);
                             } else {
-                                Thread.dumpStack();
+                                exception.printStackTrace();
                             }
                         }
 
