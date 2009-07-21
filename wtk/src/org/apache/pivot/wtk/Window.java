@@ -27,6 +27,7 @@ import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.ThreadUtilities;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
+import org.apache.pivot.wtk.Keyboard.KeyStroke;
 import org.apache.pivot.wtk.media.Image;
 
 
@@ -47,24 +48,37 @@ public class Window extends Container {
         private ActionDictionary() {
         }
 
-        public Action get(Keyboard.KeyStroke key) {
-            return actions.get(key);
+        public Action get(Keyboard.KeyStroke keyStroke) {
+            return actions.get(keyStroke);
         }
 
-        public Action put(Keyboard.KeyStroke key, Action value) {
-            return actions.put(key, value);
+        public Action put(Keyboard.KeyStroke keyStroke, Action value) {
+            boolean update = containsKey(keyStroke);
+            Action previousAction = actions.put(keyStroke, value);
 
-            // TODO Fire WindowActionListener#actionAdded()/actionUpdated()
+            if (update) {
+                windowActionListeners.actionUpdated(Window.this, keyStroke, previousAction);
+            }
+            else {
+                windowActionListeners.actionAdded(Window.this, keyStroke);
+            }
+
+            return previousAction;
         }
 
-        public Action remove(Keyboard.KeyStroke key) {
-            return actions.remove(key);
+        public Action remove(Keyboard.KeyStroke keyStroke) {
+            Action action = null;
 
-            // TODO Fire WindowActionListener#actionRemoved()
+            if (containsKey(keyStroke)) {
+                action = actions.remove(keyStroke);
+                windowActionListeners.actionRemoved(Window.this, keyStroke, action);
+            }
+
+            return action;
         }
 
-        public boolean containsKey(Keyboard.KeyStroke key) {
-            return actions.containsKey(key);
+        public boolean containsKey(Keyboard.KeyStroke keyStroke) {
+            return actions.containsKey(keyStroke);
         }
 
         public boolean isEmpty() {
@@ -174,6 +188,27 @@ public class Window extends Container {
         }
     }
 
+    private static class WindowActionListenerList extends ListenerList<WindowActionListener>
+        implements WindowActionListener {
+        public void actionAdded(Window window, KeyStroke keyStroke) {
+            for (WindowActionListener listener : this) {
+                listener.actionAdded(window, keyStroke);
+            }
+        }
+
+        public void actionUpdated(Window window, KeyStroke keyStroke, Action previousAction) {
+            for (WindowActionListener listener : this) {
+                listener.actionUpdated(window, keyStroke, previousAction);
+            }
+        }
+
+        public void actionRemoved(Window window, KeyStroke keyStroke, Action action) {
+            for (WindowActionListener listener : this) {
+                listener.actionRemoved(window, keyStroke, action);
+            }
+        }
+    }
+
     /**
      * Window class listener list.
      *
@@ -209,6 +244,7 @@ public class Window extends Container {
 
     private WindowListenerList windowListeners = new WindowListenerList();
     private WindowStateListenerList windowStateListeners = new WindowStateListenerList();
+    private WindowActionListenerList windowActionListeners = new WindowActionListenerList();
     private static WindowClassListenerList windowClassListeners = new WindowClassListenerList();
 
     private static Window activeWindow = null;
@@ -978,6 +1014,10 @@ public class Window extends Container {
 
     public ListenerList<WindowStateListener> getWindowStateListeners() {
         return windowStateListeners;
+    }
+
+    public ListenerList<WindowActionListener> getWindowActionListeners() {
+        return windowActionListeners;
     }
 
     public static ListenerList<WindowClassListener> getWindowClassListeners() {
