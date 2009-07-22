@@ -859,7 +859,7 @@ public class JSONSerializer implements Serializer<Object> {
              List<Object> list = (List<Object>)parent;
              previousValue = list.update(Integer.parseInt(key), value);
         } else {
-            throw new IllegalArgumentException("Invalid path.");
+            throw new IllegalArgumentException("Invalid path: " + path + ".");
         }
 
         return previousValue;
@@ -901,7 +901,7 @@ public class JSONSerializer implements Serializer<Object> {
              List<Object> list = (List<Object>)parent;
              previousValue = list.remove(Integer.parseInt(key), 1).get(0);
         } else {
-            throw new IllegalArgumentException("Invalid path.");
+            throw new IllegalArgumentException("Invalid path: " + path + ".");
         }
 
         return previousValue;
