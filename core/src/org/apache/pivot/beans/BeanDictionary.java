@@ -37,6 +37,7 @@ import org.apache.pivot.collections.Dictionary;
  * <tt>null</tt>, the return type of the getter method is used.
  *
  * @author gbrown
+ * @author tvolkert
  */
 public class BeanDictionary implements Dictionary<String, Object>, Iterable<String> {
     /**
@@ -111,7 +112,17 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
                     && nextProperty == null) {
                     Field field = fields[j++];
 
-                    // TODO
+                    int modifiers = field.getModifiers();
+                    if ((modifiers & Modifier.PUBLIC) != 0
+                        && (modifiers & Modifier.STATIC) == 0) {
+                        nextProperty = FIELD_PREFIX + field.getName();
+                    }
+
+                    if (nextProperty != null
+                        && ignoreReadOnlyProperties
+                        && (modifiers & Modifier.FINAL) != 0) {
+                        nextProperty = null;
+                    }
                 }
             }
         }
@@ -127,6 +138,7 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
     public static final String GET_PREFIX = "get";
     public static final String IS_PREFIX = "is";
     public static final String SET_PREFIX = "set";
+    public static final String FIELD_PREFIX = "~";
     public static final String LISTENERS_SUFFIX = "Listeners";
 
     /**
@@ -179,29 +191,26 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
 
         Object value = null;
 
-        Method getterMethod = getGetterMethod(key);
-
-        if (getterMethod != null) {
-            try {
-                value = getterMethod.invoke(bean, new Object[] {});
-            } catch(IllegalAccessException exception) {
-                // No-op
-            } catch(InvocationTargetException exception) {
-                // No-op
-            }
-        } else {
-            Field field = getField(key);
+        if (key.startsWith(FIELD_PREFIX)) {
+            Field field = getField(key.substring(1));
 
             if (field != null) {
-                int modifiers = field.getModifiers();
+                try {
+                    value = field.get(bean);
+                } catch (IllegalAccessException exception) {
+                    // No-op
+                }
+            }
+        } else {
+            Method getterMethod = getGetterMethod(key);
 
-                if ((modifiers & Modifier.PUBLIC) != 0
-                    && (modifiers & Modifier.STATIC) == 0) {
-                    try {
-                        value = field.get(bean);
-                    } catch(IllegalAccessException exception) {
-                        // No-op
-                    }
+            if (getterMethod != null) {
+                try {
+                    value = getterMethod.invoke(bean, new Object[] {});
+                } catch (IllegalAccessException exception) {
+                    // No-op
+                } catch (InvocationTargetException exception) {
+                    // No-op
                 }
             }
         }
@@ -247,30 +256,36 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
             valueType = value.getClass();
         }
 
-        Method setterMethod = getSetterMethod(key, valueType);
-
-        if (setterMethod == null) {
-            Field field = getField(key);
+        if (key.startsWith(FIELD_PREFIX)) {
+            Field field = getField(key.substring(1));
 
             if (field == null
                 || !field.getType().isAssignableFrom(valueType)
                 || (field.getModifiers() & Modifier.FINAL) != 0) {
+                throw new PropertyNotFoundException("Field \"" + key + "\""
+                    + " of type " + valueType.getName()
+                    + " does not exist or is final.");
+            }
+
+            try {
+                field.set(bean, value);
+            } catch (IllegalAccessException exception) {
+                throw new RuntimeException(exception);
+            }
+        } else {
+            Method setterMethod = getSetterMethod(key, valueType);
+
+            if (setterMethod == null) {
                 throw new PropertyNotFoundException("Property \"" + key + "\""
                     + " of type " + valueType.getName()
                     + " does not exist or is read-only.");
             }
 
             try {
-                field.set(bean, value);
-            } catch(IllegalAccessException exception) {
-                throw new RuntimeException(exception);
-            }
-        } else {
-            try {
                 setterMethod.invoke(bean, new Object[] {value});
-            } catch(IllegalAccessException exception) {
+            } catch (IllegalAccessException exception) {
                 throw new RuntimeException(exception);
-            } catch(InvocationTargetException exception) {
+            } catch (InvocationTargetException exception) {
                 Throwable cause = exception.getCause();
 
                 if (cause instanceof RuntimeException) {
@@ -309,8 +324,15 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
             throw new IllegalArgumentException("key is null.");
         }
 
-        return (getGetterMethod(key) != null
-            || getField(key) != null);
+        boolean containsKey;
+
+        if (key.startsWith(FIELD_PREFIX)) {
+            containsKey = (getField(key.substring(1)) != null);
+        } else {
+            containsKey = (getGetterMethod(key) != null);
+        }
+
+        return containsKey;
     }
 
     /**
@@ -375,15 +397,15 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
      * Returns the public, non-static field for a property. Note that fields
      * will only be consulted for bean properties after bean methods.
      *
-     * @param key
+     * @param fieldName
      * The property name
      *
      * @return
      * The field, or <tt>null</tt> if the field does not exist, or is
      * non-public or static
      */
-    private Field getField(String key) {
-        return getField(bean.getClass(), key);
+    private Field getField(String fieldName) {
+        return getField(bean.getClass(), fieldName);
     }
 
     /**
@@ -400,7 +422,9 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
     }
 
     /**
-     * Tests the read-only state of a property.
+     * Tests the read-only state of a property. Note that is no such property
+     * exists, this method will return <tt>true</tt> (it will <u>not</u> throw
+     * an exception).
      *
      * @param type
      * The bean class.
@@ -418,14 +442,13 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
 
         boolean isReadOnly = true;
 
-        Method setterMethod = getSetterMethod(type, key, getType(type, key));
-
-        if (setterMethod != null) {
-            isReadOnly = false;
-        } else {
-            Field field = getField(type, key);
+        if (key.startsWith(FIELD_PREFIX)) {
+            Field field = getField(type, key.substring(1));
             isReadOnly = (field == null
                 || (field.getModifiers() & Modifier.FINAL) != 0);
+        } else {
+            Method setterMethod = getSetterMethod(type, key, getType(type, key));
+            isReadOnly = (setterMethod == null);
         }
 
         return isReadOnly;
@@ -451,15 +474,17 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
 
         Class<?> propertyType = null;
 
-        Method getterMethod = getGetterMethod(type, key);
-
-        if (getterMethod != null) {
-            propertyType = getterMethod.getReturnType();
-        } else {
-            Field field = getField(type, key);
+        if (key.startsWith(FIELD_PREFIX)) {
+            Field field = getField(type, key.substring(1));
 
             if (field != null) {
                 propertyType = field.getType();
+            }
+        } else {
+            Method getterMethod = getGetterMethod(type, key);
+
+            if (getterMethod != null) {
+                propertyType = getterMethod.getReturnType();
             }
         }
 
@@ -485,14 +510,14 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
 
         try {
             method = type.getMethod(GET_PREFIX + key, new Class<?>[] {});
-        } catch(NoSuchMethodException exception) {
+        } catch (NoSuchMethodException exception) {
             // No-op
         }
 
         if (method == null) {
             try {
                 method = type.getMethod(IS_PREFIX + key, new Class<?>[] {});
-            } catch(NoSuchMethodException exception) {
+            } catch (NoSuchMethodException exception) {
                 // No-op
             }
         }
@@ -507,18 +532,18 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
      * @param type
      * The bean class
      *
-     * @param key
+     * @param fieldName
      * The property name
      *
      * @return
      * The field, or <tt>null</tt> if the field does not exist, or is
      * non-public or static
      */
-    public static Field getField(Class<?> type, String key) {
+    public static Field getField(Class<?> type, String fieldName) {
         Field field = null;
 
         try {
-            field = type.getField(key);
+            field = type.getField(fieldName);
 
             int modifiers = field.getModifiers();
 
@@ -557,7 +582,7 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
 
             try {
                 method = type.getMethod(methodName, new Class<?>[] {valueType});
-            } catch(NoSuchMethodException exception) {
+            } catch (NoSuchMethodException exception) {
                 // No-op
             }
 
@@ -576,12 +601,12 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
 
                     try {
                         method = type.getMethod(methodName, new Class<?>[] {primitiveValueType});
-                    } catch(NoSuchMethodException exception) {
+                    } catch (NoSuchMethodException exception) {
                         // No-op
                     }
-                } catch(NoSuchFieldException exception) {
+                } catch (NoSuchFieldException exception) {
                     // No-op; not a wrapper type
-                } catch(IllegalAccessException exception) {
+                } catch (IllegalAccessException exception) {
                     // No-op
                 }
             }
