@@ -20,7 +20,6 @@ import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentKeyListener;
-import org.apache.pivot.wtk.ComponentLayoutListener;
 import org.apache.pivot.wtk.ComponentListener;
 import org.apache.pivot.wtk.ComponentMouseButtonListener;
 import org.apache.pivot.wtk.ComponentMouseListener;
@@ -32,6 +31,8 @@ import org.apache.pivot.wtk.Cursor;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Direction;
 import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.DragSource;
+import org.apache.pivot.wtk.DropTarget;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Point;
@@ -44,9 +45,8 @@ import org.apache.pivot.wtk.Tooltip;
  * @author gbrown
  */
 public abstract class ComponentSkin implements Skin, ComponentListener,
-    ComponentLayoutListener, ComponentStateListener, ComponentMouseListener,
-    ComponentMouseButtonListener, ComponentMouseWheelListener,
-    ComponentKeyListener {
+    ComponentStateListener, ComponentMouseListener, ComponentMouseButtonListener,
+    ComponentMouseWheelListener, ComponentKeyListener {
     private class ShowTooltipCallback implements Runnable {
         public void run() {
             Component component = getComponent();
@@ -105,7 +105,6 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
         assert(this.component == null) : "Skin is already installed on a component.";
 
         component.getComponentListeners().add(this);
-        component.getComponentLayoutListeners().add(this);
         component.getComponentStateListeners().add(this);
         component.getComponentMouseListeners().add(this);
         component.getComponentMouseButtonListeners().add(this);
@@ -117,7 +116,6 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
 
     public void uninstall() {
         component.getComponentListeners().remove(this);
-        component.getComponentLayoutListeners().remove(this);
         component.getComponentStateListeners().remove(this);
         component.getComponentMouseListeners().remove(this);
         component.getComponentMouseButtonListeners().remove(this);
@@ -154,11 +152,20 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
         // No-op
     }
 
+    public void preferredSizeChanged(Component component,
+        int previousPreferredWidth, int previousPreferredHeight) {
+        // No-op
+    }
+
     public void locationChanged(Component component, int previousX, int previousY) {
         // No-op
     }
 
     public void visibleChanged(Component component) {
+        // No-op
+    }
+
+    public void displayableChanged(Component component) {
         // No-op
     }
 
@@ -174,17 +181,15 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
         // TODO Handle change here instead of in ShowTooltipCallback?
     }
 
+    public void dragSourceChanged(Component component, DragSource previousDragSource) {
+        // No-op
+    }
+
+    public void dropTargetChanged(Component component, DropTarget previousDropTarget) {
+        // No-op
+    }
+
     public void contextMenuHandlerChanged(Component component, ContextMenuHandler previousContextMenuHandler) {
-        // No-op
-    }
-
-    // Component layout events
-    public void preferredSizeChanged(Component component,
-        int previousPreferredWidth, int previousPreferredHeight) {
-        // No-op
-    }
-
-    public void displayableChanged(Component component) {
         // No-op
     }
 

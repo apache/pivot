@@ -308,6 +308,14 @@ public abstract class Component implements ConstrainedVisual {
             }
         }
 
+        public void preferredSizeChanged(Component component, int previousPreferredWidth,
+            int previousPreferredHeight) {
+            for (ComponentListener listener : this) {
+                listener.preferredSizeChanged(component, previousPreferredWidth,
+                    previousPreferredHeight);
+            }
+        }
+
         public void locationChanged(Component component, int previousX, int previousY) {
             for (ComponentListener listener : this) {
                 listener.locationChanged(component, previousX, previousY);
@@ -317,6 +325,12 @@ public abstract class Component implements ConstrainedVisual {
         public void visibleChanged(Component component) {
             for (ComponentListener listener : this) {
                 listener.visibleChanged(component);
+            }
+        }
+
+        public void displayableChanged(Component component) {
+            for (ComponentListener listener : this) {
+                listener.displayableChanged(component);
             }
         }
 
@@ -338,26 +352,22 @@ public abstract class Component implements ConstrainedVisual {
             }
         }
 
-        public void contextMenuHandlerChanged(Component component, ContextMenuHandler previousContextMenuHandler) {
+        public void dragSourceChanged(Component component, DragSource previousDragSource) {
+            for (ComponentListener listener : this) {
+                listener.dragSourceChanged(component, previousDragSource);
+            }
+        }
+
+        public void dropTargetChanged(Component component, DropTarget previousDropTarget) {
+            for (ComponentListener listener : this) {
+                listener.dropTargetChanged(component, previousDropTarget);
+            }
+        }
+
+        public void contextMenuHandlerChanged(Component component,
+            ContextMenuHandler previousContextMenuHandler) {
             for (ComponentListener listener : this) {
                 listener.contextMenuHandlerChanged(component, previousContextMenuHandler);
-            }
-        }
-    }
-
-    private static class ComponentLayoutListenerList extends
-        ListenerList<ComponentLayoutListener> implements ComponentLayoutListener {
-        public void preferredSizeChanged(Component component,
-            int previousPreferredWidth, int previousPreferredHeight) {
-            for (ComponentLayoutListener listener : this) {
-                listener.preferredSizeChanged(component,
-                    previousPreferredWidth, previousPreferredHeight);
-            }
-        }
-
-        public void displayableChanged(Component component) {
-            for (ComponentLayoutListener listener : this) {
-                listener.displayableChanged(component);
             }
         }
     }
@@ -505,21 +515,6 @@ public abstract class Component implements ConstrainedVisual {
         }
     }
 
-    private static class ComponentDragDropListenerList extends ListenerList<ComponentDragDropListener>
-        implements ComponentDragDropListener {
-        public void dragSourceChanged(Component component, DragSource previousDragSource) {
-            for (ComponentDragDropListener listener : this) {
-                listener.dragSourceChanged(component, previousDragSource);
-            }
-        }
-
-        public void dropTargetChanged(Component component, DropTarget previousDropTarget) {
-            for (ComponentDragDropListener listener : this) {
-                listener.dropTargetChanged(component, previousDropTarget);
-            }
-        }
-    }
-
     private static class ComponentDataListenerList extends ListenerList<ComponentDataListener>
         implements ComponentDataListener {
         public void valueAdded(Component component, String key) {
@@ -620,14 +615,12 @@ public abstract class Component implements ConstrainedVisual {
 
     // Event listener lists.
     private ComponentListenerList componentListeners = new ComponentListenerList();
-    private ComponentLayoutListenerList componentLayoutListeners = new ComponentLayoutListenerList();
     private ComponentStateListenerList componentStateListeners = new ComponentStateListenerList();
     private ComponentDecoratorListenerList componentDecoratorListeners = new ComponentDecoratorListenerList();
     private ComponentMouseListenerList componentMouseListeners = new ComponentMouseListenerList();
     private ComponentMouseButtonListenerList componentMouseButtonListeners = new ComponentMouseButtonListenerList();
     private ComponentMouseWheelListenerList componentMouseWheelListeners = new ComponentMouseWheelListenerList();
     private ComponentKeyListenerList componentKeyListeners = new ComponentKeyListenerList();
-    private ComponentDragDropListenerList componentDragDropListeners = new ComponentDragDropListenerList();
     private ComponentDataListenerList componentDataListeners = new ComponentDataListenerList();
 
     // The component that currently has the focus
@@ -924,8 +917,8 @@ public abstract class Component implements ConstrainedVisual {
 
             invalidate();
 
-            componentLayoutListeners.preferredSizeChanged(this,
-                previousPreferredWidth, preferredHeight);
+            componentListeners.preferredSizeChanged(this, previousPreferredWidth,
+                preferredHeight);
         }
     }
 
@@ -999,8 +992,8 @@ public abstract class Component implements ConstrainedVisual {
 
             invalidate();
 
-            componentLayoutListeners.preferredSizeChanged(this,
-                preferredWidth, previousPreferredHeight);
+            componentListeners.preferredSizeChanged(this, preferredWidth,
+                previousPreferredHeight);
         }
     }
 
@@ -1078,8 +1071,8 @@ public abstract class Component implements ConstrainedVisual {
 
             invalidate();
 
-            componentLayoutListeners.preferredSizeChanged(this,
-                previousPreferredWidth, previousPreferredHeight);
+            componentListeners.preferredSizeChanged(this, previousPreferredWidth,
+                previousPreferredHeight);
         }
     }
 
@@ -1336,7 +1329,7 @@ public abstract class Component implements ConstrainedVisual {
 
             invalidate();
 
-            componentLayoutListeners.displayableChanged(this);
+            componentListeners.displayableChanged(this);
         }
     }
 
@@ -2211,7 +2204,7 @@ public abstract class Component implements ConstrainedVisual {
 
         if (previousDragSource != dragSource) {
             this.dragSource = dragSource;
-            componentDragDropListeners.dragSourceChanged(this, previousDragSource);
+            componentListeners.dragSourceChanged(this, previousDragSource);
         }
     }
 
@@ -2224,7 +2217,7 @@ public abstract class Component implements ConstrainedVisual {
 
         if (previousDropTarget != dropTarget) {
             this.dropTarget = dropTarget;
-            componentDragDropListeners.dropTargetChanged(this, previousDropTarget);
+            componentListeners.dropTargetChanged(this, previousDropTarget);
         }
     }
 
@@ -2464,10 +2457,6 @@ public abstract class Component implements ConstrainedVisual {
         return componentListeners;
     }
 
-    public ListenerList<ComponentLayoutListener> getComponentLayoutListeners() {
-        return componentLayoutListeners;
-    }
-
     public ListenerList<ComponentStateListener> getComponentStateListeners() {
         return componentStateListeners;
     }
@@ -2490,10 +2479,6 @@ public abstract class Component implements ConstrainedVisual {
 
     public ListenerList<ComponentKeyListener> getComponentKeyListeners() {
         return componentKeyListeners;
-    }
-
-    public ListenerList<ComponentDragDropListener> getComponentDragDropListeners() {
-        return componentDragDropListeners;
     }
 
     public ListenerList<ComponentDataListener> getComponentDataListeners() {

@@ -17,13 +17,15 @@
 package org.apache.pivot.wtk;
 
 /**
- *
+ * Context menu handler interface.
  *
  * @author tvolkert
  */
 public interface ContextMenuHandler {
     /**
+     * Called to allow an implementation to configure a context menu.
      *
+     * @param menu
      */
     public boolean configureMenu(Menu menu);
 }

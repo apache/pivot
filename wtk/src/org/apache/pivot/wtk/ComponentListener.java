@@ -28,36 +28,42 @@ public interface ComponentListener {
      * @author tvolkert
      */
     public static class Adapter implements ComponentListener {
-        @Override
         public void parentChanged(Component component, Container previousParent) {
         }
 
-        @Override
         public void sizeChanged(Component component, int previousWidth, int previousHeight) {
         }
 
-        @Override
+        public void preferredSizeChanged(Component component, int previousPreferredWidth,
+            int previousPreferredHeight) {
+        }
+
         public void locationChanged(Component component, int previousX, int previousY) {
         }
 
-        @Override
         public void visibleChanged(Component component) {
         }
 
-        @Override
+        public void displayableChanged(Component component) {
+        }
+
         public void styleUpdated(Component component, String styleKey, Object previousValue) {
         }
 
-        @Override
         public void cursorChanged(Component component, Cursor previousCursor) {
         }
 
-        @Override
         public void tooltipTextChanged(Component component, String previousTooltipText) {
         }
 
-        @Override
-        public void contextMenuHandlerChanged(Component component, ContextMenuHandler previousContextMenuHandler) {
+        public void dragSourceChanged(Component component, DragSource previousDragSource) {
+        }
+
+        public void dropTargetChanged(Component component, DropTarget previousDropTarget) {
+        }
+
+        public void contextMenuHandlerChanged(Component component,
+            ContextMenuHandler previousContextMenuHandler) {
         }
     }
 
@@ -80,6 +86,16 @@ public interface ComponentListener {
     public void sizeChanged(Component component, int previousWidth, int previousHeight);
 
     /**
+     * Called when a component's preferred size has changed.
+     *
+     * @param component
+     * @param previousPreferredWidth
+     * @param previousPreferredHeight
+     */
+    public void preferredSizeChanged(Component component, int previousPreferredWidth,
+        int previousPreferredHeight);
+
+    /**
      * Called when a component's location has changed.
      *
      * @param component
@@ -94,6 +110,13 @@ public interface ComponentListener {
      * @param component
      */
     public void visibleChanged(Component component);
+
+    /**
+     * Called when a component's displayable flag has changed.
+     *
+     * @param component
+     */
+    public void displayableChanged(Component component);
 
     /**
      * Called when a component style has been updated.
@@ -119,6 +142,22 @@ public interface ComponentListener {
      * @param previousTooltipText
      */
     public void tooltipTextChanged(Component component, String previousTooltipText);
+
+    /**
+     * Called when a component's drag source has changed.
+     *
+     * @param component
+     * @param previousDragSource
+     */
+    public void dragSourceChanged(Component component, DragSource previousDragSource);
+
+    /**
+     * Called when a component's drop target has changed.
+     *
+     * @param component
+     * @param previousDropTarget
+     */
+    public void dropTargetChanged(Component component, DropTarget previousDropTarget);
 
     /**
      * Called when a component's context menu handler has changed.

@@ -20,8 +20,6 @@ import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentListener;
-import org.apache.pivot.wtk.Container;
-import org.apache.pivot.wtk.Cursor;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Dialog;
 import org.apache.pivot.wtk.Display;
@@ -40,29 +38,11 @@ public class WindowTest implements Application {
         window1.setTitle("Window 1");
         window1.setPreferredSize(320, 240);
 
-        window1.getComponentListeners().add(new ComponentListener() {
-            public void parentChanged(Component component, Container previousParent) {
-            }
-
+        window1.getComponentListeners().add(new ComponentListener.Adapter() {
             public void sizeChanged(Component component, int previousWidth, int previousHeight) {
                 window1.align(window1.getDisplay().getBounds(),
                     HorizontalAlignment.CENTER, VerticalAlignment.CENTER);
                 window1.getComponentListeners().remove(this);
-            }
-
-            public void locationChanged(Component component, int previousX, int previousY) {
-            }
-
-            public void visibleChanged(Component component) {
-            }
-
-            public void styleUpdated(Component component, String styleKey, Object previousValue) {
-            }
-
-            public void cursorChanged(Component component, Cursor previousCursor) {
-            }
-
-            public void tooltipTextChanged(Component component, String previousTooltipText) {
             }
         });
 
