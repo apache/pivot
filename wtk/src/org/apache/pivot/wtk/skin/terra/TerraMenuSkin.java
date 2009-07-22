@@ -35,7 +35,7 @@ import org.apache.pivot.wtk.skin.ContainerSkin;
  *
  * @author gbrown
  */
-public class TerraMenuSkin extends ContainerSkin implements MenuListener {
+public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.SectionListener {
     private Font font;
     private Color color;
     private Color disabledColor;
@@ -73,11 +73,19 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener {
 
         Menu menu = (Menu)component;
         menu.getMenuListeners().add(this);
+
+        for (Menu.Section section : menu.getSections()) {
+            section.getSectionListeners().add(this);
+        }
     }
 
     public void uninstall() {
         Menu menu = (Menu)getComponent();
         menu.getMenuListeners().remove(this);
+
+        for (Menu.Section section : menu.getSections()) {
+            section.getSectionListeners().remove(this);
+        }
 
         super.uninstall();
     }
@@ -370,10 +378,18 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener {
     }
 
     public void sectionInserted(Menu menu, int index) {
+        Menu.Section section = menu.getSections().get(index);
+        section.getSectionListeners().add(this);
+
         invalidateComponent();
     }
 
     public void sectionsRemoved(Menu menu, int index, Sequence<Menu.Section> removed) {
+        for (int i = 0, n = removed.getLength(); i < n; i++) {
+            Menu.Section section = removed.get(i);
+            section.getSectionListeners().remove(this);
+        }
+
         invalidateComponent();
     }
 
@@ -383,5 +399,9 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener {
 
     public void itemsRemoved(Menu.Section section, int index, Sequence<Menu.Item> removed) {
         invalidateComponent();
+    }
+
+    public void nameChanged(Menu.Section section, String previousName) {
+        // No-op
     }
 }

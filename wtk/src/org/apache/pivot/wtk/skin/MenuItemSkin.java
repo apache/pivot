@@ -219,6 +219,10 @@ public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListen
         }
     }
 
+    public void nameChanged(Menu.Item menuItem, String previousName) {
+        // No-op
+    }
+
     public void menuChanged(Menu.Item menuItem, Menu previousMenu) {
         menuPopup.setMenu(menuItem.getMenu());
         repaintComponent();

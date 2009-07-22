@@ -40,21 +40,4 @@ public interface MenuListener {
      * @param removed
      */
     public void sectionsRemoved(Menu menu, int index, Sequence<Menu.Section> removed);
-
-    /**
-     * Called when a menu item has been inserted.
-     *
-     * @param section
-     * @param index
-     */
-    public void itemInserted(Menu.Section section, int index);
-
-    /**
-     * Called when menu items have been removed.
-     *
-     * @param section
-     * @param index
-     * @param removed
-     */
-    public void itemsRemoved(Menu.Section section, int index, Sequence<Menu.Item> removed);
 }

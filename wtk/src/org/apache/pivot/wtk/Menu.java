@@ -19,6 +19,7 @@ package org.apache.pivot.wtk;
 import java.util.Iterator;
 
 import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
@@ -39,6 +40,12 @@ public class Menu extends Container {
     public static class Item extends Button {
         private class ItemListenerList extends ListenerList<ItemListener>
             implements ItemListener {
+            public void nameChanged(Item item, String previousName) {
+                for (ItemListener listener : this) {
+                    listener.nameChanged(item, previousName);
+                }
+            }
+
             public void menuChanged(Item item, Menu previousMenu) {
                 for (ItemListener listener : this) {
                     listener.menuChanged(item, previousMenu);
@@ -47,6 +54,8 @@ public class Menu extends Container {
         }
 
         private Section section = null;
+
+        private String name = null;
         private Menu menu = null;
 
         private ItemListenerList itemListeners = new ItemListenerList();
@@ -79,8 +88,32 @@ public class Menu extends Container {
             return section;
         }
 
-        private void setSection(Section section) {
-            this.section = section;
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            String previousName = this.name;
+
+            if (name != previousName) {
+                this.name = name;
+
+                if (section != null
+                    && section.menu != null) {
+                    if (name == null) {
+                        section.menu.itemMap.remove(name);
+                    } else {
+                        if (section.menu.itemMap.containsKey(name)) {
+                            throw new IllegalArgumentException("A menu item named \"" + name
+                                + "\" already exists.");
+                        }
+
+                        section.menu.itemMap.put(name, this);
+                    }
+                }
+
+                itemListeners.nameChanged(this, previousName);
+            }
         }
 
         public Menu getMenu() {
@@ -145,6 +178,20 @@ public class Menu extends Container {
      * @author gbrown
      */
     public interface ItemListener {
+        /**
+         * Called when an item's name has changed.
+         *
+         * @param item
+         * @param previousName
+         */
+        public void nameChanged(Item item, String previousName);
+
+        /**
+         * Called when an item's menu has changed.
+         *
+         * @param item
+         * @param previousMenu
+         */
         public void menuChanged(Item item, Menu previousMenu);
     }
 
@@ -155,15 +202,63 @@ public class Menu extends Container {
      * @author gbrown
      */
     public static class Section implements Sequence<Item>, Iterable<Item> {
+        private static class SectionListenerList extends ListenerList<SectionListener>
+            implements SectionListener {
+            public void itemInserted(Menu.Section section, int index) {
+                for (SectionListener listener : this) {
+                    listener.itemInserted(section, index);
+                }
+            }
+
+            public void itemsRemoved(Menu.Section section, int index, Sequence<Item> removed) {
+                for (SectionListener listener : this) {
+                    listener.itemsRemoved(section, index, removed);
+                }
+            }
+
+            public void nameChanged(Menu.Section section, String previousName) {
+                for (SectionListener listener : this) {
+                    listener.nameChanged(section, previousName);
+                }
+            }
+        }
+
         private Menu menu = null;
+
+        private String name = null;
         private ArrayList<Item> items = new ArrayList<Item>();
+
+        private SectionListenerList sectionListeners = new SectionListenerList();
 
         public Menu getMenu() {
             return menu;
         }
 
-        private void setMenu(Menu menu) {
-            this.menu = menu;
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            String previousName = this.name;
+
+            if (name != previousName) {
+                this.name = name;
+
+                if (menu != null) {
+                    if (name == null) {
+                        menu.sectionMap.remove(name);
+                    } else {
+                        if (menu.sectionMap.containsKey(name)) {
+                            throw new IllegalArgumentException("A menu section named \"" + name
+                                + "\" already exists.");
+                        }
+
+                        menu.sectionMap.put(name, this);
+                    }
+                }
+
+                sectionListeners.nameChanged(this, previousName);
+            }
         }
 
         public int add(Item item) {
@@ -179,11 +274,11 @@ public class Menu extends Container {
             }
 
             items.insert(item, index);
-            item.setSection(this);
+            item.section = this;
 
             if (menu != null) {
                 menu.add(item);
-                menu.menuListeners.itemInserted(this, index);
+                sectionListeners.itemInserted(this, index);
             }
         }
 
@@ -206,16 +301,14 @@ public class Menu extends Container {
             for (int i = 0, n = removed.getLength(); i < n; i++) {
                 Item item = removed.get(i);
 
-                item.setSection(null);
+                item.section = null;
 
                 if (menu != null) {
                     menu.remove(item);
                 }
             }
 
-            if (menu != null) {
-                menu.menuListeners.itemsRemoved(this, index, removed);
-            }
+            sectionListeners.itemsRemoved(this, index, removed);
 
             return removed;
         }
@@ -235,6 +328,42 @@ public class Menu extends Container {
         public Iterator<Item> iterator() {
             return new ImmutableIterator<Item>(items.iterator());
         }
+
+        public ListenerList<SectionListener> getSectionListeners() {
+            return sectionListeners;
+        }
+    }
+
+    /**
+     * Section listener interface.
+     *
+     * @author gbrown
+     */
+    public interface SectionListener {
+        /**
+         * Called when a menu item has been inserted.
+         *
+         * @param section
+         * @param index
+         */
+        public void itemInserted(Section section, int index);
+
+        /**
+         * Called when menu items have been removed.
+         *
+         * @param section
+         * @param index
+         * @param removed
+         */
+        public void itemsRemoved(Section section, int index, Sequence<Item> removed);
+
+        /**
+         * Called when a section's name has changed.
+         *
+         * @param section
+         * @param previousName
+         */
+        public void nameChanged(Section section, String previousName);
     }
 
     /**
@@ -254,12 +383,33 @@ public class Menu extends Container {
         }
 
         public void insert(Section section, int index) {
-            if (section.getMenu() != null) {
+            if (section.menu != null) {
                 throw new IllegalArgumentException("section already has a menu.");
             }
 
             sections.insert(section, index);
-            section.setMenu(Menu.this);
+
+            if (section.name != null) {
+                if (sectionMap.containsKey(section.name)) {
+                    throw new IllegalArgumentException("A menu section named \"" + section.name
+                        + "\" already exists.");
+                }
+
+                sectionMap.put(section.name, section);
+            }
+
+            for (Item item : section) {
+                if (item.name != null) {
+                    if (itemMap.containsKey(item.name)) {
+                        throw new IllegalArgumentException("A menu item named \"" + item.name
+                            + "\" already exists.");
+                    }
+
+                    itemMap.put(item.name, item);
+                }
+            }
+
+            section.menu = Menu.this;
 
             for (int i = 0, n = section.getLength(); i < n; i++) {
                 Menu.this.add(section.get(i));
@@ -287,7 +437,17 @@ public class Menu extends Container {
             for (int i = 0, n = removed.getLength(); i < n; i++) {
                 Section section = removed.get(i);
 
-                section.setMenu(null);
+                if (section.name != null) {
+                    sectionMap.remove(section.name);
+                }
+
+                for (Item item : section) {
+                    if (item.name != null) {
+                        itemMap.remove(item.name);
+                    }
+                }
+
+                section.menu = null;
 
                 for (Item item : section) {
                     Menu.this.remove(item);
@@ -329,18 +489,6 @@ public class Menu extends Container {
                 listener.sectionsRemoved(menu, index, removed);
             }
         }
-
-        public void itemInserted(Menu.Section section, int index) {
-            for (MenuListener listener : this) {
-                listener.itemInserted(section, index);
-            }
-        }
-
-        public void itemsRemoved(Menu.Section section, int index, Sequence<Item> removed) {
-            for (MenuListener listener : this) {
-                listener.itemsRemoved(section, index, removed);
-            }
-        }
     }
 
     private static class MenuItemSelectionListenerList extends ListenerList<MenuItemSelectionListener>
@@ -353,8 +501,11 @@ public class Menu extends Container {
     }
 
     private Item item = null;
+
     private ArrayList<Section> sections = new ArrayList<Section>();
     private SectionSequence sectionSequence = new SectionSequence();
+    private HashMap<String, Section> sectionMap = new HashMap<String, Section>();
+    private HashMap<String, Item> itemMap = new HashMap<String, Item>();
 
     private MenuListenerList menuListeners = new MenuListenerList();
     private MenuItemSelectionListenerList menuItemSelectionListeners = new MenuItemSelectionListenerList();
@@ -373,6 +524,10 @@ public class Menu extends Container {
 
     public SectionSequence getSections() {
         return sectionSequence;
+    }
+
+    public Section getSection(String name) {
+        return sectionMap.get(name);
     }
 
     @Override
