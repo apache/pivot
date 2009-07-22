@@ -130,11 +130,11 @@ public class Menu extends Container {
 
             if (previousMenu != menu) {
                 if (previousMenu != null) {
-                    previousMenu.setItem(null);
+                    previousMenu.item = null;
                 }
 
                 if (menu != null) {
-                    menu.setItem(this);
+                    menu.item = this;
                 }
 
                 this.menu = menu;
@@ -514,20 +514,41 @@ public class Menu extends Container {
         installSkin(Menu.class);
     }
 
+    /**
+     * Retrieves the parent item of this menu.
+     */
     public Item getItem() {
         return item;
-    }
-
-    private void setItem(Item item) {
-        this.item = item;
     }
 
     public SectionSequence getSections() {
         return sectionSequence;
     }
 
+    /**
+     * Retrieves a named section.
+     *
+     * @param name
+     *
+     * @return
+     * The section with the given name, or <tt>null</tt> if the name does not
+     * exist.
+     */
     public Section getSection(String name) {
         return sectionMap.get(name);
+    }
+
+    /**
+     * Retrieves a named item.
+     *
+     * @param name
+     *
+     * @return
+     * The item with the given name, or <tt>null</tt> if the name does not
+     * exist.
+     */
+    public Item getItem(String name) {
+        return itemMap.get(name);
     }
 
     @Override
