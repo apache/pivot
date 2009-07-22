@@ -27,6 +27,7 @@ import org.apache.pivot.wtk.ComponentMouseListener;
 import org.apache.pivot.wtk.ComponentMouseWheelListener;
 import org.apache.pivot.wtk.ComponentStateListener;
 import org.apache.pivot.wtk.Container;
+import org.apache.pivot.wtk.ContextMenuHandler;
 import org.apache.pivot.wtk.Cursor;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Direction;
@@ -171,6 +172,10 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
 
     public void tooltipTextChanged(Component component, String previousTooltipText) {
         // TODO Handle change here instead of in ShowTooltipCallback?
+    }
+
+    public void contextMenuHandlerChanged(Component component, ContextMenuHandler previousContextMenuHandler) {
+        // No-op
     }
 
     // Component layout events

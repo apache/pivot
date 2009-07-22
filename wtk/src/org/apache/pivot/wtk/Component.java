@@ -337,6 +337,12 @@ public abstract class Component implements ConstrainedVisual {
                 listener.tooltipTextChanged(component, previousTooltipText);
             }
         }
+
+        public void contextMenuHandlerChanged(Component component, ContextMenuHandler previousContextMenuHandler) {
+            for (ComponentListener listener : this) {
+                listener.contextMenuHandlerChanged(component, previousContextMenuHandler);
+            }
+        }
     }
 
     private static class ComponentLayoutListenerList extends
@@ -595,6 +601,9 @@ public abstract class Component implements ConstrainedVisual {
 
     // The component's drop target
     private DropTarget dropTarget = null;
+
+    // The component's context menu handler
+    private ContextMenuHandler contextMenuHandler = null;
 
     // User data
     private HashMap<String, Object> userData = new HashMap<String, Object>();
@@ -2216,6 +2225,19 @@ public abstract class Component implements ConstrainedVisual {
         if (previousDropTarget != dropTarget) {
             this.dropTarget = dropTarget;
             componentDragDropListeners.dropTargetChanged(this, previousDropTarget);
+        }
+    }
+
+    public ContextMenuHandler getContextMenuHandler() {
+        return contextMenuHandler;
+    }
+
+    public void setContextMenuHandler(ContextMenuHandler contextMenuHandler) {
+        ContextMenuHandler previousContextMenuHandler = this.contextMenuHandler;
+
+        if (previousContextMenuHandler != contextMenuHandler) {
+            this.contextMenuHandler = contextMenuHandler;
+            componentListeners.contextMenuHandlerChanged(this, previousContextMenuHandler);
         }
     }
 

@@ -28,25 +28,36 @@ public interface ComponentListener {
      * @author tvolkert
      */
     public static class Adapter implements ComponentListener {
+        @Override
         public void parentChanged(Component component, Container previousParent) {
         }
 
+        @Override
         public void sizeChanged(Component component, int previousWidth, int previousHeight) {
         }
 
+        @Override
         public void locationChanged(Component component, int previousX, int previousY) {
         }
 
+        @Override
         public void visibleChanged(Component component) {
         }
 
+        @Override
         public void styleUpdated(Component component, String styleKey, Object previousValue) {
         }
 
+        @Override
         public void cursorChanged(Component component, Cursor previousCursor) {
         }
 
+        @Override
         public void tooltipTextChanged(Component component, String previousTooltipText) {
+        }
+
+        @Override
+        public void contextMenuHandlerChanged(Component component, ContextMenuHandler previousContextMenuHandler) {
         }
     }
 
@@ -108,4 +119,12 @@ public interface ComponentListener {
      * @param previousTooltipText
      */
     public void tooltipTextChanged(Component component, String previousTooltipText);
+
+    /**
+     * Called when a component's context menu handler has changed.
+     *
+     * @param component
+     * @param previousContextMenuHandler
+     */
+    public void contextMenuHandlerChanged(Component component, ContextMenuHandler previousContextMenuHandler);
 }
