@@ -16,7 +16,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="Script Application Test" maximized="true"
+<Window wtkx:id="window"
+    title="Script Application Test" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
     <wtkx:define>
@@ -32,7 +33,7 @@ limitations under the License.
                     <wtkx:script language="javascript">
                     <![CDATA[
                     function buttonPressed(button) {
-                        testFrame.open(root);
+                        testFrame.open(window);
                     }
                     ]]>
                     </wtkx:script>
@@ -40,12 +41,5 @@ limitations under the License.
             </PushButton>
         </BoxPane>
     </content>
-
-    <wtkx:script language="javascript">
-    <![CDATA[
-    fooLabel.setText(foo);
-    barLabel.setText(bar);
-    ]]>
-    </wtkx:script>
 </Window>
 

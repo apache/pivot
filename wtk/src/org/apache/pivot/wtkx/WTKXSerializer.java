@@ -233,8 +233,6 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
 
     public static final String DEFINE_TAG = "define";
 
-    public static final String ROOT_OBJECT_ID = "root";
-
     public static final String MIME_TYPE = "application/wtkx";
 
     public WTKXSerializer() {
@@ -492,7 +490,6 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                         // If this is the root, set it
                         if (element.parent == null) {
                             root = element.value;
-                            namedObjects.put(ROOT_OBJECT_ID, root);
                         }
 
                         break;

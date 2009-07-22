@@ -19,19 +19,16 @@ package org.apache.pivot.wtk.skin;
 import java.awt.Color;
 
 import org.apache.pivot.util.Vote;
-import org.apache.pivot.wtk.Action;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Direction;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.FocusTraversalPolicy;
-import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.WindowListener;
 import org.apache.pivot.wtk.WindowStateListener;
 import org.apache.pivot.wtk.media.Image;
-
 
 /**
  * Window skin.
@@ -129,26 +126,6 @@ public class WindowSkin extends ContainerSkin
                 content.setVisible(false);
             }
         }
-    }
-
-    // Component key events
-    @Override
-    public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
-        boolean consumed = super.keyReleased(component, keyCode, keyLocation);
-
-        // Perform any action defined for this keystroke
-        // in the active window's action dictionary
-        Window window = (Window)getComponent();
-        Keyboard.KeyStroke keyStroke = new Keyboard.KeyStroke(keyCode,
-            Keyboard.getModifiers());
-
-        Action action = window.getActions().get(keyStroke);
-        if (action != null
-            && action.isEnabled()) {
-            action.perform();
-        }
-
-        return consumed;
     }
 
     // Window events

@@ -1008,6 +1008,24 @@ public class Window extends Container {
         return super.mouseDown(button, x, y);
     }
 
+    @Override
+    public boolean keyReleased(int keyCode, Keyboard.KeyLocation keyLocation) {
+        boolean consumed = super.keyReleased(keyCode, keyLocation);
+
+        // Perform any action defined for this keystroke
+        // in the active window's action dictionary
+        Keyboard.KeyStroke keyStroke = new Keyboard.KeyStroke(keyCode,
+            Keyboard.getModifiers());
+
+        Action action = actions.get(keyStroke);
+        if (action != null
+            && action.isEnabled()) {
+            action.perform();
+        }
+
+        return consumed;
+    }
+
     public ListenerList<WindowListener> getWindowListeners() {
         return windowListeners;
     }
