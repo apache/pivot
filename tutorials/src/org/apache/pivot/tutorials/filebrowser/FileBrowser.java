@@ -58,7 +58,6 @@ public class FileBrowser implements Application {
         };
 
         final Folder rootFolder = new Folder(pathname, fileFilter);
-        rootFolder.refresh();
         folderTreeView.setTreeData(rootFolder);
 
         folderTreeView.getTreeViewBranchListeners().add(new TreeViewBranchListener() {

@@ -22,6 +22,7 @@ import org.apache.pivot.collections.Sequence.Tree.Path;
 import org.apache.pivot.io.Folder;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.TreeView;
@@ -40,7 +41,6 @@ public class FileBrowserTest implements Application {
 
         String pathname = "/";
         final Folder rootFolder = new Folder(pathname);
-        rootFolder.refresh();
         folderTreeView.setTreeData(rootFolder);
         folderTreeView.getTreeViewBranchListeners().add(new TreeViewBranchListener() {
             public void branchExpanded(TreeView treeView, Path path) {
@@ -70,5 +70,9 @@ public class FileBrowserTest implements Application {
     }
 
     public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(FileBrowserTest.class, args);
     }
 }

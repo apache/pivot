@@ -28,14 +28,8 @@ import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 
-
 /**
  * Class representing a folder in the file system.
- * <p>
- * NOTE Because Java does not provide any way to monitor the file system for
- * changes, instances of this class must be refreshed periodically to reflect
- * updates. Instances must also be refreshed to perform initial population
- * immediately after construction. See {@link #refresh()}.
  *
  * @author gbrown
  */
@@ -54,19 +48,27 @@ public class Folder extends File implements List<File> {
         }
     }
 
-    private static final long serialVersionUID = 0;
-
-    private ArrayList<File> files;
-    private transient FileFilter fileFilter;
-
-    private transient ListListenerList<File> listListeners = new ListListenerList<File>();
-
-    public Folder() {
-        this("", null);
+    private static class FolderListenerList extends ListenerList<FolderListener>
+        implements FolderListener {
+        public void fileFilterChanged(Folder folder, FileFilter previousFileFilter) {
+            for (FolderListener listener : this) {
+                listener.fileFilterChanged(folder, previousFileFilter);
+            }
+        }
     }
 
-    public Folder(FileFilter fileFilter) {
-        this("", fileFilter);
+    private static final long serialVersionUID = 0;
+
+    private ArrayList<File> files = null;
+
+    private transient FileFilter fileFilter = null;
+    private transient Comparator<File> comparator = null;
+
+    private transient ListListenerList<File> listListeners = new ListListenerList<File>();
+    private transient FolderListenerList folderListeners = new FolderListenerList();
+
+    public Folder() {
+        this("");
     }
 
     public Folder(String pathname) {
@@ -74,16 +76,20 @@ public class Folder extends File implements List<File> {
     }
 
     public Folder(String pathname, FileFilter fileFilter) {
+        this(pathname, fileFilter, new FileNameComparator());
+    }
+
+    public Folder(String pathname, FileFilter fileFilter, Comparator<File> comparator) {
         super(pathname);
 
         if (!isDirectory()) {
             throw new IllegalArgumentException(this + " is not a directory.");
         }
 
-        files = new ArrayList<File>();
+        // We don't need to call the setters here since there is no data to
+        // sort or filter yet
         this.fileFilter = fileFilter;
-
-        setComparator(new FileNameComparator());
+        this.comparator = comparator;
     }
 
     /**
@@ -91,6 +97,25 @@ public class Folder extends File implements List<File> {
      */
     public FileFilter getFileFilter() {
         return fileFilter;
+    }
+
+    /**
+     * Sets the file filter that is applied to this folder.
+     *
+     * @param fileFilter
+     */
+    public void setFileFilter(FileFilter fileFilter) {
+        FileFilter previousFileFilter = this.fileFilter;
+
+        if (fileFilter != previousFileFilter) {
+            this.fileFilter = fileFilter;
+
+            if (files != null) {
+                refresh();
+            }
+
+            folderListeners.fileFilterChanged(this, previousFileFilter);
+        }
     }
 
     /**
@@ -136,36 +161,45 @@ public class Folder extends File implements List<File> {
     }
 
     public File get(int index) {
+        if (files == null) {
+            refresh();
+        }
+
         return files.get(index);
     }
 
     public int indexOf(File file) {
+        if (files == null) {
+            refresh();
+        }
+
         return files.indexOf(file);
     }
 
     public int getLength() {
+        if (files == null) {
+            refresh();
+        }
+
         return files.getLength();
     }
 
     public Comparator<File> getComparator() {
-        return files.getComparator();
+        return comparator;
     }
 
     public void setComparator(Comparator<File> comparator) {
-        Comparator<File> previousComparator = files.getComparator();
-        files.setComparator(comparator);
+        Comparator<File> previousComparator = this.comparator;
 
-        // Recursively apply comparator change
-        for (int i = 0, n = files.getLength(); i < n; i++) {
-            File file = files.get(i);
+        if (comparator != previousComparator) {
+            this.comparator = comparator;
 
-            if (file instanceof Folder) {
-                Folder folder = (Folder)file;
-                folder.setComparator(comparator);
+            if (files != null) {
+                refresh();
             }
-        }
 
-        listListeners.comparatorChanged(this, previousComparator);
+            listListeners.comparatorChanged(this, previousComparator);
+        }
     }
 
     /**
@@ -173,11 +207,7 @@ public class Folder extends File implements List<File> {
      * contents.
      */
     public void refresh() {
-        // Clear the list contents
-        files.clear();
-        listListeners.listCleared(this);
-
-        // Refresh list and fire an insert event for each file
+        // Get the current folder contents
         File[] fileList;
         if (getPath().length() == 0) {
             fileList = listRoots();
@@ -185,13 +215,18 @@ public class Folder extends File implements List<File> {
             fileList = listFiles(fileFilter);
         }
 
+        // Clear the file list
+        files = new ArrayList<File>(fileList.length);
+        listListeners.listCleared(this);
+
+        // Add the new files, firing an insert event for each file
         if (fileList != null) {
             for (int i = 0; i < fileList.length; i++) {
                 File file = fileList[i];
 
                 if (!file.isHidden()) {
                     if (file.isDirectory()) {
-                        Folder folder = new Folder(file.getPath(), fileFilter);
+                        Folder folder = new Folder(file.getPath(), fileFilter, comparator);
                         folder.setComparator(files.getComparator());
                         file = folder;
                     }
@@ -201,6 +236,10 @@ public class Folder extends File implements List<File> {
                 }
             }
         }
+
+        if (comparator != null) {
+            ArrayList.sort(files, comparator);
+        }
     }
 
     public Iterator<File> iterator() {
@@ -209,5 +248,9 @@ public class Folder extends File implements List<File> {
 
     public ListenerList<ListListener<File>> getListListeners() {
         return listListeners;
+    }
+
+    public ListenerList<FolderListener> getFolderListeners() {
+        return folderListeners;
     }
 }
