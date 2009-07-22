@@ -435,6 +435,17 @@ public class TableViewRowEditor implements TableView.RowEditor {
             tableViewScrollPane = (ScrollPane)tableViewParent;
         }
 
+        // Get the row data, represented as a Dictionary
+        Object tableRow = tableView.getTableData().get(rowIndex);
+        Dictionary<String, Object> rowData;
+        BeanDictionary beanDictionary = null;
+        if (tableRow instanceof Dictionary<?, ?>) {
+            rowData = (Dictionary<String, Object>)tableRow;
+        } else {
+            beanDictionary = new BeanDictionary(tableRow);
+            rowData = beanDictionary;
+        }
+
         // Match the table pane's columns to the table view's
         TableView.ColumnSequence tableViewColumns = tableView.getColumns();
         TablePane.ColumnSequence tablePaneColumns = editorTablePane.getColumns();
@@ -463,6 +474,12 @@ public class TableViewRowEditor implements TableView.RowEditor {
                 editorComponent = editorTextInput;
             }
 
+            // Disable the component for read-only properties
+            if (beanDictionary != null
+                && beanDictionary.isReadOnly(columnName)) {
+                editorComponent.setEnabled(false);
+            }
+
             // Add the editor component to the table pane
             tablePaneRow.add(editorComponent);
 
@@ -470,15 +487,6 @@ public class TableViewRowEditor implements TableView.RowEditor {
                 // Remove non-visible components from focus contention
                 editorComponent.setEnabled(false);
             }
-        }
-
-        // Get the row data, represented as a Dictionary
-        Object tableRow = tableView.getTableData().get(rowIndex);
-        Dictionary<String, Object> rowData;
-        if (tableRow instanceof Dictionary<?, ?>) {
-            rowData = (Dictionary<String, Object>)tableRow;
-        } else {
-            rowData = new BeanDictionary(tableRow);
         }
 
         // Load the row data into the editor components

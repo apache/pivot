@@ -280,10 +280,12 @@ public class CalendarButton extends Button {
     @Override
     @SuppressWarnings("unchecked")
     public void store(Dictionary<String, ?> context) {
-        String selectedDateKey = getSelectedDateKey();
+        if (isEnabled()) {
+            String selectedDateKey = getSelectedDateKey();
 
-        if (selectedDateKey != null) {
-            ((Dictionary<String, CalendarDate>)context).put(selectedDateKey, getSelectedDate());
+            if (selectedDateKey != null) {
+                ((Dictionary<String, CalendarDate>)context).put(selectedDateKey, getSelectedDate());
+            }
         }
     }
 

@@ -287,7 +287,8 @@ public class ListButton extends Button {
     @Override
     @SuppressWarnings("unchecked")
     public void store(Dictionary<String, ?> context) {
-        if (selectedItemKey != null) {
+        if (isEnabled()
+            && selectedItemKey != null) {
             Object item = getSelectedItem();
             ((Dictionary<String, Object>)context).put(selectedItemKey, item);
         }

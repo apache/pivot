@@ -165,7 +165,7 @@ public class TableViewCellEditor implements TableView.RowEditor {
 
     @SuppressWarnings("unchecked")
     public void edit(TableView tableView, int rowIndex, int columnIndex) {
-        if (this.tableView != null) {
+        if (isEditing()) {
             throw new IllegalStateException("Currently editing.");
         }
 
@@ -173,38 +173,47 @@ public class TableViewCellEditor implements TableView.RowEditor {
         this.rowIndex = rowIndex;
         this.columnIndex = columnIndex;
 
+        boolean isReadOnly = false;
+        String columnName = tableView.getColumns().get(columnIndex).getName();
+
         // Get the row data, represented as a Dictionary
         Object tableRow = tableView.getTableData().get(rowIndex);
         Dictionary<String, Object> rowData;
         if (tableRow instanceof Dictionary<?, ?>) {
             rowData = (Dictionary<String, Object>)tableRow;
         } else {
-            rowData = new BeanDictionary(tableRow);
+            BeanDictionary beanDictionary = new BeanDictionary(tableRow);
+            isReadOnly = beanDictionary.isReadOnly(columnName);
+            rowData = beanDictionary;
         }
 
-        // Get the data being edited
-        String columnName = tableView.getColumns().get(columnIndex).getName();
-        Object cellData = rowData.get(columnName);
+        if (isReadOnly) {
+            // Don't initiate the edit
+            this.tableView = null;
+        } else {
+            // Get the data being edited
+            Object cellData = rowData.get(columnName);
 
-        // Get the cell bounds
-        Bounds cellBounds = tableView.getCellBounds(rowIndex, columnIndex);
-        tableView.scrollAreaToVisible(cellBounds);
-        cellBounds = tableView.getVisibleArea(cellBounds);
+            // Get the cell bounds
+            Bounds cellBounds = tableView.getCellBounds(rowIndex, columnIndex);
+            tableView.scrollAreaToVisible(cellBounds);
+            cellBounds = tableView.getVisibleArea(cellBounds);
 
-        // Create the text input
-        textInput = new TextInput();
-        textInput.setText(cellData == null ? "" : cellData.toString());
-        textInput.setPreferredWidth(cellBounds.width);
-        textInput.getComponentKeyListeners().add(textInputKeyHandler);
+            // Create the text input
+            textInput = new TextInput();
+            textInput.setText(cellData == null ? "" : cellData.toString());
+            textInput.setPreferredWidth(cellBounds.width);
+            textInput.getComponentKeyListeners().add(textInputKeyHandler);
 
-        // Create and open the popup
-        popup = new Window(textInput, true);
-        popup.getWindowStateListeners().add(popupWindowStateHandler);
-        popup.setLocation(cellBounds.x, cellBounds.y
-            + (cellBounds.height - textInput.getPreferredHeight(-1)) / 2);
-        popup.open(tableView.getWindow());
+            // Create and open the popup
+            popup = new Window(textInput, true);
+            popup.getWindowStateListeners().add(popupWindowStateHandler);
+            popup.setLocation(cellBounds.x, cellBounds.y
+                + (cellBounds.height - textInput.getPreferredHeight(-1)) / 2);
+            popup.open(tableView.getWindow());
 
-        textInput.requestFocus();
+            textInput.requestFocus();
+        }
     }
 
     public boolean isEditing() {

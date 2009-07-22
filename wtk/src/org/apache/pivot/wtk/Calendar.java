@@ -316,7 +316,8 @@ public class Calendar extends Container {
     @Override
     @SuppressWarnings("unchecked")
     public void store(Dictionary<String, ?> context) {
-        if (selectedDateKey != null) {
+        if (isEnabled()
+            && selectedDateKey != null) {
             ((Dictionary<String, CalendarDate>)context).put(selectedDateKey, selectedDate);
         }
     }

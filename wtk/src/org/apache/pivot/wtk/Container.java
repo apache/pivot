@@ -566,18 +566,20 @@ public abstract class Container extends Component
      */
     @SuppressWarnings("unchecked")
     public void store(Dictionary<String, ?> context) {
-        if (contextKey != null) {
-            // Bound value is expected to be a sub-context
-            Object value = context.get(contextKey);
-            if (value instanceof Dictionary<?, ?>) {
-                context = (Map<String, Object>)value;
-            } else {
-                context = new BeanDictionary(value);
+        if (isEnabled()) {
+            if (contextKey != null) {
+                // Bound value is expected to be a sub-context
+                Object value = context.get(contextKey);
+                if (value instanceof Dictionary<?, ?>) {
+                    context = (Map<String, Object>)value;
+                } else {
+                    context = new BeanDictionary(value);
+                }
             }
-        }
 
-        for (Component component : components) {
-            component.store(context);
+            for (Component component : components) {
+                component.store(context);
+            }
         }
     }
 

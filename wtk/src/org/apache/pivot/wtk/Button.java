@@ -661,12 +661,14 @@ public abstract class Button extends Component {
     @Override
     @SuppressWarnings("unchecked")
     public void store(Dictionary<String, ?> context) {
-        if (selectedKey != null) {
-            ((Dictionary<String, Boolean>)context).put(selectedKey, isSelected());
-        }
+        if (isEnabled()) {
+            if (selectedKey != null) {
+                ((Dictionary<String, Boolean>)context).put(selectedKey, isSelected());
+            }
 
-        if (stateKey != null) {
-            ((Dictionary<String, State>)context).put(stateKey, state);
+            if (stateKey != null) {
+                ((Dictionary<String, State>)context).put(stateKey, state);
+            }
         }
     }
 

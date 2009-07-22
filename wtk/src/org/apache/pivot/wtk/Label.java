@@ -111,7 +111,8 @@ public class Label extends Component {
     @Override
     @SuppressWarnings("unchecked")
     public void store(Dictionary<String, ?> context) {
-        if (textKey != null) {
+        if (isEnabled()
+            && textKey != null) {
             ((Dictionary<String, String>)context).put(textKey, getText());
         }
     }

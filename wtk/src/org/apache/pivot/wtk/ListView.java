@@ -1091,14 +1091,16 @@ public class ListView extends Component {
     @Override
     @SuppressWarnings("unchecked")
     public void store(Dictionary<String, ?> context) {
-        if (selectedItemKey != null) {
-            Object item = getSelectedItem();
-            ((Dictionary<String, Object>)context).put(selectedItemKey, item);
-        }
+        if (isEnabled()) {
+            if (selectedItemKey != null) {
+                Object item = getSelectedItem();
+                ((Dictionary<String, Object>)context).put(selectedItemKey, item);
+            }
 
-        if (selectedItemsKey != null) {
-            Sequence<Object> items = getSelectedItems();
-            ((Dictionary<String, Sequence<Object>>)context).put(selectedItemsKey, items);
+            if (selectedItemsKey != null) {
+                Sequence<Object> items = getSelectedItems();
+                ((Dictionary<String, Sequence<Object>>)context).put(selectedItemsKey, items);
+            }
         }
     }
 
