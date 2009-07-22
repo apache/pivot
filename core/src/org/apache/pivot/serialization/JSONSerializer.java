@@ -690,10 +690,11 @@ public class JSONSerializer implements Serializer<Object> {
                 Map<String, Object> map = (Map<String, Object>)value;
                 value = map.get(key);
             } else if (value instanceof Sequence<?>) {
-                 List<Object> list = (List<Object>)value;
-                 value = list.get(Integer.parseInt(key));
+                List<Object> list = (List<Object>)value;
+                value = list.get(Integer.parseInt(key));
             } else {
-                throw new IllegalArgumentException("Invalid path.");
+                value = null;
+                break;
             }
         }
 
@@ -939,10 +940,10 @@ public class JSONSerializer implements Serializer<Object> {
             Dictionary<String, Object> dictionary = (Dictionary<String, Object>)parent;
             containsKey = dictionary.containsKey(key);
         } else if (parent instanceof Sequence<?>) {
-             List<Object> list = (List<Object>)parent;
-             containsKey = (list.getLength() > Integer.parseInt(key));
+            List<Object> list = (List<Object>)parent;
+            containsKey = (list.getLength() > Integer.parseInt(key));
         } else {
-            throw new IllegalArgumentException("Invalid path.");
+            containsKey = false;
         }
 
         return containsKey;

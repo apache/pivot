@@ -274,11 +274,11 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
             float percentComplete = getPercentComplete();
 
             if (from < to) {
-                fromScaleDecorator.setScale(1.0f - percentComplete);
-                toScaleDecorator.setScale(2.0f - percentComplete);
-            } else {
                 fromScaleDecorator.setScale(1.0f + percentComplete);
                 toScaleDecorator.setScale(percentComplete);
+            } else {
+                fromScaleDecorator.setScale(1.0f - percentComplete);
+                toScaleDecorator.setScale(2.0f - percentComplete);
             }
 
             super.update();
