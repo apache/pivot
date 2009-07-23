@@ -51,6 +51,7 @@ import java.util.TimerTask;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
+import org.apache.pivot.collections.LinkedList;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.Version;
 import org.apache.pivot.wtk.Manifest;
@@ -778,8 +779,42 @@ public abstract class ApplicationContext {
                     switch (eventID) {
                         case MouseEvent.MOUSE_PRESSED: {
                             requestFocus();
-                            dragLocation = new Point(x, y);
+
                             mouseOwner.mouseDown(button, x, y);
+
+                            if (button == Mouse.Button.LEFT) {
+                                dragLocation = new Point(x, y);
+                            } else if (button == Mouse.Button.RIGHT) {
+                                Component descendant = mouseOwner;
+                                if (mouseOwner instanceof Container) {
+                                    descendant = ((Container)mouseOwner).getDescendantAt(x, y);
+                                }
+
+                                LinkedList<Component> componentPath = new LinkedList<Component>(descendant);
+                                while (descendant != mouseOwner) {
+                                    descendant = descendant.getParent();
+                                    componentPath.insert(descendant, 0);
+                                }
+
+                                Menu menu = new Menu();
+                                MenuPopup menuPopup = new MenuPopup(menu);
+
+                                for (Component component : componentPath) {
+                                    ContextMenuHandler contextMenuHandler = component.getContextMenuHandler();
+
+                                    if (contextMenuHandler != null) {
+                                        if (contextMenuHandler.configureMenu(menu)) {
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                if (menu.getSections().getLength() > 0) {
+                                    Display display = mouseOwner.getDisplay();
+                                    menuPopup.open(display, mouseOwner.mapPointToAncestor(display, x, y));
+                                }
+                            }
+
                             break;
                         }
 

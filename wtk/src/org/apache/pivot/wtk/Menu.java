@@ -556,7 +556,8 @@ public class Menu extends Container {
         for (int i = index, n = index + count; i < n; i++) {
             Item item = (Item)get(i);
 
-            if (item.getSection() != null) {
+            if (item.getSection() != null
+                && item.getSection().getMenu() != null) {
                 throw new UnsupportedOperationException();
             }
         }
