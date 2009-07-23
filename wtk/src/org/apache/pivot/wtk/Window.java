@@ -20,16 +20,13 @@ import java.net.URL;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.ArrayStack;
-import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.ThreadUtilities;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
-import org.apache.pivot.wtk.Keyboard.KeyStroke;
 import org.apache.pivot.wtk.media.Image;
-
 
 /**
  * Top-level container representing the entry point into a user interface.
@@ -39,58 +36,188 @@ import org.apache.pivot.wtk.media.Image;
  */
 public class Window extends Container {
     /**
-     * Action dictionary implementation.
+     * Class representing a mapping from keystrokes to actions.
      *
      * @author gbrown
      */
-    public final class ActionDictionary
-        implements Dictionary<Keyboard.KeyStroke, Action> {
-        private ActionDictionary() {
+    public static class ActionMapping {
+        private Window window = null;
+
+        private Keyboard.KeyStroke keyStroke = null;
+        private Action action = null;
+
+        public ActionMapping() {
         }
 
-        public Action get(Keyboard.KeyStroke keyStroke) {
-            return actions.get(keyStroke);
+        public ActionMapping(Keyboard.KeyStroke keyStroke, Action action) {
+            setKeyStroke(keyStroke);
+            setAction(action);
         }
 
-        public Action put(Keyboard.KeyStroke keyStroke, Action value) {
-            boolean update = containsKey(keyStroke);
-            Action previousAction = actions.put(keyStroke, value);
-
-            if (update) {
-                windowActionListeners.actionUpdated(Window.this, keyStroke, previousAction);
-            }
-            else {
-                windowActionListeners.actionAdded(Window.this, keyStroke);
-            }
-
-            return previousAction;
+        public ActionMapping(Keyboard.KeyStroke keyStroke, String actionID) {
+            setKeyStroke(keyStroke);
+            setAction(actionID);
         }
 
-        public Action remove(Keyboard.KeyStroke keyStroke) {
-            Action action = null;
+        public Window getWindow() {
+            return window;
+        }
 
-            if (containsKey(keyStroke)) {
-                action = actions.remove(keyStroke);
-                windowActionListeners.actionRemoved(Window.this, keyStroke, action);
+        public Keyboard.KeyStroke getKeyStroke() {
+            return keyStroke;
+        }
+
+        public void setKeyStroke(Keyboard.KeyStroke keyStroke) {
+            if (keyStroke == null) {
+                throw new IllegalArgumentException("keyStroke is null.");
             }
 
+            Keyboard.KeyStroke previousKeyStroke = this.keyStroke;
+
+            if (keyStroke != previousKeyStroke) {
+                if (window != null) {
+                    if (window.actionMap.containsKey(keyStroke)) {
+                        throw new IllegalArgumentException("A mapping for " + keyStroke
+                            + " already exists.");
+                    }
+
+                    // We can't simply enforce that keyStroke and action are
+                    // null when the mapping is added to the sequence, since
+                    // the mapping will be added before the attributes are
+                    // applied in WTKX
+                    if (previousKeyStroke != null) {
+                        window.actionMap.remove(previousKeyStroke);
+                    }
+
+                    if (keyStroke != null) {
+                        window.actionMap.put(keyStroke, action);
+                    }
+
+                    window.windowActionMappingListeners.keyStrokeChanged(this, previousKeyStroke);
+                }
+
+                this.keyStroke = keyStroke;
+            }
+        }
+
+        public void setKeyStroke(String keyStroke) {
+            if (keyStroke == null) {
+                throw new IllegalArgumentException("keyStroke is null.");
+            }
+
+            setKeyStroke(Keyboard.KeyStroke.decode(keyStroke));
+        }
+
+        public Action getAction() {
             return action;
         }
 
-        public boolean containsKey(Keyboard.KeyStroke keyStroke) {
-            return actions.containsKey(keyStroke);
+        public void setAction(Action action) {
+            Action previousAction = this.action;
+
+            if (action != previousAction) {
+                if (window != null) {
+                    if (keyStroke != null) {
+                        if (action == null) {
+                            window.actionMap.remove(keyStroke);
+                        } else {
+                            window.actionMap.put(keyStroke, action);
+                        }
+                    }
+
+                    window.windowActionMappingListeners.actionChanged(this, previousAction);
+                }
+
+                this.action = action;
+            }
         }
 
-        public boolean isEmpty() {
-            return actions.isEmpty();
+        public void setAction(String actionID) {
+            if (actionID == null) {
+                throw new IllegalArgumentException("actionID is null");
+            }
+
+            Action action = Action.getNamedActions().get(actionID);
+            if (action == null) {
+                throw new IllegalArgumentException("An action with ID "
+                    + actionID + " does not exist.");
+            }
+
+            setAction(action);
         }
     }
 
-    /**
-     * Window listener list.
-     *
-     * @author gbrown
-     */
+    public class ActionMappingSequence implements Sequence<ActionMapping> {
+        public int add(ActionMapping actionMapping) {
+            if (actionMapping.window != null) {
+                throw new IllegalArgumentException("Action mapping already has a window.");
+            }
+
+            if (actionMapping.keyStroke == null
+                && actionMap.containsKey(actionMapping.keyStroke)) {
+                throw new IllegalArgumentException("A mapping for " + actionMapping.keyStroke
+                    + " already exists.");
+            }
+
+            actionMapping.window = Window.this;
+
+            int index = actionMappings.add(actionMapping);
+            actionMap.put(actionMapping.keyStroke, actionMapping.action);
+
+            windowActionMappingListeners.actionMappingAdded(Window.this);
+
+            return index;
+        }
+
+        public void insert(ActionMapping actionMapping, int index) {
+            throw new UnsupportedOperationException();
+        }
+
+        public ActionMapping update(int index, ActionMapping actionMapping) {
+            throw new UnsupportedOperationException();
+        }
+
+        public int remove(ActionMapping actionMapping) {
+            int index = indexOf(actionMapping);
+
+            if (index >= 0) {
+               remove(index, 1);
+            }
+
+            return index;
+        }
+
+        public Sequence<ActionMapping> remove(int index, int count) {
+            Sequence<ActionMapping> removed = actionMappings.remove(index, count);
+
+            for (int i = 0, n = removed.getLength(); i < n; i++) {
+                ActionMapping actionMapping = removed.get(i);
+
+                actionMapping.window = null;
+
+                if (actionMapping.keyStroke != null) {
+                    actionMap.remove(actionMapping.keyStroke);
+                }
+            }
+
+            windowActionMappingListeners.actionMappingsRemoved(Window.this, index, removed);
+
+            return removed;
+        }
+
+        public ActionMapping get(int index) {
+            return actionMappings.get(index);
+        }
+
+        public int indexOf(ActionMapping actionMapping) {
+            return actionMappings.indexOf(actionMapping);
+        }
+
+        public int getLength() {
+            return actionMappings.getLength();
+        }
+    }
+
     private static class WindowListenerList extends ListenerList<WindowListener>
         implements WindowListener {
         public void titleChanged(Window window, String previousTitle) {
@@ -136,11 +263,6 @@ public class Window extends Container {
         }
     }
 
-    /**
-     * Window state listener list.
-     *
-     * @author gbrown
-     */
     private static class WindowStateListenerList extends ListenerList<WindowStateListener>
         implements WindowStateListener {
         public Vote previewWindowOpen(Window window, Display display) {
@@ -188,32 +310,33 @@ public class Window extends Container {
         }
     }
 
-    private static class WindowActionListenerList extends ListenerList<WindowActionListener>
-        implements WindowActionListener {
-        public void actionAdded(Window window, KeyStroke keyStroke) {
-            for (WindowActionListener listener : this) {
-                listener.actionAdded(window, keyStroke);
+    private static class WindowActionMappingListenerList extends ListenerList<WindowActionMappingListener>
+        implements WindowActionMappingListener {
+        public void actionMappingAdded(Window window) {
+            for (WindowActionMappingListener listener : this) {
+                listener.actionMappingAdded(window);
             }
         }
 
-        public void actionUpdated(Window window, KeyStroke keyStroke, Action previousAction) {
-            for (WindowActionListener listener : this) {
-                listener.actionUpdated(window, keyStroke, previousAction);
+        public void actionMappingsRemoved(Window window, int index, Sequence<Window.ActionMapping> removed) {
+            for (WindowActionMappingListener listener : this) {
+                listener.actionMappingsRemoved(window, index, removed);
             }
         }
 
-        public void actionRemoved(Window window, KeyStroke keyStroke, Action action) {
-            for (WindowActionListener listener : this) {
-                listener.actionRemoved(window, keyStroke, action);
+        public void keyStrokeChanged(Window.ActionMapping actionMapping, Keyboard.KeyStroke previousKeyStroke) {
+            for (WindowActionMappingListener listener : this) {
+                listener.keyStrokeChanged(actionMapping, previousKeyStroke);
+            }
+        }
+
+        public void actionChanged(Window.ActionMapping actionMapping, Action previousAction) {
+            for (WindowActionMappingListener listener : this) {
+                listener.actionChanged(actionMapping, previousAction);
             }
         }
     }
 
-    /**
-     * Window class listener list.
-     *
-     * @author tvolkert
-     */
     private static class WindowClassListenerList
         extends ListenerList<WindowClassListener>
         implements WindowClassListener {
@@ -229,8 +352,10 @@ public class Window extends Container {
     private Window owner = null;
     private ArrayList<Window> ownedWindows = new ArrayList<Window>();
 
-    private HashMap<Keyboard.KeyStroke, Action> actions = new HashMap<Keyboard.KeyStroke, Action>();
-    private ActionDictionary actionDictionary = new ActionDictionary();
+    private ArrayList<ActionMapping> actionMappings = new ArrayList<ActionMapping>();
+    private ActionMappingSequence actionMappingSequence = new ActionMappingSequence();
+
+    private HashMap<Keyboard.KeyStroke, Action> actionMap = new HashMap<Keyboard.KeyStroke, Action>();
 
     private String title = null;
     private Image icon = null;
@@ -244,7 +369,8 @@ public class Window extends Container {
 
     private WindowListenerList windowListeners = new WindowListenerList();
     private WindowStateListenerList windowStateListeners = new WindowStateListenerList();
-    private WindowActionListenerList windowActionListeners = new WindowActionListenerList();
+    private WindowActionMappingListenerList windowActionMappingListeners = new WindowActionMappingListenerList();
+
     private static WindowClassListenerList windowClassListeners = new WindowClassListenerList();
 
     private static Window activeWindow = null;
@@ -793,10 +919,10 @@ public class Window extends Container {
     }
 
     /**
-     * Returns the global action map for this window.
+     * Returns the action mappings for this window.
      */
-    public ActionDictionary getActions() {
-        return actionDictionary;
+    public ActionMappingSequence getActionMappings() {
+        return actionMappingSequence;
     }
 
     /**
@@ -1017,7 +1143,7 @@ public class Window extends Container {
         Keyboard.KeyStroke keyStroke = new Keyboard.KeyStroke(keyCode,
             Keyboard.getModifiers());
 
-        Action action = actions.get(keyStroke);
+        Action action = actionMap.get(keyStroke);
         if (action != null
             && action.isEnabled()) {
             action.perform();
@@ -1034,8 +1160,8 @@ public class Window extends Container {
         return windowStateListeners;
     }
 
-    public ListenerList<WindowActionListener> getWindowActionListeners() {
-        return windowActionListeners;
+    public ListenerList<WindowActionMappingListener> getWindowActionMappingListeners() {
+        return windowActionMappingListeners;
     }
 
     public static ListenerList<WindowClassListener> getWindowClassListeners() {

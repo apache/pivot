@@ -96,21 +96,21 @@ public class Menu extends Container {
             String previousName = this.name;
 
             if (name != previousName) {
-                this.name = name;
-
                 if (section != null
                     && section.menu != null) {
-                    if (name == null) {
-                        section.menu.itemMap.remove(name);
-                    } else {
-                        if (section.menu.itemMap.containsKey(name)) {
-                            throw new IllegalArgumentException("A menu item named \"" + name
-                                + "\" already exists.");
-                        }
-
-                        section.menu.itemMap.put(name, this);
+                    if (section.menu.itemMap.containsKey(name)) {
+                        throw new IllegalArgumentException("A menu item named \"" + name
+                            + "\" already exists.");
                     }
+
+                    if (previousName != null) {
+                        section.menu.itemMap.remove(previousName);
+                    }
+
+                    section.menu.itemMap.put(name, this);
                 }
+
+                this.name = name;
 
                 itemListeners.nameChanged(this, previousName);
             }
@@ -242,20 +242,20 @@ public class Menu extends Container {
             String previousName = this.name;
 
             if (name != previousName) {
-                this.name = name;
-
                 if (menu != null) {
-                    if (name == null) {
-                        menu.sectionMap.remove(name);
-                    } else {
-                        if (menu.sectionMap.containsKey(name)) {
-                            throw new IllegalArgumentException("A menu section named \"" + name
-                                + "\" already exists.");
-                        }
-
-                        menu.sectionMap.put(name, this);
+                    if (menu.sectionMap.containsKey(name)) {
+                        throw new IllegalArgumentException("A menu section named \"" + name
+                            + "\" already exists.");
                     }
+
+                    if (previousName != null) {
+                        menu.sectionMap.remove(previousName);
+                    }
+
+                    menu.sectionMap.put(name, this);
                 }
+
+                this.name = name;
 
                 sectionListeners.nameChanged(this, previousName);
             }
@@ -508,6 +508,7 @@ public class Menu extends Container {
 
     private ArrayList<Section> sections = new ArrayList<Section>();
     private SectionSequence sectionSequence = new SectionSequence();
+
     private HashMap<String, Section> sectionMap = new HashMap<String, Section>();
     private HashMap<String, Item> itemMap = new HashMap<String, Item>();
 
