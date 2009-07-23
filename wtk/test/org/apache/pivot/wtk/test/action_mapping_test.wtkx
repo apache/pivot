@@ -22,7 +22,7 @@ limitations under the License.
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
     <actionMappings>
-        <Window.ActionMapping keyStroke="SHIFT-A" action="action1" foo="bar"/>
+        <Window.ActionMapping keyStroke="SHIFT-A" action="action1"/>
     </actionMappings>
 
     <content>

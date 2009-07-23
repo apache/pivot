@@ -503,7 +503,8 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                 case INSTANCE:
                                 case INCLUDE: {
                                     String id = null;
-                                    ArrayList<Attribute> attributes = new ArrayList<Attribute>();
+                                    ArrayList<Attribute> instancePropertyAttributes = new ArrayList<Attribute>();
+                                    ArrayList<Attribute> staticPropertyAttributes = new ArrayList<Attribute>();
 
                                     if (element.type == Element.Type.INCLUDE) {
                                         // Process attributes looking for wtkx:id, src, resources, asynchronous,
@@ -530,13 +531,13 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                                     throw new UnsupportedOperationException("Asynchronous includes are not"
                                                         + " yet supported.");
                                                 } else {
-                                                    if (attribute.namespaceURI == null) {
+                                                    if (!Character.isUpperCase(attribute.localName.charAt(0))) {
                                                         throw new SerializationException("Instance property setters are not"
                                                             + " supported for " + WTKX_PREFIX + ":" + INCLUDE_TAG
                                                             + " " + " tag.");
                                                     }
 
-                                                    attributes.add(attribute);
+                                                    staticPropertyAttributes.add(attribute);
                                                 }
                                             }
                                         }
@@ -576,7 +577,11 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                                         + " is not a valid attribute.");
                                                 }
                                             } else {
-                                                attributes.add(attribute);
+                                                if (Character.isUpperCase(attribute.localName.charAt(0))) {
+                                                    staticPropertyAttributes.add(attribute);
+                                                } else {
+                                                    instancePropertyAttributes.add(attribute);
+                                                }
                                             }
                                         }
                                     }
@@ -589,6 +594,24 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                         }
 
                                         namedObjects.put(id, element.value);
+                                    }
+
+                                    // Apply instance attributes
+                                    if (element.value instanceof Dictionary) {
+                                        // The element is already a dictionary
+                                        Dictionary<String, Object> dictionary = (Dictionary<String, Object>)element.value;
+
+                                        for (Attribute attribute : instancePropertyAttributes) {
+                                            dictionary.put(attribute.localName, resolve(attribute.value, null));
+                                        }
+                                    } else {
+                                        // The element is not a dictionary; wrap it in a bean dictionary
+                                        BeanDictionary beanDictionary = new BeanDictionary(element.value);
+
+                                        for (Attribute attribute : instancePropertyAttributes) {
+                                            beanDictionary.put(attribute.localName,
+                                                resolve(attribute.value, beanDictionary.getType(attribute.localName)));
+                                        }
                                     }
 
                                     // If the element's parent is a sequence or a listener list, add
@@ -605,32 +628,15 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                         }
                                     }
 
-                                    // Apply remaining attributes
+                                    // Apply static attributes
                                     if (element.value instanceof Dictionary) {
-                                        // The element is already a dictionary
-                                        Dictionary<String, Object> dictionary = (Dictionary<String, Object>)element.value;
-
-                                        for (Attribute attribute : attributes) {
-                                            if (Character.isUpperCase(attribute.localName.charAt(0))) {
-                                                throw new SerializationException("Static setters are only supported"
-                                                    + " for typed objects.");
-                                            }
-
-                                            // Resolve and apply the attribute
-                                            dictionary.put(attribute.localName, resolve(attribute.value, null));
+                                        if (staticPropertyAttributes.getLength() > 0) {
+                                            throw new SerializationException("Static setters are only supported"
+                                                + " for typed objects.");
                                         }
                                     } else {
-                                        // The element is not a dictionary; wrap it in a bean dictionary
-                                        BeanDictionary beanDictionary = new BeanDictionary(element.value);
-
-                                        for (Attribute attribute : attributes) {
-                                            if (Character.isUpperCase(attribute.localName.charAt(0))) {
-                                                // The property represents an attached value
-                                                setStaticProperty(attribute, element.value);
-                                            } else {
-                                                beanDictionary.put(attribute.localName,
-                                                    resolve(attribute.value, beanDictionary.getType(attribute.localName)));
-                                            }
+                                        for (Attribute attribute : staticPropertyAttributes) {
+                                            setStaticProperty(attribute, element.value);
                                         }
                                     }
 

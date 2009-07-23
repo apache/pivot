@@ -68,30 +68,24 @@ public class Window extends Container {
         }
 
         public void setKeyStroke(Keyboard.KeyStroke keyStroke) {
-            if (keyStroke == null) {
-                throw new IllegalArgumentException("keyStroke is null.");
-            }
-
             Keyboard.KeyStroke previousKeyStroke = this.keyStroke;
 
             if (keyStroke != previousKeyStroke) {
                 if (window != null) {
+                    if (keyStroke == null) {
+                        throw new IllegalStateException();
+                    }
+
                     if (window.actionMap.containsKey(keyStroke)) {
                         throw new IllegalArgumentException("A mapping for " + keyStroke
                             + " already exists.");
                     }
 
-                    // We can't simply enforce that keyStroke and action are
-                    // null when the mapping is added to the sequence, since
-                    // the mapping will be added before the attributes are
-                    // applied in WTKX
                     if (previousKeyStroke != null) {
                         window.actionMap.remove(previousKeyStroke);
                     }
 
-                    if (keyStroke != null) {
-                        window.actionMap.put(keyStroke, action);
-                    }
+                    window.actionMap.put(keyStroke, action);
 
                     window.windowActionMappingListeners.keyStrokeChanged(this, previousKeyStroke);
                 }
@@ -117,13 +111,11 @@ public class Window extends Container {
 
             if (action != previousAction) {
                 if (window != null) {
-                    if (keyStroke != null) {
-                        if (action == null) {
-                            window.actionMap.remove(keyStroke);
-                        } else {
-                            window.actionMap.put(keyStroke, action);
-                        }
+                    if (action == null) {
+                        throw new IllegalStateException();
                     }
+
+                    window.actionMap.put(keyStroke, action);
 
                     window.windowActionMappingListeners.actionChanged(this, previousAction);
                 }
@@ -153,8 +145,15 @@ public class Window extends Container {
                 throw new IllegalArgumentException("Action mapping already has a window.");
             }
 
-            if (actionMapping.keyStroke == null
-                && actionMap.containsKey(actionMapping.keyStroke)) {
+            if (actionMapping.keyStroke == null) {
+                throw new IllegalArgumentException("Keystroke is undefined.");
+            }
+
+            if (actionMapping.action == null) {
+                throw new IllegalArgumentException("Action is undefined.");
+            }
+
+            if (actionMap.containsKey(actionMapping.keyStroke)) {
                 throw new IllegalArgumentException("A mapping for " + actionMapping.keyStroke
                     + " already exists.");
             }
@@ -195,9 +194,7 @@ public class Window extends Container {
 
                 actionMapping.window = null;
 
-                if (actionMapping.keyStroke != null) {
-                    actionMap.remove(actionMapping.keyStroke);
-                }
+                actionMap.remove(actionMapping.keyStroke);
             }
 
             windowActionMappingListeners.actionMappingsRemoved(Window.this, index, removed);
