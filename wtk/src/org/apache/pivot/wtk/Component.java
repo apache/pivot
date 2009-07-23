@@ -364,10 +364,9 @@ public abstract class Component implements ConstrainedVisual {
             }
         }
 
-        public void contextMenuHandlerChanged(Component component,
-            ContextMenuHandler previousContextMenuHandler) {
+        public void menuHandlerChanged(Component component, MenuHandler previousMenuHandler) {
             for (ComponentListener listener : this) {
-                listener.contextMenuHandlerChanged(component, previousContextMenuHandler);
+                listener.menuHandlerChanged(component, previousMenuHandler);
             }
         }
     }
@@ -597,8 +596,8 @@ public abstract class Component implements ConstrainedVisual {
     // The component's drop target
     private DropTarget dropTarget = null;
 
-    // The component's context menu handler
-    private ContextMenuHandler contextMenuHandler = null;
+    // The component's menu handler
+    private MenuHandler menuHandler = null;
 
     // User data
     private HashMap<String, Object> userData = new HashMap<String, Object>();
@@ -2222,16 +2221,16 @@ public abstract class Component implements ConstrainedVisual {
         }
     }
 
-    public ContextMenuHandler getContextMenuHandler() {
-        return contextMenuHandler;
+    public MenuHandler getMenuHandler() {
+        return menuHandler;
     }
 
-    public void setContextMenuHandler(ContextMenuHandler contextMenuHandler) {
-        ContextMenuHandler previousContextMenuHandler = this.contextMenuHandler;
+    public void setMenuHandler(MenuHandler menuHandler) {
+        MenuHandler previousMenuHandler = this.menuHandler;
 
-        if (previousContextMenuHandler != contextMenuHandler) {
-            this.contextMenuHandler = contextMenuHandler;
-            componentListeners.contextMenuHandlerChanged(this, previousContextMenuHandler);
+        if (previousMenuHandler != menuHandler) {
+            this.menuHandler = menuHandler;
+            componentListeners.menuHandlerChanged(this, previousMenuHandler);
         }
     }
 

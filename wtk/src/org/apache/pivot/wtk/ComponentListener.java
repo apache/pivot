@@ -62,8 +62,7 @@ public interface ComponentListener {
         public void dropTargetChanged(Component component, DropTarget previousDropTarget) {
         }
 
-        public void contextMenuHandlerChanged(Component component,
-            ContextMenuHandler previousContextMenuHandler) {
+        public void menuHandlerChanged(Component component, MenuHandler previousMenuHandler) {
         }
     }
 
@@ -163,7 +162,7 @@ public interface ComponentListener {
      * Called when a component's context menu handler has changed.
      *
      * @param component
-     * @param previousContextMenuHandler
+     * @param previousMenuHandler
      */
-    public void contextMenuHandlerChanged(Component component, ContextMenuHandler previousContextMenuHandler);
+    public void menuHandlerChanged(Component component, MenuHandler previousMenuHandler);
 }

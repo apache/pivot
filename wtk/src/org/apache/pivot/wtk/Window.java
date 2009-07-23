@@ -667,8 +667,8 @@ public class Window extends Container {
     }
 
     /**
-     * Returns the window's auxilliary flag. Auxilliary windows must have an
-     * owner, can't become active, and can only own other auxilliary windows.
+     * Returns the window's auxilliary flag. Auxilliary windows can't become
+     * active and can only own other auxilliary windows.
      *
      * @return
      * <tt>true</tt> if this is an auxilliary window; <tt>false</tt>, otherwise.

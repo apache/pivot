@@ -51,7 +51,6 @@ import java.util.TimerTask;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
-import org.apache.pivot.collections.LinkedList;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.Version;
 import org.apache.pivot.wtk.Manifest;
@@ -784,32 +783,50 @@ public abstract class ApplicationContext {
 
                             if (button == Mouse.Button.LEFT) {
                                 dragLocation = new Point(x, y);
-                            } else if (button == Mouse.Button.RIGHT) {
-                                Component descendant = mouseOwner;
-                                if (mouseOwner instanceof Container) {
-                                    descendant = ((Container)mouseOwner).getDescendantAt(x, y);
-                                }
-
-                                LinkedList<Component> componentPath = new LinkedList<Component>(descendant);
-                                while (descendant != mouseOwner) {
-                                    descendant = descendant.getParent();
-                                    componentPath.insert(descendant, 0);
-                                }
-
-                                Menu menu = new Menu();
+                            } else if (button == Mouse.Button.RIGHT
+                                && mouseOwner.isShowing()
+                                && !mouseOwner.isBlocked()) {
+                                // Instantiate a context menu
+                                final Menu menu = new Menu();
                                 MenuPopup menuPopup = new MenuPopup(menu);
 
-                                for (Component component : componentPath) {
-                                    ContextMenuHandler contextMenuHandler = component.getContextMenuHandler();
+                                // Allow menu handlers to configure the menu
+                                Component component = mouseOwner;
+                                int componentX = x;
+                                int componentY = y;
 
-                                    if (contextMenuHandler != null) {
-                                        if (contextMenuHandler.configureMenu(menu)) {
+                                do {
+                                    MenuHandler menuHandler = component.getMenuHandler();
+                                    if (menuHandler != null) {
+                                        if (menuHandler.configureContextMenu(component,
+                                            menu, componentX, componentY)) {
+                                            // Stop propagation
                                             break;
                                         }
                                     }
-                                }
 
+                                    if (component instanceof Container) {
+                                        Container container = (Container)component;
+                                        component = container.getComponentAt(componentX, componentY);
+
+                                        if (component != null) {
+                                            componentX -= component.getX();
+                                            componentY -= component.getY();
+                                        }
+                                    } else {
+                                        component = null;
+                                    }
+                                } while (component != null && component.isEnabled());
+
+                                // Show the context menu if it contains any sections
                                 if (menu.getSections().getLength() > 0) {
+                                    menuPopup.getWindowStateListeners().add(new WindowStateListener.Adapter() {
+                                        public void windowClosed(Window window, Display display) {
+                                            menu.getSections().clear();
+                                            window.getWindowStateListeners().remove(this);
+                                        }
+                                    });
+
                                     Display display = mouseOwner.getDisplay();
                                     menuPopup.open(display, mouseOwner.mapPointToAncestor(display, x, y));
                                 }

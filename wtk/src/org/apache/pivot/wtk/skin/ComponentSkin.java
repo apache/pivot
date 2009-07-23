@@ -26,7 +26,7 @@ import org.apache.pivot.wtk.ComponentMouseListener;
 import org.apache.pivot.wtk.ComponentMouseWheelListener;
 import org.apache.pivot.wtk.ComponentStateListener;
 import org.apache.pivot.wtk.Container;
-import org.apache.pivot.wtk.ContextMenuHandler;
+import org.apache.pivot.wtk.MenuHandler;
 import org.apache.pivot.wtk.Cursor;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Direction;
@@ -189,7 +189,7 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
         // No-op
     }
 
-    public void contextMenuHandlerChanged(Component component, ContextMenuHandler previousContextMenuHandler) {
+    public void menuHandlerChanged(Component component, MenuHandler previousMenuHandler) {
         // No-op
     }
 

@@ -459,6 +459,10 @@ public class Menu extends Container {
             return removed;
         }
 
+        public void clear() {
+            remove(0, sections.getLength());
+        }
+
         public Section get(int index) {
             return sections.get(index);
         }
