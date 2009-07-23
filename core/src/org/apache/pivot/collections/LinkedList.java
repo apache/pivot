@@ -310,23 +310,28 @@ public class LinkedList<T> implements List<T>, Serializable {
             throw new IndexOutOfBoundsException();
         }
 
-        T item;
-        if (index == 0) {
-            item = first.item;
-        } else if (index == length - 1) {
-            item = last.item;
-        } else {
-            Node node = getNode(index);
-            item = node.item;
-        }
-
-        return item;
+        Node node = getNode(index);
+        return node.item;
     }
 
     private Node getNode(int index) {
-        Node node = first;
-        for (int i = 0; i < index; i++) {
-            node = node.next;
+        Node node;
+        if (index == 0) {
+            node = first;
+        } else if (index == length - 1) {
+            node = last;
+        } else {
+            if (index < length / 2) {
+                node = first;
+                for (int i = 0; i < index; i++) {
+                    node = node.next;
+                }
+            } else {
+                node = last;
+                for (int i = length - 1; i > index; i--) {
+                    node = node.previous;
+                }
+            }
         }
 
         return node;
