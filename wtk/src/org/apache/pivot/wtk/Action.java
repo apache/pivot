@@ -36,13 +36,13 @@ public abstract class Action {
      *
      * @author gbrown
      */
-    public static final class ActionDictionary
+    public static final class NamedActionDictionary
         implements Dictionary<String, Action>, Iterable<String> {
-        private ActionDictionary() {
+        private NamedActionDictionary() {
         }
 
         public Action get(String id) {
-            return actions.get(id);
+            return namedActions.get(id);
         }
 
         public Action put(String id, Action action) {
@@ -50,41 +50,40 @@ public abstract class Action {
                 throw new IllegalArgumentException("action is null.");
             }
 
-            Action previousAction = actions.put(id, action);
+            boolean update = containsKey(id);
+            Action previousAction = namedActions.put(id, action);
 
-            if (previousAction != null) {
-                previousAction.id = null;
+            if (update) {
+                actionClassListeners.actionUpdated(id, previousAction);
             }
-
-            action.id = id;
-
-            // TODO Fire ActionClassListener#actionAdded()/actionUpdated()
+            else {
+                actionClassListeners.actionAdded(id);
+            }
 
             return previousAction;
         }
 
         public Action remove(String id) {
-            Action previousAction = actions.remove(id);
+            Action action = null;
 
-            if (previousAction != null) {
-                previousAction.id = null;
+            if (containsKey(id)) {
+                action = namedActions.remove(id);
+                actionClassListeners.actionRemoved(id, action);
             }
 
-            // TODO Fire ActionClassListener#actionRemoved()
-
-            return previousAction;
+            return action;
         }
 
         public boolean containsKey(String id) {
-            return actions.containsKey(id);
+            return namedActions.containsKey(id);
         }
 
         public boolean isEmpty() {
-            return actions.isEmpty();
+            return namedActions.isEmpty();
         }
 
         public Iterator<String> iterator() {
-            return new ImmutableIterator<String>(actions.iterator());
+            return new ImmutableIterator<String>(namedActions.iterator());
         }
     }
 
@@ -97,27 +96,36 @@ public abstract class Action {
         }
     }
 
-    private String id;
+    private static class ActionClassListenerList extends ListenerList<ActionClassListener>
+        implements ActionClassListener {
+        public void actionAdded(String id) {
+            for (ActionClassListener listener : this) {
+                listener.actionAdded(id);
+            }
+        }
+
+        public void actionUpdated(String id, Action previousAction) {
+            for (ActionClassListener listener : this) {
+                listener.actionUpdated(id, previousAction);
+            }
+        }
+
+        public void actionRemoved(String id, Action action) {
+            for (ActionClassListener listener : this) {
+                listener.actionRemoved(id, action);
+            }
+        }
+    }
+
+
     private boolean enabled = true;
 
     private ActionListenerList actionListeners = new ActionListenerList();
 
-    private static HashMap<String, Action> actions = new HashMap<String, Action>();
-    private static ActionDictionary actionDictionary = new ActionDictionary();
+    private static HashMap<String, Action> namedActions = new HashMap<String, Action>();
+    private static NamedActionDictionary namedActionDictionary = new NamedActionDictionary();
 
-    public Action() {
-        this(null);
-    }
-
-    public Action(String id) {
-        if (id != null) {
-            actions.put(id, this);
-        }
-    }
-
-    public String getID() {
-        return id;
-    }
+    private static ActionClassListenerList actionClassListeners = new ActionClassListenerList();
 
     /**
      * Returns a text description of the action. Subclasses should override this
@@ -143,11 +151,15 @@ public abstract class Action {
         }
     }
 
-    public static ActionDictionary getActions() {
-        return actionDictionary;
+    public static NamedActionDictionary getNamedActions() {
+        return namedActionDictionary;
     }
 
     public ListenerList<ActionListener> getActionListeners() {
         return actionListeners;
+    }
+
+    public static ListenerList<ActionClassListener> getActionClassListeners() {
+        return actionClassListeners;
     }
 }

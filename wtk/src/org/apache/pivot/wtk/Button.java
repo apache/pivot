@@ -385,7 +385,7 @@ public abstract class Button extends Component {
             throw new IllegalArgumentException("actionID is null");
         }
 
-        Action action = Action.getActions().get(actionID);
+        Action action = Action.getNamedActions().get(actionID);
         if (action == null) {
             throw new IllegalArgumentException("An action with ID "
                 + actionID + " does not exist.");

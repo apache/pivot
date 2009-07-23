@@ -21,7 +21,6 @@ import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.collections.Sequence.Tree.Path;
 import org.apache.pivot.io.Folder;
 import org.apache.pivot.wtk.Application;
-import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Frame;
@@ -35,7 +34,7 @@ public class FileBrowserTest implements Application {
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        frame = new Frame((Component)wtkxSerializer.readObject(getClass().getResource("file_browser_test.wtkx")));
+        frame = (Frame)wtkxSerializer.readObject(getClass().getResource("file_browser_test.wtkx"));
 
         TreeView folderTreeView = (TreeView)wtkxSerializer.get("folderTreeView");
 
@@ -53,8 +52,6 @@ public class FileBrowserTest implements Application {
             }
         });
 
-        frame.setTitle("File Browser Test");
-        frame.setPreferredSize(480, 640);
         frame.open(display);
     }
 

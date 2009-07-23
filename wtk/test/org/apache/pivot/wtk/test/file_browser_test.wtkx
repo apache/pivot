@@ -16,22 +16,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Border styles="{padding:0}"
+<Frame title="File Browser Test" preferredWidth="480" preferredHeight="640"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:io="org.apache.pivot.io"
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
     <content>
-        <ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
-            verticalScrollBarPolicy="fill_to_capacity">
-            <view>
-                <TreeView wtkx:id="folderTreeView">
-                    <nodeRenderer>
-                        <content:TreeViewFileRenderer/>
-                    </nodeRenderer>
-                </TreeView>
-            </view>
-        </ScrollPane>
+        <Border styles="{padding:0}">
+            <content>
+                <ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
+                    verticalScrollBarPolicy="fill_to_capacity">
+                    <view>
+                        <TreeView wtkx:id="folderTreeView">
+                            <nodeRenderer>
+                                <content:TreeViewFileRenderer/>
+                            </nodeRenderer>
+                        </TreeView>
+                    </view>
+                </ScrollPane>
+            </content>
+        </Border>
     </content>
-</Border>
+</Frame>
 

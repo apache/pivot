@@ -31,7 +31,7 @@ public class SpinnerFocusTest implements Application {
 
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        Action action = new Action("buttonAction") {
+        Action action = new Action() {
             public String getDescription() {
                 return null;
             }
@@ -40,6 +40,8 @@ public class SpinnerFocusTest implements Application {
                 Alert.alert("Foo", frame);
             }
         };
+
+        Action.getNamedActions().put("buttonAction", action);
 
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         frame = new Frame((Component)wtkxSerializer.readObject(getClass().getResource("spinner_focus_test.wtkx")));

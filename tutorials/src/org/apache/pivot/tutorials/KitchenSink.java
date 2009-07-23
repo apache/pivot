@@ -272,7 +272,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
 
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                new Action("selectImageAction") {
+                Action.getNamedActions().put("selectImageAction", new Action() {
                     public String getDescription() {
                         return "Select Image Action";
                     }
@@ -301,7 +301,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                         // Update the image
                         menuImageView.setImage(image);
                     }
-                };
+                });
 
                 WTKXSerializer wtkxSerializer = new WTKXSerializer();
                 try {

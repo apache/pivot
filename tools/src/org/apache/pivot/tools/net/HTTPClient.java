@@ -160,7 +160,7 @@ public class HTTPClient implements Application {
     // Application methods
 
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        new Action("setAuthenticationAction") {
+        Action.getNamedActions().put("setAuthenticationAction", new Action() {
             public String getDescription() {
                 return "Specifies authentication credentials";
             }
@@ -226,9 +226,9 @@ public class HTTPClient implements Application {
 
                 sheet.open(window);
             }
-        };
+        });
 
-        new Action("toggleHostnameVerificationAction") {
+        Action.getNamedActions().put("toggleHostnameVerificationAction", new Action() {
             public String getDescription() {
                 return "Toggles lenient hostname verification";
             }
@@ -236,9 +236,9 @@ public class HTTPClient implements Application {
             public void perform() {
                 lenientHostnameVerification = !lenientHostnameVerification;
             }
-        };
+        });
 
-        new Action("setKeystoreAction") {
+        Action.getNamedActions().put("setKeystoreAction", new Action() {
             private String keystorePath = null;
             private String keystorePassword = null;
 
@@ -317,7 +317,7 @@ public class HTTPClient implements Application {
 
                 sheet.open(window);
             }
-        };
+        });
 
         // Load the main app window
         serializer = new WTKXSerializer();
