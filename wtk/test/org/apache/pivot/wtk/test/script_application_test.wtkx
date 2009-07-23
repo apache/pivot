@@ -22,6 +22,7 @@ limitations under the License.
     xmlns="org.apache.pivot.wtk">
     <wtkx:define>
         <wtkx:include wtkx:id="testFrame" src="script_application_test.frame.wtkx"/>
+        <Label wtkx:id="label1" text="Hello"/>
     </wtkx:define>
 
     <content>
@@ -34,9 +35,14 @@ limitations under the License.
                     <![CDATA[
                     function buttonPressed(button) {
                         testFrame.open(window);
+                        java.lang.System.out.println(label1.getText());
+                        java.lang.System.out.println(label2.getText());
                     }
                     ]]>
                     </wtkx:script>
+                    <wtkx:define>
+                        <Label wtkx:id="label2" text="World"/>
+                    </wtkx:define>
                 </buttonPressListeners>
             </PushButton>
         </BoxPane>

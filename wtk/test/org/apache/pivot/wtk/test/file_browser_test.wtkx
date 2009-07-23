@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Frame title="File Browser Test" preferredWidth="480" preferredHeight="640"
+<Frame title="File Browser Test" icon="@applications-games.png" preferredWidth="480" preferredHeight="640"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:io="org.apache.pivot.io"
     xmlns:content="org.apache.pivot.wtk.content"

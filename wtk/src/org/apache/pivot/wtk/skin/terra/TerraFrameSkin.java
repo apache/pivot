@@ -285,6 +285,9 @@ public class TerraFrameSkin extends WindowSkin {
         titleBoxPane.getStyles().put("padding", new Insets(0, 0, 0, 2));
 
         titleLabel.getStyles().put("fontBold", true);
+
+        iconImageView.setPreferredSize(16, 16);
+        iconImageView.getStyles().put("fill", true);
         iconImageView.getStyles().put("backgroundColor", null);
 
         // Initialize the button box pane

@@ -634,11 +634,10 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                         }
                                     }
 
-                                    // If the parent element is a writable property or a define, set this as its
+                                    // If the parent element is a writable property, set this as its
                                     // value; it will be applied later in the parent's closing tag
                                     if (element.parent != null
-                                        && (element.parent.type == Element.Type.WRITABLE_PROPERTY
-                                            || element.parent.type == Element.Type.DEFINE)) {
+                                        && element.parent.type == Element.Type.WRITABLE_PROPERTY) {
                                         element.parent.value = element.value;
                                     }
 
@@ -846,6 +845,10 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                     }
 
                                     break;
+                                }
+
+                                case DEFINE: {
+                                    // No-op
                                 }
                             }
 
