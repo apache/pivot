@@ -2051,7 +2051,8 @@ public abstract class Component implements ConstrainedVisual {
         do {
             // Attempt to traverse the current component's parent
             Container container = component.getParent();
-            FocusTraversalPolicy focusTraversalPolicy = container.getFocusTraversalPolicy();
+            FocusTraversalPolicy focusTraversalPolicy = (container == null
+                ? null : container.getFocusTraversalPolicy());
 
             if (focusTraversalPolicy == null) {
                 // This container has no traversal policy; move up a level
