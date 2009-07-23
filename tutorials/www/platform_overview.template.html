@@ -137,19 +137,14 @@ limitations under the License.
 
 <ul>
 <li><p><b>Window</b> - Base window class; it is not abstract and is the most basic means by which content may be placed on the screen. It simply provides an undecorated region in which other components may be placed.</p></li>
-
 <li><p><b>Frame</b> - A window with a title bar and border for dragging and resizing.</p></li>
-
 <li><p><b>Dialog</b> - A frame that is generally used for collecting user input (engaging in a "dialog" with the user); may optionally be "modal", blocking input to its owner.</p></li>
-
 <li><p><b>Alert</b> - A dialog that is generally used to present brief notifications to the user.</p></li>
-
 <li><p><b>Sheet</b> - A window that, like a dialog, is generally used for collecting user input; however, unlike dialogs, sheets always have an owner, and are always modal over the owner's content.</p></li>
-
 <li><p><b>Prompt</b> - A sheet that is generally used to present brief notifications to the user; the sheet equivalent of <tt>Alert</tt>.</p></li>
-
 <li><p><b>Palette</b> - A floating tool palette window.</p></li>
-
+<li><p><b>FileBrowserSheet</b> - A file browser sheet.</p></li>
+<li><p><b>FolderBrowserSheet</b> - A folder browser sheet.</p></li>
 <li><p><b>Tooltip</b> - A small, popup-like window that disappears as soon as the user moves the mouse.</p></li>
 </ul>
 
@@ -168,19 +163,12 @@ limitations under the License.
 
 <ul>
 <li><p><b>FlowPane</b> - Container that arranges components in a horizontal line, wrapping when contents don't fit on a single line.</p></li>
-
 <li><p><b>BoxPane</b> - Container that arranges components in a line, either vertically or horizontally.</p></li>
-
 <li><p><b>TablePane</b> - A container that lays out its children in a two-dimensional table structure, optionally spanning table cells.</p></li>
-
 <li><p><b>Border</b> - A container with an optional title that draws a border around a single content component.</p></li>
-
 <li><p><b>StackPane</b> - Arranges components in layers, like a stack of transparencies.</p></li>
-
 <li><p><b>SplitPane</b> - Provides a draggable divider between two components allowing a user to dynamically change the size of each; may be horizontal or vertical.</p></li>
-
 <li><p><b>Form</b> - Arranges components in a "form" layout with labels to the left and optional flag messages (e.g. to alert a user to input errors) to the right.</p></li>
-
 <li><p><b>Panel</b> - A container that performs no layout, allowing the application to specify absolute component positions and sizes.</p></li>
 </ul>
 
@@ -190,15 +178,10 @@ limitations under the License.
 
 <ul>
 <li><p><b>CardPane</b> - A simple "card stack" of components, only one of which is visible at a time.</p></li>
-
 <li><p><b>TabPane</b> - Similar to CardPane but with built-in "tabs" for navigation; may optionally be "collapsed" such that only the tab buttons show.</p></li>
-
 <li><p><b>Accordion</b> - Similar to <tt>TabPane</tt>, but subcomponents are presented like the folds of an accordion, with headers for navigating between panels.</p></li>
-
 <li><p><b>Expander</b> - Similar to a border but collapsible such that only the title shows.</p></li>
-
 <li><p><b>Rollup</b> - Similar to Expander but can contain an aribitrary number of child components; when collapsed, only the first component is visible. Can be nested to create the appearance of a "tree" structure.</p></li>
-
 <li><p><b><i>Viewport</i></b> - Abstract base class for a scrollable region. Viewport sublcasses include:
 <ul>
 <li><b>ScrollPane</b> - A scrollable area with optional vertical and horizontal scroll bars as well as row and column headers.
@@ -216,15 +199,14 @@ limitations under the License.
 <p>Composites are simply components that are implemented using other components. For example, a <tt>ScrollBar</tt> is a container consisting of of two button components and a "thumb", the draggable area that allows the user to scroll by clicking and dragging the mouse. Composites include:</p>
 
 <ul>
-<li><p><b>Menu</b> - Displays a list of actions to the user. Generally displayed in a popup context menu or as part of a menu bar or menu button.</p></li>
-
-<li><p><b>MenuBar</b> - Provides access to a collection of sub-menus.</p></li>
-
 <li><p><b>ScrollBar</b> - Allows a user to select one of a range of values using up/down buttons or a draggable "thumb" that also represents an extent value. Most often used to facilitate scrolling in a scroll pane.</p></li>
-
 <li><p><b>Spinner</b> - An "up/down" control allowing a user to cycle through a range of pre-defined values.</p></li>
-
 <li><p><b>Slider</b> - Allows a user to select one of a range of values by dragging the mouse.</p></li>
+<li><p><b>Menu</b> - Displays a list of actions to the user. Generally displayed in a popup context menu or as part of a menu bar or menu button.</p></li>
+<li><p><b>MenuBar</b> - Provides access to a collection of sub-menus.</p></li>
+<li><p><b>Calendar</b> - Allows a user to select a date.</p></li>
+<li><p><b>FileBrowser</b> - Allows a user to select a file.</p></li>
+<li><p><b>FolderBrowser</b> - Allows a user to select a folder.</p></li>
 </ul>
 
 <h3>Components</h3>
@@ -233,9 +215,7 @@ Non-container components are generally used to present data to the user, retriev
 
 <ul>
 <li><p><b>Label</b> - A simple component used to display an uneditable block of (optionally wrapped) text.</p></li>
-
 <li><p><b>ImageView</b> - A component that displays a static, optionally scaled, image.</p></li>
-
 <li><p><b><i>Button</i></b> - Abstract base class for buttons, which include:
 <ul>
 <li><b>PushButton</b> - A basic push button. Can be single-push or toggle (selectable); toggle push buttons can be placed in groups such that only one can be selected at at time.</li>
@@ -243,27 +223,18 @@ Non-container components are generally used to present data to the user, retriev
 <li><b>RadioButton</b> - A button that behaves like an old-style car radio button; generally part of a group where only one button can be selected at time.</li>
 <li><b>LinkButton</b> - A single-push button that looks like an HTML hyperlink.</li>
 <li><b>ListButton</b> - A button that displays a drop-down list of choices when pushed and reflects the user's selection.</li>
+<li><b>CalendarButton</b> - A button that displays a calendar when pushed and reflects the user's selection.</li>
 <li><b>MenuButton</b> - A button that displays a drop-down list of menu items; can optionally reflect the user's selection allowing the action associated with the item to be repeated (i.e. behave like a "split button").</li>
 <li><b>Menu.Item</b> - A button that provides behavior for menu items.</li>
 <li><b>Menu.BarItem</b> - A button that provides behavior for menu bar items.</li>
 </ul></p></li>
-
 <li><b>Separator</b> - A simple horizontal rule component.</p></li>
-
 <li><b>TextInput</b> - A component for entering a single line of text.</p></li>
-
 <li><b>TextArea</b> - A component for viewing or entering multiple lines of (optionally formatted) text.</p></li>
-
-<li><b>Spinner</b> - Allows the user to select one of a predefined collection of values.</p></li>
-
 <li><b>ActivityIndicator</b> - Displays an indeterminate progress state.</p></li>
-
 <li><b>Meter</b> - Displays a progress bar reflecting a completion percentage.</p></li>
-
 <li><b>ListView</b> - Displays a list of optionally selectable items arranged vertically.</p></li>
-
 <li><b>TableView</b> - Displays data grouped into rows and columns. Columns are sortable and resizeable, and rows are optionally selectable.</p></li>
-
 <li><b>TreeView</b> - Displays a hierarchical data structure. Tree nodes are optionally selectable and collapsible.</p></li>
 </ul>
 
