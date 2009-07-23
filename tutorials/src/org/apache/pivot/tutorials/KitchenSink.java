@@ -46,7 +46,6 @@ import org.apache.pivot.wtk.DragSource;
 import org.apache.pivot.wtk.DropAction;
 import org.apache.pivot.wtk.DropTarget;
 import org.apache.pivot.wtk.ImageView;
-import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.LocalManifest;
 import org.apache.pivot.wtk.Manifest;
