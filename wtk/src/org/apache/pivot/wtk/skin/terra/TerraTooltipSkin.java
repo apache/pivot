@@ -18,6 +18,7 @@ package org.apache.pivot.wtk.skin.terra;
 
 import java.awt.Color;
 
+import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Border;
 import org.apache.pivot.wtk.Component;
@@ -118,11 +119,11 @@ public class TerraTooltipSkin extends WindowSkin implements TooltipListener {
 
         // Apply the default styles
         TerraTheme theme = (TerraTheme)Theme.getTheme();
-        Component.StyleDictionary labelStyles = label.getStyles();
+        Dictionary<String, Object> labelStyles = label.getStyles();
         labelStyles.put("font", theme.getFont());
         labelStyles.put("color", Color.BLACK);
 
-        Component.StyleDictionary borderStyles = border.getStyles();
+        Dictionary<String, Object> borderStyles = border.getStyles();
         borderStyles.put("backgroundColor", new Color(0xff, 0xff, 0xe0, 0xf0));
         borderStyles.put("color", Color.BLACK);
         borderStyles.put("padding", new Insets(2));

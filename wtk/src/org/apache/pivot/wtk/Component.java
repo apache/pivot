@@ -55,7 +55,7 @@ public abstract class Component implements ConstrainedVisual {
      *
      * @author gbrown
      */
-    public final class StyleDictionary extends BeanDictionary {
+    private final class StyleDictionary extends BeanDictionary {
         private StyleDictionary(org.apache.pivot.wtk.Skin skin) {
             super(skin, true);
         }
@@ -2226,7 +2226,7 @@ public abstract class Component implements ConstrainedVisual {
      * implementation. It allows callers to modify the properties of the skin
      * without directly obtaining a reference to the skin.
      */
-    public final StyleDictionary getStyles() {
+    public Dictionary<String, Object> getStyles() {
         return styleDictionary;
     }
 
