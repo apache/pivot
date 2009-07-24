@@ -239,27 +239,6 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     /**
-     * Abstract base class for component "attributes". Attributes are attached
-     * properties that are specific to a particular component type.
-     *
-     * @author gbrown
-     */
-    public static abstract class Attributes {
-        private Component component = null;
-
-        protected Attributes() {
-        }
-
-        public Component getComponent() {
-            return component;
-        }
-
-        private void setComponent(Component component) {
-            this.component = component;
-        }
-    }
-
-    /**
      * Provides dictionary access to all components by handle.
      *
      * @author gbrown
@@ -610,7 +589,7 @@ public abstract class Component implements ConstrainedVisual {
     private HashSet<String> customStyles = new HashSet<String>();
 
     // Attached properties
-    private Attributes attributes = null;
+    private Object attributes = null;
 
     // Event listener lists.
     private ComponentListenerList componentListeners = new ComponentListenerList();
@@ -2313,30 +2292,23 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     /**
-     * Returns the currently installed attributes.
+     * Returns the component's attributes.
      *
      * @return
-     * This component's attributes
+     * The component's attributes, or <tt>null</tt> if no attributes are
+     * installed.
      */
-    public Attributes getAttributes() {
+    protected Object getAttributes() {
         return attributes;
     }
 
     /**
-     * Sets the attributes.
+     * Sets the component's attributes.
      *
      * @param attributes
      */
-    protected void setAttributes(Attributes attributes) {
-        if (this.attributes != null) {
-            this.attributes.setComponent(null);
-        }
-
+    protected void setAttributes(Object attributes) {
         this.attributes = attributes;
-
-        if (this.attributes != null) {
-            this.attributes.setComponent(this);
-        }
     }
 
     protected boolean mouseMove(int x, int y) {

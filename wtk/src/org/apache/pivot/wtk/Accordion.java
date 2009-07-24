@@ -39,46 +39,6 @@ import org.apache.pivot.wtk.media.Image;
  */
 public class Accordion extends Container {
     /**
-     * Defines accordion panel attributes.
-     *
-     * @author gbrown
-     */
-    protected static class AccordionAttributes extends Attributes {
-        private String name = null;
-        private Image icon = null;
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            String previousName = this.name;
-            this.name = name;
-
-            Component component = getComponent();
-            Accordion accordion = (Accordion)component.getParent();
-            if (accordion != null) {
-                accordion.accordionAttributeListeners.nameChanged(accordion, component, previousName);
-            }
-        }
-
-        public Image getIcon() {
-            return icon;
-        }
-
-        public void setIcon(Image icon) {
-            Image previousIcon = this.icon;
-            this.icon = icon;
-
-            Component component = getComponent();
-            Accordion accordion = (Accordion)component.getParent();
-            if (accordion != null) {
-                accordion.accordionAttributeListeners.iconChanged(accordion, component, previousIcon);
-            }
-        }
-    }
-
-    /**
      * Panel sequence implementation.
      *
      * @author gbrown
@@ -108,7 +68,7 @@ public class Accordion extends Container {
             panels.insert(panel, index);
 
             // Attach the attributes
-            panel.setAttributes(new AccordionAttributes());
+            panel.setAttributes(new Attributes());
 
             // Update the selection
             if (selectedIndex >= index) {
@@ -175,6 +135,11 @@ public class Accordion extends Container {
         public Iterator<Component> iterator() {
             return new ImmutableIterator<Component>(panels.iterator());
         }
+    }
+
+    private static class Attributes {
+        public String name = null;
+        public Image icon = null;
     }
 
     private static class AccordionListenerList extends ListenerList<AccordionListener>
@@ -298,31 +263,47 @@ public class Accordion extends Container {
     }
 
     public static String getName(Component component) {
-        AccordionAttributes accordionAttributes = (AccordionAttributes)component.getAttributes();
-        return (accordionAttributes == null) ? null : accordionAttributes.getName();
+        Attributes attributes = (Attributes)component.getAttributes();
+        return (attributes == null) ? null : attributes.name;
     }
 
     public static void setName(Component component, String name) {
-        AccordionAttributes accordionAttributes = (AccordionAttributes)component.getAttributes();
-        if (accordionAttributes == null) {
+        Attributes attributes = (Attributes)component.getAttributes();
+        if (attributes == null) {
             throw new IllegalStateException();
         }
 
-        accordionAttributes.setName(name);
+        String previousName = attributes.name;
+        if (previousName != name) {
+            attributes.name = name;
+
+            Accordion accordion = (Accordion)component.getParent();
+            if (accordion != null) {
+                accordion.accordionAttributeListeners.nameChanged(accordion, component, previousName);
+            }
+        }
     }
 
     public static Image getIcon(Component component) {
-        AccordionAttributes accordionAttributes = (AccordionAttributes)component.getAttributes();
-        return (accordionAttributes == null) ? null : accordionAttributes.getIcon();
+        Attributes attributes = (Attributes)component.getAttributes();
+        return (attributes == null) ? null : attributes.icon;
     }
 
     public static void setIcon(Component component, Image icon) {
-        AccordionAttributes accordionAttributes = (AccordionAttributes)component.getAttributes();
-        if (accordionAttributes == null) {
+        Attributes attributes = (Attributes)component.getAttributes();
+        if (attributes == null) {
             throw new IllegalStateException();
         }
 
-        accordionAttributes.setIcon(icon);
+        Image previousIcon = attributes.icon;
+        if (previousIcon != icon) {
+            attributes.icon = icon;
+
+            Accordion accordion = (Accordion)component.getParent();
+            if (accordion != null) {
+                accordion.accordionAttributeListeners.iconChanged(accordion, component, previousIcon);
+            }
+        }
     }
 
     public static final void setIcon(Component component, URL icon) {

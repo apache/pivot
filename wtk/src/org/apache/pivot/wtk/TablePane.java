@@ -204,7 +204,7 @@ public class TablePane extends Container {
                 tablePane.add(component);
 
                 // Attach the attributes
-                component.setAttributes(new TablePaneAttributes());
+                component.setAttributes(new Attributes());
             }
 
             cells.insert(component, index);
@@ -224,7 +224,7 @@ public class TablePane extends Container {
                 tablePane.add(component);
 
                 // Attach the attributes
-                component.setAttributes(new TablePaneAttributes());
+                component.setAttributes(new Attributes());
             }
 
             cells.update(index, component);
@@ -455,48 +455,6 @@ public class TablePane extends Container {
     }
 
     /**
-     * Defines table pane component attributes.
-     *
-     * @author gbrown
-     */
-    protected static class TablePaneAttributes extends Attributes {
-        private int rowSpan = 1;
-        private int columnSpan = 1;
-
-        public int getRowSpan() {
-            return rowSpan;
-        }
-
-        public void setRowSpan(int rowSpan) {
-            int previousRowSpan = this.rowSpan;
-            this.rowSpan = rowSpan;
-
-            Component component = getComponent();
-            TablePane tablePane = (TablePane)component.getParent();
-            if (tablePane != null) {
-                tablePane.tablePaneAttributeListeners.rowSpanChanged(tablePane,
-                    component, previousRowSpan);
-            }
-        }
-
-        public int getColumnSpan() {
-            return columnSpan;
-        }
-
-        public void setColumnSpan(int columnSpan) {
-            int previousColumnSpan = this.columnSpan;
-            this.columnSpan = columnSpan;
-
-            Component component = getComponent();
-            TablePane tablePane = (TablePane)component.getParent();
-            if (tablePane != null) {
-                tablePane.tablePaneAttributeListeners.columnSpanChanged(tablePane,
-                    component, previousColumnSpan);
-            }
-        }
-    }
-
-    /**
      * Table pane skin interface. Table pane skins must implement
      * this interface to facilitate additional communication between the
      * component and the skin.
@@ -547,7 +505,7 @@ public class TablePane extends Container {
                 TablePane.this.add(component);
 
                 // Attach attributes to each row component
-                component.setAttributes(new TablePaneAttributes());
+                component.setAttributes(new Attributes());
             }
 
             // Notify listeners
@@ -682,9 +640,11 @@ public class TablePane extends Container {
         }
     }
 
-    /**
-     * Internal listener list.
-     */
+    private static class Attributes {
+        public int rowSpan = 1;
+        public int columnSpan = 1;
+    }
+
     private static class TablePaneListenerList extends ListenerList<TablePaneListener>
         implements TablePaneListener {
         public void rowInserted(TablePane tablePane, int index) {
@@ -977,30 +937,48 @@ public class TablePane extends Container {
     }
 
     public static int getRowSpan(Component component) {
-        TablePaneAttributes tablePaneAttributes = (TablePaneAttributes)component.getAttributes();
-        return (tablePaneAttributes == null) ? -1 : tablePaneAttributes.getRowSpan();
+        Attributes attributes = (Attributes)component.getAttributes();
+        return (attributes == null) ? -1 : attributes.rowSpan;
     }
 
     public static void setRowSpan(Component component, int rowSpan) {
-        TablePaneAttributes tablePaneAttributes = (TablePaneAttributes)component.getAttributes();
-        if (tablePaneAttributes == null) {
+        Attributes attributes = (Attributes)component.getAttributes();
+        if (attributes == null) {
             throw new UnsupportedOperationException();
         }
 
-        tablePaneAttributes.setRowSpan(rowSpan);
+        int previousRowSpan = attributes.rowSpan;
+        if (previousRowSpan != rowSpan) {
+            attributes.rowSpan = rowSpan;
+
+            TablePane tablePane = (TablePane)component.getParent();
+            if (tablePane != null) {
+                tablePane.tablePaneAttributeListeners.rowSpanChanged(tablePane,
+                    component, previousRowSpan);
+            }
+        }
     }
 
     public static int getColumnSpan(Component component) {
-        TablePaneAttributes tablePaneAttributes = (TablePaneAttributes)component.getAttributes();
-        return (tablePaneAttributes == null) ? -1 : tablePaneAttributes.getColumnSpan();
+        Attributes attributes = (Attributes)component.getAttributes();
+        return (attributes == null) ? -1 : attributes.columnSpan;
     }
 
     public static void setColumnSpan(Component component, int columnSpan) {
-        TablePaneAttributes tablePaneAttributes = (TablePaneAttributes)component.getAttributes();
-        if (tablePaneAttributes == null) {
+        Attributes attributes = (Attributes)component.getAttributes();
+        if (attributes == null) {
             throw new UnsupportedOperationException();
         }
 
-        tablePaneAttributes.setColumnSpan(columnSpan);
+        int previousColumnSpan = attributes.columnSpan;
+        if (previousColumnSpan != columnSpan) {
+            attributes.columnSpan = columnSpan;
+
+            TablePane tablePane = (TablePane)component.getParent();
+            if (tablePane != null) {
+                tablePane.tablePaneAttributeListeners.columnSpanChanged(tablePane,
+                    component, previousColumnSpan);
+            }
+        }
     }
 }

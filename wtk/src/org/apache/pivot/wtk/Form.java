@@ -85,7 +85,7 @@ public class Form extends Container {
                 form.formListeners.fieldInserted(this, index);
             }
 
-            field.setAttributes(new FormAttributes(this));
+            field.setAttributes(new Attributes(this));
         }
 
         public Component update(int index, Component field) {
@@ -217,55 +217,6 @@ public class Form extends Container {
     }
 
     /**
-     * Defines form field attributes.
-     *
-     * @author gbrown
-     */
-    protected static class FormAttributes extends Attributes {
-        private Section section = null;
-        private String name = null;
-        private Flag flag = null;
-
-        protected FormAttributes(Section section) {
-            this.section = section;
-        }
-
-        public Section getSection() {
-            return section;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            String previousName = this.name;
-            this.name = name;
-
-            Component component = getComponent();
-            Form form = (Form)component.getParent();
-            if (form != null) {
-                form.formAttributeListeners.nameChanged(form, component, previousName);
-            }
-        }
-
-        public Flag getFlag() {
-            return flag;
-        }
-
-        public void setFlag(Flag flag) {
-            Flag previousFlag = this.flag;
-            this.flag = flag;
-
-            Component component = getComponent();
-            Form form = (Form)component.getParent();
-            if (form != null) {
-                form.formAttributeListeners.flagChanged(form, component, previousFlag);
-            }
-        }
-    }
-
-    /**
      * Represents an message alert associated with a form field.
      *
      * @author gbrown
@@ -354,11 +305,16 @@ public class Form extends Container {
         }
     }
 
-    /**
-     * Form listener list.
-     *
-     * @author gbrown
-     */
+    private static class Attributes {
+        public final Section section;
+        public String name = null;
+        public Flag flag = null;
+
+        public Attributes(Section section) {
+            this.section = section;
+        }
+    }
+
     private static class FormListenerList extends ListenerList<FormListener>
         implements FormListener {
         public void sectionInserted(Form form, int index) {
@@ -392,9 +348,6 @@ public class Form extends Container {
         }
     }
 
-    /**
-     * Form attribute listener list.
-     */
     private static class FormAttributeListenerList extends ListenerList<FormAttributeListener>
         implements FormAttributeListener {
         public void nameChanged(Form form, Component component, String previousName) {
@@ -494,36 +447,52 @@ public class Form extends Container {
     }
 
     public static Section getSection(Component component) {
-        FormAttributes formAttributes = (FormAttributes)component.getAttributes();
-        return (formAttributes == null) ? null : formAttributes.getSection();
+        Attributes attributes = (Attributes)component.getAttributes();
+        return (attributes == null) ? null : attributes.section;
     }
 
     public static String getName(Component component) {
-        FormAttributes formAttributes = (FormAttributes)component.getAttributes();
-        return (formAttributes == null) ? null : formAttributes.getName();
+        Attributes attributes = (Attributes)component.getAttributes();
+        return (attributes == null) ? null : attributes.name;
     }
 
     public static void setName(Component component, String name) {
-        FormAttributes formAttributes = (FormAttributes)component.getAttributes();
-        if (formAttributes == null) {
+        Attributes attributes = (Attributes)component.getAttributes();
+        if (attributes == null) {
             throw new IllegalStateException();
         }
 
-        formAttributes.setName(name);
+        String previousName = attributes.name;
+        if (previousName != name) {
+            attributes.name = name;
+
+            Form form = (Form)component.getParent();
+            if (form != null) {
+                form.formAttributeListeners.nameChanged(form, component, previousName);
+            }
+        }
     }
 
     public static Flag getFlag(Component component) {
-        FormAttributes formAttributes = (FormAttributes)component.getAttributes();
-        return (formAttributes == null) ? null : formAttributes.getFlag();
+        Attributes attributes = (Attributes)component.getAttributes();
+        return (attributes == null) ? null : attributes.flag;
     }
 
     public static void setFlag(Component component, Flag flag) {
-        FormAttributes formAttributes = (FormAttributes)component.getAttributes();
-        if (formAttributes == null) {
+        Attributes attributes = (Attributes)component.getAttributes();
+        if (attributes == null) {
             throw new IllegalStateException();
         }
 
-        formAttributes.setFlag(flag);
+        Flag previousFlag = attributes.flag;
+        if (previousFlag != flag) {
+            attributes.flag = flag;
+
+            Form form = (Form)component.getParent();
+            if (form != null) {
+                form.formAttributeListeners.flagChanged(form, component, previousFlag);
+            }
+        }
     }
 
     public static final void setFlag(Component component, String flag) {

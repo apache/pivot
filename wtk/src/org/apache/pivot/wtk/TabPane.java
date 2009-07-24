@@ -39,59 +39,6 @@ import org.apache.pivot.wtk.media.Image;
  */
 public class TabPane extends Container {
     /**
-     * Defines tab attributes.
-     *
-     * @author gbrown
-     */
-    protected static class TabPaneAttributes extends Attributes {
-        private String name = null;
-        private Image icon = null;
-        private boolean closeable = false;
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            String previousName = this.name;
-            this.name = name;
-
-            Component component = getComponent();
-            TabPane tabPane = (TabPane)component.getParent();
-            if (tabPane != null) {
-                tabPane.tabPaneAttributeListeners.nameChanged(tabPane, component, previousName);
-            }
-        }
-
-        public Image getIcon() {
-            return icon;
-        }
-
-        public void setIcon(Image icon) {
-            Image previousIcon = this.icon;
-            this.icon = icon;
-
-            Component component = getComponent();
-            TabPane tabPane = (TabPane)component.getParent();
-            if (tabPane != null) {
-                tabPane.tabPaneAttributeListeners.iconChanged(tabPane, component, previousIcon);
-            }
-        }
-
-        public boolean isCloseable() {
-            return closeable;
-        }
-
-        public void setCloseable(boolean closeable) {
-            Component component = getComponent();
-            TabPane tabPane = (TabPane)component.getParent();
-            if (tabPane != null) {
-                tabPane.tabPaneAttributeListeners.closeableChanged(tabPane, component);
-            }
-        }
-    }
-
-    /**
      * Tab sequence implementation.
      *
      * @author gbrown
@@ -121,7 +68,7 @@ public class TabPane extends Container {
             tabs.insert(tab, index);
 
             // Attach the attributes
-            tab.setAttributes(new TabPaneAttributes());
+            tab.setAttributes(new Attributes());
 
             // Update the selection
             if (selectedIndex >= index) {
@@ -188,6 +135,12 @@ public class TabPane extends Container {
         public Iterator<Component> iterator() {
             return new ImmutableIterator<Component>(tabs.iterator());
         }
+    }
+
+    private static class Attributes {
+        public String name = null;
+        public Image icon = null;
+        public boolean closeable = false;
     }
 
     private static class TabPaneListenerList extends ListenerList<TabPaneListener>
@@ -353,31 +306,47 @@ public class TabPane extends Container {
     }
 
     public static String getName(Component component) {
-        TabPaneAttributes tabPaneAttributes = (TabPaneAttributes)component.getAttributes();
-        return (tabPaneAttributes == null) ? null : tabPaneAttributes.getName();
+        Attributes attributes = (Attributes)component.getAttributes();
+        return (attributes == null) ? null : attributes.name;
     }
 
     public static void setName(Component component, String name) {
-        TabPaneAttributes tabPaneAttributes = (TabPaneAttributes)component.getAttributes();
-        if (tabPaneAttributes == null) {
+        Attributes attributes = (Attributes)component.getAttributes();
+        if (attributes == null) {
             throw new IllegalStateException();
         }
 
-        tabPaneAttributes.setName(name);
+        String previousName = attributes.name;
+        if (previousName != name) {
+            attributes.name = name;
+
+            TabPane tabPane = (TabPane)component.getParent();
+            if (tabPane != null) {
+                tabPane.tabPaneAttributeListeners.nameChanged(tabPane, component, previousName);
+            }
+        }
     }
 
     public static Image getIcon(Component component) {
-        TabPaneAttributes tabPaneAttributes = (TabPaneAttributes)component.getAttributes();
-        return (tabPaneAttributes == null) ? null : tabPaneAttributes.getIcon();
+        Attributes attributes = (Attributes)component.getAttributes();
+        return (attributes == null) ? null : attributes.icon;
     }
 
     public static void setIcon(Component component, Image icon) {
-        TabPaneAttributes tabPaneAttributes = (TabPaneAttributes)component.getAttributes();
-        if (tabPaneAttributes == null) {
+        Attributes attributes = (Attributes)component.getAttributes();
+        if (attributes == null) {
             throw new IllegalStateException();
         }
 
-        tabPaneAttributes.setIcon(icon);
+        Image previousIcon = attributes.icon;
+        if (previousIcon != icon) {
+            attributes.icon = icon;
+
+            TabPane tabPane = (TabPane)component.getParent();
+            if (tabPane != null) {
+                tabPane.tabPaneAttributeListeners.iconChanged(tabPane, component, previousIcon);
+            }
+        }
     }
 
     public static final void setIcon(Component component, URL icon) {
@@ -410,17 +379,24 @@ public class TabPane extends Container {
     }
 
     public static boolean isCloseable(Component component) {
-        TabPaneAttributes tabPaneAttributes = (TabPaneAttributes)component.getAttributes();
-        return (tabPaneAttributes == null) ? null : tabPaneAttributes.isCloseable();
+        Attributes attributes = (Attributes)component.getAttributes();
+        return (attributes == null) ? null : attributes.closeable;
     }
 
     public static void setCloseable(Component component, boolean closeable) {
-        TabPaneAttributes tabPaneAttributes = (TabPaneAttributes)component.getAttributes();
-        if (tabPaneAttributes == null) {
+        Attributes attributes = (Attributes)component.getAttributes();
+        if (attributes == null) {
             throw new IllegalStateException();
         }
 
-        tabPaneAttributes.setCloseable(closeable);
+        if (attributes.closeable != closeable) {
+            attributes.closeable = closeable;
+
+            TabPane tabPane = (TabPane)component.getParent();
+            if (tabPane != null) {
+                tabPane.tabPaneAttributeListeners.closeableChanged(tabPane, component);
+            }
+        }
     }
 }
 
