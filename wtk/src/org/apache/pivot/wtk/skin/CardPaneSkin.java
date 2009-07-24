@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.wtk.skin;
 
+import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.CardPane;
@@ -23,13 +24,13 @@ import org.apache.pivot.wtk.CardPaneListener;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.Dimensions;
+import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.effects.FadeDecorator;
 import org.apache.pivot.wtk.effects.ScaleDecorator;
 import org.apache.pivot.wtk.effects.Transition;
 import org.apache.pivot.wtk.effects.TransitionListener;
 import org.apache.pivot.wtk.effects.easing.Easing;
 import org.apache.pivot.wtk.effects.easing.Quartic;
-
 
 /**
  * Card pane skin.
@@ -173,11 +174,11 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
             int dy = (int)(height * percentComplete) * direction;
 
             if (selectionChangeEffect == SelectionChangeEffect.HORIZONTAL_SLIDE) {
-                fromCard.setLocation(dx, 0);
-                toCard.setLocation(-width * direction + dx, 0);
+                fromCard.setLocation(padding.left + dx, padding.top);
+                toCard.setLocation(padding.left - (width * direction) + dx, padding.top);
             } else {
-                fromCard.setLocation(0, dy);
-                toCard.setLocation(0, -height * direction + dy);
+                fromCard.setLocation(padding.left, padding.top + dy);
+                toCard.setLocation(padding.left, padding.top - (height * direction) + dy);
             }
         }
     }
@@ -285,6 +286,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         }
     }
 
+    private Insets padding = new Insets(0);
     private boolean sizeToSelection = false;
     private SelectionChangeEffect selectionChangeEffect = null;
 
@@ -321,6 +323,8 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
             for (Component card : cardPane) {
                 preferredWidth = Math.max(preferredWidth, card.getPreferredWidth(height));
             }
+
+            preferredWidth += (padding.left + padding.right);
         }
 
         return preferredWidth;
@@ -338,13 +342,16 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
             for (Component card : cardPane) {
                 preferredHeight = Math.max(preferredHeight, card.getPreferredHeight(width));
             }
+
+            preferredHeight += (padding.top + padding.bottom);
         }
 
         return preferredHeight;
     }
 
     public Dimensions getPreferredSize() {
-        Dimensions preferredSize;
+        int preferredWidth = 0;
+        int preferredHeight = 0;
 
         CardPane cardPane = (CardPane)getComponent();
 
@@ -352,10 +359,10 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
             if (selectionChangeTransition == null) {
                 Component selectedCard = cardPane.getSelectedCard();
 
-                if (selectedCard == null) {
-                    preferredSize = new Dimensions(0, 0);
-                } else {
-                    preferredSize = selectedCard.getPreferredSize();
+                if (selectedCard != null) {
+                    Dimensions cardSize = selectedCard.getPreferredSize();
+                    preferredWidth = cardSize.width;
+                    preferredHeight = cardSize.height;
                 }
             } else {
                 float percentComplete = selectionChangeTransition.getPercentComplete();
@@ -382,37 +389,68 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
                     height = toSize.height;
                 }
 
-                int preferredWidth = previousWidth + (int)((width - previousWidth) * percentComplete);
-                int preferredHeight = previousHeight + (int)((height - previousHeight) * percentComplete);
-
-                preferredSize = new Dimensions(preferredWidth, preferredHeight);
+                preferredWidth = previousWidth + (int)((width - previousWidth) * percentComplete);
+                preferredHeight = previousHeight + (int)((height - previousHeight) * percentComplete);
             }
         } else {
-            int preferredWidth = 0;
-            int preferredHeight = 0;
-
             for (Component card : cardPane) {
                 Dimensions cardSize = card.getPreferredSize();
 
                 preferredWidth = Math.max(cardSize.width, preferredWidth);
                 preferredHeight = Math.max(cardSize.height, preferredHeight);
             }
-
-            preferredSize = new Dimensions(preferredWidth, preferredHeight);
         }
 
-        return preferredSize;
+        preferredWidth += (padding.left + padding.right);
+        preferredHeight += (padding.top + padding.bottom);
+
+        return new Dimensions(preferredWidth, preferredHeight);
     }
 
     public void layout() {
+        // Set the size of all components to match the size of the stack pane,
+        // minus padding
         CardPane cardPane = (CardPane)getComponent();
-        int width = getWidth();
-        int height = getHeight();
+        int width = getWidth() - (padding.left + padding.right);
+        int height = getHeight() - (padding.top + padding.bottom);
 
         for (Component card : cardPane) {
-            card.setLocation(0, 0);
+            card.setLocation(padding.left, padding.top);
             card.setSize(width, height);
         }
+    }
+
+    public Insets getPadding() {
+        return padding;
+    }
+
+    public void setPadding(Insets padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        this.padding = padding;
+        invalidateComponent();
+    }
+
+    public final void setPadding(Dictionary<String, ?> padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setPadding(new Insets(padding));
+    }
+
+    public final void setPadding(int padding) {
+        setPadding(new Insets(padding));
+    }
+
+    public final void setPadding(Number padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setPadding(padding.intValue());
     }
 
     public boolean getSizeToSelection() {
