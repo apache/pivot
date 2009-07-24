@@ -75,7 +75,7 @@ public class TableViewRowEditor implements TableView.RowEditor {
             int height = rowBounds.height;
 
             TableView.ColumnSequence columns = tableView.getColumns();
-            Dictionary<String, Object> styles = tableView.getStyles();
+            Component.StyleDictionary styles = tableView.getStyles();
 
             boolean rowSelected = tableView.isRowSelected(rowIndex);
             boolean rowDisabled = tableView.isRowDisabled(rowIndex);

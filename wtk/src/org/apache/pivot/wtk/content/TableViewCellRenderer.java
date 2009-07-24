@@ -21,6 +21,7 @@ import java.awt.Font;
 
 import org.apache.pivot.beans.BeanDictionary;
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.TableView;
@@ -65,8 +66,8 @@ public class TableViewCellRenderer extends Label
     }
 
     protected void renderStyles(TableView tableView, boolean rowSelected, boolean rowDisabled) {
-        Dictionary<String, Object> tableViewStyles = tableView.getStyles();
-        Dictionary<String, Object> styles = getStyles();
+        Component.StyleDictionary tableViewStyles = tableView.getStyles();
+        Component.StyleDictionary styles = getStyles();
 
         Font font = (Font)tableViewStyles.get("font");
         styles.put("font", font);

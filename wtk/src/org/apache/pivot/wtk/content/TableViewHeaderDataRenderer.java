@@ -19,8 +19,8 @@ package org.apache.pivot.wtk.content;
 import java.awt.Color;
 import java.awt.Font;
 
-import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.wtk.BoxPane;
+import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Insets;
@@ -97,7 +97,7 @@ public class TableViewHeaderDataRenderer extends BoxPane
             label.setDisplayable(true);
 
             // Update the label styles
-            Dictionary<String, Object> labelStyles = label.getStyles();
+            Component.StyleDictionary labelStyles = label.getStyles();
 
             Object labelFont = tableViewHeader.getStyles().get("font");
             if (labelFont instanceof Font) {
