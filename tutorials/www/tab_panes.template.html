@@ -50,7 +50,7 @@ deployJava.writeAppletTag(attributes, parameters);
 
 <p>The WTKX source that produces this example is as follows. The tab pane contains three tabs, each of which are flow panes containing bordered labels at different sizes. Like <tt>CardPane</tt>, the preferred size of a tab pane is the maximum of the preferred widths and heights of the tabs, plus the size of the area allocated to the tab navigation, and each tab is sized to fill the entire space allocated to the tabs. The tab pane itself is contained in a flow pane so that changes to its preferred size are easily visible.</p>
 
-<p>Note that, like the <a href="forms.html">Form</a> container, <tt>TabPane</tt> defines attributes that a caller can set to customize the appearance of the tab. <tt>TabPane</tt> currently defines two attributes: "name" and "icon" (additional attributes may be added in the future to support closeable tabs or other such features). Also note that disabling a tab component also disables its corresponding tab button, preventing the user from navigating to that tab:</p>
+<p>Note that, like the <a href="forms.html">Form</a> container, <tt>TabPane</tt> defines attributes that a caller can set to customize the appearance of the tab. <tt>TabPane</tt> currently defines two attributes: "label" and "icon" (additional attributes may be added in the future to support closeable tabs or other such features). Also note that disabling a tab component also disables its corresponding tab button, preventing the user from navigating to that tab:</p>
 
 <pre class="brush:xml">
 &lt;Window title="Tab Panes" maximized="true"
@@ -69,7 +69,7 @@ deployJava.writeAppletTag(attributes, parameters);
                             &lt;BoxPane&gt;
                                 &lt;TabPane wtkx:id="tabPane"&gt;
                                     &lt;tabs&gt;
-                                        &lt;BoxPane TabPane.icon="org/apache/pivot/tutorials/bell.png" TabPane.name="Bell"
+                                        &lt;BoxPane TabPane.icon="org/apache/pivot/tutorials/bell.png" TabPane.label="Bell"
                                             styles="{horizontalAlignment:'center', verticalAlignment:'center'}"&gt;
                                             &lt;Border&gt;
                                                 &lt;content&gt;
@@ -79,7 +79,7 @@ deployJava.writeAppletTag(attributes, parameters);
                                             &lt;/Border&gt;
                                         &lt;/BoxPane&gt;
 
-                                        &lt;BoxPane TabPane.icon="org/apache/pivot/tutorials/clock.png" TabPane.name="Clock"
+                                        &lt;BoxPane TabPane.icon="org/apache/pivot/tutorials/clock.png" TabPane.label="Clock"
                                             styles="{horizontalAlignment:'center', verticalAlignment:'center'}"&gt;
                                             &lt;Border&gt;
                                                 &lt;content&gt;
@@ -89,7 +89,7 @@ deployJava.writeAppletTag(attributes, parameters);
                                             &lt;/Border&gt;
                                         &lt;/BoxPane&gt;
 
-                                        &lt;BoxPane TabPane.icon="org/apache/pivot/tutorials/house.png" TabPane.name="House"
+                                        &lt;BoxPane TabPane.icon="org/apache/pivot/tutorials/house.png" TabPane.label="House"
                                             styles="{horizontalAlignment:'center', verticalAlignment:'center'}"&gt;
                                             &lt;Border&gt;
                                                 &lt;content&gt;
@@ -99,7 +99,7 @@ deployJava.writeAppletTag(attributes, parameters);
                                             &lt;/Border&gt;
                                         &lt;/BoxPane&gt;
 
-                                        &lt;BoxPane TabPane.icon="org/apache/pivot/tutorials/star.png" TabPane.name="Star" enabled="false"/&gt;
+                                        &lt;BoxPane TabPane.icon="org/apache/pivot/tutorials/star.png" TabPane.label="Star" enabled="false"/&gt;
                                     &lt;/tabs&gt;
                                     &lt;corner&gt;
                                         &lt;BoxPane wtkx:id="cornerBoxPane" styles="{horizontalAlignment:'right'}"&gt;

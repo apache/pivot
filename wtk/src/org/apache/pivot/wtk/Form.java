@@ -307,7 +307,7 @@ public class Form extends Container {
 
     private static class Attributes {
         public final Section section;
-        public String name = null;
+        public String label = null;
         public Flag flag = null;
 
         public Attributes(Section section) {
@@ -350,9 +350,9 @@ public class Form extends Container {
 
     private static class FormAttributeListenerList extends ListenerList<FormAttributeListener>
         implements FormAttributeListener {
-        public void nameChanged(Form form, Component component, String previousName) {
+        public void labelChanged(Form form, Component component, String previousLabel) {
             for (FormAttributeListener listener : this) {
-                listener.nameChanged(form, component, previousName);
+                listener.labelChanged(form, component, previousLabel);
             }
         }
 
@@ -451,24 +451,24 @@ public class Form extends Container {
         return (attributes == null) ? null : attributes.section;
     }
 
-    public static String getName(Component component) {
+    public static String getLabel(Component component) {
         Attributes attributes = (Attributes)component.getAttributes();
-        return (attributes == null) ? null : attributes.name;
+        return (attributes == null) ? null : attributes.label;
     }
 
-    public static void setName(Component component, String name) {
+    public static void setLabel(Component component, String label) {
         Attributes attributes = (Attributes)component.getAttributes();
         if (attributes == null) {
             throw new IllegalStateException();
         }
 
-        String previousName = attributes.name;
-        if (previousName != name) {
-            attributes.name = name;
+        String previousLabel = attributes.label;
+        if (previousLabel != label) {
+            attributes.label = label;
 
             Form form = (Form)component.getParent();
             if (form != null) {
-                form.formAttributeListeners.nameChanged(form, component, previousName);
+                form.formAttributeListeners.labelChanged(form, component, previousLabel);
             }
         }
     }

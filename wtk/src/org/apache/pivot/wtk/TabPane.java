@@ -138,7 +138,7 @@ public class TabPane extends Container {
     }
 
     private static class Attributes {
-        public String name = null;
+        public String label = null;
         public Image icon = null;
         public boolean closeable = false;
     }
@@ -191,9 +191,9 @@ public class TabPane extends Container {
 
     private static class TabPaneAttributeListenerList extends ListenerList<TabPaneAttributeListener>
         implements TabPaneAttributeListener {
-        public void nameChanged(TabPane tabPane, Component component, String previousName) {
+        public void labelChanged(TabPane tabPane, Component component, String previousLabel) {
             for (TabPaneAttributeListener listener : this) {
-                listener.nameChanged(tabPane, component, previousName);
+                listener.labelChanged(tabPane, component, previousLabel);
             }
         }
 
@@ -305,24 +305,24 @@ public class TabPane extends Container {
         return tabPaneAttributeListeners;
     }
 
-    public static String getName(Component component) {
+    public static String getLabel(Component component) {
         Attributes attributes = (Attributes)component.getAttributes();
-        return (attributes == null) ? null : attributes.name;
+        return (attributes == null) ? null : attributes.label;
     }
 
-    public static void setName(Component component, String name) {
+    public static void setLabel(Component component, String label) {
         Attributes attributes = (Attributes)component.getAttributes();
         if (attributes == null) {
             throw new IllegalStateException();
         }
 
-        String previousName = attributes.name;
-        if (previousName != name) {
-            attributes.name = name;
+        String previousLabel = attributes.label;
+        if (previousLabel != label) {
+            attributes.label = label;
 
             TabPane tabPane = (TabPane)component.getParent();
             if (tabPane != null) {
-                tabPane.tabPaneAttributeListeners.nameChanged(tabPane, component, previousName);
+                tabPane.tabPaneAttributeListeners.labelChanged(tabPane, component, previousLabel);
             }
         }
     }

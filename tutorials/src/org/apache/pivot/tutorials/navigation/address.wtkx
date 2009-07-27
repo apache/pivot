@@ -20,13 +20,13 @@ limitations under the License.
     xmlns="org.apache.pivot.wtk">
     <sections>
         <Form.Section>
-            <TextInput Form.name="Name"/>
-            <BoxPane Form.name="Address" orientation="vertical">
+            <TextInput Form.label="Name"/>
+            <BoxPane Form.label="Address" orientation="vertical">
                 <TextInput/>
                 <TextInput/>
             </BoxPane>
-            <TextInput Form.name="City"/>
-            <ListButton Form.name="State"
+            <TextInput Form.label="City"/>
+            <ListButton Form.label="State"
                 listData="[
                     'Alabama',
                     'Alaska',
@@ -81,7 +81,7 @@ limitations under the License.
                     'Wyoming'
                 ]">
             </ListButton>
-            <TextInput Form.name="Zip"/>
+            <TextInput Form.label="Zip"/>
         </Form.Section>
     </sections>
 </Form>

@@ -121,7 +121,7 @@ limitations under the License.
                 <Form>
                     <sections>
                         <Form.Section>
-                            <ListButton Form.name="Basic" selectedIndex="0">
+                            <ListButton Form.label="Basic" selectedIndex="0">
                                 <listData>
                                     <collections:ArrayList>
                                         <content:ListItem text="Red"/>
@@ -134,7 +134,7 @@ limitations under the License.
                                 </listData>
                             </ListButton>
 
-                            <ListButton Form.name="Image" selectedIndex="2">
+                            <ListButton Form.label="Image" selectedIndex="2">
                                 <listData>
                                     <collections:ArrayList>
                                         <content:ListItem icon="@anchor.png" text="Anchor"/>
@@ -151,7 +151,7 @@ limitations under the License.
                                 </itemRenderer>
                             </ListButton>
 
-                            <ListButton Form.name="Color" selectedIndex="0"
+                            <ListButton Form.label="Color" selectedIndex="0"
                                 styles="{listSize:6}">
                                 <listData>
                                     <collections:ArrayList>

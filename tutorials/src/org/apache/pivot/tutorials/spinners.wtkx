@@ -26,12 +26,12 @@ limitations under the License.
                 <Form>
                     <sections>
                         <Form.Section>
-                            <Spinner Form.name="Basic" preferredWidth="60"
+                            <Spinner Form.label="Basic" preferredWidth="60"
                                 spinnerData="['One', 'Two', 'Three', 'Four', 'Five']"
                                 circular="true" selectedIndex="0"/>
-                            <Spinner wtkx:id="numericSpinner" Form.name="Numeric"
+                            <Spinner wtkx:id="numericSpinner" Form.label="Numeric"
                                 preferredWidth="60"/>
-                            <Spinner wtkx:id="dateSpinner" Form.name="Date"/>
+                            <Spinner wtkx:id="dateSpinner" Form.label="Date"/>
                         </Form.Section>
                     </sections>
                 </Form>
@@ -46,10 +46,10 @@ limitations under the License.
                 <Form>
                     <sections>
                         <Form.Section>
-                            <Slider wtkx:id="redSlider" Form.name="Red" bounds="{minimum:0, maximum:255}" value="0"/>
-                            <Slider wtkx:id="greenSlider" Form.name="Green" bounds="{minimum:0, maximum:255}" value="0"/>
-                            <Slider wtkx:id="blueSlider" Form.name="Blue" bounds="{minimum:0, maximum:255}" value="0"/>
-                            <Border wtkx:id="colorBorder" Form.name="Color" preferredWidth="120" preferredHeight="30"/>
+                            <Slider wtkx:id="redSlider" Form.label="Red" bounds="{minimum:0, maximum:255}" value="0"/>
+                            <Slider wtkx:id="greenSlider" Form.label="Green" bounds="{minimum:0, maximum:255}" value="0"/>
+                            <Slider wtkx:id="blueSlider" Form.label="Blue" bounds="{minimum:0, maximum:255}" value="0"/>
+                            <Border wtkx:id="colorBorder" Form.label="Color" preferredWidth="120" preferredHeight="30"/>
                         </Form.Section>
                     </sections>
                 </Form>

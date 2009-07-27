@@ -33,8 +33,8 @@ limitations under the License.
               <Form>
                 <sections>
                   <Form.Section>
-                    <TextInput wtkx:id="username" Form.name="Username" />
-                    <TextInput wtkx:id="password" Form.name="Password" password="true" />
+                    <TextInput wtkx:id="username" Form.label="Username" />
+                    <TextInput wtkx:id="password" Form.label="Password" password="true" />
                   </Form.Section>
                 </sections>
               </Form>

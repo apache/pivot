@@ -31,13 +31,13 @@ limitations under the License.
                             <Form styles="{rightAlignLabels:true}">
                                 <sections>
                                     <Form.Section>
-                                        <BoxPane wtkx:id="nameBoxPane" Form.name="Name">
+                                        <BoxPane wtkx:id="nameBoxPane" Form.label="Name">
                                             <TextInput wtkx:id="lastNameTextInput" prompt="Last"/>
                                             <TextInput wtkx:id="firstNameTextInput" prompt="First"/>
                                         </BoxPane>
                                     </Form.Section>
                                     <Form.Section heading="Addresses">
-                                        <BoxPane Form.name="Home" orientation="vertical">
+                                        <BoxPane Form.label="Home" orientation="vertical">
                                             <TextInput prompt="Street" textSize="24"/>
                                             <BoxPane>
                                                 <TextInput prompt="City"/>
@@ -45,7 +45,7 @@ limitations under the License.
                                                 <TextInput prompt="Zip" textSize="10"/>
                                             </BoxPane>
                                         </BoxPane>
-                                        <BoxPane Form.name="Work" orientation="vertical">
+                                        <BoxPane Form.label="Work" orientation="vertical">
                                             <TextInput prompt="Street" textSize="24"/>
                                             <BoxPane>
                                                 <TextInput prompt="City"/>
@@ -55,12 +55,12 @@ limitations under the License.
                                         </BoxPane>
                                     </Form.Section>
                                     <Form.Section heading="Phone Numbers">
-                                        <TextInput Form.name="Home"/>
-                                        <TextInput Form.name="Work"/>
+                                        <TextInput Form.label="Home"/>
+                                        <TextInput Form.label="Work"/>
                                     </Form.Section>
                                     <Form.Section heading="Email Addresses">
-                                        <TextInput Form.name="Home"/>
-                                        <TextInput Form.name="Work"/>
+                                        <TextInput Form.label="Home"/>
+                                        <TextInput Form.label="Work"/>
                                     </Form.Section>
                                 </sections>
                             </Form>

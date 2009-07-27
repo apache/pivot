@@ -26,10 +26,10 @@ limitations under the License.
                     <Form wtkx:id="form">
                         <sections>
                             <Form.Section>
-                                <Label Form.name="ID" textKey="id"/>
-                                <Label Form.name="Name" textKey="name"/>
+                                <Label Form.label="ID" textKey="id"/>
+                                <Label Form.label="Name" textKey="name"/>
 
-                                <BoxPane Form.name="Address" orientation="vertical" contextKey="address">
+                                <BoxPane Form.label="Address" orientation="vertical" contextKey="address">
                                     <Label textKey="street"/>
                                     <BoxPane>
                                         <Label textKey="city"/>
@@ -38,15 +38,15 @@ limitations under the License.
                                     </BoxPane>
                                 </BoxPane>
 
-                                <Label Form.name="Phone" textKey="phoneNumber"/>
-                                <Label Form.name="Email" textKey="emailAddress"/>
+                                <Label Form.label="Phone" textKey="phoneNumber"/>
+                                <Label Form.label="Email" textKey="emailAddress"/>
 
-                                <BoxPane Form.name="IM" contextKey="imAccount">
+                                <BoxPane Form.label="IM" contextKey="imAccount">
                                     <Label textKey="id"/>
                                     <Label textKey="type"/>
                                 </BoxPane>
 
-                                <Label wtkx:id="sourceLabel" Form.name="Source" styles="{fontItalic:true}"/>
+                                <Label wtkx:id="sourceLabel" Form.label="Source" styles="{fontItalic:true}"/>
                             </Form.Section>
                         </sections>
                     </Form>

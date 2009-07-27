@@ -269,7 +269,7 @@ public class TerraAccordionSkin extends ContainerSkin
             // the close button (and also avoid the heap allocation every
             // time we're called to render())
             Component panel = (Component)data;
-            super.render(new ButtonData(Accordion.getIcon(panel), Accordion.getName(panel)),
+            super.render(new ButtonData(Accordion.getIcon(panel), Accordion.getLabel(panel)),
                 button, highlighted);
         }
     };
@@ -752,7 +752,7 @@ public class TerraAccordionSkin extends ContainerSkin
     }
 
     // Accordion attribute events
-    public void nameChanged(Accordion accordion, Component component, String previousName) {
+    public void labelChanged(Accordion accordion, Component component, String previousLabel) {
         invalidateComponent();
     }
 

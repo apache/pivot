@@ -42,11 +42,11 @@ limitations under the License.
                                 <TablePane.Row height="1*">
                                     <TabPane selectedIndex="0" styles="{tabOrientation:'horizontal'}">
                                         <tabs>
-                                            <Label TabPane.icon="@bell.png" TabPane.name="Bell" text="Basic"
+                                            <Label TabPane.icon="@bell.png" TabPane.label="Bell" text="Basic"
                                                 styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
-                                            <Label TabPane.icon="@clock.png" TabPane.name="Clock" text="Basic"
+                                            <Label TabPane.icon="@clock.png" TabPane.label="Clock" text="Basic"
                                                 styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
-                                            <Label TabPane.icon="@house.png" TabPane.name="House" text="Basic"
+                                            <Label TabPane.icon="@house.png" TabPane.label="House" text="Basic"
                                                 styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
                                         </tabs>
                                     </TabPane>
@@ -56,17 +56,17 @@ limitations under the License.
                                     <TabPane selectedIndex="-1" styles="{tabOrientation:'horizontal', collapsible:true}"
                                         tooltipText="Click a tab to expand/collapse">
                                         <tabs>
-                                            <BoxPane TabPane.icon="@anchor.png" TabPane.name="Anchor"
+                                            <BoxPane TabPane.icon="@anchor.png" TabPane.label="Anchor"
                                                 styles="{horizontalAlignment:'center', verticalAlignment:'top'}">
                                                 <Label text="Collapsible"/>
                                             </BoxPane>
 
-                                            <BoxPane TabPane.icon="@cup.png" TabPane.name="Cup"
+                                            <BoxPane TabPane.icon="@cup.png" TabPane.label="Cup"
                                                 styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
                                                 <Label text="Collapsible"/>
                                             </BoxPane>
 
-                                            <BoxPane TabPane.icon="@star.png" TabPane.name="Star"
+                                            <BoxPane TabPane.icon="@star.png" TabPane.label="Star"
                                                 styles="{horizontalAlignment:'center', verticalAlignment:'bottom'}">
                                                 <Label text="Collapsible"/>
                                             </BoxPane>
@@ -85,11 +85,11 @@ limitations under the License.
                                 <TablePane.Row height="-1">
                                     <TabPane selectedIndex="0" styles="{tabOrientation:'vertical'}">
                                         <tabs>
-                                            <Label TabPane.icon="@bell.png" TabPane.name="Bell" text="Basic"
+                                            <Label TabPane.icon="@bell.png" TabPane.label="Bell" text="Basic"
                                                 styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
-                                            <Label TabPane.icon="@clock.png" TabPane.name="Clock" text="Basic"
+                                            <Label TabPane.icon="@clock.png" TabPane.label="Clock" text="Basic"
                                                 styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
-                                            <Label TabPane.icon="@house.png" TabPane.name="House" text="Basic"
+                                            <Label TabPane.icon="@house.png" TabPane.label="House" text="Basic"
                                                 styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
                                         </tabs>
                                     </TabPane>
@@ -97,17 +97,17 @@ limitations under the License.
                                     <TabPane selectedIndex="-1" styles="{tabOrientation:'vertical', collapsible:true}"
                                         tooltipText="Click a tab to expand/collapse">
                                         <tabs>
-                                            <BoxPane TabPane.icon="@anchor.png" TabPane.name="Anchor"
+                                            <BoxPane TabPane.icon="@anchor.png" TabPane.label="Anchor"
                                                 styles="{horizontalAlignment:'left', verticalAlignment:'center'}">
                                                 <Label text="Collapsible"/>
                                             </BoxPane>
 
-                                            <BoxPane TabPane.icon="@cup.png" TabPane.name="Cup"
+                                            <BoxPane TabPane.icon="@cup.png" TabPane.label="Cup"
                                                 styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
                                                 <Label text="Collapsible"/>
                                             </BoxPane>
 
-                                            <BoxPane TabPane.icon="@star.png" TabPane.name="Star"
+                                            <BoxPane TabPane.icon="@star.png" TabPane.label="Star"
                                                 styles="{horizontalAlignment:'right', verticalAlignment:'center'}">
                                                 <Label text="Collapsible"/>
                                             </BoxPane>
@@ -158,11 +158,11 @@ limitations under the License.
                 <Label text="Accordion" styles="{fontBold:true}"/>
                 <Accordion selectedIndex="1" preferredWidth="110" preferredHeight="180">
                     <panels>
-                        <Label Accordion.name="One" text="Un"
+                        <Label Accordion.label="One" text="Un"
                           styles="{horizontalAlignment:'center', verticalAlignment:'center', fontItalic:true}"/>
-                        <Label Accordion.name="Two" text="Deux"
+                        <Label Accordion.label="Two" text="Deux"
                           styles="{horizontalAlignment:'center', verticalAlignment:'center', fontItalic:true}"/>
-                        <Label Accordion.name="Three" text="Trois"
+                        <Label Accordion.label="Three" text="Trois"
                           styles="{horizontalAlignment:'center', verticalAlignment:'center', fontItalic:true}"/>
                     </panels>
                 </Accordion>

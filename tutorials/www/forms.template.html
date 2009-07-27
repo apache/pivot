@@ -68,13 +68,13 @@ deployJava.writeAppletTag(attributes, parameters);
                             &lt;Form styles="{rightAlignLabels:true}"&gt;
                                 &lt;sections&gt;
                                     &lt;Form.Section&gt;
-                                        &lt;BoxPane wtkx:id="nameBoxPane" Form.name="Name"&gt;
+                                        &lt;BoxPane wtkx:id="nameBoxPane" Form.label="Name"&gt;
                                             &lt;TextInput wtkx:id="lastNameTextInput" prompt="Last"/&gt;
                                             &lt;TextInput wtkx:id="firstNameTextInput" prompt="First"/&gt;
                                         &lt;/BoxPane&gt;
                                     &lt;/Form.Section&gt;
                                     &lt;Form.Section heading="Addresses"&gt;
-                                        &lt;BoxPane Form.name="Home" orientation="vertical"&gt;
+                                        &lt;BoxPane Form.label="Home" orientation="vertical"&gt;
                                             &lt;TextInput prompt="Street" textSize="24"/&gt;
                                             &lt;BoxPane&gt;
                                                 &lt;TextInput prompt="City"/&gt;
@@ -82,7 +82,7 @@ deployJava.writeAppletTag(attributes, parameters);
                                                 &lt;TextInput prompt="Zip" textSize="10"/&gt;
                                             &lt;/BoxPane&gt;
                                         &lt;/BoxPane&gt;
-                                        &lt;BoxPane Form.name="Work" orientation="vertical"&gt;
+                                        &lt;BoxPane Form.label="Work" orientation="vertical"&gt;
                                             &lt;TextInput prompt="Street" textSize="24"/&gt;
                                             &lt;BoxPane&gt;
                                                 &lt;TextInput prompt="City"/&gt;
@@ -92,12 +92,12 @@ deployJava.writeAppletTag(attributes, parameters);
                                         &lt;/BoxPane&gt;
                                     &lt;/Form.Section&gt;
                                     &lt;Form.Section heading="Phone Numbers"&gt;
-                                        &lt;TextInput Form.name="Home"/&gt;
-                                        &lt;TextInput Form.name="Work"/&gt;
+                                        &lt;TextInput Form.label="Home"/&gt;
+                                        &lt;TextInput Form.label="Work"/&gt;
                                     &lt;/Form.Section&gt;
                                     &lt;Form.Section heading="Email Addresses"&gt;
-                                        &lt;TextInput Form.name="Home"/&gt;
-                                        &lt;TextInput Form.name="Work"/&gt;
+                                        &lt;TextInput Form.label="Home"/&gt;
+                                        &lt;TextInput Form.label="Work"/&gt;
                                     &lt;/Form.Section&gt;
                                 &lt;/sections&gt;
                             &lt;/Form&gt;
@@ -132,7 +132,7 @@ deployJava.writeAppletTag(attributes, parameters);
 &lt;/Window&gt;
 </pre>
 
-<p>Also note the use of the "Form.name" attribute - this is an example of an "attached property", also called an "attribute" in WTK. An attribute is a property that can be specified on a component only when it is a child of the container that defines the property. The same result can be achieved programmatically by calling the static <tt>Form.setName()</tt> method on a component after it has been added to the form. Several other containers, including <tt>TabPane</tt> and <tt>TablePane</tt>, define similar attributes.</p>
+<p>Also note the use of the "Form.label" attribute - this is an example of an "attached property", also called an "attribute" in WTK. An attribute is a property that can be specified on a component only when it is a child of the container that defines the property. The same result can be achieved programmatically by calling the static <tt>Form.setName()</tt> method on a component after it has been added to the form. Several other containers, including <tt>TabPane</tt> and <tt>TablePane</tt>, define similar attributes.</p>
 
 <p>Note also that section components are not required to be typical form elements such as <tt>TextInput</tt> or <tt>PushButton</tt>. They can also be containers, allowing the arrangement of components within a section to be customized.</p>
 

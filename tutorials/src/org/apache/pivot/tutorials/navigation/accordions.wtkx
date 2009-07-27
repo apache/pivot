@@ -22,9 +22,9 @@ limitations under the License.
     <content>
         <Accordion wtkx:id="accordion" styles="{padding:0}">
             <panels>
-                <wtkx:include wtkx:id="shippingPanel" src="shipping.wtkx" Accordion.name="Shipping Information"/>
-                <wtkx:include wtkx:id="paymentPanel" src="payment.wtkx" Accordion.name="Payment Information"/>
-                <wtkx:include wtkx:id="summaryPanel" src="summary.wtkx" Accordion.name="Summary &amp; Confirmation"/>
+                <wtkx:include wtkx:id="shippingPanel" src="shipping.wtkx" Accordion.label="Shipping Information"/>
+                <wtkx:include wtkx:id="paymentPanel" src="payment.wtkx" Accordion.label="Payment Information"/>
+                <wtkx:include wtkx:id="summaryPanel" src="summary.wtkx" Accordion.label="Summary &amp; Confirmation"/>
             </panels>
         </Accordion>
     </content>

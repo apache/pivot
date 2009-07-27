@@ -20,16 +20,16 @@ limitations under the License.
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
     <tabs>
-        <Label TabPane.name="Tab 1" preferredWidth="320" preferredHeight="240" text="Tab 1"/>
-        <Label TabPane.name="Tab 2" preferredWidth="320" preferredHeight="240" text="Tab 2"/>
-        <Label TabPane.name="Tab 3" preferredWidth="320" preferredHeight="240" text="Tab 3"/>
-        <Label TabPane.name="Tab 4" preferredWidth="320" preferredHeight="240" text="Tab 4"/>
-        <Label TabPane.name="Tab 5" preferredWidth="320" preferredHeight="240" text="Tab 5"/>
-        <Label TabPane.name="Tab 6" preferredWidth="320" preferredHeight="240" text="Tab 6"/>
-        <Label TabPane.name="Tab 7" preferredWidth="320" preferredHeight="240" text="Tab 7"/>
-        <Label TabPane.name="Tab 8" preferredWidth="320" preferredHeight="240" text="Tab 8"/>
-        <Label TabPane.name="Tab 9" preferredWidth="320" preferredHeight="240" text="Tab 9"/>
-        <Label TabPane.name="Tab 10" preferredWidth="320" preferredHeight="240" text="Tab 10"/>
+        <Label TabPane.label="Tab 1" preferredWidth="320" preferredHeight="240" text="Tab 1"/>
+        <Label TabPane.label="Tab 2" preferredWidth="320" preferredHeight="240" text="Tab 2"/>
+        <Label TabPane.label="Tab 3" preferredWidth="320" preferredHeight="240" text="Tab 3"/>
+        <Label TabPane.label="Tab 4" preferredWidth="320" preferredHeight="240" text="Tab 4"/>
+        <Label TabPane.label="Tab 5" preferredWidth="320" preferredHeight="240" text="Tab 5"/>
+        <Label TabPane.label="Tab 6" preferredWidth="320" preferredHeight="240" text="Tab 6"/>
+        <Label TabPane.label="Tab 7" preferredWidth="320" preferredHeight="240" text="Tab 7"/>
+        <Label TabPane.label="Tab 8" preferredWidth="320" preferredHeight="240" text="Tab 8"/>
+        <Label TabPane.label="Tab 9" preferredWidth="320" preferredHeight="240" text="Tab 9"/>
+        <Label TabPane.label="Tab 10" preferredWidth="320" preferredHeight="240" text="Tab 10"/>
     </tabs>
 </TabPane>
 

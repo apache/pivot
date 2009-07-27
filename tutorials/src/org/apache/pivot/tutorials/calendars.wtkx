@@ -45,11 +45,11 @@ limitations under the License.
                     <Form>
                         <sections>
                             <Form.Section>
-                                <CalendarButton Form.name="English (US)" locale="{language:'en', country:'us'}"/>
-                                <CalendarButton Form.name="Españole (US)" locale="{language:'es', country:'us'}"/>
-                                <CalendarButton Form.name="Españole (ES)" locale="{language:'es', country:'es'}"/>
-                                <CalendarButton Form.name="Français (FR)" locale="{language:'fr', country:'fr'}"/>
-                                <CalendarButton Form.name="Français (CA)" locale="{language:'fr', country:'ca'}"/>
+                                <CalendarButton Form.label="English (US)" locale="{language:'en', country:'us'}"/>
+                                <CalendarButton Form.label="Españole (US)" locale="{language:'es', country:'us'}"/>
+                                <CalendarButton Form.label="Españole (ES)" locale="{language:'es', country:'es'}"/>
+                                <CalendarButton Form.label="Français (FR)" locale="{language:'fr', country:'fr'}"/>
+                                <CalendarButton Form.label="Français (CA)" locale="{language:'fr', country:'ca'}"/>
                             </Form.Section>
                         </sections>
                     </Form>

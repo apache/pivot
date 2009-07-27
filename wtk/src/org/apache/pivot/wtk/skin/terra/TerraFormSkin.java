@@ -394,9 +394,9 @@ public class TerraFormSkin extends ContainerSkin
     }
 
     // Form attribute events
-    public void nameChanged(Form form, Component field, String previousName) {
+    public void labelChanged(Form form, Component field, String previousLabel) {
         Form.Section section = Form.getSection(field);
-        updateFieldName(section, section.indexOf(field));
+        updateFieldLabel(section, section.indexOf(field));
     }
 
     public void flagChanged(Form form, Component field, Form.Flag previousFlag) {
@@ -460,7 +460,7 @@ public class TerraFormSkin extends ContainerSkin
         Label label = new Label();
         labels.get(sectionIndex).insert(label, index);
         form.add(label);
-        updateFieldName(section, index);
+        updateFieldLabel(section, index);
 
         // Create the flag image view
         ImageView flagImageView = new ImageView();
@@ -498,14 +498,14 @@ public class TerraFormSkin extends ContainerSkin
         separator.setHeading(section.getHeading());
     }
 
-    private void updateFieldName(Form.Section section, int fieldIndex) {
+    private void updateFieldLabel(Form.Section section, int fieldIndex) {
         Form form = (Form)getComponent();
         Component field = section.get(fieldIndex);
 
         int sectionIndex = form.getSections().indexOf(section);
         Label label = labels.get(sectionIndex).get(fieldIndex);
-        String name = Form.getName(field);
-        label.setText((name == null) ? "" : name + ":");
+        String labelText = Form.getLabel(field);
+        label.setText((labelText == null) ? "" : labelText + ":");
     }
 
     private void updateFieldFlag(Form.Section section, int fieldIndex) {

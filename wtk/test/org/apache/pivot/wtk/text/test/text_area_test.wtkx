@@ -80,8 +80,8 @@ limitations under the License.
                     <Form styles="{verticalSpacing:2}">
                         <sections>
                             <Form.Section>
-                                <Label wtkx:id="offsetLabel" Form.name="Offset"/>
-                                <Label wtkx:id="charactersLabel" Form.name="Characters"/>
+                                <Label wtkx:id="offsetLabel" Form.label="Offset"/>
+                                <Label wtkx:id="charactersLabel" Form.label="Characters"/>
                             </Form.Section>
                         </sections>
                     </Form>

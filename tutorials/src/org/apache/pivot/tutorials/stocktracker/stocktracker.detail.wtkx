@@ -24,17 +24,17 @@ limitations under the License.
     <Form styles="{rightAlignLabels:true, fill:true}">
         <sections>
             <Form.Section>
-                <Label Form.name="%value" textKey="value"
+                <Label Form.label="%value" textKey="value"
                     styles="{horizontalAlignment:'right'}"/>
-                <Label wtkx:id="changeLabel" Form.name="%change" textKey="change"
+                <Label wtkx:id="changeLabel" Form.label="%change" textKey="change"
                     styles="{horizontalAlignment:'right'}"/>
-                <Label Form.name="%openingValue" textKey="openingValue"
+                <Label Form.label="%openingValue" textKey="openingValue"
                     styles="{horizontalAlignment:'right'}"/>
-                <Label Form.name="%highValue" textKey="highValue"
+                <Label Form.label="%highValue" textKey="highValue"
                     styles="{horizontalAlignment:'right'}"/>
-                <Label Form.name="%lowValue" textKey="lowValue"
+                <Label Form.label="%lowValue" textKey="lowValue"
                     styles="{horizontalAlignment:'right'}"/>
-                <Label Form.name="%volume" textKey="volume"
+                <Label Form.label="%volume" textKey="volume"
                     styles="{horizontalAlignment:'right'}"/>
             </Form.Section>
         </sections>

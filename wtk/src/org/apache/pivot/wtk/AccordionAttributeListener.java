@@ -25,13 +25,13 @@ import org.apache.pivot.wtk.media.Image;
  */
 public interface AccordionAttributeListener {
     /**
-     * Called when a panel's name attribute has changed.
+     * Called when a panel's label attribute has changed.
      *
      * @param accordion
      * @param component
-     * @param previousName
+     * @param previousLabel
      */
-    public void nameChanged(Accordion accordion, Component component, String previousName);
+    public void labelChanged(Accordion accordion, Component component, String previousLabel);
 
     /**
      * Called when a panel's icon attribute has changed.

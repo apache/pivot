@@ -29,7 +29,7 @@ public interface FormAttributeListener {
      * @param field
      * @param previousName
      */
-    public void nameChanged(Form form, Component field, String previousName);
+    public void labelChanged(Form form, Component field, String previousName);
 
     /**
      * Called when a field's flag attribute has changed.

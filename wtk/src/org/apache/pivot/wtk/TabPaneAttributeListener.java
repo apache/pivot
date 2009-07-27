@@ -29,9 +29,9 @@ public interface TabPaneAttributeListener {
      *
      * @param tabPane
      * @param component
-     * @param previousName
+     * @param previousLabel
      */
-    public void nameChanged(TabPane tabPane, Component component, String previousName);
+    public void labelChanged(TabPane tabPane, Component component, String previousLabel);
 
     /**
      * Called when a tab's icon attribute has changed.

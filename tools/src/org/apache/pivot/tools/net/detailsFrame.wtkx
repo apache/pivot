@@ -30,15 +30,15 @@ limitations under the License.
         <TablePane.Row height="300">
           <TabPane selectedIndex="0">
             <tabs>
-              <ScrollPane TabPane.name="Request Headers">
+              <ScrollPane TabPane.label="Request Headers">
                 <view>
                 </view>
               </ScrollPane>
-              <ScrollPane TabPane.name="Response Headers">
+              <ScrollPane TabPane.label="Response Headers">
                 <view>
                 </view>
               </ScrollPane>
-              <ScrollPane TabPane.name="Response">
+              <ScrollPane TabPane.label="Response">
                 <view>
                 </view>
               </ScrollPane>
@@ -50,8 +50,8 @@ limitations under the License.
               <Form>
                 <sections>
                   <Form.Section>
-                    <TextInput wtkx:id="path" Form.name="Path" />
-                    <TextInput wtkx:id="passwd" Form.name="Password" password="true" />
+                    <TextInput wtkx:id="path" Form.label="Path" />
+                    <TextInput wtkx:id="passwd" Form.label="Password" password="true" />
                   </Form.Section>
                 </sections>
               </Form>

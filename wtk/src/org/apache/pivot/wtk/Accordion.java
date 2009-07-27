@@ -138,7 +138,7 @@ public class Accordion extends Container {
     }
 
     private static class Attributes {
-        public String name = null;
+        public String label = null;
         public Image icon = null;
     }
 
@@ -184,9 +184,9 @@ public class Accordion extends Container {
 
     private static class AccordionAttributeListenerList extends ListenerList<AccordionAttributeListener>
         implements AccordionAttributeListener {
-        public void nameChanged(Accordion accordion, Component component, String previousName) {
+        public void labelChanged(Accordion accordion, Component component, String previousLabel) {
             for (AccordionAttributeListener listener : this) {
-                listener.nameChanged(accordion, component, previousName);
+                listener.labelChanged(accordion, component, previousLabel);
             }
         }
 
@@ -262,24 +262,24 @@ public class Accordion extends Container {
         return accordionAttributeListeners;
     }
 
-    public static String getName(Component component) {
+    public static String getLabel(Component component) {
         Attributes attributes = (Attributes)component.getAttributes();
-        return (attributes == null) ? null : attributes.name;
+        return (attributes == null) ? null : attributes.label;
     }
 
-    public static void setName(Component component, String name) {
+    public static void setLabel(Component component, String label) {
         Attributes attributes = (Attributes)component.getAttributes();
         if (attributes == null) {
             throw new IllegalStateException();
         }
 
-        String previousName = attributes.name;
-        if (previousName != name) {
-            attributes.name = name;
+        String previousLabel = attributes.label;
+        if (previousLabel != label) {
+            attributes.label = label;
 
             Accordion accordion = (Accordion)component.getParent();
             if (accordion != null) {
-                accordion.accordionAttributeListeners.nameChanged(accordion, component, previousName);
+                accordion.accordionAttributeListeners.labelChanged(accordion, component, previousLabel);
             }
         }
     }

@@ -26,9 +26,9 @@ limitations under the License.
                     <Form wtkx:id="loginForm" styles="{fill:true}">
                         <sections>
                             <Form.Section>
-                                <TextInput wtkx:id="usernameTextInput" Form.name="Username" />
-                                <TextInput wtkx:id="passwordTextInput" Form.name="Password" password="true" />
-                                <TextInput wtkx:id="domainTextInput" Form.name="Domain"/>
+                                <TextInput wtkx:id="usernameTextInput" Form.label="Username" />
+                                <TextInput wtkx:id="passwordTextInput" Form.label="Password" password="true" />
+                                <TextInput wtkx:id="domainTextInput" Form.label="Domain"/>
                                 <BoxPane>
                                     <PushButton wtkx:id="loginButton" buttonData="Login"/>
                                 </BoxPane>

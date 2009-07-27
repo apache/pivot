@@ -32,7 +32,7 @@ limitations under the License.
                             <BoxPane>
                                 <TabPane wtkx:id="tabPane">
                                     <tabs>
-                                        <BoxPane TabPane.icon="org/apache/pivot/tutorials/bell.png" TabPane.name="Bell"
+                                        <BoxPane TabPane.icon="org/apache/pivot/tutorials/bell.png" TabPane.label="Bell"
                                             styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
                                             <Border>
                                                 <content>
@@ -42,7 +42,7 @@ limitations under the License.
                                             </Border>
                                         </BoxPane>
 
-                                        <BoxPane TabPane.icon="org/apache/pivot/tutorials/clock.png" TabPane.name="Clock"
+                                        <BoxPane TabPane.icon="org/apache/pivot/tutorials/clock.png" TabPane.label="Clock"
                                             styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
                                             <Border>
                                                 <content>
@@ -52,7 +52,7 @@ limitations under the License.
                                             </Border>
                                         </BoxPane>
 
-                                        <BoxPane TabPane.icon="org/apache/pivot/tutorials/house.png" TabPane.name="House"
+                                        <BoxPane TabPane.icon="org/apache/pivot/tutorials/house.png" TabPane.label="House"
                                             styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
                                             <Border>
                                                 <content>
@@ -62,7 +62,7 @@ limitations under the License.
                                             </Border>
                                         </BoxPane>
 
-                                        <BoxPane TabPane.icon="org/apache/pivot/tutorials/star.png" TabPane.name="Star" enabled="false"/>
+                                        <BoxPane TabPane.icon="org/apache/pivot/tutorials/star.png" TabPane.label="Star" enabled="false"/>
                                     </tabs>
                                     <corner>
                                         <BoxPane wtkx:id="cornerBoxPane" styles="{horizontalAlignment:'right'}">

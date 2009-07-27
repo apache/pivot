@@ -372,7 +372,7 @@ public class TerraTabPaneSkin extends ContainerSkin
             // the close button (and also avoid the heap allocation every
             // time we're called to render())
             Component tab = (Component)data;
-            super.render(new ButtonData(TabPane.getIcon(tab), TabPane.getName(tab)),
+            super.render(new ButtonData(TabPane.getIcon(tab), TabPane.getLabel(tab)),
                 button, highlighted);
         }
     };
@@ -1247,7 +1247,7 @@ public class TerraTabPaneSkin extends ContainerSkin
     }
 
     // Tab pane attribute events
-    public void nameChanged(TabPane tabPane, Component component, String previousName) {
+    public void labelChanged(TabPane tabPane, Component component, String previousLabel) {
         invalidateComponent();
     }
 
