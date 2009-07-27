@@ -1,0 +1,8 @@
+{   openFile: "Open File",
+    saveFile: "Save File",
+    selectFolder: "Select Folder",
+    saveAs: "Save as:",
+    allFolders: "All folders",
+    ok: "OK",
+    cancel: "Cancel"
+}

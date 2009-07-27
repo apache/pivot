@@ -1,0 +1,5 @@
+{   goUp: "Go up a folder",
+    newFolder: "Create new folder",
+    goHome: "Go to home folder",
+    showFiles: "Show:"
+}

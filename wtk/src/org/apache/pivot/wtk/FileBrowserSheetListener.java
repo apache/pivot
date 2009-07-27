@@ -25,21 +25,6 @@ import java.io.File;
  */
 public interface FileBrowserSheetListener {
     /**
-     * Called when a file browser sheet's file name input label has changed.
-     *
-     * @param fileBrowserSheet
-     * @param previousFileNameInputLabel
-     */
-    public void fileNameInputLabelChanged(FileBrowserSheet fileBrowserSheet, String previousFileNameInputLabel);
-
-    /**
-     * Called when a file browser sheet's show file name input flag has changed.
-     *
-     * @param fileBrowserSheet
-     */
-    public void showFileNameInputChanged(FileBrowserSheet fileBrowserSheet);
-
-    /**
      * Called when a file browser sheet's selected file has changed.
      *
      * @param fileBrowserSheet

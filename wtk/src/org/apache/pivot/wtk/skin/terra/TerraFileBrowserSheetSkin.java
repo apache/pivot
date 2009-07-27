@@ -50,16 +50,6 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin
     }
 
     @Override
-    public void fileNameInputLabelChanged(FileBrowserSheet fileBrowserSheet, String previousFileNameInputLabel) {
-        // TODO
-    }
-
-    @Override
-    public void showFileNameInputChanged(FileBrowserSheet fileBrowserSheet) {
-        // TODO
-    }
-
-    @Override
     public void selectedFileChanged(FileBrowserSheet fileBrowserSheet, File previousSelectedFile) {
         // TODO
     }

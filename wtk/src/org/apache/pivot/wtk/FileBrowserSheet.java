@@ -17,10 +17,12 @@
 package org.apache.pivot.wtk;
 
 import java.io.File;
+import java.io.FileFilter;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Resources;
 
 /**
  * File browser sheet.
@@ -30,18 +32,6 @@ import org.apache.pivot.util.ListenerList;
 public class FileBrowserSheet extends Sheet {
     private static class FileBrowserSheetListenerList extends ListenerList<FileBrowserSheetListener>
         implements FileBrowserSheetListener {
-        public void fileNameInputLabelChanged(FileBrowserSheet fileBrowserSheet, String previousFileNameInputLabel) {
-            for (FileBrowserSheetListener listener : this) {
-                listener.fileNameInputLabelChanged(fileBrowserSheet, previousFileNameInputLabel);
-            }
-        }
-
-        public void showFileNameInputChanged(FileBrowserSheet fileBrowserSheet) {
-            for (FileBrowserSheetListener listener : this) {
-                listener.showFileNameInputChanged(fileBrowserSheet);
-            }
-        }
-
         public void selectedFileChanged(FileBrowserSheet fileBrowserSheet, File previousSelectedFile) {
             for (FileBrowserSheetListener listener : this) {
                 listener.selectedFileChanged(fileBrowserSheet, previousSelectedFile);
@@ -49,54 +39,52 @@ public class FileBrowserSheet extends Sheet {
         }
     }
 
-
-    private ArrayList<FileBrowser.FilterSpecification> filterSpecifications;
     private String fileNameInputLabel;
+    private ArrayList<FileBrowser.FilterSpecification> filterSpecifications;
 
-    private boolean showFileNameInput = false;
     private File selectedFile = null;
 
     private FileBrowserSheetListenerList fileBrowserSheetListeners = new FileBrowserSheetListenerList();
 
-    public FileBrowserSheet() {
-        this(null);
+    private static Resources resources = null;
+
+    static {
+        try {
+            resources = new Resources(FileBrowserSheet.class.getName());
+        } catch(Exception exception) {
+            throw new RuntimeException(exception);
+        }
     }
+
+    public FileBrowserSheet() {
+        this(null, null);
+    }
+
+    public FileBrowserSheet(String fileNameInputLabel) {
+        this(fileNameInputLabel, null);
+    }
+
     public FileBrowserSheet(Sequence<FileBrowser.FilterSpecification> filterSpecifications) {
+        this(null, filterSpecifications);
+    }
+
+    public FileBrowserSheet(String fileNameInputLabel, Sequence<FileBrowser.FilterSpecification> filterSpecifications) {
+        this.fileNameInputLabel = fileNameInputLabel;
         this.filterSpecifications = new ArrayList<FileBrowser.FilterSpecification>(filterSpecifications);
 
         installSkin(FileBrowserSheet.class);
-    }
-
-    public int getFilterSpecificationCount() {
-        return filterSpecifications.getLength();
-    }
-
-    public FileBrowser.FilterSpecification getFilterSpecification(int index) {
-        return filterSpecifications.get(index);
     }
 
     public String getFileNameInputLabel() {
         return fileNameInputLabel;
     }
 
-    public void setFileNameInputLabel(String fileNameInputLabel) {
-        String previousFileNameInputLabel = this.fileNameInputLabel;
-
-        if (fileNameInputLabel != previousFileNameInputLabel) {
-            this.fileNameInputLabel = fileNameInputLabel;
-            fileBrowserSheetListeners.fileNameInputLabelChanged(this, previousFileNameInputLabel);
-        }
+    public FileBrowser.FilterSpecification getFilterSpecification(int index) {
+        return filterSpecifications.get(index);
     }
 
-    public boolean getShowFileNameInput() {
-        return showFileNameInput;
-    }
-
-    public void setShowFileNameInput(boolean showFileNameInput) {
-        if (this.showFileNameInput != showFileNameInput) {
-            this.showFileNameInput = showFileNameInput;
-            fileBrowserSheetListeners.showFileNameInputChanged(this);
-        }
+    public int getFilterSpecificationCount() {
+        return filterSpecifications.getLength();
     }
 
     public File getSelectedFile() {
@@ -114,5 +102,38 @@ public class FileBrowserSheet extends Sheet {
 
     public ListenerList<FileBrowserSheetListener> getFileBrowserSheetListeners() {
         return fileBrowserSheetListeners;
+    }
+
+    public static void showFileOpen(Window owner) {
+        showFileOpen(owner, null);
+    }
+
+    public static void showFileOpen(Window owner, Sequence<FileBrowser.FilterSpecification> filterSpecifications) {
+        FileBrowserSheet fileBrowserSheet = new FileBrowserSheet(filterSpecifications);
+        fileBrowserSheet.setTitle(resources.getString("openFile"));
+        fileBrowserSheet.open(owner);
+    }
+
+    public static void showFileSave(Window owner) {
+        FileBrowserSheet fileBrowserSheet = new FileBrowserSheet(resources.getString("saveAs"));
+        fileBrowserSheet.setTitle(resources.getString("saveFile"));
+        fileBrowserSheet.open(owner);
+    }
+
+    public static void showFolderSelect(Window owner) {
+        FileFilter folderFilter = new FileFilter() {
+            public boolean accept(File file) {
+                return (file.isDirectory());
+            }
+        };
+
+        ArrayList<FileBrowser.FilterSpecification> filterSpecifications =
+            new ArrayList<FileBrowser.FilterSpecification>();
+        filterSpecifications.add(new FileBrowser.FilterSpecification(resources.getString("allFolders"),
+            folderFilter));
+
+        FileBrowserSheet fileBrowserSheet = new FileBrowserSheet(filterSpecifications);
+        fileBrowserSheet.setTitle(resources.getString("selectFolder"));
+        fileBrowserSheet.open(owner);
     }
 }
