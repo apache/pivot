@@ -40,8 +40,6 @@ import org.apache.pivot.wtk.Expander;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.FileBrowser;
 import org.apache.pivot.wtk.FileBrowserSheet;
-import org.apache.pivot.wtk.FolderBrowser;
-import org.apache.pivot.wtk.FolderBrowserSheet;
 import org.apache.pivot.wtk.Form;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.Label;
@@ -158,8 +156,6 @@ public final class TerraTheme extends Theme {
         componentSkinMap.put(Expander.class, TerraExpanderSkin.class);
         componentSkinMap.put(FileBrowser.class, TerraFileBrowserSkin.class);
         componentSkinMap.put(FileBrowserSheet.class, TerraFileBrowserSheetSkin.class);
-        componentSkinMap.put(FolderBrowser.class, TerraFolderBrowserSkin.class);
-        componentSkinMap.put(FolderBrowserSheet.class, TerraFolderBrowserSheetSkin.class);
         componentSkinMap.put(Form.class, TerraFormSkin.class);
         componentSkinMap.put(BoxPane.class, TerraBoxPaneSkin.class);
         componentSkinMap.put(Frame.class, TerraFrameSkin.class);
