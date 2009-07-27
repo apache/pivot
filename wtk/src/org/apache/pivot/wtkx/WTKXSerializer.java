@@ -561,9 +561,9 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                         }
 
                                         if (id == null
-                                            && !serializer.isEmpty()) {
-                                            System.err.println("Include \"" + src + "\" is missing an " + ID_ATTRIBUTE
-                                                + " attribute.");
+                                            && !serializer.isEmpty()
+                                            && serializer.scriptEngineManager == null) {
+                                            System.err.println("Include \"" + src + "\" defines unreachable objects.");
                                         }
                                     } else {
                                         // Process attributes looking for wtkx:id and all property setters
