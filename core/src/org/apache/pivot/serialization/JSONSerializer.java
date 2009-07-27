@@ -118,10 +118,28 @@ public class JSONSerializer implements Serializer<Object> {
 
         // Read the root value
         lineNumberReader = new LineNumberReader(reader);
-        Object object = readValue(lineNumberReader);
+        Object object;
+
+        try {
+            object = readValue(lineNumberReader);
+        } catch (IOException exception) {
+            logException(exception);
+            throw exception;
+        } catch (SerializationException exception) {
+            logException(exception);
+            throw exception;
+        } catch (RuntimeException exception) {
+            logException(exception);
+            throw exception;
+        }
+
         lineNumberReader = null;
 
         return object;
+    }
+
+    private void logException(Exception exception) {
+        System.err.println("An error occurred while processing input at line number " + getLineNumber());
     }
 
     /**
