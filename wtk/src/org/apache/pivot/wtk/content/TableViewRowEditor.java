@@ -420,6 +420,19 @@ public class TableViewRowEditor implements TableView.RowEditor {
         return cellEditors;
     }
 
+    /**
+     * Gets the container that houses the individual cell editors.
+     *
+     * @return
+     * This editor's container editor
+     */
+    protected final Container getRowEditor() {
+        return editorTablePane;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     public void edit(TableView tableView, int rowIndex, int columnIndex) {
         if (isEditing()) {

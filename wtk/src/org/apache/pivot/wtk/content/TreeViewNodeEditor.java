@@ -176,6 +176,22 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
     private Window popup = null;
     private TextInput textInput = null;
 
+    /**
+     * Gets the text input that serves as the editor component. This component
+     * will only be non-<tt>null</tt> while editing.
+     *
+     * @return
+     * This editor's component, or <tt>null</tt> if an edit is not in progress
+     *
+     * @see #isEditing()
+     */
+    protected final TextInput getEditor() {
+        return textInput;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void edit(TreeView treeView, Path path) {
         if (isEditing()) {
             throw new IllegalStateException();
@@ -239,6 +255,9 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
         return (treeView != null);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     public void save() {
         if (!isEditing()) {

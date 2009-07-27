@@ -163,6 +163,22 @@ public class TableViewCellEditor implements TableView.RowEditor {
     private TextInput textInput = null;
     private Window popup = null;
 
+    /**
+     * Gets the text input that serves as the editor component. This component
+     * will only be non-<tt>null</tt> while editing.
+     *
+     * @return
+     * This editor's component, or <tt>null</tt> if an edit is not in progress
+     *
+     * @see #isEditing()
+     */
+    protected final TextInput getEditor() {
+        return textInput;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     public void edit(TableView tableView, int rowIndex, int columnIndex) {
         if (isEditing()) {
@@ -220,6 +236,9 @@ public class TableViewCellEditor implements TableView.RowEditor {
         return (tableView != null);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     public void save() {
         if (!isEditing()) {

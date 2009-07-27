@@ -138,6 +138,22 @@ public class ListViewItemEditor implements ListView.ItemEditor {
         }
     };
 
+    /**
+     * Gets the text input that serves as the editor component. This component
+     * will only be non-<tt>null</tt> while editing.
+     *
+     * @return
+     * This editor's component, or <tt>null</tt> if an edit is not in progress
+     *
+     * @see #isEditing()
+     */
+    protected final TextInput getEditor() {
+        return textInput;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void edit(ListView listView, int index) {
         if (this.listView != null) {
             throw new IllegalStateException("Currently editing.");
@@ -201,6 +217,9 @@ public class ListViewItemEditor implements ListView.ItemEditor {
         return (listView != null);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     public void save() {
         if (!isEditing()) {
