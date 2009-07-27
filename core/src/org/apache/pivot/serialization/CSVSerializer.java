@@ -224,25 +224,40 @@ public class CSVSerializer implements Serializer<List<?>> {
 
         lineNumberReader = new LineNumberReader(reader);
 
-        while (c != -1) {
-            Object item = readItem(lineNumberReader);
-            while (item != null) {
-                items.add(item);
+        try {
+            while (c != -1) {
+                Object item = readItem(lineNumberReader);
+                while (item != null) {
+                    items.add(item);
 
-                // Move to next line
-                while (c != -1
-                    && (c == '\r' || c == '\n')) {
-                    c = lineNumberReader.read();
+                    // Move to next line
+                    while (c != -1
+                        && (c == '\r' || c == '\n')) {
+                        c = lineNumberReader.read();
+                    }
+
+                    // Read the next item
+                    item = readItem(lineNumberReader);
                 }
-
-                // Read the next item
-                item = readItem(lineNumberReader);
             }
+        } catch (IOException exception) {
+            logException(exception);
+            throw exception;
+        } catch (SerializationException exception) {
+            logException(exception);
+            throw exception;
+        } catch (RuntimeException exception) {
+            logException(exception);
+            throw exception;
         }
 
         lineNumberReader = null;
 
         return items;
+    }
+
+    private void logException(Exception exception) {
+        System.err.println("An error occurred while processing input at line number " + getLineNumber());
     }
 
     /**
