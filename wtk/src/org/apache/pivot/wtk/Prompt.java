@@ -47,7 +47,7 @@ public class Prompt extends Sheet {
     private MessageType type = null;
     private String message = null;
     private Component body = null;
-    private Sequence<?> options = null;
+    private ArrayList<Object> options = null;
     private int selectedOption = -1;
 
     private PromptListenerList promptListeners = new PromptListenerList();
@@ -66,6 +66,7 @@ public class Prompt extends Sheet {
         this(type, message, options, null);
     }
 
+    @SuppressWarnings("unchecked")
     public Prompt(MessageType type, String message, Sequence<?> options, Component body) {
         if (type == null) {
             throw new IllegalArgumentException("type is null.");
@@ -77,7 +78,7 @@ public class Prompt extends Sheet {
 
         this.type = type;
         this.message = message;
-        this.options = options;
+        this.options = new ArrayList<Object>((Sequence<Object>)options);
         this.body = body;
 
         installSkin(Prompt.class);

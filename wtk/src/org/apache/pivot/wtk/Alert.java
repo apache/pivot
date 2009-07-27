@@ -43,7 +43,7 @@ public class Alert extends Dialog {
     private MessageType type = null;
     private String message = null;
     private Component body = null;
-    private Sequence<?> options = null;
+    private ArrayList<Object> options = null;
     private int selectedOption = -1;
 
     private AlertListenerList alertListeners = new AlertListenerList();
@@ -62,6 +62,7 @@ public class Alert extends Dialog {
         this(type, message, options, null);
     }
 
+    @SuppressWarnings("unchecked")
     public Alert(MessageType type, String message, Sequence<?> options, Component body) {
         if (type == null) {
             throw new IllegalArgumentException("type is null.");
@@ -73,7 +74,7 @@ public class Alert extends Dialog {
 
         this.type = type;
         this.message = message;
-        this.options = options;
+        this.options = new ArrayList<Object>((Sequence<Object>)options);
         this.body = body;
 
         installSkin(Alert.class);

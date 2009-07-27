@@ -56,4 +56,18 @@ public class ArrayListTest {
 
         assertEquals(list, new ArrayList<String>("B", "E", "C"));
     }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void copyConstructorTest() {
+        ArrayList<Object> list = new ArrayList<Object>("a", "b", "c");
+
+        Sequence<?> sequence = list;
+        list = new ArrayList<Object>((Sequence<Object>)sequence);
+
+        assertEquals(list.getLength(), 3);
+        assertEquals(list.get(0), "a");
+        assertEquals(list.get(0), "b");
+        assertEquals(list.get(0), "c");
+    }
 }
