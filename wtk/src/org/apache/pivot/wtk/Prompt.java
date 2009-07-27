@@ -127,29 +127,28 @@ public class Prompt extends Sheet {
     }
 
     public static void prompt(String message, Window owner) {
-        prompt(MessageType.INFO, message, owner, null);
+        prompt(MessageType.INFO, message, null, owner, null);
     }
 
-    public static void prompt(String message, Window owner,
-        SheetStateListener sheetStateListener) {
-        prompt(MessageType.INFO, message, owner, sheetStateListener);
+    public static void prompt(MessageType messageType, String message, Window owner) {
+        prompt(messageType, message, null, owner, null);
     }
 
-    public static void prompt(MessageType type, String message, Window owner) {
-        prompt(type, message, owner, null);
+    public static void prompt(MessageType messageType, String message, Component body, Window owner) {
+        prompt(messageType, message, body, owner, null);
     }
 
-    public static void prompt(MessageType type, String message, Window owner,
-        SheetStateListener sheetStateListener) {
-        Prompt prompt = createPrompt(type, message);
-        prompt.open(owner, sheetStateListener);
+    public static void prompt(MessageType messageType, String message, Component body, Window owner,
+        SheetCloseListener sheetCloseListener) {
+        Prompt prompt = createPrompt(messageType, message, body);
+        prompt.open(owner, sheetCloseListener);
     }
 
-    private static Prompt createPrompt(MessageType type, String message) {
+    private static Prompt createPrompt(MessageType messageType, String message, Component body) {
         List<Object> options = new ArrayList<Object>();
         options.add(resources.get("defaultOption"));
 
-        Prompt prompt = new Prompt(type, message, options, null);
+        Prompt prompt = new Prompt(messageType, message, options, null);
         prompt.setTitle((String)resources.get("defaultTitle"));
         prompt.setSelectedOption(0);
 

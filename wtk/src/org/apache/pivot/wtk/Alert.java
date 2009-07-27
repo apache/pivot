@@ -123,48 +123,46 @@ public class Alert extends Dialog {
     }
 
     public static void alert(String message, Display display) {
-        alert(MessageType.INFO, message, display, null);
+        alert(MessageType.INFO, message, null, display, null);
     }
 
-    public static void alert(String message, Display display,
+    public static void alert(MessageType messageType, String message, Display display) {
+        alert(messageType, message, null, display, null);
+    }
+
+    public static void alert(MessageType messageType, String message, Component body, Display display) {
+        alert(messageType, message, body, display, null);
+    }
+
+    public static void alert(MessageType messageType, String message, Component body, Display display,
         DialogCloseListener dialogCloseListener) {
-        alert(MessageType.INFO, message, display, dialogCloseListener);
-    }
-
-    public static void alert(MessageType type, String message, Display display) {
-        alert(type, message, display, null);
-    }
-
-    public static void alert(MessageType type, String message, Display display,
-        DialogCloseListener dialogCloseListener) {
-        Alert alert = createAlert(type, message);
+        Alert alert = createAlert(messageType, message, body);
         alert.open(display, dialogCloseListener);
     }
 
     public static void alert(String message, Window owner) {
-        alert(MessageType.INFO, message, owner, null);
+        alert(MessageType.INFO, message, null, owner, null);
     }
 
-    public static void alert(String message, Window owner,
+    public static void alert(MessageType messageType, String message, Window owner) {
+        alert(messageType, message, null, owner, null);
+    }
+
+    public static void alert(MessageType messageType, String message, Component body, Window owner) {
+        alert(messageType, message, body, owner, null);
+    }
+
+    public static void alert(MessageType messageType, String message, Component body, Window owner,
         DialogCloseListener dialogCloseListener) {
-        alert(MessageType.INFO, message, owner, dialogCloseListener);
-    }
-
-    public static void alert(MessageType type, String message, Window owner) {
-        alert(type, message, owner, null);
-    }
-
-    public static void alert(MessageType type, String message, Window owner,
-        DialogCloseListener dialogCloseListener) {
-        Alert alert = createAlert(type, message);
+        Alert alert = createAlert(messageType, message, body);
         alert.open(owner, dialogCloseListener);
     }
 
-    private static Alert createAlert(MessageType type, String message) {
+    private static Alert createAlert(MessageType messageType, String message, Component body) {
         List<Object> options = new ArrayList<Object>();
         options.add(resources.get("defaultOption"));
 
-        Alert alert = new Alert(type, message, options, null);
+        Alert alert = new Alert(messageType, message, options, body);
         alert.setTitle((String)resources.get("defaultTitle"));
         alert.setSelectedOption(0);
 

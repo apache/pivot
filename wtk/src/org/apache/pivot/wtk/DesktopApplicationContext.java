@@ -79,9 +79,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                                 application.startup(applicationContext.getDisplay(),
                                     new ImmutableMap<String, String>(properties));
                             } catch(Exception exception) {
-                                exception.printStackTrace();
-                                Alert.alert(MessageType.ERROR, exception.getMessage(),
-                                    applicationContext.getDisplay());
+                                displayException(exception);
                             }
                         }
 
@@ -134,9 +132,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                         try {
                             application.suspend();
                         } catch(Exception exception) {
-                            exception.printStackTrace();
-                            Alert.alert(MessageType.ERROR, exception.getMessage(),
-                                applicationContext.getDisplay());
+                            displayException(exception);
                         }
 
                         break;
@@ -146,9 +142,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                         try {
                             application.resume();
                         } catch(Exception exception) {
-                            exception.printStackTrace();
-                            Alert.alert(MessageType.ERROR, exception.getMessage(),
-                                applicationContext.getDisplay());
+                            displayException(exception);
                         }
 
                         break;
@@ -188,9 +182,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
             try {
                 cancelShutdown = application.shutdown(true);
             } catch(Exception exception) {
-                exception.printStackTrace();
-                Alert.alert(MessageType.ERROR, exception.getMessage(),
-                    applicationContext.getDisplay());
+                displayException(exception);
             }
         }
 
@@ -458,6 +450,22 @@ public final class DesktopApplicationContext extends ApplicationContext {
             Picture rootPicture = (Picture)icon;
             windowedHostFrame.setIconImage(rootPicture.getBufferedImage());
         }
+    }
+
+    private static void displayException(Exception exception) {
+        exception.printStackTrace();
+
+        String message = exception.getClass().getName();
+
+        Label body = null;
+        String bodyText = exception.getMessage();
+        if (bodyText != null
+            && bodyText.length() > 0) {
+            body = new Label(bodyText);
+            body.getStyles().put("wrapText", true);
+        }
+
+        Alert.alert(MessageType.ERROR, message, body, applicationContext.getDisplay());
     }
 
     /**

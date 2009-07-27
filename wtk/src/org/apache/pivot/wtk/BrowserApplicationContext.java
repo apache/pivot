@@ -151,9 +151,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
                         application.startup(applicationContext.getDisplay(),
                             new ImmutableMap<String, String>(properties));
                     } catch (Exception exception) {
-                        Alert.alert(MessageType.ERROR, exception.getMessage(),
-                            applicationContext.getDisplay());
-                        exception.printStackTrace();
+                        displayException(exception);
                     }
                 }
             }
@@ -166,9 +164,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
                     try {
                         application.shutdown(false);
                     } catch (Exception exception) {
-                        Alert.alert(MessageType.ERROR, exception.getMessage(),
-                            applicationContext.getDisplay());
-                        exception.printStackTrace();
+                        displayException(exception);
                     }
                 }
             }
@@ -243,6 +239,22 @@ public final class BrowserApplicationContext extends ApplicationContext {
         @Override
         public void update(Graphics graphics) {
             paint(graphics);
+        }
+
+        private void displayException(Exception exception) {
+            exception.printStackTrace();
+
+            String message = exception.getClass().getName();
+
+            Label body = null;
+            String bodyText = exception.getMessage();
+            if (bodyText != null
+                && bodyText.length() > 0) {
+                body = new Label(bodyText);
+                body.getStyles().put("wrapText", true);
+            }
+
+            Alert.alert(MessageType.ERROR, message, body, applicationContext.getDisplay());
         }
     }
 
