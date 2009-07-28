@@ -41,7 +41,8 @@ public class CardPanes implements Application {
     private RadioButton crossfadeRadioButton = null;
     private RadioButton horizontalSlideRadioButton = null;
     private RadioButton verticalSlideRadioButton = null;
-    private RadioButton flipRadioButton = null;
+    private RadioButton horizontalFlipRadioButton = null;
+    private RadioButton verticalFlipRadioButton = null;
     private RadioButton zoomRadioButton = null;
     private RadioButton noneRadioButton = null;
 
@@ -56,7 +57,8 @@ public class CardPanes implements Application {
         crossfadeRadioButton = (RadioButton)wtkxSerializer.get("crossfadeRadioButton");
         horizontalSlideRadioButton = (RadioButton)wtkxSerializer.get("horizontalSlideRadioButton");
         verticalSlideRadioButton = (RadioButton)wtkxSerializer.get("verticalSlideRadioButton");
-        flipRadioButton = (RadioButton)wtkxSerializer.get("flipRadioButton");
+        horizontalFlipRadioButton = (RadioButton)wtkxSerializer.get("horizontalFlipRadioButton");
+        verticalFlipRadioButton = (RadioButton)wtkxSerializer.get("verticalFlipRadioButton");
         zoomRadioButton = (RadioButton)wtkxSerializer.get("zoomRadioButton");
         noneRadioButton = (RadioButton)wtkxSerializer.get("noneRadioButton");
 
@@ -97,7 +99,8 @@ public class CardPanes implements Application {
         crossfadeRadioButton.getButtonStateListeners().add(radioButtonStateListener);
         horizontalSlideRadioButton.getButtonStateListeners().add(radioButtonStateListener);
         verticalSlideRadioButton.getButtonStateListeners().add(radioButtonStateListener);
-        flipRadioButton.getButtonStateListeners().add(radioButtonStateListener);
+        horizontalFlipRadioButton.getButtonStateListeners().add(radioButtonStateListener);
+        verticalFlipRadioButton.getButtonStateListeners().add(radioButtonStateListener);
         zoomRadioButton.getButtonStateListeners().add(radioButtonStateListener);
         noneRadioButton.getButtonStateListeners().add(radioButtonStateListener);
 
@@ -133,9 +136,12 @@ public class CardPanes implements Application {
         } else if (verticalSlideRadioButton.isSelected()) {
             cardPane.getStyles().put("selectionChangeEffect",
                 CardPaneSkin.SelectionChangeEffect.VERTICAL_SLIDE);
-        } else if (flipRadioButton.isSelected()) {
+        } else if (horizontalFlipRadioButton.isSelected()) {
             cardPane.getStyles().put("selectionChangeEffect",
-                CardPaneSkin.SelectionChangeEffect.FLIP);
+                CardPaneSkin.SelectionChangeEffect.HORIZONTAL_FLIP);
+        } else if (verticalFlipRadioButton.isSelected()) {
+            cardPane.getStyles().put("selectionChangeEffect",
+                CardPaneSkin.SelectionChangeEffect.VERTICAL_FLIP);
         } else if (zoomRadioButton.isSelected()) {
             cardPane.getStyles().put("selectionChangeEffect",
                 CardPaneSkin.SelectionChangeEffect.ZOOM);

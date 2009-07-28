@@ -44,7 +44,8 @@ limitations under the License.
 <li>Crossfade</li>
 <li>Horizontal slide ("wipe" left/right)</li>
 <li>Vertical slide ("wipe" up/down)</li>
-<li>Flip</li>
+<li>Horizonal Flip</li>
+<li>Vertical Flip</li>
 <li>Zoom</li>
 </ul>
 
@@ -122,7 +123,9 @@ deployJava.writeAppletTag(attributes, parameters);
                                     group="selectionChangeEffect"/&gt;
                                 &lt;RadioButton wtkx:id="verticalSlideRadioButton" buttonData="Vertical Slide"
                                     group="selectionChangeEffect"/&gt;
-                                &lt;RadioButton wtkx:id="flipRadioButton" buttonData="Flip"
+                                &lt;RadioButton wtkx:id="horizontalFlipRadioButton" buttonData="Horizontal Flip"
+                                    group="selectionChangeEffect"/&gt;
+                                &lt;RadioButton wtkx:id="verticalFlipRadioButton" buttonData="Vertical Flip"
                                     group="selectionChangeEffect"/&gt;
                                 &lt;RadioButton wtkx:id="noneRadioButton" buttonData="None"
                                     group="selectionChangeEffect"/&gt;
@@ -166,7 +169,8 @@ public class CardPanes implements Application {
     private RadioButton crossfadeRadioButton = null;
     private RadioButton horizontalSlideRadioButton = null;
     private RadioButton verticalSlideRadioButton = null;
-    private RadioButton flipRadioButton = null;
+    private RadioButton horizontalFlipRadioButton = null;
+    private RadioButton verticalFlipRadioButton = null;
     private RadioButton noneRadioButton = null;
 
     public void startup(Display display, Map&lt;String, String&gt; properties)
@@ -180,7 +184,8 @@ public class CardPanes implements Application {
         crossfadeRadioButton = (RadioButton)wtkxSerializer.get("crossfadeRadioButton");
         horizontalSlideRadioButton = (RadioButton)wtkxSerializer.get("horizontalSlideRadioButton");
         verticalSlideRadioButton = (RadioButton)wtkxSerializer.get("verticalSlideRadioButton");
-        flipRadioButton = (RadioButton)wtkxSerializer.get("flipRadioButton");
+        horizontalFlipRadioButton = (RadioButton)wtkxSerializer.get("horizontalFlipRadioButton");
+        verticalFlipRadioButton = (RadioButton)wtkxSerializer.get("verticalFlipRadioButton");
         noneRadioButton = (RadioButton)wtkxSerializer.get("noneRadioButton");
 
         cardPane.getCardPaneListeners().add(new CardPaneListener.Adapter() {
@@ -220,7 +225,8 @@ public class CardPanes implements Application {
         crossfadeRadioButton.getButtonStateListeners().add(radioButtonStateListener);
         horizontalSlideRadioButton.getButtonStateListeners().add(radioButtonStateListener);
         verticalSlideRadioButton.getButtonStateListeners().add(radioButtonStateListener);
-        flipRadioButton.getButtonStateListeners().add(radioButtonStateListener);
+        horizontalFlipRadioButton.getButtonStateListeners().add(radioButtonStateListener);
+        verticalFlipRadioButton.getButtonStateListeners().add(radioButtonStateListener);
         noneRadioButton.getButtonStateListeners().add(radioButtonStateListener);
 
         updateCardPane();
@@ -255,9 +261,12 @@ public class CardPanes implements Application {
         } else if (verticalSlideRadioButton.isSelected()) {
             cardPane.getStyles().put("selectionChangeEffect",
                 CardPaneSkin.SelectionChangeEffect.VERTICAL_SLIDE);
-        } else if (flipRadioButton.isSelected()) {
+        } else if (horizontalFlipRadioButton.isSelected()) {
             cardPane.getStyles().put("selectionChangeEffect",
-                CardPaneSkin.SelectionChangeEffect.FLIP);
+                CardPaneSkin.SelectionChangeEffect.HORIZONTAL_FLIP);
+        } else if (verticalFlipRadioButton.isSelected()) {
+            cardPane.getStyles().put("selectionChangeEffect",
+                CardPaneSkin.SelectionChangeEffect.VERTICAL_FLIP);
         } else {
             cardPane.getStyles().put("selectionChangeEffect", null);
         }

@@ -73,7 +73,9 @@ limitations under the License.
                                     group="selectionChangeEffect"/>
                                 <RadioButton wtkx:id="verticalSlideRadioButton" buttonData="Vertical Slide"
                                     group="selectionChangeEffect"/>
-                                <RadioButton wtkx:id="flipRadioButton" buttonData="Flip"
+                                <RadioButton wtkx:id="horizontalFlipRadioButton" buttonData="Horizontal Flip"
+                                    group="selectionChangeEffect"/>
+                                <RadioButton wtkx:id="verticalFlipRadioButton" buttonData="Vertical Flip"
                                     group="selectionChangeEffect"/>
                                 <RadioButton wtkx:id="zoomRadioButton" buttonData="Zoom"
                                     group="selectionChangeEffect"/>

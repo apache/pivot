@@ -161,7 +161,7 @@ public class TableViewRowEditor implements TableView.RowEditor {
             });
 
             // Flip to the editor card
-            editorCardPane.getStyles().put("selectionChangeEffect", CardPaneSkin.SelectionChangeEffect.FLIP);
+            editorCardPane.getStyles().put("selectionChangeEffect", CardPaneSkin.SelectionChangeEffect.VERTICAL_FLIP);
             editorCardPane.setSelectedIndex(EDITOR_CARD_INDEX);
         }
 

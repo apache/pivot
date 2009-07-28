@@ -58,8 +58,7 @@ public class ScaleDecorator implements Decorator {
      * The amount to scale the component's y-axis
      */
     public ScaleDecorator(float scaleX, float scaleY) {
-        setScaleX(scaleX);
-        setScaleY(scaleY);
+        setScale(scaleX, scaleY);
     }
 
     /**
@@ -81,11 +80,7 @@ public class ScaleDecorator implements Decorator {
      * The amount to scale the component's x-axis
      */
     public void setScaleX(float scaleX) {
-        if (scaleX < 0) {
-            throw new IllegalArgumentException("scaleX is negative.");
-        }
-
-        this.scaleX = scaleX;
+        setScale(scaleX, scaleY);
     }
 
     /**
@@ -122,11 +117,7 @@ public class ScaleDecorator implements Decorator {
      * The amount to scale the component's y-axis
      */
     public void setScaleY(float scaleY) {
-        if (scaleY < 0) {
-            throw new IllegalArgumentException("scaleY is negative.");
-        }
-
-        this.scaleY = scaleY;
+        setScale(scaleX, scaleY);
     }
 
     /**
@@ -142,6 +133,29 @@ public class ScaleDecorator implements Decorator {
         }
 
         setScaleY(scaleY.floatValue());
+    }
+
+    /**
+     * Sets the amount by which drawing operations will be scaled along the
+     * x and y axes.
+     *
+     * @param scaleX
+     * The amount to scale the component's x-axis.
+     *
+     * @param scaleY
+     * The amount to scale the component's y-axis.
+     */
+    public void setScale(float scaleX, float scaleY) {
+        if (scaleX < 0) {
+            throw new IllegalArgumentException("scaleX is negative.");
+        }
+
+        if (scaleY < 0) {
+            throw new IllegalArgumentException("scaleY is negative.");
+        }
+
+        this.scaleX = scaleX;
+        this.scaleY = scaleY;
     }
 
     /**

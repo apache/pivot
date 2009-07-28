@@ -25,6 +25,7 @@ import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Insets;
+import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.effects.FadeDecorator;
 import org.apache.pivot.wtk.effects.ScaleDecorator;
 import org.apache.pivot.wtk.effects.Transition;
@@ -47,7 +48,8 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         CROSSFADE,
         HORIZONTAL_SLIDE,
         VERTICAL_SLIDE,
-        FLIP,
+        HORIZONTAL_FLIP,
+        VERTICAL_FLIP,
         ZOOM
     }
 
@@ -189,11 +191,13 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
      * @author tvolkert
      */
     public class FlipTransition extends SelectionChangeTransition {
+        private Orientation orientation;
         private double theta;
         private ScaleDecorator scaleDecorator = new ScaleDecorator();
 
-        public FlipTransition(int from, int to) {
+        public FlipTransition(Orientation orientation, int from, int to) {
             super(from, to, 350);
+            this.orientation = orientation;
         }
 
         @Override
@@ -218,8 +222,13 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
             if (percentComplete < 1f) {
                 theta = Math.PI * percentComplete;
 
-                float scaleY = (float)Math.abs(Math.cos(theta));
-                scaleDecorator.setScaleY(Math.max(scaleY, 0.01f));
+                float scale = (float)Math.abs(Math.cos(theta));
+
+                if (orientation == Orientation.HORIZONTAL) {
+                    scaleDecorator.setScale(Math.max(scale, 0.01f), 1.0f);
+                } else {
+                    scaleDecorator.setScale(1.0f, Math.max(scale, 0.01f));
+                }
 
                 fromCard.setVisible(theta < Math.PI / 2);
                 toCard.setVisible(theta >= Math.PI / 2);
@@ -544,10 +553,20 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
                     break;
                 }
 
-                case FLIP: {
+                case HORIZONTAL_FLIP: {
                     if (previousSelectedIndex != -1
                         && selectedIndex != -1) {
-                        selectionChangeTransition = new FlipTransition(previousSelectedIndex, selectedIndex);
+                        selectionChangeTransition = new FlipTransition(Orientation.HORIZONTAL,
+                            previousSelectedIndex, selectedIndex);
+                    }
+                    break;
+                }
+
+                case VERTICAL_FLIP: {
+                    if (previousSelectedIndex != -1
+                        && selectedIndex != -1) {
+                        selectionChangeTransition = new FlipTransition(Orientation.VERTICAL,
+                            previousSelectedIndex, selectedIndex);
                     }
                     break;
                 }
