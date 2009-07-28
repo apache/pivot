@@ -134,11 +134,11 @@ public class HelloJava implements Application {
 
 <p>The same application can be run from the command line using the following syntax (minus the line breaks) on UNIX-based systems; the class name is the first argument to the DesktopApplicationContext loader application:</p>
 
-<p class="command"><tt>java -cp pivot-core-@version@.jar:pivot-wtk-@version@.jar:pivot-wtk-@version@.terra.jar:pivot-tutorials-@version@.jar org.apache.pivot.wtk.DesktopApplicationContext org.apache.pivot.tutorials.HelloJava</tt></p>
+<p class="command">java -cp pivot-core-@version@.jar:pivot-wtk-@version@.jar:pivot-wtk-@version@.terra.jar:pivot-tutorials-@version@.jar org.apache.pivot.wtk.DesktopApplicationContext org.apache.pivot.tutorials.HelloJava</p>
 
 <p>and the following on Windows systems:</p>
 
-<p class="command"><tt>java -cp pivot-core-@version@.jar;pivot-wtk-@version@.jar;pivot-wtk-@version@.terra.jar;pivot-tutorials-@version@.jar org.apache.pivot.wtk.DesktopApplicationContext org.apache.pivot.tutorials.HelloJava</tt></p>
+<p class="command">java -cp pivot-core-@version@.jar;pivot-wtk-@version@.jar;pivot-wtk-@version@.terra.jar;pivot-tutorials-@version@.jar org.apache.pivot.wtk.DesktopApplicationContext org.apache.pivot.tutorials.HelloJava</p>
 
 <p>The application itself defines a convenience <tt>main()</tt> method that delegates to <tt>DesktopApplicationContext.main()</tt>; this allows Pivot applications to be bundled as executable JARs and makes launching applications from within an IDE easier.</p>
 

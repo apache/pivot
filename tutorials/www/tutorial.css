@@ -9,14 +9,23 @@ p.caption {
 }
 
 p.command {
+	font-family:"Consolas", "Monaco", "Bitstream Vera Sans Mono", "Courier New";
+    background-color:#E7E5DC;
+    padding-top:12px;
     padding-left:24px;
+    padding-bottom:12px;
+    padding-right:24px;    
 }
 
 pre.snippet {
-    margin-left:24px;
-    margin-right:24px;
-    padding:4px;
-    background-color:#eeeeee;
+    padding:6px;
+    border:#E7E5DC solid 1px;
+	font-family:"Consolas", "Monaco", "Bitstream Vera Sans Mono", "Courier New";
+	font-size:1em;
+}
+
+tt {
+    font-family:"Consolas", "Monaco", "Bitstream Vera Sans Mono", "Courier New";
 }
 
 table {
