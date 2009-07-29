@@ -24,6 +24,7 @@ import java.awt.Rectangle;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.Filter;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
@@ -37,11 +38,9 @@ import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TableViewColumnListener;
 import org.apache.pivot.wtk.TableViewListener;
 import org.apache.pivot.wtk.TableViewRowListener;
-import org.apache.pivot.wtk.TableViewRowStateListener;
 import org.apache.pivot.wtk.TableViewSelectionListener;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.skin.ComponentSkin;
-
 
 /**
  * Table view skin.
@@ -56,7 +55,7 @@ import org.apache.pivot.wtk.skin.ComponentSkin;
  */
 public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     TableViewListener, TableViewColumnListener, TableViewRowListener,
-    TableViewRowStateListener, TableViewSelectionListener {
+    TableViewSelectionListener {
     private Font font;
     private Color color;
     private Color disabledColor;
@@ -102,7 +101,6 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         tableView.getTableViewListeners().add(this);
         tableView.getTableViewColumnListeners().add(this);
         tableView.getTableViewRowListeners().add(this);
-        tableView.getTableViewRowStateListeners().add(this);
         tableView.getTableViewSelectionListeners().add(this);
     }
 
@@ -111,7 +109,6 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         tableView.getTableViewListeners().remove(this);
         tableView.getTableViewColumnListeners().remove(this);
         tableView.getTableViewRowListeners().remove(this);
-        tableView.getTableViewRowStateListeners().remove(this);
         tableView.getTableViewSelectionListeners().remove(this);
 
         super.uninstall();
@@ -831,8 +828,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                     new Span(startIndex, rowIndex) : new Span(rowIndex, endIndex);
 
                 ArrayList<Span> selectedRanges = new ArrayList<Span>();
-                Sequence<Integer> disabledIndexes = tableView.getDisabledIndexes();
-                if (disabledIndexes.getLength() == 0) {
+                Filter<?> disabledRowFilter = tableView.getDisabledRowFilter();
+                if (disabledRowFilter == null) {
                     selectedRanges.add(selectedRange);
                 } else {
                     // TODO Split the range by the disabled indexes; for now,
@@ -992,6 +989,10 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         repaintComponent();
     }
 
+    public void disabledRowFilterChanged(TableView tableView, Filter<?> previousDisabledRowFilter) {
+        repaintComponent();
+    }
+
     // Table view column events
     public void columnInserted(TableView tableView, int index) {
         invalidateComponent();
@@ -1044,11 +1045,6 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
     public void rowsSorted(TableView tableView) {
         repaintComponent();
-    }
-
-    // Table view row state events
-    public void rowDisabledChanged(TableView tableView, int index) {
-        repaintComponent(getRowBounds(index));
     }
 
     // Table view selection detail events

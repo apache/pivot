@@ -26,6 +26,7 @@ import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
+import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.content.TableViewCellRenderer;
 
@@ -645,6 +646,12 @@ public class TableView extends Component {
                 listener.selectModeChanged(tableView, previousSelectMode);
             }
         }
+
+        public void disabledRowFilterChanged(TableView tableView, Filter<?> previousDisabledRowFilter) {
+            for (TableViewListener listener : this) {
+                listener.disabledRowFilterChanged(tableView, previousDisabledRowFilter);
+            }
+        }
     }
 
     /**
@@ -741,21 +748,6 @@ public class TableView extends Component {
         }
     }
 
-
-    /**
-     * List view item state listener list.
-     *
-     * @author gbrown
-     */
-    private static class TableViewRowStateListenerList extends ListenerList<TableViewRowStateListener>
-        implements TableViewRowStateListener {
-        public void rowDisabledChanged(TableView tableView, int index) {
-            for (TableViewRowStateListener listener : this) {
-                listener.rowDisabledChanged(tableView, index);
-            }
-        }
-    }
-
     /**
      * Table view selection detail listener list.
      *
@@ -791,18 +783,6 @@ public class TableView extends Component {
             // Increment selected ranges
             selectedRanges.insertIndex(index);
 
-            // Increment disabled indexes
-            int i = ArrayList.binarySearch(disabledIndexes, index);
-            if (i < 0) {
-                i = -(i + 1);
-            }
-
-            int n = disabledIndexes.getLength();
-            while (i < n) {
-                disabledIndexes.update(i, disabledIndexes.get(i) + 1);
-                i++;
-            }
-
             // Notify listeners that items were inserted
             tableViewRowListeners.rowInserted(TableView.this, index);
         }
@@ -812,18 +792,6 @@ public class TableView extends Component {
 
             // Decrement selected ranges
             selectedRanges.removeIndexes(index, count);
-
-            // Decrement disabled indexes
-            int i = ArrayList.binarySearch(disabledIndexes, index);
-            if (i < 0) {
-                i = -(i + 1);
-            }
-
-            int n = disabledIndexes.getLength();
-            while (i < n) {
-                disabledIndexes.update(i, disabledIndexes.get(i) - count);
-                i++;
-            }
 
             // Notify listeners that items were removed
             tableViewRowListeners.rowsRemoved(TableView.this, index, count);
@@ -837,7 +805,6 @@ public class TableView extends Component {
             // All items were removed; clear the selection and notify
             // listeners
             selectedRanges.clear();
-            disabledIndexes.clear();
 
             tableViewRowListeners.rowsCleared(TableView.this);
         }
@@ -846,29 +813,23 @@ public class TableView extends Component {
             Comparator<Object> previousComparator) {
             if (list.getComparator() != null) {
                 selectedRanges.clear();
-                disabledIndexes.clear();
 
                 tableViewRowListeners.rowsSorted(TableView.this);
             }
         }
     };
 
-
     private SpanSequence selectedRanges = new SpanSequence();
     private SelectMode selectMode = SelectMode.SINGLE;
 
-    private ArrayList<Integer> disabledIndexes = new ArrayList<Integer>();
+    private Filter<?> disabledRowFilter = null;
 
     private RowEditor rowEditor = null;
 
     private TableViewListenerList tableViewListeners = new TableViewListenerList();
-    private TableViewColumnListenerList tableViewColumnListeners =
-        new TableViewColumnListenerList();
+    private TableViewColumnListenerList tableViewColumnListeners = new TableViewColumnListenerList();
     private TableViewRowListenerList tableViewRowListeners = new TableViewRowListenerList();
-    private TableViewRowStateListenerList tableViewRowStateListeners =
-        new TableViewRowStateListenerList();
-    private TableViewSelectionListenerList tableViewSelectionListeners
-        = new TableViewSelectionListenerList();
+    private TableViewSelectionListenerList tableViewSelectionListeners = new TableViewSelectionListenerList();
 
     /**
      * Creates a new table view populated with an empty array list.
@@ -1361,42 +1322,42 @@ public class TableView extends Component {
      * <tt>true</tt> if the row is disabled; <tt>false</tt>,
      * otherwise.
      */
+    @SuppressWarnings("unchecked")
     public boolean isRowDisabled(int index) {
-        return (ArrayList.binarySearch(disabledIndexes, index) >= 0);
+        boolean disabled = false;
+
+        if (disabledRowFilter != null) {
+            Object row = tableData.get(index);
+            disabled = ((Filter<Object>)disabledRowFilter).include(row);
+        }
+
+        return disabled;
     }
 
     /**
-     * Sets the disabled state of a row.
+     * Returns the disabled row filter.
      *
-     * @param index
-     * The index of the row whose disabled state is to be set.
-     *
-     * @param disabled
-     * <tt>true</tt> to disable the row; <tt>false</tt>, otherwise.
+     * @return
+     * The disabled row filter, or <tt>null</tt> if no disabled row filter is
+     * set.
      */
-    public void setRowDisabled(int index, boolean disabled) {
-        int i = ArrayList.binarySearch(disabledIndexes, index);
-
-        if ((i < 0 && disabled)
-            || (i >= 0 && !disabled)) {
-            if (disabled) {
-                disabledIndexes.insert(index, -(i + 1));
-            } else {
-                disabledIndexes.remove(i, 1);
-            }
-
-            tableViewRowStateListeners.rowDisabledChanged(this, index);
-        }
+    public Filter<?> getDisabledRowFilter() {
+        return disabledRowFilter;
     }
 
-    public Sequence<Integer> getDisabledIndexes() {
-        ArrayList<Integer> disabledIndexes = new ArrayList<Integer>();
+    /**
+     * Sets the disabled row filter.
+     *
+     * @param disabledRowFilter
+     * The disabled row filter, or <tt>null</tt> for no disabled row filter.
+     */
+    public void setDisabledRowFilter(Filter<?> disabledRowFilter) {
+        Filter<?> previousDisabledRowFilter = this.disabledRowFilter;
 
-        for (int i = 0, n = this.disabledIndexes.getLength(); i < n; i++) {
-            disabledIndexes.add(this.disabledIndexes.get(i));
+        if (previousDisabledRowFilter != disabledRowFilter) {
+            this.disabledRowFilter = disabledRowFilter;
+            tableViewListeners.disabledRowFilterChanged(this, previousDisabledRowFilter);
         }
-
-        return disabledIndexes;
     }
 
     /**
@@ -1484,10 +1445,6 @@ public class TableView extends Component {
 
     public ListenerList<TableViewRowListener> getTableViewRowListeners() {
         return tableViewRowListeners;
-    }
-
-    public ListenerList<TableViewRowStateListener> getTableViewRowStateListeners() {
-        return tableViewRowStateListeners;
     }
 
     public ListenerList<TableViewSelectionListener> getTableViewSelectionListeners() {

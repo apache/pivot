@@ -17,6 +17,7 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.List;
+import org.apache.pivot.util.Filter;
 
 /**
  * Table view listener interface.
@@ -37,6 +38,9 @@ public interface TableViewListener {
         }
 
         public void selectModeChanged(TableView tableView, TableView.SelectMode previousSelectMode) {
+        }
+
+        public void disabledRowFilterChanged(TableView tableView, Filter<?> previousDisabledRowFilter) {
         }
     }
 
@@ -63,4 +67,12 @@ public interface TableViewListener {
      * @param previousSelectMode
      */
     public void selectModeChanged(TableView tableView, TableView.SelectMode previousSelectMode);
+
+    /**
+     * Called when a table view's disabled row filter has changed.
+     *
+     * @param tableView
+     * @param previousDisabledRowFilter
+     */
+    public void disabledRowFilterChanged(TableView tableView, Filter<?> previousDisabledRowFilter);
 }
