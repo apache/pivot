@@ -24,6 +24,7 @@ import java.awt.Rectangle;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.Filter;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Checkbox;
 import org.apache.pivot.wtk.Component;
@@ -39,7 +40,6 @@ import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.skin.ComponentSkin;
-
 
 /**
  * List view skin.
@@ -207,6 +207,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                     itemY + checkboxY, CHECKBOX.getWidth(), CHECKBOX.getHeight());
 
                 CHECKBOX.setSelected(checked);
+                CHECKBOX.setEnabled(!disabled);
                 CHECKBOX.paint(checkboxGraphics);
                 checkboxGraphics.dispose();
 
@@ -554,6 +555,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                 && y > itemY + checkboxPadding.top
                 && y < itemY + checkboxPadding.top + CHECKBOX.getHeight())) {
                 ListView.SelectMode selectMode = listView.getSelectMode();
+
                 if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
                     && selectMode == ListView.SelectMode.MULTI) {
                     // Select the range
@@ -563,8 +565,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                         new Span(startIndex, itemIndex) : new Span(itemIndex, endIndex);
 
                     ArrayList<Span> selectedRanges = new ArrayList<Span>();
-                    Sequence<Integer> disabledIndexes = listView.getDisabledIndexes();
-                    if (disabledIndexes.getLength() == 0) {
+                    Filter<?> disabledItemFilter = listView.getDisabledItemFilter();
+                    if (disabledItemFilter == null) {
                         selectedRanges.add(selectedRange);
                     } else {
                         // TODO Split the range by the disabled indexes; for now,
@@ -775,6 +777,10 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         invalidateComponent();
     }
 
+    public void disabledItemFilterChanged(ListView listView, Filter<?> previousDisabledItemFilter) {
+        repaintComponent();
+    }
+
     public void selectedItemKeyChanged(ListView listView, String previousSelectedItemKey) {
         // No-op
     }
@@ -805,10 +811,6 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     }
 
     // List view item state events
-    public void itemDisabledChanged(ListView listView, int index) {
-        repaintComponent(getItemBounds(index));
-    }
-
     public void itemCheckedChanged(ListView listView, int index) {
         repaintComponent(getItemBounds(index));
     }

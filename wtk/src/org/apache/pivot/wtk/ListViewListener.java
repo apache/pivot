@@ -17,6 +17,7 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.List;
+import org.apache.pivot.util.Filter;
 
 /**
  * List view listener interface.
@@ -42,13 +43,16 @@ public interface ListViewListener {
         public void selectModeChanged(ListView listView, ListView.SelectMode previousSelectMode) {
         }
 
+        public void checkmarksEnabledChanged(ListView listView) {
+        }
+
+        public void disabledItemFilterChanged(ListView listView, Filter<?> previousDisabledItemFilter) {
+        }
+
         public void selectedItemKeyChanged(ListView listView, String previousSelectedItemKey) {
         }
 
         public void selectedItemsKeyChanged(ListView listView, String previousSelectedItemsKey) {
-        }
-
-        public void checkmarksEnabledChanged(ListView listView) {
         }
     }
 
@@ -90,6 +94,14 @@ public interface ListViewListener {
      * @param listView
      */
     public void checkmarksEnabledChanged(ListView listView);
+
+    /**
+     * Called when a list view's disabled item filter has changed.
+     *
+     * @param listView
+     * @param previousDisabledItemFilter
+     */
+    public void disabledItemFilterChanged(ListView listView, Filter<?> previousDisabledItemFilter);
 
     /**
      * Called when a list view's selected item key has changed.

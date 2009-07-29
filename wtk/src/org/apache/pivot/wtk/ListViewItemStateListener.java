@@ -24,27 +24,6 @@ package org.apache.pivot.wtk;
  */
 public interface ListViewItemStateListener {
     /**
-     * List view item state listener adapter.
-     *
-     * @author tvolkert
-     */
-    public static class Adapter implements ListViewItemStateListener {
-        public void itemDisabledChanged(ListView listView, int index) {
-        }
-
-        public void itemCheckedChanged(ListView listView, int index) {
-        }
-    }
-
-    /**
-     * Called when an item's disabled state has changed.
-     *
-     * @param listView
-     * @param index
-     */
-    public void itemDisabledChanged(ListView listView, int index);
-
-    /**
      * Called when an item's checked state has changed.
      *
      * @param listView

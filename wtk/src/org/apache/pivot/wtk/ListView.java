@@ -25,6 +25,7 @@ import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
+import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.content.ListViewItemRenderer;
 
@@ -160,6 +161,12 @@ public class ListView extends Component {
             }
         }
 
+        public void disabledItemFilterChanged(ListView listView, Filter<?> previousDisabledItemFilter) {
+            for (ListViewListener listener : this) {
+                listener.disabledItemFilterChanged(listView, previousDisabledItemFilter);
+            }
+        }
+
         public void selectedItemKeyChanged(ListView listView, String previousSelectedItemKey) {
             for (ListViewListener listener : this) {
                 listener.selectedItemKeyChanged(listView, previousSelectedItemKey);
@@ -218,12 +225,6 @@ public class ListView extends Component {
      */
     private static class ListViewItemStateListenerList extends ListenerList<ListViewItemStateListener>
         implements ListViewItemStateListener {
-        public void itemDisabledChanged(ListView listView, int index) {
-            for (ListViewItemStateListener listener : this) {
-                listener.itemDisabledChanged(listView, index);
-            }
-        }
-
         public void itemCheckedChanged(ListView listView, int index) {
             for (ListViewItemStateListener listener : this) {
                 listener.itemCheckedChanged(listView, index);
@@ -278,18 +279,6 @@ public class ListView extends Component {
                 i++;
             }
 
-            // Increment disabled indexes
-            i = ArrayList.binarySearch(disabledIndexes, index);
-            if (i < 0) {
-                i = -(i + 1);
-            }
-
-            n = disabledIndexes.getLength();
-            while (i < n) {
-                disabledIndexes.update(i, disabledIndexes.get(i) + 1);
-                i++;
-            }
-
             // Notify listeners that items were inserted
             listViewItemListeners.itemInserted(ListView.this, index);
         }
@@ -314,18 +303,6 @@ public class ListView extends Component {
                 i++;
             }
 
-            // Decrement disabled indexes
-            i = ArrayList.binarySearch(disabledIndexes, index);
-            if (i < 0) {
-                i = -(i + 1);
-            }
-
-            n = disabledIndexes.getLength();
-            while (i < n) {
-                disabledIndexes.update(i, disabledIndexes.get(i) - count);
-                i++;
-            }
-
             // Notify listeners that items were removed
             listViewItemListeners.itemsRemoved(ListView.this, index, count);
         }
@@ -339,7 +316,6 @@ public class ListView extends Component {
             // listeners
             selectedRanges.clear();
             checkedIndexes.clear();
-            disabledIndexes.clear();
 
             listViewItemListeners.itemsCleared(ListView.this);
         }
@@ -349,7 +325,6 @@ public class ListView extends Component {
             if (list.getComparator() != null) {
                 selectedRanges.clear();
                 checkedIndexes.clear();
-                disabledIndexes.clear();
 
                 listViewItemListeners.itemsSorted(ListView.this);
             }
@@ -365,7 +340,7 @@ public class ListView extends Component {
     private boolean checkmarksEnabled = false;
     private ArrayList<Integer> checkedIndexes = new ArrayList<Integer>();
 
-    private ArrayList<Integer> disabledIndexes = new ArrayList<Integer>();
+    private Filter<?> disabledItemFilter = null;
 
     private String selectedItemKey = null;
     private String selectedItemsKey = null;
@@ -427,7 +402,6 @@ public class ListView extends Component {
                 // Clear any existing selection
                 selectedRanges.clear();
                 checkedIndexes.clear();
-                disabledIndexes.clear();
 
                 ((List<Object>)previousListData).getListListeners().remove(listDataListener);
             }
@@ -1005,45 +979,42 @@ public class ListView extends Component {
      * <tt>true</tt> if the item is disabled; <tt>false</tt>,
      * otherwise.
      */
+    @SuppressWarnings("unchecked")
     public boolean isItemDisabled(int index) {
-        return (ArrayList.binarySearch(disabledIndexes, index) >= 0);
+        boolean disabled = false;
+
+        if (disabledItemFilter != null) {
+            Object item = listData.get(index);
+            disabled = ((Filter<Object>)disabledItemFilter).include(item);
+        }
+
+        return disabled;
     }
 
     /**
-     * Sets an item's disabled state.
+     * Returns the disabled item filter.
      *
-     * @param index
-     * The index of the item whose disabled state is to be set.
-     *
-     * @param disabled
-     * <tt>true</tt> to disable the item; <tt>false</tt>, otherwise.
+     * @return
+     * The disabled item filter, or <tt>null</tt> if no disabled item filter is
+     * set.
      */
-    public void setItemDisabled(int index, boolean disabled) {
-        int i = ArrayList.binarySearch(disabledIndexes, index);
-
-        if ((i < 0 && disabled)
-            || (i >= 0 && !disabled)) {
-            if (disabled) {
-                disabledIndexes.insert(index, -(i + 1));
-            } else {
-                disabledIndexes.remove(i, 1);
-            }
-
-            listViewItemStateListeners.itemDisabledChanged(this, index);
-        }
+    public Filter<?> getDisabledItemFilter() {
+        return disabledItemFilter;
     }
 
     /**
-     * Returns the indexes of currently disabled items.
+     * Sets the disabled item filter.
+     *
+     * @param disabledItemFilter
+     * The disabled item filter, or <tt>null</tt> for no disabled item filter.
      */
-    public Sequence<Integer> getDisabledIndexes() {
-        ArrayList<Integer> disabledIndexes = new ArrayList<Integer>();
+    public void setDisabledItemFilter(Filter<?> disabledItemFilter) {
+        Filter<?> previousDisabledItemFilter = this.disabledItemFilter;
 
-        for (int i = 0, n = this.disabledIndexes.getLength(); i < n; i++) {
-            disabledIndexes.add(this.disabledIndexes.get(i));
+        if (previousDisabledItemFilter != disabledItemFilter) {
+            this.disabledItemFilter = disabledItemFilter;
+            listViewListeners.disabledItemFilterChanged(this, previousDisabledItemFilter);
         }
-
-        return disabledIndexes;
     }
 
     public String getSelectedItemKey() {

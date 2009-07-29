@@ -19,7 +19,9 @@ package org.apache.pivot.wtk.test;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
+import org.apache.pivot.util.Filter;
 import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.Window;
@@ -30,7 +32,7 @@ public class ListViewTest implements Application {
     public void startup(Display display, Map<String, String> properties) {
         ListView listView = new ListView();
 
-        List<Object> listData = new ArrayList<Object>();
+        List<String> listData = new ArrayList<String>();
         listData.add("0");
         listData.add("1");
         listData.add("2");
@@ -49,9 +51,11 @@ public class ListViewTest implements Application {
         listData.add("F");
 
         listView.setListData(listData);
-
-        listView.setItemDisabled(3, true);
-        listView.setItemDisabled(5, true);
+        listView.setDisabledItemFilter(new Filter<String>() {
+            public boolean include(String item) {
+                return !Character.isDigit(item.charAt(0));
+            }
+        });
 
         listView.setCheckmarksEnabled(true);
         listView.setItemChecked(4, true);
@@ -78,5 +82,9 @@ public class ListViewTest implements Application {
     }
 
     public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(ListViewTest.class, args);
     }
 }

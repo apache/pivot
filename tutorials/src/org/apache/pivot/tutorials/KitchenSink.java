@@ -29,6 +29,7 @@ import org.apache.pivot.collections.Map;
 import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.CalendarDate;
+import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.wtk.Action;
@@ -147,8 +148,11 @@ public class KitchenSink implements Application, Application.AboutHandler {
                     }
                 });
 
-                iconListView.setItemDisabled(3, true);
-                iconListView.setItemDisabled(4, true);
+                iconListView.setDisabledItemFilter(new Filter<ListItem>() {
+                    public boolean include(ListItem listItem) {
+                        return Character.toLowerCase(listItem.getText().charAt(0)) == 'c';
+                    }
+                });
 
                 checkedListView.setItemChecked(0, true);
                 checkedListView.setItemChecked(2, true);
