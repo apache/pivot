@@ -16,10 +16,15 @@
  */
 package org.apache.pivot.wtk.test;
 
+import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
+import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.ComponentKeyListener;
 import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.Window;
 
@@ -29,11 +34,28 @@ public class CheckedListViewTest implements Application {
 
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        ListView listView = new ListView(JSONSerializer.parseList("['One', 'Two', 'Three', 'Four']"));
+        final ListView listView = new ListView(JSONSerializer.parseList("['One', 'Two', 'Three', 'Four']"));
         listView.setSelectMode(ListView.SelectMode.MULTI);
         listView.setCheckmarksEnabled(true);
         listView.setItemChecked(0, true);
         listView.setItemChecked(2, true);
+
+        listView.getComponentKeyListeners().add(new ComponentKeyListener.Adapter() {
+            @Override
+            @SuppressWarnings("unchecked")
+            public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+                if (keyCode == Keyboard.KeyCode.DELETE) {
+                    List<Object> listData = (List<Object>)listView.getListData();
+
+                    Sequence<Object> selectedItems = listView.getSelectedItems();
+                    for (int i = 0, n = selectedItems.getLength(); i < n; i++) {
+                        listData.remove(selectedItems.get(i));
+                    }
+                }
+
+                return false;
+            }
+        });
 
         window = new Window(listView);
         window.setTitle("Checked List View Test");
