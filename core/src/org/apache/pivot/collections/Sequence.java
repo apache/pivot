@@ -349,7 +349,8 @@ public interface Sequence<T> {
      * The item to be added to the sequence.
      *
      * @return
-     * The index at which the item was added.
+     * The index at which the item was added, or <tt>-1</tt> if the item
+     * was not added to the sequence.
      */
     public int add(T item);
 
