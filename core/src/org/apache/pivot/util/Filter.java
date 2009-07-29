@@ -14,23 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.pivot.io;
-
-import java.io.File;
-
-import org.apache.pivot.util.Filter;
+package org.apache.pivot.util;
 
 /**
- * Folder listener interface.
+ * Generic filter interface.
  *
  * @author gbrown
  */
-public interface FolderListener {
+public interface Filter<T> {
     /**
-     * Called when a folder's file filter has changed.
+     * Determines item inclusion.
      *
-     * @param folder
-     * @param previousFileFilter
+     * @param item
+     * The item to test for inclusion.
+     *
+     * @return
+     * <tt>true</tt> if the item should be included; <tt>false</tt>, otherwise.
      */
-    public void fileFilterChanged(Folder folder, Filter<File> previousFileFilter);
+    public boolean include(T item);
 }

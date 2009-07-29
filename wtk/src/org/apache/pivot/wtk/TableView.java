@@ -621,78 +621,6 @@ public class TableView extends Component {
     }
 
     /**
-     * List event handler.
-     *
-     * @author gbrown
-     */
-    private class ListHandler implements ListListener<Object> {
-        public void itemInserted(List<Object> list, int index) {
-            // Increment selected ranges
-            selectedRanges.insertIndex(index);
-
-            // Increment disabled indexes
-            int i = ArrayList.binarySearch(disabledIndexes, index);
-            if (i < 0) {
-                i = -(i + 1);
-            }
-
-            int n = disabledIndexes.getLength();
-            while (i < n) {
-                disabledIndexes.update(i, disabledIndexes.get(i) + 1);
-                i++;
-            }
-
-            // Notify listeners that items were inserted
-            tableViewRowListeners.rowInserted(TableView.this, index);
-        }
-
-        public void itemsRemoved(List<Object> list, int index, Sequence<Object> items) {
-            int count = items.getLength();
-
-            // Decrement selected ranges
-            selectedRanges.removeIndexes(index, count);
-
-            // Decrement disabled indexes
-            int i = ArrayList.binarySearch(disabledIndexes, index);
-            if (i < 0) {
-                i = -(i + 1);
-            }
-
-            int n = disabledIndexes.getLength();
-            while (i < n) {
-                disabledIndexes.update(i, disabledIndexes.get(i) - count);
-                i++;
-            }
-
-            // Notify listeners that items were removed
-            tableViewRowListeners.rowsRemoved(TableView.this, index, count);
-        }
-
-        public void itemUpdated(List<Object> list, int index, Object previousItem) {
-            tableViewRowListeners.rowUpdated(TableView.this, index);
-        }
-
-        public void listCleared(List<Object> list) {
-            // All items were removed; clear the selection and notify
-            // listeners
-            selectedRanges.clear();
-            disabledIndexes.clear();
-
-            tableViewRowListeners.rowsCleared(TableView.this);
-        }
-
-        public void comparatorChanged(List<Object> list,
-            Comparator<Object> previousComparator) {
-            if (list.getComparator() != null) {
-                selectedRanges.clear();
-                disabledIndexes.clear();
-
-                tableViewRowListeners.rowsSorted(TableView.this);
-            }
-        }
-    }
-
-    /**
      * Table view listener list.
      *
      * @author gbrown
@@ -858,7 +786,73 @@ public class TableView extends Component {
     private ColumnSequence columnSequence = new ColumnSequence();
 
     private List<?> tableData = null;
-    private ListHandler tableDataHandler = new ListHandler();
+    private ListListener<Object> tableDataListener =     new ListListener<Object>() {
+        public void itemInserted(List<Object> list, int index) {
+            // Increment selected ranges
+            selectedRanges.insertIndex(index);
+
+            // Increment disabled indexes
+            int i = ArrayList.binarySearch(disabledIndexes, index);
+            if (i < 0) {
+                i = -(i + 1);
+            }
+
+            int n = disabledIndexes.getLength();
+            while (i < n) {
+                disabledIndexes.update(i, disabledIndexes.get(i) + 1);
+                i++;
+            }
+
+            // Notify listeners that items were inserted
+            tableViewRowListeners.rowInserted(TableView.this, index);
+        }
+
+        public void itemsRemoved(List<Object> list, int index, Sequence<Object> items) {
+            int count = items.getLength();
+
+            // Decrement selected ranges
+            selectedRanges.removeIndexes(index, count);
+
+            // Decrement disabled indexes
+            int i = ArrayList.binarySearch(disabledIndexes, index);
+            if (i < 0) {
+                i = -(i + 1);
+            }
+
+            int n = disabledIndexes.getLength();
+            while (i < n) {
+                disabledIndexes.update(i, disabledIndexes.get(i) - count);
+                i++;
+            }
+
+            // Notify listeners that items were removed
+            tableViewRowListeners.rowsRemoved(TableView.this, index, count);
+        }
+
+        public void itemUpdated(List<Object> list, int index, Object previousItem) {
+            tableViewRowListeners.rowUpdated(TableView.this, index);
+        }
+
+        public void listCleared(List<Object> list) {
+            // All items were removed; clear the selection and notify
+            // listeners
+            selectedRanges.clear();
+            disabledIndexes.clear();
+
+            tableViewRowListeners.rowsCleared(TableView.this);
+        }
+
+        public void comparatorChanged(List<Object> list,
+            Comparator<Object> previousComparator) {
+            if (list.getComparator() != null) {
+                selectedRanges.clear();
+                disabledIndexes.clear();
+
+                tableViewRowListeners.rowsSorted(TableView.this);
+            }
+        }
+    };
+
 
     private SpanSequence selectedRanges = new SpanSequence();
     private SelectMode selectMode = SelectMode.SINGLE;
@@ -942,10 +936,10 @@ public class TableView extends Component {
                 // Clear any existing selection
                 clearSelection();
 
-                ((List<Object>)previousTableData).getListListeners().remove(tableDataHandler);
+                ((List<Object>)previousTableData).getListListeners().remove(tableDataListener);
             }
 
-            ((List<Object>)tableData).getListListeners().add(tableDataHandler);
+            ((List<Object>)tableData).getListListeners().add(tableDataListener);
 
             // Update the list data and fire change event
             this.tableData = tableData;

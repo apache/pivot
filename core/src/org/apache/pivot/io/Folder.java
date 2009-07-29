@@ -25,6 +25,7 @@ import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 
@@ -50,7 +51,7 @@ public class Folder extends File implements List<File> {
 
     private static class FolderListenerList extends ListenerList<FolderListener>
         implements FolderListener {
-        public void fileFilterChanged(Folder folder, FileFilter previousFileFilter) {
+        public void fileFilterChanged(Folder folder, Filter<File> previousFileFilter) {
             for (FolderListener listener : this) {
                 listener.fileFilterChanged(folder, previousFileFilter);
             }
@@ -61,7 +62,7 @@ public class Folder extends File implements List<File> {
 
     private ArrayList<File> files = null;
 
-    private transient FileFilter fileFilter = null;
+    private transient Filter<File> fileFilter = null;
     private transient Comparator<File> comparator = null;
 
     private transient ListListenerList<File> listListeners = new ListListenerList<File>();
@@ -75,11 +76,11 @@ public class Folder extends File implements List<File> {
         this(pathname, null);
     }
 
-    public Folder(String pathname, FileFilter fileFilter) {
+    public Folder(String pathname, Filter<File> fileFilter) {
         this(pathname, fileFilter, new FileNameComparator());
     }
 
-    public Folder(String pathname, FileFilter fileFilter, Comparator<File> comparator) {
+    public Folder(String pathname, Filter<File> fileFilter, Comparator<File> comparator) {
         super(pathname);
 
         if (!isDirectory()) {
@@ -95,7 +96,7 @@ public class Folder extends File implements List<File> {
     /**
      * Returns the file filter that is applied to this folder.
      */
-    public FileFilter getFileFilter() {
+    public Filter<File> getFileFilter() {
         return fileFilter;
     }
 
@@ -104,8 +105,8 @@ public class Folder extends File implements List<File> {
      *
      * @param fileFilter
      */
-    public void setFileFilter(FileFilter fileFilter) {
-        FileFilter previousFileFilter = this.fileFilter;
+    public void setFileFilter(Filter<File> fileFilter) {
+        Filter<File> previousFileFilter = this.fileFilter;
 
         if (fileFilter != previousFileFilter) {
             this.fileFilter = fileFilter;
@@ -212,7 +213,11 @@ public class Folder extends File implements List<File> {
         if (getPath().length() == 0) {
             fileList = listRoots();
         } else {
-            fileList = listFiles(fileFilter);
+            fileList = listFiles(new FileFilter() {
+                public boolean accept(File file) {
+                    return fileFilter.include(file);
+                }
+            });
         }
 
         // Clear the file list

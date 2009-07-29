@@ -17,13 +17,13 @@
 package org.apache.pivot.tutorials.filebrowser;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.net.MalformedURLException;
 
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.collections.Sequence.Tree.Path;
 import org.apache.pivot.io.Folder;
+import org.apache.pivot.util.Filter;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Component;
@@ -51,9 +51,9 @@ public class FileBrowser implements Application {
         wtkxSerializer.bind(this, FileBrowser.class);
 
         String pathname = System.getProperty("user.home");
-        FileFilter fileFilter = new FileFilter() {
-            public boolean accept(File file) {
-                return true; // (file.isDirectory());
+        Filter<File> fileFilter = new Filter<File>() {
+            public boolean include(File file) {
+                return file.isDirectory();
             }
         };
 
