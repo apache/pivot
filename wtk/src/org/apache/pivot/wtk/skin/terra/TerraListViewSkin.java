@@ -22,6 +22,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
 import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.Filter;
@@ -499,6 +500,31 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     public void setShowHighlight(boolean showHighlight) {
         this.showHighlight = showHighlight;
         repaintComponent();
+    }
+
+    public Insets getCheckboxPadding() {
+        return checkboxPadding;
+    }
+
+    public void setCheckboxPadding(Insets checkboxPadding) {
+        if (checkboxPadding == null) {
+            throw new IllegalArgumentException("checkboxPadding is null.");
+        }
+
+        this.checkboxPadding = checkboxPadding;
+        invalidateComponent();
+    }
+
+    public final void setCheckboxPadding(Dictionary<String, ?> checkboxPadding) {
+        if (checkboxPadding == null) {
+            throw new IllegalArgumentException("checkboxPadding is null.");
+        }
+
+        setCheckboxPadding(new Insets(checkboxPadding));
+    }
+
+    public final void setCheckboxPadding(int checkboxPadding) {
+        setCheckboxPadding(new Insets(checkboxPadding));
     }
 
     @Override
