@@ -23,6 +23,7 @@ import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.ListListener;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
@@ -1044,6 +1045,40 @@ public class TableView extends Component {
 
         // Notify listeners
         tableViewSelectionListeners.selectedRangesChanged(this, previousSelectedRanges);
+    }
+
+    /**
+     * Sets the selection to the given range sequence.
+     *
+     * @param selectedRanges
+     * A JSON-formatted string containing the ranges to select.
+     *
+     * @see #setSelectedRanges(Sequence)
+     */
+    public void setSelectedRanges(String selectedRanges) {
+        if (selectedRanges == null) {
+            throw new IllegalArgumentException("selectedRanges is null.");
+        }
+
+        try {
+            setSelectedRanges(parseSelectedRanges(selectedRanges));
+        } catch (SerializationException exception) {
+            throw new IllegalArgumentException(exception);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private Sequence<Span> parseSelectedRanges(String json)
+        throws SerializationException {
+        ArrayList<Span> selectedRanges = new ArrayList<Span>();
+
+        List<?> list = JSONSerializer.parseList(json);
+        for (Object item : list) {
+            Map<String, ?> map = (Map<String, ?>)item;
+            selectedRanges.add(new Span(map));
+        }
+
+        return selectedRanges;
     }
 
     /**

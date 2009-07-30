@@ -76,7 +76,8 @@ class ListSelection {
                 selectedRanges.add(range);
                 added.add(range);
             } else {
-                // TODO
+                // TODO Perform two binary searches to determine the endpoints
+                // of the intersection
             }
         }
 
@@ -169,21 +170,21 @@ class ListSelection {
     public void insertIndex(int index) {
         // Get the insertion point for the range corresponding to the given index
         Span range = new Span(index, index);
-        int i = indexOf(range);
+        int i = ArrayList.binarySearch(selectedRanges, range, INTERSECTION_COMPARATOR);
 
         if (i < 0) {
-            // The inserted item does not intersect with a selected range
+            // The inserted index does not intersect with a selected range
             i = -(i + 1);
         } else {
-            // The inserted item intersects with a currently selected range
+            // The inserted index intersects with a currently selected range
             Span selectedRange = selectedRanges.get(i);
 
-            // If the ranges' start values are equal, shift the selection;
-            // otherwise, insert the index into the selection
-            if (selectedRange.start > range.start) {
+            // If the inserted index falls within the current range, increment
+            // the endpoint only
+            if (selectedRange.start < index) {
                 selectedRanges.update(i, new Span(selectedRange.start, selectedRange.end + 1));
 
-                // Start incrementing range bounds beginning at the next range index
+                // Start incrementing range bounds beginning at the next range
                 i++;
             }
         }
@@ -210,7 +211,7 @@ class ListSelection {
 
         // Decrement any subsequent selection indexes
         Span range = new Span(index, index);
-        int i = indexOf(range);
+        int i = ArrayList.binarySearch(selectedRanges, range, INTERSECTION_COMPARATOR);
         assert (i < 0) : "i should be negative, since index should no longer be selected";
 
         i = -(i + 1);

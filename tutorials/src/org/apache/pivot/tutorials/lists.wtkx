@@ -55,7 +55,8 @@ limitations under the License.
                     <content>
                         <ScrollPane preferredHeight="80">
                             <view>
-                                <ListView wtkx:id="shapeListView" selectMode="multi">
+                                <ListView wtkx:id="shapeListView" selectMode="multi"
+                                    selectedRanges="[{start:0, end:0}, {start:2, end:3}]">
                                     <listData>
                                         <collections:ArrayList>
                                             <content:ListItem text="Circle"/>

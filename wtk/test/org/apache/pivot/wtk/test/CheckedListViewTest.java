@@ -23,6 +23,7 @@ import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentKeyListener;
+import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.ListView;
@@ -74,7 +75,10 @@ public class CheckedListViewTest implements Application {
     public void resume() {
     }
 
-
     public void suspend() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(CheckedListViewTest.class, args);
     }
 }
