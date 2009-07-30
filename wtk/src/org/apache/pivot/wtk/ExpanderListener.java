@@ -33,6 +33,9 @@ public interface ExpanderListener {
         public void titleChanged(Expander expander, String previousTitle) {
         }
 
+        public void collapsibleChanged(Expander expander) {
+        }
+
         public Vote previewExpandedChange(Expander expander) {
             return Vote.APPROVE;
         }
@@ -54,6 +57,13 @@ public interface ExpanderListener {
      * @param previousTitle
      */
     public void titleChanged(Expander expander, String previousTitle);
+
+    /**
+     * Called when an expander's collapsible flag has changed.
+     *
+     * @param expander
+     */
+    public void collapsibleChanged(Expander expander);
 
     /**
      * Called to preview an expanded change event.

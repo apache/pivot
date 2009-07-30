@@ -31,7 +31,6 @@ import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentMouseButtonListener;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Expander;
-import org.apache.pivot.wtk.ExpanderListener;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.HorizontalAlignment;
@@ -48,15 +47,16 @@ import org.apache.pivot.wtk.effects.TransitionListener;
 import org.apache.pivot.wtk.effects.easing.Easing;
 import org.apache.pivot.wtk.effects.easing.Quadratic;
 import org.apache.pivot.wtk.media.Image;
-import org.apache.pivot.wtk.skin.ContainerSkin;
+import org.apache.pivot.wtk.skin.ExpanderSkin;
 
 /**
  * Terra expander skin.
  *
  * @author gbrown
+ * @author tvolkert
  */
-public class TerraExpanderSkin extends ContainerSkin
-    implements ButtonPressListener, ExpanderListener {
+public class TerraExpanderSkin extends ExpanderSkin
+    implements ButtonPressListener {
     /**
      * Expand/collapse transition.
      *
@@ -196,8 +196,11 @@ public class TerraExpanderSkin extends ContainerSkin
 
             if (count == 2) {
                 Expander expander = (Expander)getComponent();
-                expander.setExpanded(!expander.isExpanded());
-                consumed = true;
+
+                if (expander.isCollapsible()) {
+                    expander.setExpanded(!expander.isExpanded());
+                    consumed = true;
+                }
             }
 
             return consumed;
@@ -254,7 +257,6 @@ public class TerraExpanderSkin extends ContainerSkin
         super.install(component);
 
         Expander expander = (Expander)component;
-        expander.getExpanderListeners().add(this);
         expander.add(titleBarTablePane);
 
         Image buttonData = expander.isExpanded() ? collapseImage : expandImage;
@@ -264,11 +266,11 @@ public class TerraExpanderSkin extends ContainerSkin
         shadeButton.getButtonPressListeners().add(this);
 
         titleChanged(expander, null);
+        collapsibleChanged(expander);
     }
 
     public void uninstall() {
         Expander expander = (Expander)getComponent();
-        expander.getExpanderListeners().remove(this);
         expander.remove(titleBarTablePane);
 
         shadeButton.getButtonPressListeners().remove(this);
@@ -582,6 +584,8 @@ public class TerraExpanderSkin extends ContainerSkin
         setPadding(padding.intValue());
     }
 
+    // ButtonPressListener methods
+
     /**
      * Listener for expander button events.
      *
@@ -591,16 +595,35 @@ public class TerraExpanderSkin extends ContainerSkin
     public void buttonPressed(Button button) {
         Expander expander = (Expander)getComponent();
 
-        expander.setExpanded(!expander.isExpanded());
+        if (expander.isCollapsible()) {
+            expander.setExpanded(!expander.isExpanded());
+        }
     }
 
-    // Expander events
+    // ExpanderListener methods
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void titleChanged(Expander expander, String previousTitle) {
         String title = expander.getTitle();
         titleLabel.setDisplayable(title != null);
         titleLabel.setText(title);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void collapsibleChanged(Expander expander) {
+        buttonBoxPane.setDisplayable(expander.isCollapsible());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Vote previewExpandedChange(final Expander expander) {
         Vote vote;
 
@@ -629,6 +652,10 @@ public class TerraExpanderSkin extends ContainerSkin
         return vote;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void expandedChangeVetoed(Expander expander, Vote reason) {
         if (reason == Vote.DENY
             && expandTransition != null) {
@@ -644,11 +671,19 @@ public class TerraExpanderSkin extends ContainerSkin
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void expandedChanged(final Expander expander) {
         shadeButton.setButtonData(expander.isExpanded() ? collapseImage : expandImage);
         invalidateComponent();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void contentChanged(Expander expander, Component previousContent) {
         if (expandTransition != null) {
             expandTransition.end();

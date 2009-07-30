@@ -36,6 +36,12 @@ public class Expander extends Container {
             }
         }
 
+        public void collapsibleChanged(Expander expander) {
+            for (ExpanderListener listener : this) {
+                listener.collapsibleChanged(expander);
+            }
+        }
+
         public Vote previewExpandedChange(Expander expander) {
             Vote vote = Vote.APPROVE;
 
@@ -66,6 +72,7 @@ public class Expander extends Container {
     }
 
     private String title = null;
+    private boolean collapsible = true;
     private boolean expanded = true;
     private Component content = null;
 
@@ -94,9 +101,37 @@ public class Expander extends Container {
     public void setTitle(String title) {
         String previousTitle = this.title;
 
-        if (previousTitle == null ^ title == null) {
+        if (title != previousTitle) {
             this.title = title;
             expanderListeners.titleChanged(this, previousTitle);
+        }
+    }
+
+    /**
+     * Returns the expander's collapsible flag.
+     *
+     * @return
+     * The collapsible flag
+     */
+    public boolean isCollapsible() {
+        return collapsible;
+    }
+
+    /**
+     * Sets the expander's collapsible flag.
+     *
+     * @param collapsible
+     * The collapsible flag
+     */
+    public void setCollapsible(boolean collapsible) {
+        if (collapsible != this.collapsible) {
+            if (!collapsible
+                && !expanded) {
+                throw new IllegalStateException();
+            }
+
+            this.collapsible = collapsible;
+            expanderListeners.collapsibleChanged(this);
         }
     }
 
@@ -106,6 +141,11 @@ public class Expander extends Container {
 
     public void setExpanded(boolean expanded) {
         if (expanded != this.expanded) {
+            if (!collapsible
+                && !expanded) {
+                throw new IllegalStateException();
+            }
+
             Vote vote = expanderListeners.previewExpandedChange(this);
 
             if (vote == Vote.APPROVE) {
