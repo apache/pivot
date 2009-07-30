@@ -54,8 +54,8 @@ public class ListViews implements Application {
             for (int i = 0, n = selectedRanges.getLength(); i < n; i++) {
                 Span selectedRange = selectedRanges.get(i);
 
-                for (int j = selectedRange.getStart();
-                    j <= selectedRange.getEnd();
+                for (int j = selectedRange.start;
+                    j <= selectedRange.end;
                     j++) {
                     if (selectionText.length() > 0) {
                         selectionText += ", ";

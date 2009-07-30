@@ -84,8 +84,8 @@ public class FileDropTargetDemo implements Application {
 
                     for (int i = selectedRanges.getLength() - 1; i >= 0; i--) {
                         Span range = selectedRanges.get(i);
-                        int index = range.getStart();
-                        int count = range.getEnd() - index + 1;
+                        int index = range.start;
+                        int count = range.end - index + 1;
                         fileList.remove(index, count);
                     }
                 }

@@ -271,33 +271,22 @@ public class SplitPane extends Container {
     }
 
     public void setSplitBounds(Span splitBounds) {
-        // Check if this is a no-op.
-        if (this.splitBounds == null) {
-           if (splitBounds == null) {
-              return;
-           }
-        } else {
-           if (this.splitBounds.equals(splitBounds)) {
-              return;
-           }
-        }
-
-        int start = splitBounds.getStart();
-        int end = splitBounds.getEnd();
-
         Span previousSplitBounds = this.splitBounds;
-        this.splitBounds = new Span(start, end);
 
-        // Reposition the splitter if necessary.
-        if (splitBounds != null) {
-           if (splitLocation < start) {
-              setSplitLocation(start);
-           } else if (splitLocation > end) {
-              setSplitLocation(end);
-           }
+        if (previousSplitBounds != splitBounds) {
+            this.splitBounds = new Span(splitBounds);
+
+            // Reposition the splitter if necessary
+            if (splitBounds != null) {
+               if (splitLocation < splitBounds.start) {
+                  setSplitLocation(splitBounds.start);
+               } else if (splitLocation > splitBounds.end) {
+                  setSplitLocation(splitBounds.end);
+               }
+            }
+
+            splitPaneListeners.splitBoundsChanged(this, previousSplitBounds);
         }
-
-        splitPaneListeners.splitBoundsChanged(this, previousSplitBounds);
     }
 
     public final void setSplitBounds(Dictionary<String, ?> splitBounds) {

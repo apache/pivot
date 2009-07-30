@@ -263,7 +263,7 @@ public class ListView extends Component {
     private ListListener<Object> listDataListener = new ListListener<Object>() {
         public void itemInserted(List<Object> list, int index) {
             // Increment selected ranges
-            selectedRanges.insertIndex(index);
+            listSelection.insertIndex(index);
 
             int i, n;
 
@@ -287,7 +287,7 @@ public class ListView extends Component {
             int count = items.getLength();
 
             // Decrement selected ranges
-            selectedRanges.removeIndexes(index, count);
+            listSelection.removeIndexes(index, count);
 
             int i, n;
 
@@ -314,7 +314,7 @@ public class ListView extends Component {
         public void listCleared(List<Object> list) {
             // All items were removed; clear the selection and notify
             // listeners
-            selectedRanges.clear();
+            listSelection.clear();
             checkedIndexes.clear();
 
             listViewItemListeners.itemsCleared(ListView.this);
@@ -323,7 +323,7 @@ public class ListView extends Component {
         public void comparatorChanged(List<Object> list,
             Comparator<Object> previousComparator) {
             if (list.getComparator() != null) {
-                selectedRanges.clear();
+                listSelection.clear();
                 checkedIndexes.clear();
 
                 listViewItemListeners.itemsSorted(ListView.this);
@@ -334,7 +334,7 @@ public class ListView extends Component {
     private ItemRenderer itemRenderer = null;
     private ItemEditor itemEditor = null;
 
-    private SpanSequence selectedRanges = new SpanSequence();
+    private ListSelection listSelection = new ListSelection();
     private SelectMode selectMode = SelectMode.SINGLE;
 
     private boolean checkmarksEnabled = false;
@@ -400,7 +400,7 @@ public class ListView extends Component {
         if (previousListData != listData) {
             if (previousListData != null) {
                 // Clear any existing selection
-                selectedRanges.clear();
+                listSelection.clear();
                 checkedIndexes.clear();
 
                 ((List<Object>)previousListData).getListListeners().remove(listDataListener);
@@ -504,7 +504,7 @@ public class ListView extends Component {
             throw new IllegalStateException("List view is not in single-select mode.");
         }
 
-        return (selectedRanges.getLength() == 0) ? -1 : selectedRanges.get(0).getStart();
+        return (listSelection.getLength() == 0) ? -1 : listSelection.get(0).start;
     }
 
     /**
@@ -527,20 +527,12 @@ public class ListView extends Component {
      * Returns the list's current selection.
      */
     public Sequence<Span> getSelectedRanges() {
-        // Return a copy of the selection list (including copies of the
-        // list contents)
-        ArrayList<Span> selection = new ArrayList<Span>();
-
-        for (int i = 0, n = selectedRanges.getLength(); i < n; i++) {
-            selection.add(new Span(selectedRanges.get(i)));
-        }
-
-        return selection;
+        return new ListSelectionSequence(listSelection);
     }
 
     /**
-     * Sets the selection to the given span sequence. Any overlapping or
-     * connecting spans will be consolidated, and the resulting selection will
+     * Sets the selection to the given range sequence. Any overlapping or
+     * connecting ranges will be consolidated, and the resulting selection will
      * be sorted in ascending order.
      *
      * @param selectedRanges
@@ -571,8 +563,9 @@ public class ListView extends Component {
         }
 
         // Update the selection
-        SpanSequence ranges = new SpanSequence();
+        ListSelectionSequence previousSelectedRanges = new ListSelectionSequence(listSelection);
 
+        ListSelection listSelection = new ListSelection();
         for (int i = 0, n = selectedRanges.getLength(); i < n; i++) {
             Span range = selectedRanges.get(i);
 
@@ -580,15 +573,14 @@ public class ListView extends Component {
                 throw new IllegalArgumentException("range is null.");
             }
 
-            if (range.getStart() < 0 || range.getEnd() >= listData.getLength()) {
+            if (range.start < 0 || range.end >= listData.getLength()) {
                 throw new IndexOutOfBoundsException();
             }
 
-            ranges.add(range);
+            listSelection.addRange(range.start, range.end);
         }
 
-        SpanSequence previousSelectedRanges = this.selectedRanges;
-        this.selectedRanges = ranges;
+        this.listSelection = listSelection;
 
         // Notify listeners
         listViewSelectionListeners.selectedRangesChanged(this, previousSelectedRanges);
@@ -601,8 +593,7 @@ public class ListView extends Component {
      * The first selected index, or <tt>-1</tt> if nothing is selected.
      */
     public int getFirstSelectedIndex() {
-        return (selectedRanges.getLength() > 0) ?
-            selectedRanges.get(0).getStart() : -1;
+        return (listSelection.getLength() > 0) ? listSelection.get(0).start : -1;
     }
 
     /**
@@ -612,8 +603,8 @@ public class ListView extends Component {
      * The last selected index, or <tt>-1</tt> if nothing is selected.
      */
     public int getLastSelectedIndex() {
-        return (selectedRanges.getLength() > 0) ?
-            selectedRanges.get(selectedRanges.getLength() - 1).getEnd() : -1;
+        return (listSelection.getLength() > 0) ?
+            listSelection.get(listSelection.getLength() - 1).end : -1;
     }
 
     /**
@@ -629,14 +620,27 @@ public class ListView extends Component {
     /**
      * Adds a range of indexes to the selection.
      *
-     * @param rangeStart
+     * @param start
      * The first index in the range.
      *
-     * @param rangeEnd
+     * @param end
      * The last index in the range.
      */
-    public void addSelectedRange(int rangeStart, int rangeEnd) {
-        addSelectedRange(new Span(rangeStart, rangeEnd));
+    public void addSelectedRange(int start, int end) {
+        if (selectMode != SelectMode.MULTI) {
+            throw new IllegalStateException("List view is not in multi-select mode.");
+        }
+
+        if (start < 0 || end >= listData.getLength()) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        Sequence<Span> added = listSelection.addRange(start, end);
+
+        for (int i = 0, n = added.getLength(); i < n; i++) {
+            Span addedRange = added.get(i);
+            listViewSelectionListeners.selectedRangeAdded(this, addedRange.start, addedRange.end);
+        }
     }
 
     /**
@@ -646,22 +650,11 @@ public class ListView extends Component {
      * The range to add.
      */
     public void addSelectedRange(Span range) {
-        if (selectMode != SelectMode.MULTI) {
-            throw new IllegalStateException("List view is not in multi-select mode.");
-        }
-
         if (range == null) {
             throw new IllegalArgumentException("range is null.");
         }
 
-        if (range.getStart() < 0 || range.getEnd() >= listData.getLength()) {
-            throw new IndexOutOfBoundsException();
-        }
-
-        selectedRanges.add(range);
-
-        listViewSelectionListeners.selectedRangeAdded(this, range.getStart(),
-            range.getEnd());
+        addSelectedRange(range.start, range.end);
     }
 
     /**
@@ -677,14 +670,27 @@ public class ListView extends Component {
     /**
      * Removes a range of indexes from the selection.
      *
-     * @param rangeStart
+     * @param start
      * The start of the range to remove.
      *
-     * @param rangeEnd
+     * @param end
      * The end of the range to remove.
      */
-    public void removeSelectedRange(int rangeStart, int rangeEnd) {
-        removeSelectedRange(new Span(rangeStart, rangeEnd));
+    public void removeSelectedRange(int start, int end) {
+        if (selectMode != SelectMode.MULTI) {
+            throw new IllegalStateException("List view is not in multi-select mode.");
+        }
+
+        if (start < 0 || end >= listData.getLength()) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        Sequence<Span> removed = listSelection.removeRange(start, end);
+
+        for (int i = 0, n = removed.getLength(); i < n; i++) {
+            Span removedRange = removed.get(i);
+            listViewSelectionListeners.selectedRangeRemoved(this, removedRange.start, removedRange.end);
+        }
     }
 
     /**
@@ -694,34 +700,23 @@ public class ListView extends Component {
      * The range to remove.
      */
     public void removeSelectedRange(Span range) {
-        if (selectMode != SelectMode.MULTI) {
-            throw new IllegalStateException("List view is not in multi-select mode.");
-        }
-
         if (range == null) {
             throw new IllegalArgumentException("range is null.");
         }
 
-        if (range.getStart() < 0 || range.getEnd() >= listData.getLength()) {
-            throw new IndexOutOfBoundsException();
-        }
-
-        selectedRanges.remove(range);
-
-        listViewSelectionListeners.selectedRangeRemoved(this, range.getStart(),
-            range.getEnd());
+        removeSelectedRange(range.start, range.end);
     }
 
     /**
      * Clears the selection.
      */
     public void clearSelection() {
-        if (selectedRanges.getLength() > 0) {
-            SpanSequence previousSelectedSpans = this.selectedRanges;
-            selectedRanges = new SpanSequence();
+        if (listSelection.getLength() > 0) {
+            Sequence<Span> previousSelectedRanges = new ListSelectionSequence(listSelection);
+            listSelection = new ListSelection();
 
             listViewSelectionListeners.selectedRangesChanged(this,
-                previousSelectedSpans);
+                previousSelectedRanges);
         }
     }
 
@@ -735,56 +730,11 @@ public class ListView extends Component {
      * otherwise.
      */
     public boolean isItemSelected(int index) {
-        return isRangeSelected(index, index);
-    }
-
-    /**
-     * Returns the selection state of a given range.
-     *
-     * @param rangeStart
-     * The first index in the range.
-     *
-     * @param rangeEnd
-     * The last index in the range.
-     *
-     * @return <tt>true</tt> if the entire range is selected; <tt>false</tt>,
-     * otherwise.
-     */
-    public boolean isRangeSelected(int rangeStart, int rangeEnd) {
-        return isRangeSelected(new Span(rangeStart, rangeEnd));
-    }
-
-    /**
-     * Returns the selection state of a given range.
-     *
-     * @param range
-     * The range whose selection state is to be tested.
-     *
-     * @return <tt>true</tt> if the entire range is selected; <tt>false</tt>,
-     * otherwise.
-     */
-    public boolean isRangeSelected(Span range) {
-        boolean selected = false;
-
-        if (range == null) {
-            throw new IllegalArgumentException("range is null.");
-        }
-
-        if (range.getStart() < 0 || range.getEnd() >= listData.getLength()) {
+        if (index < 0 || index >= listData.getLength()) {
             throw new IndexOutOfBoundsException();
         }
 
-        // Locate the span in the selection
-        int i = selectedRanges.indexOf(range);
-
-        // If the selected span contains the given span, it is considered
-        // selected
-        if (i >= 0) {
-            Span selectedSpan = selectedRanges.get(i);
-            selected = selectedSpan.contains(range);
-        }
-
-        return selected;
+        return (listSelection.containsIndex(index));
     }
 
     public Object getSelectedItem() {
@@ -815,10 +765,10 @@ public class ListView extends Component {
     public Sequence<Object> getSelectedItems() {
         ArrayList<Object> items = new ArrayList<Object>();
 
-        for (int i = 0, n = selectedRanges.getLength(); i < n; i++) {
-            Span span = selectedRanges.get(i);
+        for (int i = 0, n = listSelection.getLength(); i < n; i++) {
+            Span range = listSelection.get(i);
 
-            for (int index = span.getStart(), end = span.getEnd(); index <= end; index++) {
+            for (int index = range.start; index <= range.end; index++) {
                 Object item = listData.get(index);
                 items.add(item);
             }
@@ -871,7 +821,7 @@ public class ListView extends Component {
 
         if (previousSelectMode != selectMode) {
             // Clear any current selection
-            selectedRanges = new SpanSequence();
+            listSelection = new ListSelection();
 
             // Update the selection mode
             this.selectMode = selectMode;

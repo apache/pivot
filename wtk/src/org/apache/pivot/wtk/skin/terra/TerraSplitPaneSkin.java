@@ -247,8 +247,8 @@ public class TerraSplitPaneSkin extends ContainerSkin
 
             Span bounds = splitPane.getSplitBounds();
             if (bounds != null) {
-                lower = Math.max(lower, bounds.getStart());
-                upper = Math.min(upper, bounds.getEnd());
+                lower = Math.max(lower, bounds.start);
+                upper = Math.min(upper, bounds.end);
             }
 
             if (splitLocation < lower) {

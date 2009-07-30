@@ -778,10 +778,10 @@ public class TableView extends Component {
     private ColumnSequence columnSequence = new ColumnSequence();
 
     private List<?> tableData = null;
-    private ListListener<Object> tableDataListener =     new ListListener<Object>() {
+    private ListListener<Object> tableDataListener = new ListListener<Object>() {
         public void itemInserted(List<Object> list, int index) {
             // Increment selected ranges
-            selectedRanges.insertIndex(index);
+            tableSelection.insertIndex(index);
 
             // Notify listeners that items were inserted
             tableViewRowListeners.rowInserted(TableView.this, index);
@@ -791,7 +791,7 @@ public class TableView extends Component {
             int count = items.getLength();
 
             // Decrement selected ranges
-            selectedRanges.removeIndexes(index, count);
+            tableSelection.removeIndexes(index, count);
 
             // Notify listeners that items were removed
             tableViewRowListeners.rowsRemoved(TableView.this, index, count);
@@ -804,7 +804,7 @@ public class TableView extends Component {
         public void listCleared(List<Object> list) {
             // All items were removed; clear the selection and notify
             // listeners
-            selectedRanges.clear();
+            tableSelection.clear();
 
             tableViewRowListeners.rowsCleared(TableView.this);
         }
@@ -812,14 +812,14 @@ public class TableView extends Component {
         public void comparatorChanged(List<Object> list,
             Comparator<Object> previousComparator) {
             if (list.getComparator() != null) {
-                selectedRanges.clear();
+                tableSelection.clear();
 
                 tableViewRowListeners.rowsSorted(TableView.this);
             }
         }
     };
 
-    private SpanSequence selectedRanges = new SpanSequence();
+    private ListSelection tableSelection = new ListSelection();
     private SelectMode selectMode = SelectMode.SINGLE;
 
     private Filter<?> disabledRowFilter = null;
@@ -963,7 +963,7 @@ public class TableView extends Component {
             throw new IllegalStateException("Table view is not in single-select mode.");
         }
 
-        return (selectedRanges.getLength() == 0) ? -1 : selectedRanges.get(0).getStart();
+        return (tableSelection.getLength() == 0) ? -1 : tableSelection.get(0).start;
     }
 
     /**
@@ -986,20 +986,12 @@ public class TableView extends Component {
      * Returns the table's current selection.
      */
     public Sequence<Span> getSelectedRanges() {
-        // Return a copy of the selection list (including copies of the
-        // list contents)
-        ArrayList<Span> selectedRanges = new ArrayList<Span>();
-
-        for (int i = 0, n = this.selectedRanges.getLength(); i < n; i++) {
-            selectedRanges.add(new Span(this.selectedRanges.get(i)));
-        }
-
-        return selectedRanges;
+        return new ListSelectionSequence(tableSelection);
     }
 
     /**
-     * Sets the selection to the given span sequence. Any overlapping or
-     * connecting spans will be consolidated, and the resulting selection will
+     * Sets the selection to the given range sequence. Any overlapping or
+     * connecting ranges will be consolidated, and the resulting selection will
      * be sorted in ascending order.
      *
      * @param selectedRanges
@@ -1031,8 +1023,9 @@ public class TableView extends Component {
         }
 
         // Update the selection
-        SpanSequence ranges = new SpanSequence();
+        ListSelectionSequence previousSelectedRanges = new ListSelectionSequence(tableSelection);
 
+        ListSelection tableSelection = new ListSelection();
         for (int i = 0, n = selectedRanges.getLength(); i < n; i++) {
             Span range = selectedRanges.get(i);
 
@@ -1040,15 +1033,14 @@ public class TableView extends Component {
                 throw new IllegalArgumentException("range is null.");
             }
 
-            if (range.getStart() < 0 || range.getEnd() >= tableData.getLength()) {
+            if (range.start < 0 || range.end >= tableData.getLength()) {
                 throw new IndexOutOfBoundsException();
             }
 
-            ranges.add(range);
+            tableSelection.addRange(range.start, range.end);
         }
 
-        SpanSequence previousSelectedRanges = this.selectedRanges;
-        this.selectedRanges = ranges;
+        this.tableSelection = tableSelection;
 
         // Notify listeners
         tableViewSelectionListeners.selectedRangesChanged(this, previousSelectedRanges);
@@ -1061,8 +1053,7 @@ public class TableView extends Component {
      * The first selected index, or <tt>-1</tt> if nothing is selected.
      */
     public int getFirstSelectedIndex() {
-        return (selectedRanges.getLength() > 0) ?
-            selectedRanges.get(0).getStart() : -1;
+        return (tableSelection.getLength() > 0) ? tableSelection.get(0).start : -1;
     }
 
     /**
@@ -1072,8 +1063,8 @@ public class TableView extends Component {
      * The last selected index, or <tt>-1</tt> if nothing is selected.
      */
     public int getLastSelectedIndex() {
-        return (selectedRanges.getLength() > 0) ?
-            selectedRanges.get(selectedRanges.getLength() - 1).getEnd() : -1;
+        return (tableSelection.getLength() > 0) ?
+            tableSelection.get(tableSelection.getLength() - 1).end : -1;
     }
 
     /**
@@ -1089,14 +1080,27 @@ public class TableView extends Component {
     /**
      * Adds a range of indexes to the selection.
      *
-     * @param rangeStart
+     * @param start
      * The first index in the range.
      *
-     * @param rangeEnd
+     * @param end
      * The last index in the range.
      */
-    public void addSelectedRange(int rangeStart, int rangeEnd) {
-        addSelectedRange(new Span(rangeStart, rangeEnd));
+    public void addSelectedRange(int start, int end) {
+        if (selectMode != SelectMode.MULTI) {
+            throw new IllegalStateException("Table view is not in multi-select mode.");
+        }
+
+        if (start < 0 || end >= tableData.getLength()) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        Sequence<Span> added = tableSelection.addRange(start, end);
+
+        for (int i = 0, n = added.getLength(); i < n; i++) {
+            Span addedRange = added.get(i);
+            tableViewSelectionListeners.selectedRangeAdded(this, addedRange.start, addedRange.end);
+        }
     }
 
     /**
@@ -1106,22 +1110,11 @@ public class TableView extends Component {
      * The range to add.
      */
     public void addSelectedRange(Span range) {
-        if (selectMode != SelectMode.MULTI) {
-            throw new IllegalStateException("Table view is not in multi-select mode.");
-        }
-
         if (range == null) {
             throw new IllegalArgumentException("range is null.");
         }
 
-        if (range.getStart() < 0 || range.getEnd() >= tableData.getLength()) {
-            throw new IndexOutOfBoundsException();
-        }
-
-        selectedRanges.add(range);
-
-        tableViewSelectionListeners.selectedRangeAdded(this, range.getStart(),
-            range.getEnd());
+        addSelectedRange(range.start, range.end);
     }
 
     /**
@@ -1137,14 +1130,27 @@ public class TableView extends Component {
     /**
      * Removes a range of indexes from the selection.
      *
-     * @param rangeStart
+     * @param start
      * The start of the range to remove.
      *
-     * @param rangeEnd
+     * @param end
      * The end of the range to remove.
      */
-    public void removeSelectedRange(int rangeStart, int rangeEnd) {
-        removeSelectedRange(new Span(rangeStart, rangeEnd));
+    public void removeSelectedRange(int start, int end) {
+        if (selectMode != SelectMode.MULTI) {
+            throw new IllegalStateException("Table view is not in multi-select mode.");
+        }
+
+        if (start < 0 || end >= tableData.getLength()) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        Sequence<Span> removed = tableSelection.removeRange(start, end);
+
+        for (int i = 0, n = removed.getLength(); i < n; i++) {
+            Span removedRange = removed.get(i);
+            tableViewSelectionListeners.selectedRangeRemoved(this, removedRange.start, removedRange.end);
+        }
     }
 
     /**
@@ -1154,33 +1160,23 @@ public class TableView extends Component {
      * The range to remove.
      */
     public void removeSelectedRange(Span range) {
-        if (selectMode != SelectMode.MULTI) {
-            throw new IllegalStateException("Table view is not in multi-select mode.");
-        }
-
         if (range == null) {
             throw new IllegalArgumentException("range is null.");
         }
 
-        if (range.getStart() < 0 || range.getEnd() >= tableData.getLength()) {
-            throw new IndexOutOfBoundsException();
-        }
-
-        selectedRanges.remove(range);
-
-        tableViewSelectionListeners.selectedRangeRemoved(this, range.getStart(),
-            range.getEnd());
+        removeSelectedRange(range.start, range.end);
     }
 
     /**
      * Clears the selection.
      */
     public void clearSelection() {
-        if (selectedRanges.getLength() > 0) {
-            SpanSequence previousSelectedSpans = this.selectedRanges;
-            selectedRanges = new SpanSequence();
+        if (tableSelection.getLength() > 0) {
+            Sequence<Span> previousSelectedRanges = new ListSelectionSequence(tableSelection);
+            tableSelection = new ListSelection();
 
-            tableViewSelectionListeners.selectedRangesChanged(this, previousSelectedSpans);
+            tableViewSelectionListeners.selectedRangesChanged(this,
+                previousSelectedRanges);
         }
     }
 
@@ -1194,56 +1190,11 @@ public class TableView extends Component {
      * otherwise.
      */
     public boolean isRowSelected(int index) {
-        return isRangeSelected(index, index);
-    }
-
-    /**
-     * Returns the selection state of a given range.
-     *
-     * @param rangeStart
-     * The first index in the range.
-     *
-     * @param rangeEnd
-     * The last index in the range.
-     *
-     * @return <tt>true</tt> if the entire range is selected; <tt>false</tt>,
-     * otherwise.
-     */
-    public boolean isRangeSelected(int rangeStart, int rangeEnd) {
-        return isRangeSelected(new Span(rangeStart, rangeEnd));
-    }
-
-    /**
-     * Returns the selection state of a given range.
-     *
-     * @param range
-     * The range whose selection state is to be tested.
-     *
-     * @return <tt>true</tt> if the entire range is selected; <tt>false</tt>,
-     * otherwise.
-     */
-    public boolean isRangeSelected(Span range) {
-        boolean selected = false;
-
-        if (range == null) {
-            throw new IllegalArgumentException("range is null.");
-        }
-
-        if (range.getStart() < 0 || range.getEnd() >= tableData.getLength()) {
+        if (index < 0 || index >= tableData.getLength()) {
             throw new IndexOutOfBoundsException();
         }
 
-        // Locate the span in the selection
-        int i = selectedRanges.indexOf(range);
-
-        // If the selected span contains the given span, it is considered
-        // selected
-        if (i >= 0) {
-            Span selectedSpan = selectedRanges.get(i);
-            selected = selectedSpan.contains(range);
-        }
-
-        return selected;
+        return (tableSelection.containsIndex(index));
     }
 
     public Object getSelectedRow() {
@@ -1260,10 +1211,10 @@ public class TableView extends Component {
     public Sequence<Object> getSelectedRows() {
         ArrayList<Object> rows = new ArrayList<Object>();
 
-        for (int i = 0, n = selectedRanges.getLength(); i < n; i++) {
-            Span span = selectedRanges.get(i);
+        for (int i = 0, n = tableSelection.getLength(); i < n; i++) {
+            Span range = tableSelection.get(i);
 
-            for (int index = span.getStart(), end = span.getEnd(); index <= end; index++) {
+            for (int index = range.start; index <= range.end; index++) {
                 Object row = tableData.get(index);
                 rows.add(row);
             }
