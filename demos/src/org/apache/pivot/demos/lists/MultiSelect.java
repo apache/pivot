@@ -54,11 +54,9 @@ public class MultiSelect implements Application {
             public void selectedRangesChanged(ListView listView, Sequence<Span> previousSelectedRanges) {
                 refreshSelectionListData();
             }
-
-            private void refreshSelectionListData() {
-                selectionListView.setListData(new ArrayList<Span>(dataListView.getSelectedRanges()));
-            }
         });
+
+        refreshSelectionListData();
 
         window.open(display);
         dataListView.requestFocus();
@@ -79,6 +77,10 @@ public class MultiSelect implements Application {
 
     @Override
     public void resume() {
+    }
+
+    private void refreshSelectionListData() {
+        selectionListView.setListData(new ArrayList<Span>(dataListView.getSelectedRanges()));
     }
 
     public static void main(String[] args) {

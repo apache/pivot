@@ -30,22 +30,20 @@ class ListSelection {
     private ArrayList<Span> selectedRanges = new ArrayList<Span>();
 
     /**
-     * Comparator that determines the relative order of two ranges' start
-     * values.
+     * Comparator that determines the index of the first intersecting range.
      */
     public static final Comparator<Span> START_COMPARATOR = new Comparator<Span>() {
         public int compare(Span range1, Span range2) {
-            return (range1.start - range2.start);
+            return (range1.end - range2.start);
         }
     };
 
     /**
-     * Comparator that determines the relative order of two ranges' end
-     * values.
+     * Comparator that determines the index of the last intersecting range.
      */
     public static final Comparator<Span> END_COMPARATOR = new Comparator<Span>() {
         public int compare(Span range1, Span range2) {
-            return (range1.end - range2.end);
+            return (range1.start - range2.end);
         }
     };
 
@@ -69,9 +67,12 @@ class ListSelection {
      * A sequence containing the ranges that were added.
      */
     public Sequence<Span> addRange(int start, int end) {
+        assert(start > 0);
+        assert(end >= start);
+
         ArrayList<Span> added = new ArrayList<Span>();
 
-        Span range = normalize(start, end);
+        Span range = new Span(start, end);
 
         if (range.getLength() > 0) {
             int n = selectedRanges.getLength();
@@ -81,30 +82,17 @@ class ListSelection {
                 selectedRanges.add(range);
                 added.add(range);
             } else {
-                // Perform two binary searches to determine the endpoints
-                // of the intersection
+                // Locate the lower bound of the intersection
                 int i = ArrayList.binarySearch(selectedRanges, range, START_COMPARATOR);
                 if (i <= 0) {
                     i = -(i + 1);
                 }
 
-                int j = ArrayList.binarySearch(selectedRanges, range, END_COMPARATOR);
-                if (j <= 0) {
-                    j = -(j + 1);
-                }
-
-                // Merge the selection with the previous and next ranges, if necessary
+                // Merge the selection with the previous range, if necessary
                 if (i > 0) {
                     Span previousRange = selectedRanges.get(i - 1);
                     if (range.start == previousRange.end + 1) {
                         i--;
-                    }
-                }
-
-                if (j < n) {
-                    Span nextRange = selectedRanges.get(j);
-                    if (range.end == nextRange.start - 1) {
-                        j++;
                     }
                 }
 
@@ -114,21 +102,38 @@ class ListSelection {
                     selectedRanges.add(range);
                     added.add(range);
                 } else {
-                    // TODO Add any gaps to the added list
-
-                    // Remove any redundant ranges
-                    if (i < j) {
-                        selectedRanges.remove(i + 1, j - i - 1);
+                    // Locate the upper bound of the intersection
+                    int j = ArrayList.binarySearch(selectedRanges, range, END_COMPARATOR);
+                    if (j <= 0) {
+                        j = -(j + 1);
                     }
 
-                    // Create a new range representing the union of the intersecting ranges
-                    Span lowerRange = selectedRanges.get(i);
-                    Span upperRange = selectedRanges.get(j);
+                    // Merge the selection with the next range, if necessary
+                    if (j < n) {
+                        Span nextRange = selectedRanges.get(j);
+                        if (range.end == nextRange.start - 1) {
+                            j++;
+                        }
+                    }
 
-                    range = new Span(Math.min(range.start, lowerRange.start),
-                        Math.max(range.end, upperRange.end));
+                    if (i == j) {
+                        selectedRanges.insert(range, i);
+                    } else {
+                        Span lowerRange = selectedRanges.get(i);
+                        Span upperRange = selectedRanges.get(j - 1);
 
-                    selectedRanges.update(i, range);
+                        // Remove all redundant ranges
+                        // TODO Add the gaps to the added list
+                        if (i < j) {
+                            selectedRanges.remove(i + 1, j - i - 1);
+                        }
+
+                        // Create a new range representing the union of the intersecting ranges
+                        range = new Span(Math.min(range.start, lowerRange.start),
+                            Math.max(range.end, upperRange.end));
+
+                        selectedRanges.update(i, range);
+                    }
                 }
             }
         }
@@ -147,26 +152,57 @@ class ListSelection {
      * A sequence containing the ranges that were removed.
      */
     public Sequence<Span> removeRange(int start, int end) {
+        assert(start > 0);
+        assert(end >= start);
+
         ArrayList<Span> removed = new ArrayList<Span>();
 
-        Span range = normalize(start, end);
+        Span range = new Span(start, end);
 
-        if (range.getLength() > 0
-            && selectedRanges.getLength() > 0) {
-            // Perform two binary searches to determine the endpoints
-            // of the intersection
-            int i = ArrayList.binarySearch(selectedRanges, range, START_COMPARATOR);
-            if (i <= 0) {
-                i = -(i + 1);
-            }
+        if (range.getLength() > 0) {
+            int n = selectedRanges.getLength();
 
-            int j = ArrayList.binarySearch(selectedRanges, range, END_COMPARATOR);
-            if (j <= 0) {
-                j = -(j + 1);
-            }
+            if (n > 0) {
+                // Locate the lower bound of the intersection
+                int i = ArrayList.binarySearch(selectedRanges, range, START_COMPARATOR);
+                if (i <= 0) {
+                    i = -(i + 1);
+                }
 
-            if (i == j) {
+                Span lowerRange = selectedRanges.get(i);
 
+                if (lowerRange.start < range.start
+                    && lowerRange.end > range.end) {
+                    // Removing the range will split the intersecting selection
+                    // into two ranges
+                    selectedRanges.update(i, new Span(lowerRange.start, range.start - 1));
+                    selectedRanges.insert(new Span(range.end + 1, lowerRange.end), i + 1);
+                    removed.add(range);
+                } else {
+                    if (range.start > lowerRange.start) {
+                        // TODO Remove the tail of this range; add to removed list
+                        i++;
+                    }
+
+                    // Locate the upper bound of the intersection
+                    int j = ArrayList.binarySearch(selectedRanges, range, END_COMPARATOR);
+                    if (j <= 0) {
+                        j = -(j + 1);
+                    }
+
+                    Span upperRange = selectedRanges.get(j - 1);
+
+                    if (range.end < upperRange.end) {
+                        // TODO Remove the head of this range; add to removed list
+                        j--;
+                    }
+
+                    // Remove all cleared ranges
+                    // TODO Add the removed ranges to the removed list
+                    if (i < j) {
+                        selectedRanges.remove(i + 1, j - i - 1);
+                    }
+                }
             }
         }
 
@@ -292,9 +328,5 @@ class ListSelection {
             selectedRanges.update(i, new Span(selectedRange.start - count, selectedRange.end - count));
             i++;
         }
-    }
-
-    public static Span normalize(int start, int end) {
-        return new Span(Math.min(start, end), Math.max(start, end));
     }
 }

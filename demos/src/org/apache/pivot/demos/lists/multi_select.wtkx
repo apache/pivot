@@ -34,7 +34,8 @@ limitations under the License.
                             <ScrollPane horizontalScrollBarPolicy="fill">
                                 <view>
                                     <ListView wtkx:id="dataListView" selectMode="multi"
-                                        selectedRanges="[{start:0, end:1}, {start:3, end:7}, {start:10, end:15}]">
+                                        selectedRanges="[{start:0, end:1}, {start:3, end:7}, {start:10, end:15},
+                                            {start:25, end:30}, {start:4, end:19}]">
                                         <listData>
                                             <content:NumericSpinnerData lowerBound="0" upperBound="31"
                                                 increment="1"/>
