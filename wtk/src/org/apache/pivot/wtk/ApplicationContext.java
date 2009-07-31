@@ -1179,7 +1179,9 @@ public abstract class ApplicationContext {
                                     unprocessedKeyHandler.keyPressed(keyCode, keyLocation);
                                 }
                             } else {
-                                consumed = focusedComponent.keyPressed(keyCode, keyLocation);
+                                if (!focusedComponent.isBlocked()) {
+                                    consumed = focusedComponent.keyPressed(keyCode, keyLocation);
+                                }
                             }
                         } catch (Exception exception) {
                             if (application instanceof Application.UncaughtExceptionHandler) {
@@ -1211,7 +1213,9 @@ public abstract class ApplicationContext {
                                     unprocessedKeyHandler.keyReleased(keyCode, keyLocation);
                                 }
                             } else {
-                                consumed = focusedComponent.keyReleased(keyCode, keyLocation);
+                                if (!focusedComponent.isBlocked()) {
+                                    consumed = focusedComponent.keyReleased(keyCode, keyLocation);
+                                }
                             }
                         } catch (Exception exception) {
                             if (application instanceof Application.UncaughtExceptionHandler) {
@@ -1243,7 +1247,9 @@ public abstract class ApplicationContext {
                                     unprocessedKeyHandler.keyTyped(keyChar);
                                 }
                             } else {
-                                consumed = focusedComponent.keyTyped(keyChar);
+                                if (!focusedComponent.isBlocked()) {
+                                    consumed = focusedComponent.keyTyped(keyChar);
+                                }
                             }
                         } catch (Exception exception) {
                             if (application instanceof Application.UncaughtExceptionHandler) {

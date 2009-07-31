@@ -117,8 +117,8 @@ public class Sheet extends Window {
 
         if (isOpen()) {
             Component content = owner.getContent();
-            if (content.isBlocked()) {
-                throw new IllegalStateException("Owner content is already blocked.");
+            if (!content.isEnabled()) {
+                throw new IllegalStateException("Owner content is already disabled.");
             }
 
             content.setEnabled(false);

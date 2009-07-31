@@ -254,7 +254,7 @@ public abstract class Container extends Component
         // and contains the focused component, clear the focus
         if (parent == null
             && containsFocus()) {
-            clearFocus(true);
+            clearFocus(false);
         }
 
         super.setParent(parent);
@@ -303,7 +303,7 @@ public abstract class Container extends Component
     public void setVisible(boolean visible) {
         if (!visible
             && containsFocus()) {
-            clearFocus(true);
+            clearFocus(false);
         }
 
         super.setVisible(visible);
@@ -459,8 +459,7 @@ public abstract class Container extends Component
      */
     @Override
     protected boolean requestFocus(boolean temporary) {
-        if (isShowing()
-            && !isBlocked()) {
+        if (isShowing()) {
             FocusTraversalPolicy focusTraversalPolicy = getFocusTraversalPolicy();
             Component component = focusTraversalPolicy.getNextComponent(this, null, Direction.FORWARD);
             if (component != null) {

@@ -1055,7 +1055,7 @@ public class TableView extends Component {
      *
      * @see #setSelectedRanges(Sequence)
      */
-    public void setSelectedRanges(String selectedRanges) {
+    public final void setSelectedRanges(String selectedRanges) {
         if (selectedRanges == null) {
             throw new IllegalArgumentException("selectedRanges is null.");
         }

@@ -538,7 +538,7 @@ public class ListView extends Component {
      *
      * @param selectedRanges
      */
-    public void setSelectedRanges(Sequence<Span> selectedRanges) {
+    public final void setSelectedRanges(Sequence<Span> selectedRanges) {
         if (selectedRanges == null) {
             throw new IllegalArgumentException("selectedRanges is null.");
         }

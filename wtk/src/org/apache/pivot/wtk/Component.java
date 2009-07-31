@@ -1964,7 +1964,7 @@ public abstract class Component implements ConstrainedVisual {
     public boolean isFocusable() {
         return skin.isFocusable()
             && isShowing()
-            && !isBlocked();
+            && isEnabled();
     }
 
     /**

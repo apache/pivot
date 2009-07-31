@@ -899,8 +899,7 @@ public class Window extends Container {
      * have a focus descendant, the focus is cleared.
      */
     protected void restoreFocus() {
-        assert(isShowing()
-            && !isBlocked());
+        assert(isShowing());
 
         if (focusDescendant != null) {
             if (isAncestor(focusDescendant)) {
@@ -911,7 +910,7 @@ public class Window extends Container {
         }
 
         if (focusDescendant == null) {
-            Component.clearFocus(true);
+            Component.clearFocus(false);
         }
     }
 
@@ -976,7 +975,7 @@ public class Window extends Container {
             } else {
                 // Activate the window
                 if (window.isShowing()
-                    && !window.isBlocked()
+                    && window.isEnabled()
                     && !window.isAuxilliary()) {
                     setActiveWindow(window);
                     window.restoreFocus();

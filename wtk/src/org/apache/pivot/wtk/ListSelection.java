@@ -27,31 +27,36 @@ import org.apache.pivot.collections.Sequence;
  * @author gbrown
  */
 class ListSelection {
+    private ArrayList<Span> selectedRanges = new ArrayList<Span>();
+
     /**
-     * Determines the relative order of two ranges.
-     *
-     * @author gbrown
+     * Comparator that determines the relative order of two ranges' start
+     * values.
      */
-    public static class IntersectionComparator implements Comparator<Span> {
-        /**
-         * Compares two range values. A range is considered less than or greater
-         * than another range if and only if it is absolutely less than or
-         * greater than the other range; if the ranges overlap in any way,
-         * they are considered equal.
-         *
-         * @return
-         * A positive value if <tt>range1</tt> is greater than <tt>range2</tt>;
-         * a negative value if <tt>range1</tt> is less than <tt>range2</tt>; a
-         * value of zero if <tt>range1</tt> intersects with <tt>range2</tt>.
-         */
+    public static final Comparator<Span> START_COMPARATOR = new Comparator<Span>() {
+        public int compare(Span range1, Span range2) {
+            return (range1.start - range2.start);
+        }
+    };
+
+    /**
+     * Comparator that determines the relative order of two ranges' end
+     * values.
+     */
+    public static final Comparator<Span> END_COMPARATOR = new Comparator<Span>() {
+        public int compare(Span range1, Span range2) {
+            return (range1.end - range2.end);
+        }
+    };
+
+    /**
+     * Comparator that determines if two ranges intersect.
+     */
+    public static final Comparator<Span> INTERSECTION_COMPARATOR = new Comparator<Span>() {
         public int compare(Span range1, Span range2) {
             return (range1.start > range2.end) ? 1 : (range2.start > range1.end) ? -1 : 0;
         }
-    }
-
-    private ArrayList<Span> selectedRanges = new ArrayList<Span>();
-
-    public static final IntersectionComparator INTERSECTION_COMPARATOR = new IntersectionComparator();
+    };
 
     /**
      * Adds a range to the selection, merging and removing intersecting ranges
@@ -72,12 +77,59 @@ class ListSelection {
             int n = selectedRanges.getLength();
 
             if (n == 0) {
-                // Nothing is currently selected
+                // The selection is currently empty; append the new range
                 selectedRanges.add(range);
                 added.add(range);
             } else {
-                // TODO Perform two binary searches to determine the endpoints
+                // Perform two binary searches to determine the endpoints
                 // of the intersection
+                int i = ArrayList.binarySearch(selectedRanges, range, START_COMPARATOR);
+                if (i <= 0) {
+                    i = -(i + 1);
+                }
+
+                int j = ArrayList.binarySearch(selectedRanges, range, END_COMPARATOR);
+                if (j <= 0) {
+                    j = -(j + 1);
+                }
+
+                // Merge the selection with the previous and next ranges, if necessary
+                if (i > 0) {
+                    Span previousRange = selectedRanges.get(i - 1);
+                    if (range.start == previousRange.end + 1) {
+                        i--;
+                    }
+                }
+
+                if (j < n) {
+                    Span nextRange = selectedRanges.get(j);
+                    if (range.end == nextRange.start - 1) {
+                        j++;
+                    }
+                }
+
+                if (i == n) {
+                    // The new range starts after the last existing selection
+                    // ends; append
+                    selectedRanges.add(range);
+                    added.add(range);
+                } else {
+                    // TODO Add any gaps to the added list
+
+                    // Remove any redundant ranges
+                    if (i < j) {
+                        selectedRanges.remove(i + 1, j - i - 1);
+                    }
+
+                    // Create a new range representing the union of the intersecting ranges
+                    Span lowerRange = selectedRanges.get(i);
+                    Span upperRange = selectedRanges.get(j);
+
+                    range = new Span(Math.min(range.start, lowerRange.start),
+                        Math.max(range.end, upperRange.end));
+
+                    selectedRanges.update(i, range);
+                }
             }
         }
 
@@ -101,7 +153,21 @@ class ListSelection {
 
         if (range.getLength() > 0
             && selectedRanges.getLength() > 0) {
-            // TODO
+            // Perform two binary searches to determine the endpoints
+            // of the intersection
+            int i = ArrayList.binarySearch(selectedRanges, range, START_COMPARATOR);
+            if (i <= 0) {
+                i = -(i + 1);
+            }
+
+            int j = ArrayList.binarySearch(selectedRanges, range, END_COMPARATOR);
+            if (j <= 0) {
+                j = -(j + 1);
+            }
+
+            if (i == j) {
+
+            }
         }
 
         return removed;
@@ -133,8 +199,8 @@ class ListSelection {
      * @param range
      *
      * @return
-     * The index of the range, if it exists in the selection in its entirety;
-     * <tt>-1</tt>, otherwise.
+     * The index of the range, if it exists in the selection; <tt>-1</tt>,
+     * otherwise.
      */
     public int indexOf(Span range) {
         assert (range != null);
@@ -158,7 +224,10 @@ class ListSelection {
      * <tt>true</tt> if the index is selected; <tt>false</tt>, otherwise.
      */
     public boolean containsIndex(int index) {
-        return (indexOf(new Span(index, index)) != -1);
+        Span range = new Span(index, index);
+        int i = ArrayList.binarySearch(selectedRanges, range, INTERSECTION_COMPARATOR);
+
+        return (i >= 0);
     }
 
     /**

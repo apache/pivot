@@ -33,21 +33,8 @@ import org.apache.pivot.util.ListenerList;
  * the list).
  * <p>
  * The iterator returned by this class's <tt>iterator</tt> method is
- * <i>fail-fast</i>: if the data is structurally modified at any time after
- * the iterator is created, in any way except through the iterator's own
- * remove or add methods, the iterator will throw a
- * <tt>ConcurrentModificationException</tt>. Thus, in the face of concurrent
- * modification, the iterator fails quickly and cleanly, rather than risking
- * arbitrary, non-deterministic behavior at an undetermined time in the
- * future.
- * <p>
- * Note that the fail-fast behavior of an iterator cannot be guaranteed
- * as it is, generally speaking, impossible to make any hard guarantees in the
- * presence of unsynchronized concurrent modification.  Fail-fast iterators
- * throw <tt>ConcurrentModificationException</tt> on a best-effort basis.
- * Therefore, it would be wrong to write a program that depended on this
- * exception for its correctness: <i>the fail-fast behavior of iterators
- * should be used only to detect bugs.</i>
+ * <i>fail-fast</i>: if the bounds of the enclosing spinner data change during
+ * iteration, a <tt>ConcurrentModificationException</tt> will be thrown.
  *
  * @author tvolkert
  */
