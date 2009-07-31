@@ -396,20 +396,6 @@ public abstract class Container extends Component
         }
     }
 
-    @Override
-    public void setEnabled(boolean enabled) {
-        if (isEnabled() != enabled) {
-            super.setEnabled(enabled);
-
-            if (isEnabled() == enabled) {
-                if (!enabled
-                    && containsFocus()) {
-                    clearFocus(true);
-                }
-            }
-        }
-    }
-
     /**
      * Unsupported for containers. Only leaf components can have tooltips.
      */
