@@ -67,7 +67,7 @@ class ListSelection {
      * A sequence containing the ranges that were added.
      */
     public Sequence<Span> addRange(int start, int end) {
-        assert(start > 0);
+        assert(start >= 0);
         assert(end >= start);
 
         ArrayList<Span> added = new ArrayList<Span>();
@@ -84,7 +84,7 @@ class ListSelection {
             } else {
                 // Locate the lower bound of the intersection
                 int i = ArrayList.binarySearch(selectedRanges, range, START_COMPARATOR);
-                if (i <= 0) {
+                if (i < 0) {
                     i = -(i + 1);
                 }
 
@@ -104,8 +104,10 @@ class ListSelection {
                 } else {
                     // Locate the upper bound of the intersection
                     int j = ArrayList.binarySearch(selectedRanges, range, END_COMPARATOR);
-                    if (j <= 0) {
+                    if (j < 0) {
                         j = -(j + 1);
+                    } else {
+                        j++;
                     }
 
                     // Merge the selection with the next range, if necessary
@@ -118,6 +120,7 @@ class ListSelection {
 
                     if (i == j) {
                         selectedRanges.insert(range, i);
+                        added.add(range);
                     } else {
                         Span lowerRange = selectedRanges.get(i);
                         Span upperRange = selectedRanges.get(j - 1);
@@ -152,7 +155,7 @@ class ListSelection {
      * A sequence containing the ranges that were removed.
      */
     public Sequence<Span> removeRange(int start, int end) {
-        assert(start > 0);
+        assert(start >= 0);
         assert(end >= start);
 
         ArrayList<Span> removed = new ArrayList<Span>();
@@ -165,7 +168,7 @@ class ListSelection {
             if (n > 0) {
                 // Locate the lower bound of the intersection
                 int i = ArrayList.binarySearch(selectedRanges, range, START_COMPARATOR);
-                if (i <= 0) {
+                if (i < 0) {
                     i = -(i + 1);
                 }
 
@@ -186,8 +189,10 @@ class ListSelection {
 
                     // Locate the upper bound of the intersection
                     int j = ArrayList.binarySearch(selectedRanges, range, END_COMPARATOR);
-                    if (j <= 0) {
+                    if (j < 0) {
                         j = -(j + 1);
+                    } else {
+                        j++;
                     }
 
                     Span upperRange = selectedRanges.get(j - 1);
