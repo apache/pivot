@@ -34,6 +34,8 @@ import org.apache.pivot.util.ListenerList;
 public final class ImmutableList<T> implements List<T> {
     private List<T> list = null;
 
+    private ListListenerList<T> listListeners = new ListListenerList<T>();
+
     public ImmutableList(List<T> list) {
         if (list == null) {
             throw new IllegalArgumentException("list is null.");
@@ -90,6 +92,6 @@ public final class ImmutableList<T> implements List<T> {
     }
 
     public ListenerList<ListListener<T>> getListListeners() {
-        throw new UnsupportedOperationException();
+        return listListeners;
     }
 }
