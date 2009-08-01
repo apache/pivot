@@ -67,7 +67,7 @@ public class ArrayListTest {
 
         assertEquals(list.getLength(), 3);
         assertEquals(list.get(0), "a");
-        assertEquals(list.get(0), "b");
-        assertEquals(list.get(0), "c");
+        assertEquals(list.get(1), "b");
+        assertEquals(list.get(2), "c");
     }
 }

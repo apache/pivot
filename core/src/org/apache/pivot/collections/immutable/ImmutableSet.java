@@ -41,11 +41,11 @@ public class ImmutableSet<E> implements Set<E> {
         this.set = set;
     }
 
-    public void add(E element) {
+    public boolean add(E element) {
         throw new UnsupportedOperationException();
     }
 
-    public void remove(E element) {
+    public boolean remove(E element) {
         throw new UnsupportedOperationException();
     }
 
@@ -59,6 +59,10 @@ public class ImmutableSet<E> implements Set<E> {
 
     public boolean isEmpty() {
         return set.isEmpty();
+    }
+
+    public int count() {
+        return set.count();
     }
 
     public Comparator<E> getComparator() {

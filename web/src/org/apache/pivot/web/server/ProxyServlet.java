@@ -51,13 +51,13 @@ public class ProxyServlet extends HttpServlet {
         private static final long serialVersionUID = 3055851700567335445L;
 
         @Override
-        public void add(String element) {
-            super.add(element.toLowerCase());
+        public boolean add(String element) {
+            return super.add(element.toLowerCase());
         }
 
         @Override
-        public void remove(String element) {
-            super.remove(element.toLowerCase());
+        public boolean remove(String element) {
+            return super.remove(element.toLowerCase());
         }
 
         @Override

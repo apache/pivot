@@ -45,18 +45,30 @@ public class SetAdapter<E> implements Set<E> {
         return set;
     }
 
-    public void add(E element) {
+    public boolean add(E element) {
+        boolean added = false;
+
         if (!contains(element)) {
             set.add(element);
+            added = true;
+
             setListeners.elementAdded(this, element);
         }
+
+        return added;
     }
 
-    public void remove(E element) {
+    public boolean remove(E element) {
+        boolean removed = false;
+
         if (contains(element)) {
             set.remove(element);
+            removed = false;
+
             setListeners.elementRemoved(this, element);
         }
+
+        return removed;
     }
 
     public void clear() {
@@ -72,6 +84,10 @@ public class SetAdapter<E> implements Set<E> {
 
     public boolean isEmpty() {
         return set.isEmpty();
+    }
+
+    public int count() {
+        return set.size();
     }
 
     public Comparator<E> getComparator() {

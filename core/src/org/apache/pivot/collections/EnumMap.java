@@ -105,6 +105,10 @@ public class EnumMap<E extends Enum<E>, V> implements Map<E, V>, Serializable {
         return keySet.isEmpty();
     }
 
+    public int count() {
+        return keySet.count();
+    }
+
     public Comparator<E> getComparator() {
         return null;
     }

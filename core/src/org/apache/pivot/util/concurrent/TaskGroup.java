@@ -79,22 +79,30 @@ public class TaskGroup extends Task<Void>
         return null;
     }
 
-    public void add(Task<?> element) {
+    public boolean add(Task<?> element) {
         if (isPending()) {
             throw new IllegalStateException();
         }
 
-        tasks.add(element);
-        count++;
+        boolean added = tasks.add(element);
+        if (added) {
+            count++;
+        }
+
+        return added;
     }
 
-    public void remove(Task<?> element) {
+    public boolean remove(Task<?> element) {
         if (isPending()) {
             throw new IllegalStateException();
         }
 
-        tasks.remove(element);
-        count--;
+        boolean removed = tasks.remove(element);
+        if (removed) {
+            count--;
+        }
+
+        return removed;
     }
 
     public boolean contains(Task<?> element) {

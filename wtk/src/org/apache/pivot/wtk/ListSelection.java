@@ -67,20 +67,19 @@ class ListSelection {
      * A sequence containing the ranges that were added.
      */
     public Sequence<Span> addRange(int start, int end) {
-        assert(start >= 0);
-        assert(end >= start);
+        ArrayList<Span> addedRanges = new ArrayList<Span>();
 
-        ArrayList<Span> added = new ArrayList<Span>();
-
-        Span range = new Span(start, end);
+        Span range = normalize(start, end);
+        assert(range.start >= 0);
 
         if (range.getLength() > 0) {
             int n = selectedRanges.getLength();
 
             if (n == 0) {
                 // The selection is currently empty; append the new range
+                // and add it to the added range list
                 selectedRanges.add(range);
-                added.add(range);
+                addedRanges.add(range);
             } else {
                 // Locate the lower bound of the intersection
                 int i = ArrayList.binarySearch(selectedRanges, range, START_COMPARATOR);
@@ -98,9 +97,9 @@ class ListSelection {
 
                 if (i == n) {
                     // The new range starts after the last existing selection
-                    // ends; append
+                    // ends; append it and add it to the added range list
                     selectedRanges.add(range);
-                    added.add(range);
+                    addedRanges.add(range);
                 } else {
                     // Locate the upper bound of the intersection
                     int j = ArrayList.binarySearch(selectedRanges, range, END_COMPARATOR);
@@ -120,28 +119,42 @@ class ListSelection {
 
                     if (i == j) {
                         selectedRanges.insert(range, i);
-                        added.add(range);
+                        addedRanges.add(range);
                     } else {
+                        // Create a new range representing the union of the intersecting ranges
                         Span lowerRange = selectedRanges.get(i);
                         Span upperRange = selectedRanges.get(j - 1);
 
-                        // Remove all redundant ranges
-                        // TODO Add the gaps to the added list
-                        if (i < j) {
-                            selectedRanges.remove(i + 1, j - i - 1);
-                        }
-
-                        // Create a new range representing the union of the intersecting ranges
                         range = new Span(Math.min(range.start, lowerRange.start),
                             Math.max(range.end, upperRange.end));
 
+                        // Add the gaps to the added list
+                        if (range.start < lowerRange.start) {
+                            addedRanges.add(new Span(range.start, lowerRange.start - 1));
+                        }
+
+                        for (int k = i; k < j - 1; k++) {
+                            Span selectedRange = selectedRanges.get(k);
+                            Span nextSelectedRange = selectedRanges.get(k + 1);
+                            addedRanges.add(new Span(selectedRange.end + 1, nextSelectedRange.start - 1));
+                        }
+
+                        if (range.end > upperRange.end) {
+                            addedRanges.add(new Span(upperRange.end + 1, range.end));
+                        }
+
+                        // Remove all redundant ranges
                         selectedRanges.update(i, range);
+
+                        if (i < j) {
+                            selectedRanges.remove(i + 1, j - i - 1);
+                        }
                     }
                 }
             }
         }
 
-        return added;
+        return addedRanges;
     }
 
     /**
@@ -155,12 +168,10 @@ class ListSelection {
      * A sequence containing the ranges that were removed.
      */
     public Sequence<Span> removeRange(int start, int end) {
-        assert(start >= 0);
-        assert(end >= start);
+        ArrayList<Span> removedRanges = new ArrayList<Span>();
 
-        ArrayList<Span> removed = new ArrayList<Span>();
-
-        Span range = new Span(start, end);
+        Span range = normalize(start, end);
+        assert(range.start >= 0);
 
         if (range.getLength() > 0) {
             int n = selectedRanges.getLength();
@@ -180,12 +191,13 @@ class ListSelection {
                     // into two ranges
                     selectedRanges.update(i, new Span(lowerRange.start, range.start - 1));
                     selectedRanges.insert(new Span(range.end + 1, lowerRange.end), i + 1);
-                    removed.add(range);
+                    removedRanges.add(range);
                 } else {
+                    Span leadingRemovedRange = null;
                     if (range.start > lowerRange.start) {
                         // Remove the tail of this range
-                        // TODO Add removed tail to removed list
                         selectedRanges.update(i, new Span(lowerRange.start, range.start - 1));
+                        leadingRemovedRange = new Span(range.start, lowerRange.end);
                         i++;
                     }
 
@@ -199,21 +211,34 @@ class ListSelection {
 
                     Span upperRange = selectedRanges.get(j - 1);
 
+                    Span trailingRemovedRange = null;
                     if (range.end < upperRange.end) {
-                        // Remove the head of this range;
-                        // TODO Add removed head to removed list
-                        selectedRanges.update(j, new Span(range.end + 1, upperRange.end));
+                        // Remove the head of this range
+                        selectedRanges.update(j - 1, new Span(range.end + 1, upperRange.end));
+                        trailingRemovedRange = new Span(upperRange.start, range.end);
                         j--;
                     }
 
                     // Remove all cleared ranges
-                    // TODO Add the removed ranges to the removed list
-                    selectedRanges.remove(i, j - i);
+                    Sequence<Span> clearedRanges = selectedRanges.remove(i, j - i);
+
+                    // Construct the removed range list
+                    if (leadingRemovedRange != null) {
+                        removedRanges.add(leadingRemovedRange);
+                    }
+
+                    for (int k = 0, c = clearedRanges.getLength(); k < c; k++) {
+                        removedRanges.add(clearedRanges.get(k));
+                    }
+
+                    if (trailingRemovedRange != null) {
+                        removedRanges.add(trailingRemovedRange);
+                    }
                 }
             }
         }
 
-        return removed;
+        return removedRanges;
     }
 
     public void clear() {
@@ -335,5 +360,9 @@ class ListSelection {
             selectedRanges.update(i, new Span(selectedRange.start - count, selectedRange.end - count));
             i++;
         }
+    }
+
+    public static Span normalize(int start, int end) {
+        return new Span(Math.min(start, end), Math.max(start, end));
     }
 }

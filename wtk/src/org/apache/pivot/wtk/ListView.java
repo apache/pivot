@@ -677,16 +677,12 @@ public class ListView extends Component {
             throw new IndexOutOfBoundsException();
         }
 
-        Sequence<Span> added = listSelection.addRange(start, end);
+        Sequence<Span> addedRanges = listSelection.addRange(start, end);
 
-        // TODO
-        listViewSelectionListeners.selectedRangeAdded(this, start, end);
-        /*
-        for (int i = 0, n = added.getLength(); i < n; i++) {
-            Span addedRange = added.get(i);
+        for (int i = 0, n = addedRanges.getLength(); i < n; i++) {
+            Span addedRange = addedRanges.get(i);
             listViewSelectionListeners.selectedRangeAdded(this, addedRange.start, addedRange.end);
         }
-        */
     }
 
     /**
@@ -731,17 +727,12 @@ public class ListView extends Component {
             throw new IndexOutOfBoundsException();
         }
 
-        Sequence<Span> removed = listSelection.removeRange(start, end);
+        Sequence<Span> removedRanges = listSelection.removeRange(start, end);
 
-        // TODO
-        listViewSelectionListeners.selectedRangeRemoved(this, start, end);
-
-        /*
-        for (int i = 0, n = removed.getLength(); i < n; i++) {
-            Span removedRange = removed.get(i);
+        for (int i = 0, n = removedRanges.getLength(); i < n; i++) {
+            Span removedRange = removedRanges.get(i);
             listViewSelectionListeners.selectedRangeRemoved(this, removedRange.start, removedRange.end);
         }
-        */
     }
 
     /**

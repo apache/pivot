@@ -66,6 +66,10 @@ public class ImmutableMap<K, V> implements Map<K, V> {
         return map.isEmpty();
     }
 
+    public int count() {
+        return map.count();
+    }
+
     public Comparator<K> getComparator() {
         return null;
     }

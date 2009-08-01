@@ -116,6 +116,11 @@ public class SynchronizedMap<K, V> extends SynchronizedCollection<K>
         return ((Map<K, V>)collection).containsKey(key);
     }
 
+    @SuppressWarnings("unchecked")
+    public synchronized int count() {
+        return ((Map<K, V>)collection).count();
+    }
+
     public ListenerList<MapListener<K, V>> getMapListeners() {
         return mapListeners;
     }

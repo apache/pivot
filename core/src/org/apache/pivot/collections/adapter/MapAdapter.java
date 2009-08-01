@@ -90,6 +90,10 @@ public class MapAdapter<K, V> implements Map<K, V> {
         return map.isEmpty();
     }
 
+    public int count() {
+        return map.size();
+    }
+
     public Comparator<K> getComparator() {
         return null;
     }

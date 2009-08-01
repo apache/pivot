@@ -61,17 +61,22 @@ public interface Set<E> extends Group<E>, Collection<E> {
     /**
      * @see SetListener#elementAdded(Set, Object)
      */
-    public void add(E element);
+    public boolean add(E element);
 
     /**
      * @see SetListener#elementRemoved(Set, Object)
      */
-    public void remove(E element);
+    public boolean remove(E element);
 
     /**
      * @see SetListener#setCleared(Set)
      */
     public void clear();
+
+    /**
+     * Returns the number of elements in the set.
+     */
+    public int count();
 
     /**
      * @see SetListener#setCleared(Set)

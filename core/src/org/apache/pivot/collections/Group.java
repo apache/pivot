@@ -27,16 +27,24 @@ public interface Group<E> {
      *
      * @param element
      * The element to add to the group.
+     *
+     * @return
+     * <tt>true</tt> if the element was added to the group; <tt>false</tt>,
+     * otherwise.
      */
-    public void add(E element);
+    public boolean add(E element);
 
     /**
      * Removes an element from the group.
      *
      * @param element
      * The element to remove from the set.
+     *
+     * @return
+     * <tt>true</tt> if the element was removed from the group; <tt>false</tt>,
+     * otherwise.
      */
-    public void remove(E element);
+    public boolean remove(E element);
 
     /**
      * Tests the existence of an element in the group.

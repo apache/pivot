@@ -87,24 +87,34 @@ public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
         return enumClass;
     }
 
-    public void add(E element) {
-        int ordinal = element.ordinal();
+    public boolean add(E element) {
+        boolean added = false;
 
+        int ordinal = element.ordinal();
         if (!members[ordinal]) {
             members[ordinal] = true;
+            added = true;
             count++;
+
             setListeners.elementAdded(this, element);
         }
+
+        return added;
     }
 
-    public void remove(E element) {
-        int ordinal = element.ordinal();
+    public boolean remove(E element) {
+        boolean removed = false;
 
+        int ordinal = element.ordinal();
         if (members[ordinal]) {
             members[ordinal] = false;
+            removed = true;
             count--;
+
             setListeners.elementRemoved(this, element);
         }
+
+        return removed;
     }
 
     public void clear() {
@@ -121,6 +131,10 @@ public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
 
     public boolean isEmpty() {
         return count == 0;
+    }
+
+    public int count() {
+        return count;
     }
 
     public Comparator<E> getComparator() {

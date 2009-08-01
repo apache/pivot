@@ -138,6 +138,11 @@ public interface Map<K, V> extends Dictionary<K, V>, Collection<K> {
     public void clear();
 
     /**
+     * Returns the number of entries in the map.
+     */
+    public int count();
+
+    /**
      * @see MapListener#comparatorChanged(Map, Comparator)
      */
     public void setComparator(Comparator<K> comparator);

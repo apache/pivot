@@ -1130,17 +1130,12 @@ public class TableView extends Component {
             throw new IndexOutOfBoundsException();
         }
 
-        Sequence<Span> added = tableSelection.addRange(start, end);
+        Sequence<Span> addedRanges = tableSelection.addRange(start, end);
 
-        // TODO
-        tableViewSelectionListeners.selectedRangeAdded(this, start, end);
-
-        /*
-        for (int i = 0, n = added.getLength(); i < n; i++) {
-            Span addedRange = added.get(i);
+        for (int i = 0, n = addedRanges.getLength(); i < n; i++) {
+            Span addedRange = addedRanges.get(i);
             tableViewSelectionListeners.selectedRangeAdded(this, addedRange.start, addedRange.end);
         }
-        */
     }
 
     /**
@@ -1185,17 +1180,12 @@ public class TableView extends Component {
             throw new IndexOutOfBoundsException();
         }
 
-        Sequence<Span> removed = tableSelection.removeRange(start, end);
+        Sequence<Span> removedRanges = tableSelection.removeRange(start, end);
 
-        // TODO
-        tableViewSelectionListeners.selectedRangeRemoved(this, start, end);
-
-        /*
-        for (int i = 0, n = removed.getLength(); i < n; i++) {
-            Span removedRange = removed.get(i);
+        for (int i = 0, n = removedRanges.getLength(); i < n; i++) {
+            Span removedRange = removedRanges.get(i);
             tableViewSelectionListeners.selectedRangeRemoved(this, removedRange.start, removedRange.end);
         }
-        */
     }
 
     /**

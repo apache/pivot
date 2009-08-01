@@ -66,18 +66,30 @@ public class HashSet<E> implements Set<E>, Serializable {
         // this.comparator = comparator;
     }
 
-    public void add(E element) {
+    public boolean add(E element) {
+        boolean added = false;
+
         if (!hashSet.contains(element)) {
             hashSet.add(element);
+            added = true;
+
             setListeners.elementAdded(this, element);
         }
+
+        return added;
     }
 
-    public void remove(E element) {
+    public boolean remove(E element) {
+        boolean removed = false;
+
         if (hashSet.contains(element)) {
             hashSet.remove(element);
+            removed = true;
+
             setListeners.elementRemoved(this, element);
         }
+
+        return removed;
     }
 
     public void clear() {

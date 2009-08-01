@@ -22,7 +22,6 @@ import org.apache.pivot.collections.Set;
 import org.apache.pivot.collections.SetListener;
 import org.apache.pivot.util.ListenerList;
 
-
 /**
  * Synchronized implementation of the {@link Set} interface.
  *
@@ -69,18 +68,30 @@ public class SynchronizedSet<E> extends SynchronizedCollection<E>
         super(set);
     }
 
-    public synchronized void add(E element) {
+    public synchronized boolean add(E element) {
+        boolean added = false;
+
         if (!contains(element)) {
             ((Set<E>)collection).add(element);
+            added = true;
+
             setListeners.elementAdded(this, element);
         }
+
+        return added;
     }
 
-    public synchronized void remove(E element) {
+    public synchronized boolean remove(E element) {
+        boolean removed = false;
+
         if (contains(element)) {
             ((Set<E>)collection).remove(element);
+            removed = true;
+
             setListeners.elementRemoved(this, element);
         }
+
+        return removed;
     }
 
     public synchronized boolean contains(E element) {
@@ -89,6 +100,10 @@ public class SynchronizedSet<E> extends SynchronizedCollection<E>
 
     public synchronized boolean isEmpty() {
         return ((Set<E>)collection).isEmpty();
+    }
+
+    public synchronized int count() {
+        return ((Set<E>)collection).count();
     }
 
     public ListenerList<SetListener<E>> getSetListeners() {
