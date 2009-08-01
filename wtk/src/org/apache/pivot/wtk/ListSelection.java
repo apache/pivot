@@ -183,7 +183,9 @@ class ListSelection {
                     removed.add(range);
                 } else {
                     if (range.start > lowerRange.start) {
-                        // TODO Remove the tail of this range; add to removed list
+                        // Remove the tail of this range
+                        // TODO Add removed tail to removed list
+                        selectedRanges.update(i, new Span(lowerRange.start, range.start - 1));
                         i++;
                     }
 
@@ -198,15 +200,15 @@ class ListSelection {
                     Span upperRange = selectedRanges.get(j - 1);
 
                     if (range.end < upperRange.end) {
-                        // TODO Remove the head of this range; add to removed list
+                        // Remove the head of this range;
+                        // TODO Add removed head to removed list
+                        selectedRanges.update(j, new Span(range.end + 1, upperRange.end));
                         j--;
                     }
 
                     // Remove all cleared ranges
                     // TODO Add the removed ranges to the removed list
-                    if (i < j) {
-                        selectedRanges.remove(i + 1, j - i - 1);
-                    }
+                    selectedRanges.remove(i, j - i);
                 }
             }
         }

@@ -27,6 +27,7 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.ListView;
+import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.Window;
 
 
@@ -48,9 +49,10 @@ public class CheckedListViewTest implements Application {
                 if (keyCode == Keyboard.KeyCode.DELETE) {
                     List<Object> listData = (List<Object>)listView.getListData();
 
-                    Sequence<Object> selectedItems = listView.getSelectedItems();
-                    for (int i = 0, n = selectedItems.getLength(); i < n; i++) {
-                        listData.remove(selectedItems.get(i));
+                    Sequence<Span> selectedRanges = listView.getSelectedRanges();
+                    for (int i = selectedRanges.getLength() - 1; i >= 0; i--) {
+                        Span selectedRange = selectedRanges.get(i);
+                        listData.remove(selectedRange.start, selectedRange.end - selectedRange.start + 1);
                     }
                 }
 

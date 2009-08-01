@@ -290,15 +290,22 @@ public class ListView extends Component {
             // Decrement selected ranges
             listSelection.removeIndexes(index, count);
 
-            int i, n;
-
-            // Decrement checked indexes
-            i = ArrayList.binarySearch(checkedIndexes, index);
+            // Remove and decrement checked indexes
+            int i = ArrayList.binarySearch(checkedIndexes, index);
             if (i < 0) {
                 i = -(i + 1);
             }
 
-            n = checkedIndexes.getLength();
+            int j = ArrayList.binarySearch(checkedIndexes, index + count - 1);
+            if (j < 0) {
+                j = -(j + 1);
+            } else {
+                j++;
+            }
+
+            checkedIndexes.remove(i, j - i);
+
+            int n = checkedIndexes.getLength();
             while (i < n) {
                 checkedIndexes.update(i, checkedIndexes.get(i) - count);
                 i++;
@@ -672,10 +679,14 @@ public class ListView extends Component {
 
         Sequence<Span> added = listSelection.addRange(start, end);
 
+        // TODO
+        listViewSelectionListeners.selectedRangeAdded(this, start, end);
+        /*
         for (int i = 0, n = added.getLength(); i < n; i++) {
             Span addedRange = added.get(i);
             listViewSelectionListeners.selectedRangeAdded(this, addedRange.start, addedRange.end);
         }
+        */
     }
 
     /**
@@ -722,10 +733,15 @@ public class ListView extends Component {
 
         Sequence<Span> removed = listSelection.removeRange(start, end);
 
+        // TODO
+        listViewSelectionListeners.selectedRangeRemoved(this, start, end);
+
+        /*
         for (int i = 0, n = removed.getLength(); i < n; i++) {
             Span removedRange = removed.get(i);
             listViewSelectionListeners.selectedRangeRemoved(this, removedRange.start, removedRange.end);
         }
+        */
     }
 
     /**
