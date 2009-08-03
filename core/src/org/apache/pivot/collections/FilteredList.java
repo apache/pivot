@@ -75,9 +75,11 @@ public class FilteredList<T> implements List<T> {
                     T item = items.get(i);
 
                     int viewIndex = view.indexOf(item);
-                    Sequence<T> removed = view.remove(viewIndex, 1);
 
-                    listListeners.itemsRemoved(FilteredList.this, viewIndex, removed);
+                    if (viewIndex != -1) {
+                        Sequence<T> removed = view.remove(viewIndex, 1);
+                        listListeners.itemsRemoved(FilteredList.this, viewIndex, removed);
+                    }
                 }
             }
         }
@@ -347,7 +349,7 @@ public class FilteredList<T> implements List<T> {
             listListeners.itemUpdated(this, index, previousItem);
 
             // Update the item in the source
-            source.update(source.indexOf(item), item);
+            source.update(source.indexOf(previousItem), item);
         } finally {
             updating = false;
         }
@@ -490,5 +492,25 @@ public class FilteredList<T> implements List<T> {
 
     public ListenerList<FilteredListListener<T>> getFilteredListListeners() {
         return filteredListListeners;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(getClass().getName());
+        sb.append(" [");
+
+        for (int i = 0; i < getLength(); i++) {
+            if (i > 0) {
+                sb.append(", ");
+            }
+
+            sb.append(get(i));
+        }
+
+        sb.append("]");
+
+        return sb.toString();
     }
 }

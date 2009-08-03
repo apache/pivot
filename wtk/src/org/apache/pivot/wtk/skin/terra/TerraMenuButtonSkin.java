@@ -102,10 +102,6 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         MenuButton menuButton = (MenuButton)getComponent();
         Button.DataRenderer dataRenderer = menuButton.getDataRenderer();
 
-        if (height != -1) {
-            height = Math.max(height - (padding.top + padding.bottom + 2), 0);
-        }
-
         dataRenderer.render(menuButton.getButtonData(), menuButton, false);
 
         int preferredWidth = dataRenderer.getPreferredWidth(-1) + TRIGGER_WIDTH
@@ -203,8 +199,8 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         triggerGraphics.setStroke(new BasicStroke(0));
         triggerGraphics.setPaint(color);
 
-        int tx = triggerBounds.x + Math.round((triggerBounds.width - triggerIconShape.getBounds().width) / 2);
-        int ty = triggerBounds.y + Math.round((triggerBounds.height - triggerIconShape.getBounds().height) / 2f);
+        int tx = triggerBounds.x + (triggerBounds.width - triggerIconShape.getBounds().width) / 2;
+        int ty = triggerBounds.y + (triggerBounds.height - triggerIconShape.getBounds().height) / 2;
         triggerGraphics.translate(tx, ty);
 
         triggerGraphics.draw(triggerIconShape);
