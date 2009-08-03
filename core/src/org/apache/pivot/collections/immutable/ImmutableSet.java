@@ -33,6 +33,8 @@ import org.apache.pivot.util.ListenerList;
 public class ImmutableSet<E> implements Set<E> {
     private Set<E> set = null;
 
+    private SetListenerList<E> setListeners = new SetListenerList<E>();
+
     public ImmutableSet(Set<E> set) {
         if (set == null) {
             throw new IllegalArgumentException("set is null.");
@@ -78,6 +80,6 @@ public class ImmutableSet<E> implements Set<E> {
     }
 
     public ListenerList<SetListener<E>> getSetListeners() {
-        throw new UnsupportedOperationException();
+        return setListeners;
     }
 }

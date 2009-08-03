@@ -33,6 +33,8 @@ import org.apache.pivot.util.ListenerList;
 public class ImmutableMap<K, V> implements Map<K, V> {
     private Map<K, V> map = null;
 
+    private MapListenerList<K, V> mapListeners = new MapListenerList<K, V>();
+
     public ImmutableMap(Map<K, V> map) {
         if (map == null) {
             throw new IllegalArgumentException("map is null.");
@@ -83,6 +85,6 @@ public class ImmutableMap<K, V> implements Map<K, V> {
     }
 
     public ListenerList<MapListener<K, V>> getMapListeners() {
-        throw new UnsupportedOperationException();
+        return mapListeners;
     }
 }
