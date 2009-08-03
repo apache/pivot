@@ -380,7 +380,7 @@ public class TabPane extends Container {
 
     public static boolean isCloseable(Component component) {
         Attributes attributes = (Attributes)component.getAttributes();
-        return (attributes == null) ? null : attributes.closeable;
+        return (attributes == null) ? false : attributes.closeable;
     }
 
     public static void setCloseable(Component component, boolean closeable) {
