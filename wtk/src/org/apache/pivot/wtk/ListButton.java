@@ -21,6 +21,7 @@ import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
+import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.content.ListButtonDataRenderer;
 import org.apache.pivot.wtk.content.ListViewItemRenderer;
@@ -52,6 +53,12 @@ public class ListButton extends Button {
             }
         }
 
+        public void disabledItemFilterChanged(ListButton listButton, Filter<?> previousDisabledItemFilter) {
+            for (ListButtonListener listener : this) {
+                listener.disabledItemFilterChanged(listButton, previousDisabledItemFilter);
+            }
+        }
+
         public void selectedItemKeyChanged(ListButton listButton, String previousSelectedItemKey) {
             for (ListButtonListener listener : this) {
                 listener.selectedItemKeyChanged(listButton, previousSelectedItemKey);
@@ -76,6 +83,7 @@ public class ListButton extends Button {
     private List<?> listData;
     private ListView.ItemRenderer itemRenderer = null;
     private int selectedIndex = -1;
+    private Filter<?> disabledItemFilter = null;
     private String selectedItemKey = null;
 
     private ListButtonListenerList listButtonListeners = new ListButtonListenerList();
@@ -263,6 +271,54 @@ public class ListButton extends Button {
         }
 
         setSelectedIndex(index);
+    }
+
+    /**
+     * Returns an item's disabled state.
+     *
+     * @param index
+     * The index of the item whose disabled state is to be tested.
+     *
+     * @return
+     * <tt>true</tt> if the item is disabled; <tt>false</tt>,
+     * otherwise.
+     */
+    @SuppressWarnings("unchecked")
+    public boolean isItemDisabled(int index) {
+        boolean disabled = false;
+
+        if (disabledItemFilter != null) {
+            Object item = listData.get(index);
+            disabled = ((Filter<Object>)disabledItemFilter).include(item);
+        }
+
+        return disabled;
+    }
+
+    /**
+     * Returns the disabled item filter.
+     *
+     * @return
+     * The disabled item filter, or <tt>null</tt> if no disabled item filter is
+     * set.
+     */
+    public Filter<?> getDisabledItemFilter() {
+        return disabledItemFilter;
+    }
+
+    /**
+     * Sets the disabled item filter.
+     *
+     * @param disabledItemFilter
+     * The disabled item filter, or <tt>null</tt> for no disabled item filter.
+     */
+    public void setDisabledItemFilter(Filter<?> disabledItemFilter) {
+        Filter<?> previousDisabledItemFilter = this.disabledItemFilter;
+
+        if (previousDisabledItemFilter != disabledItemFilter) {
+            this.disabledItemFilter = disabledItemFilter;
+            listButtonListeners.disabledItemFilterChanged(this, previousDisabledItemFilter);
+        }
     }
 
     public String getSelectedItemKey() {

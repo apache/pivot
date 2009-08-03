@@ -17,6 +17,7 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.List;
+import org.apache.pivot.util.Filter;
 
 /**
  * List button listener list interface.
@@ -39,6 +40,14 @@ public interface ListButtonListener {
      * @param previousItemRenderer
      */
     public void itemRendererChanged(ListButton listButton, ListView.ItemRenderer previousItemRenderer);
+
+    /**
+     * Called when a list button's disabled item filter has changed.
+     *
+     * @param listButton
+     * @param previousDisabledItemFilter
+     */
+    public void disabledItemFilterChanged(ListButton listButton, Filter<?> previousDisabledItemFilter);
 
     /**
      * Called when a list button's selected value key has changed.

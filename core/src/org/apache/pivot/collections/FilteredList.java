@@ -201,7 +201,8 @@ public class FilteredList<T> implements List<T> {
                 for (T item : source) {
                     if (filter == null
                         || filter.include(item)) {
-                        listListeners.itemInserted(this, view.add(item));
+                        int index = view.add(item);
+                        listListeners.itemInserted(this, index);
                     }
                 }
             }
@@ -243,7 +244,8 @@ public class FilteredList<T> implements List<T> {
                 for (T item : source) {
                     if (filter == null
                         || filter.include(item)) {
-                        listListeners.itemInserted(this, view.add(item));
+                        int index = view.add(item);
+                        listListeners.itemInserted(this, index);
                     }
                 }
             }

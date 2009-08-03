@@ -135,7 +135,7 @@ limitations under the License.
                                 </listData>
                             </ListButton>
 
-                            <ListButton Form.label="Image" selectedIndex="2">
+                            <ListButton wtkx:id="iconListButton" Form.label="Image" selectedIndex="2">
                                 <listData>
                                     <collections:ArrayList>
                                         <content:ListItem icon="@anchor.png" text="Anchor"/>

@@ -41,6 +41,7 @@ import org.apache.pivot.wtk.Border;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.ComponentMouseButtonListener;
+import org.apache.pivot.wtk.ListButton;
 import org.apache.pivot.wtk.MenuHandler;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.DragSource;
@@ -120,6 +121,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         private ListView editableListView = null;
         private ListView iconListView = null;
         private ListView checkedListView = null;
+        private ListButton iconListButton = null;
 
         @SuppressWarnings("unchecked")
         public Vote previewExpandedChange(Rollup rollup) {
@@ -136,6 +138,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                 editableListView = (ListView)wtkxSerializer.get("editableListView");
                 iconListView = (ListView)wtkxSerializer.get("iconListView");
                 checkedListView = (ListView)wtkxSerializer.get("checkedListView");
+                iconListButton = (ListButton)wtkxSerializer.get("iconListButton");
 
                 rollup.setContent(component);
 
@@ -148,11 +151,15 @@ public class KitchenSink implements Application, Application.AboutHandler {
                     }
                 });
 
-                iconListView.setDisabledItemFilter(new Filter<ListItem>() {
+
+                Filter<ListItem> disabledItemFilter = new Filter<ListItem>() {
                     public boolean include(ListItem listItem) {
                         return Character.toLowerCase(listItem.getText().charAt(0)) == 'c';
                     }
-                });
+                };
+
+                iconListView.setDisabledItemFilter(disabledItemFilter);
+                iconListButton.setDisabledItemFilter(disabledItemFilter);
 
                 checkedListView.setItemChecked(0, true);
                 checkedListView.setItemChecked(2, true);

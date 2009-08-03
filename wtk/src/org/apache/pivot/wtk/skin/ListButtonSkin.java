@@ -18,6 +18,7 @@ package org.apache.pivot.wtk.skin;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.List;
+import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Component;
@@ -392,6 +393,10 @@ public abstract class ListButtonSkin extends ButtonSkin
 
     public void itemRendererChanged(ListButton listButton, ListView.ItemRenderer previousItemRenderer) {
         listView.setItemRenderer(listButton.getItemRenderer());
+    }
+
+    public void disabledItemFilterChanged(ListButton listButton, Filter<?> previousDisabledItemFilter) {
+        listView.setDisabledItemFilter(listButton.getDisabledItemFilter());
     }
 
     public void selectedItemKeyChanged(ListButton listButton, String previousSelectedItemKey) {
