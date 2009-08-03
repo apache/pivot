@@ -18,6 +18,9 @@ package org.apache.pivot.wtk;
 
 import java.util.Locale;
 
+import org.apache.pivot.util.CalendarDate;
+import org.apache.pivot.util.Filter;
+
 /**
  * Calendar button listener interface.
  *
@@ -26,13 +29,22 @@ import java.util.Locale;
  */
 public interface CalendarButtonListener {
     /**
-     * Called when a calendar button's selected date key has changed.
+     * Calendar button listener adapter.
      *
-     * @param calendarButton
-     * @param previousSelectedDateKey
+     * @author gbrown
      */
-    public void selectedDateKeyChanged(CalendarButton calendarButton,
-        String previousSelectedDateKey);
+    public static class Adapter implements CalendarButtonListener {
+        public void localeChanged(CalendarButton calendarButton, Locale previousLocale) {
+        }
+
+        public void disabledDateFilterChanged(CalendarButton calendarButton,
+            Filter<CalendarDate> previousDisabledDateFilter) {
+        }
+
+        public void selectedDateKeyChanged(CalendarButton calendarButton,
+            String previousSelectedDateKey) {
+        }
+    }
 
     /**
      * Called when a calendar button's locale has changed.
@@ -41,4 +53,22 @@ public interface CalendarButtonListener {
      * @param previousLocale
      */
     public void localeChanged(CalendarButton calendarButton, Locale previousLocale);
+
+    /**
+     * Called when a calendar button's disabled date filter has changed.
+     *
+     * @param calendarButton
+     * @param previousDisabledDateFilter
+     */
+    public void disabledDateFilterChanged(CalendarButton calendarButton,
+        Filter<CalendarDate> previousDisabledDateFilter);
+
+    /**
+     * Called when a calendar button's selected date key has changed.
+     *
+     * @param calendarButton
+     * @param previousSelectedDateKey
+     */
+    public void selectedDateKeyChanged(CalendarButton calendarButton,
+        String previousSelectedDateKey);
 }

@@ -22,6 +22,7 @@ import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.CalendarDate;
+import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.content.CalendarButtonDataRenderer;
 
@@ -42,16 +43,23 @@ public class CalendarButton extends Button {
     private static class CalendarButtonListenerList
         extends ListenerList<CalendarButtonListener>
         implements CalendarButtonListener {
+        public void localeChanged(CalendarButton calendarButton, Locale previousLocale) {
+            for (CalendarButtonListener listener : this) {
+                listener.localeChanged(calendarButton, previousLocale);
+            }
+        }
+
+        public void disabledDateFilterChanged(CalendarButton calendarButton,
+            Filter<CalendarDate> previousDisabledDateFilter) {
+            for (CalendarButtonListener listener : this) {
+                listener.disabledDateFilterChanged(calendarButton, previousDisabledDateFilter);
+            }
+        }
+
         public void selectedDateKeyChanged(CalendarButton calendarButton,
             String previousSelectedDateKey) {
             for (CalendarButtonListener listener : this) {
                 listener.selectedDateKeyChanged(calendarButton, previousSelectedDateKey);
-            }
-        }
-
-        public void localeChanged(CalendarButton calendarButton, Locale previousLocale) {
-            for (CalendarButtonListener listener : this) {
-                listener.localeChanged(calendarButton, previousLocale);
             }
         }
     }
@@ -74,8 +82,9 @@ public class CalendarButton extends Button {
     }
 
     private CalendarDate selectedDate = null;
-    private String selectedDateKey = null;
     private Locale locale = Locale.getDefault();
+    private Filter<CalendarDate> disabledDateFilter = null;
+    private String selectedDateKey = null;
 
     private CalendarButtonListenerList calendarButtonListeners =
         new CalendarButtonListenerList();
@@ -155,26 +164,6 @@ public class CalendarButton extends Button {
     }
 
     /**
-     * Gets the data binding key that is set on this calendar button.
-     */
-    public String getSelectedDateKey() {
-        return selectedDateKey;
-    }
-
-    /**
-     * Sets this calendar button's data binding key.
-     */
-    public void setSelectedDateKey(String selectedDateKey) {
-        String previousSelectedDateKey = this.selectedDateKey;
-
-        if (previousSelectedDateKey != selectedDateKey) {
-            this.selectedDateKey = selectedDateKey;
-            calendarButtonListeners.selectedDateKeyChanged(this,
-                previousSelectedDateKey);
-        }
-    }
-
-    /**
      * Returns the locale used to present calendar data.
      */
     public Locale getLocale() {
@@ -247,6 +236,39 @@ public class CalendarButton extends Button {
             setLocale(JSONSerializer.parseMap(locale));
         } catch (SerializationException exception) {
             throw new IllegalArgumentException(exception);
+        }
+    }
+
+    public Filter<CalendarDate> getDisabledDateFilter() {
+        return disabledDateFilter;
+    }
+
+    public void setDisabledDateFilter(Filter<CalendarDate> disabledDateFilter) {
+        Filter<CalendarDate> previousDisabledDateFilter = this.disabledDateFilter;
+
+        if (previousDisabledDateFilter != disabledDateFilter) {
+            this.disabledDateFilter = disabledDateFilter;
+            calendarButtonListeners.disabledDateFilterChanged(this, previousDisabledDateFilter);
+        }
+    }
+
+    /**
+     * Gets the data binding key that is set on this calendar button.
+     */
+    public String getSelectedDateKey() {
+        return selectedDateKey;
+    }
+
+    /**
+     * Sets this calendar button's data binding key.
+     */
+    public void setSelectedDateKey(String selectedDateKey) {
+        String previousSelectedDateKey = this.selectedDateKey;
+
+        if (previousSelectedDateKey != selectedDateKey) {
+            this.selectedDateKey = selectedDateKey;
+            calendarButtonListeners.selectedDateKeyChanged(this,
+                previousSelectedDateKey);
         }
     }
 

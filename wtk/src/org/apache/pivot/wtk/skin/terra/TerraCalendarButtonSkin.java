@@ -24,6 +24,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
+import java.util.Locale;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.util.Vote;
@@ -476,5 +477,11 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
         }
 
         setPadding(padding.intValue());
+    }
+
+    // Calendar button events
+    public void localeChanged(CalendarButton calendarButton, Locale previousLocale) {
+        super.localeChanged(calendarButton, previousLocale);
+        invalidateComponent();
     }
 }

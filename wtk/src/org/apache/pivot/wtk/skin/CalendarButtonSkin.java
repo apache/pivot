@@ -19,6 +19,7 @@ package org.apache.pivot.wtk.skin;
 import java.util.Locale;
 
 import org.apache.pivot.util.CalendarDate;
+import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Calendar;
@@ -360,14 +361,18 @@ public abstract class CalendarButtonSkin extends ButtonSkin
     }
 
     // Calendar button events
+    public void localeChanged(CalendarButton calendarButton, Locale previousLocale) {
+        calendar.setLocale(calendarButton.getLocale());
+    }
+
+    public void disabledDateFilterChanged(CalendarButton calendarButton,
+        Filter<CalendarDate> previousDisabledDateFilter) {
+        calendar.setDisabledDateFilter(calendarButton.getDisabledDateFilter());
+    }
+
     public void selectedDateKeyChanged(CalendarButton calendarButton,
         String previousSelectedDateKey) {
         // No-op
-    }
-
-    public void localeChanged(CalendarButton calendarButton, Locale previousLocale) {
-        calendar.setLocale(calendarButton.getLocale());
-        invalidateComponent();
     }
 
     // Calendar button selection events

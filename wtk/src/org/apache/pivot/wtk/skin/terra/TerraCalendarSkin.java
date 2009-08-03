@@ -25,6 +25,7 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import org.apache.pivot.util.CalendarDate;
+import org.apache.pivot.util.Filter;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Calendar;
@@ -579,6 +580,8 @@ public class TerraCalendarSkin extends CalendarSkin
         int month = calendar.getMonth();
         int year = calendar.getYear();
 
+        Filter<CalendarDate> disabledDateFilter = calendar.getDisabledDateFilter();
+
         monthSpinner.setSelectedIndex(month);
         yearSpinner.setSelectedIndex(year);
 
@@ -604,6 +607,7 @@ public class TerraCalendarSkin extends CalendarSkin
                 DateButton dateButton = dateButtons[j][i];
 
                 int day;
+                boolean enabled = false;
                 if (k < firstIndex) {
                     month--;
                     if (month < 0) {
@@ -612,7 +616,6 @@ public class TerraCalendarSkin extends CalendarSkin
                     }
 
                     day = daysLastMonth - (firstIndex - k);
-                    dateButton.setEnabled(false);
                 } else if (k >= lastIndex) {
                     month++;
                     if (month > 11) {
@@ -621,13 +624,16 @@ public class TerraCalendarSkin extends CalendarSkin
                     }
 
                     day = k - lastIndex;
-                    dateButton.setEnabled(false);
                 } else {
                     day = k - firstIndex;
-                    dateButton.setEnabled(true);
+                    enabled = true;
                 }
 
-                dateButton.setButtonData(new CalendarDate(year, month, day));
+                CalendarDate buttonData = new CalendarDate(year, month, day);
+                dateButton.setButtonData(buttonData);
+                dateButton.setEnabled(enabled
+                    && (disabledDateFilter == null
+                        || disabledDateFilter.include(buttonData)));
             }
         }
 
@@ -882,15 +888,15 @@ public class TerraCalendarSkin extends CalendarSkin
     }
 
     @Override
-    public void selectedDateKeyChanged(Calendar calendar,
-        String previousSelectedDateKey) {
-        // No-op
+    public void localeChanged(Calendar calendar, Locale previousLocale) {
+        invalidateComponent(); // TODO Necessary?
+
+        updateLabels();
+        updateCalendar();
     }
 
     @Override
-    public void localeChanged(Calendar calendar, Locale previousLocale) {
-        super.localeChanged(calendar, previousLocale);
-        updateLabels();
+    public void disabledDateFilterChanged(Calendar calendar, Filter<CalendarDate> previousDisabledDateFilter) {
         updateCalendar();
     }
 

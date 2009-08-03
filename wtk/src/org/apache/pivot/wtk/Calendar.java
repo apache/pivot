@@ -22,6 +22,7 @@ import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.CalendarDate;
+import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.ListenerList;
 
 
@@ -52,16 +53,22 @@ public class Calendar extends Container {
             }
         }
 
+        public void localeChanged(Calendar calendar, Locale previousLocale) {
+            for (CalendarListener listener : this) {
+                listener.localeChanged(calendar, previousLocale);
+            }
+        }
+
+        public void disabledDateFilterChanged(Calendar calendar, Filter<CalendarDate> previousDisabledDateFilter) {
+            for (CalendarListener listener : this) {
+                listener.disabledDateFilterChanged(calendar, previousDisabledDateFilter);
+            }
+        }
+
         public void selectedDateKeyChanged(Calendar calendar,
             String previousSelectedDateKey) {
             for (CalendarListener listener : this) {
                 listener.selectedDateKeyChanged(calendar, previousSelectedDateKey);
-            }
-        }
-
-        public void localeChanged(Calendar calendar, Locale previousLocale) {
-            for (CalendarListener listener : this) {
-                listener.localeChanged(calendar, previousLocale);
             }
         }
     }
@@ -87,8 +94,9 @@ public class Calendar extends Container {
     private int month;
 
     private CalendarDate selectedDate = null;
-    private String selectedDateKey = null;
     private Locale locale = Locale.getDefault();
+    private Filter<CalendarDate> disabledDateFilter = null;
+    private String selectedDateKey = null;
 
     private CalendarListenerList calendarListeners = new CalendarListenerList();
     private CalendarSelectionListenerList calendarSelectionListeners =
@@ -193,26 +201,6 @@ public class Calendar extends Container {
     }
 
     /**
-     * Gets the data binding key that is set on this calendar.
-     */
-    public String getSelectedDateKey() {
-        return selectedDateKey;
-    }
-
-    /**
-     * Sets this calendar's data binding key.
-     */
-    public void setSelectedDateKey(String selectedDateKey) {
-        String previousSelectedDateKey = this.selectedDateKey;
-
-        if ((selectedDateKey == null ^ previousSelectedDateKey == null)
-            || (selectedDateKey != null && !selectedDateKey.equals(previousSelectedDateKey))) {
-            this.selectedDateKey = selectedDateKey;
-            calendarListeners.selectedDateKeyChanged(this, previousSelectedDateKey);
-        }
-    }
-
-    /**
      * Returns the locale used to present calendar data.
      */
     public Locale getLocale() {
@@ -285,6 +273,39 @@ public class Calendar extends Container {
             setLocale(JSONSerializer.parseMap(locale));
         } catch (SerializationException exception) {
             throw new IllegalArgumentException(exception);
+        }
+    }
+
+    public Filter<CalendarDate> getDisabledDateFilter() {
+        return disabledDateFilter;
+    }
+
+    public void setDisabledDateFilter(Filter<CalendarDate> disabledDateFilter) {
+        Filter<CalendarDate> previousDisabledDateFilter = this.disabledDateFilter;
+
+        if (previousDisabledDateFilter != disabledDateFilter) {
+            this.disabledDateFilter = disabledDateFilter;
+            calendarListeners.disabledDateFilterChanged(this, previousDisabledDateFilter);
+        }
+    }
+
+    /**
+     * Gets the data binding key that is set on this calendar.
+     */
+    public String getSelectedDateKey() {
+        return selectedDateKey;
+    }
+
+    /**
+     * Sets this calendar's data binding key.
+     */
+    public void setSelectedDateKey(String selectedDateKey) {
+        String previousSelectedDateKey = this.selectedDateKey;
+
+        if ((selectedDateKey == null ^ previousSelectedDateKey == null)
+            || (selectedDateKey != null && !selectedDateKey.equals(previousSelectedDateKey))) {
+            this.selectedDateKey = selectedDateKey;
+            calendarListeners.selectedDateKeyChanged(this, previousSelectedDateKey);
         }
     }
 

@@ -16,15 +16,11 @@
  */
 package org.apache.pivot.wtk.skin;
 
-import java.util.Locale;
-
-import org.apache.pivot.util.CalendarDate;
 import org.apache.pivot.wtk.Calendar;
 import org.apache.pivot.wtk.CalendarListener;
 import org.apache.pivot.wtk.CalendarSelectionListener;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.skin.ContainerSkin;
-
 
 /**
  * Abstract base class for calendar skins.
@@ -51,28 +47,8 @@ public abstract class CalendarSkin extends ContainerSkin
         super.uninstall();
     }
 
-    // Calendar events
-
-    public void yearChanged(Calendar calendar, int previousYear) {
-        // No-op
-    }
-
-    public void monthChanged(Calendar calendar, int previousMonth) {
-        // No-op
-    }
-
     public void selectedDateKeyChanged(Calendar calendar,
         String previousSelectedDateKey) {
-        // No-op
-    }
-
-    public void localeChanged(Calendar calendar, Locale previousLocale) {
-        invalidateComponent();
-    }
-
-    // Calendar selection events
-
-    public void selectedDateChanged(Calendar calendar, CalendarDate previousSelectedDate) {
         // No-op
     }
 }

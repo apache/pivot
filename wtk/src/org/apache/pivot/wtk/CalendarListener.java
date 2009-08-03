@@ -18,6 +18,9 @@ package org.apache.pivot.wtk;
 
 import java.util.Locale;
 
+import org.apache.pivot.util.CalendarDate;
+import org.apache.pivot.util.Filter;
+
 /**
  * Calendar listener interface.
  *
@@ -36,11 +39,14 @@ public interface CalendarListener {
         public void monthChanged(Calendar calendar, int previousMonth) {
         }
 
-        public void selectedDateKeyChanged(Calendar calendar,
-            String previousSelectedDateKey) {
+        public void localeChanged(Calendar calendar, Locale previousLocale) {
         }
 
-        public void localeChanged(Calendar calendar, Locale previousLocale) {
+        public void disabledDateFilterChanged(Calendar calendar, Filter<CalendarDate> previousDisabledDateFilter) {
+        }
+
+        public void selectedDateKeyChanged(Calendar calendar,
+            String previousSelectedDateKey) {
         }
     }
 
@@ -61,6 +67,22 @@ public interface CalendarListener {
     public void monthChanged(Calendar calendar, int previousMonth);
 
     /**
+     * Called when a calendar's locale has changed.
+     *
+     * @param calendar
+     * @param previousLocale
+     */
+    public void localeChanged(Calendar calendar, Locale previousLocale);
+
+    /**
+     * Called when a calendar's disabled date filter has changed.
+     *
+     * @param calendar
+     * @param previousDisabledDateFilter
+     */
+    public void disabledDateFilterChanged(Calendar calendar, Filter<CalendarDate> previousDisabledDateFilter);
+
+    /**
      * Called when a calendar's selected date key has changed.
      *
      * @param calendar
@@ -68,12 +90,4 @@ public interface CalendarListener {
      */
     public void selectedDateKeyChanged(Calendar calendar,
         String previousSelectedDateKey);
-
-    /**
-     * Called when a calendar's locale has changed.
-     *
-     * @param calendar
-     * @param previousLocale
-     */
-    public void localeChanged(Calendar calendar, Locale previousLocale);
 }
