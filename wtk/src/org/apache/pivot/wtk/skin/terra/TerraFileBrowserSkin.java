@@ -18,6 +18,9 @@ package org.apache.pivot.wtk.skin.terra;
 
 import java.io.File;
 
+import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.io.Folder;
+import org.apache.pivot.util.Filter;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.FileBrowser;
 import org.apache.pivot.wtk.FileBrowserListener;
@@ -28,8 +31,9 @@ import org.apache.pivot.wtk.skin.ContainerSkin;
  *
  * @author gbrown
  */
-public class TerraFileBrowserSkin extends ContainerSkin
-    implements FileBrowserListener {
+public class TerraFileBrowserSkin extends ContainerSkin implements FileBrowserListener {
+    // TODO Define abstract base class
+
     @Override
     public void install(Component component) {
         super.install(component);
@@ -56,8 +60,27 @@ public class TerraFileBrowserSkin extends ContainerSkin
 
     }
 
-    @Override
-    public void selectedFileChanged(FileBrowser fileBrowser, File previousSelectedFile) {
+    public void multiSelectChanged(FileBrowser fileBrowser) {
+        // TODO
+    }
+
+    public void selectedFolderChanged(FileBrowser fileBrowser, Folder previousSelectedFolder) {
+        // TODO
+    }
+
+    public void selectedFileAdded(FileBrowser fileBrowser, File file) {
+        // TODO
+    }
+
+    public void selectedFileRemoved(FileBrowser fileBrowser, File file) {
+        // TODO
+    }
+
+    public void selectedFilesChanged(FileBrowser fileBrowser, Sequence<File> previousSelectedFiles) {
+        // TODO
+    }
+
+    public void fileFilterChanged(FileBrowser fileBrowser, Filter<File> previousFileFilter) {
         // TODO
     }
 }

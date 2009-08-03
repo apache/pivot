@@ -18,6 +18,10 @@ package org.apache.pivot.wtk;
 
 import java.io.File;
 
+import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.io.Folder;
+import org.apache.pivot.util.Filter;
+
 /**
  * File browser sheet listener interface.
  *
@@ -25,10 +29,74 @@ import java.io.File;
  */
 public interface FileBrowserSheetListener {
     /**
-     * Called when a file browser sheet's selected file has changed.
+     * File browser sheet listener adapter.
+     *
+     * @author gbrown
+     */
+    public static class Adapter implements FileBrowserSheetListener {
+        public void multiSelectChanged(FileBrowserSheet fileBrowserSheet) {
+        }
+
+        public void selectedFolderChanged(FileBrowserSheet fileBrowserSheet, Folder previousSelectedFolder) {
+        }
+
+        public void selectedFileAdded(FileBrowserSheet fileBrowserSheet, File file) {
+        }
+
+        public void selectedFileRemoved(FileBrowserSheet fileBrowserSheet, File file) {
+        }
+
+        public void selectedFilesChanged(FileBrowserSheet fileBrowserSheet, Sequence<File> previousSelectedFiles) {
+        }
+
+        public void fileFilterChanged(FileBrowserSheet fileBrowserSheet, Filter<File> previousFileFilter) {
+        }
+    }
+
+    /**
+     * Called when a file browser sheet's multi-select flag has changed.
      *
      * @param fileBrowserSheet
-     * @param previousSelectedFile
      */
-    public void selectedFileChanged(FileBrowserSheet fileBrowserSheet, File previousSelectedFile);
+    public void multiSelectChanged(FileBrowserSheet fileBrowserSheet);
+
+    /**
+     * Called when a file browser's selected folder has changed.
+     *
+     * @param fileBrowserSheet
+     * @param previousSelectedFolder
+     */
+    public void selectedFolderChanged(FileBrowserSheet fileBrowserSheet, Folder previousSelectedFolder);
+
+    /**
+     * Called when a file has been added to a file browser's selection.
+     *
+     * @param fileBrowserSheet
+     * @param file
+     */
+    public void selectedFileAdded(FileBrowserSheet fileBrowserSheet, File file);
+
+    /**
+     * Called when a file has been removed from a file browser's selection.
+     *
+     * @param fileBrowserSheet
+     * @param file
+     */
+    public void selectedFileRemoved(FileBrowserSheet fileBrowserSheet, File file);
+
+    /**
+     * Called when a file browser's selection state has been reset.
+     *
+     * @param fileBrowserSheet
+     * @param previousSelectedFiles
+     */
+    public void selectedFilesChanged(FileBrowserSheet fileBrowserSheet, Sequence<File> previousSelectedFiles);
+
+    /**
+     * Called when a file browser sheet's file filter has changed.
+     *
+     * @param fileBrowserSheet
+     * @param previousFileFilter
+     */
+    public void fileFilterChanged(FileBrowserSheet fileBrowserSheet, Filter<File> previousFileFilter);
 }

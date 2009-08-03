@@ -544,8 +544,11 @@ public class ListView extends Component {
      * be sorted in ascending order.
      *
      * @param selectedRanges
+     *
+     * @return
+     * The ranges that were actually set.
      */
-    public final void setSelectedRanges(Sequence<Span> selectedRanges) {
+    public Sequence<Span> setSelectedRanges(Sequence<Span> selectedRanges) {
         if (selectedRanges == null) {
             throw new IllegalArgumentException("selectedRanges is null.");
         }
@@ -592,6 +595,8 @@ public class ListView extends Component {
 
         // Notify listeners
         listViewSelectionListeners.selectedRangesChanged(this, previousSelectedRanges);
+
+        return getSelectedRanges();
     }
 
     /**
@@ -600,9 +605,12 @@ public class ListView extends Component {
      * @param selectedRanges
      * A JSON-formatted string containing the ranges to select.
      *
+     * @return
+     * The ranges that were actually set.
+     *
      * @see #setSelectedRanges(Sequence)
      */
-    public void setSelectedRanges(String selectedRanges) {
+    public final Sequence<Span> setSelectedRanges(String selectedRanges) {
         if (selectedRanges == null) {
             throw new IllegalArgumentException("selectedRanges is null.");
         }
@@ -612,6 +620,8 @@ public class ListView extends Component {
         } catch (SerializationException exception) {
             throw new IllegalArgumentException(exception);
         }
+
+        return getSelectedRanges();
     }
 
     @SuppressWarnings("unchecked")
@@ -654,9 +664,14 @@ public class ListView extends Component {
      *
      * @param index
      * The index to add.
+     *
+     * @return
+     * <tt>true</tt> if the index was added to the selection; <tt>false</tt>,
+     * otherwise.
      */
-    public void addSelectedIndex(int index) {
-        addSelectedRange(index, index);
+    public boolean addSelectedIndex(int index) {
+        Sequence<Span> addedRanges = addSelectedRange(index, index);
+        return (addedRanges.getLength() > 0);
     }
 
     /**
@@ -667,8 +682,11 @@ public class ListView extends Component {
      *
      * @param end
      * The last index in the range.
+     *
+     * @return
+     * The ranges that were added to the selection.
      */
-    public void addSelectedRange(int start, int end) {
+    public Sequence<Span> addSelectedRange(int start, int end) {
         if (selectMode != SelectMode.MULTI) {
             throw new IllegalStateException("List view is not in multi-select mode.");
         }
@@ -683,6 +701,8 @@ public class ListView extends Component {
             Span addedRange = addedRanges.get(i);
             listViewSelectionListeners.selectedRangeAdded(this, addedRange.start, addedRange.end);
         }
+
+        return addedRanges;
     }
 
     /**
@@ -690,13 +710,16 @@ public class ListView extends Component {
      *
      * @param range
      * The range to add.
+     *
+     * @return
+     * The ranges that were added to the selection.
      */
-    public void addSelectedRange(Span range) {
+    public Sequence<Span> addSelectedRange(Span range) {
         if (range == null) {
             throw new IllegalArgumentException("range is null.");
         }
 
-        addSelectedRange(range.start, range.end);
+        return addSelectedRange(range.start, range.end);
     }
 
     /**
@@ -704,9 +727,14 @@ public class ListView extends Component {
      *
      * @param index
      * The index to remove.
+     *
+     * @return
+     * <tt>true</tt> if the index was removed from the selection;
+     * <tt>false</tt>, otherwise.
      */
-    public void removeSelectedIndex(int index) {
-        removeSelectedRange(index, index);
+    public boolean removeSelectedIndex(int index) {
+        Sequence<Span> removedRanges = removeSelectedRange(index, index);
+        return (removedRanges.getLength() > 0);
     }
 
     /**
@@ -717,8 +745,11 @@ public class ListView extends Component {
      *
      * @param end
      * The end of the range to remove.
+     *
+     * @return
+     * The ranges that were removed from the selection.
      */
-    public void removeSelectedRange(int start, int end) {
+    public Sequence<Span> removeSelectedRange(int start, int end) {
         if (selectMode != SelectMode.MULTI) {
             throw new IllegalStateException("List view is not in multi-select mode.");
         }
@@ -733,6 +764,8 @@ public class ListView extends Component {
             Span removedRange = removedRanges.get(i);
             listViewSelectionListeners.selectedRangeRemoved(this, removedRange.start, removedRange.end);
         }
+
+        return removedRanges;
     }
 
     /**
@@ -740,13 +773,16 @@ public class ListView extends Component {
      *
      * @param range
      * The range to remove.
+     *
+     * @return
+     * The ranges that were removed from the selection.
      */
-    public void removeSelectedRange(Span range) {
+    public Sequence<Span> removeSelectedRange(Span range) {
         if (range == null) {
             throw new IllegalArgumentException("range is null.");
         }
 
-        removeSelectedRange(range.start, range.end);
+        return removeSelectedRange(range.start, range.end);
     }
 
     /**

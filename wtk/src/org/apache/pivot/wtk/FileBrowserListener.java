@@ -18,6 +18,10 @@ package org.apache.pivot.wtk;
 
 import java.io.File;
 
+import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.io.Folder;
+import org.apache.pivot.util.Filter;
+
 /**
  * File browser listener interface.
  *
@@ -25,10 +29,74 @@ import java.io.File;
  */
 public interface FileBrowserListener {
     /**
-     * Called when a file browser's selected file has changed.
+     * File browser listener adapter.
+     *
+     * @author gbrown
+     */
+    public static class Adapter implements FileBrowserListener {
+        public void multiSelectChanged(FileBrowser fileBrowser) {
+        }
+
+        public void selectedFolderChanged(FileBrowser fileBrowser, Folder previousSelectedFolder) {
+        }
+
+        public void selectedFileAdded(FileBrowser fileBrowser, File file) {
+        }
+
+        public void selectedFileRemoved(FileBrowser fileBrowser, File file) {
+        }
+
+        public void selectedFilesChanged(FileBrowser fileBrowser, Sequence<File> previousSelectedFiles) {
+        }
+
+        public void fileFilterChanged(FileBrowser fileBrowser, Filter<File> previousFileFilter) {
+        }
+    }
+
+    /**
+     * Called when a file browser's multi-select flag has changed.
      *
      * @param fileBrowser
-     * @param previousSelectedFile
      */
-    public void selectedFileChanged(FileBrowser fileBrowser, File previousSelectedFile);
+    public void multiSelectChanged(FileBrowser fileBrowser);
+
+    /**
+     * Called when a file browser's selected folder has changed.
+     *
+     * @param fileBrowser
+     * @param previousSelectedFolder
+     */
+    public void selectedFolderChanged(FileBrowser fileBrowser, Folder previousSelectedFolder);
+
+    /**
+     * Called when a file has been added to a file browser's selection.
+     *
+     * @param fileBrowser
+     * @param file
+     */
+    public void selectedFileAdded(FileBrowser fileBrowser, File file);
+
+    /**
+     * Called when a file has been removed from a file browser's selection.
+     *
+     * @param fileBrowser
+     * @param file
+     */
+    public void selectedFileRemoved(FileBrowser fileBrowser, File file);
+
+    /**
+     * Called when a file browser's selection state has been reset.
+     *
+     * @param fileBrowser
+     * @param previousSelectedFiles
+     */
+    public void selectedFilesChanged(FileBrowser fileBrowser, Sequence<File> previousSelectedFiles);
+
+    /**
+     * Called when a file browser's file filter has changed.
+     *
+     * @param fileBrowser
+     * @param previousFileFilter
+     */
+    public void fileFilterChanged(FileBrowser fileBrowser, Filter<File> previousFileFilter);
 }

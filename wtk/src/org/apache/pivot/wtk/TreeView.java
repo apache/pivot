@@ -996,7 +996,7 @@ public class TreeView extends Component {
      * @throws IllegalStateException
      * If selection has been disabled (select mode <tt>NONE</tt>).
      */
-    public void setSelectedPaths(Sequence<Path> selectedPaths) {
+    public Sequence<Path> setSelectedPaths(Sequence<Path> selectedPaths) {
         if (selectedPaths == null) {
             throw new IllegalArgumentException("selectedPaths is null.");
         }
@@ -1011,6 +1011,8 @@ public class TreeView extends Component {
         }
 
         Sequence<Path> previousSelectedPaths = this.selectedPaths;
+
+        // TODO Only add and monitor non-duplicates
 
         if (selectedPaths != previousSelectedPaths) {
             this.selectedPaths = new ArrayList<Path>(PATH_COMPARATOR);
@@ -1028,6 +1030,9 @@ public class TreeView extends Component {
             // Notify listeners
             treeViewSelectionListeners.selectedPathsChanged(this, previousSelectedPaths);
         }
+
+        // TODO return getSelectedPaths() when we start using immutable paths
+        return null;
     }
 
     /**
@@ -1122,39 +1127,18 @@ public class TreeView extends Component {
     }
 
     /**
+     * Adds a path to the selection.
      *
+     * @param path
      *
-     * @throws IllegalStateException
-     * If multi-select is not enabled.
-     */
-    public void addSelectedPath(Path path) {
-        if (path == null) {
-            throw new IllegalArgumentException("path is null.");
-        }
-
-        if (selectMode != SelectMode.MULTI) {
-            throw new IllegalStateException("Tree view is not in multi-select mode.");
-        }
-
-        if (selectedPaths.indexOf(path) < 0) {
-            // Monitor the path's parent
-            monitorBranch(new Path(path, path.getLength() - 1));
-
-            // Update the selection
-            selectedPaths.add(new Path(path));
-
-            // Notify listeners
-            treeViewSelectionListeners.selectedPathAdded(this, path);
-        }
-    }
-
-    /**
-     *
+     * @return
+     * <tt>true</tt> if the path was added to the selection; <tt>false</tt>,
+     * otherwise.
      *
      * @throws IllegalStateException
      * If multi-select is not enabled.
      */
-    public void removeSelectedPath(Path path) {
+    public boolean addSelectedPath(Path path) {
         if (path == null) {
             throw new IllegalArgumentException("path is null.");
         }
@@ -1164,7 +1148,42 @@ public class TreeView extends Component {
         }
 
         int index = selectedPaths.indexOf(path);
+        if (index < 0) {
+            // Monitor the path's parent
+            monitorBranch(new Path(path, path.getLength() - 1));
 
+            // Update the selection
+            selectedPaths.add(new Path(path));
+
+            // Notify listeners
+            treeViewSelectionListeners.selectedPathAdded(this, path);
+        }
+
+        return (index < 0);
+    }
+
+    /**
+     * Removes a path from the selection.
+     *
+     * @param path
+     *
+     * @return
+     * <tt>true</tt> if the path was added to the selection; <tt>false</tt>,
+     * otherwise.
+     *
+     * @throws IllegalStateException
+     * If multi-select is not enabled.
+     */
+    public boolean removeSelectedPath(Path path) {
+        if (path == null) {
+            throw new IllegalArgumentException("path is null.");
+        }
+
+        if (selectMode != SelectMode.MULTI) {
+            throw new IllegalStateException("Tree view is not in multi-select mode.");
+        }
+
+        int index = selectedPaths.indexOf(path);
         if (index >= 0) {
             // Update the selection
             selectedPaths.remove(index, 1);
@@ -1172,6 +1191,8 @@ public class TreeView extends Component {
             // Notify listeners
             treeViewSelectionListeners.selectedPathRemoved(this, path);
         }
+
+        return (index >= 0);
     }
 
     /**

@@ -18,6 +18,9 @@ package org.apache.pivot.wtk.skin.terra;
 
 import java.io.File;
 
+import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.io.Folder;
+import org.apache.pivot.util.Filter;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.FileBrowserSheet;
 import org.apache.pivot.wtk.FileBrowserSheetListener;
@@ -27,8 +30,9 @@ import org.apache.pivot.wtk.FileBrowserSheetListener;
  *
  * @author gbrown
  */
-public class TerraFileBrowserSheetSkin extends TerraSheetSkin
-    implements FileBrowserSheetListener {
+public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBrowserSheetListener {
+    // TODO Define abstract base class
+
     @Override
     public void install(Component component) {
         super.install(component);
@@ -49,8 +53,27 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin
         super.uninstall();
     }
 
-    @Override
-    public void selectedFileChanged(FileBrowserSheet fileBrowserSheet, File previousSelectedFile) {
+    public void multiSelectChanged(FileBrowserSheet fileBrowserSheet) {
+        // TODO
+    }
+
+    public void selectedFolderChanged(FileBrowserSheet fileBrowserSheet, Folder previousSelectedFolder) {
+        // TODO
+    }
+
+    public void selectedFileAdded(FileBrowserSheet fileBrowserSheet, File file) {
+        // TODO
+    }
+
+    public void selectedFileRemoved(FileBrowserSheet fileBrowserSheet, File file) {
+        // TODO
+    }
+
+    public void selectedFilesChanged(FileBrowserSheet fileBrowserSheet, Sequence<File> previousSelectedFiles) {
+        // TODO
+    }
+
+    public void fileFilterChanged(FileBrowserSheet fileBrowserSheet, Filter<File> previousFileFilter) {
         // TODO
     }
 }

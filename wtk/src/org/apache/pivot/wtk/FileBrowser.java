@@ -17,10 +17,12 @@
 package org.apache.pivot.wtk;
 
 import java.io.File;
-import java.io.FileFilter;
 
-import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.collections.immutable.ImmutableList;
+import org.apache.pivot.io.FileList;
+import org.apache.pivot.io.Folder;
+import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.ListenerList;
 
 /**
@@ -29,76 +31,150 @@ import org.apache.pivot.util.ListenerList;
  * @author gbrown
  */
 public class FileBrowser extends Container {
-    /**
-     * Specifies a file filter.
-     *
-     * @author gbrown
-     */
-    public static final class FilterSpecification {
-        /**
-         * The filter label.
-         */
-        public final String label;
-
-        /**
-         * The filter implementation.
-         */
-        public final FileFilter fileFilter;
-
-        public FilterSpecification(String label, FileFilter fileFilter) {
-            if (label == null
-                || fileFilter == null) {
-                throw new IllegalArgumentException();
-            }
-
-            this.label = label;
-            this.fileFilter = fileFilter;
-        }
-    }
-
     private static class FileBrowserListenerList extends ListenerList<FileBrowserListener>
         implements FileBrowserListener {
-        public void selectedFileChanged(FileBrowser fileBrowser, File previousSelectedFile) {
+        public void multiSelectChanged(FileBrowser fileBrowser) {
             for (FileBrowserListener listener : this) {
-                listener.selectedFileChanged(fileBrowser, previousSelectedFile);
+                listener.multiSelectChanged(fileBrowser);
+            }
+        }
+
+        public void selectedFolderChanged(FileBrowser fileBrowser, Folder previousSelectedFolder) {
+            for (FileBrowserListener listener : this) {
+                listener.selectedFolderChanged(fileBrowser, previousSelectedFolder);
+            }
+        }
+
+        public void selectedFileAdded(FileBrowser fileBrowser, File file) {
+            for (FileBrowserListener listener : this) {
+                listener.selectedFileAdded(fileBrowser, file);
+            }
+        }
+
+        public void selectedFileRemoved(FileBrowser fileBrowser, File file) {
+            for (FileBrowserListener listener : this) {
+                listener.selectedFileRemoved(fileBrowser, file);
+            }
+        }
+
+        public void selectedFilesChanged(FileBrowser fileBrowser, Sequence<File> previousSelectedFiles) {
+            for (FileBrowserListener listener : this) {
+                listener.selectedFilesChanged(fileBrowser, previousSelectedFiles);
+            }
+        }
+
+        public void fileFilterChanged(FileBrowser fileBrowser, Filter<File> previousFileFilter) {
+            for (FileBrowserListener listener : this) {
+                listener.fileFilterChanged(fileBrowser, previousFileFilter);
             }
         }
     }
 
-    private ArrayList<FilterSpecification> filterSpecifications;
-
-    private File selectedFile = null;
+    private Folder selectedFolder;
+    private FileList fileSelection = new FileList();
+    private boolean multiSelect = false;
+    private Filter<File> fileFilter = null;
 
     private FileBrowserListenerList fileBrowserListeners = new FileBrowserListenerList();
 
     public FileBrowser() {
-        this(null);
-    }
-
-    public FileBrowser(Sequence<FilterSpecification> filterSpecifications) {
-        this.filterSpecifications = new ArrayList<FilterSpecification>(filterSpecifications);
+        String userHome = System.getProperty("user.home");
+        selectedFolder = new Folder(userHome);
 
         installSkin(FileBrowser.class);
     }
 
-    public int getFilterSpecificationCount() {
-        return filterSpecifications.getLength();
+    public Folder getSelectedFolder() {
+        return selectedFolder;
     }
 
-    public FilterSpecification getFilterSpecification(int index) {
-        return filterSpecifications.get(index);
+    public void setSelectedFolder(Folder selectedFolder) {
+        if (selectedFolder == null) {
+            throw new IllegalArgumentException("selectedFolder is null.");
+        }
+
+        Folder previousSelectedFolder = this.selectedFolder;
+        if (previousSelectedFolder != selectedFolder) {
+            this.selectedFolder = selectedFolder;
+            fileBrowserListeners.selectedFolderChanged(this, previousSelectedFolder);
+        }
     }
 
-    public File getSelectedFile() {
-        return selectedFile;
+    public boolean addSelectedFile(File file) {
+        int index = fileSelection.add(file);
+        if (index != -1) {
+            fileBrowserListeners.selectedFileAdded(this, file);
+        }
+
+        return (index != -1);
     }
 
-    public void setSelectedFile(File selectedFile) {
-        File previousSelectedFile = this.selectedFile;
+    public boolean removeSelectedFile(File file) {
+        int index = fileSelection.remove(file);
+        if (index != -1) {
+            fileBrowserListeners.selectedFileRemoved(this, file);
+        }
 
-        if (selectedFile != previousSelectedFile) {
-            this.selectedFile = selectedFile;
-            fileBrowserListeners.selectedFileChanged(this, previousSelectedFile);
+        return (index != -1);
+    }
+
+    public Sequence<File> getSelectedFiles() {
+        return new ImmutableList<File>(fileSelection);
+    }
+
+    public Sequence<File> setSelectedFiles(Sequence<File> selectedFiles) {
+        if (selectedFiles == null) {
+            throw new IllegalArgumentException("selectedFiles is null.");
+        }
+
+        if (!multiSelect
+            && selectedFiles.getLength() > 1) {
+            throw new IllegalArgumentException("Multi-select is not enabled.");
+        }
+
+        // Update the selection
+        Sequence<File> previousSelectedFiles = getSelectedFiles();
+
+        FileList fileSelection = new FileList();
+        for (int i = 0, n = fileSelection.getLength(); i < n; i++) {
+            File file = fileSelection.get(i);
+
+            if (file == null) {
+                throw new IllegalArgumentException("file is null.");
+            }
+
+            fileSelection.add(file);
+        }
+
+        this.fileSelection = fileSelection;
+
+        // Notify listeners
+        fileBrowserListeners.selectedFilesChanged(this, previousSelectedFiles);
+
+        return getSelectedFiles();
+    }
+
+    public boolean isMultiSelect() {
+        return multiSelect;
+    }
+
+    public void setMultiSelect(boolean multiSelect) {
+        if (this.multiSelect != multiSelect) {
+            this.multiSelect = multiSelect;
+            fileBrowserListeners.multiSelectChanged(this);
+        }
+    }
+
+    public Filter<File> getFileFilter() {
+        return fileFilter;
+    }
+
+    public void setFileFilter(Filter<File> fileFilter) {
+        Filter<File> previousFileFilter = this.fileFilter;
+
+        if (previousFileFilter != fileFilter) {
+            this.fileFilter = fileFilter;
+            fileBrowserListeners.fileFilterChanged(this, previousFileFilter);
         }
     }
 
