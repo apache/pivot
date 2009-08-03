@@ -46,83 +46,138 @@ public class MapList<K, V> implements List<Pair<K, V>> {
 
     private Map<K, V> source;
 
-    private ArrayList<Pair<K, V>> view = new ArrayList<Pair<K, V>>();
+    private ArrayList<Pair<K, V>> view = null;
 
     private boolean updating = false;
 
     private ListListenerList<Pair<K, V>> listListeners = new ListListenerList<Pair<K, V>>();
     private MapListListenerList<K, V> mapListListeners = new MapListListenerList<K, V>();
 
+    private MapListener<K, V> mapHandler = new MapListener.Adapter<K, V>() {
+        @Override
+        public void valueAdded(Map<K, V> map, K key) {
+            if (!updating) {
+                int index = view.add(new Pair<K, V>(key, map.get(key)));
+                listListeners.itemInserted(MapList.this, index);
+            }
+        }
+
+        @Override
+        public void valueUpdated(Map<K, V> map, K key, V previousValue) {
+            if (!updating) {
+                Pair<K, V> pair = new Pair<K, V>(key, map.get(key));
+                Pair<K, V> previousPair = new Pair<K, V>(key, previousValue);
+
+                // Bypass the view comparator to find exact matches only
+                int index = linearSearch(pair);
+
+                if (index >= 0) {
+                    // We disallow duplicate keys in the list, so this means
+                    // that the value logically equals the previous value
+                    view.update(index, pair);
+                    listListeners.itemUpdated(MapList.this, index, previousPair);
+                } else {
+                    int previousIndex = linearSearch(previousPair);
+                    assert (previousIndex >= 0);
+
+                    Sequence<Pair<K, V>> removed = view.remove(previousIndex, 1);
+                    listListeners.itemsRemoved(MapList.this, previousIndex, removed);
+
+                    index = view.add(pair);
+                    listListeners.itemInserted(MapList.this, index);
+                }
+            }
+        }
+
+        @Override
+        public void valueRemoved(Map<K, V> map, K key, V value) {
+            if (!updating) {
+                Pair<K, V> pair = new Pair<K, V>(key, value);
+
+                // Bypass the view comparator to find exact matches only
+                int index = linearSearch(pair);
+
+                Sequence<Pair<K, V>> removed = view.remove(index, 1);
+                listListeners.itemsRemoved(MapList.this, index, removed);
+            }
+        }
+
+        @Override
+        public void mapCleared(Map<K, V> map) {
+            if (!updating) {
+                view.clear();
+                listListeners.listCleared(MapList.this);
+            }
+        }
+    };
+
     /**
-     * Creates a new map list that decorates the specified map.
+     * Creates a new map list with no source map.
+     */
+    public MapList() {
+        this(null);
+    }
+
+    /**
+     * Creates a new map list that decorates the specified source map.
      *
      * @param source
      * The map to present as a list
      */
     public MapList(Map<K, V> source) {
-        this.source = source;
+        setSource(source);
+    }
 
-        for (K key : source) {
-            view.add(new Pair<K, V>(key, source.get(key)));
+    /**
+     * Gets the source map.
+     *
+     * @return
+     * The source map, or <tt>null</tt> if no source is set
+     */
+    public Map<K, V> getSource() {
+        return source;
+    }
+
+    /**
+     * Sets the source map.
+     *
+     * @param source
+     * The source map, or <tt>null</tt> to clear the source
+     */
+    public void setSource(Map<K, V> source) {
+        Map<K, V> previousSource = this.source;
+
+        if (previousSource != source) {
+            // Clear any existing view
+            if (view != null) {
+                view.clear();
+                listListeners.listCleared(this);
+            }
+
+            // Attach/detach list listeners
+            if (previousSource != null) {
+                previousSource.getMapListeners().remove(mapHandler);
+            }
+
+            if (source != null) {
+                source.getMapListeners().add(mapHandler);
+            }
+
+            // Update source
+            this.source = source;
+            mapListListeners.sourceChanged(this, previousSource);
+
+            // Refresh the view
+            if (source == null) {
+                view = null;
+            } else {
+                view = new ArrayList<Pair<K, V>>(source.count());
+
+                for (K key : source) {
+                    listListeners.itemInserted(this, view.add(new Pair<K, V>(key, source.get(key))));
+                }
+            }
         }
-
-        source.getMapListeners().add(new MapListener.Adapter<K, V>() {
-            @Override
-            public void valueAdded(Map<K, V> map, K key) {
-                if (!updating) {
-                    int index = view.add(new Pair<K, V>(key, map.get(key)));
-                    listListeners.itemInserted(MapList.this, index);
-                }
-            }
-
-            @Override
-            public void valueUpdated(Map<K, V> map, K key, V previousValue) {
-                if (!updating) {
-                    Pair<K, V> pair = new Pair<K, V>(key, map.get(key));
-                    Pair<K, V> previousPair = new Pair<K, V>(key, previousValue);
-
-                    // Bypass the view comparator to find exact matches only
-                    int index = linearSearch(pair);
-
-                    if (index >= 0) {
-                        // We disallow duplicate keys in the list, so this means
-                        // that the value logically equals the previous value
-                        view.update(index, pair);
-                        listListeners.itemUpdated(MapList.this, index, previousPair);
-                    } else {
-                        int previousIndex = linearSearch(previousPair);
-                        assert (previousIndex >= 0);
-
-                        Sequence<Pair<K, V>> removed = view.remove(previousIndex, 1);
-                        listListeners.itemsRemoved(MapList.this, previousIndex, removed);
-
-                        index = view.add(pair);
-                        listListeners.itemInserted(MapList.this, index);
-                    }
-                }
-            }
-
-            @Override
-            public void valueRemoved(Map<K, V> map, K key, V value) {
-                if (!updating) {
-                    Pair<K, V> pair = new Pair<K, V>(key, value);
-
-                    // Bypass the view comparator to find exact matches only
-                    int index = linearSearch(pair);
-
-                    Sequence<Pair<K, V>> removed = view.remove(index, 1);
-                    listListeners.itemsRemoved(MapList.this, index, removed);
-                }
-            }
-
-            @Override
-            public void mapCleared(Map<K, V> map) {
-                if (!updating) {
-                    view.clear();
-                    listListeners.listCleared(MapList.this);
-                }
-            }
-        });
     }
 
     /**
