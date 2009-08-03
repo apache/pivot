@@ -1082,7 +1082,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
      * if no element is currently being processed.
      */
     public int getLineNumber() {
-        return (element == null ? null : element.lineNumber);
+        return (element == null ? -1 : element.lineNumber);
     }
 
     /**
