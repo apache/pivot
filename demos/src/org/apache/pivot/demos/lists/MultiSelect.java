@@ -60,14 +60,6 @@ public class MultiSelect implements Application {
 
         window.open(display);
         dataListView.requestFocus();
-
-        dataListView.clearSelection();
-        dataListView.addSelectedRange(0, 4);
-        dataListView.addSelectedRange(8, 12);
-        dataListView.addSelectedRange(4, 7);
-
-        dataListView.removeSelectedRange(1, 1);
-        dataListView.removeSelectedRange(0, 0);
     }
 
     @Override

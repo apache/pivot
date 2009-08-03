@@ -110,6 +110,41 @@ public interface Sequence<T> {
         }
 
         /**
+         * Class representing an immutable path.
+         *
+         * @author gbrown
+         */
+        public static class ImmutablePath extends Path {
+            public ImmutablePath(Integer... elements) {
+                super(elements);
+            }
+
+            public ImmutablePath(Path path) {
+                super(path);
+            }
+
+            @Override
+            public int add(Integer item) {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public void insert(Integer item, int index) {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public Integer update(int index, Integer item) {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public Sequence<Integer> remove(int index, int count) {
+                throw new UnsupportedOperationException();
+            }
+        }
+
+        /**
          * Adds an item to a nested sequence.
          *
          * @param sequence
