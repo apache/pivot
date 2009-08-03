@@ -30,31 +30,47 @@ import org.apache.pivot.util.ListenerList;
  * @author tvolkert
  */
 public class MapList<K, V> implements List<Pair<K, V>> {
-    private Map<K, V> map;
-    private ArrayList<Pair<K, V>> pairs = new ArrayList<Pair<K, V>>();
+    /**
+     * Map list listener list.
+     *
+     * @author tvolkert
+     */
+    private static class MapListListenerList<K, V> extends ListenerList<MapListListener<K, V>>
+        implements MapListListener<K, V> {
+        public void sourceChanged(MapList<K, V> mapList, Map<K, V> previousSource) {
+            for (MapListListener<K, V> listener : this) {
+                listener.sourceChanged(mapList, previousSource);
+            }
+        }
+    }
+
+    private Map<K, V> source;
+
+    private ArrayList<Pair<K, V>> view = new ArrayList<Pair<K, V>>();
 
     private boolean updating = false;
 
     private ListListenerList<Pair<K, V>> listListeners = new ListListenerList<Pair<K, V>>();
+    private MapListListenerList<K, V> mapListListeners = new MapListListenerList<K, V>();
 
     /**
      * Creates a new map list that decorates the specified map.
      *
-     * @param map
+     * @param source
      * The map to present as a list
      */
-    public MapList(Map<K, V> map) {
-        this.map = map;
+    public MapList(Map<K, V> source) {
+        this.source = source;
 
-        for (K key : map) {
-            pairs.add(new Pair<K, V>(key, map.get(key)));
+        for (K key : source) {
+            view.add(new Pair<K, V>(key, source.get(key)));
         }
 
-        map.getMapListeners().add(new MapListener.Adapter<K, V>() {
+        source.getMapListeners().add(new MapListener.Adapter<K, V>() {
             @Override
             public void valueAdded(Map<K, V> map, K key) {
                 if (!updating) {
-                    int index = pairs.add(new Pair<K, V>(key, map.get(key)));
+                    int index = view.add(new Pair<K, V>(key, map.get(key)));
                     listListeners.itemInserted(MapList.this, index);
                 }
             }
@@ -65,22 +81,22 @@ public class MapList<K, V> implements List<Pair<K, V>> {
                     Pair<K, V> pair = new Pair<K, V>(key, map.get(key));
                     Pair<K, V> previousPair = new Pair<K, V>(key, previousValue);
 
-                    // Bypass the pairs comparator to find exact matches only
+                    // Bypass the view comparator to find exact matches only
                     int index = linearSearch(pair);
 
                     if (index >= 0) {
                         // We disallow duplicate keys in the list, so this means
                         // that the value logically equals the previous value
-                        pairs.update(index, pair);
+                        view.update(index, pair);
                         listListeners.itemUpdated(MapList.this, index, previousPair);
                     } else {
                         int previousIndex = linearSearch(previousPair);
                         assert (previousIndex >= 0);
 
-                        Sequence<Pair<K, V>> removed = pairs.remove(previousIndex, 1);
+                        Sequence<Pair<K, V>> removed = view.remove(previousIndex, 1);
                         listListeners.itemsRemoved(MapList.this, previousIndex, removed);
 
-                        index = pairs.add(pair);
+                        index = view.add(pair);
                         listListeners.itemInserted(MapList.this, index);
                     }
                 }
@@ -91,10 +107,10 @@ public class MapList<K, V> implements List<Pair<K, V>> {
                 if (!updating) {
                     Pair<K, V> pair = new Pair<K, V>(key, value);
 
-                    // Bypass the pairs comparator to find exact matches only
+                    // Bypass the view comparator to find exact matches only
                     int index = linearSearch(pair);
 
-                    Sequence<Pair<K, V>> removed = pairs.remove(index, 1);
+                    Sequence<Pair<K, V>> removed = view.remove(index, 1);
                     listListeners.itemsRemoved(MapList.this, index, removed);
                 }
             }
@@ -102,7 +118,7 @@ public class MapList<K, V> implements List<Pair<K, V>> {
             @Override
             public void mapCleared(Map<K, V> map) {
                 if (!updating) {
-                    pairs.clear();
+                    view.clear();
                     listListeners.listCleared(MapList.this);
                 }
             }
@@ -118,17 +134,17 @@ public class MapList<K, V> implements List<Pair<K, V>> {
             throw new IllegalArgumentException("Pair is null.");
         }
 
-        if (map.containsKey(pair.key)) {
+        if (source.containsKey(pair.key)) {
             throw new IllegalArgumentException("Duplicate keys not allowed.");
         }
 
         // Update the list
-        int index = pairs.add(pair);
+        int index = view.add(pair);
 
-        // Update the map
+        // Update the source
         updating = true;
         try {
-            map.put(pair.key, pair.value);
+            source.put(pair.key, pair.value);
         } finally {
             updating = false;
         }
@@ -148,17 +164,17 @@ public class MapList<K, V> implements List<Pair<K, V>> {
             throw new IllegalArgumentException("Pair is null.");
         }
 
-        if (map.containsKey(pair.key)) {
+        if (source.containsKey(pair.key)) {
             throw new IllegalArgumentException("Duplicate keys not allowed.");
         }
 
         // Update the list
-        pairs.insert(pair, index);
+        view.insert(pair, index);
 
-        // Update the map
+        // Update the source
         updating = true;
         try {
-            map.put(pair.key, pair.value);
+            source.put(pair.key, pair.value);
         } finally {
             updating = false;
         }
@@ -176,21 +192,21 @@ public class MapList<K, V> implements List<Pair<K, V>> {
             throw new IllegalArgumentException("Pair is null.");
         }
 
-        Pair<K, V> previousPair = pairs.get(index);
+        Pair<K, V> previousPair = view.get(index);
 
         if (!pair.key.equals(previousPair.key)
-            && map.containsKey(pair.key)) {
+            && source.containsKey(pair.key)) {
             throw new IllegalArgumentException("Duplicate keys not allowed.");
         }
 
         // Update the list
-        pairs.update(index, pair);
+        view.update(index, pair);
 
-        // Update the map
+        // Update the source
         updating = true;
         try {
-            map.remove(previousPair.key);
-            map.put(pair.key, pair.value);
+            source.remove(previousPair.key);
+            source.put(pair.key, pair.value);
         } finally {
             updating = false;
         }
@@ -221,14 +237,14 @@ public class MapList<K, V> implements List<Pair<K, V>> {
     @Override
     public Sequence<Pair<K, V>> remove(int index, int count) {
         // Update the list
-        Sequence<Pair<K, V>> removed = pairs.remove(index, count);
+        Sequence<Pair<K, V>> removed = view.remove(index, count);
 
-        // Update the map
+        // Update the source
         updating = true;
         try {
             for (int i = 0, n = removed.getLength(); i < n; i++) {
                 Pair<K, V> pair = removed.get(i);
-                map.remove(pair.key);
+                source.remove(pair.key);
             }
         } finally {
             updating = false;
@@ -245,7 +261,7 @@ public class MapList<K, V> implements List<Pair<K, V>> {
      */
     @Override
     public Pair<K, V> get(int index) {
-        return pairs.get(index);
+        return view.get(index);
     }
 
     /**
@@ -253,11 +269,11 @@ public class MapList<K, V> implements List<Pair<K, V>> {
      */
     @Override
     public int indexOf(Pair<K, V> pair) {
-        return pairs.indexOf(pair);
+        return view.indexOf(pair);
     }
 
     /**
-     * Finds the specified pair in the pairs list by searching linearly
+     * Finds the specified pair in the view list by searching linearly
      * and reporting an exact match only (bypasses the list's
      * comparator).
      *
@@ -270,8 +286,8 @@ public class MapList<K, V> implements List<Pair<K, V>> {
     private int linearSearch(Pair<K, V> pair) {
         int index = -1;
 
-        for (int i = 0, n = pairs.getLength(); i < n; i++) {
-            if (pairs.get(i).equals(pair)) {
+        for (int i = 0, n = view.getLength(); i < n; i++) {
+            if (view.get(i).equals(pair)) {
                 index = i;
                 break;
             }
@@ -286,12 +302,12 @@ public class MapList<K, V> implements List<Pair<K, V>> {
     @Override
     public void clear() {
         // Update the list
-        pairs.clear();
+        view.clear();
 
-        // Update the map
+        // Update the source
         updating = true;
         try {
-            map.clear();
+            source.clear();
         } finally {
             updating = false;
         }
@@ -305,7 +321,7 @@ public class MapList<K, V> implements List<Pair<K, V>> {
      */
     @Override
     public int getLength() {
-        return pairs.getLength();
+        return view.getLength();
     }
 
     /**
@@ -313,7 +329,7 @@ public class MapList<K, V> implements List<Pair<K, V>> {
      */
     @Override
     public Comparator<Pair<K, V>> getComparator() {
-        return pairs.getComparator();
+        return view.getComparator();
     }
 
     /**
@@ -321,10 +337,10 @@ public class MapList<K, V> implements List<Pair<K, V>> {
      */
     @Override
     public void setComparator(Comparator<Pair<K, V>> comparator) {
-        Comparator<Pair<K, V>> previousComparator = pairs.getComparator();
+        Comparator<Pair<K, V>> previousComparator = view.getComparator();
 
         if (previousComparator != comparator) {
-            pairs.setComparator(comparator);
+            view.setComparator(comparator);
             listListeners.comparatorChanged(this, previousComparator);
         }
     }
@@ -334,7 +350,7 @@ public class MapList<K, V> implements List<Pair<K, V>> {
      */
     @Override
     public Iterator<Pair<K, V>> iterator() {
-        return pairs.iterator();
+        return view.iterator();
     }
 
     /**
@@ -343,5 +359,12 @@ public class MapList<K, V> implements List<Pair<K, V>> {
     @Override
     public ListenerList<ListListener<Pair<K, V>>> getListListeners() {
         return listListeners;
+    }
+
+    /**
+     * Gets the map list listeners.
+     */
+    public ListenerList<MapListListener<K, V>> getMapListListeners() {
+        return mapListListeners;
     }
 }
