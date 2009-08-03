@@ -23,9 +23,9 @@ import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.collections.Sequence.Tree.Path;
+import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.content.TreeViewNodeRenderer;
-
 
 /**
  * Class that displays a hierarchical data structure, allowing a user to select
@@ -211,6 +211,12 @@ public class TreeView extends Component {
                 listener.showMixedCheckmarkStateChanged(treeView);
             }
         }
+
+        public void disabledNodeFilterChanged(TreeView treeView, Filter<?> previousDisabledNodeFilter) {
+            for (TreeViewListener listener : this) {
+                listener.disabledNodeFilterChanged(treeView, previousDisabledNodeFilter);
+            }
+        }
     }
 
     /**
@@ -280,12 +286,6 @@ public class TreeView extends Component {
     private static class TreeViewNodeStateListenerList
         extends ListenerList<TreeViewNodeStateListener>
         implements TreeViewNodeStateListener {
-        public void nodeDisabledChanged(TreeView treeView, Path path) {
-            for (TreeViewNodeStateListener listener : this) {
-                listener.nodeDisabledChanged(treeView, path);
-            }
-        }
-
         public void nodeCheckStateChanged(TreeView treeView, Path path,
             TreeView.NodeCheckState previousCheckState) {
             for (TreeViewNodeStateListener listener : this) {
@@ -439,7 +439,6 @@ public class TreeView extends Component {
             // Update our data structures
             incrementPaths(expandedPaths, path, index);
             incrementPaths(selectedPaths, path, index);
-            incrementPaths(disabledPaths, path, index);
             incrementPaths(checkedPaths, path, index);
 
             // Notify listeners
@@ -465,7 +464,6 @@ public class TreeView extends Component {
             // Update our data structures
             clearAndDecrementPaths(expandedPaths, path, index, count);
             clearAndDecrementPaths(selectedPaths, path, index, count);
-            clearAndDecrementPaths(disabledPaths, path, index, count);
             clearAndDecrementPaths(checkedPaths, path, index, count);
 
             // Notify listeners
@@ -486,7 +484,6 @@ public class TreeView extends Component {
                 // Update our data structures
                 clearPaths(expandedPaths, path, index);
                 clearPaths(selectedPaths, path, index);
-                clearPaths(disabledPaths, path, index);
                 clearPaths(checkedPaths, path, index);
             }
 
@@ -512,7 +509,6 @@ public class TreeView extends Component {
             // Update our data structures
             clearPaths(expandedPaths, path);
             clearPaths(selectedPaths, path);
-            clearPaths(disabledPaths, path);
             clearPaths(checkedPaths, path);
 
             // Notify listeners
@@ -540,7 +536,6 @@ public class TreeView extends Component {
                 // Update our data structures
                 clearPaths(expandedPaths, path);
                 clearPaths(selectedPaths, path);
-                clearPaths(disabledPaths, path);
                 clearPaths(checkedPaths, path);
 
                 // Notify listeners
@@ -723,13 +718,15 @@ public class TreeView extends Component {
     // Ancillary data models
     private ArrayList<Path> expandedPaths = new ArrayList<Path>(PATH_COMPARATOR);
     private ArrayList<Path> selectedPaths = new ArrayList<Path>(PATH_COMPARATOR);
-    private ArrayList<Path> disabledPaths = new ArrayList<Path>(PATH_COMPARATOR);
     private ArrayList<Path> checkedPaths = new ArrayList<Path>(PATH_COMPARATOR);
 
     // Properties
     private SelectMode selectMode = SelectMode.SINGLE;
     private boolean checkmarksEnabled = false;
     private boolean showMixedCheckmarkState = false;
+
+    // Disabled node filter
+    private Filter<?> disabledNodeFilter = null;
 
     // Handlers
     private BranchHandler rootBranchHandler;
@@ -816,9 +813,9 @@ public class TreeView extends Component {
      * of {@link TreeViewNodeRenderer} is used.
      * <p>
      * When the tree data is changed, the state of all nodes (expansion,
-     * selection, disabled, and checked) will be cleared since the nodes
-     * themselves are being replaced. Note that corresponding events will
-     * <b>not</b> be fired, since these actions are implied by the
+     * selection, and checked) will be cleared since the nodes themselves are
+     * being replaced. Note that corresponding events will <b>not</b> be fired,
+     * since these actions are implied by the
      * {@link TreeViewListener#treeDataChanged(TreeView,List) treeDataChanged}
      * event.
      *
@@ -837,7 +834,6 @@ public class TreeView extends Component {
                 // Reset our data models
                 expandedPaths.clear();
                 selectedPaths.clear();
-                disabledPaths.clear();
                 checkedPaths.clear();
 
                 // Release our existing branch handlers
@@ -1214,65 +1210,58 @@ public class TreeView extends Component {
      * <tt>true</tt> if the node is disabled; <tt>false</tt>,
      * otherwise
      */
+    @SuppressWarnings("unchecked")
     public boolean isNodeDisabled(Path path) {
         if (path == null) {
             throw new IllegalArgumentException("path is null.");
         }
 
-        return (disabledPaths.indexOf(path) >= 0);
+        boolean disabled = false;
+
+        if (disabledNodeFilter != null) {
+            Object node = Sequence.Tree.get(treeData, path);
+            disabled = ((Filter<Object>)disabledNodeFilter).include(node);
+        }
+
+        return disabled;
     }
 
     /**
-     * Sets the disabled state of a node. A disabled node is not interactive to
-     * the user. Note, however, that disabled nodes may still be expanded,
-     * selected, and checked <i>programatically</i>. Disabling a node does
-     * <b>not</b> disable its children.
+     * Returns the disabled node filter, which determines the disabled state of
+     * all nodes. Disabled nodes are not interactive to the user. Note, however,
+     * that disabled nodes may still be expanded, selected, and checked
+     * <i>programatically</i>. A disabled node may have enabled children.
+     * <p>
+     * If the disabled node filter is set to <tt>null</tt>, all nodes are
+     * enabled.
      *
-     * @param path
-     * The path to the node.
-     *
-     * @param disabled
-     * <tt>true</tt> to disable the node; <tt>false</tt> to enable it.
+     * @return
+     * The disabled node filter, or <tt>null</tt> if no disabled node filter is
+     * set
      */
-    public void setNodeDisabled(Path path, boolean disabled) {
-        if (path == null) {
-            throw new IllegalArgumentException("path is null.");
-        }
-
-        int index = disabledPaths.indexOf(path);
-
-        if ((index < 0 && disabled)
-            || (index >= 0 && !disabled)) {
-            if (disabled) {
-                // Monitor the path's parent
-                monitorBranch(new Path(path, path.getLength() - 1));
-
-                // Update the disabled paths
-                disabledPaths.add(new Path(path));
-            } else {
-                // Update the disabled paths
-                disabledPaths.remove(index, 1);
-            }
-
-            // Notify listeners
-            treeViewNodeStateListeners.nodeDisabledChanged(this, path);
-        }
+    public Filter<?> getDisabledNodeFilter() {
+        return disabledNodeFilter;
     }
 
     /**
+     * Sets the disabled node filter, which determines the disabled state of
+     * all nodes. Disabled nodes are not interactive to the user. Note, however,
+     * that disabled nodes may still be expanded, selected, and checked
+     * <i>programatically</i>. A disabled node may have enabled children.
+     * <p>
+     * If the disabled node filter is set to <tt>null</tt>, all nodes are
+     * enabled.
      *
+     * @param disabledNodeFilter
+     * The disabled node filter, or <tt>null</tt> for no disabled node filter
      */
-    public Sequence<Path> getDisabledPaths() {
-        int count = disabledPaths.getLength();
+    public void setDisabledNodeFilter(Filter<?> disabledNodeFilter) {
+        Filter<?> previousDisabledNodeFilter = this.disabledNodeFilter;
 
-        Sequence<Path> disabledPaths = new ArrayList<Path>(count);
-
-        // Deep copy the disabled paths into a new list
-        for (int i = 0; i < count; i++) {
-            disabledPaths.add(new Path(this.disabledPaths.get(i)));
+        if (previousDisabledNodeFilter != disabledNodeFilter) {
+            this.disabledNodeFilter = disabledNodeFilter;
+            treeViewListeners.disabledNodeFilterChanged(this, previousDisabledNodeFilter);
         }
-
-        return disabledPaths;
     }
 
     /**

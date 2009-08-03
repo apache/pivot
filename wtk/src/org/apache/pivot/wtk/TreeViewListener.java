@@ -17,6 +17,7 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.List;
+import org.apache.pivot.util.Filter;
 
 /**
  * Tree view listener interface.
@@ -47,6 +48,9 @@ public interface TreeViewListener {
         }
 
         public void showMixedCheckmarkStateChanged(TreeView treeView) {
+        }
+
+        public void disabledNodeFilterChanged(TreeView treeView, Filter<?> previousDisabledNodeFilter) {
         }
     }
 
@@ -95,4 +99,12 @@ public interface TreeViewListener {
      * @param treeView
      */
     public void showMixedCheckmarkStateChanged(TreeView treeView);
+
+    /**
+     * Called when a tree view's disabled node filter has changed.
+     *
+     * @param treeView
+     * @param previousDisabledNodeFilter
+     */
+    public void disabledNodeFilterChanged(TreeView treeView, Filter<?> previousDisabledNodeFilter);
 }

@@ -163,7 +163,7 @@ limitations under the License.
                             horizontalScrollBarPolicy="fill_to_capacity"
                             styles="{backgroundColor:null}">
                             <view>
-                                <TreeView checkmarksEnabled="true" showMixedCheckmarkState="true">
+                                <TreeView wtkx:id="checkTreeView" checkmarksEnabled="true" showMixedCheckmarkState="true">
                                     <treeData>
                                         <content:TreeBranch>
                                             <content:TreeBranch text="Africa">

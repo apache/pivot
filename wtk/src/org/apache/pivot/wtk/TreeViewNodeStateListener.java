@@ -21,32 +21,9 @@ import org.apache.pivot.collections.Sequence.Tree.Path;
 /**
  * Tree view node state listener interface.
  *
- * @author gbrown
  * @author tvolkert
  */
 public interface TreeViewNodeStateListener {
-    /**
-     * Tree view node state listener adapter.
-     *
-     * @author tvolkert
-     */
-    public static class Adapter implements TreeViewNodeStateListener {
-        public void nodeDisabledChanged(TreeView treeView, Path path) {
-        }
-
-        public void nodeCheckStateChanged(TreeView treeView, Path path,
-            TreeView.NodeCheckState previousCheckState) {
-        }
-    }
-
-    /**
-     * Called when a node's disabled state has changed.
-     *
-     * @param treeView
-     * @param path
-     */
-    public void nodeDisabledChanged(TreeView treeView, Path path);
-
     /**
      * Called when a node's checked state has changed.
      *

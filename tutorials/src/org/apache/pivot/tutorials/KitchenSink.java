@@ -76,6 +76,7 @@ import org.apache.pivot.wtk.content.NumericSpinnerData;
 import org.apache.pivot.wtk.content.TableRow;
 import org.apache.pivot.wtk.content.TableViewHeaderData;
 import org.apache.pivot.wtk.content.TreeBranch;
+import org.apache.pivot.wtk.content.TreeNode;
 import org.apache.pivot.wtk.effects.ReflectionDecorator;
 import org.apache.pivot.wtk.effects.WatermarkDecorator;
 import org.apache.pivot.wtk.media.Image;
@@ -551,6 +552,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
     private class TreesRollupStateHandler extends RollupStateHandler {
         private Component component = null;
         private TreeView editableTreeView = null;
+        private TreeView checkTreeView = null;
 
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
@@ -564,11 +566,29 @@ public class KitchenSink implements Application, Application.AboutHandler {
                 }
 
                 editableTreeView = (TreeView)wtkxSerializer.get("editableTreeView");
+                checkTreeView = (TreeView)wtkxSerializer.get("checkTreeView");
 
                 rollup.setContent(component);
 
                 TreeBranch treeData = (TreeBranch)editableTreeView.getTreeData();
                 treeData.setComparator(new TreeNodeComparator());
+
+                checkTreeView.setDisabledNodeFilter(new Filter<TreeNode>() {
+                    public boolean include(TreeNode treeNode) {
+                        boolean include = false;
+
+                        if (!(treeNode instanceof TreeBranch)) {
+                            String text = treeNode.getText();
+
+                            if (text != null) {
+                                char firstCharacter = Character.toLowerCase(text.charAt(0));
+                                include = (firstCharacter % 2 == 0);
+                            }
+                        }
+
+                        return include;
+                    }
+                });
             }
 
             return Vote.APPROVE;
