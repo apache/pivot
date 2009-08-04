@@ -19,6 +19,7 @@ package org.apache.pivot.wtk.skin.terra;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.Dialog;
 import org.apache.pivot.wtk.DialogStateListener;
 import org.apache.pivot.wtk.Keyboard;
@@ -36,17 +37,17 @@ public class TerraDialogSkin extends TerraFrameSkin implements DialogStateListen
 
         public void run() {
             Dialog dialog = (Dialog)getComponent();
-            Component owner = dialog.getOwner();
+            Container ancestor = dialog.getOwner();
 
-            if (owner == null) {
-                owner = dialog.getDisplay();
+            if (ancestor == null) {
+                ancestor = dialog.getDisplay();
             }
 
-            int deltaWidth = owner.getWidth() - getWidth();
-            int deltaHeight = owner.getHeight() - getHeight();
+            int deltaWidth = ancestor.getWidth() - getWidth();
+            int deltaHeight = ancestor.getHeight() - getHeight();
 
-            int x = Math.max(0, Math.round(owner.getX() + 0.5f * deltaWidth));
-            int y = Math.max(0, Math.round(owner.getY() + GOLDEN_SECTION * deltaHeight));
+            int x = Math.max(0, Math.round(ancestor.getX() + 0.5f * deltaWidth));
+            int y = Math.max(0, Math.round(ancestor.getY() + GOLDEN_SECTION * deltaHeight));
 
             dialog.setLocation(x, y);
         }

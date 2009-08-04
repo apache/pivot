@@ -118,9 +118,13 @@ public final class BrowserApplicationContext extends ApplicationContext {
                 }
 
                 hostApplets.add(HostApplet.this);
+            }
+        }
 
+        private class StartCallback implements Runnable {
+            public void run() {
                 // Load the application
-                Application application;
+                Application application = null;
                 String applicationClassName = getParameter(APPLICATION_CLASS_NAME_PARAMETER);
                 if (applicationClassName == null) {
                     Alert.alert(MessageType.ERROR, "Application class name is required.",
@@ -136,16 +140,12 @@ public final class BrowserApplicationContext extends ApplicationContext {
                         throwable.printStackTrace();
                     }
                 }
-            }
-        }
 
-        private class StartCallback implements Runnable {
-            public void run() {
                 // Set focus to the display host
                 DisplayHost displayHost = applicationContext.getDisplayHost();
                 displayHost.requestFocus();
 
-                Application application = applicationContext.getApplication();
+                // Start the application
                 if (application != null) {
                     try {
                         application.startup(applicationContext.getDisplay(),

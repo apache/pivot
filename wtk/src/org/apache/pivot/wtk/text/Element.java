@@ -79,7 +79,7 @@ public abstract class Element extends Node
     }
 
     private class ElementListenerList extends ListenerList<ElementListener>
-    implements ElementListener {
+        implements ElementListener {
         public void nodeInserted(Element element, int index) {
             for (ElementListener listener : this) {
                 listener.nodeInserted(element, index);

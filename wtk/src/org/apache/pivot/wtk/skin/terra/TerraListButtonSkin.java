@@ -177,11 +177,6 @@ public class TerraListButtonSkin extends ListButtonSkin {
 
         Button.DataRenderer dataRenderer = listButton.getDataRenderer();
 
-        // Include padding in constraint
-        if (height != -1) {
-            height = Math.max(height - (padding.top + padding.bottom + 2), 0);
-        }
-
         // Determine the preferred width of the current button data
         dataRenderer.render(listButton.getButtonData(),
             listButton, false);

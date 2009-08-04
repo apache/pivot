@@ -371,6 +371,9 @@ public final class DesktopApplicationContext extends ApplicationContext {
         fullScreenHostFrame = new HostFrame();
         fullScreenHostFrame.setUndecorated(true);
 
+        // Open the windowed host
+        windowedHostFrame.setVisible(true);
+
         // Load the application
         Application application = null;
         try {
@@ -434,9 +437,6 @@ public final class DesktopApplicationContext extends ApplicationContext {
                 System.err.println(throwable);
             }
         }
-
-        // Open the windowed host
-        windowedHostFrame.setVisible(true);
 
         // Go to full-screen mode, if requested
         setFullScreen(fullScreen);
