@@ -371,9 +371,6 @@ public final class DesktopApplicationContext extends ApplicationContext {
         fullScreenHostFrame = new HostFrame();
         fullScreenHostFrame.setUndecorated(true);
 
-        // Open the windowed host
-        windowedHostFrame.setVisible(true);
-
         // Load the application
         Application application = null;
         try {
@@ -385,6 +382,9 @@ public final class DesktopApplicationContext extends ApplicationContext {
                 applicationContext.getDisplay());
             exception.printStackTrace();
         }
+
+        // Open the windowed host
+        windowedHostFrame.setVisible(true);
 
         // Hook into OS X application menu
         String osName = System.getProperty("os.name");
