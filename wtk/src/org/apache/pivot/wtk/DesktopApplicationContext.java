@@ -35,7 +35,6 @@ import org.apache.pivot.collections.immutable.ImmutableMap;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.media.Picture;
 
-
 /**
  * Application context used to execute applications in a native frame
  * window.
@@ -69,17 +68,83 @@ public final class DesktopApplicationContext extends ApplicationContext {
             if (this == windowedHostFrame) {
                 switch(event.getID()) {
                     case WindowEvent.WINDOW_OPENED: {
-                        applicationContext.getDisplayHost().requestFocus();
-
                         createTimer();
 
-                        Application application = applicationContext.getApplication();
+                        // Load the application
+                        Application application = null;
+                        try {
+                            Class<?> applicationClass = Class.forName(applicationClassName);
+                            application = (Application)applicationClass.newInstance();
+                            applicationContext.setApplication(application);
+                        } catch(Exception exception) {
+                            Alert.alert(MessageType.ERROR, exception.getMessage(),
+                                applicationContext.getDisplay());
+                            exception.printStackTrace();
+                        }
+
+                        // Set focus to the display host
+                        DisplayHost displayHost = applicationContext.getDisplayHost();
+                        displayHost.requestFocus();
+
+                        // Start the application
                         if (application != null) {
                             try {
                                 application.startup(applicationContext.getDisplay(),
                                     new ImmutableMap<String, String>(properties));
                             } catch(Exception exception) {
                                 displayException(exception);
+                            }
+
+                            // Hook into OS X application menu
+                            String osName = System.getProperty("os.name");
+                            if (osName.toLowerCase().startsWith("mac os x")) {
+                                try {
+                                    // Get the EAWT classes and methods
+                                    Class<?> eawtApplicationClass = Class.forName("com.apple.eawt.Application");
+                                    Class<?> eawtApplicationListenerClass = Class.forName("com.apple.eawt.ApplicationListener");
+                                    Class<?> eawtApplicationEventClass = Class.forName("com.apple.eawt.ApplicationEvent");
+
+                                    Method setEnabledAboutMenuMethod = eawtApplicationClass.getMethod("setEnabledAboutMenu",
+                                        new Class<?>[] {Boolean.TYPE});
+
+                                    Method addApplicationListenerMethod = eawtApplicationClass.getMethod("addApplicationListener",
+                                        new Class<?>[] {eawtApplicationListenerClass});
+
+                                    final Method setHandledMethod = eawtApplicationEventClass.getMethod("setHandled",
+                                        new Class<?>[] {Boolean.TYPE});
+
+                                    // Create the proxy handler
+                                    InvocationHandler handler = new InvocationHandler() {
+                                        public Object invoke(Object proxy, Method method, Object[] args)
+                                            throws Throwable {
+                                            String methodName = method.getName();
+                                            if (methodName.equals("handleAbout"))  {
+                                                handleAbout();
+                                            } else if (methodName.equals("handleQuit")) {
+                                                exit();
+                                            }
+
+                                            // Invoke setHandled(true)
+                                            setHandledMethod.invoke(args[0], new Object[] {true});
+
+                                            return null;
+                                        }
+                                    };
+
+                                    Object eawtApplication = eawtApplicationClass.newInstance();
+
+                                    setEnabledAboutMenuMethod.invoke(eawtApplication,
+                                        application instanceof Application.AboutHandler);
+
+                                    Object eawtApplicationListener =
+                                        Proxy.newProxyInstance(DesktopApplicationContext.class.getClassLoader(),
+                                            new Class[]{eawtApplicationListenerClass}, handler);
+
+                                    // Invoke the addApplicationListener() method with the proxy listener
+                                    addApplicationListenerMethod.invoke(eawtApplication, new Object[] {eawtApplicationListener});
+                                } catch(Throwable throwable) {
+                                    System.err.println(throwable);
+                                }
                             }
                         }
 
@@ -88,6 +153,11 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
                     case WindowEvent.WINDOW_CLOSING: {
                         exit();
+                        break;
+                    }
+
+                    case WindowEvent.WINDOW_CLOSED: {
+                        destroyTimer();
                         break;
                     }
 
@@ -153,6 +223,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
     }
 
     private static DesktopApplicationContext applicationContext = null;
+    private static String applicationClassName = null;
     private static HashMap<String, String> properties = null;
 
     private static HostFrame windowedHostFrame = null;
@@ -187,10 +258,8 @@ public final class DesktopApplicationContext extends ApplicationContext {
         }
 
         if (!cancelShutdown) {
-            destroyTimer();
             windowedHostFrame.dispose();
             fullScreenHostFrame.dispose();
-            System.exit(0);
         }
     }
 
@@ -209,7 +278,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
             System.err.println("Application class name is required.");
         }
 
-        String applicationClassName = args[0];
+        applicationClassName = args[0];
 
         // Get the startup properties
         properties = new HashMap<String, String>();
@@ -371,72 +440,8 @@ public final class DesktopApplicationContext extends ApplicationContext {
         fullScreenHostFrame = new HostFrame();
         fullScreenHostFrame.setUndecorated(true);
 
-        // Load the application
-        Application application = null;
-        try {
-            Class<?> applicationClass = Class.forName(applicationClassName);
-            application = (Application)applicationClass.newInstance();
-            applicationContext.setApplication(application);
-        } catch(Exception exception) {
-            Alert.alert(MessageType.ERROR, exception.getMessage(),
-                applicationContext.getDisplay());
-            exception.printStackTrace();
-        }
-
         // Open the windowed host
         windowedHostFrame.setVisible(true);
-
-        // Hook into OS X application menu
-        String osName = System.getProperty("os.name");
-        if (osName.toLowerCase().startsWith("mac os x")) {
-            try {
-                // Get the EAWT classes and methods
-                Class<?> eawtApplicationClass = Class.forName("com.apple.eawt.Application");
-                Class<?> eawtApplicationListenerClass = Class.forName("com.apple.eawt.ApplicationListener");
-                Class<?> eawtApplicationEventClass = Class.forName("com.apple.eawt.ApplicationEvent");
-
-                Method setEnabledAboutMenuMethod = eawtApplicationClass.getMethod("setEnabledAboutMenu",
-                    new Class<?>[] {Boolean.TYPE});
-
-                Method addApplicationListenerMethod = eawtApplicationClass.getMethod("addApplicationListener",
-                    new Class<?>[] {eawtApplicationListenerClass});
-
-                final Method setHandledMethod = eawtApplicationEventClass.getMethod("setHandled",
-                    new Class<?>[] {Boolean.TYPE});
-
-                // Create the proxy handler
-                InvocationHandler handler = new InvocationHandler() {
-                    public Object invoke(Object proxy, Method method, Object[] args)
-                        throws Throwable {
-                        String methodName = method.getName();
-                        if (methodName.equals("handleAbout"))  {
-                            handleAbout();
-                        } else if (methodName.equals("handleQuit")) {
-                            exit();
-                        }
-
-                        // Invoke setHandled(true)
-                        setHandledMethod.invoke(args[0], new Object[] {true});
-
-                        return null;
-                    }
-                };
-
-                Object eawtApplication = eawtApplicationClass.newInstance();
-
-                setEnabledAboutMenuMethod.invoke(eawtApplication,
-                    application instanceof Application.AboutHandler);
-
-                Object eawtApplicationListener =
-                    Proxy.newProxyInstance(DesktopApplicationContext.class.getClassLoader(),
-                        new Class[]{eawtApplicationListenerClass}, handler);
-
-                // Invoke the addApplicationListener() method with the proxy listener
-                addApplicationListenerMethod.invoke(eawtApplication, new Object[] {eawtApplicationListener});
-            } catch(Throwable throwable) {
-                System.err.println(throwable);
-            }
-        }
 
         // Go to full-screen mode, if requested
         setFullScreen(fullScreen);
