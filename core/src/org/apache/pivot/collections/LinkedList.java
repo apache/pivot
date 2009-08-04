@@ -34,7 +34,8 @@ import org.apache.pivot.util.ListenerList;
  */
 public class LinkedList<T> implements List<T>, Serializable {
     // Node containing an item in the list
-    private class Node {
+    private class Node implements Serializable {
+        private static final long serialVersionUID = 0;
         private Node previous;
         private Node next;
         private T item;
