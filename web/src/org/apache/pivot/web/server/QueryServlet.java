@@ -84,83 +84,27 @@ public abstract class QueryServlet extends HttpServlet {
     }
 
     private boolean authenticationRequired = false;
-    private Credentials credentials = null;
-
-    private String hostname;
-    private String contextPath;
-    private String queryPath;
-    private int port;
-    private boolean secure;
-    private Method method;
-
     private boolean determineContentLength = false;
 
-    private QueryDictionary parameters = new QueryDictionary();
-    private QueryDictionary requestHeaders = new QueryDictionary();
-    private QueryDictionary responseHeaders = new QueryDictionary();
-
     private Serializer<?> serializer = new JSONSerializer();
+
+    private transient ThreadLocal<Credentials> credentials = new ThreadLocal<Credentials>();
+
+    private transient ThreadLocal<String> hostname = new ThreadLocal<String>();
+    private transient ThreadLocal<String> contextPath = new ThreadLocal<String>();
+    private transient ThreadLocal<String> queryPath = new ThreadLocal<String>();
+    private transient ThreadLocal<Integer> port = new ThreadLocal<Integer>();
+    private transient ThreadLocal<Boolean> secure = new ThreadLocal<Boolean>();
+    private transient ThreadLocal<Method> method = new ThreadLocal<Method>();
+
+    private transient ThreadLocal<QueryDictionary> parameters = new ThreadLocal<QueryDictionary>();
+    private transient ThreadLocal<QueryDictionary> requestHeaders = new ThreadLocal<QueryDictionary>();
+    private transient ThreadLocal<QueryDictionary> responseHeaders = new ThreadLocal<QueryDictionary>();
 
     private static final String BASIC_AUTHENTICATION_TAG = "Basic";
     private static final String HTTP_PROTOCOL = "http";
     private static final String HTTPS_PROTOCOL = "https";
     private static final String URL_ENCODING = "UTF-8";
-
-    /**
-     * Gets the host name that was requested.
-     */
-    public String getHostname() {
-        return hostname;
-    }
-
-    /**
-     * Returns the portion of the request URI that indicates the context of the
-     * request. The context path always comes first in a request URI. The path
-     * starts with a "/" character but does not end with a "/" character. For
-     * servlets in the default (root) context, this method returns "".
-     */
-    public String getContextPath() {
-        return contextPath;
-    }
-
-    /**
-     * Returns the portion of the request URI that occurs after the context
-     * path but preceding the query string. It will start with a "/" character.
-     * For servlets in the default (root) context, this method returns the full
-     * path.
-     */
-    public String getQueryPath() {
-        return queryPath;
-    }
-
-    /**
-     * Returns the Internet Protocol (IP) port number of the interface on which
-     * the request was received.
-     */
-    public int getPort() {
-        return port;
-    }
-
-    /**
-     * Tells whether the request has been ecrypted over HTTPS.
-     */
-    public boolean isSecure() {
-        return secure;
-    }
-
-    /**
-     * Returns the name of the HTTP protocol that the request is using.
-     */
-    public String getProtocol() {
-        return isSecure() ? HTTPS_PROTOCOL : HTTP_PROTOCOL;
-    }
-
-    /**
-     * Gets the HTTP method with which the current request was made.
-     */
-    public Method getMethod() {
-        return method;
-    }
 
     /**
      * Tells whether this servlet is configured to always determine the content
@@ -209,39 +153,6 @@ public abstract class QueryServlet extends HttpServlet {
     }
 
     /**
-     * Gets the authentication credentials that were extracted from the
-     * request. These are only available if the <tt>authenticationRequired</tt>
-     * flag is set to <tt>true</tt>.
-     */
-    public Credentials getCredentials() {
-        return credentials;
-    }
-
-    /**
-     * Returns the servlet's parameter dictionary, which holds the values
-     * passed in the HTTP request query string.
-     */
-    public QueryDictionary getParameters() {
-        return parameters;
-    }
-
-    /**
-     * Returns the servlet's request header dictionary, which holds the HTTP
-     * request headers.
-     */
-    public QueryDictionary getRequestHeaders() {
-        return requestHeaders;
-    }
-
-    /**
-     * Returns the servlet's response header dictionary, which holds the HTTP
-     * response headers that will be sent back to the client.
-     */
-    public QueryDictionary getResponseHeaders() {
-        return responseHeaders;
-    }
-
-    /**
      * Returns the serializer used to stream the value passed to or from the
      * web query. By default, an instance of {@link JSONSerializer} is used.
      */
@@ -265,28 +176,174 @@ public abstract class QueryServlet extends HttpServlet {
     }
 
     /**
+     * Gets the host name that was requested.
+     */
+    public String getHostname() {
+        return hostname.get();
+    }
+
+    /**
+     * Returns the portion of the request URI that indicates the context of the
+     * request. The context path always comes first in a request URI. The path
+     * starts with a "/" character but does not end with a "/" character. For
+     * servlets in the default (root) context, this method returns "".
+     */
+    public String getContextPath() {
+        return contextPath.get();
+    }
+
+    /**
+     * Returns the portion of the request URI that occurs after the context
+     * path but preceding the query string. It will start with a "/" character.
+     * For servlets in the default (root) context, this method returns the full
+     * path.
+     */
+    public String getQueryPath() {
+        return queryPath.get();
+    }
+
+    /**
+     * Returns the Internet Protocol (IP) port number of the interface on which
+     * the request was received.
+     */
+    public int getPort() {
+        return port.get();
+    }
+
+    /**
+     * Tells whether the request has been ecrypted over HTTPS.
+     */
+    public boolean isSecure() {
+        return secure.get();
+    }
+
+    /**
+     * Returns the name of the HTTP protocol that the request is using.
+     */
+    public String getProtocol() {
+        return isSecure() ? HTTPS_PROTOCOL : HTTP_PROTOCOL;
+    }
+
+    /**
+     * Gets the HTTP method with which the current request was made.
+     */
+    public Method getMethod() {
+        return method.get();
+    }
+
+    /**
+     * Gets the authentication credentials that were extracted from the
+     * request. These are only available if the <tt>authenticationRequired</tt>
+     * flag is set to <tt>true</tt>.
+     */
+    public Credentials getCredentials() {
+        return credentials.get();
+    }
+
+    /**
+     * Returns the servlet's parameter dictionary, which holds the values
+     * passed in the HTTP request query string.
+     */
+    public QueryDictionary getParameters() {
+        return parameters.get();
+    }
+
+    /**
+     * Returns the servlet's request header dictionary, which holds the HTTP
+     * request headers.
+     */
+    public QueryDictionary getRequestHeaders() {
+        return requestHeaders.get();
+    }
+
+    /**
+     * Returns the servlet's response header dictionary, which holds the HTTP
+     * response headers that will be sent back to the client.
+     */
+    public QueryDictionary getResponseHeaders() {
+        return responseHeaders.get();
+    }
+
+    /**
+     * Called when an HTTP GET is received. This base method throws
+     * <tt>UnsupportedOperationException</tt>, which will cause an HTTP 405
+     * (method not allowed) to be sent in the response. Subclasses should
+     * override this method if they wish to support GET requests.
+     * <p>
+     * Request parameters, and request/response headers are available to
+     * subclasses via the corresponding query dictionary.
      *
+     * @return
+     * The object that was retrieved via the GET request. This object will be
+     * serialized by this servlet's serializer before being included in the
+     * HTTP response
+     *
+     * @see #getParameters()
+     * @see #getRequestHeaders()
+     * @see #getResponseHeaders()
      */
     protected Object doGet() throws ServletException {
         throw new UnsupportedOperationException();
     }
 
     /**
+     * Called when an HTTP POST is received. This base method throws
+     * <tt>UnsupportedOperationException</tt>, which will cause an HTTP 405
+     * (method not allowed) to be sent in the response. Subclasses should
+     * override this method if they wish to support POST requests.
+     * <p>
+     * Request parameters, and request/response headers are available to
+     * subclasses via the corresponding query dictionary.
      *
+     * @param value
+     * The object that is being posted by the client. This object will have
+     * been de-serialized from within the request by this servlet's serializer
+     *
+     * @return
+     * The URL identifying the location of the object that was posted. The
+     * semantics of this URL are up to the subclass to define
+     *
+     * @see #getParameters()
+     * @see #getRequestHeaders()
+     * @see #getResponseHeaders()
      */
     protected URL doPost(Object value) throws ServletException {
         throw new UnsupportedOperationException();
     }
 
     /**
+     * Called when an HTTP PUT is received. This base method throws
+     * <tt>UnsupportedOperationException</tt>, which will cause an HTTP 405
+     * (method not allowed) to be sent in the response. Subclasses should
+     * override this method if they wish to support PUT requests.
+     * <p>
+     * Request parameters, and request/response headers are available to
+     * subclasses via the corresponding query dictionary.
      *
+     * @param value
+     * The object that is being updated by the client. This object will have
+     * been de-serialized from within the request by this servlet's serializer
+     *
+     * @see #getParameters()
+     * @see #getRequestHeaders()
+     * @see #getResponseHeaders()
      */
     protected void doPut(Object value) throws ServletException {
         throw new UnsupportedOperationException();
     }
 
     /**
+     * Called when an HTTP DELETE is received. This base method throws
+     * <tt>UnsupportedOperationException</tt>, which will cause an HTTP 405
+     * (method not allowed) to be sent in the response. Subclasses should
+     * override this method if they wish to support DELETE requests.
+     * <p>
+     * Request parameters, and request/response headers are available to
+     * subclasses via the corresponding query dictionary.
      *
+     * @see #getParameters()
+     * @see #getRequestHeaders()
+     * @see #getResponseHeaders()
      */
     protected void doDelete() throws ServletException {
         throw new UnsupportedOperationException();
@@ -299,7 +356,7 @@ public abstract class QueryServlet extends HttpServlet {
      * wishing to authorize the authenticated user credentials may override
      * this method to perform that authorization. On the other hand, the
      * <tt>authorize</tt> method of <tt>QueryServlet</tt> does nothing, so
-     * subclasses that wish to authenticate the request but not authorization
+     * subclasses that wish to authenticate the request but not authorize
      * it may simply not override this method.
      * <p>
      * This method is guaranteed to be called after the arguments and request
@@ -316,92 +373,104 @@ public abstract class QueryServlet extends HttpServlet {
     @SuppressWarnings("unchecked")
     protected void service(HttpServletRequest request, HttpServletResponse response)
         throws IOException, ServletException {
-        boolean proceed = true;
+        try {
+            parameters.set(new QueryDictionary());
+            requestHeaders.set(new QueryDictionary());
+            responseHeaders.set(new QueryDictionary());
 
-        if (authenticationRequired) {
-            String authorization = request.getHeader("Authorization");
-
-            if (authorization == null) {
-                proceed = false;
-                doUnauthorized(request, response);
-            } else {
-                String encodedCredentials = authorization.substring
-                    (BASIC_AUTHENTICATION_TAG.length() + 1);
-                String decodedCredentials = new String(Base64.decode(encodedCredentials));
-                String[] credentialsPair = decodedCredentials.split(":");
-
-                String username = credentialsPair.length > 0 ? credentialsPair[0] : "";
-                String password = credentialsPair.length > 1 ? credentialsPair[1] : "";
-
-                if (credentials == null) {
-                    credentials = new Credentials(username, password);
-                } else {
-                    credentials.username = username;
-                    credentials.password = password;
-                }
-            }
-        }
-
-        if (proceed) {
-            // Extract our location context
-            try {
-                URL url = new URL(request.getRequestURL().toString());
-
-                hostname = url.getHost();
-                contextPath = request.getContextPath();
-                queryPath = request.getRequestURI();
-                port = request.getLocalPort();
-                secure = url.getProtocol().equalsIgnoreCase(HTTPS_PROTOCOL);
-                method = Method.valueOf(request.getMethod().toUpperCase());
-
-                if (queryPath.startsWith(contextPath)) {
-                    queryPath = queryPath.substring(contextPath.length());
-                }
-            } catch (MalformedURLException ex) {
-                throw new ServletException(ex);
-            }
-
-            // Clear out any remnants of the previous service
-            parameters.clear();
-            requestHeaders.clear();
-            responseHeaders.clear();
-
-            // Copy the query string into our arguments dictionary
-            String queryString = request.getQueryString();
-            if (queryString != null) {
-                String[] pairs = queryString.split("&");
-
-                for (int i = 0, n = pairs.length; i < n; i++) {
-                    String[] pair = pairs[i].split("=");
-
-                    String key = URLDecoder.decode(pair[0], URL_ENCODING);
-                    String value = URLDecoder.decode((pair.length > 1) ? pair[1] : "", URL_ENCODING);
-
-                    parameters.add(key, value);
-                }
-            }
-
-            // Copy the request headers into our request properties dictionary
-            Enumeration<String> headerNames = request.getHeaderNames();
-            while (headerNames.hasMoreElements()) {
-                String headerName = headerNames.nextElement();
-                String headerValue = request.getHeader(headerName);
-
-                requestHeaders.add(headerName, headerValue);
-            }
+            boolean proceed = true;
 
             if (authenticationRequired) {
-                try {
-                    authorize();
-                } catch (LoginException ex) {
+                String authorization = request.getHeader("Authorization");
+
+                if (authorization == null) {
                     proceed = false;
-                    doForbidden(request, response);
+                    doUnauthorized(request, response);
+                } else {
+                    String encodedCredentials = authorization.substring
+                        (BASIC_AUTHENTICATION_TAG.length() + 1);
+                    String decodedCredentials = new String(Base64.decode(encodedCredentials));
+                    String[] credentialsPair = decodedCredentials.split(":");
+
+                    String username = credentialsPair.length > 0 ? credentialsPair[0] : "";
+                    String password = credentialsPair.length > 1 ? credentialsPair[1] : "";
+
+                    credentials.set(new Credentials(username, password));
                 }
             }
-        }
 
-        if (proceed) {
-            super.service(request, response);
+            if (proceed) {
+                // Extract our location context
+                try {
+                    URL url = new URL(request.getRequestURL().toString());
+                    String requestURI = request.getRequestURI();
+                    String requestContext = request.getContextPath();
+
+                    hostname.set(url.getHost());
+                    contextPath.set(requestContext);
+                    queryPath.set(requestURI);
+                    port.set(request.getLocalPort());
+                    secure.set(url.getProtocol().equalsIgnoreCase(HTTPS_PROTOCOL));
+                    method.set(Method.valueOf(request.getMethod().toUpperCase()));
+
+                    if (requestURI.startsWith(requestContext)) {
+                        queryPath.set(requestURI.substring(requestContext.length()));
+                    }
+                } catch (MalformedURLException exception) {
+                    throw new ServletException(exception);
+                }
+
+                // Copy the query string into our arguments dictionary
+                String queryString = request.getQueryString();
+                if (queryString != null) {
+                    QueryDictionary parametersDictionary = parameters.get();
+                    String[] pairs = queryString.split("&");
+
+                    for (int i = 0, n = pairs.length; i < n; i++) {
+                        String[] pair = pairs[i].split("=");
+
+                        String key = URLDecoder.decode(pair[0], URL_ENCODING);
+                        String value = URLDecoder.decode((pair.length > 1) ? pair[1] : "", URL_ENCODING);
+
+                        parametersDictionary.add(key, value);
+                    }
+                }
+
+                // Copy the request headers into our request properties dictionary
+                QueryDictionary requestHeaderDictionary = requestHeaders.get();
+                Enumeration<String> headerNames = request.getHeaderNames();
+                while (headerNames.hasMoreElements()) {
+                    String headerName = headerNames.nextElement();
+                    String headerValue = request.getHeader(headerName);
+
+                    requestHeaderDictionary.add(headerName, headerValue);
+                }
+
+                if (authenticationRequired) {
+                    try {
+                        authorize();
+                    } catch (LoginException exception) {
+                        proceed = false;
+                        doForbidden(request, response);
+                    }
+                }
+            }
+
+            if (proceed) {
+                super.service(request, response);
+            }
+        } finally {
+            // Clean up our thread local variables
+            credentials.remove();
+            hostname.remove();
+            contextPath.remove();
+            queryPath.remove();
+            port.remove();
+            secure.remove();
+            method.remove();
+            parameters.remove();
+            requestHeaders.remove();
+            responseHeaders.remove();
         }
     }
 
@@ -451,10 +520,10 @@ public abstract class QueryServlet extends HttpServlet {
             } else {
                 serializer.writeObject(result, responseOutputStream);
             }
-        } catch (UnsupportedOperationException ex) {
+        } catch (UnsupportedOperationException exception) {
             doMethodNotAllowed(response);
-        } catch (SerializationException ex) {
-            throw new ServletException(ex);
+        } catch (SerializationException exception) {
+            throw new ServletException(exception);
         }
     }
 
@@ -471,10 +540,10 @@ public abstract class QueryServlet extends HttpServlet {
             response.setHeader("Location", url.toString());
             response.setContentLength(0);
             response.flushBuffer();
-        } catch (UnsupportedOperationException ex) {
+        } catch (UnsupportedOperationException exception) {
             doMethodNotAllowed(response);
-        } catch (SerializationException ex) {
-            throw new ServletException(ex);
+        } catch (SerializationException exception) {
+            throw new ServletException(exception);
         }
     }
 
@@ -490,10 +559,10 @@ public abstract class QueryServlet extends HttpServlet {
             setResponseHeaders(response);
             response.setContentLength(0);
             response.flushBuffer();
-        } catch (UnsupportedOperationException ex) {
+        } catch (UnsupportedOperationException exception) {
             doMethodNotAllowed(response);
-        } catch (SerializationException ex) {
-            throw new ServletException(ex);
+        } catch (SerializationException exception) {
+            throw new ServletException(exception);
         }
     }
 
@@ -507,7 +576,7 @@ public abstract class QueryServlet extends HttpServlet {
             setResponseHeaders(response);
             response.setContentLength(0);
             response.flushBuffer();
-        } catch (UnsupportedOperationException ex) {
+        } catch (UnsupportedOperationException exception) {
             doMethodNotAllowed(response);
         }
     }
@@ -565,9 +634,11 @@ public abstract class QueryServlet extends HttpServlet {
      *
      */
     private void setResponseHeaders(HttpServletResponse response) {
-        for (String key : responseHeaders) {
-            for (int i = 0, n = responseHeaders.getLength(key); i < n; i++) {
-                response.addHeader(key, responseHeaders.get(key, i));
+        QueryDictionary responseHeaderDictionary = responseHeaders.get();
+
+        for (String key : responseHeaderDictionary) {
+            for (int i = 0, n = responseHeaderDictionary.getLength(key); i < n; i++) {
+                response.addHeader(key, responseHeaderDictionary.get(key, i));
             }
         }
     }
