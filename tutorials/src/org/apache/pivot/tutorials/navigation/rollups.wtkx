@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<Window title="Rollups" maximized="true"
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns="org.apache.pivot.wtk">
+    <content>
+        <Border styles="{padding:6}">
+            <content>
+                <ScrollPane horizontalScrollBarPolicy="fill">
+                    <view>
+                        <BoxPane orientation="vertical" styles="{fill:true,
+                            padding:{left:2, right:2}}">
+                            <Rollup expanded="true">
+                                <heading>
+                                    <Label text="Stocks" styles="{fontBold:true, color:13}"/>
+                                </heading>
+                                <content>
+                                    <wtkx:include src="stocks.wtkx"/>
+                                </content>
+                            </Rollup>
+                            <Rollup>
+                                <heading>
+                                    <Label text="Weather" styles="{fontBold:true, color:13}"/>
+                                </heading>
+                                <content>
+                                    <wtkx:include src="weather.wtkx"/>
+                                </content>
+                            </Rollup>
+                            <Rollup>
+                                <heading>
+                                    <Label text="Calendar" styles="{fontBold:true, color:13}"/>
+                                </heading>
+                                <content>
+                                    <wtkx:include src="calendar.wtkx"/>
+                                </content>
+                            </Rollup>
+                            <Rollup>
+                                <heading>
+                                    <Label text="Nested" styles="{fontBold:true, color:13}"/>
+                                </heading>
+                                <content>
+                                    <BoxPane orientation="vertical">
+                                        <Rollup>
+                                            <heading>
+                                                <Label text="Level 1"/>
+                                            </heading>
+                                            <content>
+                                                <Label text="Level 1 content" styles="{fontItalic:true}"/>
+                                            </content>
+                                        </Rollup>
+
+                                        <Rollup>
+                                            <heading>
+                                                <Label text="Level 2"/>
+                                            </heading>
+                                            <content>
+                                                <Label text="Level 2 content" styles="{fontItalic:true}"/>
+                                            </content>
+                                        </Rollup>
+
+                                        <Rollup>
+                                            <heading>
+                                                <Label text="Level 3"/>
+                                            </heading>
+                                            <content>
+                                                <Label text="Level 3 content" styles="{fontItalic:true}"/>
+                                            </content>
+                                        </Rollup>
+                                    </BoxPane>
+                                </content>
+                            </Rollup>
+                        </BoxPane>
+                    </view>
+                </ScrollPane>
+            </content>
+        </Border>
+    </content>
+</Window>

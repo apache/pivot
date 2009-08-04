@@ -22,9 +22,8 @@ import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Border;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentKeyListener;
-import org.apache.pivot.wtk.ComponentMouseButtonListener;
-import org.apache.pivot.wtk.ComponentMouseListener;
-import org.apache.pivot.wtk.ComponentMouseWheelListener;
+import org.apache.pivot.wtk.Container;
+import org.apache.pivot.wtk.ContainerMouseListener;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
@@ -39,70 +38,55 @@ import org.apache.pivot.wtk.effects.Transition;
 import org.apache.pivot.wtk.effects.TransitionListener;
 import org.apache.pivot.wtk.skin.WindowSkin;
 
-
 /**
  * Tooltip skin.
  *
  * @author gbrown
  */
 public class TerraTooltipSkin extends WindowSkin implements TooltipListener {
-    private class CloseHandler implements ComponentMouseListener,
-        ComponentMouseButtonListener, ComponentMouseWheelListener,
-        ComponentKeyListener {
-        // Component mouse events
-        public boolean mouseMove(Component component, int x, int y) {
-            Tooltip tooltip = (Tooltip)getComponent();
-            tooltip.close();
-            return false;
-        }
-
-        public void mouseOver(Component component) {
-        }
-
-        public void mouseOut(Component component) {
-        }
-
-        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
-            Tooltip tooltip = (Tooltip)getComponent();
-            tooltip.close();
-            return false;
-        }
-
-        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
-            return false;
-        }
-
-        public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-            return false;
-        }
-
-        public boolean mouseWheel(Component component, Mouse.ScrollType scrollType,
-            int scrollAmount, int wheelRotation, int x, int y) {
-            Tooltip tooltip = (Tooltip)getComponent();
-            tooltip.close();
-            return false;
-        }
-
-        // Component key events
-        public boolean keyTyped(Component component, char character) {
-            return false;
-        }
-
-        public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
-            Tooltip tooltip = (Tooltip)getComponent();
-            tooltip.close();
-            return false;
-        }
-
-        public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
-            return false;
-        }
-    }
-
     private Label label = new Label();
     private Border border = new Border();
 
-    private CloseHandler closeHandler = new CloseHandler();
+    private boolean fade = true;
+
+    private ContainerMouseListener displayContainerMouseListener = new ContainerMouseListener() {
+        public boolean mouseMove(Container container, int x, int y) {
+            Tooltip tooltip = (Tooltip)getComponent();
+            tooltip.close();
+            return false;
+        }
+
+        public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
+            Tooltip tooltip = (Tooltip)getComponent();
+            tooltip.close();
+            return false;
+        }
+
+        public boolean mouseUp(Container container, Mouse.Button button, int x, int y) {
+            Tooltip tooltip = (Tooltip)getComponent();
+            tooltip.close();
+            return false;
+        }
+
+        public boolean mouseWheel(Container container, Mouse.ScrollType scrollType,
+            int scrollAmount, int wheelRotation, int x, int y) {
+            fade = false;
+            Tooltip tooltip = (Tooltip)getComponent();
+            tooltip.close();
+            return false;
+        }
+    };
+
+    private ComponentKeyListener displayKeyListener = new ComponentKeyListener.Adapter() {
+        @Override
+        public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+            fade = false;
+            Tooltip tooltip = (Tooltip)getComponent();
+            tooltip.close();
+            return false;
+        }
+    };
+
     private Transition closeTransition = null;
 
     private DropShadowDecorator dropShadowDecorator = null;
@@ -160,30 +144,30 @@ public class TerraTooltipSkin extends WindowSkin implements TooltipListener {
 
         // Add this as a display mouse and key listener
         Display display = window.getDisplay();
-        display.getComponentMouseListeners().add(closeHandler);
-        display.getComponentMouseButtonListeners().add(closeHandler);
-        display.getComponentMouseWheelListeners().add(closeHandler);
-        display.getComponentKeyListeners().add(closeHandler);
+        display.getContainerMouseListeners().add(displayContainerMouseListener);
+        display.getComponentKeyListeners().add(displayKeyListener);
     }
 
     @Override
     public Vote previewWindowClose(final Window window) {
         Vote vote = Vote.APPROVE;
 
-        if (closeTransition == null) {
-            closeTransition = new FadeWindowTransition(window,
-                CLOSE_TRANSITION_DURATION, CLOSE_TRANSITION_RATE,
-                dropShadowDecorator);
+        if (fade) {
+            if (closeTransition == null) {
+                closeTransition = new FadeWindowTransition(window,
+                    CLOSE_TRANSITION_DURATION, CLOSE_TRANSITION_RATE,
+                    dropShadowDecorator);
 
-            closeTransition.start(new TransitionListener() {
-                public void transitionCompleted(Transition transition) {
-                    window.close();
-                }
-            });
+                closeTransition.start(new TransitionListener() {
+                    public void transitionCompleted(Transition transition) {
+                        window.close();
+                    }
+                });
 
-            vote = Vote.DEFER;
-        } else {
-            vote = (closeTransition.isRunning()) ? Vote.DEFER : Vote.APPROVE;
+                vote = Vote.DEFER;
+            } else {
+                vote = (closeTransition.isRunning()) ? Vote.DEFER : Vote.APPROVE;
+            }
         }
 
         return vote;
@@ -204,10 +188,8 @@ public class TerraTooltipSkin extends WindowSkin implements TooltipListener {
         super.windowClosed(window, display);
 
         // Remove this as a display mouse and key listener
-        display.getComponentMouseListeners().remove(closeHandler);
-        display.getComponentMouseButtonListeners().remove(closeHandler);
-        display.getComponentMouseWheelListeners().remove(closeHandler);
-        display.getComponentKeyListeners().remove(closeHandler);
+        display.getContainerMouseListeners().remove(displayContainerMouseListener);
+        display.getComponentKeyListeners().remove(displayKeyListener);
 
         closeTransition = null;
     }
