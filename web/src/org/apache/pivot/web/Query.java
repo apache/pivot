@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.web;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
@@ -30,6 +31,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 import org.apache.pivot.io.IOTask;
 import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.serialization.Serializer;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.concurrent.Dispatcher;
@@ -484,9 +486,12 @@ public abstract class Query<V> extends IOTask<V> {
 
             // Notify listeners that the response has been received
             queryListeners.responseReceived(this);
-        } catch (Exception exception) {
+        } catch (IOException exception) {
             queryListeners.failed(this);
             throw new QueryException(exception);
+        } catch (SerializationException se) {
+            queryListeners.failed(this);
+            throw new QueryException(se);
         }
 
         return value;
