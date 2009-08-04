@@ -318,8 +318,7 @@ public class TerraExpanderSkin extends ExpanderSkin
 
         if (content != null
             && (expander.isExpanded()
-                || (expandTransition != null
-                    && !expandTransition.isReversed()))) {
+                || expandTransition != null)) {
             // Title bar border is only drawn when content is non-null and
             // expander is expanded or expanding
             preferredHeight += 1;
@@ -360,8 +359,7 @@ public class TerraExpanderSkin extends ExpanderSkin
                 preferredWidth);
 
             if (expander.isExpanded()
-                || (expandTransition != null
-                    && !expandTransition.isReversed())) {
+                || expandTransition != null) {
                 // Title bar border is only drawn when expander is expanded
                 // or expanding
                 preferredHeight += 1;
@@ -393,17 +391,17 @@ public class TerraExpanderSkin extends ExpanderSkin
         titleBarTablePane.setSize(Math.max(width - 2, 0), titleBarHeight);
         titleBarTablePane.setLocation(1, 1);
 
-        if ((expander.isExpanded()
-            || (expandTransition != null
-                && !expandTransition.isReversed()))
-            && content != null) {
-            int contentWidth = Math.max(width - (2 + padding.left + padding.right), 0);
-            int contentHeight = Math.max(height - (3 + padding.top + padding.bottom + titleBarHeight), 0);
-            content.setSize(contentWidth, contentHeight);
+        if (expander.isExpanded()
+            || expandTransition != null) {
+            if (content != null) {
+                int contentWidth = Math.max(width - (2 + padding.left + padding.right), 0);
+                int contentHeight = Math.max(height - (3 + padding.top + padding.bottom + titleBarHeight), 0);
+                content.setSize(contentWidth, contentHeight);
 
-            int contentX = 1 + padding.left;
-            int contentY = 2 + padding.top + titleBarHeight;
-            content.setLocation(contentX, contentY);
+                int contentX = 1 + padding.left;
+                int contentY = 2 + padding.top + titleBarHeight;
+                content.setLocation(contentX, contentY);
+            }
         }
     }
 
@@ -414,19 +412,13 @@ public class TerraExpanderSkin extends ExpanderSkin
         int width = getWidth();
         int height = getHeight();
 
-        Expander expander = (Expander)getComponent();
-        if (expander.isExpanded()
-            || (expandTransition != null
-                && !expandTransition.isReversed())) {
-            int titleBarHeight = titleBarTablePane.getPreferredHeight(-1);
-            graphics.setPaint(titleBarBorderColor);
-            GraphicsUtilities.drawLine(graphics, 0, 1 + titleBarHeight, width, Orientation.HORIZONTAL);
-        }
-
         int titleBarX = titleBarTablePane.getX();
         int titleBarY = titleBarTablePane.getY();
         int titleBarWidth = titleBarTablePane.getWidth();
         int titleBarHeight = titleBarTablePane.getHeight();
+
+        graphics.setPaint(titleBarBorderColor);
+        GraphicsUtilities.drawLine(graphics, 0, 1 + titleBarHeight, width, Orientation.HORIZONTAL);
 
         graphics.setPaint(new GradientPaint(titleBarX + titleBarWidth / 2, titleBarY, titleBarBevelColor,
             titleBarX + titleBarWidth / 2, titleBarY + titleBarHeight, titleBarBackgroundColor));
