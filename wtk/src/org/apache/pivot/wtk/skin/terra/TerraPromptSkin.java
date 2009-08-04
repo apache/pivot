@@ -59,7 +59,7 @@ public class TerraPromptSkin extends TerraSheetSkin
         Component content = null;
 
         try {
-            content = (Component)wtkxSerializer.readObject(getClass().getResource("prompt_skin.wtkx"));
+            content = (Component)wtkxSerializer.readObject(this, "terra_prompt_skin.wtkx");
         } catch(Exception exception) {
             throw new RuntimeException(exception);
         }

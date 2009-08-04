@@ -183,7 +183,11 @@ public class FileBrowserSheet extends Sheet {
 
     public void setMultiSelect(boolean multiSelect) {
         if (this.multiSelect != multiSelect) {
+            // Clear any existing selection
+            fileSelection.clear();
+
             this.multiSelect = multiSelect;
+
             fileBrowserSheetListeners.multiSelectChanged(this);
         }
     }

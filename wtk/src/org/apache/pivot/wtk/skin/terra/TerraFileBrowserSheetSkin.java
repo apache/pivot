@@ -31,8 +31,6 @@ import org.apache.pivot.wtk.FileBrowserSheetListener;
  * @author gbrown
  */
 public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBrowserSheetListener {
-    // TODO Define abstract base class
-
     @Override
     public void install(Component component) {
         super.install(component);
@@ -40,7 +38,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
         FileBrowserSheet fileBrowserSheet = (FileBrowserSheet)component;
         fileBrowserSheet.getFileBrowserSheetListeners().add(this);
 
-        // TODO Add components
+        // TODO Set content component
     }
 
     @Override
@@ -48,7 +46,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
         FileBrowserSheet fileBrowserSheet = (FileBrowserSheet)getComponent();
         fileBrowserSheet.getFileBrowserSheetListeners().remove(this);
 
-        // TODO Remove components
+        fileBrowserSheet.setContent(null);
 
         super.uninstall();
     }

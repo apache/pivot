@@ -61,7 +61,7 @@ public class TerraAlertSkin extends TerraDialogSkin
         Component content = null;
 
         try {
-            content = (Component)wtkxSerializer.readObject(getClass().getResource("alert_skin.wtkx"));
+            content = (Component)wtkxSerializer.readObject(this, "terra_alert_skin.wtkx");
         } catch(Exception exception) {
             throw new RuntimeException(exception);
         }

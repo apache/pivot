@@ -1,0 +1,8 @@
+{   openFile: "Open File",
+    openFiles: "Open Files",
+    saveFile: "Save File",
+    saveTo: "Save To",
+    ok: "OK",
+    cancel: "Cancel"
+}
+

@@ -14,60 +14,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.pivot.wtk.skin.terra;
+package org.apache.pivot.wtk.skin;
 
-import java.io.File;
-
-import org.apache.pivot.collections.Sequence;
-import org.apache.pivot.io.Folder;
-import org.apache.pivot.util.Filter;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.FileBrowser;
-import org.apache.pivot.wtk.skin.FileBrowserSkin;
+import org.apache.pivot.wtk.FileBrowserListener;
+import org.apache.pivot.wtk.skin.ContainerSkin;
 
 /**
- * Terra file browser skin.
+ * Abstract base class for file browser skins.
  *
  * @author gbrown
  */
-public class TerraFileBrowserSkin extends FileBrowserSkin {
+public abstract class FileBrowserSkin extends ContainerSkin implements FileBrowserListener {
     @Override
     public void install(Component component) {
         super.install(component);
 
-        // TODO Add components
+        FileBrowser fileBrowser = (FileBrowser)component;
+        fileBrowser.getFileBrowserListeners().add(this);
     }
 
     @Override
     public void uninstall() {
-        // TODO Remove components
+        FileBrowser fileBrowser = (FileBrowser)getComponent();
+        fileBrowser.getFileBrowserListeners().remove(this);
 
         super.uninstall();
     }
 
-    @Override
-    public void layout() {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void selectedFolderChanged(FileBrowser fileBrowser, Folder previousSelectedFolder) {
-        // TODO
-    }
-
-    public void selectedFileAdded(FileBrowser fileBrowser, File file) {
-        // TODO
-    }
-
-    public void selectedFileRemoved(FileBrowser fileBrowser, File file) {
-        // TODO
-    }
-
-    public void selectedFilesChanged(FileBrowser fileBrowser, Sequence<File> previousSelectedFiles) {
-        // TODO
-    }
-
-    public void fileFilterChanged(FileBrowser fileBrowser, Filter<File> previousFileFilter) {
-        // TODO
+    public void multiSelectChanged(FileBrowser fileBrowser) {
+        // No-op
     }
 }
