@@ -152,8 +152,8 @@ public class Request extends IOTask<Response> {
 
         try {
             location = new URL(protocol, host, port, path);
-        } catch (MalformedURLException ex) {
-            throw new IllegalArgumentException("Unable to construct URL.", ex);
+        } catch (MalformedURLException exception) {
+            throw new IllegalArgumentException("Unable to construct URL.", exception);
         }
     }
 
@@ -335,9 +335,12 @@ public class Request extends IOTask<Response> {
 
             // Notify listeners that the response has been received
             httpRequestListeners.responseReceived(this);
-        } catch (IOException ex) {
+        } catch (IOException exception) {
             httpRequestListeners.failed(this);
-            throw new TaskExecutionException(ex);
+            throw new TaskExecutionException(exception);
+        } catch (RuntimeException exception) {
+            httpRequestListeners.failed(this);
+            throw exception;
         }
 
         return httpResponse;
