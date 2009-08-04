@@ -17,6 +17,7 @@
 package org.apache.pivot.tools.net;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -334,7 +335,7 @@ public class Request extends IOTask<Response> {
 
             // Notify listeners that the response has been received
             httpRequestListeners.responseReceived(this);
-        } catch (Exception ex) {
+        } catch (IOException ex) {
             httpRequestListeners.failed(this);
             throw new TaskExecutionException(ex);
         }
