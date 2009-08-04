@@ -148,7 +148,7 @@ public abstract class QueryServlet extends HttpServlet {
         this.authenticationRequired = authenticationRequired;
 
         if (!authenticationRequired) {
-            credentials = null;
+            credentials.remove();
         }
     }
 
