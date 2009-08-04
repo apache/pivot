@@ -43,9 +43,9 @@ public class Exponential implements Easing {
         }
 
         if ((time /= duration / 2f) < 1) {
-            return change / 2f * (float)Math.pow(2, 10 * (time - 1)) + begin;
+            return change / 2f * (float) Math.pow(2, 10 * (time - 1)) + begin;
         }
 
-        return change / 2f * ((float)-Math.pow(2, -10 * --time) + 2) + begin;
+        return change / 2f * ((float) - Math.pow(2, -10 * (time - 1)) + 2) + begin;
     }
 }
