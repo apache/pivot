@@ -819,43 +819,47 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             && !tableView.isRowDisabled(rowIndex)) {
             TableView.SelectMode selectMode = tableView.getSelectMode();
 
-            if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
-                && selectMode == TableView.SelectMode.MULTI) {
-                // Select the range
-                int startIndex = tableView.getFirstSelectedIndex();
-                int endIndex = tableView.getLastSelectedIndex();
-                Span selectedRange = (rowIndex > startIndex) ?
-                    new Span(startIndex, rowIndex) : new Span(rowIndex, endIndex);
-
-                ArrayList<Span> selectedRanges = new ArrayList<Span>();
-                Filter<?> disabledRowFilter = tableView.getDisabledRowFilter();
-                if (disabledRowFilter == null) {
-                    selectedRanges.add(selectedRange);
-                } else {
-                    // TODO Split the range by the disabled indexes; for now,
-                    // just return
-                    return consumed;
-                }
-
-                tableView.setSelectedRanges(selectedRanges);
-            } else if (Keyboard.isPressed(Keyboard.Modifier.CTRL)
-                && selectMode == TableView.SelectMode.MULTI) {
-                // Toggle the item's selection state
-                if (tableView.isRowSelected(rowIndex)) {
-                    tableView.removeSelectedIndex(rowIndex);
-                } else {
-                    tableView.addSelectedIndex(rowIndex);
+            if (button == Mouse.Button.RIGHT) {
+                if (!tableView.isRowSelected(rowIndex)
+                    && selectMode != TableView.SelectMode.NONE) {
+                    tableView.setSelectedIndex(rowIndex);
                 }
             } else {
-                if (selectMode != TableView.SelectMode.NONE) {
-                    if (tableView.isRowSelected(rowIndex)
-                        && tableView.isFocused()) {
-                        // Edit the row
-                        editIndex = rowIndex;
-                    }
+                if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
+                    && selectMode == TableView.SelectMode.MULTI) {
+                    Filter<?> disabledRowFilter = tableView.getDisabledRowFilter();
 
-                    // Select the row
-                    tableView.setSelectedIndex(rowIndex);
+                    if (disabledRowFilter == null) {
+                        // Select the range
+                        int startIndex = tableView.getFirstSelectedIndex();
+                        int endIndex = tableView.getLastSelectedIndex();
+                        Span selectedRange = (rowIndex > startIndex) ?
+                            new Span(startIndex, rowIndex) : new Span(rowIndex, endIndex);
+
+                        ArrayList<Span> selectedRanges = new ArrayList<Span>();
+                        selectedRanges.add(selectedRange);
+
+                        tableView.setSelectedRanges(selectedRanges);
+                    }
+                } else if (Keyboard.isPressed(Keyboard.Modifier.CTRL)
+                    && selectMode == TableView.SelectMode.MULTI) {
+                    // Toggle the item's selection state
+                    if (tableView.isRowSelected(rowIndex)) {
+                        tableView.removeSelectedIndex(rowIndex);
+                    } else {
+                        tableView.addSelectedIndex(rowIndex);
+                    }
+                } else {
+                    if (selectMode != TableView.SelectMode.NONE) {
+                        if (tableView.isRowSelected(rowIndex)
+                            && tableView.isFocused()) {
+                            // Edit the row
+                            editIndex = rowIndex;
+                        }
+
+                        // Select the row
+                        tableView.setSelectedIndex(rowIndex);
+                    }
                 }
             }
         }
