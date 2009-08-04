@@ -489,9 +489,12 @@ public abstract class Query<V> extends IOTask<V> {
         } catch (IOException exception) {
             queryListeners.failed(this);
             throw new QueryException(exception);
-        } catch (SerializationException se) {
+        } catch (SerializationException exception) {
             queryListeners.failed(this);
-            throw new QueryException(se);
+            throw new QueryException(exception);
+        } catch (RuntimeException exception) {
+            queryListeners.failed(this);
+            throw exception;
         }
 
         return value;
