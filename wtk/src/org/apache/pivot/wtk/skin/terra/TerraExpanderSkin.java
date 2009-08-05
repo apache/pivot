@@ -444,22 +444,6 @@ public class TerraExpanderSkin extends ExpanderSkin
         setTitleBarFont(Font.decode(titleBarFont));
     }
 
-    public boolean isTitleBarFontBold() {
-        return (Boolean)titleLabel.getStyles().get("fontBold");
-    }
-
-    public void setTitleBarFontBold(boolean titleBarFontBold) {
-        titleLabel.getStyles().put("fontBold", titleBarFontBold);
-    }
-
-    public boolean isTitleBarFontItalic() {
-        return (Boolean)titleLabel.getStyles().get("fontItalic");
-    }
-
-    public void setTitleBarFontItalic(boolean titleBarFontItalic) {
-        titleLabel.getStyles().put("fontItalic", titleBarFontItalic);
-    }
-
     public Color getTitleBarColor() {
         return (Color)titleLabel.getStyles().get("color");
     }
