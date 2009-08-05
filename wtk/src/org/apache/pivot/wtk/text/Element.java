@@ -78,7 +78,7 @@ public abstract class Element extends Node
         }
     }
 
-    private class ElementListenerList extends ListenerList<ElementListener>
+    private static class ElementListenerList extends ListenerList<ElementListener>
         implements ElementListener {
         public void nodeInserted(Element element, int index) {
             for (ElementListener listener : this) {
