@@ -84,7 +84,7 @@ public abstract class ApplicationContext {
 
         private Point dragLocation = null;
         private Component dragDescendant = null;
-        private Manifest dragManifest = null;
+        private transient Manifest dragManifest = null;
         private DropAction userDropAction = null;
         private Component dropDescendant = null;
 
@@ -94,7 +94,7 @@ public abstract class ApplicationContext {
 
         private boolean debugRepaint = false;
 
-        private DropTargetListener dropTargetListener = new DropTargetListener() {
+        private transient DropTargetListener dropTargetListener = new DropTargetListener() {
             public void dragEnter(DropTargetDragEvent event) {
                 if (dragDescendant != null) {
                     throw new IllegalStateException("Local drag already in progress.");
