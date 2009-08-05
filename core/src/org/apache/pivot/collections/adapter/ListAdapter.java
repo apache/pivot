@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.collections.adapter;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -31,11 +32,13 @@ import org.apache.pivot.util.ListenerList;
  * Implementation of the {@link List} interface that is backed by an
  * instance of <tt>java.util.List</tt>.
  */
-public class ListAdapter<T> implements List<T> {
+public class ListAdapter<T> implements List<T>, Serializable {
+    private static final long serialVersionUID = 0;
+
     private java.util.List<T> list = null;
     private Comparator<T> comparator = null;
 
-    private ListListenerList<T> listListeners = new ListListenerList<T>();
+    private transient ListListenerList<T> listListeners = new ListListenerList<T>();
 
     public ListAdapter(java.util.List<T> list) {
         if (list == null) {

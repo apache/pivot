@@ -17,6 +17,7 @@
 package org.apache.pivot.io;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.Comparator;
 
 import org.apache.pivot.collections.adapter.ListAdapter;
@@ -29,7 +30,9 @@ import org.apache.pivot.collections.adapter.ListAdapter;
  * @author gbrown
  */
 public class FileList extends ListAdapter<File> {
-    private static class FilePathComparator implements Comparator<File> {
+    private static class FilePathComparator implements Comparator<File>, Serializable {
+        private static final long serialVersionUID = 0;
+
         public int compare(File file1, File file2) {
             String path1 = file1.getPath();
             String path2 = file2.getPath();
@@ -38,6 +41,7 @@ public class FileList extends ListAdapter<File> {
         }
     }
 
+    private static final long serialVersionUID = 0;
     private static final FilePathComparator filePathComparator = new FilePathComparator();
 
     public FileList() {

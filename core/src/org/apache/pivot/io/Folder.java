@@ -18,6 +18,7 @@ package org.apache.pivot.io;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Iterator;
 
@@ -40,7 +41,9 @@ public class Folder extends File implements List<File> {
      *
      * @author gbrown
      */
-    public static class FileNameComparator implements Comparator<File> {
+    public static class FileNameComparator implements Comparator<File>, Serializable {
+        private static final long serialVersionUID = 0;
+
         public int compare(File file1, File file2) {
             String path1 = file1.getPath();
             String path2 = file2.getPath();
