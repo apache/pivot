@@ -1,0 +1,9 @@
+{
+    mainKeyString: "Hello From Main",
+    someMagicString: "From Main",
+    mainKeyNumber: 200,
+    someMagicNumber: 200,
+    mainKeyBoolean: false,
+    someMagicBoolean: true,
+    languageKey: "This is not specifically any language"
+}

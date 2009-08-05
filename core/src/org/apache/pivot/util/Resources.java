@@ -29,7 +29,6 @@ import org.apache.pivot.collections.Map;
 import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 
-
 /**
  * Reads a JSON resource at {@link #baseName} using
  * {@link ClassLoader#getResourceAsStream(String)}. It applies localization to
@@ -38,80 +37,121 @@ import org.apache.pivot.serialization.SerializationException;
  * applies a country specified resource over-writing the values in the base
  * using the country specified. It then does the same for country/language
  * specific.
- *
+ * 
  * @see java.util.ResourceBundle
- *
+ * 
  * @author brindy
  * @author gbrown
  */
 public class Resources implements Dictionary<String, Object>, Iterable<String> {
-    private String baseName = null;
-    private Locale locale = null;
-    private Charset charset = null;
+
+    private final Resources parent;
+    private final String baseName;
+    private final Locale locale;
+    private final Charset charset;
 
     private Map<String, Object> resourceMap = null;
 
-    public Resources(Object baseObject)
-        throws IOException, SerializationException {
+    public Resources(Object baseObject) throws IOException,
+            SerializationException {
         this(baseObject.getClass());
     }
 
-    public Resources(Class<?> baseType)
-        throws IOException, SerializationException {
+    public Resources(Resources parent, Object baseObject) throws IOException,
+            SerializationException {
+        this(parent, baseObject.getClass());
+    }
+
+    public Resources(Class<?> baseType) throws IOException,
+            SerializationException {
         this(baseType.getName());
     }
 
-    public Resources(String baseName)
-        throws IOException, SerializationException {
-        this(baseName, Locale.getDefault(), Charset.defaultCharset());
+    public Resources(Resources parent, Class<?> baseType) throws IOException,
+            SerializationException {
+        this(parent, baseType.getName());
     }
 
-    public Resources(String baseName, Locale locale)
-        throws IOException, SerializationException {
-        this(baseName, locale, Charset.defaultCharset());
+    public Resources(String baseName) throws IOException,
+            SerializationException {
+        this(null, baseName, Locale.getDefault(), Charset.defaultCharset());
     }
 
-    public Resources(String baseName, String charsetName)
-        throws IOException, SerializationException {
+    public Resources(Resources parent, String baseName) throws IOException,
+            SerializationException {
+        this(parent, baseName, Locale.getDefault(), Charset.defaultCharset());
+    }
+
+    public Resources(String baseName, Locale locale) throws IOException,
+            SerializationException {
+        this(null, baseName, locale, Charset.defaultCharset());
+    }
+
+    public Resources(Resources parent, String baseName, Locale locale)
+            throws IOException, SerializationException {
+        this(parent, baseName, locale, Charset.defaultCharset());
+    }
+
+    public Resources(String baseName, String charsetName) throws IOException,
+            SerializationException {
         this(baseName, Locale.getDefault(), charsetName);
     }
 
-    public Resources(String baseName, Charset charset)
-        throws IOException, SerializationException {
-        this(baseName, Locale.getDefault(), charset);
+    public Resources(Resources parent, String baseName, String charsetName)
+            throws IOException, SerializationException {
+        this(parent, baseName, Locale.getDefault(), charsetName);
+    }
+
+    public Resources(String baseName, Charset charset) throws IOException,
+            SerializationException {
+        this(null, baseName, Locale.getDefault(), charset);
+    }
+
+    public Resources(Resources parent, String baseName, Charset charset)
+            throws IOException, SerializationException {
+        this(parent, baseName, Locale.getDefault(), charset);
     }
 
     public Resources(String baseName, Locale locale, String charsetName)
-        throws IOException, SerializationException {
-        this(baseName, locale, Charset.forName(charsetName));
+            throws IOException, SerializationException {
+        this(null, baseName, locale, Charset.forName(charsetName));
+    }
+
+    public Resources(Resources parent, String baseName, Locale locale,
+            String charsetName) throws IOException, SerializationException {
+        this(parent, baseName, locale, Charset.forName(charsetName));
     }
 
     /**
      * Creates a new resource bundle.
-     *
+     * 
+     * @param parent
+     * The parent resource defer to if a resource cannot be found in this
+     * instance or null.
+     * 
      * @param baseName
      * The base name of this resource as a fully qualified class name.
-     *
+     * 
      * @param locale
      * The locale to use when reading this resource.
-     *
+     * 
      * @param charset
      * The character encoding to use when reading this resource.
-     *
+     * 
      * @throws IOException
      * If there is a problem when reading the resource.
-     *
+     * 
      * @throws SerializationException
      * If there is a problem deserializing the resource from its JSON format.
-     *
+     * 
      * @throws IllegalArgumentException
      * If baseName or locale is null.
-     *
+     * 
      * @throws MissingResourceException
      * If no resource for the specified base name can be found.
      */
-    public Resources(String baseName, Locale locale, Charset charset) throws IOException,
-        SerializationException {
+    public Resources(Resources parent, String baseName, Locale locale,
+            Charset charset) throws IOException, SerializationException {
 
         if (locale == null) {
             throw new IllegalArgumentException("locale is null");
@@ -121,6 +161,7 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
             throw new IllegalArgumentException("charset is null.");
         }
 
+        this.parent = parent;
         this.baseName = baseName;
         this.locale = locale;
         this.charset = charset;
@@ -128,19 +169,21 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
         String resourceName = baseName.replace('.', '/');
         resourceMap = readJSONResource(resourceName + ".json");
         if (resourceMap == null) {
-            throw new MissingResourceException("Can't find resource for base name "
-                + baseName + ", locale " + locale, baseName, "");
+            throw new MissingResourceException(
+                    "Can't find resource for base name " + baseName
+                            + ", locale " + locale, baseName, "");
         }
 
         // try to find resource for the language (e.g. resourceName_en)
         Map<String, Object> overrideMap = readJSONResource(resourceName + "_"
-            + locale.getLanguage() + ".json");
+                + locale.getLanguage() + ".json");
         if (overrideMap != null) {
             applyOverrides(resourceMap, overrideMap);
         }
 
         // try to find resource for the entire locale (e.g. resourceName_en_GB)
-        overrideMap = readJSONResource(resourceName + "_" + locale.toString() + ".json");
+        overrideMap = readJSONResource(resourceName + "_" + locale.toString()
+                + ".json");
         if (null != overrideMap) {
             applyOverrides(resourceMap, overrideMap);
         }
@@ -155,94 +198,156 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
     }
 
     public Object get(String key) {
-        return JSONSerializer.get(resourceMap, key);
+        Object o = JSONSerializer.get(resourceMap, key);
+        if (o == null && parent != null) {
+            return parent.get(key);
+        }
+        return o;
     }
 
     public String getString(String key) {
-        return JSONSerializer.getString(resourceMap, key);
+        String s = JSONSerializer.getString(resourceMap, key);
+        if (s == null && parent != null) {
+            return parent.getString(key);
+        }
+        return s;
     }
 
     public Number getNumber(String key) {
-        return JSONSerializer.getNumber(resourceMap, key);
+        Number n = JSONSerializer.getNumber(resourceMap, key);
+        if (n == null && parent != null) {
+            return parent.getNumber(key);
+        }
+        return n;
     }
 
     public Short getShort(String key) {
-        return JSONSerializer.getShort(resourceMap, key);
+        Short s = JSONSerializer.getShort(resourceMap, key);
+        if (s == null && parent != null) {
+            return parent.getShort(key);
+        }
+        return s;
     }
 
     public Integer getInteger(String key) {
-        return JSONSerializer.getInteger(resourceMap, key);
+        Integer i = JSONSerializer.getInteger(resourceMap, key);
+        if (i == null && parent != null) {
+            return parent.getInteger(key);
+        }
+        return i;
     }
 
     public Long getLong(String key) {
-        return JSONSerializer.getLong(resourceMap, key);
+        Long l = JSONSerializer.getLong(resourceMap, key);
+        if (l == null && parent != null) {
+            return parent.getLong(key);
+        }
+        return l;
     }
 
     public Float getFloat(String key) {
-        return JSONSerializer.getFloat(resourceMap, key);
+        Float f = JSONSerializer.getFloat(resourceMap, key);
+        if (f == null && parent != null) {
+            return parent.getFloat(key);
+        }
+        return f;
     }
 
     public Double getDouble(String key) {
-        return JSONSerializer.getDouble(resourceMap, key);
+        Double d = JSONSerializer.getDouble(resourceMap, key);
+        if (d == null && parent != null) {
+            return parent.getDouble(key);
+        }
+        return d;
     }
 
     public Boolean getBoolean(String key) {
-        return JSONSerializer.getBoolean(resourceMap, key);
+        Boolean b = JSONSerializer.getBoolean(resourceMap, key);
+        if (b == null && parent != null) {
+            return parent.getBoolean(key);
+        }
+        return b;
     }
 
     public List<?> getList(String key) {
-        return JSONSerializer.getList(resourceMap, key);
+        List<?> list = JSONSerializer.getList(resourceMap, key);
+        if (list == null && parent != null) {
+            return parent.getList(key);
+        }
+        return list;
     }
 
     public Map<String, ?> getMap(String key) {
-        return JSONSerializer.getMap(resourceMap, key);
+        Map<String, ?> map = JSONSerializer.getMap(resourceMap, key);
+        if (map == null && parent != null) {
+            return parent.getMap(key);
+        }
+        return map;
+    }
+
+    public Resources getParent() {
+        return parent;
     }
 
     public Object put(String key, Object value) {
-        throw new UnsupportedOperationException("Resources instances are immutable");
+        throw new UnsupportedOperationException(
+                "Resources instances are immutable");
     }
 
     public Object remove(String key) {
-        throw new UnsupportedOperationException("Resources instances are immutable");
+        throw new UnsupportedOperationException(
+                "Resources instances are immutable");
     }
 
     public boolean containsKey(String key) {
-        return resourceMap.containsKey(key);
+        boolean containsKey = resourceMap.containsKey(key);
+        if (!containsKey && parent != null) {
+            return parent.containsKey(key);
+        }
+        return containsKey;
     }
 
     public boolean isEmpty() {
-        return resourceMap.isEmpty();
+        boolean empty = resourceMap.isEmpty();
+        if (empty && parent != null) {
+            return parent.isEmpty();
+        }
+        return empty;
     }
 
-    @SuppressWarnings({"unchecked"})
-    private void applyOverrides(Map<String, Object> sourceMap,
-        Map<String, Object> overridesMap) {
+    public Iterator<String> iterator() {
+        return new ImmutableIterator<String>(resourceMap.iterator());
+    }
 
+    @SuppressWarnings( { "unchecked" })
+    private void applyOverrides(Map<String, Object> sourceMap,
+            Map<String, Object> overridesMap) {
+    
         for (String key : overridesMap) {
             if (sourceMap.containsKey(key)) {
                 Object source = sourceMap.get(key);
                 Object override = overridesMap.get(key);
-
+    
                 if (source instanceof Map<?, ?>
-                    && override instanceof Map<?, ?>) {
+                        && override instanceof Map<?, ?>) {
                     applyOverrides((Map<String, Object>) source,
-                        (Map<String, Object>) override);
+                            (Map<String, Object>) override);
                 } else {
                     sourceMap.put(key, overridesMap.get(key));
                 }
             }
         }
-
+    
     }
 
     @SuppressWarnings("unchecked")
-    private Map<String, Object> readJSONResource(String name) throws IOException,
-        SerializationException {
+    private Map<String, Object> readJSONResource(String name)
+            throws IOException, SerializationException {
         InputStream in = getClass().getClassLoader().getResourceAsStream(name);
         if (in == null) {
             return null;
         }
-
+    
         JSONSerializer serializer = new JSONSerializer(charset);
         Map<String, Object> resourceMap = null;
         try {
@@ -250,11 +355,7 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
         } finally {
             in.close();
         }
-
+    
         return resourceMap;
-    }
-
-    public Iterator<String> iterator() {
-        return new ImmutableIterator<String>(resourceMap.iterator());
     }
 }

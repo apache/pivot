@@ -1,0 +1,20 @@
+{
+    parentKeyString: "Hello from parent",
+    someMagicString: "From Parent",
+    parentKeyNumber: 100,
+    someMagicNumber: 100,
+    mainKeyBoolean: true,
+    someMagicBoolean: false,
+    
+    myMap : {
+    
+        x: 75,
+        y: 90
+    
+    },
+    
+    languageKey: "This is not a specific language and is in the parent.",
+    
+    aList: [1, 2, 3, 4, 5, 6]
+    
+}
