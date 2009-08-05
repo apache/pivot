@@ -101,7 +101,13 @@ public class Version implements Comparable<Version>, Serializable {
 
     @Override
     public boolean equals(Object object) {
-        return (compareTo((Version)object) == 0);
+        boolean equals = false;
+
+        if (object instanceof Version) {
+        	return (compareTo((Version)object) == 0);
+        }
+
+        return equals;
     }
 
     @Override
