@@ -30,7 +30,7 @@ import org.apache.pivot.util.ListenerList;
 public class ArrayStack<T> extends ArrayList<T> implements Stack<T> {
     private static final long serialVersionUID = 0;
 
-    private StackListenerList<T> stackListeners = new StackListenerList<T>();
+    private transient StackListenerList<T> stackListeners = new StackListenerList<T>();
 
     public ArrayStack() {
         this(null);
