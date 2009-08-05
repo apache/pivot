@@ -30,7 +30,7 @@ import org.apache.pivot.util.ListenerList;
 public class ArrayQueue<T> extends ArrayList<T> implements Queue<T> {
     private static final long serialVersionUID = 0;
 
-    private QueueListenerList<T> queueListeners = new QueueListenerList<T>();
+    private transient QueueListenerList<T> queueListeners = new QueueListenerList<T>();
 
     public ArrayQueue() {
         this(null);
