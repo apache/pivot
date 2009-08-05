@@ -524,7 +524,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                                 if (attribute.localName.equals(INCLUDE_SRC_ATTRIBUTE)) {
                                                     src = attribute.value;
                                                 } else if (attribute.localName.equals(INCLUDE_RESOURCES_ATTRIBUTE)) {
-                                                    resources = new Resources(attribute.value);
+                                                    resources = new Resources(resources, attribute.value);
                                                 } else if (attribute.localName.equals(INCLUDE_ASYNCHRONOUS_ATTRIBUTE)) {
                                                     // TODO
                                                     throw new UnsupportedOperationException("Asynchronous includes are not"
