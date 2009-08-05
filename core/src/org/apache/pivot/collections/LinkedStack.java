@@ -28,7 +28,7 @@ import org.apache.pivot.util.ListenerList;
 public class LinkedStack<T> extends LinkedList<T> implements Stack<T> {
     private static final long serialVersionUID = 0;
 
-    private StackListenerList<T> stackListeners = new StackListenerList<T>();
+    private transient StackListenerList<T> stackListeners = new StackListenerList<T>();
 
     public LinkedStack() {
         this(null);
