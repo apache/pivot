@@ -38,6 +38,14 @@ public interface ComponentListener {
             int previousPreferredHeight) {
         }
 
+        public void preferredWidthLimitsChanged(Component component, int previousMinPreferredWidth,
+            int previousMaxPreferredWidth) {
+        }
+
+        public void preferredHeightLimitsChanged(Component component, int previousMinPreferredHeight,
+            int previousMaxPreferredHeight) {
+        }
+
         public void locationChanged(Component component, int previousX, int previousY) {
         }
 
@@ -93,6 +101,26 @@ public interface ComponentListener {
      */
     public void preferredSizeChanged(Component component, int previousPreferredWidth,
         int previousPreferredHeight);
+
+    /**
+     * Called when a component's preferred width limits have changed.
+     *
+     * @param component
+     * @param previousMinPreferredWidth
+     * @param previousMaxPreferredWidth
+     */
+    public void preferredWidthLimitsChanged(Component component, int previousMinPreferredWidth,
+        int previousMaxPreferredWidth);
+
+    /**
+     * Called when a component's preferred height limits have changed.
+     *
+     * @param component
+     * @param previousMinPreferredHeight
+     * @param previousMaxPreferredHeight
+     */
+    public void preferredHeightLimitsChanged(Component component, int previousMinPreferredHeight,
+        int previousMaxPreferredHeight);
 
     /**
      * Called when a component's location has changed.

@@ -157,6 +157,16 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
         // No-op
     }
 
+    public void preferredWidthLimitsChanged(Component component, int previousMinPreferredWidth,
+        int previousMaxPreferredWidth) {
+        // No-op
+    }
+
+    public void preferredHeightLimitsChanged(Component component, int previousMinPreferredHeight,
+        int previousMaxPreferredHeight) {
+        // No-op
+    }
+
     public void locationChanged(Component component, int previousX, int previousY) {
         // No-op
     }
