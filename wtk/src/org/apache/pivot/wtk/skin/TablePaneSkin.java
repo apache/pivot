@@ -662,6 +662,14 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
         setPadding(new Insets(padding));
     }
 
+    public final void setPadding(String padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setPadding(Insets.decode(padding));
+    }
+
     /**
      * Gets the spacing that will be applied in between the table pane's
      * columns during layout.

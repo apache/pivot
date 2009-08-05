@@ -471,6 +471,14 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         setPadding(padding.intValue());
     }
 
+    public final void setPadding(String padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setPadding(Insets.decode(padding));
+    }
+
     public float getPreferredAspectRatio() {
         return preferredAspectRatio;
     }

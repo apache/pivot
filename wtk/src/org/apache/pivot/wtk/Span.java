@@ -17,6 +17,8 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.serialization.SerializationException;
 
 /**
  * Class representing a range of integer values. The range includes all
@@ -32,6 +34,11 @@ public final class Span {
 
     public static final String START_KEY = "start";
     public static final String END_KEY = "end";
+
+    public Span(int index) {
+        start = index;
+        end = index;
+    }
 
     public Span(int start, int end) {
         this.start = start;
@@ -177,5 +184,24 @@ public final class Span {
 
     public String toString() {
         return ("{start: " + start + ", end: " + end + "}");
+    }
+
+    public static Span decode(String value) {
+        if (value == null) {
+            throw new IllegalArgumentException();
+        }
+
+        Span span;
+        if (value.startsWith("{")) {
+            try {
+                span = new Span(JSONSerializer.parseMap(value));
+            } catch (SerializationException exception) {
+                throw new IllegalArgumentException(exception);
+            }
+        } else {
+            span = new Span(Integer.parseInt(value));
+        }
+
+        return span;
     }
 }

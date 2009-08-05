@@ -19,6 +19,8 @@ package org.apache.pivot.wtk;
 import java.io.Serializable;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.serialization.SerializationException;
 
 /**
  * Class representing the location of an object.
@@ -91,5 +93,20 @@ public final class Point implements Serializable {
 
     public String toString() {
         return getClass().getName() + " [" + x + "," + y + "]";
+    }
+
+    public static Point decode(String value) {
+        if (value == null) {
+            throw new IllegalArgumentException();
+        }
+
+        Point point;
+        try {
+            point = new Point(JSONSerializer.parseMap(value));
+        } catch (SerializationException exception) {
+            throw new IllegalArgumentException(exception);
+        }
+
+        return point;
     }
 }

@@ -292,7 +292,7 @@ class ListSelection {
      * <tt>true</tt> if the index is selected; <tt>false</tt>, otherwise.
      */
     public boolean containsIndex(int index) {
-        Span range = new Span(index, index);
+        Span range = new Span(index);
         int i = ArrayList.binarySearch(selectedRanges, range, INTERSECTION_COMPARATOR);
 
         return (i >= 0);
@@ -306,7 +306,7 @@ class ListSelection {
      */
     public void insertIndex(int index) {
         // Get the insertion point for the range corresponding to the given index
-        Span range = new Span(index, index);
+        Span range = new Span(index);
         int i = ArrayList.binarySearch(selectedRanges, range, INTERSECTION_COMPARATOR);
 
         if (i < 0) {
@@ -347,7 +347,7 @@ class ListSelection {
         removeRange(index, (index + count) - 1);
 
         // Decrement any subsequent selection indexes
-        Span range = new Span(index, index);
+        Span range = new Span(index);
         int i = ArrayList.binarySearch(selectedRanges, range, INTERSECTION_COMPARATOR);
         assert (i < 0) : "i should be negative, since index should no longer be selected";
 

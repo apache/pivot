@@ -19,6 +19,8 @@ package org.apache.pivot.wtk;
 import java.io.Serializable;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.serialization.SerializationException;
 
 /**
  * Class representing the insets of an object.
@@ -117,5 +119,24 @@ public final class Insets implements Serializable {
     public String toString() {
         return getClass().getName() + " [" + top + ", " + left + ", "
             + bottom + ", " + right + "]";
+    }
+
+    public static Insets decode(String value) {
+        if (value == null) {
+            throw new IllegalArgumentException();
+        }
+
+        Insets insets;
+        if (value.startsWith("{")) {
+            try {
+                insets = new Insets(JSONSerializer.parseMap(value));
+            } catch (SerializationException exception) {
+                throw new IllegalArgumentException(exception);
+            }
+        } else {
+            insets = new Insets(Integer.parseInt(value));
+        }
+
+        return insets;
     }
 }

@@ -527,6 +527,14 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         setCheckboxPadding(new Insets(checkboxPadding));
     }
 
+    public final void setCheckboxPadding(String checkboxPadding) {
+        if (checkboxPadding == null) {
+            throw new IllegalArgumentException("checkboxPadding is null.");
+        }
+
+        setCheckboxPadding(Insets.decode(checkboxPadding));
+    }
+
     @Override
     public boolean mouseMove(Component component, int x, int y) {
         boolean consumed = super.mouseMove(component, x, y);

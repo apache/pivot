@@ -1382,6 +1382,14 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         setMargin(margin.intValue());
     }
 
+    public final void setMargin(String margin) {
+        if (margin == null) {
+            throw new IllegalArgumentException("margin is null.");
+        }
+
+        setMargin(Insets.decode(margin));
+    }
+
     public boolean isBreakOnWhitespaceOnly() {
         return breakOnWhitespaceOnly;
     }

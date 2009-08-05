@@ -977,7 +977,7 @@ public class TableView extends Component {
         ArrayList<Span> selectedRanges = new ArrayList<Span>();
 
         if (index >= 0) {
-            selectedRanges.add(new Span(index, index));
+            selectedRanges.add(new Span(index));
         }
 
         setSelectedRanges(selectedRanges);

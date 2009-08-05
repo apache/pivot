@@ -310,6 +310,14 @@ public class FlowPaneSkin extends ContainerSkin {
         setPadding(padding.intValue());
     }
 
+    public final void setPadding(String padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setPadding(Insets.decode(padding));
+    }
+
     public int getHorizontalSpacing() {
         return horizontalSpacing;
     }

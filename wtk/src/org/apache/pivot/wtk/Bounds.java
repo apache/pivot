@@ -19,6 +19,8 @@ package org.apache.pivot.wtk;
 import java.io.Serializable;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.serialization.SerializationException;
 
 /**
  * Class representing the bounds of an object.
@@ -234,5 +236,20 @@ public final class Bounds implements Serializable {
 
     public String toString() {
         return getClass().getName() + " [" + x + "," + y + ";" + width + "x" + height + "]";
+    }
+
+    public static Bounds decode(String value) {
+        if (value == null) {
+            throw new IllegalArgumentException();
+        }
+
+        Bounds bounds;
+        try {
+            bounds = new Bounds(JSONSerializer.parseMap(value));
+        } catch (SerializationException exception) {
+            throw new IllegalArgumentException(exception);
+        }
+
+        return bounds;
     }
 }

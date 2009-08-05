@@ -377,6 +377,14 @@ public class TerraPaletteSkin extends WindowSkin {
         setPadding(padding.intValue());
     }
 
+    public final void setPadding(String padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setPadding(Insets.decode(padding));
+    }
+
     @Override
     public boolean mouseMove(Component component, int x, int y) {
         boolean consumed = super.mouseMove(component, x, y);

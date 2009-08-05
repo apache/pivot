@@ -19,6 +19,8 @@ package org.apache.pivot.wtk;
 import java.io.Serializable;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.serialization.SerializationException;
 
 /**
  * Class representing the corner radii of a rectangular object.
@@ -114,5 +116,20 @@ public final class CornerRadii implements Serializable {
     public String toString() {
         return getClass().getName() + " [" + topLeft + ", " + topRight
             + bottomLeft + ", " + bottomRight + "]";
+    }
+
+    public static CornerRadii decode(String value) {
+        if (value == null) {
+            throw new IllegalArgumentException();
+        }
+
+        CornerRadii cornerRadii;
+        try {
+            cornerRadii = new CornerRadii(JSONSerializer.parseMap(value));
+        } catch (SerializationException exception) {
+            throw new IllegalArgumentException(exception);
+        }
+
+        return cornerRadii;
     }
 }

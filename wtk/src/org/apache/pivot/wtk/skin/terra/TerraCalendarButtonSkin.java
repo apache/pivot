@@ -474,6 +474,14 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
         setPadding(padding.intValue());
     }
 
+    public final void setPadding(String padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setPadding(Insets.decode(padding));
+    }
+
     // Calendar button events
     public void localeChanged(CalendarButton calendarButton, Locale previousLocale) {
         super.localeChanged(calendarButton, previousLocale);

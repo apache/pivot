@@ -392,6 +392,14 @@ public class BorderSkin extends ContainerSkin
         setPadding(padding.intValue());
     }
 
+    public final void setPadding(String padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setPadding(Insets.decode(padding));
+    }
+
     public CornerRadii getCornerRadii() {
         return cornerRadii;
     }
@@ -417,12 +425,20 @@ public class BorderSkin extends ContainerSkin
         setCornerRadii(new CornerRadii(cornerRadii));
     }
 
-    public void setCornerRadii(Number cornerRadii) {
+    public final void setCornerRadii(Number cornerRadii) {
         if (cornerRadii == null) {
             throw new IllegalArgumentException("cornerRadii is null.");
         }
 
         setCornerRadii(cornerRadii.intValue());
+    }
+
+    public final void setCornerRadii(String cornerRadii) {
+        if (cornerRadii == null) {
+            throw new IllegalArgumentException("cornerRadii is null.");
+        }
+
+        setCornerRadii(CornerRadii.decode(cornerRadii));
     }
 
     // Border events

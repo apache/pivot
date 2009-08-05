@@ -19,6 +19,8 @@ package org.apache.pivot.wtk;
 import java.io.Serializable;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.serialization.SerializationException;
 
 /**
  * Class representing the dimensions of an object.
@@ -87,5 +89,20 @@ public final class Dimensions implements Serializable {
 
     public String toString() {
         return getClass().getName() + " [" + width + "x" + height + "]";
+    }
+
+    public static Dimensions decode(String value) {
+        if (value == null) {
+            throw new IllegalArgumentException();
+        }
+
+        Dimensions dimensions;
+        try {
+            dimensions = new Dimensions(JSONSerializer.parseMap(value));
+        } catch (SerializationException exception) {
+            throw new IllegalArgumentException(exception);
+        }
+
+        return dimensions;
     }
 }

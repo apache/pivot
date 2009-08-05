@@ -414,6 +414,14 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         setPadding(padding.intValue());
     }
 
+    public final void setPadding(String padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setPadding(Insets.decode(padding));
+    }
+
     public int getSpacing() {
         return spacing;
     }
