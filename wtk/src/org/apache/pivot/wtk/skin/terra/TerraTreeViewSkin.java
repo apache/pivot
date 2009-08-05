@@ -1405,25 +1405,32 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                     if (!consumed) {
                         TreeView.SelectMode selectMode = treeView.getSelectMode();
 
-                        if (selectMode == TreeView.SelectMode.SINGLE) {
-                            if (nodeInfo.isSelected()
-                                && treeView.isFocused()) {
-                                // Edit the node
-                                editNode = nodeInfo;
-                            } else {
-                                // Select the node
+                        if (button == Mouse.Button.RIGHT) {
+                            if (!treeView.isNodeSelected(path)
+                                && selectMode != TreeView.SelectMode.NONE) {
                                 treeView.setSelectedPath(path);
                             }
-                        } else if (selectMode == TreeView.SelectMode.MULTI) {
-                            if (Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
-                                if (nodeInfo.isSelected()) {
-                                    treeView.removeSelectedPath(path);
+                        } else {
+                            if (selectMode == TreeView.SelectMode.SINGLE) {
+                                if (nodeInfo.isSelected()
+                                    && treeView.isFocused()) {
+                                    // Edit the node
+                                    editNode = nodeInfo;
                                 } else {
-                                    treeView.addSelectedPath(path);
+                                    // Select the node
+                                    treeView.setSelectedPath(path);
                                 }
-                            } else {
-                                // Replace the selection
-                                treeView.setSelectedPath(path);
+                            } else if (selectMode == TreeView.SelectMode.MULTI) {
+                                if (Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
+                                    if (nodeInfo.isSelected()) {
+                                        treeView.removeSelectedPath(path);
+                                    } else {
+                                        treeView.addSelectedPath(path);
+                                    }
+                                } else {
+                                    // Replace the selection
+                                    treeView.setSelectedPath(path);
+                                }
                             }
                         }
                     }
