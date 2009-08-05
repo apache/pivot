@@ -55,16 +55,20 @@ public abstract class Component implements ConstrainedVisual {
      *
      * @author gbrown
      */
-    public final class StyleDictionary extends BeanDictionary {
-        private StyleDictionary(org.apache.pivot.wtk.Skin skin) {
-            super(skin, true);
+    public final class StyleDictionary implements
+        Dictionary<String, Object>, Iterable<String> {
+        private StyleDictionary() {
+        }
+
+        public Object get(String key) {
+            return styles.get(key);
         }
 
         public Object put(String key, Object value) {
             Object previousValue = null;
 
             try {
-                previousValue = super.put(key, value);
+                previousValue = styles.put(key, value);
                 customStyles.add(key);
                 componentListeners.styleUpdated(Component.this, key, previousValue);
             } catch(PropertyNotFoundException exception) {
@@ -73,6 +77,30 @@ public abstract class Component implements ConstrainedVisual {
             }
 
             return previousValue;
+        }
+
+        public Object remove(String key) {
+            Object previousValue;
+            if (styles.containsKey(key)) {
+                previousValue = styles.remove(key);
+                componentDataListeners.valueRemoved(Component.this, key, previousValue);
+            } else {
+                previousValue = null;
+            }
+
+            return previousValue;
+        }
+
+        public boolean containsKey(String key) {
+            return styles.containsKey(key);
+        }
+
+        public boolean isEmpty() {
+            return styles.isEmpty();
+        }
+
+        public Iterator<String> iterator() {
+            return new ImmutableIterator<String>(styles.iterator());
         }
     }
 
@@ -528,6 +556,11 @@ public abstract class Component implements ConstrainedVisual {
 
     // The currently installed skin, or null if no skin is installed
     private org.apache.pivot.wtk.Skin skin = null;
+    private BeanDictionary styles = null;
+    private StyleDictionary styleDictionary = new StyleDictionary();
+
+    // Custom style keys
+    private HashSet<String> customStyles = new HashSet<String>();
 
     // Preferred width and height values explicitly set by the user
     private int preferredWidth = -1;
@@ -582,13 +615,7 @@ public abstract class Component implements ConstrainedVisual {
     private HashMap<String, Object> userData = new HashMap<String, Object>();
     private UserDataDictionary userDataDictionary = new UserDataDictionary();
 
-    // Proxy class for getting/setting style properties on the skin
-    private StyleDictionary styleDictionary = null;
-
-    // Custom style keys
-    private HashSet<String> customStyles = new HashSet<String>();
-
-    // Attached properties
+    // Container attributes
     private Object attributes = null;
 
     // Event listener lists.
@@ -654,7 +681,7 @@ public abstract class Component implements ConstrainedVisual {
         }
 
         this.skin = skin;
-        styleDictionary = new StyleDictionary(skin);
+        styles = new BeanDictionary(skin);
         skin.install(this);
 
         invalidate();
