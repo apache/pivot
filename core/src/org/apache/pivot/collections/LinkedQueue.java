@@ -28,7 +28,7 @@ import org.apache.pivot.util.ListenerList;
 public class LinkedQueue<T> extends LinkedList<T> implements Queue<T> {
     private static final long serialVersionUID = 0;
 
-    private QueueListenerList<T> queueListeners = new QueueListenerList<T>();
+    private transient QueueListenerList<T> queueListeners = new QueueListenerList<T>();
 
     public LinkedQueue() {
         this(null);
