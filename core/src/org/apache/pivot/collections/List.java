@@ -27,22 +27,6 @@ import org.apache.pivot.util.ListenerList;
  */
 public interface List<T> extends Sequence<T>, Collection<T> {
     /**
-     * Comparator capable of comparing two comparable objects by delegating the
-     * comparison to the objects.
-     *
-     * @author gbrown
-     */
-    public static final class SimpleComparator<T extends Comparable<? super T>>
-        implements Comparator<T> {
-        /**
-         * {@inheritDoc}
-         */
-        public int compare(T t1, T t2) {
-            return t1.compareTo(t2);
-        }
-    }
-
-    /**
      * List listener list.
      *
      * @author gbrown

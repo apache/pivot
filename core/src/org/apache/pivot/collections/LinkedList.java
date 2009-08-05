@@ -34,13 +34,13 @@ import org.apache.pivot.util.ListenerList;
  */
 public class LinkedList<T> implements List<T>, Serializable {
     // Node containing an item in the list
-    private class Node implements Serializable {
+    private static class Node<T> implements Serializable {
         private static final long serialVersionUID = 0;
-        private Node previous;
-        private Node next;
+        private Node<T> previous;
+        private Node<T> next;
         private T item;
 
-        public Node(Node previous, Node next, T item) {
+        public Node(Node<T> previous, Node<T> next, T item) {
             this.previous = previous;
             this.next = next;
             this.item = item;
@@ -49,7 +49,7 @@ public class LinkedList<T> implements List<T>, Serializable {
 
     // Node iterator
     private class NodeIterator implements Iterator<T> {
-        private Node node;
+        private Node<T> node;
 
         public NodeIterator() {
             this.node = first;
@@ -84,8 +84,8 @@ public class LinkedList<T> implements List<T>, Serializable {
 
     private static final long serialVersionUID = 0;
 
-    private Node first = null;
-    private Node last = null;
+    private Node<T> first = null;
+    private Node<T> last = null;
     private int length = 0;
 
     private Comparator<T> comparator = null;
@@ -132,7 +132,7 @@ public class LinkedList<T> implements List<T>, Serializable {
             if (nodeIterator.hasNext()
                 && index > 0) {
                 // Insert the new node here
-                Node node = new Node(nodeIterator.node, nodeIterator.node.next, item);
+                Node<T> node = new Node<T>(nodeIterator.node, nodeIterator.node.next, item);
                 nodeIterator.node.next = node;
                 node.next.previous = node;
                 length++;
@@ -156,12 +156,12 @@ public class LinkedList<T> implements List<T>, Serializable {
         }
 
         if (length == 0) {
-            Node node = new Node(null, null, item);
+            Node<T> node = new Node<T>(null, null, item);
             first = node;
             last = node;
         } else {
-            Node next = (index == length) ? null : getNode(index);
-            Node previous = (next == null) ? last : next.previous;
+            Node<T> next = (index == length) ? null : getNode(index);
+            Node<T> previous = (next == null) ? last : next.previous;
 
             if (comparator != null) {
                 // Ensure that the new item is greater or equal to its
@@ -174,7 +174,7 @@ public class LinkedList<T> implements List<T>, Serializable {
                 }
             }
 
-            Node node = new Node(previous, next, item);
+            Node<T> node = new Node<T>(previous, next, item);
             if (previous == null) {
                 first = node;
             } else {
@@ -200,7 +200,7 @@ public class LinkedList<T> implements List<T>, Serializable {
         }
 
         // Get the previous item at index
-        Node node = getNode(index);
+        Node<T> node = getNode(index);
         T previousItem = node.item;
 
         if (previousItem != item) {
@@ -254,8 +254,8 @@ public class LinkedList<T> implements List<T>, Serializable {
 
         if (count > 0) {
             // Identify the bounding nodes and build the removed item list
-            Node start = getNode(index);
-            Node end = start;
+            Node<T> start = getNode(index);
+            Node<T> end = start;
             for (int i = 0; i < count; i++) {
                 removed.add(end.item);
                 end = end.next;
@@ -311,12 +311,12 @@ public class LinkedList<T> implements List<T>, Serializable {
             throw new IndexOutOfBoundsException();
         }
 
-        Node node = getNode(index);
+        Node<T> node = getNode(index);
         return node.item;
     }
 
-    private Node getNode(int index) {
-        Node node;
+    private Node<T> getNode(int index) {
+        Node<T> node;
         if (index == 0) {
             node = first;
         } else if (index == length - 1) {
@@ -384,10 +384,10 @@ public class LinkedList<T> implements List<T>, Serializable {
                 // Rebuild the node list
                 first = null;
 
-                Node node = null;
+                Node<T> node = null;
                 for (i = 0; i < length; i++) {
-                    Node previousNode = node;
-                    node = new Node(previousNode, null, array[i]);
+                    Node<T> previousNode = node;
+                    node = new Node<T>(previousNode, null, array[i]);
 
                     if (previousNode == null) {
                         first = node;

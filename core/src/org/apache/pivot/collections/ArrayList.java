@@ -427,7 +427,11 @@ public class ArrayList<T> implements List<T>, Serializable {
 
     public static <T extends Comparable<? super T>> int binarySearch(ArrayList<T> arrayList,
         T item) {
-        return binarySearch(arrayList, item, new SimpleComparator<T>());
+        return binarySearch(arrayList, item, new Comparator<T>() {
+            public int compare(T t1, T t2) {
+                return t1.compareTo(t2);
+            }
+        });
     }
 
     @SuppressWarnings("unchecked")
