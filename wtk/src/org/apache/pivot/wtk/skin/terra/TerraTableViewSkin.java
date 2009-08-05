@@ -66,6 +66,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     private Color inactiveSelectionBackgroundColor;
     private Color highlightBackgroundColor;
     private Color alternateRowColor;
+    private Color columnSelectionColor;
     private Color gridColor;
     private boolean showHorizontalGridLines;
     private boolean showVerticalGridLines;
@@ -87,6 +88,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         inactiveSelectionBackgroundColor = theme.getColor(9);
         highlightBackgroundColor = theme.getColor(10);
         alternateRowColor = theme.getColor(11);
+        columnSelectionColor = null;
         gridColor = theme.getColor(11);
         showHorizontalGridLines = true;
         showVerticalGridLines = true;
@@ -175,11 +177,10 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         graphics.setPaint(backgroundColor);
         graphics.fillRect(0, 0, width, height);
 
-        // Paint the list contents
+        // Ensure that we only paint items that are visible
         int rowStart = 0;
         int rowEnd = tableData.getLength() - 1;
 
-        // Ensure that we only paint items that are visible
         Rectangle clipBounds = graphics.getClipBounds();
         if (clipBounds != null) {
             rowStart = Math.max(rowStart, (int)Math.floor(clipBounds.y
@@ -188,7 +189,42 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                 + clipBounds.height) / (double)rowHeight) - 1);
         }
 
+        // Paint the row backgrounds
         int rowY = rowStart * rowHeight;
+
+        if (alternateRowColor != null) {
+            for (int rowIndex = rowStart; rowIndex <= rowEnd; rowIndex++) {
+                if (rowIndex % 2 > 0) {
+                    graphics.setPaint(alternateRowColor);
+                    graphics.fillRect(0, rowY, width, rowHeight);
+                }
+
+                rowY += rowHeight;
+            }
+        }
+
+        // Paint the column backgrounds
+        int columnX = 0;
+        if (columnSelectionColor != null) {
+            graphics.setColor(columnSelectionColor);
+
+            columnX = 0;
+
+            for (int columnIndex = 0, columnCount = columns.getLength();
+                columnIndex < columnCount; columnIndex++) {
+                TableView.Column column = columns.get(columnIndex);
+                int columnWidth = columnWidths.get(columnIndex);
+
+                if (column.getSortDirection() != null) {
+                    graphics.fillRect(columnX, 0, columnWidth, height);
+                }
+
+                columnX += columnWidth + 1;
+            }
+        }
+
+        // Paint the list contents
+        rowY = rowStart * rowHeight;
 
         for (int rowIndex = rowStart; rowIndex <= rowEnd; rowIndex++) {
             Object rowData = tableData.get(rowIndex);
@@ -197,19 +233,14 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             boolean rowSelected = tableView.isRowSelected(rowIndex);
             boolean rowDisabled = tableView.isRowDisabled(rowIndex);
 
+            // Paint selection state
             Color rowBackgroundColor = null;
-
             if (rowSelected) {
                 rowBackgroundColor = (tableView.isFocused())
                     ? this.selectionBackgroundColor : inactiveSelectionBackgroundColor;
             } else {
                 if (rowHighlighted && showHighlight && !rowDisabled) {
                     rowBackgroundColor = highlightBackgroundColor;
-                } else {
-                    if (alternateRowColor != null
-                        && rowIndex % 2 > 0) {
-                        rowBackgroundColor = alternateRowColor;
-                    }
                 }
             }
 
@@ -219,7 +250,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             }
 
             // Paint the cells
-            int cellX = 0;
+            columnX = 0;
 
             for (int columnIndex = 0, columnCount = columns.getLength();
                 columnIndex < columnCount; columnIndex++) {
@@ -229,7 +260,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
                 int columnWidth = columnWidths.get(columnIndex);
 
-                Graphics2D rendererGraphics = (Graphics2D)graphics.create(cellX, rowY,
+                Graphics2D rendererGraphics = (Graphics2D)graphics.create(columnX, rowY,
                     columnWidth, rowHeight);
 
                 cellRenderer.render(rowData, tableView, column, rowSelected,
@@ -239,7 +270,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
                 rendererGraphics.dispose();
 
-                cellX += columnWidth + 1;
+                columnX += columnWidth + 1;
             }
 
             rowY += rowHeight;
@@ -250,14 +281,14 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
         // Paint the vertical grid lines
         if (showVerticalGridLines) {
-            int gridX = 0;
+            columnX = 0;
 
             for (int columnIndex = 0, columnCount = columns.getLength();
                 columnIndex < columnCount; columnIndex++) {
-                gridX += columnWidths.get(columnIndex);
+                columnX += columnWidths.get(columnIndex);
 
-                GraphicsUtilities.drawLine(graphics, gridX, 0, height, Orientation.VERTICAL);
-                gridX++;
+                GraphicsUtilities.drawLine(graphics, columnX, 0, height, Orientation.VERTICAL);
+                columnX++;
             }
         }
 
@@ -711,6 +742,28 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     public final void setAlternateRowColor(int alternateRowColor) {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
         setAlternateRowColor(theme.getColor(alternateRowColor));
+    }
+
+    public Color getColumnSelectionColor() {
+        return columnSelectionColor;
+    }
+
+    public void setColumnSelectionColor(Color columnSelectionColor) {
+        this.columnSelectionColor = columnSelectionColor;
+        repaintComponent();
+    }
+
+    public final void setColumnSelectionColor(String columnSelectionColor) {
+        if (columnSelectionColor == null) {
+            throw new IllegalArgumentException("columnSelectionColor is null.");
+        }
+
+        setColumnSelectionColor(GraphicsUtilities.decodeColor(columnSelectionColor));
+    }
+
+    public final void setColumnSelectionColor(int columnSelectionColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setColumnSelectionColor(theme.getColor(columnSelectionColor));
     }
 
     public Color getGridColor() {
