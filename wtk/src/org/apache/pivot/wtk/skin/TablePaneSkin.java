@@ -49,7 +49,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
     private boolean showHorizontalGridLines = false;
     private boolean showVerticalGridLines = false;
     private Color gridColor = Color.BLACK;
-    private Color selectionBackgroundColor = Color.GRAY;
+    private Color highlightBackgroundColor = Color.GRAY;
 
     private static final Insets DEFAULT_PADDING = new Insets(0);
 
@@ -498,24 +498,24 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
         int width = getWidth();
         int height = getHeight();
 
-        graphics.setPaint(selectionBackgroundColor);
+        graphics.setPaint(highlightBackgroundColor);
 
-        // Paint the selected rows
+        // Paint the highlighted rows
         for (int i = 0, rowY = padding.top; i < rowCount; i++) {
             TablePane.Row row = rows.get(i);
 
-            if (row.isSelected()) {
+            if (row.isHighlighted()) {
                 graphics.fillRect(0, rowY, width, rowHeights[i]);
             }
 
             rowY += rowHeights[i] + verticalSpacing;
         }
 
-        // Paint the selected columns
+        // Paint the highlighted columns
         for (int j = 0, columnX = padding.left; j < columnCount; j++) {
             TablePane.Column column = columns.get(j);
 
-            if (column.isSelected()) {
+            if (column.isHighlighted()) {
                 graphics.fillRect(columnX, 0, columnWidths[j], height);
             }
 
@@ -780,33 +780,33 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
     }
 
     /**
-     * Gets the background color used to paint the selected rows and columns.
+     * Gets the background color used to paint the highlighted rows and columns.
      */
-    public Color getSelectionBackgroundColor() {
-        return selectionBackgroundColor;
+    public Color getHighlightBackgroundColor() {
+        return highlightBackgroundColor;
     }
 
     /**
-     * Sets the background color used to paint the selected rows and columns.
+     * Sets the background color used to paint the highlighted rows and columns.
      */
-    public void setSelectionBackgroundColor(Color selectionBackgroundColor) {
-        if (selectionBackgroundColor == null) {
-            throw new IllegalArgumentException("selectionBackgroundColor is null.");
+    public void setHighlightBackgroundColor(Color highlightBackgroundColor) {
+        if (highlightBackgroundColor == null) {
+            throw new IllegalArgumentException("highlightBackgroundColor is null.");
         }
 
-        this.selectionBackgroundColor = selectionBackgroundColor;
+        this.highlightBackgroundColor = highlightBackgroundColor;
         repaintComponent();
     }
 
     /**
-     * Sets the background color used to paint the selected rows and columns.
+     * Sets the background color used to paint the highlighted rows and columns.
      */
-    public final void setSelectionBackgroundColor(String selectionBackgroundColor) {
-        if (selectionBackgroundColor == null) {
-            throw new IllegalArgumentException("selectionBackgroundColor is null.");
+    public final void setHighlightBackgroundColor(String highlightBackgroundColor) {
+        if (highlightBackgroundColor == null) {
+            throw new IllegalArgumentException("highlightBackgroundColor is null.");
         }
 
-        setSelectionBackgroundColor(GraphicsUtilities.decodeColor(selectionBackgroundColor));
+        setHighlightBackgroundColor(GraphicsUtilities.decodeColor(highlightBackgroundColor));
     }
 
     /**
@@ -1347,7 +1347,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
         invalidateComponent();
     }
 
-    public void rowSelectedChanged(TablePane.Row row) {
+    public void rowHighlightedChanged(TablePane.Row row) {
         TablePane tablePane = row.getTablePane();
         repaintComponent(getRowBounds(tablePane.getRows().indexOf(row)));
     }
@@ -1366,7 +1366,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
         invalidateComponent();
     }
 
-    public void columnSelectedChanged(TablePane.Column column) {
+    public void columnHighlightedChanged(TablePane.Column column) {
         TablePane tablePane = column.getTablePane();
         repaintComponent(getColumnBounds(tablePane.getColumns().indexOf(column)));
     }

@@ -41,7 +41,7 @@ public interface TablePaneListener {
             boolean previousRelative) {
         }
 
-        public void rowSelectedChanged(TablePane.Row row) {
+        public void rowHighlightedChanged(TablePane.Row row) {
         }
 
         public void columnInserted(TablePane tablePane, int index) {
@@ -55,7 +55,7 @@ public interface TablePaneListener {
             boolean previousRelative) {
         }
 
-        public void columnSelectedChanged(TablePane.Column column) {
+        public void columnHighlightedChanged(TablePane.Column column) {
         }
 
         public void cellInserted(TablePane.Row row, int column) {
@@ -99,11 +99,11 @@ public interface TablePaneListener {
         boolean previousRelative);
 
     /**
-     * Called when a row's selected state has changed.
+     * Called when a row's highlighted state has changed.
      *
      * @param row
      */
-    public void rowSelectedChanged(TablePane.Row row);
+    public void rowHighlightedChanged(TablePane.Row row);
 
     /**
      * Called when a column has been inserted into a table pane.
@@ -134,11 +134,11 @@ public interface TablePaneListener {
         boolean previousRelative);
 
     /**
-     * Called when a column's selected state has changed.
+     * Called when a column's highlighted state has changed.
      *
      * @param column
      */
-    public void columnSelectedChanged(TablePane.Column column);
+    public void columnHighlightedChanged(TablePane.Column column);
 
     /**
      * Called when a cell has been inserted into a table pane.

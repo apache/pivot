@@ -36,7 +36,7 @@ public class TablePane extends Container {
     public static final class Row implements Sequence<Component> {
         private int height;
         private boolean relative;
-        private boolean selected;
+        private boolean highlighted;
 
         private ArrayList<Component> cells = new ArrayList<Component>();
 
@@ -54,10 +54,10 @@ public class TablePane extends Container {
             this(height, relative, false);
         }
 
-        public Row(int height, boolean relative, boolean selected) {
+        public Row(int height, boolean relative, boolean highlighted) {
             this.height = height;
             this.relative = relative;
-            this.selected = selected;
+            this.highlighted = highlighted;
         }
 
         /**
@@ -159,28 +159,28 @@ public class TablePane extends Container {
         }
 
         /**
-         * Returns the selected flag.
+         * Returns the highlighted flag.
          *
          * @return
-         * <tt>true</tt> if the row is selected, <tt>false</tt> if it is not
+         * <tt>true</tt> if the row is highlighted, <tt>false</tt> if it is not
          */
-        public boolean isSelected() {
-            return selected;
+        public boolean isHighlighted() {
+            return highlighted;
         }
 
         /**
-         * Sets the selected flag.
+         * Sets the highlighted flag.
          *
-         * @param selected
-         * <tt>true</tt> to set the row as selected, <tt>false</tt> to set
-         * it as not selected
+         * @param highlighted
+         * <tt>true</tt> to set the row as highlighted, <tt>false</tt> to set
+         * it as not highlighted
          */
-        public void setSelected(boolean selected) {
-            if (selected != this.selected) {
-                this.selected = selected;
+        public void setHighlighted(boolean highlighted) {
+            if (highlighted != this.highlighted) {
+                this.highlighted = highlighted;
 
                 if (tablePane != null) {
-                    tablePane.tablePaneListeners.rowSelectedChanged(this);
+                    tablePane.tablePaneListeners.rowHighlightedChanged(this);
                 }
             }
         }
@@ -308,7 +308,7 @@ public class TablePane extends Container {
 
         private int width;
         private boolean relative;
-        private boolean selected;
+        private boolean highlighted;
 
         public Column() {
             this(-1, false, false);
@@ -322,10 +322,10 @@ public class TablePane extends Container {
             this(width, relative, false);
         }
 
-        public Column(int width, boolean relative, boolean selected) {
+        public Column(int width, boolean relative, boolean highlighted) {
             this.width = width;
             this.relative = relative;
-            this.selected = selected;
+            this.highlighted = highlighted;
         }
 
         /**
@@ -427,28 +427,28 @@ public class TablePane extends Container {
         }
 
         /**
-         * Returns the selected flag.
+         * Returns the highlighted flag.
          *
          * @return
-         * <tt>true</tt> if the column is selected, <tt>false</tt> if it is not
+         * <tt>true</tt> if the column is highlighted, <tt>false</tt> if it is not
          */
-        public boolean isSelected() {
-            return selected;
+        public boolean isHighlighted() {
+            return highlighted;
         }
 
         /**
-         * Sets the selected flag.
+         * Sets the highlighted flag.
          *
-         * @param selected
-         * <tt>true</tt> to set the column as selected, <tt>false</tt> to set
-         * it as not selected
+         * @param highlighted
+         * <tt>true</tt> to set the column as highlighted, <tt>false</tt> to set
+         * it as not highlighted
          */
-        public void setSelected(boolean selected) {
-            if (selected != this.selected) {
-                this.selected = selected;
+        public void setHighlighted(boolean highlighted) {
+            if (highlighted != this.highlighted) {
+                this.highlighted = highlighted;
 
                 if (tablePane != null) {
-                    tablePane.tablePaneListeners.columnSelectedChanged(this);
+                    tablePane.tablePaneListeners.columnHighlightedChanged(this);
                 }
             }
         }
@@ -667,9 +667,9 @@ public class TablePane extends Container {
             }
         }
 
-        public void rowSelectedChanged(TablePane.Row row) {
+        public void rowHighlightedChanged(TablePane.Row row) {
             for (TablePaneListener listener : this) {
-                listener.rowSelectedChanged(row);
+                listener.rowHighlightedChanged(row);
             }
         }
 
@@ -693,9 +693,9 @@ public class TablePane extends Container {
             }
         }
 
-        public void columnSelectedChanged(TablePane.Column column) {
+        public void columnHighlightedChanged(TablePane.Column column) {
             for (TablePaneListener listener : this) {
-                listener.columnSelectedChanged(column);
+                listener.columnHighlightedChanged(column);
             }
         }
 

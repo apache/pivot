@@ -27,7 +27,7 @@ import org.apache.pivot.wtk.skin.TablePaneSkin;
 public class TerraTablePaneSkin extends TablePaneSkin {
     public TerraTablePaneSkin() {
         setGridColor(7);
-        setSelectionBackgroundColor(10);
+        setHighlightBackgroundColor(10);
     }
 
     public final void setBackgroundColor(int backgroundColor) {
@@ -40,8 +40,8 @@ public class TerraTablePaneSkin extends TablePaneSkin {
         setGridColor(theme.getColor(gridColor));
     }
 
-    public final void setSelectionBackgroundColor(int selectionBackgroundColor) {
+    public final void setHighlightBackgroundColor(int highlightBackgroundColor) {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
-        setSelectionBackgroundColor(theme.getColor(selectionBackgroundColor));
+        setHighlightBackgroundColor(theme.getColor(highlightBackgroundColor));
     }
 }
