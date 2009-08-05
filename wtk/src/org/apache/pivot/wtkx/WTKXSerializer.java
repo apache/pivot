@@ -48,7 +48,6 @@ import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamException;
 
 import org.apache.pivot.beans.BeanDictionary;
-import org.apache.pivot.beans.PropertyNotFoundException;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
@@ -597,21 +596,15 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                     }
 
                                     // Apply instance attributes
+                                    Dictionary<String, Object> dictionary;
                                     if (element.value instanceof Dictionary) {
-                                        // The element is already a dictionary
-                                        Dictionary<String, Object> dictionary = (Dictionary<String, Object>)element.value;
-
-                                        for (Attribute attribute : instancePropertyAttributes) {
-                                            dictionary.put(attribute.localName, resolve(attribute.value, null));
-                                        }
+                                        dictionary = (Dictionary<String, Object>)element.value;
                                     } else {
-                                        // The element is not a dictionary; wrap it in a bean dictionary
-                                        BeanDictionary beanDictionary = new BeanDictionary(element.value);
+                                        dictionary = new BeanDictionary(element.value);
+                                    }
 
-                                        for (Attribute attribute : instancePropertyAttributes) {
-                                            beanDictionary.put(attribute.localName,
-                                                resolve(attribute.value, beanDictionary.getType(attribute.localName)));
-                                        }
+                                    for (Attribute attribute : instancePropertyAttributes) {
+                                        dictionary.put(attribute.localName, resolve(attribute.value));
                                     }
 
                                     // If the element's parent is a sequence or a listener list, add
@@ -661,7 +654,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
 
                                             Dictionary<String, Object> dictionary =
                                                 (Dictionary<String, Object>)element.value;
-                                            dictionary.put(attribute.localName, resolve(attribute.value, null));
+                                            dictionary.put(attribute.localName, resolve(attribute.value));
                                         }
                                     }
 
@@ -1151,9 +1144,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
     }
 
     /**
-     * Resolves an attribute value. If the property type is a primitive or
-     * primitive wrapper, converts the string value to the primitive type.
-     * Otherwise, resolves the value as either a URL, resource value, or
+     * Resolves an attribute value as either a URL, resource value, or
      * object reference, depending on the value's prefix. If the value can't
      * or doesn't need to be resolved, the original attribute value is
      * returned.
@@ -1161,118 +1152,59 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
      * @param attributeValue
      * The attribute value to resolve.
      *
-     * @param propertyType
-     * The property type, or <tt>null</tt> if the type is not known.
-     *
      * @return
      * The resolved value.
      */
-    private Object resolve(String attributeValue, Class<?> propertyType)
+    private Object resolve(String attributeValue)
         throws MalformedURLException {
         Object resolvedValue = null;
 
-        if (propertyType == Boolean.class
-            || propertyType == Boolean.TYPE) {
-            try {
-                resolvedValue = Boolean.parseBoolean(attributeValue);
-            } catch (NumberFormatException exception) {
-                resolvedValue = attributeValue;
-            }
-        } else if (propertyType == Character.class
-            || propertyType == Character.TYPE) {
-            if (attributeValue.length() > 0) {
-                resolvedValue = attributeValue.charAt(0);
-            }
-        } else if (propertyType == Byte.class
-            || propertyType == Byte.TYPE) {
-            try {
-                resolvedValue = Byte.parseByte(attributeValue);
-            } catch (NumberFormatException exception) {
-                resolvedValue = attributeValue;
-            }
-        } else if (propertyType == Short.class
-            || propertyType == Short.TYPE) {
-            try {
-                resolvedValue = Short.parseShort(attributeValue);
-            } catch (NumberFormatException exception) {
-                resolvedValue = attributeValue;
-            }
-        } else if (propertyType == Integer.class
-            || propertyType == Integer.TYPE) {
-            try {
-                resolvedValue = Integer.parseInt(attributeValue);
-            } catch (NumberFormatException exception) {
-                resolvedValue = attributeValue;
-            }
-        } else if (propertyType == Long.class
-            || propertyType == Long.TYPE) {
-            try {
-                resolvedValue = Long.parseLong(attributeValue);
-            } catch (NumberFormatException exception) {
-                resolvedValue = attributeValue;
-            }
-        } else if (propertyType == Float.class
-            || propertyType == Float.TYPE) {
-            try {
-                resolvedValue = Float.parseFloat(attributeValue);
-            } catch (NumberFormatException exception) {
-                resolvedValue = attributeValue;
-            }
-        } else if (propertyType == Double.class
-            || propertyType == Double.TYPE) {
-            try {
-                resolvedValue = Double.parseDouble(attributeValue);
-            } catch (NumberFormatException exception) {
-                resolvedValue = attributeValue;
-            }
-        } else {
-            if (attributeValue.length() > 0) {
-                if (attributeValue.charAt(0) == URL_PREFIX) {
-                    if (attributeValue.length() > 1) {
-                        if (attributeValue.charAt(1) == URL_PREFIX) {
-                            resolvedValue = attributeValue.substring(1);
-                        } else {
-                            if (location == null) {
-                                throw new IllegalStateException("Base location is undefined.");
-                            }
+        if (attributeValue.length() > 0) {
+            if (attributeValue.charAt(0) == URL_PREFIX) {
+                if (attributeValue.length() > 1) {
+                    if (attributeValue.charAt(1) == URL_PREFIX) {
+                        resolvedValue = attributeValue.substring(1);
+                    } else {
+                        if (location == null) {
+                            throw new IllegalStateException("Base location is undefined.");
+                        }
 
-                            resolvedValue = new URL(location, attributeValue.substring(1));
+                        resolvedValue = new URL(location, attributeValue.substring(1));
+                    }
+                }
+            } else if (attributeValue.charAt(0) == RESOURCE_KEY_PREFIX) {
+                if (attributeValue.length() > 1) {
+                    if (attributeValue.charAt(1) == RESOURCE_KEY_PREFIX) {
+                        resolvedValue = attributeValue.substring(1);
+                    } else {
+                        if (resources == null) {
+                            throw new IllegalStateException("Resources is null.");
+                        }
+
+                        resolvedValue = resources.get(attributeValue.substring(1));
+
+                        if (resolvedValue == null) {
+                            resolvedValue = attributeValue;
                         }
                     }
-                } else if (attributeValue.charAt(0) == RESOURCE_KEY_PREFIX) {
-                    if (attributeValue.length() > 1) {
-                        if (attributeValue.charAt(1) == RESOURCE_KEY_PREFIX) {
-                            resolvedValue = attributeValue.substring(1);
-                        } else {
-                            if (resources == null) {
-                                throw new IllegalStateException("Resources is null.");
-                            }
+                }
+            } else if (attributeValue.charAt(0) == OBJECT_REFERENCE_PREFIX) {
+                if (attributeValue.length() > 1) {
+                    if (attributeValue.charAt(1) == OBJECT_REFERENCE_PREFIX) {
+                        resolvedValue = attributeValue.substring(1);
+                    } else {
+                        resolvedValue = get(attributeValue.substring(1));
 
-                            resolvedValue = resources.get(attributeValue.substring(1));
-
-                            if (resolvedValue == null) {
-                                resolvedValue = attributeValue;
-                            }
+                        if (resolvedValue == null) {
+                            resolvedValue = attributeValue;
                         }
                     }
-                } else if (attributeValue.charAt(0) == OBJECT_REFERENCE_PREFIX) {
-                    if (attributeValue.length() > 1) {
-                        if (attributeValue.charAt(1) == OBJECT_REFERENCE_PREFIX) {
-                            resolvedValue = attributeValue.substring(1);
-                        } else {
-                            resolvedValue = get(attributeValue.substring(1));
-
-                            if (resolvedValue == null) {
-                                resolvedValue = attributeValue;
-                            }
-                        }
-                    }
-                } else {
-                    resolvedValue = attributeValue;
                 }
             } else {
                 resolvedValue = attributeValue;
             }
+        } else {
+            resolvedValue = attributeValue;
         }
 
         return resolvedValue;
@@ -1289,6 +1221,10 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
      */
     private void setStaticProperty(Attribute attribute, Object object)
         throws SerializationException, MalformedURLException {
+        Object value = resolve(attribute.value);
+
+        Class<?> objectType = object.getClass();
+
         String propertyName =
             attribute.localName.substring(attribute.localName.lastIndexOf(".") + 1);
         propertyName = Character.toUpperCase(propertyName.charAt(0)) +
@@ -1305,32 +1241,33 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             throw new SerializationException(exception);
         }
 
-        Class<?> objectType = object.getClass();
-
-        // Determine the property type from the getter method
-        Method getterMethod = getStaticGetterMethod(propertyClass, propertyName, objectType);
-        if (getterMethod == null) {
-            throw new PropertyNotFoundException("Static property \"" + attribute
-                + "\" does not exist.");
+        Method setterMethod = null;
+        if (value != null) {
+            setterMethod = getStaticSetterMethod(propertyClass, propertyName,
+                objectType, value.getClass());
         }
 
-        // Resolve the attribute value
-        Class<?> propertyType = getterMethod.getReturnType();
-        Object propertyValue = resolve(attribute.value, propertyType);
-        Class<?> propertyValueType = (propertyValue == null) ?
-            getterMethod.getReturnType() : propertyValue.getClass();
+        if (setterMethod == null) {
+            Method getterMethod = getStaticGetterMethod(propertyClass, propertyName, objectType);
 
-        Method setterMethod = getStaticSetterMethod(propertyClass, propertyName,
-            objectType, propertyValueType);
+            if (getterMethod != null) {
+                Class<?> propertyType = getterMethod.getReturnType();
+                setterMethod = getStaticSetterMethod(propertyClass, propertyName,
+                    objectType, propertyType);
+
+                if (value instanceof String) {
+                    value = BeanDictionary.coerce((String)value, propertyType);
+                }
+            }
+        }
 
         if (setterMethod == null) {
-            throw new SerializationException("Unable to determine type for "
-                + " static property \"" + attribute + "\".");
+            throw new SerializationException(attribute.localName + " is not valid static property.");
         }
 
         // Invoke the setter
         try {
-            setterMethod.invoke(null, new Object[] {object, propertyValue});
+            setterMethod.invoke(null, new Object[] {object, value});
         } catch (Exception exception) {
             throw new SerializationException(exception);
         }

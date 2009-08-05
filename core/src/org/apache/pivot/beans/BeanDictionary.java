@@ -242,29 +242,19 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
             throw new IllegalArgumentException("key is null.");
         }
 
-        Class<?> valueType = null;
-
-        if (value == null) {
-            Method getterMethod = getGetterMethod(key);
-            if (getterMethod == null) {
-                throw new PropertyNotFoundException("Property \"" + key + "\"" +
-                    " does not exist.");
-            }
-
-            valueType = getterMethod.getReturnType();
-        } else {
-            valueType = value.getClass();
-        }
-
         if (key.startsWith(FIELD_PREFIX)) {
             Field field = getField(key.substring(1));
 
-            if (field == null
-                || !field.getType().isAssignableFrom(valueType)
-                || (field.getModifiers() & Modifier.FINAL) != 0) {
-                throw new PropertyNotFoundException("Field \"" + key + "\""
-                    + " of type " + valueType.getName()
+            if (field == null) {
+                throw new PropertyNotFoundException("Property \"" + key + "\""
                     + " does not exist or is final.");
+            }
+
+            Class<?> fieldType = field.getType();
+            Class<?> valueType = value.getClass();
+            if (fieldType != valueType
+                && valueType == String.class) {
+                value = coerce((String)value, fieldType);
             }
 
             try {
@@ -273,11 +263,26 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
                 throw new RuntimeException(exception);
             }
         } else {
-            Method setterMethod = getSetterMethod(key, valueType);
+            Method setterMethod = null;
+
+            if (value != null) {
+                setterMethod = getSetterMethod(key, value.getClass());
+            }
+
+            if (setterMethod == null) {
+                Class<?> propertyType = getType(key);
+
+                if (propertyType != null) {
+                    setterMethod = getSetterMethod(key, propertyType);
+
+                    if (value instanceof String) {
+                        value = coerce((String)value, propertyType);
+                    }
+                }
+            }
 
             if (setterMethod == null) {
                 throw new PropertyNotFoundException("Property \"" + key + "\""
-                    + " of type " + valueType.getName()
                     + " does not exist or is read-only.");
             }
 
@@ -467,62 +472,28 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
      * The type of the property, or <tt>null</tt> if no such bean property
      * exists.
      */
-    public static Class<?> getType(Class<?> type, String key) {
+    public static Class<?> getType(Class<?> beanClass, String key) {
         if (key == null) {
             throw new IllegalArgumentException("key is null.");
         }
 
-        Class<?> propertyType = null;
+        Class<?> type = null;
 
         if (key.startsWith(FIELD_PREFIX)) {
-            Field field = getField(type, key.substring(1));
+            Field field = getField(beanClass, key.substring(1));
 
             if (field != null) {
-                propertyType = field.getType();
+                type = field.getType();
             }
         } else {
-            Method getterMethod = getGetterMethod(type, key);
+            Method getterMethod = getGetterMethod(beanClass, key);
 
             if (getterMethod != null) {
-                propertyType = getterMethod.getReturnType();
+                type = getterMethod.getReturnType();
             }
         }
 
-        return propertyType;
-    }
-
-    /**
-     * Returns the getter method for a property.
-     *
-     * @param type
-     * The bean class.
-     *
-     * @param key
-     * The property name.
-     *
-     * @return
-     * The getter method, or <tt>null</tt> if the method does not exist.
-     */
-    public static Method getGetterMethod(Class<?> type, String key) {
-        // Upper-case the first letter
-        key = Character.toUpperCase(key.charAt(0)) + key.substring(1);
-        Method method = null;
-
-        try {
-            method = type.getMethod(GET_PREFIX + key, new Class<?>[] {});
-        } catch (NoSuchMethodException exception) {
-            // No-op
-        }
-
-        if (method == null) {
-            try {
-                method = type.getMethod(IS_PREFIX + key, new Class<?>[] {});
-            } catch (NoSuchMethodException exception) {
-                // No-op
-            }
-        }
-
-        return method;
+        return type;
     }
 
     /**
@@ -547,9 +518,10 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
 
             int modifiers = field.getModifiers();
 
+            // Exclude non-public, static, and final fields
             if ((modifiers & Modifier.PUBLIC) == 0
-                || (modifiers & Modifier.STATIC) != 0) {
-                // Exclude non-public or static fields
+                || (modifiers & Modifier.STATIC) > 0
+                || (modifiers & Modifier.FINAL) > 0) {
                 field = null;
             }
         } catch (NoSuchFieldException exception) {
@@ -560,9 +532,9 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
     }
 
     /**
-     * Returns the setter method for a property.
+     * Returns the getter method for a property.
      *
-     * @param type
+     * @param beanClass
      * The bean class.
      *
      * @param key
@@ -571,8 +543,42 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
      * @return
      * The getter method, or <tt>null</tt> if the method does not exist.
      */
-    public static Method getSetterMethod(Class<?> type, String key, Class<?> valueType) {
-        Method method = null;
+    public static Method getGetterMethod(Class<?> beanClass, String key) {
+        // Upper-case the first letter
+        key = Character.toUpperCase(key.charAt(0)) + key.substring(1);
+        Method getterMethod = null;
+
+        try {
+            getterMethod = beanClass.getMethod(GET_PREFIX + key, new Class<?>[] {});
+        } catch (NoSuchMethodException exception) {
+            // No-op
+        }
+
+        if (getterMethod == null) {
+            try {
+                getterMethod = beanClass.getMethod(IS_PREFIX + key, new Class<?>[] {});
+            } catch (NoSuchMethodException exception) {
+                // No-op
+            }
+        }
+
+        return getterMethod;
+    }
+
+    /**
+     * Returns the setter method for a property.
+     *
+     * @param beanClass
+     * The bean class.
+     *
+     * @param key
+     * The property name.
+     *
+     * @return
+     * The getter method, or <tt>null</tt> if the method does not exist.
+     */
+    public static Method getSetterMethod(Class<?> beanClass, String key, Class<?> valueType) {
+        Method setterMethod = null;
 
         if (valueType != null) {
             // Upper-case the first letter and prepend the "set" prefix to
@@ -581,18 +587,18 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
             final String methodName = SET_PREFIX + key;
 
             try {
-                method = type.getMethod(methodName, new Class<?>[] {valueType});
+                setterMethod = beanClass.getMethod(methodName, new Class<?>[] {valueType});
             } catch (NoSuchMethodException exception) {
                 // No-op
             }
 
-            if (method == null) {
+            if (setterMethod == null) {
                 // Look for a match on the value's super type
                 Class<?> superType = valueType.getSuperclass();
-                method = getSetterMethod(type, key, superType);
+                setterMethod = getSetterMethod(beanClass, key, superType);
             }
 
-            if (method == null) {
+            if (setterMethod == null) {
                 // If value type is a primitive wrapper, look for a method
                 // signature with the corresponding primitive type
                 try {
@@ -600,7 +606,7 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
                     Class<?> primitiveValueType = (Class<?>)primitiveTypeField.get(null);
 
                     try {
-                        method = type.getMethod(methodName, new Class<?>[] {primitiveValueType});
+                        setterMethod = beanClass.getMethod(methodName, new Class<?>[] {primitiveValueType});
                     } catch (NoSuchMethodException exception) {
                         // No-op
                     }
@@ -611,19 +617,66 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
                 }
             }
 
-            if (method == null) {
+            if (setterMethod == null) {
                 // Walk the interface graph to find a matching method
                 Class<?>[] interfaces = valueType.getInterfaces();
 
                 int i = 0, n = interfaces.length;
-                while (method == null
+                while (setterMethod == null
                     && i < n) {
                     Class<?> interfaceType = interfaces[i++];
-                    method = getSetterMethod(type, key, interfaceType);
+                    setterMethod = getSetterMethod(beanClass, key, interfaceType);
                 }
             }
         }
 
-        return method;
+        return setterMethod;
+    }
+
+    /**
+     * Coerces a string value to a primitive type.
+     *
+     * @param value
+     * @param type
+     *
+     * @return
+     * The coerced value.
+     */
+    public static Object coerce(String value, Class<?> type) {
+        Object coercedValue;
+
+        if (type == Boolean.class
+            || type == Boolean.TYPE) {
+            coercedValue = Boolean.parseBoolean(value);
+        } else if (type == Character.class
+            || type == Character.TYPE) {
+            if (value.length() == 1) {
+                coercedValue = value.charAt(0);
+            } else {
+                throw new IllegalArgumentException("\"" + value + "\" is not a valid character");
+            }
+        } else if (type == Byte.class
+            || type == Byte.TYPE) {
+            coercedValue = Byte.parseByte(value);
+        } else if (type == Short.class
+            || type == Short.TYPE) {
+            coercedValue = Short.parseShort(value);
+        } else if (type == Integer.class
+            || type == Integer.TYPE) {
+            coercedValue = Integer.parseInt(value);
+        } else if (type == Long.class
+            || type == Long.TYPE) {
+            coercedValue = Long.parseLong(value);
+        } else if (type == Float.class
+            || type == Float.TYPE) {
+            coercedValue = Float.parseFloat(value);
+        } else if (type == Double.class
+            || type == Double.TYPE) {
+            coercedValue = Double.parseDouble(value);
+        } else {
+            coercedValue = value;
+        }
+
+        return coercedValue;
     }
 }

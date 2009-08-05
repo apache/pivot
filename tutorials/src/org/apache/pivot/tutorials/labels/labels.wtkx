@@ -20,7 +20,8 @@ limitations under the License.
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
     <content>
-        <BoxPane styles="{padding:4, verticalAlignment:'center'}">
+        <BoxPane>
+            <styles spacing="24" verticalAlignment="center"/>
             <ImageView image="org/apache/pivot/tutorials/clock.png" cursor="crosshair"/>
             <Label text="What time is it?"/>
         </BoxPane>
