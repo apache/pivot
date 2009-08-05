@@ -46,9 +46,9 @@ limitations under the License.
                 <Form>
                     <sections>
                         <Form.Section>
-                            <Slider wtkx:id="redSlider" Form.label="Red" bounds="{minimum:0, maximum:255}" value="0"/>
-                            <Slider wtkx:id="greenSlider" Form.label="Green" bounds="{minimum:0, maximum:255}" value="0"/>
-                            <Slider wtkx:id="blueSlider" Form.label="Blue" bounds="{minimum:0, maximum:255}" value="0"/>
+                            <Slider wtkx:id="redSlider" Form.label="Red" range="{start:0, end:255}" value="0"/>
+                            <Slider wtkx:id="greenSlider" Form.label="Green" range="{start:0, end:255}" value="0"/>
+                            <Slider wtkx:id="blueSlider" Form.label="Blue" range="{start:0, end:255}" value="0"/>
                             <Border wtkx:id="colorBorder" Form.label="Color" preferredWidth="120" preferredHeight="30"/>
                         </Form.Section>
                     </sections>

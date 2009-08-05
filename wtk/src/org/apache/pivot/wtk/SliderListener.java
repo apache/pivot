@@ -23,11 +23,11 @@ package org.apache.pivot.wtk;
  */
 public interface SliderListener {
     /**
-     * Called when a slider's bounds have changed.
+     * Called when a slider's range has changed.
      *
      * @param slider
-     * @param previousMinimum
-     * @param previousMaximum
+     * @param previousRangeStart
+     * @param previousRangeEnd
      */
-    public void boundsChanged(Slider slider, int previousMinimum, int previousMaximum);
+    public void rangeChanged(Slider slider, int previousRangeStart, int previousRangeEnd);
 }

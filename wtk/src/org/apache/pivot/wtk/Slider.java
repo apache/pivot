@@ -17,10 +17,7 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.Dictionary;
-import org.apache.pivot.serialization.JSONSerializer;
-import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ListenerList;
-
 
 /**
  * Allows a user to select one of a range of values.
@@ -30,9 +27,9 @@ import org.apache.pivot.util.ListenerList;
 public class Slider extends Container {
     private static class SliderListenerList extends ListenerList<SliderListener>
         implements SliderListener {
-        public void boundsChanged(Slider slider, int previousMinimum, int previousMaximum) {
+        public void rangeChanged(Slider slider, int previousRangeStart, int previousRangeEnd) {
             for (SliderListener listener : this) {
-                listener.boundsChanged(slider, previousMinimum, previousMaximum);
+                listener.rangeChanged(slider, previousRangeStart, previousRangeEnd);
             }
         }
     }
@@ -46,98 +43,89 @@ public class Slider extends Container {
         }
     }
 
-    private int minimum = DEFAULT_MINIMUM;
-    private int maximum = DEFAULT_MAXIMUM;
+    private int rangeStart = DEFAULT_RANGE_START;
+    private int rangeEnd = DEFAULT_RANGE_END;
     private int value = DEFAULT_VALUE;
 
     private SliderListenerList sliderListeners = new SliderListenerList();
     private SliderValueListenerList sliderValueListeners = new SliderValueListenerList();
 
-    public static final int DEFAULT_MINIMUM = 0;
-    public static final int DEFAULT_MAXIMUM = 100;
+    public static final int DEFAULT_RANGE_START = 0;
+    public static final int DEFAULT_RANGE_END = 100;
     public static final int DEFAULT_VALUE = 0;
-
-    public static final String MINIMUM_KEY = "minimum";
-    public static final String MAXIMUM_KEY = "maximum";
 
     public Slider() {
         installSkin(Slider.class);
     }
 
-    public int getMinimum() {
-        return minimum;
+    public int getRangeStart() {
+        return rangeStart;
     }
 
-    public void setMinimum(int minimum) {
-        setBounds(minimum, maximum);
+    public void setRangeStart(int rangeStart) {
+        setRange(rangeStart, rangeEnd);
     }
 
-    public int getMaximum() {
-        return maximum;
+    public int getRangeEnd() {
+        return rangeEnd;
     }
 
-    public void setMaximum(int maximum) {
-        setBounds(minimum, maximum);
+    public void setRangeEnd(int rangeEnd) {
+        setRange(rangeStart, rangeEnd);
     }
 
-    public void setBounds(int minimum, int maximum) {
-        if (minimum > maximum) {
-            throw new IllegalArgumentException("minimum is greater than maximum.");
+    public void setRange(int rangeStart, int rangeEnd) {
+        if (rangeStart > rangeEnd) {
+            throw new IllegalArgumentException("rangeStart is greater than maximum.");
         }
 
-        int previousMinimum = this.minimum;
-        int previousMaximum = this.maximum;
+        int previousRangeStart = this.rangeStart;
+        int previousRangeEnd = this.rangeEnd;
         int previousValue = this.value;
 
-        if (minimum != previousMinimum
-            || maximum != previousMaximum) {
-            this.minimum = minimum;
-            if (value < minimum) {
-                this.value = minimum;
+        if (rangeStart != previousRangeStart
+            || rangeEnd != previousRangeEnd) {
+            this.rangeStart = rangeStart;
+            if (value < rangeStart) {
+                this.value = rangeStart;
             }
 
-            this.maximum = maximum;
-            if (value > maximum) {
-                this.value = maximum;
+            this.rangeEnd = rangeEnd;
+            if (value > rangeEnd) {
+                this.value = rangeEnd;
             }
 
-            sliderListeners.boundsChanged(this, previousMinimum, previousMaximum);
+            sliderListeners.rangeChanged(this, previousRangeStart, previousRangeEnd);
 
-            if (previousValue < minimum
-                || previousValue > maximum) {
+            if (previousValue < rangeStart
+                || previousValue > rangeEnd) {
                 sliderValueListeners.valueChanged(this, previousValue);
             }
         }
     }
 
-    public final void setBounds(Dictionary<String, ?> bounds) {
-        if (bounds == null) {
-            throw new IllegalArgumentException("bounds is null.");
+    public final void setRange(Span range) {
+        if (range == null) {
+            throw new IllegalArgumentException("range is null.");
         }
 
-        int minimum = DEFAULT_MINIMUM;
-        if (bounds.containsKey(MINIMUM_KEY)) {
-            minimum = ((Number)bounds.get(MINIMUM_KEY)).intValue();
-        }
-
-        int maximum = DEFAULT_MAXIMUM;
-        if (bounds.containsKey(MAXIMUM_KEY)) {
-            maximum = ((Number)bounds.get(MAXIMUM_KEY)).intValue();
-        }
-
-        setBounds(minimum, maximum);
+        setRange(range.start, range.end);
     }
 
-    public final void setBounds(String bounds) {
-        if (bounds == null) {
-            throw new IllegalArgumentException("bounds is null.");
+    public final void setRange(Dictionary<String, ?> range) {
+        if (range == null) {
+            throw new IllegalArgumentException("range is null.");
         }
 
-        try {
-            setBounds(JSONSerializer.parseMap(bounds));
-        } catch (SerializationException exception) {
-            throw new IllegalArgumentException(exception);
+        setRange(new Span(range));
+    }
+
+    public final void setRange(String range) {
+        if (range == null) {
+            throw new IllegalArgumentException("range is null.");
         }
+
+        setRange(Span.decode(range));
     }
 
     public int getValue() {
@@ -145,11 +133,11 @@ public class Slider extends Container {
     }
 
     public void setValue(int value) {
-        if (value < minimum) {
+        if (value < rangeStart) {
             throw new IllegalArgumentException("value is less than minimum.");
         }
 
-        if (value > maximum) {
+        if (value > rangeEnd) {
             throw new IllegalArgumentException("value is greater than maximum.");
         }
 

@@ -23,7 +23,7 @@ limitations under the License.
         <Border>
             <content>
                 <BoxPane styles="{verticalAlignment:'center'}">
-                    <Slider wtkx:id="slider" bounds="{minimum:0, maximum:255}" value="0"/>
+                    <Slider wtkx:id="slider" range="{start:0, end:255}" value="0"/>
                     <Label wtkx:id="label"/>
                 </BoxPane>
             </content>

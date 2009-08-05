@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.util.ListenerList;
 
 /**
@@ -77,6 +78,10 @@ public class ScrollBar extends Container {
     private ScrollBarValueListenerList scrollBarValueListeners =
         new ScrollBarValueListenerList();
 
+    public ScrollBar() {
+        this(Orientation.HORIZONTAL);
+    }
+
     public ScrollBar(Orientation orientation) {
         if (orientation == null) {
             throw new IllegalArgumentException("orientation is null");
@@ -108,16 +113,56 @@ public class ScrollBar extends Container {
         return rangeStart;
     }
 
+    public void setRangeStart(int rangeStart) {
+        setScope(rangeStart, rangeEnd, extent);
+    }
+
     public int getRangeEnd() {
         return rangeEnd;
+    }
+
+    public void setRangeEnd(int rangeEnd) {
+        setScope(rangeStart, rangeEnd, extent);
     }
 
     public Span getRange() {
         return new Span(rangeStart, rangeEnd);
     }
 
+    public void setRange(int rangeStart, int rangeEnd) {
+        setScope(rangeStart, rangeEnd, extent);
+    }
+
+    public final void setRange(Span range) {
+        if (range == null) {
+            throw new IllegalArgumentException("range is null.");
+        }
+
+        setRange(range.start, range.end);
+    }
+
+    public final void setRange(Dictionary<String, ?> range) {
+        if (range == null) {
+            throw new IllegalArgumentException("range is null.");
+        }
+
+        setRange(new Span(range));
+    }
+
+    public final void setRange(String range) {
+        if (range == null) {
+            throw new IllegalArgumentException("range is null.");
+        }
+
+        setRange(Span.decode(range));
+    }
+
     public int getExtent() {
         return extent;
+    }
+
+    public void setExtent(int extent) {
+        setScope(rangeStart, rangeEnd, extent);
     }
 
     public void setScope(int rangeStart, int rangeEnd, int extent) {

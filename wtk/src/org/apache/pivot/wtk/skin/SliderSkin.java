@@ -45,12 +45,4 @@ public abstract class SliderSkin extends ContainerSkin
 
         super.uninstall();
     }
-
-    public void boundsChanged(Slider slider, int previousMinimum, int previousMaximum) {
-        invalidateComponent();
-    }
-
-    public void valueChanged(Slider slider, int previousValue) {
-        // No-op
-    }
 }
