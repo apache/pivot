@@ -34,7 +34,89 @@ limitations under the License.
 <body>
 <h1>Spinners</h1>
 
-<p>This section is not yet complete.</p>
+<p><tt>Spinner</tt> is a component that provides a means of cycling through a list of items. The items are defined by the spinner's model data, specified via the "spinnerData" property. Spinners behave similarly to a single-select <tt>ListView</tt> or a <tt>ListButton</tt>, allowing a user to select one of the items in the list. However, unlike list views and list buttons, spinners only present a single item at a time.</p>
+
+<p>Note that spinners may be "circular". When a spinner's "circular" property is set to <tt>true</tt>, the spinner's selection will wrap when it reaches the first or last item in the list. In the following example, the first spinner is circular, and the second is not:</p>
+
+<script>
+var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
+    archive:"lib/@project_name@-core-@version@.jar,lib/@project_name@-wtk-@version@.jar,lib/@project_name@-wtk-@version@.terra.jar,lib/@project_name@-tutorials-@version@.jar",
+    width:160,
+    height:30
+};
+var parameters = {application_class_name:"org.apache.pivot.tutorials.boundedrange.Spinners",
+    codebase_lookup:false
+};
+deployJava.writeAppletTag(attributes, parameters);
+</script>
+
+<p>Because spinner data is specified using an instance of the <tt>List</tt> interface, spinners are quite flexible. The second spinner in the above example uses an instance of <tt>NumericSpinnerData</tt> as its model. This class is a lightweight means of representing a list of numeric value options: it doesn't actually store the values as a list in memory - it simply calculates the appropriate value for a given index using its lower and upper bounds and increment value.</p>
+
+<p>The WTKX for this example is shown below:</p>
+
+<pre class="brush:xml">
+&lt;Window title="Spinners" maximized="true"
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:content="org.apache.pivot.wtk.content"
+    xmlns="org.apache.pivot.wtk"&gt;
+    &lt;content&gt;
+        &lt;Border&gt;
+            &lt;content&gt;
+                &lt;BoxPane styles="{verticalAlignment:'center'}"&gt;
+                    &lt;Spinner spinnerData="['One', 'Two', 'Three', 'Four', 'Five']"
+                        circular="true" preferredWidth="80" selectedIndex="0"/&gt;
+                    &lt;Spinner preferredWidth="40" selectedIndex="0"&gt;
+                        &lt;spinnerData&gt;
+                            &lt;content:NumericSpinnerData lowerBound="0" upperBound="9" increment="1"/&gt;
+                        &lt;/spinnerData&gt;
+                    &lt;/Spinner&gt;
+                &lt;/BoxPane&gt;
+            &lt;/content&gt;
+        &lt;/Border&gt;
+    &lt;/content&gt;
+&lt;/Window&gt;
+</pre>
+
+<p>The Java source is as follows:</p>
+
+<pre class="brush:java">
+package org.apache.pivot.tutorials.boundedrange;
+
+import org.apache.pivot.collections.Map;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.DesktopApplicationContext;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtkx.WTKXSerializer;
+
+public class Spinners implements Application {
+    private Window window = null;
+
+    public void startup(Display display, Map&lt;String, String&gt; properties) throws Exception {
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        window = (Window)wtkxSerializer.readObject(this, "spinners.wtkx");
+        window.open(display);
+    }
+
+    public boolean shutdown(boolean optional) {
+        if (window != null) {
+            window.close();
+        }
+
+        return false;
+    }
+
+    public void suspend() {
+    }
+
+    public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(Spinners.class, args);
+    }
+}
+</pre>
 
 <p>Next: <a href="sliders.html">Sliders</a></p>
 </body>
