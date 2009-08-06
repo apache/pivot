@@ -16,12 +16,29 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.collections.LinkedList;
+import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Container class representing a decorated frame window.
  *
  * @author gbrown
  */
 public class Frame extends Window {
+    private static class FrameListenerList extends ListenerList<FrameListener>
+        implements FrameListener {
+        public void menuBarChanged(Frame frame, MenuBar previousMenuBar) {
+            for (FrameListener listener : this) {
+                listener.menuBarChanged(frame, previousMenuBar);
+            }
+        }
+    }
+
+    private MenuBar menuBar = null;
+
+    private FrameListenerList frameListeners = new FrameListenerList();
+
     public Frame() {
         this(null, null);
     }
@@ -39,5 +56,87 @@ public class Frame extends Window {
 
         setTitle(title);
         installSkin(Frame.class);
+    }
+
+    public MenuBar getMenuBar() {
+        return menuBar;
+    }
+
+    public void setMenuBar(MenuBar menuBar) {
+        MenuBar previousMenuBar = this.menuBar;
+
+        if (previousMenuBar != menuBar) {
+            this.menuBar = menuBar;
+
+            if (previousMenuBar != null) {
+                remove(previousMenuBar);
+            }
+
+            if (menuBar != null) {
+                add(menuBar);
+            }
+
+            frameListeners.menuBarChanged(this, previousMenuBar);
+        }
+    }
+
+    @Override
+    protected void setFocusDescendant(Component focusDescendant) {
+        Component previousFocusDescendant = getFocusDescendant();
+
+        // Walk down previous focus descendant hierarchy and call cleanupMenuBar()
+        if (previousFocusDescendant != null) {
+            LinkedList<Component> previousFocusDescendantPath = new LinkedList<Component>();
+
+            Component previousFocusAncestor = previousFocusDescendant;
+            while (!(previousFocusAncestor instanceof Display)) {
+                previousFocusDescendantPath.insert(previousFocusAncestor, 0);
+            }
+
+            for (Component component : previousFocusDescendantPath) {
+                MenuHandler menuHandler = component.getMenuHandler();
+
+                if (menuHandler != null) {
+                    menuHandler.cleanupMenuBar(component, menuBar);
+                }
+            }
+        }
+
+        super.setFocusDescendant(focusDescendant);
+
+        // Walk down focus descendant hierarchy and call configureMenuBar()
+        if (focusDescendant != null) {
+            LinkedList<Component> focusDescendantPath = new LinkedList<Component>();
+
+            Component focusAncestor = focusDescendant;
+            while (!(focusAncestor instanceof Display)) {
+                focusDescendantPath.insert(focusAncestor, 0);
+            }
+
+            for (Component component : focusDescendantPath) {
+                MenuHandler menuHandler = component.getMenuHandler();
+
+                if (menuHandler != null) {
+                    menuHandler.configureMenuBar(component, menuBar);
+                }
+            }
+        }
+    }
+
+    @Override
+    public Sequence<Component> remove(int index, int count) {
+        for (int i = index, n = index + count; i < n; i++) {
+            Component component = get(i);
+            if (component == menuBar) {
+                throw new UnsupportedOperationException();
+            }
+        }
+
+        // Call the base method to remove the components
+        return super.remove(index, count);
+    }
+
+    public ListenerList<FrameListener> getFrameListeners() {
+        return frameListeners;
     }
 }

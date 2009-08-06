@@ -32,11 +32,14 @@ import org.apache.pivot.wtk.Cursor;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.BoxPane;
+import org.apache.pivot.wtk.Frame;
+import org.apache.pivot.wtk.FrameListener;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Label;
+import org.apache.pivot.wtk.MenuBar;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Point;
@@ -52,11 +55,13 @@ import org.apache.pivot.wtk.skin.WindowSkin;
 
 /**
  * Frame skin.
+ * <p>
+ * TODO Add menu bar support.
  *
  * @author gbrown
  * @author tvolkert
  */
-public class TerraFrameSkin extends WindowSkin {
+public class TerraFrameSkin extends WindowSkin implements FrameListener {
     /**
      * Frame button.
      *
@@ -774,5 +779,9 @@ public class TerraFrameSkin extends WindowSkin {
     @Override
     public void displayableChanged(Component component) {
         // No-op
+    }
+
+    public void menuBarChanged(Frame frame, MenuBar previousMenuBar) {
+        invalidateComponent();
     }
 }
