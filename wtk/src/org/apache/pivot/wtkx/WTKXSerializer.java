@@ -749,7 +749,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                                 scriptReader = new BufferedReader(new InputStreamReader(scriptLocation.openStream()));
                                                 scriptEngine.eval(scriptReader);
                                             } catch(ScriptException exception) {
-                                                System.err.println(exception.getMessage());
+                                                exception.printStackTrace(System.err);
                                             } finally {
                                                 if (scriptReader != null) {
                                                     scriptReader.close();
@@ -773,7 +773,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                             try {
                                                 scriptEngine.eval((String)element.value);
                                             } catch (ScriptException exception) {
-                                                System.err.println(exception.getMessage());
+                                                exception.printStackTrace(System.err);
                                             }
                                         }
                                     } else {

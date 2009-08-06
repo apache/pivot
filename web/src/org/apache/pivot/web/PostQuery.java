@@ -79,6 +79,7 @@ public class PostQuery extends Query<URL> {
             try {
                 valueLocation = new URL(getLocation(), location);
             } catch(MalformedURLException exception) {
+                throw new RuntimeException(exception);
             }
         }
 

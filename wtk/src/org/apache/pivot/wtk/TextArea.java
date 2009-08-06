@@ -223,7 +223,9 @@ public class TextArea extends Component {
                 serializer.writeObject(document, writer);
                 text = writer.toString();
             } catch(SerializationException exception) {
+                throw new RuntimeException(exception);
             } catch(IOException exception) {
+                throw new RuntimeException(exception);
             }
         }
 
@@ -240,7 +242,9 @@ public class TextArea extends Component {
                 StringReader reader = new StringReader(text);
                 document = serializer.readObject(reader);
             } catch(SerializationException exception) {
+                throw new RuntimeException(exception);
             } catch(IOException exception) {
+                throw new RuntimeException(exception);
             }
         } else {
             document = new Document();

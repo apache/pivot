@@ -115,7 +115,9 @@ public class ListAdapter<T> implements List<T>, Serializable {
         try {
             removedList = list.getClass().newInstance();
         } catch(IllegalAccessException exception) {
+            throw new RuntimeException(exception);
         } catch(InstantiationException exception) {
+            throw new RuntimeException(exception);
         }
 
         List<T> removed = new ListAdapter<T>(removedList);

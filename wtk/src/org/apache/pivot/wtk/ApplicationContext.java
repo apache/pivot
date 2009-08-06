@@ -42,8 +42,10 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.Timer;
@@ -53,8 +55,6 @@ import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.Version;
-import org.apache.pivot.wtk.Manifest;
-import org.apache.pivot.wtk.RemoteManifest;
 import org.apache.pivot.wtk.Component.DecoratorSequence;
 import org.apache.pivot.wtk.effects.Decorator;
 
@@ -266,11 +266,13 @@ public abstract class ApplicationContext {
                 System.setProperty("sun.awt.noerasebackground", "true");
                 System.setProperty("sun.awt.erasebackgroundonresize", "true");
             } catch (SecurityException exception) {
+                // No-op
             }
 
             try {
                 debugRepaint = Boolean.parseBoolean(System.getProperty("org.apache.pivot.wtk.debugRepaint"));
-            } catch (Exception ex) {
+            } catch (SecurityException ex) {
+                // No-op
             }
 
             // Add native drop support
@@ -1419,8 +1421,10 @@ public abstract class ApplicationContext {
 
         try {
             desktop.browse(location.toURI());
-        } catch(Exception exception) {
-            System.out.println("Unable to open URL in default browser.");
+        } catch(IOException exception) {
+            System.out.println("Unable to open URL in default browser: " + exception.getMessage());
+        } catch(URISyntaxException exception) {
+            System.out.println("Unable to open URL in default browser: " + exception.getMessage());
         }
     }
 
@@ -1520,7 +1524,9 @@ public abstract class ApplicationContext {
             try {
                 java.awt.EventQueue.invokeAndWait(callback);
             } catch (InvocationTargetException exception) {
+                throw new RuntimeException(exception.getCause());
             } catch (InterruptedException exception) {
+                throw new RuntimeException(exception);
             }
         } else {
             java.awt.EventQueue.invokeLater(callback);
