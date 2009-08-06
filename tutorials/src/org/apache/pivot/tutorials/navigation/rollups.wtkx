@@ -50,36 +50,39 @@ limitations under the License.
                                     <wtkx:include src="calendar.wtkx"/>
                                 </content>
                             </Rollup>
-                            <Rollup>
+                            <Rollup styles="{fill:true}">
                                 <heading>
                                     <Label text="Nested" styles="{fontBold:true, color:13}"/>
                                 </heading>
                                 <content>
-                                    <BoxPane orientation="vertical">
-                                        <Rollup>
+                                    <BoxPane orientation="vertical" styles="{fill:true}">
+                                        <Rollup styles="{fill:true}">
                                             <heading>
                                                 <Label text="Level 1"/>
                                             </heading>
                                             <content>
-                                                <Label text="Level 1 content" styles="{fontItalic:true}"/>
+                                                <Label text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum."
+                                                    styles="{wrapText:true}"/>
                                             </content>
                                         </Rollup>
 
-                                        <Rollup>
+                                        <Rollup styles="{fill:true}">
                                             <heading>
                                                 <Label text="Level 2"/>
                                             </heading>
                                             <content>
-                                                <Label text="Level 2 content" styles="{fontItalic:true}"/>
+                                                <Label text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum."
+                                                    styles="{wrapText:true}"/>
                                             </content>
                                         </Rollup>
 
-                                        <Rollup>
+                                        <Rollup styles="{fill:true}">
                                             <heading>
                                                 <Label text="Level 3"/>
                                             </heading>
                                             <content>
-                                                <Label text="Level 3 content" styles="{fontItalic:true}"/>
+                                                <Label text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum."
+                                                    styles="{wrapText:true}"/>
                                             </content>
                                         </Rollup>
                                     </BoxPane>

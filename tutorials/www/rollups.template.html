@@ -34,7 +34,156 @@ limitations under the License.
 <body>
 <h1>Rollups</h1>
 
-<p>This section is not yet complete.</p>
+<p>Rollups are conceptually similar to Expanders. Like expanders, rollups also allow the user to expand or collapse a region of the screen to make more room for other content. However, rather than a defining a titled, rectangular region, Rollups supports a configurable "header" component; when collapsed, only the header is visible. Additionally, rollups can be nested to create the appearance of a "tree" structure.</p>
+</p>
+
+<p>The first three rollups in the example below present the same content as in the Expanders example. The fourth includes an example of nested rollups:</p>
+
+<script>
+var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
+    archive:"lib/@project_name@-core-@version@.jar,lib/@project_name@-wtk-@version@.jar,lib/@project_name@-wtk-@version@.terra.jar,lib/@project_name@-tutorials-@version@.jar",
+    width:220,
+    height:360
+};
+var parameters = {application_class_name:"org.apache.pivot.tutorials.navigation.Rollups",
+    codebase_lookup:false
+};
+deployJava.writeAppletTag(attributes, parameters);
+</script>
+
+<p>The WTKX source for this example is as follows. Note that the "fill" style is set to <tt>true</tt> on the nested rollups - this allows the rollup content to wrap:</p>
+
+<pre class="brush:xml">
+&lt;Window title="Rollups" maximized="true"
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns="org.apache.pivot.wtk"&gt;
+    &lt;content&gt;
+        &lt;Border styles="{padding:6}"&gt;
+            &lt;content&gt;
+                &lt;ScrollPane horizontalScrollBarPolicy="fill"&gt;
+                    &lt;view&gt;
+                        &lt;BoxPane orientation="vertical" styles="{fill:true,
+                            padding:{left:2, right:2}}"&gt;
+                            &lt;Rollup expanded="true"&gt;
+                                &lt;heading&gt;
+                                    &lt;Label text="Stocks" styles="{fontBold:true, color:13}"/&gt;
+                                &lt;/heading&gt;
+                                &lt;content&gt;
+                                    &lt;wtkx:include src="stocks.wtkx"/&gt;
+                                &lt;/content&gt;
+                            &lt;/Rollup&gt;
+                            &lt;Rollup&gt;
+                                &lt;heading&gt;
+                                    &lt;Label text="Weather" styles="{fontBold:true, color:13}"/&gt;
+                                &lt;/heading&gt;
+                                &lt;content&gt;
+                                    &lt;wtkx:include src="weather.wtkx"/&gt;
+                                &lt;/content&gt;
+                            &lt;/Rollup&gt;
+                            &lt;Rollup&gt;
+                                &lt;heading&gt;
+                                    &lt;Label text="Calendar" styles="{fontBold:true, color:13}"/&gt;
+                                &lt;/heading&gt;
+                                &lt;content&gt;
+                                    &lt;wtkx:include src="calendar.wtkx"/&gt;
+                                &lt;/content&gt;
+                            &lt;/Rollup&gt;
+                            &lt;Rollup styles="{fill:true}"&gt;
+                                &lt;heading&gt;
+                                    &lt;Label text="Nested" styles="{fontBold:true, color:13}"/&gt;
+                                &lt;/heading&gt;
+                                &lt;content&gt;
+                                    &lt;BoxPane orientation="vertical" styles="{fill:true}"&gt;
+                                        &lt;Rollup styles="{fill:true}"&gt;
+                                            &lt;heading&gt;
+                                                &lt;Label text="Level 1"/&gt;
+                                            &lt;/heading&gt;
+                                            &lt;content&gt;
+                                                &lt;Label text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
+                                                sed diam nonumy eirmod tempor invidunt ut labore et dolore magna
+                                                aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
+                                                dolores et ea rebum."
+                                                styles="{wrapText:true}"/&gt;
+                                            &lt;/content&gt;
+                                        &lt;/Rollup&gt;
+
+                                        &lt;Rollup styles="{fill:true}"&gt;
+                                            &lt;heading&gt;
+                                                &lt;Label text="Level 2"/&gt;
+                                            &lt;/heading&gt;
+                                            &lt;content&gt;
+                                                &lt;Label text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
+                                                sed diam nonumy eirmod tempor invidunt ut labore et dolore magna
+                                                aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
+                                                dolores et ea rebum."
+                                                styles="{wrapText:true}"/&gt;
+                                            &lt;/content&gt;
+                                        &lt;/Rollup&gt;
+
+                                        &lt;Rollup styles="{fill:true}"&gt;
+                                            &lt;heading&gt;
+                                                &lt;Label text="Level 3"/&gt;
+                                            &lt;/heading&gt;
+                                            &lt;content&gt;
+                                                &lt;Label text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
+                                                sed diam nonumy eirmod tempor invidunt ut labore et dolore magna
+                                                aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
+                                                dolores et ea rebum."
+                                                styles="{wrapText:true}"/&gt;
+                                            &lt;/content&gt;
+                                        &lt;/Rollup&gt;
+                                    &lt;/BoxPane&gt;
+                                &lt;/content&gt;
+                            &lt;/Rollup&gt;
+                        &lt;/BoxPane&gt;
+                    &lt;/view&gt;
+                &lt;/ScrollPane&gt;
+            &lt;/content&gt;
+        &lt;/Border&gt;
+    &lt;/content&gt;
+&lt;/Window&gt;
+</pre>
+
+<p>The Java source serves only to load and display the content defined in the WTKX:</p>
+
+<pre class="brush:java">
+package org.apache.pivot.tutorials.navigation;
+
+import org.apache.pivot.collections.Map;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.DesktopApplicationContext;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtkx.WTKXSerializer;
+
+public class Rollups implements Application {
+    private Window window = null;
+
+    public void startup(Display display, Map&lt;String, String&gt; properties) throws Exception {
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        window = (Window)wtkxSerializer.readObject(this, "rollups.wtkx");
+        window.open(display);
+    }
+
+    public boolean shutdown(boolean optional) {
+        if (window != null) {
+            window.close();
+        }
+
+        return false;
+    }
+
+    public void suspend() {
+    }
+
+    public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(Rollups.class, args);
+    }
+}
+</pre>
 
 <p>Next: <a href="viewports.html">Viewports</a></p>
 </body>

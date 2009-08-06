@@ -34,7 +34,85 @@ limitations under the License.
 <body>
 <h1>Scroll Panes</h1>
 
-<p>This section is not yet complete.</p>
+<p>Scroll panes are a type of viewport that facilitates scrolling by presenting a vertical or horizontal scroll bar that the user can drag to access the obscured parts of the view. They are often used to wrap data-driven components containing a lot of items (such as a <a href="table_views.html">TableView</a> displaying a long list of database query results), or to wrap long forms.</p>
+
+<p>The following example demonstrates the use of a scroll pane to display a large image:</p>
+
+<script>
+var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
+    archive:"lib/@project_name@-core-@version@.jar,lib/@project_name@-wtk-@version@.jar,lib/@project_name@-wtk-@version@.terra.jar,lib/@project_name@-tutorials-@version@.jar",
+    width:480,
+    height:360
+};
+var parameters = {application_class_name:"org.apache.pivot.tutorials.navigation.ScrollPanes",
+    codebase_lookup:false
+};
+deployJava.writeAppletTag(attributes, parameters);
+</script>
+
+<p>The WTKX source for this example is shown below:</p>
+
+<pre class="brush:xml">
+&lt;Window title="Scroll Panes" maximized="true"
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns="org.apache.pivot.wtk"&gt;
+    &lt;content&gt;
+        &lt;Border styles="{padding:0, color:10}"&gt;
+            &lt;content&gt;
+                &lt;ScrollPane&gt;
+                    &lt;view&gt;
+                        &lt;ImageView image="org/apache/pivot/tutorials/IMG_1147.jpg"
+                            tooltipText="Pemaquid Point Lighthouse, Bristol ME"/&gt;
+                    &lt;/view&gt;
+                &lt;/ScrollPane&gt;
+            &lt;/content&gt;
+        &lt;/Border&gt;
+    &lt;/content&gt;
+&lt;/Window&gt;
+</pre>
+
+<p>The Java source is as follows:</p>
+
+<pre class="brush:java">
+package org.apache.pivot.tutorials.navigation;
+
+import org.apache.pivot.collections.Map;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.DesktopApplicationContext;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtkx.WTKXSerializer;
+
+public class ScrollPanes implements Application {
+    private Window window = null;
+
+    public void startup(Display display, Map&lt;String, String&gt; properties) throws Exception {
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        window = (Window)wtkxSerializer.readObject(this, "scroll_panes.wtkx");
+        window.open(display);
+    }
+
+    public boolean shutdown(boolean optional) {
+        if (window != null) {
+            window.close();
+        }
+
+        return false;
+    }
+
+    public void suspend() {
+    }
+
+    public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(ScrollPanes.class, args);
+    }
+}
+</pre>
+
+<p>In addition to the view component, scroll panes also support row and column header components. The column header remains fixed vertically at the top of the scroll pane but scrolls horizontally with the view, and the row header is fixed horizontally at the left of the scroll pane but scrolls vertically with the view. An example of a column header is shown in the <a href="table_views.html">Table Views</a> section.</p>
 
 <p>Next: <a href="panoramas.html">Panoramas</a></p>
 </body>

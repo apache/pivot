@@ -80,15 +80,8 @@ public abstract class Component implements ConstrainedVisual {
         }
 
         public Object remove(String key) {
-            Object previousValue;
-            if (styles.containsKey(key)) {
-                previousValue = styles.remove(key);
-                componentDataListeners.valueRemoved(Component.this, key, previousValue);
-            } else {
-                previousValue = null;
-            }
-
-            return previousValue;
+            customStyles.remove(key);
+            return null;
         }
 
         public boolean containsKey(String key) {
