@@ -35,11 +35,11 @@ public class ScrollBar extends Container {
             }
         }
 
-        public void scopeChanged(ScrollBar scrollBar, int previousRangeStart,
-           int previousRangeEnd, int previousExtent) {
+        public void scopeChanged(ScrollBar scrollBar, int previousStart, int previousEnd,
+            int previousExtent) {
             for (ScrollBarListener listener : this) {
-                listener.scopeChanged(scrollBar, previousRangeStart,
-                    previousRangeEnd, previousExtent);
+                listener.scopeChanged(scrollBar, previousStart, previousEnd,
+                    previousExtent);
             }
         }
 
@@ -67,8 +67,8 @@ public class ScrollBar extends Container {
     }
 
     private Orientation orientation;
-    private int rangeStart = 0;
-    private int rangeEnd = 100;
+    private int start = 0;
+    private int end = 100;
     private int extent = 100;
     private int value = 0;
     private int unitIncrement = 1;
@@ -109,28 +109,28 @@ public class ScrollBar extends Container {
         }
     }
 
-    public int getRangeStart() {
-        return rangeStart;
+    public int getStart() {
+        return start;
     }
 
-    public void setRangeStart(int rangeStart) {
-        setScope(rangeStart, rangeEnd, extent);
+    public void setStart(int start) {
+        setScope(start, end, extent);
     }
 
-    public int getRangeEnd() {
-        return rangeEnd;
+    public int getEnd() {
+        return end;
     }
 
-    public void setRangeEnd(int rangeEnd) {
-        setScope(rangeStart, rangeEnd, extent);
+    public void setEnd(int end) {
+        setScope(start, end, extent);
     }
 
     public Span getRange() {
-        return new Span(rangeStart, rangeEnd);
+        return new Span(start, end);
     }
 
-    public void setRange(int rangeStart, int rangeEnd) {
-        setScope(rangeStart, rangeEnd, extent);
+    public void setRange(int start, int end) {
+        setScope(start, end, extent);
     }
 
     public final void setRange(Span range) {
@@ -162,35 +162,35 @@ public class ScrollBar extends Container {
     }
 
     public void setExtent(int extent) {
-        setScope(rangeStart, rangeEnd, extent);
+        setScope(start, end, extent);
     }
 
-    public void setScope(int rangeStart, int rangeEnd, int extent) {
-        int previousRangeStart = this.rangeStart;
-        int previousRangeEnd = this.rangeEnd;
+    public void setScope(int start, int end, int extent) {
+        int previousStart = this.start;
+        int previousEnd = this.end;
         int previousExtent = this.extent;
 
-        if (rangeStart != previousRangeStart
-            || rangeEnd != previousRangeEnd
+        if (start != previousStart
+            || end != previousEnd
             || extent != previousExtent) {
-            if (rangeStart > value) {
-                throw new IllegalArgumentException("rangeStart is greater than value");
+            if (start > value) {
+                throw new IllegalArgumentException("start is greater than value");
             }
 
             if (extent < 0) {
                 throw new IllegalArgumentException("extent is negative");
             }
 
-            if (rangeEnd < value + extent) {
-                throw new IllegalArgumentException("rangeEnd is less than value+extent");
+            if (end < value + extent) {
+                throw new IllegalArgumentException("end is less than value+extent");
             }
 
-            this.rangeStart = rangeStart;
-            this.rangeEnd = rangeEnd;
+            this.start = start;
+            this.end = end;
             this.extent = extent;
 
-            scrollBarListeners.scopeChanged(this, previousRangeStart,
-                previousRangeEnd, previousExtent);
+            scrollBarListeners.scopeChanged(this, previousStart, previousEnd,
+                previousExtent);
         }
     }
 
@@ -202,12 +202,12 @@ public class ScrollBar extends Container {
         int previousValue = this.value;
 
         if (value != previousValue) {
-            if (value < rangeStart) {
-                throw new IllegalArgumentException("value is less than rangeStart");
+            if (value < start) {
+                throw new IllegalArgumentException("value is less than start");
             }
 
-            if (value + extent > rangeEnd) {
-                throw new IllegalArgumentException("value+extent is greater than rangeEnd");
+            if (value + extent > end) {
+                throw new IllegalArgumentException("value+extent is greater than end");
             }
 
             this.value = value;

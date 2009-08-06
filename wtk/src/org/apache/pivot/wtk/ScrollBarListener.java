@@ -34,12 +34,12 @@ public interface ScrollBarListener {
      * Called when a scroll bar's scope has changed.
      *
      * @param scrollBar
-     * @param previousRangeStart
-     * @param previousRangeEnd
+     * @param previousStart
+     * @param previousEnd
      * @param previousExtent
      */
-    public void scopeChanged(ScrollBar scrollBar, int previousRangeStart,
-        int previousRangeEnd, int previousExtent);
+    public void scopeChanged(ScrollBar scrollBar, int previousStart, int previousEnd,
+        int previousExtent);
 
     /**
      * Called when a scroll bar's unit increment has changed.

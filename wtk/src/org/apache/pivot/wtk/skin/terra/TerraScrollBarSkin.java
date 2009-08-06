@@ -113,8 +113,8 @@ public class TerraScrollBarSkin extends ContainerSkin
         private void scroll() {
             ScrollBar scrollBar = (ScrollBar)TerraScrollBarSkin.this.getComponent();
 
-            int rangeStart = scrollBar.getRangeStart();
-            int rangeEnd = scrollBar.getRangeEnd();
+            int start = scrollBar.getStart();
+            int end = scrollBar.getEnd();
             int extent = scrollBar.getExtent();
             int value = scrollBar.getValue();
 
@@ -127,7 +127,7 @@ public class TerraScrollBarSkin extends ContainerSkin
             }
 
             if (adjustment < 0) {
-                int newValue = Math.max(value + adjustment, rangeStart);
+                int newValue = Math.max(value + adjustment, start);
                 scrollBar.setValue(newValue);
 
                 if (stopValue != -1
@@ -136,12 +136,12 @@ public class TerraScrollBarSkin extends ContainerSkin
                     stop();
                 }
 
-                if (newValue == rangeStart) {
+                if (newValue == start) {
                     // We implicit stop at the minimum scroll bar value
                     stop();
                 }
             } else {
-                int newValue = Math.min(value + adjustment, rangeEnd - extent);
+                int newValue = Math.min(value + adjustment, end - extent);
                 scrollBar.setValue(newValue);
 
                 if (stopValue != -1
@@ -150,7 +150,7 @@ public class TerraScrollBarSkin extends ContainerSkin
                     stop();
                 }
 
-                if (newValue == rangeEnd - extent) {
+                if (newValue == end - extent) {
                     // We implicitly stop at the maximum scroll bar value
                     stop();
                 }
@@ -533,9 +533,9 @@ public class TerraScrollBarSkin extends ContainerSkin
                 int realValue = (int)(pixelValue / getValueScale());
 
                 // Bound the value
-                int rangeEnd = scrollBar.getRangeEnd();
+                int end = scrollBar.getEnd();
                 int extent = scrollBar.getExtent();
-                realValue = Math.min(Math.max(realValue, 0), rangeEnd - extent);
+                realValue = Math.min(Math.max(realValue, 0), end - extent);
 
                 // Update the scroll bar
                 scrollBar.setValue(realValue);
@@ -683,14 +683,14 @@ public class TerraScrollBarSkin extends ContainerSkin
         int width = getWidth();
         int height = getHeight();
 
-        int rangeStart = scrollBar.getRangeStart();
-        int rangeEnd = scrollBar.getRangeEnd();
+        int start = scrollBar.getStart();
+        int end = scrollBar.getEnd();
         int extent = scrollBar.getExtent();
         int value = scrollBar.getValue();
 
-        int maxLegalRealValue = rangeEnd - extent;
-        int numLegalRealValues = maxLegalRealValue - rangeStart + 1;
-        float extentPercentage = (float)extent / (float)(rangeEnd - rangeStart);
+        int maxLegalRealValue = end - extent;
+        int numLegalRealValues = maxLegalRealValue - start + 1;
+        float extentPercentage = (float)extent / (float)(end - start);
 
         if (scrollBar.getOrientation() == Orientation.HORIZONTAL) {
             scrollUpButton.setSize(scrollUpButton.getPreferredWidth(-1), height);
@@ -1122,7 +1122,7 @@ public class TerraScrollBarSkin extends ContainerSkin
             scrollBar.getUnitIncrement());
 
         if (wheelRotation > 0) {
-            int maxValue = scrollBar.getRangeEnd() - scrollBar.getExtent();
+            int maxValue = scrollBar.getEnd() - scrollBar.getExtent();
             newValue = Math.min(newValue, maxValue);
 
             if (previousValue < maxValue) {
@@ -1160,12 +1160,12 @@ public class TerraScrollBarSkin extends ContainerSkin
 
         float valueScale;
 
-        int rangeStart = scrollBar.getRangeStart();
-        int rangeEnd = scrollBar.getRangeEnd();
+        int start = scrollBar.getStart();
+        int end = scrollBar.getEnd();
         int extent = scrollBar.getExtent();
-        int maxLegalRealValue = rangeEnd - extent;
+        int maxLegalRealValue = end - extent;
 
-        int numLegalRealValues = maxLegalRealValue - rangeStart + 1;
+        int numLegalRealValues = maxLegalRealValue - start + 1;
         int numLegalPixelValues;
 
         if (scrollBar.getOrientation() == Orientation.HORIZONTAL) {
@@ -1205,8 +1205,8 @@ public class TerraScrollBarSkin extends ContainerSkin
         invalidateComponent();
     }
 
-    public void scopeChanged(ScrollBar scrollBar, int previousRangeStart,
-        int previousRangeEnd, int previousExtent) {
+    public void scopeChanged(ScrollBar scrollBar, int previousStart, int previousEnd,
+        int previousExtent) {
         invalidateComponent();
     }
 

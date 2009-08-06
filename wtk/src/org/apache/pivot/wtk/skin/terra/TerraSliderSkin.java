@@ -124,10 +124,10 @@ public class TerraSliderSkin extends SliderSkin {
 
                 float ratio = (float)(sliderX - dragOffset.x) / (sliderWidth - thumbWidth);
 
-                int rangeStart = slider.getRangeStart();
-                int rangeEnd = slider.getRangeEnd();
+                int start = slider.getStart();
+                int end = slider.getEnd();
 
-                int value = (int)(rangeStart + (rangeEnd - rangeStart) * ratio);
+                int value = (int)(start + (end - start) * ratio);
                 slider.setValue(value);
             }
 
@@ -243,11 +243,11 @@ public class TerraSliderSkin extends SliderSkin {
         int width = getWidth();
         int height = getHeight();
 
-        int rangeStart = slider.getRangeStart();
-        int rangeEnd = slider.getRangeEnd();
+        int start = slider.getStart();
+        int end = slider.getEnd();
         int value = slider.getValue();
 
-        float ratio = (float)(value - rangeStart) / (rangeEnd - rangeStart);
+        float ratio = (float)(value - start) / (end - start);
 
         thumb.setSize(thumbWidth, thumbHeight);
         thumb.setLocation((int)((width - thumbWidth) * ratio),
@@ -392,7 +392,7 @@ public class TerraSliderSkin extends SliderSkin {
         setThumbHeight(thumbHeight.intValue());
     }
 
-    public void rangeChanged(Slider slider, int previousRangeStart, int previousRangeEnd) {
+    public void rangeChanged(Slider slider, int previousStart, int previousEnd) {
         invalidateComponent();
     }
 

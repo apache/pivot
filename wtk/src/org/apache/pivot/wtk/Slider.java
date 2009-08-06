@@ -27,9 +27,9 @@ import org.apache.pivot.util.ListenerList;
 public class Slider extends Container {
     private static class SliderListenerList extends ListenerList<SliderListener>
         implements SliderListener {
-        public void rangeChanged(Slider slider, int previousRangeStart, int previousRangeEnd) {
+        public void rangeChanged(Slider slider, int previousStart, int previousEnd) {
             for (SliderListener listener : this) {
-                listener.rangeChanged(slider, previousRangeStart, previousRangeEnd);
+                listener.rangeChanged(slider, previousStart, previousEnd);
             }
         }
     }
@@ -43,62 +43,62 @@ public class Slider extends Container {
         }
     }
 
-    private int rangeStart = DEFAULT_RANGE_START;
-    private int rangeEnd = DEFAULT_RANGE_END;
+    private int start = DEFAULT_START;
+    private int end = DEFAULT_END;
     private int value = DEFAULT_VALUE;
 
     private SliderListenerList sliderListeners = new SliderListenerList();
     private SliderValueListenerList sliderValueListeners = new SliderValueListenerList();
 
-    public static final int DEFAULT_RANGE_START = 0;
-    public static final int DEFAULT_RANGE_END = 100;
+    public static final int DEFAULT_START = 0;
+    public static final int DEFAULT_END = 100;
     public static final int DEFAULT_VALUE = 0;
 
     public Slider() {
         installSkin(Slider.class);
     }
 
-    public int getRangeStart() {
-        return rangeStart;
+    public int getStart() {
+        return start;
     }
 
-    public void setRangeStart(int rangeStart) {
-        setRange(rangeStart, rangeEnd);
+    public void setStart(int start) {
+        setRange(start, end);
     }
 
-    public int getRangeEnd() {
-        return rangeEnd;
+    public int getEnd() {
+        return end;
     }
 
-    public void setRangeEnd(int rangeEnd) {
-        setRange(rangeStart, rangeEnd);
+    public void setEnd(int end) {
+        setRange(start, end);
     }
 
-    public void setRange(int rangeStart, int rangeEnd) {
-        if (rangeStart > rangeEnd) {
-            throw new IllegalArgumentException("rangeStart is greater than maximum.");
+    public void setRange(int start, int end) {
+        if (start > end) {
+            throw new IllegalArgumentException("start is greater than maximum.");
         }
 
-        int previousRangeStart = this.rangeStart;
-        int previousRangeEnd = this.rangeEnd;
+        int previousStart = this.start;
+        int previousEnd = this.end;
         int previousValue = this.value;
 
-        if (rangeStart != previousRangeStart
-            || rangeEnd != previousRangeEnd) {
-            this.rangeStart = rangeStart;
-            if (value < rangeStart) {
-                this.value = rangeStart;
+        if (start != previousStart
+            || end != previousEnd) {
+            this.start = start;
+            if (value < start) {
+                this.value = start;
             }
 
-            this.rangeEnd = rangeEnd;
-            if (value > rangeEnd) {
-                this.value = rangeEnd;
+            this.end = end;
+            if (value > end) {
+                this.value = end;
             }
 
-            sliderListeners.rangeChanged(this, previousRangeStart, previousRangeEnd);
+            sliderListeners.rangeChanged(this, previousStart, previousEnd);
 
-            if (previousValue < rangeStart
-                || previousValue > rangeEnd) {
+            if (previousValue < start
+                || previousValue > end) {
                 sliderValueListeners.valueChanged(this, previousValue);
             }
         }
@@ -133,11 +133,11 @@ public class Slider extends Container {
     }
 
     public void setValue(int value) {
-        if (value < rangeStart) {
+        if (value < start) {
             throw new IllegalArgumentException("value is less than minimum.");
         }
 
-        if (value > rangeEnd) {
+        if (value > end) {
             throw new IllegalArgumentException("value is greater than maximum.");
         }
 
