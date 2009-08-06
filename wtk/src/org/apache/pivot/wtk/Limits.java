@@ -110,8 +110,7 @@ public final class Limits implements Serializable {
 
     @Override
     public int hashCode() {
-        // TODO This may not be the most optimal hashing function
-        return min * max;
+        return 31 * min + max;
     }
 
     public String toString() {

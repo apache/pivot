@@ -178,8 +178,7 @@ public final class Span {
 
     @Override
     public int hashCode() {
-        // TODO This may not be the most optimal hashing function
-        return (start * end);
+        return 31 * start + end;
     }
 
     public String toString() {
