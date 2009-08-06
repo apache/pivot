@@ -640,6 +640,17 @@ public class TablePane extends Container {
         }
     }
 
+    /**
+     * Component that can be used as filler for empty cells.
+     *
+     * @author gbrown
+     */
+    public static class Filler extends Component {
+        public Filler() {
+            installSkin(Filler.class);
+        }
+    }
+
     private static class Attributes {
         public int rowSpan = 1;
         public int columnSpan = 1;

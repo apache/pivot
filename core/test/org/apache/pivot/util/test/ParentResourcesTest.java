@@ -140,7 +140,7 @@ public class ParentResourcesTest {
         assertEquals("Language in parent",
                 "This is not a specific language and is in the parent.", parent
                         .getString("languageKey"));
-        
+
     }
 
     @Test

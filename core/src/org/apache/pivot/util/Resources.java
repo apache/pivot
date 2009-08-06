@@ -37,9 +37,9 @@ import org.apache.pivot.serialization.SerializationException;
  * applies a country specified resource over-writing the values in the base
  * using the country specified. It then does the same for country/language
  * specific.
- * 
+ *
  * @see java.util.ResourceBundle
- * 
+ *
  * @author brindy
  * @author gbrown
  */
@@ -124,29 +124,29 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
 
     /**
      * Creates a new resource bundle.
-     * 
+     *
      * @param parent
      * The parent resource defer to if a resource cannot be found in this
      * instance or null.
-     * 
+     *
      * @param baseName
      * The base name of this resource as a fully qualified class name.
-     * 
+     *
      * @param locale
      * The locale to use when reading this resource.
-     * 
+     *
      * @param charset
      * The character encoding to use when reading this resource.
-     * 
+     *
      * @throws IOException
      * If there is a problem when reading the resource.
-     * 
+     *
      * @throws SerializationException
      * If there is a problem deserializing the resource from its JSON format.
-     * 
+     *
      * @throws IllegalArgumentException
      * If baseName or locale is null.
-     * 
+     *
      * @throws MissingResourceException
      * If no resource for the specified base name can be found.
      */
@@ -322,12 +322,12 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
     @SuppressWarnings( { "unchecked" })
     private void applyOverrides(Map<String, Object> sourceMap,
             Map<String, Object> overridesMap) {
-    
+
         for (String key : overridesMap) {
             if (sourceMap.containsKey(key)) {
                 Object source = sourceMap.get(key);
                 Object override = overridesMap.get(key);
-    
+
                 if (source instanceof Map<?, ?>
                         && override instanceof Map<?, ?>) {
                     applyOverrides((Map<String, Object>) source,
@@ -337,7 +337,7 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
                 }
             }
         }
-    
+
     }
 
     @SuppressWarnings("unchecked")
@@ -347,7 +347,7 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
         if (in == null) {
             return null;
         }
-    
+
         JSONSerializer serializer = new JSONSerializer(charset);
         Map<String, Object> resourceMap = null;
         try {
@@ -355,7 +355,7 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
         } finally {
             in.close();
         }
-    
+
         return resourceMap;
     }
 }
