@@ -53,7 +53,8 @@ public class FileBrowser implements Application {
         String pathname = System.getProperty("user.home");
         Filter<File> fileFilter = new Filter<File>() {
             public boolean include(File file) {
-                return file.isDirectory();
+                // return file.isDirectory();
+                return true;
             }
         };
 

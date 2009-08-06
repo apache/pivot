@@ -60,19 +60,15 @@ deployJava.writeAppletTag(attributes, parameters);
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk"&gt;
     &lt;content&gt;
-        &lt;Border&gt;
-            &lt;content&gt;
-                &lt;BoxPane styles="{verticalAlignment:'center'}"&gt;
-                    &lt;Spinner spinnerData="['One', 'Two', 'Three', 'Four', 'Five']"
-                        circular="true" preferredWidth="80" selectedIndex="0"/&gt;
-                    &lt;Spinner preferredWidth="40" selectedIndex="0"&gt;
-                        &lt;spinnerData&gt;
-                            &lt;content:NumericSpinnerData lowerBound="0" upperBound="9" increment="1"/&gt;
-                        &lt;/spinnerData&gt;
-                    &lt;/Spinner&gt;
-                &lt;/BoxPane&gt;
-            &lt;/content&gt;
-        &lt;/Border&gt;
+        &lt;BoxPane styles="{verticalAlignment:'center'}"&gt;
+            &lt;Spinner spinnerData="['One', 'Two', 'Three', 'Four', 'Five']"
+                circular="true" preferredWidth="80" selectedIndex="0"/&gt;
+            &lt;Spinner preferredWidth="40" selectedIndex="0"&gt;
+                &lt;spinnerData&gt;
+                    &lt;content:NumericSpinnerData lowerBound="0" upperBound="9" increment="1"/&gt;
+                &lt;/spinnerData&gt;
+            &lt;/Spinner&gt;
+        &lt;/BoxPane&gt;
     &lt;/content&gt;
 &lt;/Window&gt;
 </pre>

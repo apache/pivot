@@ -20,13 +20,9 @@ limitations under the License.
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
     <content>
-        <Border>
-            <content>
-                <BoxPane styles="{verticalAlignment:'center'}">
-                    <Slider wtkx:id="slider" range="{start:0, end:255}" value="0"/>
-                    <Label wtkx:id="label"/>
-                </BoxPane>
-            </content>
-        </Border>
+        <BoxPane styles="{verticalAlignment:'center'}">
+            <Slider wtkx:id="slider" range="{start:0, end:255}" value="0"/>
+            <Label wtkx:id="label"/>
+        </BoxPane>
     </content>
 </Window>
