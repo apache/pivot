@@ -54,35 +54,35 @@ public class ParentResourcesTest {
     @Test
     public void testNumber() throws Exception {
         assertNotNull("In main only", main.getNumber("mainKeyNumber"));
-        assertEquals("In parent", new Integer(100), main.getParent().getNumber(
+        assertEquals("In parent", Integer.valueOf(100), main.getParent().getNumber(
                 "someMagicNumber"));
-        assertEquals("In both", new Integer(200), main
+        assertEquals("In both", Integer.valueOf(200), main
                 .getNumber("someMagicNumber"));
     }
 
     @Test
     public void testInteger() throws Exception {
         assertNotNull("In main only", main.getInteger("mainKeyNumber"));
-        assertEquals("In parent", new Integer(100), main.getParent()
+        assertEquals("In parent", Integer.valueOf(100), main.getParent()
                 .getInteger("someMagicNumber"));
-        assertEquals("In both", new Integer(200), main
+        assertEquals("In both", Integer.valueOf(200), main
                 .getInteger("someMagicNumber"));
     }
 
     @Test
     public void testLong() throws Exception {
         assertNotNull("In main only", main.getLong("mainKeyNumber"));
-        assertEquals("In parent", new Long(100), main.getParent().getLong(
+        assertEquals("In parent", Long.valueOf(100), main.getParent().getLong(
                 "someMagicNumber"));
-        assertEquals("In both", new Long(200), main.getLong("someMagicNumber"));
+        assertEquals("In both", Long.valueOf(200), main.getLong("someMagicNumber"));
     }
 
     @Test
     public void testShort() throws Exception {
         assertNotNull("In main only", main.getShort("mainKeyNumber"));
-        assertEquals("In parent", new Short((short) 100), main.getParent()
+        assertEquals("In parent", Short.valueOf((short) 100), main.getParent()
                 .getShort("someMagicNumber"));
-        assertEquals("In both", new Short((short) 200), main
+        assertEquals("In both", Short.valueOf((short) 200), main
                 .getShort("someMagicNumber"));
     }
 
