@@ -49,7 +49,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     private Color borderColor;
     private Color disabledBorderColor;
     private Insets padding;
-    private float preferredAspectRatio;
+    private float minimumPreferredAspectRatio;
     private boolean toolbar;
 
     // Derived colors
@@ -68,7 +68,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         borderColor = theme.getColor(7);
         disabledBorderColor = theme.getColor(7);
         padding = new Insets(2, 3, 2, 3);
-        preferredAspectRatio = Float.NaN;
+        minimumPreferredAspectRatio = Float.NaN;
         toolbar = false;
 
         // Set the derived colors
@@ -80,27 +80,28 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 
-        PushButton pushButton = (PushButton)getComponent();
-
         if (height == -1
-            && !Float.isNaN(preferredAspectRatio)) {
+            && !Float.isNaN(minimumPreferredAspectRatio)) {
             preferredWidth = getPreferredSize().width;
         } else {
-            if (Float.isNaN(preferredAspectRatio)) {
-                preferredWidth = (int)(preferredAspectRatio * height);
-            } else {
-                Button.DataRenderer dataRenderer = pushButton.getDataRenderer();
+            PushButton pushButton = (PushButton)getComponent();
+            Button.DataRenderer dataRenderer = pushButton.getDataRenderer();
 
-                dataRenderer.render(pushButton.getButtonData(), pushButton, false);
+            dataRenderer.render(pushButton.getButtonData(), pushButton, false);
 
-                // Include padding in constraint
-                int contentHeight = height;
-                if (contentHeight != -1) {
-                    contentHeight = Math.max(contentHeight - (padding.top + padding.bottom + 2), 0);
-                }
+            // Include padding in constraint
+            int contentHeight = height;
+            if (contentHeight != -1) {
+                contentHeight = Math.max(contentHeight - (padding.top + padding.bottom + 2), 0);
+            }
 
-                preferredWidth = dataRenderer.getPreferredWidth(contentHeight)
-                    + padding.left + padding.right + 2;
+            preferredWidth = dataRenderer.getPreferredWidth(contentHeight)
+                + padding.left + padding.right + 2;
+
+            // Adjust for preferred aspect ratio
+            if (!Float.isNaN(minimumPreferredAspectRatio)
+                && (float)preferredWidth / (float)height < minimumPreferredAspectRatio) {
+                preferredWidth = (int)(height * minimumPreferredAspectRatio);
             }
         }
 
@@ -111,25 +112,27 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         int preferredHeight = 0;
 
         if (width== -1
-            && !Float.isNaN(preferredAspectRatio)) {
+            && !Float.isNaN(minimumPreferredAspectRatio)) {
             preferredHeight = getPreferredSize().height;
         } else {
-            if (!Float.isNaN(preferredAspectRatio)) {
-                preferredHeight = (int)(width / preferredAspectRatio);
-            } else {
-                PushButton pushButton = (PushButton)getComponent();
-                Button.DataRenderer dataRenderer = pushButton.getDataRenderer();
+            PushButton pushButton = (PushButton)getComponent();
+            Button.DataRenderer dataRenderer = pushButton.getDataRenderer();
 
-                dataRenderer.render(pushButton.getButtonData(), pushButton, false);
+            dataRenderer.render(pushButton.getButtonData(), pushButton, false);
 
-                // Include padding in constraint
-                int contentWidth = width;
-                if (contentWidth != -1) {
-                    contentWidth = Math.max(contentWidth - (padding.left + padding.right + 2), 0);
-                }
+            // Include padding in constraint
+            int contentWidth = width;
+            if (contentWidth != -1) {
+                contentWidth = Math.max(contentWidth - (padding.left + padding.right + 2), 0);
+            }
 
-                preferredHeight = dataRenderer.getPreferredHeight(contentWidth)
-                    + padding.top + padding.bottom + 2;
+            preferredHeight = dataRenderer.getPreferredHeight(contentWidth)
+                + padding.top + padding.bottom + 2;
+
+            // Adjust for preferred aspect ratio
+            if (!Float.isNaN(minimumPreferredAspectRatio)
+                && (float)width / (float)preferredHeight < minimumPreferredAspectRatio) {
+                preferredHeight = (int)(width / minimumPreferredAspectRatio);
             }
         }
 
@@ -151,11 +154,9 @@ public class TerraPushButtonSkin extends PushButtonSkin {
             + padding.top + padding.bottom + 2;
 
         // Adjust for preferred aspect ratio
-        if (!Float.isNaN(preferredAspectRatio)) {
-            if (preferredAspectRatio > 1) {
-                preferredWidth = (int)(preferredHeight * preferredAspectRatio);
-            } else {
-                preferredHeight = (int)(preferredWidth / preferredAspectRatio);
+        if (!Float.isNaN(minimumPreferredAspectRatio)) {
+            if ((float)preferredWidth / (float)preferredHeight < minimumPreferredAspectRatio) {
+                preferredWidth = (int)(preferredHeight * minimumPreferredAspectRatio);
             }
         }
 
@@ -470,21 +471,21 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         setPadding(Insets.decode(padding));
     }
 
-    public float getPreferredAspectRatio() {
-        return preferredAspectRatio;
+    public float getMinimumPreferredAspectRatio() {
+        return minimumPreferredAspectRatio;
     }
 
-    public void setPreferredAspectRatio(float preferredAspectRatio) {
-        this.preferredAspectRatio = preferredAspectRatio;
+    public void setMinimumPreferredAspectRatio(float minimumPreferredAspectRatio) {
+        this.minimumPreferredAspectRatio = minimumPreferredAspectRatio;
         invalidateComponent();
     }
 
-    public final void setPreferredAspectRatio(Number preferredAspectRatio) {
-        if (preferredAspectRatio == null) {
-            throw new IllegalArgumentException("preferredAspectRatio is null.");
+    public final void setMinimumPreferredAspectRatio(Number minimumPreferredAspectRatio) {
+        if (minimumPreferredAspectRatio == null) {
+            throw new IllegalArgumentException("minimumPreferredAspectRatio is null.");
         }
 
-        setPreferredAspectRatio(preferredAspectRatio.floatValue());
+        setMinimumPreferredAspectRatio(minimumPreferredAspectRatio.floatValue());
     }
 
     public boolean isToolbar() {

@@ -28,9 +28,6 @@ import org.apache.pivot.wtk.VerticalAlignment;
 
 /**
  * Box pane skin.
- * <p>
- * TODO Cache preferred component sizes when alignment is justified, so we
- * don't need to recalculate them during layout.
  *
  * @author gbrown
  */

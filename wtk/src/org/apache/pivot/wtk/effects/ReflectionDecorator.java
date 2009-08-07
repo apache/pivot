@@ -31,8 +31,6 @@ import org.apache.pivot.wtk.Component;
  * Decorator that paints a reflection of a component.
  * <p>
  * TODO Make gradient properties configurable.
- * <p>
- * TODO Add a shear value.
  *
  * @author gbrown
  */

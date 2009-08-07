@@ -98,7 +98,6 @@ public class ImageView extends Component {
             throw new IllegalArgumentException("image is null.");
         }
 
-        // TODO Support asynchronous loading?
         try {
             setImage(Image.load(image));
         } catch (TaskExecutionException exception) {

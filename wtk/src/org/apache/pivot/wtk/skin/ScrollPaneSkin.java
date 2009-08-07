@@ -945,7 +945,7 @@ public class ScrollPaneSkin extends ContainerSkin
         boolean optimizeScrolling = this.optimizeScrolling;
 
         // TODO Remove this check when we can. Sun bug 4033851 causes paint
-        // artifacts while scrolling. For a full description of why this is,
+        // artifacts while scrolling. For a full description of why this is
         // needed, see http://people.apache.org/~tvolkert/tests/scrolling/
         // There seems to be no workaround, so we have to turn the optimization
         // completely off if we're not sure that we're unobscured.
@@ -1026,7 +1026,7 @@ public class ScrollPaneSkin extends ContainerSkin
         boolean optimizeScrolling = this.optimizeScrolling;
 
         // TODO Remove this check when we can. Sun bug 4033851 causes paint
-        // artifacts while scrolling. For a full description of why this is,
+        // artifacts while scrolling. For a full description of why this is   s
         // needed, see http://people.apache.org/~tvolkert/tests/scrolling/.
         // There seems to be no workaround, so we have to turn the optimization
         // completely off if we're not sure that we're unobscured.

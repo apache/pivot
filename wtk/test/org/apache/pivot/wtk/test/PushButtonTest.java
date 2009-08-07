@@ -35,7 +35,7 @@ public class PushButtonTest implements Application {
         boxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
 
         PushButton uploadButton = new PushButton("Upload");
-        uploadButton.getStyles().put("preferredAspectRatio", 3.0f);
+        uploadButton.getStyles().put("minimumPreferredAspectRatio", 3.0f);
         boxPane.add(uploadButton);
 
         window.setContent(boxPane);

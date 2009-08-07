@@ -22,9 +22,9 @@ limitations under the License.
     <content>
         <BoxPane styles="{fill:true}">
             <BoxPane orientation="vertical" styles="{fill:true}">
-                <PushButton buttonData="ABCDEFG" styles="{preferredAspectRatio:1}"/>
-                <PushButton buttonData="ABC" styles="{preferredAspectRatio:1}"/>
-                <PushButton buttonData="A" styles="{preferredAspectRatio:1}"/>
+                <PushButton buttonData="ABCDEFG" styles="{minimumPreferredAspectRatio:1}"/>
+                <PushButton buttonData="ABC" styles="{minimumPreferredAspectRatio:1}"/>
+                <PushButton buttonData="A" styles="{minimumPreferredAspectRatio:0.5}"/>
             </BoxPane>
         </BoxPane>
     </content>
