@@ -196,6 +196,8 @@ public class FlowPaneSkin extends ContainerSkin {
                 // Add the component to the row
                 row.add(component);
                 rowWidth += componentSize.width + horizontalSpacing;
+            } else {
+                component.setSize(0, 0);
             }
         }
 

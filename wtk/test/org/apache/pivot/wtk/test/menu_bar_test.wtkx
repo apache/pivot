@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<Frame title="MenuBar Test" preferredWidth="320" preferredHeight="240"
+    styles="{padding:{top:0, left:4, bottom:4, right:4}}"
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns="org.apache.pivot.wtk">
+    <menuBar>
+        <MenuBar xmlns:wtkx="http://pivot.apache.org/wtkx"
+            xmlns:content="org.apache.pivot.wtk.content"
+            xmlns="org.apache.pivot.wtk">
+            <items>
+                <MenuBar.Item buttonData="File">
+                    <menu>
+                        <Menu>
+                            <sections>
+                                <Menu.Section>
+                                    <Menu.Item>
+                                        <buttonData>
+                                            <content:ButtonData text="New"/>
+                                        </buttonData>
+                                    </Menu.Item>
+                                    <Menu.Item>
+                                        <buttonData>
+                                            <content:ButtonData text="Open"/>
+                                        </buttonData>
+                                    </Menu.Item>
+                                </Menu.Section>
+                                <Menu.Section>
+                                    <Menu.Item>
+                                        <buttonData>
+                                            <content:ButtonData text="Close"/>
+                                        </buttonData>
+                                    </Menu.Item>
+                                    <Menu.Item>
+                                        <buttonData>
+                                            <content:ButtonData text="Close All"/>
+                                        </buttonData>
+                                    </Menu.Item>
+                                </Menu.Section>
+                                <Menu.Section>
+                                    <Menu.Item enabled="false">
+                                        <buttonData>
+                                            <content:ButtonData text="Save"/>
+                                        </buttonData>
+                                    </Menu.Item>
+                                    <Menu.Item>
+                                        <buttonData>
+                                            <content:ButtonData text="Save As"/>
+                                        </buttonData>
+
+                                        <menu>
+                                            <Menu>
+                                                <sections>
+                                                    <Menu.Section>
+                                                        <Menu.Item buttonData="JPEG"/>
+                                                        <Menu.Item buttonData="PNG"/>
+                                                        <Menu.Item buttonData="GIF"/>
+                                                        <Menu.Item buttonData="PDF"/>
+                                                    </Menu.Section>
+                                                </sections>
+                                            </Menu>
+                                        </menu>
+                                    </Menu.Item>
+                                </Menu.Section>
+                            </sections>
+                        </Menu>
+                    </menu>
+                </MenuBar.Item>
+
+                <MenuBar.Item buttonData="Edit">
+                    <menu>
+                        <Menu>
+                            <sections>
+                                <Menu.Section>
+                                    <Menu.Item>
+                                        <buttonData>
+                                            <content:MenuItemData text="Undo"
+                                                keyboardShortcut="CTRL-Z"/>
+                                        </buttonData>
+                                    </Menu.Item>
+                                    <Menu.Item>
+                                        <buttonData>
+                                            <content:MenuItemData text="Redo"
+                                                keyboardShortcut="SHIFT-CTRL-Z"/>
+                                        </buttonData>
+                                    </Menu.Item>
+                                </Menu.Section>
+                                <Menu.Section>
+                                    <Menu.Item>
+                                        <buttonData>
+                                            <content:MenuItemData text="Cut"
+                                                keyboardShortcut="CTRL-X"/>
+                                        </buttonData>
+                                    </Menu.Item>
+                                    <Menu.Item>
+                                        <buttonData>
+                                            <content:MenuItemData text="Copy"
+                                                keyboardShortcut="CTRL-C"/>
+                                        </buttonData>
+                                    </Menu.Item>
+                                    <Menu.Item>
+                                        <buttonData>
+                                            <content:MenuItemData text="Paste"
+                                                keyboardShortcut="CTRL-V"/>
+                                        </buttonData>
+                                    </Menu.Item>
+                                </Menu.Section>
+                                <Menu.Section>
+                                    <Menu.Item>
+                                        <buttonData>
+                                            <content:MenuItemData text="Delete"
+                                                keyboardShortcut="DELETE"/>
+                                        </buttonData>
+                                    </Menu.Item>
+                                    <Menu.Item>
+                                        <buttonData>
+                                            <content:MenuItemData text="Select All"
+                                                keyboardShortcut="CTRL-A"/>
+                                        </buttonData>
+                                    </Menu.Item>
+                                </Menu.Section>
+                            </sections>
+                        </Menu>
+                    </menu>
+                </MenuBar.Item>
+
+                <MenuBar.Item buttonData="Window">
+                    <menu>
+                        <Menu>
+                            <sections>
+                                <Menu.Section>
+                                    <Menu.Item buttonData="Minimize"/>
+                                    <Menu.Item buttonData="Maximize"/>
+                                </Menu.Section>
+                            </sections>
+                        </Menu>
+                    </menu>
+                </MenuBar.Item>
+            </items>
+        </MenuBar>
+    </menuBar>
+
+    <content>
+        <Border styles="{padding:8}">
+            <content>
+                <Form>
+                    <sections>
+                        <Form.Section>
+                            <TextInput wtkx:id="textInput1" Form.label="Field 1"/>
+                            <TextInput wtkx:id="textInput2" Form.label="Field 2"/>
+                            <TextInput wtkx:id="textInput3" Form.label="Field 3"/>
+                        </Form.Section>
+                    </sections>
+                </Form>
+            </content>
+        </Border>
+    </content>
+</Frame>
+

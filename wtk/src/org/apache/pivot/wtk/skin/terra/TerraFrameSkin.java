@@ -55,8 +55,6 @@ import org.apache.pivot.wtk.skin.WindowSkin;
 
 /**
  * Frame skin.
- * <p>
- * TODO Add menu bar support.
  *
  * @author gbrown
  * @author tvolkert
@@ -119,8 +117,8 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
      */
     protected class MinimizeImage extends ButtonImage {
         public void paint(Graphics2D graphics) {
-            Window window = (Window)getComponent();
-            graphics.setPaint(window.isActive() ? titleBarColor : inactiveTitleBarColor);
+            Frame frame = (Frame)getComponent();
+            graphics.setPaint(frame.isActive() ? titleBarColor : inactiveTitleBarColor);
             graphics.fillRect(0, 6, 8, 2);
         }
     }
@@ -132,11 +130,11 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
      */
     protected class MaximizeImage extends ButtonImage {
         public void paint(Graphics2D graphics) {
-            Window window = (Window)getComponent();
-            graphics.setPaint(window.isActive() ? titleBarColor : inactiveTitleBarColor);
+            Frame frame = (Frame)getComponent();
+            graphics.setPaint(frame.isActive() ? titleBarColor : inactiveTitleBarColor);
             graphics.fillRect(0, 0, 8, 8);
 
-            graphics.setPaint(window.isActive() ? titleBarBackgroundColor : inactiveTitleBarBackgroundColor);
+            graphics.setPaint(frame.isActive() ? titleBarBackgroundColor : inactiveTitleBarBackgroundColor);
             graphics.fillRect(2, 2, 4, 4);
         }
     }
@@ -148,12 +146,12 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
      */
     protected class RestoreImage extends ButtonImage {
         public void paint(Graphics2D graphics) {
-            Window window = (Window)getComponent();
-            graphics.setPaint(window.isActive() ?
+            Frame frame = (Frame)getComponent();
+            graphics.setPaint(frame.isActive() ?
                 titleBarColor : inactiveTitleBarColor);
             graphics.fillRect(1, 1, 6, 6);
 
-            graphics.setPaint(window.isActive() ?
+            graphics.setPaint(frame.isActive() ?
                 titleBarBackgroundColor : inactiveTitleBarBackgroundColor);
             graphics.fillRect(3, 3, 2, 2);
         }
@@ -166,8 +164,8 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
      */
     protected class CloseImage extends ButtonImage {
         public void paint(Graphics2D graphics) {
-            Window window = (Window)getComponent();
-            graphics.setPaint(window.isActive() ?
+            Frame frame = (Frame)getComponent();
+            graphics.setPaint(frame.isActive() ?
                 titleBarColor : inactiveTitleBarColor);
             graphics.setStroke(new BasicStroke(2));
 
@@ -304,13 +302,13 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
     public void install(Component component) {
         super.install(component);
 
-        Window window = (Window)component;
+        Frame frame = (Frame)getComponent();
 
         // Attach the drop-shadow decorator
         dropShadowDecorator = new DropShadowDecorator();
-        window.getDecorators().add(dropShadowDecorator);
+        frame.getDecorators().add(dropShadowDecorator);
 
-        window.add(titleBarTablePane);
+        frame.add(titleBarTablePane);
 
         // Create the frame buttons
         minimizeButton = new FrameButton(minimizeImage);
@@ -323,14 +321,14 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
 
         ButtonPressListener buttonPressListener = new ButtonPressListener() {
             public void buttonPressed(Button button) {
-                Window window = (Window)getComponent();
+                Frame frame = (Frame)getComponent();
 
                 if (button == minimizeButton) {
-                    window.setDisplayable(false);
+                    frame.setDisplayable(false);
                 } else if (button == maximizeButton) {
-                    window.setMaximized(!window.isMaximized());
+                    frame.setMaximized(!frame.isMaximized());
                 } else if (button == closeButton) {
-                    window.close();
+                    frame.close();
                 }
             }
         };
@@ -339,24 +337,24 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         maximizeButton.getButtonPressListeners().add(buttonPressListener);
         closeButton.getButtonPressListeners().add(buttonPressListener);
 
-        window.add(resizeHandle);
+        frame.add(resizeHandle);
 
-        iconChanged(window, null);
-        titleChanged(window, null);
-        activeChanged(window);
+        iconChanged(frame, null);
+        titleChanged(frame, null);
+        activeChanged(frame);
 
         updateMaximizedState();
     }
 
     @Override
     public void uninstall() {
-        Window window = (Window)getComponent();
+        Frame frame = (Frame)getComponent();
 
         // Detach the drop shadow decorator
-        window.getDecorators().remove(dropShadowDecorator);
+        frame.getDecorators().remove(dropShadowDecorator);
         dropShadowDecorator = null;
 
-        window.remove(titleBarTablePane);
+        frame.remove(titleBarTablePane);
 
         buttonBoxPane.remove(minimizeButton);
         buttonBoxPane.remove(maximizeButton);
@@ -372,21 +370,26 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 
-        Window window = (Window)getComponent();
-        Component content = window.getContent();
-
         Dimensions preferredTitleBarSize = titleBarTablePane.getPreferredSize();
         preferredWidth = preferredTitleBarSize.width;
 
+        Frame frame = (Frame)getComponent();
+
+        MenuBar menuBar = frame.getMenuBar();
+        if (menuBar != null
+            && menuBar.isDisplayable()) {
+            preferredWidth = Math.max(preferredWidth, menuBar.getPreferredWidth());
+        }
+
+        Component content = frame.getContent();
         if (content != null
             && content.isDisplayable()) {
             if (height != -1) {
-                height = Math.max(height - preferredTitleBarSize.height - 4 -
+                height = Math.max(height - preferredTitleBarSize.height - 5 -
                     padding.top - padding.bottom, 0);
             }
 
-            preferredWidth = Math.max(preferredWidth,
-                content.getPreferredWidth(height));
+            preferredWidth = Math.max(preferredWidth, content.getPreferredWidth(height));
         }
 
         preferredWidth += (padding.left + padding.right) + 2;
@@ -397,15 +400,21 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
     public int getPreferredHeight(int width) {
         int preferredHeight = 0;
 
-        Window window = (Window)getComponent();
-        Component content = window.getContent();
-
         if (width != -1) {
             width = Math.max(width - 2, 0);
         }
 
         preferredHeight = titleBarTablePane.getPreferredHeight(width);
 
+        Frame frame = (Frame)getComponent();
+
+        MenuBar menuBar = frame.getMenuBar();
+        if (menuBar != null
+            && menuBar.isDisplayable()) {
+            preferredHeight += menuBar.getPreferredHeight();
+        }
+
+        Component content = frame.getContent();
         if (content != null
             && content.isDisplayable()) {
             if (width != -1) {
@@ -415,7 +424,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
             preferredHeight += content.getPreferredHeight(width);
         }
 
-        preferredHeight += (padding.top + padding.bottom) + 4;
+        preferredHeight += (padding.top + padding.bottom) + 5;
 
         return preferredHeight;
     }
@@ -424,14 +433,23 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         int preferredWidth = 0;
         int preferredHeight = 0;
 
-        Window window = (Window)getComponent();
-        Component content = window.getContent();
-
         Dimensions preferredTitleBarSize = titleBarTablePane.getPreferredSize();
 
         preferredWidth = preferredTitleBarSize.width;
         preferredHeight = preferredTitleBarSize.height;
 
+        Frame frame = (Frame)getComponent();
+
+        MenuBar menuBar = frame.getMenuBar();
+        if (menuBar != null
+            && menuBar.isDisplayable()) {
+            Dimensions preferredMenuBarSize = menuBar.getPreferredSize();
+
+            preferredWidth = Math.max(preferredWidth, preferredMenuBarSize.width);
+            preferredHeight += preferredMenuBarSize.height;
+        }
+
+        Component content = frame.getContent();
         if (content != null
             && content.isDisplayable()) {
             Dimensions preferredContentSize = content.getPreferredSize();
@@ -441,13 +459,13 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         }
 
         preferredWidth += (padding.left + padding.right) + 2;
-        preferredHeight += (padding.top + padding.bottom) + 4;
+        preferredHeight += (padding.top + padding.bottom) + 5;
 
         return new Dimensions(preferredWidth, preferredHeight);
     }
 
     public void layout() {
-        Window window = (Window)getComponent();
+        Frame frame = (Frame)getComponent();
 
         int width = getWidth();
         int height = getHeight();
@@ -462,29 +480,45 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         resizeHandle.setLocation(width - resizeHandle.getWidth() - 2,
             height - resizeHandle.getHeight() - 2);
 
-        boolean maximized = window.isMaximized();
+        boolean maximized = frame.isMaximized();
         resizeHandle.setVisible(resizable
             && !maximized
-            && (window.isPreferredWidthSet()
-                || window.isPreferredHeightSet()));
+            && (frame.isPreferredWidthSet()
+                || frame.isPreferredHeightSet()));
+
+        // Size/position menu bar
+        int contentX = padding.left + 1;
+        int contentY = titleBarTablePane.getHeight() + 4;
+        int contentWidth = Math.max(width - (padding.left + padding.right + 2), 0);
+        int contentHeight = Math.max(height - (titleBarTablePane.getHeight()
+            + padding.top + padding.bottom + 5), 0);
+
+        MenuBar menuBar = frame.getMenuBar();
+        if (menuBar != null) {
+            menuBar.setLocation(1, contentY);
+
+            int menuBarWidth = width - 2;
+            if (menuBar.isDisplayable()) {
+                menuBar.setSize(menuBarWidth, menuBar.getPreferredHeight());
+            } else {
+                menuBar.setSize(menuBarWidth, 0);
+            }
+
+            contentY += menuBar.getHeight();
+            contentHeight -= menuBar.getHeight();
+        }
+
+        contentY += padding.top;
 
         // Size/position content
-        Component content = window.getContent();
-
+        Component content = frame.getContent();
         if (content != null) {
+            content.setLocation(contentX, contentY);
+
             if (content.isDisplayable()) {
-                content.setVisible(true);
-
-                content.setLocation(padding.left + 1,
-                    titleBarTablePane.getHeight() + padding.top + 3);
-
-                int contentWidth = Math.max(width - (padding.left + padding.right + 2), 0);
-                int contentHeight = Math.max(height - (titleBarTablePane.getHeight()
-                    + padding.top + padding.bottom + 4), 0);
-
                 content.setSize(contentWidth, contentHeight);
             } else {
-                content.setVisible(false);
+                content.setSize(contentWidth, 0);
             }
         }
     }
@@ -494,18 +528,18 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         // Call the base class to paint the background
         super.paint(graphics);
 
-        Window window = (Window)getComponent();
+        Frame frame = (Frame)getComponent();
 
         int width = getWidth();
         int height = getHeight();
         int titleBarHeight = titleBarTablePane.getHeight();
 
         // Draw the title area
-        Color titleBarBackgroundColor = window.isActive() ?
+        Color titleBarBackgroundColor = frame.isActive() ?
             this.titleBarBackgroundColor : inactiveTitleBarBackgroundColor;
-        Color titleBarBorderColor = window.isActive() ?
+        Color titleBarBorderColor = frame.isActive() ?
             this.titleBarBorderColor : inactiveTitleBarBorderColor;
-        Color titleBarBevelColor = window.isActive() ?
+        Color titleBarBevelColor = frame.isActive() ?
             this.titleBarBevelColor : inactiveTitleBarBevelColor;
 
         graphics.setPaint(new GradientPaint(width / 2, 0, titleBarBevelColor,
@@ -614,18 +648,18 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
     }
 
     private void updateMaximizedState() {
-        Window window = (Window)getComponent();
-        boolean maximized = window.isMaximized();
+        Frame frame = (Frame)getComponent();
+        boolean maximized = frame.isMaximized();
 
         if (!maximized) {
             maximizeButton.setButtonData(maximizeImage);
 
             if (restoreLocation != null) {
-                window.setLocation(restoreLocation.x, restoreLocation.y);
+                frame.setLocation(restoreLocation.x, restoreLocation.y);
             }
         } else {
             maximizeButton.setButtonData(restoreImage);
-            restoreLocation = window.getLocation();
+            restoreLocation = frame.getLocation();
         }
     }
 
@@ -634,35 +668,35 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         boolean consumed = super.mouseMove(component, x, y);
 
         if (Mouse.getCapturer() == component) {
-            Window window = (Window)getComponent();
-            Display display = window.getDisplay();
+            Frame frame = (Frame)getComponent();
+            Display display = frame.getDisplay();
 
-            Point location = window.mapPointToAncestor(display, x, y);
+            Point location = frame.mapPointToAncestor(display, x, y);
 
             // Pretend that the mouse can't move off screen (off the display)
             location = new Point(Math.min(Math.max(location.x, 0), display.getWidth() - 1),
                 Math.min(Math.max(location.y, 0), display.getHeight() - 1));
 
             if (dragOffset != null) {
-                // Move the window
-                window.setLocation(location.x - dragOffset.x, location.y - dragOffset.y);
+                // Move the frame
+                frame.setLocation(location.x - dragOffset.x, location.y - dragOffset.y);
             } else {
                 if (resizeOffset != null) {
-                    // Resize the window
+                    // Resize the frame
                     int preferredWidth = -1;
                     int preferredHeight = -1;
 
-                    if (window.isPreferredWidthSet()) {
-                        preferredWidth = Math.max(location.x - window.getX() + resizeOffset.x,
+                    if (frame.isPreferredWidthSet()) {
+                        preferredWidth = Math.max(location.x - frame.getX() + resizeOffset.x,
                             titleBarTablePane.getPreferredWidth(-1) + 2);
                     }
 
-                    if (window.isPreferredHeightSet()) {
-                        preferredHeight = Math.max(location.y - window.getY() + resizeOffset.y,
+                    if (frame.isPreferredHeightSet()) {
+                        preferredHeight = Math.max(location.y - frame.getY() + resizeOffset.y,
                             titleBarTablePane.getHeight() + resizeHandle.getHeight() + 7);
                     }
 
-                    window.setPreferredSize(preferredWidth, preferredHeight);
+                    frame.setPreferredSize(preferredWidth, preferredHeight);
                 }
             }
         } else {
@@ -696,8 +730,8 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
     public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
         boolean consumed = super.mouseDown(component, button, x, y);
 
-        Window window = (Window)getComponent();
-        boolean maximized = window.isMaximized();
+        Frame frame = (Frame)getComponent();
+        boolean maximized = frame.isMaximized();
 
         if (button == Mouse.Button.LEFT
             && !maximized) {
