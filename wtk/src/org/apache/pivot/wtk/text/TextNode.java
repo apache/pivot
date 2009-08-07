@@ -24,7 +24,7 @@ import org.apache.pivot.util.ListenerList;
  * @author gbrown
  */
 public final class TextNode extends Node {
-    private class TextNodeListenerList extends ListenerList<TextNodeListener>
+    private static class TextNodeListenerList extends ListenerList<TextNodeListener>
         implements TextNodeListener {
         public void charactersInserted(TextNode textNode, int index, int count) {
             for (TextNodeListener listener : this) {

@@ -37,7 +37,7 @@ public class MenuBar extends Container {
      * @author gbrown
      */
     public static class Item extends Button {
-        private class ItemListenerList extends ListenerList<ItemListener>
+        private static class ItemListenerList extends ListenerList<ItemListener>
             implements ItemListener {
             public void menuChanged(Item item, Menu previousMenu) {
                 for (ItemListener listener : this) {
@@ -188,7 +188,7 @@ public class MenuBar extends Container {
         }
     }
 
-    private class MenuBarListenerList extends ListenerList<MenuBarListener>
+    private static class MenuBarListenerList extends ListenerList<MenuBarListener>
         implements MenuBarListener {
         public void itemInserted(MenuBar menuBar, int index) {
             for (MenuBarListener listener : this) {

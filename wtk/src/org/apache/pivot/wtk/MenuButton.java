@@ -33,7 +33,7 @@ import org.apache.pivot.wtk.content.ButtonDataRenderer;
  * @author gbrown
  */
 public class MenuButton extends Button {
-    private class MenuButtonListenerList extends ListenerList<MenuButtonListener>
+    private static class MenuButtonListenerList extends ListenerList<MenuButtonListener>
         implements MenuButtonListener {
         public void menuChanged(MenuButton menuButton, Menu previousMenu) {
             for (MenuButtonListener listener : this) {

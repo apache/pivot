@@ -340,7 +340,7 @@ public class TerraCalendarSkin extends CalendarSkin
         }
     }
 
-    private class DateButtonDataRenderer extends ButtonDataRenderer {
+    private static class DateButtonDataRenderer extends ButtonDataRenderer {
         public void render(Object data, Button button, boolean highlighted) {
             CalendarDate date = (CalendarDate)data;
             super.render(date.getDay() + 1, button, highlighted);

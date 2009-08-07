@@ -33,7 +33,7 @@ public class Canvas extends Group {
         }
     }
 
-    private class CanvasListenerList extends ListenerList<CanvasListener>
+    private static class CanvasListenerList extends ListenerList<CanvasListener>
         implements CanvasListener {
         public void regionUpdated(Canvas canvas, int x, int y, int width, int height) {
             for (CanvasListener listener : this) {

@@ -38,7 +38,7 @@ public class Menu extends Container {
      * @author gbrown
      */
     public static class Item extends Button {
-        private class ItemListenerList extends ListenerList<ItemListener>
+        private static class ItemListenerList extends ListenerList<ItemListener>
             implements ItemListener {
             public void nameChanged(Item item, String previousName) {
                 for (ItemListener listener : this) {

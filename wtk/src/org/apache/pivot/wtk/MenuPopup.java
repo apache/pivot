@@ -24,7 +24,7 @@ import org.apache.pivot.util.ListenerList;
  * @author gbrown
  */
 public class MenuPopup extends Window {
-    private class MenuPopupListenerList extends ListenerList<MenuPopupListener>
+    private static class MenuPopupListenerList extends ListenerList<MenuPopupListener>
         implements MenuPopupListener {
         public void menuChanged(MenuPopup menuPopup, Menu previousMenu) {
             for (MenuPopupListener listener : this) {
