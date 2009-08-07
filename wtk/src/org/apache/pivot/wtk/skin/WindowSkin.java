@@ -91,27 +91,21 @@ public class WindowSkin extends ContainerSkin
         Window window = (Window)getComponent();
         Component content = window.getContent();
 
-        return (content != null
-            && content.isDisplayable()) ?
-            content.getPreferredWidth(height) : 0;
+        return (content != null) ? content.getPreferredWidth(height) : 0;
     }
 
     public int getPreferredHeight(int width) {
         Window window = (Window)getComponent();
         Component content = window.getContent();
 
-        return (content != null
-            && content.isDisplayable()) ?
-            content.getPreferredHeight(width) : 0;
+        return (content != null) ? content.getPreferredHeight(width) : 0;
     }
 
     public Dimensions getPreferredSize() {
         Window window = (Window)getComponent();
         Component content = window.getContent();
 
-        return (content != null
-            && content.isDisplayable()) ?
-            content.getPreferredSize() : new Dimensions(0, 0);
+        return (content != null) ? content.getPreferredSize() : new Dimensions(0, 0);
     }
 
     public void layout() {
@@ -119,12 +113,7 @@ public class WindowSkin extends ContainerSkin
         Component content = window.getContent();
 
         if (content != null) {
-            if (content.isDisplayable()) {
-                content.setVisible(true);
-                content.setSize(window.getSize());
-            } else {
-                content.setVisible(false);
-            }
+            content.setSize(window.getSize());
         }
     }
 

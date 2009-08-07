@@ -25,6 +25,11 @@ import java.awt.Graphics2D;
  */
 public class TablePaneFillerSkin extends ComponentSkin {
     @Override
+    public boolean isFocusable() {
+        return false;
+    }
+
+    @Override
     public void layout() {
         // No-op
     }

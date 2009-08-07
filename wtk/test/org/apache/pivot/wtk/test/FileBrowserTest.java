@@ -17,15 +17,10 @@
 package org.apache.pivot.wtk.test;
 
 import org.apache.pivot.collections.Map;
-import org.apache.pivot.collections.Sequence;
-import org.apache.pivot.collections.Sequence.Tree.Path;
-import org.apache.pivot.io.Folder;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Frame;
-import org.apache.pivot.wtk.TreeView;
-import org.apache.pivot.wtk.TreeViewBranchListener;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class FileBrowserTest implements Application {
@@ -35,23 +30,6 @@ public class FileBrowserTest implements Application {
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         frame = (Frame)wtkxSerializer.readObject(getClass().getResource("file_browser_test.wtkx"));
-
-        TreeView folderTreeView = (TreeView)wtkxSerializer.get("folderTreeView");
-
-        String pathname = "/";
-        final Folder rootFolder = new Folder(pathname);
-        folderTreeView.setTreeData(rootFolder);
-        folderTreeView.getTreeViewBranchListeners().add(new TreeViewBranchListener() {
-            public void branchExpanded(TreeView treeView, Path path) {
-                Folder folder = (Folder)Sequence.Tree.get(rootFolder, path);
-                folder.refresh();
-            }
-
-            public void branchCollapsed(TreeView treeView, Path path) {
-                // No-op
-            }
-        });
-
         frame.open(display);
     }
 

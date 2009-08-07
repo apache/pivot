@@ -17,13 +17,17 @@
 package org.apache.pivot.wtk.skin.terra;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.io.Folder;
+import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.Filter;
+import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.FileBrowser;
 import org.apache.pivot.wtk.skin.FileBrowserSkin;
+import org.apache.pivot.wtkx.WTKXSerializer;
 
 /**
  * Terra file browser skin.
@@ -31,24 +35,51 @@ import org.apache.pivot.wtk.skin.FileBrowserSkin;
  * @author gbrown
  */
 public class TerraFileBrowserSkin extends FileBrowserSkin {
+    private Component content = null;
+
     @Override
     public void install(Component component) {
         super.install(component);
 
-        // TODO Add components
+        FileBrowser fileBrowser = (FileBrowser)component;
+
+        Resources resources;
+        try {
+            resources = new Resources(this);
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
+        } catch (SerializationException exception) {
+            throw new RuntimeException(exception);
+        }
+
+        WTKXSerializer wtkxSerializer = new WTKXSerializer(resources);
+        try {
+            content = (Component)wtkxSerializer.readObject(this, "terra_file_browser_skin.wtkx");
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
+        } catch (SerializationException exception) {
+            throw new RuntimeException(exception);
+        }
+
+        fileBrowser.add(content);
     }
 
     @Override
     public void uninstall() {
-        // TODO Remove components
+        FileBrowser fileBrowser = (FileBrowser)getComponent();
+        fileBrowser.remove(content);
+
+        content = null;
 
         super.uninstall();
     }
 
     @Override
     public void layout() {
-        // TODO Auto-generated method stub
+        int width = getWidth();
+        int height = getHeight();
 
+        content.setSize(width, height);
     }
 
     public void selectedFolderChanged(FileBrowser fileBrowser, Folder previousSelectedFolder) {

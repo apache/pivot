@@ -1,5 +1,10 @@
-{   goUp: "Go up a folder",
+{   goTo: "Go to a folder",
+    goUp: "Go up a folder",
     newFolder: "Create new folder",
     goHome: "Go to home folder",
-    search: "search"
+    search: "search",
+    searchFor: "Search for files",
+    fileName: "File",
+    size: "Size",
+    lastModified: "Modified"
 }

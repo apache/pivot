@@ -16,15 +16,103 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<TablePane xmlns:wtkx="http://pivot.apache.org/wtkx"
+<TablePane styles="{verticalSpacing:6, showHorizontalGridLines:true}"
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:collections="org.apache.pivot.collections"
+    xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
     <columns>
         <TablePane.Column width="1*"/>
     </columns>
     <rows>
         <TablePane.Row height="-1">
+            <!-- Toolbar -->
+            <TablePane>
+                <columns>
+                    <TablePane.Column width="-1"/>
+                    <TablePane.Column width="1*"/>
+                    <TablePane.Column width="3*"/>
+                </columns>
+                <rows>
+                    <TablePane.Row>
+                        <BoxPane styles="{verticalAlignment:'center'}">
+                            <ListButton wtkx:id="pathListButton" selectedIndex="0" tooltipText="%goTo">
+                                <listData>
+                                    <collections:ArrayList>
+                                        <content:ListItem icon="@folder.png" text="Sample Folder"/>
+                                    </collections:ArrayList>
+                                </listData>
+                                <itemRenderer>
+                                    <content:ListViewItemRenderer iconWidth="16" iconHeight="16"
+                                        showIcon="true"/>
+                                </itemRenderer>
+                            </ListButton>
+
+                            <BoxPane styles="{spacing:0}">
+                                <PushButton wtkx:id="goUpButton" styles="{toolbar:true}" tooltipText="%goUp">
+                                    <buttonData>
+                                        <content:ButtonData icon="@folder_up.png"/>
+                                    </buttonData>
+                                </PushButton>
+                                <PushButton wtkx:id="newFolderUpButton" styles="{toolbar:true}" tooltipText="%newFolder">
+                                    <buttonData>
+                                        <content:ButtonData icon="@folder_add.png"/>
+                                    </buttonData>
+                                </PushButton>
+                                <PushButton wtkx:id="goHomeButton" styles="{toolbar:true}" tooltipText="%goHome">
+                                    <buttonData>
+                                        <content:ButtonData icon="@house.png"/>
+                                    </buttonData>
+                                </PushButton>
+                            </BoxPane>
+                        </BoxPane>
+
+                        <TablePane.Filler/>
+
+                        <BoxPane orientation="vertical"
+                            styles="{horizontalAlignment:'right', verticalAlignment:'center', fill:true}">
+                            <BoxPane orientation="vertical" styles="{verticalAlignment:'center', fill:true}">
+                                <TextInput wtkx:id="searchTextInput" prompt="%search" tooltipText="%searchFor"/>
+                            </BoxPane>
+                        </BoxPane>
+                    </TablePane.Row>
+                </rows>
+            </TablePane>
         </TablePane.Row>
+
         <TablePane.Row height="1*">
+            <!-- File table view -->
+            <Border styles="{color:10, padding:0}">
+                <content>
+                    <ScrollPane horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fill_to_capacity">
+                        <view>
+                            <TableView wtkx:id="fileTableView"
+                                styles="{showHorizontalGridLines:false}">
+                                <columns>
+                                    <TableView.Column name="name" width="3*" headerData="%fileName">
+                                        <cellRenderer>
+                                            <content:TableViewFileRenderer/>
+                                        </cellRenderer>
+                                    </TableView.Column>
+                                    <TableView.Column name="size" width="1*" headerData="%size">
+                                        <cellRenderer>
+                                            <content:TableViewFileRenderer/>
+                                        </cellRenderer>
+                                    </TableView.Column>
+                                    <TableView.Column name="lastModified" width="2*" headerData="%lastModified">
+                                        <cellRenderer>
+                                            <content:TableViewFileRenderer/>
+                                        </cellRenderer>
+                                    </TableView.Column>
+                                </columns>
+                            </TableView>
+                        </view>
+                        <columnHeader>
+                            <TableViewHeader tableView="$fileTableView"/>
+                        </columnHeader>
+                    </ScrollPane>
+                </content>
+            </Border>
         </TablePane.Row>
     </rows>
 </TablePane>

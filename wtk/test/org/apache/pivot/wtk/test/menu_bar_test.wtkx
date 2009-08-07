@@ -19,11 +19,10 @@ limitations under the License.
 <Frame title="MenuBar Test" preferredWidth="320" preferredHeight="240"
     styles="{padding:{top:0, left:4, bottom:4, right:4}}"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
     <menuBar>
-        <MenuBar xmlns:wtkx="http://pivot.apache.org/wtkx"
-            xmlns:content="org.apache.pivot.wtk.content"
-            xmlns="org.apache.pivot.wtk">
+        <MenuBar>
             <items>
                 <MenuBar.Item buttonData="File">
                     <menu>

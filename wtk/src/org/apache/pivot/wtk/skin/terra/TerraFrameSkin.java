@@ -382,8 +382,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         }
 
         Component content = frame.getContent();
-        if (content != null
-            && content.isDisplayable()) {
+        if (content != null) {
             if (height != -1) {
                 height = Math.max(height - preferredTitleBarSize.height - 5 -
                     padding.top - padding.bottom, 0);
@@ -415,8 +414,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         }
 
         Component content = frame.getContent();
-        if (content != null
-            && content.isDisplayable()) {
+        if (content != null) {
             if (width != -1) {
                 width = Math.max(width - padding.left - padding.right, 0);
             }
@@ -450,8 +448,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         }
 
         Component content = frame.getContent();
-        if (content != null
-            && content.isDisplayable()) {
+        if (content != null) {
             Dimensions preferredContentSize = content.getPreferredSize();
 
             preferredWidth = Math.max(preferredWidth, preferredContentSize.width);
@@ -514,12 +511,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         Component content = frame.getContent();
         if (content != null) {
             content.setLocation(contentX, contentY);
-
-            if (content.isDisplayable()) {
-                content.setSize(contentWidth, contentHeight);
-            } else {
-                content.setSize(contentWidth, 0);
-            }
+            content.setSize(contentWidth, contentHeight);
         }
     }
 
