@@ -25,6 +25,7 @@ import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.FileBrowser;
 import org.apache.pivot.wtk.skin.FileBrowserSkin;
 import org.apache.pivot.wtkx.WTKXSerializer;
@@ -75,10 +76,26 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     }
 
     @Override
+    public int getPreferredWidth(int height) {
+        return content.getPreferredWidth(height);
+    }
+
+    @Override
+    public int getPreferredHeight(int width) {
+        return content.getPreferredHeight(width);
+    }
+
+    @Override
+    public Dimensions getPreferredSize() {
+        return content.getPreferredSize();
+    }
+
+    @Override
     public void layout() {
         int width = getWidth();
         int height = getHeight();
 
+        content.setLocation(0, 0);
         content.setSize(width, height);
     }
 

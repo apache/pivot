@@ -20,6 +20,7 @@ import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.FileBrowserSheet;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
@@ -29,6 +30,10 @@ public class FileBrowserTest implements Application {
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
+
+        FileBrowserSheet fileOpenSheet = new FileBrowserSheet(FileBrowserSheet.Mode.OPEN);
+        wtkxSerializer.put("fileOpenSheet", fileOpenSheet);
+
         frame = (Frame)wtkxSerializer.readObject(getClass().getResource("file_browser_test.wtkx"));
         frame.open(display);
     }

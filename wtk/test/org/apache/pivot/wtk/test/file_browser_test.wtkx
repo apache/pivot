@@ -16,14 +16,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Frame title="File Browser Test" icon="@applications-games.png"
-    preferredWidth="480" preferredHeight="360"
+<Frame wtkx:id="frame" title="File Browser Test" icon="@applications-games.png"
+    preferredWidth="640" preferredHeight="480"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
     <content>
         <Border>
             <content>
-                <FileBrowser/>
+                <BoxPane styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                    <PushButton buttonData="Open">
+                        <buttonPressListeners>
+                            <wtkx:script>
+                            function buttonPressed(button) {
+                                fileOpenSheet.open(frame);
+                            }
+                            </wtkx:script>
+                        </buttonPressListeners>
+                    </PushButton>
+                </BoxPane>
             </content>
         </Border>
     </content>
