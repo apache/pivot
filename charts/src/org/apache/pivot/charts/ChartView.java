@@ -252,7 +252,7 @@ public abstract class ChartView extends Component {
     /**
      * Chart view listener list.
      */
-    private class ChartViewListenerList extends ListenerList<ChartViewListener>
+    private static class ChartViewListenerList extends ListenerList<ChartViewListener>
         implements ChartViewListener {
         public void chartDataChanged(ChartView chartView, List<?> previousChartData) {
             for (ChartViewListener listener : this) {
@@ -294,7 +294,7 @@ public abstract class ChartView extends Component {
     /**
      * Chart view category listener list.
      */
-    private class ChartViewCategoryListenerList extends ListenerList<ChartViewCategoryListener>
+    private static class ChartViewCategoryListenerList extends ListenerList<ChartViewCategoryListener>
         implements ChartViewCategoryListener {
         public void categoryInserted(ChartView chartView, int index) {
             for (ChartViewCategoryListener listener : this) {
@@ -324,7 +324,7 @@ public abstract class ChartView extends Component {
     /**
      * Chart view series listener list.
      */
-    private class ChartViewSeriesListenerList extends ListenerList<ChartViewSeriesListener>
+    private static class ChartViewSeriesListenerList extends ListenerList<ChartViewSeriesListener>
         implements ChartViewSeriesListener {
         public void seriesInserted(ChartView chartView, int index) {
             for (ChartViewSeriesListener listener : this) {
