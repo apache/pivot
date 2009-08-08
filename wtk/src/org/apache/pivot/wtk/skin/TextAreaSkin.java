@@ -1274,6 +1274,11 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         return new Dimensions(preferredWidth, preferredHeight);
     }
 
+    @Override
+    public boolean isOpaque() {
+        return false;
+    }
+
     public void layout() {
         if (documentView != null) {
             documentView.abortValidateCallback();

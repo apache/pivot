@@ -30,6 +30,11 @@ public class TablePaneFillerSkin extends ComponentSkin {
     }
 
     @Override
+    public boolean isOpaque() {
+        return false;
+    }
+
+    @Override
     public void layout() {
         // No-op
     }
