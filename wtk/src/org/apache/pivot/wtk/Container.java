@@ -445,15 +445,31 @@ public abstract class Container extends Component
      */
     @Override
     protected boolean requestFocus(boolean temporary) {
-        if (isShowing()) {
+        boolean success = false;
+
+        if (isShowing()
+            && isEnabled()) {
             FocusTraversalPolicy focusTraversalPolicy = getFocusTraversalPolicy();
-            Component component = focusTraversalPolicy.getNextComponent(this, null, Direction.FORWARD);
-            if (component != null) {
-                component.requestFocus();
+
+            if (focusTraversalPolicy != null) {
+                Component component = null;
+
+                do {
+                    component = focusTraversalPolicy.getNextComponent(this, component, Direction.FORWARD);
+
+                    // TODO Detect infinite loop that can occur if the focus
+                    // traversal policy loops and every component it returns
+                    // yields false when requestFocus() is called on it
+
+                    if (component != null) {
+                        success = component.requestFocus(temporary);
+                    }
+                } while (component != null
+                    && !success);
             }
         }
 
-        return containsFocus();
+        return success;
     }
 
     /**
