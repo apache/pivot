@@ -2214,46 +2214,25 @@ public abstract class Component implements ConstrainedVisual {
      * The direction in which to transfer focus.
      */
     public void transferFocus(Direction direction) {
-        Component component = this;
+        Container container = getParent();
 
-        // Loop until we either find a component that is capable of receiving
-        // the focus or we run out of components
-        do {
-            // Attempt to traverse the current component's parent
-            Container container = component.getParent();
-            FocusTraversalPolicy focusTraversalPolicy = (container == null
-                ? null : container.getFocusTraversalPolicy());
+        if (container != null) {
+            // Get the focus traversal policy for this component's parent
+            FocusTraversalPolicy focusTraversalPolicy = container.getFocusTraversalPolicy();
 
             if (focusTraversalPolicy == null) {
-                // This container has no traversal policy; move up a level
-                component = container;
+                // The container has no traversal policy; move up a level
+                container.transferFocus(direction);
             } else {
                 // Get the next component in the traversal
-                component = focusTraversalPolicy.getNextComponent(container, component, direction);
-
-                // If the next component is a container, attempt to traverse
-                // down into it
-                while (component instanceof Container) {
-                    container = (Container)component;
-                    component = null;
-
-                    focusTraversalPolicy = container.getFocusTraversalPolicy();
-
-                    if (focusTraversalPolicy != null) {
-                        component = focusTraversalPolicy.getNextComponent(container, component, direction);
-                    }
-                }
+                Component component = container.focusNext(this, direction);
 
                 if (component == null) {
-                    // We are at the end of the traversal; move up a level
-                    component = container;
+                    // We are at the end of the traversal
+                    container.transferFocus(direction);
                 }
             }
-        } while (component != null
-            && !component.isFocusable());
-
-        // Focus the component (which may be null)
-        setFocusedComponent(component);
+        }
     }
 
     /**

@@ -436,31 +436,48 @@ public abstract class Container extends Component
      */
     @Override
     public boolean requestFocus() {
-        boolean success = false;
+        boolean focused = super.requestFocus();
 
-        if (isShowing()
-            && isEnabled()) {
-            FocusTraversalPolicy focusTraversalPolicy = getFocusTraversalPolicy();
+        if (!focused
+            && focusTraversalPolicy != null) {
+            Component component = null;
 
-            if (focusTraversalPolicy != null) {
-                Component component = null;
+            do {
+                component = focusTraversalPolicy.getNextComponent(this, component, Direction.FORWARD);
+            } while (component != null
+                && !component.requestFocus());
 
-                do {
-                    component = focusTraversalPolicy.getNextComponent(this, component, Direction.FORWARD);
-
-                    // TODO Detect infinite loop that can occur if the focus
-                    // traversal policy loops and every component it returns
-                    // yields false when requestFocus() is called on it
-
-                    if (component != null) {
-                        success = component.requestFocus();
-                    }
-                } while (component != null
-                    && !success);
-            }
+            focused = (component != null
+                && component.isFocused());
         }
 
-        return success;
+        return focused;
+    }
+
+    protected Component focusNext(Component component, Direction direction) {
+        do {
+            component = focusTraversalPolicy.getNextComponent(this, component, direction);
+
+            if (component == null) {
+                Container parent = getParent();
+
+                if (parent != null) {
+                    component = parent.focusNext(this, direction);
+                }
+            } else {
+                if (component.isFocusable()) {
+                    component.requestFocus();
+                } else {
+                    if (component instanceof Container) {
+                        Container container = (Container)component;
+                        component = container.focusNext(null, direction);
+                    }
+                }
+            }
+        } while (component != null
+            && !component.isFocused());
+
+        return component;
     }
 
     /**
