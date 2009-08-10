@@ -2199,12 +2199,12 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Requests that focus be given to this component.
      */
-    public boolean requestFocus() {
+    public Component requestFocus() {
         if (isFocusable()) {
             setFocusedComponent(this);
         }
 
-        return isFocused();
+        return isFocused() ? this : null;
     }
 
     /**
@@ -2213,26 +2213,15 @@ public abstract class Component implements ConstrainedVisual {
      * @param direction
      * The direction in which to transfer focus.
      */
-    public void transferFocus(Direction direction) {
-        Container container = getParent();
+    public Component transferFocus(Direction direction) {
+        Component component = null;
 
-        if (container != null) {
-            // Get the focus traversal policy for this component's parent
-            FocusTraversalPolicy focusTraversalPolicy = container.getFocusTraversalPolicy();
-
-            if (focusTraversalPolicy == null) {
-                // The container has no traversal policy; move up a level
-                container.transferFocus(direction);
-            } else {
-                // Get the next component in the traversal
-                Component component = container.focusNext(this, direction);
-
-                if (component == null) {
-                    // We are at the end of the traversal
-                    container.transferFocus(direction);
-                }
-            }
+        Container parent = getParent();
+        if (parent != null) {
+            component = parent.transferFocus(this, direction);
         }
+
+        return component;
     }
 
     /**
@@ -2256,7 +2245,7 @@ public abstract class Component implements ConstrainedVisual {
      * <tt>true</tt> if this focus change is or was temporary; <tt>false</tt>,
      * if it is permanent.
      */
-    private static void setFocusedComponent(Component focusedComponent) {
+    public static void setFocusedComponent(Component focusedComponent) {
         Component previousFocusedComponent = Component.focusedComponent;
 
         if (previousFocusedComponent != focusedComponent) {

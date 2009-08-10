@@ -96,6 +96,7 @@ public class HashMapTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void constructorTests() throws Exception {
         // don't like the warning generated here ...
         HashMap<String, Integer> map = new HashMap<String, Integer>(
