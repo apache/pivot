@@ -462,15 +462,11 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
     /**
      * Returns the type of a property.
      *
-     * @param type
-     * The bean class.
+     * @param beanClass The bean class.
      *
-     * @param key
-     * The property name.
+     * @param key The property name.
      *
-     * @return
-     * The type of the property, or <tt>null</tt> if no such bean property
-     * exists.
+     * @return The type of the property, or <tt>null</tt> if no such bean property exists.
      */
     public static Class<?> getType(Class<?> beanClass, String key) {
         if (key == null) {
