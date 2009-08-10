@@ -81,52 +81,50 @@ public class Frame extends Window {
     }
 
     @Override
-    protected void setFocusDescendant(Component focusDescendant) {
+    protected void descendantGainedFocus(Component descendant) {
+        super.descendantGainedFocus(descendant);
+
+        // Walk down descendant hierarchy and call configureMenuBar()
         if (menuBar != null) {
-            // Walk down previous focus descendant hierarchy and call cleanupMenuBar()
-            Component previousFocusDescendant = getFocusDescendant();
+            LinkedList<Component> path = new LinkedList<Component>();
 
-            if (previousFocusDescendant != null
-                && !(previousFocusDescendant instanceof MenuBar.Item)) {
-                LinkedList<Component> previousFocusDescendantPath = new LinkedList<Component>();
-
-                Component previousFocusAncestor = previousFocusDescendant;
-                while (!(previousFocusAncestor instanceof Display)) {
-                    previousFocusDescendantPath.insert(previousFocusAncestor, 0);
-                    previousFocusAncestor = previousFocusAncestor.getParent();
-                }
-
-                for (Component component : previousFocusDescendantPath) {
-                    MenuHandler menuHandler = component.getMenuHandler();
-
-                    if (menuHandler != null) {
-                        menuHandler.cleanupMenuBar(component, menuBar);
-                    }
-                }
+            Component ancestor = descendant;
+            while (!(ancestor instanceof Display)) {
+                path.insert(ancestor, 0);
+                ancestor = ancestor.getParent();
             }
 
-            // Walk down focus descendant hierarchy and call configureMenuBar()
-            if (focusDescendant != null
-                && !(previousFocusDescendant instanceof MenuBar.Item)) {
-                LinkedList<Component> focusDescendantPath = new LinkedList<Component>();
+            for (Component component : path) {
+                MenuHandler menuHandler = component.getMenuHandler();
 
-                Component focusAncestor = focusDescendant;
-                while (!(focusAncestor instanceof Display)) {
-                    focusDescendantPath.insert(focusAncestor, 0);
-                    focusAncestor = focusAncestor.getParent();
-                }
-
-                for (Component component : focusDescendantPath) {
-                    MenuHandler menuHandler = component.getMenuHandler();
-
-                    if (menuHandler != null) {
-                        menuHandler.configureMenuBar(component, menuBar);
-                    }
+                if (menuHandler != null) {
+                    menuHandler.configureMenuBar(component, menuBar);
                 }
             }
         }
+    }
 
-        super.setFocusDescendant(focusDescendant);
+    protected void descendantLostFocus(Component descendant) {
+        super.descendantLostFocus(descendant);
+
+        // Walk down descendant hierarchy and call configureMenuBar()
+        if (menuBar != null) {
+            LinkedList<Component> path = new LinkedList<Component>();
+
+            Component ancestor = descendant;
+            while (!(ancestor instanceof Display)) {
+                path.insert(ancestor, 0);
+                ancestor = ancestor.getParent();
+            }
+
+            for (Component component : path) {
+                MenuHandler menuHandler = component.getMenuHandler();
+
+                if (menuHandler != null) {
+                    menuHandler.cleanupMenuBar(component, menuBar);
+                }
+            }
+        }
     }
 
     @Override

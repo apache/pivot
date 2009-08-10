@@ -37,8 +37,8 @@ public abstract class PushButtonSkin extends ButtonSkin {
     }
 
     @Override
-    public void focusedChanged(Component component, boolean temporary) {
-        super.focusedChanged(component, temporary);
+    public void focusedChanged(Component component, Component obverseComponent) {
+        super.focusedChanged(component, obverseComponent);
 
         pressed = false;
     }

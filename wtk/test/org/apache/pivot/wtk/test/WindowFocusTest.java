@@ -22,6 +22,7 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Frame;
+import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.TextInput;
 
 public class WindowFocusTest implements Application {
@@ -30,13 +31,17 @@ public class WindowFocusTest implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        BoxPane boxPane1 = new BoxPane();
+        BoxPane boxPane1 = new BoxPane(Orientation.VERTICAL);
+        boxPane1.add(new TextInput());
+        boxPane1.add(new TextInput());
         boxPane1.add(new TextInput());
         frame1 = new Frame(boxPane1);
         frame1.setPreferredSize(320, 240);
         frame1.open(display);
 
-        BoxPane boxPane2 = new BoxPane();
+        BoxPane boxPane2 = new BoxPane(Orientation.VERTICAL);
+        boxPane2.add(new TextInput());
+        boxPane2.add(new TextInput());
         boxPane2.add(new TextInput());
         frame2 = new Frame(boxPane2);
         frame2.setPreferredSize(320, 240);

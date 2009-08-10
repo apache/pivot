@@ -788,8 +788,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     }
 
     @Override
-    public void focusedChanged(Component component, boolean temporary) {
-        super.focusedChanged(component, temporary);
+    public void focusedChanged(Component component, Component obverseComponent) {
+        super.focusedChanged(component, obverseComponent);
 
         repaintComponent(!component.isFocused());
     }

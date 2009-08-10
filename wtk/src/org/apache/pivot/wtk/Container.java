@@ -254,7 +254,7 @@ public abstract class Container extends Component
         // and contains the focused component, clear the focus
         if (parent == null
             && containsFocus()) {
-            clearFocus(false);
+            clearFocus();
         }
 
         super.setParent(parent);
@@ -303,7 +303,7 @@ public abstract class Container extends Component
     public void setVisible(boolean visible) {
         if (!visible
             && containsFocus()) {
-            clearFocus(false);
+            clearFocus();
         }
 
         super.setVisible(visible);
@@ -431,20 +431,11 @@ public abstract class Container extends Component
      }
 
     /**
-     * @return
-     * <tt>false</tt>; containers are not focusable.
-     */
-    @Override
-    public final boolean isFocusable() {
-        return false;
-    }
-
-    /**
      * Requests that focus be set to the first focusable descendant in this
      * container.
      */
     @Override
-    protected boolean requestFocus(boolean temporary) {
+    public boolean requestFocus() {
         boolean success = false;
 
         if (isShowing()
@@ -462,7 +453,7 @@ public abstract class Container extends Component
                     // yields false when requestFocus() is called on it
 
                     if (component != null) {
-                        success = component.requestFocus(temporary);
+                        success = component.requestFocus();
                     }
                 } while (component != null
                     && !success);
@@ -506,6 +497,22 @@ public abstract class Container extends Component
         Component focusedComponent = getFocusedComponent();
         return (focusedComponent != null
             && isAncestor(focusedComponent));
+    }
+
+    protected void descendantGainedFocus(Component descendant) {
+        Container parent = getParent();
+
+        if (parent != null) {
+            parent.descendantGainedFocus(descendant);
+        }
+    }
+
+    protected void descendantLostFocus(Component descendant) {
+        Container parent = getParent();
+
+        if (parent != null) {
+            parent.descendantLostFocus(descendant);
+        }
     }
 
     /**

@@ -100,7 +100,7 @@ public class TerraPaletteSkin extends WindowSkin {
     private Insets padding = new Insets(4);
 
     private WindowListener ownerListener = new WindowListener.Adapter() {
-        public void activeChanged(Window owner) {
+        public void activeChanged(Window owner, Window obverseWindow) {
             Window window = (Window)getComponent();
             window.setVisible(owner.isActive());
         }

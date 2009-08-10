@@ -1585,8 +1585,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     }
 
     @Override
-    public void focusedChanged(Component component, boolean temporary) {
-        super.focusedChanged(component, temporary);
+    public void focusedChanged(Component component, Component obverseComponent) {
+        super.focusedChanged(component, obverseComponent);
 
         TextArea textArea = (TextArea)getComponent();
         showCaret(textArea.isFocused()

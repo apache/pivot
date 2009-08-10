@@ -32,7 +32,7 @@ public interface ComponentStateListener {
         public void enabledChanged(Component component) {
         }
 
-        public void focusedChanged(Component component, boolean temporary) {
+        public void focusedChanged(Component component, Component obverseComponent) {
         }
     }
 
@@ -47,7 +47,7 @@ public interface ComponentStateListener {
      * Called when a component's focused state has changed.
      *
      * @param component
-     * @param temporary
+     * @param obverseComponent
      */
-    public void focusedChanged(Component component, boolean temporary);
+    public void focusedChanged(Component component, Component obverseComponent);
 }

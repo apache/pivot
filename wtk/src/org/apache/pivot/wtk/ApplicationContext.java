@@ -676,7 +676,7 @@ public abstract class ApplicationContext {
                     if (focusedComponent != null
                         && focusedComponent.isShowing()
                         && !focusedComponent.isBlocked()) {
-                        focusedComponent.requestFocus(true);
+                        focusedComponent.requestFocus();
                     }
 
                     break;
@@ -684,7 +684,7 @@ public abstract class ApplicationContext {
 
                 case FocusEvent.FOCUS_LOST: {
                     focusedComponent = Component.getFocusedComponent();
-                    Component.clearFocus(true);
+                    Component.clearFocus();
 
                     break;
                 }

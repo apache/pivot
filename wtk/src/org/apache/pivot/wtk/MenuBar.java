@@ -232,10 +232,6 @@ public class MenuBar extends Container {
         if (this.active != active) {
             this.active = active;
 
-            if (!active) {
-                getWindow().setFocusDescendant(null);
-            }
-
             menuBarListeners.activeChanged(this);
         }
     }

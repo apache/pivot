@@ -200,8 +200,8 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
     }
 
     @Override
-    public void focusedChanged(Component component, boolean temporary) {
-        super.focusedChanged(component, temporary);
+    public void focusedChanged(Component component, Component obverseComponent) {
+        super.focusedChanged(component, obverseComponent);
 
         if (component.isFocused()) {
             if (!menuPopup.isOpen()) {
@@ -215,8 +215,7 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
                 menuPopup.open(menuBarItem);
             }
         } else {
-            if (!temporary
-                && !menuPopup.containsFocus()) {
+            if (!menuPopup.containsFocus()) {
                 menuPopup.close();
             }
         }

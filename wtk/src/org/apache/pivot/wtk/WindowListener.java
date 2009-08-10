@@ -42,7 +42,7 @@ public interface WindowListener {
         public void ownerChanged(Window window, Window previousOwner) {
         }
 
-        public void activeChanged(Window window) {
+        public void activeChanged(Window window, Window obverseWindow) {
         }
 
         public void maximizedChanged(Window window) {
@@ -88,8 +88,9 @@ public interface WindowListener {
      * Called when a window's active state has changed.
      *
      * @param window
+     * @param obverseWindow
      */
-    public void activeChanged(Window window);
+    public void activeChanged(Window window, Window obverseWindow);
 
     /**
      * Called when a window's maximized state has changed.

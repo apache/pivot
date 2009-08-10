@@ -341,7 +341,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
 
         iconChanged(frame, null);
         titleChanged(frame, null);
-        activeChanged(frame);
+        activeChanged(frame, null);
 
         updateMaximizedState();
     }
@@ -770,7 +770,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
     }
 
     @Override
-    public void activeChanged(Window window) {
+    public void activeChanged(Window window, Window obverseWindow) {
         boolean active = window.isActive();
 
         titleLabel.getStyles().put("color", active ?

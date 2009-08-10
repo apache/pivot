@@ -134,7 +134,7 @@ public class WindowSkin extends ContainerSkin
         // No-op
     }
 
-    public void activeChanged(Window window) {
+    public void activeChanged(Window window, Window obverseWindow) {
         // No-op
     }
 

@@ -391,9 +391,9 @@ public class TerraExpanderSkin extends ExpanderSkin
         titleBarTablePane.setSize(Math.max(width - 2, 0), titleBarHeight);
         titleBarTablePane.setLocation(1, 1);
 
-        if (expander.isExpanded()
-            || expandTransition != null) {
-            if (content != null) {
+        if (content != null) {
+            if (expander.isExpanded()
+                || expandTransition != null) {
                 int contentWidth = Math.max(width - (2 + padding.left + padding.right), 0);
                 int contentHeight = Math.max(height - (3 + padding.top + padding.bottom + titleBarHeight), 0);
                 content.setSize(contentWidth, contentHeight);
@@ -401,6 +401,10 @@ public class TerraExpanderSkin extends ExpanderSkin
                 int contentX = 1 + padding.left;
                 int contentY = 2 + padding.top + titleBarHeight;
                 content.setLocation(contentX, contentY);
+
+                content.setVisible(true);
+            } else {
+                content.setVisible(false);
             }
         }
     }

@@ -45,6 +45,7 @@ import org.apache.pivot.wtk.TextInputCharacterListener;
 import org.apache.pivot.wtk.TextInputListener;
 import org.apache.pivot.wtk.TextInputSelectionListener;
 import org.apache.pivot.wtk.Theme;
+import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.skin.ComponentSkin;
 import org.apache.pivot.wtk.text.TextNode;
 import org.apache.pivot.wtk.text.validation.Validator;
@@ -1215,21 +1216,32 @@ public class TerraTextInputSkin extends ComponentSkin
     }
 
     @Override
-    public void focusedChanged(Component component, boolean temporary) {
-        super.focusedChanged(component, temporary);
+    public void focusedChanged(Component component, Component obverseComponent) {
+        super.focusedChanged(component, obverseComponent);
 
         TextInput textInput = (TextInput)getComponent();
         TextNode textNode = textInput.getTextNode();
 
-        if (component.isFocused()) {
-            showCaret(textInput.getSelectionLength() == 0);
+        Window window = component.getWindow();
 
-            if (!temporary
-                && Mouse.getCapturer() != component) {
-                textInput.setSelection(0, textNode.getCharacterCount());
+        if (component.isFocused()) {
+            // If focus is not being restored or the focus was permanently
+            // transferred within this window, select all
+            if ((obverseComponent == null
+                    && window.getFocusDescendant() != component)
+                || (obverseComponent != null
+                    && obverseComponent.getWindow() == window)) {
+                if (Mouse.getCapturer() != component) {
+                    textInput.setSelection(0, textNode.getCharacterCount());
+                }
             }
+
+            showCaret(textInput.getSelectionLength() == 0);
         } else {
-            if (!temporary) {
+            // If focus is being permanently transferred within this window,
+            // clear the selection
+            if (obverseComponent != null
+                && obverseComponent.getWindow() == window) {
                 textInput.setSelection(textInput.getSelectionStart()
                     + textInput.getSelectionLength(), 0);
             }

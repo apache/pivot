@@ -247,9 +247,9 @@ public class Window extends Container {
             }
         }
 
-        public void activeChanged(Window window) {
+        public void activeChanged(Window window, Window obverseWindow) {
             for (WindowListener listener : this) {
-                listener.activeChanged(window);
+                listener.activeChanged(window, obverseWindow);
             }
         }
 
@@ -814,9 +814,10 @@ public class Window extends Container {
      * Called to notify a window that its active state has changed.
      *
      * @param active
+     * @param obverseWindow
      */
-    protected void setActive(boolean active) {
-        windowListeners.activeChanged(this);
+    protected void setActive(boolean active, Window obverseWindow) {
+        windowListeners.activeChanged(this, obverseWindow);
     }
 
     /**
@@ -861,12 +862,12 @@ public class Window extends Container {
 
             // Notify the windows of the state change
             if (previousActiveWindow != null) {
-                previousActiveWindow.setActive(false);
+                previousActiveWindow.setActive(false, activeWindow);
             }
 
             // Activate the window
             if (activeWindow != null) {
-                activeWindow.setActive(true);
+                activeWindow.setActive(true, previousActiveWindow);
             }
 
             windowClassListeners.activeWindowChanged(previousActiveWindow);
@@ -881,17 +882,11 @@ public class Window extends Container {
         return focusDescendant;
     }
 
-    /**
-     * Sets the window descendant to which focus will be restored by a call to
-     * {@link #restoreFocus()}.
-     *
-     * @param focusDescendant
-     */
-    protected void setFocusDescendant(Component focusDescendant) {
-        assert(focusDescendant == null
-            || focusDescendant.getWindow() == this);
+    @Override
+    protected void descendantGainedFocus(Component descendant) {
+        super.descendantGainedFocus(descendant);
 
-        this.focusDescendant = focusDescendant;
+        this.focusDescendant = descendant;
     }
 
     /**
@@ -903,14 +898,14 @@ public class Window extends Container {
 
         if (focusDescendant != null) {
             if (isAncestor(focusDescendant)) {
-                focusDescendant.requestFocus(true);
+                focusDescendant.requestFocus();
             } else {
                 focusDescendant = null;
             }
         }
 
         if (focusDescendant == null) {
-            Component.clearFocus(false);
+            Component.clearFocus();
         }
     }
 
@@ -1016,7 +1011,7 @@ public class Window extends Container {
         }
 
         if (containsFocus()) {
-            clearFocus(true);
+            clearFocus();
         }
 
         Display display = getDisplay();

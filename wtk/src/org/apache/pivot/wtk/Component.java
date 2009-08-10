@@ -389,9 +389,9 @@ public abstract class Component implements ConstrainedVisual {
             }
         }
 
-        public void focusedChanged(Component component, boolean temporary) {
+        public void focusedChanged(Component component, Component obverseComponent) {
             for (ComponentStateListener listener : this) {
-                listener.focusedChanged(component, temporary);
+                listener.focusedChanged(component, obverseComponent);
             }
         }
     }
@@ -2182,31 +2182,26 @@ public abstract class Component implements ConstrainedVisual {
      * <tt>true</tt> if the component has received the input focus;
      * <tt>false</tt> if the component has lost the focus.
      *
-     * @param temporary
-     * <tt>true</tt> if this focus change is temporary; <tt>false</tt>,
-     * otherwise.
+     * @param obverseComponent
+     * If <tt>focused</tt> is true, the component that has lost the focus;
+     * otherwise, the component that has gained the focus.
      */
-    protected void setFocused(boolean focused, boolean temporary) {
-        componentStateListeners.focusedChanged(this, temporary);
+    protected void setFocused(boolean focused, Component obverseComponent) {
+        componentStateListeners.focusedChanged(this, obverseComponent);
+
+        if (focused) {
+            parent.descendantGainedFocus(this);
+        } else {
+            parent.descendantLostFocus(this);
+        }
     }
 
     /**
      * Requests that focus be given to this component.
      */
-    public final boolean requestFocus() {
-        return requestFocus(false);
-    }
-
-    /**
-     * Requests that focus be given to this component.
-     *
-     * @param temporary
-     * If <tt>true</tt>, indicates that focus is being restored from a
-     * temporary loss.
-     */
-    protected boolean requestFocus(boolean temporary) {
+    public boolean requestFocus() {
         if (isFocusable()) {
-            setFocusedComponent(this, temporary);
+            setFocusedComponent(this);
         }
 
         return isFocused();
@@ -2258,7 +2253,7 @@ public abstract class Component implements ConstrainedVisual {
             && !component.isFocusable());
 
         // Focus the component (which may be null)
-        setFocusedComponent(component, false);
+        setFocusedComponent(component);
     }
 
     /**
@@ -2282,25 +2277,18 @@ public abstract class Component implements ConstrainedVisual {
      * <tt>true</tt> if this focus change is or was temporary; <tt>false</tt>,
      * if it is permanent.
      */
-    private static void setFocusedComponent(Component focusedComponent, boolean temporary) {
+    private static void setFocusedComponent(Component focusedComponent) {
         Component previousFocusedComponent = Component.focusedComponent;
 
         if (previousFocusedComponent != focusedComponent) {
-            // Set the focused component
             Component.focusedComponent = focusedComponent;
 
-            if (focusedComponent == null) {
-                if (previousFocusedComponent != null
-                    && !temporary) {
-                    previousFocusedComponent.getWindow().setFocusDescendant(null);
-                }
-            } else {
-                focusedComponent.getWindow().setFocusDescendant(focusedComponent);
-                focusedComponent.setFocused(true, temporary);
+            if (previousFocusedComponent != null) {
+                previousFocusedComponent.setFocused(false, focusedComponent);
             }
 
-            if (previousFocusedComponent != null) {
-                previousFocusedComponent.setFocused(false, temporary);
+            if (focusedComponent != null) {
+                focusedComponent.setFocused(true, previousFocusedComponent);
             }
 
             componentClassListeners.focusedComponentChanged(previousFocusedComponent);
@@ -2311,17 +2299,7 @@ public abstract class Component implements ConstrainedVisual {
      * Clears the focus.
      */
     public static void clearFocus() {
-        clearFocus(false);
-    }
-
-    /**
-     * Clears the focus.
-     *
-     * @param temporary
-     * If <tt>true</tt>, the focus is being cleared temporarily.
-     */
-    protected static void clearFocus(boolean temporary) {
-        setFocusedComponent(null, temporary);
+        setFocusedComponent(null);
     }
 
     /**

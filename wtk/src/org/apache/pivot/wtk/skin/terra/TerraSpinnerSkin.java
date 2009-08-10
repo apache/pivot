@@ -243,8 +243,8 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         }
 
         @Override
-        public void focusedChanged(Component component, boolean temporary) {
-            super.focusedChanged(component, temporary);
+        public void focusedChanged(Component component, Component obverseComponent) {
+            super.focusedChanged(component, obverseComponent);
 
             repaintComponent(!component.isFocused());
         }

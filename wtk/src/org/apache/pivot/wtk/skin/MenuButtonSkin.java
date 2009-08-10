@@ -69,8 +69,8 @@ public abstract class MenuButtonSkin extends ButtonSkin
     }
 
     @Override
-    public void focusedChanged(Component component, boolean temporary) {
-        super.focusedChanged(component, temporary);
+    public void focusedChanged(Component component, Component obverseComponent) {
+        super.focusedChanged(component, obverseComponent);
 
         // Close the popup if focus was transferred to a component whose
         // window is not the popup

@@ -342,7 +342,12 @@ public class TerraRollupSkin extends RollupSkin {
 
                 content.setLocation(x, y);
                 content.setSize(contentWidth, contentHeight);
+
+                content.setVisible(true);
+            } else {
+                content.setVisible(false);
             }
+
         }
 
         y = (heading == null ? 0 : (heading.getHeight() - rollupButtonSize.height) / 2 + 1);
