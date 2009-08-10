@@ -320,7 +320,6 @@ public class TerraRollupSkin extends RollupSkin {
                 headingHeight = headingPreferredSize.height;
             }
 
-            heading.setVisible(true);
             heading.setLocation(x, y);
             heading.setSize(headingWidth, headingHeight);
 
@@ -341,11 +340,8 @@ public class TerraRollupSkin extends RollupSkin {
                     contentHeight = contentPreferredSize.height;
                 }
 
-                content.setVisible(true);
                 content.setLocation(x, y);
                 content.setSize(contentWidth, contentHeight);
-            } else {
-                content.setVisible(false);
             }
         }
 

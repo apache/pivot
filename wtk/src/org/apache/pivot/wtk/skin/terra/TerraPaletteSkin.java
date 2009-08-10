@@ -288,8 +288,6 @@ public class TerraPaletteSkin extends WindowSkin {
         Component content = palette.getContent();
 
         if (content != null) {
-            content.setVisible(true);
-
             content.setLocation(padding.left + 1,
                 titleBarTablePane.getHeight() + padding.top + 3);
 

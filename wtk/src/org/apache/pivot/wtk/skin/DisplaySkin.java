@@ -65,10 +65,6 @@ public class DisplaySkin extends ContainerSkin {
                         window.setSize(preferredSize.width, preferredSize.height);
                     }
                 }
-
-                window.setVisible(true);
-            } else {
-                window.setVisible(false);
             }
         }
     }

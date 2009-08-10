@@ -252,7 +252,6 @@ public class TerraFormSkin extends ContainerSkin
                 if (field.isVisible()) {
                     // Show the row components
                     label.setVisible(true);
-                    field.setVisible(true);
                     flagImageView.setVisible(true);
 
                     // Set the row component sizes
@@ -287,7 +286,6 @@ public class TerraFormSkin extends ContainerSkin
                 } else {
                     // Hide the row components
                     label.setVisible(false);
-                    field.setVisible(false);
                     flagImageView.setVisible(false);
                 }
             }

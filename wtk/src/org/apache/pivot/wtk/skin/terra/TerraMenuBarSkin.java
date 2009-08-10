@@ -140,13 +140,10 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
 
         for (MenuBar.Item item : menuBar.getItems()) {
             if (item.isVisible()) {
-                item.setVisible(true);
                 item.setSize(item.getPreferredWidth(height), height);
                 item.setLocation(itemX, 0);
 
                 itemX += item.getWidth() + spacing;
-            } else {
-                item.setVisible(false);
             }
         }
     }

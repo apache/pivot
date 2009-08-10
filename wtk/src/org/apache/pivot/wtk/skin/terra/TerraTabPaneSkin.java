@@ -741,7 +741,6 @@ public class TerraTabPaneSkin extends ContainerSkin
 
                     buttonPanoramaY = Math.max(cornerHeight - buttonPanoramaHeight + 1, 0);
 
-                    corner.setVisible(true);
                     corner.setLocation(cornerX, cornerY);
                     corner.setSize(cornerWidth, cornerHeight);
                 }
@@ -773,7 +772,6 @@ public class TerraTabPaneSkin extends ContainerSkin
 
                     buttonPanoramaX = Math.max(cornerWidth - buttonPanoramaWidth + 1, 0);
 
-                    corner.setVisible(true);
                     corner.setLocation(cornerX, cornerY);
                     corner.setSize(cornerWidth, cornerHeight);
                 }

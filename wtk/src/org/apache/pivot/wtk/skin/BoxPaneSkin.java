@@ -272,14 +272,8 @@ public class BoxPaneSkin extends ContainerSkin
                     component.setSize(componentWidth, componentHeight);
                     component.setLocation(x, y);
 
-                    // Ensure that the component is visible
-                    component.setVisible(true);
-
                     // Increment the x-coordinate
                     x += componentWidth + spacing;
-                } else {
-                    // Hide the component
-                    component.setVisible(false);
                 }
             }
         } else {
@@ -342,14 +336,8 @@ public class BoxPaneSkin extends ContainerSkin
                     component.setSize(componentWidth, componentHeight);
                     component.setLocation(x, y);
 
-                    // Ensure that the component is visible
-                    component.setVisible(true);
-
                     // Increment the y-coordinate
                     y += componentHeight + spacing;
-                } else {
-                    // Hide the component
-                    component.setVisible(false);
                 }
             }
         }
