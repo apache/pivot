@@ -79,9 +79,9 @@ public class MenuBarItemDataRenderer extends BoxPane implements Button.DataRende
         MenuBar menuBar = menuBarItem.getMenuBar();
 
         if (icon == null) {
-            imageView.setDisplayable(false);
+            imageView.setVisible(false);
         } else {
-            imageView.setDisplayable(true);
+            imageView.setVisible(true);
             imageView.setImage(icon);
             imageView.getStyles().put("opacity", button.isEnabled() ? 1.0f : 0.5f);
         }
@@ -90,9 +90,9 @@ public class MenuBarItemDataRenderer extends BoxPane implements Button.DataRende
         label.setText(text);
 
         if (text == null) {
-            label.setDisplayable(false);
+            label.setVisible(false);
         } else {
-            label.setDisplayable(true);
+            label.setVisible(true);
 
             Font font = (Font)menuBar.getStyles().get("font");
             label.getStyles().put("font", font);

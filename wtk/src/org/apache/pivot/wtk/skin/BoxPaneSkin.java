@@ -72,7 +72,7 @@ public class BoxPaneSkin extends ContainerSkin
             for (int i = 0, n = boxPane.getLength(); i < n; i++) {
                 Component component = boxPane.get(i);
 
-                if (component.isDisplayable()) {
+                if (component.isVisible()) {
                     preferredWidth += component.getPreferredWidth(fill ? height : -1);
                     j++;
                 }
@@ -87,7 +87,7 @@ public class BoxPaneSkin extends ContainerSkin
             for (int i = 0, n = boxPane.getLength(); i < n; i++) {
                 Component component = boxPane.get(i);
 
-                if (component.isDisplayable()) {
+                if (component.isVisible()) {
                     preferredWidth = Math.max(preferredWidth,
                         component.getPreferredWidth());
                 }
@@ -117,7 +117,7 @@ public class BoxPaneSkin extends ContainerSkin
             for (int i = 0, n = boxPane.getLength(); i < n; i++) {
                 Component component = boxPane.get(i);
 
-                if (component.isDisplayable()) {
+                if (component.isVisible()) {
                     preferredHeight += component.getPreferredHeight(fill ? width : -1);
                     j++;
                 }
@@ -132,7 +132,7 @@ public class BoxPaneSkin extends ContainerSkin
             for (int i = 0, n = boxPane.getLength(); i < n; i++) {
                 Component component = boxPane.get(i);
 
-                if (component.isDisplayable()) {
+                if (component.isVisible()) {
                     preferredHeight = Math.max(preferredHeight,
                         component.getPreferredHeight());
                 }
@@ -158,7 +158,7 @@ public class BoxPaneSkin extends ContainerSkin
                 for (int i = 0, n = boxPane.getLength(); i < n; i++) {
                     Component component = boxPane.get(i);
 
-                    if (component.isDisplayable()) {
+                    if (component.isVisible()) {
                         Dimensions preferredSize = component.getPreferredSize();
                         preferredWidth += preferredSize.width;
                         preferredHeight = Math.max(preferredSize.height, preferredHeight);
@@ -180,7 +180,7 @@ public class BoxPaneSkin extends ContainerSkin
                 for (int i = 0, n = boxPane.getLength(); i < n; i++) {
                     Component component = boxPane.get(i);
 
-                    if (component.isDisplayable()) {
+                    if (component.isVisible()) {
                         Dimensions preferredSize = component.getPreferredSize();
                         preferredWidth = Math.max(preferredSize.width, preferredWidth);
                         preferredHeight += preferredSize.height;
@@ -236,7 +236,7 @@ public class BoxPaneSkin extends ContainerSkin
             for (int i = 0; i < n; i++) {
                 Component component = boxPane.get(i);
 
-                if (component.isDisplayable()) {
+                if (component.isVisible()) {
                     int componentWidth = 0;
                     int componentHeight = 0;
                     int y = 0;
@@ -306,7 +306,7 @@ public class BoxPaneSkin extends ContainerSkin
             for (int i = 0; i < n; i++) {
                 Component component = boxPane.get(i);
 
-                if (component.isDisplayable()) {
+                if (component.isVisible()) {
                     int componentWidth = 0;
                     int componentHeight = 0;
                     int x = 0;

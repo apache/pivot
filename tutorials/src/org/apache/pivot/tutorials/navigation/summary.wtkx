@@ -41,7 +41,7 @@ limitations under the License.
                     <PushButton wtkx:id="confirmOrderButton" styles="{minimumPreferredAspectRatio:3}"/>
                     <ActivityIndicator wtkx:id="activityIndicator" styles="{color:16}"
                         preferredWidth="48" preferredHeight="48"/>
-                    <Label wtkx:id="processingOrderLabel" text="Pretending to process order..." displayable="false"
+                    <Label wtkx:id="processingOrderLabel" text="Pretending to process order..." visible="false"
                         styles="{fontItalic:true}"/>
                 </BoxPane>
             </BoxPane>

@@ -49,19 +49,19 @@ public class Checkboxes implements Application {
         // Wire up event listeners
         bellCheckbox.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
-                bellImageView.setDisplayable(!bellImageView.isDisplayable());
+                bellImageView.setVisible(!bellImageView.isVisible());
             }
         });
 
         clockCheckbox.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
-                clockImageView.setDisplayable(!clockImageView.isDisplayable());
+                clockImageView.setVisible(!clockImageView.isVisible());
             }
         });
 
         houseCheckbox.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
-                houseImageView.setDisplayable(!houseImageView.isDisplayable());
+                houseImageView.setVisible(!houseImageView.isVisible());
             }
         });
 

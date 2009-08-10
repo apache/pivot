@@ -74,9 +74,9 @@ public class ButtonDataRenderer extends BoxPane implements Button.DataRenderer {
 
         // Update the image view
         if (icon == null) {
-            imageView.setDisplayable(false);
+            imageView.setVisible(false);
         } else {
-            imageView.setDisplayable(true);
+            imageView.setVisible(true);
             imageView.setImage(icon);
 
             imageView.getStyles().put("opacity", button.isEnabled() ? 1.0f : 0.5f);
@@ -86,9 +86,9 @@ public class ButtonDataRenderer extends BoxPane implements Button.DataRenderer {
         label.setText(text);
 
         if (text == null) {
-            label.setDisplayable(false);
+            label.setVisible(false);
         } else {
-            label.setDisplayable(true);
+            label.setVisible(true);
 
             Font font = (Font)button.getStyles().get("font");
             label.getStyles().put("font", font);

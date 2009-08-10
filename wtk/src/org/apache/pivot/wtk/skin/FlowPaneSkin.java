@@ -53,7 +53,7 @@ public class FlowPaneSkin extends ContainerSkin {
         for (int i = 0, n = flowPane.getLength(); i < n; i++) {
             Component component = flowPane.get(i);
 
-            if (component.isDisplayable()) {
+            if (component.isVisible()) {
                 preferredWidth += component.getPreferredWidth();
                 j++;
             }
@@ -81,7 +81,7 @@ public class FlowPaneSkin extends ContainerSkin {
             for (int i = 0, n = flowPane.getLength(); i < n; i++) {
                 Component component = flowPane.get(i);
 
-                if (component.isDisplayable()) {
+                if (component.isVisible()) {
                     preferredHeight = Math.max(preferredHeight,
                         component.getPreferredHeight());
                 }
@@ -97,7 +97,7 @@ public class FlowPaneSkin extends ContainerSkin {
             for (int i = 0, n = flowPane.getLength(); i < n; i++) {
                 Component component = flowPane.get(i);
 
-                if (component.isDisplayable()) {
+                if (component.isVisible()) {
                     Dimensions componentSize = component.getPreferredSize();
 
                     if (rowWidth + componentSize.width > contentWidth
@@ -145,7 +145,7 @@ public class FlowPaneSkin extends ContainerSkin {
         for (int i = 0, n = flowPane.getLength(); i < n; i++) {
             Component component = flowPane.get(i);
 
-            if (component.isDisplayable()) {
+            if (component.isVisible()) {
                 Dimensions componentSize = component.getPreferredSize();
                 preferredWidth += componentSize.width;
                 preferredHeight = Math.max(preferredHeight, componentSize.height);
@@ -180,7 +180,7 @@ public class FlowPaneSkin extends ContainerSkin {
         for (int i = 0, n = flowPane.getLength(); i < n; i++) {
             Component component = flowPane.get(i);
 
-            if (component.isDisplayable()) {
+            if (component.isVisible()) {
                 Dimensions componentSize = component.getPreferredSize();
                 component.setSize(componentSize);
 

@@ -54,7 +54,7 @@ public class TreeViewNodeRenderer extends BoxPane implements TreeView.NodeRender
         add(label);
 
         imageView.setPreferredSize(DEFAULT_ICON_WIDTH, DEFAULT_ICON_HEIGHT);
-        imageView.setDisplayable(DEFAULT_SHOW_ICON);
+        imageView.setVisible(DEFAULT_SHOW_ICON);
     }
 
     public void setSize(int width, int height) {
@@ -105,9 +105,9 @@ public class TreeViewNodeRenderer extends BoxPane implements TreeView.NodeRender
             label.setText(text);
 
             if (text == null) {
-                label.setDisplayable(false);
+                label.setVisible(false);
             } else {
-                label.setDisplayable(true);
+                label.setVisible(true);
 
                 Font font = (Font)treeView.getStyles().get("font");
                 label.getStyles().put("font", font);
@@ -157,11 +157,11 @@ public class TreeViewNodeRenderer extends BoxPane implements TreeView.NodeRender
     }
 
     public boolean getShowIcon() {
-        return imageView.isDisplayable();
+        return imageView.isVisible();
     }
 
     public void setShowIcon(boolean showIcon) {
-        imageView.setDisplayable(showIcon);
+        imageView.setVisible(showIcon);
     }
 
     /**

@@ -129,11 +129,11 @@ public class MenuItemDataRenderer extends BoxPane implements Button.DataRenderer
         }
 
         if (showKeyboardShortcuts) {
-            keyboardShortcutLabel.setDisplayable(true);
+            keyboardShortcutLabel.setVisible(true);
             keyboardShortcutLabel.setText(keyboardShortcut == null ?
                 null : keyboardShortcut.toString());
         } else {
-            keyboardShortcutLabel.setDisplayable(false);
+            keyboardShortcutLabel.setVisible(false);
         }
     }
 }

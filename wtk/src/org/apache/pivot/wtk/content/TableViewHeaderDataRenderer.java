@@ -82,9 +82,9 @@ public class TableViewHeaderDataRenderer extends BoxPane
         imageView.setImage(icon);
 
         if (icon == null) {
-            imageView.setDisplayable(false);
+            imageView.setVisible(false);
         } else {
-            imageView.setDisplayable(true);
+            imageView.setVisible(true);
             imageView.getStyles().put("opacity", tableViewHeader.isEnabled() ? 1.0f : 0.5f);
         }
 
@@ -92,9 +92,9 @@ public class TableViewHeaderDataRenderer extends BoxPane
         label.setText(text);
 
         if (text == null) {
-            label.setDisplayable(false);
+            label.setVisible(false);
         } else {
-            label.setDisplayable(true);
+            label.setVisible(true);
 
             // Update the label styles
             Component.StyleDictionary labelStyles = label.getStyles();

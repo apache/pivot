@@ -420,20 +420,20 @@ public class Window extends Container {
     }
 
     /**
-     * Sets the displayable state of this window and all of its owned
+     * Sets the visible state of this window and all of its owned
      * descendant windows.
      *
-     * @param displayable
-     * If <tt>true</tt>, the window and its owned descendants are displayable;
-     * otherwise, they are not displayable.
+     * @param visible
+     * If <tt>true</tt>, the window and its owned descendants are visible;
+     * otherwise, they are not visible.
      */
     @Override
-    public void setDisplayable(boolean displayable) {
-        super.setDisplayable(displayable);
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
 
         // Show/hide owned windows
         for (Window ownedWindow : ownedWindows) {
-            ownedWindow.setDisplayable(displayable);
+            ownedWindow.setVisible(visible);
         }
     }
 
@@ -485,7 +485,7 @@ public class Window extends Container {
 
             if (owner != null) {
                 owner.ownedWindows.add(this);
-                setDisplayable(owner.isDisplayable());
+                setVisible(owner.isVisible());
                 setEnabled(owner.isEnabled());
             }
 

@@ -52,9 +52,6 @@ public interface ComponentListener {
         public void visibleChanged(Component component) {
         }
 
-        public void displayableChanged(Component component) {
-        }
-
         public void styleUpdated(Component component, String styleKey, Object previousValue) {
         }
 
@@ -137,13 +134,6 @@ public interface ComponentListener {
      * @param component
      */
     public void visibleChanged(Component component);
-
-    /**
-     * Called when a component's displayable flag has changed.
-     *
-     * @param component
-     */
-    public void displayableChanged(Component component);
 
     /**
      * Called when a component style has been updated.

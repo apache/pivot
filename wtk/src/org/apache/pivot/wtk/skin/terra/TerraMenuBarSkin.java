@@ -84,7 +84,7 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
             }
 
             MenuBar.Item item = items.get(i);
-            if (item.isDisplayable()) {
+            if (item.isVisible()) {
                 preferredWidth += item.getPreferredWidth(height);
                 j++;
             }
@@ -101,7 +101,7 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
 
         for (int i = 0, n = items.getLength(); i < n; i++) {
             MenuBar.Item item = items.get(i);
-            if (item.isDisplayable()) {
+            if (item.isVisible()) {
                 preferredHeight = Math.max(item.getPreferredHeight(width), preferredHeight);
             }
         }
@@ -123,7 +123,7 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
             }
 
             MenuBar.Item item = items.get(i);
-            if (item.isDisplayable()) {
+            if (item.isVisible()) {
                 preferredWidth += item.getPreferredWidth(-1);
                 preferredHeight = Math.max(item.getPreferredHeight(-1), preferredHeight);
             }
@@ -139,7 +139,7 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
         int itemX = 0;
 
         for (MenuBar.Item item : menuBar.getItems()) {
-            if (item.isDisplayable()) {
+            if (item.isVisible()) {
                 item.setVisible(true);
                 item.setSize(item.getPreferredWidth(height), height);
                 item.setLocation(itemX, 0);

@@ -100,7 +100,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
             Menu.Section section = sections.get(i);
 
             for (Menu.Item item : section) {
-                if (item.isDisplayable()) {
+                if (item.isVisible()) {
                     preferredWidth = Math.max(item.getPreferredWidth(-1),
                         preferredWidth);
                 }
@@ -120,7 +120,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
             Menu.Section section = sections.get(i);
 
             for (Menu.Item item : section) {
-                if (item.isDisplayable()) {
+                if (item.isVisible()) {
                     preferredHeight += item.getPreferredHeight(width);
                 }
             }
@@ -144,7 +144,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
             Menu.Section section = sections.get(i);
 
             for (Menu.Item item : section) {
-                if (item.isDisplayable()) {
+                if (item.isVisible()) {
                     preferredWidth = Math.max(item.getPreferredWidth(),
                         preferredWidth);
                     preferredHeight += item.getPreferredHeight();
@@ -170,7 +170,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
             Menu.Section section = sections.get(i);
 
             for (Menu.Item item : section) {
-                if (item.isDisplayable()) {
+                if (item.isVisible()) {
                     item.setVisible(true);
                     item.setSize(width, item.getPreferredHeight(width));
                     item.setLocation(0, itemY);

@@ -104,7 +104,7 @@ public class TerraFormSkin extends ContainerSkin
                 fieldIndex < fieldCount; fieldIndex++) {
                 Component field = section.get(fieldIndex);
 
-                if (field.isDisplayable()) {
+                if (field.isVisible()) {
                     Label label = labels.get(sectionIndex).get(fieldIndex);
                     maximumLabelWidth = Math.max(maximumLabelWidth,
                         label.getPreferredWidth(-1));
@@ -141,7 +141,7 @@ public class TerraFormSkin extends ContainerSkin
                     fieldIndex < fieldCount; fieldIndex++) {
                     Component field = section.get(fieldIndex);
 
-                    if (field.isDisplayable()) {
+                    if (field.isVisible()) {
                         Label label = labels.get(sectionIndex).get(fieldIndex);
                         maximumLabelWidth = Math.max(maximumLabelWidth,
                             label.getPreferredWidth(-1));
@@ -171,7 +171,7 @@ public class TerraFormSkin extends ContainerSkin
                 fieldIndex < fieldCount; fieldIndex++) {
                 Component field = section.get(fieldIndex);
 
-                if (field.isDisplayable()) {
+                if (field.isVisible()) {
                     Label label = labels.get(sectionIndex).get(fieldIndex);
 
                     int preferredRowHeight = Math.max(label.getPreferredHeight(-1),
@@ -209,7 +209,7 @@ public class TerraFormSkin extends ContainerSkin
                 fieldIndex < fieldCount; fieldIndex++) {
                 Component field = section.get(fieldIndex);
 
-                if (field.isDisplayable()) {
+                if (field.isVisible()) {
                     Label label = labels.get(sectionIndex).get(fieldIndex);
                     maximumLabelWidth = Math.max(maximumLabelWidth,
                         label.getPreferredWidth(-1));
@@ -249,7 +249,7 @@ public class TerraFormSkin extends ContainerSkin
                 Label label = labels.get(sectionIndex).get(fieldIndex);
                 ImageView flagImageView = flagImageViews.get(sectionIndex).get(fieldIndex);
 
-                if (field.isDisplayable()) {
+                if (field.isVisible()) {
                     // Show the row components
                     label.setVisible(true);
                     field.setVisible(true);

@@ -324,7 +324,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
                 Frame frame = (Frame)getComponent();
 
                 if (button == minimizeButton) {
-                    frame.setDisplayable(false);
+                    frame.setVisible(false);
                 } else if (button == maximizeButton) {
                     frame.setMaximized(!frame.isMaximized());
                 } else if (button == closeButton) {
@@ -376,8 +376,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         Frame frame = (Frame)getComponent();
 
         MenuBar menuBar = frame.getMenuBar();
-        if (menuBar != null
-            && menuBar.isDisplayable()) {
+        if (menuBar != null) {
             preferredWidth = Math.max(preferredWidth, menuBar.getPreferredWidth());
         }
 
@@ -408,8 +407,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         Frame frame = (Frame)getComponent();
 
         MenuBar menuBar = frame.getMenuBar();
-        if (menuBar != null
-            && menuBar.isDisplayable()) {
+        if (menuBar != null) {
             preferredHeight += menuBar.getPreferredHeight();
         }
 
@@ -439,8 +437,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         Frame frame = (Frame)getComponent();
 
         MenuBar menuBar = frame.getMenuBar();
-        if (menuBar != null
-            && menuBar.isDisplayable()) {
+        if (menuBar != null) {
             Dimensions preferredMenuBarSize = menuBar.getPreferredSize();
 
             preferredWidth = Math.max(preferredWidth, preferredMenuBarSize.width);
@@ -495,7 +492,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
             menuBar.setLocation(1, contentY);
 
             int menuBarWidth = width - 2;
-            if (menuBar.isDisplayable()) {
+            if (menuBar.isVisible()) {
                 menuBar.setSize(menuBarWidth, menuBar.getPreferredHeight());
             } else {
                 menuBar.setSize(menuBarWidth, 0);
@@ -566,27 +563,27 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
     }
 
     public boolean getShowMinimizeButton() {
-        return minimizeButton.isDisplayable();
+        return minimizeButton.isVisible();
     }
 
     public void setShowMinimizeButton(boolean showMinimizeButton) {
-        minimizeButton.setDisplayable(showMinimizeButton);
+        minimizeButton.setVisible(showMinimizeButton);
     }
 
     public boolean getShowMaximizeButton() {
-        return maximizeButton.isDisplayable();
+        return maximizeButton.isVisible();
     }
 
     public void setShowMaximizeButton(boolean showMaximizeButton) {
-        maximizeButton.setDisplayable(showMaximizeButton);
+        maximizeButton.setVisible(showMaximizeButton);
     }
 
     public boolean getShowCloseButton() {
-        return closeButton.isDisplayable();
+        return closeButton.isVisible();
     }
 
     public void setShowCloseButton(boolean showCloseButton) {
-        closeButton.setDisplayable(showCloseButton);
+        closeButton.setVisible(showCloseButton);
     }
 
     public Insets getPadding() {
@@ -761,14 +758,14 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
     @Override
     public void titleChanged(Window window, String previousTitle) {
         String title = window.getTitle();
-        titleLabel.setDisplayable(title != null);
+        titleLabel.setVisible(title != null);
         titleLabel.setText(title);
     }
 
     @Override
     public void iconChanged(Window window, Image previousIcon) {
         Image icon = window.getIcon();
-        iconImageView.setDisplayable(icon != null);
+        iconImageView.setVisible(icon != null);
         iconImageView.setImage(icon);
     }
 
@@ -800,11 +797,6 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
     @Override
     public void maximizedChanged(Window window) {
         updateMaximizedState();
-    }
-
-    @Override
-    public void displayableChanged(Component component) {
-        // No-op
     }
 
     public void menuBarChanged(Frame frame, MenuBar previousMenuBar) {

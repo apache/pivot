@@ -52,7 +52,7 @@ public class ListViewItemRenderer extends BoxPane implements ListView.ItemRender
         add(label);
 
         imageView.setPreferredSize(DEFAULT_ICON_WIDTH, DEFAULT_ICON_HEIGHT);
-        imageView.setDisplayable(DEFAULT_SHOW_ICON);
+        imageView.setVisible(DEFAULT_SHOW_ICON);
     }
 
     @Override
@@ -142,11 +142,11 @@ public class ListViewItemRenderer extends BoxPane implements ListView.ItemRender
     }
 
     public boolean getShowIcon() {
-        return imageView.isDisplayable();
+        return imageView.isVisible();
     }
 
     public void setShowIcon(boolean showIcon) {
-        imageView.setDisplayable(showIcon);
+        imageView.setVisible(showIcon);
     }
 
     /**

@@ -32,7 +32,7 @@ limitations under the License.
                     <TablePane.Filler preferredHeight="60"/>
                 </TablePane.Row>
                 <TablePane.Row height="-1">
-                    <PushButton buttonData="Three" displayable="false"/>
+                    <PushButton buttonData="Three" visible="false"/>
                 </TablePane.Row>
                 <TablePane.Row height="-1">
                     <PushButton buttonData="Four"/>

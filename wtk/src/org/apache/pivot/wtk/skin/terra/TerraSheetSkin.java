@@ -134,8 +134,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         Sheet sheet = (Sheet)getComponent();
         Component content = sheet.getContent();
 
-        if (content != null
-            && content.isDisplayable()) {
+        if (content != null) {
             if (height != -1) {
                 height = Math.max(height - (padding.top + padding.bottom + 2), 0);
             }
@@ -155,8 +154,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         Sheet sheet = (Sheet)getComponent();
         Component content = sheet.getContent();
 
-        if (content != null
-            && content.isDisplayable()) {
+        if (content != null) {
             if (width != -1) {
                 width = Math.max(width - (padding.left + padding.right + 2), 0);
             }
@@ -178,8 +176,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         Sheet sheet = (Sheet)getComponent();
         Component content = sheet.getContent();
 
-        if (content != null
-            && content.isDisplayable()) {
+        if (content != null) {
             Dimensions preferredContentSize = content.getPreferredSize();
             preferredWidth = preferredContentSize.width;
             preferredHeight = preferredContentSize.height;
@@ -220,18 +217,12 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         Component content = sheet.getContent();
 
         if (content != null) {
-            if (content.isDisplayable()) {
-                content.setVisible(true);
+            content.setLocation(padding.left + 1, padding.top + 1);
 
-                content.setLocation(padding.left + 1, padding.top + 1);
+            int contentWidth = Math.max(width - (padding.left + padding.right + 2), 0);
+            int contentHeight = Math.max(height - (padding.top + padding.bottom + 2), 0);
 
-                int contentWidth = Math.max(width - (padding.left + padding.right + 2), 0);
-                int contentHeight = Math.max(height - (padding.top + padding.bottom + 2), 0);
-
-                content.setSize(contentWidth, contentHeight);
-            } else {
-                content.setVisible(false);
-            }
+            content.setSize(contentWidth, contentHeight);
         }
     }
 

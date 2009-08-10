@@ -608,7 +608,7 @@ public class TerraExpanderSkin extends ExpanderSkin
     @Override
     public void titleChanged(Expander expander, String previousTitle) {
         String title = expander.getTitle();
-        titleLabel.setDisplayable(title != null);
+        titleLabel.setVisible(title != null);
         titleLabel.setText(title);
     }
 
@@ -617,7 +617,7 @@ public class TerraExpanderSkin extends ExpanderSkin
      */
     @Override
     public void collapsibleChanged(Expander expander) {
-        buttonBoxPane.setDisplayable(expander.isCollapsible());
+        buttonBoxPane.setVisible(expander.isCollapsible());
     }
 
     /**

@@ -156,7 +156,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
                 Component component = row.get(j);
 
                 if (component != null
-                    && component.isDisplayable()) {
+                    && component.isVisible()) {
                     int columnSpan = TablePane.getColumnSpan(component);
 
                     if (columnSpan > 1) {
@@ -330,7 +330,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
                 Component component = row.get(j);
 
                 if (component != null
-                    && component.isDisplayable()) {
+                    && component.isVisible()) {
                     int rowSpan = TablePane.getRowSpan(component);
 
                     if (rowSpan > 1) {
@@ -450,7 +450,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
                 Component child = row.get(j);
 
                 if (child != null) {
-                    if (child.isDisplayable()) {
+                    if (child.isVisible()) {
                         child.setLocation(componentX, componentY);
 
                         int columnSpan = TablePane.getColumnSpan(child);
@@ -467,12 +467,6 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
 
                         // Set the component's size
                         child.setSize(Math.max(childWidth, 0), Math.max(childHeight, 0));
-
-                        // Show the component
-                        child.setVisible(true);
-                    } else {
-                        // Hide the component
-                        child.setVisible(false);
                     }
                 }
 
@@ -843,7 +837,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
                 Component component = row.get(columnIndex);
 
                 if (component != null
-                    && component.isDisplayable()
+                    && component.isVisible()
                     && TablePane.getColumnSpan(component) == 1) {
                     int rowHeight = -1;
 
@@ -894,7 +888,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
             Component component = row.get(i);
 
             if (component != null
-                && component.isDisplayable()
+                && component.isVisible()
                 && TablePane.getRowSpan(component) == 1) {
                 TablePane.Column column = columns.get(i);
                 int columnWidth = -1;
@@ -986,7 +980,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
                 Component component = row.get(j);
 
                 if (component != null
-                    && component.isDisplayable()) {
+                    && component.isVisible()) {
                     int columnSpan = TablePane.getColumnSpan(component);
 
                     if (columnSpan > 1) {
@@ -1158,7 +1152,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
                 Component component = row.get(j);
 
                 if (component != null
-                    && component.isDisplayable()) {
+                    && component.isVisible()) {
                     int rowSpan = TablePane.getRowSpan(component);
 
                     if (rowSpan > 1) {

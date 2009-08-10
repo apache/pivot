@@ -101,7 +101,7 @@ public class Accordions implements Application {
             public void buttonPressed(Button button) {
                 // Pretend to submit or cancel the order
                 activityIndicator.setActive(!activityIndicator.isActive());
-                processingOrderLabel.setDisplayable(activityIndicator.isActive());
+                processingOrderLabel.setVisible(activityIndicator.isActive());
                 updateConfirmOrderButton();
             }
         });

@@ -175,10 +175,6 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
         // No-op
     }
 
-    public void displayableChanged(Component component) {
-        // No-op
-    }
-
     public void styleUpdated(Component component, String styleKey, Object previousValue) {
         // No-op
     }

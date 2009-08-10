@@ -32,21 +32,21 @@ limitations under the License.
                     <BoxPane styles="{verticalAlignment:'center'}">
                         <Checkbox wtkx:id="bellCheckbox" buttonData="Bell"/>
                     </BoxPane>
-                    <ImageView wtkx:id="bellImageView" image="org/apache/pivot/tutorials/bell.png" displayable="false"/>
+                    <ImageView wtkx:id="bellImageView" image="org/apache/pivot/tutorials/bell.png" visible="false"/>
                 </TablePane.Row>
 
                 <TablePane.Row height="24">
                     <BoxPane styles="{verticalAlignment:'center'}">
                         <Checkbox wtkx:id="clockCheckbox" buttonData="Clock"/>
                     </BoxPane>
-                    <ImageView wtkx:id="clockImageView" image="org/apache/pivot/tutorials/clock.png" displayable="false"/>
+                    <ImageView wtkx:id="clockImageView" image="org/apache/pivot/tutorials/clock.png" visible="false"/>
                 </TablePane.Row>
 
                 <TablePane.Row height="24">
                     <BoxPane styles="{verticalAlignment:'center'}">
                         <Checkbox wtkx:id="houseCheckbox" buttonData="House"/>
                     </BoxPane>
-                    <ImageView wtkx:id="houseImageView" image="org/apache/pivot/tutorials/house.png" displayable="false"/>
+                    <ImageView wtkx:id="houseImageView" image="org/apache/pivot/tutorials/house.png" visible="false"/>
                 </TablePane.Row>
             </rows>
         </TablePane>

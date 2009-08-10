@@ -105,8 +105,7 @@ public class BorderSkin extends ContainerSkin
         }
 
         Component content = border.getContent();
-        if (content != null
-            && content.isDisplayable()) {
+        if (content != null) {
             if (height != -1) {
                 height = Math.max(height - (topThickness + thickness) -
                     padding.top - padding.bottom, 0);
@@ -136,8 +135,7 @@ public class BorderSkin extends ContainerSkin
         }
 
         Component content = border.getContent();
-        if (content != null
-            && content.isDisplayable()) {
+        if (content != null) {
             if (width != -1) {
                 width = Math.max(width - (thickness * 2)
                     - padding.left - padding.right, 0);
@@ -174,21 +172,15 @@ public class BorderSkin extends ContainerSkin
 
         Component content = border.getContent();
         if (content != null) {
-            if (content.isDisplayable()) {
-                content.setVisible(true);
+            content.setLocation(padding.left + thickness,
+                padding.top + topThickness);
 
-                content.setLocation(padding.left + thickness,
-                    padding.top + topThickness);
+            int contentWidth = Math.max(width - (padding.left + padding.right
+                + (thickness * 2)), 0);
+            int contentHeight = Math.max(height - (padding.top + padding.bottom
+                + (topThickness + thickness)), 0);
 
-                int contentWidth = Math.max(width - (padding.left + padding.right
-                    + (thickness * 2)), 0);
-                int contentHeight = Math.max(height - (padding.top + padding.bottom
-                    + (topThickness + thickness)), 0);
-
-                content.setSize(contentWidth, contentHeight);
-            } else {
-                content.setVisible(false);
-            }
+            content.setSize(contentWidth, contentHeight);
         }
     }
 

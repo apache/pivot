@@ -344,12 +344,6 @@ public abstract class Component implements ConstrainedVisual {
             }
         }
 
-        public void displayableChanged(Component component) {
-            for (ComponentListener listener : this) {
-                listener.displayableChanged(component);
-            }
-        }
-
         public void styleUpdated(Component component, String styleKey, Object previousValue) {
             for (ComponentListener listener : this) {
                 listener.styleUpdated(component, styleKey, previousValue);
@@ -597,9 +591,6 @@ public abstract class Component implements ConstrainedVisual {
 
     // The component's visible flag
     private boolean visible = true;
-
-    // The component's displayable flag
-    private boolean displayable = true;
 
     // The component's decorators
     private ArrayList<Decorator> decorators = new ArrayList<Decorator>();
@@ -1476,9 +1467,6 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the component's visibility.
-     * <p>
-     * NOTE This method should only be called during layout. Callers should
-     * use {@link #setDisplayable(boolean)}.
      *
      * @param visible
      * <tt>true</tt> if the component should be painted; <tt>false</tt>,
@@ -1511,58 +1499,12 @@ public abstract class Component implements ConstrainedVisual {
                 parent.repaint(getDecoratedBounds());
             }
 
-            // Ensure the layout is valid
-            if (visible
-                && !valid) {
-                validate();
+            // Invalidate the parent
+            if (parent != null) {
+                parent.invalidate();
             }
 
             componentListeners.visibleChanged(this);
-        }
-    }
-
-    /**
-     * Returns the component's displayability.
-     *
-     * NOTE Container skins should generally try to respect this flag when
-     * laying out, as follows:
-     * <ul>
-     *   <li>
-     *     When a component's displayable flag is <tt>true</tt>, the
-     *     container skin should include the component in layout and set its
-     *     visibility to <tt>true</tt>.
-     *   </li>
-     *   <li>
-     *     When a component's displayable flag is <tt>false</tt>, the
-     *     container skin should not include the component in layout and set
-     *     its visibility to <tt>false</tt>.
-     *   </li>
-     * </ul>
-     * However, depending on the nature of the skin, it may ignore this flag
-     * and manage its components' visibilities internally.
-     *
-     * @return
-     * <tt>true</tt> if the component will participate in layout;
-     * <tt>false</tt>, otherwise.
-     */
-    public boolean isDisplayable() {
-        return displayable;
-    }
-
-    /**
-     * Sets the component's displayability.
-     *
-     * @param displayable
-     * <tt>true</tt> if the component will participate in layout;
-     * <tt>false</tt>, otherwise.
-     */
-    public void setDisplayable(boolean displayable) {
-        if (this.displayable != displayable) {
-            this.displayable = displayable;
-
-            invalidate();
-
-            componentListeners.displayableChanged(this);
         }
     }
 

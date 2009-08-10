@@ -100,8 +100,9 @@ public class TerraPaletteSkin extends WindowSkin {
     private Insets padding = new Insets(4);
 
     private WindowListener ownerListener = new WindowListener.Adapter() {
-        public void activeChanged(Window window) {
-            getComponent().setDisplayable(window.isActive());
+        public void activeChanged(Window owner) {
+            Window window = (Window)getComponent();
+            window.setVisible(owner.isActive());
         }
     };
 
@@ -207,8 +208,7 @@ public class TerraPaletteSkin extends WindowSkin {
         Dimensions preferredTitleBarSize = titleBarTablePane.getPreferredSize();
         preferredWidth = preferredTitleBarSize.width;
 
-        if (content != null
-            && content.isDisplayable()) {
+        if (content != null) {
             if (height != -1) {
                 height = Math.max(height - preferredTitleBarSize.height - 4 -
                     padding.top - padding.bottom, 0);
@@ -235,8 +235,7 @@ public class TerraPaletteSkin extends WindowSkin {
 
         preferredHeight = titleBarTablePane.getPreferredHeight(width);
 
-        if (content != null
-            && content.isDisplayable()) {
+        if (content != null) {
             if (width != -1) {
                 width = Math.max(width - padding.left - padding.right, 0);
             }
@@ -261,8 +260,7 @@ public class TerraPaletteSkin extends WindowSkin {
         preferredWidth = preferredTitleBarSize.width;
         preferredHeight = preferredTitleBarSize.height;
 
-        if (content != null
-            && content.isDisplayable()) {
+        if (content != null) {
             Dimensions preferredContentSize = content.getPreferredSize();
 
             preferredWidth = Math.max(preferredWidth, preferredContentSize.width);
@@ -290,20 +288,16 @@ public class TerraPaletteSkin extends WindowSkin {
         Component content = palette.getContent();
 
         if (content != null) {
-            if (content.isDisplayable()) {
-                content.setVisible(true);
+            content.setVisible(true);
 
-                content.setLocation(padding.left + 1,
-                    titleBarTablePane.getHeight() + padding.top + 3);
+            content.setLocation(padding.left + 1,
+                titleBarTablePane.getHeight() + padding.top + 3);
 
-                int contentWidth = Math.max(width - (padding.left + padding.right + 2), 0);
-                int contentHeight = Math.max(height - (titleBarTablePane.getHeight()
-                    + padding.top + padding.bottom + 4), 0);
+            int contentWidth = Math.max(width - (padding.left + padding.right + 2), 0);
+            int contentHeight = Math.max(height - (titleBarTablePane.getHeight()
+                + padding.top + padding.bottom + 4), 0);
 
-                content.setSize(contentWidth, contentHeight);
-            } else {
-                content.setVisible(false);
-            }
+            content.setSize(contentWidth, contentHeight);
         }
     }
 
@@ -459,7 +453,7 @@ public class TerraPaletteSkin extends WindowSkin {
         super.titleChanged(window, previousTitle);
 
         String title = window.getTitle();
-        titleLabel.setDisplayable(title != null);
+        titleLabel.setVisible(title != null);
         titleLabel.setText(title);
     }
 }

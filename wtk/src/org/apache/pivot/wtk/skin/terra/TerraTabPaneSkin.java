@@ -471,8 +471,7 @@ public class TerraTabPaneSkin extends ContainerSkin
         switch (tabOrientation) {
             case HORIZONTAL: {
                 if (height != -1) {
-                    if (corner != null
-                        && corner.isDisplayable()) {
+                    if (corner != null) {
                         height = Math.max(height - Math.max(corner.getPreferredHeight(-1),
                             Math.max(buttonPanorama.getPreferredHeight(-1) - 1, 0)), 0);
                     } else {
@@ -485,8 +484,7 @@ public class TerraTabPaneSkin extends ContainerSkin
                 preferredWidth = getPreferredTabWidth(height) + (padding.left + padding.right + 2);
 
                 int buttonAreaPreferredWidth = buttonPanorama.getPreferredWidth(-1);
-                if (corner != null
-                    && corner.isDisplayable()) {
+                if (corner != null) {
                     buttonAreaPreferredWidth += corner.getPreferredWidth(-1);
                 }
 
@@ -514,8 +512,7 @@ public class TerraTabPaneSkin extends ContainerSkin
                     preferredWidth += 2;
                 }
 
-                if (corner != null
-                    && corner.isDisplayable()) {
+                if (corner != null) {
                     preferredWidth += Math.max(corner.getPreferredWidth(-1),
                         Math.max(buttonPanorama.getPreferredWidth(-1) - 1, 0));
                 } else {
@@ -557,8 +554,7 @@ public class TerraTabPaneSkin extends ContainerSkin
                     preferredHeight += 2;
                 }
 
-                if (corner != null
-                    && corner.isDisplayable()) {
+                if (corner != null) {
                     preferredHeight += Math.max(corner.getPreferredHeight(-1),
                         Math.max(buttonPanorama.getPreferredHeight(-1) - 1, 0));
                 } else {
@@ -570,8 +566,7 @@ public class TerraTabPaneSkin extends ContainerSkin
 
             case VERTICAL: {
                 if (width != -1) {
-                    if (corner != null
-                        && corner.isDisplayable()) {
+                    if (corner != null) {
                         width = Math.max(width - Math.max(corner.getPreferredWidth(-1),
                             Math.max(buttonPanorama.getPreferredWidth(-1) - 1, 0)), 0);
                     } else {
@@ -584,8 +579,7 @@ public class TerraTabPaneSkin extends ContainerSkin
                 preferredHeight = getPreferredTabHeight(width) + (padding.top + padding.bottom + 2);
 
                 int buttonAreaPreferredHeight = buttonPanorama.getPreferredHeight(-1);
-                if (corner != null
-                    && corner.isDisplayable()) {
+                if (corner != null) {
                     buttonAreaPreferredHeight += corner.getPreferredHeight(-1);
                 }
 
@@ -627,8 +621,7 @@ public class TerraTabPaneSkin extends ContainerSkin
                 }
 
                 int buttonAreaPreferredWidth = buttonPanorama.getPreferredWidth(-1);
-                if (corner != null
-                    && corner.isDisplayable()) {
+                if (corner != null) {
                     buttonAreaPreferredWidth += corner.getPreferredWidth(-1);
                     preferredHeight += Math.max(corner.getPreferredHeight(-1),
                         Math.max(buttonPanorama.getPreferredHeight(-1) - 1, 0));
@@ -661,8 +654,7 @@ public class TerraTabPaneSkin extends ContainerSkin
                 }
 
                 int buttonAreaPreferredHeight = buttonPanorama.getPreferredHeight(-1);
-                if (corner != null
-                    && corner.isDisplayable()) {
+                if (corner != null) {
                     preferredWidth += Math.max(corner.getPreferredWidth(-1),
                         Math.max(buttonPanorama.getPreferredWidth(-1) - 1, 0));
                     buttonAreaPreferredHeight += corner.getPreferredHeight(-1);
@@ -742,20 +734,16 @@ public class TerraTabPaneSkin extends ContainerSkin
                 int buttonPanoramaY = 0;
 
                 if (corner != null) {
-                    if (corner.isDisplayable()) {
-                        int cornerWidth = width - buttonPanoramaWidth;
-                        int cornerHeight = Math.max(corner.getPreferredHeight(-1), buttonPanoramaSize.height - 1);
-                        int cornerX = buttonPanoramaWidth;
-                        int cornerY = Math.max(buttonPanoramaHeight - cornerHeight - 1, 0);
+                    int cornerWidth = width - buttonPanoramaWidth;
+                    int cornerHeight = Math.max(corner.getPreferredHeight(-1), buttonPanoramaSize.height - 1);
+                    int cornerX = buttonPanoramaWidth;
+                    int cornerY = Math.max(buttonPanoramaHeight - cornerHeight - 1, 0);
 
-                        buttonPanoramaY = Math.max(cornerHeight - buttonPanoramaHeight + 1, 0);
+                    buttonPanoramaY = Math.max(cornerHeight - buttonPanoramaHeight + 1, 0);
 
-                        corner.setVisible(true);
-                        corner.setLocation(cornerX, cornerY);
-                        corner.setSize(cornerWidth, cornerHeight);
-                    } else {
-                        corner.setVisible(false);
-                    }
+                    corner.setVisible(true);
+                    corner.setLocation(cornerX, cornerY);
+                    corner.setSize(cornerWidth, cornerHeight);
                 }
 
                 buttonPanorama.setLocation(buttonPanoramaX, buttonPanoramaY);
@@ -778,20 +766,16 @@ public class TerraTabPaneSkin extends ContainerSkin
                 int buttonPanoramaY = 0;
 
                 if (corner != null) {
-                    if (corner.isDisplayable()) {
-                        int cornerWidth = corner.getPreferredWidth(-1);
-                        int cornerHeight = height - buttonPanoramaHeight;
-                        int cornerX = Math.max(buttonPanoramaWidth - cornerWidth - 1, 0);
-                        int cornerY = buttonPanoramaHeight;
+                    int cornerWidth = corner.getPreferredWidth(-1);
+                    int cornerHeight = height - buttonPanoramaHeight;
+                    int cornerX = Math.max(buttonPanoramaWidth - cornerWidth - 1, 0);
+                    int cornerY = buttonPanoramaHeight;
 
-                        buttonPanoramaX = Math.max(cornerWidth - buttonPanoramaWidth + 1, 0);
+                    buttonPanoramaX = Math.max(cornerWidth - buttonPanoramaWidth + 1, 0);
 
-                        corner.setVisible(true);
-                        corner.setLocation(cornerX, cornerY);
-                        corner.setSize(cornerWidth, cornerHeight);
-                    } else {
-                        corner.setVisible(false);
-                    }
+                    corner.setVisible(true);
+                    corner.setLocation(cornerX, cornerY);
+                    corner.setSize(cornerWidth, cornerHeight);
                 }
 
                 buttonPanorama.setLocation(buttonPanoramaX, buttonPanoramaY);

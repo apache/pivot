@@ -53,7 +53,7 @@ public class DisplaySkin extends ContainerSkin {
         for (Component component : display) {
             Window window = (Window)component;
 
-            if (window.isDisplayable()) {
+            if (window.isVisible()) {
                 if (window.isMaximized()) {
                     window.setLocation(0, 0);
                     window.setSize(display.getSize());
