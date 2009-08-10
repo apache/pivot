@@ -16,14 +16,17 @@
  */
 package org.apache.pivot.wtk.skin.terra;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.geom.Rectangle2D;
 
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
+import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Point;
@@ -60,7 +63,7 @@ public class TerraSliderSkin extends SliderSkin {
 
         @Override
         public boolean isFocusable() {
-            return false;
+            return true;
         }
 
         public int getPreferredWidth(int height) {
@@ -98,6 +101,13 @@ public class TerraSliderSkin extends SliderSkin {
 
             highlighted = false;
             repaintComponent();
+        }
+
+        @Override
+        public void focusedChanged(Component component, Component obverseComponent) {
+            super.focusedChanged(component, obverseComponent);
+
+            TerraSliderSkin.this.repaintComponent();
         }
 
         @Override
@@ -173,6 +183,35 @@ public class TerraSliderSkin extends SliderSkin {
                 dragOffset = null;
                 Mouse.release();
                 repaintComponent();
+            }
+
+            return consumed;
+        }
+
+        @Override
+        public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+            component.requestFocus();
+            return super.mouseClick(component, button, x, y, count);
+        }
+
+        @Override
+        public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+            boolean consumed = super.keyPressed(component, keyCode, keyLocation);
+
+            Slider slider = (Slider)TerraSliderSkin.this.getComponent();
+            int start = slider.getStart();
+            int end = slider.getEnd();
+            int length = end - start;
+
+            int value = slider.getValue();
+            int increment = length / 10;
+
+            if (keyCode == Keyboard.KeyCode.LEFT) {
+                slider.setValue(Math.max(start, value - increment));
+                consumed = true;
+            } else if (keyCode == Keyboard.KeyCode.RIGHT) {
+                slider.setValue(Math.min(end, value + increment));
+                consumed = true;
             }
 
             return consumed;
@@ -265,6 +304,19 @@ public class TerraSliderSkin extends SliderSkin {
             RenderingHints.VALUE_ANTIALIAS_ON);
         GraphicsUtilities.drawLine(graphics, 0, (height - trackWidth) / 2,
             width, Orientation.HORIZONTAL, trackWidth);
+
+        if (thumb.isFocused()) {
+            BasicStroke dashStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND,
+                BasicStroke.JOIN_ROUND, 1.0f, new float[] {0.0f, 2.0f}, 0.0f);
+
+            graphics.setStroke(dashStroke);
+            graphics.setColor(buttonBorderColor);
+
+            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+
+            graphics.draw(new Rectangle2D.Double(0, 0, width - 1, height - 1));
+        }
     }
 
     public Color getTrackColor() {
@@ -390,6 +442,12 @@ public class TerraSliderSkin extends SliderSkin {
         }
 
         setThumbHeight(thumbHeight.intValue());
+    }
+
+    @Override
+    public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+        thumb.requestFocus();
+        return super.mouseClick(component, button, x, y, count);
     }
 
     public void rangeChanged(Slider slider, int previousStart, int previousEnd) {
