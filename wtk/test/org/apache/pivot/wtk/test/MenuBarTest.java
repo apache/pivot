@@ -18,29 +18,38 @@ package org.apache.pivot.wtk.test;
 
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.MenuBar;
 import org.apache.pivot.wtk.MenuHandler;
+import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class MenuBarTest implements Application {
-    private Frame frame = null;
+    private Frame frame1 = null;
+    private Frame frame2 = null;
 
     @WTKX private TextInput textInput1 = null;
     @WTKX private TextInput textInput2 = null;
     @WTKX private TextInput textInput3 = null;
 
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        frame = (Frame)wtkxSerializer.readObject(this, "menu_bar_test.wtkx");
-        wtkxSerializer.bind(this, MenuBarTest.class);
+        BoxPane boxPane = new BoxPane(Orientation.VERTICAL);
+        boxPane.add(new TextInput());
+        boxPane.add(new TextInput());
+        boxPane.add(new TextInput());
+        frame1 = new Frame(boxPane);
+        frame1.setPreferredSize(320, 240);
+        frame1.open(display);
 
-        // frame.setMenuBar(null);
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        frame2 = (Frame)wtkxSerializer.readObject(this, "menu_bar_test.wtkx");
+        wtkxSerializer.bind(this, MenuBarTest.class);
 
         MenuHandler menuHandler = new MenuHandler.Adapter() {
             @Override
@@ -58,12 +67,13 @@ public class MenuBarTest implements Application {
         textInput2.setMenuHandler(menuHandler);
         textInput3.setMenuHandler(menuHandler);
 
-        frame.open(display);
+        frame2.setLocation(40, 40);
+        frame2.open(display);
     }
 
     public boolean shutdown(boolean optional) {
-        if (frame != null) {
-            frame.close();
+        if (frame2 != null) {
+            frame2.close();
         }
 
         return false;

@@ -811,6 +811,22 @@ public class Window extends Container {
     }
 
     /**
+     * Requests that this window become the active window.
+     *
+     * @return
+     * <tt>true</tt> if the window became active; <tt>false</tt>, otherwise.
+     */
+    public boolean requestActive() {
+        if (!isAuxilliary()
+            && isOpen()
+            && isEnabled()) {
+            setActiveWindow(this);
+        }
+
+        return isActive();
+    }
+
+    /**
      * Called to notify a window that its active state has changed.
      *
      * @param active
@@ -839,21 +855,7 @@ public class Window extends Container {
      * @param activeWindow
      * The window to activate, or <tt>null</tt> to clear the active window.
      */
-    public static void setActiveWindow(Window activeWindow) {
-        if (activeWindow != null) {
-            if (activeWindow.isAuxilliary()) {
-                throw new IllegalArgumentException("activeWindow is auxilliary.");
-            }
-
-            if (!activeWindow.isOpen()) {
-                throw new IllegalArgumentException("activeWindow is not open.");
-            }
-
-            if (!activeWindow.isEnabled()) {
-                throw new IllegalArgumentException("activeWindow is not enabled.");
-            }
-        }
-
+    private static void setActiveWindow(Window activeWindow) {
         Window previousActiveWindow = Window.activeWindow;
 
         if (previousActiveWindow != activeWindow) {
@@ -883,8 +885,8 @@ public class Window extends Container {
     }
 
     @Override
-    protected void descendantGainedFocus(Component descendant) {
-        super.descendantGainedFocus(descendant);
+    protected void descendantGainedFocus(Component descendant, Component previousFocusedComponent) {
+        super.descendantGainedFocus(descendant, previousFocusedComponent);
 
         this.focusDescendant = descendant;
     }

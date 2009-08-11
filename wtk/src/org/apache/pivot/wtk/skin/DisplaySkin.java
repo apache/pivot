@@ -88,7 +88,7 @@ public class DisplaySkin extends ContainerSkin {
             if (window != null
                 && window.isEnabled()
                 && !window.isAuxilliary()) {
-                Window.setActiveWindow(window);
+                window.requestActive();
             }
         }
 

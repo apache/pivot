@@ -194,13 +194,6 @@ public class TerraMenuPopupSkin extends WindowSkin
         if (keyCode == Keyboard.KeyCode.ESCAPE) {
             MenuPopup menuPopup = (MenuPopup)getComponent();
             menuPopup.close();
-
-            // TODO Maybe we should leave this to the caller
-            Component affiliate = menuPopup.getAffiliate();
-            if (affiliate != null
-                && affiliate.isFocusable()) {
-                affiliate.requestFocus();
-            }
         }
 
         return consumed;
@@ -212,6 +205,12 @@ public class TerraMenuPopupSkin extends WindowSkin
 
         Display display = window.getDisplay();
         display.getContainerMouseListeners().add(displayMouseListener);
+
+        MenuPopup menuPopup = (MenuPopup)window;
+        Menu menu = menuPopup.getMenu();
+        if (menu != null) {
+            menu.requestFocus();
+        }
 
         Component.getComponentClassListeners().add(this);
     }
@@ -242,13 +241,12 @@ public class TerraMenuPopupSkin extends WindowSkin
 
         closeTransition = null;
 
-        // TODO Maybe we should leave this to the caller
         MenuPopup menuPopup = (MenuPopup)getComponent();
         Component affiliate = menuPopup.getAffiliate();
 
-        Window affiliateWindow = affiliate.getWindow();
-        if (affiliateWindow.isOpen()) {
-            affiliateWindow.moveToFront();
+        if (affiliate != null
+            && affiliate.isFocusable()) {
+            affiliate.requestFocus();
         }
     }
 

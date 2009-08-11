@@ -65,6 +65,13 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
         public void windowClosed(Window window, Display display) {
             MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
             menuBarItem.setSelected(false);
+
+            // If the menu bar is no longer active, move the window to the
+            // front to restore focus
+            MenuBar menuBar = menuBarItem.getMenuBar();
+            if (menuBar.getSelectedItem() == null) {
+                menuBarItem.getWindow().moveToFront();
+            }
         }
     };
 

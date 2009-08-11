@@ -440,21 +440,25 @@ public abstract class Container extends Component
      * was denied
      */
     @Override
-    public Component requestFocus() {
-        Component component = super.requestFocus();
+    public boolean requestFocus() {
+        boolean focused = false;
 
-        if (component == null
-            && focusTraversalPolicy != null) {
-            // TODO Guard against infinite loop that can occur if the focus
-            // traversal policy loops, and all components that it returns are
-            // not focusable
-            do {
-                component = focusTraversalPolicy.getNextComponent(this, component, Direction.FORWARD);
-            } while (component != null
-                && component.requestFocus() == null);
+        if (isFocusable()) {
+            focused = super.requestFocus();
+        } else {
+            if (focusTraversalPolicy != null) {
+                Component component = null;
+
+                do {
+                    component = focusTraversalPolicy.getNextComponent(this, component, Direction.FORWARD);
+                } while (component != null
+                    && !component.requestFocus());
+
+                focused = (component != null);
+            }
         }
 
-        return component;
+        return focused;
     }
 
     /**
@@ -538,11 +542,11 @@ public abstract class Container extends Component
             && isAncestor(focusedComponent));
     }
 
-    protected void descendantGainedFocus(Component descendant) {
+    protected void descendantGainedFocus(Component descendant, Component previousFocusedComponent) {
         Container parent = getParent();
 
         if (parent != null) {
-            parent.descendantGainedFocus(descendant);
+            parent.descendantGainedFocus(descendant, previousFocusedComponent);
         }
     }
 

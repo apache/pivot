@@ -79,6 +79,8 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
         for (Menu.Section section : menu.getSections()) {
             section.getSectionListeners().add(this);
         }
+
+        menu.setFocusTraversalPolicy(new IndexFocusTraversalPolicy(true));
     }
 
     public void uninstall() {

@@ -46,6 +46,8 @@ public class WindowFocusTest implements Application {
         frame2 = new Frame(boxPane2);
         frame2.setPreferredSize(320, 240);
         frame2.open(display);
+
+        frame2.requestFocus();
     }
 
     @Override

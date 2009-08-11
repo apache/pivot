@@ -42,12 +42,7 @@ public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListen
 
     private WindowStateListener menuPopupWindowListener = new WindowStateListener.Adapter() {
         public void windowClosed(Window window, Display display) {
-            Menu.Item menuItem = (Menu.Item)getComponent();
-            if (menuItem.isFocused()) {
-                Component.clearFocus();
-            } else {
-                repaintComponent();
-            }
+            repaintComponent();
         }
     };
 
@@ -148,21 +143,20 @@ public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListen
             menuItem.transferFocus(Direction.FORWARD);
             consumed = true;
         } else if (keyCode == Keyboard.KeyCode.LEFT) {
-            Menu parentMenu = menuItem.getSection().getMenu();
+            Menu.Section parentSection = menuItem.getSection();
+            Menu parentMenu = parentSection.getMenu();
             Menu.Item parentMenuItem = parentMenu.getItem();
             if (parentMenuItem != null) {
-                parentMenuItem.requestFocus();
-                consumed = true;
+                Window window = menuItem.getWindow();
+                window.close();
             }
-
-            menuPopup.close();
         } else if (keyCode == Keyboard.KeyCode.RIGHT) {
             if (menu != null) {
                 if (!menuPopup.isOpen()) {
                     menuItem.press();
                 }
 
-                menu.requestFocus();
+                menu.transferFocus(null, Direction.FORWARD);
                 consumed = true;
             }
         } else if (keyCode == Keyboard.KeyCode.ENTER) {

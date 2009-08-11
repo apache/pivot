@@ -81,11 +81,11 @@ public class Frame extends Window {
     }
 
     @Override
-    protected void descendantGainedFocus(Component descendant) {
-        super.descendantGainedFocus(descendant);
-
-        // Walk down descendant hierarchy and call configureMenuBar()
-        if (menuBar != null) {
+    protected void descendantGainedFocus(Component descendant, Component previousFocusedComponent) {
+        // If the focus descendant changed, walk down descendant hierarchy and
+        // call configureMenuBar()
+        if (menuBar != null
+            && getFocusDescendant() != descendant) {
             LinkedList<Component> path = new LinkedList<Component>();
 
             Component ancestor = descendant;
@@ -102,13 +102,18 @@ public class Frame extends Window {
                 }
             }
         }
+
+        super.descendantGainedFocus(descendant, previousFocusedComponent);
     }
 
     protected void descendantLostFocus(Component descendant) {
-        super.descendantLostFocus(descendant);
+        // If the focus changed within this window, walk down descendant
+        // hierarchy and call configureMenuBar()
+        Component focusedComponent = getFocusedComponent();
 
-        // Walk down descendant hierarchy and call configureMenuBar()
-        if (menuBar != null) {
+        if (menuBar != null
+            && focusedComponent != null
+            && focusedComponent.getWindow() == this) {
             LinkedList<Component> path = new LinkedList<Component>();
 
             Component ancestor = descendant;
@@ -125,6 +130,8 @@ public class Frame extends Window {
                 }
             }
         }
+
+        super.descendantLostFocus(descendant);
     }
 
     @Override
