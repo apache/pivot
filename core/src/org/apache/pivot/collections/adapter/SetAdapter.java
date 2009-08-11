@@ -123,7 +123,7 @@ public class SetAdapter<E> implements Set<E>, Serializable {
             } catch (InstantiationException exception) {
                 throw new RuntimeException(exception);
             } catch (IllegalAccessException exception) {
-                throw new UnsupportedOperationException(exception);
+                throw new RuntimeException(exception);
             } catch (InvocationTargetException exception) {
                 throw new RuntimeException(exception);
             }
