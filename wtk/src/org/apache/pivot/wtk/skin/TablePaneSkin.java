@@ -805,7 +805,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
 
     /**
      * Gets the preferred width of a table pane column, which is defined as the
-     * maximum preferred width of the column's displayable components. The
+     * maximum preferred width of the column's visible components. The
      * preferred width of each constituent component will be constrained by the
      * height of the row that the component occupies (as specified in the array
      * of row heights).
@@ -858,7 +858,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
 
     /**
      * Gets the preferred height of a table pane row, which is defined as the
-     * maximum preferred height of the row's displayable components. The
+     * maximum preferred height of the row's visible components. The
      * preferred height of each constituent component will be constrained by
      * the width of the column that the component occupies (as specified in the
      * array of column widths).

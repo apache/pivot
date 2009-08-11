@@ -2153,10 +2153,10 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns this component's focusability. A focusable component is capable
-     * of receiving the focus.
+     * of receiving the focus only when it is showing and enabled.
      *
      * @return
-     * <tt>true</tt> if the component is enabled and visible.
+     * <tt>true</tt> if the component is capable of receiving the focus
      */
     public boolean isFocusable() {
         return skin.isFocusable()
@@ -2168,11 +2168,11 @@ public abstract class Component implements ConstrainedVisual {
      * Returns the component's focused state.
      *
      * @return
-     * <tt>true</tt> if the component has the input focus; <tt>false</tt>;
+     * <tt>true</tt> if the component has the input focus; <tt>false</tt>
      * otherwise.
      */
     public boolean isFocused() {
-        return focusedComponent == this;
+        return (focusedComponent == this);
     }
 
     /**
@@ -2198,6 +2198,10 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Requests that focus be given to this component.
+     *
+     * @return
+     * The component that got the focus, or <tt>null</tt> if the focus request
+     * was denied
      */
     public Component requestFocus() {
         if (isFocusable()) {
@@ -2245,7 +2249,7 @@ public abstract class Component implements ConstrainedVisual {
      * <tt>true</tt> if this focus change is or was temporary; <tt>false</tt>,
      * if it is permanent.
      */
-    public static void setFocusedComponent(Component focusedComponent) {
+    private static void setFocusedComponent(Component focusedComponent) {
         Component previousFocusedComponent = Component.focusedComponent;
 
         if (previousFocusedComponent != focusedComponent) {

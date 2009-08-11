@@ -329,7 +329,7 @@ public class TerraRollupSkin extends RollupSkin {
         if (content != null) {
             if (rollup.isExpanded()
                 || (expandTransition != null
-                    && !expandTransition.isReversed())) {
+                && !expandTransition.isReversed())) {
                 int contentWidth, contentHeight;
                 if (fill) {
                     contentWidth = justifiedWidth;

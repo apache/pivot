@@ -68,21 +68,21 @@ deployJava.writeAppletTag(attributes, parameters);
                     &lt;BoxPane styles="{verticalAlignment:'center'}"&gt;
                         &lt;Checkbox wtkx:id="bellCheckbox" buttonData="Bell"/&gt;
                     &lt;/BoxPane&gt;
-                    &lt;ImageView wtkx:id="bellImageView" image="org/apache/pivot/tutorials/bell.png" displayable="false"/&gt;
+                    &lt;ImageView wtkx:id="bellImageView" image="org/apache/pivot/tutorials/bell.png" visible="false"/&gt;
                 &lt;/TablePane.Row&gt;
 
                 &lt;TablePane.Row height="24"&gt;
                     &lt;BoxPane styles="{verticalAlignment:'center'}"&gt;
                         &lt;Checkbox wtkx:id="clockCheckbox" buttonData="Clock"/&gt;
                     &lt;/BoxPane&gt;
-                    &lt;ImageView wtkx:id="clockImageView" image="org/apache/pivot/tutorials/clock.png" displayable="false"/&gt;
+                    &lt;ImageView wtkx:id="clockImageView" image="org/apache/pivot/tutorials/clock.png" visible="false"/&gt;
                 &lt;/TablePane.Row&gt;
 
                 &lt;TablePane.Row height="24"&gt;
                     &lt;BoxPane styles="{verticalAlignment:'center'}"&gt;
                         &lt;Checkbox wtkx:id="houseCheckbox" buttonData="House"/&gt;
                     &lt;/BoxPane&gt;
-                    &lt;ImageView wtkx:id="houseImageView" image="org/apache/pivot/tutorials/house.png" displayable="false"/&gt;
+                    &lt;ImageView wtkx:id="houseImageView" image="org/apache/pivot/tutorials/house.png" visible="false"/&gt;
                 &lt;/TablePane.Row&gt;
             &lt;/rows&gt;
         &lt;/TablePane&gt;
@@ -92,7 +92,7 @@ deployJava.writeAppletTag(attributes, parameters);
 
 <p>Note that this example uses the <tt>TablePane</tt> layout container. <tt>TablePane</tt> defines a two-dimensional grid structure and is similar to an HTML table. It is discussed in more detail in the <a href="layout_containers.html">Layout Containers</a> section.</p>
 
-<p>The following is the Java source for the example. A button press handler is assigned to each checkbox. When the handler is invoked, it simply toggles the displayability of the corresponding image view, causing the image to appear and disappear based on the checkbox's selection state.</p>
+<p>The following is the Java source for the example. A button press handler is assigned to each checkbox. When the handler is invoked, it simply toggles the visibility of the corresponding image view, causing the image to appear and disappear based on the checkbox's selection state.</p>
 
 <pre class="brush:java">
 package org.apache.pivot.tutorials.buttons;
@@ -130,19 +130,19 @@ public class Checkboxes implements Application {
         // Wire up event listeners
         bellCheckbox.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
-                bellImageView.setDisplayable(!bellImageView.isDisplayable());
+                bellImageView.setVisible(!bellImageView.isVisible());
             }
         });
 
         clockCheckbox.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
-                clockImageView.setDisplayable(!clockImageView.isDisplayable());
+                clockImageView.setVisible(!clockImageView.isVisible());
             }
         });
 
         houseCheckbox.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
-                houseImageView.setDisplayable(!houseImageView.isDisplayable());
+                houseImageView.setVisible(!houseImageView.isVisible());
             }
         });
 

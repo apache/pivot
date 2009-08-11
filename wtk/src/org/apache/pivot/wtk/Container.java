@@ -431,8 +431,13 @@ public abstract class Container extends Component
      }
 
     /**
-     * Requests that focus be set to the first focusable descendant in this
-     * container.
+     * Requests that focus be given to this container. If this container is not
+     * focusable, this requests that focus be set to the first focusable
+     * descendant in this container.
+     *
+     * @return
+     * The component that got the focus, or <tt>null</tt> if the focus request
+     * was denied
      */
     @Override
     public Component requestFocus() {
@@ -440,6 +445,9 @@ public abstract class Container extends Component
 
         if (component == null
             && focusTraversalPolicy != null) {
+            // TODO Guard against infinite loop that can occur if the focus
+            // traversal policy loops, and all components that it returns are
+            // not focusable
             do {
                 component = focusTraversalPolicy.getNextComponent(this, component, Direction.FORWARD);
             } while (component != null
