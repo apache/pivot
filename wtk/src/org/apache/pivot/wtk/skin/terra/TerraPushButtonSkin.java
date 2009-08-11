@@ -155,9 +155,9 @@ public class TerraPushButtonSkin extends PushButtonSkin {
 
         // Adjust for preferred aspect ratio
         if (!Float.isNaN(preferredAspectRatio)) {
-            float preferredAspectRatio = (float)preferredWidth / (float)preferredHeight;
+            float aspectRatio = (float)preferredWidth / (float)preferredHeight;
 
-            if (preferredAspectRatio < this.preferredAspectRatio) {
+            if (aspectRatio < preferredAspectRatio) {
                 preferredWidth = (int)(preferredHeight * preferredAspectRatio);
             } else {
                 preferredHeight = (int)(preferredWidth / preferredAspectRatio);
