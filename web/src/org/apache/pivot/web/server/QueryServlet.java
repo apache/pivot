@@ -86,7 +86,7 @@ public abstract class QueryServlet extends HttpServlet {
     private boolean authenticationRequired = false;
     private boolean determineContentLength = false;
 
-    private Serializer<?> serializer = new JSONSerializer();
+    private Class<? extends Serializer<?>> serializerClass = JSONSerializer.class;
 
     private transient ThreadLocal<Credentials> credentials = new ThreadLocal<Credentials>();
 
@@ -153,26 +153,50 @@ public abstract class QueryServlet extends HttpServlet {
     }
 
     /**
-     * Returns the serializer used to stream the value passed to or from the
-     * web query. By default, an instance of {@link JSONSerializer} is used.
+     * Returns the class of serializer that will be used to stream the value
+     * passed to or from the web query. By default, {@link JSONSerializer} is
+     * used.
+     *
+     * @return
+     * This servlet's serializer class
      */
-    public Serializer<?> getSerializer() {
-        return serializer;
+    public Class<? extends Serializer<?>> getSerializerClass() {
+        return serializerClass;
     }
 
     /**
-     * Sets the serializer used to stream the value passed to or from the
-     * web query.
+     * Sets the class of serializer that will be used to stream the value
+     * passed to or from the web query.
      *
-     * @param serializer
-     * The serializer (must be non-null).
+     * @param serializerClass
+     * This servlet's serializer class (must be non-<tt>null</tt>)
      */
-    public void setSerializer(Serializer<?> serializer) {
-        if (serializer == null) {
-            throw new IllegalArgumentException("serializer is null.");
+    public void setSerializerClass(Class<? extends Serializer<?>> serializerClass) {
+        if (serializerClass == null) {
+            throw new IllegalArgumentException("serializerClass is null.");
         }
 
-        this.serializer = serializer;
+        this.serializerClass = serializerClass;
+    }
+
+    /**
+     * Returns a newly allocated instance of this servlet's serializer class.
+     *
+     * @return
+     * A new serializer
+     */
+    private Serializer<?> newSerializer() {
+        Serializer<?> serializer;
+
+        try {
+            serializer = serializerClass.newInstance();
+        } catch (IllegalAccessException exception) {
+            throw new RuntimeException(exception);
+        } catch (InstantiationException exception) {
+            throw new RuntimeException(exception);
+        }
+
+        return serializer;
     }
 
     /**
@@ -478,7 +502,7 @@ public abstract class QueryServlet extends HttpServlet {
     @SuppressWarnings("unchecked")
     protected final void doGet(HttpServletRequest request, HttpServletResponse response)
         throws IOException, ServletException {
-        Serializer<Object> serializer = (Serializer<Object>)this.serializer;
+        Serializer<Object> serializer = (Serializer<Object>)newSerializer();
 
         try {
             Object result = doGet();
@@ -530,6 +554,8 @@ public abstract class QueryServlet extends HttpServlet {
     @Override
     protected final void doPost(HttpServletRequest request, HttpServletResponse response)
         throws IOException, ServletException {
+        Serializer<?> serializer = newSerializer();
+
         try {
             Object value = serializer.readObject(request.getInputStream());
 
@@ -550,6 +576,8 @@ public abstract class QueryServlet extends HttpServlet {
     @Override
     protected final void doPut(HttpServletRequest request, HttpServletResponse response)
         throws IOException, ServletException {
+        Serializer<?> serializer = newSerializer();
+
         try {
             Object value = serializer.readObject(request.getInputStream());
 
