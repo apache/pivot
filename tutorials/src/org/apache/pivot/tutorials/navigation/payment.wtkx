@@ -32,7 +32,7 @@ limitations under the License.
             <BoxPane styles="{horizontalAlignment:'right', backgroundColor:11,
                 padding:4}">
                 <PushButton wtkx:id="nextButton" buttonData="Next"
-                    styles="{minimumPreferredAspectRatio:3}"/>
+                    styles="{preferredAspectRatio:3}"/>
             </BoxPane>
         </TablePane.Row>
     </rows>

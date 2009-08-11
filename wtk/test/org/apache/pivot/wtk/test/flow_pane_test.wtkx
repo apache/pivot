@@ -22,23 +22,23 @@ limitations under the License.
     xmlns="org.apache.pivot.wtk">
     <content>
         <FlowPane styles="{alignment:'left', backgroundColor:'#ff0000', padding:4}">
-            <PushButton buttonData="0" styles="{minimumPreferredAspectRatio:15}"/>
-            <PushButton buttonData="1" styles="{minimumPreferredAspectRatio:1.5}"/>
-            <PushButton buttonData="2" visible="false" styles="{minimumPreferredAspectRatio:1.5}"/>
-            <PushButton buttonData="3" styles="{minimumPreferredAspectRatio:1.5}"/>
-            <PushButton buttonData="4" styles="{minimumPreferredAspectRatio:1.5}"/>
-            <PushButton buttonData="5" styles="{minimumPreferredAspectRatio:1.5}"/>
-            <PushButton buttonData="6" styles="{minimumPreferredAspectRatio:1.5}"/>
-            <PushButton buttonData="7" preferredHeight="40" styles="{minimumPreferredAspectRatio:1.5}"/>
-            <PushButton buttonData="8" preferredHeight="50" styles="{minimumPreferredAspectRatio:1.5}"/>
-            <PushButton buttonData="9" preferredHeight="60" styles="{minimumPreferredAspectRatio:1.5}"/>
-            <PushButton buttonData="0" styles="{minimumPreferredAspectRatio:1.5}"/>
-            <PushButton buttonData="A" styles="{minimumPreferredAspectRatio:1.5}"/>
-            <PushButton buttonData="B" visible="false" styles="{minimumPreferredAspectRatio:1.5}"/>
-            <PushButton buttonData="C" styles="{minimumPreferredAspectRatio:1.5}"/>
-            <PushButton buttonData="D" styles="{minimumPreferredAspectRatio:1.5}"/>
-            <PushButton buttonData="E" styles="{minimumPreferredAspectRatio:1.5}"/>
-            <PushButton buttonData="F" styles="{minimumPreferredAspectRatio:1.5}"/>
+            <PushButton buttonData="0" styles="{preferredAspectRatio:15}"/>
+            <PushButton buttonData="1" styles="{preferredAspectRatio:1.5}"/>
+            <PushButton buttonData="2" visible="false" styles="{preferredAspectRatio:1.5}"/>
+            <PushButton buttonData="3" styles="{preferredAspectRatio:1.5}"/>
+            <PushButton buttonData="4" styles="{preferredAspectRatio:1.5}"/>
+            <PushButton buttonData="5" styles="{preferredAspectRatio:1.5}"/>
+            <PushButton buttonData="6" styles="{preferredAspectRatio:1.5}"/>
+            <PushButton buttonData="7" preferredHeight="40" styles="{preferredAspectRatio:1.5}"/>
+            <PushButton buttonData="8" preferredHeight="50" styles="{preferredAspectRatio:1.5}"/>
+            <PushButton buttonData="9" preferredHeight="60" styles="{preferredAspectRatio:1.5}"/>
+            <PushButton buttonData="0" styles="{preferredAspectRatio:1.5}"/>
+            <PushButton buttonData="A" styles="{preferredAspectRatio:1.5}"/>
+            <PushButton buttonData="B" visible="false" styles="{preferredAspectRatio:1.5}"/>
+            <PushButton buttonData="C" styles="{preferredAspectRatio:1.5}"/>
+            <PushButton buttonData="D" styles="{preferredAspectRatio:1.5}"/>
+            <PushButton buttonData="E" styles="{preferredAspectRatio:1.5}"/>
+            <PushButton buttonData="F" styles="{preferredAspectRatio:1.5}"/>
         </FlowPane>
     </content>
 </Frame>

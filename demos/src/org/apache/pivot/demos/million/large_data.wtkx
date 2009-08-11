@@ -32,8 +32,8 @@ limitations under the License.
                         <BoxPane>
                             <ListButton wtkx:id="fileListButton"
                                 listData="['10e0.csv', '10e1.csv', '10e2.csv', '10e3.csv', '10e4.csv', '10e5.csv']" selectedIndex="0"/>
-                            <PushButton wtkx:id="loadDataButton" buttonData="Load Data" styles="{minimumPreferredAspectRatio:3}"/>
-                            <PushButton wtkx:id="cancelButton" buttonData="Cancel" enabled="false" styles="{minimumPreferredAspectRatio:3}"/>
+                            <PushButton wtkx:id="loadDataButton" buttonData="Load Data" styles="{preferredAspectRatio:3}"/>
+                            <PushButton wtkx:id="cancelButton" buttonData="Cancel" enabled="false" styles="{preferredAspectRatio:3}"/>
                         </BoxPane>
                         <Label wtkx:id="statusLabel"/>
                         <Separator/>

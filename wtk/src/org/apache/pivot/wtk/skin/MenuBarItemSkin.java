@@ -109,6 +109,11 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
     }
 
     @Override
+    public boolean isFocusable() {
+        return false;
+    }
+
+    @Override
     public void mouseOver(Component component) {
         super.mouseOver(component);
 
@@ -199,38 +204,19 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
         menuPopup.close();
     }
 
-    @Override
-    public void focusedChanged(Component component, Component obverseComponent) {
-        super.focusedChanged(component, obverseComponent);
-
-        if (component.isFocused()) {
-            if (!menuPopup.isOpen()) {
-                MenuBar.Item menuBarItem = (MenuBar.Item)component;
-                Display display = menuBarItem.getDisplay();
-                Point menuBarItemLocation = menuBarItem.mapPointToAncestor(display, 0, getHeight());
-
-                // TODO Ensure that the popup remains within the bounds of the display
-
-                menuPopup.setLocation(menuBarItemLocation.x, menuBarItemLocation.y);
-                menuPopup.open(menuBarItem);
-            }
-        } else {
-            if (!menuPopup.containsFocus()) {
-                menuPopup.close();
-            }
-        }
-    }
-
     public void buttonPressed(Button button) {
-        MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
-        MenuBar menuBar = menuBarItem.getMenuBar();
-
         if (menuPopup.isOpen()) {
-            if (menuBar.isActive()) {
-                Component.clearFocus();
-            } else {
-                menuBar.setActive(true);
-            }
+            menuPopup.close();
+        } else {
+            MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
+
+            Display display = menuBarItem.getDisplay();
+            Point menuBarItemLocation = menuBarItem.mapPointToAncestor(display, 0, getHeight());
+
+            // TODO Ensure that the popup remains within the bounds of the display
+
+            menuPopup.setLocation(menuBarItemLocation.x, menuBarItemLocation.y);
+            menuPopup.open(menuBarItem);
         }
     }
 

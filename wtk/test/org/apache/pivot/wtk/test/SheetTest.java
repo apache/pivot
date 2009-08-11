@@ -87,7 +87,7 @@ public class SheetTest implements Application {
         boxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
 
         final PushButton closeButton = new PushButton("Close");
-        closeButton.getStyles().put("minimumPreferredAspectRatio", 3);
+        closeButton.getStyles().put("preferredAspectRatio", 3);
         boxPane.add(closeButton);
 
         sheet = new Sheet(tablePane);
