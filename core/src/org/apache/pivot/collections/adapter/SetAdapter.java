@@ -17,6 +17,8 @@
 package org.apache.pivot.collections.adapter;
 
 import java.io.Serializable;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Comparator;
 import java.util.Iterator;
 
@@ -25,10 +27,9 @@ import org.apache.pivot.collections.SetListener;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 
-
 /**
- * Implementation of the {@link Set} interface that is backed by an
- * instance of <tt>java.util.Set</tt>.
+ * Implementation of the {@link Set} interface that is backed by an instance of
+ * <tt>java.util.Set</tt>.
  */
 public class SetAdapter<E> implements Set<E>, Serializable {
     private static final long serialVersionUID = 0;
@@ -93,11 +94,40 @@ public class SetAdapter<E> implements Set<E>, Serializable {
         return set.size();
     }
 
+    @SuppressWarnings("unchecked")
     public Comparator<E> getComparator() {
+        if (this.set instanceof java.util.SortedSet) {
+            return ((java.util.SortedSet) this.set).comparator();
+        }
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     public void setComparator(Comparator<E> comparator) {
+        // If the adapted set supports it, implement setComparator by
+        // constructing a new set
+        if (this.set instanceof java.util.SortedSet) {
+            try {
+                Constructor constructor = this.set.getClass().getConstructor(Comparator.class);
+                if (constructor != null) {
+                    java.util.SortedSet<E> set = (java.util.SortedSet) constructor.newInstance(comparator);
+                    set.addAll(this.set);
+                    this.set = set;
+                }
+            } catch (SecurityException exception) {
+                throw new RuntimeException(exception);
+            } catch (NoSuchMethodException exception) {
+                throw new RuntimeException(exception);
+            } catch (IllegalArgumentException exception) {
+                throw new RuntimeException(exception);
+            } catch (InstantiationException exception) {
+                throw new RuntimeException(exception);
+            } catch (IllegalAccessException exception) {
+                throw new UnsupportedOperationException(exception);
+            } catch (InvocationTargetException exception) {
+                throw new RuntimeException(exception);
+            }
+        }
         throw new UnsupportedOperationException();
     }
 

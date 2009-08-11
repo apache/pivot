@@ -17,18 +17,20 @@
 package org.apache.pivot.collections.adapter;
 
 import java.io.Serializable;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.SortedMap;
 
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.MapListener;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 
-
 /**
- * Implementation of the {@link Map} interface that is backed by an
- * instance of <tt>java.util.Map</tt>.
+ * Implementation of the {@link Map} interface that is backed by an instance of
+ * <tt>java.util.Map</tt>.
  */
 public class MapAdapter<K, V> implements Map<K, V>, Serializable {
     private static final long serialVersionUID = 0;
@@ -58,8 +60,7 @@ public class MapAdapter<K, V> implements Map<K, V>, Serializable {
 
         if (update) {
             mapListeners.valueUpdated(this, key, previousValue);
-        }
-        else {
+        } else {
             mapListeners.valueAdded(this, key);
         }
 
@@ -88,7 +89,6 @@ public class MapAdapter<K, V> implements Map<K, V>, Serializable {
         return map.containsKey(key);
     }
 
-
     public boolean isEmpty() {
         return map.isEmpty();
     }
@@ -97,11 +97,40 @@ public class MapAdapter<K, V> implements Map<K, V>, Serializable {
         return map.size();
     }
 
+    @SuppressWarnings("unchecked")
     public Comparator<K> getComparator() {
+        if (this.map instanceof SortedMap) {
+            return ((SortedMap) this.map).comparator();
+        }
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     public void setComparator(Comparator<K> comparator) {
+        // If the adapted map supports it, implement setComparator by
+        // constructing a new map
+        if (this.map instanceof SortedMap) {
+            try {
+                Constructor constructor = this.map.getClass().getConstructor(Comparator.class);
+                if (constructor != null) {
+                    java.util.Map<K, V> map = (java.util.Map) constructor.newInstance(comparator);
+                    map.putAll(this.map);
+                    this.map = map;
+                }
+            } catch (SecurityException exception) {
+                throw new RuntimeException(exception);
+            } catch (NoSuchMethodException exception) {
+                throw new RuntimeException(exception);
+            } catch (IllegalArgumentException exception) {
+                throw new RuntimeException(exception);
+            } catch (InstantiationException exception) {
+                throw new RuntimeException(exception);
+            } catch (IllegalAccessException exception) {
+                throw new RuntimeException(exception);
+            } catch (InvocationTargetException exception) {
+                throw new RuntimeException(exception);
+            }
+        }
         throw new UnsupportedOperationException();
     }
 
