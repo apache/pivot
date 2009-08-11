@@ -171,12 +171,10 @@ public class TerraMenuItemSkin extends MenuItemSkin {
         boolean opaque = false;
 
         Menu.Item menuItem = (Menu.Item)getComponent();
-        Menu menu = menuItem.getSection().getMenu();
 
-        boolean highlight = (menuItem.isFocused()
-            || menuPopup.isOpen());
-
-        if (highlight) {
+        if (menuItem.isFocused()
+            || menuPopup.isOpen()) {
+            Menu menu = menuItem.getSection().getMenu();
             Color highlightBackgroundColor = (Color)menu.getStyles().get("highlightBackgroundColor");
             opaque = (highlightBackgroundColor.getTransparency() == Transparency.OPAQUE);
         }

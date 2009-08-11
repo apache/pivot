@@ -244,6 +244,8 @@ public class BoxPaneSkin extends ContainerSkin
                     if (fill) {
                         componentHeight = Math.max(height - (padding.top
                             + padding.bottom), 0);
+
+                        component.invalidate();
                         componentWidth = component.getPreferredWidth(componentHeight);
                     } else {
                         Dimensions preferredComponentSize = component.getPreferredSize();
@@ -309,6 +311,7 @@ public class BoxPaneSkin extends ContainerSkin
                         componentWidth = Math.max(width - (padding.left
                             + padding.right), 0);
 
+                        component.invalidate();
                         componentHeight = component.getPreferredHeight(componentWidth);
                     } else {
                         Dimensions preferredComponentSize = component.getPreferredSize();

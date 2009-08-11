@@ -28,7 +28,6 @@ import org.apache.pivot.wtk.MenuBarListener;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.skin.ContainerSkin;
 
-
 /**
  * Menu bar skin.
  *
@@ -58,15 +57,11 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
 
         MenuBar menuBar = (MenuBar)component;
         menuBar.getMenuBarListeners().add(this);
-
-        menuBar.setFocusTraversalPolicy(new IndexFocusTraversalPolicy(true));
     }
 
     public void uninstall() {
         MenuBar menuBar = (MenuBar)getComponent();
         menuBar.getMenuBarListeners().remove(this);
-
-        menuBar.setFocusTraversalPolicy(null);
 
         super.uninstall();
     }
@@ -297,9 +292,5 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
 
     public void itemsRemoved(MenuBar menuBar, int index, Sequence<MenuBar.Item> removed) {
         invalidateComponent();
-    }
-
-    public void activeChanged(MenuBar menuBar) {
-        // No-op
     }
 }

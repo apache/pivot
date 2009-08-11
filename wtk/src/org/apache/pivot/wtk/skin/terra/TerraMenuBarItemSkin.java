@@ -75,16 +75,15 @@ public class TerraMenuBarItemSkin extends MenuBarItemSkin {
 
     public void paint(Graphics2D graphics) {
         MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
-        MenuBar menuBar = menuBarItem.getMenuBar();
 
         int width = getWidth();
         int height = getHeight();
 
-        boolean highlight = menuPopup.isOpen()
-            || menuBarItem.isFocused();
+        boolean highlight = menuPopup.isOpen();
 
         // Paint highlight state
         if (highlight) {
+            MenuBar menuBar = menuBarItem.getMenuBar();
             Color highlightBackgroundColor = (Color)menuBar.getStyles().get("highlightBackgroundColor");
             graphics.setColor(highlightBackgroundColor);
             graphics.fillRect(0, 0, width, height);
@@ -102,12 +101,9 @@ public class TerraMenuBarItemSkin extends MenuBarItemSkin {
     public boolean isOpaque() {
         boolean opaque = false;
 
-        MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
-        MenuBar menuBar = menuBarItem.getMenuBar();
-
-        boolean highlight = menuPopup.isOpen();
-
-        if (highlight) {
+        if (menuPopup.isOpen()) {
+            MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
+            MenuBar menuBar = menuBarItem.getMenuBar();
             Color highlightBackgroundColor = (Color)menuBar.getStyles().get("highlightBackgroundColor");
             opaque = (highlightBackgroundColor.getTransparency() == Transparency.OPAQUE);
         }

@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.wtk.test;
 
+import java.awt.Color;
+
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Component;
@@ -46,7 +48,7 @@ public class WindowTest implements Application {
             }
         });
 
-        display.getStyles().put("backgroundColor", "#aaaaff");
+        display.getStyles().put("backgroundColor", new Color(0, 127, 127));
         window1.setContent(new Label("Hello Bar"));
         window1.open(display);
 

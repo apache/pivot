@@ -23,7 +23,9 @@ import java.awt.Graphics2D;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
+import org.apache.pivot.wtk.Direction;
 import org.apache.pivot.wtk.GraphicsUtilities;
+import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Menu;
 import org.apache.pivot.wtk.MenuListener;
 import org.apache.pivot.wtk.Theme;
@@ -88,6 +90,11 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
         }
 
         super.uninstall();
+    }
+
+    @Override
+    public boolean isFocusable() {
+        return true;
     }
 
     public int getPreferredWidth(int height) {
@@ -375,6 +382,23 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
     public void setShowKeyboardShortcuts(boolean showKeyboardShortcuts) {
         this.showKeyboardShortcuts = showKeyboardShortcuts;
         invalidateComponent();
+    }
+
+    @Override
+    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+        boolean consumed = super.keyPressed(component, keyCode, keyLocation);
+
+        Menu menu = (Menu)component;
+
+        if (keyCode == Keyboard.KeyCode.UP) {
+            menu.transferFocus(null, Direction.BACKWARD);
+            consumed = true;
+        } else if (keyCode == Keyboard.KeyCode.DOWN) {
+            menu.transferFocus(null, Direction.FORWARD);
+            consumed = true;
+        }
+
+        return consumed;
     }
 
     public void sectionInserted(Menu menu, int index) {

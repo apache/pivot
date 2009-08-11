@@ -26,7 +26,7 @@ import org.apache.pivot.wtk.content.MenuBarItemDataRenderer;
 
 
 /**
- * Component representing a horizontal menu bar.
+ * Component representing a menu bar.
  *
  * @author gbrown
  */
@@ -59,6 +59,7 @@ public class MenuBar extends Container {
 
         public Item(Object buttonData) {
             super(buttonData);
+            super.setToggleButton(true);
 
             setDataRenderer(DEFAULT_DATA_RENDERER);
             installSkin(Item.class);
@@ -102,7 +103,7 @@ public class MenuBar extends Container {
 
         @Override
         public void setToggleButton(boolean toggleButton) {
-            throw new UnsupportedOperationException("Menu bar items cannot be toggle buttons.");
+            throw new UnsupportedOperationException("Menu bar items are always toggle buttons.");
         }
 
         public ListenerList<ItemListener> getItemListeners() {
@@ -139,6 +140,7 @@ public class MenuBar extends Container {
 
             MenuBar.this.add(item);
             items.insert(item, index);
+            item.setGroup(itemGroup);
             item.setMenuBar(MenuBar.this);
 
             menuBarListeners.itemInserted(MenuBar.this, index);
@@ -162,6 +164,7 @@ public class MenuBar extends Container {
 
             for (int i = 0, n = removed.getLength(); i < n; i++) {
                 Item item = removed.get(i);
+                item.setGroup((Button.Group)null);
                 item.setMenuBar(null);
                 MenuBar.this.remove(item);
             }
@@ -201,18 +204,11 @@ public class MenuBar extends Container {
                 listener.itemsRemoved(menuBar, index, removed);
             }
         }
-
-        public void activeChanged(MenuBar menuBar) {
-            for (MenuBarListener listener : this) {
-                listener.activeChanged(menuBar);
-            }
-        }
     }
 
     private ArrayList<Item> items = new ArrayList<Item>();
+    private Button.Group itemGroup = new Button.Group();
     private ItemSequence itemSequence = new ItemSequence();
-
-    private boolean active = false;
 
     private MenuBarListenerList menuBarListeners = new MenuBarListenerList();
 
@@ -224,15 +220,47 @@ public class MenuBar extends Container {
         return itemSequence;
     }
 
-    public boolean isActive() {
-        return active;
+    public Item getSelectedItem() {
+        return (Item)itemGroup.getSelection();
     }
 
-    public void setActive(boolean active) {
-        if (this.active != active) {
-            this.active = active;
+    public void selectNextItem() {
+        int n = items.getLength();
 
-            menuBarListeners.activeChanged(this);
+        if (n > 0) {
+            int index = n;
+
+            Item selectedItem = getSelectedItem();
+            if (selectedItem != null) {
+                index = items.indexOf(selectedItem) + 1;
+            }
+
+            if (index == n) {
+                index = 0;
+            }
+
+            selectedItem = items.get(index);
+            selectedItem.setSelected(true);
+        }
+    }
+
+    public void selectPreviousItem() {
+        int n = items.getLength();
+
+        if (n > 0) {
+            int index = -1;
+
+            Item selectedItem = getSelectedItem();
+            if (selectedItem != null) {
+                index = items.indexOf(selectedItem) - 1;
+            }
+
+            if (index < 0) {
+                index = n - 1;
+            }
+
+            selectedItem = items.get(index);
+            selectedItem.setSelected(true);
         }
     }
 

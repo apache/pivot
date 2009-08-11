@@ -605,6 +605,9 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
         @Override
         public void validate() {
+            // TODO Don't queue the validate callback until layout()? Then we
+            // wouldn't have to abort it in multiple locations...
+
             if (!isValid()) {
                 TextArea textArea = (TextArea)getComponent();
                 Container parent = textArea.getParent();

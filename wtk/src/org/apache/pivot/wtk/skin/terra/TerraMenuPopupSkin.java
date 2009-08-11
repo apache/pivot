@@ -245,7 +245,11 @@ public class TerraMenuPopupSkin extends WindowSkin
         // TODO Maybe we should leave this to the caller
         MenuPopup menuPopup = (MenuPopup)getComponent();
         Component affiliate = menuPopup.getAffiliate();
-        affiliate.getWindow().moveToFront();
+
+        Window affiliateWindow = affiliate.getWindow();
+        if (affiliateWindow.isOpen()) {
+            affiliateWindow.moveToFront();
+        }
     }
 
     public void menuChanged(MenuPopup menuPopup, Menu previousMenu) {

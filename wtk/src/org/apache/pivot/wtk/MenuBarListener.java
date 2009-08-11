@@ -40,11 +40,4 @@ public interface MenuBarListener {
      * @param removed
      */
     public void itemsRemoved(MenuBar menuBar, int index, Sequence<MenuBar.Item> removed);
-
-    /**
-     * Called when the menu bar's active state has changed.
-     *
-     * @param menuBar
-     */
-    public void activeChanged(MenuBar menuBar);
 }

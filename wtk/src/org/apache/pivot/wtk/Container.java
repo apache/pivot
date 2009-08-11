@@ -449,7 +449,16 @@ public abstract class Container extends Component
         return component;
     }
 
-    protected Component transferFocus(Component component, Direction direction) {
+    /**
+     * Transfers focus to the next focusable component.
+     *
+     * @param component
+     * The component from which focus will be transferred.
+     *
+     * @param direction
+     * The direction in which to transfer focus.
+     */
+    public Component transferFocus(Component component, Direction direction) {
         if (focusTraversalPolicy == null) {
             // The container has no traversal policy; move up a level
             component = transferFocus(direction);

@@ -19,7 +19,6 @@ package org.apache.pivot.wtk.skin;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentKeyListener;
-import org.apache.pivot.wtk.Direction;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Menu;
@@ -38,30 +37,26 @@ import org.apache.pivot.wtk.WindowStateListener;
 public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.ItemListener {
     protected MenuPopup menuPopup = new MenuPopup();
 
-    private ComponentKeyListener menuPopupComponentKeyListener = new ComponentKeyListener() {
-        public boolean keyTyped(Component component, char character) {
-            return false;
-        }
-
+    private ComponentKeyListener menuPopupComponentKeyListener = new ComponentKeyListener.Adapter() {
         public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+            boolean consumed = false;
+
             MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
+            MenuBar menuBar = menuBarItem.getMenuBar();
 
             if (keyCode == Keyboard.KeyCode.LEFT
                 || (keyCode == Keyboard.KeyCode.TAB
                     && Keyboard.isPressed(Keyboard.Modifier.SHIFT))) {
-                menuBarItem.transferFocus(Direction.BACKWARD);
+                menuBar.selectPreviousItem();
+                consumed = true;
+
             } else if (keyCode == Keyboard.KeyCode.RIGHT
                 || keyCode == Keyboard.KeyCode.TAB) {
-                menuBarItem.transferFocus(Direction.FORWARD);
-            } else if (keyCode == Keyboard.KeyCode.ESCAPE) {
-                Component.clearFocus();
+                menuBar.selectNextItem();
+                consumed = true;
             }
 
-            return false;
-        }
-
-        public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
-            return false;
+            return consumed;
         }
     };
 
@@ -69,16 +64,7 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
         @Override
         public void windowClosed(Window window, Display display) {
             MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
-            if (menuBarItem.isFocused()) {
-                Component.clearFocus();
-            } else {
-                repaintComponent();
-            }
-
-            MenuBar menuBar = menuBarItem.getMenuBar();
-            if (!menuBar.containsFocus()) {
-                menuBar.setActive(false);
-            }
+            menuBarItem.setSelected(false);
         }
     };
 
@@ -120,8 +106,8 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
         MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
         MenuBar menuBar = menuBarItem.getMenuBar();
 
-        if (menuBar.isActive()) {
-            menuBarItem.requestFocus();
+        if (menuBar.getSelectedItem() != null) {
+            menuBarItem.setSelected(true);
         }
     }
 
@@ -130,7 +116,7 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
         boolean consumed = super.mouseDown(component, button, x, y);
 
         MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
-        menuBarItem.requestFocus();
+        menuBarItem.setSelected(true);
 
         return consumed;
     }
@@ -146,70 +132,19 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
     }
 
     @Override
-    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
-        boolean consumed = false;
-
-        MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
-
-        if (keyCode == Keyboard.KeyCode.UP) {
-            menuPopup.requestFocus();
-            Component focusedComponent = Component.getFocusedComponent();
-            if (focusedComponent != null) {
-                focusedComponent.transferFocus(Direction.BACKWARD);
-            }
-
-            consumed = true;
-        } else if (keyCode == Keyboard.KeyCode.DOWN) {
-            menuPopup.requestFocus();
-            consumed = true;
-        } else if (keyCode == Keyboard.KeyCode.LEFT) {
-            menuBarItem.transferFocus(Direction.BACKWARD);
-            consumed = true;
-        } else if (keyCode == Keyboard.KeyCode.RIGHT) {
-            menuBarItem.transferFocus(Direction.FORWARD);
-            consumed = true;
-        } else if (keyCode == Keyboard.KeyCode.ENTER) {
-            menuBarItem.press();
-            consumed = true;
-        } else if (keyCode == Keyboard.KeyCode.ESCAPE) {
-            Component.clearFocus();
-            consumed = true;
-        } else {
-            consumed = super.keyPressed(component, keyCode, keyLocation);
-        }
-
-        return consumed;
-    }
-
-    @Override
-    public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
-        boolean consumed = false;
-
-        MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
-
-        if (keyCode == Keyboard.KeyCode.SPACE) {
-            menuBarItem.press();
-            consumed = true;
-        } else {
-            consumed = super.keyReleased(component, keyCode, keyLocation);
-        }
-
-        return consumed;
-    }
-
-    @Override
     public void enabledChanged(Component component) {
         super.enabledChanged(component);
 
         menuPopup.close();
     }
 
-    public void buttonPressed(Button button) {
-        if (menuPopup.isOpen()) {
-            menuPopup.close();
-        } else {
-            MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
+    @Override
+    public void stateChanged(Button button, Button.State previousState) {
+        super.stateChanged(button, previousState);
 
+        MenuBar.Item menuBarItem = (MenuBar.Item)button;
+
+        if (menuBarItem.isSelected()) {
             Display display = menuBarItem.getDisplay();
             Point menuBarItemLocation = menuBarItem.mapPointToAncestor(display, 0, getHeight());
 
@@ -217,6 +152,9 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
 
             menuPopup.setLocation(menuBarItemLocation.x, menuBarItemLocation.y);
             menuPopup.open(menuBarItem);
+            menuPopup.requestFocus();
+        } else {
+            menuPopup.close();
         }
     }
 
