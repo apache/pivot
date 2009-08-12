@@ -36,6 +36,7 @@ import org.apache.pivot.wtk.WindowStateListener;
  */
 public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.ItemListener {
     protected MenuPopup menuPopup = new MenuPopup();
+    private boolean closeMenuPopup = false;
 
     private ComponentKeyListener menuPopupComponentKeyListener = new ComponentKeyListener.Adapter() {
         public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
@@ -72,6 +73,8 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
             if (menuBar.getSelectedItem() == null) {
                 menuBarItem.getWindow().moveToFront();
             }
+
+            closeMenuPopup = false;
         }
     };
 
@@ -123,7 +126,19 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
         boolean consumed = super.mouseDown(component, button, x, y);
 
         MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
+        closeMenuPopup = menuBarItem.isSelected();
         menuBarItem.setSelected(true);
+
+        return consumed;
+    }
+
+    @Override
+    public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+        boolean consumed = super.mouseUp(component, button, x, y);
+
+        if (closeMenuPopup) {
+            menuPopup.close();
+        }
 
         return consumed;
     }

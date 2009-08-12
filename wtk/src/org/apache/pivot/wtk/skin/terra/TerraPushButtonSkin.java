@@ -80,8 +80,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 
-        if (height == -1
-            && !Float.isNaN(preferredAspectRatio)) {
+        if (height == -1) {
             preferredWidth = getPreferredSize().width;
         } else {
             PushButton pushButton = (PushButton)getComponent();
@@ -111,8 +110,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     public int getPreferredHeight(int width) {
         int preferredHeight = 0;
 
-        if (width== -1
-            && !Float.isNaN(preferredAspectRatio)) {
+        if (width== -1) {
             preferredHeight = getPreferredSize().height;
         } else {
             PushButton pushButton = (PushButton)getComponent();
