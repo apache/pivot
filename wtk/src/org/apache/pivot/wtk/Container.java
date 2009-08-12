@@ -32,17 +32,6 @@ import org.apache.pivot.wtk.effects.Decorator;
 
 /**
  * Abstract base class for containers.
- * <p>
- * NOTES:
- * <ul>
- * <li>Child components that have special meaning to a container should be
- * installed via a dedicated method (for example,
- * {@link org.apache.pivot.wtk.Window#setContent(Component)}); additional components may
- * be added by the skin when installed. Other components may still be added but
- * may not be rendered properly by the installed skin.</li>
- * <li>Callers should not rely on component position within container to mean
- * anything other than paint order.</li>
- * </ul>
  *
  * @author gbrown
  */
@@ -456,7 +445,7 @@ public abstract class Container extends Component
 
                     // Ensure that we don't get into an infinite loop
                     if (component == first) {
-                        break;
+                        throw new RuntimeException("Infinite loop in focus traversal policy for " + this);
                     }
                 }
 

@@ -19,7 +19,6 @@ package org.apache.pivot.wtk.test;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.BoxPane;
-import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Direction;
 import org.apache.pivot.wtk.Display;
@@ -43,11 +42,8 @@ public class FocusTest implements Application {
         frame.setPreferredSize(320, 240);
         frame.open(display);
 
-        boolean focused = frame.requestFocus();
-        System.out.println("focused = " + focused);
-
-        Component component = frame.transferFocus(null, Direction.FORWARD);
-        System.out.println("component = " + component);
+        frame.requestFocus();
+        frame.transferFocus(null, Direction.FORWARD);
     }
 
     @Override

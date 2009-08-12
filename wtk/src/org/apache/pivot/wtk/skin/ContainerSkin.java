@@ -83,8 +83,7 @@ public abstract class ContainerSkin extends ComponentSkin
                             if (index < n - 1) {
                                 nextComponent = container.get(index + 1);
                             } else {
-                                if (wrap
-                                    && container.containsFocus()) {
+                                if (wrap) {
                                     nextComponent = container.get(0);
                                 }
                             }
@@ -107,8 +106,7 @@ public abstract class ContainerSkin extends ComponentSkin
                             if (index > 0) {
                                 nextComponent = container.get(index - 1);
                             } else {
-                                if (wrap
-                                    && container.containsFocus()) {
+                                if (wrap) {
                                     nextComponent = container.get(n - 1);
                                 }
                             }
