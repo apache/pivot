@@ -20,40 +20,29 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Iterator;
 
-import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
-
 
 /**
  * Implementation of the {@link Set} interface that is backed by a
- * hashtable.
- * <p>
- * TODO We're temporarily using a java.util.HashSet to back this set.
- * Eventually, we'll replace this with an internal set representation.
+ * hash table.
  */
 public class HashSet<E> implements Set<E>, Serializable {
     private static final long serialVersionUID = 0;
 
-    protected java.util.HashSet<E> hashSet = null;
+    protected HashMap<E, Void> hashMap = new HashMap<E, Void>();
 
-    private Comparator<E> comparator = null;
     private transient SetListenerList<E> setListeners = new SetListenerList<E>();
 
     public HashSet() {
-        hashSet = new java.util.HashSet<E>();
     }
 
     public HashSet(Set<E> set) {
-        hashSet = new java.util.HashSet<E>();
-
         for (E element : set) {
             add(element);
         }
     }
 
     public HashSet(E... elements) {
-        hashSet = new java.util.HashSet<E>();
-
         for (int i = 0; i < elements.length; i++) {
             E element = elements[i];
             add(element);
@@ -61,16 +50,14 @@ public class HashSet<E> implements Set<E>, Serializable {
     }
 
     public HashSet(Comparator<E> comparator) {
-        throw new UnsupportedOperationException("HashSet auto-sorting is not yet supported.");
-
-        // this.comparator = comparator;
+        setComparator(comparator);
     }
 
     public boolean add(E element) {
         boolean added = false;
 
-        if (!hashSet.contains(element)) {
-            hashSet.add(element);
+        if (!hashMap.containsKey(element)) {
+            hashMap.put(element, null);
             added = true;
 
             setListeners.elementAdded(this, element);
@@ -82,8 +69,8 @@ public class HashSet<E> implements Set<E>, Serializable {
     public boolean remove(E element) {
         boolean removed = false;
 
-        if (hashSet.contains(element)) {
-            hashSet.remove(element);
+        if (hashMap.containsKey(element)) {
+            hashMap.remove(element);
             removed = true;
 
             setListeners.elementRemoved(this, element);
@@ -93,34 +80,34 @@ public class HashSet<E> implements Set<E>, Serializable {
     }
 
     public void clear() {
-        hashSet.clear();
-        setListeners.setCleared(this);
+        if (!hashMap.isEmpty()) {
+            hashMap.clear();
+            setListeners.setCleared(this);
+        }
     }
 
     public boolean contains(E element) {
-        return hashSet.contains(element);
+        return hashMap.containsKey(element);
     }
 
     public boolean isEmpty() {
-        return hashSet.isEmpty();
+        return hashMap.isEmpty();
     }
 
     public int count() {
-        return hashSet.size();
+        return hashMap.count();
     }
 
     public Comparator<E> getComparator() {
-        return comparator;
+        return hashMap.getComparator();
     }
 
     public void setComparator(Comparator<E> comparator) {
-        // TODO
-        throw new UnsupportedOperationException("HashSet auto-sorting is not yet supported.");
+        hashMap.setComparator(comparator);
     }
 
     public Iterator<E> iterator() {
-        // TODO Return an iterator that supports modification?
-        return new ImmutableIterator<E>(hashSet.iterator());
+        return hashMap.iterator();
     }
 
     public ListenerList<SetListener<E>> getSetListeners() {

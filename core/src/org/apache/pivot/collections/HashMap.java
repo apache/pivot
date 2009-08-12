@@ -26,7 +26,7 @@ import org.apache.pivot.util.ListenerList;
 
 /**
  * Implementation of the {@link Map} interface that is backed by a
- * hashtable.
+ * hash table.
  * <p>
  * TODO We're temporarily using a java.util.HashMap to back this map.
  * Eventually, we'll replace this with an internal map representation.
@@ -135,7 +135,6 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
     }
 
     public Iterator<K> iterator() {
-        // TODO Return an iterator that supports modification?
         return new ImmutableIterator<K>(hashMap.keySet().iterator());
     }
 
