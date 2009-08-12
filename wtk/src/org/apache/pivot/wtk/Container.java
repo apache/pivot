@@ -449,8 +449,7 @@ public abstract class Container extends Component
                     }
                 }
 
-                focused = (component != null
-                    && component != first);
+                focused = (component != null);
             }
         }
 

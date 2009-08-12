@@ -24,6 +24,7 @@ import org.apache.pivot.wtk.Direction;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.Label;
+import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.skin.ContainerSkin;
 
 public class FocusTest implements Application {
@@ -33,7 +34,7 @@ public class FocusTest implements Application {
     public void startup(Display display, Map<String, String> properties) {
         frame = new Frame();
 
-        BoxPane boxPane = new BoxPane();
+        BoxPane boxPane = new BoxPane(Orientation.VERTICAL);
         boxPane.add(new Label("Hello, World!"));
         boxPane.setFocusTraversalPolicy(new ContainerSkin.IndexFocusTraversalPolicy(true));
 
