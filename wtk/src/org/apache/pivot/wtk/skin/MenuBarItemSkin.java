@@ -19,6 +19,8 @@ package org.apache.pivot.wtk.skin;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentKeyListener;
+import org.apache.pivot.wtk.Container;
+import org.apache.pivot.wtk.ContainerMouseListener;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Menu;
@@ -61,7 +63,13 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
         }
     };
 
-    private WindowStateListener menuPopupWindowListener = new WindowStateListener.Adapter() {
+    private WindowStateListener menuPopupWindowStateListener = new WindowStateListener.Adapter() {
+        @Override
+        public void windowOpened(Window window) {
+            Display display = window.getDisplay();
+            display.getContainerMouseListeners().add(displayMouseListener);
+        }
+
         @Override
         public void windowClosed(Window window, Display display) {
             MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
@@ -71,16 +79,37 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
             // front to restore focus
             MenuBar menuBar = menuBarItem.getMenuBar();
             if (menuBar.getSelectedItem() == null) {
-                menuBarItem.getWindow().moveToFront();
+                Window menuBarWindow = menuBar.getWindow();
+
+                if (menuBarWindow.isOpen()) {
+                    menuBarWindow.moveToFront();
+                }
             }
+
+            display.getContainerMouseListeners().remove(displayMouseListener);
 
             closeMenuPopup = false;
         }
     };
 
+    private ContainerMouseListener displayMouseListener = new ContainerMouseListener.Adapter() {
+        @Override
+        public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
+            Display display = (Display)container;
+            Component descendant = display.getDescendantAt(x, y);
+
+            if (!menuPopup.isAncestor(descendant)
+                && descendant != MenuBarItemSkin.this.getComponent()) {
+                menuPopup.close();
+            }
+
+            return false;
+        }
+    };
+
     public MenuBarItemSkin() {
         menuPopup.getComponentKeyListeners().add(menuPopupComponentKeyListener);
-        menuPopup.getWindowStateListeners().add(menuPopupWindowListener);
+        menuPopup.getWindowStateListeners().add(menuPopupWindowStateListener);
     }
 
     @Override
@@ -173,7 +202,7 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
             // TODO Ensure that the popup remains within the bounds of the display
 
             menuPopup.setLocation(menuBarItemLocation.x, menuBarItemLocation.y);
-            menuPopup.open(menuBarItem);
+            menuPopup.open(menuBarItem.getWindow());
             menuPopup.requestFocus();
         } else {
             menuPopup.close();

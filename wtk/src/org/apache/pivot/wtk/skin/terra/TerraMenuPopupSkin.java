@@ -21,7 +21,6 @@ import java.awt.Color;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Border;
 import org.apache.pivot.wtk.Component;
-import org.apache.pivot.wtk.ComponentClassListener;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.ContainerMouseListener;
 import org.apache.pivot.wtk.Display;
@@ -39,14 +38,12 @@ import org.apache.pivot.wtk.effects.Transition;
 import org.apache.pivot.wtk.effects.TransitionListener;
 import org.apache.pivot.wtk.skin.WindowSkin;
 
-
 /**
  * Menu popup skin.
  *
  * @author gbrown
  */
-public class TerraMenuPopupSkin extends WindowSkin
-    implements MenuPopupListener, ComponentClassListener {
+public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener {
     private Panorama panorama;
     private Border border;
 
@@ -63,7 +60,7 @@ public class TerraMenuPopupSkin extends WindowSkin
             if (!menuPopup.isAncestor(descendant)
                 && (window == null
                     || !menuPopup.isOwner(window))
-                && descendant != menuPopup.getAffiliate()) {
+                && menuPopup.isAutoClose()) {
                 menuPopup.close();
             }
 
@@ -130,10 +127,6 @@ public class TerraMenuPopupSkin extends WindowSkin
         MenuPopup menuPopup = (MenuPopup)component;
         menuPopup.getMenuPopupListeners().add(this);
 
-        if (menuPopup.isOpen()) {
-            Component.getComponentClassListeners().add(this);
-        }
-
         Menu menu = menuPopup.getMenu();
         if (menu != null) {
             menu.getMenuItemSelectionListeners().add(menuItemPressListener);
@@ -151,10 +144,6 @@ public class TerraMenuPopupSkin extends WindowSkin
     public void uninstall() {
         MenuPopup menuPopup = (MenuPopup)getComponent();
         menuPopup.getMenuPopupListeners().remove(this);
-
-        if (menuPopup.isOpen()) {
-            Component.getComponentClassListeners().remove(this);
-        }
 
         Menu menu = menuPopup.getMenu();
         if (menu != null) {
@@ -211,8 +200,6 @@ public class TerraMenuPopupSkin extends WindowSkin
         if (menu != null) {
             menu.requestFocus();
         }
-
-        Component.getComponentClassListeners().add(this);
     }
 
     @Override
@@ -237,17 +224,8 @@ public class TerraMenuPopupSkin extends WindowSkin
         super.windowClosed(window, display);
 
         display.getContainerMouseListeners().remove(displayMouseListener);
-        Component.getComponentClassListeners().remove(this);
 
         closeTransition = null;
-
-        MenuPopup menuPopup = (MenuPopup)getComponent();
-        Component affiliate = menuPopup.getAffiliate();
-
-        if (affiliate != null
-            && affiliate.isFocusable()) {
-            affiliate.requestFocus();
-        }
     }
 
     public void menuChanged(MenuPopup menuPopup, Menu previousMenu) {
@@ -261,24 +239,5 @@ public class TerraMenuPopupSkin extends WindowSkin
         }
 
         panorama.setView(menu);
-    }
-
-    public void focusedComponentChanged(Component previousFocusedComponent) {
-        MenuPopup menuPopup = (MenuPopup)getComponent();
-
-        if (!menuPopup.containsFocus()) {
-            Component affiliate = menuPopup.getAffiliate();
-            Component focusedComponent = Component.getFocusedComponent();
-
-            if (focusedComponent != null
-                && focusedComponent != affiliate) {
-                Window window = focusedComponent.getWindow();
-
-                if (window != menuPopup
-                    && !menuPopup.isOwner(window)) {
-                    menuPopup.close();
-                }
-            }
-        }
     }
 }

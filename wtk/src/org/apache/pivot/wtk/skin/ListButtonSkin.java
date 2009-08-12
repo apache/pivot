@@ -19,7 +19,6 @@ package org.apache.pivot.wtk.skin;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.util.Filter;
-import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentKeyListener;
@@ -39,7 +38,6 @@ import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.WindowStateListener;
 
-
 /**
  * Abstract base class for list button skins.
  * <p>
@@ -57,6 +55,7 @@ public abstract class ListButtonSkin extends ButtonSkin
     protected Window listViewPopup;
 
     private ComponentMouseButtonListener listViewPopupMouseButtonListener = new ComponentMouseButtonListener.Adapter() {
+        @Override
         public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
             ListButton listButton = (ListButton)getComponent();
 
@@ -72,11 +71,8 @@ public abstract class ListButtonSkin extends ButtonSkin
         }
     };
 
-    private ComponentKeyListener listViewPopupKeyListener = new ComponentKeyListener() {
-        public boolean keyTyped(Component component, char character) {
-            return false;
-        }
-
+    private ComponentKeyListener listViewPopupKeyListener = new ComponentKeyListener.Adapter() {
+        @Override
         public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
             ListButton listButton = (ListButton)getComponent();
 
@@ -111,44 +107,23 @@ public abstract class ListButtonSkin extends ButtonSkin
 
             return false;
         }
-
-        public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
-            return false;
-        }
     };
 
-    private WindowStateListener listViewPopupWindowStateListener = new WindowStateListener() {
-        public Vote previewWindowOpen(Window window, Display display) {
-            return Vote.APPROVE;
-        }
-
-        public void windowOpenVetoed(Window window, Vote reason) {
-            // No-op
-        }
-
+    private WindowStateListener listViewPopupWindowStateListener = new WindowStateListener.Adapter() {
+        @Override
         public void windowOpened(Window window) {
             Display display = window.getDisplay();
             display.getContainerMouseListeners().add(displayMouseListener);
         }
 
-        public Vote previewWindowClose(Window window) {
-            return Vote.APPROVE;
-        }
-
-        public void windowCloseVetoed(Window window, Vote reason) {
-            // No-op
-        }
-
+        @Override
         public void windowClosed(Window window, Display display) {
             display.getContainerMouseListeners().remove(displayMouseListener);
         }
     };
 
-    private ContainerMouseListener displayMouseListener = new ContainerMouseListener() {
-        public boolean mouseMove(Container container, int x, int y) {
-            return false;
-        }
-
+    private ContainerMouseListener displayMouseListener = new ContainerMouseListener.Adapter() {
+        @Override
         public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
             Display display = (Display)container;
             Component descendant = display.getDescendantAt(x, y);
@@ -161,10 +136,7 @@ public abstract class ListButtonSkin extends ButtonSkin
             return false;
         }
 
-        public boolean mouseUp(Container container, Mouse.Button button, int x, int y) {
-            return false;
-        }
-
+        @Override
         public boolean mouseWheel(Container container, Mouse.ScrollType scrollType,
             int scrollAmount, int wheelRotation, int x, int y) {
             boolean consumed = false;

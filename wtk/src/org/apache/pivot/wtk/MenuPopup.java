@@ -34,7 +34,7 @@ public class MenuPopup extends Window {
     }
 
     private Menu menu;
-    private Component affiliate = null;
+    private boolean autoClose = false;
 
     private MenuPopupListenerList menuPopupListeners = new MenuPopupListenerList();
 
@@ -62,17 +62,20 @@ public class MenuPopup extends Window {
         }
     }
 
-    public Component getAffiliate() {
-        return affiliate;
+    public boolean isAutoClose() {
+        return autoClose;
     }
 
     public void open(Display display, int x, int y) {
-        // TODO Determine x, y and width, height
+        // TODO Determine x, y and width, height based on display bounds
+
+        autoClose = true;
+
         setLocation(x, y);
         super.open(display);
     }
 
-    public void open(Display display, Point location) {
+    public final void open(Display display, Point location) {
         if (location == null) {
             throw new IllegalArgumentException("location is null.");
         }
@@ -81,12 +84,15 @@ public class MenuPopup extends Window {
     }
 
     public void open(Window owner, int x, int y) {
-        // TODO Determine x, y and width, height
+        // TODO Determine x, y and width, height based on display bounds
+
+        autoClose = true;
+
         setLocation(x, y);
         super.open(owner);
     }
 
-    public void open(Window owner, Point location) {
+    public final void open(Window owner, Point location) {
         if (location == null) {
             throw new IllegalArgumentException("location is null.");
         }
@@ -94,47 +100,12 @@ public class MenuPopup extends Window {
         open(owner, location.x, location.y);
     }
 
-    /**
-     * Opens the popup.
-     *
-     * @param affiliate
-     * The component with which the popup is affiliated.
-     */
-    public void open(Component affiliate) {
-        if (affiliate == null) {
-            throw new IllegalArgumentException("affiliate is null.");
-        }
-
-        if (isOpen()
-            && getAffiliate() != affiliate) {
-            throw new IllegalStateException("Popup is already open with a different affiliate.");
-        }
-
-        this.affiliate = affiliate;
-
-        open(affiliate.getWindow());
-    }
-
-    public void open(Component affiliate, int x, int y) {
-        // TODO Determine x, y and width, height
-        setLocation(x, y);
-        open(affiliate);
-    }
-
-    public void open(Component affiliate, Point location) {
-        if (location == null) {
-            throw new IllegalArgumentException("location is null.");
-        }
-
-        open(affiliate, location.x, location.y);
-    }
-
     @Override
     public void close() {
         super.close();
 
         if (isClosed()) {
-            affiliate = null;
+            autoClose = false;
         }
     }
 

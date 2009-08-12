@@ -18,6 +18,8 @@ package org.apache.pivot.wtk.skin;
 
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.Container;
+import org.apache.pivot.wtk.ContainerMouseListener;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Keyboard;
@@ -28,6 +30,7 @@ import org.apache.pivot.wtk.MenuPopup;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtk.WindowStateListener;
 
 /**
  * Abstract base class for menu button skins.
@@ -39,6 +42,37 @@ public abstract class MenuButtonSkin extends ButtonSkin
     protected boolean pressed = false;
     protected MenuPopup menuPopup = new MenuPopup();
 
+    private WindowStateListener menuPopupWindowStateListener = new WindowStateListener.Adapter() {
+        @Override
+        public void windowOpened(Window window) {
+            Display display = window.getDisplay();
+            display.getContainerMouseListeners().add(displayMouseListener);
+        }
+
+        @Override
+        public void windowClosed(Window window, Display display) {
+            display.getContainerMouseListeners().remove(displayMouseListener);
+
+            Window menuButtonWindow = getComponent().getWindow();
+            menuButtonWindow.moveToFront();
+        }
+    };
+
+    private ContainerMouseListener displayMouseListener = new ContainerMouseListener.Adapter() {
+        @Override
+        public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
+            Display display = (Display)container;
+            Component descendant = display.getDescendantAt(x, y);
+
+            if (!menuPopup.isAncestor(descendant)
+                && descendant != MenuButtonSkin.this.getComponent()) {
+                menuPopup.close();
+            }
+
+            return false;
+        }
+    };
+
     @Override
     public void install(Component component) {
         super.install(component);
@@ -47,6 +81,8 @@ public abstract class MenuButtonSkin extends ButtonSkin
         menuButton.getMenuButtonListeners().add(this);
 
         menuPopup.setMenu(menuButton.getMenu());
+
+        menuPopup.getWindowStateListeners().add(menuPopupWindowStateListener);
     }
 
     @Override
@@ -203,7 +239,7 @@ public abstract class MenuButtonSkin extends ButtonSkin
 
                 menuPopup.setLocation(x, y);
                 menuPopup.setPreferredSize(popupSize.width, popupHeight);
-                menuPopup.open(menuButton);
+                menuPopup.open(menuButton.getWindow());
 
                 menuPopup.requestFocus();
             }

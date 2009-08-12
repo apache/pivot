@@ -19,6 +19,8 @@ package org.apache.pivot.wtk.skin;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.Container;
+import org.apache.pivot.wtk.ContainerMouseListener;
 import org.apache.pivot.wtk.Direction;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Keyboard;
@@ -37,17 +39,44 @@ import org.apache.pivot.wtk.WindowStateListener;
 public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListener {
     protected MenuPopup menuPopup = new MenuPopup();
 
-    protected int buttonPressInterval = 200;
-    protected ApplicationContext.ScheduledCallback buttonPressCallback = null;
+    private WindowStateListener menuPopupWindowStateListener = new WindowStateListener.Adapter() {
+        @Override
+        public void windowOpened(Window window) {
+            Display display = window.getDisplay();
+            display.getContainerMouseListeners().add(displayMouseListener);
+        }
 
-    private WindowStateListener menuPopupWindowListener = new WindowStateListener.Adapter() {
+        @Override
         public void windowClosed(Window window, Display display) {
+            display.getContainerMouseListeners().remove(displayMouseListener);
+
             repaintComponent();
+
+            Menu.Item menuItem = (Menu.Item)getComponent();
+            menuItem.requestFocus();
         }
     };
 
+    private ContainerMouseListener displayMouseListener = new ContainerMouseListener.Adapter() {
+        @Override
+        public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
+            Display display = (Display)container;
+            Component descendant = display.getDescendantAt(x, y);
+
+            if (!menuPopup.isAncestor(descendant)
+                && descendant != MenuItemSkin.this.getComponent()) {
+                menuPopup.close();
+            }
+
+            return false;
+        }
+    };
+
+    protected int buttonPressInterval = 200;
+    protected ApplicationContext.ScheduledCallback buttonPressCallback = null;
+
     public MenuItemSkin() {
-        menuPopup.getWindowStateListeners().add(menuPopupWindowListener);
+        menuPopup.getWindowStateListeners().add(menuPopupWindowStateListener);
     }
 
     @Override
@@ -143,9 +172,11 @@ public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListen
             menuItem.transferFocus(Direction.FORWARD);
             consumed = true;
         } else if (keyCode == Keyboard.KeyCode.LEFT) {
+            // If this is not a top-level menu, close the window
             Menu.Section parentSection = menuItem.getSection();
             Menu parentMenu = parentSection.getMenu();
             Menu.Item parentMenuItem = parentMenu.getItem();
+
             if (parentMenuItem != null) {
                 Window window = menuItem.getWindow();
                 window.close();
@@ -209,7 +240,7 @@ public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListen
             // TODO Ensure that the popup remains within the bounds of the display
 
             menuPopup.setLocation(menuItemLocation.x, menuItemLocation.y);
-            menuPopup.open(menuItem);
+            menuPopup.open(menuItem.getWindow());
         }
     }
 
