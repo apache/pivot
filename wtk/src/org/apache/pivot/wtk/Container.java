@@ -447,14 +447,21 @@ public abstract class Container extends Component
             focused = super.requestFocus();
         } else {
             if (focusTraversalPolicy != null) {
-                Component component = null;
+                Component first = focusTraversalPolicy.getNextComponent(this, null, Direction.FORWARD);
 
-                do {
+                Component component = first;
+                while (component != null
+                    && !component.requestFocus()) {
                     component = focusTraversalPolicy.getNextComponent(this, component, Direction.FORWARD);
-                } while (component != null
-                    && !component.requestFocus());
 
-                focused = (component != null);
+                    // Ensure that we don't get into an infinite loop
+                    if (component == first) {
+                        break;
+                    }
+                }
+
+                focused = (component != null
+                    && component != first);
             }
         }
 
@@ -478,13 +485,7 @@ public abstract class Container extends Component
             do {
                 component = focusTraversalPolicy.getNextComponent(this, component, direction);
 
-                if (component == null) {
-                    Container parent = getParent();
-
-                    if (parent != null) {
-                        component = parent.transferFocus(this, direction);
-                    }
-                } else {
+                if (component != null) {
                     if (component.isFocusable()) {
                         component.requestFocus();
                     } else {
@@ -499,7 +500,7 @@ public abstract class Container extends Component
 
             if (component == null) {
                 // We are at the end of the traversal
-                transferFocus(direction);
+                component = transferFocus(direction);
             }
         }
 
