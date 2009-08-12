@@ -1499,6 +1499,12 @@ public abstract class Component implements ConstrainedVisual {
                 parent.repaint(getDecoratedBounds());
             }
 
+            // Ensure the layout is valid
+            if (visible
+                && !valid) {
+                validate();
+            }
+
             // Invalidate the parent
             if (parent != null) {
                 parent.invalidate();
@@ -2198,17 +2204,10 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Requests that focus be given to this component.
-<<<<<<< .mine
      *
      * @return
-     * <tt>true</tt> if the component gained the focus; <tt>false</tt>,
+     * <tt>true</tt> if the component gained the focus; <tt>false</tt>
      * otherwise.
-=======
-     *
-     * @return
-     * The component that got the focus, or <tt>null</tt> if the focus request
-     * was denied
->>>>>>> .r803327
      */
     public boolean requestFocus() {
         if (isFocusable()) {
