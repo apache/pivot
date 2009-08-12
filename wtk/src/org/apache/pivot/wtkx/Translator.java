@@ -199,8 +199,7 @@ public class Translator {
     }
 
     /**
-     * Translates a WTKX resource into a Java source file. The translated class
-     * will implement the {@link Bindable.ObjectHierarchy} interface.
+     * Translates a WTKX resource into a Java source file.
      *
      * @param referenceClass
      * The class relative to which the WTKX resource can be found.
@@ -208,8 +207,7 @@ public class Translator {
      * @param resourceName
      * A path name that identifies the WTKX resource. The path name should be
      * of the form defined by {@link Class#getResource(String)} and is relative
-     * to the base package. Note that this is the same form as is defined in
-     * {@link Bindable.Load#resourceName()}.
+     * to the base package.
      *
      * @return
      * The Java source file representation of the WTKX resource.
@@ -230,8 +228,7 @@ public class Translator {
     }
 
     /**
-     * Translates a WTKX input stream into a Java source file. The translated class
-     * will implement the {@link Bindable.ObjectHierarchy} interface.
+     * Translates a WTKX input stream into a Java source file.
      *
      * @param inputStream
      * The data stream from which the WTKX will be read.

@@ -39,6 +39,10 @@ public class WindowTest implements Application {
     public void startup(Display display, Map<String, String> properties) {
         window1.setTitle("Window 1");
         window1.setPreferredSize(320, 240);
+        window1.setMinPreferredWidth(220);
+        window1.setMaxPreferredWidth(420);
+        window1.setMinPreferredHeight(140);
+        window1.setMaxPreferredHeight(340);
 
         window1.getComponentListeners().add(new ComponentListener.Adapter() {
             public void sizeChanged(Component component, int previousWidth, int previousHeight) {

@@ -50,8 +50,7 @@ public class Compiler {
      * @param resourceName
      * A path name that identifies the WTKX resource. The path name should be
      * of the form defined by {@link Class#getResource(String)} and is relative
-     * to the base package. Note that this is the same form as is defined in
-     * {@link Bindable.Load#resourceName()}.
+     * to the base package.
      *
      * @param options
      * Compiler options, or <tt>null</tt> for no options.
@@ -93,8 +92,7 @@ public class Compiler {
      * @param resourceName
      * A path name that identifies the WTKX resource. The path name should be
      * of the form defined by {@link Class#getResource(String)} and is relative
-     * to the reference class. Note that this is the same form as is defined in
-     * {@link Bindable.Load#resourceName()}.
+     * to the reference class.
      *
      * @return
      * The preferred class name for a compiled version of the specified WTKX

@@ -570,9 +570,9 @@ public abstract class Component implements ConstrainedVisual {
     private int preferredHeight = -1;
 
     // Bounds on preferred size
-    private int minPreferredWidth = Integer.MIN_VALUE;
+    private int minPreferredWidth = 0;
     private int maxPreferredWidth = Integer.MAX_VALUE;
-    private int minPreferredHeight = Integer.MIN_VALUE;
+    private int minPreferredHeight = 0;
     private int maxPreferredHeight = Integer.MAX_VALUE;
 
     // Calculated preferred size value
@@ -1168,6 +1168,10 @@ public abstract class Component implements ConstrainedVisual {
 
         if (previousMinPreferredWidth != minPreferredWidth
             || previousMaxPreferredWidth != maxPreferredWidth) {
+            if (minPreferredWidth < 0) {
+                throw new IllegalArgumentException("minPreferredWidth is negative.");
+            }
+
             if (minPreferredWidth > maxPreferredWidth) {
                 throw new IllegalArgumentException("minPreferredWidth > maxPreferredWidth");
             }
@@ -1278,6 +1282,10 @@ public abstract class Component implements ConstrainedVisual {
 
         if (previousMinPreferredHeight != minPreferredHeight
             || previousMaxPreferredHeight != maxPreferredHeight) {
+            if (minPreferredHeight < 0) {
+                throw new IllegalArgumentException("minPreferredHeight is negative.");
+            }
+
             if (minPreferredHeight > maxPreferredHeight) {
                 throw new IllegalArgumentException("minPreferredHeight > maxPreferredHeight");
             }
