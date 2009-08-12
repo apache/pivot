@@ -60,9 +60,9 @@ limitations under the License.
         </TablePane.Row>
         <TablePane.Row height="-1">
           <BoxPane styles="{spacing:6,horizontalAlignment:'right'}">
-            <PushButton wtkx:id="previousButton" buttonData="Previous" styles="{preferredAspectRatio:3, padding:5, backgroundColor:16, borderColor:13, color:4, fontBold:true}"/>
-            <PushButton wtkx:id="nextButton" buttonData="Next" styles="{preferredAspectRatio:3, padding:5, backgroundColor:16, borderColor:13, color:4, fontBold:true}"/>
-            <PushButton wtkx:id="closeButton" buttonData="Close" styles="{preferredAspectRatio:3, padding:5, backgroundColor:16, borderColor:13, color:4, fontBold:true}"/>
+            <PushButton wtkx:id="previousButton" buttonData="Previous" styles="{minimumAspectRatio:3, padding:5, backgroundColor:16, borderColor:13, color:4, fontBold:true}"/>
+            <PushButton wtkx:id="nextButton" buttonData="Next" styles="{minimumAspectRatio:3, padding:5, backgroundColor:16, borderColor:13, color:4, fontBold:true}"/>
+            <PushButton wtkx:id="closeButton" buttonData="Close" styles="{minimumAspectRatio:3, padding:5, backgroundColor:16, borderColor:13, color:4, fontBold:true}"/>
           </BoxPane>
         </TablePane.Row>
       </rows>

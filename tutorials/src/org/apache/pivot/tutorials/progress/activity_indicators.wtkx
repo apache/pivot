@@ -41,7 +41,7 @@ limitations under the License.
                 </TablePane.Row>
                 <TablePane.Row height="-1">
                     <BoxPane styles="{horizontalAlignment:'center', padding:6}">
-                        <PushButton wtkx:id="activityButton" styles="{preferredAspectRatio:3}"/>
+                        <PushButton wtkx:id="activityButton" styles="{minimumAspectRatio:3}"/>
                     </BoxPane>
                 </TablePane.Row>
             </rows>

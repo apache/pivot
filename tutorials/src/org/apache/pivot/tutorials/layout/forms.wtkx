@@ -81,7 +81,7 @@ limitations under the License.
                                         </BoxPane>
                                         <BoxPane styles="{horizontalAlignment:'right', verticalAlignment:'center'}">
                                             <PushButton wtkx:id="submitButton" buttonData="Submit"
-                                                styles="{preferredAspectRatio:3}"/>
+                                                styles="{minimumAspectRatio:3}"/>
                                         </BoxPane>
                                     </TablePane.Row>
                                 </rows>

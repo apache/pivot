@@ -99,7 +99,7 @@ public class TerraAlertSkin extends TerraDialogSkin
             optionButtonStyles.put("borderColor", theme.getColor(13));
 
             optionButton.setStyles(optionButtonStyles);
-            optionButton.getStyles().put("preferredAspectRatio", 3);
+            optionButton.getStyles().put("minimumAspectRatio", 3);
 
             optionButton.getButtonPressListeners().add(new ButtonPressListener() {
                 public void buttonPressed(Button button) {
