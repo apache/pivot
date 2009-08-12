@@ -21,6 +21,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.Transparency;
 import java.awt.font.FontRenderContext;
 import java.awt.font.LineBreakMeasurer;
 import java.awt.font.LineMetrics;
@@ -59,6 +60,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
     private Font font;
     private Color color;
+    private Color backgroundColor;
     private TextDecoration textDecoration;
     private HorizontalAlignment horizontalAlignment;
     private VerticalAlignment verticalAlignment;
@@ -69,6 +71,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         Theme theme = Theme.getTheme();
         font = theme.getFont();
         color = Color.BLACK;
+        backgroundColor = null;
         textDecoration = null;
         horizontalAlignment = HorizontalAlignment.LEFT;
         verticalAlignment = VerticalAlignment.TOP;
@@ -187,6 +190,11 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     public void paint(Graphics2D graphics) {
         int width = getWidth();
         int height = getHeight();
+
+        if (backgroundColor != null) {
+            graphics.setPaint(backgroundColor);
+            graphics.fillRect(0, 0, width, height);
+        }
 
         Label label = (Label)getComponent();
         String text = label.getText();
@@ -314,7 +322,14 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
      */
     @Override
     public boolean isOpaque() {
-        return false;
+        boolean opaque = false;
+
+        if (backgroundColor != null
+            && backgroundColor.getTransparency() == Transparency.OPAQUE) {
+            opaque = true;
+        }
+
+        return opaque;
     }
 
     public Font getFont() {
@@ -393,6 +408,23 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         }
 
         setColor(GraphicsUtilities.decodeColor(color));
+    }
+
+    public Color getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public void setBackgroundColor(Color backgroundColor) {
+        this.backgroundColor = backgroundColor;
+        repaintComponent();
+    }
+
+    public final void setBackgroundColor(String backgroundColor) {
+        if (backgroundColor == null) {
+            throw new IllegalArgumentException("backgroundColor is null");
+        }
+
+        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
     }
 
     public TextDecoration getTextDecoration() {
