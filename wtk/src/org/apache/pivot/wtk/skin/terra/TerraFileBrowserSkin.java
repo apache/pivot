@@ -19,6 +19,7 @@ package org.apache.pivot.wtk.skin.terra;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.io.Folder;
 import org.apache.pivot.serialization.SerializationException;
@@ -27,7 +28,10 @@ import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.FileBrowser;
+import org.apache.pivot.wtk.ListButton;
+import org.apache.pivot.wtk.ListButtonSelectionListener;
 import org.apache.pivot.wtk.skin.FileBrowserSkin;
+import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 /**
@@ -38,11 +42,13 @@ import org.apache.pivot.wtkx.WTKXSerializer;
 public class TerraFileBrowserSkin extends FileBrowserSkin {
     private Component content = null;
 
+    @WTKX private ListButton pathListButton = null;
+
     @Override
     public void install(Component component) {
         super.install(component);
 
-        FileBrowser fileBrowser = (FileBrowser)component;
+        final FileBrowser fileBrowser = (FileBrowser)component;
 
         Resources resources;
         try {
@@ -63,6 +69,20 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         }
 
         fileBrowser.add(content);
+
+        wtkxSerializer.bind(this, TerraFileBrowserSkin.class);
+
+        pathListButton.getListButtonSelectionListeners().add(new ListButtonSelectionListener() {
+            public void selectedIndexChanged(ListButton listButton, int previousSelectedIndex) {
+                File directory = (File)listButton.getSelectedItem();
+
+                if (directory != null) {
+                    fileBrowser.setSelectedFolder(new Folder(directory.getPath()));
+                }
+            }
+        });
+
+        selectedFolderChanged(fileBrowser, null);
     }
 
     @Override
@@ -100,7 +120,17 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     }
 
     public void selectedFolderChanged(FileBrowser fileBrowser, Folder previousSelectedFolder) {
-        // TODO
+        ArrayList<File> path = new ArrayList<File>();
+
+        Folder folder = fileBrowser.getSelectedFolder();
+        File directory = folder.getParentFile();
+        while (directory != null) {
+            path.add(directory);
+            directory = directory.getParentFile();
+        }
+
+        pathListButton.setListData(path);
+        pathListButton.setButtonData(folder);
     }
 
     public void selectedFileAdded(FileBrowser fileBrowser, File file) {

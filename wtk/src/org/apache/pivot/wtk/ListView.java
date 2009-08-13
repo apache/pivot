@@ -522,7 +522,11 @@ public class ListView extends Component {
      * The index to select, or <tt>-1</tt> to clear the selection.
      */
     public void setSelectedIndex(int index) {
-        setSelectedRange(index, index);
+        if (index == -1) {
+            clearSelection();
+        } else {
+            setSelectedRange(index, index);
+        }
     }
 
     /**

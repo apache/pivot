@@ -36,15 +36,12 @@ limitations under the License.
                 <rows>
                     <TablePane.Row>
                         <BoxPane styles="{verticalAlignment:'center'}">
-                            <ListButton wtkx:id="pathListButton" selectedIndex="0" tooltipText="%goTo">
-                                <listData>
-                                    <collections:ArrayList>
-                                        <content:ListItem icon="@folder.png" text="Sample Folder"/>
-                                    </collections:ArrayList>
-                                </listData>
+                            <ListButton wtkx:id="pathListButton" tooltipText="%goTo">
+                                <dataRenderer>
+                                    <content:ListButtonFileRenderer/>
+                                </dataRenderer>
                                 <itemRenderer>
-                                    <content:ListViewItemRenderer iconWidth="16" iconHeight="16"
-                                        showIcon="true"/>
+                                    <content:ListViewFileRenderer/>
                                 </itemRenderer>
                             </ListButton>
 

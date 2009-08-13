@@ -18,38 +18,42 @@ package org.apache.pivot.wtk.content;
 
 import java.io.File;
 
-import org.apache.pivot.wtk.TreeView;
+import org.apache.pivot.wtk.Insets;
+import org.apache.pivot.wtk.ListView;
 
 /**
- * Tree view renderer for displaying file system contents.
+ * List view renderer for displaying file system contents.
  *
  * @author gbrown
  */
-public class TreeViewFileRenderer extends FileRenderer implements TreeView.NodeRenderer {
-    public void render(Object node, TreeView treeView, boolean expanded,
-        boolean selected, TreeView.NodeCheckState checkState,
-        boolean highlighted, boolean disabled) {
-        label.getStyles().put("font", treeView.getStyles().get("font"));
+public class ListViewFileRenderer extends FileRenderer implements ListView.ItemRenderer {
+    public ListViewFileRenderer() {
+        getStyles().put("padding", new Insets(2, 3, 2, 3));
+    }
+
+    public void render(Object item, ListView listView, boolean selected,
+        boolean checked, boolean highlighted, boolean disabled) {
+        label.getStyles().put("font", listView.getStyles().get("font"));
 
         Object color = null;
-        if (treeView.isEnabled() && !disabled) {
+        if (listView.isEnabled() && !disabled) {
             if (selected) {
-                if (treeView.isFocused()) {
-                    color = treeView.getStyles().get("selectionColor");
+                if (listView.isFocused()) {
+                    color = listView.getStyles().get("selectionColor");
                 } else {
-                    color = treeView.getStyles().get("inactiveSelectionColor");
+                    color = listView.getStyles().get("inactiveSelectionColor");
                 }
             } else {
-                color = treeView.getStyles().get("color");
+                color = listView.getStyles().get("color");
             }
         } else {
-            color = treeView.getStyles().get("disabledColor");
+            color = listView.getStyles().get("disabledColor");
         }
 
         label.getStyles().put("color", color);
 
-        if (node != null) {
-            render((File)node, treeView, disabled);
+        if (item != null) {
+            render((File)item, listView, disabled);
         }
     }
 }
