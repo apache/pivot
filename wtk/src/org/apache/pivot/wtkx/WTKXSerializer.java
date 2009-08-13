@@ -888,7 +888,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             + " starting at line number " + getLineNumber();
 
         if (location != null) {
-            message += " in file" + location.getPath();
+            message += " in file " + location.getPath();
         }
 
         message += ":";
