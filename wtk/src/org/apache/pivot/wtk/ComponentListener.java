@@ -38,12 +38,12 @@ public interface ComponentListener {
             int previousPreferredHeight) {
         }
 
-        public void preferredWidthLimitsChanged(Component component, int previousMinPreferredWidth,
-            int previousMaxPreferredWidth) {
+        public void preferredWidthLimitsChanged(Component component, int previousMinimumPreferredWidth,
+            int previousMaximumPreferredWidth) {
         }
 
-        public void preferredHeightLimitsChanged(Component component, int previousMinPreferredHeight,
-            int previousMaxPreferredHeight) {
+        public void preferredHeightLimitsChanged(Component component, int previousMinimumPreferredHeight,
+            int previousMaximumPreferredHeight) {
         }
 
         public void locationChanged(Component component, int previousX, int previousY) {
@@ -103,21 +103,21 @@ public interface ComponentListener {
      * Called when a component's preferred width limits have changed.
      *
      * @param component
-     * @param previousMinPreferredWidth
-     * @param previousMaxPreferredWidth
+     * @param previousMinimumPreferredWidth
+     * @param previousMaximumPreferredWidth
      */
-    public void preferredWidthLimitsChanged(Component component, int previousMinPreferredWidth,
-        int previousMaxPreferredWidth);
+    public void preferredWidthLimitsChanged(Component component, int previousMinimumPreferredWidth,
+        int previousMaximumPreferredWidth);
 
     /**
      * Called when a component's preferred height limits have changed.
      *
      * @param component
-     * @param previousMinPreferredHeight
-     * @param previousMaxPreferredHeight
+     * @param previousMinimumPreferredHeight
+     * @param previousMaximumPreferredHeight
      */
-    public void preferredHeightLimitsChanged(Component component, int previousMinPreferredHeight,
-        int previousMaxPreferredHeight);
+    public void preferredHeightLimitsChanged(Component component, int previousMinimumPreferredHeight,
+        int previousMaximumPreferredHeight);
 
     /**
      * Called when a component's location has changed.
