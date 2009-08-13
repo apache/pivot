@@ -447,25 +447,24 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
             for (int j = 0, n = row.getLength(); j < n && j < columnCount; j++) {
                 Component child = row.get(j);
 
-                if (child != null) {
-                    if (child.isVisible()) {
-                        child.setLocation(componentX, componentY);
+                if (child != null
+                    && child.isVisible()) {
+                    child.setLocation(componentX, componentY);
 
-                        int columnSpan = TablePane.getColumnSpan(child);
-                        int childWidth = (columnSpan - 1) * horizontalSpacing;
-                        for (int k = 0; k < columnSpan && j + k < columnCount; k++) {
-                            childWidth += columnWidths[j + k];
-                        }
-
-                        int rowSpan = TablePane.getRowSpan(child);
-                        int childHeight = (rowSpan - 1) * verticalSpacing;
-                        for (int k = 0; k < rowSpan && i + k < rowCount; k++) {
-                            childHeight += rowHeights[i + k];
-                        }
-
-                        // Set the component's size
-                        child.setSize(Math.max(childWidth, 0), Math.max(childHeight, 0));
+                    int columnSpan = TablePane.getColumnSpan(child);
+                    int childWidth = (columnSpan - 1) * horizontalSpacing;
+                    for (int k = 0; k < columnSpan && j + k < columnCount; k++) {
+                        childWidth += columnWidths[j + k];
                     }
+
+                    int rowSpan = TablePane.getRowSpan(child);
+                    int childHeight = (rowSpan - 1) * verticalSpacing;
+                    for (int k = 0; k < rowSpan && i + k < rowCount; k++) {
+                        childHeight += rowHeights[i + k];
+                    }
+
+                    // Set the component's size
+                    child.setSize(Math.max(childWidth, 0), Math.max(childHeight, 0));
                 }
 
                 componentX += (columnWidths[j] + horizontalSpacing);
