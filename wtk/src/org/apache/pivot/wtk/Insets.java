@@ -40,6 +40,11 @@ public final class Insets implements Serializable {
     public static final String BOTTOM_KEY = "bottom";
     public static final String RIGHT_KEY = "right";
 
+    /**
+     * Insets whose top, left, bottom, and right values are all zero.
+     */
+    public static final Insets NONE = new Insets(0);
+
     public Insets(int inset) {
         top = inset;
         left = inset;

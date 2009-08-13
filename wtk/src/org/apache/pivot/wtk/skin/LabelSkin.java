@@ -75,7 +75,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         textDecoration = null;
         horizontalAlignment = HorizontalAlignment.LEFT;
         verticalAlignment = VerticalAlignment.TOP;
-        padding = new Insets(0);
+        padding = Insets.NONE;
         wrapText = false;
     }
 

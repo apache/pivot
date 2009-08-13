@@ -43,15 +43,13 @@ import org.apache.pivot.wtk.TablePaneListener;
  */
 public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
     TablePaneListener, TablePaneAttributeListener {
-    private Insets padding = DEFAULT_PADDING;
+    private Insets padding = Insets.NONE;
     private int horizontalSpacing = 0;
     private int verticalSpacing = 0;
     private boolean showHorizontalGridLines = false;
     private boolean showVerticalGridLines = false;
     private Color gridColor = Color.BLACK;
     private Color highlightBackgroundColor = Color.GRAY;
-
-    private static final Insets DEFAULT_PADDING = new Insets(0);
 
     private int[] columnWidths = null;
     private int[] rowHeights = null;

@@ -295,7 +295,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         }
     }
 
-    private Insets padding = new Insets(0);
+    private Insets padding = Insets.NONE;
     private boolean sizeToSelection = false;
     private SelectionChangeEffect selectionChangeEffect = null;
 

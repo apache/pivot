@@ -35,7 +35,7 @@ public class BoxPaneSkin extends ContainerSkin
     implements BoxPaneListener {
     private HorizontalAlignment horizontalAlignment = HorizontalAlignment.LEFT;
     private VerticalAlignment verticalAlignment = VerticalAlignment.TOP;
-    private Insets padding = new Insets(0);
+    private Insets padding = Insets.NONE;
     private int spacing = 4;
     private boolean fill = false;
 
