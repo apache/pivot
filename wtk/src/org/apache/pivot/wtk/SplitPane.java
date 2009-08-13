@@ -85,8 +85,8 @@ public class SplitPane extends Container {
         }
     }
 
-    Component topLeft = null;
-    Component bottomRight = null;
+    private Component topLeft = null;
+    private Component bottomRight = null;
     private Orientation orientation = null;
     private Region primaryRegion = Region.TOP_LEFT;
     private float splitRatio = 0.5f;
@@ -116,9 +116,10 @@ public class SplitPane extends Container {
     }
 
     public void setTopLeft(Component topLeft) {
-        if (topLeft != this.topLeft) {
+        Component previousTopLeft = this.topLeft;
+
+        if (topLeft != previousTopLeft) {
             // Set the component as the new top/left component
-            Component previousTopLeft = this.topLeft;
             this.topLeft = topLeft;
 
             // Remove any previous content component
@@ -144,9 +145,10 @@ public class SplitPane extends Container {
     }
 
     public void setBottomRight(Component bottomRight) {
-        if (bottomRight != this.bottomRight) {
+        Component previousBottomRight = this.bottomRight;
+
+        if (bottomRight != previousBottomRight) {
             // Set the component as the new bottom/right component
-            Component previousBottomRight = this.bottomRight;
             this.bottomRight = bottomRight;
 
             // Remove any previous content component
@@ -210,7 +212,6 @@ public class SplitPane extends Container {
 
         if (this.orientation != orientation) {
             this.orientation = orientation;
-
             splitPaneListeners.orientationChanged(this);
         }
     }
@@ -234,7 +235,6 @@ public class SplitPane extends Container {
 
         if (this.primaryRegion != primaryRegion) {
             this.primaryRegion = primaryRegion;
-
             splitPaneListeners.primaryRegionChanged(this);
         }
     }
