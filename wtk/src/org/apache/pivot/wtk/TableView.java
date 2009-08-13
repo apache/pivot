@@ -974,11 +974,18 @@ public class TableView extends Component {
      * The index to select, or <tt>-1</tt> to clear the selection.
      */
     public void setSelectedIndex(int index) {
-        ArrayList<Span> selectedRanges = new ArrayList<Span>();
+        setSelectedRange(index, index);
+    }
 
-        if (index >= 0) {
-            selectedRanges.add(new Span(index));
-        }
+    /**
+     * Sets the selection to a single range.
+     *
+     * @param start
+     * @param end
+     */
+    public void setSelectedRange(int start, int end) {
+        ArrayList<Span> selectedRanges = new ArrayList<Span>();
+        selectedRanges.add(new Span(start, end));
 
         setSelectedRanges(selectedRanges);
     }
@@ -1235,6 +1242,13 @@ public class TableView extends Component {
         }
 
         return removeSelectedRange(range.start, range.end);
+    }
+
+    /**
+     * Selects all rows in the table.
+     */
+    public void selectAll() {
+        setSelectedRange(0, tableData.getLength() - 1);
     }
 
     /**

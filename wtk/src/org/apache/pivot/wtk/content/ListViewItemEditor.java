@@ -209,6 +209,7 @@ public class ListViewItemEditor implements ListView.ItemEditor {
                 + (editBounds.height - textInput.getPreferredHeight(-1)) / 2);
             popup.open(listView.getWindow());
 
+            textInput.selectAll();
             textInput.requestFocus();
         }
     }

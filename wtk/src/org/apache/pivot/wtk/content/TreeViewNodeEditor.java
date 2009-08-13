@@ -247,6 +247,7 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
                 + (editBounds.height - textInput.getPreferredHeight(-1)) / 2);
             popup.open(treeView.getWindow());
 
+            textInput.selectAll();
             textInput.requestFocus();
         }
     }

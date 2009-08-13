@@ -228,6 +228,7 @@ public class TableViewCellEditor implements TableView.RowEditor {
                 + (cellBounds.height - textInput.getPreferredHeight(-1)) / 2);
             popup.open(tableView.getWindow());
 
+            textInput.selectAll();
             textInput.requestFocus();
         }
     }

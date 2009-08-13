@@ -2201,13 +2201,13 @@ public abstract class Component implements ConstrainedVisual {
      * otherwise, the component that has gained the focus.
      */
     private void setFocused(boolean focused, Component obverseComponent) {
-        componentStateListeners.focusedChanged(this, obverseComponent);
-
         if (focused) {
             parent.descendantGainedFocus(this, obverseComponent);
         } else {
             parent.descendantLostFocus(this);
         }
+
+        componentStateListeners.focusedChanged(this, obverseComponent);
     }
 
     /**

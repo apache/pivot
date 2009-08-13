@@ -405,6 +405,18 @@ public class TextInput extends Component {
     }
 
     /**
+     * Returns a span representing the current selection.
+     *
+     * @return
+     * A span containing the current selection. Both start and end points are
+     * inclusive. Returns <tt>null</tt> if the selection is empty.
+     */
+    public Span getSelection() {
+        return (selectionLength == 0) ? null : new Span(selectionStart,
+            selectionStart + selectionLength - 1);
+    }
+
+    /**
      * Sets the selection. The sum of the selection start and length must be
      * less than the length of the text input's content.
      *
@@ -438,15 +450,17 @@ public class TextInput extends Component {
     }
 
     /**
-     * Returns a span representing the current selection.
-     *
-     * @return
-     * A span containing the current selection. Both start and end points are
-     * inclusive. Returns <tt>null</tt> if the selection is empty.
+     * Selects all text.
      */
-    public Span getSelectionRange() {
-        return (selectionLength == 0) ? null : new Span(selectionStart,
-            selectionStart + selectionLength - 1);
+    public void selectAll() {
+        setSelection(0, textNode.getCharacterCount());
+    }
+
+    /**
+     * Clears the selection.
+     */
+    public void clearSelection() {
+        setSelection(0, 0);
     }
 
     /**

@@ -1219,31 +1219,26 @@ public class TerraTextInputSkin extends ComponentSkin
     public void focusedChanged(Component component, Component obverseComponent) {
         super.focusedChanged(component, obverseComponent);
 
-        TextInput textInput = (TextInput)getComponent();
-        TextNode textNode = textInput.getTextNode();
-
-        Window window = component.getWindow();
+        TextInput textInput = (TextInput)component;
+        Window window = textInput.getWindow();
 
         if (component.isFocused()) {
-            // If focus is not being restored or the focus was permanently
-            // transferred within this window, select all
-            if ((obverseComponent == null
-                    && window.getFocusDescendant() != component)
-                || (obverseComponent != null
-                    && obverseComponent.getWindow() == window)) {
+            // If focus was permanently transferred within this window,
+            // select all
+            if (obverseComponent != null
+                && obverseComponent.getWindow() == window) {
                 if (Mouse.getCapturer() != component) {
-                    textInput.setSelection(0, textNode.getCharacterCount());
+                    textInput.selectAll();
                 }
             }
 
             showCaret(textInput.getSelectionLength() == 0);
         } else {
-            // If focus is being permanently transferred within this window,
+            // If focus was permanently transferred within this window,
             // clear the selection
             if (obverseComponent != null
                 && obverseComponent.getWindow() == window) {
-                textInput.setSelection(textInput.getSelectionStart()
-                    + textInput.getSelectionLength(), 0);
+                textInput.clearSelection();
             }
 
             showCaret(false);
