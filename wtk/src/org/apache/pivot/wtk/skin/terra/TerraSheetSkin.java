@@ -84,7 +84,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
 
     private DropShadowDecorator dropShadowDecorator = null;
 
-    private static final int TRANSITION_DURATION = 250;
+    private static final int TRANSITION_DURATION = 300;
     private static final int TRANSITION_RATE = 30;
 
     public TerraSheetSkin() {

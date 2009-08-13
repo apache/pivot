@@ -16,12 +16,8 @@
  */
 package org.apache.pivot.wtk;
 
-import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
-import org.apache.pivot.serialization.JSONSerializer;
-import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ListenerList;
-
 
 /**
  * A <tt>SplitPane</tt> is a container component that splits its size up into
@@ -52,15 +48,15 @@ public class SplitPane extends Container {
 
     private static class SplitPaneListenerList extends ListenerList<SplitPaneListener>
         implements SplitPaneListener {
-        public void topLeftComponentChanged(SplitPane splitPane, Component previousTopLeftComponent) {
+        public void topLeftChanged(SplitPane splitPane, Component previousTopLeft) {
             for (SplitPaneListener listener : this) {
-                listener.topLeftComponentChanged(splitPane, previousTopLeftComponent);
+                listener.topLeftChanged(splitPane, previousTopLeft);
             }
         }
 
-        public void bottomRightComponentChanged(SplitPane splitPane, Component previousBottomRightComponent) {
+        public void bottomRightChanged(SplitPane splitPane, Component previousBottomRight) {
             for (SplitPaneListener listener : this) {
-                listener.bottomRightComponentChanged(splitPane, previousBottomRightComponent);
+                listener.bottomRightChanged(splitPane, previousBottomRight);
             }
         }
 
@@ -76,15 +72,9 @@ public class SplitPane extends Container {
             }
         }
 
-        public void splitLocationChanged(SplitPane splitPane, int previousSplitLocation) {
+        public void splitRatioChanged(SplitPane splitPane, float previousSplitRatio) {
             for (SplitPaneListener listener : this) {
-                listener.splitLocationChanged(splitPane, previousSplitLocation);
-            }
-        }
-
-        public void splitBoundsChanged(SplitPane splitPane, Span previousSplitBounds) {
-            for (SplitPaneListener listener : this) {
-                listener.splitBoundsChanged(splitPane, previousSplitBounds);
+                listener.splitRatioChanged(splitPane, previousSplitRatio);
             }
         }
 
@@ -95,114 +85,118 @@ public class SplitPane extends Container {
         }
     }
 
-    Component topLeftComponent = null;
-    Component bottomRightComponent = null;
+    Component topLeft = null;
+    Component bottomRight = null;
     private Orientation orientation = null;
     private Region primaryRegion = Region.TOP_LEFT;
-    private int splitLocation = 0;
-    private Span splitBounds = null;
+    private float splitRatio = 0.5f;
     private boolean locked = false;
 
     private SplitPaneListenerList splitPaneListeners = new SplitPaneListenerList();
-
-    // TODO Define a constructor that takes 2 components as arguments
 
     public SplitPane() {
         this(Orientation.HORIZONTAL);
     }
 
     public SplitPane(Orientation orientation) {
+        this(orientation, null, null);
+    }
+
+    public SplitPane(Orientation orientation, Component topLeft, Component bottomRight) {
         this.orientation = orientation;
 
         installSkin(SplitPane.class);
+
+        setTopLeft(topLeft);
+        setBottomRight(bottomRight);
     }
 
-    public Component getTopLeftComponent() {
-        return topLeftComponent;
+    public Component getTopLeft() {
+        return topLeft;
     }
 
-    public void setTopLeftComponent(Component topLeftComponent) {
-        if (topLeftComponent != this.topLeftComponent) {
+    public void setTopLeft(Component topLeft) {
+        if (topLeft != this.topLeft) {
             // Set the component as the new top/left component
-            Component previousTopLeftComponent = this.topLeftComponent;
-            this.topLeftComponent = topLeftComponent;
+            Component previousTopLeft = this.topLeft;
+            this.topLeft = topLeft;
 
             // Remove any previous content component
-            if (previousTopLeftComponent != null) {
-                remove(previousTopLeftComponent);
+            if (previousTopLeft != null) {
+                remove(previousTopLeft);
             }
 
-            if (topLeftComponent != null) {
-                if (topLeftComponent.getParent() != null) {
+            if (topLeft != null) {
+                if (topLeft.getParent() != null) {
                     throw new IllegalArgumentException("Component already has a parent.");
                 }
 
                 // Add the component
-                add(topLeftComponent);
+                add(topLeft);
             }
 
-            splitPaneListeners.topLeftComponentChanged(this, previousTopLeftComponent);
+            splitPaneListeners.topLeftChanged(this, previousTopLeft);
         }
     }
 
-    public Component getBottomRightComponent() {
-        return bottomRightComponent;
+    public Component getBottomRight() {
+        return bottomRight;
     }
 
-    public void setBottomRightComponent(Component bottomRightComponent) {
-        if (bottomRightComponent != this.bottomRightComponent) {
+    public void setBottomRight(Component bottomRight) {
+        if (bottomRight != this.bottomRight) {
             // Set the component as the new bottom/right component
-            Component previousBottomRightComponent = this.bottomRightComponent;
-            this.bottomRightComponent = bottomRightComponent;
+            Component previousBottomRight = this.bottomRight;
+            this.bottomRight = bottomRight;
 
             // Remove any previous content component
-            if (previousBottomRightComponent != null) {
-                remove(previousBottomRightComponent);
+            if (previousBottomRight != null) {
+                remove(previousBottomRight);
             }
 
-            if (bottomRightComponent != null) {
-                if (bottomRightComponent.getParent() != null) {
+            if (bottomRight != null) {
+                if (bottomRight.getParent() != null) {
                     throw new IllegalArgumentException("Component already has a parent.");
                 }
 
                 // Add the component
-                add(bottomRightComponent);
+                add(bottomRight);
             }
 
-            splitPaneListeners.bottomRightComponentChanged(this, previousBottomRightComponent);
+            splitPaneListeners.bottomRightChanged(this, previousBottomRight);
         }
     }
 
     public Component getTop() {
-        return (orientation == Orientation.HORIZONTAL) ? null : getTopLeftComponent();
+        return (orientation == Orientation.HORIZONTAL) ? null : getTopLeft();
     }
 
     public void setTop(Component component) {
-        setTopLeftComponent(component);
+        setTopLeft(component);
     }
 
     public Component getBottom() {
-        return (orientation == Orientation.HORIZONTAL) ? null : getBottomRightComponent();
+        return (orientation == Orientation.HORIZONTAL) ? null : getBottomRight();
     }
 
     public void setBottom(Component component) {
-        setBottomRightComponent(component);
+        setBottomRight(component);
     }
 
     public Component getLeft() {
-        return (orientation == Orientation.VERTICAL) ? null : getTopLeftComponent();
+        return (orientation == Orientation.VERTICAL) ? null : getTopLeft();
     }
 
     public void setLeft(Component component) {
-        setTopLeftComponent(component);
+        setTopLeft(component);
     }
 
     public Component getRight() {
-        return (orientation == Orientation.VERTICAL) ? null : getBottomRightComponent();
+        return (orientation == Orientation.VERTICAL) ? null : getBottomRight();
     }
 
     public void setRight(Component component) {
-        setBottomRightComponent(component);
+        setBottomRight(component);
     }
 
     public Orientation getOrientation() {
@@ -253,59 +247,16 @@ public class SplitPane extends Container {
         setPrimaryRegion(Region.valueOf(primaryRegion.toUpperCase()));
     }
 
-    public int getSplitLocation() {
-        return splitLocation;
+    public float getSplitRatio() {
+        return splitRatio;
     }
 
-    public void setSplitLocation(int splitLocation) {
-        int previousSplitLocation = this.splitLocation;
+    public void setSplitRatio(float splitRatio) {
+        float previousSplitRatio = this.splitRatio;
 
-        if (previousSplitLocation != splitLocation) {
-            this.splitLocation = splitLocation;
-            splitPaneListeners.splitLocationChanged(this, previousSplitLocation);
-        }
-    }
-
-    public Span getSplitBounds() {
-        return splitBounds;
-    }
-
-    public void setSplitBounds(Span splitBounds) {
-        Span previousSplitBounds = this.splitBounds;
-
-        if (previousSplitBounds != splitBounds) {
-            this.splitBounds = new Span(splitBounds);
-
-            // Reposition the splitter if necessary
-            if (splitBounds != null) {
-               if (splitLocation < splitBounds.start) {
-                  setSplitLocation(splitBounds.start);
-               } else if (splitLocation > splitBounds.end) {
-                  setSplitLocation(splitBounds.end);
-               }
-            }
-
-            splitPaneListeners.splitBoundsChanged(this, previousSplitBounds);
-        }
-    }
-
-    public final void setSplitBounds(Dictionary<String, ?> splitBounds) {
-        if (splitBounds == null) {
-            throw new IllegalArgumentException("splitBounds is null.");
-        }
-
-        setSplitBounds(new Span(splitBounds));
-    }
-
-    public final void setSplitBounds(String splitBounds) {
-        if (splitBounds == null) {
-            throw new IllegalArgumentException("splitBounds is null.");
-        }
-
-        try {
-            setSplitBounds(JSONSerializer.parseMap(splitBounds));
-        } catch (SerializationException exception) {
-            throw new IllegalArgumentException(exception);
+        if (previousSplitRatio != splitRatio) {
+            this.splitRatio = splitRatio;
+            splitPaneListeners.splitRatioChanged(this, previousSplitRatio);
         }
     }
 
@@ -324,8 +275,8 @@ public class SplitPane extends Container {
     public Sequence<Component> remove(int index, int count) {
         for (int i = index, n = index + count; i < n; i++) {
             Component component = get(i);
-            if (component == topLeftComponent
-                || component == bottomRightComponent) {
+            if (component == topLeft
+                || component == bottomRight) {
                 throw new UnsupportedOperationException();
             }
         }

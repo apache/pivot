@@ -26,17 +26,17 @@ public interface SplitPaneListener {
      * Called when a split pane's top left component has changed.
      *
      * @param splitPane
-     * @param previousTopLeftComponent
+     * @param previousTopLeft
      */
-    public void topLeftComponentChanged(SplitPane splitPane, Component previousTopLeftComponent);
+    public void topLeftChanged(SplitPane splitPane, Component previousTopLeft);
 
     /**
      * Called when a split pane's bottom right component has changed.
      *
      * @param splitPane
-     * @param previousBottomRightComponent
+     * @param previousBottomRight
      */
-    public void bottomRightComponentChanged(SplitPane splitPane, Component previousBottomRightComponent);
+    public void bottomRightChanged(SplitPane splitPane, Component previousBottomRight);
 
     /**
      * Called when a split pane's orientation has changed.
@@ -56,17 +56,9 @@ public interface SplitPaneListener {
      * Called when a split pane's split location has changed.
      *
      * @param splitPane
-     * @param previousSplitLocation
+     * @param previousSplitRatio
      */
-    public void splitLocationChanged(SplitPane splitPane, int previousSplitLocation);
-
-    /**
-     * Called when a split pane's split bounds have changed.
-     *
-     * @param splitPane
-     * @param previousSplitBounds
-     */
-    public void splitBoundsChanged(SplitPane splitPane, Span previousSplitBounds);
+    public void splitRatioChanged(SplitPane splitPane, float previousSplitRatio);
 
     /**
      * Called when a split pane's locked flag has changed.

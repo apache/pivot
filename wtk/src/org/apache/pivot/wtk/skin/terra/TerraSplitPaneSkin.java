@@ -19,28 +19,24 @@ package org.apache.pivot.wtk.skin.terra;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
-
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Cursor;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Orientation;
-import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.SplitPane;
 import org.apache.pivot.wtk.SplitPaneListener;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.skin.ComponentSkin;
 import org.apache.pivot.wtk.skin.ContainerSkin;
 
-
 /**
  * Split pane skin.
  *
  * @author tvolkert
  */
-public class TerraSplitPaneSkin extends ContainerSkin
-    implements SplitPaneListener {
+public class TerraSplitPaneSkin extends ContainerSkin implements SplitPaneListener {
 
     /**
      * Split pane splitter component.
@@ -86,7 +82,7 @@ public class TerraSplitPaneSkin extends ContainerSkin
         }
 
         public void paint(Graphics2D graphics) {
-            SplitPane splitPane = (SplitPane)TerraSplitPaneSkin.this.getComponent();
+            SplitPane splitPane = (SplitPane) TerraSplitPaneSkin.this.getComponent();
 
             Orientation orientation = splitPane.getOrientation();
 
@@ -143,23 +139,23 @@ public class TerraSplitPaneSkin extends ContainerSkin
             boolean consumed = super.mouseMove(component, x, y);
 
             if (Mouse.getCapturer() == component) {
-                SplitPane splitPane = (SplitPane)TerraSplitPaneSkin.this.getComponent();
+                SplitPane splitPane = (SplitPane) TerraSplitPaneSkin.this.getComponent();
                 Orientation orientation = splitPane.getOrientation();
 
                 // Calculate the would-be new split location
                 int splitLocation;
+                float splitRatio;
                 if (orientation == Orientation.HORIZONTAL) {
-                    splitLocation = component.getX() + x - dragOffset;
+                    splitLocation = limitSplitLocation(component.getX() + x - dragOffset);
+                    splitRatio = (float) splitLocation / splitPane.getWidth();
                 } else {
-                    splitLocation = component.getY() + y - dragOffset;
+                    splitLocation = limitSplitLocation(component.getY() + y - dragOffset);
+                    splitRatio = (float) splitLocation / splitPane.getHeight();
                 }
-
-                // Bound the split location
-                splitLocation = boundSplitLocation(splitLocation);
 
                 if (shadow == null) {
                     // Update the split location immediately
-                    splitPane.setSplitLocation(splitLocation);
+                    splitPane.setSplitRatio(splitRatio);
                 } else {
                     // Move the shadow to the split location
                     if (orientation == Orientation.HORIZONTAL) {
@@ -177,10 +173,9 @@ public class TerraSplitPaneSkin extends ContainerSkin
         public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
             boolean consumed = super.mouseDown(component, button, x, y);
 
-            SplitPane splitPane = (SplitPane)TerraSplitPaneSkin.this.getComponent();
+            SplitPane splitPane = (SplitPane) TerraSplitPaneSkin.this.getComponent();
 
-            if (button == Mouse.Button.LEFT
-                && !splitPane.isLocked()) {
+            if (button == Mouse.Button.LEFT && !splitPane.isLocked()) {
                 Orientation orientation = splitPane.getOrientation();
 
                 if (useShadow) {
@@ -209,20 +204,22 @@ public class TerraSplitPaneSkin extends ContainerSkin
         public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
             boolean consumed = super.mouseUp(component, button, x, y);
 
-            if (button == Mouse.Button.LEFT
-                && Mouse.getCapturer() == component) {
+            if (button == Mouse.Button.LEFT && Mouse.getCapturer() == component) {
                 if (shadow != null) {
-                    SplitPane splitPane = (SplitPane)TerraSplitPaneSkin.this.getComponent();
+                    SplitPane splitPane = (SplitPane) TerraSplitPaneSkin.this.getComponent();
 
                     // Update the split location and remove the shadow
                     int splitLocation;
+                    float splitRatio;
                     if (splitPane.getOrientation() == Orientation.HORIZONTAL) {
                         splitLocation = shadow.getX();
+                        splitRatio = (float) splitLocation / splitPane.getWidth();
                     } else {
                         splitLocation = shadow.getY();
+                        splitRatio = (float) splitLocation / splitPane.getHeight();
                     }
 
-                    splitPane.setSplitLocation(splitLocation);
+                    splitPane.setSplitRatio(splitRatio);
 
                     splitPane.remove(shadow);
                     shadow = null;
@@ -232,32 +229,6 @@ public class TerraSplitPaneSkin extends ContainerSkin
             }
 
             return consumed;
-        }
-
-        private int boundSplitLocation(int splitLocation) {
-            SplitPane splitPane = (SplitPane)TerraSplitPaneSkin.this.getComponent();
-
-            int lower = 0;
-            int upper;
-            if (splitPane.getOrientation() == Orientation.HORIZONTAL) {
-                upper = splitPane.getWidth() - splitterThickness;
-            } else {
-                upper = splitPane.getHeight() - splitterThickness;
-            }
-
-            Span bounds = splitPane.getSplitBounds();
-            if (bounds != null) {
-                lower = Math.max(lower, bounds.start);
-                upper = Math.min(upper, bounds.end);
-            }
-
-            if (splitLocation < lower) {
-                splitLocation = lower;
-            } else if (splitLocation > upper) {
-                splitLocation = upper;
-            }
-
-            return splitLocation;
         }
     }
 
@@ -310,7 +281,7 @@ public class TerraSplitPaneSkin extends ContainerSkin
     private boolean useShadow;
 
     public TerraSplitPaneSkin() {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         splitterHandlePrimaryColor = theme.getColor(9);
         splitterHandleSecondaryColor = theme.getColor(10);
         splitterThickness = 6;
@@ -321,7 +292,7 @@ public class TerraSplitPaneSkin extends ContainerSkin
     public void install(Component component) {
         super.install(component);
 
-        SplitPane splitPane = (SplitPane)component;
+        SplitPane splitPane = (SplitPane) component;
         splitPane.getSplitPaneListeners().add(this);
 
         splitPane.add(splitter);
@@ -330,7 +301,7 @@ public class TerraSplitPaneSkin extends ContainerSkin
 
     @Override
     public void uninstall() {
-        SplitPane splitPane = (SplitPane)getComponent();
+        SplitPane splitPane = (SplitPane) getComponent();
         splitPane.getSplitPaneListeners().remove(this);
 
         splitPane.remove(splitter);
@@ -357,38 +328,41 @@ public class TerraSplitPaneSkin extends ContainerSkin
         int width = getWidth();
         int height = getHeight();
 
-        SplitPane splitPane = (SplitPane)getComponent();
-        int splitLocation = splitPane.getSplitLocation();
-        Component leftComponent = splitPane.getTopLeftComponent();
-        Component rightComponent = splitPane.getBottomRightComponent();
+        SplitPane splitPane = (SplitPane) getComponent();
 
-        int rightStart = splitLocation + splitterThickness;
+        float splitRatio = splitPane.getSplitRatio();
+        Component topLeft = splitPane.getTopLeft();
+        Component bottomRight = splitPane.getBottomRight();
 
         if (splitPane.getOrientation() == Orientation.HORIZONTAL) {
+            int splitLocation = limitSplitLocation((int) (splitRatio * width));
+            int rightStart = splitLocation + splitterThickness;
             splitter.setLocation(splitLocation, 0);
             splitter.setSize(splitterThickness, height);
 
-            if (leftComponent != null) {
-                leftComponent.setLocation(0, 0);
-                leftComponent.setSize(splitLocation, height);
+            if (topLeft != null) {
+                topLeft.setLocation(0, 0);
+                topLeft.setSize(splitLocation, height);
             }
 
-            if (rightComponent != null) {
-                rightComponent.setLocation(rightStart, 0);
-                rightComponent.setSize(Math.max(width - rightStart, 0), height);
+            if (bottomRight != null) {
+                bottomRight.setLocation(rightStart, 0);
+                bottomRight.setSize(Math.max(width - rightStart, 0), height);
             }
         } else {
+            int splitLocation = limitSplitLocation((int) (splitRatio * height));
+            int bottomStart = splitLocation + splitterThickness;
             splitter.setLocation(0, splitLocation);
             splitter.setSize(width, splitterThickness);
 
-            if (leftComponent != null) {
-                leftComponent.setLocation(0, 0);
-                leftComponent.setSize(width, splitLocation);
+            if (topLeft != null) {
+                topLeft.setLocation(0, 0);
+                topLeft.setSize(width, splitLocation);
             }
 
-            if (rightComponent != null) {
-                rightComponent.setLocation(0, rightStart);
-                rightComponent.setSize(width, Math.max(height - rightStart, 0));
+            if (bottomRight != null) {
+                bottomRight.setLocation(0, bottomStart);
+                bottomRight.setSize(width, Math.max(height - bottomStart, 0));
             }
         }
     }
@@ -415,7 +389,7 @@ public class TerraSplitPaneSkin extends ContainerSkin
     }
 
     public final void setSplitterHandlePrimaryColor(int splitterHandlePrimaryColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setSplitterHandlePrimaryColor(theme.getColor(splitterHandlePrimaryColor));
     }
 
@@ -441,7 +415,7 @@ public class TerraSplitPaneSkin extends ContainerSkin
     }
 
     public final void setSplitterHandleSecondaryColor(int splitterHandleSecondaryColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setSplitterHandleSecondaryColor(theme.getColor(splitterHandleSecondaryColor));
     }
 
@@ -462,11 +436,11 @@ public class TerraSplitPaneSkin extends ContainerSkin
         this.useShadow = useShadow;
     }
 
-    public void topLeftComponentChanged(SplitPane splitPane, Component previousTopLeftComponent) {
+    public void topLeftChanged(SplitPane splitPane, Component previousTopLeft) {
         invalidateComponent();
     }
 
-    public void bottomRightComponentChanged(SplitPane splitPane, Component previousBottomRightComponent) {
+    public void bottomRightChanged(SplitPane splitPane, Component previousBottomRight) {
         invalidateComponent();
     }
 
@@ -479,11 +453,7 @@ public class TerraSplitPaneSkin extends ContainerSkin
         updateSplitterCursor();
     }
 
-    public void splitLocationChanged(SplitPane splitPane, int previousSplitLocation) {
-        invalidateComponent();
-    }
-
-    public void splitBoundsChanged(SplitPane splitPane, Span previousSplitBounds) {
+    public void splitRatioChanged(SplitPane splitPane, float previousSplitLocation) {
         invalidateComponent();
     }
 
@@ -493,34 +463,68 @@ public class TerraSplitPaneSkin extends ContainerSkin
 
     private void updateSplitterCursor() {
         Cursor cursor = Cursor.DEFAULT;
-        SplitPane splitPane = (SplitPane)getComponent();
+        SplitPane splitPane = (SplitPane) getComponent();
 
         if (!splitPane.isLocked()) {
             switch (splitPane.getOrientation()) {
-            case HORIZONTAL:
-                switch (splitPane.getPrimaryRegion()) {
-                case TOP_LEFT:
-                    cursor = Cursor.RESIZE_EAST;
-                    break;
-                case BOTTOM_RIGHT:
-                    cursor = Cursor.RESIZE_WEST;
-                    break;
-                }
-                break;
+                case HORIZONTAL: {
+                    switch (splitPane.getPrimaryRegion()) {
+                        case TOP_LEFT:
+                            cursor = Cursor.RESIZE_EAST;
+                            break;
+                        case BOTTOM_RIGHT:
+                            cursor = Cursor.RESIZE_WEST;
+                            break;
+                    }
 
-            case VERTICAL:
-                switch (splitPane.getPrimaryRegion()) {
-                case TOP_LEFT:
-                    cursor = Cursor.RESIZE_SOUTH;
-                    break;
-                case BOTTOM_RIGHT:
-                    cursor = Cursor.RESIZE_NORTH;
                     break;
                 }
-                break;
+
+                case VERTICAL: {
+                    switch (splitPane.getPrimaryRegion()) {
+                        case TOP_LEFT:
+                            cursor = Cursor.RESIZE_SOUTH;
+                            break;
+                        case BOTTOM_RIGHT:
+                            cursor = Cursor.RESIZE_NORTH;
+                            break;
+                    }
+
+                    break;
+                }
             }
         }
 
         splitter.setCursor(cursor);
+    }
+
+    private int limitSplitLocation(int splitLocation) {
+        SplitPane splitPane = (SplitPane) getComponent();
+
+        int lower, upper;
+        if (splitPane.getOrientation() == Orientation.HORIZONTAL) {
+            int splitWidth = splitPane.getWidth();
+            lower = splitPane.getLeft().getMinPreferredWidth();
+
+            int minChildSize = splitPane.getRight().getMinPreferredWidth();
+            upper = splitWidth - splitterThickness - (minChildSize > 0 ? minChildSize : 0);
+        } else {
+            lower = splitPane.getBottom().getMinPreferredHeight();
+            int minChildSize = splitPane.getBottom().getMinPreferredHeight();
+            upper = splitPane.getHeight() - splitterThickness
+                - (minChildSize > 0 ? minChildSize : 0);
+        }
+
+        if (splitLocation < lower) {
+            splitLocation = lower;
+        } else if (splitLocation > upper) {
+            splitLocation = upper;
+        }
+
+        if (splitLocation < 0) {
+            splitLocation = 0;
+        }
+
+        return splitLocation;
     }
 }

@@ -65,11 +65,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         public final Component toCard;
 
         public SelectionChangeTransition(int from, int to) {
-            this(from, to, SELECTION_CHANGE_DURATION);
-        }
-
-        public SelectionChangeTransition(int from, int to, int duration) {
-            super(duration, SELECTION_CHANGE_RATE, false);
+            super(SELECTION_CHANGE_DURATION, SELECTION_CHANGE_RATE, false);
 
             this.from = from;
             this.to = to;
@@ -196,7 +192,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         private ScaleDecorator scaleDecorator = new ScaleDecorator();
 
         public FlipTransition(Orientation orientation, int from, int to) {
-            super(from, to, 350);
+            super(from, to);
             this.orientation = orientation;
         }
 

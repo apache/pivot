@@ -67,7 +67,7 @@ public class BorderSkin extends ContainerSkin
         titleColor = Color.BLACK;
         thickness = 1;
         padding = new Insets(2);
-        cornerRadii = new CornerRadii(0);
+        cornerRadii = CornerRadii.NONE;
     }
 
     @Override

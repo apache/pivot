@@ -20,7 +20,7 @@ limitations under the License.
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
     <content>
-        <SplitPane splitLocation="260">
+        <SplitPane splitRatio="0.75">
             <left>
                 <Border styles="{padding:0}">
                     <content>

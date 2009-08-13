@@ -40,6 +40,11 @@ public final class CornerRadii implements Serializable {
     public static final String BOTTOM_LEFT_KEY = "bottomLeft";
     public static final String BOTTOM_RIGHT_KEY = "bottomRight";
 
+    /**
+     * Corner radii whose top, left, bottom, and right values are all zero.
+     */
+    public static final CornerRadii NONE = new CornerRadii(0);
+
     public CornerRadii(int radius) {
         this(radius, radius, radius, radius);
     }

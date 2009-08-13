@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<SplitPane splitLocation="420"
+<SplitPane splitRatio="0.75"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:test="org.apache.pivot.wtk.text.test"
     xmlns="org.apache.pivot.wtk">

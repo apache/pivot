@@ -47,7 +47,7 @@ limitations under the License.
         </content>
     </Border>
 
-    <SplitPane preferredWidth="472" preferredHeight="180" splitLocation="288">
+    <SplitPane preferredWidth="472" preferredHeight="180" splitRatio="0.6">
         <left>
             <Border>
                 <content>
