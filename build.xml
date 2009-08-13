@@ -133,7 +133,7 @@ limitations under the License.
             <junit fork="true">
                 <classpath>
                     <classpath-elements/>
-                </classpath>
+               </classpath>
 
                 <formatter type="brief" usefile="false" if="test.formatter"/>
 
@@ -266,6 +266,7 @@ limitations under the License.
     <target name="core-test" depends="core">
         <test project="core">
             <pathelement location="core/${folder.bin}"/>
+            <pathelement location="core/test"/>
         </test>
     </target>
 
