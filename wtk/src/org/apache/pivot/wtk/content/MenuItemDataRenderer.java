@@ -19,40 +19,46 @@ package org.apache.pivot.wtk.content;
 import java.awt.Color;
 import java.awt.Font;
 
-import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.BoxPane;
-import org.apache.pivot.wtk.HorizontalAlignment;
+import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.Menu;
+import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.media.Image;
-
 
 /**
  * Default menu item data renderer.
  *
  * @author gbrown
  */
-public class MenuItemDataRenderer extends BoxPane implements Button.DataRenderer {
+public class MenuItemDataRenderer extends TablePane implements Button.DataRenderer {
     protected ImageView imageView = new ImageView();
     protected Label textLabel = new Label();
     protected Label keyboardShortcutLabel = new Label();
 
     public MenuItemDataRenderer() {
-        getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
         getStyles().put("padding", new Insets(2));
 
-        add(imageView);
-        add(textLabel);
-        add(keyboardShortcutLabel);
+        getColumns().add(new TablePane.Column(1, true));
+        getColumns().add(new TablePane.Column());
+
+        BoxPane boxPane = new BoxPane();
+        boxPane.add(imageView);
+        boxPane.add(textLabel);
+        boxPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
+        boxPane.getStyles().put("padding", new Insets(0, 0, 0, 6));
+
+        TablePane.Row row = new TablePane.Row();
+        row.add(boxPane);
+        row.add(keyboardShortcutLabel);
+
+        getRows().add(row);
 
         imageView.getStyles().put("backgroundColor", null);
-
-        keyboardShortcutLabel.getStyles().put("horizontalAlignment",
-            HorizontalAlignment.RIGHT);
     }
 
     public void setSize(int width, int height) {
