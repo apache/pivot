@@ -25,9 +25,9 @@ import java.util.Date;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.TableView;
+import org.apache.pivot.wtk.media.Image;
 
 public class TableViewFileRenderer extends FileRenderer implements TableView.CellRenderer {
-    public static final String ICON_KEY = "icon";
     public static final String NAME_KEY = "name";
     public static final String SIZE_KEY = "size";
     public static final String LAST_MODIFIED_KEY = "lastModified";
@@ -41,61 +41,53 @@ public class TableViewFileRenderer extends FileRenderer implements TableView.Cel
         boolean rowSelected, boolean rowHighlighted, boolean rowDisabled) {
         String columnName = column.getName();
 
-        if (columnName.equals(ICON_KEY)) {
-            imageView.setVisible(true);
-            label.setVisible(false);
+        if (value != null) {
+            File file = (File)value;
 
-            if (value != null) {
-                File file = (File)value;
-                imageView.setImage(FileRenderer.getIcon(file));
-            }
-        } else {
-            imageView.setVisible(false);
-            label.setVisible(true);
+            String text = null;
+            Image icon = null;
 
-            if (value != null) {
-                File file = (File)value;
+            if (columnName.equals(NAME_KEY)) {
+                text = file.getName();
+                icon = getIcon(file);
+                getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
+            } else if (columnName.equals(SIZE_KEY)) {
+                text = formatSize(file);
+                getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
+            } else if (columnName.equals(LAST_MODIFIED_KEY)) {
+                long lastModified = file.lastModified();
+                Date lastModifiedDate = new Date(lastModified);
 
-                String text;
-                if (columnName.equals(NAME_KEY)) {
-                    text = file.getName();
-                    getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
-                } else if (columnName.equals(SIZE_KEY)) {
-                    text = formatSize(file);
-                    getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
-                } else if (columnName.equals(LAST_MODIFIED_KEY)) {
-                    long lastModified = file.lastModified();
-                    Date lastModifiedDate = new Date(lastModified);
-
-                    DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
-                    text = dateFormat.format(lastModifiedDate);
-                    getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
-                } else {
-                    text = null;
-                }
-
-                label.setText(text);
+                DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+                text = dateFormat.format(lastModifiedDate);
+                getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
+            } else {
+                System.err.println("Unexpected column name in " + getClass().getName()
+                    + ": " + columnName);
             }
 
-            Font font = (Font)tableView.getStyles().get("font");
-            label.getStyles().put("font", font);
+            label.setText(text);
+            imageView.setImage(icon);
+        }
 
-            Color color;
-            if (tableView.isEnabled() && !rowDisabled) {
-                if (rowSelected) {
-                    if (tableView.isFocused()) {
-                        color = (Color)tableView.getStyles().get("selectionColor");
-                    } else {
-                        color = (Color)tableView.getStyles().get("inactiveSelectionColor");
-                    }
+        Font font = (Font)tableView.getStyles().get("font");
+        label.getStyles().put("font", font);
+
+        Color color;
+        if (tableView.isEnabled() && !rowDisabled) {
+            if (rowSelected) {
+                if (tableView.isFocused()) {
+                    color = (Color)tableView.getStyles().get("selectionColor");
                 } else {
-                    color = (Color)tableView.getStyles().get("color");
+                    color = (Color)tableView.getStyles().get("inactiveSelectionColor");
                 }
             } else {
-                color = (Color)tableView.getStyles().get("disabledColor");
+                color = (Color)tableView.getStyles().get("color");
             }
-
-            label.getStyles().put("color", color);
+        } else {
+            color = (Color)tableView.getStyles().get("disabledColor");
         }
+
+        label.getStyles().put("color", color);
     }
 }

@@ -25,11 +25,17 @@ import org.apache.pivot.io.Folder;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.Resources;
+import org.apache.pivot.wtk.Button;
+import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.ComponentMouseButtonListener;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.FileBrowser;
 import org.apache.pivot.wtk.ListButton;
 import org.apache.pivot.wtk.ListButtonSelectionListener;
+import org.apache.pivot.wtk.Mouse;
+import org.apache.pivot.wtk.PushButton;
+import org.apache.pivot.wtk.ScrollPane;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.skin.FileBrowserSkin;
 import org.apache.pivot.wtkx.WTKX;
@@ -44,6 +50,11 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     private Component content = null;
 
     @WTKX private ListButton pathListButton = null;
+    @WTKX private PushButton goUpButton = null;
+    @WTKX private PushButton newFolderButton = null;
+    @WTKX private PushButton goHomeButton = null;
+
+    @WTKX private ScrollPane fileScrollPane = null;
     @WTKX private TableView fileTableView = null;
 
     @Override
@@ -81,6 +92,49 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                 if (directory != null) {
                     fileBrowser.setSelectedFolder(new Folder(directory.getPath()));
                 }
+            }
+        });
+
+        goUpButton.getButtonPressListeners().add(new ButtonPressListener() {
+            public void buttonPressed(Button button) {
+                Folder selectedFolder = fileBrowser.getSelectedFolder();
+                File parentDirectory = selectedFolder.getParentFile();
+                fileBrowser.setSelectedFolder(new Folder(parentDirectory.getPath()));
+            }
+        });
+
+        newFolderButton.getButtonPressListeners().add(new ButtonPressListener() {
+            public void buttonPressed(Button button) {
+                // TODO
+            }
+        });
+
+        goHomeButton.getButtonPressListeners().add(new ButtonPressListener() {
+            public void buttonPressed(Button button) {
+                fileBrowser.setSelectedFolder(new Folder(System.getProperty("user.home")));
+            }
+        });
+
+        fileTableView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
+            private File selectedDirectory = null;
+
+            @Override
+            public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+                // TODO If we're in multi-select mode, we'll need to check
+                // selection length
+                if (count == 1) {
+                    File selectedFile = (File)fileTableView.getSelectedRow();
+                    if (selectedFile != null
+                        && selectedFile.isDirectory()) {
+                        selectedDirectory = selectedFile;
+                    }
+                } else if (count == 2) {
+                    if (selectedDirectory == fileTableView.getSelectedRow()) {
+                        fileBrowser.setSelectedFolder(new Folder(selectedDirectory.getPath()));
+                    }
+                }
+
+                return false;
             }
         });
 
@@ -124,17 +178,25 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     public void selectedFolderChanged(FileBrowser fileBrowser, Folder previousSelectedFolder) {
         ArrayList<File> path = new ArrayList<File>();
 
-        Folder folder = fileBrowser.getSelectedFolder();
-        File directory = folder.getParentFile();
+        Folder selectedFolder = fileBrowser.getSelectedFolder();
+
+        File directory = selectedFolder.getParentFile();
         while (directory != null) {
             path.add(directory);
             directory = directory.getParentFile();
         }
 
         pathListButton.setListData(path);
-        pathListButton.setButtonData(folder);
+        pathListButton.setButtonData(selectedFolder);
 
-        fileTableView.setTableData(folder);
+        goUpButton.setEnabled(selectedFolder.getParentFile() != null);
+
+        File homeDirectory = new File(System.getProperty("user.home"));
+        goHomeButton.setEnabled(!selectedFolder.equals(homeDirectory));
+
+        fileScrollPane.setScrollTop(0);
+        fileScrollPane.setScrollLeft(0);
+        fileTableView.setTableData(selectedFolder);
     }
 
     public void selectedFileAdded(FileBrowser fileBrowser, File file) {

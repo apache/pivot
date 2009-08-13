@@ -51,7 +51,7 @@ limitations under the License.
                                         <content:ButtonData icon="@folder_up.png"/>
                                     </buttonData>
                                 </PushButton>
-                                <PushButton wtkx:id="newFolderUpButton" styles="{toolbar:true}" tooltipText="%newFolder">
+                                <PushButton wtkx:id="newFolderButton" styles="{toolbar:true}" tooltipText="%newFolder">
                                     <buttonData>
                                         <content:ButtonData icon="@folder_add.png"/>
                                     </buttonData>
@@ -81,16 +81,12 @@ limitations under the License.
             <!-- File table view -->
             <Border styles="{color:10, padding:0}">
                 <content>
-                    <ScrollPane horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fill_to_capacity">
+                    <ScrollPane wtkx:id="fileScrollPane"
+                        horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fill_to_capacity">
                         <view>
                             <TableView wtkx:id="fileTableView"
                                 styles="{showHorizontalGridLines:false, showVerticalGridLines:false}">
                                 <columns>
-                                    <TableView.Column name="icon" width="20">
-                                        <cellRenderer>
-                                            <content:TableViewFileRenderer/>
-                                        </cellRenderer>
-                                    </TableView.Column>
                                     <TableView.Column name="name" width="3*" headerData="%fileName">
                                         <cellRenderer>
                                             <content:TableViewFileRenderer/>
