@@ -47,13 +47,13 @@ public class HashMapTest {
 
         assertNull(map.put("a", Integer.valueOf(1)));
 
-        assertEquals(1, map.put("a", 2));
+        assertEquals(1, (int)map.put("a", 2));
 
-        assertEquals(2, map.get("a"));
+        assertEquals(2, (int)map.get("a"));
 
         assertEquals(1, map.count());
 
-        assertEquals(2, map.remove("a"));
+        assertEquals(2, (int)map.remove("a"));
 
         assertEquals(0, map.count());
 
@@ -61,9 +61,9 @@ public class HashMapTest {
         map.put("b", 2);
         map.put("c", 3);
 
-        assertEquals(1, map.get("a"));
-        assertEquals(2, map.get("b"));
-        assertEquals(3, map.get("c"));
+        assertEquals(1, (int)map.get("a"));
+        assertEquals(2, (int)map.get("b"));
+        assertEquals(3, (int)map.get("c"));
 
         assertEquals(3, map.count());
 
