@@ -19,35 +19,34 @@ package org.apache.pivot.wtk.content;
 import java.io.File;
 
 import org.apache.pivot.wtk.Button;
-import org.apache.pivot.wtk.media.Image;
+import org.apache.pivot.wtk.HorizontalAlignment;
 
 /**
  * List button file renderer.
  *
  * @author gbrown
  */
-public class ListButtonFileRenderer extends ListButtonDataRenderer {
+public class ListButtonFileRenderer extends FileRenderer implements Button.DataRenderer {
+    public ListButtonFileRenderer() {
+        getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
+    }
+
     @Override
     public void render(Object data, Button button, boolean highlight) {
         if (data != null) {
             File file = (File)data;
 
-            Image icon;
-            if (file.isDirectory()) {
-                icon = file.equals(FileRenderer.HOME_DIRECTORY) ?
-                    FileRenderer.HOME_FOLDER_IMAGE : FileRenderer.FOLDER_IMAGE;
-            } else {
-                icon = FileRenderer.FILE_IMAGE;
-            }
+            // Update the image view
+            imageView.setImage(getIcon(file));
+            imageView.getStyles().put("opacity", button.isEnabled() ? 1.0f : 0.5f);
 
+            // Update the label
             String text = file.getName();
             if (text.length() == 0) {
                 text = System.getProperty("file.separator");
             }
 
-            data = new ButtonData(icon, text);
+            label.setText(text);
         }
-
-        super.render(data, button, highlight);
     }
 }

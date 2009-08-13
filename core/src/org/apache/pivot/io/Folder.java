@@ -216,11 +216,15 @@ public class Folder extends File implements List<File> {
         if (getPath().length() == 0) {
             fileList = listRoots();
         } else {
-            fileList = listFiles(new FileFilter() {
-                public boolean accept(File file) {
-                    return fileFilter.include(file);
-                }
-            });
+            if (fileFilter == null) {
+                fileList = listFiles();
+            } else {
+                fileList = listFiles(new FileFilter() {
+                    public boolean accept(File file) {
+                        return fileFilter.include(file);
+                    }
+                });
+            }
         }
 
         // Clear the file list

@@ -18,6 +18,7 @@ package org.apache.pivot.wtk.content;
 
 import java.io.File;
 
+import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.TreeView;
 
 /**
@@ -26,6 +27,10 @@ import org.apache.pivot.wtk.TreeView;
  * @author gbrown
  */
 public class TreeViewFileRenderer extends FileRenderer implements TreeView.NodeRenderer {
+    public TreeViewFileRenderer() {
+        getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
+    }
+
     public void render(Object node, TreeView treeView, boolean expanded,
         boolean selected, TreeView.NodeCheckState checkState,
         boolean highlighted, boolean disabled) {
@@ -49,7 +54,20 @@ public class TreeViewFileRenderer extends FileRenderer implements TreeView.NodeR
         label.getStyles().put("color", color);
 
         if (node != null) {
-            render((File)node, treeView, disabled);
+            File file = (File)node;
+
+            // Update the image view
+            imageView.setImage(getIcon(file));
+            imageView.getStyles().put("opacity",
+                (treeView.isEnabled() && !disabled) ? 1.0f : 0.5f);
+
+            // Update the label
+            String text = file.getName();
+            if (text.length() == 0) {
+                text = System.getProperty("file.separator");
+            }
+
+            label.setText(text);
         }
     }
 }

@@ -30,6 +30,7 @@ import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.FileBrowser;
 import org.apache.pivot.wtk.ListButton;
 import org.apache.pivot.wtk.ListButtonSelectionListener;
+import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.skin.FileBrowserSkin;
 import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
@@ -43,6 +44,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     private Component content = null;
 
     @WTKX private ListButton pathListButton = null;
+    @WTKX private TableView fileTableView = null;
 
     @Override
     public void install(Component component) {
@@ -131,6 +133,8 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
         pathListButton.setListData(path);
         pathListButton.setButtonData(folder);
+
+        fileTableView.setTableData(folder);
     }
 
     public void selectedFileAdded(FileBrowser fileBrowser, File file) {

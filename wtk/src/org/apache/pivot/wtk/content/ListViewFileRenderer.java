@@ -18,6 +18,7 @@ package org.apache.pivot.wtk.content;
 
 import java.io.File;
 
+import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.ListView;
 
@@ -28,6 +29,7 @@ import org.apache.pivot.wtk.ListView;
  */
 public class ListViewFileRenderer extends FileRenderer implements ListView.ItemRenderer {
     public ListViewFileRenderer() {
+        getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
         getStyles().put("padding", new Insets(2, 3, 2, 3));
     }
 
@@ -53,7 +55,20 @@ public class ListViewFileRenderer extends FileRenderer implements ListView.ItemR
         label.getStyles().put("color", color);
 
         if (item != null) {
-            render((File)item, listView, disabled);
+            File file = (File)item;
+
+            // Update the image view
+            imageView.setImage(getIcon(file));
+            imageView.getStyles().put("opacity",
+                (listView.isEnabled() && !disabled) ? 1.0f : 0.5f);
+
+            // Update the label
+            String text = file.getName();
+            if (text.length() == 0) {
+                text = System.getProperty("file.separator");
+            }
+
+            label.setText(text);
         }
     }
 }

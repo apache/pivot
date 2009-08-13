@@ -84,8 +84,13 @@ limitations under the License.
                     <ScrollPane horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fill_to_capacity">
                         <view>
                             <TableView wtkx:id="fileTableView"
-                                styles="{showHorizontalGridLines:false}">
+                                styles="{showHorizontalGridLines:false, showVerticalGridLines:false}">
                                 <columns>
+                                    <TableView.Column name="icon" width="20">
+                                        <cellRenderer>
+                                            <content:TableViewFileRenderer/>
+                                        </cellRenderer>
+                                    </TableView.Column>
                                     <TableView.Column name="name" width="3*" headerData="%fileName">
                                         <cellRenderer>
                                             <content:TableViewFileRenderer/>

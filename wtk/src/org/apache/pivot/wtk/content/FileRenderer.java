@@ -17,11 +17,10 @@
 package org.apache.pivot.wtk.content;
 
 import java.io.File;
+import java.text.NumberFormat;
 
 import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.wtk.BoxPane;
-import org.apache.pivot.wtk.Component;
-import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.VerticalAlignment;
@@ -43,6 +42,9 @@ public abstract class FileRenderer extends BoxPane {
     public static final Image HOME_FOLDER_IMAGE;
     public static final Image FILE_IMAGE;
 
+    public static final int KILOBYTE = 1024;
+    public static final String[] ABBREVIATIONS = {"K", "M", "G", "T", "P", "E", "Z", "Y"};
+
     public static final File HOME_DIRECTORY;
 
     static {
@@ -58,13 +60,13 @@ public abstract class FileRenderer extends BoxPane {
     }
 
     public FileRenderer() {
-        getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
         getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
 
         add(imageView);
         add(label);
 
         imageView.setPreferredSize(ICON_WIDTH, ICON_HEIGHT);
+        imageView.getStyles().put("backgroundColor", null);
     }
 
     public void setSize(int width, int height) {
@@ -75,8 +77,12 @@ public abstract class FileRenderer extends BoxPane {
         validate();
     }
 
-    protected void render(File file, Component component, boolean disabled) {
-        // Update the image view
+    /**
+     * Obtains the icon to display for a given file.
+     *
+     * @param file
+     */
+    public static Image getIcon(File file) {
         Image icon;
         if (file.isDirectory()) {
             icon = file.equals(HOME_DIRECTORY) ? HOME_FOLDER_IMAGE : FOLDER_IMAGE;
@@ -84,16 +90,46 @@ public abstract class FileRenderer extends BoxPane {
             icon = FILE_IMAGE;
         }
 
-        imageView.setImage(icon);
-        imageView.getStyles().put("opacity",
-            (component.isEnabled() && !disabled) ? 1.0f : 0.5f);
+        return icon;
+    }
 
-        // Update the label
-        String text = file.getName();
-        if (text.length() == 0) {
-            text = System.getProperty("file.separator");
+    /**
+     * Converts a file size into a human-readable representation using binary
+     * prefixes (1KB = 1024 bytes).
+     *
+     * @param length
+     * The length of the file, in bytes. May be <tt>-1</tt> to indicate an
+     * unknown file size.
+     *
+     * @return
+     * The formatted file size, or null if <tt>length</tt> is <tt>-1</tt>.
+     */
+    public static String formatSize(File file) {
+        String formattedSize;
+
+        long length = file.length();
+        if (length == -1) {
+            formattedSize = null;
+        } else {
+            double size = length;
+
+            int i = -1;
+            do {
+                size /= KILOBYTE;
+                i++;
+            } while (size > KILOBYTE);
+
+            NumberFormat numberFormat = NumberFormat.getNumberInstance();
+            if (i == 0
+                && size > 1) {
+                numberFormat.setMaximumFractionDigits(0);
+            } else {
+                numberFormat.setMaximumFractionDigits(1);
+            }
+
+            formattedSize = numberFormat.format(size) + " " + ABBREVIATIONS[i] + "B";
         }
 
-        label.setText(text);
+        return formattedSize;
     }
 }
