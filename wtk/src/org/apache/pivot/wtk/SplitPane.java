@@ -252,6 +252,11 @@ public class SplitPane extends Container {
     }
 
     public void setSplitRatio(float splitRatio) {
+        if (splitRatio < 0
+            || splitRatio > 1) {
+            throw new IllegalArgumentException("splitRatio must be between 0 and 1.");
+        }
+
         float previousSplitRatio = this.splitRatio;
 
         if (previousSplitRatio != splitRatio) {

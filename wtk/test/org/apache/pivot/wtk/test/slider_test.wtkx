@@ -18,6 +18,6 @@ limitations under the License.
 
 <BoxPane xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <Slider wtkx:id="slider" bounds="{minimum:-100, maximum:100}" value="0"/>
+    <Slider wtkx:id="slider" range="{start:-100, end:100}" value="0"/>
     <Label wtkx:id="valueLabel"/>
 </BoxPane>
