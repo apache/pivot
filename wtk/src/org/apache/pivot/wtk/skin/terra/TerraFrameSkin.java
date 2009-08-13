@@ -678,15 +678,15 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
                     if (frame.isPreferredWidthSet()) {
                         preferredWidth = Math.max(location.x - frame.getX() + resizeOffset.x,
                             titleBarTablePane.getPreferredWidth(-1) + 2);
-                        preferredWidth = Math.min(preferredWidth, frame.getMaxPreferredWidth());
-                        preferredWidth = Math.max(preferredWidth, frame.getMinPreferredWidth());
+                        preferredWidth = Math.min(preferredWidth, frame.getMaximumPreferredWidth());
+                        preferredWidth = Math.max(preferredWidth, frame.getMinimumPreferredWidth());
                     }
 
                     if (frame.isPreferredHeightSet()) {
                         preferredHeight = Math.max(location.y - frame.getY() + resizeOffset.y,
                             titleBarTablePane.getHeight() + resizeHandle.getHeight() + 7);
-                        preferredHeight = Math.min(preferredHeight, frame.getMaxPreferredHeight());
-                        preferredHeight = Math.max(preferredHeight, frame.getMinPreferredHeight());
+                        preferredHeight = Math.min(preferredHeight, frame.getMaximumPreferredHeight());
+                        preferredHeight = Math.max(preferredHeight, frame.getMinimumPreferredHeight());
                     }
 
                     frame.setPreferredSize(preferredWidth, preferredHeight);

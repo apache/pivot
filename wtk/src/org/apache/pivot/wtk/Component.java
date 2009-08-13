@@ -316,19 +316,19 @@ public abstract class Component implements ConstrainedVisual {
             }
         }
 
-        public void preferredWidthLimitsChanged(Component component, int previousMinPreferredWidth,
-            int previousMaxPreferredWidth) {
+        public void preferredWidthLimitsChanged(Component component, int previousMinimumPreferredWidth,
+            int previousMaximumPreferredWidth) {
             for (ComponentListener listener : this) {
-                listener.preferredWidthLimitsChanged(component, previousMinPreferredWidth,
-                    previousMaxPreferredWidth);
+                listener.preferredWidthLimitsChanged(component, previousMinimumPreferredWidth,
+                    previousMaximumPreferredWidth);
             }
         }
 
-        public void preferredHeightLimitsChanged(Component component, int previousMinPreferredHeight,
-            int previousMaxPreferredHeight) {
+        public void preferredHeightLimitsChanged(Component component, int previousMinimumPreferredHeight,
+            int previousMaximumPreferredHeight) {
             for (ComponentListener listener : this) {
-                listener.preferredHeightLimitsChanged(component, previousMinPreferredHeight,
-                    previousMaxPreferredHeight);
+                listener.preferredHeightLimitsChanged(component, previousMinimumPreferredHeight,
+                    previousMaximumPreferredHeight);
             }
         }
 
@@ -570,10 +570,10 @@ public abstract class Component implements ConstrainedVisual {
     private int preferredHeight = -1;
 
     // Bounds on preferred size
-    private int minPreferredWidth = 0;
-    private int maxPreferredWidth = Integer.MAX_VALUE;
-    private int minPreferredHeight = 0;
-    private int maxPreferredHeight = Integer.MAX_VALUE;
+    private int minimumPreferredWidth = 0;
+    private int maximumPreferredWidth = Integer.MAX_VALUE;
+    private int minimumPreferredHeight = 0;
+    private int maximumPreferredHeight = Integer.MAX_VALUE;
 
     // Calculated preferred size value
     private Dimensions preferredSize = null;
@@ -898,7 +898,7 @@ public abstract class Component implements ConstrainedVisual {
                     && preferredSize.height == height) {
                     preferredWidth = preferredSize.width;
                 } else {
-                    Limits limits = new Limits(minPreferredWidth, maxPreferredWidth);
+                    Limits limits = new Limits(minimumPreferredWidth, maximumPreferredWidth);
                     preferredWidth = limits.limit(skin.getPreferredWidth(height));
                 }
             }
@@ -960,7 +960,7 @@ public abstract class Component implements ConstrainedVisual {
                     && preferredSize.width == width) {
                     preferredHeight = preferredSize.height;
                 } else {
-                    Limits limits = new Limits(minPreferredHeight, maxPreferredHeight);
+                    Limits limits = new Limits(minimumPreferredHeight, maximumPreferredHeight);
                     preferredHeight = limits.limit(skin.getPreferredHeight(width));
                 }
             }
@@ -1012,8 +1012,8 @@ public abstract class Component implements ConstrainedVisual {
                 preferredSize = new Dimensions(preferredWidth, preferredHeight);
             }
 
-            Limits preferredWidthLimits = new Limits(minPreferredWidth, maxPreferredWidth);
-            Limits preferredHeightLimits = new Limits(minPreferredHeight, maxPreferredHeight);
+            Limits preferredWidthLimits = new Limits(minimumPreferredWidth, maximumPreferredWidth);
+            Limits preferredHeightLimits = new Limits(minimumPreferredHeight, maximumPreferredHeight);
 
             preferredSize = new Dimensions(preferredWidthLimits.limit(preferredSize.width),
                 preferredHeightLimits.limit(preferredSize.height));
@@ -1058,14 +1058,14 @@ public abstract class Component implements ConstrainedVisual {
         if (previousPreferredWidth != preferredWidth
             || previousPreferredHeight != preferredHeight) {
             if (preferredWidth != -1
-                && (preferredWidth < minPreferredWidth
-                || preferredWidth > maxPreferredWidth)) {
+                && (preferredWidth < minimumPreferredWidth
+                || preferredWidth > maximumPreferredWidth)) {
                 throw new IllegalArgumentException("preferredWidth is outside limits");
             }
 
             if (preferredHeight != -1
-                && (preferredHeight < minPreferredHeight
-                || preferredHeight > maxPreferredHeight)) {
+                && (preferredHeight < minimumPreferredHeight
+                || preferredHeight > maximumPreferredHeight)) {
                 throw new IllegalArgumentException("preferredHeight is outside limits");
             }
 
@@ -1100,8 +1100,8 @@ public abstract class Component implements ConstrainedVisual {
      * @return
      * The minimum preferred width
      */
-    public int getMinPreferredWidth() {
-        return minPreferredWidth;
+    public int getMinimumPreferredWidth() {
+        return minimumPreferredWidth;
     }
 
     /**
@@ -1109,12 +1109,12 @@ public abstract class Component implements ConstrainedVisual {
      * will always report a preferred size whose width is greater than or equal
      * to its minimum preferred width.
      *
-     * @param minPreferredWidth
+     * @param minimumPreferredWidth
      * The minimum preferred width, or <tt>-1</tt> to specify no minimum
      * preferred width
      */
-    public void setMinPreferredWidth(int minPreferredWidth) {
-        setPreferredWidthLimits(minPreferredWidth, getMaxPreferredWidth());
+    public void setMinimumPreferredWidth(int minimumPreferredWidth) {
+        setPreferredWidthLimits(minimumPreferredWidth, getMaximumPreferredWidth());
     }
 
     /**
@@ -1125,8 +1125,8 @@ public abstract class Component implements ConstrainedVisual {
      * @return
      * The maximum preferred width
      */
-    public int getMaxPreferredWidth() {
-        return maxPreferredWidth;
+    public int getMaximumPreferredWidth() {
+        return maximumPreferredWidth;
     }
 
     /**
@@ -1134,11 +1134,11 @@ public abstract class Component implements ConstrainedVisual {
      * will always report a preferred size whose width is less than or equal
      * to its maximum preferred width.
      *
-     * @param maxPreferredWidth
+     * @param maximumPreferredWidth
      * The maximum preferred width
      */
-    public void setMaxPreferredWidth(int maxPreferredWidth) {
-        setPreferredWidthLimits(getMinPreferredWidth(), maxPreferredWidth);
+    public void setMaximumPreferredWidth(int maximumPreferredWidth) {
+        setPreferredWidthLimits(getMinimumPreferredWidth(), maximumPreferredWidth);
     }
 
     /**
@@ -1149,46 +1149,46 @@ public abstract class Component implements ConstrainedVisual {
      * The preferred width limits
      */
     public Limits getPreferredWidthLimits() {
-        return new Limits(minPreferredWidth, maxPreferredWidth);
+        return new Limits(minimumPreferredWidth, maximumPreferredWidth);
     }
 
     /**
      * Sets the preferred width limits for this component. A component will
      * always report a preferred size whose width is within these limits.
      *
-     * @param minPreferredWidth
+     * @param minimumPreferredWidth
      * The minimum preferred width for the component
      *
-     * @param maxPreferredWidth
+     * @param maximumPreferredWidth
      * The maximum preferred width for the component
      */
-    public void setPreferredWidthLimits(int minPreferredWidth, int maxPreferredWidth) {
-        int previousMinPreferredWidth = this.minPreferredWidth;
-        int previousMaxPreferredWidth = this.maxPreferredWidth;
+    public void setPreferredWidthLimits(int minimumPreferredWidth, int maximumPreferredWidth) {
+        int previousMinimumPreferredWidth = this.minimumPreferredWidth;
+        int previousMaximumPreferredWidth = this.maximumPreferredWidth;
 
-        if (previousMinPreferredWidth != minPreferredWidth
-            || previousMaxPreferredWidth != maxPreferredWidth) {
-            if (minPreferredWidth < 0) {
-                throw new IllegalArgumentException("minPreferredWidth is negative.");
+        if (previousMinimumPreferredWidth != minimumPreferredWidth
+            || previousMaximumPreferredWidth != maximumPreferredWidth) {
+            if (minimumPreferredWidth < 0) {
+                throw new IllegalArgumentException("minimumPreferredWidth is negative.");
             }
 
-            if (minPreferredWidth > maxPreferredWidth) {
-                throw new IllegalArgumentException("minPreferredWidth > maxPreferredWidth");
+            if (minimumPreferredWidth > maximumPreferredWidth) {
+                throw new IllegalArgumentException("minimumPreferredWidth > maximumPreferredWidth");
             }
 
             if (preferredWidth != -1
-                && (preferredWidth < minPreferredWidth
-                || preferredWidth > maxPreferredWidth)) {
+                && (preferredWidth < minimumPreferredWidth
+                || preferredWidth > maximumPreferredWidth)) {
                 throw new IllegalArgumentException("preferredWidth is outside limits");
             }
 
-            this.minPreferredWidth = minPreferredWidth;
-            this.maxPreferredWidth = maxPreferredWidth;
+            this.minimumPreferredWidth = minimumPreferredWidth;
+            this.maximumPreferredWidth = maximumPreferredWidth;
 
             invalidate();
 
-            componentListeners.preferredWidthLimitsChanged(this, previousMinPreferredWidth,
-                previousMaxPreferredWidth);
+            componentListeners.preferredWidthLimitsChanged(this, previousMinimumPreferredWidth,
+                previousMaximumPreferredWidth);
         }
     }
 
@@ -1215,8 +1215,8 @@ public abstract class Component implements ConstrainedVisual {
      * @return
      * The minimum preferred height
      */
-    public int getMinPreferredHeight() {
-        return minPreferredHeight;
+    public int getMinimumPreferredHeight() {
+        return minimumPreferredHeight;
     }
 
     /**
@@ -1224,11 +1224,11 @@ public abstract class Component implements ConstrainedVisual {
      * will always report a preferred size whose height is greater than or equal
      * to its minimum preferred height.
      *
-     * @param minPreferredHeight
+     * @param minimumPreferredHeight
      * The minimum preferred height
      */
-    public void setMinPreferredHeight(int minPreferredHeight) {
-        setPreferredHeightLimits(minPreferredHeight, getMaxPreferredHeight());
+    public void setMinimumPreferredHeight(int minimumPreferredHeight) {
+        setPreferredHeightLimits(minimumPreferredHeight, getMaximumPreferredHeight());
     }
 
     /**
@@ -1239,8 +1239,8 @@ public abstract class Component implements ConstrainedVisual {
      * @return
      * The maximum preferred height
      */
-    public int getMaxPreferredHeight() {
-        return maxPreferredHeight;
+    public int getMaximumPreferredHeight() {
+        return maximumPreferredHeight;
     }
 
     /**
@@ -1248,11 +1248,11 @@ public abstract class Component implements ConstrainedVisual {
      * will always report a preferred size whose height is less than or equal
      * to its maximum preferred height.
      *
-     * @param maxPreferredHeight
+     * @param maximumPreferredHeight
      * The maximum preferred height
      */
-    public void setMaxPreferredHeight(int maxPreferredHeight) {
-        setPreferredHeightLimits(getMinPreferredHeight(), maxPreferredHeight);
+    public void setMaximumPreferredHeight(int maximumPreferredHeight) {
+        setPreferredHeightLimits(getMinimumPreferredHeight(), maximumPreferredHeight);
     }
 
     /**
@@ -1263,46 +1263,46 @@ public abstract class Component implements ConstrainedVisual {
      * The preferred height limits
      */
     public Limits getPreferredHeightLimits() {
-        return new Limits(minPreferredHeight, maxPreferredHeight);
+        return new Limits(minimumPreferredHeight, maximumPreferredHeight);
     }
 
     /**
      * Sets the preferred height limits for this component. A component will
      * always report a preferred size whose height is within these limits.
      *
-     * @param minPreferredHeight
+     * @param minimumPreferredHeight
      * The minimum preferred height for the component
      *
-     * @param maxPreferredHeight
+     * @param maximumPreferredHeight
      * The maximum preferred height for the component
      */
-    public void setPreferredHeightLimits(int minPreferredHeight, int maxPreferredHeight) {
-        int previousMinPreferredHeight = this.minPreferredHeight;
-        int previousMaxPreferredHeight = this.maxPreferredHeight;
+    public void setPreferredHeightLimits(int minimumPreferredHeight, int maximumPreferredHeight) {
+        int previousMinimumPreferredHeight = this.minimumPreferredHeight;
+        int previousMaximumPreferredHeight = this.maximumPreferredHeight;
 
-        if (previousMinPreferredHeight != minPreferredHeight
-            || previousMaxPreferredHeight != maxPreferredHeight) {
-            if (minPreferredHeight < 0) {
-                throw new IllegalArgumentException("minPreferredHeight is negative.");
+        if (previousMinimumPreferredHeight != minimumPreferredHeight
+            || previousMaximumPreferredHeight != maximumPreferredHeight) {
+            if (minimumPreferredHeight < 0) {
+                throw new IllegalArgumentException("minimumPreferredHeight is negative.");
             }
 
-            if (minPreferredHeight > maxPreferredHeight) {
-                throw new IllegalArgumentException("minPreferredHeight > maxPreferredHeight");
+            if (minimumPreferredHeight > maximumPreferredHeight) {
+                throw new IllegalArgumentException("minimumPreferredHeight > maximumPreferredHeight");
             }
 
             if (preferredHeight != -1
-                && (preferredHeight < minPreferredHeight
-                || preferredHeight > maxPreferredHeight)) {
+                && (preferredHeight < minimumPreferredHeight
+                || preferredHeight > maximumPreferredHeight)) {
                 throw new IllegalArgumentException("preferredHeight is outside limits");
             }
 
-            this.minPreferredHeight = minPreferredHeight;
-            this.maxPreferredHeight = maxPreferredHeight;
+            this.minimumPreferredHeight = minimumPreferredHeight;
+            this.maximumPreferredHeight = maximumPreferredHeight;
 
             invalidate();
 
-            componentListeners.preferredHeightLimitsChanged(this, previousMinPreferredHeight,
-                previousMaxPreferredHeight);
+            componentListeners.preferredHeightLimitsChanged(this, previousMinimumPreferredHeight,
+                previousMaximumPreferredHeight);
         }
     }
 

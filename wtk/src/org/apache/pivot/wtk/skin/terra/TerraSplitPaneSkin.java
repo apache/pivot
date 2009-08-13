@@ -505,15 +505,16 @@ public class TerraSplitPaneSkin extends ContainerSkin implements SplitPaneListen
         int lower, upper;
         if (splitPane.getOrientation() == Orientation.HORIZONTAL) {
             int splitWidth = splitPane.getWidth();
-            lower = splitPane.getLeft().getMinPreferredWidth();
+            lower = splitPane.getLeft().getMinimumPreferredWidth();
 
-            int minChildSize = splitPane.getRight().getMinPreferredWidth();
-            upper = splitWidth - splitterThickness - (minChildSize > 0 ? minChildSize : 0);
+            int minimumChildSize = splitPane.getRight().getMinimumPreferredWidth();
+            upper = splitWidth - splitterThickness
+                - (minimumChildSize > 0 ? minimumChildSize : 0);
         } else {
-            lower = splitPane.getBottom().getMinPreferredHeight();
-            int minChildSize = splitPane.getBottom().getMinPreferredHeight();
+            lower = splitPane.getBottom().getMinimumPreferredHeight();
+            int minimumChildSize = splitPane.getBottom().getMinimumPreferredHeight();
             upper = splitPane.getHeight() - splitterThickness
-                - (minChildSize > 0 ? minChildSize : 0);
+                - (minimumChildSize > 0 ? minimumChildSize : 0);
         }
 
         if (splitLocation < lower) {
