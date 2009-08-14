@@ -629,6 +629,8 @@ public class TerraListButtonSkin extends ListButtonSkin {
                     Point buttonLocation = listButton.mapPointToAncestor(display, 0, 0);
 
                     Dimensions displaySize = display.getSize();
+
+                    listViewPopup.setPreferredSize(-1, -1);
                     Dimensions popupSize = listViewPopup.getPreferredSize();
                     int popupWidth = Math.max(popupSize.width, listButton.getWidth() - TRIGGER_WIDTH - 1);
                     int popupHeight = popupSize.height;

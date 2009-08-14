@@ -30,39 +30,38 @@ limitations under the License.
             <!-- Toolbar -->
             <TablePane>
                 <columns>
+                    <TablePane.Column width="2*"/>
                     <TablePane.Column width="-1"/>
                     <TablePane.Column width="1*"/>
                     <TablePane.Column width="3*"/>
                 </columns>
                 <rows>
                     <TablePane.Row>
-                        <BoxPane styles="{verticalAlignment:'center'}">
-                            <ListButton wtkx:id="pathListButton" tooltipText="%goTo">
-                                <dataRenderer>
-                                    <terra:TerraFileBrowserSkin.ListButtonFileRenderer/>
-                                </dataRenderer>
-                                <itemRenderer>
-                                    <terra:TerraFileBrowserSkin.ListViewFileRenderer/>
-                                </itemRenderer>
-                            </ListButton>
+                        <ListButton wtkx:id="pathListButton" tooltipText="%goTo">
+                            <dataRenderer>
+                                <terra:TerraFileBrowserSkin.ListButtonFileRenderer/>
+                            </dataRenderer>
+                            <itemRenderer>
+                                <terra:TerraFileBrowserSkin.ListViewFileRenderer/>
+                            </itemRenderer>
+                        </ListButton>
 
-                            <BoxPane styles="{spacing:0}">
-                                <PushButton wtkx:id="goUpButton" styles="{toolbar:true}" tooltipText="%goUp">
-                                    <buttonData>
-                                        <content:ButtonData icon="@folder_up.png"/>
-                                    </buttonData>
-                                </PushButton>
-                                <PushButton wtkx:id="newFolderButton" styles="{toolbar:true}" tooltipText="%newFolder">
-                                    <buttonData>
-                                        <content:ButtonData icon="@folder_add.png"/>
-                                    </buttonData>
-                                </PushButton>
-                                <PushButton wtkx:id="goHomeButton" styles="{toolbar:true}" tooltipText="%goHome">
-                                    <buttonData>
-                                        <content:ButtonData icon="@house.png"/>
-                                    </buttonData>
-                                </PushButton>
-                            </BoxPane>
+                        <BoxPane styles="{verticalAlignment:'center', padding:{left:2, right:2}, spacing:0}">
+                            <PushButton wtkx:id="goUpButton" styles="{toolbar:true}" tooltipText="%goUp">
+                                <buttonData>
+                                    <content:ButtonData icon="@folder_up.png"/>
+                                </buttonData>
+                            </PushButton>
+                            <PushButton wtkx:id="newFolderButton" styles="{toolbar:true}" tooltipText="%newFolder">
+                                <buttonData>
+                                    <content:ButtonData icon="@folder_add.png"/>
+                                </buttonData>
+                            </PushButton>
+                            <PushButton wtkx:id="goHomeButton" styles="{toolbar:true}" tooltipText="%goHome">
+                                <buttonData>
+                                    <content:ButtonData icon="@house.png"/>
+                                </buttonData>
+                            </PushButton>
                         </BoxPane>
 
                         <TablePane.Filler/>

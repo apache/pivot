@@ -56,13 +56,11 @@ public abstract class ListButtonSkin extends ButtonSkin
         public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
             ListButton listButton = (ListButton)getComponent();
 
-            int index = listView.getSelectedIndex();
-
-            listView.clearSelection();
-            listButton.setSelectedIndex(index);
-
             listViewPopup.close();
             getComponent().requestFocus();
+
+            int index = listView.getSelectedIndex();
+            listButton.setSelectedIndex(index);
 
             return true;
         }
@@ -82,12 +80,6 @@ public abstract class ListButtonSkin extends ButtonSkin
 
                 case Keyboard.KeyCode.TAB:
                 case Keyboard.KeyCode.ENTER: {
-
-                    int index = listView.getSelectedIndex();
-
-                    listView.clearSelection();
-                    listButton.setSelectedIndex(index);
-
                     listViewPopup.close();
 
                     if (keyCode == Keyboard.KeyCode.TAB) {
@@ -97,6 +89,9 @@ public abstract class ListButtonSkin extends ButtonSkin
                     } else {
                         listButton.requestFocus();
                     }
+
+                    int index = listView.getSelectedIndex();
+                    listButton.setSelectedIndex(index);
 
                     break;
                 }

@@ -465,6 +465,8 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         fileScrollPane.setScrollTop(0);
         fileScrollPane.setScrollLeft(0);
         fileTableView.setTableData(selectedFolder);
+
+        fileTableView.requestFocus();
     }
 
     public void selectedFileAdded(FileBrowser fileBrowser, File file) {

@@ -496,6 +496,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
                 Point buttonLocation = menuButton.mapPointToAncestor(display, 0, 0);
 
                 Dimensions displaySize = display.getSize();
+                menuPopup.setPreferredSize(-1, -1);
                 Dimensions popupSize = menuPopup.getPreferredSize();
                 int popupWidth = Math.max(popupSize.width, menuButton.getWidth());
                 int popupHeight = popupSize.height;

@@ -59,11 +59,11 @@ public abstract class CalendarButtonSkin extends ButtonSkin
         public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
             CalendarButton calendarButton = (CalendarButton)getComponent();
 
-            CalendarDate date = calendar.getSelectedDate();
-            calendarButton.setSelectedDate(date);
-
             calendarPopup.close();
             calendarButton.requestFocus();
+
+            CalendarDate date = calendar.getSelectedDate();
+            calendarButton.setSelectedDate(date);
 
             return true;
         }
@@ -83,11 +83,6 @@ public abstract class CalendarButtonSkin extends ButtonSkin
 
                 case Keyboard.KeyCode.TAB:
                 case Keyboard.KeyCode.ENTER: {
-                    CalendarDate date = calendar.getSelectedDate();
-
-                    calendar.setSelectedDate((CalendarDate)null);
-                    calendarButton.setSelectedDate(date);
-
                     calendarPopup.close();
 
                     if (keyCode == Keyboard.KeyCode.TAB) {
@@ -97,6 +92,9 @@ public abstract class CalendarButtonSkin extends ButtonSkin
                     } else {
                         calendarButton.requestFocus();
                     }
+
+                    CalendarDate date = calendar.getSelectedDate();
+                    calendarButton.setSelectedDate(date);
 
                     break;
                 }

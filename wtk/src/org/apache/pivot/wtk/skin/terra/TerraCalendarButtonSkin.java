@@ -503,6 +503,8 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
                 Point buttonLocation = calendarButton.mapPointToAncestor(display, 0, 0);
 
                 Dimensions displaySize = display.getSize();
+
+                calendarPopup.setPreferredSize(-1, -1);
                 Dimensions popupSize = calendarPopup.getPreferredSize();
                 int popupWidth = Math.max(popupSize.width, calendarButton.getWidth());
                 int popupHeight = popupSize.height;
