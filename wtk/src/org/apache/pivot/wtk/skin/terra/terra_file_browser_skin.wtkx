@@ -20,6 +20,7 @@ limitations under the License.
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:collections="org.apache.pivot.collections"
     xmlns:content="org.apache.pivot.wtk.content"
+    xmlns:terra="org.apache.pivot.wtk.skin.terra"
     xmlns="org.apache.pivot.wtk">
     <columns>
         <TablePane.Column width="1*"/>
@@ -38,10 +39,10 @@ limitations under the License.
                         <BoxPane styles="{verticalAlignment:'center'}">
                             <ListButton wtkx:id="pathListButton" tooltipText="%goTo">
                                 <dataRenderer>
-                                    <content:ListButtonFileRenderer/>
+                                    <terra:TerraFileBrowserSkin.ListButtonFileRenderer/>
                                 </dataRenderer>
                                 <itemRenderer>
-                                    <content:ListViewFileRenderer/>
+                                    <terra:TerraFileBrowserSkin.ListViewFileRenderer/>
                                 </itemRenderer>
                             </ListButton>
 
@@ -89,17 +90,17 @@ limitations under the License.
                                 <columns>
                                     <TableView.Column name="name" width="3*" headerData="%fileName">
                                         <cellRenderer>
-                                            <content:TableViewFileRenderer/>
+                                            <terra:TerraFileBrowserSkin.TableViewFileRenderer/>
                                         </cellRenderer>
                                     </TableView.Column>
                                     <TableView.Column name="size" width="1*" headerData="%size">
                                         <cellRenderer>
-                                            <content:TableViewFileRenderer/>
+                                            <terra:TerraFileBrowserSkin.TableViewFileRenderer/>
                                         </cellRenderer>
                                     </TableView.Column>
                                     <TableView.Column name="lastModified" width="2*" headerData="%lastModified">
                                         <cellRenderer>
-                                            <content:TableViewFileRenderer/>
+                                            <terra:TerraFileBrowserSkin.TableViewFileRenderer/>
                                         </cellRenderer>
                                     </TableView.Column>
                                 </columns>
