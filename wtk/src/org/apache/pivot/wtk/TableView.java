@@ -1296,7 +1296,7 @@ public class TableView extends Component {
         return row;
     }
 
-    public Sequence<Object> getSelectedRows() {
+    public Sequence<?> getSelectedRows() {
         ArrayList<Object> rows = new ArrayList<Object>();
 
         for (int i = 0, n = tableSelection.getLength(); i < n; i++) {

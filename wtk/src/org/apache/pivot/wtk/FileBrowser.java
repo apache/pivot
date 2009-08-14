@@ -84,10 +84,21 @@ public class FileBrowser extends Container {
         installSkin(FileBrowser.class);
     }
 
+    /**
+     * Returns the currently selected folder.
+     *
+     * @return
+     * The current folder selection.
+     */
     public Folder getSelectedFolder() {
         return selectedFolder;
     }
 
+    /**
+     * Sets the selected folder. Clears any existing file selection.
+     *
+     * @param selectedFolder
+     */
     public void setSelectedFolder(Folder selectedFolder) {
         if (selectedFolder == null) {
             throw new IllegalArgumentException("selectedFolder is null.");
@@ -96,10 +107,20 @@ public class FileBrowser extends Container {
         Folder previousSelectedFolder = this.selectedFolder;
         if (previousSelectedFolder != selectedFolder) {
             this.selectedFolder = selectedFolder;
+            fileSelection.clear();
             fileBrowserListeners.selectedFolderChanged(this, previousSelectedFolder);
         }
     }
 
+    /**
+     * Adds a file to the file selection.
+     *
+     * @param file
+     *
+     * @return
+     * <tt>true</tt> if the file was added; <tt>false</tt> if it was already
+     * selected.
+     */
     public boolean addSelectedFile(File file) {
         int index = fileSelection.add(file);
         if (index != -1) {
@@ -109,6 +130,15 @@ public class FileBrowser extends Container {
         return (index != -1);
     }
 
+    /**
+     * Removes a file from the file selection.
+     *
+     * @param file
+     *
+     * @return
+     * <tt>true</tt> if the file was removed; <tt>false</tt> if it was not
+     * already selected.
+     */
     public boolean removeSelectedFile(File file) {
         int index = fileSelection.remove(file);
         if (index != -1) {
@@ -118,10 +148,27 @@ public class FileBrowser extends Container {
         return (index != -1);
     }
 
+    /**
+     * Returns the currently selected files.
+     *
+     * @return
+     * An immutable list of selected files. The file paths are relative to
+     * the currently selected folder.
+     */
     public Sequence<File> getSelectedFiles() {
         return new ImmutableList<File>(fileSelection);
     }
 
+    /**
+     * Sets the selected files.
+     *
+     * @param selectedFiles
+     * The files to select. The file paths are relative to the currently
+     * selected folder.
+     *
+     * @return
+     * The files that were selected, with duplicates eliminated.
+     */
     public Sequence<File> setSelectedFiles(Sequence<File> selectedFiles) {
         if (selectedFiles == null) {
             throw new IllegalArgumentException("selectedFiles is null.");
@@ -136,8 +183,8 @@ public class FileBrowser extends Container {
         Sequence<File> previousSelectedFiles = getSelectedFiles();
 
         FileList fileSelection = new FileList();
-        for (int i = 0, n = fileSelection.getLength(); i < n; i++) {
-            File file = fileSelection.get(i);
+        for (int i = 0, n = selectedFiles.getLength(); i < n; i++) {
+            File file = selectedFiles.get(i);
 
             if (file == null) {
                 throw new IllegalArgumentException("file is null.");
@@ -154,10 +201,19 @@ public class FileBrowser extends Container {
         return getSelectedFiles();
     }
 
+    /**
+     * Returns the file browser's multi-select state.
+     */
     public boolean isMultiSelect() {
         return multiSelect;
     }
 
+    /**
+     * Sets the file browser's multi-select state.
+     *
+     * @param multiSelect
+     * <tt>true</tt> if multi-select is enabled; <tt>false</tt>, otherwise.
+     */
     public void setMultiSelect(boolean multiSelect) {
         if (this.multiSelect != multiSelect) {
             // Clear any existing selection
@@ -169,10 +225,22 @@ public class FileBrowser extends Container {
         }
     }
 
+    /**
+     * Returns the current file filter.
+     *
+     * @return
+     * The current file filter, or <tt>null</tt> if no filter is set.
+     */
     public Filter<File> getFileFilter() {
         return fileFilter;
     }
 
+    /**
+     * Sets the file filter.
+     *
+     * @param fileFilter
+     * The file filter to use, or <tt>null</tt> for no filter.
+     */
     public void setFileFilter(Filter<File> fileFilter) {
         Filter<File> previousFileFilter = this.fileFilter;
 

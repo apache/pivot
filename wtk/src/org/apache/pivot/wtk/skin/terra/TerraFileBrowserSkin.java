@@ -48,7 +48,9 @@ import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.ScrollPane;
+import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.TableView;
+import org.apache.pivot.wtk.TableViewSelectionListener;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.skin.FileBrowserSkin;
@@ -283,6 +285,8 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     @WTKX private ScrollPane fileScrollPane = null;
     @WTKX private TableView fileTableView = null;
 
+    private boolean updatingSelection = false;
+
     @Override
     public void install(Component component) {
         super.install(component);
@@ -341,21 +345,66 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             }
         });
 
+        fileTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener() {
+            public void selectedRangeAdded(TableView tableView, int rangeStart, int rangeEnd) {
+                updatingSelection = true;
+
+                Folder selectedFolder = (Folder)tableView.getTableData();
+                for (int i = rangeStart; i <= rangeEnd; i++) {
+                    File file = selectedFolder.get(i);
+                    file = getRelativeFile(selectedFolder, file);
+
+                    fileBrowser.addSelectedFile(file);
+                }
+
+                updatingSelection = false;
+            }
+
+            public void selectedRangeRemoved(TableView tableView, int rangeStart, int rangeEnd) {
+                updatingSelection = true;
+
+                Folder selectedFolder = (Folder)tableView.getTableData();
+                for (int i = rangeStart; i <= rangeEnd; i++) {
+                    File file = selectedFolder.get(i);
+                    file = getRelativeFile(selectedFolder, file);
+
+                    fileBrowser.removeSelectedFile(file);
+                }
+
+                updatingSelection = false;
+            }
+
+            @SuppressWarnings("unchecked")
+            public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges) {
+                updatingSelection = true;
+
+                Folder selectedFolder = (Folder)tableView.getTableData();
+
+                Sequence<File> files = (Sequence<File>)tableView.getSelectedRows();
+                for (int i = 0, n = files.getLength(); i < n; i++) {
+                    File file = files.get(i);
+                    files.update(i, getRelativeFile(selectedFolder, file));
+                }
+
+                fileBrowser.setSelectedFiles(files);
+
+                updatingSelection = false;
+            }
+        });
+
         fileTableView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
-            private File selectedDirectory = null;
+            private int index = -1;
 
             @Override
             public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-                // TODO If we're in multi-select mode, we'll need to check
-                // selection length
                 if (count == 1) {
-                    File selectedFile = (File)fileTableView.getSelectedRow();
-                    if (selectedFile != null
-                        && selectedFile.isDirectory()) {
-                        selectedDirectory = selectedFile;
-                    }
+                    index = fileTableView.getRowAt(y);
                 } else if (count == 2) {
-                    if (selectedDirectory == fileTableView.getSelectedRow()) {
+                    int index = fileTableView.getRowAt(y);
+                    if (index != -1
+                        && index == this.index
+                        && fileTableView.isRowSelected(index)) {
+                        File selectedDirectory = (File)fileTableView.getTableData().get(index);
                         fileBrowser.setSelectedFolder(new Folder(selectedDirectory.getPath()));
                     }
                 }
@@ -365,6 +414,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         });
 
         selectedFolderChanged(fileBrowser, null);
+        selectedFilesChanged(fileBrowser, null);
     }
 
     @Override
@@ -401,6 +451,11 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         content.setSize(width, height);
     }
 
+    public void multiSelectChanged(FileBrowser fileBrowser) {
+        fileTableView.setSelectMode(fileBrowser.isMultiSelect() ?
+            TableView.SelectMode.MULTI : TableView.SelectMode.SINGLE);
+    }
+
     public void selectedFolderChanged(FileBrowser fileBrowser, Folder previousSelectedFolder) {
         ArrayList<File> path = new ArrayList<File>();
 
@@ -428,18 +483,31 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     }
 
     public void selectedFileAdded(FileBrowser fileBrowser, File file) {
-        // TODO
+        if (!updatingSelection) {
+            // TODO
+        }
     }
 
     public void selectedFileRemoved(FileBrowser fileBrowser, File file) {
-        // TODO
+        if (!updatingSelection) {
+            // TODO
+        }
     }
 
     public void selectedFilesChanged(FileBrowser fileBrowser, Sequence<File> previousSelectedFiles) {
-        // TODO
+        if (!updatingSelection) {
+            // TODO
+        }
     }
 
     public void fileFilterChanged(FileBrowser fileBrowser, Filter<File> previousFileFilter) {
-        // TODO
+        fileTableView.setDisabledRowFilter(fileBrowser.getFileFilter());
+    }
+
+    public static File getRelativeFile(Folder folder, File file) {
+        String path = file.getPath();
+        path = path.substring(folder.getPath().length() + 1);
+
+        return new File(path);
     }
 }

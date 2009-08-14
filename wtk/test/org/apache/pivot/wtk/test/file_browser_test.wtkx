@@ -20,11 +20,48 @@ limitations under the License.
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
     <content>
-        <Border styles="{padding:8}">
-            <content>
-                <FileBrowser wtkx:id="fileBrowser"/>
-            </content>
-        </Border>
+        <SplitPane splitRatio="0.65">
+            <left>
+                <Border styles="{padding:8}">
+                    <content>
+                        <FileBrowser wtkx:id="fileBrowser" multiSelect="true"/>
+                    </content>
+                </Border>
+            </left>
+            <right>
+                <Border styles="{padding:8}">
+                    <content>
+                        <TablePane styles="{verticalSpacing:6}">
+                            <columns>
+                                <TablePane.Column width="1*"/>
+                            </columns>
+                            <rows>
+                                <TablePane.Row height="-1">
+                                    <Label text="Selected folder:" styles="{fontBold:true}"/>
+                                </TablePane.Row>
+                                <TablePane.Row height="-1">
+                                    <Label wtkx:id="selectedFolderLabel"/>
+                                </TablePane.Row>
+                                <TablePane.Row height="-1">
+                                    <Label text="Selected files:" styles="{fontBold:true}"/>
+                                </TablePane.Row>
+                                <TablePane.Row height="1*">
+                                    <Border styles="{color:10}">
+                                        <content>
+                                            <ScrollPane preferredHeight="240">
+                                                <view>
+                                                    <ListView wtkx:id="filesListView" selectMode="none"/>
+                                                </view>
+                                            </ScrollPane>
+                                        </content>
+                                    </Border>
+                                </TablePane.Row>
+                            </rows>
+                        </TablePane>
+                    </content>
+                </Border>
+            </right>
+        </SplitPane>
     </content>
 </Window>
 

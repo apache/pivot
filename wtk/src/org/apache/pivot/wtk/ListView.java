@@ -858,7 +858,7 @@ public class ListView extends Component {
         setSelectedIndex(index);
     }
 
-    public Sequence<Object> getSelectedItems() {
+    public Sequence<?> getSelectedItems() {
         ArrayList<Object> items = new ArrayList<Object>();
 
         for (int i = 0, n = listSelection.getLength(); i < n; i++) {
@@ -1109,7 +1109,7 @@ public class ListView extends Component {
             }
 
             if (selectedItemsKey != null) {
-                Sequence<Object> items = getSelectedItems();
+                Sequence<Object> items = (Sequence<Object>)getSelectedItems();
                 ((Dictionary<String, Sequence<Object>>)context).put(selectedItemsKey, items);
             }
         }

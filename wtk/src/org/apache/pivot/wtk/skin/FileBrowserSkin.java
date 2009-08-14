@@ -42,8 +42,4 @@ public abstract class FileBrowserSkin extends ContainerSkin implements FileBrows
 
         super.uninstall();
     }
-
-    public void multiSelectChanged(FileBrowser fileBrowser) {
-        // No-op
-    }
 }
