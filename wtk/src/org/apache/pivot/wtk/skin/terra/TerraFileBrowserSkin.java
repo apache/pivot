@@ -21,13 +21,13 @@ import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
-import java.text.NumberFormat;
 import java.util.Date;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.io.Folder;
 import org.apache.pivot.serialization.SerializationException;
+import org.apache.pivot.text.FileSizeFormat;
 import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
@@ -77,9 +77,6 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         public static final Image HOME_FOLDER_IMAGE;
         public static final Image FILE_IMAGE;
 
-        public static final int KILOBYTE = 1024;
-        public static final String[] ABBREVIATIONS = {"K", "M", "G", "T", "P", "E", "Z", "Y"};
-
         public static final File HOME_DIRECTORY;
 
         static {
@@ -126,46 +123,6 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             }
 
             return icon;
-        }
-
-        /**
-         * Converts a file size into a human-readable representation using binary
-         * prefixes (1KB = 1024 bytes).
-         *
-         * @param length
-         * The length of the file, in bytes. May be <tt>-1</tt> to indicate an
-         * unknown file size.
-         *
-         * @return
-         * The formatted file size, or null if <tt>length</tt> is <tt>-1</tt>.
-         */
-        public static String formatSize(File file) {
-            String formattedSize;
-
-            long length = file.length();
-            if (length == -1) {
-                formattedSize = null;
-            } else {
-                double size = length;
-
-                int i = -1;
-                do {
-                    size /= KILOBYTE;
-                    i++;
-                } while (size > KILOBYTE);
-
-                NumberFormat numberFormat = NumberFormat.getNumberInstance();
-                if (i == 0
-                    && size > 1) {
-                    numberFormat.setMaximumFractionDigits(0);
-                } else {
-                    numberFormat.setMaximumFractionDigits(1);
-                }
-
-                formattedSize = numberFormat.format(size) + " " + ABBREVIATIONS[i] + "B";
-            }
-
-            return formattedSize;
         }
     }
 
@@ -275,7 +232,8 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                     icon = getIcon(file);
                     getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
                 } else if (columnName.equals(SIZE_KEY)) {
-                    text = formatSize(file);
+                    long length = file.length();
+                    text = FileSizeFormat.getInstance().format(length);
                     getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
                 } else if (columnName.equals(LAST_MODIFIED_KEY)) {
                     long lastModified = file.lastModified();
