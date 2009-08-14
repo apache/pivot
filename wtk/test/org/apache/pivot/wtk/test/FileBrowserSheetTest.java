@@ -24,7 +24,7 @@ import org.apache.pivot.wtk.FileBrowserSheet;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
-public class FileBrowserTest implements Application {
+public class FileBrowserSheetTest implements Application {
     private Frame frame = null;
 
     public void startup(Display display, Map<String, String> properties)
@@ -34,7 +34,7 @@ public class FileBrowserTest implements Application {
         FileBrowserSheet fileOpenSheet = new FileBrowserSheet(FileBrowserSheet.Mode.OPEN);
         wtkxSerializer.put("fileOpenSheet", fileOpenSheet);
 
-        frame = (Frame)wtkxSerializer.readObject(getClass().getResource("file_browser_test.wtkx"));
+        frame = (Frame)wtkxSerializer.readObject(getClass().getResource("file_browser_sheet_test.wtkx"));
         frame.open(display);
     }
 
@@ -53,6 +53,6 @@ public class FileBrowserTest implements Application {
     }
 
     public static void main(String[] args) {
-        DesktopApplicationContext.main(FileBrowserTest.class, args);
+        DesktopApplicationContext.main(FileBrowserSheetTest.class, args);
     }
 }

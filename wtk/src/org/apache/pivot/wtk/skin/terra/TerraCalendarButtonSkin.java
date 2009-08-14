@@ -36,6 +36,7 @@ import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Insets;
+import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.WindowStateListener;
@@ -480,6 +481,56 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
         }
 
         setPadding(Insets.decode(padding));
+    }
+
+    // Button events
+    @Override
+    public void buttonPressed(Button button) {
+        if (calendarPopup.isOpen()) {
+            calendarPopup.close();
+        } else {
+            CalendarButton calendarButton = (CalendarButton)button;
+
+            // Determine the popup's location and preferred size, relative
+            // to the button
+            Display display = calendarButton.getDisplay();
+
+            if (display != null) {
+                int width = getWidth();
+                int height = getHeight();
+
+                // Ensure that the popup remains within the bounds of the display
+                Point buttonLocation = calendarButton.mapPointToAncestor(display, 0, 0);
+
+                Dimensions displaySize = display.getSize();
+                Dimensions popupSize = calendarPopup.getPreferredSize();
+                int popupWidth = Math.max(popupSize.width, calendarButton.getWidth());
+                int popupHeight = popupSize.height;
+
+                int x = buttonLocation.x;
+                if (popupWidth > width
+                    && x + popupWidth > displaySize.width) {
+                    x = buttonLocation.x + width - popupWidth;
+                }
+
+                int y = buttonLocation.y + height - 1;
+                if (y + popupSize.height > displaySize.height) {
+                    if (buttonLocation.y - popupSize.height > 0) {
+                        y = buttonLocation.y - popupSize.height + 1;
+                    } else {
+                        popupHeight = displaySize.height - y;
+                    }
+                } else {
+                    popupHeight = -1;
+                }
+
+                calendarPopup.setLocation(x, y);
+                calendarPopup.setPreferredSize(popupWidth, popupHeight);
+                calendarPopup.open(calendarButton.getWindow());
+
+                calendar.requestFocus();
+            }
+        }
     }
 
     // Calendar button events

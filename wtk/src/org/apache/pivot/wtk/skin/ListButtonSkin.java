@@ -19,13 +19,11 @@ package org.apache.pivot.wtk.skin;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.util.Filter;
-import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentKeyListener;
 import org.apache.pivot.wtk.ComponentMouseButtonListener;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.ContainerMouseListener;
-import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Direction;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Keyboard;
@@ -34,7 +32,6 @@ import org.apache.pivot.wtk.ListButtonListener;
 import org.apache.pivot.wtk.ListButtonSelectionListener;
 import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.Mouse;
-import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.WindowStateListener;
 
@@ -298,64 +295,6 @@ public abstract class ListButtonSkin extends ButtonSkin
         }
 
         return consumed;
-    }
-
-    // Button events
-    @Override
-    public void buttonPressed(Button button) {
-        if (listViewPopup.isOpen()) {
-            listViewPopup.close();
-        } else {
-            ListButton listButton = (ListButton)button;
-
-            if (listButton.getListData().getLength() > 0) {
-                // Determine the popup's location and preferred size, relative
-                // to the button
-                Display display = listButton.getDisplay();
-
-                if (display != null) {
-                    int width = getWidth();
-                    int height = getHeight();
-
-                    Component content = listViewPopup.getContent();
-
-                    // Ensure that the popup remains within the bounds of the display
-                    Point buttonLocation = listButton.mapPointToAncestor(display, 0, 0);
-
-                    Dimensions displaySize = display.getSize();
-                    Dimensions popupSize = content.getPreferredSize();
-                    int popupHeight = popupSize.height;
-
-                    int x = buttonLocation.x;
-                    if (popupSize.width > width
-                        && x + popupSize.width > displaySize.width) {
-                        x = buttonLocation.x + width - popupSize.width;
-                    }
-
-                    int y = buttonLocation.y + height - 1;
-                    if (y + popupSize.height > displaySize.height) {
-                        if (buttonLocation.y - popupSize.height > 0) {
-                            y = buttonLocation.y - popupSize.height + 1;
-                        } else {
-                            popupHeight = displaySize.height - y;
-                        }
-                    } else {
-                        popupHeight = -1;
-                    }
-
-                    listViewPopup.setLocation(x, y);
-                    listViewPopup.setPreferredSize(popupSize.width, popupHeight);
-                    listViewPopup.open(listButton.getWindow());
-
-                    if (listView.getFirstSelectedIndex() == -1
-                        && listView.getListData().getLength() > 0) {
-                        listView.setSelectedIndex(0);
-                    }
-
-                    listView.requestFocus();
-                }
-            }
-        }
     }
 
     // List button events

@@ -20,7 +20,6 @@ import java.util.Locale;
 
 import org.apache.pivot.util.CalendarDate;
 import org.apache.pivot.util.Filter;
-import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Calendar;
 import org.apache.pivot.wtk.CalendarButton;
 import org.apache.pivot.wtk.CalendarButtonListener;
@@ -30,12 +29,10 @@ import org.apache.pivot.wtk.ComponentKeyListener;
 import org.apache.pivot.wtk.ComponentMouseButtonListener;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.ContainerMouseListener;
-import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Direction;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
-import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.WindowStateListener;
 
@@ -279,57 +276,6 @@ public abstract class CalendarButtonSkin extends ButtonSkin
         }
 
         return consumed;
-    }
-
-    // Button events
-    @Override
-    public void buttonPressed(Button button) {
-        if (calendarPopup.isOpen()) {
-            calendarPopup.close();
-        } else {
-            CalendarButton calendarButton = (CalendarButton)button;
-
-            // Determine the popup's location and preferred size, relative
-            // to the button
-            Display display = calendarButton.getDisplay();
-
-            if (display != null) {
-                int width = getWidth();
-                int height = getHeight();
-
-                Component content = calendarPopup.getContent();
-
-                // Ensure that the popup remains within the bounds of the display
-                Point buttonLocation = calendarButton.mapPointToAncestor(display, 0, 0);
-
-                Dimensions displaySize = display.getSize();
-                Dimensions popupSize = content.getPreferredSize();
-                int popupHeight = popupSize.height;
-
-                int x = buttonLocation.x;
-                if (popupSize.width > width
-                    && x + popupSize.width > displaySize.width) {
-                    x = buttonLocation.x + width - popupSize.width;
-                }
-
-                int y = buttonLocation.y + height - 1;
-                if (y + popupSize.height > displaySize.height) {
-                    if (buttonLocation.y - popupSize.height > 0) {
-                        y = buttonLocation.y - popupSize.height + 1;
-                    } else {
-                        popupHeight = displaySize.height - y;
-                    }
-                } else {
-                    popupHeight = -1;
-                }
-
-                calendarPopup.setLocation(x, y);
-                calendarPopup.setPreferredSize(popupSize.width, popupHeight);
-                calendarPopup.open(calendarButton.getWindow());
-
-                calendar.requestFocus();
-            }
-        }
     }
 
     // Calendar button events

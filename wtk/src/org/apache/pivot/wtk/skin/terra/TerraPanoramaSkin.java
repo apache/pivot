@@ -365,7 +365,8 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
 
         Component view = panorama.getView();
         if (view != null) {
-            view.setSize(view.getPreferredSize());
+            Dimensions viewSize = view.getPreferredSize();
+            view.setSize(Math.max(width, viewSize.width), Math.max(height, viewSize.height));
             int viewWidth = view.getWidth();
             int viewHeight = view.getHeight();
 
