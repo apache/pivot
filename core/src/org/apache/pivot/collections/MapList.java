@@ -26,13 +26,13 @@ import org.apache.pivot.util.ListenerList;
  * Decorates a {@link Map} to look like a {@link List} of key/value pairs. This
  * facilitates the use of a <tt>Map</tt> as table data in a
  * {@link org.apache.pivot.wtk.TableView}.
- *
+ * 
  * @author tvolkert
  */
 public class MapList<K, V> implements List<Pair<K, V>> {
     /**
      * Map list listener list.
-     *
+     * 
      * @author tvolkert
      */
     private static class MapListListenerList<K, V> extends ListenerList<MapListListener<K, V>>
@@ -48,6 +48,8 @@ public class MapList<K, V> implements List<Pair<K, V>> {
 
     private ArrayList<Pair<K, V>> view = null;
 
+    // this flag is used to prevent recursion if the source is updated
+    // externally
     private boolean updating = false;
 
     private ListListenerList<Pair<K, V>> listListeners = new ListListenerList<Pair<K, V>>();
@@ -120,9 +122,9 @@ public class MapList<K, V> implements List<Pair<K, V>> {
 
     /**
      * Creates a new map list that decorates the specified source map.
-     *
+     * 
      * @param source
-     * The map to present as a list
+     *            The map to present as a list
      */
     public MapList(Map<K, V> source) {
         setSource(source);
@@ -130,9 +132,8 @@ public class MapList<K, V> implements List<Pair<K, V>> {
 
     /**
      * Gets the source map.
-     *
-     * @return
-     * The source map, or <tt>null</tt> if no source is set
+     * 
+     * @return The source map, or <tt>null</tt> if no source is set
      */
     public Map<K, V> getSource() {
         return source;
@@ -140,11 +141,15 @@ public class MapList<K, V> implements List<Pair<K, V>> {
 
     /**
      * Sets the source map.
-     *
+     * 
      * @param source
-     * The source map, or <tt>null</tt> to clear the source
+     *            The source map, or <tt>null</tt> to clear the source
      */
     public void setSource(Map<K, V> source) {
+        if (source == null) {
+            source = new HashMap<K, V>();
+        }
+
         Map<K, V> previousSource = this.source;
 
         if (previousSource != source) {
@@ -168,14 +173,10 @@ public class MapList<K, V> implements List<Pair<K, V>> {
             mapListListeners.sourceChanged(this, previousSource);
 
             // Refresh the view
-            if (source == null) {
-                view = null;
-            } else {
-                view = new ArrayList<Pair<K, V>>(source.count());
+            view = new ArrayList<Pair<K, V>>(source.count());
 
-                for (K key : source) {
-                    listListeners.itemInserted(this, view.add(new Pair<K, V>(key, source.get(key))));
-                }
+            for (K key : source) {
+                listListeners.itemInserted(this, view.add(new Pair<K, V>(key, source.get(key))));
             }
         }
     }
@@ -249,8 +250,7 @@ public class MapList<K, V> implements List<Pair<K, V>> {
 
         Pair<K, V> previousPair = view.get(index);
 
-        if (!pair.key.equals(previousPair.key)
-            && source.containsKey(pair.key)) {
+        if (!pair.key.equals(previousPair.key) && source.containsKey(pair.key)) {
             throw new IllegalArgumentException("Duplicate keys not allowed.");
         }
 
@@ -260,7 +260,6 @@ public class MapList<K, V> implements List<Pair<K, V>> {
         // Update the source
         updating = true;
         try {
-            source.remove(previousPair.key);
             source.put(pair.key, pair.value);
         } finally {
             updating = false;
@@ -280,7 +279,7 @@ public class MapList<K, V> implements List<Pair<K, V>> {
         int index = indexOf(pair);
 
         if (index >= 0) {
-           remove(index, 1);
+            remove(index, 1);
         }
 
         return index;
@@ -328,15 +327,13 @@ public class MapList<K, V> implements List<Pair<K, V>> {
     }
 
     /**
-     * Finds the specified pair in the view list by searching linearly
-     * and reporting an exact match only (bypasses the list's
-     * comparator).
-     *
+     * Finds the specified pair in the view list by searching linearly and
+     * reporting an exact match only (bypasses the list's comparator).
+     * 
      * @param pair
-     * The pair to search for
-     *
-     * @return
-     * The index of the pair in the list, or <tt>-1</tt> if not found
+     *            The pair to search for
+     * 
+     * @return The index of the pair in the list, or <tt>-1</tt> if not found
      */
     private int linearSearch(Pair<K, V> pair) {
         int index = -1;
