@@ -18,6 +18,7 @@ package org.apache.pivot.wtk;
 
 import java.io.File;
 
+import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.collections.immutable.ImmutableList;
 import org.apache.pivot.io.FileList;
@@ -149,6 +150,33 @@ public class FileBrowser extends Container {
     }
 
     /**
+     * When in single-select mode, returns the currently selected file.
+     *
+     * @return
+     * The currently selected file.
+     */
+    public File getSelectedFile() {
+        if (multiSelect) {
+            throw new IllegalStateException("File browser is not in single-select mode.");
+        }
+
+        return (fileSelection.getLength() == 0) ? null : fileSelection.get(0);
+    }
+
+    /**
+     * Sets the selection to a single file.
+     *
+     * @param file
+     */
+    public void setSelectedFile(File file) {
+        if (file == null) {
+            clearSelection();
+        } else {
+            setSelectedFiles(new ArrayList<File>(file));
+        }
+    }
+
+    /**
      * Returns the currently selected files.
      *
      * @return
@@ -199,6 +227,13 @@ public class FileBrowser extends Container {
         fileBrowserListeners.selectedFilesChanged(this, previousSelectedFiles);
 
         return getSelectedFiles();
+    }
+
+    /**
+     * Clears the selection.
+     */
+    public void clearSelection() {
+        setSelectedFiles(new ArrayList<File>());
     }
 
     /**

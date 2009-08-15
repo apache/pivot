@@ -28,5 +28,4 @@ public interface SheetCloseListener {
      * @param sheet
      */
     public void sheetClosed(Sheet sheet);
-
 }

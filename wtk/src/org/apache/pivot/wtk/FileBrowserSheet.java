@@ -18,6 +18,7 @@ package org.apache.pivot.wtk;
 
 import java.io.File;
 
+import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.collections.immutable.ImmutableList;
 import org.apache.pivot.io.FileList;
@@ -54,18 +55,6 @@ public class FileBrowserSheet extends Sheet {
         public void selectedFolderChanged(FileBrowserSheet fileBrowserSheet, Folder previousSelectedFolder) {
             for (FileBrowserSheetListener listener : this) {
                 listener.selectedFolderChanged(fileBrowserSheet, previousSelectedFolder);
-            }
-        }
-
-        public void selectedFileAdded(FileBrowserSheet fileBrowserSheet, File file) {
-            for (FileBrowserSheetListener listener : this) {
-                listener.selectedFileAdded(fileBrowserSheet, file);
-            }
-        }
-
-        public void selectedFileRemoved(FileBrowserSheet fileBrowserSheet, File file) {
-            for (FileBrowserSheetListener listener : this) {
-                listener.selectedFileRemoved(fileBrowserSheet, file);
             }
         }
 
@@ -123,28 +112,54 @@ public class FileBrowserSheet extends Sheet {
         }
     }
 
-    public boolean addSelectedFile(File file) {
-        int index = fileSelection.add(file);
-        if (index != -1) {
-            fileBrowserSheetListeners.selectedFileAdded(this, file);
+    /**
+     * When in single-select mode, returns the currently selected file.
+     *
+     * @return
+     * The currently selected file.
+     */
+    public File getSelectedFile() {
+        if (multiSelect) {
+            throw new IllegalStateException("File browser is not in single-select mode.");
         }
 
-        return (index != -1);
+        return (fileSelection.getLength() == 0) ? null : fileSelection.get(0);
     }
 
-    public boolean removeSelectedFile(File file) {
-        int index = fileSelection.remove(file);
-        if (index != -1) {
-            fileBrowserSheetListeners.selectedFileRemoved(this, file);
+    /**
+     * Sets the selection to a single file.
+     *
+     * @param file
+     */
+    public void setSelectedFile(File file) {
+        if (file == null) {
+            clearSelection();
+        } else {
+            setSelectedFiles(new ArrayList<File>(file));
         }
-
-        return (index != -1);
     }
 
+    /**
+     * Returns the currently selected files.
+     *
+     * @return
+     * An immutable list of selected files. The file paths are relative to
+     * the currently selected folder.
+     */
     public Sequence<File> getSelectedFiles() {
         return new ImmutableList<File>(fileSelection);
     }
 
+    /**
+     * Sets the selected files.
+     *
+     * @param selectedFiles
+     * The files to select. The file paths are relative to the currently
+     * selected folder.
+     *
+     * @return
+     * The files that were selected, with duplicates eliminated.
+     */
     public Sequence<File> setSelectedFiles(Sequence<File> selectedFiles) {
         if (selectedFiles == null) {
             throw new IllegalArgumentException("selectedFiles is null.");
@@ -159,8 +174,8 @@ public class FileBrowserSheet extends Sheet {
         Sequence<File> previousSelectedFiles = getSelectedFiles();
 
         FileList fileSelection = new FileList();
-        for (int i = 0, n = fileSelection.getLength(); i < n; i++) {
-            File file = fileSelection.get(i);
+        for (int i = 0, n = selectedFiles.getLength(); i < n; i++) {
+            File file = selectedFiles.get(i);
 
             if (file == null) {
                 throw new IllegalArgumentException("file is null.");
@@ -175,6 +190,13 @@ public class FileBrowserSheet extends Sheet {
         fileBrowserSheetListeners.selectedFilesChanged(this, previousSelectedFiles);
 
         return getSelectedFiles();
+    }
+
+    /**
+     * Clears the selection.
+     */
+    public void clearSelection() {
+        setSelectedFiles(new ArrayList<File>());
     }
 
     public boolean isMultiSelect() {

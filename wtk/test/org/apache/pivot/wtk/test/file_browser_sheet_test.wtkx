@@ -20,6 +20,25 @@ limitations under the License.
     preferredWidth="640" preferredHeight="480"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
+    <wtkx:script>
+    <![CDATA[
+    importPackage(org.apache.pivot.wtk);
+
+    var sheetCloseListener = new SheetCloseListener() {
+        sheetClosed: function(sheet) {
+            var message;
+            if (sheet.getResult()) {
+                message = "You selected \"" + sheet.getSelectedFile() + "\".";
+            } else {
+                message = "You didn't select anything.";
+            }
+
+            Alert.alert(MessageType.INFO, message, frame);
+        }
+    };
+    ]]>
+    </wtkx:script>
+
     <content>
         <Border>
             <content>
@@ -28,7 +47,7 @@ limitations under the License.
                         <buttonPressListeners>
                             <wtkx:script>
                             function buttonPressed(button) {
-                                fileOpenSheet.open(frame);
+                                fileOpenSheet.open(frame, sheetCloseListener);
                             }
                             </wtkx:script>
                         </buttonPressListeners>

@@ -228,7 +228,7 @@ public class Folder extends File implements List<File> {
         }
 
         // Clear the file list
-        files = new ArrayList<File>(fileList.length);
+        files = new ArrayList<File>(fileList == null ? 0 : fileList.length);
         listListeners.listCleared(this);
 
         // Add the new files, firing an insert event for each file

@@ -27,9 +27,12 @@ import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.FileBrowser;
 import org.apache.pivot.wtk.FileBrowserSheet;
 import org.apache.pivot.wtk.FileBrowserSheetListener;
 import org.apache.pivot.wtk.PushButton;
+import org.apache.pivot.wtk.TextInput;
+import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 /**
@@ -38,8 +41,12 @@ import org.apache.pivot.wtkx.WTKXSerializer;
  * @author gbrown
  */
 public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBrowserSheetListener {
-    private PushButton okButton = null;
-    private PushButton cancelButton = null;
+    @WTKX private TextInput saveAsTextInput = null;
+    @WTKX private FileBrowser fileBrowser = null;
+    @WTKX private PushButton okButton = null;
+    @WTKX private PushButton cancelButton = null;
+
+    private boolean updatingSelection = false;
 
     @Override
     public void install(Component component) {
@@ -69,14 +76,23 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
 
         fileBrowserSheet.setContent(content);
 
-        okButton = (PushButton)wtkxSerializer.get("okButton");
+        wtkxSerializer.bind(this, TerraFileBrowserSheetSkin.class);
+
         okButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
+                updatingSelection = true;
+
+                // TODO If SAVE_AS, get value from saveAsTextInput
+                saveAsTextInput.getText();
+
+                fileBrowserSheet.setSelectedFiles(fileBrowser.getSelectedFiles());
+
+                updatingSelection = false;
+
                 fileBrowserSheet.close(true);
             }
         });
 
-        cancelButton = (PushButton)wtkxSerializer.get("cancelButton");
         cancelButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
                 fileBrowserSheet.close(false);
@@ -104,16 +120,10 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
         // TODO
     }
 
-    public void selectedFileAdded(FileBrowserSheet fileBrowserSheet, File file) {
-        // TODO
-    }
-
-    public void selectedFileRemoved(FileBrowserSheet fileBrowserSheet, File file) {
-        // TODO
-    }
-
     public void selectedFilesChanged(FileBrowserSheet fileBrowserSheet, Sequence<File> previousSelectedFiles) {
-        // TODO
+        if (!updatingSelection) {
+            fileBrowser.setSelectedFiles(fileBrowserSheet.getSelectedFiles());
+        }
     }
 
     public void fileFilterChanged(FileBrowserSheet fileBrowserSheet, Filter<File> previousFileFilter) {
