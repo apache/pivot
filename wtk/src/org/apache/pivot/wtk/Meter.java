@@ -21,7 +21,6 @@ import org.apache.pivot.util.ListenerList;
 /**
  * Component that displays progress information.
  *
- * @author tvolkert
  */
 public class Meter extends Component {
     private static class MeterListenerList extends ListenerList<MeterListener>

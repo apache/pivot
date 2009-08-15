@@ -23,7 +23,6 @@ import org.apache.pivot.util.Vote;
  * Window class representing a "sheet". A sheet behaves like a dialog that is
  * modal only over a window's content component.
  *
- * @author gbrown
  */
 public class Sheet extends Window {
     private static class SheetStateListenerList extends ListenerList<SheetStateListener>

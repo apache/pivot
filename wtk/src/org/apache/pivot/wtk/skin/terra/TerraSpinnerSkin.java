@@ -45,7 +45,6 @@ import org.apache.pivot.wtk.skin.ContainerSkin;
 /**
  * Spinner skin.
  *
- * @author tvolkert
  */
 public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
     SpinnerListener, SpinnerSelectionListener {
@@ -132,7 +131,6 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
      * Component that holds the content of a spinner. It is the focusable part
      * of a spinner.
      *
-     * @author tvolkert
      */
     protected class SpinnerContent extends Component {
         public SpinnerContent() {
@@ -143,7 +141,6 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
     /**
      * SpinnerContent skin.
      *
-     * @author tvolkert
      */
     protected class SpinnerContentSkin extends ComponentSkin {
         public int getPreferredWidth(int height) {
@@ -289,7 +286,6 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
     /**
      * Spinner button.
      *
-     * @author tvolkert
      */
     protected class SpinButton extends Component {
         private int direction;
@@ -314,7 +310,6 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
     /**
      * Spinner button skin.
      *
-     * @author tvolkert
      */
     protected class SpinButtonSkin extends ComponentSkin {
         private boolean highlighted = false;

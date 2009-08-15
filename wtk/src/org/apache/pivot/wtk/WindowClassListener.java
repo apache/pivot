@@ -19,7 +19,6 @@ package org.apache.pivot.wtk;
 /**
  * Window class listener interface.
  *
- * @author tvolkert
  */
 public interface WindowClassListener {
     /**

@@ -28,7 +28,6 @@ import org.apache.pivot.wtk.Point;
 /**
  * Shape representing a line.
  *
- * @author gbrown
  */
 public class Line extends Shape {
     private static class LineListenerList extends ListenerList<LineListener>

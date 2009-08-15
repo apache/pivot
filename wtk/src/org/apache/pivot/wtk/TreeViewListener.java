@@ -22,14 +22,11 @@ import org.apache.pivot.util.Filter;
 /**
  * Tree view listener interface.
  *
- * @author gbrown
- * @author tvolkert
  */
 public interface TreeViewListener {
     /**
      * Tree view listener adapter.
      *
-     * @author tvolkert
      */
     public static class Adapter implements TreeViewListener {
         public void treeDataChanged(TreeView treeView, List<?> previousTreeData) {

@@ -25,7 +25,6 @@ import org.apache.pivot.serialization.SerializationException;
 /**
  * Class representing the insets of an object.
  *
- * @author gbrown
  */
 public final class Insets implements Serializable {
     private static final long serialVersionUID = 0;

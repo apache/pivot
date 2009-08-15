@@ -21,7 +21,6 @@ import org.apache.pivot.util.ListenerList;
 /**
  * Popup class that displays a cascading menu.
  *
- * @author gbrown
  */
 public class MenuPopup extends Window {
     private static class MenuPopupListenerList extends ListenerList<MenuPopupListener>

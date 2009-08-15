@@ -21,7 +21,6 @@ import org.apache.pivot.wtk.media.Image;
 /**
  * Tab pane attribute listener interface.
  *
- * @author gbrown
  */
 public interface TabPaneAttributeListener {
     /**

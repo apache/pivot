@@ -24,13 +24,11 @@ import org.apache.pivot.util.Filter;
 /**
  * Calendar listener interface.
  *
- * @author tvolkert
  */
 public interface CalendarListener {
     /**
      * Calendar listener adapter.
      *
-     * @author tvolkert
      */
     public static class Adapter implements CalendarListener {
         public void yearChanged(Calendar calendar, int previousYear) {

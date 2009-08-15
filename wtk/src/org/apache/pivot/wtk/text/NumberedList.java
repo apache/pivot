@@ -19,13 +19,11 @@ package org.apache.pivot.wtk.text;
 /**
  * Element representing a numbered list.
  *
- * @author gbrown
  */
 public class NumberedList extends List {
     /**
      * List numbering styles.
      *
-     * @author gbrown
      */
     public enum Style {
         DECIMAL,

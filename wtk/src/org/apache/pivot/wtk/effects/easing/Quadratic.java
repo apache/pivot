@@ -19,8 +19,6 @@ package org.apache.pivot.wtk.effects.easing;
 /**
  * Quadratic easing operation.
  *
- * @author Robert Penner
- * @author gbrown
  */
 public class Quadratic implements Easing {
     public float easeIn(float time, float begin, float change, float duration) {

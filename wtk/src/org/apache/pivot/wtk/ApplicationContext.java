@@ -67,13 +67,11 @@ import org.apache.pivot.wtk.effects.Decorator;
  * TODO Provide a means of mapping common "actions" to keystrokes (e.g. "copy"
  * to Control-C or Command-C)
  *
- * @author gbrown
  */
 public abstract class ApplicationContext {
     /**
      * Native display host.
      *
-     * @author gbrown
      */
     public final class DisplayHost extends java.awt.Canvas {
         private static final long serialVersionUID = 0;
@@ -1295,7 +1293,6 @@ public abstract class ApplicationContext {
     /**
      * Resource cache dictionary implementation.
      *
-     * @author gbrown
      */
     public static final class ResourceCacheDictionary
         implements Dictionary<URL, Object>, Iterable<URL> {

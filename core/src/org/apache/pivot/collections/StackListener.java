@@ -19,7 +19,6 @@ package org.apache.pivot.collections;
 /**
  * Stack listener interface.
  *
- * @author gbrown
  */
 public interface StackListener<T> {
     /**

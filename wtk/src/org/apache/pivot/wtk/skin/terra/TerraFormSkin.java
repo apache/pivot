@@ -34,7 +34,6 @@ import org.apache.pivot.wtk.skin.ContainerSkin;
 /**
  * Form skin.
  *
- * @author gbrown
  */
 public class TerraFormSkin extends ContainerSkin
     implements FormListener, FormAttributeListener {

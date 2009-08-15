@@ -23,13 +23,11 @@ import org.apache.pivot.util.ListenerList;
 /**
  * Collection interface representing a group of unique elements.
  *
- * @author gbrown
  */
 public interface Set<E> extends Group<E>, Collection<E> {
     /**
      * Set listener list.
      *
-     * @author gbrown
      */
     public static class SetListenerList<E>
         extends ListenerList<SetListener<E>> implements SetListener<E> {

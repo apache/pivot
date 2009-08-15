@@ -27,7 +27,6 @@ import org.apache.pivot.wtk.media.Image;
 /**
  * Default tree node implementation.
  *
- * @author gbrown
  */
 public class TreeNode {
     private Image icon = null;

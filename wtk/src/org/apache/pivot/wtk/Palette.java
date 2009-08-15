@@ -20,7 +20,6 @@ package org.apache.pivot.wtk;
  * Window representing a "tool palette". A tool palette is an auxiliary window
  * whose visibility is tied to its owner's active state.
  *
- * @author gbrown
  */
 public class Palette extends Window {
     public Palette() {

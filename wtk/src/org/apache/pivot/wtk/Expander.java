@@ -25,7 +25,6 @@ import org.apache.pivot.util.Vote;
  * Navigation container that allows a user to expand and collapse a content
  * component.
  *
- * @author tvolkert
  */
 public class Expander extends Container {
     private static class ExpanderListenerList extends ListenerList<ExpanderListener>

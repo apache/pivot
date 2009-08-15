@@ -21,7 +21,6 @@ import org.apache.pivot.collections.Sequence;
 /**
  * Shape transform listener interface.
  *
- * @author gbrown
  */
 public interface ShapeTransformListener {
     /**

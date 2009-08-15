@@ -19,7 +19,6 @@ package org.apache.pivot.wtk.effects;
 /**
  * Transition listener interface.
  *
- * @author tvolkert
  */
 public interface TransitionListener {
     /**

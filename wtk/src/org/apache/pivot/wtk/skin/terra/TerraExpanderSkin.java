@@ -52,15 +52,12 @@ import org.apache.pivot.wtk.skin.ExpanderSkin;
 /**
  * Terra expander skin.
  *
- * @author gbrown
- * @author tvolkert
  */
 public class TerraExpanderSkin extends ExpanderSkin
     implements ButtonPressListener {
     /**
      * Expand/collapse transition.
      *
-     * @author gbrown
      */
     public class ExpandTransition extends Transition {
         private Easing easing = new Quadratic();
@@ -104,7 +101,6 @@ public class TerraExpanderSkin extends ExpanderSkin
     /**
      * Expander shade button component.
      *
-     * @author tvolkert
      */
     public class ShadeButton extends LinkButton {
         public ShadeButton() {
@@ -122,7 +118,6 @@ public class TerraExpanderSkin extends ExpanderSkin
     /**
      * Expander shade button component skin.
      *
-     * @author tvolkert
      */
     public class ShadeButtonSkin extends TerraLinkButtonSkin {
         @Override

@@ -22,7 +22,6 @@ import org.apache.pivot.wtk.HorizontalAlignment;
 /**
  * Default menu button data renderer.
  *
- * @author gbrown
  */
 public class MenuButtonDataRenderer extends ButtonDataRenderer {
     public MenuButtonDataRenderer() {

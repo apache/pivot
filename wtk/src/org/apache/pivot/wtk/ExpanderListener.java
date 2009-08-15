@@ -21,13 +21,11 @@ import org.apache.pivot.util.Vote;
 /**
  * Expander listener list.
  *
- * @author tvolkert
  */
 public interface ExpanderListener {
     /**
      * Expander listener adapter.
      *
-     * @author tvolkert
      */
     public static class Adapter implements ExpanderListener {
         public void titleChanged(Expander expander, String previousTitle) {

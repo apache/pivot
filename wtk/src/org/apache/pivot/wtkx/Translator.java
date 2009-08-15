@@ -50,13 +50,11 @@ import org.apache.pivot.util.ListenerList;
  * <b>NOTE</b>: This class contains experimental functionality and should be
  * considered a "preview" until a future release.
  *
- * @author tvolkert
  */
 public class Translator {
     /**
      * A generated Java file object.
      *
-     * @author tvolkert
      */
     private static class JavaFile implements JavaFileObject {
         private final File file;
@@ -136,7 +134,6 @@ public class Translator {
     /**
      * A parsed XML element.
      *
-     * @author gbrown
      */
     private static class Element  {
         public enum Type {
@@ -167,7 +164,6 @@ public class Translator {
     /**
      * A parsed XML attribute.
      *
-     * @author gbrown
      */
     private static class Attribute {
         public final String namespaceURI;

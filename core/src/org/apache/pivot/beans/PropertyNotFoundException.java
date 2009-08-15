@@ -20,7 +20,6 @@ package org.apache.pivot.beans;
  * Thrown when a caller attempts to set the value of a non-existent bean
  * property.
  *
- * @author gbrown
  */
 public class PropertyNotFoundException extends RuntimeException {
     private static final long serialVersionUID = 0;

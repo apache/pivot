@@ -29,7 +29,6 @@ import org.apache.pivot.util.ImmutableIterator;
  * NOTE In order to guarantee thread-safe access, all access to the backing
  * collection must be via the synchronized wrapper.
  *
- * @author gbrown
  */
 public abstract class SynchronizedCollection<T> implements Collection<T> {
     protected Collection<T> collection = null;

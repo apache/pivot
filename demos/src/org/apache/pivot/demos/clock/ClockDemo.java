@@ -26,7 +26,6 @@ import org.apache.pivot.wtk.Window;
 /**
  * Demonstrates how to write a movie "asset" class.
  *
- * @author tvolkert
  */
 public class ClockDemo implements Application {
     private Window window;

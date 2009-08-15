@@ -21,13 +21,11 @@ import org.apache.pivot.collections.Sequence;
 /**
  * Form listener interface.
  *
- * @author gbrown
  */
 public interface FormListener {
     /**
      * Form listener adapter.
      *
-     * @author tvolkert
      */
     public static class Adapter implements FormListener {
         public void sectionInserted(Form form, int index) {

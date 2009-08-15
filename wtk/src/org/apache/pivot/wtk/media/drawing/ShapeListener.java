@@ -21,7 +21,6 @@ import java.awt.Paint;
 /**
  * Shape listener interface.
  *
- * @author gbrown
  */
 public interface ShapeListener {
     /**

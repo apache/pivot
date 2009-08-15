@@ -29,8 +29,6 @@ import org.apache.pivot.collections.adapter.MapAdapter;
  * Implementation of the {@link Serializer} interface that reads data from
  * and writes data to the Java properties file format.
  *
- * @author smartini
- * @author gbrown
  */
 public class PropertiesSerializer implements Serializer<Map<?, ?>> {
     public static final String MIME_TYPE = "text/plain";

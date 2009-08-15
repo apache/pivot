@@ -51,7 +51,6 @@ import org.apache.pivot.wtk.skin.ComponentSkin;
  * should be enabled but the caller wants to implement the management of it;
  * e.g. changing a message's flag state in an email client.
  *
- * @author gbrown
  */
 public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     TableViewListener, TableViewColumnListener, TableViewRowListener,

@@ -19,7 +19,6 @@ package org.apache.pivot.wtk;
 /**
  * Action listener interface.
  *
- * @author gbrown
  */
 public interface ActionListener {
     /**

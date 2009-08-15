@@ -22,7 +22,6 @@ import org.apache.pivot.util.ListenerList;
 /**
  * Allows a user to select one of a range of values.
  *
- * @author gbrown
  */
 public class Slider extends Container {
     private static class SliderListenerList extends ListenerList<SliderListener>

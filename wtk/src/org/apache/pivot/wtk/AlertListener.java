@@ -19,7 +19,6 @@ package org.apache.pivot.wtk;
 /**
  * Alert listener interface.
  *
- * @author gbrown
  */
 public interface AlertListener {
     /**

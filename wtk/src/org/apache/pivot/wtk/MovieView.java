@@ -23,7 +23,6 @@ import org.apache.pivot.wtk.media.Movie;
 /**
  * Component that plays a movie.
  *
- * @author tvolkert
  */
 public class MovieView extends Component {
     private static class MovieViewListenerList extends ListenerList<MovieViewListener>

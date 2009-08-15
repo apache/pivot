@@ -22,7 +22,6 @@ import org.apache.pivot.util.ListenerList;
  * Container that arranges components in a line, either vertically or
  * horizontally.
  *
- * @author gbrown
  */
 public class BoxPane extends Container {
     private static class BoxPaneListenerList extends ListenerList<BoxPaneListener>

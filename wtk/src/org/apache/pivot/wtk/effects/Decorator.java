@@ -47,7 +47,6 @@ import org.apache.pivot.wtk.Component;
  * the current clip (not the intersections of all preceding decorator prepare()
  * calls).
  *
- * @author gbrown
  */
 public interface Decorator {
     /**

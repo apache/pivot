@@ -24,7 +24,6 @@ import java.io.InputStreamReader;
 /**
  * Utility class for locating and instantiating service providers.
  *
- * @author gbrown
  */
 public class Service {
     /**

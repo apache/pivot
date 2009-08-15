@@ -19,13 +19,11 @@ package org.apache.pivot.wtk.media;
 /**
  * Movie listener interface.
  *
- * @author tvolkert
  */
 public interface MovieListener {
     /**
      * Movie listener adapter.
      *
-     * @author tvolkert
      */
     public static class Adapter implements MovieListener {
         public void sizeChanged(Movie movie, int previousWidth, int previousHeight) {

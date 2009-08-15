@@ -20,7 +20,6 @@ package org.apache.pivot.util;
  * Implements the "base64" binary encoding scheme as defined by
  * <a href="http://tools.ietf.org/html/rfc2045">RFC 2045</a>.
  *
- * @author tvolkert
  */
 public final class Base64 {
     private static final char[] lookup = new char[64];

@@ -21,13 +21,11 @@ import java.awt.MouseInfo;
 /**
  * Class representing the system mouse.
  *
- * @author gbrown
  */
 public final class Mouse {
     /**
      * Enumeration representing mouse buttons.
      *
-     * @author gbrown
      */
     public enum Button {
         LEFT,
@@ -46,7 +44,6 @@ public final class Mouse {
     /**
      * Enumeration defining supported scroll types.
      *
-     * @author gbrown
      */
     public enum ScrollType {
         UNIT,

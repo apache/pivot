@@ -19,7 +19,6 @@ package org.apache.pivot.wtk;
 /**
  * Clipboard content listener interface.
  *
- * @author gbrown
  */
 public interface ClipboardContentListener {
     public void contentChanged(LocalManifest previousContent);

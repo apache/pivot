@@ -37,7 +37,6 @@ import org.apache.pivot.util.ListenerList;
  * internal calendar instance from which <tt>CalendarDate</tt> instances are
  * created on demand.
  *
- * @author tvolkert
  */
 public class CalendarDateSpinnerData implements List<CalendarDate> {
     /**
@@ -46,7 +45,6 @@ public class CalendarDateSpinnerData implements List<CalendarDate> {
      * performance hit in making the iterator delegate its implementation to
      * the list.
      *
-     * @author tvolkert
      */
     private class DataIterator implements Iterator<CalendarDate> {
         private int index = 0;

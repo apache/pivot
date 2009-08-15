@@ -27,7 +27,6 @@ import java.util.NoSuchElementException;
  * must manually synchronize on the listener list instance to ensure thread
  * safety during iteration.
  *
- * @author gbrown
  */
 public abstract class ListenerList<T> implements Iterable<T> {
     // Node containing a listener in the list

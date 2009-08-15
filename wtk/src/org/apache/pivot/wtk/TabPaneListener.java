@@ -21,13 +21,11 @@ import org.apache.pivot.collections.Sequence;
 /**
  * Tab pane listener interface.
  *
- * @author gbrown
  */
 public interface TabPaneListener {
     /**
      * Tab pane listener adapter.
      *
-     * @author tvolkert
      */
     public static class Adapter implements TabPaneListener {
         public void tabInserted(TabPane tabPane, int index) {

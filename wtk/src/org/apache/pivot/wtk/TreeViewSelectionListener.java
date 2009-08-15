@@ -22,13 +22,11 @@ import org.apache.pivot.collections.Sequence.Tree.Path;
 /**
  * Tree view selection listener.
  *
- * @author gbrown
  */
 public interface TreeViewSelectionListener {
     /**
      * Tree view selection listener adapter.
      *
-     * @author tvolkert
      */
     public static class Adapter implements TreeViewSelectionListener {
         public void selectedPathAdded(TreeView treeView, Path path) {

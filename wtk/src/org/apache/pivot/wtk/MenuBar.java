@@ -28,13 +28,11 @@ import org.apache.pivot.wtk.content.MenuBarItemDataRenderer;
 /**
  * Component representing a menu bar.
  *
- * @author gbrown
  */
 public class MenuBar extends Container {
     /**
      * Component representing a menu bar item.
      *
-     * @author gbrown
      */
     public static class Item extends Button {
         private static class ItemListenerList extends ListenerList<ItemListener>
@@ -114,7 +112,6 @@ public class MenuBar extends Container {
     /**
      * Item listener interface.
      *
-     * @author gbrown
      */
     public interface ItemListener {
         public void menuChanged(Item item, Menu previousMenu);
@@ -123,7 +120,6 @@ public class MenuBar extends Container {
     /**
      * Item sequence implementation.
      *
-     * @author gbrown
      */
     public final class ItemSequence implements Sequence<Item>, Iterable<Item> {
         public int add(Item item) {

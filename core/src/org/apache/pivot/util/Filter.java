@@ -19,7 +19,6 @@ package org.apache.pivot.util;
 /**
  * Generic filter interface.
  *
- * @author gbrown
  */
 public interface Filter<T> {
     /**

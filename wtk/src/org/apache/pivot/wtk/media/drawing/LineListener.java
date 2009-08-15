@@ -19,7 +19,6 @@ package org.apache.pivot.wtk.media.drawing;
 /**
  * Line listener interface.
  *
- * @author gbrown
  */
 public interface LineListener {
     /**

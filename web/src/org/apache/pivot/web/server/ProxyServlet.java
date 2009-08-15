@@ -38,14 +38,11 @@ import org.apache.pivot.collections.HashSet;
  * HTTP proxy that allows an unsigned applet to issue web queries to services
  * outside of its origin server.
  *
- * @author gbrown
- * @author tvolkert
  */
 public class ProxyServlet extends HttpServlet {
     /**
      * A set of HTTP response header names, stored in a case-insensitive manner.
      *
-     * @author tvolkert
      */
     private static class ResponseHeaderSet extends HashSet<String> {
         private static final long serialVersionUID = 3055851700567335445L;

@@ -21,13 +21,11 @@ import org.apache.pivot.wtk.text.Document;
 /**
  * Text area listener interface.
  *
- * @author gbrown
  */
 public interface TextAreaListener {
     /**
      * Text area listener adapter.
      *
-     * @author tvolkert
      */
     public static class Adapter implements TextAreaListener {
         public void documentChanged(TextArea textArea, Document previousDocument) {

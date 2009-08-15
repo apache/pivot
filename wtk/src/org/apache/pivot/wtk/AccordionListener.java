@@ -21,13 +21,11 @@ import org.apache.pivot.collections.Sequence;
 /**
  * Accordion listener interface.
  *
- * @author gbrown
  */
 public interface AccordionListener {
     /**
      * Accordion listener adapter.
      *
-     * @author tvolkert
      */
     public static class Adapter implements AccordionListener {
         public void panelInserted(Accordion accordion, int index) {

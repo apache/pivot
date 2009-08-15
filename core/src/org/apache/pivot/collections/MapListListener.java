@@ -19,7 +19,6 @@ package org.apache.pivot.collections;
 /**
  * Map list listener interface.
  *
- * @author tvolkert
  */
 public interface MapListListener<K, V> {
     /**

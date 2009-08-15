@@ -21,7 +21,6 @@ import org.apache.pivot.wtk.content.LinkButtonDataRenderer;
 /**
  * Button component that resembles an HTML hyperlink.
  *
- * @author gbrown
  */
 public class LinkButton extends Button {
     private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new LinkButtonDataRenderer();

@@ -19,7 +19,6 @@ package org.apache.pivot.demos.roweditor;
 /**
  * Sample enum of expense types.
  *
- * @author tvolkert
  */
 public enum ExpenseType {
     Hotel,

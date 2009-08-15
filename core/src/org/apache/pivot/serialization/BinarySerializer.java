@@ -27,7 +27,6 @@ import java.io.OutputStream;
  * internal serialization mechanism to read and write values. All values in the
  * object hierarchy are required to implement {@link java.io.Serializable}.
  *
- * @author gbrown
  */
 public class BinarySerializer implements Serializer<Object> {
     public static final String MIME_TYPE = "application/x-java-serialized-object";

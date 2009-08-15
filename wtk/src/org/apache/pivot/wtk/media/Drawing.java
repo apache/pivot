@@ -30,7 +30,6 @@ import org.apache.pivot.wtk.media.drawing.CanvasListener;
 /**
  * Image representing a vector drawing.
  *
- * @author gbrown
  */
 public class Drawing extends Image {
     private static class DrawingListenerList extends ListenerList<DrawingListener>

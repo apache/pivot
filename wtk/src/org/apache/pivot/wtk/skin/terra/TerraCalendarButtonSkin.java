@@ -51,7 +51,6 @@ import org.apache.pivot.wtk.skin.CalendarButtonSkin;
  *
  * TODO Calendar pass-through styles
  *
- * @author gbrown
  */
 public class TerraCalendarButtonSkin extends CalendarButtonSkin {
     private WindowStateListener calendarPopupStateListener = new WindowStateListener() {

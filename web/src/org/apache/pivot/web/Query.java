@@ -53,14 +53,11 @@ import org.apache.pivot.util.concurrent.Dispatcher;
  * it is {@link Object}; for POST operations, the type is {@link URL}. For PUT
  * and DELETE, it is {@link Void}.
  *
- * @author gbrown
- * @author tvolkert
  */
 public abstract class Query<V> extends IOTask<V> {
     /**
      * Supported HTTP methods.
      *
-     * @author gbrown
      */
     public enum Method {
         GET,
@@ -72,7 +69,6 @@ public abstract class Query<V> extends IOTask<V> {
     /**
      * Query status codes.
      *
-     * @author gbrown
      */
     public static class Status {
         public static final int OK = 200;
@@ -101,7 +97,6 @@ public abstract class Query<V> extends IOTask<V> {
     /**
      * Query listener list.
      *
-     * @author tvolkert
      */
     private static class QueryListenerList<V> extends ListenerList<QueryListener<V>>
         implements QueryListener<V> {

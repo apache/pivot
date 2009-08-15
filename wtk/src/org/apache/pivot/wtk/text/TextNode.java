@@ -21,7 +21,6 @@ import org.apache.pivot.util.ListenerList;
 /**
  * Node representing a sequence of characters.
  *
- * @author gbrown
  */
 public final class TextNode extends Node {
     private static class TextNodeListenerList extends ListenerList<TextNodeListener>

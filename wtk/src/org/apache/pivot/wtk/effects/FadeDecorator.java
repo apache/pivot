@@ -27,7 +27,6 @@ import org.apache.pivot.wtk.Component;
 /**
  * Decorator that applies an opacity to a component.
  *
- * @author gbrown
  */
 public class FadeDecorator implements Decorator {
     private float opacity;

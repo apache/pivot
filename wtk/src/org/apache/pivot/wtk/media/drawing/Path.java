@@ -31,7 +31,6 @@ import org.apache.pivot.util.ListenerList;
  * A shape representing a geometric path constructed from straight lines,
  * quadratic curves, and and cubic (B&eacute;zier) curves.
  *
- * @author tvolkert
  */
 public class Path extends Shape
     implements Sequence<Path.Operation> {
@@ -39,7 +38,6 @@ public class Path extends Shape
      * Abstract base class for path operations. See the specific subclasses for
      * details.
      *
-     * @author tvolkert
      */
     public static abstract class Operation {
         private Path path = null;
@@ -84,7 +82,6 @@ public class Path extends Shape
     /**
      * Adds a point to the path by moving to the specified coordinates.
      *
-     * @author tvolkert
      */
     public static final class MoveTo extends Operation {
         private int x;
@@ -168,7 +165,6 @@ public class Path extends Shape
      * Adds a point to the path by drawing a straight line from the current
      * coordinates to the new specified coordinates.
      *
-     * @author tvolkert
      */
     public static final class LineTo extends Operation {
         private int x;
@@ -230,7 +226,6 @@ public class Path extends Shape
      * using the specified points {@code (x1,y1)} and {@code (x2,y2)} as
      * B&eacute;zier control points.
      *
-     * @author tvolkert
      */
     public static final class CurveTo extends Operation {
         private int x1;
@@ -364,7 +359,6 @@ public class Path extends Shape
      * using the specified point {@code (x1,y1)} as a quadratic
      * parametric control point.
      *
-     * @author tvolkert
      */
     public static final class QuadTo extends Operation {
         private int x1;
@@ -458,7 +452,6 @@ public class Path extends Shape
     /**
      * The winding rule specifies how the interior of a path is determined.
      *
-     * @author tvolkert
      */
     public enum WindingRule {
         /**
@@ -498,7 +491,6 @@ public class Path extends Shape
     /**
      * Path listener list.
      *
-     * @author tvolkert
      */
     private static class PathListenerList extends ListenerList<PathListener>
         implements PathListener {

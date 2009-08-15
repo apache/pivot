@@ -22,7 +22,6 @@ import java.awt.Graphics2D;
  * Interface representing a "visual". A visual is an object that can be drawn
  * to the screen or other output device.
  *
- * @author gbrown
  */
 public interface Visual {
     /**

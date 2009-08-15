@@ -54,7 +54,6 @@ public class IMClient implements Application {
     /**
      * Task for asynchronously logging into Jabber.
      *
-     * @author gbrown
      */
     private class LoginTask extends Task<Void> {
         public Void execute() throws TaskExecutionException {

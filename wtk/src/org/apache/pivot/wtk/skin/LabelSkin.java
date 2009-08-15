@@ -53,7 +53,6 @@ import org.apache.pivot.wtk.VerticalAlignment;
  * <p>
  * TODO breakOnWhitespaceOnly style
  *
- * @author gbrown
  */
 public class LabelSkin extends ComponentSkin implements LabelListener {
     private FontRenderContext fontRenderContext = new FontRenderContext(null, true, true);

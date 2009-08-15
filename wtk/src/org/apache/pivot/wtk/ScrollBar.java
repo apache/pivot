@@ -23,7 +23,6 @@ import org.apache.pivot.util.ListenerList;
  * Component that allows a user to select one of a range of values. Most often
  * used by scroll panes.
  *
- * @author gbrown
  */
 public class ScrollBar extends Container {
     private static class ScrollBarListenerList extends ListenerList<ScrollBarListener>

@@ -22,7 +22,6 @@ import org.apache.pivot.wtk.skin.BoxPaneSkin;
 /**
  * Terra box pane skin.
  *
- * @author gbrown
  */
 public class TerraBoxPaneSkin extends BoxPaneSkin {
     public final void setBackgroundColor(int backgroundColor) {

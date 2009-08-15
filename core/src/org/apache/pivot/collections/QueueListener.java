@@ -19,7 +19,6 @@ package org.apache.pivot.collections;
 /**
  * Queue listener interface.
  *
- * @author gbrown
  */
 public interface QueueListener<T> {
     /**

@@ -19,7 +19,6 @@ package org.apache.pivot.wtk.media.drawing;
 /**
  * Quadratic curve listner interface.
  *
- * @author gbrown
  */
 public interface QuadCurveListener {
     /**

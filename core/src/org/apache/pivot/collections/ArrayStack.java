@@ -25,7 +25,6 @@ import org.apache.pivot.util.ListenerList;
  * Implementation of the {@link Stack} interface that is backed by an
  * array.
  *
- * @author gbrown
  */
 public class ArrayStack<T> extends ArrayList<T> implements Stack<T> {
     private static final long serialVersionUID = 0;

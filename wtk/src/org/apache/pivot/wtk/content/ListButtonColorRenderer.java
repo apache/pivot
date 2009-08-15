@@ -25,7 +25,6 @@ import org.apache.pivot.wtk.ImageView;
 /**
  * List button renderer for displaying color swatches.
  *
- * @author gbrown
  */
 public class ListButtonColorRenderer extends ImageView
     implements Button.DataRenderer {

@@ -56,7 +56,6 @@ import org.apache.pivot.wtk.skin.CalendarSkin;
 /**
  * Terra calendar skin.
  *
- * @author gbrown
  */
 public class TerraCalendarSkin extends CalendarSkin
     implements CalendarListener, CalendarSelectionListener {

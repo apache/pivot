@@ -22,13 +22,11 @@ import org.apache.pivot.util.Filter;
 /**
  * Table view listener interface.
  *
- * @author gbrown
  */
 public interface TableViewListener {
     /**
      * Table view listener adapter.
      *
-     * @author tvolkert
      */
     public static class Adapter implements TableViewListener {
         public void tableDataChanged(TableView tableView, List<?> previousTableData) {

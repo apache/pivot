@@ -19,7 +19,6 @@ package org.apache.pivot.wtk;
 /**
  * Separator listener interface.
  *
- * @author gbrown
  */
 public interface SeparatorListener {
     /**

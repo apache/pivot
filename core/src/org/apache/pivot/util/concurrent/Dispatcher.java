@@ -37,8 +37,6 @@ import org.apache.pivot.collections.concurrent.SynchronizedQueue;
  * TODO Is there a way to throw an AbortException when an item is removed
  * from the queue, without having to rely on methods like abort()?
  *
- * @author gbrown
- * @author tvolkert
  */
 public class Dispatcher {
     private class MonitorThread extends Thread {

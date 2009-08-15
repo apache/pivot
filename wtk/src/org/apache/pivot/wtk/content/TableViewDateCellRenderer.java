@@ -29,7 +29,6 @@ import org.apache.pivot.wtk.TableView;
  * Default renderer for table view cells that contain date data. Renders
  * cell contents as a formatted date.
  *
- * @author gbrown
  */
 public class TableViewDateCellRenderer extends TableViewCellRenderer {
     private DateFormat dateFormat = DEFAULT_DATE_FORMAT;

@@ -22,7 +22,6 @@ import org.apache.pivot.wtk.content.TableViewCellRenderer;
 /**
  * Renders an <tt>Request</tt> in the form of <tt>[status code] [status message]</tt>.
  *
- * @author tvolkert
  */
 public class ResponseCellRenderer extends TableViewCellRenderer {
     @Override

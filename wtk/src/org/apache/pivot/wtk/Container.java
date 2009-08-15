@@ -33,7 +33,6 @@ import org.apache.pivot.wtk.effects.Decorator;
 /**
  * Abstract base class for containers.
  *
- * @author gbrown
  */
 public abstract class Container extends Component
     implements Sequence<Component>, Iterable<Component> {

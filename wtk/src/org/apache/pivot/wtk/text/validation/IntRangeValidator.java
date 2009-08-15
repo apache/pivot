@@ -18,7 +18,6 @@ import java.util.Locale;
 /**
  * A validator for an int value limited to a range.
  *
- * @author Noel Grandin
  */
 public class IntRangeValidator extends IntValidator {
     private int minValue, maxValue;

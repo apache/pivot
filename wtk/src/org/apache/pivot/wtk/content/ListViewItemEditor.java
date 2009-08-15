@@ -37,7 +37,6 @@ import org.apache.pivot.wtk.WindowStateListener;
 /**
  * Default list view item editor.
  *
- * @author gbrown
  */
 public class ListViewItemEditor implements ListView.ItemEditor {
     private ListView listView = null;

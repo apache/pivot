@@ -55,7 +55,6 @@ import org.apache.pivot.wtk.text.validation.Validator;
 /**
  * Text input skin.
  *
- * @author gbrown
  */
 public class TerraTextInputSkin extends ComponentSkin
     implements TextInputListener, TextInputCharacterListener, TextInputSelectionListener {
@@ -67,7 +66,6 @@ public class TerraTextInputSkin extends ComponentSkin
      * getText(), if possible. This means that the character iterator will need
      * to return "*" characters when in password mode.
      *
-     * @author gbrown
      */
     /*
     private static class TextInputCharacterIterator implements AttributedCharacterIterator {

@@ -60,7 +60,6 @@ import org.xml.sax.SAXException;
 /**
  * RSS feed demo application.
  *
- * @author gbrown
  */
 public class RSSFeedDemo implements Application {
     // Loads the feed in the background so the UI doesn't block

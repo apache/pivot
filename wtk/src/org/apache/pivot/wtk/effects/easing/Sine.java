@@ -19,8 +19,6 @@ package org.apache.pivot.wtk.effects.easing;
 /**
  * Easing operation based on a sine curve.
  *
- * @author Robert Penner
- * @author gbrown
  */
 public class Sine {
     public float easeIn(float time, float begin, float change, float duration) {

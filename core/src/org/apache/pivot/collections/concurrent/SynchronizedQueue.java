@@ -24,7 +24,6 @@ import org.apache.pivot.util.ListenerList;
 /**
  * Synchronized implementation of the {@link Queue} interface.
  *
- * @author gbrown
  */
 public class SynchronizedQueue<T> extends SynchronizedCollection<T>
     implements Queue<T> {

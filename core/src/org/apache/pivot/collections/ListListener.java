@@ -21,13 +21,11 @@ import java.util.Comparator;
 /**
  * List listener interface.
  *
- * @author gbrown
  */
 public interface ListListener<T> {
     /**
      * List listener adapter.
      *
-     * @author tvolkert
      */
     public static class Adapter<T> implements ListListener<T> {
         public void itemInserted(List<T> list, int index) {

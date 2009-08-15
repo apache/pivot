@@ -21,13 +21,11 @@ import org.apache.pivot.collections.Sequence;
 /**
  * Table pane listener interface.
  *
- * @author gbrown
  */
 public interface TablePaneListener {
     /**
      * Table pane listener adapter.
      *
-     * @author tvolkert
      */
     public static class Adapter implements TablePaneListener {
         public void rowInserted(TablePane tablePane, int index) {

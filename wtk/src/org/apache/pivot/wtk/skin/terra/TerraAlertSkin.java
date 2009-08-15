@@ -35,8 +35,6 @@ import org.apache.pivot.wtkx.WTKXSerializer;
 /**
  * Alert skin.
  *
- * @author tvolkert
- * @author gbrown
  */
 public class TerraAlertSkin extends TerraDialogSkin
     implements AlertListener {

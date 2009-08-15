@@ -21,13 +21,11 @@ import org.apache.pivot.collections.Sequence;
 /**
  * Table view selection listener interface.
  *
- * @author gbrown
  */
 public interface TableViewSelectionListener {
     /**
      * Table view selection listener adapter.
      *
-     * @author tvolkert
      */
     public static class Adapter implements TableViewSelectionListener {
         public void selectedRangeAdded(TableView tableView, int rangeStart, int rangeEnd) {

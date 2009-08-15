@@ -24,7 +24,6 @@ import org.apache.pivot.wtk.text.validation.Validator;
 /**
  * Validates that text represents a valid dollar value.
  *
- * @author tvolkert
  */
 public class CurrencyValidator implements Validator {
     public boolean isValid(String text) {

@@ -21,7 +21,6 @@ import org.apache.pivot.wtk.media.Movie;
 /**
  * Movie view listener interface.
  *
- * @author tvolkert
  */
 public interface MovieViewListener {
     /**

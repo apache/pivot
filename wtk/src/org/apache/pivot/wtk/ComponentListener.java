@@ -19,13 +19,11 @@ package org.apache.pivot.wtk;
 /**
  * Component listener interface.
  *
- * @author gbrown
  */
 public interface ComponentListener {
     /**
      * Component listener adapter.
      *
-     * @author tvolkert
      */
     public static class Adapter implements ComponentListener {
         public void parentChanged(Component component, Container previousParent) {

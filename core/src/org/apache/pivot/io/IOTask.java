@@ -28,15 +28,12 @@ import org.apache.pivot.util.concurrent.Task;
 /**
  * Abstract base class for input/output tasks.
  *
- * @author gbrown
- * @author tvolkert
  */
 public abstract class IOTask<V> extends Task<V> {
     /**
      * Input stream that monitors the bytes that are read from it by
      * incrementing the <tt>bytesReceived</tt> member variable.
      *
-     * @author tvolkert
      */
     protected class MonitoredInputStream extends InputStream {
         private InputStream inputStream;
@@ -138,7 +135,6 @@ public abstract class IOTask<V> extends Task<V> {
      * Output stream that monitors the bytes that are written to it by
      * incrementing the <tt>bytesSent</tt> member variable.
      *
-     * @author tvolkert
      */
     protected class MonitoredOutputStream extends OutputStream {
         private OutputStream outputStream;

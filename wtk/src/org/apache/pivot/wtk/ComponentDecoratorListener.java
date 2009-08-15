@@ -23,7 +23,6 @@ import org.apache.pivot.wtk.effects.Decorator;
 /**
  * Component decorator listener interface.
  *
- * @author gbrown
  */
 public interface ComponentDecoratorListener {
     /**

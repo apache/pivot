@@ -19,7 +19,6 @@ package org.apache.pivot.charts;
 /**
  * Presents chart data using "open/high/low/close" plot.
  *
- * @author gbrown
  */
 public class HighLowChartView extends ChartView {
     public HighLowChartView() {

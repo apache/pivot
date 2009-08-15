@@ -19,7 +19,6 @@ package org.apache.pivot.util.concurrent;
 /**
  * Thrown when an executing task has timed out.
  *
- * @author gbrown
  */
 public class TimeoutException extends RuntimeException {
     private static final long serialVersionUID = 0;

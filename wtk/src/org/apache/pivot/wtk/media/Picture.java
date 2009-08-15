@@ -25,13 +25,11 @@ import java.awt.image.BufferedImage;
 /**
  * Image representing a bitmapped picture.
  *
- * @author gbrown
  */
 public class Picture extends Image {
     /**
      * Enum defing the algorithms to apply when resizing a picture.
      *
-     * @author gbrown
      */
     public enum Interpolation {
         NEAREST_NEIGHBOR,

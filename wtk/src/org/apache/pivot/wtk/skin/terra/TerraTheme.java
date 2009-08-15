@@ -87,8 +87,6 @@ import org.apache.pivot.wtk.media.Image;
  *   </font>
  * </p>
  *
- * @author gbrown
- * @author tvolkert
  */
 public final class TerraTheme extends Theme {
     private Font font = null;

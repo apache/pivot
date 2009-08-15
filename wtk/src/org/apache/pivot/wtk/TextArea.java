@@ -38,14 +38,12 @@ import org.apache.pivot.wtk.text.TextNode;
  * Component that allows a user to enter and edit multiple lines of (optionally
  * formatted) text.
  *
- * @author gbrown
  */
 public class TextArea extends Component {
     /**
      * Text area skin interface. Text area skins are required to implement
      * this.
      *
-     * @author gbrown
      */
     public interface Skin {
         /**

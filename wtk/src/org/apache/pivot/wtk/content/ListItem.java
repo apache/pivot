@@ -27,7 +27,6 @@ import org.apache.pivot.wtk.media.Image;
 /**
  * Default list item implementation.
  *
- * @author gbrown
  */
 public class ListItem {
     private Image icon;

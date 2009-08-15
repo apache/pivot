@@ -24,7 +24,6 @@ import org.apache.pivot.wtk.SliderValueListener;
 /**
  * Abstract base class for slider skins.
  *
- * @author gbrown
  */
 public abstract class SliderSkin extends ContainerSkin
     implements SliderListener, SliderValueListener {

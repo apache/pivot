@@ -22,7 +22,6 @@ import org.apache.pivot.wtk.skin.TablePaneSkin;
 /**
  * Terra table pane skin.
  *
- * @author tvolkert
  */
 public class TerraTablePaneSkin extends TablePaneSkin {
     public TerraTablePaneSkin() {

@@ -19,7 +19,6 @@ package org.apache.pivot.wtk.text;
 /**
  * Node listener interface.
  *
- * @author gbrown
  */
 public interface NodeListener {
     /**

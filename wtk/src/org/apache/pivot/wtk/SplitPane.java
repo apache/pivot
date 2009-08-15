@@ -33,13 +33,11 @@ import org.apache.pivot.util.ListenerList;
  * orientation.  The parent pane's separator will be able to travel past that
  * of it's child, but the child's separator will be unable to pass the parent's.
  *
- * @author tvolkert
  */
 public class SplitPane extends Container {
     /**
      * Enumeration defining split pane regions.
      *
-     * @author gbrown
      */
     public enum Region {
         TOP_LEFT,

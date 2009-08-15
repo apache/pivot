@@ -22,13 +22,11 @@ import org.apache.pivot.util.ListenerList;
  * Interface representing a first-in, first-out (FIFO) queue when unsorted, and
  * a priority queue when sorted.
  *
- * @author gbrown
  */
 public interface Queue<T> extends Collection<T> {
     /**
      * Queue listener list.
      *
-     * @author gbrown
      */
     public static class QueueListenerList<T> extends ListenerList<QueueListener<T>>
         implements QueueListener<T> {

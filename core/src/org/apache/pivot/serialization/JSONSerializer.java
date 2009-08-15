@@ -42,7 +42,6 @@ import org.apache.pivot.collections.Sequence;
  * Implementation of the {@link Serializer} interface that reads data from
  * and writes data to a JavaScript Object Notation (JSON) file.
  *
- * @author gbrown
  */
 public class JSONSerializer implements Serializer<Object> {
     private Charset charset = null;

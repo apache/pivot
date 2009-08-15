@@ -19,7 +19,6 @@ package org.apache.pivot.wtk;
 /**
  * Enumeration representing a two-dimensional direction.
  *
- * @author gbrown
  */
 public enum Direction {
     FORWARD,

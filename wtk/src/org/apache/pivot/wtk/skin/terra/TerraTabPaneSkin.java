@@ -57,14 +57,12 @@ import org.apache.pivot.wtk.skin.ContainerSkin;
 /**
  * Tab pane skin.
  *
- * @author gbrown
  */
 public class TerraTabPaneSkin extends ContainerSkin
     implements TabPaneListener, TabPaneSelectionListener, TabPaneAttributeListener {
     /**
      * Tab button component.
      *
-     * @author gbrown
      */
     public class TabButton extends Button {
         public TabButton(Component tab) {
@@ -101,7 +99,6 @@ public class TerraTabPaneSkin extends ContainerSkin
      * Note that this class does not respect preferred size constraints,
      * because it will never be called to use them.
      *
-     * @author gbrown
      */
     public class TabButtonSkin extends ButtonSkin {
         public int getPreferredWidth(int height) {
@@ -271,7 +268,6 @@ public class TerraTabPaneSkin extends ContainerSkin
     /**
      * Selection change transition.
      *
-     * @author gbrown
      */
     public class SelectionChangeTransition extends Transition {
         public final Component tab;

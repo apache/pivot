@@ -19,7 +19,6 @@ package org.apache.pivot.wtk.media;
 /**
  * Image listener interface.
  *
- * @author gbrown
  */
 public interface ImageListener {
     /**

@@ -21,13 +21,11 @@ import java.util.Comparator;
 /**
  * Set listener interface.
  *
- * @author gbrown
  */
 public interface SetListener<E> {
     /**
      * Set listener adapter.
      *
-     * @author tvolkert
      */
     public static class Adapter<E> implements SetListener<E> {
         public void elementAdded(Set<E> set, E element) {

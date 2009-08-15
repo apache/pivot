@@ -27,8 +27,6 @@ import org.apache.pivot.util.Resources;
  * Class representing an "alert", a dialog commonly used to perform simple
  * user interaction.
  *
- * @author tvolkert
- * @author gbrown
  */
 public class Alert extends Dialog {
     private static class AlertListenerList extends ListenerList<AlertListener>

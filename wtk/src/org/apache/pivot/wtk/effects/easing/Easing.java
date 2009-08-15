@@ -19,8 +19,6 @@ package org.apache.pivot.wtk.effects.easing;
 /**
  * Base interface for easing operations.
  *
- * @author Robert Penner
- * @author gbrown
  */
 public interface Easing {
     public float easeIn(float time, float begin, float change, float duration);

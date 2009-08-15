@@ -32,7 +32,6 @@ import org.apache.pivot.util.Resources;
  * over its entire owner hierarchy (its entire "application", in common usage)
  * but a prompt will be modal only over its owner's content.
  *
- * @author tvolkert
  */
 public class Prompt extends Sheet {
     private static class PromptListenerList extends ListenerList<PromptListener>

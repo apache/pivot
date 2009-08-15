@@ -35,8 +35,6 @@ import org.apache.pivot.wtkx.WTKXSerializer;
 /**
  * Prompt skin.
  *
- * @author tvolkert
- * @author gbrown
  */
 public class TerraPromptSkin extends TerraSheetSkin
     implements PromptListener {

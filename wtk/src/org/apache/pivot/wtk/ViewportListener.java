@@ -19,13 +19,11 @@ package org.apache.pivot.wtk;
 /**
  * Viewport listener interface.
  *
- * @author tvolkert
  */
 public interface ViewportListener {
     /**
      * Viewport listener adapter.
      *
-     * @author tvolkert
      */
     public static class Adapter implements ViewportListener {
         public void scrollTopChanged(Viewport scrollPane, int previousScrollTop) {

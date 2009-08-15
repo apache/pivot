@@ -27,7 +27,6 @@ import org.apache.pivot.util.ListenerList;
 /**
  * Shape representing an ellipse.
  *
- * @author tvolkert
  */
 public class Ellipse extends Shape {
     private static class EllipseListenerList extends ListenerList<EllipseListener>

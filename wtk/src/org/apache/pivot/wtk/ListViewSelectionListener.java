@@ -21,13 +21,11 @@ import org.apache.pivot.collections.Sequence;
 /**
  * List view selection listener interface.
  *
- * @author gbrown
  */
 public interface ListViewSelectionListener {
     /**
      * List view selection listener adapter.
      *
-     * @author tvolkert
      */
     public static class Adapter implements ListViewSelectionListener {
         public void selectedRangeAdded(ListView listView, int rangeStart, int rangeEnd) {

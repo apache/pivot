@@ -21,13 +21,11 @@ import org.apache.pivot.util.Vote;
 /**
  * Accordion selection listener interface.
  *
- * @author gbrown
  */
 public interface AccordionSelectionListener {
     /**
      * Accordion selection listener adapter.
      *
-     * @author tvolkert
      */
     public static class Adapter implements AccordionSelectionListener {
         public Vote previewSelectedIndexChange(Accordion accordion, int selectedIndex) {

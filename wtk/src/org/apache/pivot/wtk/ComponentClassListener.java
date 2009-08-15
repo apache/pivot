@@ -19,7 +19,6 @@ package org.apache.pivot.wtk;
 /**
  * Component class listener interface.
  *
- * @author gbrown
  */
 public interface ComponentClassListener {
     /**

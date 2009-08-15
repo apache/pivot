@@ -39,7 +39,6 @@ import org.apache.pivot.wtk.TablePaneListener;
 /**
  * Table pane skin.
  *
- * @author tvolkert
  */
 public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
     TablePaneListener, TablePaneAttributeListener {

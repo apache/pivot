@@ -21,7 +21,6 @@ import org.apache.pivot.collections.Sequence;
 /**
  * Path listener interface.
  *
- * @author tvolkert
  */
 public interface PathListener {
     /**

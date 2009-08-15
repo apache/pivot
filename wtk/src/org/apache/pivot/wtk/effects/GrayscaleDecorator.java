@@ -27,8 +27,6 @@ import org.apache.pivot.wtk.Component;
 /**
  * Decorator that applies a grayscale conversion to a component.
  *
- * @author tvolkert
- * @author gbrown
  */
 public class GrayscaleDecorator implements Decorator {
     private Graphics2D graphics = null;

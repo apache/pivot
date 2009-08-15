@@ -19,7 +19,6 @@ package org.apache.pivot.wtk;
 /**
  * Enumeration defining the supported mouse cursor types.
  *
- * @author gbrown
  */
 public enum Cursor {
     DEFAULT,

@@ -52,13 +52,11 @@ import org.apache.pivot.wtk.skin.CardPaneSkin;
 /**
  * Default table view row editor.
  *
- * @author tvolkert
  */
 public class TableViewRowEditor implements TableView.RowEditor {
     /**
      * Paints the row being edited.
      *
-     * @author tvolkert
      */
     private Image tableRowImage = new Image() {
         public int getWidth() {
@@ -127,7 +125,6 @@ public class TableViewRowEditor implements TableView.RowEditor {
      * Responsible for "edit initialization" and "edit finalization" tasks when
      * the edit popup is opened and closed, respectively.
      *
-     * @author tvolkert
      */
     private WindowStateListener popupStateHandler = new WindowStateListener.Adapter() {
         private boolean closing = false;
@@ -222,7 +219,6 @@ public class TableViewRowEditor implements TableView.RowEditor {
      * Responsible for saving or cancelling the edit based on the user pressing
      * the <tt>ENTER</tt> key or the <tt>ESCAPE</tt> key, respectively.
      *
-     * @author tvolkert
      */
     private ComponentKeyListener popupKeyHandler = new ComponentKeyListener.Adapter() {
         @Override
@@ -241,7 +237,6 @@ public class TableViewRowEditor implements TableView.RowEditor {
      * Responsible for closing the popup whenever the user clicks outside the
      * bounds of the popup.
      *
-     * @author tvolkert
      */
     private ContainerMouseListener displayMouseHandler = new ContainerMouseListener.Adapter() {
         @Override
@@ -282,7 +277,6 @@ public class TableViewRowEditor implements TableView.RowEditor {
     /**
      * Responsible for cancelling the edit if the table view's size changes.
      *
-     * @author tvolkert
      */
     private ComponentListener tableViewComponentHandler = new ComponentListener.Adapter() {
         @Override
@@ -295,7 +289,6 @@ public class TableViewRowEditor implements TableView.RowEditor {
      * Responsible for cancelling the edit if any relevant changes are made to
      * the table view while we're editing.
      *
-     * @author tvolkert
      */
     private TableViewListener tableViewHandler = new TableViewListener.Adapter() {
         @Override
@@ -313,7 +306,6 @@ public class TableViewRowEditor implements TableView.RowEditor {
      * Responsible for cancelling the edit if any changes are made to the table
      * data while we're editing.
      *
-     * @author tvolkert
      */
     private TableViewRowListener tableViewRowHandler = new TableViewRowListener.Adapter() {
         @Override
@@ -346,7 +338,6 @@ public class TableViewRowEditor implements TableView.RowEditor {
      * Responsible for keeping the table view scroll pane's scrollLeft value in
      * sync with the editor scroll pane's scrollLeft value.
      *
-     * @author tvolkert
      */
     private ViewportListener viewportHandler = new ViewportListener.Adapter() {
         @Override

@@ -25,13 +25,11 @@ import org.apache.pivot.util.ListenerList;
  * Container that arranges components in a two-dimensional grid, optionally
  * spanning multiple rows and columns.
  *
- * @author tvolkert
  */
 public class TablePane extends Container {
     /**
      * Represents a table pane row.
      *
-     * @author tvolkert
      */
     public static final class Row implements Sequence<Component> {
         private int height;
@@ -301,7 +299,6 @@ public class TablePane extends Container {
     /**
      * Represents a table pane column.
      *
-     * @author tvolkert
      */
     public static class Column {
         private TablePane tablePane = null;
@@ -459,7 +456,6 @@ public class TablePane extends Container {
      * this interface to facilitate additional communication between the
      * component and the skin.
      *
-     * @author tvolkert
      */
     public interface Skin {
         public int getRowAt(int y);
@@ -472,7 +468,6 @@ public class TablePane extends Container {
      * Class that manages a table pane's row list. Callers get access to the
      * row sequence via {@link TablePane#getRows()}.
      *
-     * @author tvolkert
      */
     public final class RowSequence implements Sequence<Row> {
         private RowSequence() {
@@ -570,7 +565,6 @@ public class TablePane extends Container {
      * Class that manages a table pane's column list. Callers get access to the
      * column sequence via {@link TablePane#getColumns()}.
      *
-     * @author tvolkert
      */
     public final class ColumnSequence implements Sequence<Column> {
         private ColumnSequence() {
@@ -643,7 +637,6 @@ public class TablePane extends Container {
     /**
      * Component that can be used as filler for empty cells.
      *
-     * @author gbrown
      */
     public static class Filler extends Component {
         public Filler() {

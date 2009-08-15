@@ -32,7 +32,6 @@ import org.apache.pivot.wtk.Component;
 /**
  * Decorator that modifies the color saturation of a component.
  *
- * @author tvolkert
  */
 public class SaturationDecorator implements Decorator {
     private float multiplier;

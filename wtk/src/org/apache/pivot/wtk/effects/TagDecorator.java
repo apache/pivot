@@ -29,7 +29,6 @@ import org.apache.pivot.wtk.Visual;
 /**
  * Decorator that allows a caller to attach a "tag" visual to a component.
  *
- * @author gbrown
  */
 public class TagDecorator implements Decorator {
     private Visual tag;

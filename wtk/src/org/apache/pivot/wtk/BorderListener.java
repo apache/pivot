@@ -19,14 +19,12 @@ package org.apache.pivot.wtk;
 /**
  * Border listener interface.
  *
- * @author gbrown
  *
  */
 public interface BorderListener {
     /**
      * Border listener adapter.
      *
-     * @author tvolkert
      */
     public static class Adapter implements BorderListener {
         public void titleChanged(Border border, String previousTitle) {

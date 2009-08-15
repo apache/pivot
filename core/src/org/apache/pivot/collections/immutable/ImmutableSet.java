@@ -28,7 +28,6 @@ import org.apache.pivot.util.ListenerList;
 /**
  * Unmodifiable implementation of the {@link Set} interface.
  *
- * @author gbrown
  */
 public class ImmutableSet<E> implements Set<E> {
     private Set<E> set = null;

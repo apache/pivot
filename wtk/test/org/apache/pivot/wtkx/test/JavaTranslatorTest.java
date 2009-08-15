@@ -27,7 +27,6 @@ import org.apache.pivot.wtkx.Translator;
 
 
 /**
- * @author tvolkert
  */
 public class JavaTranslatorTest {
    public static void main(String[] args) throws Exception {

@@ -21,13 +21,11 @@ import org.apache.pivot.collections.List;
 /**
  * Spinner listener interface.
  *
- * @author tvolkert
  */
 public interface SpinnerListener {
     /**
      * Spinner listener adapter.
      *
-     * @author tvolkert
      */
     public static class Adapter implements SpinnerListener {
         public void spinnerDataChanged(Spinner spinner, List<?> previousSpinnerData) {

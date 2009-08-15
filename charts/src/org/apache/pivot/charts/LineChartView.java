@@ -19,7 +19,6 @@ package org.apache.pivot.charts;
 /**
  * Presents chart data using a line plot.
  *
- * @author gbrown
  */
 public class LineChartView extends ChartView {
     public LineChartView() {

@@ -22,7 +22,6 @@ import org.apache.pivot.wtk.media.Image;
 /**
  * Default menu item data implementation.
  *
- * @author gbrown
  */
 public class MenuItemData extends ButtonData {
     private Keyboard.KeyStroke keyboardShortcut = null;

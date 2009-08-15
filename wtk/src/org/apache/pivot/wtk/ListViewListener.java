@@ -22,13 +22,11 @@ import org.apache.pivot.util.Filter;
 /**
  * List view listener interface.
  *
- * @author gbrown
  */
 public interface ListViewListener {
     /**
      * List view listener adapter.
      *
-     * @author tvolkert
      */
     public static class Adapter implements ListViewListener {
         public void listDataChanged(ListView listView, List<?> previousListData) {

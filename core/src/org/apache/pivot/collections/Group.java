@@ -19,7 +19,6 @@ package org.apache.pivot.collections;
 /**
  * Interface representing a group of unique elements.
  *
- * @author gbrown
  */
 public interface Group<E> {
     /**

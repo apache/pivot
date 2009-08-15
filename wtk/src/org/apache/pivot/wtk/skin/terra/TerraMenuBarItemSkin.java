@@ -31,7 +31,6 @@ import org.apache.pivot.wtk.skin.MenuBarItemSkin;
 /**
  * Terra menu bar item skin.
  *
- * @author gbrown
  */
 public class TerraMenuBarItemSkin extends MenuBarItemSkin {
     @Override

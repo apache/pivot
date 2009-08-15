@@ -33,7 +33,6 @@ import org.apache.pivot.wtk.media.Image;
 /**
  * Default table view header data renderer.
  *
- * @author gbrown
  */
 public class TableViewHeaderDataRenderer extends BoxPane
     implements TableViewHeader.DataRenderer {

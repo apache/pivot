@@ -24,7 +24,6 @@ import org.apache.pivot.wtk.ExpanderListener;
 /**
  * Abstract base class for expander skins.
  *
- * @author tvolkert
  */
 public abstract class ExpanderSkin extends ContainerSkin
     implements ExpanderListener {

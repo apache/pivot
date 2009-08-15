@@ -31,14 +31,11 @@ import org.apache.pivot.wtk.content.CalendarButtonDataRenderer;
  * A component that allows a user to select a calendar date. The calendar
  * is hidden until the user pushes the button.
  *
- * @author tvolkert
- * @author gbrown
  */
 public class CalendarButton extends Button {
     /**
      * Calendar button listener list.
      *
-     * @author tvolkert
      */
     private static class CalendarButtonListenerList
         extends ListenerList<CalendarButtonListener>
@@ -67,7 +64,6 @@ public class CalendarButton extends Button {
     /**
      * Calendar button selection listener list.
      *
-     * @author tvolkert
      */
     private static class CalendarButtonSelectionListenerList
         extends ListenerList<CalendarButtonSelectionListener>

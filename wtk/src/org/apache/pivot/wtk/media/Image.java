@@ -37,13 +37,11 @@ import org.apache.pivot.wtkx.WTKXSerializer;
  * Abstract base class for images. An image is either a bitmapped "picture"
  * or a vector "drawing".
  *
- * @author gbrown
  */
 public abstract class Image implements Visual {
     /**
      * Image listener list.
      *
-     * @author gbrown
      */
     protected static class ImageListenerList extends ListenerList<ImageListener>
         implements ImageListener {
@@ -63,7 +61,6 @@ public abstract class Image implements Visual {
     /**
      * Task that executes an image load operation.
      *
-     * @author gbrown
      */
     public static class LoadTask extends IOTask<Image> {
         private URL url = null;

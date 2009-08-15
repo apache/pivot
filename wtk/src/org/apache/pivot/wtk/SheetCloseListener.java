@@ -19,7 +19,6 @@ package org.apache.pivot.wtk;
 /**
  * Sheet close listener interface.
  *
- * @author gbrown
  */
 public interface SheetCloseListener {
     /**

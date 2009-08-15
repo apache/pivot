@@ -49,7 +49,6 @@ import org.apache.pivot.wtk.skin.ComponentSkin;
 /**
  * Tree view skin.
  *
- * @author tvolkert
  */
 public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     TreeViewListener, TreeViewBranchListener, TreeViewNodeListener,
@@ -58,7 +57,6 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     /**
      * Callback that can be executed on a node info object.
      *
-     * @author tvolkert
      */
     protected interface NodeInfoCallback {
         /**
@@ -84,7 +82,6 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
      * NOTE: some of this data is managed by <tt>TreeView</tt> and cached here
      * to provide further optimizations during painting and user input.
      *
-     * @author tvolkert
      */
     protected static class NodeInfo {
         // Core metadata
@@ -232,7 +229,6 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
      * An internal data structure that keeps track of skin-related metadata
      * for a tree branch.
      *
-     * @author tvolkert
      */
     protected static class BranchInfo extends NodeInfo {
         // Core skin metadata

@@ -23,13 +23,11 @@ import org.apache.pivot.util.Vote;
  * register for such events by adding themselves to a rollup's list of "rollup
  * state listeners" (see {@link Rollup#getRollupStateListeners()}).
  *
- * @author tvolkert
  */
 public interface RollupStateListener {
     /**
      * Rollup state listener adapter.
      *
-     * @author tvolkert
      */
     public static class Adapter implements RollupStateListener {
         public Vote previewExpandedChange(Rollup rollup) {

@@ -21,13 +21,11 @@ import org.apache.pivot.util.Vote;
 /**
  * Tab pane selection listener interface.
  *
- * @author gbrown
  */
 public interface TabPaneSelectionListener {
     /**
      * Tab pane selection listener adapter.
      *
-     * @author tvolkert
      */
     public static class Adapter implements TabPaneSelectionListener {
         public Vote previewSelectedIndexChange(TabPane tabPane, int selectedIndex) {

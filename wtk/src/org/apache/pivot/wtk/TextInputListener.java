@@ -22,13 +22,11 @@ import org.apache.pivot.wtk.text.validation.Validator;
 /**
  * Text input listener interface.
  *
- * @author gbrown
  */
 public interface TextInputListener {
     /**
      * Text input listener adapter.
      *
-     * @author tvolkert
      */
     public static class Adapter implements TextInputListener {
         public void textNodeChanged(TextInput textInput, TextNode previousTextNode) {

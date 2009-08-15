@@ -45,7 +45,6 @@ import org.apache.pivot.wtk.skin.ComponentSkin;
 /**
  * Table view header skin.
  *
- * @author gbrown
  */
 public class TerraTableViewHeaderSkin extends ComponentSkin
     implements TableViewHeader.Skin, TableViewHeaderListener, TableViewColumnListener {

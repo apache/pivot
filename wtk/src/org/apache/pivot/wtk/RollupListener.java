@@ -21,7 +21,6 @@ package org.apache.pivot.wtk;
  * register for such events by adding themselves to a rollup's list of "rollup
  * listeners" (see {@link Rollup#getRollupListeners()}).
  *
- * @author tvolkert
  */
 public interface RollupListener {
     /**

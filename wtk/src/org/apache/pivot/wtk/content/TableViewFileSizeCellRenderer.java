@@ -27,7 +27,6 @@ import org.apache.pivot.wtk.TableView;
  * Default renderer for table view cells that contain file size data. Renders
  * cell contents as a formatted file size.
  *
- * @author gbrown
  */
 public class TableViewFileSizeCellRenderer extends TableViewCellRenderer {
     public TableViewFileSizeCellRenderer() {

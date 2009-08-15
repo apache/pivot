@@ -30,7 +30,6 @@ import org.apache.pivot.wtk.skin.ComponentSkin;
 /**
  * Abstract base class for chart view skins.
  *
- * @author gbrown
  */
 public abstract class ChartViewSkin extends ComponentSkin
     implements ChartView.Skin,

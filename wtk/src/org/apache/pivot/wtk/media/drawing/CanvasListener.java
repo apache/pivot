@@ -19,7 +19,6 @@ package org.apache.pivot.wtk.media.drawing;
 /**
  * Canvas listener interface.
  *
- * @author gbrown
  */
 public interface CanvasListener {
     /**

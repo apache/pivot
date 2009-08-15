@@ -40,7 +40,6 @@ import org.apache.pivot.wtk.Theme;
 /**
  * Separator skin.
  *
- * @author gbrown
  */
 public class SeparatorSkin extends ComponentSkin
     implements SeparatorListener {

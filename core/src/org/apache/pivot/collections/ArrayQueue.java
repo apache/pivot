@@ -25,7 +25,6 @@ import org.apache.pivot.util.ListenerList;
  * Implementation of the {@link Queue} interface that is backed by an
  * array.
  *
- * @author gbrown
  */
 public class ArrayQueue<T> extends ArrayList<T> implements Queue<T> {
     private static final long serialVersionUID = 0;

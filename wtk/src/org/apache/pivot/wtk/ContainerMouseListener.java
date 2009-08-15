@@ -20,13 +20,11 @@ package org.apache.pivot.wtk;
  * Container mouse listener interface. Container mouse events are "tunneling"
  * events that are fired as the event propagates down the component hierarchy.
  *
- * @author gbrown
  */
 public interface ContainerMouseListener {
     /**
      * Container mouse listener adapter.
      *
-     * @author tvolkert
      */
     public static class Adapter implements ContainerMouseListener {
         public boolean mouseMove(Container container, int x, int y) {

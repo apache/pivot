@@ -26,7 +26,6 @@ import org.apache.pivot.util.ListenerList;
 /**
  * Synchronized implementation of the {@link Map} interface.
  *
- * @author gbrown
  */
 public class SynchronizedMap<K, V> extends SynchronizedCollection<K>
     implements Map<K, V> {

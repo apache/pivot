@@ -19,13 +19,11 @@ package org.apache.pivot.wtk;
 /**
  * Action class listener interface.
  *
- * @author gbrown
  */
 public interface ActionClassListener {
     /**
      * Action class listener adapter.
      *
-     * @author gbrown
      */
     public class Adapter implements ActionClassListener {
         public void actionAdded(String id) {

@@ -26,7 +26,6 @@ import org.apache.pivot.wtk.RollupStateListener;
 /**
  * Abstract base class for rollup skins.
  *
- * @author tvolkert
  */
 public abstract class RollupSkin extends ContainerSkin
     implements RollupListener, RollupStateListener {

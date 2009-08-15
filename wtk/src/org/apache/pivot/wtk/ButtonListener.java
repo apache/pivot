@@ -19,13 +19,11 @@ package org.apache.pivot.wtk;
 /**
  * Button listener interface.
  *
- * @author gbrown
  */
 public interface ButtonListener {
     /**
      * Button listener adapter.
      *
-     * @author tvolkert
      */
     public static class Adapter implements ButtonListener {
         public void buttonDataChanged(Button button, Object previousButtonData) {

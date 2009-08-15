@@ -19,7 +19,6 @@ package org.apache.pivot.wtk;
 /**
  * Frame listener interface.
  *
- * @author gbrown
  */
 public interface FrameListener {
     /**

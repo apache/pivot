@@ -42,7 +42,6 @@ import org.apache.pivot.wtk.Tooltip;
 /**
  * Abstract base class for component skins.
  *
- * @author gbrown
  */
 public abstract class ComponentSkin implements Skin, ComponentListener,
     ComponentStateListener, ComponentMouseListener, ComponentMouseButtonListener,

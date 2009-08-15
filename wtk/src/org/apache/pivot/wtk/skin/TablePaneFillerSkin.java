@@ -21,7 +21,6 @@ import java.awt.Graphics2D;
 /**
  * Table pane filler skin.
  *
- * @author gbrown
  */
 public class TablePaneFillerSkin extends ComponentSkin {
     @Override

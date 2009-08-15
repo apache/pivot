@@ -22,7 +22,6 @@ import org.apache.pivot.collections.Dictionary;
  * Base interface for "renderers". Renderers are used to customize the
  * appearance of a component's content.
  *
- * @author gbrown
  */
 public interface Renderer extends ConstrainedVisual {
     /**

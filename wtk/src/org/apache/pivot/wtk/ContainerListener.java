@@ -21,7 +21,6 @@ import org.apache.pivot.collections.Sequence;
 /**
  * Container listener interface.
  *
- * @author gbrown
  */
 public interface ContainerListener  {
     /**

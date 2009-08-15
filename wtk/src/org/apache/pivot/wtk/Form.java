@@ -33,14 +33,12 @@ import org.apache.pivot.util.ListenerList;
  * attention using one of several flag types and an optional flag message (for
  * use during form validation, for example).
  *
- * @author gbrown
  */
 public class Form extends Container {
     /**
      * Class representing a form section. A section is a grouping of components
      * within a form.
      *
-     * @author gbrown
      */
     public static class Section implements Sequence<Component>, Iterable<Component> {
         private Form form = null;
@@ -140,7 +138,6 @@ public class Form extends Container {
     /**
      * Section sequence implementation.
      *
-     * @author gbrown
      */
     public final class SectionSequence implements Sequence<Section>, Iterable<Section> {
         private SectionSequence() {
@@ -219,7 +216,6 @@ public class Form extends Container {
     /**
      * Represents an message alert associated with a form field.
      *
-     * @author gbrown
      */
     public static class Flag {
         /**

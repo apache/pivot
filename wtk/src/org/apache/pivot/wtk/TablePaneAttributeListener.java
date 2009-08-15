@@ -19,7 +19,6 @@ package org.apache.pivot.wtk;
 /**
  * Table pane attribute listener interface.
  *
- * @author gbrown
  */
 public interface TablePaneAttributeListener {
     /**

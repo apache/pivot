@@ -19,7 +19,6 @@ package org.apache.pivot.wtk;
 /**
  * Table view header press listener.
  *
- * @author gbrown
  */
 public interface TableViewHeaderPressListener {
     /**

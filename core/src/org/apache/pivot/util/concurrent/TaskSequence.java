@@ -27,7 +27,6 @@ import org.apache.pivot.util.ImmutableIterator;
  * Class that runs a sequence of tasks in series and notifies listeners
  * when all tasks are complete.
  *
- * @author gbrown
  */
 public class TaskSequence extends Task<Void>
     implements Sequence<Task<?>>, Iterable<Task<?>> {

@@ -21,7 +21,6 @@ import org.apache.pivot.util.ListenerList;
 /**
  * Component representing an activity indicator.
  *
- * @author gbrown
  */
 public class ActivityIndicator extends Component {
     private static class ActivityIndicatorListenerList extends ListenerList<ActivityIndicatorListener>

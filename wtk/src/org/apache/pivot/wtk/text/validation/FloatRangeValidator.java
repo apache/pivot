@@ -18,7 +18,6 @@ import java.util.Locale;
 /**
  * A validator for a float value limited to a range.
  *
- * @author Noel Grandin
  */
 public class FloatRangeValidator extends FloatValidator {
     private float minValue, maxValue;

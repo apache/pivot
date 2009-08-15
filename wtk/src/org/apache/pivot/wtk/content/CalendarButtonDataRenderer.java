@@ -28,7 +28,6 @@ import org.apache.pivot.wtk.HorizontalAlignment;
 /**
  * Default calendar button data renderer.
  *
- * @author gbrown
  */
 public class CalendarButtonDataRenderer extends ButtonDataRenderer {
     public CalendarButtonDataRenderer() {

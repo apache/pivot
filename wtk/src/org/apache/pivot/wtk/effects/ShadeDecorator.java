@@ -29,7 +29,6 @@ import org.apache.pivot.wtk.Component;
  * of the same size as the component that is painted over the component using a
  * given color and opacity value.
  *
- * @author tvolkert
  */
 public class ShadeDecorator implements Decorator {
     private float opacity;

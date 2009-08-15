@@ -25,13 +25,11 @@ import org.apache.pivot.util.Filter;
 /**
  * File browser listener interface.
  *
- * @author gbrown
  */
 public interface FileBrowserListener {
     /**
      * File browser listener adapter.
      *
-     * @author gbrown
      */
     public static class Adapter implements FileBrowserListener {
         public void multiSelectChanged(FileBrowser fileBrowser) {

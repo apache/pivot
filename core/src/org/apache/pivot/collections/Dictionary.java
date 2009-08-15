@@ -19,7 +19,6 @@ package org.apache.pivot.collections;
 /**
  * Interface representing a set of key/value pairs.
  *
- * @author gbrown
  */
 public interface Dictionary<K, V> {
     /**

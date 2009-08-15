@@ -21,7 +21,6 @@ package org.apache.pivot.wtk.text;
  * <p>
  * TODO Add horizontal alignment, margin, and line spacing properties.
  *
- * @author gbrown
  */
 public abstract class Block extends Element {
     public Block() {

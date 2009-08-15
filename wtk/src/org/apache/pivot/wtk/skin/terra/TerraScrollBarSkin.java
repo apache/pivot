@@ -41,7 +41,6 @@ import org.apache.pivot.wtk.skin.ContainerSkin;
 /**
  * Scroll bar skin.
  *
- * @author tvolkert
  */
 public class TerraScrollBarSkin extends ContainerSkin
     implements ScrollBarListener, ScrollBarValueListener {
@@ -51,7 +50,6 @@ public class TerraScrollBarSkin extends ContainerSkin
      * scrolling) and <tt>ScrollButtonSkin</tt> (automatic unit increment
      * scrolling).
      *
-     * @author tvolkert
      */
     protected class AutomaticScroller {
         public int direction;
@@ -161,7 +159,6 @@ public class TerraScrollBarSkin extends ContainerSkin
     /**
      * Scroll bar scroll button component.
      *
-     * @author tvolkert
      */
     protected class ScrollButton extends Component {
         private int direction;
@@ -185,7 +182,6 @@ public class TerraScrollBarSkin extends ContainerSkin
     /**
      * Scroll bar scroll button component skin.
      *
-     * @author tvolkert
      */
     protected class ScrollButtonSkin extends ComponentSkin {
         private boolean highlighted = false;
@@ -405,7 +401,6 @@ public class TerraScrollBarSkin extends ContainerSkin
     /**
      * Scroll bar handle component.
      *
-     * @author tvolkert
      */
     protected class Handle extends Component {
         public Handle() {
@@ -416,7 +411,6 @@ public class TerraScrollBarSkin extends ContainerSkin
     /**
      * Scroll bar scroll handle component skin.
      *
-     * @author tvolkert
      */
     protected class HandleSkin extends ComponentSkin {
         private int dragOffset;

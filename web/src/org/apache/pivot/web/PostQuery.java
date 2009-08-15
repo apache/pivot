@@ -22,7 +22,6 @@ import java.net.URL;
 /**
  * Executes an HTTP POST operation.
  *
- * @author gbrown
  */
 public class PostQuery extends Query<URL> {
     private Object value = null;

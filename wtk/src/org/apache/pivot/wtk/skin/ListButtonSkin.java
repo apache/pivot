@@ -44,7 +44,6 @@ import org.apache.pivot.wtk.WindowStateListener;
  * we close the popup. This would also tie this base class less tightly to its
  * concrete subclasses.
  *
- * @author gbrown
  */
 public abstract class ListButtonSkin extends ButtonSkin
     implements ListButtonListener, ListButtonSelectionListener {

@@ -35,7 +35,6 @@ import org.apache.pivot.wtk.skin.MenuItemSkin;
 /**
  * Terra menu item skin.
  *
- * @author gbrown
  */
 public class TerraMenuItemSkin extends MenuItemSkin {
     public final class CheckmarkImage extends Image {

@@ -24,7 +24,6 @@ import org.apache.pivot.util.Filter;
 /**
  * Wraps an instance of {@link FileFilter} in a {@link Filter}.
  *
- * @author gbrown
  */
 public class FileFilterAdapter implements Filter<File> {
     private FileFilter fileFilter;

@@ -33,7 +33,6 @@ import org.apache.pivot.wtk.media.Image;
 /**
  * Window skin.
  *
- * @author gbrown
  */
 public class WindowSkin extends ContainerSkin
     implements WindowListener, WindowStateListener {
@@ -41,7 +40,6 @@ public class WindowSkin extends ContainerSkin
      * Focus traversal policy that always returns the window's content. This
      * ensures that focus does not traverse out of the window.
      *
-     * @author gbrown
      */
     public static class WindowFocusTraversalPolicy implements FocusTraversalPolicy {
         public Component getNextComponent(Container container, Component component, Direction direction) {

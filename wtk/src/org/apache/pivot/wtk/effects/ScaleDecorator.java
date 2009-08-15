@@ -31,7 +31,6 @@ import org.apache.pivot.wtk.VerticalAlignment;
 /**
  * Decorator that scales the painting of a component along the X and/or Y axes.
  *
- * @author tvolkert
  */
 public class ScaleDecorator implements Decorator {
     private float scaleX;

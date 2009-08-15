@@ -19,13 +19,11 @@ package org.apache.pivot.wtk;
 /**
  * List view item listener interface.
  *
- * @author gbrown
  */
 public interface ListViewItemListener {
     /**
      * List view item listener adapter.
      *
-     * @author tvolkert
      */
     public static class Adapter implements ListViewItemListener {
         public void itemInserted(ListView listView, int index) {

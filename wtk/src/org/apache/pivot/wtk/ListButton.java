@@ -31,13 +31,11 @@ import org.apache.pivot.wtk.content.ListViewItemRenderer;
  * Component that allows a user to select one of several list options. The
  * options are hidden until the user pushes the button.
  *
- * @author gbrown
  */
 public class ListButton extends Button {
     /**
      * List button listener list.
      *
-     * @author gbrown
      */
     private static class ListButtonListenerList extends ListenerList<ListButtonListener>
         implements ListButtonListener {
@@ -69,7 +67,6 @@ public class ListButton extends Button {
     /**
      * List button selection listener list.
      *
-     * @author gbrown
      */
     private static class ListButtonSelectionListenerList extends ListenerList<ListButtonSelectionListener>
         implements ListButtonSelectionListener {

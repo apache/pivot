@@ -32,13 +32,11 @@ import org.apache.pivot.wtk.content.SpinnerItemRenderer;
 /**
  * Component that presents a means of cycling through a list of items.
  *
- * @author tvolkert
  */
 public class Spinner extends Container {
     /**
      * Spinner renderer interface.
      *
-     * @author tvolkert
      */
     public interface ItemRenderer extends Renderer {
         /**
@@ -57,7 +55,6 @@ public class Spinner extends Container {
      * Spinner skin interface. Spinner skins must implement this interface to
      * facilitate additional communication between the component and the skin.
      *
-     * @author tvolkert
      */
     public interface Skin {
         public Bounds getContentBounds();
@@ -66,7 +63,6 @@ public class Spinner extends Container {
     /**
      * List event handler.
      *
-     * @author tvolkert
      */
     private class ListHandler implements ListListener<Object> {
         public void itemInserted(List<Object> list, int index) {
@@ -114,7 +110,6 @@ public class Spinner extends Container {
     /**
      * Spinner listener list.
      *
-     * @author tvolkert
      */
     private static class SpinnerListenerList extends ListenerList<SpinnerListener>
         implements SpinnerListener {
@@ -147,7 +142,6 @@ public class Spinner extends Container {
     /**
      * Spinner item listener list.
      *
-     * @author tvolkert
      */
     private static class SpinnerItemListenerList extends ListenerList<SpinnerItemListener>
         implements SpinnerItemListener {
@@ -185,7 +179,6 @@ public class Spinner extends Container {
     /**
      * Spinner selection listener list.
      *
-     * @author tvolkert
      */
     private static class SpinnerSelectionListenerList
         extends ListenerList<SpinnerSelectionListener>

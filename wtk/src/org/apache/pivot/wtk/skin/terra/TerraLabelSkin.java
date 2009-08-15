@@ -22,7 +22,6 @@ import org.apache.pivot.wtk.skin.LabelSkin;
 /**
  * Terra label skin.
  *
- * @author gbrown
  */
 public class TerraLabelSkin extends LabelSkin {
     public TerraLabelSkin() {

@@ -43,7 +43,6 @@ import org.apache.pivot.collections.Sequence;
  * <p>
  * TODO Add "firstLineContainsKeys" flag.
  *
- * @author gbrown
  */
 public class CSVSerializer implements Serializer<List<?>> {
     /**
@@ -86,7 +85,6 @@ public class CSVSerializer implements Serializer<List<?>> {
     /**
      * Allows a caller to retrieve the contents of a CSV stream iteratively.
      *
-     * @author gbrown
      */
     public class StreamIterator {
         private Reader reader;

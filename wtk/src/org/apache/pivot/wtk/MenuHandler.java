@@ -19,13 +19,11 @@ package org.apache.pivot.wtk;
 /**
  * Menu handler interface.
  *
- * @author tvolkert
  */
 public interface MenuHandler {
     /**
      * Menu handler adapter.
      *
-     * @author tvolkert
      */
     public static class Adapter implements MenuHandler {
         public void configureMenuBar(Component component, MenuBar menuBar) {

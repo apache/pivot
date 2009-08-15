@@ -31,7 +31,6 @@ import org.apache.pivot.wtk.skin.ContainerSkin;
 /**
  * Menu bar skin.
  *
- * @author gbrown
  */
 public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
     private Font font;

@@ -19,7 +19,6 @@ package org.apache.pivot.charts;
 /**
  * Presents chart data using a pie plot.
  *
- * @author gbrown
  */
 public class PieChartView extends ChartView {
     public PieChartView() {

@@ -19,7 +19,6 @@ package org.apache.pivot.wtk;
 /**
  * Enumeration representing text decoration styles.
  *
- * @author gbrown
  */
 public enum TextDecoration {
     UNDERLINE,

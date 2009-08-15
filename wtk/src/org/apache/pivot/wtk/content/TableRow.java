@@ -22,7 +22,6 @@ import org.apache.pivot.collections.HashMap;
 /**
  * Default table row implementation.
  *
- * @author gbrown
  */
 public class TableRow implements Dictionary<String, Object> {
     private HashMap<String, Object> cells = new HashMap<String, Object>();

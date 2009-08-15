@@ -19,7 +19,6 @@ package org.apache.pivot.serialization;
 /**
  * Thrown when an error is encountered during serialization.
  *
- * @author gbrown
  */
 public class SerializationException extends Exception {
     private static final long serialVersionUID = 0;

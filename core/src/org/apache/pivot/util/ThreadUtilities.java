@@ -19,7 +19,6 @@ package org.apache.pivot.util;
 /**
  * Contains utility methods for dealing with threads.
  *
- * @author tvolkert
  */
 public final class ThreadUtilities {
     private ThreadUtilities() {

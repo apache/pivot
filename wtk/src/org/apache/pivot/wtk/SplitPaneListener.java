@@ -19,7 +19,6 @@ package org.apache.pivot.wtk;
 /**
  * Split pane listener interface.
  *
- * @author tvolkert
  */
 public interface SplitPaneListener {
     /**

@@ -25,7 +25,6 @@ import org.apache.pivot.serialization.SerializationException;
 /**
  * Class representing the dimensions of an object.
  *
- * @author gbrown
  */
 public final class Dimensions implements Serializable {
     private static final long serialVersionUID = 0;

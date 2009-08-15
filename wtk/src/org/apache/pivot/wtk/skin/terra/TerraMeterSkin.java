@@ -34,7 +34,6 @@ import org.apache.pivot.wtk.skin.ComponentSkin;
 /**
  * Meter skin.
  *
- * @author tvolkert
  */
 public class TerraMeterSkin extends ComponentSkin
     implements MeterListener {

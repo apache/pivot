@@ -34,7 +34,6 @@ import org.apache.pivot.wtk.WindowStateListener;
 /**
  * Abstract base class for menu bar item skins.
  *
- * @author gbrown
  */
 public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.ItemListener {
     protected MenuPopup menuPopup = new MenuPopup();

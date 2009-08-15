@@ -21,7 +21,6 @@ import org.apache.pivot.collections.Sequence;
 /**
  * Window action mapping listener interface.
  *
- * @author gbrown
  */
 public interface WindowActionMappingListener {
     /**

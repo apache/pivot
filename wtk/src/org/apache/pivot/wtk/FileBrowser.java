@@ -29,7 +29,6 @@ import org.apache.pivot.util.ListenerList;
 /**
  * Component representing a file browser.
  *
- * @author gbrown
  */
 public class FileBrowser extends Container {
     private static class FileBrowserListenerList extends ListenerList<FileBrowserListener>

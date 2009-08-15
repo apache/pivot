@@ -19,7 +19,6 @@ package org.apache.pivot.wtk;
 /**
  * Menu popup listener interface.
  *
- * @author gbrown
  */
 public interface MenuPopupListener {
     /**

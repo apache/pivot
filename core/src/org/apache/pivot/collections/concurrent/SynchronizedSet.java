@@ -25,7 +25,6 @@ import org.apache.pivot.util.ListenerList;
 /**
  * Synchronized implementation of the {@link Set} interface.
  *
- * @author gbrown
  */
 public class SynchronizedSet<E> extends SynchronizedCollection<E>
     implements Set<E> {

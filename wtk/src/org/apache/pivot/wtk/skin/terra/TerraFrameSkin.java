@@ -56,14 +56,11 @@ import org.apache.pivot.wtk.skin.WindowSkin;
 /**
  * Frame skin.
  *
- * @author gbrown
- * @author tvolkert
  */
 public class TerraFrameSkin extends WindowSkin implements FrameListener {
     /**
      * Frame button.
      *
-     * @author gbrown
      */
     public static class FrameButton extends PushButton {
         public FrameButton(Object buttonData) {
@@ -76,7 +73,6 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
     /**
      * Frame button skin.
      *
-     * @author gbrown
      */
     public static class FrameButtonSkin extends TerraPushButtonSkin {
         public FrameButtonSkin() {
@@ -98,7 +94,6 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
     /**
      * Abstract base class for frame button images.
      *
-     * @author gbrown
      */
     protected abstract class ButtonImage extends Image {
         public int getWidth() {
@@ -113,7 +108,6 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
     /**
      * Minimize button image.
      *
-     * @author gbrown
      */
     protected class MinimizeImage extends ButtonImage {
         public void paint(Graphics2D graphics) {
@@ -126,7 +120,6 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
     /**
      * Maximize button image.
      *
-     * @author gbrown
      */
     protected class MaximizeImage extends ButtonImage {
         public void paint(Graphics2D graphics) {
@@ -142,7 +135,6 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
     /**
      * Restore button image.
      *
-     * @author gbrown
      */
     protected class RestoreImage extends ButtonImage {
         public void paint(Graphics2D graphics) {
@@ -160,7 +152,6 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
     /**
      * Close button image.
      *
-     * @author gbrown
      */
     protected class CloseImage extends ButtonImage {
         public void paint(Graphics2D graphics) {
@@ -180,7 +171,6 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
     /**
      * Resize button image.
      *
-     * @author gbrown
      */
     protected class ResizeImage extends Image {
         public static final int ALPHA = 64;

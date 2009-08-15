@@ -24,7 +24,6 @@ import java.beans.PropertyChangeListener;
 /**
  * Provides platform-specific information.
  *
- * @author gbrown
  */
 public class Platform {
     private static Object textAntialiasingHint = null;

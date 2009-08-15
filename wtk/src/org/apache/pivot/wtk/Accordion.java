@@ -35,13 +35,11 @@ import org.apache.pivot.wtk.media.Image;
  * <p>
  * TODO Add a getPanelAt() method that delegates to the skin.
  *
- * @author gbrown
  */
 public class Accordion extends Container {
     /**
      * Panel sequence implementation.
      *
-     * @author gbrown
      */
     public final class PanelSequence implements Sequence<Component>, Iterable<Component> {
         private PanelSequence() {

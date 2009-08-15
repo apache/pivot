@@ -19,8 +19,6 @@ package org.apache.pivot.wtk.effects.easing;
 /**
  * Exponential easing operation.
  *
- * @author Robert Penner
- * @author gbrown
  */
 public class Exponential implements Easing {
     public float easeIn(float time, float begin, float change, float duration) {

@@ -38,7 +38,6 @@ import org.apache.pivot.wtk.skin.RadioButtonSkin;
  * <p>
  * TODO Button alignment style (vertical only).
  *
- * @author gbrown
  */
 public class TerraRadioButtonSkin extends RadioButtonSkin {
     private Font font;

@@ -60,13 +60,11 @@ import org.apache.pivot.wtkx.WTKXSerializer;
 /**
  * Terra file browser skin.
  *
- * @author gbrown
  */
 public class TerraFileBrowserSkin extends FileBrowserSkin {
     /**
      * Abstract renderer for displaying file system contents.
      *
-     * @author gbrown
      */
     public static abstract class FileRenderer extends BoxPane {
         protected ImageView imageView = new ImageView();
@@ -131,7 +129,6 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     /**
      * List button file renderer.
      *
-     * @author gbrown
      */
     public static class ListButtonFileRenderer extends FileRenderer implements Button.DataRenderer {
         public ListButtonFileRenderer() {
@@ -161,7 +158,6 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     /**
      * List view renderer for displaying file system contents.
      *
-     * @author gbrown
      */
     public static class ListViewFileRenderer extends FileRenderer implements ListView.ItemRenderer {
         public ListViewFileRenderer() {

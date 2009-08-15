@@ -29,7 +29,6 @@ import org.apache.pivot.wtk.media.Image;
  * <p>
  * TODO Add a URL setter for the image property.
  *
- * @author gbrown
  */
 public class ImageNode extends Node {
     private static class ImageNodeListenerList extends ListenerList<ImageNodeListener>

@@ -31,7 +31,6 @@ import org.apache.pivot.wtk.skin.LinkButtonSkin;
 /**
  * Terra link button skin.
  *
- * @author gbrown
  */
 public class TerraLinkButtonSkin extends LinkButtonSkin {
     private Font font;

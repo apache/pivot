@@ -22,7 +22,6 @@ import java.util.NoSuchElementException;
 /**
  * A no-op iterator.
  *
- * @author gbrown
  */
 public class EmptyIterator<T> implements Iterator<T> {
     @Override

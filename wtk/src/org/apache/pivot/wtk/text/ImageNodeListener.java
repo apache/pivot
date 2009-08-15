@@ -21,7 +21,6 @@ import org.apache.pivot.wtk.media.Image;
 /**
  * Image node listener interface.
  *
- * @author gbrown
  */
 public interface ImageNodeListener {
     public void imageChanged(ImageNode imageNode, Image previousImage);

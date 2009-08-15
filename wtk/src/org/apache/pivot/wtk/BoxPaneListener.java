@@ -19,7 +19,6 @@ package org.apache.pivot.wtk;
 /**
  * Box pane listener interface.
  *
- * @author gbrown
  */
 public interface BoxPaneListener {
     /**

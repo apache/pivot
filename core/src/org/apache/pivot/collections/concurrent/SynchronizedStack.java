@@ -24,7 +24,6 @@ import org.apache.pivot.util.ListenerList;
 /**
  * Synchronized implementation of the {@link Stack} interface.
  *
- * @author gbrown
  */
 public class SynchronizedStack<T> extends SynchronizedCollection<T>
     implements Stack<T> {

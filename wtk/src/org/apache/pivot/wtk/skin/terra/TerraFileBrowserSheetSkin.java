@@ -38,7 +38,6 @@ import org.apache.pivot.wtkx.WTKXSerializer;
 /**
  * Terra file browser sheet skin.
  *
- * @author gbrown
  */
 public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBrowserSheetListener {
     @WTKX private TextInput saveAsTextInput = null;

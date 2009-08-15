@@ -21,7 +21,6 @@ import java.awt.Color;
 /**
  * List item representing a color.
  *
- * @author gbrown
  */
 public class ColorItem {
     private Color color;

@@ -19,7 +19,6 @@ package org.apache.pivot.wtk;
 /**
  * Tooltip listener interface.
  *
- * @author gbrown
  */
 public interface TooltipListener {
     /**

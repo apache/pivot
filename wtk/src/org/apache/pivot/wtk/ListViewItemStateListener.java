@@ -19,8 +19,6 @@ package org.apache.pivot.wtk;
 /**
  * List view item state listener interface.
  *
- * @author gbrown
- * @author tvolkert
  */
 public interface ListViewItemStateListener {
     /**

@@ -25,7 +25,6 @@ import org.apache.pivot.wtk.StackPane;
 /**
  * Stack pane skin.
  *
- * @author gbrown
  */
 public class StackPaneSkin extends ContainerSkin {
     private Insets padding = Insets.NONE;

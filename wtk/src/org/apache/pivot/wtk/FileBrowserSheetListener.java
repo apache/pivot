@@ -25,13 +25,11 @@ import org.apache.pivot.util.Filter;
 /**
  * File browser sheet listener interface.
  *
- * @author gbrown
  */
 public interface FileBrowserSheetListener {
     /**
      * File browser sheet listener adapter.
      *
-     * @author gbrown
      */
     public static class Adapter implements FileBrowserSheetListener {
         public void multiSelectChanged(FileBrowserSheet fileBrowserSheet) {

@@ -32,7 +32,6 @@ import org.apache.pivot.wtk.media.Picture;
  * Manifest class that serves as data source for a clipboard or drag/drop
  * operation.
  *
- * @author gbrown
  */
 public class LocalManifest implements Manifest {
     protected String text = null;

@@ -24,7 +24,6 @@ import org.apache.pivot.wtk.Mouse;
 /**
  * Abstract base class for checkbox skins.
  *
- * @author gbrown
  */
 public abstract class CheckboxSkin extends ButtonSkin {
     @Override

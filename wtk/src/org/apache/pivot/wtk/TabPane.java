@@ -35,13 +35,11 @@ import org.apache.pivot.wtk.media.Image;
  * <p>
  * TODO Add a getTabAt() method that delegates to the skin.
  *
- * @author gbrown
  */
 public class TabPane extends Container {
     /**
      * Tab sequence implementation.
      *
-     * @author gbrown
      */
     public final class TabSequence implements Sequence<Component>, Iterable<Component> {
         private TabSequence() {

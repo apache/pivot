@@ -19,13 +19,11 @@ package org.apache.pivot.wtk;
 /**
  * Table view row listener interface.
  *
- * @author gbrown
  */
 public interface TableViewRowListener {
     /**
      * Table row listener adapter.
      *
-     * @author tvolkert
      */
     public static class Adapter implements TableViewRowListener {
         public void rowInserted(TableView tableView, int index) {

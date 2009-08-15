@@ -47,7 +47,6 @@ import org.apache.pivot.wtk.skin.ComponentSkin;
  * <p>
  * NOTE This skin assumes a fixed renderer height.
  *
- * @author gbrown
  */
 public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     ListViewListener, ListViewItemListener, ListViewItemStateListener,

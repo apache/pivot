@@ -19,13 +19,11 @@ package org.apache.pivot.wtk;
 /**
  * Text area character listener interface.
  *
- * @author gbrown
  */
 public interface TextAreaCharacterListener {
     /**
      * Text area character listener adapter.
      *
-     * @author tvolkert
      */
     public static class Adapter implements TextAreaCharacterListener {
         public void charactersInserted(TextArea textArea, int index, int count) {

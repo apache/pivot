@@ -21,7 +21,6 @@ package org.apache.pivot.wtk.text.validation;
  * and events are fired by the TextInput if the programmer wishes to take
  * further action.
  *
- * @author Noel Grandin
  */
 public interface Validator {
     /**

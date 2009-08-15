@@ -24,7 +24,6 @@ import org.apache.pivot.wtk.media.drawing.Canvas;
 /**
  * Drawing listener interface.
  *
- * @author gbrown
  */
 public interface DrawingListener {
     /**

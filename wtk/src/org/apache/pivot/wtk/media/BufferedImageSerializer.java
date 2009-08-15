@@ -31,13 +31,11 @@ import org.apache.pivot.serialization.Serializer;
  * Implementation of the {@link Serializer} interface that reads and writes
  * instances of {@link java.awt.image.BufferedImage}.
  *
- * @author tvolkert
  */
 public class BufferedImageSerializer implements Serializer<BufferedImage> {
     /**
      * Supported image formats.
      *
-     * @author tvolkert
      */
     public enum Format {
         PNG("png", "image/png"),

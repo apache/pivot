@@ -20,7 +20,6 @@ package org.apache.pivot.util;
  * Enumeration representing a vote. Votes are often used to determine the
  * result of an event preview.
  *
- * @author gbrown
  */
 public enum Vote {
     APPROVE(true),

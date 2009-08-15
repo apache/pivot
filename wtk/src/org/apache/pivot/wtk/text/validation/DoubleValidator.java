@@ -18,7 +18,6 @@ import java.util.Locale;
 /**
  * A validator for a double value.
  *
- * @author Noel Grandin
  */
 public class DoubleValidator extends DecimalValidator {
     public DoubleValidator() {

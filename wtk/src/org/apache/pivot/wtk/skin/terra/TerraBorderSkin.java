@@ -22,7 +22,6 @@ import org.apache.pivot.wtk.skin.BorderSkin;
 /**
  * Terra border skin.
  *
- * @author gbrown
  */
 public class TerraBorderSkin extends BorderSkin {
     public TerraBorderSkin() {

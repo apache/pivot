@@ -19,13 +19,11 @@ package org.apache.pivot.wtk;
 /**
  * Spinner item listener interface.
  *
- * @author tvolkert
  */
 public interface SpinnerItemListener {
     /**
      * Spinner item listener adapter.
      *
-     * @author tvolkert
      */
     public static class Adapter implements SpinnerItemListener {
         public void itemInserted(Spinner spinner, int index) {

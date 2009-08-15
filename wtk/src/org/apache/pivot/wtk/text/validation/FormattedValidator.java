@@ -21,7 +21,6 @@ import java.text.ParsePosition;
  * <p>
  * This class is mostly intended to be a base-class for other validators.
  *
- * @author Noel Grandin
  */
 public class FormattedValidator<F extends Format> implements Validator {
     protected final F format;

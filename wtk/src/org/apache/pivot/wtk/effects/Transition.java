@@ -22,8 +22,6 @@ import org.apache.pivot.wtk.ApplicationContext;
  * Abstract base class for "transitions", which are animated application
  * effects.
  *
- * @author gbrown
- * @author tvolkert
  */
 public abstract class Transition {
     private int duration;

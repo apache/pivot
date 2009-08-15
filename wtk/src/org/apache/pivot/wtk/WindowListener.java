@@ -21,13 +21,11 @@ import org.apache.pivot.wtk.media.Image;
 /**
  * Window listener interface.
  *
- * @author gbrown
  */
 public interface WindowListener {
     /**
      * Window listener adapter.
      *
-     * @author tvolkert
      */
     public static class Adapter implements WindowListener {
         public void titleChanged(Window window, String previousTitle) {

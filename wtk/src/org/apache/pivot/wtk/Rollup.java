@@ -27,7 +27,6 @@ import org.apache.pivot.util.Vote;
  * the user expands the rollup, its content component will be shown beneath the
  * heading.
  *
- * @author tvolkert
  */
 public class Rollup extends Container {
     private static class RollupListenerList extends ListenerList<RollupListener>

@@ -23,7 +23,6 @@ import org.apache.pivot.util.ListenerList;
 /**
  * Container that displays a border.
  *
- * @author gbrown
  */
 public class Border extends Container {
     private static class BorderListenerList extends ListenerList<BorderListener>

@@ -41,7 +41,6 @@ import org.apache.pivot.wtk.skin.WindowSkin;
 /**
  * Tooltip skin.
  *
- * @author gbrown
  */
 public class TerraTooltipSkin extends WindowSkin implements TooltipListener {
     private Label label = new Label();

@@ -22,7 +22,6 @@ import org.apache.pivot.wtk.TextDecoration;
 /**
  * Default link button data renderer.
  *
- * @author gbrown
  */
 public class LinkButtonDataRenderer extends ButtonDataRenderer {
     public LinkButtonDataRenderer() {

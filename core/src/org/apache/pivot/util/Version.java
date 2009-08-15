@@ -25,7 +25,6 @@ import java.io.Serializable;
  * <p>
  * for example, "JDK 1.6.0_10".
  *
- * @author gbrown
  */
 public class Version implements Comparable<Version>, Serializable {
     private static final long serialVersionUID = 0;

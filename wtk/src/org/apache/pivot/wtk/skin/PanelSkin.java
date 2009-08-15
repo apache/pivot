@@ -19,7 +19,6 @@ package org.apache.pivot.wtk.skin;
 /**
  * Panel skin.
  *
- * @author gbrown
  */
 public class PanelSkin extends ContainerSkin {
     public void layout() {

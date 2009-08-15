@@ -30,13 +30,11 @@ import org.apache.pivot.wtk.text.validation.Validator;
 /**
  * A component that allows a user to enter a single line of unformatted text.
  *
- * @author gbrown
  */
 public class TextInput extends Component {
     /**
      * Text input listener list.
      *
-     * @author gbrown
      */
     private static class TextInputListenerList extends ListenerList<TextInputListener>
         implements TextInputListener {
@@ -92,7 +90,6 @@ public class TextInput extends Component {
     /**
      * Text input text listener list.
      *
-     * @author gbrown
      */
     private static class TextInputTextListenerList extends ListenerList<TextInputTextListener>
         implements TextInputTextListener {
@@ -106,7 +103,6 @@ public class TextInput extends Component {
     /**
      * Text input character listener list.
      *
-     * @author gbrown
      */
     private static class TextInputCharacterListenerList extends ListenerList<TextInputCharacterListener>
         implements TextInputCharacterListener {
@@ -126,7 +122,6 @@ public class TextInput extends Component {
     /**
      * Text input selection listener list.
      *
-     * @author gbrown
      */
     private static class TextInputSelectionListenerList extends ListenerList<TextInputSelectionListener>
         implements TextInputSelectionListener {

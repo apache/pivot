@@ -25,7 +25,6 @@ import java.lang.annotation.Target;
  * Annotation that causes a loaded WTKX element to be bound to the annotated
  * field.
  *
- * @author gbrown
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

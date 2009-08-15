@@ -36,7 +36,6 @@ import org.apache.pivot.util.ListenerList;
  * <i>fail-fast</i>: if the bounds of the enclosing spinner data change during
  * iteration, a <tt>ConcurrentModificationException</tt> will be thrown.
  *
- * @author tvolkert
  */
 public class NumericSpinnerData implements List<Integer> {
     private class DataIterator implements Iterator<Integer> {

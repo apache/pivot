@@ -34,7 +34,6 @@ import org.apache.pivot.wtk.media.MovieListener;
 /**
  * Movie view skin.
  *
- * @author tvolkert
  */
 public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
     private Color backgroundColor = null;

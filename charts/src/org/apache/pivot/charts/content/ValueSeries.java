@@ -21,7 +21,6 @@ import org.apache.pivot.collections.ArrayList;
 /**
  * Represents series data for value chart views.
  *
- * @author gbrown
  */
 public class ValueSeries<T> extends ArrayList<T> {
     private static final long serialVersionUID = 0;

@@ -41,14 +41,11 @@ import org.apache.pivot.wtk.skin.RollupSkin;
 /**
  * Terra rollup skin.
  *
- * @author tvolkert
- * @author gbrown
  */
 public class TerraRollupSkin extends RollupSkin {
     /**
      * Expand/collapse transition.
      *
-     * @author gbrown
      */
     public class ExpandTransition extends Transition {
         private Easing easing = new Quadratic();
@@ -92,7 +89,6 @@ public class TerraRollupSkin extends RollupSkin {
     /**
      * Component that allows the user to expand and collapse the Rollup.
      *
-     * @author tvolkert
      */
     protected class RollupButton extends Component {
         public RollupButton() {
@@ -103,7 +99,6 @@ public class TerraRollupSkin extends RollupSkin {
     /**
      * Skin for the rollup button.
      *
-     * @author tvolkert
      */
     protected class RollupButtonSkin extends ComponentSkin {
         @Override

@@ -22,7 +22,6 @@ import org.apache.pivot.wtk.content.TableViewCellRenderer;
 /**
  * Renders an <tt>Request</tt> in the form of <tt>[method] [resource]</tt>.
  *
- * @author tvolkert
  */
 public class RequestCellRenderer extends TableViewCellRenderer {
     @Override

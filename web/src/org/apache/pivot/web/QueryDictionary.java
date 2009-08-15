@@ -27,7 +27,6 @@ import org.apache.pivot.collections.HashMap;
  * Represents a collection of keyed data associated with a query. Allows
  * multiple values to be set against a given key.
  *
- * @author brindy
  */
 public final class QueryDictionary implements Dictionary<String, String>, Iterable<String> {
     private HashMap<String, ArrayList<String>> map =  new HashMap<String, ArrayList<String>>();

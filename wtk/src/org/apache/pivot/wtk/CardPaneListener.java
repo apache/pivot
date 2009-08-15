@@ -21,13 +21,11 @@ import org.apache.pivot.util.Vote;
 /**
  * Card pane listener interface.
  *
- * @author gbrown
  */
 public interface CardPaneListener {
     /**
      * Card pane listener adapter.
      *
-     * @author tvolkert
      */
     public static class Adapter implements CardPaneListener {
         public Vote previewSelectedIndexChange(CardPane cardPane, int selectedIndex) {

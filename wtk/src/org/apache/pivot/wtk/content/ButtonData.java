@@ -27,7 +27,6 @@ import org.apache.pivot.wtk.media.Image;
 /**
  * Default button data implementation.
  *
- * @author gbrown
  */
 public class ButtonData {
     private Image icon;

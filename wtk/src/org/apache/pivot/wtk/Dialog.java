@@ -23,7 +23,6 @@ import org.apache.pivot.util.Vote;
  * Window class whose primary purpose is to facilitate interaction between
  * an application and a user.
  *
- * @author gbrown
  */
 public class Dialog extends Frame {
     private static class DialogStateListenerList extends ListenerList<DialogStateListener>

@@ -23,7 +23,6 @@ import org.apache.pivot.util.ListenerList;
 /**
  * Container class representing a decorated frame window.
  *
- * @author gbrown
  */
 public class Frame extends Window {
     private static class FrameListenerList extends ListenerList<FrameListener>

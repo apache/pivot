@@ -24,22 +24,18 @@ import org.apache.pivot.util.ImmutableIterator;
 /**
  * Interface representing an ordered sequence of items.
  *
- * @author gbrown
  */
 public interface Sequence<T> {
     /**
      * Collection of static utility methods providing path access to nested
      * sequence data.
      *
-     * @author gbrown
      */
     public static class Tree {
         /**
          * An object representing a path to a nested node in nested sequence
          * data.
          *
-         * @author tvolkert
-         * @author gbrown
          */
         public static class Path implements Sequence<Integer>, Iterable<Integer> {
             private ArrayList<Integer> elements;
@@ -116,7 +112,6 @@ public interface Sequence<T> {
         /**
          * Class representing an immutable path.
          *
-         * @author gbrown
          */
         public static class ImmutablePath extends Path {
             public ImmutablePath(Integer... elements) {

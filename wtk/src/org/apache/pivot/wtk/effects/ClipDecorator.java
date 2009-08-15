@@ -26,7 +26,6 @@ import org.apache.pivot.wtk.Component;
 /**
  * Decorator that adds a rectangular region to the current clip.
  *
- * @author gbrown
  */
 public class ClipDecorator implements Decorator {
     private int x = 0;

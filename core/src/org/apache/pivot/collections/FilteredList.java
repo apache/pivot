@@ -29,7 +29,6 @@ import org.apache.pivot.util.ListenerList;
  * remains backed by the original data. Modifications to the filtered list
  * are propagated to the source.
  *
- * @author gbrown
  */
 public class FilteredList<T> implements List<T> {
     private static class FilteredListListenerList<T> extends ListenerList<FilteredListListener<T>>

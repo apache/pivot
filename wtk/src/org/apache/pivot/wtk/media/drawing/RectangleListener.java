@@ -19,7 +19,6 @@ package org.apache.pivot.wtk.media.drawing;
 /**
  * Rectangle listener interface.
  *
- * @author gbrown
  */
 public interface RectangleListener {
     /**

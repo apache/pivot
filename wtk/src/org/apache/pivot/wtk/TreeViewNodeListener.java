@@ -21,13 +21,11 @@ import org.apache.pivot.collections.Sequence.Tree.Path;
 /**
  * Tree view node listener interface.
  *
- * @author gbrown
  */
 public interface TreeViewNodeListener {
     /**
      * Tree view node listener adapter.
      *
-     * @author tvolkert
      */
     public static class Adapter implements TreeViewNodeListener {
         public void nodeInserted(TreeView treeView, Path path, int index) {

@@ -21,7 +21,6 @@ import java.util.Locale;
 /**
  * A validator for decimal values.
  *
- * @author Noel Grandin
  */
 public class DecimalValidator extends FormattedValidator<NumberFormat> {
 

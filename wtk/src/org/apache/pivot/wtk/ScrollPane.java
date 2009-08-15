@@ -24,13 +24,11 @@ import org.apache.pivot.util.ListenerList;
  * Container that provides a scrollable view of a component, with optional
  * fixed row and column headers.
  *
- * @author tvolkert
  */
 public class ScrollPane extends Viewport {
     /**
      * Enumeration defining scroll pane scroll bar policies.
      *
-     * @author gbrown
      */
     public enum ScrollBarPolicy {
         AUTO,
@@ -85,13 +83,11 @@ public class ScrollPane extends Viewport {
      * components as needed when unfilled corners are introduced by a row
      * header or column header.
      *
-     * @author tvolkert
      */
     public static class Corner extends Component {
         /**
          * Enumeration defining placement values for scroll pane corners.
          *
-         * @author tvolkert
          */
         public enum Placement {
             TOP_LEFT,

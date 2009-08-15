@@ -34,7 +34,6 @@ import org.apache.pivot.wtk.media.Image;
  * keys to native IDs (which we would need to do via MIME types if the system
  * is based on AWT's DnD mechanism).
  *
- * @author gbrown
  */
 public interface Manifest {
     public String getText() throws IOException;

@@ -25,13 +25,11 @@ import org.apache.pivot.util.ListenerList;
  * view on a component (called the "view") that is too large to fit within a
  * given area. They are generally scrollable.
  *
- * @author tvolkert
  */
 public abstract class Viewport extends Container {
     /**
      * Viewport skin interface. Viewport skins must implement this.
      *
-     * @author tvolkert
      */
     public interface Skin {
         public Bounds getViewportBounds();

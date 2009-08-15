@@ -19,7 +19,6 @@ package org.apache.pivot.wtk;
 /**
  * Enumeration representing vertical alignment values.
  *
- * @author gbrown
  */
 public enum VerticalAlignment {
     /**

@@ -28,7 +28,6 @@ import org.apache.pivot.util.ListenerList;
 /**
  * Shape representing a quad curve.
  *
- * @author gbrown
  */
 public class QuadCurve extends Shape {
     private static class QuadCurveListenerList extends ListenerList<QuadCurveListener>

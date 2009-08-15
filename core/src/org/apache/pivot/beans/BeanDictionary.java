@@ -36,8 +36,6 @@ import org.apache.pivot.collections.Dictionary;
  * is determined by the type of the value being set. If the value is
  * <tt>null</tt>, the return type of the getter method is used.
  *
- * @author gbrown
- * @author tvolkert
  */
 public class BeanDictionary implements Dictionary<String, Object>, Iterable<String> {
     /**

@@ -22,7 +22,6 @@ import java.util.Comparator;
  * Root interface in collection hierarchy. Defines operations common to all
  * collections.
  *
- * @author gbrown
  */
 public interface Collection<T> extends Iterable<T> {
     /**

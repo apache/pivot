@@ -21,7 +21,6 @@ import org.apache.pivot.collections.Sequence;
 /**
  * Element listener interface.
  *
- * @author gbrown
  */
 public interface ElementListener {
     /**

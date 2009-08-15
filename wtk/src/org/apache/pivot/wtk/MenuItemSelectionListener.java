@@ -19,7 +19,6 @@ package org.apache.pivot.wtk;
 /**
  * Menu item selection listener interface.
  *
- * @author gbrown
  */
 public interface MenuItemSelectionListener {
     /**

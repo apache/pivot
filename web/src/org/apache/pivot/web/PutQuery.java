@@ -19,7 +19,6 @@ package org.apache.pivot.web;
 /**
  * Executes an HTTP PUT operation.
  *
- * @author gbrown
  */
 public class PutQuery extends Query<Void> {
     private Object value = null;

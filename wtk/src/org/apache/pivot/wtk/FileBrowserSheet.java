@@ -29,13 +29,11 @@ import org.apache.pivot.util.ListenerList;
 /**
  * File browser sheet.
  *
- * @author gbrown
  */
 public class FileBrowserSheet extends Sheet {
     /**
      * Enumeration defining supported modes.
      *
-     * @author gbrown
      */
     public enum Mode {
         OPEN,

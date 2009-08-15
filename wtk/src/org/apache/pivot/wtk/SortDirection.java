@@ -20,7 +20,6 @@ package org.apache.pivot.wtk;
  * Enumeration representing a sort direction. A value of <tt>null</tt> is
  * assumed to mean "no sort".
  *
- * @author gbrown
  */
 public enum SortDirection {
     ASCENDING,

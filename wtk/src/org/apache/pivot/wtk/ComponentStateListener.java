@@ -19,14 +19,11 @@ package org.apache.pivot.wtk;
 /**
  * Component state listener interface.
  *
- * @author gbrown
- * @author tvolkert
  */
 public interface ComponentStateListener {
     /**
      * Component state listener adapter.
      *
-     * @author tvolkert
      */
     public static class Adapter implements ComponentStateListener {
         public void enabledChanged(Component component) {

@@ -53,7 +53,6 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Style dictionary implementation.
      *
-     * @author gbrown
      */
     public final class StyleDictionary implements
         Dictionary<String, Object>, Iterable<String> {
@@ -100,7 +99,6 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * User data dictionary implementation.
      *
-     * @author gbrown
      */
     public final class UserDataDictionary implements
         Dictionary<String, Object>, Iterable<String> {
@@ -152,8 +150,6 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Decorator sequence implementation.
      *
-     * @author tvolkert
-     * @author gbrown
      */
     public final class DecoratorSequence implements Sequence<Decorator>,
         Iterable<Decorator> {
@@ -262,7 +258,6 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Provides dictionary access to all components by handle.
      *
-     * @author gbrown
      */
     public static class ComponentDictionary implements
         Dictionary<Integer, Component>, Iterable<Integer> {

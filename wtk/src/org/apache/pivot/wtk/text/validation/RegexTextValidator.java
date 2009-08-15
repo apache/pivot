@@ -20,7 +20,6 @@ import java.util.regex.PatternSyntaxException;
  * A validator for a regular expression.
  *
  * @see Pattern
- * @author Noel Grandin
  */
 public class RegexTextValidator implements Validator {
     private Pattern p;

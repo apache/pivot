@@ -19,7 +19,6 @@ package org.apache.pivot.wtk;
 /**
  * Base interface for content editors.
  *
- * @author gbrown
  */
 public interface Editor {
     /**

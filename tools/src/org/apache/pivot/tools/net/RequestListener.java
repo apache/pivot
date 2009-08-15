@@ -25,7 +25,6 @@ package org.apache.pivot.tools.net;
  * query listeners will be notified on the query's worker thread, not the thread
  * that executed the query.
  *
- * @author tvolkert
  */
 public interface RequestListener {
     /**

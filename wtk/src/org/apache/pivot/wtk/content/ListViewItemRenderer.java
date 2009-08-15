@@ -33,7 +33,6 @@ import org.apache.pivot.wtk.media.Image;
 /**
  * Default list view item renderer.
  *
- * @author gbrown
  */
 public class ListViewItemRenderer extends BoxPane implements ListView.ItemRenderer {
     protected ImageView imageView = new ImageView();

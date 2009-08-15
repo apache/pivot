@@ -42,7 +42,6 @@ import org.apache.pivot.wtk.ScrollPane.ScrollBarPolicy;
 /**
  * Scroll pane skin.
  *
- * @author tvolkert
  */
 public class ScrollPaneSkin extends ContainerSkin
     implements Viewport.Skin, ScrollPaneListener, ViewportListener,

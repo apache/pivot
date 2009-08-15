@@ -23,7 +23,6 @@ import org.apache.pivot.wtk.Mouse;
 /**
  * Abstract base class for link button skins.
  *
- * @author gbrown
  */
 public abstract class LinkButtonSkin extends ButtonSkin {
     /**

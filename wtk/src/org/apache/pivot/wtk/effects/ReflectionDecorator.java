@@ -32,7 +32,6 @@ import org.apache.pivot.wtk.Component;
  * <p>
  * TODO Make gradient properties configurable.
  *
- * @author gbrown
  */
 public class ReflectionDecorator implements Decorator {
     private Graphics2D graphics = null;

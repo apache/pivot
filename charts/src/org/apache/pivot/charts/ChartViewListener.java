@@ -21,7 +21,6 @@ import org.apache.pivot.collections.List;
 /**
  * Chart view listener interface.
  *
- * @author gbrown
  */
 public interface ChartViewListener {
     /**

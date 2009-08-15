@@ -24,7 +24,6 @@ import org.apache.pivot.collections.Sequence;
  * <p>
  * TODO Add indent property.
  *
- * @author gbrown
  */
 public class Paragraph extends Block {
     public Paragraph() {

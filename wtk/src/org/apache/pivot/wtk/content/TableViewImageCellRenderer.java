@@ -27,7 +27,6 @@ import org.apache.pivot.wtk.media.Image;
 /**
  * Default renderer for table view cells that contain image data.
  *
- * @author gbrown
  */
 public class TableViewImageCellRenderer extends ImageView implements CellRenderer {
     public static int DEFAULT_HEIGHT = 16;

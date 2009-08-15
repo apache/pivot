@@ -21,14 +21,11 @@ import org.apache.pivot.util.Vote;
 /**
  * Dialog state listener interface.
  *
- * @author tvolkert
- * @author gbrown
  */
 public interface DialogStateListener extends DialogCloseListener {
     /**
      * Dialog state listener adapter.
      *
-     * @author tvolkert
      */
     public static class Adapter implements DialogStateListener {
         public Vote previewDialogClose(Dialog dialog, boolean result) {

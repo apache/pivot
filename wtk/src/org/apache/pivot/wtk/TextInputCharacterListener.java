@@ -19,13 +19,11 @@ package org.apache.pivot.wtk;
 /**
  * Text input character listener interface.
  *
- * @author gbrown
  */
 public interface TextInputCharacterListener {
     /**
      * Text input character listener adapter.
      *
-     * @author tvolkert
      */
     public static class Adapter implements TextInputCharacterListener {
         public void charactersInserted(TextInput textInput, int index, int count) {

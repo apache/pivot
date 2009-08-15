@@ -21,7 +21,6 @@ package org.apache.pivot.wtk.text;
  * <p>
  * TODO Add text alignment enum/property.
  *
- * @author gbrown
  */
 public class Span extends Element {
     public Span() {

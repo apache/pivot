@@ -24,7 +24,6 @@ package org.apache.pivot.util.concurrent;
  * The type of the value returned by the operation. May be {@link Void} to
  * indicate that the task does not return a value.
  *
- * @author gbrown
  */
 public abstract class Task<V> {
     /**

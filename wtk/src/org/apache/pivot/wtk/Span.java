@@ -26,7 +26,6 @@ import org.apache.pivot.serialization.SerializationException;
  * value of <tt>start</tt> may be less than or equal to the value of
  * <tt>end</tt>.
  *
- * @author gbrown
  */
 public final class Span {
     public final int start;

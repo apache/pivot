@@ -21,7 +21,6 @@ import org.apache.pivot.util.Filter;
 /**
  * Filtered list listener interface.
  *
- * @author gbrown
  */
 public interface FilteredListListener<T> {
     /**

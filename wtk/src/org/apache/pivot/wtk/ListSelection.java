@@ -24,7 +24,6 @@ import org.apache.pivot.collections.Sequence;
 /**
  * Class for managing a set of indexed range selections.
  *
- * @author gbrown
  */
 class ListSelection {
     private ArrayList<Span> selectedRanges = new ArrayList<Span>();

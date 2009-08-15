@@ -24,7 +24,6 @@ import org.apache.pivot.wtk.HorizontalAlignment;
 /**
  * Text listener interface.
  *
- * @author gbrown
  */
 public interface TextListener {
     /**

@@ -25,7 +25,6 @@ import org.apache.pivot.util.Vote;
  * Container that behaves like a deck of cards, only one of which may be
  * visible at a time.
  *
- * @author gbrown
  */
 public class CardPane extends Container {
     private static class CardPaneListenerList extends ListenerList<CardPaneListener>

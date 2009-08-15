@@ -29,7 +29,6 @@ import org.apache.pivot.util.ListenerList;
 /**
  * Shape representing a rectangle.
  *
- * @author gbrown
  */
 public class Rectangle extends Shape {
     private static class RectangleListenerList extends ListenerList<RectangleListener>

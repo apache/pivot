@@ -29,7 +29,6 @@ import org.apache.pivot.wtk.skin.ActivityIndicatorSkin;
 /**
  * Activity indicator skin.
  *
- * @author gbrown
  */
 public class TerraActivityIndicatorSkin extends ActivityIndicatorSkin {
     private Color[] colors;

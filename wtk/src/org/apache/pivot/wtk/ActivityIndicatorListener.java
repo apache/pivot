@@ -19,7 +19,6 @@ package org.apache.pivot.wtk;
 /**
  * Activity indicator listener interface.
  *
- * @author gbrown
  */
 public interface ActivityIndicatorListener {
     /**

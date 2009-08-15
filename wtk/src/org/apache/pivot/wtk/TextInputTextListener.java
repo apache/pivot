@@ -19,7 +19,6 @@ package org.apache.pivot.wtk;
 /**
  * Text input text listener.
  *
- * @author gbrown
  */
 public interface TextInputTextListener {
     /**

@@ -19,7 +19,6 @@ package org.apache.pivot.charts;
 /**
  * Presents chart data using a bar plot.
  *
- * @author gbrown
  */
 public class BarChartView extends ChartView {
     public BarChartView() {

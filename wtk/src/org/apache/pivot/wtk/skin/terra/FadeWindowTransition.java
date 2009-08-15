@@ -24,7 +24,6 @@ import org.apache.pivot.wtk.effects.FadeTransition;
 /**
  * Transition for fading a window, including the drop shadow.
  *
- * @author gbrown
  */
 public class FadeWindowTransition extends FadeTransition {
     private DropShadowDecorator dropShadowDecorator;

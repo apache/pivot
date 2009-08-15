@@ -21,13 +21,11 @@ import java.util.Comparator;
 /**
  * Map listener interface.
  *
- * @author gbrown
  */
 public interface MapListener<K, V> {
     /**
      * Map listener adapter.
      *
-     * @author tvolkert
      */
     public static class Adapter<K, V> implements MapListener<K, V> {
         public void valueAdded(Map<K, V> map, K key) {

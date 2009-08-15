@@ -35,7 +35,6 @@ import org.apache.pivot.wtk.skin.RadioButtonSkin;
  * <p>
  * TODO Button alignment style (vertical only).
  *
- * @author gbrown
  */
 public class ObsidianRadioButtonSkin extends RadioButtonSkin {
     private Font font = new Font("Verdana", Font.PLAIN, 11);

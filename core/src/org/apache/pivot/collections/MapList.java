@@ -27,13 +27,11 @@ import org.apache.pivot.util.ListenerList;
  * facilitates the use of a <tt>Map</tt> as table data in a
  * {@link org.apache.pivot.wtk.TableView}.
  * 
- * @author tvolkert
  */
 public class MapList<K, V> implements List<Pair<K, V>> {
     /**
      * Map list listener list.
      * 
-     * @author tvolkert
      */
     private static class MapListListenerList<K, V> extends ListenerList<MapListListener<K, V>>
         implements MapListListener<K, V> {
