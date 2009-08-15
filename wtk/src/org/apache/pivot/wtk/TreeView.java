@@ -22,7 +22,9 @@ import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.collections.Sequence.Tree.ImmutablePath;
 import org.apache.pivot.collections.Sequence.Tree.Path;
+import org.apache.pivot.collections.immutable.ImmutableList;
 import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.content.TreeViewNodeRenderer;
@@ -392,7 +394,7 @@ public class TreeView extends Component {
          * This must be done to release references from the tree data to our
          * internal BranchHandler data structures. Failure to do so would mean
          * that our BranchHandler objects would remain in scope as long as the
-         * tree data remained in scope, even if  we were no longer using the
+         * tree data remained in scope, even if we were no longer using the
          * BranchHandler objects.
          */
         @SuppressWarnings("unchecked")
@@ -579,7 +581,9 @@ public class TreeView extends Component {
                     break;
                 }
 
-                affectedPath.update(depth, affectedPath.get(depth) + 1);
+                Integer[] elements = affectedPath.toArray();
+                elements[depth]++;
+                paths.update(i, new ImmutablePath(elements));
             }
         }
 
@@ -637,7 +641,9 @@ public class TreeView extends Component {
                     break;
                 }
 
-                affectedPath.update(depth, affectedPath.get(depth) - count);
+                Integer[] elements = affectedPath.toArray();
+                elements[depth] -= count;
+                paths.update(i, new ImmutablePath(elements));
             }
         }
 
@@ -882,7 +888,6 @@ public class TreeView extends Component {
 
         if (previousNodeRenderer != nodeRenderer) {
             this.nodeRenderer = nodeRenderer;
-
             treeViewListeners.nodeRendererChanged(this, previousNodeRenderer);
         }
     }
@@ -978,16 +983,7 @@ public class TreeView extends Component {
      *
      */
     public Sequence<Path> getSelectedPaths() {
-        int count = selectedPaths.getLength();
-
-        Sequence<Path> selectedPaths = new ArrayList<Path>(count);
-
-        // Deep copy the selected paths into a new list
-        for (int i = 0; i < count; i++) {
-            selectedPaths.add(new Path(this.selectedPaths.get(i)));
-        }
-
-        return selectedPaths;
+        return new ImmutableList<Path>(selectedPaths);
     }
 
     /**
@@ -1024,15 +1020,14 @@ public class TreeView extends Component {
                 monitorBranch(new Path(path, path.getLength() - 1));
 
                 // Update the selection
-                this.selectedPaths.add(new Path(path));
+                this.selectedPaths.add(new ImmutablePath(path));
             }
 
             // Notify listeners
             treeViewSelectionListeners.selectedPathsChanged(this, previousSelectedPaths);
         }
 
-        // TODO return getSelectedPaths() when we start using immutable paths
-        return null;
+        return getSelectedPaths();
     }
 
     /**
@@ -1043,13 +1038,7 @@ public class TreeView extends Component {
      * The first selected path, or <tt>null</tt> if nothing is selected.
      */
     public Path getFirstSelectedPath() {
-        Path selectedPath = null;
-
-        if (selectedPaths.getLength() > 0) {
-            selectedPath = new Path(selectedPaths.get(0));
-        }
-
-        return selectedPath;
+        return (selectedPaths.getLength() > 0 ? selectedPaths.get(0) : null);
     }
 
     /**
@@ -1060,13 +1049,8 @@ public class TreeView extends Component {
      * The last selected path, or <tt>null</tt> if nothing is selected.
      */
     public Path getLastSelectedPath() {
-        Path selectedPath = null;
-
-        if (selectedPaths.getLength() > 0) {
-            selectedPath = new Path(selectedPaths.get(selectedPaths.getLength() - 1));
-        }
-
-        return selectedPath;
+        return (selectedPaths.getLength() > 0
+            ? selectedPaths.get(selectedPaths.getLength() - 1) : null);
     }
 
     /**
@@ -1083,13 +1067,7 @@ public class TreeView extends Component {
             throw new IllegalStateException("Tree view is not in single-select mode.");
         }
 
-        Path selectedPath = null;
-
-        if (selectedPaths.getLength() > 0) {
-            selectedPath = new Path(selectedPaths.get(0));
-        }
-
-        return selectedPath;
+        return (selectedPaths.getLength() > 0 ? selectedPaths.get(0) : null);
     }
 
     /**
@@ -1100,10 +1078,7 @@ public class TreeView extends Component {
             throw new IllegalArgumentException("path is null.");
         }
 
-        Sequence<Path> selectedPaths = new ArrayList<Path>(1);
-        selectedPaths.add(new Path(path));
-
-        setSelectedPaths(selectedPaths);
+        setSelectedPaths(new ArrayList<Path>(path));
     }
 
     /**
@@ -1153,7 +1128,7 @@ public class TreeView extends Component {
             monitorBranch(new Path(path, path.getLength() - 1));
 
             // Update the selection
-            selectedPaths.add(new Path(path));
+            selectedPaths.add(new ImmutablePath(path));
 
             // Notify listeners
             treeViewSelectionListeners.selectedPathAdded(this, path);
@@ -1494,7 +1469,7 @@ public class TreeView extends Component {
                 monitorBranch(new Path(path, path.getLength() - 1));
 
                 // Update the checked paths
-                checkedPaths.add(new Path(path));
+                checkedPaths.add(new ImmutablePath(path));
             } else {
                 // Update the checked paths
                 checkedPaths.remove(index, 1);
@@ -1536,16 +1511,7 @@ public class TreeView extends Component {
      * non-<tt>null</tt>.
      */
     public Sequence<Path> getCheckedPaths() {
-        int count = checkedPaths.getLength();
-
-        Sequence<Path> checkedPaths = new ArrayList<Path>(count);
-
-        // Deep copy the checked paths into a new list
-        for (int i = 0; i < count; i++) {
-            checkedPaths.add(new Path(this.checkedPaths.get(i)));
-        }
-
-        return checkedPaths;
+        return new ImmutableList<Path>(checkedPaths);
     }
 
     /**
@@ -1574,7 +1540,7 @@ public class TreeView extends Component {
             monitorBranch(path);
 
             // Update the expanded paths
-            expandedPaths.add(new Path(path));
+            expandedPaths.add(new ImmutablePath(path));
 
             // Notify listeners
             treeViewBranchListeners.branchExpanded(this, path);

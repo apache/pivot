@@ -104,6 +104,10 @@ public interface Sequence<T> {
                 return new ImmutableIterator<Integer>(elements.iterator());
             }
 
+            public Integer[] toArray() {
+                return elements.toArray(Integer[].class);
+            }
+
             public static Path forDepth(int depth) {
                 return new Path(new ArrayList<Integer>(depth));
             }
