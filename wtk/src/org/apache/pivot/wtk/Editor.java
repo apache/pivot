@@ -18,7 +18,6 @@ package org.apache.pivot.wtk;
 
 /**
  * Base interface for content editors.
- *
  */
 public interface Editor {
     /**

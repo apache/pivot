@@ -28,7 +28,6 @@ import org.apache.pivot.wtk.Component;
 
 /**
  * Abstract base class for chart views.
- *
  */
 public abstract class ChartView extends Component {
     /**

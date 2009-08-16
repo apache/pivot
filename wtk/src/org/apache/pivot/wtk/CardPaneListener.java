@@ -20,12 +20,10 @@ import org.apache.pivot.util.Vote;
 
 /**
  * Card pane listener interface.
- *
  */
 public interface CardPaneListener {
     /**
      * Card pane listener adapter.
-     *
      */
     public static class Adapter implements CardPaneListener {
         public Vote previewSelectedIndexChange(CardPane cardPane, int selectedIndex) {

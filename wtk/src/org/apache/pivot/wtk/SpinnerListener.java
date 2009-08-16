@@ -20,12 +20,10 @@ import org.apache.pivot.collections.List;
 
 /**
  * Spinner listener interface.
- *
  */
 public interface SpinnerListener {
     /**
      * Spinner listener adapter.
-     *
      */
     public static class Adapter implements SpinnerListener {
         public void spinnerDataChanged(Spinner spinner, List<?> previousSpinnerData) {

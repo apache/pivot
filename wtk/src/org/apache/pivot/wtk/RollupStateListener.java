@@ -22,12 +22,10 @@ import org.apache.pivot.util.Vote;
  * Defines event listener methods that pertain to rollup state. Developers
  * register for such events by adding themselves to a rollup's list of "rollup
  * state listeners" (see {@link Rollup#getRollupStateListeners()}).
- *
  */
 public interface RollupStateListener {
     /**
      * Rollup state listener adapter.
-     *
      */
     public static class Adapter implements RollupStateListener {
         public Vote previewExpandedChange(Rollup rollup) {

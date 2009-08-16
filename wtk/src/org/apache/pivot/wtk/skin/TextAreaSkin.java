@@ -72,13 +72,11 @@ import org.apache.pivot.wtk.text.TextNodeListener;
 
 /**
  * Text area skin.
- *
  */
 public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     TextAreaListener, TextAreaSelectionListener {
     /**
      * Abstract base class for node views.
-     *
      */
     public abstract class NodeView implements Visual, NodeListener {
         private Node node = null;
@@ -266,13 +264,11 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
     /**
      * Abstract base class for element views.
-     *
      */
     public abstract class ElementView extends NodeView
         implements Sequence<NodeView>, Iterable<NodeView>, ElementListener {
         /**
          * Null node view, used for binary searches.
-         *
          */
         private class NullNodeView extends NodeView {
             private int offset;
@@ -312,7 +308,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
         /**
          * Comparator used to perform binary searches on node views by location.
-         *
          */
         private class NodeViewLocationComparator implements Comparator<NodeView> {
             public int compare(NodeView nodeView1, NodeView nodeView2) {
@@ -330,7 +325,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
         /**
          * Comparator used to perform binary searches on node views by offset.
-         *
          */
         private class NodeViewOffsetComparator implements Comparator<NodeView> {
             public int compare(NodeView nodeView1, NodeView nodeView2) {
@@ -536,7 +530,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
     /**
      * Document view.
-     *
      */
     public class DocumentView extends ElementView {
         private class ValidateCallback implements Runnable {
@@ -867,7 +860,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
     /**
      * Text node view.
-     *
      */
     public class TextNodeView extends NodeView implements TextNodeListener {
         private int start;

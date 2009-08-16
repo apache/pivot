@@ -26,7 +26,6 @@ import org.apache.pivot.wtk.media.Image;
 
 /**
  * Component that displays an image.
- *
  */
 public class ImageView extends Component {
     private static class ImageViewListenerList extends ListenerList<ImageViewListener>

@@ -35,7 +35,6 @@ import org.apache.pivot.util.ListenerList;
  * The iterator returned by this class's <tt>iterator</tt> method is
  * <i>fail-fast</i>: if the bounds of the enclosing spinner data change during
  * iteration, a <tt>ConcurrentModificationException</tt> will be thrown.
- *
  */
 public class NumericSpinnerData implements List<Integer> {
     private class DataIterator implements Iterator<Integer> {

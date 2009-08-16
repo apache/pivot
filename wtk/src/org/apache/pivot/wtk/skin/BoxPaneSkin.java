@@ -28,7 +28,6 @@ import org.apache.pivot.wtk.VerticalAlignment;
 
 /**
  * Box pane skin.
- *
  */
 public class BoxPaneSkin extends ContainerSkin
     implements BoxPaneListener {

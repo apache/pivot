@@ -24,7 +24,6 @@ import org.apache.pivot.wtk.skin.ContainerSkin;
 
 /**
  * Abstract base class for calendar skins.
- *
  */
 public abstract class CalendarSkin extends ContainerSkin
     implements CalendarListener, CalendarSelectionListener {

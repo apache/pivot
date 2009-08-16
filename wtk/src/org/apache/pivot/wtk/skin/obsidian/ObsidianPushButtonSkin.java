@@ -33,7 +33,6 @@ import org.apache.pivot.wtk.skin.PushButtonSkin;
 
 /**
  * Obsidian push button skin.
- *
  */
 public class ObsidianPushButtonSkin extends PushButtonSkin {
     // Style properties

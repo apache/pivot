@@ -25,7 +25,6 @@ import org.apache.pivot.collections.Map;
 
 /**
  * An HTTP response from a web server.
- *
  */
 public class Response {
     /**

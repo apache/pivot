@@ -34,7 +34,6 @@ import org.apache.pivot.wtk.Orientation;
 
 /**
  * Contains utility methods dealing with the Java2D API.
- *
  */
 public final class GraphicsUtilities {
     public enum PaintType {

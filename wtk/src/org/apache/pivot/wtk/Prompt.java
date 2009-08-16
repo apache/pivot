@@ -31,7 +31,6 @@ import org.apache.pivot.util.Resources;
  * alerts are dialogs, prompts are sheets, meaning that an alert will be modal
  * over its entire owner hierarchy (its entire "application", in common usage)
  * but a prompt will be modal only over its owner's content.
- *
  */
 public class Prompt extends Sheet {
     private static class PromptListenerList extends ListenerList<PromptListener>

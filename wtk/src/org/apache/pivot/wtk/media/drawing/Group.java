@@ -29,7 +29,6 @@ import org.apache.pivot.wtk.Bounds;
 
 /**
  * Shape representing a collection of other shapes.
- *
  */
 public class Group extends Shape implements Sequence<Shape>, Iterable<Shape> {
     private static class GroupListenerList extends ListenerList<GroupListener>

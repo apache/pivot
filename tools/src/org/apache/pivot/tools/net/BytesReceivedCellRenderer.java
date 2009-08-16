@@ -21,7 +21,6 @@ import org.apache.pivot.wtk.content.TableViewCellRenderer;
 
 /**
  * Renders an <tt>Transaction</tt> in the form of <tt>[content bytes received]</tt>.
- *
  */
 public class BytesReceivedCellRenderer extends TableViewCellRenderer {
     @Override

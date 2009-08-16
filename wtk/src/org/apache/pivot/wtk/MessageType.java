@@ -18,7 +18,6 @@ package org.apache.pivot.wtk;
 
 /**
  * Enumeration defining a message's type.
- *
  */
 public enum MessageType {
     ERROR,

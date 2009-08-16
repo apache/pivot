@@ -29,7 +29,6 @@ import org.apache.pivot.wtk.content.ButtonDataRenderer;
  * repeatedly press the left half of the button, firing additional menu
  * selection events for the selected item. Pressing the right half of the
  * button continues to fire button press events and display the menu.
- *
  */
 public class MenuButton extends Button {
     private static class MenuButtonListenerList extends ListenerList<MenuButtonListener>

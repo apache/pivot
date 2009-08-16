@@ -50,7 +50,6 @@ import org.apache.pivot.wtk.skin.ComponentSkin;
  * TODO Add disableMouseSelection style to support the case where selection
  * should be enabled but the caller wants to implement the management of it;
  * e.g. changing a message's flag state in an email client.
- *
  */
 public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     TableViewListener, TableViewColumnListener, TableViewRowListener,

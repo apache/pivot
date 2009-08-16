@@ -53,7 +53,6 @@ import org.apache.pivot.wtk.skin.ContainerSkin;
 
 /**
  * Accordion skin.
- *
  */
 public class TerraAccordionSkin extends ContainerSkin
     implements AccordionListener, AccordionSelectionListener, AccordionAttributeListener {

@@ -21,7 +21,6 @@ import org.apache.pivot.wtk.skin.SeparatorSkin;
 
 /**
  * Terra sheet skin.
- *
  */
 public class TerraSeparatorSkin extends SeparatorSkin {
     public TerraSeparatorSkin() {

@@ -34,7 +34,6 @@ import org.apache.pivot.wtk.content.ListViewItemRenderer;
 /**
  * Component that displays a sequence of items, optionally allowing a user
  * to select or check one or more items.
- *
  */
 public class ListView extends Component {
     /**
@@ -59,7 +58,6 @@ public class ListView extends Component {
 
     /**
      * List item renderer interface.
-     *
      */
     public interface ItemRenderer extends Renderer {
         /**
@@ -86,7 +84,6 @@ public class ListView extends Component {
 
     /**
      * List item editor interface.
-     *
      */
     public interface ItemEditor extends Editor {
         /**
@@ -110,7 +107,6 @@ public class ListView extends Component {
     /**
      * List view skin interface. List view skins are required to implement
      * this.
-     *
      */
     public interface Skin {
         public int getItemAt(int y);
@@ -120,7 +116,6 @@ public class ListView extends Component {
 
     /**
      * List view listener list.
-     *
      */
     private static class ListViewListenerList extends ListenerList<ListViewListener> implements
             ListViewListener {
@@ -178,7 +173,6 @@ public class ListView extends Component {
 
     /**
      * List view item listener list.
-     *
      */
     private static class ListViewItemListenerList extends ListenerList<ListViewItemListener>
         implements ListViewItemListener {
@@ -215,7 +209,6 @@ public class ListView extends Component {
 
     /**
      * List view item state listener list.
-     *
      */
     private static class ListViewItemStateListenerList extends ListenerList<ListViewItemStateListener>
         implements ListViewItemStateListener {
@@ -228,7 +221,6 @@ public class ListView extends Component {
 
     /**
      * List view selection detail listener list.
-     *
      */
     private static class ListViewSelectionListenerList extends ListenerList<ListViewSelectionListener>
         implements ListViewSelectionListener {

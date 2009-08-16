@@ -18,7 +18,6 @@ package org.apache.pivot.wtk;
 
 /**
  * Meter listener interface.
- *
  */
 public interface MeterListener {
     /**

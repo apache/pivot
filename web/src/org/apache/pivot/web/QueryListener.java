@@ -18,12 +18,10 @@ package org.apache.pivot.web;
 
 /**
  * Query listener interface.
- *
  */
 public interface QueryListener<V> {
     /**
      * Query listener adapter.
-     *
      */
     public static class Adapter<V> implements QueryListener<V> {
         public void connected(Query<V> query) {

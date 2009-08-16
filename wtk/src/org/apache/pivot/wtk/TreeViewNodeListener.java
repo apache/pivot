@@ -20,12 +20,10 @@ import org.apache.pivot.collections.Sequence.Tree.Path;
 
 /**
  * Tree view node listener interface.
- *
  */
 public interface TreeViewNodeListener {
     /**
      * Tree view node listener adapter.
-     *
      */
     public static class Adapter implements TreeViewNodeListener {
         public void nodeInserted(TreeView treeView, Path path, int index) {

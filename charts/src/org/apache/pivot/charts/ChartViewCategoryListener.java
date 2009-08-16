@@ -20,7 +20,6 @@ import org.apache.pivot.collections.Sequence;
 
 /**
  * Chart view category listener interface.
- *
  */
 public interface ChartViewCategoryListener {
     /**

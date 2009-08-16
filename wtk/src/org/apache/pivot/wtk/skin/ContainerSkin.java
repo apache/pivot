@@ -33,14 +33,12 @@ import org.apache.pivot.wtk.GraphicsUtilities;
 
 /**
  * Abstract base class for container skins.
- *
  */
 public abstract class ContainerSkin extends ComponentSkin
     implements ContainerListener {
     /**
      * Focus traversal policy that determines traversal order based on the order
      * of components in the container's component sequence.
-     *
      */
     public static class IndexFocusTraversalPolicy implements FocusTraversalPolicy {
         private boolean wrap;

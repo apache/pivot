@@ -20,12 +20,10 @@ package org.apache.pivot.wtk.text;
  * Abstract base class for list elements.
  * <p>
  * TODO Add indent and item spacing properties.
- *
  */
 public abstract class List extends Element {
     /**
      * Element representing a list item.
-     *
      */
     public class Item extends Element {
         public Item() {

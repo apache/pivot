@@ -21,12 +21,10 @@ import java.lang.reflect.Field;
 
 /**
  * Class representing the system keyboard.
- *
  */
 public final class Keyboard {
     /**
      * Enumeration representing keyboard modifiers.
-     *
      */
     public enum Modifier {
         SHIFT,
@@ -45,7 +43,6 @@ public final class Keyboard {
 
     /**
      * Enumeration representing key locations.
-     *
      */
     public enum KeyLocation {
         STANDARD,
@@ -56,7 +53,6 @@ public final class Keyboard {
 
     /**
      * Represents a keystroke, a combination of a keycode and modifier flags.
-     *
      */
     public static final class KeyStroke {
         private int keyCode = KeyCode.UNDEFINED;
@@ -153,7 +149,6 @@ public final class Keyboard {
 
     /**
      * Contains a set of key code constants that are common to all locales.
-     *
      */
     public static final class KeyCode {
         public static final int A = KeyEvent.VK_A;

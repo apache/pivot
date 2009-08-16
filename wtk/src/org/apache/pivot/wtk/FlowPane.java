@@ -19,7 +19,6 @@ package org.apache.pivot.wtk;
 /**
  * Container that arranges components in a horizontal line, wrapping when
  * contents don't fit on a single line.
- *
  */
 public class FlowPane extends Container {
     public FlowPane() {

@@ -18,7 +18,6 @@ package org.apache.pivot.wtk;
 
 /**
  * Scroll bar value listener interface.
- *
  */
 public interface ScrollBarValueListener {
     /**

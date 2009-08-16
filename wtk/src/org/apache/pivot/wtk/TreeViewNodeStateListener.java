@@ -20,7 +20,6 @@ import org.apache.pivot.collections.Sequence.Tree.Path;
 
 /**
  * Tree view node state listener interface.
- *
  */
 public interface TreeViewNodeStateListener {
     /**

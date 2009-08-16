@@ -37,7 +37,6 @@ import org.apache.pivot.wtk.skin.CheckboxSkin;
  * Terra checkbox skin.
  * <p>
  * TODO Button alignment style (vertical only).
- *
  */
 public class TerraCheckboxSkin extends CheckboxSkin {
     private Font font;

@@ -18,7 +18,6 @@ package org.apache.pivot.wtk;
 
 /**
  * Component data listener interface.
- *
  */
 public interface ComponentDataListener {
     /**

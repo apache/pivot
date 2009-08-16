@@ -20,7 +20,6 @@ import org.apache.pivot.wtk.media.Image;
 
 /**
  * Image view listener interface.
- *
  */
 public interface ImageViewListener {
     /**

@@ -18,12 +18,10 @@ package org.apache.pivot.wtk;
 
 /**
  * Text input character listener interface.
- *
  */
 public interface TextInputCharacterListener {
     /**
      * Text input character listener adapter.
-     *
      */
     public static class Adapter implements TextInputCharacterListener {
         public void charactersInserted(TextInput textInput, int index, int count) {

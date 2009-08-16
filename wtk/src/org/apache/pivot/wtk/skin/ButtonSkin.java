@@ -26,7 +26,6 @@ import org.apache.pivot.wtk.Cursor;
 
 /**
  * Abstract base class for button skins.
- *
  */
 public abstract class ButtonSkin extends ComponentSkin
     implements ButtonListener, ButtonStateListener, ButtonPressListener {

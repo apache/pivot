@@ -34,12 +34,10 @@ import org.apache.pivot.wtk.content.TableViewCellRenderer;
 /**
  * Component that displays a sequence of items partitioned into columns,
  * optionally allowing a user to select one or more rows.
- *
  */
 public class TableView extends Component {
     /**
      * Contains information about a table column.
-     *
      */
     public static final class Column {
         private TableView tableView = null;
@@ -425,7 +423,6 @@ public class TableView extends Component {
 
     /**
      * Table cell renderer interface.
-     *
      */
     public interface CellRenderer extends Renderer {
         public void render(Object value, TableView tableView, TableView.Column column,
@@ -461,7 +458,6 @@ public class TableView extends Component {
 
     /**
      * Table view skin interface. Table view skins must implement this.
-     *
      */
     public interface Skin {
         public int getRowAt(int y);
@@ -552,7 +548,6 @@ public class TableView extends Component {
 
     /**
      * Column sequence implementation.
-     *
      */
     public final class ColumnSequence implements Sequence<Column> {
         public int add(Column column) {
@@ -619,7 +614,6 @@ public class TableView extends Component {
 
     /**
      * Table view listener list.
-     *
      */
     private static class TableViewListenerList extends ListenerList<TableViewListener>
         implements TableViewListener {
@@ -651,7 +645,6 @@ public class TableView extends Component {
 
     /**
      * Table view column listener list.
-     *
      */
     private static class TableViewColumnListenerList extends ListenerList<TableViewColumnListener>
         implements TableViewColumnListener {
@@ -706,7 +699,6 @@ public class TableView extends Component {
 
     /**
      * Table view item listener list.
-     *
      */
     private static class TableViewRowListenerList extends ListenerList<TableViewRowListener>
         implements TableViewRowListener {
@@ -743,7 +735,6 @@ public class TableView extends Component {
 
     /**
      * Table view selection detail listener list.
-     *
      */
     private static class TableViewSelectionListenerList extends ListenerList<TableViewSelectionListener>
         implements TableViewSelectionListener {

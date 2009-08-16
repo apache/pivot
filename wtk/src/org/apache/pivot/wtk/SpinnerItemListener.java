@@ -18,12 +18,10 @@ package org.apache.pivot.wtk;
 
 /**
  * Spinner item listener interface.
- *
  */
 public interface SpinnerItemListener {
     /**
      * Spinner item listener adapter.
-     *
      */
     public static class Adapter implements SpinnerItemListener {
         public void itemInserted(Spinner spinner, int index) {

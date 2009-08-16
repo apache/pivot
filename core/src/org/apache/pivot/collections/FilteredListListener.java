@@ -20,7 +20,6 @@ import org.apache.pivot.util.Filter;
 
 /**
  * Filtered list listener interface.
- *
  */
 public interface FilteredListListener<T> {
     /**

@@ -22,7 +22,6 @@ import org.apache.pivot.wtk.skin.DisplaySkin;
 
 /**
  * Container that serves as the root of a component hierarchy.
- *
  */
 public final class Display extends Container {
     private class ValidateCallback implements Runnable {

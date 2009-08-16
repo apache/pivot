@@ -21,12 +21,10 @@ import org.apache.pivot.util.Filter;
 
 /**
  * Table view listener interface.
- *
  */
 public interface TableViewListener {
     /**
      * Table view listener adapter.
-     *
      */
     public static class Adapter implements TableViewListener {
         public void tableDataChanged(TableView tableView, List<?> previousTableData) {

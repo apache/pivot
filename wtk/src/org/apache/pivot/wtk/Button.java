@@ -26,12 +26,10 @@ import org.apache.pivot.util.ListenerList;
 
 /**
  * Abstract base class for button components.
- *
  */
 public abstract class Button extends Component {
     /**
      * Enumeration representing a button's selection state.
-     *
      */
     public enum State {
         SELECTED,
@@ -41,7 +39,6 @@ public abstract class Button extends Component {
 
     /**
      * Button data renderer interface.
-     *
      */
     public interface DataRenderer extends Renderer {
         public void render(Object data, Button button, boolean highlighted);
@@ -49,7 +46,6 @@ public abstract class Button extends Component {
 
     /**
      * Class representing a toggle button group.
-     *
      */
     public static class Group {
         private static class GroupListenerList extends ListenerList<GroupListener>
@@ -87,7 +83,6 @@ public abstract class Button extends Component {
 
     /**
      * Listener interface for toggle button groups.
-     *
      */
     public interface GroupListener {
         /**
@@ -101,7 +96,6 @@ public abstract class Button extends Component {
 
     /**
      * Named group dictionary.
-     *
      */
     public static class NamedGroupDictionary
         implements Dictionary<String, Group>, Iterable<String> {
@@ -152,7 +146,6 @@ public abstract class Button extends Component {
 
     /**
      * Named group dictionary listener interface.
-     *
      */
     public interface NamedGroupDictionaryListener {
         public void groupAdded(String name);
@@ -162,7 +155,6 @@ public abstract class Button extends Component {
 
     /**
      * Button listener list.
-     *
      */
     private static class ButtonListenerList extends ListenerList<ButtonListener>
         implements ButtonListener {
@@ -217,7 +209,6 @@ public abstract class Button extends Component {
 
     /**
      * Button state listener list.
-     *
      */
     private static class ButtonStateListenerList extends ListenerList<ButtonStateListener>
         implements ButtonStateListener {
@@ -230,7 +221,6 @@ public abstract class Button extends Component {
 
     /**
      * Button press listener list.
-     *
      */
     private static class ButtonPressListenerList extends ListenerList<ButtonPressListener>
         implements ButtonPressListener {

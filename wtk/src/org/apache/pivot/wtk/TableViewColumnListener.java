@@ -20,7 +20,6 @@ import org.apache.pivot.collections.Sequence;
 
 /**
  * Table view column listener interface.
- *
  */
 public interface TableViewColumnListener {
     /**

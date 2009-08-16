@@ -18,7 +18,6 @@ package org.apache.pivot.wtk;
 
 /**
  * Text area selection listener interface.
- *
  */
 public interface TextAreaSelectionListener {
     /**

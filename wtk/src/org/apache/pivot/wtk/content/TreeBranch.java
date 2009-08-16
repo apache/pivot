@@ -30,7 +30,6 @@ import org.apache.pivot.wtk.media.Image;
 
 /**
  * Default tree branch implementation.
- *
  */
 public class TreeBranch extends TreeNode implements List<TreeNode> {
     private Image expandedIcon = null;

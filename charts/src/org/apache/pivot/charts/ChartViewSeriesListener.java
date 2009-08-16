@@ -18,7 +18,6 @@ package org.apache.pivot.charts;
 
 /**
  * Chart view series listener interface.
- *
  */
 public interface ChartViewSeriesListener {
     /**

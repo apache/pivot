@@ -51,13 +51,11 @@ import org.apache.pivot.wtkx.WTKXSerializer;
 
 /**
  * HTTP client.
- *
  */
 @SuppressWarnings("unchecked")
 public class HTTPClient implements Application {
     /**
      * The supported protocols.
-     *
      */
     public enum Protocol {
         HTTP,
@@ -88,7 +86,6 @@ public class HTTPClient implements Application {
 
     /**
      * Considers all SSL hostnames as valid (performs no actual verification).
-     *
      */
     private static class LenientHostnameVerifier implements HostnameVerifier {
         public boolean verify(String hostname, SSLSession session) {

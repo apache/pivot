@@ -18,7 +18,6 @@ package org.apache.pivot.wtk.effects.easing;
 
 /**
  * Linear easing operation.
- *
  */
 public class Linear implements Easing {
     public float easeIn(float time, float begin, float change, float duration) {

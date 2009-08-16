@@ -20,7 +20,6 @@ import org.apache.pivot.wtk.media.Image;
 
 /**
  * Accordion attribute listener interface.
- *
  */
 public interface AccordionAttributeListener {
     /**

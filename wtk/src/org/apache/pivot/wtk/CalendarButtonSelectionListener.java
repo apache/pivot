@@ -20,7 +20,6 @@ import org.apache.pivot.util.CalendarDate;
 
 /**
  * Calendar button selection listener interface.
- *
  */
 public interface CalendarButtonSelectionListener {
     /**

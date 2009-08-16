@@ -18,7 +18,6 @@ package org.apache.pivot.wtk.media.drawing;
 
 /**
  * Group listener interface.
- *
  */
 public interface GroupListener {
     /**

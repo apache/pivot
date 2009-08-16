@@ -86,7 +86,6 @@ import org.apache.pivot.wtk.media.Image;
  *     <i>The default color palette</i>
  *   </font>
  * </p>
- *
  */
 public final class TerraTheme extends Theme {
     private Font font = null;

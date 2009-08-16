@@ -41,7 +41,6 @@ import org.apache.pivot.wtk.skin.ContainerSkin;
 
 /**
  * Panorama skin.
- *
  */
 public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, ViewportListener {
     /**

@@ -20,7 +20,6 @@ package org.apache.pivot.wtk;
  * Defines event listener methods that pertain to rollups. Developers
  * register for such events by adding themselves to a rollup's list of "rollup
  * listeners" (see {@link Rollup#getRollupListeners()}).
- *
  */
 public interface RollupListener {
     /**

@@ -41,14 +41,12 @@ import org.apache.pivot.web.QueryDictionary;
 /**
  * Abstract base class for web query servlets. It is the server counterpart to
  * {@link org.apache.pivot.web.Query}.
- *
  */
 public abstract class QueryServlet extends HttpServlet {
     static final long serialVersionUID = -646654620936816287L;
 
     /**
      * Supported HTTP methods.
-     *
      */
     public enum Method {
         GET,
@@ -60,7 +58,6 @@ public abstract class QueryServlet extends HttpServlet {
     /**
      * User credentials, which will be made availale if the servlet's
      * <tt>authenticationRequired</tt> flag is set to <tt>true</tt>.
-     *
      */
     public static final class Credentials {
         private String username;
@@ -625,7 +622,6 @@ public abstract class QueryServlet extends HttpServlet {
     }
 
     /**
-     *
      */
     private void doUnauthorized(HttpServletRequest request, HttpServletResponse response)
         throws IOException {
@@ -637,7 +633,6 @@ public abstract class QueryServlet extends HttpServlet {
     }
 
     /**
-     *
      */
     private void doForbidden(HttpServletRequest request, HttpServletResponse response)
         throws IOException {
@@ -647,7 +642,6 @@ public abstract class QueryServlet extends HttpServlet {
     }
 
     /**
-     *
      */
     private void doMethodNotAllowed(HttpServletResponse response) throws IOException {
         response.setStatus(405);
@@ -656,7 +650,6 @@ public abstract class QueryServlet extends HttpServlet {
     }
 
     /**
-     *
      */
     private void setResponseHeaders(HttpServletResponse response) {
         QueryDictionary responseHeaderDictionary = responseHeaders.get();

@@ -28,12 +28,10 @@ import org.apache.pivot.util.ListenerList;
 
 /**
  * Component that allows the user to select a date.
- *
  */
 public class Calendar extends Container {
     /**
      * Calendar listener list.
-     *
      */
     private static class CalendarListenerList extends ListenerList<CalendarListener>
         implements CalendarListener {
@@ -72,7 +70,6 @@ public class Calendar extends Container {
 
     /**
      * Calendar selection listener list.
-     *
      */
     private static class CalendarSelectionListenerList
         extends ListenerList<CalendarSelectionListener>

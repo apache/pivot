@@ -44,7 +44,6 @@ import org.apache.pivot.wtk.skin.WindowSkin;
  * Sheet skin class.
  * <p>
  * TODO Wire up the "resizable" flag. It current exists but does nothing.
- *
  */
 public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     public class OpenTransition extends Transition {

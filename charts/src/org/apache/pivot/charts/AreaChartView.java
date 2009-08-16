@@ -18,7 +18,6 @@ package org.apache.pivot.charts;
 
 /**
  * Presents chart data using an area plot.
- *
  */
 public class AreaChartView extends ChartView {
     public AreaChartView() {

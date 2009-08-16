@@ -62,7 +62,6 @@ import org.apache.pivot.util.Vote;
 
 /**
  * Loads an object hierarchy from an XML document.
- *
  */
 public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Object> {
     private class NamedObjectBindings implements Bindings {

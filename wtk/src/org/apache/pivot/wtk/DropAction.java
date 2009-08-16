@@ -18,7 +18,6 @@ package org.apache.pivot.wtk;
 
 /**
  * Enumeration defining supported drop actions.
- *
  */
 public enum DropAction {
     COPY,

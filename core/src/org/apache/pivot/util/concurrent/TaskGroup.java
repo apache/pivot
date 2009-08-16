@@ -26,7 +26,6 @@ import org.apache.pivot.util.ImmutableIterator;
 /**
  * Class that runs a group of tasks in parallel and notifies listeners
  * when all tasks are complete.
- *
  */
 public class TaskGroup extends Task<Void>
     implements Group<Task<?>>, Iterable<Task<?>> {

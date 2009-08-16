@@ -24,7 +24,6 @@ package org.apache.pivot.tools.net;
  * Note that, like {@link org.apache.pivot.util.concurrent.TaskListener task listeners},
  * query listeners will be notified on the query's worker thread, not the thread
  * that executed the query.
- *
  */
 public interface RequestListener {
     /**

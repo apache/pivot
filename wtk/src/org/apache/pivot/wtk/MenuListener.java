@@ -20,7 +20,6 @@ import org.apache.pivot.collections.Sequence;
 
 /**
  * Menu listener interface.
- *
  */
 public interface MenuListener {
     /**

@@ -34,7 +34,6 @@ import org.apache.pivot.wtk.skin.ContainerSkin;
 
 /**
  * Menu skin.
- *
  */
 public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.SectionListener {
     private Font font;

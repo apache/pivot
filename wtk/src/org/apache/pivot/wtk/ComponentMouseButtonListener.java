@@ -18,12 +18,10 @@ package org.apache.pivot.wtk;
 
 /**
  * Component mouse button listener interface.
- *
  */
 public interface ComponentMouseButtonListener {
     /**
      * Component mouse button listener adapter.
-     *
      */
     public static class Adapter implements ComponentMouseButtonListener {
         public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {

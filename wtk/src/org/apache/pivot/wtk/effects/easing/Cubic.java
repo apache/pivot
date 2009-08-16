@@ -18,7 +18,6 @@ package org.apache.pivot.wtk.effects.easing;
 
 /**
  * Cubic easing operation.
- *
  */
 public class Cubic implements Easing {
     public float easeIn(float time, float begin, float change, float duration) {

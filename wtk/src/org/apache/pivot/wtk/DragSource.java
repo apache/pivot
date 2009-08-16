@@ -18,7 +18,6 @@ package org.apache.pivot.wtk;
 
 /**
  * Interface representing a drag source.
- *
  */
 public interface DragSource {
     /**

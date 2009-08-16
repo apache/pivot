@@ -26,7 +26,6 @@ import org.apache.pivot.collections.adapter.ListAdapter;
 /**
  * Collection representing a list of files. Each entry in the list is unique;
  * i.e. a single file can't be added to the list more than once.
- *
  */
 public class FileList extends ListAdapter<File> {
     private static class FilePathComparator implements Comparator<File>, Serializable {

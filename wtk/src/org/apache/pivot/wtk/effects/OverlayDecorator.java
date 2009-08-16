@@ -25,7 +25,6 @@ import org.apache.pivot.wtk.Component;
 /**
  * Decorator that overlays a component on top of another component. The
  * overlay component is strictly visual and does not respond to user input.
- *
  */
 public class OverlayDecorator implements Decorator {
     private Component overlay;

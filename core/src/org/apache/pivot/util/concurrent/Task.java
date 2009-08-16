@@ -23,7 +23,6 @@ package org.apache.pivot.util.concurrent;
  * @param V
  * The type of the value returned by the operation. May be {@link Void} to
  * indicate that the task does not return a value.
- *
  */
 public abstract class Task<V> {
     /**

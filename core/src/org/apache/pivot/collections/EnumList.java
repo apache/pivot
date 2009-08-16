@@ -30,7 +30,6 @@ import org.apache.pivot.util.ListenerList;
 
 /**
  * Implementation of the {@link List} interface that is backed by an enum.
- *
  */
 public class EnumList<E extends Enum<E>> implements List<E>, Serializable {
     private class ItemIterator implements Iterator<E> {

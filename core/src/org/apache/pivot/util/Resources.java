@@ -39,7 +39,6 @@ import org.apache.pivot.serialization.SerializationException;
  * specific.
  *
  * @see java.util.ResourceBundle
- *
  */
 public class Resources implements Dictionary<String, Object>, Iterable<String> {
 

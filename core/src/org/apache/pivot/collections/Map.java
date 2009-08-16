@@ -23,12 +23,10 @@ import org.apache.pivot.util.ListenerList;
 
 /**
  * Collection interface representing set of key/value pairs.
- *
  */
 public interface Map<K, V> extends Dictionary<K, V>, Collection<K> {
     /**
      * Class representing a key/value pair.
-     *
      */
     public static final class Pair<K, V> {
         public final K key;
@@ -71,7 +69,6 @@ public interface Map<K, V> extends Dictionary<K, V>, Collection<K> {
 
     /**
      * Map listener list.
-     *
      */
     public static class MapListenerList<K, V>
         extends ListenerList<MapListener<K, V>> implements MapListener<K, V> {

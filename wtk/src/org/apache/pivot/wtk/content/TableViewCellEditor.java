@@ -37,7 +37,6 @@ import org.apache.pivot.wtk.WindowStateListener;
 
 /**
  * Default table view cell editor.
- *
  */
 public class TableViewCellEditor implements TableView.RowEditor {
     /**

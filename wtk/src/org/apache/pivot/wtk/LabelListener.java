@@ -18,7 +18,6 @@ package org.apache.pivot.wtk;
 
 /**
  * Label listener interface.
- *
  */
 public interface LabelListener {
     /**

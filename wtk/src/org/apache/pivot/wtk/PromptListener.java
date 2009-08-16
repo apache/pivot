@@ -18,7 +18,6 @@ package org.apache.pivot.wtk;
 
 /**
  * Prompt listener interface.
- *
  */
 public interface PromptListener {
     /**

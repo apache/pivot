@@ -20,12 +20,10 @@ import org.apache.pivot.collections.Sequence;
 
 /**
  * Form listener interface.
- *
  */
 public interface FormListener {
     /**
      * Form listener adapter.
-     *
      */
     public static class Adapter implements FormListener {
         public void sectionInserted(Form form, int index) {

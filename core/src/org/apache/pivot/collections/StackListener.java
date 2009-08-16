@@ -18,7 +18,6 @@ package org.apache.pivot.collections;
 
 /**
  * Stack listener interface.
- *
  */
 public interface StackListener<T> {
     /**

@@ -18,7 +18,6 @@ package org.apache.pivot.wtk;
 
 /**
  * List button selection listener interface.
- *
  */
 public interface ListButtonSelectionListener {
     /**

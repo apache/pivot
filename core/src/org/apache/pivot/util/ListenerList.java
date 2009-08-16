@@ -26,7 +26,6 @@ import java.util.NoSuchElementException;
  * thread-safe access should synchronize method access appropriately. Callers
  * must manually synchronize on the listener list instance to ensure thread
  * safety during iteration.
- *
  */
 public abstract class ListenerList<T> implements Iterable<T> {
     // Node containing a listener in the list

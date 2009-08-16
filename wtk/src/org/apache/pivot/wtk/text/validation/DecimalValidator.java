@@ -20,7 +20,6 @@ import java.util.Locale;
 
 /**
  * A validator for decimal values.
- *
  */
 public class DecimalValidator extends FormattedValidator<NumberFormat> {
 

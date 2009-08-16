@@ -18,7 +18,6 @@ package org.apache.pivot.wtk;
 
 /**
  * Button state listener interface.
- *
  */
 public interface ButtonStateListener {
     /**

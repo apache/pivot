@@ -31,7 +31,6 @@ import org.apache.pivot.wtk.media.Picture;
 
 /**
  * Manifest class that acts as a proxy to remote clipboard or drag/drop data.
- *
  */
 public class RemoteManifest implements Manifest {
     private Transferable transferable;

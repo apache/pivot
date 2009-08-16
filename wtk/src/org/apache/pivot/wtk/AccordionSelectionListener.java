@@ -20,12 +20,10 @@ import org.apache.pivot.util.Vote;
 
 /**
  * Accordion selection listener interface.
- *
  */
 public interface AccordionSelectionListener {
     /**
      * Accordion selection listener adapter.
-     *
      */
     public static class Adapter implements AccordionSelectionListener {
         public Vote previewSelectedIndexChange(Accordion accordion, int selectedIndex) {

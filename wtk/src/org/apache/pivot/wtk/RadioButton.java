@@ -20,7 +20,6 @@ import org.apache.pivot.wtk.content.ButtonDataRenderer;
 
 /**
  * Component representing a "radio button".
- *
  */
 public class RadioButton extends Button {
     private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new ButtonDataRenderer();

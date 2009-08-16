@@ -27,12 +27,10 @@ import org.apache.pivot.util.ListenerList;
 /**
  * Abstract base class for "actions". Actions are common application
  * behaviors generally triggered by buttons and keyboard shortcuts.
- *
  */
 public abstract class Action {
     /**
      * Action dictionary implementation.
-     *
      */
     public static final class NamedActionDictionary
         implements Dictionary<String, Action>, Iterable<String> {

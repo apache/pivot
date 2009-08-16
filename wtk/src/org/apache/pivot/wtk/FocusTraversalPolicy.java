@@ -19,7 +19,6 @@ package org.apache.pivot.wtk;
 /**
  * Defines the order in which components will receive focus during focus
  * traversal.
- *
  */
 public interface FocusTraversalPolicy {
     /**

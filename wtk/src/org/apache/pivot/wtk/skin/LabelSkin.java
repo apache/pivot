@@ -52,7 +52,6 @@ import org.apache.pivot.wtk.VerticalAlignment;
  * TODO showEllipsis style
  * <p>
  * TODO breakOnWhitespaceOnly style
- *
  */
 public class LabelSkin extends ComponentSkin implements LabelListener {
     private FontRenderContext fontRenderContext = new FontRenderContext(null, true, true);

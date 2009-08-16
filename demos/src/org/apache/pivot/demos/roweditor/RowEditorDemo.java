@@ -32,7 +32,6 @@ import org.apache.pivot.wtkx.WTKXSerializer;
 
 /**
  * Demonstrates a flip transition used to initiate a table view row editor.
- *
  */
 public class RowEditorDemo implements Application {
     private Window window = null;

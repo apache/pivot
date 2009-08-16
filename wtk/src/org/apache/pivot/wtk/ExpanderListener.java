@@ -20,12 +20,10 @@ import org.apache.pivot.util.Vote;
 
 /**
  * Expander listener list.
- *
  */
 public interface ExpanderListener {
     /**
      * Expander listener adapter.
-     *
      */
     public static class Adapter implements ExpanderListener {
         public void titleChanged(Expander expander, String previousTitle) {

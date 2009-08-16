@@ -26,7 +26,6 @@ import java.io.IOException;
  *
  * @param <T>
  * The type of data being read and written.
- *
  */
 public interface Serializer<T> {
     /**

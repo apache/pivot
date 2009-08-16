@@ -22,7 +22,6 @@ import org.apache.pivot.util.ListenerList;
  * Window representing a "tooltip". Tooltips are used to provide additional
  * context information to a user. A tooltip generally appears after a certain
  * amount of time has passed and closes when the user moves the mouse.
- *
  */
 public class Tooltip extends Window {
     private static class TooltipListenerList extends ListenerList<TooltipListener>

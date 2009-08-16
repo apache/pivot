@@ -42,13 +42,11 @@ import org.apache.pivot.wtk.content.TreeViewNodeRenderer;
  * Default tree view node editor, which allows the user to edit the text of a
  * tree node in a <tt>TextInput</tt>. It is only intended to work with
  * {@link TreeNode} data and {@link TreeViewNodeRenderer} renderers.
- *
  */
 public class TreeViewNodeEditor implements TreeView.NodeEditor {
     /**
      * Responsible for "edit initialization" and "edit finalization" tasks when
      * the edit popup is opened and closed, respectively.
-     *
      */
     private WindowStateListener popupStateHandler = new WindowStateListener.Adapter() {
         @Override
@@ -82,7 +80,6 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
     /**
      * Responsible for saving or cancelling the edit based on the user pressing
      * the <tt>ENTER</tt> key or the <tt>ESCAPE</tt> key, respectively.
-     *
      */
     private ComponentKeyListener textInputKeyHandler = new ComponentKeyListener.Adapter() {
         @Override
@@ -100,7 +97,6 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
     /**
      * Responsible for closing the popup whenever the user clicks outside the
      * bounds of the popup.
-     *
      */
     private ContainerMouseListener displayMouseHandler = new ContainerMouseListener.Adapter() {
         @Override

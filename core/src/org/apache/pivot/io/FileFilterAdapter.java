@@ -23,7 +23,6 @@ import org.apache.pivot.util.Filter;
 
 /**
  * Wraps an instance of {@link FileFilter} in a {@link Filter}.
- *
  */
 public class FileFilterAdapter implements Filter<File> {
     private FileFilter fileFilter;

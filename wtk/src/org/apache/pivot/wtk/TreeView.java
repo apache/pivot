@@ -32,7 +32,6 @@ import org.apache.pivot.wtk.content.TreeViewNodeRenderer;
 /**
  * Class that displays a hierarchical data structure, allowing a user to select
  * one or more paths.
- *
  */
 public class TreeView extends Component {
     /**
@@ -87,7 +86,6 @@ public class TreeView extends Component {
 
     /**
      * Tree view node renderer interface.
-     *
      */
     public interface NodeRenderer extends Renderer {
         public void render(Object node, TreeView treeView, boolean expanded,
@@ -97,7 +95,6 @@ public class TreeView extends Component {
 
     /**
      * Tree view node editor interface.
-     *
      */
     public interface NodeEditor extends Editor {
         /**
@@ -120,7 +117,6 @@ public class TreeView extends Component {
 
     /**
      * Tree view skin interface. Tree view skins must implement this.
-     *
      */
     public interface Skin {
         /**
@@ -167,7 +163,6 @@ public class TreeView extends Component {
 
     /**
      * Tree view listener list.
-     *
      */
     private static class TreeViewListenerList extends ListenerList<TreeViewListener>
         implements TreeViewListener {
@@ -218,7 +213,6 @@ public class TreeView extends Component {
 
     /**
      * Tree view branch listener list.
-     *
      */
     private static class TreeViewBranchListenerList extends ListenerList<TreeViewBranchListener>
         implements TreeViewBranchListener {
@@ -237,7 +231,6 @@ public class TreeView extends Component {
 
     /**
      * Tree view node listener list.
-     *
      */
     private static class TreeViewNodeListenerList extends ListenerList<TreeViewNodeListener>
         implements TreeViewNodeListener {
@@ -275,7 +268,6 @@ public class TreeView extends Component {
 
     /**
      * Tree view node state listener list.
-     *
      */
     private static class TreeViewNodeStateListenerList
         extends ListenerList<TreeViewNodeStateListener>
@@ -290,7 +282,6 @@ public class TreeView extends Component {
 
     /**
      * Tree view selection listener list.
-     *
      */
     private static class TreeViewSelectionListenerList
         extends ListenerList<TreeViewSelectionListener>
@@ -318,7 +309,6 @@ public class TreeView extends Component {
     /**
      * A comparator that sorts paths by the order in which they would visually
      * appear in a fully expanded tree, otherwise known as their "row order".
-     *
      */
     public static final class PathComparator implements Comparator<Path> {
         public int compare(Path path1, Path path2) {
@@ -341,7 +331,6 @@ public class TreeView extends Component {
     /**
      * Notifies the tree of nested <tt>ListListener</tt> events that occur on
      * the tree data.
-     *
      */
     private class BranchHandler extends ArrayList<BranchHandler> implements ListListener<Object> {
         private static final long serialVersionUID = -6132480635507615071L;
@@ -969,7 +958,6 @@ public class TreeView extends Component {
     }
 
     /**
-     *
      */
     public Sequence<Path> getSelectedPaths() {
         return new ImmutableList<Path>(selectedPaths);
@@ -1060,7 +1048,6 @@ public class TreeView extends Component {
     }
 
     /**
-     *
      */
     public void setSelectedPath(Path path) {
         if (path == null) {
@@ -1160,7 +1147,6 @@ public class TreeView extends Component {
     }
 
     /**
-     *
      */
     public void clearSelection() {
         if (selectedPaths.getLength() > 0) {
@@ -1175,7 +1161,6 @@ public class TreeView extends Component {
     }
 
     /**
-     *
      */
     public boolean isNodeSelected(Path path) {
         if (path == null) {
@@ -1250,7 +1235,6 @@ public class TreeView extends Component {
     }
 
     /**
-     *
      */
     public boolean getCheckmarksEnabled() {
         return checkmarksEnabled;

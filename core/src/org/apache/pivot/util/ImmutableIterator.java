@@ -20,7 +20,6 @@ import java.util.Iterator;
 
 /**
  * Immutable implementation of the {@link Iterator} interface.
- *
  */
 public class ImmutableIterator<T> implements Iterator<T> {
     Iterator<T> iterator;

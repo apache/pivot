@@ -28,7 +28,6 @@ import org.apache.pivot.wtk.Window;
 
 /**
  * Dialog skin.
- *
  */
 public class TerraDialogSkin extends TerraFrameSkin implements DialogStateListener {
     private class RepositionCallback implements Runnable {

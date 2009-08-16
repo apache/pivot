@@ -21,7 +21,6 @@ import org.apache.pivot.wtkx.WTKXSerializer;
 
 /**
  * Script application loader.
- *
  */
 public class ScriptApplication implements Application {
     private Window window = null;

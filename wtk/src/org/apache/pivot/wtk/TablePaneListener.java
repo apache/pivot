@@ -20,12 +20,10 @@ import org.apache.pivot.collections.Sequence;
 
 /**
  * Table pane listener interface.
- *
  */
 public interface TablePaneListener {
     /**
      * Table pane listener adapter.
-     *
      */
     public static class Adapter implements TablePaneListener {
         public void rowInserted(TablePane tablePane, int index) {

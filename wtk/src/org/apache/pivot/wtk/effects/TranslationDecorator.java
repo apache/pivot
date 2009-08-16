@@ -26,7 +26,6 @@ import org.apache.pivot.wtk.Point;
 
 /**
  * Decorator that translates the paint origin of its component.
- *
  */
 public class TranslationDecorator implements Decorator {
     private int x = 0;

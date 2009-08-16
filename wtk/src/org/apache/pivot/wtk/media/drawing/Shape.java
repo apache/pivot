@@ -36,12 +36,10 @@ import org.apache.pivot.wtk.Point;
  * Abstract base class for shapes.
  * <p>
  * TODO Add a strokeDashArray property.
- *
  */
 public abstract class Shape {
     /**
      * Interface encapsulating an affine transformation.
-     *
      */
     public static abstract class Transform {
         private Shape shape = null;
@@ -62,7 +60,6 @@ public abstract class Shape {
 
     /**
      * Represents a rotation transformation.
-     *
      */
     public static final class Rotate extends Transform {
         private double angle;
@@ -142,7 +139,6 @@ public abstract class Shape {
 
     /**
      * Reprensents a scale transformation.
-     *
      */
     public static final class Scale extends Transform {
         private double x = 0;
@@ -192,7 +188,6 @@ public abstract class Shape {
 
     /**
      * Represents a translation transformation.
-     *
      */
     public static final class Translate extends Transform {
         private double x = 0;
@@ -242,7 +237,6 @@ public abstract class Shape {
 
     /**
      * Represents a sequence of affine transformations applied to this shape.
-     *
      */
     public class TransformSequence extends Transform
         implements Sequence<Transform>, Iterable<Transform> {

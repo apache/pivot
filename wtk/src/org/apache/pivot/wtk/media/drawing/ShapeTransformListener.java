@@ -20,7 +20,6 @@ import org.apache.pivot.collections.Sequence;
 
 /**
  * Shape transform listener interface.
- *
  */
 public interface ShapeTransformListener {
     /**

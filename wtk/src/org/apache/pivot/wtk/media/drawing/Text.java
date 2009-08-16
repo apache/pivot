@@ -38,7 +38,6 @@ import org.apache.pivot.wtk.Platform;
 
 /**
  * Shape representing a block of text.
- *
  */
 public class Text extends Shape {
     private static class TextListenerList extends ListenerList<TextListener>

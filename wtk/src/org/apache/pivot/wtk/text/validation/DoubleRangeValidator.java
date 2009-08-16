@@ -17,7 +17,6 @@ import java.util.Locale;
 
 /**
  * A validator for a double value limited to a range.
- *
  */
 public class DoubleRangeValidator extends DoubleValidator {
     private double minValue, maxValue;

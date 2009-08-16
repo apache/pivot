@@ -28,7 +28,6 @@ import org.apache.pivot.util.ListenerList;
  * Provides a filtered view of a list that can be sorted independently, but
  * remains backed by the original data. Modifications to the filtered list
  * are propagated to the source.
- *
  */
 public class FilteredList<T> implements List<T> {
     private static class FilteredListListenerList<T> extends ListenerList<FilteredListListener<T>>

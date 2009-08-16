@@ -32,12 +32,10 @@ import netscape.javascript.JSObject;
 
 /**
  * Application context used to execute applications in a web browser.
- *
  */
 public final class BrowserApplicationContext extends ApplicationContext {
     /**
      * Applet used to host applications in a web browser.
-     *
      */
     public static final class HostApplet extends Applet {
         private class InitCallback implements Runnable {

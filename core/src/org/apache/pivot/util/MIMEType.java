@@ -24,7 +24,6 @@ import org.apache.pivot.collections.HashMap;
 
 /**
  * Utility class for introspecting a MIME type string.
- *
  */
 public class MIMEType implements Dictionary<String, String>, Iterable<String> {
     private String baseType;

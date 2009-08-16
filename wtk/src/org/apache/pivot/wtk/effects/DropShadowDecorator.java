@@ -28,7 +28,6 @@ import org.apache.pivot.wtk.Component;
 
 /**
  * Decorator that adds a drop shadows to a component.
- *
  */
 public class DropShadowDecorator implements Decorator {
     private int blurRadius;

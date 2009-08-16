@@ -18,7 +18,6 @@ package org.apache.pivot.wtk.media.drawing;
 
 /**
  * Cubic curve listener interface.
- *
  */
 public interface CubicCurveListener {
     /**

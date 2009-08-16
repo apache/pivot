@@ -31,12 +31,10 @@ import org.apache.pivot.wtk.media.Image;
 /**
  * Top-level container representing the entry point into a user interface.
  * Windows are direct descendants of the display.
- *
  */
 public class Window extends Container {
     /**
      * Class representing a mapping from keystrokes to actions.
-     *
      */
     public static class ActionMapping {
         private Window window = null;

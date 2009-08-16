@@ -18,7 +18,6 @@ package org.apache.pivot.wtk;
 
 /**
  * Table view header listener interface.
- *
  */
 public interface TableViewHeaderListener {
     /**

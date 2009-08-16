@@ -20,12 +20,10 @@ import org.apache.pivot.collections.Sequence;
 
 /**
  * List view selection listener interface.
- *
  */
 public interface ListViewSelectionListener {
     /**
      * List view selection listener adapter.
-     *
      */
     public static class Adapter implements ListViewSelectionListener {
         public void selectedRangeAdded(ListView listView, int rangeStart, int rangeEnd) {

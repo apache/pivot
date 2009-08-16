@@ -34,13 +34,11 @@ import org.apache.pivot.wtk.skin.ContainerSkin;
 
 /**
  * Split pane skin.
- *
  */
 public class TerraSplitPaneSkin extends ContainerSkin implements SplitPaneListener {
 
     /**
      * Split pane splitter component.
-     *
      */
     protected class Splitter extends Component {
         public Splitter() {
@@ -50,7 +48,6 @@ public class TerraSplitPaneSkin extends ContainerSkin implements SplitPaneListen
 
     /**
      * Split pane splitter component skin.
-     *
      */
     protected class SplitterSkin extends ComponentSkin {
         private int dragOffset;
@@ -232,7 +229,6 @@ public class TerraSplitPaneSkin extends ContainerSkin implements SplitPaneListen
 
     /**
      * Split pane splitter shadow component.
-     *
      */
     protected class SplitterShadow extends Component {
         public SplitterShadow() {
@@ -243,7 +239,6 @@ public class TerraSplitPaneSkin extends ContainerSkin implements SplitPaneListen
 
     /**
      * Split pane splitter shadow component skin.
-     *
      */
     protected class SplitterShadowSkin extends ComponentSkin {
         public int getPreferredWidth(int height) {

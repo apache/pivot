@@ -18,7 +18,6 @@ package org.apache.pivot.wtk;
 
 /**
  * Dialog close listener interface.
- *
  */
 public interface DialogCloseListener {
     /**

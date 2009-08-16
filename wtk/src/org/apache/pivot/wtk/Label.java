@@ -22,7 +22,6 @@ import org.apache.pivot.util.ListenerList;
 
 /**
  * Component that displays a string of text.
- *
  */
 public class Label extends Component {
     private static class LabelListenerList extends ListenerList<LabelListener>

@@ -40,7 +40,6 @@ import org.apache.pivot.wtk.skin.WindowSkin;
 
 /**
  * Menu popup skin.
- *
  */
 public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener {
     private Panorama panorama;

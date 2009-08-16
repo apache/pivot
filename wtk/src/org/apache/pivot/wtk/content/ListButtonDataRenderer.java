@@ -24,7 +24,6 @@ import org.apache.pivot.wtk.HorizontalAlignment;
  * <p>
  * TODO Add showIcon property to this class so the size of the button doesn't
  * change when changing selection between items with and without icons.
- *
  */
 public class ListButtonDataRenderer extends ButtonDataRenderer {
     public ListButtonDataRenderer() {

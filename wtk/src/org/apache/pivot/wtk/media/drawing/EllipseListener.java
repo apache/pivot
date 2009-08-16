@@ -18,7 +18,6 @@ package org.apache.pivot.wtk.media.drawing;
 
 /**
  * Ellipse listener interface.
- *
  */
 public interface EllipseListener {
     /**

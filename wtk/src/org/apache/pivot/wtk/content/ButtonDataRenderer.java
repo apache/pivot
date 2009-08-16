@@ -30,7 +30,6 @@ import org.apache.pivot.wtk.media.Image;
 
 /**
  * Default button data renderer.
- *
  */
 public class ButtonDataRenderer extends BoxPane implements Button.DataRenderer {
     protected ImageView imageView = new ImageView();

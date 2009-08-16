@@ -18,7 +18,6 @@ package org.apache.pivot.wtk;
 
 /**
  * Form attribute listener interface.
- *
  */
 public interface FormAttributeListener {
     /**

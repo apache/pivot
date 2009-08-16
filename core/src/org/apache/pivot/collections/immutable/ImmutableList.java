@@ -28,7 +28,6 @@ import org.apache.pivot.util.ListenerList;
 
 /**
  * Unmodifiable implementation of the {@link List} interface.
- *
  */
 public final class ImmutableList<T> implements List<T> {
     private List<T> list = null;

@@ -26,7 +26,6 @@ import org.apache.pivot.util.ListenerList;
 
 /**
  * Synchronized implementation of the {@link List} interface.
- *
  */
 public class SynchronizedList<T> extends SynchronizedCollection<T>
     implements List<T> {

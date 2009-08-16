@@ -28,7 +28,6 @@ import org.apache.pivot.wtkx.WTKXSerializer;
 
 /**
  * A concrete movie that animates a clock.
- *
  */
 public class Clock extends Movie {
     private Calendar calendar = Calendar.getInstance();

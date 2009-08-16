@@ -18,7 +18,6 @@ package org.apache.pivot.wtk;
 
 /**
  * Separator listener interface.
- *
  */
 public interface SeparatorListener {
     /**

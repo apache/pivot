@@ -23,7 +23,6 @@ import org.apache.pivot.wtk.RadioButton;
 
 /**
  * Abstract base class for radio button skins.
- *
  */
 public abstract class RadioButtonSkin extends ButtonSkin {
     @Override

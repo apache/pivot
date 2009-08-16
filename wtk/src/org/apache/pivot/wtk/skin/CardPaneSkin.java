@@ -35,12 +35,10 @@ import org.apache.pivot.wtk.effects.easing.Quartic;
 
 /**
  * Card pane skin.
- *
  */
 public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     /**
      * Defines the supported selection change effects.
-     *
      */
     public enum SelectionChangeEffect {
         CROSSFADE,
@@ -53,7 +51,6 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 
     /**
      * Abstract base class for selection change transitions.
-     *
      */
     public abstract class SelectionChangeTransition extends Transition {
         public final int from;
@@ -75,7 +72,6 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 
     /**
      * Class that performs cross-fade selection change transitions.
-     *
      */
     public class CrossfadeTransition extends SelectionChangeTransition {
         private FadeDecorator fadeOutDecorator = new FadeDecorator();
@@ -130,7 +126,6 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 
     /**
      * Class that performs slide selection change transitions.
-     *
      */
     public class SlideTransition extends SelectionChangeTransition {
         private int direction;
@@ -178,7 +173,6 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 
     /**
      * Class that performs flip selection change transitions.
-     *
      */
     public class FlipTransition extends SelectionChangeTransition {
         private Orientation orientation;
@@ -230,7 +224,6 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 
     /**
      * Class that performs zoom change transitions.
-     *
      */
     public class ZoomTransition extends CrossfadeTransition {
         private ScaleDecorator fromScaleDecorator = new ScaleDecorator();

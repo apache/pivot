@@ -31,7 +31,6 @@ import org.apache.pivot.wtk.WindowStateListener;
 
 /**
  * Abstract base class for menu button skins.
- *
  */
 public abstract class MenuButtonSkin extends ButtonSkin
     implements MenuButtonListener {

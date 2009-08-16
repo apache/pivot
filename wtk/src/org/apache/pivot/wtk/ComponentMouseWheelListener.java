@@ -18,7 +18,6 @@ package org.apache.pivot.wtk;
 
 /**
  * Component mouse wheel listener interface.
- *
  */
 public interface ComponentMouseWheelListener {
     /**

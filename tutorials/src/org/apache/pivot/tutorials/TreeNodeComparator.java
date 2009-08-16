@@ -22,7 +22,6 @@ import org.apache.pivot.wtk.content.TreeNode;
 
 /**
  * Orders TreeNode instances by their name using string comparison.
- *
  */
 public class TreeNodeComparator implements Comparator<TreeNode> {
     public int compare(TreeNode treeNode1, TreeNode treeNode2) {

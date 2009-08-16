@@ -23,12 +23,10 @@ import org.apache.pivot.util.Filter;
 
 /**
  * Calendar button listener interface.
- *
  */
 public interface CalendarButtonListener {
     /**
      * Calendar button listener adapter.
-     *
      */
     public static class Adapter implements CalendarButtonListener {
         public void localeChanged(CalendarButton calendarButton, Locale previousLocale) {

@@ -32,12 +32,10 @@ import org.apache.pivot.util.ListenerList;
  * is noticed when a split pane directly contains a child split pane of the same
  * orientation.  The parent pane's separator will be able to travel past that
  * of it's child, but the child's separator will be unable to pass the parent's.
- *
  */
 public class SplitPane extends Container {
     /**
      * Enumeration defining split pane regions.
-     *
      */
     public enum Region {
         TOP_LEFT,

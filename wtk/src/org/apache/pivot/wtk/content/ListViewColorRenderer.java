@@ -26,12 +26,10 @@ import org.apache.pivot.wtk.media.Image;
 
 /**
  * List view renderer for displaying color swatches.
- *
  */
 public class ListViewColorRenderer extends ListViewItemRenderer {
     /**
      * Internal image class for rendering color swatches.
-     *
      */
     public static class ColorBadge extends Image {
         private Color color = Color.BLACK;

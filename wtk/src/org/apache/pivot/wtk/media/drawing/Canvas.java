@@ -22,7 +22,6 @@ import org.apache.pivot.wtk.ApplicationContext;
 
 /**
  * Shape representing the root of a shape hierarchy.
- *
  */
 public class Canvas extends Group {
     private class ValidateCallback implements Runnable {

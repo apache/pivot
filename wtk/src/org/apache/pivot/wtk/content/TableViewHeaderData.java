@@ -26,7 +26,6 @@ import org.apache.pivot.wtk.media.Image;
 
 /**
  * Default table header data implementation.
- *
  */
 public class TableViewHeaderData {
     private Image icon = null;

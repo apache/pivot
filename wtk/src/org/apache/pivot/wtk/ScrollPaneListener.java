@@ -18,7 +18,6 @@ package org.apache.pivot.wtk;
 
 /**
  * Scroll pane listener interface.
- *
  */
 public interface ScrollPaneListener {
     /**

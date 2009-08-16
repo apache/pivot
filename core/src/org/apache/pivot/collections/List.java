@@ -22,12 +22,10 @@ import org.apache.pivot.util.ListenerList;
 
 /**
  * Collection interface representing an ordered sequence of items.
- *
  */
 public interface List<T> extends Sequence<T>, Collection<T> {
     /**
      * List listener list.
-     *
      */
     public static class ListListenerList<T>
         extends ListenerList<ListListener<T>> implements ListListener<T> {

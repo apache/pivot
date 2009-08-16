@@ -25,12 +25,10 @@ import org.apache.pivot.wtk.Visual;
 /**
  * Abstract base class for movies. A movie is either a bitmapped "video"
  * or a vector "animation".
- *
  */
 public abstract class Movie implements Visual {
     /**
      * Movie listener list.
-     *
      */
     protected static class MovieListenerList extends ListenerList<MovieListener>
         implements MovieListener {

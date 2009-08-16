@@ -20,12 +20,10 @@ import java.util.Comparator;
 
 /**
  * Set listener interface.
- *
  */
 public interface SetListener<E> {
     /**
      * Set listener adapter.
-     *
      */
     public static class Adapter<E> implements SetListener<E> {
         public void elementAdded(Set<E> set, E element) {

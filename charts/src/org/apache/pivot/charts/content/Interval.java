@@ -18,7 +18,6 @@ package org.apache.pivot.charts.content;
 
 /**
  * Represents value data for interval chart views.
- *
  */
 public class Interval extends Point {
     private float width = 0;

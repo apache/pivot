@@ -18,7 +18,6 @@ package org.apache.pivot.wtk;
 
 /**
  * Spinner selection listener interface.
- *
  */
 public interface SpinnerSelectionListener {
     /**

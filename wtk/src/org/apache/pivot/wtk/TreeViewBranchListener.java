@@ -20,12 +20,10 @@ import org.apache.pivot.collections.Sequence.Tree.Path;
 
 /**
  * Tree view branch listener interface.
- *
  */
 public interface TreeViewBranchListener {
     /**
      * Tree view branch listener adapter.
-     *
      */
     public static class Adapter implements TreeViewBranchListener {
         public void branchExpanded(TreeView treeView, Path path) {

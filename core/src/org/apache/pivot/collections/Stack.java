@@ -21,12 +21,10 @@ import org.apache.pivot.util.ListenerList;
 /**
  * Interface representing a last-in, first-out (LIFO) stack when unsorted, and
  * a priority stack when sorted.
- *
  */
 public interface Stack<T> extends Collection<T> {
     /**
      * Stack listener list.
-     *
      */
     public static class StackListenerList<T> extends ListenerList<StackListener<T>>
         implements StackListener<T> {

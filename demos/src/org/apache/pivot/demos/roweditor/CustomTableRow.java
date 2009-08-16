@@ -20,7 +20,6 @@ import org.apache.pivot.util.CalendarDate;
 
 /**
  * Custom table row data.
- *
  */
 public class CustomTableRow {
     private CalendarDate calendarDate = null;

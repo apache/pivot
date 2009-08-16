@@ -34,12 +34,10 @@ import org.apache.pivot.wtk.media.Image;
  * Only one component is visible at a time.
  * <p>
  * TODO Add a getPanelAt() method that delegates to the skin.
- *
  */
 public class Accordion extends Container {
     /**
      * Panel sequence implementation.
-     *
      */
     public final class PanelSequence implements Sequence<Component>, Iterable<Component> {
         private PanelSequence() {

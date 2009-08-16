@@ -18,7 +18,6 @@ package org.apache.pivot.wtk;
 
 /**
  * Container that provides a scrollable view of a component.
- *
  */
 public class Panorama extends Viewport {
     public Panorama() {

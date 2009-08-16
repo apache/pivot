@@ -28,7 +28,6 @@ import org.apache.pivot.wtk.Component;
  * Decorator that applies a "shade" to a component. The shade is a rectangle
  * of the same size as the component that is painted over the component using a
  * given color and opacity value.
- *
  */
 public class ShadeDecorator implements Decorator {
     private float opacity;
@@ -97,7 +96,6 @@ public class ShadeDecorator implements Decorator {
     }
 
     /**
-     *
      */
     public final void setColor(String color) {
         if (color == null) {

@@ -18,12 +18,10 @@ package org.apache.pivot.wtk;
 
 /**
  * Component key listener interface.
- *
  */
 public interface ComponentKeyListener {
     /**
      * Component key listener adapter.
-     *
      */
     public static class Adapter implements ComponentKeyListener {
         public boolean keyTyped(Component component, char character) {

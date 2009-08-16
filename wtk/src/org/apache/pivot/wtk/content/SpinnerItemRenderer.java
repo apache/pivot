@@ -28,7 +28,6 @@ import org.apache.pivot.wtk.VerticalAlignment;
 /**
  * Default spinner item renderer, which renders all items as strings by
  * calling <tt>toString()</tt> on them.
- *
  */
 public class SpinnerItemRenderer extends Label implements Spinner.ItemRenderer {
     public SpinnerItemRenderer() {

@@ -37,7 +37,6 @@ import org.apache.pivot.wtk.skin.PushButtonSkin;
 
 /**
  * Terra push button skin.
- *
  */
 public class TerraPushButtonSkin extends PushButtonSkin {
     private Font font;

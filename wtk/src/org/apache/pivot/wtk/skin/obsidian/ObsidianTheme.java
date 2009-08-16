@@ -27,7 +27,6 @@ import org.apache.pivot.wtk.media.Image;
 
 /**
  * Obsidian theme.
- *
  */
 public final class ObsidianTheme extends Theme {
     private Font font = new Font("Verdana", Font.PLAIN, 11);

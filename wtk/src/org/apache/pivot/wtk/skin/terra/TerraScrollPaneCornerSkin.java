@@ -27,7 +27,6 @@ import org.apache.pivot.wtk.skin.ComponentSkin;
 
 /**
  * Scroll pane corner skin.
- *
  */
 public class TerraScrollPaneCornerSkin extends ComponentSkin {
     private Color backgroundColor = new Color(0xF0, 0xEC, 0xE7);

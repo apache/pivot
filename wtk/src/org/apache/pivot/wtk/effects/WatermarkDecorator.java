@@ -36,7 +36,6 @@ import org.apache.pivot.wtk.media.Image;
 
 /**
  * Decorator that paints a watermark effect over a component.
- *
  */
 public class WatermarkDecorator implements Decorator {
     private float opacity = 0.075f;

@@ -18,7 +18,6 @@ package org.apache.pivot.wtk.media.drawing;
 
 /**
  * Arc listener interface.
- *
  */
 public interface ArcListener {
     /**

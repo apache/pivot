@@ -20,7 +20,6 @@ import org.apache.pivot.collections.Sequence;
 
 /**
  * Element listener interface.
- *
  */
 public interface ElementListener {
     /**

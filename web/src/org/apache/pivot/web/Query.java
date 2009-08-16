@@ -52,12 +52,10 @@ import org.apache.pivot.util.concurrent.Dispatcher;
  * The type of the value retrieved or sent via the query. For GET operations,
  * it is {@link Object}; for POST operations, the type is {@link URL}. For PUT
  * and DELETE, it is {@link Void}.
- *
  */
 public abstract class Query<V> extends IOTask<V> {
     /**
      * Supported HTTP methods.
-     *
      */
     public enum Method {
         GET,
@@ -68,7 +66,6 @@ public abstract class Query<V> extends IOTask<V> {
 
     /**
      * Query status codes.
-     *
      */
     public static class Status {
         public static final int OK = 200;
@@ -96,7 +93,6 @@ public abstract class Query<V> extends IOTask<V> {
 
     /**
      * Query listener list.
-     *
      */
     private static class QueryListenerList<V> extends ListenerList<QueryListener<V>>
         implements QueryListener<V> {

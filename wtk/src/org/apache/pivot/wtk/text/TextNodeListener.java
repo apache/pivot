@@ -18,7 +18,6 @@ package org.apache.pivot.wtk.text;
 
 /**
  * Text node listener interface.
- *
  */
 public interface TextNodeListener {
     /**

@@ -17,7 +17,6 @@ import java.util.Locale;
 
 /**
  * A validator for an int value.
- *
  */
 public class IntValidator extends DecimalValidator {
     public IntValidator() {

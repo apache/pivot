@@ -20,7 +20,6 @@ import org.apache.pivot.collections.Sequence;
 
 /**
  * Path listener interface.
- *
  */
 public interface PathListener {
     /**

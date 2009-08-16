@@ -26,7 +26,6 @@ import org.apache.pivot.util.Vote;
  * content. A rollup has a heading component that is always visible, and when
  * the user expands the rollup, its content component will be shown beneath the
  * heading.
- *
  */
 public class Rollup extends Container {
     private static class RollupListenerList extends ListenerList<RollupListener>

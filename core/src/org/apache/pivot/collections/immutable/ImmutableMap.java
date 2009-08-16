@@ -27,7 +27,6 @@ import org.apache.pivot.util.ListenerList;
 
 /**
  * Unmodifiable implementation of the {@link Map} interface.
- *
  */
 public class ImmutableMap<K, V> implements Map<K, V> {
     private Map<K, V> map = null;

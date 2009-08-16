@@ -38,7 +38,6 @@ import org.apache.pivot.wtk.media.Picture;
 /**
  * Application context used to execute applications in a native frame
  * window.
- *
  */
 public final class DesktopApplicationContext extends ApplicationContext {
     private static class HostFrame extends java.awt.Frame {

@@ -20,7 +20,6 @@ package org.apache.pivot.wtk.text.validation;
  * This is indicated visually to the user (a red background would be typical),
  * and events are fired by the TextInput if the programmer wishes to take
  * further action.
- *
  */
 public interface Validator {
     /**

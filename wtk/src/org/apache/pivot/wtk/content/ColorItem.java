@@ -20,7 +20,6 @@ import java.awt.Color;
 
 /**
  * List item representing a color.
- *
  */
 public class ColorItem {
     private Color color;

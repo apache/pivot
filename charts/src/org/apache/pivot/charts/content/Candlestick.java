@@ -20,7 +20,6 @@ import java.util.Date;
 
 /**
  * Represents value data for high/low chart views.
- *
  */
 public class Candlestick {
     private Date date = null;

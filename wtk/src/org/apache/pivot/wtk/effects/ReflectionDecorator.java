@@ -31,7 +31,6 @@ import org.apache.pivot.wtk.Component;
  * Decorator that paints a reflection of a component.
  * <p>
  * TODO Make gradient properties configurable.
- *
  */
 public class ReflectionDecorator implements Decorator {
     private Graphics2D graphics = null;

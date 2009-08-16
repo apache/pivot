@@ -18,7 +18,6 @@ package org.apache.pivot.wtk;
 
 /**
  * Slider value listener interface.
- *
  */
 public interface SliderValueListener {
     /**

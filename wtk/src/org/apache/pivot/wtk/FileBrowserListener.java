@@ -24,12 +24,10 @@ import org.apache.pivot.util.Filter;
 
 /**
  * File browser listener interface.
- *
  */
 public interface FileBrowserListener {
     /**
      * File browser listener adapter.
-     *
      */
     public static class Adapter implements FileBrowserListener {
         public void multiSelectChanged(FileBrowser fileBrowser) {

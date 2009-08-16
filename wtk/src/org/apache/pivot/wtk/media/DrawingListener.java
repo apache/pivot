@@ -23,7 +23,6 @@ import org.apache.pivot.wtk.media.drawing.Canvas;
 
 /**
  * Drawing listener interface.
- *
  */
 public interface DrawingListener {
     /**

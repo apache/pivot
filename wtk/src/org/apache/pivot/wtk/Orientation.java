@@ -18,7 +18,6 @@ package org.apache.pivot.wtk;
 
 /**
  * Enumeration defining a two-dimensional orientation.
- *
  */
 public enum Orientation {
     HORIZONTAL,

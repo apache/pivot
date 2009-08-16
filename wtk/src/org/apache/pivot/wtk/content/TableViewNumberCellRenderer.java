@@ -29,7 +29,6 @@ import org.apache.pivot.wtk.TableView;
 /**
  * Default renderer for table view cells that contain numeric data. Renders
  * cell contents as a formatted number.
- *
  */
 public class TableViewNumberCellRenderer extends TableViewCellRenderer {
     private NumberFormat numberFormat = DEFAULT_NUMBER_FORMAT;

@@ -19,12 +19,10 @@ package org.apache.pivot.wtk;
 /**
  * Component mouse listener interface. Component mouse events are "bubbling"
  * and are fired as the event propagates up the component hierarchy.
- *
  */
 public interface ComponentMouseListener {
     /**
      * Component mouse button listener adapter.
-     *
      */
     public static class Adapter implements ComponentMouseListener {
         public boolean mouseMove(Component component, int x, int y) {

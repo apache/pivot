@@ -33,7 +33,6 @@ import org.apache.pivot.wtk.WindowStateListener;
 
 /**
  * Abstract base class for menu item skins.
- *
  */
 public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListener {
     protected MenuPopup menuPopup = new MenuPopup();

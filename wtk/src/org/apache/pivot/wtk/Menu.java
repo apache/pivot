@@ -28,12 +28,10 @@ import org.apache.pivot.wtk.content.MenuItemDataRenderer;
 
 /**
  * Component that presents a cascading menu.
- *
  */
 public class Menu extends Container {
     /**
      * Component representing a menu item.
-     *
      */
     public static class Item extends Button {
         private static class ItemListenerList extends ListenerList<ItemListener>
@@ -172,7 +170,6 @@ public class Menu extends Container {
 
     /**
      * Item listener interface.
-     *
      */
     public interface ItemListener {
         /**
@@ -195,7 +192,6 @@ public class Menu extends Container {
     /**
      * Class representing a menu section. A section is a grouping of menu
      * items within a menu.
-     *
      */
     public static class Section implements Sequence<Item>, Iterable<Item> {
         private static class SectionListenerList extends ListenerList<SectionListener>
@@ -332,7 +328,6 @@ public class Menu extends Container {
 
     /**
      * Section listener interface.
-     *
      */
     public interface SectionListener {
         /**
@@ -363,7 +358,6 @@ public class Menu extends Container {
 
     /**
      * Section sequence implementation.
-     *
      */
     public final class SectionSequence implements Sequence<Section>, Iterable<Section> {
         private SectionSequence() {

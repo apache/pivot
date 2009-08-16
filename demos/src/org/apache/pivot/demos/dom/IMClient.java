@@ -53,7 +53,6 @@ import org.jivesoftware.smack.packet.Packet;
 public class IMClient implements Application {
     /**
      * Task for asynchronously logging into Jabber.
-     *
      */
     private class LoginTask extends Task<Void> {
         public Void execute() throws TaskExecutionException {

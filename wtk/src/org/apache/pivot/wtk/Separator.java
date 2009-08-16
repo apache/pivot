@@ -20,7 +20,6 @@ import org.apache.pivot.util.ListenerList;
 
 /**
  * Component representing a horizontal divider.
- *
  */
 public class Separator extends Component {
     private static class SeparatorListenerList extends ListenerList<SeparatorListener>

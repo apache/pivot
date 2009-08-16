@@ -23,7 +23,6 @@ import org.apache.pivot.wtk.skin.ContainerSkin;
 
 /**
  * Abstract base class for file browser skins.
- *
  */
 public abstract class FileBrowserSkin extends ContainerSkin implements FileBrowserListener {
     @Override

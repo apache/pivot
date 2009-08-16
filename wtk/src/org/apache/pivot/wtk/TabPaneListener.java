@@ -20,12 +20,10 @@ import org.apache.pivot.collections.Sequence;
 
 /**
  * Tab pane listener interface.
- *
  */
 public interface TabPaneListener {
     /**
      * Tab pane listener adapter.
-     *
      */
     public static class Adapter implements TabPaneListener {
         public void tabInserted(TabPane tabPane, int index) {

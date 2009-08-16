@@ -25,7 +25,6 @@ import org.apache.pivot.serialization.SerializationException;
  * values in the interval <i>[start, end]</i>. Values may be negative, and the
  * value of <tt>start</tt> may be less than or equal to the value of
  * <tt>end</tt>.
- *
  */
 public final class Span {
     public final int start;

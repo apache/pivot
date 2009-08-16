@@ -18,7 +18,6 @@ package org.apache.pivot.wtk;
 
 /**
  * Interface representing a drop target.
- *
  */
 public interface DropTarget {
     /**

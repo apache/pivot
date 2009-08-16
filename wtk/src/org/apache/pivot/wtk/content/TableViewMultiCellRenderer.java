@@ -31,12 +31,10 @@ import org.apache.pivot.wtk.content.TableViewCellRenderer;
 /**
  * Table cell renderer that supports dynamic rendering based on the type of
  * content being rendered.
- *
  */
 public class TableViewMultiCellRenderer implements TableView.CellRenderer {
     /**
      * Internal style dictionary that supports no styles.
-     *
      */
     private static class StyleDictionary implements Dictionary<String, Object> {
         public Object get(String key) {
@@ -63,7 +61,6 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
     /**
      * Maps the type of value being rendered (the value class) to a specific
      * cell renderer.
-     *
      */
     public static final class RendererMapping {
         private Class<?> valueClass = null;
@@ -132,7 +129,6 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
     /**
      * Provides a sequence hook into this renderer's mappings, thus enabling
      * developers to define their multi-cell renderer in WTKX.
-     *
      */
     private class RendererMappingSequence implements Sequence<RendererMapping> {
         private ArrayList<RendererMapping> mappings = new ArrayList<RendererMapping>();

@@ -44,7 +44,6 @@ import org.apache.pivot.wtk.Component;
  * <p>
  * TODO Use unequal values in the blur kernel to make pixels that are farther
  * away count less towards the blur.
- *
  */
 public class BlurDecorator implements Decorator {
     private int blurMagnitude;

@@ -33,7 +33,6 @@ import org.apache.pivot.wtk.media.Image;
  * manifests can do the opposite. We'll still need a means of mapping value
  * keys to native IDs (which we would need to do via MIME types if the system
  * is based on AWT's DnD mechanism).
- *
  */
 public interface Manifest {
     public String getText() throws IOException;

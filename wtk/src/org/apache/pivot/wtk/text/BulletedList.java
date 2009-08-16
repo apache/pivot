@@ -18,12 +18,10 @@ package org.apache.pivot.wtk.text;
 
 /**
  * Element representing a bulleted list.
- *
  */
 public class BulletedList extends List {
     /**
      * List bullet styles.
-     *
      */
     public enum Style {
         CIRCLE,

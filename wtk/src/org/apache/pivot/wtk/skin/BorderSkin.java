@@ -44,7 +44,6 @@ import org.apache.pivot.wtk.Theme;
  * <p>
  * TODO Add styles to support different border styles (e.g. inset, outset) or
  * create subclasses for these border types.
- *
  */
 public class BorderSkin extends ContainerSkin
     implements BorderListener {

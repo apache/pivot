@@ -18,7 +18,6 @@ package org.apache.pivot.web;
 
 /**
  * Interface for attaching authentication information to a web query.
- *
  */
 public interface Authentication {
     public void authenticate(Query<?> query);

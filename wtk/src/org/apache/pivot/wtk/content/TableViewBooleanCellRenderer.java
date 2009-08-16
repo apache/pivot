@@ -28,7 +28,6 @@ import org.apache.pivot.wtk.VerticalAlignment;
 /**
  * Default renderer for table view cells that contain boolean data. Renders
  * cell contents as a checkbox.
- *
  */
 public class TableViewBooleanCellRenderer extends BoxPane
     implements TableView.CellRenderer {

@@ -23,7 +23,6 @@ import java.io.InputStreamReader;
 
 /**
  * Utility class for locating and instantiating service providers.
- *
  */
 public class Service {
     /**

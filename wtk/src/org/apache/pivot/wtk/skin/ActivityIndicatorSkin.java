@@ -22,7 +22,6 @@ import org.apache.pivot.wtk.Component;
 
 /**
  * Abstract base class for activity indicator skins.
- *
  */
 public abstract class ActivityIndicatorSkin extends ComponentSkin
     implements ActivityIndicatorListener {

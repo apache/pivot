@@ -31,14 +31,12 @@ import org.apache.pivot.util.ListenerList;
  * TODO Add style properties.
  * <p>
  * TODO Add style class property.
- *
  */
 public abstract class Element extends Node
     implements Sequence<Node>, Iterable<Node> {
     /**
      * Private node class that simply represents an offset value. Used to
      * perform binary searches.
-     *
      */
     private static class NullNode extends Node {
         public void insertRange(Node range, int offset) {
@@ -64,7 +62,6 @@ public abstract class Element extends Node
 
     /**
      * Comparator used to perform binary searches on child nodes.
-     *
      */
     private static class NodeOffsetComparator implements Comparator<Node> {
         public int compare(Node node1, Node node2) {

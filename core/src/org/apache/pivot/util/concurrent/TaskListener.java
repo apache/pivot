@@ -21,7 +21,6 @@ package org.apache.pivot.util.concurrent;
  *
  * @param <V>
  * The return type of the task.
- *
  */
 public interface TaskListener<V> {
     /**

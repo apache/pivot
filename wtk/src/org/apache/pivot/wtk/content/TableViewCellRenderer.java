@@ -30,7 +30,6 @@ import org.apache.pivot.wtk.VerticalAlignment;
 
 /**
  * Default table cell renderer. Renders cell contents as a string.
- *
  */
 public class TableViewCellRenderer extends Label
     implements TableView.CellRenderer {

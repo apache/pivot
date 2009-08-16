@@ -55,12 +55,10 @@ import org.apache.pivot.wtk.skin.WindowSkin;
 
 /**
  * Frame skin.
- *
  */
 public class TerraFrameSkin extends WindowSkin implements FrameListener {
     /**
      * Frame button.
-     *
      */
     public static class FrameButton extends PushButton {
         public FrameButton(Object buttonData) {
@@ -72,7 +70,6 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
 
     /**
      * Frame button skin.
-     *
      */
     public static class FrameButtonSkin extends TerraPushButtonSkin {
         public FrameButtonSkin() {
@@ -93,7 +90,6 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
 
     /**
      * Abstract base class for frame button images.
-     *
      */
     protected abstract class ButtonImage extends Image {
         public int getWidth() {
@@ -107,7 +103,6 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
 
     /**
      * Minimize button image.
-     *
      */
     protected class MinimizeImage extends ButtonImage {
         public void paint(Graphics2D graphics) {
@@ -119,7 +114,6 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
 
     /**
      * Maximize button image.
-     *
      */
     protected class MaximizeImage extends ButtonImage {
         public void paint(Graphics2D graphics) {
@@ -134,7 +128,6 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
 
     /**
      * Restore button image.
-     *
      */
     protected class RestoreImage extends ButtonImage {
         public void paint(Graphics2D graphics) {
@@ -151,7 +144,6 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
 
     /**
      * Close button image.
-     *
      */
     protected class CloseImage extends ButtonImage {
         public void paint(Graphics2D graphics) {
@@ -170,7 +162,6 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
 
     /**
      * Resize button image.
-     *
      */
     protected class ResizeImage extends Image {
         public static final int ALPHA = 64;

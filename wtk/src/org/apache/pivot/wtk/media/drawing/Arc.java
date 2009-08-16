@@ -25,12 +25,10 @@ import org.apache.pivot.util.ListenerList;
 
 /**
  * Shape representing an arc.
- *
  */
 public class Arc extends Shape {
     /**
      * Enum representing an arc closure type.
-     *
      */
     public enum Type {
         CHORD,

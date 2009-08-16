@@ -18,7 +18,6 @@ package org.apache.pivot.wtk;
 
 /**
  * Interface representing a visual that is used in layout.
- *
  */
 public interface ConstrainedVisual extends Visual {
     /**

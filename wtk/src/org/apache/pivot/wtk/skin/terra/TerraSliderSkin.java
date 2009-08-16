@@ -38,12 +38,10 @@ import org.apache.pivot.wtk.skin.SliderSkin;
 
 /**
  * Terra slider skin.
- *
  */
 public class TerraSliderSkin extends SliderSkin {
     /**
      * Slider thumb component.
-     *
      */
     protected class Thumb extends Component {
         public Thumb() {
@@ -53,7 +51,6 @@ public class TerraSliderSkin extends SliderSkin {
 
     /**
      * Slider thumb skin.
-     *
      */
     protected class ThumbSkin extends ComponentSkin {
         private boolean highlighted = false;

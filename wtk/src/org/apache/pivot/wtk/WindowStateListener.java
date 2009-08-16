@@ -20,12 +20,10 @@ import org.apache.pivot.util.Vote;
 
 /**
  * Window state listener interface.
- *
  */
 public interface WindowStateListener {
     /**
      * Window state listener adapter.
-     *
      */
     public static class Adapter implements WindowStateListener {
         public Vote previewWindowOpen(Window window, Display display) {

@@ -18,12 +18,10 @@ package org.apache.pivot.wtk;
 
 /**
  * Button listener interface.
- *
  */
 public interface ButtonListener {
     /**
      * Button listener adapter.
-     *
      */
     public static class Adapter implements ButtonListener {
         public void buttonDataChanged(Button button, Object previousButtonData) {

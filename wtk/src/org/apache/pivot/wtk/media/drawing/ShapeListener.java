@@ -20,7 +20,6 @@ import java.awt.Paint;
 
 /**
  * Shape listener interface.
- *
  */
 public interface ShapeListener {
     /**

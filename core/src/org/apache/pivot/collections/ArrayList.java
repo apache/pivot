@@ -31,7 +31,6 @@ import org.apache.pivot.util.ListenerList;
  * <p>
  * NOTE This class is not thread-safe. For concurrent access, use a
  * {@link org.apache.pivot.collections.concurrent.SynchronizedList}.
- *
  */
 public class ArrayList<T> implements List<T>, Serializable {
     private class ItemIterator implements Iterator<T> {

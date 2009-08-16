@@ -25,7 +25,6 @@ import org.apache.pivot.wtk.Window;
 
 /**
  * Display skin.
- *
  */
 public class DisplaySkin extends ContainerSkin {
     // Style properties

@@ -20,12 +20,10 @@ import org.apache.pivot.collections.Sequence;
 
 /**
  * Accordion listener interface.
- *
  */
 public interface AccordionListener {
     /**
      * Accordion listener adapter.
-     *
      */
     public static class Adapter implements AccordionListener {
         public void panelInserted(Accordion accordion, int index) {

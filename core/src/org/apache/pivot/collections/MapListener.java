@@ -20,12 +20,10 @@ import java.util.Comparator;
 
 /**
  * Map listener interface.
- *
  */
 public interface MapListener<K, V> {
     /**
      * Map listener adapter.
-     *
      */
     public static class Adapter<K, V> implements MapListener<K, V> {
         public void valueAdded(Map<K, V> map, K key) {

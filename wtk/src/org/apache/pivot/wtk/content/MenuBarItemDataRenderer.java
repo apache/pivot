@@ -31,7 +31,6 @@ import org.apache.pivot.wtk.media.Image;
 
 /**
  * Default menu bar item data renderer.
- *
  */
 public class MenuBarItemDataRenderer extends BoxPane implements Button.DataRenderer {
     protected ImageView imageView = new ImageView();

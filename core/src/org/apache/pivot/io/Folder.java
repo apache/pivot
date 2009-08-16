@@ -32,12 +32,10 @@ import org.apache.pivot.util.ListenerList;
 
 /**
  * Class representing a folder in the file system.
- *
  */
 public class Folder extends File implements List<File> {
     /**
      * Default file name comparator.
-     *
      */
     public static class FileNameComparator implements Comparator<File>, Serializable {
         private static final long serialVersionUID = 0;

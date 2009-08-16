@@ -18,7 +18,6 @@ package org.apache.pivot.wtk;
 
 /**
  * Button press listener interface.
- *
  */
 public interface ButtonPressListener {
     /**

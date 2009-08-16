@@ -44,7 +44,6 @@ import org.apache.pivot.wtk.skin.MenuButtonSkin;
 
 /**
  * Terra menu button skin.
- *
  */
 public class TerraMenuButtonSkin extends MenuButtonSkin {
     private Font font;

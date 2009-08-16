@@ -22,12 +22,10 @@ import org.apache.pivot.wtk.content.TableViewHeaderDataRenderer;
 
 /**
  * Component representing a table view header.
- *
  */
 public class TableViewHeader extends Component {
     /**
      * Table view header data renderer interface.
-     *
      */
     public interface DataRenderer extends Renderer {
         public void render(Object data, TableViewHeader tableViewHeader, boolean highlighted);
@@ -36,7 +34,6 @@ public class TableViewHeader extends Component {
     /**
      * Table view header skin interface. Table view header skins must
      * implement this.
-     *
      */
     public interface Skin {
         public int getHeaderAt(int x);

@@ -18,7 +18,6 @@ package org.apache.pivot.charts.content;
 
 /**
  * Represents value data for x/y chart views.
- *
  */
 public class Point {
     private float x = 0;

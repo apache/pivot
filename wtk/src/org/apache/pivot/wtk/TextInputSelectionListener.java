@@ -18,7 +18,6 @@ package org.apache.pivot.wtk;
 
 /**
  * Text input selection listener interface.
- *
  */
 public interface TextInputSelectionListener {
     /**

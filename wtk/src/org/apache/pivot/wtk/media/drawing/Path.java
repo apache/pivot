@@ -30,14 +30,12 @@ import org.apache.pivot.util.ListenerList;
 /**
  * A shape representing a geometric path constructed from straight lines,
  * quadratic curves, and and cubic (B&eacute;zier) curves.
- *
  */
 public class Path extends Shape
     implements Sequence<Path.Operation> {
     /**
      * Abstract base class for path operations. See the specific subclasses for
      * details.
-     *
      */
     public static abstract class Operation {
         private Path path = null;
@@ -81,7 +79,6 @@ public class Path extends Shape
 
     /**
      * Adds a point to the path by moving to the specified coordinates.
-     *
      */
     public static final class MoveTo extends Operation {
         private int x;
@@ -164,7 +161,6 @@ public class Path extends Shape
     /**
      * Adds a point to the path by drawing a straight line from the current
      * coordinates to the new specified coordinates.
-     *
      */
     public static final class LineTo extends Operation {
         private int x;
@@ -225,7 +221,6 @@ public class Path extends Shape
      * coordinates and the specified coordinates {@code (x3,y3)},
      * using the specified points {@code (x1,y1)} and {@code (x2,y2)} as
      * B&eacute;zier control points.
-     *
      */
     public static final class CurveTo extends Operation {
         private int x1;
@@ -358,7 +353,6 @@ public class Path extends Shape
      * coordinates and the specified coordinates {@code (x2,y2)},
      * using the specified point {@code (x1,y1)} as a quadratic
      * parametric control point.
-     *
      */
     public static final class QuadTo extends Operation {
         private int x1;
@@ -451,7 +445,6 @@ public class Path extends Shape
 
     /**
      * The winding rule specifies how the interior of a path is determined.
-     *
      */
     public enum WindingRule {
         /**
@@ -490,7 +483,6 @@ public class Path extends Shape
 
     /**
      * Path listener list.
-     *
      */
     private static class PathListenerList extends ListenerList<PathListener>
         implements PathListener {

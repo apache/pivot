@@ -31,7 +31,6 @@ import javax.tools.ToolProvider;
  * <p>
  * <b>NOTE</b>: This class contains experimental functionality and should be
  * considered a "preview" until a future release.
- *
  */
 public class Compiler {
     /**

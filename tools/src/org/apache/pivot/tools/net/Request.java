@@ -36,12 +36,10 @@ import org.apache.pivot.util.concurrent.TaskExecutionException;
 
 /**
  * An asynchronous operation that executes an HTTP request.
- *
  */
 public class Request extends IOTask<Response> {
     /**
      * The supported HTTP methods.
-     *
      */
     public enum Method {
         GET,
@@ -89,7 +87,6 @@ public class Request extends IOTask<Response> {
 
     /**
      * HTTP request listener list.
-     *
      */
     private static class RequestListenerList extends ListenerList<RequestListener>
         implements RequestListener {
@@ -142,7 +139,6 @@ public class Request extends IOTask<Response> {
     private RequestListenerList httpRequestListeners = new RequestListenerList();
 
     /**
-     *
      */
     public Request(String method, String protocol, String host, int port, String path) {
         this.method = Method.valueOf(method.toUpperCase());

@@ -32,14 +32,12 @@ import org.apache.pivot.wtk.media.Image;
 
 /**
  * Window skin.
- *
  */
 public class WindowSkin extends ContainerSkin
     implements WindowListener, WindowStateListener {
     /**
      * Focus traversal policy that always returns the window's content. This
      * ensures that focus does not traverse out of the window.
-     *
      */
     public static class WindowFocusTraversalPolicy implements FocusTraversalPolicy {
         public Component getNextComponent(Container container, Component component, Direction direction) {

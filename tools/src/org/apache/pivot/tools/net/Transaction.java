@@ -18,7 +18,6 @@ package org.apache.pivot.tools.net;
 
 /**
  * Value object representing a request/response pair.
- *
  */
 public class Transaction {
     private Request request;

@@ -23,7 +23,6 @@ import java.awt.datatransfer.Transferable;
 /**
  * Singleton class providing a means of sharing data between components and
  * applications.
- *
  */
 public final class Clipboard {
     private static LocalManifest content = null;

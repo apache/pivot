@@ -35,7 +35,6 @@ import org.apache.pivot.collections.Dictionary;
  * Properties may provide multiple setters; the appropriate setter to invoke
  * is determined by the type of the value being set. If the value is
  * <tt>null</tt>, the return type of the getter method is used.
- *
  */
 public class BeanDictionary implements Dictionary<String, Object>, Iterable<String> {
     /**

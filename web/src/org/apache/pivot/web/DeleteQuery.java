@@ -18,7 +18,6 @@ package org.apache.pivot.web;
 
 /**
  * Executes an HTTP DELETE operation.
- *
  */
 public class DeleteQuery extends Query<Void> {
     public static final Method METHOD = Method.DELETE;

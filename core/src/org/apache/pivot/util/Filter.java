@@ -18,7 +18,6 @@ package org.apache.pivot.util;
 
 /**
  * Generic filter interface.
- *
  */
 public interface Filter<T> {
     /**

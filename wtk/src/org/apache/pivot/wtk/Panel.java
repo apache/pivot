@@ -18,7 +18,6 @@ package org.apache.pivot.wtk;
 
 /**
  * Simple container that performs no layout.
- *
  */
 public class Panel extends Container {
     public Panel() {

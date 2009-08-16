@@ -23,7 +23,6 @@ import org.apache.pivot.wtk.PushButton;
 
 /**
  * Abstract base class for push button skins.
- *
  */
 public abstract class PushButtonSkin extends ButtonSkin {
     protected boolean pressed = false;

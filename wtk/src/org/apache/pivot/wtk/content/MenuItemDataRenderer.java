@@ -32,7 +32,6 @@ import org.apache.pivot.wtk.media.Image;
 
 /**
  * Default menu item data renderer.
- *
  */
 public class MenuItemDataRenderer extends TablePane implements Button.DataRenderer {
     protected ImageView imageView = new ImageView();

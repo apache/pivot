@@ -54,12 +54,10 @@ import org.apache.pivot.wtk.skin.WindowSkin;
 
 /**
  * Palette skin class.
- *
  */
 public class TerraPaletteSkin extends WindowSkin {
     /**
      * Close button image.
-     *
      */
     protected class CloseImage extends Image {
         public int getWidth() {

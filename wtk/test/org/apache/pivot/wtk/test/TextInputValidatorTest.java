@@ -31,7 +31,6 @@ import org.apache.pivot.wtkx.WTKXSerializer;
 
 /**
  * Text input validator test.
- *
  */
 public class TextInputValidatorTest implements Application {
     private Window window = null;

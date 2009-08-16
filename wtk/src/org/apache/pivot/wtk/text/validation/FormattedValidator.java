@@ -20,7 +20,6 @@ import java.text.ParsePosition;
  * A validator for a {@link java.text.Format}'ed value.
  * <p>
  * This class is mostly intended to be a base-class for other validators.
- *
  */
 public class FormattedValidator<F extends Format> implements Validator {
     protected final F format;

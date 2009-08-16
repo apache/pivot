@@ -22,7 +22,6 @@ import org.apache.pivot.util.Filter;
 
 /**
  * Folder listener interface.
- *
  */
 public interface FolderListener {
     /**

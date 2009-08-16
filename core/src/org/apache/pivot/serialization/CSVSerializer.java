@@ -42,7 +42,6 @@ import org.apache.pivot.collections.Sequence;
  * and writes data to a comma-separated value (CSV) file.
  * <p>
  * TODO Add "firstLineContainsKeys" flag.
- *
  */
 public class CSVSerializer implements Serializer<List<?>> {
     /**
@@ -84,7 +83,6 @@ public class CSVSerializer implements Serializer<List<?>> {
 
     /**
      * Allows a caller to retrieve the contents of a CSV stream iteratively.
-     *
      */
     public class StreamIterator {
         private Reader reader;

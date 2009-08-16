@@ -18,7 +18,6 @@ package org.apache.pivot.web;
 
 /**
  * Executes an HTTP GET operation.
- *
  */
 public class GetQuery extends Query<Object> {
     public static final Method METHOD = Method.GET;

@@ -30,7 +30,6 @@ import org.w3c.dom.NodeList;
 
 /**
  * Wraps a W3C DOM {@link org.w3c.dom.NodeList} in a list collection.
- *
  */
 public class NodeListAdapter implements List<Node> {
     public class NodeListIterator implements Iterator<Node> {

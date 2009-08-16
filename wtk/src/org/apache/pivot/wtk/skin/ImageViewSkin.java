@@ -37,7 +37,6 @@ import org.apache.pivot.wtk.media.ImageListener;
  * Image view skin.
  * <p>
  * TODO Add a rotation (float) style.
- *
  */
 public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
     private Color backgroundColor = null;

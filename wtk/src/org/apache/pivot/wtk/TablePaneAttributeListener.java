@@ -18,7 +18,6 @@ package org.apache.pivot.wtk;
 
 /**
  * Table pane attribute listener interface.
- *
  */
 public interface TablePaneAttributeListener {
     /**

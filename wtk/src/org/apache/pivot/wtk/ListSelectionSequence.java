@@ -20,7 +20,6 @@ import org.apache.pivot.collections.Sequence;
 
 /**
  * Exposes the contents of a {@link ListSelection} as a sequence.
- *
  */
 class ListSelectionSequence implements Sequence<Span> {
     private ListSelection listSelection;

@@ -20,12 +20,10 @@ import org.apache.pivot.util.Vote;
 
 /**
  * Sheet state listener interface.
- *
  */
 public interface SheetStateListener extends SheetCloseListener {
     /**
      * Sheet state listener adapter.
-     *
      */
     public static class Adapter implements SheetStateListener {
         public Vote previewSheetClose(Sheet sheet, boolean result) {

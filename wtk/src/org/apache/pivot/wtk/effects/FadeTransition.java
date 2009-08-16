@@ -20,7 +20,6 @@ import org.apache.pivot.wtk.Component;
 
 /**
  * Fade transition class.
- *
  */
 public class FadeTransition extends Transition {
     private Component component;

@@ -44,7 +44,6 @@ import org.apache.pivot.wtk.WindowStateListener;
  * and compare it to the current state in component mouse down. If different,
  * we close the popup. This would also tie this base class less tightly to its
  * concrete subclasses.
- *
  */
 public abstract class CalendarButtonSkin extends ButtonSkin
     implements CalendarButtonListener, CalendarButtonSelectionListener {

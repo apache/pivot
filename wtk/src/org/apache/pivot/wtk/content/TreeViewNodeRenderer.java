@@ -33,7 +33,6 @@ import org.apache.pivot.wtk.media.Image;
  * Default tree node renderer, which knows how to render instances of
  * {@link TreeNode} and {@link Image}. Anything else will be rendered as a
  * string (by calling <tt>node.toString()</tt>.
- *
  */
 public class TreeViewNodeRenderer extends BoxPane implements TreeView.NodeRenderer {
     protected ImageView imageView = new ImageView();

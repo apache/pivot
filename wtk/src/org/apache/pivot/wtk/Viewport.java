@@ -24,12 +24,10 @@ import org.apache.pivot.util.ListenerList;
  * Abstract base class for viewport components. Viewports provide a windowed
  * view on a component (called the "view") that is too large to fit within a
  * given area. They are generally scrollable.
- *
  */
 public abstract class Viewport extends Container {
     /**
      * Viewport skin interface. Viewport skins must implement this.
-     *
      */
     public interface Skin {
         public Bounds getViewportBounds();

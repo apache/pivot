@@ -36,7 +36,6 @@ import org.apache.pivot.util.ListenerList;
  * This is a lightweight class that spoofs the actual list data by using an
  * internal calendar instance from which <tt>CalendarDate</tt> instances are
  * created on demand.
- *
  */
 public class CalendarDateSpinnerData implements List<CalendarDate> {
     /**
@@ -44,7 +43,6 @@ public class CalendarDateSpinnerData implements List<CalendarDate> {
      * data is spoofed, each accessor runs in constant time, so there's no
      * performance hit in making the iterator delegate its implementation to
      * the list.
-     *
      */
     private class DataIterator implements Iterator<CalendarDate> {
         private int index = 0;

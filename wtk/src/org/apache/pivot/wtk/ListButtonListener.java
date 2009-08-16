@@ -21,7 +21,6 @@ import org.apache.pivot.util.Filter;
 
 /**
  * List button listener list interface.
- *
  */
 public interface ListButtonListener {
     /**

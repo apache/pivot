@@ -21,7 +21,6 @@ import org.apache.pivot.util.concurrent.TaskListener;
 
 /**
  * Class that forwards task events to the UI thread.
- *
  */
 public class TaskAdapter<T> implements TaskListener<T> {
     /**

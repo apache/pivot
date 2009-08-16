@@ -46,7 +46,6 @@ import org.apache.pivot.wtk.Component;
  * graphics, it must still be clipped to the intersection of its own bounds and
  * the current clip (not the intersections of all preceding decorator prepare()
  * calls).
- *
  */
 public interface Decorator {
     /**
