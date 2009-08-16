@@ -431,8 +431,6 @@ public class TableView extends Component {
 
     /**
      * Table row editor interface.
-     *
-     * gbrown
      */
     public interface RowEditor extends Editor {
         /**
