@@ -496,9 +496,10 @@ limitations under the License.
 
     <!-- Package binary distribution -->
     <target name="install" description="Generates binary release in ${folder.install}"
-        depends="clean, package, doc">
-        <mkdir dir="${folder.install}/${folder.release}/${folder.doc}"/>
-        <mkdir dir="${folder.install}/${folder.release}/${folder.lib}"/>
+        depends="clean, package, doc, deploy">
+        <mkdir dir="${folder.install}/${folder.release}/lib"/>
+        <mkdir dir="${folder.install}/${folder.release}/doc"/>
+        <mkdir dir="${folder.install}/${folder.release}/webapps"/>
 
         <!-- Copy base files to the install folder -->
         <copy todir="${folder.install}/${folder.release}">
@@ -512,7 +513,7 @@ limitations under the License.
         </copy>
 
         <!-- Copy release binaries -->
-        <copy todir="${folder.install}/${folder.release}/${folder.lib}">
+        <copy todir="${folder.install}/${folder.release}/lib">
             <fileset dir="${folder.lib}">
                 <include name="${jar.charts}"/>
                 <include name="${jar.core}"/>
@@ -525,8 +526,16 @@ limitations under the License.
         </copy>
 
         <!-- Copy documentation -->
-        <copy todir="${folder.install}/${folder.release}/${folder.doc}">
+        <copy todir="${folder.install}/${folder.release}/doc">
             <fileset dir="${folder.doc}"/>
+        </copy>
+
+        <!-- Copy webapps -->
+        <copy todir="${folder.install}/${folder.release}/webapps">
+            <fileset dir="${folder.lib}">
+                <include name="${ant.project.name}_demos.war"/>
+                <include name="${ant.project.name}_tutorials.war"/>
+            </fileset>
         </copy>
 
         <!-- Create .zip archive -->
