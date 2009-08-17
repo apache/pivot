@@ -16,8 +16,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Frame title="MenuBar Test" preferredWidth="320" preferredHeight="240"
-    styles="{padding:{top:0, left:4, bottom:4, right:4}}"
+<Frame title="MenuBar Test" maximized="false" preferredWidth="320" preferredHeight="240"
+    styles="{padding:{top:0, left:4, bottom:4, right:4}, showWindowControls:true}"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">

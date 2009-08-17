@@ -129,16 +129,16 @@ public class MapListTest {
         mapList.add(pair);
         assertEquals(1, mapList.getLength());
         assertEquals(pair, mapList.get(0));
-        
+
         assertEquals(0, mapList.remove(pair));
         assertEquals(0, mapList.getLength());
 
         newSource.put("z", 24);
         assertEquals(1, mapList.getLength());
-        
+
         newSource.put("z", 24);
         assertEquals(1, mapList.getLength());
-        
+
         newSource.clear();
         assertEquals(0, mapList.getLength());
     }

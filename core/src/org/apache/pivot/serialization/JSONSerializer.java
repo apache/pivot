@@ -263,10 +263,16 @@ public class JSONSerializer implements Serializer<Object> {
             if (c == '\\') {
                 c = reader.read();
 
-                if (c == 't') {
-                    c = '\t';
+                if (c == 'b') {
+                    c = '\b';
+                } else if (c == 'f') {
+                    c = '\f';
                 } else if (c == 'n') {
                     c = '\n';
+                } else if (c == 'r') {
+                    c = '\r';
+                } else if (c == 't') {
+                    c = '\t';
                 } else if (c == 'u') {
                     StringBuilder unicodeBuilder = new StringBuilder();
                     while (unicodeBuilder.length() < 4) {

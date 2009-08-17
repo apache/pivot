@@ -44,6 +44,7 @@ public class MenuBarTest implements Application {
         boxPane.add(new TextInput());
         boxPane.add(new TextInput());
         frame1 = new Frame(boxPane);
+        frame1.setLocation(50, 50);
         frame1.setPreferredSize(320, 240);
         frame1.open(display);
 
@@ -67,7 +68,6 @@ public class MenuBarTest implements Application {
         textInput2.setMenuHandler(menuHandler);
         textInput3.setMenuHandler(menuHandler);
 
-        frame2.setLocation(40, 40);
         frame2.open(display);
     }
 

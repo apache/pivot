@@ -351,26 +351,44 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 
-        Dimensions preferredTitleBarSize = titleBarTablePane.getPreferredSize();
-        preferredWidth = preferredTitleBarSize.width;
-
         Frame frame = (Frame)getComponent();
 
+        // Include title bar width plus left/right title bar borders
+        Dimensions titleBarSize = titleBarTablePane.getPreferredSize();
+        preferredWidth = Math.max(titleBarSize.width + 2, preferredWidth);
+
+        if (height != -1) {
+            // Subtract title bar height and top/bottom title bar borders
+            // from height constraint
+            height -= titleBarSize.height + 2;
+        }
+
+        // Include menu bar width
         MenuBar menuBar = frame.getMenuBar();
         if (menuBar != null) {
-            preferredWidth = Math.max(preferredWidth, menuBar.getPreferredWidth());
+            Dimensions menuBarSize = menuBar.getPreferredSize();
+            preferredWidth = Math.max(preferredWidth, menuBarSize.width);
+
+            if (height != -1) {
+                // Subtract menu bar height from height constraint
+                height -= menuBarSize.height;
+            }
         }
 
         Component content = frame.getContent();
         if (content != null) {
             if (height != -1) {
-                height = Math.max(height - preferredTitleBarSize.height - 5 -
-                    padding.top - padding.bottom, 0);
+                // Subtract padding, top/bottom content borders, and content bevel
+                // from height constraint
+                height -= (padding.top + padding.bottom) + 3;
+
+                height = Math.max(height, 0);
             }
 
             preferredWidth = Math.max(preferredWidth, content.getPreferredWidth(height));
         }
 
+        // Add padding and left/right content borders
         preferredWidth += (padding.left + padding.right) + 2;
 
         return preferredWidth;
@@ -379,14 +397,12 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
     public int getPreferredHeight(int width) {
         int preferredHeight = 0;
 
-        if (width != -1) {
-            width = Math.max(width - 2, 0);
-        }
-
-        preferredHeight = titleBarTablePane.getPreferredHeight(width);
-
         Frame frame = (Frame)getComponent();
 
+        // Include title bar height plus top/bottom title bar borders
+        preferredHeight += titleBarTablePane.getPreferredHeight() + 2;
+
+        // Include menu bar height
         MenuBar menuBar = frame.getMenuBar();
         if (menuBar != null) {
             preferredHeight += menuBar.getPreferredHeight();
@@ -395,13 +411,17 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         Component content = frame.getContent();
         if (content != null) {
             if (width != -1) {
-                width = Math.max(width - padding.left - padding.right, 0);
+                // Subtract padding and left/right content borders from constraint
+                width -= (padding.left + padding.right) + 2;
+
+                width = Math.max(width, 0);
             }
 
             preferredHeight += content.getPreferredHeight(width);
         }
 
-        preferredHeight += (padding.top + padding.bottom) + 5;
+        // Add padding, top/bottom content borders, and content bevel
+        preferredHeight += (padding.top + padding.bottom) + 3;
 
         return preferredHeight;
     }
@@ -410,13 +430,16 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         int preferredWidth = 0;
         int preferredHeight = 0;
 
-        Dimensions preferredTitleBarSize = titleBarTablePane.getPreferredSize();
-
-        preferredWidth = preferredTitleBarSize.width;
-        preferredHeight = preferredTitleBarSize.height;
-
         Frame frame = (Frame)getComponent();
 
+        // Include title bar width plus left/right title bar borders
+        Dimensions titleBarSize = titleBarTablePane.getPreferredSize();
+        preferredWidth = Math.max(preferredWidth, titleBarSize.width + 2);
+
+        // Include title bar height plus top/bottom title bar borders
+        preferredHeight += titleBarSize.height + 2;
+
+        // Include menu bar size
         MenuBar menuBar = frame.getMenuBar();
         if (menuBar != null) {
             Dimensions preferredMenuBarSize = menuBar.getPreferredSize();
@@ -433,63 +456,86 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
             preferredHeight += preferredContentSize.height;
         }
 
+        // Add padding, borders, and content bevel
         preferredWidth += (padding.left + padding.right) + 2;
-        preferredHeight += (padding.top + padding.bottom) + 5;
+        preferredHeight += (padding.top + padding.bottom) + 3;
 
         return new Dimensions(preferredWidth, preferredHeight);
     }
-
     public void layout() {
         Frame frame = (Frame)getComponent();
 
         int width = getWidth();
         int height = getHeight();
 
-        // Size/position title bar
-        titleBarTablePane.setLocation(1, 1);
-        titleBarTablePane.setSize(Math.max(width - 2, 0),
-            Math.max(titleBarTablePane.getPreferredHeight(width - 2), 0));
-
-        // Size/position resize handle
-        resizeHandle.setSize(resizeHandle.getPreferredSize());
-        resizeHandle.setLocation(width - resizeHandle.getWidth() - 2,
-            height - resizeHandle.getHeight() - 2);
-
         boolean maximized = frame.isMaximized();
-        resizeHandle.setVisible(resizable
-            && !maximized
-            && (frame.isPreferredWidthSet()
-                || frame.isPreferredHeightSet()));
 
-        // Size/position menu bar
-        int contentX = padding.left + 1;
-        int contentY = titleBarTablePane.getHeight() + 4;
-        int contentWidth = Math.max(width - (padding.left + padding.right + 2), 0);
-        int contentHeight = Math.max(height - (titleBarTablePane.getHeight()
-            + padding.top + padding.bottom + 5), 0);
+        if (!maximized
+            || getShowWindowControls()) {
+            int clientX = 1;
+            int clientY = 1;
+            int clientWidth = width - 2;
+            int clientHeight = height - 2;
 
-        MenuBar menuBar = frame.getMenuBar();
-        if (menuBar != null) {
-            menuBar.setLocation(1, contentY);
+            // Size/position title bar
+            titleBarTablePane.setLocation(clientX, clientY);
+            titleBarTablePane.setSize(clientWidth, titleBarTablePane.getPreferredHeight());
+            titleBarTablePane.setVisible(true);
 
-            int menuBarWidth = width - 2;
-            if (menuBar.isVisible()) {
-                menuBar.setSize(menuBarWidth, menuBar.getPreferredHeight());
-            } else {
-                menuBar.setSize(menuBarWidth, 0);
+            // Add bottom title bar border, top content border, and content bevel
+            clientY += titleBarTablePane.getHeight() + 3;
+
+            // Size/position resize handle
+            resizeHandle.setSize(resizeHandle.getPreferredSize());
+            resizeHandle.setLocation(clientWidth - resizeHandle.getWidth(),
+                clientHeight - resizeHandle.getHeight());
+            resizeHandle.setVisible(resizable
+                && !maximized
+                && (frame.isPreferredWidthSet()
+                    || frame.isPreferredHeightSet()));
+
+            // Size/position menu bar
+            MenuBar menuBar = frame.getMenuBar();
+            if (menuBar != null
+                && menuBar.isVisible()) {
+                menuBar.setLocation(clientX, clientY);
+                menuBar.setSize(clientWidth, menuBar.getPreferredHeight());
+
+                clientY += menuBar.getHeight();
             }
 
-            contentY += menuBar.getHeight();
-            contentHeight -= menuBar.getHeight();
-        }
+            // Size/position content
+            Component content = frame.getContent();
+            if (content != null) {
+                int contentX = clientX + padding.left;
+                int contentY = clientY + padding.top;
+                int contentWidth = Math.max(clientWidth - (padding.left + padding.right), 0);
+                int contentHeight = Math.max(clientHeight - (clientY + padding.top + padding.bottom), 0);
 
-        contentY += padding.top;
+                content.setLocation(contentX, contentY);
+                content.setSize(contentWidth, contentHeight);
+            }
+        } else {
+            titleBarTablePane.setVisible(false);
+            resizeHandle.setVisible(false);
 
-        // Size/position content
-        Component content = frame.getContent();
-        if (content != null) {
-            content.setLocation(contentX, contentY);
-            content.setSize(contentWidth, contentHeight);
+            // Size/position menu bar
+            int clientY = 0;
+            MenuBar menuBar = frame.getMenuBar();
+            if (menuBar != null
+                && menuBar.isVisible()) {
+                menuBar.setLocation(0, clientY);
+                menuBar.setSize(width, menuBar.getPreferredHeight());
+
+                clientY += menuBar.getHeight();
+            }
+
+            Component content = frame.getContent();
+            if (content != null) {
+                content.setLocation(padding.left, clientY + padding.top);
+                content.setSize(Math.max(width - (padding.left + padding.right), 0),
+                    Math.max(height - (clientY + padding.top + padding.bottom), 0));
+            }
         }
     }
 
@@ -502,34 +548,40 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
 
         int width = getWidth();
         int height = getHeight();
-        int titleBarHeight = titleBarTablePane.getHeight();
 
-        // Draw the title area
-        Color titleBarBackgroundColor = frame.isActive() ?
-            this.titleBarBackgroundColor : inactiveTitleBarBackgroundColor;
-        Color titleBarBorderColor = frame.isActive() ?
-            this.titleBarBorderColor : inactiveTitleBarBorderColor;
-        Color titleBarBevelColor = frame.isActive() ?
-            this.titleBarBevelColor : inactiveTitleBarBevelColor;
+        boolean maximized = frame.isMaximized();
 
-        graphics.setPaint(new GradientPaint(width / 2, 0, titleBarBevelColor,
-            width / 2, titleBarHeight + 1, titleBarBackgroundColor));
-        graphics.fillRect(0, 0, width, titleBarHeight + 1);
+        if (!maximized
+            || getShowWindowControls()) {
+            int titleBarHeight = titleBarTablePane.getHeight();
 
-        // Draw the border
-        graphics.setPaint(titleBarBorderColor);
-        GraphicsUtilities.drawRect(graphics, 0, 0, width, titleBarHeight + 2);
+            // Draw the title area
+            Color titleBarBackgroundColor = frame.isActive() ?
+                this.titleBarBackgroundColor : inactiveTitleBarBackgroundColor;
+            Color titleBarBorderColor = frame.isActive() ?
+                this.titleBarBorderColor : inactiveTitleBarBorderColor;
+            Color titleBarBevelColor = frame.isActive() ?
+                this.titleBarBevelColor : inactiveTitleBarBevelColor;
 
-        // Draw the content area
-        Bounds contentAreaRectangle = new Bounds(0, titleBarHeight + 2,
-            width, height - (titleBarHeight + 2));
-        graphics.setPaint(contentBorderColor);
-        GraphicsUtilities.drawRect(graphics, contentAreaRectangle.x, contentAreaRectangle.y,
-            contentAreaRectangle.width, contentAreaRectangle.height);
+            graphics.setPaint(new GradientPaint(width / 2, 0, titleBarBevelColor,
+                width / 2, titleBarHeight + 1, titleBarBackgroundColor));
+            graphics.fillRect(0, 0, width, titleBarHeight + 1);
 
-        graphics.setPaint(contentBevelColor);
-        GraphicsUtilities.drawLine(graphics, contentAreaRectangle.x + 1,
-            contentAreaRectangle.y + 1, contentAreaRectangle.width - 2, Orientation.HORIZONTAL);
+            // Draw the border
+            graphics.setPaint(titleBarBorderColor);
+            GraphicsUtilities.drawRect(graphics, 0, 0, width, titleBarHeight + 2);
+
+            // Draw the content area
+            Bounds contentAreaRectangle = new Bounds(0, titleBarHeight + 2,
+                width, height - (titleBarHeight + 2));
+            graphics.setPaint(contentBorderColor);
+            GraphicsUtilities.drawRect(graphics, contentAreaRectangle.x, contentAreaRectangle.y,
+                contentAreaRectangle.width, contentAreaRectangle.height);
+
+            graphics.setPaint(contentBevelColor);
+            GraphicsUtilities.drawLine(graphics, contentAreaRectangle.x + 1,
+                contentAreaRectangle.y + 1, contentAreaRectangle.width - 2, Orientation.HORIZONTAL);
+        }
     }
 
     @Override
@@ -565,6 +617,18 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
 
     public void setShowCloseButton(boolean showCloseButton) {
         closeButton.setVisible(showCloseButton);
+    }
+
+    public boolean getShowWindowControls() {
+        return (getShowMinimizeButton()
+            && getShowMaximizeButton()
+            && getShowCloseButton());
+    }
+
+    public void setShowWindowControls(boolean showWindowControls) {
+        setShowMinimizeButton(showWindowControls);
+        setShowMaximizeButton(showWindowControls);
+        setShowCloseButton(showWindowControls);
     }
 
     public Insets getPadding() {
@@ -675,7 +739,8 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
             }
         } else {
             Cursor cursor = null;
-            if (x > resizeHandle.getX()
+            if (resizeHandle.isVisible()
+                && x > resizeHandle.getX()
                 && y > resizeHandle.getY()) {
                 boolean preferredWidthSet = component.isPreferredWidthSet();
                 boolean preferredHeightSet = component.isPreferredHeightSet();
