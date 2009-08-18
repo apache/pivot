@@ -510,7 +510,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
                 int contentX = clientX + padding.left;
                 int contentY = clientY + padding.top;
                 int contentWidth = Math.max(clientWidth - (padding.left + padding.right), 0);
-                int contentHeight = Math.max(clientHeight - (clientY + padding.top + padding.bottom), 0);
+                int contentHeight = Math.max(clientHeight - (clientY + padding.top + padding.bottom) + 1, 0);
 
                 content.setLocation(contentX, contentY);
                 content.setSize(contentWidth, contentHeight);

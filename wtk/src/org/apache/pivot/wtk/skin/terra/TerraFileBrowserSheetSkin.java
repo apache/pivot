@@ -107,6 +107,9 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
             }
         });
 
+        fileBrowser.getStyles().put("keyboardFolderTraversalEnabled",
+            (mode != FileBrowserSheet.Mode.SAVE_TO));
+
         fileBrowser.getFileBrowserListeners().add(new FileBrowserListener.Adapter() {
             public void selectedFileAdded(FileBrowser fileBrowser, File file) {
                 if (file.isDirectory()) {
@@ -302,7 +305,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
             }
 
             case SAVE_TO: {
-                okButton.setEnabled(selectedFiles.getLength() > 0);
+                okButton.setEnabled(selectedDirectoryCount > 0);
                 break;
             }
         }
