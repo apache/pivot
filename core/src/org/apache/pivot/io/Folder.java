@@ -251,6 +251,10 @@ public class Folder extends File implements List<File> {
     }
 
     public Iterator<File> iterator() {
+        if (files == null) {
+            refresh();
+        }
+
         return new ImmutableIterator<File>(files.iterator());
     }
 

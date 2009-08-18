@@ -107,7 +107,11 @@ limitations under the License.
                             </TableView>
                         </view>
                         <columnHeader>
-                            <TableViewHeader tableView="$fileTableView"/>
+                            <TableViewHeader tableView="$fileTableView">
+                                <tableViewHeaderPressListeners>
+                                    <terra:TerraFileBrowserSkin.SortHandler/>
+                                </tableViewHeaderPressListeners>
+                            </TableViewHeader>
                         </columnHeader>
                     </ScrollPane>
                 </content>

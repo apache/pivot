@@ -23,6 +23,19 @@ import org.apache.pivot.util.Filter;
  */
 public interface FilteredListListener<T> {
     /**
+     * Filtered list listener adapter.
+     *
+     * @param <T>
+     */
+    public static class Adapter<T> implements FilteredListListener<T> {
+        public void sourceChanged(FilteredList<T> filteredList, List<T> previousSource) {
+        }
+
+        public void filterChanged(FilteredList<T> filteredList, Filter<T> previousFilter) {
+        }
+    }
+
+    /**
      * Called when a filtered list's source has changed.
      *
      * @param filteredList

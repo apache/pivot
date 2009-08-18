@@ -47,6 +47,7 @@ public class FilteredList<T> implements List<T> {
 
     private List<T> source = null;
     private Filter<T> filter = null;
+    private Comparator<T> comparator = null;
 
     private ArrayList<T> view = null;
 
@@ -179,13 +180,9 @@ public class FilteredList<T> implements List<T> {
                 listListeners.listCleared(this);
             }
 
-            // Attach/detach list listeners
+            // Stop listening for changes
             if (previousSource != null) {
                 previousSource.getListListeners().remove(listListener);
-            }
-
-            if (source != null) {
-                source.getListListeners().add(listListener);
             }
 
             // Update source
@@ -205,6 +202,14 @@ public class FilteredList<T> implements List<T> {
                         listListeners.itemInserted(this, index);
                     }
                 }
+
+                // Re-apply comparator
+                view.setComparator(comparator);
+            }
+
+            // Listen for changes
+            if (source != null) {
+                source.getListListeners().add(listListener);
             }
         }
     }
@@ -462,18 +467,20 @@ public class FilteredList<T> implements List<T> {
 
     @Override
     public Comparator<T> getComparator() {
-        return (view == null) ? null : view.getComparator();
+        return comparator;
     }
 
     @Override
     public void setComparator(Comparator<T> comparator) {
-        if (view == null) {
-            throw new IllegalStateException();
-        }
-
         Comparator<T> previousComparator = view.getComparator();
+
         if (previousComparator != comparator) {
-            view.setComparator(comparator);
+            this.comparator = comparator;
+
+            if (view != null) {
+                view.setComparator(comparator);
+            }
+
             listListeners.comparatorChanged(this, previousComparator);
         }
     }

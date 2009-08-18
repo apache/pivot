@@ -21,10 +21,14 @@ import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.util.Comparator;
 import java.util.Date;
 
 import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.FilteredList;
+import org.apache.pivot.collections.FilteredListListener;
 import org.apache.pivot.collections.List;
+import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.io.Folder;
 import org.apache.pivot.serialization.SerializationException;
@@ -36,12 +40,14 @@ import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.ComponentKeyListener;
 import org.apache.pivot.wtk.ComponentMouseButtonListener;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.FileBrowser;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Insets;
+import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.ListButton;
 import org.apache.pivot.wtk.ListButtonSelectionListener;
@@ -49,9 +55,14 @@ import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.ScrollPane;
+import org.apache.pivot.wtk.SortDirection;
 import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.TableView;
+import org.apache.pivot.wtk.TableViewHeader;
+import org.apache.pivot.wtk.TableViewHeaderPressListener;
 import org.apache.pivot.wtk.TableViewSelectionListener;
+import org.apache.pivot.wtk.TextInput;
+import org.apache.pivot.wtk.TextInputTextListener;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.skin.FileBrowserSkin;
@@ -154,7 +165,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     }
 
     /**
-     * List view renderer for displaying file system contents.
+     * List view file renderer.
      */
     public static class ListViewFileRenderer extends FileRenderer implements ListView.ItemRenderer {
         public ListViewFileRenderer() {
@@ -202,6 +213,9 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         }
     }
 
+    /**
+     * Table view file renderer.
+     */
     public static class TableViewFileRenderer extends FileRenderer implements TableView.CellRenderer {
         public static final String NAME_KEY = "name";
         public static final String SIZE_KEY = "size";
@@ -268,15 +282,95 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         }
     }
 
+    public static class FileComparator implements Comparator<File> {
+        private String columnName = null;
+        private SortDirection sortDirection = null;
+
+        public FileComparator(String columnName, SortDirection sortDirection) {
+            this.columnName = columnName;
+            this.sortDirection = sortDirection;
+        }
+
+        public int compare(File file1, File file2) {
+            int result;
+
+            if (columnName.equals("name")) {
+                result = file1.getName().compareToIgnoreCase(file2.getName());
+            } else if (columnName.equals("size")) {
+                result = Long.signum(file1.length() - file2.length());
+            } else if (columnName.equals("lastModified")) {
+                result = Long.signum(file1.lastModified() - file2.lastModified());
+            } else {
+                throw new IllegalArgumentException();
+            }
+
+            result *= (sortDirection == SortDirection.ASCENDING) ? 1 : -1;
+
+            return result;
+        }
+    }
+
+    /**
+     * File sort handler.
+     */
+    public static class SortHandler implements TableViewHeaderPressListener {
+        @SuppressWarnings("unchecked")
+        public void headerPressed(TableViewHeader tableViewHeader, int index) {
+            TableView tableView = tableViewHeader.getTableView();
+            TableView.ColumnSequence columns = tableView.getColumns();
+            TableView.Column column = columns.get(index);
+
+            SortDirection sortDirection = column.getSortDirection();
+
+            if (sortDirection == null
+                || sortDirection == SortDirection.DESCENDING) {
+                sortDirection = SortDirection.ASCENDING;
+            } else {
+                sortDirection = SortDirection.DESCENDING;
+            }
+
+            List<File> files = (List<File>)tableView.getTableData();
+            files.setComparator(new FileComparator(column.getName(), sortDirection));
+
+            for (int i = 0, n = columns.getLength(); i < n; i++) {
+                column = columns.get(i);
+                column.setSortDirection(i == index ? sortDirection : null);
+            }
+        }
+    }
+
+    /**
+     * File name filter.
+     */
+    public static class FileNameFilter implements Filter<File> {
+        private String match;
+
+        public FileNameFilter(String match) {
+            this.match = match.toLowerCase();
+        }
+
+        public boolean include(File file) {
+            String name = file.getName();
+            name = name.toLowerCase();
+
+            return name.startsWith(match);
+        }
+    }
+
     private Component content = null;
 
     @WTKX private ListButton pathListButton = null;
     @WTKX private PushButton goUpButton = null;
     @WTKX private PushButton newFolderButton = null;
     @WTKX private PushButton goHomeButton = null;
+    @WTKX private TextInput searchTextInput = null;
 
     @WTKX private ScrollPane fileScrollPane = null;
     @WTKX private TableView fileTableView = null;
+
+    private FilteredList<File> files = new FilteredList<File>();
+
+    private boolean keyboardFolderTraversalEnabled = true;
 
     private boolean updatingSelection = false;
 
@@ -338,25 +432,51 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             }
         });
 
+        searchTextInput.getComponentKeyListeners().add(new ComponentKeyListener.Adapter() {
+            @Override
+            public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+                boolean consumed = super.keyPressed(component, keyCode, keyLocation);
+
+                if (keyCode == Keyboard.KeyCode.ESCAPE) {
+                    searchTextInput.setText("");
+                    consumed = true;
+                }
+
+                return consumed;
+            }
+        });
+
+        searchTextInput.getTextInputTextListeners().add(new TextInputTextListener() {
+            public void textChanged(TextInput textInput) {
+                String text = textInput.getText();
+
+                if (text.length() == 0) {
+                    files.setFilter(null);
+                } else {
+                    files.setFilter(new FileNameFilter(text));
+                }
+            }
+        });
+
         fileTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener() {
+            @SuppressWarnings("unchecked")
             public void selectedRangeAdded(TableView tableView, int rangeStart, int rangeEnd) {
                 updatingSelection = true;
 
-                Folder selectedFolder = (Folder)tableView.getTableData();
                 for (int i = rangeStart; i <= rangeEnd; i++) {
-                    File file = selectedFolder.get(i);
+                    File file = files.get(i);
                     fileBrowser.addSelectedFile(file);
                 }
 
                 updatingSelection = false;
             }
 
+            @SuppressWarnings("unchecked")
             public void selectedRangeRemoved(TableView tableView, int rangeStart, int rangeEnd) {
                 updatingSelection = true;
 
-                Folder selectedFolder = (Folder)tableView.getTableData();
                 for (int i = rangeStart; i <= rangeEnd; i++) {
-                    File file = selectedFolder.get(i);
+                    File file = files.get(i);
                     fileBrowser.removeSelectedFile(file);
                 }
 
@@ -383,6 +503,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             private int index = -1;
 
             @Override
+            @SuppressWarnings("unchecked")
             public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
                 if (count == 1) {
                     index = fileTableView.getRowAt(y);
@@ -391,7 +512,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                     if (index != -1
                         && index == this.index
                         && fileTableView.isRowSelected(index)) {
-                        File selectedDirectory = (File)fileTableView.getTableData().get(index);
+                        File selectedDirectory = files.get(index);
                         fileBrowser.setSelectedFolder(new Folder(selectedDirectory.getPath()));
                     }
                 }
@@ -399,6 +520,20 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                 return false;
             }
         });
+
+        files.getListListeners().add(new ListListener.Adapter<File>() {
+            public void comparatorChanged(List<File> list, Comparator<File> previousComparator) {
+                fileBrowser.clearSelection();
+            }
+        });
+
+        files.getFilteredListListeners().add(new FilteredListListener.Adapter<File>() {
+            public void filterChanged(FilteredList<File> filteredList, Filter<File> previousFilter) {
+                fileBrowser.clearSelection();
+            }
+        });
+
+        fileTableView.setTableData(files);
 
         selectedFolderChanged(fileBrowser, null);
         selectedFilesChanged(fileBrowser, null);
@@ -438,11 +573,56 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         content.setSize(width, height);
     }
 
+
+    public boolean getKeyboardFolderTraversalEnabled() {
+        return keyboardFolderTraversalEnabled;
+    }
+
+    public void setKeyboardFolderTraversalEnabled(boolean keyboardFolderTraversalEnabled) {
+        this.keyboardFolderTraversalEnabled = keyboardFolderTraversalEnabled;
+    }
+
+    @Override
+    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+        boolean consumed = super.keyPressed(component, keyCode, keyLocation);
+
+        FileBrowser fileBrowser = (FileBrowser)getComponent();
+
+        if (keyCode == Keyboard.KeyCode.ENTER
+            && keyboardFolderTraversalEnabled) {
+            Sequence<File> selectedFiles = fileBrowser.getSelectedFiles();
+
+            if (selectedFiles.getLength() == 1) {
+                File selectedFile = selectedFiles.get(0);
+                if (selectedFile.isDirectory()) {
+                    fileBrowser.setSelectedFolder(new Folder(selectedFile.getPath()));
+                    consumed = true;
+                }
+            }
+        }
+
+        return consumed;
+    }
+
+    @Override
+    public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+        boolean consumed = super.keyReleased(component, keyCode, keyLocation);
+
+        if (keyCode == Keyboard.KeyCode.S
+            && Keyboard.isPressed(Keyboard.Modifier.META)) {
+            searchTextInput.requestFocus();
+            consumed = true;
+        }
+
+        return consumed;
+    }
+
     public void multiSelectChanged(FileBrowser fileBrowser) {
         fileTableView.setSelectMode(fileBrowser.isMultiSelect() ?
             TableView.SelectMode.MULTI : TableView.SelectMode.SINGLE);
     }
 
+    @SuppressWarnings("unchecked")
     public void selectedFolderChanged(FileBrowser fileBrowser, Folder previousSelectedFolder) {
         ArrayList<File> path = new ArrayList<File>();
 
@@ -462,9 +642,12 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         File homeDirectory = new File(System.getProperty("user.home"));
         goHomeButton.setEnabled(!selectedFolder.equals(homeDirectory));
 
+        searchTextInput.setText("");
+
         fileScrollPane.setScrollTop(0);
         fileScrollPane.setScrollLeft(0);
-        fileTableView.setTableData(selectedFolder);
+
+        files.setSource(selectedFolder);
 
         fileTableView.requestFocus();
     }
@@ -472,9 +655,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     @SuppressWarnings("unchecked")
     public void selectedFileAdded(FileBrowser fileBrowser, File file) {
         if (!updatingSelection) {
-            List<File> fileTableData = (List<File>)fileTableView.getTableData();
-
-            int index = fileTableData.indexOf(file);
+            int index = files.indexOf(file);
             if (index != -1) {
                 fileTableView.addSelectedIndex(index);
             }
@@ -484,9 +665,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     @SuppressWarnings("unchecked")
     public void selectedFileRemoved(FileBrowser fileBrowser, File file) {
         if (!updatingSelection) {
-            List<File> fileTableData = (List<File>)fileTableView.getTableData();
-
-            int index = fileTableData.indexOf(file);
+            int index = files.indexOf(file);
             if (index != -1) {
                 fileTableView.removeSelectedIndex(index);
             }
@@ -498,13 +677,12 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         if (!updatingSelection) {
             fileTableView.clearSelection();
 
-            List<File> fileTableData = (List<File>)fileTableView.getTableData();
             Sequence<File> selectedFiles = fileBrowser.getSelectedFiles();
 
             for (int i = 0, n = selectedFiles.getLength(); i < n; i++) {
                 File selectedFile = selectedFiles.get(i);
 
-                int index = fileTableData.indexOf(selectedFile);
+                int index = files.indexOf(selectedFile);
                 if (index != -1) {
                     fileTableView.addSelectedIndex(index);
                 }

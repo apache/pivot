@@ -471,7 +471,7 @@ public class TableView extends Component {
      * <p>
      * TODO Allow a caller to sort on multiple columns.
      */
-    public static final class RowComparator implements Comparator<Object> {
+    public static class RowComparator implements Comparator<Object> {
         private String columnName = null;
         private SortDirection sortDirection = null;
 
