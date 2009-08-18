@@ -512,8 +512,10 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                     if (index != -1
                         && index == this.index
                         && fileTableView.isRowSelected(index)) {
-                        File selectedDirectory = files.get(index);
-                        fileBrowser.setSelectedFolder(new Folder(selectedDirectory.getPath()));
+                        File file = files.get(index);
+                        if (file.isDirectory()) {
+                            fileBrowser.setSelectedFolder(new Folder(file.getPath()));
+                        }
                     }
                 }
 

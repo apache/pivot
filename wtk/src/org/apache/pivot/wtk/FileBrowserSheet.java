@@ -64,7 +64,7 @@ public class FileBrowserSheet extends Sheet {
 
     private Mode mode;
     private Folder selectedFolder;
-    private FileList fileSelection = new FileList();
+    private FileList selectedFiles = new FileList();
     private Filter<File> disabledFileFilter = null;
 
     private FileBrowserSheetListenerList fileBrowserSheetListeners = new FileBrowserSheetListenerList();
@@ -99,7 +99,7 @@ public class FileBrowserSheet extends Sheet {
             Folder previousSelectedFolder = this.selectedFolder;
             if (previousSelectedFolder != selectedFolder) {
                 this.selectedFolder = selectedFolder;
-                fileSelection.clear();
+                selectedFiles.clear();
                 fileBrowserSheetListeners.selectedFolderChanged(this, previousSelectedFolder);
             }
         } else {
@@ -118,7 +118,7 @@ public class FileBrowserSheet extends Sheet {
             throw new IllegalStateException("File browser is not in single-select mode.");
         }
 
-        return (fileSelection.getLength() == 0) ? null : fileSelection.get(0);
+        return (selectedFiles.getLength() == 0) ? null : selectedFiles.get(0);
     }
 
     /**
@@ -141,7 +141,7 @@ public class FileBrowserSheet extends Sheet {
      * An immutable list of selected files.
      */
     public Sequence<File> getSelectedFiles() {
-        return new ImmutableList<File>(fileSelection);
+        return new ImmutableList<File>(selectedFiles);
     }
 
     /**
@@ -166,7 +166,7 @@ public class FileBrowserSheet extends Sheet {
         // Update the selection
         Sequence<File> previousSelectedFiles = getSelectedFiles();
 
-        FileList fileSelection = new FileList();
+        FileList fileList = new FileList();
         for (int i = 0, n = selectedFiles.getLength(); i < n; i++) {
             File file = selectedFiles.get(i);
 
@@ -174,10 +174,10 @@ public class FileBrowserSheet extends Sheet {
                 throw new IllegalArgumentException("file is null.");
             }
 
-            fileSelection.add(file);
+            fileList.add(file);
         }
 
-        this.fileSelection = fileSelection;
+        this.selectedFiles = fileList;
 
         // Notify listeners
         fileBrowserSheetListeners.selectedFilesChanged(this, previousSelectedFiles);

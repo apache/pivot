@@ -72,7 +72,7 @@ public class FileBrowser extends Container {
     }
 
     private Folder selectedFolder;
-    private FileList fileSelection = new FileList();
+    private FileList selectedFiles = new FileList();
     private boolean multiSelect = false;
     private Filter<File> disabledFileFilter = null;
 
@@ -109,7 +109,7 @@ public class FileBrowser extends Container {
             Folder previousSelectedFolder = this.selectedFolder;
             if (previousSelectedFolder != selectedFolder) {
                 this.selectedFolder = selectedFolder;
-                fileSelection.clear();
+                selectedFiles.clear();
                 fileBrowserListeners.selectedFolderChanged(this, previousSelectedFolder);
             }
         } else {
@@ -139,7 +139,7 @@ public class FileBrowser extends Container {
             file = new File(selectedFolder, file.getPath());
         }
 
-        int index = fileSelection.add(file);
+        int index = selectedFiles.add(file);
         if (index != -1) {
             fileBrowserListeners.selectedFileAdded(this, file);
         }
@@ -161,7 +161,7 @@ public class FileBrowser extends Container {
             throw new IllegalArgumentException();
         }
 
-        int index = fileSelection.remove(file);
+        int index = selectedFiles.remove(file);
         if (index != -1) {
             fileBrowserListeners.selectedFileRemoved(this, file);
         }
@@ -180,7 +180,7 @@ public class FileBrowser extends Container {
             throw new IllegalStateException("File browser is not in single-select mode.");
         }
 
-        return (fileSelection.getLength() == 0) ? null : fileSelection.get(0);
+        return (selectedFiles.getLength() == 0) ? null : selectedFiles.get(0);
     }
 
     /**
@@ -203,7 +203,7 @@ public class FileBrowser extends Container {
      * An immutable list of selected files.
      */
     public Sequence<File> getSelectedFiles() {
-        return new ImmutableList<File>(fileSelection);
+        return new ImmutableList<File>(selectedFiles);
     }
 
     /**
@@ -228,7 +228,7 @@ public class FileBrowser extends Container {
         // Update the selection
         Sequence<File> previousSelectedFiles = getSelectedFiles();
 
-        FileList fileSelection = new FileList();
+        FileList fileList = new FileList();
         for (int i = 0, n = selectedFiles.getLength(); i < n; i++) {
             File file = selectedFiles.get(i);
 
@@ -244,10 +244,10 @@ public class FileBrowser extends Container {
                 file = new File(selectedFolder, file.getPath());
             }
 
-            fileSelection.add(file);
+            fileList.add(file);
         }
 
-        this.fileSelection = fileSelection;
+        this.selectedFiles = fileList;
 
         // Notify listeners
         fileBrowserListeners.selectedFilesChanged(this, previousSelectedFiles);
@@ -278,7 +278,7 @@ public class FileBrowser extends Container {
     public void setMultiSelect(boolean multiSelect) {
         if (this.multiSelect != multiSelect) {
             // Clear any existing selection
-            fileSelection.clear();
+            selectedFiles.clear();
 
             this.multiSelect = multiSelect;
 
