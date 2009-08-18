@@ -52,7 +52,8 @@ limitations under the License.
                                     <content:ButtonData icon="@folder_up.png"/>
                                 </buttonData>
                             </PushButton>
-                            <PushButton wtkx:id="newFolderButton" styles="{toolbar:true}" tooltipText="%newFolder">
+                            <PushButton wtkx:id="newFolderButton" styles="{toolbar:true}" tooltipText="%newFolder"
+                                visible="false">
                                 <buttonData>
                                     <content:ButtonData icon="@folder_add.png"/>
                                 </buttonData>

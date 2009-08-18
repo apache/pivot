@@ -1245,7 +1245,7 @@ public class TerraTextInputSkin extends ComponentSkin
 
     // Text input events
     public void textNodeChanged(TextInput textInput, TextNode previousTextNode) {
-        updateSelection();
+        updateSelection(0);
     }
 
     public void textSizeChanged(TextInput textInput, int previousTextSize) {
@@ -1278,7 +1278,7 @@ public class TerraTextInputSkin extends ComponentSkin
 
     // Text input character events
     public void charactersInserted(TextInput textInput, int index, int count) {
-        updateSelection();
+        updateSelection(0);
     }
 
     public void charactersRemoved(TextInput textInput, int index, int count) {
@@ -1294,16 +1294,28 @@ public class TerraTextInputSkin extends ComponentSkin
             scrollLeft = Math.max(textWidth + (padding.left + padding.right + 2) - width, 0);
         }
 
-        updateSelection();
+        updateSelection(0);
     }
 
     // Text input selection events
     public void selectionChanged(TextInput textInput, int previousSelectionStart,
         int previousSelectionLength) {
-        updateSelection();
+        int selectionStart = textInput.getSelectionStart();
+        int selectionLength = textInput.getSelectionLength();
+
+        int bias;
+        if (selectionStart < previousSelectionStart) {
+            bias = -1;
+        } else if (selectionLength > previousSelectionLength) {
+            bias = 1;
+        } else {
+            bias = 0;
+        }
+
+        updateSelection(bias);
     }
 
-    private void updateSelection() {
+    private void updateSelection(int bias) {
         // Update the selection bounding box
         String text = getText();
 
@@ -1336,7 +1348,8 @@ public class TerraTextInputSkin extends ComponentSkin
                 Rectangle2D caretBounds = caretShapes[0].getBounds();
                 int caretLeft = (int)caretBounds.getX();
 
-                if (caretLeft - scrollLeft < 0) {
+                if (caretLeft - scrollLeft < 0
+                    && bias <= 0) {
                     // Ensure that the left edge of caret is visible
                     scrollLeft = caretLeft;
                 } else {
@@ -1352,7 +1365,8 @@ public class TerraTextInputSkin extends ComponentSkin
                 Rectangle2D logicalHighlightBounds = logicalHighlightShape.getBounds();
                 int logicalHighlightLeft = (int)logicalHighlightBounds.getX();
 
-                if (logicalHighlightLeft - scrollLeft < 0) {
+                if (logicalHighlightLeft - scrollLeft < 0
+                    && bias <= 0) {
                     // Ensure that the left edge of the highlight is visible
                     scrollLeft = logicalHighlightLeft;
                 } else {

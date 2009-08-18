@@ -45,6 +45,20 @@ import org.apache.pivot.wtkx.WTKXSerializer;
  * Terra file browser sheet skin.
  */
 public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBrowserSheetListener {
+    private static class SaveToFileFilter implements Filter<File> {
+        public final Filter<File> sourceFilter;
+
+        public SaveToFileFilter(Filter<File> sourceFilter) {
+            this.sourceFilter = sourceFilter;
+        }
+
+        public boolean include(File file) {
+            return (!file.isDirectory()
+                || (sourceFilter != null
+                    && sourceFilter.include(file)));
+        }
+    };
+
     @WTKX private TablePane tablePane = null;
     @WTKX private TablePane.Row saveAsRow = null;
     @WTKX private TextInput saveAsTextInput = null;
@@ -264,8 +278,16 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
         }
     }
 
-    public void disabledFileFilterChanged(FileBrowserSheet fileBrowserSheet, Filter<File> previousFileFilter) {
-        fileBrowser.setDisabledFileFilter(fileBrowserSheet.getDisabledFileFilter());
+    public void disabledFileFilterChanged(FileBrowserSheet fileBrowserSheet, Filter<File> previousDisabledFileFilter) {
+
+        Filter<File> disabledFileFilter = fileBrowserSheet.getDisabledFileFilter();
+
+        FileBrowserSheet.Mode mode = fileBrowserSheet.getMode();
+        if (mode == FileBrowserSheet.Mode.SAVE_TO) {
+            disabledFileFilter = new SaveToFileFilter(disabledFileFilter);
+        }
+
+        fileBrowser.setDisabledFileFilter(disabledFileFilter);
     }
 
     private void updateOKButtonState() {
@@ -288,7 +310,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
             }
 
             case SAVE_TO: {
-                okButton.setEnabled(selectedDirectoryCount > 0);
+                okButton.setEnabled(selectedFiles.getLength() > 0);
                 break;
             }
         }

@@ -24,6 +24,7 @@ import java.text.DateFormat;
 import java.util.Date;
 
 import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.io.Folder;
 import org.apache.pivot.serialization.SerializationException;
@@ -474,25 +475,39 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         fileTableView.requestFocus();
     }
 
+    @SuppressWarnings("unchecked")    
     public void selectedFileAdded(FileBrowser fileBrowser, File file) {
         if (!updatingSelection) {
-            // TODO
+            // TODO This won't work because the table contains absolute files, while the selection
+            // does not
+            List<File> fileTableData = (List<File>)fileTableView.getTableData();
+            int index = fileTableData.indexOf(file);
+            if (index != -1) {
+                fileTableView.addSelectedIndex(index);
+            }
         }
     }
 
+    @SuppressWarnings("unchecked")
     public void selectedFileRemoved(FileBrowser fileBrowser, File file) {
         if (!updatingSelection) {
-            // TODO
+            // TODO This won't work because the table contains absolute files, while the selection
+            // does not
+            List<File> fileTableData = (List<File>)fileTableView.getTableData();
+            int index = fileTableData.indexOf(file);
+            if (index != -1) {
+                fileTableView.removeSelectedIndex(index);
+            }
         }
     }
 
     public void selectedFilesChanged(FileBrowser fileBrowser, Sequence<File> previousSelectedFiles) {
         if (!updatingSelection) {
-            // TODO
+            // TODO Reset the selection
         }
     }
 
-    public void disabledFileFilterChanged(FileBrowser fileBrowser, Filter<File> previousFileFilter) {
+    public void disabledFileFilterChanged(FileBrowser fileBrowser, Filter<File> previousDisabledFileFilter) {
         fileTableView.setDisabledRowFilter(fileBrowser.getDisabledFileFilter());
     }
 
