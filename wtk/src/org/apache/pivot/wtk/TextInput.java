@@ -216,7 +216,7 @@ public class TextInput extends Component {
             // Clear the selection
             this.textNode = textNode;
 
-            selectionStart = textNode.getCharacterCount();
+            selectionStart = 0;
             selectionLength = 0;
 
             textInputListeners.textNodeChanged(this, previousTextNode);
@@ -287,6 +287,10 @@ public class TextInput extends Component {
         if (length + text.length() == textNode.getCharacterCount()) {
             setSelection(index + text.length(), 0);
         }
+    }
+
+    public int getTextLength() {
+        return textNode.getCharacterCount();
     }
 
     public void delete(Direction direction) {

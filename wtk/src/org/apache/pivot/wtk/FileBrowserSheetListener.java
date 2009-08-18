@@ -30,9 +30,6 @@ public interface FileBrowserSheetListener {
      * File browser sheet listener adapter.
      */
     public static class Adapter implements FileBrowserSheetListener {
-        public void multiSelectChanged(FileBrowserSheet fileBrowserSheet) {
-        }
-
         public void selectedFolderChanged(FileBrowserSheet fileBrowserSheet,
             Folder previousSelectedFolder) {
         }
@@ -45,13 +42,6 @@ public interface FileBrowserSheetListener {
             Filter<File> previousDisabledFileFilter) {
         }
     }
-
-    /**
-     * Called when a file browser sheet's multi-select flag has changed.
-     *
-     * @param fileBrowserSheet
-     */
-    public void multiSelectChanged(FileBrowserSheet fileBrowserSheet);
 
     /**
      * Called when a file browser sheet's selected folder has changed.

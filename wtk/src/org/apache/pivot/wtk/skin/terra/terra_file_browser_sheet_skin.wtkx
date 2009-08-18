@@ -21,19 +21,19 @@ limitations under the License.
     xmlns="org.apache.pivot.wtk">
     <Border styles="{padding:10}">
         <content>
-            <TablePane styles="{verticalSpacing:8}">
+            <TablePane wtkx:id="tablePane" styles="{verticalSpacing:8}">
                 <columns>
                     <TablePane.Column width="1*"/>
                 </columns>
                 <rows>
-                    <TablePane.Row height="-1">
-                        <BoxPane styles="{verticalAlignment:'center'}">
-                            <Label text="%saveAs"/>
-                            <TextInput wtkx:id="saveAsTextInput"/>
+                    <TablePane.Row wtkx:id="saveAsRow" height="-1">
+                        <BoxPane orientation="vertical" styles="{fill:true}">
+                            <BoxPane styles="{verticalAlignment:'center'}">
+                                <Label text="%saveAs"/>
+                                <TextInput wtkx:id="saveAsTextInput" textSize="32"/>
+                            </BoxPane>
+                            <Separator styles="{padding:2}"/>
                         </BoxPane>
-                    </TablePane.Row>
-                    <TablePane.Row>
-                        <Separator styles="{padding:2}"/>
                     </TablePane.Row>
                     <TablePane.Row height="1*">
                         <FileBrowser wtkx:id="fileBrowser"

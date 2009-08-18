@@ -42,12 +42,6 @@ public class FileBrowserSheet extends Sheet {
 
     private static class FileBrowserSheetListenerList extends ListenerList<FileBrowserSheetListener>
         implements FileBrowserSheetListener {
-        public void multiSelectChanged(FileBrowserSheet fileBrowserSheet) {
-            for (FileBrowserSheetListener listener : this) {
-                listener.multiSelectChanged(fileBrowserSheet);
-            }
-        }
-
         public void selectedFolderChanged(FileBrowserSheet fileBrowserSheet, Folder previousSelectedFolder) {
             for (FileBrowserSheetListener listener : this) {
                 listener.selectedFolderChanged(fileBrowserSheet, previousSelectedFolder);
@@ -71,7 +65,6 @@ public class FileBrowserSheet extends Sheet {
     private Mode mode;
     private Folder selectedFolder;
     private FileList fileSelection = new FileList();
-    private boolean multiSelect = false;
     private Filter<File> disabledFileFilter = null;
 
     private FileBrowserSheetListenerList fileBrowserSheetListeners = new FileBrowserSheetListenerList();
@@ -116,7 +109,7 @@ public class FileBrowserSheet extends Sheet {
      * The currently selected file.
      */
     public File getSelectedFile() {
-        if (multiSelect) {
+        if (mode == Mode.OPEN_MULTIPLE) {
             throw new IllegalStateException("File browser is not in single-select mode.");
         }
 
@@ -162,7 +155,7 @@ public class FileBrowserSheet extends Sheet {
             throw new IllegalArgumentException("selectedFiles is null.");
         }
 
-        if (!multiSelect
+        if (mode != Mode.OPEN_MULTIPLE
             && selectedFiles.getLength() > 1) {
             throw new IllegalArgumentException("Multi-select is not enabled.");
         }
@@ -194,21 +187,6 @@ public class FileBrowserSheet extends Sheet {
      */
     public void clearSelection() {
         setSelectedFiles(new ArrayList<File>());
-    }
-
-    public boolean isMultiSelect() {
-        return multiSelect;
-    }
-
-    public void setMultiSelect(boolean multiSelect) {
-        if (this.multiSelect != multiSelect) {
-            // Clear any existing selection
-            fileSelection.clear();
-
-            this.multiSelect = multiSelect;
-
-            fileBrowserSheetListeners.multiSelectChanged(this);
-        }
     }
 
     public Filter<File> getDisabledFileFilter() {
