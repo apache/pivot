@@ -92,13 +92,18 @@ public class FileBrowserSheet extends Sheet {
 
     public void setSelectedFolder(Folder selectedFolder) {
         if (selectedFolder == null) {
-            throw new IllegalArgumentException("selectedFolder is null.");
+            throw new IllegalArgumentException();
         }
 
-        Folder previousSelectedFolder = this.selectedFolder;
-        if (previousSelectedFolder != selectedFolder) {
-            this.selectedFolder = selectedFolder;
-            fileBrowserSheetListeners.selectedFolderChanged(this, previousSelectedFolder);
+        if (selectedFolder.exists()) {
+            Folder previousSelectedFolder = this.selectedFolder;
+            if (previousSelectedFolder != selectedFolder) {
+                this.selectedFolder = selectedFolder;
+                fileSelection.clear();
+                fileBrowserSheetListeners.selectedFolderChanged(this, previousSelectedFolder);
+            }
+        } else {
+            setSelectedFolder(new Folder(selectedFolder.getParent()));
         }
     }
 
@@ -133,8 +138,7 @@ public class FileBrowserSheet extends Sheet {
      * Returns the currently selected files.
      *
      * @return
-     * An immutable list of selected files. The file paths are relative to
-     * the currently selected folder.
+     * An immutable list of selected files.
      */
     public Sequence<File> getSelectedFiles() {
         return new ImmutableList<File>(fileSelection);
@@ -144,8 +148,7 @@ public class FileBrowserSheet extends Sheet {
      * Sets the selected files.
      *
      * @param selectedFiles
-     * The files to select. The file paths are relative to the currently
-     * selected folder.
+     * The files to select.
      *
      * @return
      * The files that were selected, with duplicates eliminated.

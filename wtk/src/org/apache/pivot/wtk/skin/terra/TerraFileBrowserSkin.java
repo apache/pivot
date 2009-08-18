@@ -345,8 +345,6 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                 Folder selectedFolder = (Folder)tableView.getTableData();
                 for (int i = rangeStart; i <= rangeEnd; i++) {
                     File file = selectedFolder.get(i);
-                    file = getRelativeFile(selectedFolder, file);
-
                     fileBrowser.addSelectedFile(file);
                 }
 
@@ -359,8 +357,6 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                 Folder selectedFolder = (Folder)tableView.getTableData();
                 for (int i = rangeStart; i <= rangeEnd; i++) {
                     File file = selectedFolder.get(i);
-                    file = getRelativeFile(selectedFolder, file);
-
                     fileBrowser.removeSelectedFile(file);
                 }
 
@@ -371,12 +367,10 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges) {
                 updatingSelection = true;
 
-                Folder selectedFolder = (Folder)tableView.getTableData();
-
                 Sequence<File> files = (Sequence<File>)tableView.getSelectedRows();
                 for (int i = 0, n = files.getLength(); i < n; i++) {
                     File file = files.get(i);
-                    files.update(i, getRelativeFile(selectedFolder, file));
+                    files.update(i, file);
                 }
 
                 fileBrowser.setSelectedFiles(files);
@@ -475,12 +469,11 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         fileTableView.requestFocus();
     }
 
-    @SuppressWarnings("unchecked")    
+    @SuppressWarnings("unchecked")
     public void selectedFileAdded(FileBrowser fileBrowser, File file) {
         if (!updatingSelection) {
-            // TODO This won't work because the table contains absolute files, while the selection
-            // does not
             List<File> fileTableData = (List<File>)fileTableView.getTableData();
+
             int index = fileTableData.indexOf(file);
             if (index != -1) {
                 fileTableView.addSelectedIndex(index);
@@ -491,9 +484,8 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     @SuppressWarnings("unchecked")
     public void selectedFileRemoved(FileBrowser fileBrowser, File file) {
         if (!updatingSelection) {
-            // TODO This won't work because the table contains absolute files, while the selection
-            // does not
             List<File> fileTableData = (List<File>)fileTableView.getTableData();
+
             int index = fileTableData.indexOf(file);
             if (index != -1) {
                 fileTableView.removeSelectedIndex(index);
@@ -501,20 +493,26 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public void selectedFilesChanged(FileBrowser fileBrowser, Sequence<File> previousSelectedFiles) {
         if (!updatingSelection) {
-            // TODO Reset the selection
+            fileTableView.clearSelection();
+
+            List<File> fileTableData = (List<File>)fileTableView.getTableData();
+            Sequence<File> selectedFiles = fileBrowser.getSelectedFiles();
+
+            for (int i = 0, n = selectedFiles.getLength(); i < n; i++) {
+                File selectedFile = selectedFiles.get(i);
+
+                int index = fileTableData.indexOf(selectedFile);
+                if (index != -1) {
+                    fileTableView.addSelectedIndex(index);
+                }
+            }
         }
     }
 
     public void disabledFileFilterChanged(FileBrowser fileBrowser, Filter<File> previousDisabledFileFilter) {
         fileTableView.setDisabledRowFilter(fileBrowser.getDisabledFileFilter());
-    }
-
-    public static File getRelativeFile(Folder folder, File file) {
-        String path = file.getPath();
-        path = path.substring(folder.getPath().length() + 1);
-
-        return new File(path);
     }
 }

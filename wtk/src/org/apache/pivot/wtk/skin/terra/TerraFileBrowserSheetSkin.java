@@ -109,8 +109,6 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
 
         fileBrowser.getFileBrowserListeners().add(new FileBrowserListener.Adapter() {
             public void selectedFileAdded(FileBrowser fileBrowser, File file) {
-                file = new File(fileBrowser.getSelectedFolder(), file.getName());
-
                 if (file.isDirectory()) {
                     selectedDirectoryCount++;
                 }
@@ -119,8 +117,6 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
             }
 
             public void selectedFileRemoved(FileBrowser fileBrowser, File file) {
-                file = new File(fileBrowser.getSelectedFolder(), file.getName());
-
                 if (file.isDirectory()) {
                     selectedDirectoryCount--;
                 }
@@ -135,7 +131,6 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
                 Sequence<File> selectedFiles = fileBrowser.getSelectedFiles();
                 for (int i = 0, n = selectedFiles.getLength(); i < n; i++) {
                     File selectedFile = selectedFiles.get(i);
-                    selectedFile = new File(fileBrowser.getSelectedFolder(), selectedFile.getName());
 
                     if (selectedFile.isDirectory()) {
                         selectedDirectoryCount++;
@@ -147,11 +142,8 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
 
                     if (selectedFile == null) {
                         saveAsTextInput.setText("");
-                    } else {
-                        selectedFile = new File(fileBrowser.getSelectedFolder(), selectedFile.getName());
-                        if (!selectedFile.isDirectory()) {
-                            saveAsTextInput.setText(selectedFile.getName());
-                        }
+                    } else if (!selectedFile.isDirectory()) {
+                        saveAsTextInput.setText(selectedFile.getName());
                     }
                 }
 
@@ -256,7 +248,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
 
                 case SAVE_AS: {
                     String fileName = saveAsTextInput.getText();
-                    File selectedFile = new File(fileName);
+                    File selectedFile = new File(fileBrowser.getSelectedFolder(), fileName);
                     fileBrowserSheet.setSelectedFiles(new ArrayList<File>(selectedFile));
                     break;
                 }
