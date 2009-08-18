@@ -711,6 +711,11 @@ public abstract class Container extends Component
 
                 // Propagate event to subcomponents
                 if (component != null) {
+                    // Ensure that mouse over is called
+                    if (!component.isMouseOver()) {
+                        component.mouseOver();
+                    }
+
                     consumed = component.mouseDown(button, x - component.getX(),
                         y - component.getY());
                 }
@@ -738,6 +743,11 @@ public abstract class Container extends Component
                 Component component = getComponentAt(x, y);
 
                 if (component != null) {
+                    // Ensure that mouse over is called
+                    if (!component.isMouseOver()) {
+                        component.mouseOver();
+                    }
+
                     consumed = component.mouseUp(button, x - component.getX(),
                         y - component.getY());
                 }
@@ -788,6 +798,11 @@ public abstract class Container extends Component
                 Component component = getComponentAt(x, y);
 
                 if (component != null) {
+                    // Ensure that mouse over is called
+                    if (!component.isMouseOver()) {
+                        component.mouseOver();
+                    }
+
                     consumed = component.mouseWheel(scrollType, scrollAmount, wheelRotation,
                         x - component.getX(), y - component.getY());
                 }

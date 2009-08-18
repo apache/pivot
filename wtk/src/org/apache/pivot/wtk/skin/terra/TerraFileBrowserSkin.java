@@ -492,8 +492,8 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         }
     }
 
-    public void fileFilterChanged(FileBrowser fileBrowser, Filter<File> previousFileFilter) {
-        fileTableView.setDisabledRowFilter(fileBrowser.getFileFilter());
+    public void disabledFileFilterChanged(FileBrowser fileBrowser, Filter<File> previousFileFilter) {
+        fileTableView.setDisabledRowFilter(fileBrowser.getDisabledFileFilter());
     }
 
     public static File getRelativeFile(Folder folder, File file) {

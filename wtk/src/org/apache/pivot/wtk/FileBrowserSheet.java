@@ -60,9 +60,10 @@ public class FileBrowserSheet extends Sheet {
             }
         }
 
-        public void fileFilterChanged(FileBrowserSheet fileBrowserSheet, Filter<File> previousFileFilter) {
+        public void disabledFileFilterChanged(FileBrowserSheet fileBrowserSheet,
+            Filter<File> previousDisabledFileFilter) {
             for (FileBrowserSheetListener listener : this) {
-                listener.fileFilterChanged(fileBrowserSheet, previousFileFilter);
+                listener.disabledFileFilterChanged(fileBrowserSheet, previousDisabledFileFilter);
             }
         }
     }
@@ -71,7 +72,7 @@ public class FileBrowserSheet extends Sheet {
     private Folder selectedFolder;
     private FileList fileSelection = new FileList();
     private boolean multiSelect = false;
-    private Filter<File> fileFilter = null;
+    private Filter<File> disabledFileFilter = null;
 
     private FileBrowserSheetListenerList fileBrowserSheetListeners = new FileBrowserSheetListenerList();
 
@@ -210,16 +211,16 @@ public class FileBrowserSheet extends Sheet {
         }
     }
 
-    public Filter<File> getFileFilter() {
-        return fileFilter;
+    public Filter<File> getDisabledFileFilter() {
+        return disabledFileFilter;
     }
 
-    public void setFileFilter(Filter<File> fileFilter) {
-        Filter<File> previousFileFilter = this.fileFilter;
+    public void setDisabledFileFilter(Filter<File> disabledFileFilter) {
+        Filter<File> previousDisabledFileFilter = this.disabledFileFilter;
 
-        if (previousFileFilter != fileFilter) {
-            this.fileFilter = fileFilter;
-            fileBrowserSheetListeners.fileFilterChanged(this, previousFileFilter);
+        if (previousDisabledFileFilter != disabledFileFilter) {
+            this.disabledFileFilter = disabledFileFilter;
+            fileBrowserSheetListeners.disabledFileFilterChanged(this, previousDisabledFileFilter);
         }
     }
 

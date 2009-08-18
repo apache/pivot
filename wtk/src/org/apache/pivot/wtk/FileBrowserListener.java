@@ -33,7 +33,8 @@ public interface FileBrowserListener {
         public void multiSelectChanged(FileBrowser fileBrowser) {
         }
 
-        public void selectedFolderChanged(FileBrowser fileBrowser, Folder previousSelectedFolder) {
+        public void selectedFolderChanged(FileBrowser fileBrowser,
+            Folder previousSelectedFolder) {
         }
 
         public void selectedFileAdded(FileBrowser fileBrowser, File file) {
@@ -42,10 +43,12 @@ public interface FileBrowserListener {
         public void selectedFileRemoved(FileBrowser fileBrowser, File file) {
         }
 
-        public void selectedFilesChanged(FileBrowser fileBrowser, Sequence<File> previousSelectedFiles) {
+        public void selectedFilesChanged(FileBrowser fileBrowser,
+            Sequence<File> previousSelectedFiles) {
         }
 
-        public void fileFilterChanged(FileBrowser fileBrowser, Filter<File> previousFileFilter) {
+        public void disabledFileFilterChanged(FileBrowser fileBrowser,
+            Filter<File> previousDisabledFileFilter) {
         }
     }
 
@@ -86,13 +89,15 @@ public interface FileBrowserListener {
      * @param fileBrowser
      * @param previousSelectedFiles
      */
-    public void selectedFilesChanged(FileBrowser fileBrowser, Sequence<File> previousSelectedFiles);
+    public void selectedFilesChanged(FileBrowser fileBrowser,
+        Sequence<File> previousSelectedFiles);
 
     /**
      * Called when a file browser's file filter has changed.
      *
      * @param fileBrowser
-     * @param previousFileFilter
+     * @param previousDisabledFileFilter
      */
-    public void fileFilterChanged(FileBrowser fileBrowser, Filter<File> previousFileFilter);
+    public void disabledFileFilterChanged(FileBrowser fileBrowser,
+        Filter<File> previousDisabledFileFilter);
 }

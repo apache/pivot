@@ -56,15 +56,17 @@ public class FileBrowser extends Container {
             }
         }
 
-        public void selectedFilesChanged(FileBrowser fileBrowser, Sequence<File> previousSelectedFiles) {
+        public void selectedFilesChanged(FileBrowser fileBrowser,
+            Sequence<File> previousSelectedFiles) {
             for (FileBrowserListener listener : this) {
                 listener.selectedFilesChanged(fileBrowser, previousSelectedFiles);
             }
         }
 
-        public void fileFilterChanged(FileBrowser fileBrowser, Filter<File> previousFileFilter) {
+        public void disabledFileFilterChanged(FileBrowser fileBrowser,
+            Filter<File> previousDisabledFileFilter) {
             for (FileBrowserListener listener : this) {
-                listener.fileFilterChanged(fileBrowser, previousFileFilter);
+                listener.disabledFileFilterChanged(fileBrowser, previousDisabledFileFilter);
             }
         }
     }
@@ -72,7 +74,7 @@ public class FileBrowser extends Container {
     private Folder selectedFolder;
     private FileList fileSelection = new FileList();
     private boolean multiSelect = false;
-    private Filter<File> fileFilter = null;
+    private Filter<File> disabledFileFilter = null;
 
     private FileBrowserListenerList fileBrowserListeners = new FileBrowserListenerList();
 
@@ -264,8 +266,8 @@ public class FileBrowser extends Container {
      * @return
      * The current file filter, or <tt>null</tt> if no filter is set.
      */
-    public Filter<File> getFileFilter() {
-        return fileFilter;
+    public Filter<File> getDisabledFileFilter() {
+        return disabledFileFilter;
     }
 
     /**
@@ -274,12 +276,12 @@ public class FileBrowser extends Container {
      * @param fileFilter
      * The file filter to use, or <tt>null</tt> for no filter.
      */
-    public void setFileFilter(Filter<File> fileFilter) {
-        Filter<File> previousFileFilter = this.fileFilter;
+    public void setDisabledFileFilter(Filter<File> disabledFileFilter) {
+        Filter<File> previousDisabledFileFilter = this.disabledFileFilter;
 
-        if (previousFileFilter != fileFilter) {
-            this.fileFilter = fileFilter;
-            fileBrowserListeners.fileFilterChanged(this, previousFileFilter);
+        if (previousDisabledFileFilter != disabledFileFilter) {
+            this.disabledFileFilter = disabledFileFilter;
+            fileBrowserListeners.disabledFileFilterChanged(this, previousDisabledFileFilter);
         }
     }
 

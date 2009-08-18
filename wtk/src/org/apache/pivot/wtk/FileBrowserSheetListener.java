@@ -33,13 +33,16 @@ public interface FileBrowserSheetListener {
         public void multiSelectChanged(FileBrowserSheet fileBrowserSheet) {
         }
 
-        public void selectedFolderChanged(FileBrowserSheet fileBrowserSheet, Folder previousSelectedFolder) {
+        public void selectedFolderChanged(FileBrowserSheet fileBrowserSheet,
+            Folder previousSelectedFolder) {
         }
 
-        public void selectedFilesChanged(FileBrowserSheet fileBrowserSheet, Sequence<File> previousSelectedFiles) {
+        public void selectedFilesChanged(FileBrowserSheet fileBrowserSheet,
+            Sequence<File> previousSelectedFiles) {
         }
 
-        public void fileFilterChanged(FileBrowserSheet fileBrowserSheet, Filter<File> previousFileFilter) {
+        public void disabledFileFilterChanged(FileBrowserSheet fileBrowserSheet,
+            Filter<File> previousDisabledFileFilter) {
         }
     }
 
@@ -56,7 +59,8 @@ public interface FileBrowserSheetListener {
      * @param fileBrowserSheet
      * @param previousSelectedFolder
      */
-    public void selectedFolderChanged(FileBrowserSheet fileBrowserSheet, Folder previousSelectedFolder);
+    public void selectedFolderChanged(FileBrowserSheet fileBrowserSheet,
+        Folder previousSelectedFolder);
 
     /**
      * Called when a file browser sheet's selection state has been reset.
@@ -64,13 +68,15 @@ public interface FileBrowserSheetListener {
      * @param fileBrowserSheet
      * @param previousSelectedFiles
      */
-    public void selectedFilesChanged(FileBrowserSheet fileBrowserSheet, Sequence<File> previousSelectedFiles);
+    public void selectedFilesChanged(FileBrowserSheet fileBrowserSheet,
+        Sequence<File> previousSelectedFiles);
 
     /**
-     * Called when a file browser sheet's file filter has changed.
+     * Called when a file browser sheet's disabled file filter has changed.
      *
      * @param fileBrowserSheet
-     * @param previousFileFilter
+     * @param previousDisabledFileFilter
      */
-    public void fileFilterChanged(FileBrowserSheet fileBrowserSheet, Filter<File> previousFileFilter);
+    public void disabledFileFilterChanged(FileBrowserSheet fileBrowserSheet,
+        Filter<File> previousDisabledFileFilter);
 }

@@ -124,7 +124,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
         }
     }
 
-    public void fileFilterChanged(FileBrowserSheet fileBrowserSheet, Filter<File> previousFileFilter) {
+    public void disabledFileFilterChanged(FileBrowserSheet fileBrowserSheet, Filter<File> previousFileFilter) {
         // TODO
     }
 }
