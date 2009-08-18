@@ -111,6 +111,18 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
             (mode != FileBrowserSheet.Mode.SAVE_TO));
 
         fileBrowser.getFileBrowserListeners().add(new FileBrowserListener.Adapter() {
+            public void selectedFolderChanged(FileBrowser fileBrowser,
+                Folder previousSelectedFolder) {
+                updatingSelection = true;
+
+                fileBrowserSheet.setSelectedFolder(fileBrowser.getSelectedFolder());
+
+                updatingSelection = false;
+
+                selectedDirectoryCount = 0;
+                updateOKButtonState();
+            }
+
             public void selectedFileAdded(FileBrowser fileBrowser, File file) {
                 if (file.isDirectory()) {
                     selectedDirectoryCount++;
@@ -165,7 +177,6 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
                 fileBrowserSheet.close(false);
             }
         });
-
 
         // Add this as a file browser sheet listener
         fileBrowserSheet.getFileBrowserSheetListeners().add(this);
@@ -264,7 +275,9 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
     }
 
     public void selectedFolderChanged(FileBrowserSheet fileBrowserSheet, Folder previousSelectedFolder) {
-        fileBrowser.setSelectedFolder(fileBrowserSheet.getSelectedFolder());
+        if (!updatingSelection) {
+            fileBrowser.setSelectedFolder(fileBrowserSheet.getSelectedFolder());
+        }
     }
 
     public void selectedFilesChanged(FileBrowserSheet fileBrowserSheet, Sequence<File> previousSelectedFiles) {
@@ -274,7 +287,6 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
     }
 
     public void disabledFileFilterChanged(FileBrowserSheet fileBrowserSheet, Filter<File> previousDisabledFileFilter) {
-
         Filter<File> disabledFileFilter = fileBrowserSheet.getDisabledFileFilter();
 
         FileBrowserSheet.Mode mode = fileBrowserSheet.getMode();
