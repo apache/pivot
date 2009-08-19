@@ -1175,6 +1175,12 @@ public class TerraTextInputSkin extends ComponentSkin
             }
 
             textInput.setSelection(selectionStart, selectionLength);
+        } else if (keyCode == Keyboard.KeyCode.HOME) {
+            // Move the caret to the beginning of the text
+            textInput.setSelection(0, 0);
+        } else if (keyCode == Keyboard.KeyCode.END) {
+            // Move the caret to the end of the text
+            textInput.setSelection(textNode.getCharacterCount(), 0);
         } else if (keyCode == Keyboard.KeyCode.A
             && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
             // Select all

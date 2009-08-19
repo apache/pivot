@@ -204,6 +204,9 @@ public final class Keyboard {
         public static final int PAGE_UP = KeyEvent.VK_PAGE_UP;
         public static final int PAGE_DOWN = KeyEvent.VK_PAGE_DOWN;
 
+        public static final int HOME = KeyEvent.VK_HOME;
+        public static final int END = KeyEvent.VK_END;
+
         public static final int KEYPAD_0 = KeyEvent.VK_NUMPAD0;
         public static final int KEYPAD_1 = KeyEvent.VK_NUMPAD1;
         public static final int KEYPAD_2 = KeyEvent.VK_NUMPAD2;
