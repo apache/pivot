@@ -49,14 +49,18 @@ public class PushButton extends Button {
         if (isToggleButton()) {
             State state = getState();
 
-            if (state == State.SELECTED) {
-                setState(State.UNSELECTED);
-            }
-            else if (state == State.UNSELECTED) {
-                setState(isTriState() ? State.MIXED : State.SELECTED);
-            }
-            else {
-                setState(State.SELECTED);
+            if (getGroup() == null) {
+                if (state == State.SELECTED) {
+                    setState(State.UNSELECTED);
+                }
+                else if (state == State.UNSELECTED) {
+                    setState(isTriState() ? State.MIXED : State.SELECTED);
+                }
+                else {
+                    setState(State.SELECTED);
+                }
+            } else {
+                setSelected(true);
             }
         }
 

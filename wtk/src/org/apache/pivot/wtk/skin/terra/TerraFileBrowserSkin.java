@@ -616,6 +616,13 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                     consumed = true;
                 }
             }
+        } else if (keyCode == Keyboard.KeyCode.DELETE
+            || keyCode == Keyboard.KeyCode.BACKSPACE) {
+            Folder selectedFolder = fileBrowser.getSelectedFolder();
+            File parentDirectory = selectedFolder.getParentFile();
+            if (parentDirectory != null) {
+                fileBrowser.setSelectedFolder(new Folder(parentDirectory.getPath()));
+            }
         }
 
         return consumed;

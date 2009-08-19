@@ -1072,7 +1072,7 @@ public class TerraTextInputSkin extends ComponentSkin
 
     @Override
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
-        boolean consumed = false;
+        boolean consumed = super.keyPressed(component, keyCode, keyLocation);
 
         TextInput textInput = (TextInput)getComponent();
         TextNode textNode = textInput.getTextNode();
@@ -1111,6 +1111,8 @@ public class TerraTextInputSkin extends ComponentSkin
             } else {
                 textInput.delete(direction);
             }
+
+            consumed = true;
         } else if (keyCode == Keyboard.KeyCode.LEFT) {
             int selectionStart = textInput.getSelectionStart();
             int selectionLength = textInput.getSelectionLength();
@@ -1143,6 +1145,8 @@ public class TerraTextInputSkin extends ComponentSkin
             }
 
             textInput.setSelection(selectionStart, selectionLength);
+
+            consumed = true;
         } else if (keyCode == Keyboard.KeyCode.RIGHT) {
             int selectionStart = textInput.getSelectionStart();
             int selectionLength = textInput.getSelectionLength();
@@ -1175,16 +1179,21 @@ public class TerraTextInputSkin extends ComponentSkin
             }
 
             textInput.setSelection(selectionStart, selectionLength);
+
+            consumed = true;
         } else if (keyCode == Keyboard.KeyCode.HOME) {
             // Move the caret to the beginning of the text
             textInput.setSelection(0, 0);
+            consumed = true;
         } else if (keyCode == Keyboard.KeyCode.END) {
             // Move the caret to the end of the text
             textInput.setSelection(textNode.getCharacterCount(), 0);
+            consumed = true;
         } else if (keyCode == Keyboard.KeyCode.A
             && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
             // Select all
             textInput.setSelection(0, textNode.getCharacterCount());
+            consumed = true;
         } else if (keyCode == Keyboard.KeyCode.X
             && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
             if (textInput.isPassword()) {
@@ -1192,6 +1201,8 @@ public class TerraTextInputSkin extends ComponentSkin
             } else {
                 textInput.cut();
             }
+
+            consumed = true;
         } else if (keyCode == Keyboard.KeyCode.C
             && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
             if (textInput.isPassword()) {
@@ -1199,9 +1210,12 @@ public class TerraTextInputSkin extends ComponentSkin
             } else {
                 textInput.copy();
             }
+
+            consumed = true;
         } else if (keyCode == Keyboard.KeyCode.V
             && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
             textInput.paste();
+            consumed = true;
         } else {
             consumed = super.keyPressed(component, keyCode, keyLocation);
         }

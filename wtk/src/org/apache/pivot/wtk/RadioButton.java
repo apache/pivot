@@ -51,7 +51,7 @@ public class RadioButton extends Button {
     }
 
     public void press() {
-        setSelected(getGroup() == null ? !isSelected() : true);
+        setSelected(true);
 
         super.press();
     }
