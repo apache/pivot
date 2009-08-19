@@ -353,7 +353,18 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             String name = file.getName();
             name = name.toLowerCase();
 
-            return name.startsWith(match);
+            boolean include;
+            if (match.startsWith("*")) {
+                if (match.length() == 1) {
+                    include = true;
+                } else {
+                    include = name.contains(match.substring(1));
+                }
+            } else {
+                include = name.startsWith(match);
+            }
+
+            return include;
         }
     }
 
@@ -505,6 +516,8 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             @Override
             @SuppressWarnings("unchecked")
             public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+                boolean consumed = super.mouseClick(component, button, x, y, count);
+
                 if (count == 1) {
                     index = fileTableView.getRowAt(y);
                 } else if (count == 2) {
@@ -517,9 +530,11 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                             fileBrowser.setSelectedFolder(new Folder(file.getPath()));
                         }
                     }
+
+                    consumed = true;
                 }
 
-                return false;
+                return consumed;
             }
         });
 
