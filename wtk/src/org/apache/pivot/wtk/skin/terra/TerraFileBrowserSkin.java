@@ -460,6 +460,11 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                 if (keyCode == Keyboard.KeyCode.ESCAPE) {
                     searchTextInput.setText("");
                     consumed = true;
+                } else if (keyCode == Keyboard.KeyCode.DOWN) {
+                    if (files.getLength() > 0) {
+                        fileTableView.setSelectedIndex(0);
+                        fileTableView.requestFocus();
+                    }
                 }
 
                 return consumed;
@@ -675,8 +680,8 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = super.keyReleased(component, keyCode, keyLocation);
 
-        if (keyCode == Keyboard.KeyCode.S
-            && Keyboard.isPressed(Keyboard.Modifier.META)) {
+        if (keyCode == Keyboard.KeyCode.F
+            && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
             searchTextInput.requestFocus();
             consumed = true;
         }
