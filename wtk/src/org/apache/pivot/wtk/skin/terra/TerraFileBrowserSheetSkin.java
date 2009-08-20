@@ -189,24 +189,11 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
                         && this.file != null
                         && file.equals(this.file)
                         && fileBrowser.isFileSelected(file)) {
-                        switch (mode) {
-                            case OPEN:
-                            case OPEN_MULTIPLE: {
-                                if (!file.isDirectory()) {
-                                    fileBrowserSheet.close(true);
-                                }
-
+                        if (mode == FileBrowserSheet.Mode.OPEN
+                            || mode == FileBrowserSheet.Mode.OPEN_MULTIPLE) {
+                            if (!file.isDirectory()) {
+                                fileBrowserSheet.close(true);
                                 consumed = true;
-                                break;
-                            }
-
-                            case SAVE_TO: {
-                                if (file.isDirectory()) {
-                                    fileBrowserSheet.close(true);
-                                }
-
-                                consumed = true;
-                                break;
                             }
                         }
                     }
