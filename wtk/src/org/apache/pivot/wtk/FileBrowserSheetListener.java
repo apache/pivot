@@ -19,7 +19,6 @@ package org.apache.pivot.wtk;
 import java.io.File;
 
 import org.apache.pivot.collections.Sequence;
-import org.apache.pivot.io.Folder;
 import org.apache.pivot.util.Filter;
 
 /**
@@ -30,8 +29,8 @@ public interface FileBrowserSheetListener {
      * File browser sheet listener adapter.
      */
     public static class Adapter implements FileBrowserSheetListener {
-        public void selectedFolderChanged(FileBrowserSheet fileBrowserSheet,
-            Folder previousSelectedFolder) {
+        public void rootDirectoryChanged(FileBrowserSheet fileBrowserSheet,
+            File previousRootDirectory) {
         }
 
         public void selectedFilesChanged(FileBrowserSheet fileBrowserSheet,
@@ -44,13 +43,13 @@ public interface FileBrowserSheetListener {
     }
 
     /**
-     * Called when a file browser sheet's selected folder has changed.
+     * Called when a file browser sheet's root directory has changed.
      *
      * @param fileBrowserSheet
-     * @param previousSelectedFolder
+     * @param previousRootDirectory
      */
-    public void selectedFolderChanged(FileBrowserSheet fileBrowserSheet,
-        Folder previousSelectedFolder);
+    public void rootDirectoryChanged(FileBrowserSheet fileBrowserSheet,
+        File previousRootDirectory);
 
     /**
      * Called when a file browser sheet's selection state has been reset.

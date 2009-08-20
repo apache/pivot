@@ -22,7 +22,6 @@ import java.util.Comparator;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
-import org.apache.pivot.io.Folder;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
@@ -60,7 +59,7 @@ public class FileBrowserTest implements Application {
         };
 
         fileBrowser.getFileBrowserListeners().add(new FileBrowserListener.Adapter() {
-            public void selectedFolderChanged(FileBrowser fileBrowser, Folder previousSelectedFolder) {
+            public void rootDirectoryChanged(FileBrowser fileBrowser, File previousRootDirectory) {
                 updateSelectedFolder();
             }
 
@@ -113,7 +112,7 @@ public class FileBrowserTest implements Application {
     }
 
     private void updateSelectedFolder() {
-        selectedFolderLabel.setText(fileBrowser.getSelectedFolder().getPath());
+        selectedFolderLabel.setText(fileBrowser.getRootDirectory().getPath());
 
         updateSelectedFiles();
     }

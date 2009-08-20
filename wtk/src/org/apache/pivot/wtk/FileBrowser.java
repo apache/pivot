@@ -22,7 +22,6 @@ import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.collections.immutable.ImmutableList;
 import org.apache.pivot.io.FileList;
-import org.apache.pivot.io.Folder;
 import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.ListenerList;
 
@@ -32,15 +31,9 @@ import org.apache.pivot.util.ListenerList;
 public class FileBrowser extends Container {
     private static class FileBrowserListenerList extends ListenerList<FileBrowserListener>
         implements FileBrowserListener {
-        public void multiSelectChanged(FileBrowser fileBrowser) {
+        public void rootDirectoryChanged(FileBrowser fileBrowser, File previousRootDirectory) {
             for (FileBrowserListener listener : this) {
-                listener.multiSelectChanged(fileBrowser);
-            }
-        }
-
-        public void selectedFolderChanged(FileBrowser fileBrowser, Folder previousSelectedFolder) {
-            for (FileBrowserListener listener : this) {
-                listener.selectedFolderChanged(fileBrowser, previousSelectedFolder);
+                listener.rootDirectoryChanged(fileBrowser, previousRootDirectory);
             }
         }
 
@@ -63,6 +56,12 @@ public class FileBrowser extends Container {
             }
         }
 
+        public void multiSelectChanged(FileBrowser fileBrowser) {
+            for (FileBrowserListener listener : this) {
+                listener.multiSelectChanged(fileBrowser);
+            }
+        }
+
         public void disabledFileFilterChanged(FileBrowser fileBrowser,
             Filter<File> previousDisabledFileFilter) {
             for (FileBrowserListener listener : this) {
@@ -71,7 +70,7 @@ public class FileBrowser extends Container {
         }
     }
 
-    private Folder selectedFolder;
+    private File rootDirectory;
     private FileList selectedFiles = new FileList();
     private boolean multiSelect = false;
     private Filter<File> disabledFileFilter = null;
@@ -80,40 +79,42 @@ public class FileBrowser extends Container {
 
     public FileBrowser() {
         String userHome = System.getProperty("user.home");
-        selectedFolder = new Folder(userHome);
+        rootDirectory = new File(userHome);
 
         installSkin(FileBrowser.class);
     }
 
     /**
-     * Returns the currently selected folder.
+     * Returns the current root directory.
      *
      * @return
-     * The current folder selection.
+     * The current root directory.
      */
-    public Folder getSelectedFolder() {
-        return selectedFolder;
+    public File getRootDirectory() {
+        return rootDirectory;
     }
 
     /**
-     * Sets the selected folder. Clears any existing file selection.
+     * Sets the root directory. Clears any existing file selection.
      *
-     * @param selectedFolder
+     * @param rootDirectory
      */
-    public void setSelectedFolder(Folder selectedFolder) {
-        if (selectedFolder == null) {
+    public void setRootDirectory(File rootDirectory) {
+        if (rootDirectory == null
+            || !rootDirectory.isDirectory()) {
             throw new IllegalArgumentException();
         }
 
-        if (selectedFolder.exists()) {
-            Folder previousSelectedFolder = this.selectedFolder;
-            if (previousSelectedFolder != selectedFolder) {
-                this.selectedFolder = selectedFolder;
+        if (rootDirectory.exists()) {
+            File previousRootDirectory = this.rootDirectory;
+
+            if (previousRootDirectory != rootDirectory) {
+                this.rootDirectory = rootDirectory;
                 selectedFiles.clear();
-                fileBrowserListeners.selectedFolderChanged(this, previousSelectedFolder);
+                fileBrowserListeners.rootDirectoryChanged(this, previousRootDirectory);
             }
         } else {
-            setSelectedFolder(new Folder(selectedFolder.getParent()));
+            setRootDirectory(rootDirectory.getParentFile());
         }
     }
 
@@ -132,11 +133,11 @@ public class FileBrowser extends Container {
         }
 
         if (file.isAbsolute()) {
-            if (!file.getParentFile().equals(selectedFolder)) {
+            if (!file.getParentFile().equals(rootDirectory)) {
                 throw new IllegalArgumentException();
             }
         } else {
-            file = new File(selectedFolder, file.getPath());
+            file = new File(rootDirectory, file.getPath());
         }
 
         int index = selectedFiles.add(file);
@@ -237,11 +238,11 @@ public class FileBrowser extends Container {
             }
 
             if (file.isAbsolute()) {
-                if (!file.getParentFile().equals(selectedFolder)) {
-                    throw new IllegalArgumentException("file is not a descendant of selected folder.");
+                if (!file.getParentFile().equals(rootDirectory)) {
+                    throw new IllegalArgumentException("file is not a descendant of root directory.");
                 }
             } else {
-                file = new File(selectedFolder, file.getPath());
+                file = new File(rootDirectory, file.getPath());
             }
 
             fileList.add(file);

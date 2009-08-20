@@ -19,7 +19,6 @@ package org.apache.pivot.wtk;
 import java.io.File;
 
 import org.apache.pivot.collections.Sequence;
-import org.apache.pivot.io.Folder;
 import org.apache.pivot.util.Filter;
 
 /**
@@ -30,11 +29,7 @@ public interface FileBrowserListener {
      * File browser listener adapter.
      */
     public static class Adapter implements FileBrowserListener {
-        public void multiSelectChanged(FileBrowser fileBrowser) {
-        }
-
-        public void selectedFolderChanged(FileBrowser fileBrowser,
-            Folder previousSelectedFolder) {
+        public void rootDirectoryChanged(FileBrowser fileBrowser, File previousRootDirectory) {
         }
 
         public void selectedFileAdded(FileBrowser fileBrowser, File file) {
@@ -47,25 +42,21 @@ public interface FileBrowserListener {
             Sequence<File> previousSelectedFiles) {
         }
 
+        public void multiSelectChanged(FileBrowser fileBrowser) {
+        }
+
         public void disabledFileFilterChanged(FileBrowser fileBrowser,
             Filter<File> previousDisabledFileFilter) {
         }
     }
 
     /**
-     * Called when a file browser's multi-select flag has changed.
+     * Called when a file browser's root directory has changed.
      *
      * @param fileBrowser
+     * @param previousRootDirectory
      */
-    public void multiSelectChanged(FileBrowser fileBrowser);
-
-    /**
-     * Called when a file browser's selected folder has changed.
-     *
-     * @param fileBrowser
-     * @param previousSelectedFolder
-     */
-    public void selectedFolderChanged(FileBrowser fileBrowser, Folder previousSelectedFolder);
+    public void rootDirectoryChanged(FileBrowser fileBrowser, File previousRootDirectory);
 
     /**
      * Called when a file has been added to a file browser's selection.
@@ -91,6 +82,13 @@ public interface FileBrowserListener {
      */
     public void selectedFilesChanged(FileBrowser fileBrowser,
         Sequence<File> previousSelectedFiles);
+
+    /**
+     * Called when a file browser's multi-select flag has changed.
+     *
+     * @param fileBrowser
+     */
+    public void multiSelectChanged(FileBrowser fileBrowser);
 
     /**
      * Called when a file browser's file filter has changed.

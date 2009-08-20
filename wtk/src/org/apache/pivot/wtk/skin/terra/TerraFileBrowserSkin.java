@@ -19,6 +19,7 @@ package org.apache.pivot.wtk.skin.terra;
 import java.awt.Color;
 import java.awt.Font;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Comparator;
@@ -30,7 +31,6 @@ import org.apache.pivot.collections.FilteredListListener;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Sequence;
-import org.apache.pivot.io.Folder;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.text.FileSizeFormat;
 import org.apache.pivot.util.Filter;
@@ -385,6 +385,12 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
     private boolean updatingSelection = false;
 
+    private static final FileFilter HIDDEN_FILE_FILTER = new FileFilter() {
+        public boolean accept(File file) {
+            return !file.isHidden();
+        }
+    };
+
     @Override
     public void install(Component component) {
         super.install(component);
@@ -415,19 +421,19 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
         pathListButton.getListButtonSelectionListeners().add(new ListButtonSelectionListener() {
             public void selectedIndexChanged(ListButton listButton, int previousSelectedIndex) {
-                File directory = (File)listButton.getSelectedItem();
+                File ancestorDirectory = (File)listButton.getSelectedItem();
 
-                if (directory != null) {
-                    fileBrowser.setSelectedFolder(new Folder(directory.getPath()));
+                if (ancestorDirectory != null) {
+                    fileBrowser.setRootDirectory(ancestorDirectory);
                 }
             }
         });
 
         goUpButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
-                Folder selectedFolder = fileBrowser.getSelectedFolder();
-                File parentDirectory = selectedFolder.getParentFile();
-                fileBrowser.setSelectedFolder(new Folder(parentDirectory.getPath()));
+                File rootDirectory = fileBrowser.getRootDirectory();
+                File parentDirectory = rootDirectory.getParentFile();
+                fileBrowser.setRootDirectory(parentDirectory);
             }
         });
 
@@ -439,7 +445,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
         goHomeButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
-                fileBrowser.setSelectedFolder(new Folder(System.getProperty("user.home")));
+                fileBrowser.setRootDirectory(new File(System.getProperty("user.home")));
             }
         });
 
@@ -527,7 +533,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                         && fileTableView.isRowSelected(index)) {
                         File file = files.get(index);
                         if (file.isDirectory()) {
-                            fileBrowser.setSelectedFolder(new Folder(file.getPath()));
+                            fileBrowser.setRootDirectory(file);
                         }
                     }
 
@@ -552,7 +558,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
         fileTableView.setTableData(files);
 
-        selectedFolderChanged(fileBrowser, null);
+        rootDirectoryChanged(fileBrowser, null);
         selectedFilesChanged(fileBrowser, null);
     }
 
@@ -612,17 +618,21 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             if (selectedFiles.getLength() == 1) {
                 File selectedFile = selectedFiles.get(0);
                 if (selectedFile.isDirectory()) {
-                    fileBrowser.setSelectedFolder(new Folder(selectedFile.getPath()));
+                    fileBrowser.setRootDirectory(selectedFile);
                     consumed = true;
                 }
             }
         } else if (keyCode == Keyboard.KeyCode.DELETE
             || keyCode == Keyboard.KeyCode.BACKSPACE) {
-            Folder selectedFolder = fileBrowser.getSelectedFolder();
-            File parentDirectory = selectedFolder.getParentFile();
+            File rootDirectory = fileBrowser.getRootDirectory();
+            File parentDirectory = rootDirectory.getParentFile();
             if (parentDirectory != null) {
-                fileBrowser.setSelectedFolder(new Folder(parentDirectory.getPath()));
+                fileBrowser.setRootDirectory(parentDirectory);
+                consumed = true;
             }
+        } else if (keyCode == Keyboard.KeyCode.F5) {
+            refreshFileList();
+            consumed = true;
         }
 
         return consumed;
@@ -641,37 +651,32 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         return consumed;
     }
 
-    public void multiSelectChanged(FileBrowser fileBrowser) {
-        fileTableView.setSelectMode(fileBrowser.isMultiSelect() ?
-            TableView.SelectMode.MULTI : TableView.SelectMode.SINGLE);
-    }
-
     @SuppressWarnings("unchecked")
-    public void selectedFolderChanged(FileBrowser fileBrowser, Folder previousSelectedFolder) {
+    public void rootDirectoryChanged(FileBrowser fileBrowser, File previousRootDirectory) {
         ArrayList<File> path = new ArrayList<File>();
 
-        Folder selectedFolder = fileBrowser.getSelectedFolder();
+        File rootDirectory = fileBrowser.getRootDirectory();
 
-        File directory = selectedFolder.getParentFile();
-        while (directory != null) {
-            path.add(directory);
-            directory = directory.getParentFile();
+        File ancestorDirectory = rootDirectory.getParentFile();
+        while (ancestorDirectory != null) {
+            path.add(ancestorDirectory);
+            ancestorDirectory = ancestorDirectory.getParentFile();
         }
 
         pathListButton.setListData(path);
-        pathListButton.setButtonData(selectedFolder);
+        pathListButton.setButtonData(rootDirectory);
 
-        goUpButton.setEnabled(selectedFolder.getParentFile() != null);
+        goUpButton.setEnabled(rootDirectory.getParentFile() != null);
 
         File homeDirectory = new File(System.getProperty("user.home"));
-        goHomeButton.setEnabled(!selectedFolder.equals(homeDirectory));
+        goHomeButton.setEnabled(!rootDirectory.equals(homeDirectory));
 
         searchTextInput.setText("");
 
         fileScrollPane.setScrollTop(0);
         fileScrollPane.setScrollLeft(0);
 
-        files.setSource(selectedFolder);
+        refreshFileList();
 
         fileTableView.requestFocus();
     }
@@ -714,7 +719,19 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         }
     }
 
+    public void multiSelectChanged(FileBrowser fileBrowser) {
+        fileTableView.setSelectMode(fileBrowser.isMultiSelect() ?
+            TableView.SelectMode.MULTI : TableView.SelectMode.SINGLE);
+    }
+
     public void disabledFileFilterChanged(FileBrowser fileBrowser, Filter<File> previousDisabledFileFilter) {
         fileTableView.setDisabledRowFilter(fileBrowser.getDisabledFileFilter());
+    }
+
+    private void refreshFileList() {
+        FileBrowser fileBrowser = (FileBrowser)getComponent();
+        File rootDirectory = fileBrowser.getRootDirectory();
+
+        files.setSource(new ArrayList<File>(rootDirectory.listFiles(HIDDEN_FILE_FILTER)));
     }
 }

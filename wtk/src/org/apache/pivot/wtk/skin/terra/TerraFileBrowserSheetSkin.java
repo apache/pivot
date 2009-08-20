@@ -21,7 +21,6 @@ import java.io.IOException;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
-import org.apache.pivot.io.Folder;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.Resources;
@@ -111,11 +110,12 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
             (mode != FileBrowserSheet.Mode.SAVE_TO));
 
         fileBrowser.getFileBrowserListeners().add(new FileBrowserListener.Adapter() {
-            public void selectedFolderChanged(FileBrowser fileBrowser,
-                Folder previousSelectedFolder) {
+            @Override
+            public void rootDirectoryChanged(FileBrowser fileBrowser,
+                File previousRootDirectory) {
                 updatingSelection = true;
 
-                fileBrowserSheet.setSelectedFolder(fileBrowser.getSelectedFolder());
+                fileBrowserSheet.setRootDirectory(fileBrowser.getRootDirectory());
 
                 updatingSelection = false;
 
@@ -123,6 +123,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
                 updateOKButtonState();
             }
 
+            @Override
             public void selectedFileAdded(FileBrowser fileBrowser, File file) {
                 if (file.isDirectory()) {
                     selectedDirectoryCount++;
@@ -131,6 +132,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
                 updateOKButtonState();
             }
 
+            @Override
             public void selectedFileRemoved(FileBrowser fileBrowser, File file) {
                 if (file.isDirectory()) {
                     selectedDirectoryCount--;
@@ -139,6 +141,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
                 updateOKButtonState();
             }
 
+            @Override
             public void selectedFilesChanged(FileBrowser fileBrowser,
                 Sequence<File> previousSelectedFiles) {
                 selectedDirectoryCount = 0;
@@ -220,7 +223,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
             }
         }
 
-        selectedFolderChanged(fileBrowserSheet, null);
+        rootDirectoryChanged(fileBrowserSheet, null);
         selectedFilesChanged(fileBrowserSheet, null);
         disabledFileFilterChanged(fileBrowserSheet, null);
     }
@@ -262,7 +265,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
 
                 case SAVE_AS: {
                     String fileName = saveAsTextInput.getText();
-                    File selectedFile = new File(fileBrowser.getSelectedFolder(), fileName);
+                    File selectedFile = new File(fileBrowser.getRootDirectory(), fileName);
                     fileBrowserSheet.setSelectedFiles(new ArrayList<File>(selectedFile));
                     break;
                 }
@@ -274,9 +277,9 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
         return vote;
     }
 
-    public void selectedFolderChanged(FileBrowserSheet fileBrowserSheet, Folder previousSelectedFolder) {
+    public void rootDirectoryChanged(FileBrowserSheet fileBrowserSheet, File previousRootDirectory) {
         if (!updatingSelection) {
-            fileBrowser.setSelectedFolder(fileBrowserSheet.getSelectedFolder());
+            fileBrowser.setRootDirectory(fileBrowserSheet.getRootDirectory());
         }
     }
 
@@ -321,6 +324,5 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
                 break;
             }
         }
-
     }
 }

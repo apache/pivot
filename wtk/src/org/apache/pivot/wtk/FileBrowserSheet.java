@@ -22,7 +22,6 @@ import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.collections.immutable.ImmutableList;
 import org.apache.pivot.io.FileList;
-import org.apache.pivot.io.Folder;
 import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.ListenerList;
 
@@ -40,15 +39,18 @@ public class FileBrowserSheet extends Sheet {
         SAVE_TO
     }
 
-    private static class FileBrowserSheetListenerList extends ListenerList<FileBrowserSheetListener>
+    private static class FileBrowserSheetListenerList
+        extends ListenerList<FileBrowserSheetListener>
         implements FileBrowserSheetListener {
-        public void selectedFolderChanged(FileBrowserSheet fileBrowserSheet, Folder previousSelectedFolder) {
+        public void rootDirectoryChanged(FileBrowserSheet fileBrowserSheet,
+            File previousRootDirectory) {
             for (FileBrowserSheetListener listener : this) {
-                listener.selectedFolderChanged(fileBrowserSheet, previousSelectedFolder);
+                listener.rootDirectoryChanged(fileBrowserSheet, previousRootDirectory);
             }
         }
 
-        public void selectedFilesChanged(FileBrowserSheet fileBrowserSheet, Sequence<File> previousSelectedFiles) {
+        public void selectedFilesChanged(FileBrowserSheet fileBrowserSheet,
+            Sequence<File> previousSelectedFiles) {
             for (FileBrowserSheetListener listener : this) {
                 listener.selectedFilesChanged(fileBrowserSheet, previousSelectedFiles);
             }
@@ -57,13 +59,14 @@ public class FileBrowserSheet extends Sheet {
         public void disabledFileFilterChanged(FileBrowserSheet fileBrowserSheet,
             Filter<File> previousDisabledFileFilter) {
             for (FileBrowserSheetListener listener : this) {
-                listener.disabledFileFilterChanged(fileBrowserSheet, previousDisabledFileFilter);
+                listener.disabledFileFilterChanged(fileBrowserSheet,
+                    previousDisabledFileFilter);
             }
         }
     }
 
     private Mode mode;
-    private Folder selectedFolder;
+    private File rootDirectory;
     private FileList selectedFiles = new FileList();
     private Filter<File> disabledFileFilter = null;
 
@@ -77,7 +80,7 @@ public class FileBrowserSheet extends Sheet {
         this.mode = mode;
 
         String userHome = System.getProperty("user.home");
-        selectedFolder = new Folder(userHome);
+        rootDirectory = new File(userHome);
 
         installSkin(FileBrowserSheet.class);
     }
@@ -86,24 +89,26 @@ public class FileBrowserSheet extends Sheet {
         return mode;
     }
 
-    public Folder getSelectedFolder() {
-        return selectedFolder;
+    public File getRootDirectory() {
+        return rootDirectory;
     }
 
-    public void setSelectedFolder(Folder selectedFolder) {
-        if (selectedFolder == null) {
+    public void setRootDirectory(File rootDirectory) {
+        if (rootDirectory == null
+            || !rootDirectory.isDirectory()) {
             throw new IllegalArgumentException();
         }
 
-        if (selectedFolder.exists()) {
-            Folder previousSelectedFolder = this.selectedFolder;
-            if (previousSelectedFolder != selectedFolder) {
-                this.selectedFolder = selectedFolder;
+        if (rootDirectory.exists()) {
+            File previousRootDirectory = this.rootDirectory;
+
+            if (previousRootDirectory != rootDirectory) {
+                this.rootDirectory = rootDirectory;
                 selectedFiles.clear();
-                fileBrowserSheetListeners.selectedFolderChanged(this, previousSelectedFolder);
+                fileBrowserSheetListeners.rootDirectoryChanged(this, previousRootDirectory);
             }
         } else {
-            setSelectedFolder(new Folder(selectedFolder.getParent()));
+            setRootDirectory(rootDirectory.getParentFile());
         }
     }
 
