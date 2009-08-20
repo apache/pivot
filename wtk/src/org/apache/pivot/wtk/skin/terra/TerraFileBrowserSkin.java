@@ -42,7 +42,9 @@ import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentKeyListener;
 import org.apache.pivot.wtk.ComponentMouseButtonListener;
+import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.Dimensions;
+import org.apache.pivot.wtk.Direction;
 import org.apache.pivot.wtk.FileBrowser;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.ImageView;
@@ -53,6 +55,7 @@ import org.apache.pivot.wtk.ListButton;
 import org.apache.pivot.wtk.ListButtonSelectionListener;
 import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.Mouse;
+import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.ScrollPane;
 import org.apache.pivot.wtk.SortDirection;
@@ -532,12 +535,12 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                         && index == this.index
                         && fileTableView.isRowSelected(index)) {
                         File file = files.get(index);
+
                         if (file.isDirectory()) {
                             fileBrowser.setRootDirectory(file);
+                            consumed = true;
                         }
                     }
-
-                    consumed = true;
                 }
 
                 return consumed;
@@ -557,6 +560,20 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         });
 
         fileTableView.setTableData(files);
+
+        fileBrowser.setFocusTraversalPolicy(new IndexFocusTraversalPolicy() {
+            @Override
+            public Component getNextComponent(Container container, Component component, Direction direction) {
+                Component nextComponent;
+                if (component == null) {
+                    nextComponent = fileTableView;
+                } else {
+                    nextComponent = super.getNextComponent(container, component, direction);
+                }
+
+                return nextComponent;
+            }
+        });
 
         rootDirectoryChanged(fileBrowser, null);
         selectedFilesChanged(fileBrowser, null);
@@ -596,8 +613,24 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         content.setSize(width, height);
     }
 
+    public File getFileAt(int x, int y) {
+        File file = null;
 
-    public boolean getKeyboardFolderTraversalEnabled() {
+        FileBrowser fileBrowser = (FileBrowser)getComponent();
+        Component component = fileBrowser.getDescendantAt(x, y);
+        if (component == fileTableView) {
+            Point location = fileTableView.mapPointFromAncestor(fileBrowser, x, y);
+
+            int index = fileTableView.getRowAt(location.y);
+            if (index != -1) {
+                file = files.get(index);
+            }
+        }
+
+        return file;
+    }
+
+    public boolean isKeyboardFolderTraversalEnabled() {
         return keyboardFolderTraversalEnabled;
     }
 

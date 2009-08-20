@@ -28,15 +28,18 @@ import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.ComponentMouseButtonListener;
 import org.apache.pivot.wtk.FileBrowser;
 import org.apache.pivot.wtk.FileBrowserListener;
 import org.apache.pivot.wtk.FileBrowserSheet;
 import org.apache.pivot.wtk.FileBrowserSheetListener;
+import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Sheet;
 import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextInputTextListener;
+import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
@@ -169,6 +172,50 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
             }
         });
 
+        fileBrowser.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
+            private File file = null;
+
+            @Override
+            @SuppressWarnings("unchecked")
+            public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+                boolean consumed = super.mouseClick(component, button, x, y, count);
+
+                if (count == 1) {
+                    file = fileBrowser.getFileAt(x, y);
+                } else if (count == 2) {
+                    File file = fileBrowser.getFileAt(x, y);
+
+                    if (file != null
+                        && this.file != null
+                        && file.equals(this.file)
+                        && fileBrowser.isFileSelected(file)) {
+                        switch (mode) {
+                            case OPEN:
+                            case OPEN_MULTIPLE: {
+                                if (!file.isDirectory()) {
+                                    fileBrowserSheet.close(true);
+                                }
+
+                                consumed = true;
+                                break;
+                            }
+
+                            case SAVE_TO: {
+                                if (file.isDirectory()) {
+                                    fileBrowserSheet.close(true);
+                                }
+
+                                consumed = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                return consumed;
+            }
+        });
+
         okButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
                 fileBrowserSheet.close(true);
@@ -236,6 +283,13 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
         fileBrowserSheet.getFileBrowserSheetListeners().remove(this);
 
         super.uninstall();
+    }
+
+    @Override
+    public void windowOpened(Window window) {
+        super.windowOpened(window);
+
+        window.requestFocus();
     }
 
     @Override

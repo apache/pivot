@@ -119,6 +119,8 @@ public abstract class ContainerSkin extends ComponentSkin
 
     private Paint backgroundPaint = null;
 
+    private static FocusTraversalPolicy DEFAULT_FOCUS_TRAVERSAL_POLICY = new IndexFocusTraversalPolicy();
+
     @Override
     public void install(Component component) {
         super.install(component);
@@ -129,7 +131,7 @@ public abstract class ContainerSkin extends ComponentSkin
         container.getContainerListeners().add(this);
 
         // Set the focus traversal policy
-        container.setFocusTraversalPolicy(new IndexFocusTraversalPolicy());
+        container.setFocusTraversalPolicy(DEFAULT_FOCUS_TRAVERSAL_POLICY);
     }
 
     public void uninstall() {

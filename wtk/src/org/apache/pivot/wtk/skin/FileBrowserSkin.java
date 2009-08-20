@@ -24,7 +24,8 @@ import org.apache.pivot.wtk.skin.ContainerSkin;
 /**
  * Abstract base class for file browser skins.
  */
-public abstract class FileBrowserSkin extends ContainerSkin implements FileBrowserListener {
+public abstract class FileBrowserSkin extends ContainerSkin
+    implements FileBrowser.Skin, FileBrowserListener {
     @Override
     public void install(Component component) {
         super.install(component);

@@ -29,6 +29,13 @@ import org.apache.pivot.util.ListenerList;
  * Component representing a file browser.
  */
 public class FileBrowser extends Container {
+    /**
+     * File browser skin interface.
+     */
+    public interface Skin extends org.apache.pivot.wtk.Skin {
+        public File getFileAt(int x, int y);
+    }
+
     private static class FileBrowserListenerList extends ListenerList<FileBrowserListener>
         implements FileBrowserListener {
         public void rootDirectoryChanged(FileBrowser fileBrowser, File previousRootDirectory) {
@@ -263,6 +270,10 @@ public class FileBrowser extends Container {
         setSelectedFiles(new ArrayList<File>());
     }
 
+    public boolean isFileSelected(File file) {
+        return (selectedFiles.indexOf(file) != -1);
+    }
+
     /**
      * Returns the file browser's multi-select state.
      */
@@ -310,6 +321,11 @@ public class FileBrowser extends Container {
             this.disabledFileFilter = disabledFileFilter;
             fileBrowserListeners.disabledFileFilterChanged(this, previousDisabledFileFilter);
         }
+    }
+
+    public File getFileAt(int x, int y) {
+        FileBrowser.Skin fileBrowserSkin = (FileBrowser.Skin)getSkin();
+        return fileBrowserSkin.getFileAt(x, y);
     }
 
     public ListenerList<FileBrowserListener> getFileBrowserListeners() {
