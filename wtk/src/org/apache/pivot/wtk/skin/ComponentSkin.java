@@ -312,4 +312,10 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
             component.repaint(x, y, width, height);
         }
     }
+
+    protected void repaintComponent(int x, int y, int width, int height, boolean immediate) {
+        if (component != null) {
+            component.repaint(x, y, width, height, immediate);
+        }
+    }
 }

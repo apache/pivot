@@ -944,10 +944,10 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         int wheelRotation, int x, int y) {
         if (highlightedIndex != -1) {
             Bounds rowBounds = getRowBounds(highlightedIndex);
-            repaintComponent(rowBounds.x, rowBounds.y, rowBounds.width, rowBounds.height);
-        }
 
-        highlightedIndex = -1;
+            highlightedIndex = -1;
+            repaintComponent(rowBounds.x, rowBounds.y, rowBounds.width, rowBounds.height, true);
+        }
 
         return super.mouseWheel(component, scrollType, scrollAmount, wheelRotation, x, y);
     }

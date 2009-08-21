@@ -472,7 +472,7 @@ public class FilteredList<T> implements List<T> {
 
     @Override
     public void setComparator(Comparator<T> comparator) {
-        Comparator<T> previousComparator = view.getComparator();
+        Comparator<T> previousComparator = this.comparator;
 
         if (previousComparator != comparator) {
             this.comparator = comparator;

@@ -1384,6 +1384,9 @@ public abstract class ApplicationContext {
 
     /**
      * Returns this application's origin (the URL of it's originating server).
+     *
+     * @return
+     * The application's origin, or <tt>null</tt> if the origin cannot be determined.
      */
     public static URL getOrigin() {
         return origin;

@@ -26,6 +26,7 @@ import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
+import org.apache.pivot.util.ThreadUtilities;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.wtk.Accordion;
 import org.apache.pivot.wtk.ActivityIndicator;
@@ -100,6 +101,18 @@ public final class TerraTheme extends Theme {
 
     /**
      * Constructs a theme, pulling the font and color palette from a JSON file
+     * at the specified location.
+     *
+     * @param location
+     *
+     * @see #TerraTheme(URL)
+     */
+    public TerraTheme(String location) {
+        this(ThreadUtilities.getClassLoader().getResource(location));
+    }
+
+    /**
+     * Constructs a theme, pulling the font and color palette from a JSON file
      * at the specified location. The JSON file should represent a <tt>Map</tt>
      * containing the following properties:
      * <p>
@@ -137,6 +150,7 @@ public final class TerraTheme extends Theme {
      * @param location
      * The location of the JSON file that defines the theme's font and colors.
      */
+    @SuppressWarnings("unchecked")
     public TerraTheme(URL location) {
         if (location == null) {
             throw new IllegalArgumentException("location is null.");
@@ -202,11 +216,6 @@ public final class TerraTheme extends Theme {
         componentSkinMap.put(TerraSplitPaneSkin.SplitterShadow.class, TerraSplitPaneSkin.SplitterShadowSkin.class);
         componentSkinMap.put(TerraTabPaneSkin.TabButton.class, TerraTabPaneSkin.TabButtonSkin.class);
 
-        loadScheme(location);
-    }
-
-    @SuppressWarnings("unchecked")
-    public void loadScheme(URL location) {
         try {
             InputStream inputStream = location.openStream();
 

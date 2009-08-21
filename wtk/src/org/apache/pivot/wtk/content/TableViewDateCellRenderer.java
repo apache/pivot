@@ -32,7 +32,7 @@ import org.apache.pivot.wtk.TableView;
 public class TableViewDateCellRenderer extends TableViewCellRenderer {
     private DateFormat dateFormat = DEFAULT_DATE_FORMAT;
 
-    public static final DateFormat DEFAULT_DATE_FORMAT = DateFormat.getDateInstance();
+    protected static final DateFormat DEFAULT_DATE_FORMAT = DateFormat.getDateInstance();
 
     public DateFormat getDateFormat() {
         return dateFormat;

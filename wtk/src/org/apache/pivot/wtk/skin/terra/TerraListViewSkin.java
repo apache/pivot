@@ -683,10 +683,10 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         int wheelRotation, int x, int y) {
         if (highlightedIndex != -1) {
             Bounds itemBounds = getItemBounds(highlightedIndex);
-            repaintComponent(itemBounds.x, itemBounds.y, itemBounds.width, itemBounds.height);
-        }
 
-        highlightedIndex = -1;
+            highlightedIndex = -1;
+            repaintComponent(itemBounds.x, itemBounds.y, itemBounds.width, itemBounds.height, true);
+        }
 
         return super.mouseWheel(component, scrollType, scrollAmount, wheelRotation, x, y);
     }
