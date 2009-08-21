@@ -46,28 +46,12 @@ public abstract class RollupSkin extends ContainerSkin
         super.uninstall();
     }
 
-    // RollupListener methods
-
-    public void headingChanged(Rollup rollup, Component previousHeading) {
-        // No-op
-    }
-
-    public void contentChanged(Rollup rollup, Component previousContent) {
-        // No-op
-    }
-
-    // RollupStateListener methods
-
     public Vote previewExpandedChange(Rollup rollup) {
         // No-op
         return Vote.APPROVE;
     }
 
     public void expandedChangeVetoed(Rollup rollup, Vote reason) {
-        // No-op
-    }
-
-    public void expandedChanged(Rollup rollup) {
         // No-op
     }
 }

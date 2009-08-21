@@ -23,6 +23,20 @@ package org.apache.pivot.wtk;
  */
 public interface RollupListener {
     /**
+     * Rollup listener adapter.
+     */
+    public static class Adapter implements RollupListener {
+        public void headingChanged(Rollup rollup, Component previousHeading) {
+        }
+
+        public void contentChanged(Rollup rollup, Component previousContent) {
+        }
+
+        public void collapsibleChanged(Rollup rollup) {
+        }
+    }
+
+    /**
      * Called when a rollup's heading component changed.
      *
      * @param rollup
@@ -37,4 +51,11 @@ public interface RollupListener {
      * @param previousContent
      */
     public void contentChanged(Rollup rollup, Component previousContent);
+
+    /**
+     * Called when a rollup's collapsible flag has changed.
+     *
+     * @param rollup
+     */
+    public void collapsibleChanged(Rollup rollup);
 }

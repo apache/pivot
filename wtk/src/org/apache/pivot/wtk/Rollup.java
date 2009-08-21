@@ -20,7 +20,6 @@ import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Vote;
 
-
 /**
  * Container that can be expanded or collapsed to respectively show or hide its
  * content. A rollup has a heading component that is always visible, and when
@@ -39,6 +38,12 @@ public class Rollup extends Container {
         public void contentChanged(Rollup rollup, Component previousContent) {
             for (RollupListener listener : this) {
                 listener.contentChanged(rollup, previousContent);
+            }
+        }
+
+        public void collapsibleChanged(Rollup rollup) {
+            for (RollupListener listener : this) {
+                listener.collapsibleChanged(rollup);
             }
         }
     }
@@ -68,10 +73,11 @@ public class Rollup extends Container {
         }
     }
 
-    private boolean expanded = true;
-
     private Component heading = null;
     private Component content = null;
+
+    private boolean expanded = true;
+    private boolean collapsible = true;
 
     private RollupListenerList rollupListeners = new RollupListenerList();
     private RollupStateListenerList rollupStateListeners = new RollupStateListenerList();
@@ -95,23 +101,6 @@ public class Rollup extends Container {
 
         if (content != null) {
             setContent(content);
-        }
-    }
-
-    public boolean isExpanded() {
-        return expanded;
-    }
-
-    public void setExpanded(boolean expanded) {
-        if (expanded != this.expanded) {
-            Vote vote = rollupStateListeners.previewExpandedChange(this);
-
-            if (vote == Vote.APPROVE) {
-                this.expanded = expanded;
-                rollupStateListeners.expandedChanged(this);
-            } else {
-                rollupStateListeners.expandedChangeVetoed(this, vote);
-            }
         }
     }
 
@@ -164,6 +153,34 @@ public class Rollup extends Container {
             this.content = content;
 
             rollupListeners.contentChanged(this, previousContent);
+        }
+    }
+
+    public boolean isExpanded() {
+        return expanded;
+    }
+
+    public void setExpanded(boolean expanded) {
+        if (expanded != this.expanded) {
+            Vote vote = rollupStateListeners.previewExpandedChange(this);
+
+            if (vote == Vote.APPROVE) {
+                this.expanded = expanded;
+                rollupStateListeners.expandedChanged(this);
+            } else {
+                rollupStateListeners.expandedChangeVetoed(this, vote);
+            }
+        }
+    }
+
+    public boolean isCollapsible() {
+        return collapsible;
+    }
+
+    public void setCollapsible(boolean collapsible) {
+        if (this.collapsible != collapsible) {
+            this.collapsible = collapsible;
+            rollupListeners.collapsibleChanged(this);
         }
     }
 

@@ -126,23 +126,25 @@ public class TerraRollupSkin extends RollupSkin {
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
-            if (rollup.getContent() == null && useBullet) {
+            if (rollup.isCollapsible()) {
+                if (rollup.isExpanded()) {
+                    // Paint the collapse image
+                    int[] xPoints = {0, 3, 6};
+                    int[] yPoints = {0, 6, 0};
+                    graphics.fillPolygon(xPoints, yPoints, 3);
+                    graphics.drawPolygon(xPoints, yPoints, 3);
+                } else {
+                    // Paint the expand image
+                    int[] xPoints = {0, 6, 0};
+                    int[] yPoints = {0, 3, 6};
+                    graphics.fillPolygon(xPoints, yPoints, 3);
+                    graphics.drawPolygon(xPoints, yPoints, 3);
+                }
+            } else {
                 // Paint the bullet
                 RoundRectangle2D.Double shape = new RoundRectangle2D.Double(1, 1, 4, 4, 2, 2);
                 graphics.draw(shape);
                 graphics.fill(shape);
-            } else if (rollup.isExpanded()) {
-                // Paint the collapse image
-                int[] xPoints = {0, 3, 6};
-                int[] yPoints = {0, 6, 0};
-                graphics.fillPolygon(xPoints, yPoints, 3);
-                graphics.drawPolygon(xPoints, yPoints, 3);
-            } else {
-                // Paint the expand image
-                int[] xPoints = {0, 6, 0};
-                int[] yPoints = {0, 3, 6};
-                graphics.fillPolygon(xPoints, yPoints, 3);
-                graphics.drawPolygon(xPoints, yPoints, 3);
             }
         }
 
@@ -162,7 +164,6 @@ public class TerraRollupSkin extends RollupSkin {
     private int buffer;
     private boolean fill;
     private boolean headingToggles;
-    private boolean useBullet;
 
     private ExpandTransition expandTransition = null;
 
@@ -170,8 +171,9 @@ public class TerraRollupSkin extends RollupSkin {
         public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
             boolean consumed = false;
 
-            if (headingToggles) {
-                Rollup rollup = (Rollup)getComponent();
+            Rollup rollup = (Rollup)getComponent();
+            if (headingToggles
+                && rollup.isCollapsible()) {
                 rollup.setExpanded(!rollup.isExpanded());
                 consumed = true;
             }
@@ -191,7 +193,6 @@ public class TerraRollupSkin extends RollupSkin {
         buffer = 4;
         fill = false;
         headingToggles = true;
-        useBullet = false;
     }
 
     @Override
@@ -207,6 +208,7 @@ public class TerraRollupSkin extends RollupSkin {
         // Initialize state
         headingChanged(rollup, null);
         contentChanged(rollup, null);
+        collapsibleChanged(rollup);
     }
 
     @Override
@@ -406,21 +408,6 @@ public class TerraRollupSkin extends RollupSkin {
         this.headingToggles = headingToggles;
     }
 
-    public boolean getUseBullet() {
-        return useBullet;
-    }
-
-    public void setUseBullet(boolean useBullet) {
-        this.useBullet = useBullet;
-
-        Rollup rollup = (Rollup)getComponent();
-        if (rollup.getContent() == null) {
-            rollupButton.repaint();
-        }
-    }
-
-    // RollupListener methods
-
     @Override
     public void headingChanged(Rollup rollup, Component previousHeading) {
         if (previousHeading != null) {
@@ -438,17 +425,7 @@ public class TerraRollupSkin extends RollupSkin {
 
     @Override
     public void contentChanged(Rollup rollup, Component previousContent) {
-        if (rollup.getContent() == null && useBullet) {
-            rollupButton.setCursor(Cursor.DEFAULT);
-        } else {
-            rollupButton.setCursor(Cursor.HAND);
-        }
-
-        rollupButton.repaint();
-
-        if (rollup.isExpanded()) {
-            invalidateComponent();
-        }
+        invalidateComponent();
     }
 
     // Rollup state events
@@ -494,8 +471,17 @@ public class TerraRollupSkin extends RollupSkin {
         }
     }
 
-    @Override
     public void expandedChanged(final Rollup rollup) {
+        invalidateComponent();
+    }
+
+    public void collapsibleChanged(Rollup rollup) {
+        if (rollup.isCollapsible()) {
+            rollupButton.setCursor(Cursor.HAND);
+        } else {
+            rollupButton.setCursor(Cursor.DEFAULT);
+        }
+
         invalidateComponent();
     }
 }
