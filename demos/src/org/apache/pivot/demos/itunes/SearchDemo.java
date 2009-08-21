@@ -67,7 +67,7 @@ public class SearchDemo implements Application {
 
     public SearchDemo() throws Exception {
         searchImage = Image.load(getClass().getResource("magnifier.png"));
-        cancelImage = Image.load(getClass().getResource("cancel.png"));
+        cancelImage = Image.load(getClass().getResource("bullet_cross.png"));
     }
 
     @Override
