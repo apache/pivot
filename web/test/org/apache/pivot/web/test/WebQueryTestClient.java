@@ -35,10 +35,8 @@ import org.junit.Test;
 
 
 public class WebQueryTestClient {
-    final static boolean useProxy = true;
-
     final static String HOSTNAME = "localhost";
-    final static String PATH = (useProxy ? "/pivot_web_test/proxy" : "/pivot_web_test/webquery") + "/bar/quux";
+    final static String PATH = "/pivot_web_test/proxy" /*"/pivot_web_test/webquery"*/ + "/bar/quux";
     final static int PORT = 8080;
     final static boolean SECURE = false;
 

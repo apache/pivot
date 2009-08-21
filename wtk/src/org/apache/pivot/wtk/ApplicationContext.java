@@ -90,7 +90,7 @@ public abstract class ApplicationContext {
         private boolean paintPending = false;
 
         private boolean debugRepaint = false;
-        
+
         private Random random = null;
 
 
@@ -273,7 +273,7 @@ public abstract class ApplicationContext {
                 debugRepaint = Boolean.parseBoolean(System.getProperty("org.apache.pivot.wtk.debugRepaint"));
                 if (debugRepaint == true)
                     random = new Random();
-                
+
             } catch (SecurityException ex) {
                 // No-op
             }

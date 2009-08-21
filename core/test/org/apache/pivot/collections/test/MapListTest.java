@@ -111,14 +111,14 @@ public class MapListTest {
         pair = sequence.get(0);
         assertNotNull(pair);
         assertEquals("b", pair.key);
-        assertEquals(2, pair.value);
+        assertEquals(2, (int)pair.value);
 
         assertEquals(2, mapList.getLength());
 
         newSource.put("aa", 77);
         pair = mapList.get(1);
         assertEquals(pair.key, "aa");
-        assertEquals(pair.value, 77);
+        assertEquals((int)pair.value, 77);
 
         newSource.remove("aa");
         assertEquals(1, mapList.getLength());

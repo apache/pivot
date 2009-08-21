@@ -163,13 +163,11 @@ public class Translator {
      */
     private static class Attribute {
         public final String namespaceURI;
-        public final String prefix;
         public final String localName;
         public final String value;
 
-        public Attribute(String namespaceURI, String prefix, String localName, String value) {
+        public Attribute(String namespaceURI, String localName, String value) {
             this.namespaceURI = namespaceURI;
-            this.prefix = prefix;
             this.localName = localName;
             this.value = value;
         }
@@ -340,8 +338,7 @@ public class Translator {
                                             (WTKXSerializer.INCLUDE_RESOURCES_ATTRIBUTE)) {
                                             // TODO handle resources
                                         } else {
-                                            attributes.add(new Attribute(attributeNamespaceURI,
-                                                attributePrefix, attributeLocalName, attributeValue));
+                                            attributes.add(new Attribute(attributeNamespaceURI, attributeLocalName, attributeValue));
                                         }
                                     }
                                 }
@@ -397,8 +394,7 @@ public class Translator {
                                         id = attributeValue;
                                     }
                                 } else {
-                                    attributes.add(new Attribute(attributeNamespaceURI,
-                                        attributePrefix, attributeLocalName, attributeValue));
+                                    attributes.add(new Attribute(attributeNamespaceURI, attributeLocalName, attributeValue));
                                 }
                             }
 

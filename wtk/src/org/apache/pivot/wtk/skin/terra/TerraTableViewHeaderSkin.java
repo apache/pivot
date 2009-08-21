@@ -62,10 +62,6 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
             return 4;
         }
 
-        public Dimensions getPreferredSize() {
-            return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
-        }
-
         public void paint(Graphics2D graphics) {
             GeneralPath shape = new GeneralPath();
 
