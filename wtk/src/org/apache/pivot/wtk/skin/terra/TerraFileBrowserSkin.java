@@ -484,7 +484,6 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         });
 
         fileTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener() {
-            @SuppressWarnings("unchecked")
             public void selectedRangeAdded(TableView tableView, int rangeStart, int rangeEnd) {
                 updatingSelection = true;
 
@@ -496,7 +495,6 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                 updatingSelection = false;
             }
 
-            @SuppressWarnings("unchecked")
             public void selectedRangeRemoved(TableView tableView, int rangeStart, int rangeEnd) {
                 updatingSelection = true;
 
@@ -528,7 +526,6 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             private int index = -1;
 
             @Override
-            @SuppressWarnings("unchecked")
             public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
                 boolean consumed = super.mouseClick(component, button, x, y, count);
 
@@ -689,7 +686,6 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         return consumed;
     }
 
-    @SuppressWarnings("unchecked")
     public void rootDirectoryChanged(FileBrowser fileBrowser, File previousRootDirectory) {
         ArrayList<File> path = new ArrayList<File>();
 
@@ -719,7 +715,6 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         fileTableView.requestFocus();
     }
 
-    @SuppressWarnings("unchecked")
     public void selectedFileAdded(FileBrowser fileBrowser, File file) {
         if (!updatingSelection) {
             int index = files.indexOf(file);
@@ -729,7 +724,6 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public void selectedFileRemoved(FileBrowser fileBrowser, File file) {
         if (!updatingSelection) {
             int index = files.indexOf(file);
@@ -739,7 +733,6 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public void selectedFilesChanged(FileBrowser fileBrowser, Sequence<File> previousSelectedFiles) {
         if (!updatingSelection) {
             fileTableView.clearSelection();

@@ -176,7 +176,6 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
             private File file = null;
 
             @Override
-            @SuppressWarnings("unchecked")
             public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
                 boolean consumed = super.mouseClick(component, button, x, y, count);
 
