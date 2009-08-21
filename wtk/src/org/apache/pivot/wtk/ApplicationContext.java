@@ -48,6 +48,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Iterator;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -89,6 +90,9 @@ public abstract class ApplicationContext {
         private boolean paintPending = false;
 
         private boolean debugRepaint = false;
+        
+        private Random random = null;
+
 
         private transient DropTargetListener dropTargetListener = new DropTargetListener() {
             public void dragEnter(DropTargetDragEvent event) {
@@ -267,6 +271,9 @@ public abstract class ApplicationContext {
 
             try {
                 debugRepaint = Boolean.parseBoolean(System.getProperty("org.apache.pivot.wtk.debugRepaint"));
+                if (debugRepaint == true)
+                    random = new Random();
+                
             } catch (SecurityException ex) {
                 // No-op
             }
@@ -378,8 +385,8 @@ public abstract class ApplicationContext {
                     }
 
                     if (debugRepaint) {
-                        graphics.setColor(new java.awt.Color((int)(Math.random() * 256),
-                            (int)(Math.random() * 256), (int)(Math.random() * 256), 75));
+                        graphics.setColor(new java.awt.Color(random.nextInt(256),
+                            random.nextInt(256), random.nextInt(256), 75));
                         graphics.fillRect(0, 0, getWidth(), getHeight());
                     }
                 } catch (RuntimeException exception) {
