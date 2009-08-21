@@ -21,6 +21,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Iterator;
 
@@ -143,7 +144,7 @@ public class MapListTest {
         assertEquals(0, mapList.getLength());
     }
 
-    private class TestMapListListener implements MapListListener<String, Integer> {
+    private static class TestMapListListener implements MapListListener<String, Integer> {
         private MapList<String, Integer> mapList;
         private Map<String, Integer> previousSource;
         private int calls;
@@ -157,7 +158,9 @@ public class MapListTest {
         }
     }
 
-    private class TestComparator implements Comparator<Pair<String, Integer>> {
+    private static class TestComparator implements Comparator<Pair<String, Integer>>, Serializable {
+        private static final long serialVersionUID = 0;
+
         @Override
         public int compare(Pair<String, Integer> o1, Pair<String, Integer> o2) {
             return o1.key.compareTo(o2.key);
