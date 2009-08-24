@@ -373,6 +373,7 @@ public class JSONSerializer implements Serializer<Object> {
 
         // Move to the next character after '['
         c = reader.read();
+        skipWhitespaceAndComments(reader);
 
         while (c != -1 && c != ']') {
             list.add(readValue(reader));
