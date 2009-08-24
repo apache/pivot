@@ -194,6 +194,11 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
         MenuBar.Item menuBarItem = (MenuBar.Item)button;
 
         if (menuBarItem.isSelected()) {
+            Menu menu = menuBarItem.getMenu();
+            if (menu == null) {
+                throw new IllegalStateException("Menu is not defined for " + button + ".");
+            }
+
             Display display = menuBarItem.getDisplay();
             Point menuBarItemLocation = menuBarItem.mapPointToAncestor(display, 0, getHeight());
 
