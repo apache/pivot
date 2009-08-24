@@ -127,10 +127,14 @@ public final class CornerRadii implements Serializable {
         }
 
         CornerRadii cornerRadii;
-        try {
-            cornerRadii = new CornerRadii(JSONSerializer.parseMap(value));
-        } catch (SerializationException exception) {
-            throw new IllegalArgumentException(exception);
+        if (value.startsWith("{")) {
+            try {
+                cornerRadii = new CornerRadii(JSONSerializer.parseMap(value));
+            } catch (SerializationException exception) {
+                throw new IllegalArgumentException(exception);
+            }
+        } else {
+            cornerRadii = new CornerRadii(Integer.parseInt(value));
         }
 
         return cornerRadii;
