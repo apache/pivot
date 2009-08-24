@@ -60,7 +60,7 @@ public class LinkedList<T> implements List<T>, Serializable {
         }
 
         public T next() {
-            if (node == null) {
+            if (!hasNext()) {
                 throw new NoSuchElementException();
             }
 

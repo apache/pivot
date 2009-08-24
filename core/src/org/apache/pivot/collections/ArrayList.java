@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import org.apache.pivot.util.ListenerList;
 
@@ -46,6 +47,10 @@ public class ArrayList<T> implements List<T>, Serializable {
         }
 
         public T next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+
             if (length != ArrayList.this.length) {
                 throw new ConcurrentModificationException();
             }
@@ -398,12 +403,14 @@ public class ArrayList<T> implements List<T>, Serializable {
         sb.append(getClass().getName());
         sb.append(" [");
 
-        for (int i = 0; i < length; i++) {
+        int i = 0;
+        for (T item : this) {
             if (i > 0) {
                 sb.append(", ");
             }
 
-            sb.append(items[i]);
+            sb.append(item);
+            i++;
         }
 
         sb.append("]");

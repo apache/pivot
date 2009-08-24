@@ -27,6 +27,7 @@ import static org.junit.Assert.fail;
 import java.util.Comparator;
 import java.util.Iterator;
 
+import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.Map;
 import org.junit.Test;
@@ -98,7 +99,7 @@ public class HashMapTest {
     @Test
     @SuppressWarnings("unchecked")
     public void constructorTests() throws Exception {
-        // don't like the warning generated here ...
+        // TODO Verify that this does not generate a warning under JDK 7
         HashMap<String, Integer> map = new HashMap<String, Integer>(
                 new Map.Pair<String, Integer>("a", 1),
                 new Map.Pair<String, Integer>("b", 2));
@@ -113,28 +114,28 @@ public class HashMapTest {
     }
 
     @Test
-    public void exceptionTests() throws Exception {
-        Comparator<String> comparator = new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                return o1.compareTo(o2);
+    public void comparatorTest() {
+        Comparator<Character> comparator = new Comparator<Character>() {
+            public int compare(Character c1, Character c2) {
+                return c1.compareTo(c2);
             }
         };
 
-        try {
-            new HashMap<String, Integer>(comparator);
-            fail("Expected " + UnsupportedOperationException.class);
-        } catch (UnsupportedOperationException e) {
-            // ignore, we're expecting this as part of the test
+        HashMap<Character, Integer> map = new HashMap<Character, Integer>(comparator);
+        ArrayList<Character> keys = new ArrayList<Character>('c', 'a', 'x', 'r', 'd', 'n', 'f');
+
+        int n = keys.getLength();
+
+        int i = 0;
+        while (i < n) {
+            map.put(keys.get(i), i++);
         }
 
-        try {
-            HashMap<String, Integer> map = new HashMap<String, Integer>();
-            map.setComparator(comparator);
-            fail("Expected " + UnsupportedOperationException.class);
-        } catch (UnsupportedOperationException e) {
-            // ignore, we're expecting this as part of the test
+        keys.setComparator(comparator);
+
+        int j = 0;
+        for (Character c : keys) {
+            assertEquals(keys.get(j++), c);
         }
     }
-
 }
