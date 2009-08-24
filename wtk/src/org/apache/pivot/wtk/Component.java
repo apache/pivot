@@ -2466,7 +2466,7 @@ public abstract class Component implements ConstrainedVisual {
     protected boolean mouseMove(int x, int y) {
         boolean consumed = false;
 
-        if (enabled) {
+        if (isEnabled()) {
             consumed = componentMouseListeners.mouseMove(this, x, y);
         }
 
@@ -2474,14 +2474,14 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     protected void mouseOver() {
-        if (enabled) {
+        if (isEnabled()) {
             mouseOver = true;
             componentMouseListeners.mouseOver(this);
         }
     }
 
     protected void mouseOut() {
-        if (enabled) {
+        if (isEnabled()) {
             mouseOver = false;
             componentMouseListeners.mouseOut(this);
         }
@@ -2490,7 +2490,7 @@ public abstract class Component implements ConstrainedVisual {
     protected boolean mouseDown(Mouse.Button button, int x, int y) {
         boolean consumed = false;
 
-        if (enabled) {
+        if (isEnabled()) {
             consumed = componentMouseButtonListeners.mouseDown(this, button, x, y);
         }
 
@@ -2500,7 +2500,7 @@ public abstract class Component implements ConstrainedVisual {
     protected boolean mouseUp(Mouse.Button button, int x, int y) {
         boolean consumed = false;
 
-        if (enabled) {
+        if (isEnabled()) {
             consumed = componentMouseButtonListeners.mouseUp(this, button, x, y);
         }
 
@@ -2510,7 +2510,7 @@ public abstract class Component implements ConstrainedVisual {
     protected boolean mouseClick(Mouse.Button button, int x, int y, int count) {
         boolean consumed = false;
 
-        if (enabled) {
+        if (isEnabled()) {
             consumed = componentMouseButtonListeners.mouseClick(this, button, x, y, count);
         }
 
@@ -2521,7 +2521,7 @@ public abstract class Component implements ConstrainedVisual {
         int wheelRotation, int x, int y) {
         boolean consumed = false;
 
-        if (enabled) {
+        if (isEnabled()) {
             consumed = componentMouseWheelListeners.mouseWheel(this, scrollType,
                 scrollAmount, wheelRotation, x, y);
         }
@@ -2532,7 +2532,7 @@ public abstract class Component implements ConstrainedVisual {
     protected boolean keyTyped(char character) {
         boolean consumed = false;
 
-        if (enabled) {
+        if (isEnabled()) {
             consumed = componentKeyListeners.keyTyped(this, character);
 
             if (!consumed && parent != null) {
@@ -2546,7 +2546,7 @@ public abstract class Component implements ConstrainedVisual {
     protected boolean keyPressed(int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 
-        if (enabled) {
+        if (isEnabled()) {
             consumed = componentKeyListeners.keyPressed(this, keyCode, keyLocation);
 
             if (!consumed && parent != null) {
@@ -2560,7 +2560,7 @@ public abstract class Component implements ConstrainedVisual {
     protected boolean keyReleased(int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 
-        if (enabled) {
+        if (isEnabled()) {
             consumed = componentKeyListeners.keyReleased(this, keyCode, keyLocation);
 
             if (!consumed && parent != null) {

@@ -151,6 +151,8 @@ limitations under the License.
                         </Menu>
                     </menu>
                 </MenuBar.Item>
+
+                <MenuBar.Item buttonData="Empty"/>
             </items>
         </MenuBar>
     </menuBar>

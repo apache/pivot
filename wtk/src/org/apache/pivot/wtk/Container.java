@@ -760,8 +760,8 @@ public abstract class Container extends Component
                 // Synthesize mouse click event
                 if (component != null
                     && component == mouseDownComponent
-                    && mouseDownComponent.isEnabled()
-                    && mouseDownComponent.isVisible()) {
+                    && component.isEnabled()
+                    && component.isVisible()) {
                     mouseClickConsumed = component.mouseClick(button, x - component.getX(),
                         y - component.getY(), mouseClickCount);
                 }

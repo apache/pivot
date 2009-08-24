@@ -102,6 +102,12 @@ public class MenuBar extends Container {
             throw new UnsupportedOperationException("Menu bar items are always toggle buttons.");
         }
 
+        @Override
+        public boolean isEnabled() {
+            return (super.isEnabled()
+                && menu != null);
+        }
+
         public ListenerList<ItemListener> getItemListeners() {
             return itemListeners;
         }
