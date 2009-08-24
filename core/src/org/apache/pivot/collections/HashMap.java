@@ -40,19 +40,11 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
     private transient MapListenerList<K, V> mapListeners = new MapListenerList<K, V>();
 
     public HashMap() {
-        this(false, null);
-    }
-
-    public HashMap(boolean weak) {
-        this(weak, null);
-    }
-
-    public HashMap(Map<K, V> map) {
-        this(false, map);
+        hashMap = new java.util.HashMap<K, V>();
     }
 
     public HashMap(Pair<K, V>... pairs) {
-        this(false);
+        this();
 
         for (int i = 0; i < pairs.length; i++) {
             Pair<K, V> pair = pairs[i];
@@ -60,8 +52,8 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         }
     }
 
-    public HashMap(boolean weak, Map<K, V> map) {
-        hashMap = (weak) ? new java.util.WeakHashMap<K, V>() : new java.util.HashMap<K, V>();
+    public HashMap(Map<K, V> map) {
+        this();
 
         if (map != null) {
             for (K key : map) {
@@ -121,7 +113,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         return hashMap.isEmpty();
     }
 
-    public int count() {
+    public int getCount() {
         return hashMap.size();
     }
 

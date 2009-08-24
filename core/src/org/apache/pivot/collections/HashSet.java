@@ -95,7 +95,7 @@ public class HashSet<E> implements Set<E>, Serializable {
     }
 
     public int count() {
-        return hashMap.count();
+        return hashMap.getCount();
     }
 
     public Comparator<E> getComparator() {

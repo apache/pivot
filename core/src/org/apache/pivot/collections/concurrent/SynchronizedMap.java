@@ -115,8 +115,8 @@ public class SynchronizedMap<K, V> extends SynchronizedCollection<K>
     }
 
     @SuppressWarnings("unchecked")
-    public synchronized int count() {
-        return ((Map<K, V>)collection).count();
+    public synchronized int getCount() {
+        return ((Map<K, V>)collection).getCount();
     }
 
     public ListenerList<MapListener<K, V>> getMapListeners() {

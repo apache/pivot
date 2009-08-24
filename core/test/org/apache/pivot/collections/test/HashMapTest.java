@@ -39,7 +39,7 @@ public class HashMapTest {
         HashMap<String, Integer> map = new HashMap<String, Integer>();
 
         assertTrue(map.isEmpty());
-        assertEquals(0, map.count());
+        assertEquals(0, map.getCount());
         assertNull(map.getComparator());
         assertFalse(map.containsKey("a"));
         assertNotNull(map.getMapListeners());
@@ -51,11 +51,11 @@ public class HashMapTest {
 
         assertEquals(2, (int)map.get("a"));
 
-        assertEquals(1, map.count());
+        assertEquals(1, map.getCount());
 
         assertEquals(2, (int)map.remove("a"));
 
-        assertEquals(0, map.count());
+        assertEquals(0, map.getCount());
 
         map.put("a", 1);
         map.put("b", 2);
@@ -65,7 +65,7 @@ public class HashMapTest {
         assertEquals(2, (int)map.get("b"));
         assertEquals(3, (int)map.get("c"));
 
-        assertEquals(3, map.count());
+        assertEquals(3, map.getCount());
 
         Iterator<String> iter = map.iterator();
         int count = 0;
@@ -88,7 +88,7 @@ public class HashMapTest {
 
         map.clear();
 
-        assertEquals(0, map.count());
+        assertEquals(0, map.getCount());
 
         assertEquals(null, map.get("a"));
         assertEquals(null, map.get("b"));
@@ -102,13 +102,13 @@ public class HashMapTest {
         HashMap<String, Integer> map = new HashMap<String, Integer>(
                 new Map.Pair<String, Integer>("a", 1),
                 new Map.Pair<String, Integer>("b", 2));
-        assertEquals(2, map.count());
-
-        map = new HashMap<String, Integer>(true, map);
-        assertEquals(2, map.count());
+        assertEquals(2, map.getCount());
 
         map = new HashMap<String, Integer>(map);
-        assertEquals(2, map.count());
+        assertEquals(2, map.getCount());
+
+        map = new HashMap<String, Integer>(map);
+        assertEquals(2, map.getCount());
 
     }
 

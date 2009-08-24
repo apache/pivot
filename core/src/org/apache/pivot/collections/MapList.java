@@ -169,7 +169,7 @@ public class MapList<K, V> implements List<Pair<K, V>> {
             mapListListeners.sourceChanged(this, previousSource);
 
             // Refresh the view
-            view = new ArrayList<Pair<K, V>>(source.count());
+            view = new ArrayList<Pair<K, V>>(source.getCount());
 
             for (K key : source) {
                 listListeners.itemInserted(this, view.add(new Pair<K, V>(key, source.get(key))));

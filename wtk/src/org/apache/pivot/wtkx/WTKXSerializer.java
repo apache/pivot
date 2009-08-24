@@ -126,7 +126,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         }
 
         public int size() {
-            return namedObjects.count();
+            return namedObjects.getCount();
         }
 
         public Collection<Object> values() {

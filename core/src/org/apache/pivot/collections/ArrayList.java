@@ -66,8 +66,10 @@ public class ArrayList<T> implements List<T>, Serializable {
     private Comparator<T> comparator = null;
     private transient ListListenerList<T> listListeners = new ListListenerList<T>();
 
+    public static final int DEFAULT_CAPACITY = 10;
+
     public ArrayList() {
-        items = new Object[10];
+        items = new Object[DEFAULT_CAPACITY];
     }
 
     public ArrayList(Comparator<T> comparator) {

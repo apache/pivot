@@ -93,7 +93,7 @@ public class MapAdapter<K, V> implements Map<K, V>, Serializable {
         return map.isEmpty();
     }
 
-    public int count() {
+    public int getCount() {
         return map.size();
     }
 

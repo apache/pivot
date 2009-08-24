@@ -133,7 +133,7 @@ public interface Map<K, V> extends Dictionary<K, V>, Collection<K> {
     /**
      * Returns the number of entries in the map.
      */
-    public int count();
+    public int getCount();
 
     /**
      * @see MapListener#comparatorChanged(Map, Comparator)
