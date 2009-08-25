@@ -20,6 +20,14 @@ http://www.famfamfam.com/lab/icons/silk/
 ======================================================================
 
 This software contains images distributed as part of the
+Silk Companion Set, developed by Damien Guard and licensed under
+the Creative Commons Attribution 2.5 License.
+
+http://damieng.com/creative/icons/silk-companion-1-icons
+
+======================================================================
+
+This software contains images distributed as part of the
 Tango Icon Theme 0.8.90, which is available as public domain.
 
 http://tango.freedesktop.org/
@@ -40,14 +48,6 @@ implementation of the Servlet 2.5 specification, which is licensed
 under the Apache License 2.0.
 
 http://tomcat.apache.org/
-
-======================================================================
-
-Pivot's WTKX classes (pivot.wtkx.*) are built using the Streaming API
-for XML (StAX) reference implementation, which is licensed under the
-Apache License 2.0.
-
-http://stax.codehaus.org/
 
 ======================================================================
 
