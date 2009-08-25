@@ -94,7 +94,7 @@ public class HashSet<E> implements Set<E>, Serializable {
         return hashMap.isEmpty();
     }
 
-    public int count() {
+    public int getCount() {
         return hashMap.getCount();
     }
 
@@ -112,5 +112,28 @@ public class HashSet<E> implements Set<E>, Serializable {
 
     public ListenerList<SetListener<E>> getSetListeners() {
         return setListeners;
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(getClass().getName());
+        sb.append(" (");
+
+        if (getCount() > 0) {
+            int i = 0;
+            for (E element : this) {
+                if (i > 0) {
+                    sb.append(", ");
+                }
+
+                sb.append(element);
+                i++;
+            }
+        }
+
+        sb.append(")");
+
+        return sb.toString();
     }
 }

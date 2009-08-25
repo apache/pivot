@@ -24,7 +24,6 @@ import java.util.NoSuchElementException;
 
 import org.apache.pivot.util.ListenerList;
 
-
 /**
  * Implementation of the {@link List} interface that is backed by a linked
  * list.
@@ -33,7 +32,6 @@ import org.apache.pivot.util.ListenerList;
  * {@link org.apache.pivot.collections.concurrent.SynchronizedList}.
  */
 public class LinkedList<T> implements List<T>, Serializable {
-    // Node containing an item in the list
     private static class Node<T> implements Serializable {
         private static final long serialVersionUID = 0;
         private Node<T> previous;
@@ -47,16 +45,24 @@ public class LinkedList<T> implements List<T>, Serializable {
         }
     }
 
-    // Node iterator
-    private class NodeIterator implements Iterator<T> {
-        private Node<T> node;
+    private class LinkedListItemIterator implements ItemIterator<T> {
+        private boolean reverse;
+        private Node<T> current;
+        private Node<T> next;
 
-        public NodeIterator() {
-            this.node = first;
+        public LinkedListItemIterator() {
+            this(false);
+        }
+
+        public LinkedListItemIterator(boolean reverse) {
+            this.reverse = reverse;
+
+            current = null;
+            next = (reverse) ? last : first;
         }
 
         public boolean hasNext() {
-            return (node != null);
+            return (next != null);
         }
 
         public T next() {
@@ -64,21 +70,75 @@ public class LinkedList<T> implements List<T>, Serializable {
                 throw new NoSuchElementException();
             }
 
-            T item = node.item;
-            node = node.next;
+            T item = next.item;
+            current = next;
+            next = (reverse) ? next.previous : next.next;
 
             return item;
         }
 
-        public void remove() {
-            // Unlink this node from its predecessor and successor
-            if (node.previous != null) {
-                node.previous.next = node.next;
+        public boolean hasPrevious() {
+            return (next != null);
+        }
+
+        public T previous() {
+            if (!hasPrevious()) {
+                throw new NoSuchElementException();
             }
 
-            if (node.next != null) {
-                node.next.previous = node.previous;
+            T item = next.item;
+            current = next;
+            next = (reverse) ? next.next: next.previous;
+
+            return item;
+        }
+
+        public void insert(T item) {
+            if (current == null) {
+                throw new IllegalStateException();
             }
+
+            // Insert a new node immediately prior to the current node
+            Node<T> node = new Node<T>(current.previous, current, item);
+
+            if (current.previous == null) {
+                first = node;
+            } else {
+                current.previous.next = node;
+            }
+
+            current.previous = node;
+
+            length++;
+        }
+
+        public void update(T item) {
+            if (current == null) {
+                throw new IllegalStateException();
+            }
+
+            current.item = item;
+        }
+
+        public void remove() {
+            if (current == null) {
+                throw new IllegalStateException();
+            }
+
+            // Unlink the current node from its predecessor and successor
+            if (current.previous == null) {
+                first = current.next;
+            } else {
+                current.previous.next = current.next;
+            }
+
+            if (current.next == null) {
+                last = current.previous;
+            } else {
+                current.next.previous = current.previous;
+            }
+
+            length--;
         }
     }
 
@@ -123,7 +183,7 @@ public class LinkedList<T> implements List<T>, Serializable {
         } else {
             // Find the insertion point
             index = 0;
-            NodeIterator nodeIterator = new NodeIterator();
+            LinkedListItemIterator nodeIterator = new LinkedListItemIterator();
             while (nodeIterator.hasNext()
                 && comparator.compare(item, nodeIterator.next()) > 0) {
                 index++;
@@ -132,8 +192,8 @@ public class LinkedList<T> implements List<T>, Serializable {
             if (nodeIterator.hasNext()
                 && index > 0) {
                 // Insert the new node here
-                Node<T> node = new Node<T>(nodeIterator.node, nodeIterator.node.next, item);
-                nodeIterator.node.next = node;
+                Node<T> node = new Node<T>(nodeIterator.next, nodeIterator.next.next, item);
+                nodeIterator.next.next = node;
                 node.next.previous = node;
                 length++;
             } else {
@@ -227,7 +287,7 @@ public class LinkedList<T> implements List<T>, Serializable {
     public int remove(T item) {
         int index = 0;
 
-        NodeIterator nodeIterator = new NodeIterator();
+        LinkedListItemIterator nodeIterator = new LinkedListItemIterator();
         while (nodeIterator.hasNext()) {
             if (nodeIterator.next() == item) {
                 nodeIterator.remove();
@@ -341,7 +401,7 @@ public class LinkedList<T> implements List<T>, Serializable {
     public int indexOf(T item) {
         int index = 0;
 
-        NodeIterator nodeIterator = new NodeIterator();
+        LinkedListItemIterator nodeIterator = new LinkedListItemIterator();
         while (nodeIterator.hasNext()) {
             if (nodeIterator.next() == item) {
                 break;
@@ -406,8 +466,12 @@ public class LinkedList<T> implements List<T>, Serializable {
         }
     }
 
-    public Iterator<T> iterator() {
-        return new NodeIterator();
+    public ItemIterator<T> iterator() {
+        return iterator(false);
+    }
+
+    public ItemIterator<T> iterator(boolean reverse) {
+        return new LinkedListItemIterator(reverse);
     }
 
     public ListenerList<ListListener<T>> getListListeners() {
@@ -453,14 +517,16 @@ public class LinkedList<T> implements List<T>, Serializable {
         sb.append(getClass().getName());
         sb.append(" [");
 
-        int i = 0;
-        for (T item : this) {
-            if (i > 0) {
-                sb.append(", ");
-            }
+        if (getLength() > 0) {
+            int i = 0;
+            for (T item : this) {
+                if (i > 0) {
+                    sb.append(", ");
+                }
 
-            sb.append(item);
-            i++;
+                sb.append(item);
+                i++;
+            }
         }
 
         sb.append("]");

@@ -25,7 +25,6 @@ import java.util.NoSuchElementException;
 
 import org.apache.pivot.util.ListenerList;
 
-
 /**
  * Implementation of the {@link List} interface that is backed by an
  * array.
@@ -34,16 +33,16 @@ import org.apache.pivot.util.ListenerList;
  * {@link org.apache.pivot.collections.concurrent.SynchronizedList}.
  */
 public class ArrayList<T> implements List<T>, Serializable {
-    private class ItemIterator implements Iterator<T> {
+    private class ArrayListItemIterator implements ItemIterator<T> {
         private int index = 0;
         private int length;
 
-        public ItemIterator() {
+        public ArrayListItemIterator() {
             length = ArrayList.this.length;
         }
 
         public boolean hasNext() {
-            return index < getLength();
+            return (index < getLength());
         }
 
         public T next() {
@@ -58,8 +57,49 @@ public class ArrayList<T> implements List<T>, Serializable {
             return get(index++);
         }
 
+        public boolean hasPrevious() {
+            return (index >= 0);
+        }
+
+        public T previous() {
+            if (!hasPrevious()) {
+                throw new NoSuchElementException();
+            }
+
+            if (length != ArrayList.this.length) {
+                throw new ConcurrentModificationException();
+            }
+
+            return get(index--);
+        }
+
+        public void insert(T item) {
+            if (index < 0
+                || index >= ArrayList.this.length) {
+                throw new IllegalStateException();
+            }
+
+            ArrayList.this.insert(item, index);
+            length++;
+        }
+
+        public void update(T item) {
+            if (index < 0
+                || index >= ArrayList.this.length) {
+                throw new IllegalStateException();
+            }
+
+            ArrayList.this.update(index, item);
+        }
+
         public void remove() {
-            throw new UnsupportedOperationException();
+            if (index < 0
+                || index >= ArrayList.this.length) {
+                throw new IllegalStateException();
+            }
+
+            ArrayList.this.remove(index, 1);
+            length--;
         }
     }
 
@@ -356,8 +396,8 @@ public class ArrayList<T> implements List<T>, Serializable {
         }
     }
 
-    public Iterator<T> iterator() {
-        return new ItemIterator();
+    public ItemIterator<T> iterator() {
+        return new ArrayListItemIterator();
     }
 
     public ListenerList<ListListener<T>> getListListeners() {
@@ -403,14 +443,16 @@ public class ArrayList<T> implements List<T>, Serializable {
         sb.append(getClass().getName());
         sb.append(" [");
 
-        int i = 0;
-        for (T item : this) {
-            if (i > 0) {
-                sb.append(", ");
-            }
+        if (getLength() > 0) {
+            int i = 0;
+            for (T item : this) {
+                if (i > 0) {
+                    sb.append(", ");
+                }
 
-            sb.append(item);
-            i++;
+                sb.append(item);
+                i++;
+            }
         }
 
         sb.append("]");

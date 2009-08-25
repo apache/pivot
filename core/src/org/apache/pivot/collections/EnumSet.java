@@ -133,7 +133,7 @@ public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
         return count == 0;
     }
 
-    public int count() {
+    public int getCount() {
         return count;
     }
 

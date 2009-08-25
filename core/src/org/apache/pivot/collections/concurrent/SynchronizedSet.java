@@ -100,8 +100,8 @@ public class SynchronizedSet<E> extends SynchronizedCollection<E>
         return ((Set<E>)collection).isEmpty();
     }
 
-    public synchronized int count() {
-        return ((Set<E>)collection).count();
+    public synchronized int getCount() {
+        return ((Set<E>)collection).getCount();
     }
 
     public ListenerList<SetListener<E>> getSetListeners() {

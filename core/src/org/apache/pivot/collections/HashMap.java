@@ -28,30 +28,29 @@ import org.apache.pivot.util.ListenerList;
 /**
  * Implementation of the {@link Map} interface that is backed by a
  * hash table.
- * <p>
- * TODO Optimize bucket management when a comparator is applied by using binary search to
- * sort bucket contents and locate pairs.
  */
 public class HashMap<K, V> implements Map<K, V>, Serializable {
     private class KeyIterator implements Iterator<K> {
-        private int bucketIndex = 0;
-        private int pairIndex = 0;
+        private int bucketIndex;
+        private Iterator<Pair<K, V>> entryIterator;
         private int count;
 
         public KeyIterator() {
+            bucketIndex = 0;
+            entryIterator = buckets.get(bucketIndex).iterator();
+
             count = HashMap.this.count;
         }
 
         public boolean hasNext() {
-            // Locate the next pair
-            while (bucketIndex < buckets.getLength()
-                && pairIndex == buckets.get(bucketIndex).getLength()) {
-                bucketIndex++;
-                pairIndex = 0;
+            // Move to the next bucket
+            while (entryIterator != null
+                && !entryIterator.hasNext()) {
+                entryIterator = (bucketIndex < buckets.getLength()) ?
+                    buckets.get(bucketIndex++).iterator() : null;
             }
 
-            return (bucketIndex < buckets.getLength()
-                && pairIndex < buckets.get(bucketIndex).getLength());
+            return (entryIterator != null);
         }
 
         public K next() {
@@ -63,11 +62,9 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
                 throw new ConcurrentModificationException();
             }
 
-            // Return the current pair
-            ArrayList<Pair<K, V>> bucket = buckets.get(bucketIndex);
-            Pair<K, V> pair = bucket.get(pairIndex++);
+            Pair<K, V> entry = entryIterator.next();
 
-            return pair.key;
+            return entry.key;
         }
 
         public void remove() {
@@ -77,7 +74,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
 
     private static final long serialVersionUID = 0;
 
-    private ArrayList<ArrayList<Pair<K, V>>> buckets;
+    private ArrayList<LinkedList<Pair<K, V>>> buckets;
     private float loadFactor;
 
     private int count = 0;
@@ -102,12 +99,12 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         rehash(capacity);
     }
 
-    public HashMap(Pair<K, V>... pairs) {
-        this(Math.max((int)((float)pairs.length / DEFAULT_LOAD_FACTOR) + 1, DEFAULT_CAPACITY));
+    public HashMap(Pair<K, V>... entries) {
+        this(Math.max((int)((float)entries.length / DEFAULT_LOAD_FACTOR) + 1, DEFAULT_CAPACITY));
 
-        for (int i = 0; i < pairs.length; i++) {
-            Pair<K, V> pair = pairs[i];
-            put(pair.key, pair.value);
+        for (int i = 0; i < entries.length; i++) {
+            Pair<K, V> entry = entries[i];
+            put(entry.key, entry.value);
         }
     }
 
@@ -130,20 +127,18 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
     public V get(K key) {
         V value = null;
 
-        // Locate the pair
+        // Locate the entry
         int bucketIndex = getBucketIndex(key);
-        ArrayList<Pair<K, V>> bucket = buckets.get(bucketIndex);
+        LinkedList<Pair<K, V>> bucket = buckets.get(bucketIndex);
 
-        int n = bucket.getLength();
-        int i = 0;
+        List.ItemIterator<Pair<K, V>> iterator = bucket.iterator();
+        while (iterator.hasNext()) {
+            Pair<K, V> entry = iterator.next();
 
-        while (i < n
-            && !bucket.get(i).key.equals(key)) {
-            i++;
-        }
-
-        if (i < n) {
-            value = bucket.get(i).value;
+            if (entry.key.equals(key)) {
+                value = entry.value;
+                break;
+            }
         }
 
         return value;
@@ -152,30 +147,37 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
     public V put(K key, V value) {
         V previousValue = null;
 
-        // Locate the pair
+        // Locate the entry
         int bucketIndex = getBucketIndex(key);
-        ArrayList<Pair<K, V>> bucket = buckets.get(bucketIndex);
+        LinkedList<Pair<K, V>> bucket = buckets.get(bucketIndex);
 
-        int n = bucket.getLength();
         int i = 0;
+        List.ItemIterator<Pair<K, V>> iterator = bucket.iterator();
+        while (iterator.hasNext()) {
+            Pair<K, V> entry = iterator.next();
 
-        while (i < n
-            && !bucket.get(i).key.equals(key)) {
+            if (entry.key.equals(key)) {
+                // Update the entry
+                previousValue = entry.value;
+                iterator.update(new Pair<K, V>(key, value));
+
+                mapListeners.valueUpdated(this, key, previousValue);
+
+                break;
+            }
+
             i++;
         }
 
-        if (i < n) {
-            // Update the pair
-            previousValue = bucket.update(i, new Pair<K, V>(key, value)).value;
-            mapListeners.valueUpdated(this, key, previousValue);
-        } else {
-            // Add the pair
+        if (i == bucket.getLength()) {
+            // Add the entry
             bucket.add(new Pair<K, V>(key, value));
 
             if (keys != null) {
                 keys.add(key);
             }
 
+            // Increment the count
             count++;
 
             int capacity = getCapacity();
@@ -192,30 +194,30 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
     public V remove(K key) {
         V value = null;
 
-        // Locate the pair
+        // Locate the entry
         int bucketIndex = getBucketIndex(key);
-        ArrayList<Pair<K, V>> bucket = buckets.get(bucketIndex);
+        LinkedList<Pair<K, V>> bucket = buckets.get(bucketIndex);
 
-        int n = bucket.getLength();
-        int i = 0;
+        List.ItemIterator<Pair<K, V>> iterator = bucket.iterator();
+        while (iterator.hasNext()) {
+            Pair<K, V> entry = iterator.next();
 
-        while (i < n
-            && !bucket.get(i).key.equals(key)) {
-            i++;
-        }
+            if (entry.key.equals(key)) {
+                // Remove the entry
+                value = entry.value;
+                iterator.remove();
 
-        if (i < n) {
-            // Remove the pair
-            Sequence<Pair<K, V>> removed = bucket.remove(i, 1);
-            value = removed.get(0).value;
+                if (keys != null) {
+                    keys.remove(key);
+                }
 
-            if (keys != null) {
-                keys.remove(key);
+                // Decrement the count
+                count--;
+
+                mapListeners.valueRemoved(this, key, value);
+
+                break;
             }
-
-            count--;
-
-            mapListeners.valueRemoved(this, key, value);
         }
 
         return value;
@@ -223,7 +225,8 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
 
     public void clear() {
         if (count > 0) {
-            for (ArrayList<Pair<K, V>> bucket : buckets) {
+            // Remove all entries
+            for (LinkedList<Pair<K, V>> bucket : buckets) {
                 bucket.clear();
             }
 
@@ -231,6 +234,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
                 keys.clear();
             }
 
+            // Clear the count
             count = 0;
 
             mapListeners.mapCleared(this);
@@ -238,19 +242,23 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
     }
 
     public boolean containsKey(K key) {
-        // Locate the pair
+        // Locate the entry
         int bucketIndex = getBucketIndex(key);
-        ArrayList<Pair<K, V>> bucket = buckets.get(bucketIndex);
+        LinkedList<Pair<K, V>> bucket = buckets.get(bucketIndex);
 
-        int n = bucket.getLength();
         int i = 0;
+        List.ItemIterator<Pair<K, V>> iterator = bucket.iterator();
+        while (iterator.hasNext()) {
+            Pair<K, V> entry = iterator.next();
 
-        while (i < n
-            && !bucket.get(i).key.equals(key)) {
+            if (entry.key.equals(key)) {
+                break;
+            }
+
             i++;
         }
 
-        return (i < n);
+        return (i < bucket.getLength());
     }
 
     public boolean isEmpty() {
@@ -265,21 +273,40 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         return buckets.getLength();
     }
 
+    private static int rehashCount = 0;
+    private static long rehashTime = 0;
+
     private void rehash(int capacity) {
-        ArrayList<ArrayList<Pair<K, V>>> previousBuckets = this.buckets;
-        buckets = new ArrayList<ArrayList<Pair<K, V>>>(capacity);
+        long t0 = System.currentTimeMillis();
+
+        ArrayList<LinkedList<Pair<K, V>>> previousBuckets = this.buckets;
+        buckets = new ArrayList<LinkedList<Pair<K, V>>>(capacity);
 
         for (int i = 0; i < capacity; i++) {
-            buckets.add(new ArrayList<Pair<K, V>>());
+            buckets.add(new LinkedList<Pair<K, V>>());
         }
 
+        long t1 = System.currentTimeMillis();
+
         if (previousBuckets != null) {
-            for (ArrayList<Pair<K, V>> bucket : previousBuckets) {
-                for (Pair<K, V> pair : bucket) {
-                    put(pair.key, pair.value);
+            for (LinkedList<Pair<K, V>> bucket : previousBuckets) {
+                for (Pair<K, V> entry : bucket) {
+                    put(entry.key, entry.value);
                 }
             }
         }
+
+        rehashTime += (t1 - t0);
+        rehashCount++;
+    }
+
+    public static void clearRehashTime() {
+        rehashCount = 0;
+        rehashTime = 0;
+    }
+
+    public static void dumpRehashTime() {
+        System.out.println("Rehash time/count: " + rehashTime + "ms/" + rehashCount);
     }
 
     private int getBucketIndex(K key) {
@@ -329,14 +356,16 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         sb.append(getClass().getName());
         sb.append(" {");
 
-        int i = 0;
-        for (K key : this) {
-            if (i > 0) {
-                sb.append(", ");
-            }
+        if (getCount() > 0) {
+            int i = 0;
+            for (K key : this) {
+                if (i > 0) {
+                    sb.append(", ");
+                }
 
-            sb.append(key + ":" + get(key));
-            i++;
+                sb.append(key + ":" + get(key));
+                i++;
+            }
         }
 
         sb.append("}");

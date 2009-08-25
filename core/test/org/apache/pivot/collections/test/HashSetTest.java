@@ -33,7 +33,7 @@ public class HashSetTest {
         assertTrue(hashSet.contains("A"));
         assertTrue(hashSet.contains("B"));
 
-        assertEquals(hashSet.count(), 2);
+        assertEquals(hashSet.getCount(), 2);
 
         int i = 0;
         for (String element : hashSet) {

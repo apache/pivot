@@ -61,8 +61,8 @@ public class ImmutableSet<E> implements Set<E> {
         return set.isEmpty();
     }
 
-    public int count() {
-        return set.count();
+    public int getCount() {
+        return set.getCount();
     }
 
     public Comparator<E> getComparator() {

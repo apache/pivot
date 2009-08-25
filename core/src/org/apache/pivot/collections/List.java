@@ -17,6 +17,7 @@
 package org.apache.pivot.collections;
 
 import java.util.Comparator;
+import java.util.Iterator;
 
 import org.apache.pivot.util.ListenerList;
 
@@ -24,6 +25,16 @@ import org.apache.pivot.util.ListenerList;
  * Collection interface representing an ordered sequence of items.
  */
 public interface List<T> extends Sequence<T>, Collection<T> {
+    /**
+     * Optional item iterator interface.
+     */
+    public interface ItemIterator<T> extends Iterator<T> {
+        public boolean hasPrevious();
+        public T previous();
+        public void insert(T item);
+        public void update(T item);
+    }
+
     /**
      * List listener list.
      */

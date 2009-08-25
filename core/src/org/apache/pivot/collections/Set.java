@@ -72,7 +72,7 @@ public interface Set<E> extends Group<E>, Collection<E> {
     /**
      * Returns the number of elements in the set.
      */
-    public int count();
+    public int getCount();
 
     /**
      * @see SetListener#setCleared(Set)

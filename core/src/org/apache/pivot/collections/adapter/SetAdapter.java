@@ -90,7 +90,7 @@ public class SetAdapter<E> implements Set<E>, Serializable {
         return set.isEmpty();
     }
 
-    public int count() {
+    public int getCount() {
         return set.size();
     }
 

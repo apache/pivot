@@ -60,14 +60,15 @@ public class HashMapTest {
         assertEquals(0, map.getCount());
 
         map.put("a", 1);
+        assertEquals(1, map.getCount());
         map.put("b", 2);
+        assertEquals(2, map.getCount());
         map.put("c", 3);
+        assertEquals(3, map.getCount());
 
         assertEquals(1, (int) map.get("a"));
         assertEquals(2, (int) map.get("b"));
         assertEquals(3, (int) map.get("c"));
-
-        assertEquals(3, map.getCount());
 
         Iterator<String> iter = map.iterator();
         int count = 0;
@@ -142,7 +143,7 @@ public class HashMapTest {
     @Test
     public void iteratorConcurrentModificationTest() {
         HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
-        
+
         map.put(1, 1);
         map.put(2, 2);
         Iterator<Integer> iter = map.iterator();
@@ -155,23 +156,33 @@ public class HashMapTest {
             // expecting this
         }
     }
-    
-    private static int LOAD_COUNT = 100000;
+
+    private static int LOAD_COUNT = 10000;
 
     @Test
     public void pivotHashMapSpeedTest() {
+        HashMap.clearRehashTime();
+
+        long t0 = System.currentTimeMillis();
         HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
         for (int i = 0; i < LOAD_COUNT; i++) {
             map.put(Integer.valueOf(i), Integer.valueOf(i));
         }
+        long t1 = System.currentTimeMillis();
+        System.out.println("org.apache.pivot.HashMap " + (t1 - t0) + "ms");
+
+        HashMap.dumpRehashTime();
     }
 
     @Test
     public void javaHashMapSpeedTest() {
+        long t0 = System.currentTimeMillis();
         java.util.HashMap<Integer, Integer> map = new java.util.HashMap<Integer, Integer>();
         for (int i = 0; i < LOAD_COUNT; i++) {
             map.put(Integer.valueOf(i), Integer.valueOf(i));
         }
+        long t1 = System.currentTimeMillis();
+        System.out.println("java.util.HashMap " + (t1 - t0) + "ms");
     }
 
 }
