@@ -1488,12 +1488,13 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         int wheelRotation, int x, int y) {
         if (highlightedNode != null) {
             Bounds nodeBounds = getNodeBounds(highlightedNode);
-            if (nodeBounds != null) {
-                repaintComponent(nodeBounds.x, nodeBounds.y, nodeBounds.width, nodeBounds.height, true);
-            }
 
             highlightedNode.setHighlighted(false);
             highlightedNode = null;
+
+            if (nodeBounds != null) {
+                repaintComponent(nodeBounds.x, nodeBounds.y, nodeBounds.width, nodeBounds.height, true);
+            }
         }
 
         return super.mouseWheel(component, scrollType, scrollAmount, wheelRotation, x, y);
