@@ -1486,12 +1486,17 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     @Override
     public boolean mouseWheel(Component component, Mouse.ScrollType scrollType, int scrollAmount,
         int wheelRotation, int x, int y) {
-        boolean consumed = super.mouseWheel(component, scrollType, scrollAmount,
-            wheelRotation, x, y);
+        if (highlightedNode != null) {
+            Bounds nodeBounds = getNodeBounds(highlightedNode);
+            if (nodeBounds != null) {
+                repaintComponent(nodeBounds.x, nodeBounds.y, nodeBounds.width, nodeBounds.height, true);
+            }
 
-        clearHighlightedNode();
+            highlightedNode.setHighlighted(false);
+            highlightedNode = null;
+        }
 
-        return consumed;
+        return super.mouseWheel(component, scrollType, scrollAmount, wheelRotation, x, y);
     }
 
     @Override
