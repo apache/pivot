@@ -15,175 +15,228 @@
   limitations under the License.
 ================================================================================
 
-Release notes for Pivot 1.2:
+Release notes for Pivot 1.3:
+
 
 New Features
 ------------
 
-- Drawing (vector image) support. Pivot now supports an API for defining and
-  rendering vector graphics (PIVOT-18).
+- File browser component/sheet (PIVOT-32)
 
-- Add basic movie support. A MovieView component has been added that supports
-  basic movie playback. However, serialization support for common video formats
-  has not yet been implemented (PIVOT-19).
+- Add support for put() and remove() to WTKXSerializer (PIVOT-147)
 
-- Allow caller to specify a FileFilter in pivot.io.Folder (PIVOT-49).
+- Put startup properties into root WTKXSerializer in ScriptApplication
+  (PIVOT-148)
 
-- Create a strictValidation style in TerraTextInputSkin. This style makes
-  text inputs behave as if they have an input mask applied: when this style is
-  set to true, input that would yield an invalid state (as defined by the
-  Validator) is disallowed (PIVOT-62).
+- Create new FlowPane that adheres to AWT FlowLayout behavior (and rename old
+  FlowPane to BoxPane) (PIVOT-164)
 
-- Display host scaling. Users can now scale the display host for accessibility
-  purposes or high-resolution displays. Control-Shift-mouse wheel and
-  Control-Shift +/- allows the user to dynamically scale the display in a
-  running Pivot app (PIVOT-83).
+- Add application hook into unhandled key events (PIVOT-174)
 
-- A Panel container has been added that performs no layout and supports
-  absolute sizing and positioning of components (PIVOT-92).
+- Add application hook into unhandled exceptions (PIVOT-175)
 
-- Create Component.getGraphics(). This new method returns a graphics context
-  suitable for drawing directly to a component without double-buffering
-  (effectively operating directly on the video RAM) (PIVOT-105).
+- Add setSize() method to Picture to allow caller to resample image (PIVOT-177)
 
-- Provide annotations to map WTKX data to application member variables. @Load
-  and @Bind annotations are now provided that allow a caller to automatically
-  load a WTKX file into a member variable and bind member variables to named
-  objects declared in the WTKX source (PIVOT-111).
+- Make BeanDictionary discover public fields (PIVOT-178)
 
-- Support full-screen mode in DesktopApplicationContext. A key combination
-  (Control-Shift-F) has been added to allow a user to toggle between windowed
-  and full-screen exclusive mode (PIVOT-113).
+- Add org.apache.pivot.collections.MapList (PIVOT-179)
 
-- Add an ActivityIndicator component. This new component allows an application
-  to show the user that a background task is in progress (PIVOT-115).
+- Add Resources.parent (resource hierarchy) (PIVOT-180)
 
-- WTKXSerializer interpreter (TBD) (PIVOT-116).
+- Context menu handler (PIVOT-181)
 
-- Provide a means for an application to handle "about" information.
-  Applications often provide an "about box" that displays information about the
-  application including title, version number, etc. Pivot now provides an
-  optional interface for an application to handle "about" presentation such
-  that it can be called by the application itself as well as by the system menu
-  on Mac OSX (PIVOT-117).
+- Add a menuBar property to Frame (PIVOT-188)
 
-- Add a ByteArraySerializer for serializing arbitrary content, byte per byte
-  (in a buffered way, if possible) (PIVOT-126).
+- Create a FilteredList class (PIVOT-191)
 
-- Added support for encoding basic gradient, stopped linear gradient, and
-  stopped radial gradients via JSON. Encoded paints can be set as the background
-  of a container as well as the fill or stroke of a shape (PIVOT-112).
+- Add a collapsible flag to Expander (PIVOT-200)
+
+- Add a disabled date filter to Calendar and CalendarButton (PIVOT-201)
+
+- Add support for bounding preferred size (PIVOT-207)
+
+- Display column selection state in TerraTableViewSkin (PIVOT-209)
+
+- Add FileSizeFormat class (PIVOT-231)
+
+- Add a TableViewFileSizeCellRenderer class (PIVOT-232)
+
+- Add a collapsible flag to Rollup (PIVOT-240)
 
 
 Improvements
 ------------
 
-- Optimize drop shadow decorator for better performance (PIVOT-36).
+- Complete collection classes (PIVOT-20)
 
-- Update themes to use "provider" architecture, similar to charts (PIVOT-46).
+- Remove dynamic code execution from WTKXSerializer (PIVOT-34)
 
-- Use a default comparator in pivot.io.Folder that sorts alphabetically
-  (PIVOT-50).
+- SplitPane's splitLocation(int) property should be splitRatio(float) (PIVOT-75)
 
-- Add path support for put() and remove() to JSONSerializer (PIVOT-55).
+- Optimize performance of constrained preferred size calculations in Component
+  (PIVOT-86)
 
-- TableView.RowEditor should be initiated based on a double-click gesture
-  (PIVOT-57).
+- Update JFreeChart provider to latest JFreeChart version (PIVOT-114)
 
-- Rollup should differentiate between user-added and skin-added components
-  (PIVOT-63).
+- Optimize WTK class loading (PIVOT-122)
 
-- Make "bullet" configurable in TerraRollupSkin (PIVOT-64).
+- Don't set selected index in Rollup and Expander until expand transition is
+  complete (PIVOT-124)
 
-- Optimize Viewport by only painting the revealed area (PIVOT-66).
+- Separate Queue and Stack interfaces from List (PIVOT-133)
 
-- Component#userData should allow multiple clients to co-exist (PIVOT-67).
+- Allow TaskGroup and TaskSequence to contain any type of task (Task<?> vs.
+  Task<V>) (PIVOT-134)
 
-- Alignment.JUSTIFY improvements (PIVOT-68).
+- Make transitions reversible (PIVOT-135)
 
-- Create adapter classes for listener interfaces; common listener interfaces now
-  provide an inner Adapter class that implements the interface with default
-  no-op methods (PIVOT-80).
+- Update Groovy scripting demo to Groovy 1.6 (PIVOT-139)
 
-- Create Sequence.Tree.Path. The static methods in Sequence.Tree, and
-  pivot.wtk.TreeView can change from using raw Sequence<Integer> to using Path.
-  This is not only more explicit, but it allows callers to iterate over the
-  path, whereas Sequence is not iterable (PIVOT-84).
+- Use common Shortcuts in Input fields (PIVOT-142)
 
-- Make WTK structure-like classes immutable (including Point, Dimensions,
-  Insets, etc.) (PIVOT-85).
+- Improve scripting support in WTKX (PIVOT-146)
 
-- Add drop shadows to list button and calendar button popups (PIVOT-90).
+- Move flip transition into CardPaneSkin (PIVOT-152)
 
-- Add a listCleared() event to pivot.collections.ListListener (PIVOT-95).
+- Allow WTKX binding to any class (PIVOT-153)
 
-- Java2D performance optimizations (PIVOT-96).
+- Change Locale on Validators (PIVOT-155)
 
-- Perform bounds checking on opacity in ImageViewSkin (PIVOT-98).
+- Change return value from Application#startup() to mean "deny" instead of
+  "approve" (PIVOT-156)
 
-- Move META-INF/services/javax.xml.stream.XMLInputFactory file into rebundled
-  StAX JAR (PIVOT-106).
+- Include demos and tutorials in binary distribution (PIVOT-159)
 
-- Eliminate wtkx:include namespace attribute (PIVOT-120).
+- Add a "fill" style to ImageViewSkin (PIVOT-168)
 
-- Clean up CardPaneSkin styles; the previous styles for controlling selection
-  change transitions were unintuitive and inflexible (PIVOT-121).
+- Make table view editors detect read-only properties (PIVOT-183)
 
-- Disable the tab button/accordion header when the corresponding tab/panel is
-  disabled (PIVOT-123).
+- Data binding: components should not store their data when disabled (PIVOT-184)
 
-- Add support for comments to JSONSerializer (PIVOT-127).
+- Add padding style to CardPaneSkin and StackPaneSkin (PIVOT-189)
+
+- Replace disabled item indexes/paths in ListView, TableView, and TreeView with
+  a disabled item filter; add disabled item filter to ListButton (PIVOT-192)
+
+- Clean up multiple selection implementation (PIVOT-197)
+
+- Create ImmutablePath class; update TreeView to use ImmutableList in
+  getSelectedPaths() (PIVOT-198)
+
+- Add a JSON setter for selected ranges in ListView and TableView (PIVOT-199)
+
+- Review framework classes for serializability (PIVOT-206)
+
+- Change selected to highlighted in TablePane Row & Column (PIVOT-208)
+
+- equals/hashCode fix for Span and Limits (PIVOT-210)
+
+- confirm catch blocks to either re-throw or have a good reason for ignoring
+  exception (PIVOT-211)
+
+- Eliminate Component "displayable" property; use "visible" for this purpose
+  (PIVOT-212)
+
+- TerraFrameSkin should respect preferred size limits (PIVOT-214)
+
+- Allow Containers to obtain the keyboard focus (PIVOT-215)
+
+- Support comparators in MapAdapter and SetAdapter (PIVOT-224)
+
+- Eliminate "affiliate" property in MenuPopup (PIVOT-228)
+
+- MenuItemDataRenderer unsuccessfully attempts to right-align keyboard shortcut
+  (PIVOT-230)
+
 
 Bug Fixes
 ---------
 
-- Set ApplicationContext origin property when using Web Start (PIVOT-17).
+- Interaction issues with Pivot and native modal dialogs (PIVOT-40)
 
-- Border corners are not painted correctly (PIVOT-48).
+- wtk:include without specifying namespace results in wtk:id values being lost
+  (PIVOT-79)
 
-- WTKXSerializer throws on empty string attributes (PIVOT-52).
+- Expanders don't collapse completely in Expanders tutorial (PIVOT-128)
 
-- Folder#refresh() doesn't fire events (PIVOT-54).
+- Sheet transitions leave artifacts when attached to a non-maximized window
+  (PIVOT-151)
 
-- TableView.RowEditor does not extend Editor (PIVOT-56).
+- Exceptions thrown during application launch can block application shutdown
+  (PIVOT-157)
 
-- TerraTreeViewSkin#nodesSorted() is unimplemented (PIVOT-58).
+- Opening a sheet on the Display causes a NullPointerException (PIVOT-162)
 
-- TreeViewNodeEditor and ListViewItemEditor break on sorted lists (PIVOT-59).
+- Layout problems in BoxPaneSkin (PIVOT-165)
 
-- TreeView does not appear to handle sorting properly (PIVOT-60).
+- WatermarkDecorator paints outside its bounds (PIVOT-166)
 
-- TreeBranch does not handle comparator completely (PIVOT-61).
+- Prompts clip incorrectly while opening (PIVOT-167)
 
-- Drop shadows in menu and list button popups don't fade when window is closed
-  (PIVOT-65).
+- QueryServlet is not thread-safe (PIVOT-172)
 
-- Override both equals() and hashCode() (PIVOT-70).
+- LabelSkin.setFontBold(true) and LabelSkin.setFontItalic(true) overwrite each
+  other (PIVOT-176)
 
-- Dash array (focused state) values are incorrect (PIVOT-71).
+- Selection always set on mouse down yields incorrect behavior (PIVOT-182)
 
-- Threading issues with ApplicationContext$ScheduledCallback (PIVOT-76).
+- Container.requestFocus() lacks logic found in Component.transferFocus()
+  (PIVOT-187)
 
-- MenuPopup should automatically close when a user clicks outside its bounds
-  (PIVOT-91).
+- Memory leak in MapList (PIVOT-193)
 
-- Exception in DropShadowDecorator (PIVOT-94).
+- ListView item check state incorrect upon list data item removed (PIVOT-195)
 
-- Build yields incorrect output in environments whose default encoding in not
-  UTF-8 (PIVOT-97).
+- Class org.apache.pivot.collections.LinkedList defines non-transient
+  non-serializable instance field (PIVOT-204)
 
-- Minor repaint issue in TerraSpinnerSkin (PIVOT-100).
+- MenuBar takes focus away from component (PIVOT-213)
 
-- Exception thrown upon application startup (PIVOT-101).
+- Compile errors in HashMapTest (PIVOT-229)
 
-- Data-driven component skins do not call render() on renderers before
-  calculating preferred size (PIVOT-107).
+- Possible bug(s) in TerraSplitPaneSkin (PIVOT-237)
 
-- Calendar weekdays don't line up for French and Spanish (PIVOT-108).
+- Row/item/node highlighting interferes with scroll pane optimization
+  (PIVOT-238)
 
-- ImageViewSkin does not correctly propagate repaint region (PIVOT-109).
+- Clicking on a MenuBar.Item with no menu yields exception (PIVOT-241)
 
-- Multiple response headers not handled correctly (PIVOT-125).
+
+Tasks Accomplished
+------------------
+
+- Switch all tests to JUnit 4 (PIVOT-130)
+
+- Integrate JUnit tests into the Ant build process (PIVOT-131)
+
+- check ant version in build script to verify that it is being built with the
+  correct minimum version (PIVOT-137)
+
+- Ant task for creating 'demo site' (PIVOT-138)
+
+- Rename pivot.* packages to org.apache.pivot.* (PIVOT-143)
+
+- Add version numbers to JAR files (PIVOT-144)
+
+- Remove timestamp from JAR files (PIVOT-145)
+
+- Change target JDK version to 1.6 (PIVOT-150)
+
+- Eliminate unnecessary cast compiler warnings (PIVOT-154)
+
+- Remove references to @WTKX annotation from untrusted tutorial code (PIVOT-158)
+
+- Convert manual core tests to JUnit (PIVOT-161)
+
+- Rename FlowPane to BoxPane (PIVOT-163)
+
+- Eliminate JUSTIFY alignments (PIVOT-169)
+
+- Consolidate ComponentLayoutListener and ComponentDragDropListener into
+  ComponentListener (PIVOT-186)
+
+- Remove @author tags from Pivot source (PIVOT-223)
+
 
 Additional Notes
 ----------------
