@@ -22,6 +22,7 @@ import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import org.apache.pivot.util.EmptyIterator;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 
@@ -37,7 +38,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
 
         public KeyIterator() {
             bucketIndex = 0;
-            entryIterator = buckets.get(bucketIndex).iterator();
+            entryIterator = getBucketIterator(bucketIndex);
 
             count = HashMap.this.count;
         }
@@ -47,7 +48,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
             while (entryIterator != null
                 && !entryIterator.hasNext()) {
                 entryIterator = (bucketIndex < buckets.getLength()) ?
-                    buckets.get(bucketIndex++).iterator() : null;
+                    getBucketIterator(bucketIndex++) : null;
             }
 
             return (entryIterator != null);
@@ -69,6 +70,12 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
 
         public void remove() {
             throw new UnsupportedOperationException();
+        }
+
+        private Iterator<Pair<K, V>> getBucketIterator(int bucketIndex) {
+            LinkedList<Pair<K, V>> bucket = buckets.get(bucketIndex);
+
+            return (bucket == null) ? new EmptyIterator<Pair<K,V>>() : bucket.iterator();
         }
     }
 
@@ -128,8 +135,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         V value = null;
 
         // Locate the entry
-        int bucketIndex = getBucketIndex(key);
-        LinkedList<Pair<K, V>> bucket = buckets.get(bucketIndex);
+        LinkedList<Pair<K, V>> bucket = getBucket(key);
 
         List.ItemIterator<Pair<K, V>> iterator = bucket.iterator();
         while (iterator.hasNext()) {
@@ -148,8 +154,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         V previousValue = null;
 
         // Locate the entry
-        int bucketIndex = getBucketIndex(key);
-        LinkedList<Pair<K, V>> bucket = buckets.get(bucketIndex);
+        LinkedList<Pair<K, V>> bucket = getBucket(key);
 
         int i = 0;
         List.ItemIterator<Pair<K, V>> iterator = bucket.iterator();
@@ -199,8 +204,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         V value = null;
 
         // Locate the entry
-        int bucketIndex = getBucketIndex(key);
-        LinkedList<Pair<K, V>> bucket = buckets.get(bucketIndex);
+        LinkedList<Pair<K, V>> bucket = getBucket(key);
 
         List.ItemIterator<Pair<K, V>> iterator = bucket.iterator();
         while (iterator.hasNext()) {
@@ -233,7 +237,9 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         if (count > 0) {
             // Remove all entries
             for (LinkedList<Pair<K, V>> bucket : buckets) {
-                bucket.clear();
+                if (bucket != null) {
+                    bucket.clear();
+                }
             }
 
             if (keys != null) {
@@ -251,8 +257,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
 
     public boolean containsKey(K key) {
         // Locate the entry
-        int bucketIndex = getBucketIndex(key);
-        LinkedList<Pair<K, V>> bucket = buckets.get(bucketIndex);
+        LinkedList<Pair<K, V>> bucket = getBucket(key);
 
         int i = 0;
         List.ItemIterator<Pair<K, V>> iterator = bucket.iterator();
@@ -285,24 +290,26 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
     private static long rehashTime = 0;
 
     private void rehash(int capacity) {
-        long t0 = System.currentTimeMillis();
-
         ArrayList<LinkedList<Pair<K, V>>> previousBuckets = this.buckets;
         buckets = new ArrayList<LinkedList<Pair<K, V>>>(capacity);
 
         for (int i = 0; i < capacity; i++) {
-            buckets.add(new LinkedList<Pair<K, V>>());
+            buckets.add(null);
         }
 
-        long t1 = System.currentTimeMillis();
+        long t0 = System.currentTimeMillis();
 
         if (previousBuckets != null) {
             for (LinkedList<Pair<K, V>> bucket : previousBuckets) {
-                for (Pair<K, V> entry : bucket) {
-                    put(entry.key, entry.value);
+                if (bucket != null) {
+                    for (Pair<K, V> entry : bucket) {
+                        put(entry.key, entry.value);
+                    }
                 }
             }
         }
+
+        long t1 = System.currentTimeMillis();
 
         rehashTime += (t1 - t0);
         rehashCount++;
@@ -317,9 +324,17 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         System.out.println("Rehash time/count: " + rehashTime + "ms/" + rehashCount);
     }
 
-    private int getBucketIndex(K key) {
+    private LinkedList<Pair<K, V>> getBucket(K key) {
         int hashCode = key.hashCode();
-        return Math.abs(hashCode % getCapacity());
+        int bucketIndex = Math.abs(hashCode % getCapacity());
+
+        LinkedList<Pair<K, V>> bucket = buckets.get(bucketIndex);
+        if (bucket == null) {
+            bucket = new LinkedList<Pair<K, V>>();
+            buckets.update(bucketIndex, bucket);
+        }
+
+        return bucket;
     }
 
     public Comparator<K> getComparator() {
