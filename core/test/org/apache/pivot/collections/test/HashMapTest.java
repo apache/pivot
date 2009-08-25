@@ -48,13 +48,13 @@ public class HashMapTest {
 
         assertNull(map.put("a", Integer.valueOf(1)));
 
-        assertEquals(1, (int)map.put("a", 2));
+        assertEquals(1, (int) map.put("a", 2));
 
-        assertEquals(2, (int)map.get("a"));
+        assertEquals(2, (int) map.get("a"));
 
         assertEquals(1, map.getCount());
 
-        assertEquals(2, (int)map.remove("a"));
+        assertEquals(2, (int) map.remove("a"));
 
         assertEquals(0, map.getCount());
 
@@ -62,9 +62,9 @@ public class HashMapTest {
         map.put("b", 2);
         map.put("c", 3);
 
-        assertEquals(1, (int)map.get("a"));
-        assertEquals(2, (int)map.get("b"));
-        assertEquals(3, (int)map.get("c"));
+        assertEquals(1, (int) map.get("a"));
+        assertEquals(2, (int) map.get("b"));
+        assertEquals(3, (int) map.get("c"));
 
         assertEquals(3, map.getCount());
 
@@ -100,9 +100,8 @@ public class HashMapTest {
     @SuppressWarnings("unchecked")
     public void constructorTests() throws Exception {
         // TODO Verify that this does not generate a warning under JDK 7
-        HashMap<String, Integer> map = new HashMap<String, Integer>(
-                new Map.Pair<String, Integer>("a", 1),
-                new Map.Pair<String, Integer>("b", 2));
+        HashMap<String, Integer> map = new HashMap<String, Integer>(new Map.Pair<String, Integer>(
+            "a", 1), new Map.Pair<String, Integer>("b", 2));
         assertEquals(2, map.getCount());
 
         map = new HashMap<String, Integer>(map);
@@ -138,4 +137,23 @@ public class HashMapTest {
             assertEquals(keys.get(j++), c);
         }
     }
+
+    private static int LOAD_COUNT = 100000;
+
+    @Test
+    public void pivotHashMapSpeedTest() {
+        HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
+        for (int i = 0; i < LOAD_COUNT; i++) {
+            map.put(Integer.valueOf(i), Integer.valueOf(i));
+        }
+    }
+
+    @Test
+    public void javaHashMapSpeedTest() {
+        java.util.HashMap<Integer, Integer> map = new java.util.HashMap<Integer, Integer>();
+        for (int i = 0; i < LOAD_COUNT; i++) {
+            map.put(Integer.valueOf(i), Integer.valueOf(i));
+        }
+    }
+
 }
