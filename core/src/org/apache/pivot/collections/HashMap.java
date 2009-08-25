@@ -80,7 +80,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
     private int count = 0;
     private ArrayList<K> keys = null;
 
-    private transient MapListenerList<K, V> mapListeners = new MapListenerList<K, V>();
+    private transient MapListenerList<K, V> mapListeners = null;
 
     public static final int DEFAULT_CAPACITY = 16;
     public static final float DEFAULT_LOAD_FACTOR = 0.75f;
@@ -161,7 +161,9 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
                 previousValue = entry.value;
                 iterator.update(new Pair<K, V>(key, value));
 
-                mapListeners.valueUpdated(this, key, previousValue);
+                if (mapListeners != null) {
+                    mapListeners.valueUpdated(this, key, previousValue);
+                }
 
                 break;
             }
@@ -185,7 +187,9 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
                 rehash(capacity * 2);
             }
 
-            mapListeners.valueAdded(this, key);
+            if (mapListeners != null) {
+                mapListeners.valueAdded(this, key);
+            }
         }
 
         return previousValue;
@@ -214,7 +218,9 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
                 // Decrement the count
                 count--;
 
-                mapListeners.valueRemoved(this, key, value);
+                if (mapListeners != null) {
+                    mapListeners.valueRemoved(this, key, value);
+                }
 
                 break;
             }
@@ -237,7 +243,9 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
             // Clear the count
             count = 0;
 
-            mapListeners.mapCleared(this);
+            if (mapListeners != null) {
+                mapListeners.mapCleared(this);
+            }
         }
     }
 
@@ -338,7 +346,9 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
                 keys.setComparator(comparator);
             }
 
-            mapListeners.comparatorChanged(this, previousComparator);
+            if (mapListeners != null) {
+                mapListeners.comparatorChanged(this, previousComparator);
+            }
         }
     }
 
@@ -347,6 +357,10 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
     }
 
     public ListenerList<MapListener<K, V>> getMapListeners() {
+        if (mapListeners == null) {
+            mapListeners = new MapListenerList<K, V>();
+        }
+
         return mapListeners;
     }
 
@@ -356,16 +370,14 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         sb.append(getClass().getName());
         sb.append(" {");
 
-        if (getCount() > 0) {
-            int i = 0;
-            for (K key : this) {
-                if (i > 0) {
-                    sb.append(", ");
-                }
-
-                sb.append(key + ":" + get(key));
-                i++;
+        int i = 0;
+        for (K key : this) {
+            if (i > 0) {
+                sb.append(", ");
             }
+
+            sb.append(key + ":" + get(key));
+            i++;
         }
 
         sb.append("}");

@@ -47,6 +47,7 @@ public class LinkedList<T> implements List<T>, Serializable {
 
     private class LinkedListItemIterator implements ItemIterator<T> {
         private boolean reverse;
+        private int index = -1;
         private Node<T> current;
         private Node<T> next;
 
@@ -72,6 +73,7 @@ public class LinkedList<T> implements List<T>, Serializable {
 
             T item = next.item;
             current = next;
+            index++;
             next = (reverse) ? next.previous : next.next;
 
             return item;
@@ -88,6 +90,7 @@ public class LinkedList<T> implements List<T>, Serializable {
 
             T item = next.item;
             current = next;
+            index--;
             next = (reverse) ? next.next: next.previous;
 
             return item;
@@ -108,8 +111,11 @@ public class LinkedList<T> implements List<T>, Serializable {
             }
 
             current.previous = node;
-
             length++;
+
+            if (listListeners != null) {
+                listListeners.itemInserted(LinkedList.this, index);
+            }
         }
 
         public void update(T item) {
@@ -117,7 +123,12 @@ public class LinkedList<T> implements List<T>, Serializable {
                 throw new IllegalStateException();
             }
 
+            T previousItem = current.item;
             current.item = item;
+
+            if (listListeners != null) {
+                listListeners.itemUpdated(LinkedList.this, index, previousItem);
+            }
         }
 
         public void remove() {
@@ -126,6 +137,8 @@ public class LinkedList<T> implements List<T>, Serializable {
             }
 
             // Unlink the current node from its predecessor and successor
+            T item = current.item;
+
             if (current.previous == null) {
                 first = current.next;
             } else {
@@ -139,6 +152,13 @@ public class LinkedList<T> implements List<T>, Serializable {
             }
 
             length--;
+
+            if (listListeners != null) {
+                LinkedList<T> removed = new LinkedList<T>();
+                removed.add(item);
+
+                listListeners.itemsRemoved(LinkedList.this, index, removed);
+            }
         }
     }
 
@@ -149,7 +169,7 @@ public class LinkedList<T> implements List<T>, Serializable {
     private int length = 0;
 
     private Comparator<T> comparator = null;
-    private transient ListListenerList<T> listListeners = new ListListenerList<T>();
+    private transient ListListenerList<T> listListeners;
 
     public LinkedList() {
     }
@@ -250,7 +270,10 @@ public class LinkedList<T> implements List<T>, Serializable {
 
         // Update length and notify listeners
         length++;
-        listListeners.itemInserted(this, index);
+
+        if (listListeners != null) {
+            listListeners.itemInserted(this, index);
+        }
     }
 
     public T update(int index, T item) {
@@ -279,7 +302,9 @@ public class LinkedList<T> implements List<T>, Serializable {
             node.item = item;
         }
 
-        listListeners.itemUpdated(this, index, previousItem);
+        if (listListeners != null) {
+            listListeners.itemUpdated(this, index, previousItem);
+        }
 
         return previousItem;
     }
@@ -349,7 +374,10 @@ public class LinkedList<T> implements List<T>, Serializable {
 
             // Update length and notify listeners
             length -= count;
-            listListeners.itemsRemoved(this, index, removed);
+
+            if (listListeners != null) {
+                listListeners.itemsRemoved(this, index, removed);
+            }
         }
 
         return removed;
@@ -361,7 +389,9 @@ public class LinkedList<T> implements List<T>, Serializable {
             last = null;
             length = 0;
 
-            listListeners.listCleared(this);
+            if (listListeners != null) {
+                listListeners.listCleared(this);
+            }
         }
     }
 
@@ -462,7 +492,9 @@ public class LinkedList<T> implements List<T>, Serializable {
             // Set the new comparator
             this.comparator = comparator;
 
-            listListeners.comparatorChanged(this, previousComparator);
+            if (listListeners != null) {
+                listListeners.comparatorChanged(this, previousComparator);
+            }
         }
     }
 
@@ -475,6 +507,10 @@ public class LinkedList<T> implements List<T>, Serializable {
     }
 
     public ListenerList<ListListener<T>> getListListeners() {
+        if (listListeners == null) {
+            listListeners = new ListListenerList<T>();
+        }
+
         return listListeners;
     }
 
@@ -517,16 +553,14 @@ public class LinkedList<T> implements List<T>, Serializable {
         sb.append(getClass().getName());
         sb.append(" [");
 
-        if (getLength() > 0) {
-            int i = 0;
-            for (T item : this) {
-                if (i > 0) {
-                    sb.append(", ");
-                }
-
-                sb.append(item);
-                i++;
+        int i = 0;
+        for (T item : this) {
+            if (i > 0) {
+                sb.append(", ");
             }
+
+            sb.append(item);
+            i++;
         }
 
         sb.append("]");

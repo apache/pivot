@@ -31,7 +31,7 @@ public class HashSet<E> implements Set<E>, Serializable {
 
     protected HashMap<E, Void> hashMap = new HashMap<E, Void>();
 
-    private transient SetListenerList<E> setListeners = new SetListenerList<E>();
+    private transient SetListenerList<E> setListeners = null;
 
     public HashSet() {
     }
@@ -60,7 +60,9 @@ public class HashSet<E> implements Set<E>, Serializable {
             hashMap.put(element, null);
             added = true;
 
-            setListeners.elementAdded(this, element);
+            if (setListeners != null) {
+                setListeners.elementAdded(this, element);
+            }
         }
 
         return added;
@@ -73,7 +75,9 @@ public class HashSet<E> implements Set<E>, Serializable {
             hashMap.remove(element);
             removed = true;
 
-            setListeners.elementRemoved(this, element);
+            if (setListeners != null) {
+                setListeners.elementRemoved(this, element);
+            }
         }
 
         return removed;
@@ -82,7 +86,10 @@ public class HashSet<E> implements Set<E>, Serializable {
     public void clear() {
         if (!hashMap.isEmpty()) {
             hashMap.clear();
-            setListeners.setCleared(this);
+
+            if (setListeners != null) {
+                setListeners.setCleared(this);
+            }
         }
     }
 
@@ -111,6 +118,10 @@ public class HashSet<E> implements Set<E>, Serializable {
     }
 
     public ListenerList<SetListener<E>> getSetListeners() {
+        if (setListeners == null) {
+            setListeners = new SetListenerList<E>();
+        }
+
         return setListeners;
     }
 
@@ -120,16 +131,14 @@ public class HashSet<E> implements Set<E>, Serializable {
         sb.append(getClass().getName());
         sb.append(" (");
 
-        if (getCount() > 0) {
-            int i = 0;
-            for (E element : this) {
-                if (i > 0) {
-                    sb.append(", ");
-                }
-
-                sb.append(element);
-                i++;
+        int i = 0;
+        for (E element : this) {
+            if (i > 0) {
+                sb.append(", ");
             }
+
+            sb.append(element);
+            i++;
         }
 
         sb.append(")");

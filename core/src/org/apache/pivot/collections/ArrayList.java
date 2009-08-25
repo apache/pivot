@@ -109,7 +109,7 @@ public class ArrayList<T> implements List<T>, Serializable {
     private int length = 0;
 
     private Comparator<T> comparator = null;
-    private transient ListListenerList<T> listListeners = new ListListenerList<T>();
+    private transient ListListenerList<T> listListeners = null;
 
     public static final int DEFAULT_CAPACITY = 10;
 
@@ -230,7 +230,9 @@ public class ArrayList<T> implements List<T>, Serializable {
 
         length++;
 
-        listListeners.itemInserted(this, index);
+        if (listListeners != null) {
+            listListeners.itemInserted(this, index);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -251,7 +253,9 @@ public class ArrayList<T> implements List<T>, Serializable {
             items[index] = item;
         }
 
-        listListeners.itemUpdated(this, index, previousItem);
+        if (listListeners != null) {
+            listListeners.itemUpdated(this, index, previousItem);
+        }
 
         return previousItem;
     }
@@ -287,7 +291,9 @@ public class ArrayList<T> implements List<T>, Serializable {
                 items[i] =  null;
             }
 
-            listListeners.itemsRemoved(this, index, removed);
+            if (listListeners != null) {
+                listListeners.itemsRemoved(this, index, removed);
+            }
         }
 
         return removed;
@@ -297,7 +303,10 @@ public class ArrayList<T> implements List<T>, Serializable {
         if (length > 0) {
             items = new Object[items.length];
             length = 0;
-            listListeners.listCleared(this);
+
+            if (listListeners != null) {
+                listListeners.listCleared(this);
+            }
         }
     }
 
@@ -392,7 +401,9 @@ public class ArrayList<T> implements List<T>, Serializable {
             // Set the new comparator
             this.comparator = comparator;
 
-            listListeners.comparatorChanged(this, previousComparator);
+            if (listListeners != null) {
+                listListeners.comparatorChanged(this, previousComparator);
+            }
         }
     }
 
@@ -401,6 +412,10 @@ public class ArrayList<T> implements List<T>, Serializable {
     }
 
     public ListenerList<ListListener<T>> getListListeners() {
+        if (listListeners == null) {
+            listListeners = new ListListenerList<T>();
+        }
+
         return listListeners;
     }
 
@@ -443,16 +458,14 @@ public class ArrayList<T> implements List<T>, Serializable {
         sb.append(getClass().getName());
         sb.append(" [");
 
-        if (getLength() > 0) {
-            int i = 0;
-            for (T item : this) {
-                if (i > 0) {
-                    sb.append(", ");
-                }
-
-                sb.append(item);
-                i++;
+        int i = 0;
+        for (T item : this) {
+            if (i > 0) {
+                sb.append(", ");
             }
+
+            sb.append(item);
+            i++;
         }
 
         sb.append("]");
