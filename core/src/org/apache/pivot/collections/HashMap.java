@@ -286,9 +286,6 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         return buckets.getLength();
     }
 
-    private static int rehashCount = 0;
-    private static long rehashTime = 0;
-
     private void rehash(int capacity) {
         ArrayList<LinkedList<Pair<K, V>>> previousBuckets = this.buckets;
         buckets = new ArrayList<LinkedList<Pair<K, V>>>(capacity);
@@ -296,8 +293,6 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         for (int i = 0; i < capacity; i++) {
             buckets.add(null);
         }
-
-        long t0 = System.currentTimeMillis();
 
         if (previousBuckets != null) {
             for (LinkedList<Pair<K, V>> bucket : previousBuckets) {
@@ -308,20 +303,6 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
                 }
             }
         }
-
-        long t1 = System.currentTimeMillis();
-
-        rehashTime += (t1 - t0);
-        rehashCount++;
-    }
-
-    public static void clearRehashTime() {
-        rehashCount = 0;
-        rehashTime = 0;
-    }
-
-    public static void dumpRehashTime() {
-        System.out.println("Rehash time/count: " + rehashTime + "ms/" + rehashCount);
     }
 
     private LinkedList<Pair<K, V>> getBucket(K key) {

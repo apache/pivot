@@ -161,8 +161,6 @@ public class HashMapTest {
 
     @Test
     public void pivotHashMapSpeedTest() {
-        HashMap.clearRehashTime();
-
         long t0 = System.currentTimeMillis();
         HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
         for (int i = 0; i < LOAD_COUNT; i++) {
@@ -170,8 +168,6 @@ public class HashMapTest {
         }
         long t1 = System.currentTimeMillis();
         System.out.println("org.apache.pivot.HashMap " + (t1 - t0) + "ms");
-
-        HashMap.dumpRehashTime();
     }
 
     @Test
