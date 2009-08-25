@@ -24,7 +24,10 @@ public interface SplitPaneListener {
      * Called when a split pane's top left component has changed.
      *
      * @param splitPane
+     * The SplitPane that the event originates from.
+     *
      * @param previousTopLeft
+     * The previous component. The new component can be found inside the splitPane.
      */
     public void topLeftChanged(SplitPane splitPane, Component previousTopLeft);
 
@@ -32,7 +35,10 @@ public interface SplitPaneListener {
      * Called when a split pane's bottom right component has changed.
      *
      * @param splitPane
+     * The SplitPane that the event originates from.
+     *
      * @param previousBottomRight
+     * The previous component. The new component can be found inside the splitPane.
      */
     public void bottomRightChanged(SplitPane splitPane, Component previousBottomRight);
 
@@ -40,6 +46,7 @@ public interface SplitPaneListener {
      * Called when a split pane's orientation has changed.
      *
      * @param splitPane
+     * The SplitPane that the event originates from.
      */
     public void orientationChanged(SplitPane splitPane);
 
@@ -47,6 +54,7 @@ public interface SplitPaneListener {
      * Called when a split pane's primary region has changed.
      *
      * @param splitPane
+     * The SplitPane that the event originates from.
      */
     public void primaryRegionChanged(SplitPane splitPane);
 
@@ -54,7 +62,10 @@ public interface SplitPaneListener {
      * Called when a split pane's split location has changed.
      *
      * @param splitPane
+     * The SplitPane that the event originates from.
+     *
      * @param previousSplitRatio
+     * The previous setting of the splitRatio.
      */
     public void splitRatioChanged(SplitPane splitPane, float previousSplitRatio);
 
@@ -62,6 +73,7 @@ public interface SplitPaneListener {
      * Called when a split pane's locked flag has changed.
      *
      * @param splitPane
+     * The SplitPane that the event originates from.
      */
     public void lockedChanged(SplitPane splitPane);
 }
