@@ -25,6 +25,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.Comparator;
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 
 import org.apache.pivot.collections.ArrayList;
@@ -138,6 +139,23 @@ public class HashMapTest {
         }
     }
 
+    @Test
+    public void iteratorConcurrentModificationTest() {
+        HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
+        
+        map.put(1, 1);
+        map.put(2, 2);
+        Iterator<Integer> iter = map.iterator();
+        iter.next();
+        map.put(3, 3);
+        try {
+            iter.next();
+            fail("Expecting " + ConcurrentModificationException.class);
+        } catch (ConcurrentModificationException ex) {
+            // expecting this
+        }
+    }
+    
     private static int LOAD_COUNT = 100000;
 
     @Test
