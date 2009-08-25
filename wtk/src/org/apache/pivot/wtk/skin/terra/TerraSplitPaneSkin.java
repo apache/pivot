@@ -491,21 +491,13 @@ public class TerraSplitPaneSkin extends ContainerSkin implements SplitPaneListen
 
     private int limitSplitLocation(int splitLocation) {
         SplitPane splitPane = (SplitPane) getComponent();
+        Orientation orientation = splitPane.getOrientation();
 
-        int lower, upper;
-        if (splitPane.getOrientation() == Orientation.HORIZONTAL) {
-            int splitWidth = splitPane.getWidth();
-            lower = splitPane.getLeft().getMinimumPreferredWidth();
+        int lower = getMinimumTopLeftSize(splitPane);
+        int minBottomRightSize = getMinimumBottomRightSize(splitPane);
 
-            int minimumChildSize = splitPane.getRight().getMinimumPreferredWidth();
-            upper = splitWidth - splitterThickness
-                - (minimumChildSize > 0 ? minimumChildSize : 0);
-        } else {
-            lower = splitPane.getBottom().getMinimumPreferredHeight();
-            int minimumChildSize = splitPane.getBottom().getMinimumPreferredHeight();
-            upper = splitPane.getHeight() - splitterThickness
-                - (minimumChildSize > 0 ? minimumChildSize : 0);
-        }
+        int upper = ((orientation == Orientation.HORIZONTAL) ? splitPane.getWidth() : splitPane.getHeight())
+            - (splitterThickness + minBottomRightSize);
 
         if (splitLocation < lower) {
             splitLocation = lower;
@@ -513,10 +505,31 @@ public class TerraSplitPaneSkin extends ContainerSkin implements SplitPaneListen
             splitLocation = upper;
         }
 
-        if (splitLocation < 0) {
-            splitLocation = 0;
-        }
-
         return splitLocation;
+    }
+
+    private int getMinimumBottomRightSize( SplitPane splitPane ) {
+        int minBottomRightSize = 0;
+        Component bottomRightComponent = splitPane.getBottomRight();
+        if (bottomRightComponent  != null) {
+            minBottomRightSize = bottomRightComponent.getMinimumPreferredWidth();
+            if (minBottomRightSize < 0) {
+                minBottomRightSize = 0;
+            }
+        }
+        return minBottomRightSize;
+    }
+
+    private int getMinimumTopLeftSize( SplitPane splitPane ) {
+        int minTopLeftSize = 0;
+        Component topLeftComponent = splitPane.getBottomRight();
+        if (topLeftComponent  != null) {
+            minTopLeftSize = topLeftComponent.getMinimumPreferredWidth();
+            if (minTopLeftSize < 0) {
+                minTopLeftSize = 0;
+            }
+
+        }
+        return minTopLeftSize;
     }
 }
