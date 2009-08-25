@@ -1325,6 +1325,9 @@ public abstract class ApplicationContext {
         }
     }
 
+    /**
+     * Class representing a scheduled callback.
+     */
     public static final class ScheduledCallback extends TimerTask {
         private Runnable runnable = null;
         private volatile boolean cancelled = false;

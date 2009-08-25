@@ -285,6 +285,9 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         }
     }
 
+    /**
+     * File comparator.
+     */
     public static class FileComparator implements Comparator<File> {
         private String columnName = null;
         private SortDirection sortDirection = null;

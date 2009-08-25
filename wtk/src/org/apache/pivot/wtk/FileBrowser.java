@@ -311,7 +311,7 @@ public class FileBrowser extends Container {
     /**
      * Sets the file filter.
      *
-     * @param fileFilter
+     * @param disabledFileFilter
      * The file filter to use, or <tt>null</tt> for no filter.
      */
     public void setDisabledFileFilter(Filter<File> disabledFileFilter) {

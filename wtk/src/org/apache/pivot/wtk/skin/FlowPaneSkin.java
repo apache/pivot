@@ -24,6 +24,9 @@ import org.apache.pivot.wtk.FlowPane;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Insets;
 
+/**
+ * Flow pane skin.
+ */
 public class FlowPaneSkin extends ContainerSkin {
     private HorizontalAlignment alignment = HorizontalAlignment.LEFT;
     private Insets padding = new Insets(2);
