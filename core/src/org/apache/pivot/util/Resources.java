@@ -41,7 +41,6 @@ import org.apache.pivot.serialization.SerializationException;
  * @see java.util.ResourceBundle
  */
 public class Resources implements Dictionary<String, Object>, Iterable<String> {
-
     private final Resources parent;
     private final String baseName;
     private final Locale locale;
@@ -49,73 +48,52 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
 
     private Map<String, Object> resourceMap = null;
 
-    public Resources(Object baseObject) throws IOException,
-            SerializationException {
-        this(baseObject.getClass());
-    }
-
-    public Resources(Resources parent, Object baseObject) throws IOException,
-            SerializationException {
-        this(parent, baseObject.getClass());
-    }
-
-    public Resources(Class<?> baseType) throws IOException,
-            SerializationException {
-        this(baseType.getName());
-    }
-
-    public Resources(Resources parent, Class<?> baseType) throws IOException,
-            SerializationException {
-        this(parent, baseType.getName());
-    }
-
-    public Resources(String baseName) throws IOException,
-            SerializationException {
+    public Resources(String baseName) throws IOException, SerializationException {
         this(null, baseName, Locale.getDefault(), Charset.defaultCharset());
     }
 
     public Resources(Resources parent, String baseName) throws IOException,
-            SerializationException {
+        SerializationException {
         this(parent, baseName, Locale.getDefault(), Charset.defaultCharset());
     }
 
     public Resources(String baseName, Locale locale) throws IOException,
-            SerializationException {
+        SerializationException {
         this(null, baseName, locale, Charset.defaultCharset());
     }
 
-    public Resources(Resources parent, String baseName, Locale locale)
-            throws IOException, SerializationException {
+    public Resources(Resources parent, String baseName, Locale locale) throws IOException,
+        SerializationException {
         this(parent, baseName, locale, Charset.defaultCharset());
     }
 
     public Resources(String baseName, String charsetName) throws IOException,
-            SerializationException {
+        SerializationException {
         this(baseName, Locale.getDefault(), charsetName);
     }
 
-    public Resources(Resources parent, String baseName, String charsetName)
-            throws IOException, SerializationException {
+    public Resources(Resources parent, String baseName, String charsetName) throws IOException,
+        SerializationException {
         this(parent, baseName, Locale.getDefault(), charsetName);
     }
 
     public Resources(String baseName, Charset charset) throws IOException,
-            SerializationException {
+        SerializationException {
         this(null, baseName, Locale.getDefault(), charset);
     }
 
-    public Resources(Resources parent, String baseName, Charset charset)
-            throws IOException, SerializationException {
+    public Resources(Resources parent, String baseName, Charset charset) throws IOException,
+        SerializationException {
         this(parent, baseName, Locale.getDefault(), charset);
     }
 
-    public Resources(String baseName, Locale locale, String charsetName)
-            throws IOException, SerializationException {
+    public Resources(String baseName, Locale locale, String charsetName) throws IOException,
+        SerializationException {
         this(null, baseName, locale, Charset.forName(charsetName));
     }
 
-    public Resources(Resources parent, String baseName, Locale locale,
-            String charsetName) throws IOException, SerializationException {
+    public Resources(Resources parent, String baseName, Locale locale, String charsetName)
+        throws IOException, SerializationException {
         this(parent, baseName, locale, Charset.forName(charsetName));
     }
 
@@ -147,9 +125,8 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
      * @throws MissingResourceException
      * If no resource for the specified base name can be found.
      */
-    public Resources(Resources parent, String baseName, Locale locale,
-            Charset charset) throws IOException, SerializationException {
-
+    public Resources(Resources parent, String baseName, Locale locale, Charset charset)
+        throws IOException, SerializationException {
         if (locale == null) {
             throw new IllegalArgumentException("locale is null");
         }
@@ -186,12 +163,20 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
         }
     }
 
+    public Resources getParent() {
+        return parent;
+    }
+
     public String getBaseName() {
         return baseName;
     }
 
     public Locale getLocale() {
         return locale;
+    }
+
+    public Charset getCharset() {
+        return charset;
     }
 
     public Object get(String key) {
@@ -280,10 +265,6 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
             return parent.getMap(key);
         }
         return map;
-    }
-
-    public Resources getParent() {
-        return parent;
     }
 
     public Object put(String key, Object value) {

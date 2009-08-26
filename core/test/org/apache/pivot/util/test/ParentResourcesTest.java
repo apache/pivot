@@ -46,8 +46,7 @@ public class ParentResourcesTest {
     @Test
     public void testString() throws Exception {
         assertNotNull("In main only", main.getString("mainKeyString"));
-        assertEquals("In parent", "From Parent", main.getParent().getString(
-                "someMagicString"));
+        assertEquals("In parent", "From Parent", main.getParent().getString("someMagicString"));
         assertEquals("In both", "From Main", main.getString("someMagicString"));
     }
 
@@ -55,60 +54,51 @@ public class ParentResourcesTest {
     public void testNumber() throws Exception {
         assertNotNull("In main only", main.getNumber("mainKeyNumber"));
         assertEquals("In parent", Integer.valueOf(100), main.getParent().getNumber(
-                "someMagicNumber"));
-        assertEquals("In both", Integer.valueOf(200), main
-                .getNumber("someMagicNumber"));
+            "someMagicNumber"));
+        assertEquals("In both", Integer.valueOf(200), main.getNumber("someMagicNumber"));
     }
 
     @Test
     public void testInteger() throws Exception {
         assertNotNull("In main only", main.getInteger("mainKeyNumber"));
-        assertEquals("In parent", Integer.valueOf(100), main.getParent()
-                .getInteger("someMagicNumber"));
-        assertEquals("In both", Integer.valueOf(200), main
-                .getInteger("someMagicNumber"));
+        assertEquals("In parent", Integer.valueOf(100), main.getParent().getInteger(
+            "someMagicNumber"));
+        assertEquals("In both", Integer.valueOf(200), main.getInteger("someMagicNumber"));
     }
 
     @Test
     public void testLong() throws Exception {
         assertNotNull("In main only", main.getLong("mainKeyNumber"));
-        assertEquals("In parent", Long.valueOf(100), main.getParent().getLong(
-                "someMagicNumber"));
+        assertEquals("In parent", Long.valueOf(100), main.getParent().getLong("someMagicNumber"));
         assertEquals("In both", Long.valueOf(200), main.getLong("someMagicNumber"));
     }
 
     @Test
     public void testShort() throws Exception {
         assertNotNull("In main only", main.getShort("mainKeyNumber"));
-        assertEquals("In parent", Short.valueOf((short) 100), main.getParent()
-                .getShort("someMagicNumber"));
-        assertEquals("In both", Short.valueOf((short) 200), main
-                .getShort("someMagicNumber"));
+        assertEquals("In parent", Short.valueOf((short) 100), main.getParent().getShort(
+            "someMagicNumber"));
+        assertEquals("In both", Short.valueOf((short) 200), main.getShort("someMagicNumber"));
     }
 
     @Test
     public void testFloat() throws Exception {
         assertNotNull("In main only", main.getFloat("mainKeyNumber"));
-        assertEquals("In parent", new Float(100), main.getParent().getFloat(
-                "someMagicNumber"));
-        assertEquals("In both", new Float(200), main
-                .getFloat("someMagicNumber"));
+        assertEquals("In parent", new Float(100), main.getParent().getFloat("someMagicNumber"));
+        assertEquals("In both", new Float(200), main.getFloat("someMagicNumber"));
     }
 
     @Test
     public void testDouble() throws Exception {
         assertNotNull("In main only", main.getDouble("mainKeyNumber"));
-        assertEquals("In parent", new Double(100), main.getParent().getDouble(
-                "someMagicNumber"));
-        assertEquals("In both", new Double(200), main
-                .getDouble("someMagicNumber"));
+        assertEquals("In parent", new Double(100), main.getParent().getDouble("someMagicNumber"));
+        assertEquals("In both", new Double(200), main.getDouble("someMagicNumber"));
     }
 
     @Test
     public void testBoolean() throws Exception {
         assertNotNull("In main only", main.getBoolean("mainKeyBoolean"));
-        assertEquals("In parent", false, main.getParent().getBoolean(
-                "someMagicBoolean"));
+        assertEquals("In parent", false, main.getParent().getBoolean("someMagicBoolean"));
         assertEquals("In both", true, main.getBoolean("someMagicBoolean"));
     }
 
@@ -134,41 +124,29 @@ public class ParentResourcesTest {
     @Test
     public void testLanguage() {
 
-        assertEquals("Language", "This is specifically English", main
-                .getString("languageKey"));
+        assertEquals("Language", "This is specifically English", main.getString("languageKey"));
 
-        assertEquals("Language in parent",
-                "This is not a specific language and is in the parent.", parent
-                        .getString("languageKey"));
+        assertEquals("Language in parent", "This is not a specific language and is in the parent.",
+            parent.getString("languageKey"));
 
     }
 
     @Test
     public void testConstructors() throws Exception {
-
-        main = new Resources(parent, this);
+        main = new Resources(parent, getClass().getName(), Charset.defaultCharset());
         testString();
 
-        main = new Resources(parent, getClass());
-        testString();
-
-        main = new Resources(parent, getClass().getName(), Charset
-                .defaultCharset());
-        testString();
-
-        main = new Resources(parent, getClass().getName(), Charset
-                .defaultCharset().name());
+        main = new Resources(parent, getClass().getName(), Charset.defaultCharset().name());
         testString();
 
         main = new Resources(parent, getClass().getName(), Locale.ENGLISH);
         testString();
 
-        main = new Resources(parent, getClass().getName(), Locale.ENGLISH,
-                Charset.defaultCharset());
+        main = new Resources(parent, getClass().getName(), Locale.ENGLISH, Charset.defaultCharset());
         testString();
 
         main = new Resources(parent, getClass().getName(), Locale.ENGLISH,
-                Charset.defaultCharset().name());
+            Charset.defaultCharset().name());
         testString();
 
     }

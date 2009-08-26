@@ -1,4 +1,5 @@
-#Mon Jun 15 09:16:17 EDT 2009
+#Tue Aug 25 19:33:58 EDT 2009
 eclipse.preferences.version=1
 encoding//src/org/apache/pivot/tutorials/stocktracker/StockTracker.json=UTF-8
 encoding//src/org/apache/pivot/tutorials/stocktracker/StockTracker_fr.json=UTF-8
+encoding//www/stock_tracker.localization.template.html=UTF-8

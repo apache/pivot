@@ -148,6 +148,10 @@ public class CSVSerializer implements Serializer<List<?>> {
         this.charset = charset;
     }
 
+    public Charset getCharset() {
+        return charset;
+    }
+
     /**
      * Returns a sequence representing the fields that will be read or written
      * by this serializer.

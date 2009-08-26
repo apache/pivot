@@ -68,6 +68,10 @@ public class JSONSerializer implements Serializer<Object> {
         this.charset = charset;
     }
 
+    public Charset getCharset() {
+        return charset;
+    }
+
     /**
      * Reads data from a JSON stream.
      *

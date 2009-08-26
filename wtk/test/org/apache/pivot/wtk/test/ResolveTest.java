@@ -29,7 +29,7 @@ public class ResolveTest implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        Resources resources = new Resources(this);
+        Resources resources = new Resources(getClass().getName());
         WTKXSerializer wtkxSerializer = new WTKXSerializer(resources);
         window = (Window)wtkxSerializer.readObject(this, "resolve_test.wtkx");
         window.open(display);

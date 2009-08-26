@@ -104,7 +104,7 @@ public class StockTracker implements Application {
         }
 
         // Load and bind to the WTKX source
-        Resources resources = new Resources(this);
+        Resources resources = new Resources(getClass().getName(), "UTF-8");
         WTKXSerializer wtkxSerializer = new WTKXSerializer(resources);
         window = (Window)wtkxSerializer.readObject(this, "stocktracker.wtkx");
         wtkxSerializer.bind(this, StockTracker.class);

@@ -405,7 +405,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
         Resources resources;
         try {
-            resources = new Resources(this);
+            resources = new Resources(getClass().getName());
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         } catch (SerializationException exception) {
