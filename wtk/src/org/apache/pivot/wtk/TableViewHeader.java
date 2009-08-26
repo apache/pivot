@@ -38,7 +38,6 @@ public class TableViewHeader extends Component {
     public interface Skin {
         public int getHeaderAt(int x);
         public Bounds getHeaderBounds(int index);
-        public int getPreferredColumnWidth(int columnIndex);
     }
 
     private static class TableViewHeaderListenerList extends ListenerList<TableViewHeaderListener>
@@ -154,21 +153,6 @@ public class TableViewHeader extends Component {
     public Bounds getHeaderBounds(int index) {
         TableViewHeader.Skin tableViewHeaderSkin = (TableViewHeader.Skin)getSkin();
         return tableViewHeaderSkin.getHeaderBounds(index);
-    }
-
-    /**
-     * Returns the preferred width of a column (the maximum width of all cell contents and
-     * the header width).
-     *
-     * @param columnIndex
-     * The column index.
-     *
-     * @return
-     * The preferred column width.
-     */
-    public int getPreferredColumnWidth(int columnIndex) {
-        TableViewHeader.Skin tableViewHeaderSkin = (TableViewHeader.Skin)getSkin();
-        return tableViewHeaderSkin.getPreferredColumnWidth(columnIndex);
     }
 
     public ListenerList<TableViewHeaderListener> getTableViewHeaderListeners() {

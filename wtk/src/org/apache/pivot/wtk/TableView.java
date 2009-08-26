@@ -463,7 +463,6 @@ public class TableView extends Component {
         public Bounds getRowBounds(int rowIndex);
         public Bounds getColumnBounds(int columnIndex);
         public Bounds getCellBounds(int rowIndex, int columnIndex);
-        public int getPreferredColumnWidth(int columnIndex);
     }
 
     /**
@@ -1453,20 +1452,6 @@ public class TableView extends Component {
     public Bounds getCellBounds(int rowIndex, int columnIndex) {
         TableView.Skin tableViewSkin = (TableView.Skin)getSkin();
         return tableViewSkin.getCellBounds(rowIndex, columnIndex);
-    }
-
-    /**
-     * Returns the preferred width of a column (the maximum width of all cell contents).
-     *
-     * @param columnIndex
-     * The column index.
-     *
-     * @return
-     * The preferred column width.
-     */
-    public int getPreferredColumnWidth(int columnIndex) {
-        TableView.Skin tableViewSkin = (TableView.Skin)getSkin();
-        return tableViewSkin.getPreferredColumnWidth(columnIndex);
     }
 
     public ListenerList<TableViewListener> getTableViewListeners() {

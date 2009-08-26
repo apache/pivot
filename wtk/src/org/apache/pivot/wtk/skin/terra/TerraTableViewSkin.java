@@ -485,23 +485,6 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             columnWidths.get(columnIndex), rowHeight);
     }
 
-    public int getPreferredColumnWidth(int columnIndex) {
-        int preferredColumnWidth = 0;
-
-        TableView tableView = (TableView)getComponent();
-
-        TableView.Column column = tableView.getColumns().get(columnIndex);
-        TableView.CellRenderer cellRenderer = column.getCellRenderer();
-
-        List<?> tableData = tableView.getTableData();
-        for (Object rowData : tableData) {
-            cellRenderer.render(rowData, tableView, column, false, false, false);
-            preferredColumnWidth = Math.max(preferredColumnWidth, cellRenderer.getPreferredWidth(-1));
-        }
-
-        return preferredColumnWidth;
-    }
-
     @Override
     public boolean isFocusable() {
         TableView tableView = (TableView)getComponent();

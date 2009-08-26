@@ -384,27 +384,6 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         return headerBounds;
     }
 
-    public int getPreferredColumnWidth(int columnIndex) {
-        TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
-        TableView tableView = tableViewHeader.getTableView();
-
-        // Get the column width
-        int preferredColumnWidth = tableView.getPreferredColumnWidth(columnIndex);
-
-        // Include the header width
-        TableView.Column column = tableView.getColumns().get(columnIndex);
-        TableViewHeader.DataRenderer dataRenderer = tableViewHeader.getDataRenderer();
-        dataRenderer.render(column.getHeaderData(), tableViewHeader, false);
-
-        preferredColumnWidth = Math.max(preferredColumnWidth, dataRenderer.getPreferredWidth(-1));
-
-        // Include the sort arrow
-        preferredColumnWidth += Math.max(sortAscendingImage.getWidth(), sortDescendingImage.getWidth())
-            + SORT_INDICATOR_PADDING * 2;
-
-        return preferredColumnWidth;
-    }
-
     @Override
     public boolean isFocusable() {
         return false;
