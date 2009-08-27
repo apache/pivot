@@ -24,6 +24,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
 
+import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
@@ -105,10 +106,11 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
     private boolean columnsResizable;
     private boolean includeTrailingVerticalGridLine;
 
-    // Derived colors
     private Color bevelColor;
     private Color pressedBevelColor;
     private Color disabledBevelColor;
+
+    private ArrayList<Integer> columnWidths = null;
 
     private int pressedHeaderIndex = -1;
     private int resizeHeaderIndex = -1;
@@ -221,7 +223,18 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
     }
 
     public void layout() {
-        // No-op
+        TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
+        TableView tableView = tableViewHeader.getTableView();
+
+        TableView.ColumnSequence columns = tableView.getColumns();
+        int n = columns.getLength();
+
+        columnWidths = new ArrayList<Integer>(n);
+
+        for (int i = 0; i < n; i++) {
+            Bounds columnBounds = tableView.getColumnBounds(i);
+            columnWidths.add(columnBounds.width);
+        }
     }
 
     public void paint(Graphics2D graphics) {
@@ -258,9 +271,6 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         if (tableView != null) {
             TableView.ColumnSequence columns = tableView.getColumns();
             TableViewHeader.DataRenderer dataRenderer = tableViewHeader.getDataRenderer();
-
-            Sequence<Integer> columnWidths = TerraTableViewSkin.getColumnWidths(tableView,
-                getWidth());
 
             int cellX = 0;
             for (int columnIndex = 0, columnCount = columns.getLength();
@@ -338,9 +348,6 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         TableView tableView = tableViewHeader.getTableView();
 
         if (tableView != null) {
-            Sequence<Integer> columnWidths = TerraTableViewSkin.getColumnWidths(tableView,
-                getWidth());
-
             int i = 0;
             int n = columnWidths.getLength();
             int columnX = 0;
@@ -365,9 +372,6 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         TableView tableView = tableViewHeader.getTableView();
 
         if (tableView != null) {
-            Sequence<Integer> columnWidths = TerraTableViewSkin.getColumnWidths(tableView,
-                getWidth());
-
             if (index < 0
                 || index >= columnWidths.getLength()) {
                 throw new IndexOutOfBoundsException();
