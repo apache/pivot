@@ -46,8 +46,10 @@ public class TerraFormSkin extends ContainerSkin
     private int verticalSpacing = 6;
     private int flagImageOffset = 4;
     private boolean showFirstSectionHeading = false;
+    private String delimiter = DEFAULT_DELIMITER;
 
     private static final int FLAG_IMAGE_SIZE = 16;
+    private static final String DEFAULT_DELIMITER = ":";
 
     @Override
     public void install(Component component) {
@@ -368,6 +370,31 @@ public class TerraFormSkin extends ContainerSkin
         invalidateComponent();
     }
 
+    public String getDelimiter() {
+        return delimiter;
+    }
+
+    public void setDelimiter(String delimiter) {
+        if (delimiter == null) {
+            throw new IllegalArgumentException("delimiter is null.");
+        }
+
+        this.delimiter = delimiter;
+
+        Form form = (Form)getComponent();
+        Form.SectionSequence sections = form.getSections();
+
+        for (int i = 0, n = sections.getLength(); i < n; i++) {
+            Form.Section section = sections.get(i);
+
+            for (int j = 0, m = section.getLength(); j < m; j++) {
+                updateFieldLabel(section, j);
+            }
+        }
+
+        invalidateComponent();
+    }
+
     // Form events
     public void sectionInserted(Form form, int index) {
         insertSection(form.getSections().get(index), index);
@@ -501,7 +528,7 @@ public class TerraFormSkin extends ContainerSkin
         int sectionIndex = form.getSections().indexOf(section);
         Label label = labels.get(sectionIndex).get(fieldIndex);
         String labelText = Form.getLabel(field);
-        label.setText((labelText == null) ? "" : labelText + ":");
+        label.setText((labelText == null) ? "" : labelText + delimiter);
     }
 
     private void updateFieldFlag(Form.Section section, int fieldIndex) {
