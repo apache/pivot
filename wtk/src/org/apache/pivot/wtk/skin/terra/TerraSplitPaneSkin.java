@@ -495,9 +495,6 @@ public class TerraSplitPaneSkin extends ContainerSkin implements SplitPaneListen
     }
 
     private int limitSplitLocation(int splitLocation) {
-        int width = getWidth();
-        int height = getHeight();
-
         SplitPane splitPane = (SplitPane)getComponent();
 
         Component topLeft = splitPane.getTopLeft();
@@ -507,7 +504,7 @@ public class TerraSplitPaneSkin extends ContainerSkin implements SplitPaneListen
 
         if (splitPane.getOrientation() == Orientation.HORIZONTAL) {
             lower = 0;
-            upper = width - splitterThickness;
+            upper = Math.max(getWidth() - splitterThickness, 0);
 
             if (topLeft  != null) {
                 int leftLimit = topLeft.getMinimumPreferredWidth();
@@ -524,7 +521,7 @@ public class TerraSplitPaneSkin extends ContainerSkin implements SplitPaneListen
             }
         } else {
             lower = 0;
-            upper = height - splitterThickness;
+            upper = Math.max(getHeight() - splitterThickness, 0);
 
             if (topLeft  != null) {
                 int topLimit = topLeft.getMinimumPreferredHeight();
