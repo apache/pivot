@@ -661,25 +661,27 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
     public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
         boolean consumed = super.mouseDown(component, button, x, y);
 
-        TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
-        TableView tableView = tableViewHeader.getTableView();
+        if (button == Mouse.Button.LEFT) {
+            TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
+            TableView tableView = tableViewHeader.getTableView();
 
-        if (tableView != null) {
-            int headerIndex = getHeaderAt(x);
+            if (tableView != null) {
+                int headerIndex = getHeaderAt(x);
 
-            if (headerIndex != -1) {
-                Bounds headerBounds = getHeaderBounds(headerIndex);
-                TableView.Column column = tableView.getColumns().get(headerIndex);
+                if (headerIndex != -1) {
+                    Bounds headerBounds = getHeaderBounds(headerIndex);
+                    TableView.Column column = tableView.getColumns().get(headerIndex);
 
-                if (columnsResizable
-                    && !column.isRelative()
-                    && column.getWidth() != -1
-                    && x > headerBounds.x + headerBounds.width - RESIZE_HANDLE_SIZE) {
-                    resizeHeaderIndex = headerIndex;
-                    Mouse.capture(tableViewHeader);
-                } else if (headersPressable) {
-                    pressedHeaderIndex = headerIndex;
-                    repaintComponent(getHeaderBounds(pressedHeaderIndex));
+                    if (columnsResizable
+                        && !column.isRelative()
+                        && column.getWidth() != -1
+                        && x > headerBounds.x + headerBounds.width - RESIZE_HANDLE_SIZE) {
+                        resizeHeaderIndex = headerIndex;
+                        Mouse.capture(tableViewHeader);
+                    } else if (headersPressable) {
+                        pressedHeaderIndex = headerIndex;
+                        repaintComponent(getHeaderBounds(pressedHeaderIndex));
+                    }
                 }
             }
         }
@@ -691,11 +693,13 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
     public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
         boolean consumed = super.mouseUp(component, button, x, y);
 
-        if (Mouse.getCapturer() == component) {
-            Mouse.release();
-        } else {
-            if (pressedHeaderIndex != -1) {
-                repaintComponent(getHeaderBounds(pressedHeaderIndex));
+        if (button == Mouse.Button.LEFT) {
+            if (Mouse.getCapturer() == component) {
+                Mouse.release();
+            } else {
+                if (pressedHeaderIndex != -1) {
+                    repaintComponent(getHeaderBounds(pressedHeaderIndex));
+                }
             }
         }
 
@@ -706,14 +710,35 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
     public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         boolean consumed = super.mouseClick(component, button, x, y, count);
 
-        TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
+        if (button == Mouse.Button.LEFT) {
+            TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
 
-        if (pressedHeaderIndex != -1
-            && headersPressable) {
-            tableViewHeader.pressHeader(pressedHeaderIndex);
+            if (count == 1
+                && pressedHeaderIndex != -1
+                && headersPressable) {
+                tableViewHeader.pressHeader(pressedHeaderIndex);
+            } else if (count == 2
+                && columnsResizable) {
+                TableView tableView = tableViewHeader.getTableView();
+
+                if (tableView != null) {
+                    int headerIndex = getHeaderAt(x);
+
+                    if (headerIndex != -1) {
+                        Bounds headerBounds = getHeaderBounds(headerIndex);
+                        TableView.Column column = tableView.getColumns().get(headerIndex);
+
+                        if (!column.isRelative()
+                            && column.getWidth() != -1
+                            && x > headerBounds.x + headerBounds.width - RESIZE_HANDLE_SIZE) {
+                            // TODO PIVOT-248
+                        }
+                    }
+                }
+            }
+
+            pressedHeaderIndex = -1;
         }
-
-        pressedHeaderIndex = -1;
 
         return consumed;
     }
