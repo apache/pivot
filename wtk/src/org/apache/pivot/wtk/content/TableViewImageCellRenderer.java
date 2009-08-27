@@ -35,6 +35,15 @@ public class TableViewImageCellRenderer extends ImageView implements CellRendere
     }
 
     @Override
+    public void setSize(int width, int height) {
+        super.setSize(width, height);
+
+        // Since this component doesn't have a parent, it won't be validated
+        // via layout; ensure that it is valid here
+        validate();
+    }
+
+    @Override
     public void setPreferredHeight(int preferredHeight) {
         if (preferredHeight == -1) {
             throw new IllegalArgumentException("Preferred height must be a fixed value.");

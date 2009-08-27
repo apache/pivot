@@ -24,7 +24,6 @@ import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.VerticalAlignment;
 
-
 /**
  * Default renderer for table view cells that contain boolean data. Renders
  * cell contents as a checkbox.
@@ -37,6 +36,7 @@ public class TableViewBooleanCellRenderer extends BoxPane
     public TableViewBooleanCellRenderer() {
         add(checkbox);
 
+        getStyles().put("padding", 3);
         getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
         getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
     }

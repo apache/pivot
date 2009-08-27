@@ -195,16 +195,13 @@ public class TerraCheckboxSkin extends CheckboxSkin {
         // Center the button vertically
         graphics.translate(0, (height - CHECKBOX_SIZE) / 2);
 
-        int buttonWidth = CHECKBOX_SIZE - 1;
-        int buttonHeight = CHECKBOX_SIZE - 1;
-
-        graphics.setPaint(new GradientPaint(buttonWidth / 2, 0, buttonBevelColor,
-            buttonWidth / 2, buttonHeight, buttonColor));
-        graphics.fillRect(0, 0, buttonWidth, buttonHeight);
+        graphics.setPaint(new GradientPaint(CHECKBOX_SIZE / 2, 0, buttonBevelColor,
+            CHECKBOX_SIZE / 2, CHECKBOX_SIZE, buttonColor));
+        graphics.fillRect(0, 0, CHECKBOX_SIZE, CHECKBOX_SIZE);
 
         // Paint the border
         graphics.setPaint(buttonBorderColor);
-        GraphicsUtilities.drawRect(graphics, 0, 0, buttonWidth, buttonHeight);
+        GraphicsUtilities.drawRect(graphics, 0, 0, CHECKBOX_SIZE, CHECKBOX_SIZE);
 
         // Paint the checkmark
         Button.State state = checkbox.getState();

@@ -257,10 +257,10 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
 
         if (tableView != null) {
             TableView.ColumnSequence columns = tableView.getColumns();
-            Sequence<Integer> columnWidths =
-                TerraTableViewSkin.getColumnWidths(columns, getWidth());
-
             TableViewHeader.DataRenderer dataRenderer = tableViewHeader.getDataRenderer();
+
+            Sequence<Integer> columnWidths = TerraTableViewSkin.getColumnWidths(tableView,
+                getWidth());
 
             int cellX = 0;
             for (int columnIndex = 0, columnCount = columns.getLength();
@@ -338,8 +338,8 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         TableView tableView = tableViewHeader.getTableView();
 
         if (tableView != null) {
-            Sequence<Integer> columnWidths =
-                TerraTableViewSkin.getColumnWidths(tableView.getColumns(), getWidth());
+            Sequence<Integer> columnWidths = TerraTableViewSkin.getColumnWidths(tableView,
+                getWidth());
 
             int i = 0;
             int n = columnWidths.getLength();
@@ -365,8 +365,8 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         TableView tableView = tableViewHeader.getTableView();
 
         if (tableView != null) {
-            Sequence<Integer> columnWidths =
-                TerraTableViewSkin.getColumnWidths(tableView.getColumns(), getWidth());
+            Sequence<Integer> columnWidths = TerraTableViewSkin.getColumnWidths(tableView,
+                getWidth());
 
             if (index < 0
                 || index >= columnWidths.getLength()) {
@@ -627,6 +627,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
                     TableView.Column column = tableView.getColumns().get(headerIndex);
 
                     if (!column.isRelative()
+                        && column.getWidth() != -1
                         && x > headerBounds.x + headerBounds.width - RESIZE_HANDLE_SIZE) {
                         tableViewHeader.setCursor(Cursor.RESIZE_EAST);
                     } else {
@@ -668,6 +669,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
 
                 if (columnsResizable
                     && !column.isRelative()
+                    && column.getWidth() != -1
                     && x > headerBounds.x + headerBounds.width - RESIZE_HANDLE_SIZE) {
                     resizeHeaderIndex = headerIndex;
                     Mouse.capture(tableViewHeader);

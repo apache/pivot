@@ -60,7 +60,7 @@ limitations under the License.
                                 <TableView wtkx:id="customTableView" selectMode="multi"
                                     styles="{showHorizontalGridLines:false}">
                                     <columns>
-                                        <TableView.Column name="a" width="20">
+                                        <TableView.Column name="a" width="-1">
                                             <headerData>
                                                 <content:TableViewHeaderData icon="@flag_red.png"/>
                                             </headerData>
