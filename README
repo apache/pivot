@@ -49,14 +49,18 @@ applications deployed via the web set the codebase_lookup applet parameter to
 false.
 
 
+Distribution WARs
+=================
+
+Pivot also includes web archives for browsing the Pivot tutorial and demo
+applications. The source for those applications can be found in the source
+distribution.
+
+
 Dependencies
 ============
 
-Pivot requires Java 6 or greater.
-
-* Pivot's unit tests require JUnit 4.6 or greater, available here:
-
-  http://junit.org/
+* Pivot requires Java 6 or greater.
 
 * Pivot's charting components require a compatible chart provider. No such
   provider is included in this release, but one is available here:
@@ -76,5 +80,6 @@ Documentation
 =============
 
 Pivot home page: http://incubator.apache.org/pivot
-Wiki:            http://cwiki.apache.org/PIVOT/
-Javadoc:         http://incubator.apache.org/pivot/1.3/docs/api/index.html
+Demos:           http://incubator.apache.org/pivot/1.3/demos/
+Tutorials:       http://incubator.apache.org/pivot/1.3/tutorials/
+Javadoc:         http://incubator.apache.org/pivot/1.3/docs/api/
