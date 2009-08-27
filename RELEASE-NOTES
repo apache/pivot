@@ -63,6 +63,8 @@ New Features
 
 - Add a collapsible flag to Rollup (PIVOT-240)
 
+- Add delimiter:String style to TerraFormSkin (PIVOT-242)
+
 
 Improvements
 ------------
