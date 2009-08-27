@@ -19,8 +19,8 @@ package org.apache.pivot.wtk.skin.terra;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.GradientPaint;
 import java.awt.Graphics2D;
+import java.awt.RadialGradientPaint;
 import java.awt.RenderingHints;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
@@ -171,17 +171,23 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
         // Center the button vertically
         graphics.translate(0, (height - BUTTON_DIAMETER) / 2);
 
-        // Paint the border
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
 
+        // Paint the border
         graphics.setColor(buttonBorderColor);
         graphics.fillOval(0, 0, BUTTON_DIAMETER - 1, BUTTON_DIAMETER - 1);
 
-        graphics.setPaint(new GradientPaint(BUTTON_DIAMETER / 2, 0, TerraTheme.darken(buttonColor),
-            BUTTON_DIAMETER / 2, BUTTON_DIAMETER / 2, buttonColor));
-        graphics.fillOval(1, 1, BUTTON_DIAMETER - 3, BUTTON_DIAMETER - 3);
+        // Paint the background
+        Ellipse2D buttonBackgroundCircle = new Ellipse2D.Double(1, 1,
+            BUTTON_DIAMETER - 3, BUTTON_DIAMETER - 3);
+        graphics.setPaint(new RadialGradientPaint((float)buttonBackgroundCircle.getCenterX(),
+            (float)buttonBackgroundCircle.getCenterY(),
+            (float)buttonBackgroundCircle.getWidth() * 2 / 3,
+            new float[] {0f, 1f}, new Color[] {TerraTheme.darken(buttonColor), buttonColor}));
+        graphics.fill(buttonBackgroundCircle);
 
+        // Paint the selection
         if (radioButton.isSelected()) {
             Ellipse2D buttonSelectionCircle = new Ellipse2D.Double((BUTTON_DIAMETER
                 - (BUTTON_SELECTION_DIAMETER - 1)) / 2,
