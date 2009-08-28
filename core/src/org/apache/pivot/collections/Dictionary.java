@@ -21,6 +21,48 @@ package org.apache.pivot.collections;
  */
 public interface Dictionary<K, V> {
     /**
+     * Class representing a key/value pair.
+     */
+    public static final class Pair<K, V> {
+        public final K key;
+        public final V value;
+
+        public Pair(K key, V value) {
+            if (key == null) {
+                throw new IllegalArgumentException();
+            }
+
+            this.key = key;
+            this.value = value;
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public boolean equals(Object object) {
+           boolean equals = false;
+
+           if (object instanceof Pair<?, ?>) {
+              Pair<K, V> pair = (Pair<K, V>)object;
+              equals = (key.equals(pair.key)
+                  && ((value == null && pair.value == null)
+                      || (value != null && value.equals(pair.value))));
+           }
+
+           return equals;
+        }
+
+        @Override
+        public int hashCode() {
+           return key.hashCode();
+        }
+
+        @Override
+        public String toString() {
+           return "{" + key + ": " + value + "}";
+        }
+    }
+
+    /**
      * Retrieves the value for the given key.
      *
      * @param key

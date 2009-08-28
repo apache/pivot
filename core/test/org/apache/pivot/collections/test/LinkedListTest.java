@@ -22,6 +22,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Comparator;
 
+import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.LinkedList;
 import org.apache.pivot.collections.Sequence;
 import org.junit.Test;
@@ -58,6 +59,14 @@ public class LinkedListTest {
 
         list.insert("G", 0);
         assertEquals(list, new LinkedList<String>("G", "B", "F", "D"));
+
+        assertEquals(4, list.getLength());
+
+        ArrayList<String> copy = new ArrayList<String>("G", "B", "F", "D");
+        int i = 0;
+        for (String item : list) {
+            assertEquals(item, copy.get(i++));
+        }
     }
 
     @Test

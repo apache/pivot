@@ -17,7 +17,7 @@
 
 package org.apache.pivot.collections.test;
 
-import static org.junit.Assert.assertEquals;
+ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -181,4 +181,16 @@ public class HashMapTest {
         System.out.println("java.util.HashMap " + (t1 - t0) + "ms");
     }
 
+    @Test
+    public void iteratorTest() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put("font", "Verdana 11");
+        map.put("colors", "#ff0000");
+
+        Iterator<String> iterator = map.iterator();
+        while (iterator.hasNext()) {
+            String key = iterator.next();
+            System.out.println(key);
+        }
+    }
 }

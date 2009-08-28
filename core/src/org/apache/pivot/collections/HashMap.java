@@ -47,8 +47,8 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
             // Move to the next bucket
             while (entryIterator != null
                 && !entryIterator.hasNext()) {
-                entryIterator = (bucketIndex < buckets.getLength()) ?
-                    getBucketIterator(bucketIndex++) : null;
+                entryIterator = (++bucketIndex < buckets.getLength()) ?
+                    getBucketIterator(bucketIndex) : null;
             }
 
             return (entryIterator != null);

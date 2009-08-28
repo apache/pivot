@@ -19,7 +19,7 @@ package org.apache.pivot.collections;
 import java.util.Comparator;
 import java.util.Iterator;
 
-import org.apache.pivot.collections.Map.Pair;
+import org.apache.pivot.collections.Dictionary.Pair;
 import org.apache.pivot.util.ListenerList;
 
 /**

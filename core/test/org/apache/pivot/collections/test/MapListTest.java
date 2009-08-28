@@ -30,7 +30,7 @@ import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.MapList;
 import org.apache.pivot.collections.MapListListener;
 import org.apache.pivot.collections.Sequence;
-import org.apache.pivot.collections.Map.Pair;
+import org.apache.pivot.collections.Dictionary.Pair;
 import org.junit.Before;
 import org.junit.Test;
 
