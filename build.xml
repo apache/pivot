@@ -533,8 +533,8 @@ limitations under the License.
         <!-- Copy webapps -->
         <copy todir="${folder.install}/${folder.release}/webapps">
             <fileset dir="${folder.lib}">
-                <include name="${ant.project.name}_demos.war"/>
-                <include name="${ant.project.name}_tutorials.war"/>
+                <include name="${ant.project.name}-demos.war"/>
+                <include name="${ant.project.name}-tutorials.war"/>
             </fileset>
         </copy>
 
@@ -633,7 +633,7 @@ limitations under the License.
         </copy>
 
         <!-- Generate demos WAR -->
-        <war destfile="${folder.lib}/${ant.project.name}_demos.war" webxml="demos/web.xml">
+        <war destfile="${folder.lib}/${ant.project.name}-demos.war" webxml="demos/web.xml">
             <fileset dir="demos/www">
                 <exclude name="*.template.html"/>
             </fileset>
@@ -665,7 +665,7 @@ limitations under the License.
         </copy>
 
         <!-- Generate tutorials WAR -->
-        <war destfile="${folder.lib}/${ant.project.name}_tutorials.war" webxml="tutorials/web.xml">
+        <war destfile="${folder.lib}/${ant.project.name}-tutorials.war" webxml="tutorials/web.xml">
             <fileset dir="tutorials/www">
                 <exclude name="*.template.html"/>
             </fileset>
