@@ -203,6 +203,8 @@ Bug Fixes
 
 - Clicking on a MenuBar.Item with no menu yields exception (PIVOT-241)
 
+- HashMap iteration produces duplicate entries (PIVOT-252)
+
 
 Tasks Accomplished
 ------------------
@@ -238,6 +240,8 @@ Tasks Accomplished
   ComponentListener (PIVOT-186)
 
 - Remove @author tags from Pivot source (PIVOT-223)
+
+- Move Map.Pair to Dictionary interface (PIVOT-250)
 
 
 Additional Notes
