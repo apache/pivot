@@ -61,6 +61,10 @@ public class FocusTest implements Application {
     }
 
     public static void main(String[] args) {
+        // 
+        // Note: when run, this class will generate the following exception (it's an expected failure):
+        // java.lang.RuntimeException: Infinite loop in focus traversal policy for org.apache.pivot.wtk.BoxPane#14
+        // 
         DesktopApplicationContext.main(FocusTest.class, args);
     }
 }
