@@ -635,8 +635,10 @@ public class TerraCalendarSkin extends CalendarSkin
             }
         }
 
-        today = new CalendarDate();
+        // Show/hide last row
+        calendarTablePane.getRows().get(7).setVisible(dateButtons[5][0].isEnabled());
 
+        today = new CalendarDate();
         updateSelection(calendar.getSelectedDate());
     }
 

@@ -26,8 +26,8 @@ limitations under the License.
                     <TablePane.Column width="1*"/>
                 </columns>
                 <rows>
-                    <TablePane.Row wtkx:id="saveAsRow" height="-1">
-                        <BoxPane orientation="vertical" styles="{fill:true}">
+                    <TablePane.Row height="-1">
+                        <BoxPane wtkx:id="saveAsBoxPane" orientation="vertical" styles="{fill:true}">
                             <BoxPane styles="{verticalAlignment:'center'}">
                                 <Label text="%saveAs"/>
                                 <TextInput wtkx:id="saveAsTextInput" textSize="32"/>

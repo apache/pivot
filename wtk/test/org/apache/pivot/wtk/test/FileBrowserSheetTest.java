@@ -31,7 +31,7 @@ public class FileBrowserSheetTest implements Application {
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
 
-        FileBrowserSheet fileOpenSheet = new FileBrowserSheet(FileBrowserSheet.Mode.OPEN);
+        FileBrowserSheet fileOpenSheet = new FileBrowserSheet(FileBrowserSheet.Mode.SAVE_AS);
         wtkxSerializer.put("fileOpenSheet", fileOpenSheet);
 
         frame = (Frame)wtkxSerializer.readObject(getClass().getResource("file_browser_sheet_test.wtkx"));

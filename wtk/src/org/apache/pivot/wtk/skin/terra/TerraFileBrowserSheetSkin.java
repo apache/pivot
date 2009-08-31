@@ -25,6 +25,7 @@ import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.util.Vote;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Component;
@@ -36,7 +37,6 @@ import org.apache.pivot.wtk.FileBrowserSheetListener;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Sheet;
-import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextInputTextListener;
 import org.apache.pivot.wtk.Window;
@@ -61,8 +61,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
         }
     };
 
-    @WTKX private TablePane tablePane = null;
-    @WTKX private TablePane.Row saveAsRow = null;
+    @WTKX private BoxPane saveAsBoxPane = null;
     @WTKX private TextInput saveAsTextInput = null;
     @WTKX private FileBrowser fileBrowser = null;
     @WTKX private PushButton okButton = null;
@@ -220,37 +219,25 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
         // Initialize layout and file browser selection state
         switch (mode) {
             case OPEN: {
-                if (saveAsRow.getTablePane() != null) {
-                    tablePane.getRows().remove(saveAsRow);
-                }
-
+                saveAsBoxPane.setVisible(false);
                 fileBrowser.setMultiSelect(false);
                 break;
             }
 
             case OPEN_MULTIPLE: {
-                if (saveAsRow.getTablePane() != null) {
-                    tablePane.getRows().remove(saveAsRow);
-                }
-
+                saveAsBoxPane.setVisible(false);
                 fileBrowser.setMultiSelect(true);
                 break;
             }
 
             case SAVE_AS: {
-                if (saveAsRow.getTablePane() == null) {
-                    tablePane.getRows().insert(saveAsRow, 0);
-                }
-
+                saveAsBoxPane.setVisible(true);
                 fileBrowser.setMultiSelect(false);
                 break;
             }
 
             case SAVE_TO: {
-                if (saveAsRow.getTablePane() != null) {
-                    tablePane.getRows().remove(saveAsRow);
-                }
-
+                saveAsBoxPane.setVisible(false);
                 fileBrowser.setMultiSelect(false);
                 break;
             }
