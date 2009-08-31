@@ -44,6 +44,7 @@ public class DisplaySkin extends ContainerSkin {
         super.install(component);
     }
 
+    @Override
     public void layout() {
         Display display = (Display)getComponent();
 

@@ -53,6 +53,7 @@ public class BoxPaneSkin extends ContainerSkin
         super.uninstall();
     }
 
+    @Override
     public int getPreferredWidth(int height) {
         BoxPane boxPane = (BoxPane)getComponent();
 
@@ -98,6 +99,7 @@ public class BoxPaneSkin extends ContainerSkin
         return preferredWidth;
     }
 
+    @Override
     public int getPreferredHeight(int width) {
         BoxPane boxPane = (BoxPane)getComponent();
 
@@ -143,6 +145,7 @@ public class BoxPaneSkin extends ContainerSkin
         return preferredHeight;
     }
 
+    @Override
     public Dimensions getPreferredSize() {
         BoxPane boxPane = (BoxPane)getComponent();
 
@@ -202,6 +205,7 @@ public class BoxPaneSkin extends ContainerSkin
         return new Dimensions(preferredWidth, preferredHeight);
     }
 
+    @Override
     public void layout() {
         BoxPane boxPane = (BoxPane)getComponent();
         int n = boxPane.getLength();

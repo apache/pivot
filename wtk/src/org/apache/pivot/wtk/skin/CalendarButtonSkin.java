@@ -275,21 +275,25 @@ public abstract class CalendarButtonSkin extends ButtonSkin
     }
 
     // Calendar button events
+    @Override
     public void localeChanged(CalendarButton calendarButton, Locale previousLocale) {
         calendar.setLocale(calendarButton.getLocale());
     }
 
+    @Override
     public void disabledDateFilterChanged(CalendarButton calendarButton,
         Filter<CalendarDate> previousDisabledDateFilter) {
         calendar.setDisabledDateFilter(calendarButton.getDisabledDateFilter());
     }
 
+    @Override
     public void selectedDateKeyChanged(CalendarButton calendarButton,
         String previousSelectedDateKey) {
         // No-op
     }
 
     // Calendar button selection events
+    @Override
     public void selectedDateChanged(CalendarButton calendarButton,
         CalendarDate previousSelectedDate) {
         // Set the selected date as the button data

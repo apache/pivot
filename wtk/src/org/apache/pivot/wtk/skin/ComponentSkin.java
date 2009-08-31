@@ -46,6 +46,7 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
     ComponentStateListener, ComponentMouseListener, ComponentMouseButtonListener,
     ComponentMouseWheelListener, ComponentKeyListener {
     private class ShowTooltipCallback implements Runnable {
+        @Override
         public void run() {
             Component component = getComponent();
             String tooltipText = component.getTooltipText();
@@ -82,23 +83,28 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
 
     public static final int SHOW_TOOLTIP_TIMEOUT = 1000;
 
+    @Override
     public int getWidth() {
         return width;
     }
 
+    @Override
     public int getHeight() {
         return height;
     }
 
+    @Override
     public void setSize(int width, int height) {
         this.width = width;
         this.height = height;
     }
 
+    @Override
     public Dimensions getPreferredSize() {
         return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
     }
 
+    @Override
     public void install(Component component) {
         assert(this.component == null) : "Skin is already installed on a component.";
 
@@ -112,6 +118,7 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
         this.component = component;
     }
 
+    @Override
     public void uninstall() {
         component.getComponentListeners().remove(this);
         component.getComponentStateListeners().remove(this);
@@ -123,6 +130,7 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
         component = null;
     }
 
+    @Override
     public Component getComponent() {
         return component;
     }
@@ -130,6 +138,7 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
     /**
      * By default, components are focusable.
      */
+    @Override
     public boolean isFocusable() {
         return true;
     }
@@ -137,71 +146,87 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
     /**
      * By default, skins are assumed to be opaque.
      */
+    @Override
     public boolean isOpaque() {
         return true;
     }
 
     // Component events
+    @Override
     public void parentChanged(Component component, Container previousParent) {
         // No-op
     }
 
+    @Override
     public void sizeChanged(Component component, int previousWidth, int previousHeight) {
         // No-op
     }
 
+    @Override
     public void preferredSizeChanged(Component component,
         int previousPreferredWidth, int previousPreferredHeight) {
         // No-op
     }
 
+    @Override
     public void preferredWidthLimitsChanged(Component component, int previousMinimumPreferredWidth,
         int previousMaximumPreferredWidth) {
         // No-op
     }
 
+    @Override
     public void preferredHeightLimitsChanged(Component component, int previousMinimumPreferredHeight,
         int previousMaximumPreferredHeight) {
         // No-op
     }
 
+    @Override
     public void locationChanged(Component component, int previousX, int previousY) {
         // No-op
     }
 
+    @Override
     public void visibleChanged(Component component) {
         // No-op
     }
 
+    @Override
     public void styleUpdated(Component component, String styleKey, Object previousValue) {
         // No-op
     }
 
+    @Override
     public void cursorChanged(Component component, Cursor previousCursor) {
         // No-op
     }
 
+    @Override
     public void tooltipTextChanged(Component component, String previousTooltipText) {
         // TODO Handle change here instead of in ShowTooltipCallback?
     }
 
+    @Override
     public void dragSourceChanged(Component component, DragSource previousDragSource) {
         // No-op
     }
 
+    @Override
     public void dropTargetChanged(Component component, DropTarget previousDropTarget) {
         // No-op
     }
 
+    @Override
     public void menuHandlerChanged(Component component, MenuHandler previousMenuHandler) {
         // No-op
     }
 
     // Component state events
+    @Override
     public void enabledChanged(Component component) {
         // No-op
     }
 
+    @Override
     public void focusedChanged(Component component, Component obverseComponent) {
         // Ensure that the component is visible if it is in a viewport
         if (component.isFocused()) {
@@ -210,6 +235,7 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
     }
 
     // Component mouse events
+    @Override
     public boolean mouseMove(Component component, int x, int y) {
         if (scheduledShowTooltipCallback != null) {
             scheduledShowTooltipCallback.cancel();
@@ -224,9 +250,11 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
         return false;
     }
 
+    @Override
     public void mouseOver(Component component) {
     }
 
+    @Override
     public void mouseOut(Component component) {
         if (scheduledShowTooltipCallback != null) {
             scheduledShowTooltipCallback.cancel();
@@ -235,29 +263,35 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
     }
 
     // Component mouse button events
+    @Override
     public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
         return false;
     }
 
+    @Override
     public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
         return false;
     }
 
+    @Override
     public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         return false;
     }
 
     // Component mouse wheel events
+    @Override
     public boolean mouseWheel(Component component, Mouse.ScrollType scrollType, int scrollAmount,
         int wheelRotation, int x, int y) {
         return false;
     }
 
     // Component key events
+    @Override
     public boolean keyTyped(Component component, char character) {
         return false;
     }
 
+    @Override
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 
@@ -277,6 +311,7 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
         return consumed;
     }
 
+    @Override
     public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         return false;
     }

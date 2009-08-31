@@ -45,6 +45,7 @@ public abstract class CalendarSkin extends ContainerSkin
         super.uninstall();
     }
 
+    @Override
     public void selectedDateKeyChanged(Calendar calendar,
         String previousSelectedDateKey) {
         // No-op

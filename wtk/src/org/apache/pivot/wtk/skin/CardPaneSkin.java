@@ -302,6 +302,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         super.uninstall();
     }
 
+    @Override
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 
@@ -321,6 +322,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         return preferredWidth;
     }
 
+    @Override
     public int getPreferredHeight(int width) {
         int preferredHeight = 0;
 
@@ -340,6 +342,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         return preferredHeight;
     }
 
+    @Override
     public Dimensions getPreferredSize() {
         int preferredWidth = 0;
         int preferredHeight = 0;
@@ -398,6 +401,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         return new Dimensions(preferredWidth, preferredHeight);
     }
 
+    @Override
     public void layout() {
         // Set the size of all components to match the size of the stack pane,
         // minus padding
@@ -520,6 +524,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         invalidateComponent();
     }
 
+    @Override
     public Vote previewSelectedIndexChange(CardPane cardPane, int selectedIndex) {
         Vote vote;
 
@@ -572,6 +577,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 
             if (selectionChangeTransition != null) {
                 selectionChangeTransition.start(new TransitionListener() {
+                    @Override
                     public void transitionCompleted(Transition transition) {
                         CardPane cardPane = (CardPane)getComponent();
 
@@ -596,6 +602,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         return vote;
     }
 
+    @Override
     public void selectedIndexChangeVetoed(CardPane cardPane, Vote reason) {
         if (reason == Vote.DENY
             && selectionChangeTransition != null) {
@@ -611,6 +618,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         }
     }
 
+    @Override
     public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex) {
         int selectedIndex = cardPane.getSelectedIndex();
         if (selectedIndex != -1) {

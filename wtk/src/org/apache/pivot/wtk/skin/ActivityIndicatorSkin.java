@@ -46,6 +46,7 @@ public abstract class ActivityIndicatorSkin extends ComponentSkin
         return false;
     }
 
+    @Override
     public void layout() {
         // No-op
     }

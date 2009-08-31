@@ -93,6 +93,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         super.uninstall();
     }
 
+    @Override
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 
@@ -110,6 +111,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         return preferredWidth;
     }
 
+    @Override
     public int getPreferredHeight(int width) {
         int preferredHeight = 0;
 
@@ -157,6 +159,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         return preferredHeight;
     }
 
+    @Override
     public Dimensions getPreferredSize() {
         int preferredWidth = 0;
         int preferredHeight = 0;
@@ -181,10 +184,12 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         return new Dimensions(preferredWidth, preferredHeight);
     }
 
+    @Override
     public void layout() {
         // No-op
     }
 
+    @Override
     public void paint(Graphics2D graphics) {
         int width = getWidth();
         int height = getHeight();
@@ -535,10 +540,12 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     }
 
     // Label events
+    @Override
     public void textChanged(Label label, String previousText) {
         invalidateComponent();
     }
 
+    @Override
     public void textKeyChanged(Label label, String previousTextKey) {
         // No-op
     }

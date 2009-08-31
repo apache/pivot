@@ -53,10 +53,12 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
     private float scaleY = 1;
 
     private ImageListener imageListener = new ImageListener() {
+        @Override
         public void sizeChanged(Image image, int previousWidth, int previousHeight) {
             invalidateComponent();
         }
 
+        @Override
         public void regionUpdated(Image image, int x, int y, int width, int height) {
             // TODO A rounding error is causing an off-by-one error; we're
             // accounting for it here by adding 1 to width and height
@@ -68,6 +70,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
         }
     };
 
+    @Override
     public void install(Component component) {
         super.install(component);
 
@@ -80,6 +83,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
         }
     }
 
+    @Override
     public void uninstall() {
         ImageView imageView = (ImageView)getComponent();
         Image image = imageView.getImage();
@@ -92,6 +96,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
         super.uninstall();
     }
 
+    @Override
     public int getPreferredWidth(int height) {
         ImageView imageView = (ImageView)getComponent();
         Image image = imageView.getImage();
@@ -99,6 +104,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
         return (image == null) ? 0 : image.getWidth();
     }
 
+    @Override
     public int getPreferredHeight(int width) {
         ImageView imageView = (ImageView)getComponent();
         Image image = imageView.getImage();
@@ -106,6 +112,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
         return (image == null) ? 0 : image.getHeight();
     }
 
+    @Override
     public Dimensions getPreferredSize() {
         ImageView imageView = (ImageView)getComponent();
         Image image = imageView.getImage();
@@ -114,6 +121,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
             image.getHeight());
     }
 
+    @Override
     public void layout() {
         ImageView imageView = (ImageView)getComponent();
         Image image = imageView.getImage();
@@ -171,6 +179,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
         }
     }
 
+    @Override
     public void paint(Graphics2D graphics) {
         ImageView imageView = (ImageView)getComponent();
         Image image = imageView.getImage();
@@ -340,6 +349,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
     }
 
     // Image view events
+    @Override
     public void imageChanged(ImageView imageView, Image previousImage) {
         if (previousImage != null) {
             previousImage.getImageListeners().remove(imageListener);

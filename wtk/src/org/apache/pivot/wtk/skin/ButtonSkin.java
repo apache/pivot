@@ -55,6 +55,7 @@ public abstract class ButtonSkin extends ComponentSkin
         super.uninstall();
     }
 
+    @Override
     public void layout() {
         // No-op
     }
@@ -93,44 +94,54 @@ public abstract class ButtonSkin extends ComponentSkin
     }
 
     // Button events
+    @Override
     public void buttonDataChanged(Button button, Object previousButtonData) {
         invalidateComponent();
     }
 
+    @Override
     public void dataRendererChanged(Button button, Button.DataRenderer previousDataRenderer) {
         invalidateComponent();
     }
 
+    @Override
     public void actionChanged(Button button, Action previousAction) {
         // No-op
     }
 
+    @Override
     public void toggleButtonChanged(Button button) {
         // No-op
     }
 
+    @Override
     public void triStateChanged(Button button) {
         // No-op
     }
 
+    @Override
     public void groupChanged(Button button, Button.Group previousGroup) {
         // No-op
     }
 
+    @Override
     public void selectedKeyChanged(Button button, String previousSelectedKey) {
         // No-op
     }
 
+    @Override
     public void stateKeyChanged(Button button, String previousStateKey) {
         // No-op
     }
 
     // Button state events
+    @Override
     public void stateChanged(Button button, Button.State previousState) {
         repaintComponent();
     }
 
     // Button press events
+    @Override
     public void buttonPressed(Button button) {
         // No-op
     }

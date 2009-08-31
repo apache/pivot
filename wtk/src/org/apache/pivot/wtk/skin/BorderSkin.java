@@ -153,6 +153,7 @@ public class BorderSkin extends ContainerSkin
         return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
     }
 
+    @Override
     public void layout() {
         int width = getWidth();
         int height = getHeight();
@@ -432,10 +433,12 @@ public class BorderSkin extends ContainerSkin
     }
 
     // Border events
+    @Override
     public void titleChanged(Border border, String previousTitle) {
         invalidateComponent();
     }
 
+    @Override
     public void contentChanged(Border border, Component previousContent) {
         invalidateComponent();
     }

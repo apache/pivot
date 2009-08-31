@@ -44,27 +44,33 @@ public abstract class ExpanderSkin extends ContainerSkin
 
     // ExpanderListener methods
 
+    @Override
     public void titleChanged(Expander expander, String previousTitle) {
         // No-op
     }
 
+    @Override
     public void collapsibleChanged(Expander expander) {
         // No-op
     }
 
+    @Override
     public Vote previewExpandedChange(Expander expander) {
         // No-op
         return Vote.APPROVE;
     }
 
+    @Override
     public void expandedChangeVetoed(Expander expander, Vote reason) {
         // No-op
     }
 
+    @Override
     public void expandedChanged(Expander expander) {
         // No-op
     }
 
+    @Override
     public void contentChanged(Expander expander, Component previousContent) {
         // No-op
     }
