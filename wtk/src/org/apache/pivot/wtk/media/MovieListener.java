@@ -24,21 +24,27 @@ public interface MovieListener {
      * Movie listener adapter.
      */
     public static class Adapter implements MovieListener {
+        @Override
         public void sizeChanged(Movie movie, int previousWidth, int previousHeight) {
         }
 
+        @Override
         public void currentFrameChanged(Movie movie, int previousFrame) {
         }
 
+        @Override
         public void loopingChanged(Movie movie) {
         }
 
+        @Override
         public void movieStarted(Movie movie) {
         }
 
+        @Override
         public void movieStopped(Movie movie) {
         }
 
+        @Override
         public void regionUpdated(Movie movie, int x, int y, int width, int height) {
         }
     }

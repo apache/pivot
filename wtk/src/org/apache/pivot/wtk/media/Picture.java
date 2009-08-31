@@ -47,10 +47,12 @@ public class Picture extends Image {
         this.bufferedImage = bufferedImage;
     }
 
+    @Override
     public int getWidth() {
         return bufferedImage.getWidth();
     }
 
+    @Override
     public int getHeight() {
         return bufferedImage.getHeight();
     }
@@ -139,6 +141,7 @@ public class Picture extends Image {
         }
     }
 
+    @Override
     public void paint(Graphics2D graphics) {
         graphics.drawImage(bufferedImage, 0, 0, null);
     }

@@ -43,12 +43,14 @@ public abstract class Image implements Visual {
      */
     protected static class ImageListenerList extends ListenerList<ImageListener>
         implements ImageListener {
+        @Override
         public void sizeChanged(Image image, int previousWidth, int previousHeight) {
             for (ImageListener listener : this) {
                 listener.sizeChanged(image, previousWidth, previousHeight);
             }
         }
 
+        @Override
         public void regionUpdated(Image image, int x, int y, int width, int height) {
             for (ImageListener listener : this) {
                 listener.regionUpdated(image, x, y, width, height);

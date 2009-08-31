@@ -33,12 +33,14 @@ import org.apache.pivot.wtk.media.drawing.CanvasListener;
 public class Drawing extends Image {
     private static class DrawingListenerList extends ListenerList<DrawingListener>
         implements DrawingListener {
+        @Override
         public void canvasChanged(Drawing drawing, Canvas previousCanvas) {
             for (DrawingListener listener : this) {
                 listener.canvasChanged(drawing, previousCanvas);
             }
         }
 
+        @Override
         public void backgroundChanged(Drawing drawing, Paint previousBackground) {
             for (DrawingListener listener : this) {
                 listener.backgroundChanged(drawing, previousBackground);
@@ -52,6 +54,7 @@ public class Drawing extends Image {
     private int height = 0;
 
     private CanvasListener canvasListener = new CanvasListener() {
+        @Override
         public void regionUpdated(Canvas canvas, int x, int y, int width, int height) {
             Bounds bounds = new Bounds(0, 0, Drawing.this.width, Drawing.this.height);
             bounds = bounds.intersect(new Bounds(x, y, width, height));
@@ -92,6 +95,7 @@ public class Drawing extends Image {
         }
     }
 
+    @Override
     public int getWidth() {
         return width;
     }
@@ -100,6 +104,7 @@ public class Drawing extends Image {
         setSize(width, height);
     }
 
+    @Override
     public int getHeight() {
         return height;
     }
@@ -141,6 +146,7 @@ public class Drawing extends Image {
         setBackground(Color.decode(background));
     }
 
+    @Override
     public void paint(Graphics2D graphics) {
         graphics.clipRect(0, 0, width, height);
 

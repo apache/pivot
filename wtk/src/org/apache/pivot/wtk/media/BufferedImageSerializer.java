@@ -93,6 +93,7 @@ public class BufferedImageSerializer implements Serializer<BufferedImage> {
      * @return
      * A <tt>BufferedImage</tt> object
      */
+    @Override
     public BufferedImage readObject(InputStream inputStream) throws IOException,
         SerializationException {
         if (inputStream == null) {
@@ -107,6 +108,7 @@ public class BufferedImageSerializer implements Serializer<BufferedImage> {
     /**
      * Writes a buffered image to an output stream.
      */
+    @Override
     public void writeObject(BufferedImage bufferedImage, OutputStream outputStream)
         throws IOException, SerializationException {
         if (bufferedImage == null) {
@@ -120,6 +122,7 @@ public class BufferedImageSerializer implements Serializer<BufferedImage> {
         ImageIO.write(bufferedImage, outputFormat.getName(), outputStream);
     }
 
+    @Override
     public String getMIMEType(BufferedImage bufferedImage) {
         return outputFormat.getMIMEType();
     }
