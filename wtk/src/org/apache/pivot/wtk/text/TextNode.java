@@ -24,12 +24,14 @@ import org.apache.pivot.util.ListenerList;
 public final class TextNode extends Node {
     private static class TextNodeListenerList extends ListenerList<TextNodeListener>
         implements TextNodeListener {
+        @Override
         public void charactersInserted(TextNode textNode, int index, int count) {
             for (TextNodeListener listener : this) {
                 listener.charactersInserted(textNode, index, count);
             }
         }
 
+        @Override
         public void charactersRemoved(TextNode textNode, int index, String characters) {
             for (TextNodeListener listener : this) {
                 listener.charactersRemoved(textNode, index, characters);

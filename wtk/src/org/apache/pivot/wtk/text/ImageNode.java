@@ -32,6 +32,7 @@ import org.apache.pivot.wtk.media.Image;
 public class ImageNode extends Node {
     private static class ImageNodeListenerList extends ListenerList<ImageNodeListener>
         implements ImageNodeListener {
+        @Override
         public void imageChanged(ImageNode imageNode, Image previousImage) {
             for (ImageNodeListener listener : this) {
                 listener.imageChanged(imageNode, previousImage);

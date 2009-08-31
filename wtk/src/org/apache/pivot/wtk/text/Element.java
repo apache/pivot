@@ -39,22 +39,27 @@ public abstract class Element extends Node
      * perform binary searches.
      */
     private static class NullNode extends Node {
+        @Override
         public void insertRange(Node range, int offset) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public Node removeRange(int offset, int characterCount) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public Node getRange(int offset, int characterCount) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public int getCharacterCount() {
             return 0;
         }
 
+        @Override
         public Node duplicate(boolean recursive) {
             throw new UnsupportedOperationException();
         }
@@ -64,6 +69,7 @@ public abstract class Element extends Node
      * Comparator used to perform binary searches on child nodes.
      */
     private static class NodeOffsetComparator implements Comparator<Node> {
+        @Override
         public int compare(Node node1, Node node2) {
             int offset1 = node1.getOffset();
             int offset2 = node2.getOffset();
@@ -74,12 +80,14 @@ public abstract class Element extends Node
 
     private static class ElementListenerList extends ListenerList<ElementListener>
         implements ElementListener {
+        @Override
         public void nodeInserted(Element element, int index) {
             for (ElementListener listener : this) {
                 listener.nodeInserted(element, index);
             }
         }
 
+        @Override
         public void nodesRemoved(Element element, int index,
             Sequence<Node> nodes) {
             for (ElementListener listener : this) {
@@ -316,6 +324,7 @@ public abstract class Element extends Node
         return characterCount;
     }
 
+    @Override
     public int add(Node node) {
         int index = nodes.getLength();
         insert(node, index);
@@ -323,6 +332,7 @@ public abstract class Element extends Node
         return index;
     }
 
+    @Override
     public void insert(Node node, int index) {
         if (index < 0
             || index > nodes.getLength()) {
@@ -370,10 +380,12 @@ public abstract class Element extends Node
         elementListeners.nodeInserted(this, index);
     }
 
+    @Override
     public Node update(int index, Node node) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public int remove(Node node) {
         int index = indexOf(node);
         if (index != -1) {
@@ -383,6 +395,7 @@ public abstract class Element extends Node
         return index;
     }
 
+    @Override
     public Sequence<Node> remove(int index, int count) {
         if (index < 0
             || index + count > nodes.getLength()) {
@@ -430,6 +443,7 @@ public abstract class Element extends Node
         return removed;
     }
 
+    @Override
     public Node get(int index) {
         if (index < 0
             || index > nodes.getLength() - 1) {
@@ -439,6 +453,7 @@ public abstract class Element extends Node
         return nodes.get(index);
     }
 
+    @Override
     public int indexOf(Node node) {
         if (node == null) {
             throw new IllegalArgumentException("node is null.");
@@ -458,6 +473,7 @@ public abstract class Element extends Node
         return index;
     }
 
+    @Override
     public int getLength() {
         return nodes.getLength();
     }
@@ -579,6 +595,7 @@ public abstract class Element extends Node
         super.rangeRemoved(offset, characterCount);
     }
 
+    @Override
     public Iterator<Node> iterator() {
         return new ImmutableIterator<Node>(nodes.iterator());
     }

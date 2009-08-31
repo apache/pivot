@@ -38,6 +38,7 @@ public class Paragraph extends Block {
         super(paragraph, recursive);
     }
 
+    @Override
     public Node removeRange(int offset, int characterCount) {
         if (offset + characterCount == getCharacterCount()) {
             characterCount--;

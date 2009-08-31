@@ -57,6 +57,7 @@ public class PlainTextSerializer implements Serializer<Document> {
         this.charset = charset;
     }
 
+    @Override
     public Document readObject(InputStream inputStream) throws IOException,
         SerializationException {
         Reader reader = new InputStreamReader(inputStream, charset);
@@ -80,6 +81,7 @@ public class PlainTextSerializer implements Serializer<Document> {
         return document;
     }
 
+    @Override
     public void writeObject(Document document, OutputStream outputStream)
         throws IOException, SerializationException {
         Writer writer = new OutputStreamWriter(outputStream, charset);
@@ -125,6 +127,7 @@ public class PlainTextSerializer implements Serializer<Document> {
         bufferedWriter.flush();
     }
 
+    @Override
     public String getMIMEType(Document document) {
         return MIME_TYPE + "; charset=" + charset.name();
     }
