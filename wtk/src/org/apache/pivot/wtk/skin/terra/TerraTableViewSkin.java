@@ -72,6 +72,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     private boolean includeTrailingVerticalGridLine;
 
     private ArrayList<Integer> columnWidths = null;
+    private int rowHeight = -1;
 
     private int highlightedIndex = -1;
     private int editIndex = -1;
@@ -210,6 +211,18 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                 columnWidths.update(i ,columnWidth);
             }
         }
+
+        // Recalculate row height
+        rowHeight = 0;
+        for (int i = 0; i < n; i++) {
+            TableView.Column column = columns.get(i);
+            TableView.CellRenderer cellRenderer = column.getCellRenderer();
+            cellRenderer.render(null, tableView, column, false, false, false);
+
+            rowHeight = Math.max(rowHeight, cellRenderer.getPreferredHeight(-1));
+        }
+
+        rowHeight++;
     }
 
     @SuppressWarnings("unchecked")
@@ -263,7 +276,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             for (int columnIndex = 0, columnCount = columns.getLength();
                 columnIndex < columnCount; columnIndex++) {
                 TableView.Column column = columns.get(columnIndex);
-                int columnWidth = columnWidths.get(columnIndex);
+                int columnWidth = getColumnWidth(columnIndex);
 
                 if (column.getSortDirection() != null) {
                     graphics.fillRect(columnX, 0, columnWidth, height);
@@ -308,7 +321,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
                 TableView.CellRenderer cellRenderer = column.getCellRenderer();
 
-                int columnWidth = columnWidths.get(columnIndex);
+                int columnWidth = getColumnWidth(columnIndex);
 
                 Graphics2D rendererGraphics = (Graphics2D)graphics.create(columnX, rowY,
                     columnWidth, rowHeight);
@@ -335,7 +348,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
             for (int columnIndex = 0, columnCount = columns.getLength();
                 columnIndex < columnCount; columnIndex++) {
-                columnX += columnWidths.get(columnIndex);
+                columnX += getColumnWidth(columnIndex);
 
                 GraphicsUtilities.drawLine(graphics, columnX, 0, height, Orientation.VERTICAL);
                 columnX++;
@@ -344,6 +357,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
         // Paint the horizontal grid line
         if (showHorizontalGridLines) {
+            System.out.println("Painting grid lines for [" + rowStart + ".." + rowEnd + "]");
+
             for (int rowIndex = rowStart; rowIndex <= rowEnd; rowIndex++) {
                 if (rowIndex > 0) {
                     int gridY = rowIndex * rowHeight - 1;
@@ -361,20 +376,9 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
      * The height of one table row.
      */
     public int getRowHeight() {
-        int rowHeight = 0;
-
-        TableView tableView = (TableView)getComponent();
-        TableView.ColumnSequence columns = tableView.getColumns();
-
-        for (int i = 0, n = columns.getLength(); i < n; i++) {
-            TableView.Column column = columns.get(i);
-            TableView.CellRenderer cellRenderer = column.getCellRenderer();
-            cellRenderer.render(null, tableView, column, false, false, false);
-
-            rowHeight = Math.max(rowHeight, cellRenderer.getPreferredHeight(-1));
+        if (rowHeight == -1) {
+            layout();
         }
-
-        rowHeight++;
 
         return rowHeight;
     }
@@ -403,12 +407,14 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             throw new IllegalArgumentException("x is negative");
         }
 
+        TableView tableView = (TableView)getComponent();
+
         int i = 0;
-        int n = columnWidths.getLength();
+        int n = tableView.getColumns().getLength();
         int columnX = 0;
         while (i < n
             && x > columnX) {
-            columnX += (columnWidths.get(i) + 1);
+            columnX += (getColumnWidth(i) + 1);
             i++;
         }
 
@@ -426,21 +432,27 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         return new Bounds(0, rowIndex * rowHeight, getWidth(), rowHeight);
     }
 
-    public Bounds getColumnBounds(int columnIndex) {
-        int columnCount = columnWidths.getLength();
+    public int getColumnWidth(int columnIndex) {
+        if (columnWidths == null) {
+            layout();
+        }
 
         if (columnIndex < 0
-            || columnIndex >= columnCount) {
+            || columnIndex >= columnWidths.getLength()) {
             throw new IndexOutOfBoundsException("Column index out of bounds: " +
                 columnIndex);
         }
 
+        return columnWidths.get(columnIndex);
+    }
+
+    public Bounds getColumnBounds(int columnIndex) {
         int columnX = 0;
         for (int i = 0; i < columnIndex; i++) {
-            columnX += (columnWidths.get(i) + 1);
+            columnX += (getColumnWidth(i) + 1);
         }
 
-        return new Bounds(columnX, 0, columnWidths.get(columnIndex), getHeight());
+        return new Bounds(columnX, 0, getColumnWidth(columnIndex), getHeight());
     }
 
     @SuppressWarnings("unchecked")
@@ -453,21 +465,15 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             throw new IndexOutOfBoundsException();
         }
 
-        if (columnIndex < 0
-            || columnIndex >= columnWidths.getLength()) {
-            throw new IndexOutOfBoundsException();
-        }
-
-
         int rowHeight = getRowHeight();
 
         int cellX = 0;
         for (int i = 0; i < columnIndex; i++) {
-            cellX += (columnWidths.get(i) + 1);
+            cellX += (getColumnWidth(i) + 1);
         }
 
         return new Bounds(cellX, rowIndex * rowHeight,
-            columnWidths.get(columnIndex), rowHeight);
+            getColumnWidth(columnIndex), rowHeight);
     }
 
     @Override
@@ -836,8 +842,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         super.mouseOut(component);
 
         if (highlightedIndex != -1) {
-            Bounds rowBounds = getRowBounds(highlightedIndex);
-            repaintComponent(rowBounds.x, rowBounds.y, rowBounds.width, rowBounds.height);
+            repaintComponent(getRowBounds(highlightedIndex));
         }
 
         highlightedIndex = -1;
