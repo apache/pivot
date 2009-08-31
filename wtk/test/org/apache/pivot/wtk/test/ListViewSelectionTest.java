@@ -158,6 +158,10 @@ public class ListViewSelectionTest implements Application {
     }
 
     public static void main(String[] args) {
+        // 
+        // Note that when run as Application, no List elements will be displayed
+        // on the screen, but only some messages will be displayed to the text console.
+        // 
         DesktopApplicationContext.main(ListViewSelectionTest.class, args);
     }
 }
