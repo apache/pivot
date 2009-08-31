@@ -26,12 +26,14 @@ import org.apache.pivot.util.ListenerList;
 public class Border extends Container {
     private static class BorderListenerList extends ListenerList<BorderListener>
         implements BorderListener {
+        @Override
         public void titleChanged(Border border, String previousTitle) {
             for (BorderListener listener : this) {
                 listener.titleChanged(border, previousTitle);
             }
         }
 
+        @Override
         public void contentChanged(Border border, Component previousContent) {
             for (BorderListener listener : this) {
                 listener.contentChanged(border, previousContent);

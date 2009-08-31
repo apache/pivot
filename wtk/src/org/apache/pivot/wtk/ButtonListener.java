@@ -24,27 +24,35 @@ public interface ButtonListener {
      * Button listener adapter.
      */
     public static class Adapter implements ButtonListener {
+        @Override
         public void buttonDataChanged(Button button, Object previousButtonData) {
         }
 
+        @Override
         public void dataRendererChanged(Button button, Button.DataRenderer previousDataRenderer) {
         }
 
+        @Override
         public void actionChanged(Button button, Action previousAction) {
         }
 
+        @Override
         public void toggleButtonChanged(Button button) {
         }
 
+        @Override
         public void triStateChanged(Button button) {
         }
 
+        @Override
         public void groupChanged(Button button, Button.Group previousGroup) {
         }
 
+        @Override
         public void selectedKeyChanged(Button button, String previousSelectedKey) {
         }
 
+        @Override
         public void stateKeyChanged(Button button, String previousStateKey) {
         }
     }

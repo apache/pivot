@@ -43,6 +43,7 @@ public class Accordion extends Container {
         private PanelSequence() {
         }
 
+        @Override
         public int add(Component panel) {
             int i = getLength();
             insert(panel, i);
@@ -50,6 +51,7 @@ public class Accordion extends Container {
             return i;
         }
 
+        @Override
         public void insert(Component panel, int index) {
             if (panel == null) {
                 throw new IllegalArgumentException("panel is null.");
@@ -74,10 +76,12 @@ public class Accordion extends Container {
             accordionListeners.panelInserted(Accordion.this, index);
         }
 
+        @Override
         public Component update(int index, Component panel) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public int remove(Component panel) {
             int index = indexOf(panel);
             if (index != -1) {
@@ -87,6 +91,7 @@ public class Accordion extends Container {
             return index;
         }
 
+        @Override
         public Sequence<Component> remove(int index, int count) {
             // Remove the panels from the panel list
             Sequence<Component> removed = panels.remove(index, count);
@@ -116,18 +121,22 @@ public class Accordion extends Container {
             return removed;
         }
 
+        @Override
         public Component get(int index) {
             return panels.get(index);
         }
 
+        @Override
         public int indexOf(Component panel) {
             return panels.indexOf(panel);
         }
 
+        @Override
         public int getLength() {
             return panels.getLength();
         }
 
+        @Override
         public Iterator<Component> iterator() {
             return new ImmutableIterator<Component>(panels.iterator());
         }
@@ -140,12 +149,14 @@ public class Accordion extends Container {
 
     private static class AccordionListenerList extends ListenerList<AccordionListener>
         implements AccordionListener {
+        @Override
         public void panelInserted(Accordion accordion, int index) {
             for (AccordionListener listener : this) {
                 listener.panelInserted(accordion, index);
             }
         }
 
+        @Override
         public void panelsRemoved(Accordion accordion, int index, Sequence<Component> panels) {
             for (AccordionListener listener : this) {
                 listener.panelsRemoved(accordion, index, panels);
@@ -155,6 +166,7 @@ public class Accordion extends Container {
 
     private static class AccordionSelectionListenerList extends ListenerList<AccordionSelectionListener>
         implements AccordionSelectionListener {
+        @Override
         public Vote previewSelectedIndexChange(Accordion accordion, int selectedIndex) {
             Vote vote = Vote.APPROVE;
 
@@ -165,12 +177,14 @@ public class Accordion extends Container {
             return vote;
         }
 
+        @Override
         public void selectedIndexChangeVetoed(Accordion accordion, Vote reason) {
             for (AccordionSelectionListener listener : this) {
                 listener.selectedIndexChangeVetoed(accordion, reason);
             }
         }
 
+        @Override
         public void selectedIndexChanged(Accordion accordion, int previousSelectedIndex) {
             for (AccordionSelectionListener listener : this) {
                 listener.selectedIndexChanged(accordion, previousSelectedIndex);
@@ -180,12 +194,14 @@ public class Accordion extends Container {
 
     private static class AccordionAttributeListenerList extends ListenerList<AccordionAttributeListener>
         implements AccordionAttributeListener {
+        @Override
         public void labelChanged(Accordion accordion, Component component, String previousLabel) {
             for (AccordionAttributeListener listener : this) {
                 listener.labelChanged(accordion, component, previousLabel);
             }
         }
 
+        @Override
         public void iconChanged(Accordion accordion, Component component, Image previousIcon) {
             for (AccordionAttributeListener listener : this) {
                 listener.iconChanged(accordion, component, previousIcon);

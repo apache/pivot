@@ -24,6 +24,7 @@ import org.apache.pivot.util.ListenerList;
 public class ActivityIndicator extends Component {
     private static class ActivityIndicatorListenerList extends ListenerList<ActivityIndicatorListener>
         implements ActivityIndicatorListener {
+        @Override
         public void activeChanged(ActivityIndicator activityIndicator) {
             for (ActivityIndicatorListener listener : this) {
                 listener.activeChanged(activityIndicator);

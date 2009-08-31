@@ -26,9 +26,11 @@ public interface AccordionListener {
      * Accordion listener adapter.
      */
     public static class Adapter implements AccordionListener {
+        @Override
         public void panelInserted(Accordion accordion, int index) {
         }
 
+        @Override
         public void panelsRemoved(Accordion accordion, int index, Sequence<Component> removed) {
         }
     }

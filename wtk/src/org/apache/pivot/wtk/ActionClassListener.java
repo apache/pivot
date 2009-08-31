@@ -24,12 +24,15 @@ public interface ActionClassListener {
      * Action class listener adapter.
      */
     public class Adapter implements ActionClassListener {
+        @Override
         public void actionAdded(String id) {
         }
 
+        @Override
         public void actionUpdated(String id, Action previousAction) {
         }
 
+        @Override
         public void actionRemoved(String id, Action action) {
         }
     }

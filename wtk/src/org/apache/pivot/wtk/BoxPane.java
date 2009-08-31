@@ -25,6 +25,7 @@ import org.apache.pivot.util.ListenerList;
 public class BoxPane extends Container {
     private static class BoxPaneListenerList extends ListenerList<BoxPaneListener>
         implements BoxPaneListener {
+        @Override
         public void orientationChanged(BoxPane boxPane) {
             for (BoxPaneListener listener : this) {
                 listener.orientationChanged(boxPane);

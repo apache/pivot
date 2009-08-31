@@ -26,9 +26,11 @@ public interface BorderListener {
      * Border listener adapter.
      */
     public static class Adapter implements BorderListener {
+        @Override
         public void titleChanged(Border border, String previousTitle) {
         }
 
+        @Override
         public void contentChanged(Border border, Component previousContent) {
         }
     }

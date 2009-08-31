@@ -26,13 +26,16 @@ public interface AccordionSelectionListener {
      * Accordion selection listener adapter.
      */
     public static class Adapter implements AccordionSelectionListener {
+        @Override
         public Vote previewSelectedIndexChange(Accordion accordion, int selectedIndex) {
             return Vote.APPROVE;
         }
 
+        @Override
         public void selectedIndexChangeVetoed(Accordion accordion, Vote reason) {
         }
 
+        @Override
         public void selectedIndexChanged(Accordion accordion, int previousSelectedIndex) {
         }
     }
