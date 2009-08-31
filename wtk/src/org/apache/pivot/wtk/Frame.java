@@ -104,6 +104,7 @@ public class Frame extends Window {
         super.descendantGainedFocus(descendant, previousFocusedComponent);
     }
 
+    @Override
     protected void descendantLostFocus(Component descendant) {
         // If the focus changed within this window, walk down descendant
         // hierarchy and call configureMenuBar()

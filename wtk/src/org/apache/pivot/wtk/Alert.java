@@ -30,6 +30,7 @@ import org.apache.pivot.util.Resources;
 public class Alert extends Dialog {
     private static class AlertListenerList extends ListenerList<AlertListener>
         implements AlertListener {
+        @Override
         public void selectedOptionChanged(Alert alert, int previousSelectedOption) {
             for (AlertListener listener : this) {
                 listener.selectedOptionChanged(alert, previousSelectedOption);

@@ -78,6 +78,7 @@ public class Dialog extends Frame {
      *
      * @param display
      */
+    @Override
     public final void open(Display display) {
         open(display, null);
     }
@@ -102,6 +103,7 @@ public class Dialog extends Frame {
      *
      * @param owner
      */
+    @Override
     public final void open(Window owner) {
         open(owner, true, null);
     }

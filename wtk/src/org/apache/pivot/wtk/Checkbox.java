@@ -41,6 +41,7 @@ public class Checkbox extends Button {
         installSkin(Checkbox.class);
     }
 
+    @Override
     public void press() {
         State state = getState();
 

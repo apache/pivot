@@ -85,6 +85,7 @@ public final class Dimensions implements Serializable {
         return width * height;
     }
 
+    @Override
     public String toString() {
         return getClass().getName() + " [" + width + "x" + height + "]";
     }

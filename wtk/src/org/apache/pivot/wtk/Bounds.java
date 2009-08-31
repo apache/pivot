@@ -232,6 +232,7 @@ public final class Bounds implements Serializable {
         return new java.awt.Rectangle(x, y, width, height);
     }
 
+    @Override
     public String toString() {
         return getClass().getName() + " [" + x + "," + y + ";" + width + "x" + height + "]";
     }
