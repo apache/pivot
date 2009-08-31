@@ -36,20 +36,25 @@ public final class ObsidianTheme extends Theme {
         componentSkinMap.put(RadioButton.class, ObsidianRadioButtonSkin.class);
     }
 
+    @Override
     protected void install() {
     }
 
+    @Override
     protected void uninstall() {
     }
 
+    @Override
     public Font getFont() {
         return font;
     }
 
+    @Override
     public Image getMessageIcon(MessageType messageType) {
         return null;
     }
 
+    @Override
     public Image getSmallMessageIcon(MessageType messageType) {
         return null;
     }

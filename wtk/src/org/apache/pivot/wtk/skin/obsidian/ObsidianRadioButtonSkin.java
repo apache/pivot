@@ -51,6 +51,7 @@ public class ObsidianRadioButtonSkin extends RadioButtonSkin {
     private static final int BUTTON_DIAMETER = 14;
     private static final int BUTTON_SELECTION_DIAMETER = 6;
 
+    @Override
     public int getPreferredWidth(int height) {
         RadioButton radioButton = (RadioButton)getComponent();
         Button.DataRenderer dataRenderer = radioButton.getDataRenderer();
@@ -64,6 +65,7 @@ public class ObsidianRadioButtonSkin extends RadioButtonSkin {
         return preferredWidth;
     }
 
+    @Override
     public int getPreferredHeight(int width) {
         RadioButton radioButton = (RadioButton)getComponent();
         Button.DataRenderer dataRenderer = radioButton.getDataRenderer();
@@ -80,6 +82,7 @@ public class ObsidianRadioButtonSkin extends RadioButtonSkin {
         return preferredHeight;
     }
 
+    @Override
     public Dimensions getPreferredSize() {
         RadioButton radioButton = (RadioButton)getComponent();
         Button.DataRenderer dataRenderer = radioButton.getDataRenderer();
@@ -96,6 +99,7 @@ public class ObsidianRadioButtonSkin extends RadioButtonSkin {
         return new Dimensions(preferredWidth, preferredHeight);
     }
 
+    @Override
     public void paint(Graphics2D graphics) {
         RadioButton radioButton = (RadioButton)getComponent();
         int width = getWidth();

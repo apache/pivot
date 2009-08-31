@@ -59,6 +59,7 @@ public class ObsidianPushButtonSkin extends PushButtonSkin {
 
     private int cornerRadius = 6;
 
+    @Override
     public int getPreferredWidth(int height) {
         PushButton pushButton = (PushButton)getComponent();
         Button.DataRenderer dataRenderer = pushButton.getDataRenderer();
@@ -76,6 +77,7 @@ public class ObsidianPushButtonSkin extends PushButtonSkin {
         return preferredWidth;
     }
 
+    @Override
     public int getPreferredHeight(int width) {
         PushButton pushButton = (PushButton)getComponent();
         Button.DataRenderer dataRenderer = pushButton.getDataRenderer();
@@ -93,6 +95,7 @@ public class ObsidianPushButtonSkin extends PushButtonSkin {
         return preferredHeight;
     }
 
+    @Override
     public Dimensions getPreferredSize() {
         PushButton pushButton = (PushButton)getComponent();
         Button.DataRenderer dataRenderer = pushButton.getDataRenderer();
@@ -110,6 +113,7 @@ public class ObsidianPushButtonSkin extends PushButtonSkin {
         return new Dimensions(preferredWidth, preferredHeight);
     }
 
+    @Override
     public void paint(Graphics2D graphics) {
         PushButton pushButton = (PushButton)getComponent();
 
