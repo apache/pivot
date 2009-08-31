@@ -95,6 +95,7 @@ public abstract class ApplicationContext {
 
 
         private transient DropTargetListener dropTargetListener = new DropTargetListener() {
+            @Override
             public void dragEnter(DropTargetDragEvent event) {
                 if (dragDescendant != null) {
                     throw new IllegalStateException("Local drag already in progress.");
@@ -570,6 +571,7 @@ public abstract class ApplicationContext {
                 {   appendEvent(mouseEvent);
                 }
 
+                @Override
                 public synchronized int getSourceActions() {
                     int awtSourceActions = 0;
 
@@ -588,10 +590,12 @@ public abstract class ApplicationContext {
                     return awtSourceActions;
                 }
 
+                @Override
                 protected void registerListeners() {
                     // No-op
                 }
 
+                @Override
                 protected void unregisterListeners() {
                     // No-op
                 }
@@ -826,6 +830,7 @@ public abstract class ApplicationContext {
                                 // Show the context menu if it contains any sections
                                 if (menu.getSections().getLength() > 0) {
                                     menuPopup.getWindowStateListeners().add(new WindowStateListener.Adapter() {
+                                        @Override
                                         public void windowClosed(Window window, Display display) {
                                             menu.getSections().clear();
                                             window.getWindowStateListeners().remove(this);
@@ -1342,6 +1347,7 @@ public abstract class ApplicationContext {
             };
         }
 
+        @Override
         public void run() {
             queueCallback(runnable);
         }

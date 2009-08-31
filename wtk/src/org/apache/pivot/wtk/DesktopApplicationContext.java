@@ -172,6 +172,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                                 applicationContext.getDisplay().setEnabled(false);
 
                                 dialog.addWindowListener(new WindowAdapter() {
+                                    @Override
                                     public void windowClosed(WindowEvent event) {
                                         applicationContext.getDisplay().setEnabled(true);
                                         event.getWindow().removeWindowListener(this);
@@ -425,6 +426,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
         // Add a key listener to the display host to toggle between full-screen
         // and windowed mode
         displayHost.addKeyListener(new KeyAdapter() {
+            @Override
             public void keyPressed(KeyEvent keyEvent) {
                 if (keyEvent.getKeyCode() == KeyEvent.VK_F
                     && (keyEvent.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK) > 0
