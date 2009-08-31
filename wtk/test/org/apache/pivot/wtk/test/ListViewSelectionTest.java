@@ -21,6 +21,7 @@ import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.ListViewSelectionListener;
@@ -53,6 +54,7 @@ public class ListViewSelectionTest implements Application {
         listView.setSelectMode(ListView.SelectMode.MULTI);
     }
 
+    @Override
     public void startup(Display display, Map<String, String> properties) {
         ArrayList<Span> selectedRanges = new ArrayList<Span>();
         selectedRanges.add(new Span(0, 0));
@@ -133,13 +135,16 @@ public class ListViewSelectionTest implements Application {
         listView.getListData().remove(2, 1);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 
@@ -150,5 +155,9 @@ public class ListViewSelectionTest implements Application {
     protected void verifySelection(int index) {
         System.out.println("Index " + index + " "
             + (listView.isItemSelected(index) ? "is" : "is not") + " selected");
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(ListViewSelectionTest.class, args);
     }
 }
