@@ -92,7 +92,7 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
         }
     };
 
-    private static final int CLOSE_TRANSITION_DURATION = 250;
+    private static final int CLOSE_TRANSITION_DURATION = 200;
     private static final int CLOSE_TRANSITION_RATE = 30;
 
     public TerraMenuPopupSkin() {
@@ -198,6 +198,9 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
         super.windowClosed(window, display);
 
         display.getContainerMouseListeners().remove(displayMouseListener);
+
+        window.setEnabled(true);
+        closeTransition = null;
     }
 
     @Override
@@ -218,6 +221,8 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
     public Vote previewMenuPopupClose(final MenuPopup menuPopup, boolean immediate) {
         if (!immediate
             && closeTransition == null) {
+            menuPopup.setEnabled(false);
+
             closeTransition = new FadeWindowTransition(menuPopup,
                 CLOSE_TRANSITION_DURATION, CLOSE_TRANSITION_RATE,
                 dropShadowDecorator);
@@ -238,12 +243,9 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
         if (reason == Vote.DENY
             && closeTransition != null) {
             closeTransition.stop();
+
+            menuPopup.setEnabled(true);
             closeTransition = null;
         }
-    }
-
-    @Override
-    public void menuPopupClosed(MenuPopup menuPopup) {
-        closeTransition = null;
     }
 }

@@ -40,12 +40,14 @@ import org.apache.pivot.wtk.ListButton;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Sheet;
+import org.apache.pivot.wtk.SheetCloseListener;
 import org.apache.pivot.wtk.SheetStateListener;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TaskAdapter;
 import org.apache.pivot.wtk.TextArea;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtk.WindowStateListener;
 import org.apache.pivot.wtk.content.ListItem;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
@@ -190,15 +192,14 @@ public class HTTPClient implements Application {
                     passwordTextInput.setText(credentials.getPassword());
                 }
 
-                sheet.getSheetStateListeners().add(new SheetStateListener() {
-                    public Vote previewSheetClose(Sheet sheet, boolean result) {
-                        return Vote.APPROVE;
-                    }
+                sheet.getWindowStateListeners().add(new WindowStateListener.Adapter() {
+                    public void windowClosed(Window window, Display display) {
 
-                    public void sheetCloseVetoed(Sheet sheet, Vote reaso) {
-                        // No-op
                     }
+                });
 
+                sheet.open(window, new SheetCloseListener() {
+                    @Override
                     public void sheetClosed(Sheet sheet) {
                         if (sheet.getResult()) {
                             TextInput usernameTextInput = (TextInput)
@@ -217,8 +218,6 @@ public class HTTPClient implements Application {
                         }
                     }
                 });
-
-                sheet.open(window);
             }
         });
 
@@ -300,7 +299,10 @@ public class HTTPClient implements Application {
                     public void sheetCloseVetoed(Sheet sheet, Vote reaso) {
                         // No-op
                     }
+                });
 
+                sheet.open(window, new SheetCloseListener() {
+                    @Override
                     public void sheetClosed(Sheet sheet) {
                         if (sheet.getResult()) {
                             System.setProperty("javax.net.ssl.trustStore", keystorePath);
@@ -308,8 +310,6 @@ public class HTTPClient implements Application {
                         }
                     }
                 });
-
-                sheet.open(window);
             }
         });
 

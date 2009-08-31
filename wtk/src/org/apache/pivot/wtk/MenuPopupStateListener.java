@@ -32,9 +32,6 @@ public interface MenuPopupStateListener {
 
         public void menuPopupCloseVetoed(MenuPopup menuPopup, Vote reason) {
         }
-
-        public void menuPopupClosed(MenuPopup menuPopup) {
-        }
     }
 
     /**
@@ -52,11 +49,4 @@ public interface MenuPopupStateListener {
      * @param reason
      */
     public void menuPopupCloseVetoed(MenuPopup menuPopup, Vote reason);
-
-    /**
-     * Called when a menu popup has closed.
-     *
-     * @param menuPopup
-     */
-    public void menuPopupClosed(MenuPopup menuPopup);
 }

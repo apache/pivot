@@ -24,6 +24,7 @@ import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentListener;
 import org.apache.pivot.wtk.Dimensions;
+import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
@@ -360,6 +361,17 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         });
     }
 
+    @Override
+    public void windowClosed(Window window, Display display) {
+        super.windowClosed(window, display);
+
+        Window owner = window.getOwner();
+        owner.getComponentListeners().remove(ownerComponentListener);
+
+        Component ownerContent = owner.getContent();
+        ownerContent.getComponentListeners().remove(ownerContentComponentListener);
+    }
+
     public Vote previewSheetClose(final Sheet sheet, final boolean result) {
         // Start a close transition, return false, and close the window
         // when the transition is complete
@@ -401,14 +413,6 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
             openTransition.stop();
             openTransition = null;
         }
-    }
-
-    public void sheetClosed(Sheet sheet) {
-        Window owner = sheet.getOwner();
-        owner.getComponentListeners().remove(ownerComponentListener);
-
-        Component ownerContent = owner.getContent();
-        ownerContent.getComponentListeners().remove(ownerContentComponentListener);
     }
 
     public void alignToOwnerContent() {

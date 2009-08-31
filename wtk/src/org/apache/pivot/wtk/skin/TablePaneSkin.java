@@ -1215,9 +1215,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
         }
 
         TablePane tablePane = (TablePane)getComponent();
-
         TablePane.RowSequence rows = tablePane.getRows();
-        TablePane.ColumnSequence columns = tablePane.getColumns();
 
         int rowCount = tablePane.getRows().getLength();
         int columnCount = tablePane.getColumns().getLength();

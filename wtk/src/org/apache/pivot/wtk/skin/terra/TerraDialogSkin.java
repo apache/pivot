@@ -103,8 +103,4 @@ public class TerraDialogSkin extends TerraFrameSkin implements DialogStateListen
     public void dialogCloseVetoed(Dialog dialog, Vote reason) {
         // No-op
     }
-
-    public void dialogClosed(Dialog dialog) {
-        // No-op
-    }
 }

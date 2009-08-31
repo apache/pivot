@@ -41,12 +41,6 @@ public class Dialog extends Frame {
                 listener.dialogCloseVetoed(dialog, reason);
             }
         }
-
-        public void dialogClosed(Dialog dialog) {
-            for (DialogStateListener listener : this) {
-                listener.dialogClosed(dialog);
-            }
-        }
     }
 
     private boolean modal = false;
@@ -217,8 +211,6 @@ public class Dialog extends Frame {
                         dialogCloseListener.dialogClosed(this);
                         dialogCloseListener = null;
                     }
-
-                    dialogStateListeners.dialogClosed(this);
                 }
             } else {
                 dialogStateListeners.dialogCloseVetoed(this, vote);

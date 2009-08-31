@@ -49,12 +49,6 @@ public class MenuPopup extends Window {
                 listener.menuPopupCloseVetoed(menuPopup, reason);
             }
         }
-
-        public void menuPopupClosed(MenuPopup menuPopup) {
-            for (MenuPopupStateListener listener : this) {
-                listener.menuPopupClosed(menuPopup);
-            }
-        }
     }
 
     private Menu menu;
@@ -136,10 +130,6 @@ public class MenuPopup extends Window {
 
             if (vote.isApproved()) {
                 super.close();
-
-                if (isClosed()) {
-                    menuPopupStateListeners.menuPopupClosed(this);
-                }
             } else {
                 menuPopupStateListeners.menuPopupCloseVetoed(this, vote);
             }
