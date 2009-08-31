@@ -58,10 +58,12 @@ public abstract class Component implements ConstrainedVisual {
         private StyleDictionary() {
         }
 
+        @Override
         public Object get(String key) {
             return styles.get(key);
         }
 
+        @Override
         public Object put(String key, Object value) {
             Object previousValue = null;
 
@@ -77,19 +79,23 @@ public abstract class Component implements ConstrainedVisual {
             return previousValue;
         }
 
+        @Override
         public Object remove(String key) {
             customStyles.remove(key);
             return null;
         }
 
+        @Override
         public boolean containsKey(String key) {
             return styles.containsKey(key);
         }
 
+        @Override
         public boolean isEmpty() {
             return styles.isEmpty();
         }
 
+        @Override
         public Iterator<String> iterator() {
             return new ImmutableIterator<String>(styles.iterator());
         }
@@ -103,10 +109,12 @@ public abstract class Component implements ConstrainedVisual {
         private UserDataDictionary() {
         }
 
+        @Override
         public Object get(String key) {
             return userData.get(key);
         }
 
+        @Override
         public Object put(String key, Object value) {
             boolean update = userData.containsKey(key);
             Object previousValue = userData.put(key, value);
@@ -120,6 +128,7 @@ public abstract class Component implements ConstrainedVisual {
             return previousValue;
         }
 
+        @Override
         public Object remove(String key) {
             Object previousValue;
             if (userData.containsKey(key)) {
@@ -132,14 +141,17 @@ public abstract class Component implements ConstrainedVisual {
             return previousValue;
         }
 
+        @Override
         public boolean containsKey(String key) {
             return userData.containsKey(key);
         }
 
+        @Override
         public boolean isEmpty() {
             return userData.isEmpty();
         }
 
+        @Override
         public Iterator<String> iterator() {
             return new ImmutableIterator<String>(userData.iterator());
         }
@@ -150,6 +162,7 @@ public abstract class Component implements ConstrainedVisual {
      */
     public final class DecoratorSequence implements Sequence<Decorator>,
         Iterable<Decorator> {
+        @Override
         public int add(Decorator decorator) {
             int i = getLength();
             insert(decorator, i);
@@ -157,6 +170,7 @@ public abstract class Component implements ConstrainedVisual {
             return i;
         }
 
+        @Override
         public void insert(Decorator decorator, int index) {
             if (decorator == null) {
                 throw new IllegalArgumentException("decorator is null");
@@ -177,6 +191,7 @@ public abstract class Component implements ConstrainedVisual {
             componentDecoratorListeners.decoratorInserted(Component.this, index);
         }
 
+        @Override
         public Decorator update(int index, Decorator decorator) {
             if (decorator == null) {
                 throw new IllegalArgumentException("decorator is null.");
@@ -200,6 +215,7 @@ public abstract class Component implements ConstrainedVisual {
             return previousDecorator;
         }
 
+        @Override
         public int remove(Decorator decorator) {
             int index = indexOf(decorator);
             if (index != -1) {
@@ -209,6 +225,7 @@ public abstract class Component implements ConstrainedVisual {
             return index;
         }
 
+        @Override
         public Sequence<Decorator> remove(int index, int count) {
             if (count > 0) {
                 // Repaint the the component's previous decorated region
@@ -235,18 +252,22 @@ public abstract class Component implements ConstrainedVisual {
             return remove(0, getLength());
         }
 
+        @Override
         public Decorator get(int index) {
             return decorators.get(index);
         }
 
+        @Override
         public int indexOf(Decorator decorator) {
             return decorators.indexOf(decorator);
         }
 
+        @Override
         public int getLength() {
             return decorators.getLength();
         }
 
+        @Override
         public Iterator<Decorator> iterator() {
             return new ImmutableIterator<Decorator>(decorators.iterator());
         }
@@ -260,26 +281,32 @@ public abstract class Component implements ConstrainedVisual {
         private ComponentDictionary() {
         }
 
+        @Override
         public Component get(Integer key) {
             return components.get(key);
         }
 
+        @Override
         public Component put(Integer key, Component value) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public Component remove(Integer key) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public boolean containsKey(Integer key) {
             return components.containsKey(key);
         }
 
+        @Override
         public boolean isEmpty() {
             return components.isEmpty();
         }
 
+        @Override
         public Iterator<Integer> iterator() {
             return new ImmutableIterator<Integer>(components.iterator());
         }
@@ -287,18 +314,21 @@ public abstract class Component implements ConstrainedVisual {
 
     private static class ComponentListenerList extends ListenerList<ComponentListener>
         implements ComponentListener {
+        @Override
         public void parentChanged(Component component, Container previousParent) {
             for (ComponentListener listener : this) {
                 listener.parentChanged(component, previousParent);
             }
         }
 
+        @Override
         public void sizeChanged(Component component, int previousWidth, int previousHeight) {
             for (ComponentListener listener : this) {
                 listener.sizeChanged(component, previousWidth, previousHeight);
             }
         }
 
+        @Override
         public void preferredSizeChanged(Component component, int previousPreferredWidth,
             int previousPreferredHeight) {
             for (ComponentListener listener : this) {
@@ -307,6 +337,7 @@ public abstract class Component implements ConstrainedVisual {
             }
         }
 
+        @Override
         public void preferredWidthLimitsChanged(Component component, int previousMinimumPreferredWidth,
             int previousMaximumPreferredWidth) {
             for (ComponentListener listener : this) {
@@ -315,6 +346,7 @@ public abstract class Component implements ConstrainedVisual {
             }
         }
 
+        @Override
         public void preferredHeightLimitsChanged(Component component, int previousMinimumPreferredHeight,
             int previousMaximumPreferredHeight) {
             for (ComponentListener listener : this) {
@@ -323,48 +355,56 @@ public abstract class Component implements ConstrainedVisual {
             }
         }
 
+        @Override
         public void locationChanged(Component component, int previousX, int previousY) {
             for (ComponentListener listener : this) {
                 listener.locationChanged(component, previousX, previousY);
             }
         }
 
+        @Override
         public void visibleChanged(Component component) {
             for (ComponentListener listener : this) {
                 listener.visibleChanged(component);
             }
         }
 
+        @Override
         public void styleUpdated(Component component, String styleKey, Object previousValue) {
             for (ComponentListener listener : this) {
                 listener.styleUpdated(component, styleKey, previousValue);
             }
         }
 
+        @Override
         public void cursorChanged(Component component, Cursor previousCursor) {
             for (ComponentListener listener : this) {
                 listener.cursorChanged(component, previousCursor);
             }
         }
 
+        @Override
         public void tooltipTextChanged(Component component, String previousTooltipText) {
             for (ComponentListener listener : this) {
                 listener.tooltipTextChanged(component, previousTooltipText);
             }
         }
 
+        @Override
         public void dragSourceChanged(Component component, DragSource previousDragSource) {
             for (ComponentListener listener : this) {
                 listener.dragSourceChanged(component, previousDragSource);
             }
         }
 
+        @Override
         public void dropTargetChanged(Component component, DropTarget previousDropTarget) {
             for (ComponentListener listener : this) {
                 listener.dropTargetChanged(component, previousDropTarget);
             }
         }
 
+        @Override
         public void menuHandlerChanged(Component component, MenuHandler previousMenuHandler) {
             for (ComponentListener listener : this) {
                 listener.menuHandlerChanged(component, previousMenuHandler);
@@ -374,12 +414,14 @@ public abstract class Component implements ConstrainedVisual {
 
     private static class ComponentStateListenerList extends
         ListenerList<ComponentStateListener> implements ComponentStateListener {
+        @Override
         public void enabledChanged(Component component) {
             for (ComponentStateListener listener : this) {
                 listener.enabledChanged(component);
             }
         }
 
+        @Override
         public void focusedChanged(Component component, Component obverseComponent) {
             for (ComponentStateListener listener : this) {
                 listener.focusedChanged(component, obverseComponent);
@@ -389,18 +431,21 @@ public abstract class Component implements ConstrainedVisual {
 
     private static class ComponentDecoratorListenerList extends
         ListenerList<ComponentDecoratorListener> implements ComponentDecoratorListener {
+        @Override
         public void decoratorInserted(Component component, int index) {
             for (ComponentDecoratorListener listener : this) {
                 listener.decoratorInserted(component, index);
             }
         }
 
+        @Override
         public void decoratorUpdated(Component component, int index, Decorator previousDecorator) {
             for (ComponentDecoratorListener listener : this) {
                 listener.decoratorUpdated(component, index, previousDecorator);
             }
         }
 
+        @Override
         public void decoratorsRemoved(Component component, int index,
             Sequence<Decorator> decorators) {
             for (ComponentDecoratorListener listener : this) {
@@ -411,6 +456,7 @@ public abstract class Component implements ConstrainedVisual {
 
     private static class ComponentMouseListenerList extends ListenerList<ComponentMouseListener>
         implements ComponentMouseListener {
+        @Override
         public boolean mouseMove(Component component, int x, int y) {
             boolean consumed = false;
 
@@ -421,12 +467,14 @@ public abstract class Component implements ConstrainedVisual {
             return consumed;
         }
 
+        @Override
         public void mouseOver(Component component) {
             for (ComponentMouseListener listener : this) {
                 listener.mouseOver(component);
             }
         }
 
+        @Override
         public void mouseOut(Component component) {
             for (ComponentMouseListener listener : this) {
                 listener.mouseOut(component);
@@ -436,6 +484,7 @@ public abstract class Component implements ConstrainedVisual {
 
     private static class ComponentMouseButtonListenerList extends ListenerList<ComponentMouseButtonListener>
         implements ComponentMouseButtonListener {
+        @Override
         public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
             boolean consumed = false;
 
@@ -446,6 +495,7 @@ public abstract class Component implements ConstrainedVisual {
             return consumed;
         }
 
+        @Override
         public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
             boolean consumed = false;
 
@@ -456,6 +506,7 @@ public abstract class Component implements ConstrainedVisual {
             return consumed;
         }
 
+        @Override
         public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
             boolean consumed = false;
 
@@ -469,6 +520,7 @@ public abstract class Component implements ConstrainedVisual {
 
     private static class ComponentMouseWheelListenerList extends ListenerList<ComponentMouseWheelListener>
         implements ComponentMouseWheelListener {
+        @Override
         public boolean mouseWheel(Component component, Mouse.ScrollType scrollType,
             int scrollAmount, int wheelRotation, int x, int y) {
             boolean consumed = false;
@@ -484,6 +536,7 @@ public abstract class Component implements ConstrainedVisual {
 
     private static class ComponentKeyListenerList extends ListenerList<ComponentKeyListener>
         implements ComponentKeyListener {
+        @Override
         public boolean keyTyped(Component component, char character) {
             boolean consumed = false;
 
@@ -494,6 +547,7 @@ public abstract class Component implements ConstrainedVisual {
             return consumed;
         }
 
+        @Override
         public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
             boolean consumed = false;
 
@@ -504,6 +558,7 @@ public abstract class Component implements ConstrainedVisual {
             return consumed;
         }
 
+        @Override
         public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
             boolean consumed = false;
 
@@ -517,18 +572,21 @@ public abstract class Component implements ConstrainedVisual {
 
     private static class ComponentDataListenerList extends ListenerList<ComponentDataListener>
         implements ComponentDataListener {
+        @Override
         public void valueAdded(Component component, String key) {
             for (ComponentDataListener listener : this) {
                 listener.valueAdded(component, key);
             }
         }
 
+        @Override
         public void valueUpdated(Component component, String key, Object previousValue) {
             for (ComponentDataListener listener : this) {
                 listener.valueUpdated(component, key, previousValue);
             }
         }
 
+        @Override
         public void valueRemoved(Component component, String key, Object value) {
             for (ComponentDataListener listener : this) {
                 listener.valueRemoved(component, key, value);
@@ -538,6 +596,7 @@ public abstract class Component implements ConstrainedVisual {
 
     private static class ComponentClassListenerList extends ListenerList<ComponentClassListener>
         implements ComponentClassListener {
+        @Override
         public void focusedComponentChanged(Component previousFocusedComponent) {
             for (ComponentClassListener listener : this) {
                 listener.focusedComponentChanged(previousFocusedComponent);
@@ -789,6 +848,7 @@ public abstract class Component implements ConstrainedVisual {
         return (Display)component;
     }
 
+    @Override
     public int getWidth() {
         return skin.getWidth();
     }
@@ -797,6 +857,7 @@ public abstract class Component implements ConstrainedVisual {
         setSize(width, getHeight());
     }
 
+    @Override
     public int getHeight() {
         return skin.getHeight();
     }
@@ -824,6 +885,7 @@ public abstract class Component implements ConstrainedVisual {
      * @param width
      * @param height
      */
+    @Override
     public void setSize(int width, int height) {
         if (width < 0) {
             throw new IllegalArgumentException("width is negative.");
@@ -878,6 +940,7 @@ public abstract class Component implements ConstrainedVisual {
      * @return
      * The constrained preferred width.
      */
+    @Override
     public int getPreferredWidth(int height) {
         int preferredWidth;
 
@@ -940,6 +1003,7 @@ public abstract class Component implements ConstrainedVisual {
      * @return
      * The constrained preferred height.
      */
+    @Override
     public int getPreferredHeight(int width) {
         int preferredHeight;
 
@@ -988,6 +1052,7 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Gets the component's unconstrained preferred size.
      */
+    @Override
     public Dimensions getPreferredSize() {
         if (preferredSize == null) {
             if (preferredWidth == -1
@@ -1960,6 +2025,7 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Paints the component. Delegates to the skin.
      */
+    @Override
     public void paint(Graphics2D graphics) {
         skin.paint(graphics);
     }
