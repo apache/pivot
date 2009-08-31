@@ -149,7 +149,9 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         TableView tableView = (TableView)getComponent();
 
         int n = tableView.getTableData().getLength();
-        preferredHeight = getRowHeight() * n;
+
+        int rowHeight = getRowHeight();
+        preferredHeight = (rowHeight + 1) * n;
 
         return preferredHeight;
     }
@@ -221,8 +223,6 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
             rowHeight = Math.max(rowHeight, cellRenderer.getPreferredHeight(-1));
         }
-
-        rowHeight++;
     }
 
     @SuppressWarnings("unchecked")
@@ -247,22 +247,22 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         Rectangle clipBounds = graphics.getClipBounds();
         if (clipBounds != null) {
             rowStart = Math.max(rowStart, (int)Math.floor(clipBounds.y
-                / (double)rowHeight));
+                / (double)(rowHeight + 1)));
             rowEnd = Math.min(rowEnd, (int)Math.ceil((clipBounds.y
-                + clipBounds.height) / (double)rowHeight) - 1);
+                + clipBounds.height) / (double)(rowHeight + 1)) - 1);
         }
 
         // Paint the row backgrounds
-        int rowY = rowStart * rowHeight;
+        int rowY = rowStart * (rowHeight + 1);
 
         if (alternateRowColor != null) {
             for (int rowIndex = rowStart; rowIndex <= rowEnd; rowIndex++) {
                 if (rowIndex % 2 > 0) {
                     graphics.setPaint(alternateRowColor);
-                    graphics.fillRect(0, rowY, width, rowHeight);
+                    graphics.fillRect(0, rowY, width, rowHeight + 1);
                 }
 
-                rowY += rowHeight;
+                rowY += rowHeight + 1;
             }
         }
 
@@ -286,8 +286,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             }
         }
 
-        // Paint the list contents
-        rowY = rowStart * rowHeight;
+        // Paint the table contents
+        rowY = rowStart * (rowHeight + 1);
 
         for (int rowIndex = rowStart; rowIndex <= rowEnd; rowIndex++) {
             Object rowData = tableData.get(rowIndex);
@@ -309,7 +309,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
             if (rowBackgroundColor != null) {
                 graphics.setPaint(rowBackgroundColor);
-                graphics.fillRect(0, rowY, width, rowHeight);
+                graphics.fillRect(0, rowY, width, rowHeight + 1);
             }
 
             // Paint the cells
@@ -328,7 +328,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
                 cellRenderer.render(rowData, tableView, column, rowSelected,
                     rowHighlighted, rowDisabled);
-                cellRenderer.setSize(columnWidth, rowHeight - 1);
+                cellRenderer.setSize(columnWidth, rowHeight);
                 cellRenderer.paint(rendererGraphics);
 
                 rendererGraphics.dispose();
@@ -336,7 +336,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                 columnX += columnWidth + 1;
             }
 
-            rowY += rowHeight;
+            rowY += rowHeight + 1;
         }
 
         // Set the grid stroke and color
@@ -357,11 +357,9 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
         // Paint the horizontal grid line
         if (showHorizontalGridLines) {
-            System.out.println("Painting grid lines for [" + rowStart + ".." + rowEnd + "]");
-
             for (int rowIndex = rowStart; rowIndex <= rowEnd; rowIndex++) {
                 if (rowIndex > 0) {
-                    int gridY = rowIndex * rowHeight - 1;
+                    int gridY = rowIndex * (rowHeight + 1) - 1;
                     GraphicsUtilities.drawLine(graphics, 0, gridY, width, Orientation.HORIZONTAL);
                 }
             }
@@ -393,7 +391,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         TableView tableView = (TableView)getComponent();
         List<Object> tableData = (List<Object>)tableView.getTableData();
 
-        int rowIndex = (y / getRowHeight());
+        int rowHeight = getRowHeight();
+        int rowIndex = (y / (rowHeight + 1));
 
         if (rowIndex >= tableData.getLength()) {
             rowIndex = -1;
@@ -429,7 +428,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
     public Bounds getRowBounds(int rowIndex) {
         int rowHeight = getRowHeight();
-        return new Bounds(0, rowIndex * rowHeight, getWidth(), rowHeight);
+        return new Bounds(0, rowIndex * (rowHeight + 1), getWidth(), rowHeight);
     }
 
     public int getColumnWidth(int columnIndex) {
@@ -465,15 +464,14 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             throw new IndexOutOfBoundsException();
         }
 
-        int rowHeight = getRowHeight();
-
         int cellX = 0;
         for (int i = 0; i < columnIndex; i++) {
             cellX += (getColumnWidth(i) + 1);
         }
 
-        return new Bounds(cellX, rowIndex * rowHeight,
-            getColumnWidth(columnIndex), rowHeight);
+        int rowHeight = getRowHeight();
+
+        return new Bounds(cellX, rowIndex * (rowHeight + 1), getColumnWidth(columnIndex), rowHeight);
     }
 
     @Override
@@ -1098,15 +1096,15 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     public void selectedRangeAdded(TableView tableView, int rangeStart, int rangeEnd) {
         // Repaint the area containing the added selection
         int rowHeight = getRowHeight();
-        repaintComponent(0, rangeStart * rowHeight,
-            getWidth(), (rangeEnd - rangeStart + 1) * rowHeight);
+        repaintComponent(0, rangeStart * (rowHeight + 1),
+            getWidth(), (rangeEnd - rangeStart + 1) * (rowHeight + 1));
     }
 
     public void selectedRangeRemoved(TableView tableView, int rangeStart, int rangeEnd) {
         // Repaint the area containing the removed selection
         int rowHeight = getRowHeight();
-        repaintComponent(0, rangeStart * rowHeight,
-            getWidth(), (rangeEnd - rangeStart + 1) * rowHeight);
+        repaintComponent(0, rangeStart * (rowHeight + 1),
+            getWidth(), (rangeEnd - rangeStart + 1) * (rowHeight + 1));
     }
 
     public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges) {
