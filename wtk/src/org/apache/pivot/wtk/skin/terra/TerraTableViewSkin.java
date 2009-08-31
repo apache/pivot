@@ -309,7 +309,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
             if (rowBackgroundColor != null) {
                 graphics.setPaint(rowBackgroundColor);
-                graphics.fillRect(0, rowY, width, rowHeight + 1);
+                graphics.fillRect(0, rowY, width, rowHeight);
             }
 
             // Paint the cells
