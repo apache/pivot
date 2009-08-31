@@ -128,6 +128,7 @@ public abstract class ApplicationContext {
                 }
             }
 
+            @Override
             public void dragExit(DropTargetEvent event) {
                 // Clear mouse location
                 mouseLocation = null;
@@ -146,6 +147,7 @@ public abstract class ApplicationContext {
                 dropDescendant = null;
             }
 
+            @Override
             public void dragOver(DropTargetDragEvent event) {
                 java.awt.Point location = event.getLocation();
 
@@ -190,6 +192,7 @@ public abstract class ApplicationContext {
                 }
             }
 
+            @Override
             public void dropActionChanged(DropTargetDragEvent event) {
                 userDropAction = getDropAction(event.getDropAction());
 
@@ -213,6 +216,7 @@ public abstract class ApplicationContext {
                 }
             }
 
+            @Override
             public void drop(DropTargetDropEvent event) {
                 java.awt.Point location = event.getLocation();
                 dropDescendant = getDropDescendant(location.x, location.y);
@@ -615,26 +619,31 @@ public abstract class ApplicationContext {
 
             awtDragSource.startDrag(trigger, java.awt.Cursor.getDefaultCursor(),
                 null, null, localManifestAdapter, new DragSourceListener() {
+                @Override
                 public void dragEnter(DragSourceDragEvent event) {
                     DragSourceContext context = event.getDragSourceContext();
                     context.setCursor(getDropCursor(getDropAction(event.getDropAction())));
                 }
 
+                @Override
                 public void dragExit(DragSourceEvent event) {
                     DragSourceContext context = event.getDragSourceContext();
                     context.setCursor(java.awt.Cursor.getDefaultCursor());
                 }
 
+                @Override
                 public void dragOver(DragSourceDragEvent event) {
                     DragSourceContext context = event.getDragSourceContext();
                     context.setCursor(getDropCursor(getDropAction(event.getDropAction())));
                 }
 
+                @Override
                 public void dropActionChanged(DragSourceDragEvent event) {
                     DragSourceContext context = event.getDragSourceContext();
                     context.setCursor(getDropCursor(getDropAction(event.getDropAction())));
                 }
 
+                @Override
                 public void dragDropEnd(DragSourceDropEvent event) {
                     DragSourceContext context = event.getDragSourceContext();
                     context.setCursor(java.awt.Cursor.getDefaultCursor());
@@ -1305,26 +1314,32 @@ public abstract class ApplicationContext {
      */
     public static final class ResourceCacheDictionary
         implements Dictionary<URL, Object>, Iterable<URL> {
+        @Override
         public Object get(URL key) {
             return resourceCache.get(key);
         }
 
+        @Override
         public Object put(URL key, Object value) {
             return resourceCache.put(key, value);
         }
 
+        @Override
         public Object remove(URL key) {
             return resourceCache.remove(key);
         }
 
+        @Override
         public boolean containsKey(URL key) {
             return resourceCache.containsKey(key);
         }
 
+        @Override
         public boolean isEmpty() {
             return resourceCache.isEmpty();
         }
 
+        @Override
         public Iterator<URL> iterator() {
             return new ImmutableIterator<URL>(resourceCache.iterator());
         }

@@ -39,6 +39,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
      */
     public static final class HostApplet extends Applet {
         private class InitCallback implements Runnable {
+            @Override
             public void run() {
                 // Set the origin
                 URL codeBase = getCodeBase();
@@ -118,6 +119,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
         }
 
         private class StartCallback implements Runnable {
+            @Override
             public void run() {
                 // Load the application
                 Application application = null;
@@ -154,6 +156,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
         }
 
         private class StopCallback implements Runnable {
+            @Override
             public void run() {
                 Application application = applicationContext.getApplication();
                 if (application != null) {
@@ -167,6 +170,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
         }
 
         private class DestroyCallback implements Runnable {
+            @Override
             public void run() {
                 hostApplets.remove(HostApplet.this);
 

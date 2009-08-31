@@ -113,6 +113,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
                                     // Create the proxy handler
                                     InvocationHandler handler = new InvocationHandler() {
+                                    @Override
                                         public Object invoke(Object proxy, Method method, Object[] args)
                                             throws Throwable {
                                             String methodName = method.getName();
@@ -370,6 +371,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
         };
 
         Window.getWindowClassListeners().add(new WindowClassListener() {
+            @Override
             public void activeWindowChanged(Window previousActiveWindow) {
                 if (previousActiveWindow != null) {
                     Window previousRootOwner = previousActiveWindow.getRootOwner();
@@ -385,6 +387,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
                 if (updateFrameTitleBarCallback == null) {
                     updateFrameTitleBarCallback = new Runnable() {
+                        @Override
                         public void run() {
                             Window activeWindow = Window.getActiveWindow();
                             if (activeWindow == null) {
