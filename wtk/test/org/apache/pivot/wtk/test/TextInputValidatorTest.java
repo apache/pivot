@@ -40,6 +40,7 @@ public class TextInputValidatorTest implements Application {
     private TextInput textinputDateRegex = null;
     private TextInput textinputCustomBoolean = null;
 
+    @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = new Window((Component)wtkxSerializer.readObject(
@@ -105,6 +106,7 @@ public class TextInputValidatorTest implements Application {
         window.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (window != null) {
             window.close();
@@ -113,9 +115,11 @@ public class TextInputValidatorTest implements Application {
         return false;
     }
 
+    @Override
     public void resume() {
     }
 
+    @Override
     public void suspend() {
     }
 

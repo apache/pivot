@@ -19,6 +19,7 @@ package org.apache.pivot.wtk.test;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtkx.WTKXSerializer;
@@ -26,6 +27,7 @@ import org.apache.pivot.wtkx.WTKXSerializer;
 public class ColorListButtonTest implements Application {
     private Frame frame = null;
 
+    @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -35,6 +37,7 @@ public class ColorListButtonTest implements Application {
         frame.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (frame != null) {
             frame.close();
@@ -43,10 +46,16 @@ public class ColorListButtonTest implements Application {
         return false;
     }
 
+    @Override
     public void resume() {
     }
 
 
+    @Override
     public void suspend() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(ColorListButtonTest.class, args);
     }
 }

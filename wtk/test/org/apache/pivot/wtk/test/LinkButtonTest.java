@@ -20,6 +20,7 @@ import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentMouseListener;
+import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.LinkButton;
@@ -31,6 +32,7 @@ import org.apache.pivot.wtk.media.Image;
 public class LinkButtonTest implements Application {
     private Window window = new Window();
 
+    @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BoxPane boxPane = new BoxPane();
         boxPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
@@ -76,6 +78,7 @@ public class LinkButtonTest implements Application {
         window.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (window != null) {
             window.close();
@@ -84,9 +87,15 @@ public class LinkButtonTest implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(LinkButtonTest.class, args);
     }
 }

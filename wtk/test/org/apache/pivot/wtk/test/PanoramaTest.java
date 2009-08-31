@@ -19,6 +19,7 @@ package org.apache.pivot.wtk.test;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.ImageView;
@@ -29,6 +30,7 @@ public class PanoramaTest implements Application {
     private Frame frame1 = null;
     private Frame frame2 = null;
 
+    @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         frame1 = new Frame();
@@ -50,6 +52,7 @@ public class PanoramaTest implements Application {
         frame2.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (frame1 != null) {
             frame1.close();
@@ -62,9 +65,15 @@ public class PanoramaTest implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(PanoramaTest.class, args);
     }
 }

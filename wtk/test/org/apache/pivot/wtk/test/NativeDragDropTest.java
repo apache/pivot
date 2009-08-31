@@ -24,6 +24,7 @@ import java.net.URL;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.DragSource;
 import org.apache.pivot.wtk.DropAction;
@@ -40,6 +41,7 @@ import org.apache.pivot.wtk.Visual;
 public class NativeDragDropTest implements Application {
     private Frame frame = null;
 
+    @Override
     public void startup(final Display display, Map<String, String> properties)
         throws Exception {
         final Label label = new Label("http://www.apple.com");
@@ -141,6 +143,7 @@ public class NativeDragDropTest implements Application {
         frame.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (frame != null) {
             frame.close();
@@ -149,9 +152,15 @@ public class NativeDragDropTest implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(NativeDragDropTest.class, args);
     }
 }

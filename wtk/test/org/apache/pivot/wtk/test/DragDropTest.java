@@ -22,6 +22,7 @@ import java.io.IOException;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.DragSource;
 import org.apache.pivot.wtk.DropAction;
@@ -41,6 +42,7 @@ public class DragDropTest implements Application {
     private static final Color IMAGE_VIEW_BACKGROUND_COLOR = new Color(0x99, 0x99, 0x99);
     private static final Color IMAGE_VIEW_DROP_HIGHLIGHT_COLOR = new Color(0xf0, 0xe6, 0x8c);
 
+    @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         frame1.setTitle("Frame 1");
         frame1.setPreferredSize(160, 120);
@@ -171,6 +173,7 @@ public class DragDropTest implements Application {
         frame2.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (frame1 != null) {
             frame1.close();
@@ -183,9 +186,15 @@ public class DragDropTest implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(DragDropTest.class, args);
     }
 }
