@@ -99,7 +99,8 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
 
             if (!menuPopup.isAncestor(descendant)
                 && descendant != MenuBarItemSkin.this.getComponent()) {
-                menuPopup.close();
+                menuPopup.close(descendant instanceof Display
+                    || !menuPopup.isOwner(descendant.getWindow()));
             }
 
             return false;
@@ -126,7 +127,7 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
         MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
         menuBarItem.getItemListeners().remove(this);
 
-        menuPopup.close();
+        menuPopup.close(true);
         menuPopup.setMenu(null);
 
         super.uninstall();
@@ -185,7 +186,7 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
     public void enabledChanged(Component component) {
         super.enabledChanged(component);
 
-        menuPopup.close();
+        menuPopup.close(true);
     }
 
     @Override
@@ -204,7 +205,7 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
             menuPopup.open(menuBarItem.getWindow());
             menuPopup.requestFocus();
         } else {
-            menuPopup.close();
+            menuPopup.close(true);
         }
     }
 

@@ -29,6 +29,7 @@ import org.apache.pivot.wtk.Menu;
 import org.apache.pivot.wtk.MenuItemSelectionListener;
 import org.apache.pivot.wtk.MenuPopup;
 import org.apache.pivot.wtk.MenuPopupListener;
+import org.apache.pivot.wtk.MenuPopupStateListener;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Panorama;
 import org.apache.pivot.wtk.Theme;
@@ -41,7 +42,8 @@ import org.apache.pivot.wtk.skin.WindowSkin;
 /**
  * Menu popup skin.
  */
-public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener {
+public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
+    MenuPopupStateListener {
     private Panorama panorama;
     private Border border;
 
@@ -85,23 +87,12 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener 
 
     private MenuItemSelectionListener menuItemPressListener = new MenuItemSelectionListener() {
         public void itemSelected(Menu.Item item) {
-            final MenuPopup menuPopup = (MenuPopup)getComponent();
-
-            closeTransition = new FadeWindowTransition(menuPopup,
-                CLOSE_TRANSITION_DURATION, CLOSE_TRANSITION_RATE,
-                dropShadowDecorator);
-
-            closeTransition.start(new TransitionListener() {
-                public void transitionCompleted(Transition transition) {
-                    menuPopup.close();
-                }
-            });
-
+            MenuPopup menuPopup = (MenuPopup)getComponent();
             menuPopup.close();
         }
     };
 
-    private static final int CLOSE_TRANSITION_DURATION = 150;
+    private static final int CLOSE_TRANSITION_DURATION = 250;
     private static final int CLOSE_TRANSITION_RATE = 30;
 
     public TerraMenuPopupSkin() {
@@ -124,6 +115,7 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener 
 
         MenuPopup menuPopup = (MenuPopup)component;
         menuPopup.getMenuPopupListeners().add(this);
+        menuPopup.getMenuPopupStateListeners().add(this);
 
         Menu menu = menuPopup.getMenu();
         if (menu != null) {
@@ -142,6 +134,7 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener 
     public void uninstall() {
         MenuPopup menuPopup = (MenuPopup)getComponent();
         menuPopup.getMenuPopupListeners().remove(this);
+        menuPopup.getMenuPopupStateListeners().remove(this);
 
         Menu menu = menuPopup.getMenu();
         if (menu != null) {
@@ -201,31 +194,13 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener 
     }
 
     @Override
-    public Vote previewWindowClose(Window window) {
-        return (closeTransition != null
-            && closeTransition.isRunning()) ? Vote.DEFER : Vote.APPROVE;
-    }
-
-    @Override
-    public void windowCloseVetoed(Window window, Vote reason) {
-        super.windowCloseVetoed(window, reason);
-
-        if (reason == Vote.DENY
-            && closeTransition != null) {
-            closeTransition.stop();
-            closeTransition = null;
-        }
-    }
-
-    @Override
     public void windowClosed(Window window, Display display) {
         super.windowClosed(window, display);
 
         display.getContainerMouseListeners().remove(displayMouseListener);
-
-        closeTransition = null;
     }
 
+    @Override
     public void menuChanged(MenuPopup menuPopup, Menu previousMenu) {
         if (previousMenu != null) {
             previousMenu.getMenuItemSelectionListeners().remove(menuItemPressListener);
@@ -237,5 +212,38 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener 
         }
 
         panorama.setView(menu);
+    }
+
+    @Override
+    public Vote previewMenuPopupClose(final MenuPopup menuPopup, boolean immediate) {
+        if (!immediate
+            && closeTransition == null) {
+            closeTransition = new FadeWindowTransition(menuPopup,
+                CLOSE_TRANSITION_DURATION, CLOSE_TRANSITION_RATE,
+                dropShadowDecorator);
+
+            closeTransition.start(new TransitionListener() {
+                public void transitionCompleted(Transition transition) {
+                    menuPopup.close();
+                }
+            });
+        }
+
+        return (closeTransition != null
+            && closeTransition.isRunning()) ? Vote.DEFER : Vote.APPROVE;
+    }
+
+    @Override
+    public void menuPopupCloseVetoed(MenuPopup menuPopup, Vote reason) {
+        if (reason == Vote.DENY
+            && closeTransition != null) {
+            closeTransition.stop();
+            closeTransition = null;
+        }
+    }
+
+    @Override
+    public void menuPopupClosed(MenuPopup menuPopup) {
+        closeTransition = null;
     }
 }

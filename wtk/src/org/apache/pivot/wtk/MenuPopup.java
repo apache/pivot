@@ -17,6 +17,7 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Vote;
 
 /**
  * Popup class that displays a cascading menu.
@@ -31,10 +32,36 @@ public class MenuPopup extends Window {
         }
     }
 
+    private static class MenuPopupStateListenerList extends ListenerList<MenuPopupStateListener>
+        implements MenuPopupStateListener {
+        public Vote previewMenuPopupClose(MenuPopup menuPopup, boolean immediate) {
+            Vote vote = Vote.APPROVE;
+
+            for (MenuPopupStateListener listener : this) {
+                vote = vote.tally(listener.previewMenuPopupClose(menuPopup, immediate));
+            }
+
+            return vote;
+        }
+
+        public void menuPopupCloseVetoed(MenuPopup menuPopup, Vote reason) {
+            for (MenuPopupStateListener listener : this) {
+                listener.menuPopupCloseVetoed(menuPopup, reason);
+            }
+        }
+
+        public void menuPopupClosed(MenuPopup menuPopup) {
+            for (MenuPopupStateListener listener : this) {
+                listener.menuPopupClosed(menuPopup);
+            }
+        }
+    }
+
     private Menu menu;
     private boolean autoClose = false;
 
     private MenuPopupListenerList menuPopupListeners = new MenuPopupListenerList();
+    private MenuPopupStateListenerList menuPopupStateListeners = new MenuPopupStateListenerList();
 
     public MenuPopup() {
         this(null);
@@ -99,8 +126,24 @@ public class MenuPopup extends Window {
     }
 
     @Override
-    public void close() {
-        super.close();
+    public final void close() {
+        close(false);
+    }
+
+    public void close(boolean immediate) {
+        if (!isClosed()) {
+            Vote vote = menuPopupStateListeners.previewMenuPopupClose(this, immediate);
+
+            if (vote.isApproved()) {
+                super.close();
+
+                if (isClosed()) {
+                    menuPopupStateListeners.menuPopupClosed(this);
+                }
+            } else {
+                menuPopupStateListeners.menuPopupCloseVetoed(this, vote);
+            }
+        }
 
         if (isClosed()) {
             autoClose = false;
@@ -109,5 +152,9 @@ public class MenuPopup extends Window {
 
     public ListenerList<MenuPopupListener> getMenuPopupListeners() {
         return menuPopupListeners;
+    }
+
+    public ListenerList<MenuPopupStateListener> getMenuPopupStateListeners() {
+        return menuPopupStateListeners;
     }
 }
