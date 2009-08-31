@@ -119,6 +119,7 @@ public final class Insets implements Serializable {
         return (top * left) ^ (bottom * right);
     }
 
+    @Override
     public String toString() {
         return getClass().getName() + " [" + top + ", " + left + ", "
             + bottom + ", " + right + "]";

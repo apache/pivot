@@ -111,6 +111,7 @@ public final class Limits implements Serializable {
         return 31 * min + max;
     }
 
+    @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
 

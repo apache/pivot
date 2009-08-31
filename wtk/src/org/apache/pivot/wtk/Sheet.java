@@ -54,6 +54,7 @@ public class Sheet extends Window {
 
     private ComponentMouseButtonListener ownerMouseButtonListener =
         new ComponentMouseButtonListener.Adapter() {
+        @Override
         public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
             Window owner = (Window)component;
             Component ownerContent = owner.getContent();
@@ -125,6 +126,7 @@ public class Sheet extends Window {
         }
     }
 
+    @Override
     public final void open(Window owner) {
         open(owner, null);
     }

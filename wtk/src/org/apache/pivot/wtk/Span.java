@@ -179,6 +179,7 @@ public final class Span {
         return 31 * start + end;
     }
 
+    @Override
     public String toString() {
         return ("{start: " + start + ", end: " + end + "}");
     }

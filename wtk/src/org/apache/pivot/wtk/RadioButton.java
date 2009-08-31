@@ -50,6 +50,7 @@ public class RadioButton extends Button {
         installSkin(RadioButton.class);
     }
 
+    @Override
     public void press() {
         setSelected(true);
 

@@ -116,6 +116,7 @@ public final class CornerRadii implements Serializable {
         return (topLeft * topRight) ^ (bottomLeft * bottomRight);
     }
 
+    @Override
     public String toString() {
         return getClass().getName() + " [" + topLeft + ", " + topRight
             + bottomLeft + ", " + bottomRight + "]";

@@ -45,6 +45,7 @@ public class PushButton extends Button {
         installSkin(PushButton.class);
     }
 
+    @Override
     public void press() {
         if (isToggleButton()) {
             State state = getState();

@@ -89,6 +89,7 @@ public final class Point implements Serializable {
         return x * y;
     }
 
+    @Override
     public String toString() {
         return getClass().getName() + " [" + x + "," + y + "]";
     }
