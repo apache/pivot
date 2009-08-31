@@ -49,23 +49,28 @@ public class TextAreaTest implements Application {
     private Node selectedNode = null;
 
     private NodeListener selectedNodeListener = new NodeListener() {
+        @Override
         public void parentChanged(Node node, Element previousParent) {
             // No-op
         }
 
+        @Override
         public void offsetChanged(Node node, int previousOffset) {
             updateSelectedNodeData();
         }
 
+        @Override
         public void rangeInserted(Node node, int offset, int span) {
             updateSelectedNodeData();
         }
 
+        @Override
         public void rangeRemoved(Node node, int offset, int span) {
             updateSelectedNodeData();
         }
     };
 
+    @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -126,6 +131,7 @@ public class TextAreaTest implements Application {
         treeView.setTreeData(documentAdapter);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (frame != null) {
             frame.close();
@@ -134,9 +140,11 @@ public class TextAreaTest implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 

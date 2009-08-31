@@ -33,6 +33,7 @@ import org.apache.pivot.wtk.text.TextNode;
 
 public class ElementAdapter extends NodeAdapter implements List<NodeAdapter> {
     private ElementListener elementListener = new ElementListener() {
+        @Override
         public void nodeInserted(Element element, int index) {
             // Insert/attach node
             Node node = element.get(index);
@@ -43,6 +44,7 @@ public class ElementAdapter extends NodeAdapter implements List<NodeAdapter> {
             listListeners.itemInserted(ElementAdapter.this, index);
         }
 
+        @Override
         public void nodesRemoved(Element element, int index, Sequence<Node> nodes) {
             // Remove/detach nodes
             Sequence<NodeAdapter> removed = nodeAdapters.remove(index, nodes.getLength());
@@ -99,58 +101,72 @@ public class ElementAdapter extends NodeAdapter implements List<NodeAdapter> {
         }
     }
 
+    @Override
     public String getText() {
         return text;
     }
 
+    @Override
     public int add(NodeAdapter nodeAdapter) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public void insert(NodeAdapter nodeAdapter, int index) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public int remove(NodeAdapter nodeAdapter) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public Sequence<NodeAdapter> remove(int index, int count) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public void clear() {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public NodeAdapter update(int index, NodeAdapter nodeAdapter) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public NodeAdapter get(int index) {
         return nodeAdapters.get(index);
     }
 
+    @Override
     public int indexOf(NodeAdapter nodeAdapter) {
         return nodeAdapters.indexOf(nodeAdapter);
     }
 
+    @Override
     public int getLength() {
         return nodeAdapters.getLength();
     }
 
+    @Override
     public Comparator<NodeAdapter> getComparator() {
         return null;
     }
 
+    @Override
     public void setComparator(Comparator<NodeAdapter> comparator) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public ListenerList<ListListener<NodeAdapter>> getListListeners() {
         return listListeners;
     }
 
+    @Override
     public Iterator<NodeAdapter> iterator() {
         return new ImmutableIterator<NodeAdapter>(nodeAdapters.iterator());
     }

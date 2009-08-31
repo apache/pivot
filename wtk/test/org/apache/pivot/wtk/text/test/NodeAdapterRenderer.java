@@ -24,6 +24,7 @@ import org.apache.pivot.wtk.TreeView;
 
 
 public class NodeAdapterRenderer extends Label implements TreeView.NodeRenderer {
+    @Override
     public void render(Object node, TreeView treeView, boolean expanded,
         boolean selected, TreeView.NodeCheckState checkState,
         boolean highlighted, boolean disabled) {

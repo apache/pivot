@@ -21,10 +21,12 @@ import org.apache.pivot.wtk.text.TextNodeListener;
 
 public class TextNodeAdapter extends NodeAdapter {
     private TextNodeListener textNodeListener = new TextNodeListener() {
+        @Override
         public void charactersInserted(TextNode textNode, int index, int count) {
             update(textNode);
         }
 
+        @Override
         public void charactersRemoved(TextNode textNode, int index, String characters) {
             update(textNode);
         }

@@ -25,15 +25,19 @@ public abstract class NodeAdapter {
     private ElementAdapter parent = null;
 
     private NodeListener nodeListener = new NodeListener() {
+        @Override
         public void offsetChanged(Node node, int previousOffset) {
         }
 
+        @Override
         public void parentChanged(Node node, Element previousParent) {
         }
 
+        @Override
         public void rangeInserted(Node node, int offset, int span) {
         }
 
+        @Override
         public void rangeRemoved(Node node, int offset, int span) {
         }
     };
