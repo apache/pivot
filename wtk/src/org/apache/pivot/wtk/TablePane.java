@@ -181,6 +181,14 @@ public class TablePane extends Container {
             }
         }
 
+        public void setVisible(boolean visible) {
+            if (tablePane != null) {
+                for (Component component : cells) {
+                    component.setVisible(visible);
+                }
+            }
+        }
+
         public int add(Component component) {
             int i = getLength();
             insert(component, i);
@@ -443,6 +451,18 @@ public class TablePane extends Container {
 
                 if (tablePane != null) {
                     tablePane.tablePaneListeners.columnHighlightedChanged(this);
+                }
+            }
+        }
+
+        public void setVisible(boolean visible) {
+            if (tablePane != null) {
+                int columnIndex = tablePane.columns.indexOf(this);
+
+                for (Row row : tablePane.rows) {
+                    if (row.getLength() > columnIndex) {
+                        row.get(columnIndex).setVisible(visible);
+                    }
                 }
             }
         }

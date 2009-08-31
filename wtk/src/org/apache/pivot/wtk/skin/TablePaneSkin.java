@@ -35,7 +35,6 @@ import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.TablePaneAttributeListener;
 import org.apache.pivot.wtk.TablePaneListener;
 
-
 /**
  * Table pane skin.
  */
@@ -93,17 +92,18 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
             int columnWidth = column.getWidth();
             boolean isRelative = column.isRelative();
 
+            defaultWidthColumns[i] = (columnWidth < 0);
+
             if (isRelative) {
                 relativeWeights[i] = columnWidth;
                 totalRelativeWeight += columnWidth;
             }
 
             if (columnWidth < 0 || isRelative) {
-                columnWidth = getPreferredColumnWidth(tablePane, i, null);
+                columnWidth = getPreferredColumnWidth(i);
             }
 
             columnWidths[i] = columnWidth;
-            defaultWidthColumns[i] = (columnWidth < 0);
         }
 
         // Next, we adjust the widths of the relative columns upwards where
@@ -229,10 +229,29 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
         // The preferred width of the table pane is the sum of the column
         // widths, plus padding and spacing
 
-        int preferredWidth = padding.left + padding.right + (columnCount - 1) * horizontalSpacing;
+        boolean[][] occupiedCells = getOccupiedCells();
+        int visibleColumnCount = 0;
 
-        for (int i = 0; i < columnCount; i++) {
-            preferredWidth += columnWidths[i];
+        int preferredWidth = padding.left + padding.right;
+
+        for (int j = 0; j < columnCount; j++) {
+            boolean columnVisible = false;
+
+            for (int i = 0; i < rowCount; i++) {
+                if (occupiedCells[i][j]) {
+                    columnVisible = true;
+                    break;
+                }
+            }
+
+            if (columnVisible) {
+                preferredWidth += columnWidths[j];
+                visibleColumnCount++;
+            }
+        }
+
+        if (visibleColumnCount > 1) {
+            preferredWidth += (visibleColumnCount - 1) * horizontalSpacing;
         }
 
         return preferredWidth;
@@ -257,7 +276,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
             width = getPreferredWidth(-1);
         }
 
-        int[] columnWidths = getColumnWidths(tablePane, width, null);
+        int[] columnWidths = getColumnWidths(width);
 
         // First, we calculate the base heights of the rows, giving relative
         // rows their preferred height
@@ -267,17 +286,18 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
             int rowHeight = row.getHeight();
             boolean isRelative = row.isRelative();
 
+            defaultHeightRows[i] = (rowHeight < 0);
+
             if (isRelative) {
                 relativeWeights[i] = rowHeight;
                 totalRelativeWeight += rowHeight;
             }
 
             if (rowHeight < 0 || isRelative) {
-                rowHeight = getPreferredRowHeight(tablePane, i, columnWidths);
+                rowHeight = getPreferredRowHeight(i, columnWidths);
             }
 
             rowHeights[i] = rowHeight;
-            defaultHeightRows[i] = (rowHeight < 0);
         }
 
         // Next, we adjust the heights of the relative rows upwards where
@@ -403,10 +423,29 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
         // The preferred height of the table pane is the sum of the row
         // heights, plus padding and spacing
 
-        int preferredHeight = padding.top + padding.bottom + (rowCount - 1) * verticalSpacing;
+        boolean[][] occupiedCells = getOccupiedCells();
+        int visibleRowCount = 0;
+
+        int preferredHeight = padding.top + padding.bottom;
 
         for (int i = 0; i < rowCount; i++) {
-            preferredHeight += rowHeights[i];
+            boolean rowVisible = false;
+
+            for (int j = 0; j < columnCount; j++) {
+                if (occupiedCells[i][j]) {
+                    rowVisible = true;
+                    break;
+                }
+            }
+
+            if (rowVisible) {
+                preferredHeight += rowHeights[i];
+                visibleRowCount++;
+            }
+        }
+
+        if (visibleRowCount > 1) {
+            preferredHeight += (visibleRowCount - 1) * verticalSpacing;
         }
 
         return preferredHeight;
@@ -435,8 +474,21 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
 
         // NOTE We cache column widths and row heights to make getColumnAt()
         // and getRowAt() more efficient
-        columnWidths = getColumnWidths(tablePane, width, null);
-        rowHeights = getRowHeights(tablePane, height, columnWidths);
+        columnWidths = getColumnWidths(width);
+        rowHeights = getRowHeights(height, columnWidths);
+
+        boolean[] visibleRows = new boolean[rowCount];
+        boolean[] visibleColumns = new boolean[columnCount];
+
+        boolean[][] occupiedCells = getOccupiedCells();
+        for (int i = 0; i < rowCount; i++) {
+            for (int j = 0; j < columnCount; j++) {
+                if (occupiedCells[i][j]) {
+                    visibleRows[i] = true;
+                    visibleColumns[j] = true;
+                }
+            }
+        }
 
         int componentY = padding.top;
         for (int i = 0; i < rowCount; i++) {
@@ -466,10 +518,14 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
                     child.setSize(Math.max(childWidth, 0), Math.max(childHeight, 0));
                 }
 
-                componentX += (columnWidths[j] + horizontalSpacing);
+                if (visibleColumns[j]) {
+                    componentX += (columnWidths[j] + horizontalSpacing);
+                }
             }
 
-            componentY += (rowHeights[i] + verticalSpacing);
+            if (visibleRows[i]) {
+                componentY += (rowHeights[i] + verticalSpacing);
+            }
         }
     }
 
@@ -652,14 +708,6 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
         setPadding(new Insets(padding));
     }
 
-    public final void setPadding(String padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
-        setPadding(Insets.decode(padding));
-    }
-
     /**
      * Gets the spacing that will be applied in between the table pane's
      * columns during layout.
@@ -800,28 +848,66 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
     }
 
     /**
+     * Returns a grid indicating which cells are occupied. A component is said
+     * to occupy a cell if it is visible and either lives in the cell directly
+     * or spans the cell. Conversely, vacant cells do not have visible
+     * components within them or spanning them.
+     *
+     * @return
+     * A grid of booleans, where occupied cells are denoted by <tt>true</tt>,
+     * and vacant cells are denoted by <tt>false</tt>
+     */
+    private boolean[][] getOccupiedCells() {
+        TablePane tablePane = (TablePane)getComponent();
+
+        TablePane.RowSequence rows = tablePane.getRows();
+        TablePane.ColumnSequence columns = tablePane.getColumns();
+
+        int rowCount = rows.getLength();
+        int columnCount = columns.getLength();
+
+        boolean[][] occupiedCells = new boolean[rowCount][columnCount];
+
+        for (int i = 0; i < rowCount; i++) {
+            TablePane.Row row = rows.get(i);
+
+            for (int j = 0, n = row.getLength(); j < n && j < columnCount; j++) {
+                Component component = row.get(j);
+
+                if (component != null
+                    && component.isVisible()) {
+
+                    int rowSpan = TablePane.getRowSpan(component);
+                    int columnSpan = TablePane.getColumnSpan(component);
+
+                    for (int k = 0; k < rowSpan && i + k < rowCount; k++) {
+                        occupiedCells[i + k][j] = true;
+                    }
+
+                    for (int k = 0; k < columnSpan && j + k < columnCount; k++) {
+                        occupiedCells[i][j + k] = true;
+                    }
+                }
+            }
+        }
+
+        return occupiedCells;
+    }
+
+    /**
      * Gets the preferred width of a table pane column, which is defined as the
-     * maximum preferred width of the column's visible components. The
-     * preferred width of each constituent component will be constrained by the
-     * height of the row that the component occupies (as specified in the array
-     * of row heights).
+     * maximum preferred width of the column's visible components.
      * <p>
      * Components that span multiple columns will not be considered in the
-     * calculation. It is up to the caller to factor such components into the
-     * column widths calculation.
-     *
-     * @param tablePane
-     * The table pane
+     * calculation (even if they live in the column directly). It is up to the
+     * caller to factor such components into the column widths calculation.
      *
      * @param columnIndex
      * The index of the column whose preferred width we're calculating
-     *
-     * @param rowHeights
-     * An array of row height values corresponding to the rows of the table
-     * pane, or <tt>null</tt> if these heights are not yet known
      */
-    private static int getPreferredColumnWidth(TablePane tablePane, int columnIndex,
-        int[] rowHeights) {
+    private int getPreferredColumnWidth(int columnIndex) {
+        TablePane tablePane = (TablePane)getComponent();
+
         TablePane.RowSequence rows = tablePane.getRows();
 
         int preferredWidth = 0;
@@ -835,21 +921,40 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
                 if (component != null
                     && component.isVisible()
                     && TablePane.getColumnSpan(component) == 1) {
-                    int rowHeight = -1;
-
-                    if (rowHeights != null) {
-                        rowHeight = rowHeights[i];
-                    } else if (!row.isRelative()) {
-                        rowHeight = row.getHeight();
-                    }
-
                     preferredWidth = Math.max(preferredWidth,
-                        component.getPreferredWidth(rowHeight));
+                        component.getPreferredWidth(-1));
                 }
             }
         }
 
         return preferredWidth;
+    }
+
+    /**
+     * Tells whether or not the specified column is visible. A column is
+     * visible if and only if one or more visible components occupies it. A
+     * component is said to occupy a cell if it either lives in the cell
+     * directly or spans the cell.
+     *
+     * @param columnIndex
+     * The index of the column within the table pane
+     *
+     * @return
+     * <tt>true</tt> if the column is visible; <tt>false</tt> otherwise
+     */
+    private boolean isColumnVisible(int columnIndex) {
+        boolean visible = false;
+
+        boolean[][] occupiedCells = getOccupiedCells();
+
+        for (int i = 0; i < occupiedCells.length; i++) {
+            if (occupiedCells[i][columnIndex]) {
+                visible = true;
+                break;
+            }
+        }
+
+        return visible;
     }
 
     /**
@@ -860,43 +965,36 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
      * array of column widths).
      * <p>
      * Components that span multiple rows will not be considered in the
-     * calculation. It is up to the caller to factor such components into the
-     * row heights calculation.
-     *
-     * @param tablePane
-     * The table pane
+     * calculation (even if they live in the column directly). It is up to the
+     * caller to factor such components into the row heights calculation.
      *
      * @param rowIndex
      * The index of the row whose preferred height we're calculating
      *
      * @param columnWidths
      * An array of column width values corresponding to the columns of the
-     * table pane, or <tt>null</tt> if these widths are not yet known
+     * table pane
      */
-    private static int getPreferredRowHeight(TablePane tablePane, int rowIndex,
-        int[] columnWidths) {
+    private int getPreferredRowHeight(int rowIndex, int[] columnWidths) {
+        if (columnWidths == null) {
+            throw new IllegalArgumentException("columnWidths is null");
+        }
+
+        TablePane tablePane = (TablePane)getComponent();
+
         TablePane.ColumnSequence columns = tablePane.getColumns();
         TablePane.Row row = tablePane.getRows().get(rowIndex);
 
         int preferredHeight = 0;
 
-        for (int i = 0, n = row.getLength(), m = columns.getLength(); i < n && i < m; i++) {
-            Component component = row.get(i);
+        for (int j = 0, n = row.getLength(), m = columns.getLength(); j < n && j < m; j++) {
+            Component component = row.get(j);
 
             if (component != null
                 && component.isVisible()
                 && TablePane.getRowSpan(component) == 1) {
-                TablePane.Column column = columns.get(i);
-                int columnWidth = -1;
-
-                if (columnWidths != null) {
-                    columnWidth = columnWidths[i];
-                } else if (!column.isRelative()) {
-                    columnWidth = column.getWidth();
-                }
-
                 preferredHeight = Math.max(preferredHeight,
-                    component.getPreferredHeight(columnWidth));
+                    component.getPreferredHeight(columnWidths[j]));
             }
         }
 
@@ -904,27 +1002,45 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
     }
 
     /**
-     * Gets the width of each column of a table pane given the specified
-     * constraints. This method is static to allow other skins (such as
-     * <tt>TablePaneHeaderSkin</tt>) to hook into it.
+     * Tells whether or not the specified row is visible. A row is visible if
+     * and only if one or more visible components occupies it. A component is
+     * said to occupy a cell if it either lives in the cell directly or spans
+     * the cell.
      *
-     * @param tablePane
-     * The table pane
+     * @param rowIndex
+     * The index of the row within the table pane
+     *
+     * @return
+     * <tt>true</tt> if the row is visible; <tt>false</tt> otherwise
+     */
+    private boolean isRowVisible(int rowIndex) {
+        boolean visible = false;
+
+        boolean[][] occupiedCells = getOccupiedCells();
+
+        for (int j = 0; j < occupiedCells[rowIndex].length; j++) {
+            if (occupiedCells[rowIndex][j]) {
+                visible = true;
+                break;
+            }
+        }
+
+        return visible;
+    }
+
+    /**
+     * Gets the width of each table pane column given the specified table pane
+     * width.
      *
      * @param width
      * The width constraint of the table pane
      *
-     * @param rowHeights
-     * The heights of the table pane's rows, which will be used as height
-     * constraints to the column widths when necessary, or <tt>null</tt> if the
-     * row heights are not yet known (the column widths will be unconstrained)
-     *
      * @return
      * An array containing the width of each column in the table pane given the
-     * specified constraints
+     * specified constraint
      */
-    public static int[] getColumnWidths(TablePane tablePane, int width, int[] rowHeights) {
-        assert(width >= 0) : "Width must be greater than or equal to zero.";
+    private int[] getColumnWidths(int width) {
+        TablePane tablePane = (TablePane)getComponent();
 
         TablePane.RowSequence rows = tablePane.getRows();
         TablePane.ColumnSequence columns = tablePane.getColumns();
@@ -933,35 +1049,43 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
         int columnCount = columns.getLength();
 
         int[] columnWidths = new int[columnCount];
+
         boolean[] defaultWidthColumns = new boolean[columnCount];
-
-        Insets padding = (Insets)tablePane.getStyles().get("padding");
-        int horizontalSpacing = (Integer)tablePane.getStyles().get("horizontalSpacing");
-
-        int reservedWidth = padding.left + padding.right +
-            Math.max(columnCount - 1, 0) * horizontalSpacing;
         int totalRelativeWeight = 0;
+        int visibleColumnCount = 0;
+
+        int reservedWidth = padding.left + padding.right;
 
         // First, we allocate the widths of non-relative columns. We store the
         // widths of relative columns as negative values for later processing
 
-        for (int i = 0; i < columnCount; i++) {
-            TablePane.Column column = columns.get(i);
-            int columnWidth = column.getWidth();
+        for (int j = 0; j < columnCount; j++) {
+            if (isColumnVisible(j)) {
+                TablePane.Column column = columns.get(j);
+                int columnWidth = column.getWidth();
 
-            if (column.isRelative()) {
-                columnWidths[i] = -columnWidth;
-                totalRelativeWeight += columnWidth;
-            } else {
-                if (columnWidth < 0) {
-                    // Default width column; we must calculate the width
-                    columnWidth = getPreferredColumnWidth(tablePane, i, rowHeights);
-                    defaultWidthColumns[i] = true;
+                if (column.isRelative()) {
+                    columnWidths[j] = -columnWidth;
+                    totalRelativeWeight += columnWidth;
+                } else {
+                    if (columnWidth < 0) {
+                        // Default width column; we must calculate the width
+                        columnWidth = getPreferredColumnWidth(j);
+                        defaultWidthColumns[j] = true;
+                    }
+
+                    columnWidths[j] = columnWidth;
+                    reservedWidth += columnWidth;
                 }
 
-                columnWidths[i] = columnWidth;
-                reservedWidth += columnWidth;
+                visibleColumnCount++;
+            } else {
+                columnWidths[j] = 0;
             }
+        }
+
+        if (visibleColumnCount > 1) {
+            reservedWidth += (visibleColumnCount - 1) * horizontalSpacing;
         }
 
         // Next, we we account for default-width columns containing spanning
@@ -985,18 +1109,19 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
                         // spanned cells are default width and how much space
                         // we've allocated thus far for those cells
 
+                        boolean adjustCells = true;
                         int spannedDefaultWidthCellCount = 0;
-                        int spannedRelativeWeight = 0;
                         int spannedWidth = 0;
 
                         for (int k = 0; k < columnSpan && j + k < columnCount; k++) {
-                            if (defaultWidthColumns[j + k]) {
-                                spannedDefaultWidthCellCount++;
-                            }
-
                             if (columnWidths[j + k] < 0) {
-                                spannedRelativeWeight += -columnWidths[j + k];
+                                adjustCells = false;
+                                break;
                             } else {
+                                if (defaultWidthColumns[j + k]) {
+                                    spannedDefaultWidthCellCount++;
+                                }
+
                                 spannedWidth += columnWidths[j + k];
                             }
                         }
@@ -1010,24 +1135,15 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
                         // columns *or* among the default-width columns if we
                         // don't span any relative-width columns
 
-                        if (spannedRelativeWeight == 0
+                        if (adjustCells
                             && spannedDefaultWidthCellCount > 0) {
-                            int rowHeight = -1;
-
-                            if (rowHeights != null) {
-                                rowHeight = rowHeights[i];
-                            } else if (!row.isRelative()) {
-                                rowHeight = row.getHeight();
-                            }
-
-                            int componentPreferredWidth = component.getPreferredWidth(rowHeight);
+                            int componentPreferredWidth = component.getPreferredWidth(-1);
 
                             if (componentPreferredWidth > spannedWidth) {
                                 // The component's preferred width is larger
                                 // than the width we've allocated thus far, so
                                 // an adjustment is necessary
                                 int adjustment = componentPreferredWidth - spannedWidth;
-                                reservedWidth -= adjustment;
 
                                 // We'll distribute the adjustment evenly
                                 // among the default-width columns
@@ -1037,6 +1153,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
                                             spannedDefaultWidthCellCount;
 
                                         columnWidths[j + k] += columnAdjustment;
+                                        reservedWidth += columnAdjustment;
 
                                         // Adjust these to avoid rounding errors
                                         adjustment -= columnAdjustment;
@@ -1054,14 +1171,15 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
         // up the remaining width
 
         int remainingWidth = Math.max(width - reservedWidth, 0);
-        if (totalRelativeWeight > 0 && remainingWidth > 0) {
-            for (int i = 0; i < columnCount; i++) {
-                if (columnWidths[i] < 0) {
-                    int relativeWeight = -columnWidths[i];
+        if (totalRelativeWeight > 0
+            && remainingWidth > 0) {
+            for (int j = 0; j < columnCount; j++) {
+                if (columnWidths[j] < 0) {
+                    int relativeWeight = -columnWidths[j];
                     float weightPercentage = relativeWeight / (float)totalRelativeWeight;
                     int columnWidth = (int)(remainingWidth * weightPercentage);
 
-                    columnWidths[i] = columnWidth;
+                    columnWidths[j] = columnWidth;
 
                     // NOTE we adjust remainingWidth and totalRelativeWeight as we go
                     // to avoid potential rounding errors in the columnWidth
@@ -1077,11 +1195,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
 
     /**
      * Gets the height of each row of a table pane given the specified
-     * constraints. This method is static to allow other skins (such as
-     * <tt>TablePaneHeaderSkin</tt>) to hook into it.
-     *
-     * @param tablePane
-     * The table pane
+     * constraints.
      *
      * @param height
      * The height constraint of the table pane
@@ -1095,8 +1209,12 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
      * An array containing the height of each row in the table pane given the
      * specified constraints
      */
-    public static int[] getRowHeights(TablePane tablePane, int height, int[] columnWidths) {
-        assert(height >= 0) : "Height must be greater than or equal to zero.";
+    private int[] getRowHeights(int height, int[] columnWidths) {
+        if (columnWidths == null) {
+            throw new IllegalArgumentException("columnWidths is null");
+        }
+
+        TablePane tablePane = (TablePane)getComponent();
 
         TablePane.RowSequence rows = tablePane.getRows();
         TablePane.ColumnSequence columns = tablePane.getColumns();
@@ -1105,35 +1223,43 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
         int columnCount = tablePane.getColumns().getLength();
 
         int rowHeights[] = new int[rowCount];
+
         boolean[] defaultHeightRows = new boolean[rowCount];
-
-        Insets padding = (Insets)tablePane.getStyles().get("padding");
-        int verticalSpacing = (Integer)tablePane.getStyles().get("verticalSpacing");
-
-        int reservedHeight = padding.top + padding.bottom +
-            Math.max(rowCount - 1, 0) * verticalSpacing;
         int totalRelativeWeight = 0;
+        int visibleRowCount = 0;
+
+        int reservedHeight = padding.top + padding.bottom;
 
         // First, we allocate the heights of non-relative rows. We store the
         // heights of relative rows as negative values for later processing
 
         for (int i = 0; i < rowCount; i++) {
-            TablePane.Row row = rows.get(i);
-            int rowHeight = row.getHeight();
+            if (isRowVisible(i)) {
+                TablePane.Row row = rows.get(i);
+                int rowHeight = row.getHeight();
 
-            if (row.isRelative()) {
-                rowHeights[i] = -rowHeight;
-                totalRelativeWeight += rowHeight;
-            } else {
-                if (rowHeight < 0) {
-                    // Default height row; we must calculate the height
-                    rowHeight = getPreferredRowHeight(tablePane, i, columnWidths);
-                    defaultHeightRows[i] = true;
+                if (row.isRelative()) {
+                    rowHeights[i] = -rowHeight;
+                    totalRelativeWeight += rowHeight;
+                } else {
+                    if (rowHeight < 0) {
+                        // Default height row; we must calculate the height
+                        rowHeight = getPreferredRowHeight(i, columnWidths);
+                        defaultHeightRows[i] = true;
+                    }
+
+                    rowHeights[i] = rowHeight;
+                    reservedHeight += rowHeight;
                 }
 
-                rowHeights[i] = rowHeight;
-                reservedHeight += rowHeight;
+                visibleRowCount++;
+            } else {
+                rowHeights[i] = 0;
             }
+        }
+
+        if (visibleRowCount > 1) {
+            reservedHeight += (visibleRowCount - 1) * verticalSpacing;
         }
 
         // Next, we we account for default-width columns containing spanning
@@ -1157,18 +1283,19 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
                         // spanned cells are default height and how much space
                         // we've allocated thus far for those cells
 
+                        boolean adjustCells = true;
                         int spannedDefaultHeightCellCount = 0;
-                        int spannedRelativeWeight = 0;
                         int spannedHeight = 0;
 
                         for (int k = 0; k < rowSpan && i + k < rowCount; k++) {
-                            if (defaultHeightRows[i + k]) {
-                                spannedDefaultHeightCellCount++;
-                            }
-
                             if (rowHeights[i + k] < 0) {
-                                spannedRelativeWeight += -rowHeights[i + k];
+                                adjustCells = false;
+                                break;
                             } else {
+                                if (defaultHeightRows[i + k]) {
+                                    spannedDefaultHeightCellCount++;
+                                }
+
                                 spannedHeight += rowHeights[i + k];
                             }
                         }
@@ -1182,26 +1309,16 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
                         // rows *or* among the default-height rows if we
                         // don't span any relative-height rows
 
-                        if (spannedRelativeWeight == 0
+                        if (adjustCells
                             && spannedDefaultHeightCellCount > 0) {
-                            TablePane.Column column = columns.get(j);
-                            int columnWidth = -1;
-
-                            if (columnWidths != null) {
-                                columnWidth = columnWidths[j];
-                            } else if (!column.isRelative()) {
-                                columnWidth = column.getWidth();
-                            }
-
                             int componentPreferredHeight =
-                                component.getPreferredHeight(columnWidth);
+                                component.getPreferredHeight(columnWidths[j]);
 
                             if (componentPreferredHeight > spannedHeight) {
                                 // The component's preferred height is larger
                                 // than the height we've allocated thus far, so
                                 // an adjustment is necessary
                                 int adjustment = componentPreferredHeight - spannedHeight;
-                                reservedHeight -= adjustment;
 
                                 // We'll distribute the adjustment evenly
                                 // among the default-height rows
@@ -1211,6 +1328,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
                                             spannedDefaultHeightCellCount;
 
                                         rowHeights[i + k] += rowAdjustment;
+                                        reservedHeight += rowAdjustment;
 
                                         // Adjust these to avoid rounding errors
                                         adjustment -= rowAdjustment;
