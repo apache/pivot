@@ -39,6 +39,7 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
     private boolean closeMenuPopup = false;
 
     private ComponentKeyListener menuPopupComponentKeyListener = new ComponentKeyListener.Adapter() {
+        @Override
         public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
             boolean consumed = false;
 

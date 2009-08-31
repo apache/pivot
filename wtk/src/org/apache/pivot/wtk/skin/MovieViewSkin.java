@@ -58,6 +58,7 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
         }
     };
 
+    @Override
     public void install(Component component) {
         super.install(component);
 
@@ -70,6 +71,7 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
         }
     }
 
+    @Override
     public void uninstall() {
         MovieView movieView = (MovieView)getComponent();
         Movie movie = movieView.getMovie();
@@ -82,6 +84,7 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
         super.uninstall();
     }
 
+    @Override
     public int getPreferredWidth(int height) {
         MovieView movieView = (MovieView)getComponent();
         Movie movie = movieView.getMovie();
@@ -89,6 +92,7 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
         return (movie == null) ? 0 : Math.round(movie.getWidth() * scale);
     }
 
+    @Override
     public int getPreferredHeight(int width) {
         MovieView movieView = (MovieView)getComponent();
         Movie movie = movieView.getMovie();
@@ -106,6 +110,7 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
             Math.round(movie.getHeight() * scale));
     }
 
+    @Override
     public void layout() {
         MovieView movieView = (MovieView)getComponent();
         Movie movie = movieView.getMovie();
@@ -143,6 +148,7 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
         }
     }
 
+    @Override
     public void paint(Graphics2D graphics) {
         MovieView movieView = (MovieView)getComponent();
         Movie movie = movieView.getMovie();
@@ -271,6 +277,7 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
 
     // MovieViewListener methods
 
+    @Override
     public void movieChanged(MovieView movieView, Movie previousMovie) {
         if (previousMovie != null) {
             previousMovie.getMovieListeners().remove(movieListener);

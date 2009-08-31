@@ -20,6 +20,7 @@ package org.apache.pivot.wtk.skin;
  * Panel skin.
  */
 public class PanelSkin extends ContainerSkin {
+    @Override
     public void layout() {
         // No-op
     }

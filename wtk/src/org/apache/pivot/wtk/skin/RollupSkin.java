@@ -46,11 +46,13 @@ public abstract class RollupSkin extends ContainerSkin
         super.uninstall();
     }
 
+    @Override
     public Vote previewExpandedChange(Rollup rollup) {
         // No-op
         return Vote.APPROVE;
     }
 
+    @Override
     public void expandedChangeVetoed(Rollup rollup, Vote reason) {
         // No-op
     }

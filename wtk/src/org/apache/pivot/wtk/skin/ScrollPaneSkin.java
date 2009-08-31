@@ -519,6 +519,7 @@ public class ScrollPaneSkin extends ContainerSkin
         return maxScrollLeft;
     }
 
+    @Override
     public void layout() {
         ScrollPane scrollPane = (ScrollPane)getComponent();
 
@@ -847,6 +848,7 @@ public class ScrollPaneSkin extends ContainerSkin
 
     // Viewport.Skin methods
 
+    @Override
     public Bounds getViewportBounds() {
         int x = 0;
         int y = 0;
@@ -884,24 +886,29 @@ public class ScrollPaneSkin extends ContainerSkin
 
     // ScrollPaneListener methods
 
+    @Override
     public void horizontalScrollBarPolicyChanged(ScrollPane scrollPane,
         ScrollBarPolicy previousHorizontalScrollBarPolicy) {
         invalidateComponent();
     }
 
+    @Override
     public void verticalScrollBarPolicyChanged(ScrollPane scrollPane,
         ScrollBarPolicy previousVerticalScrollBarPolicy) {
         invalidateComponent();
     }
 
+    @Override
     public void rowHeaderChanged(ScrollPane scrollPane, Component previousRowHeader) {
         invalidateComponent();
     }
 
+    @Override
     public void columnHeaderChanged(ScrollPane scrollPane, Component previousColumnHeader) {
         invalidateComponent();
     }
 
+    @Override
     public void cornerChanged(ScrollPane scrollPane, Component previousCorner) {
         invalidateComponent();
     }
@@ -909,6 +916,7 @@ public class ScrollPaneSkin extends ContainerSkin
     // ViewportListener methods
 
     @SuppressWarnings("deprecation")
+    @Override
     public void scrollTopChanged(Viewport viewport, int previousScrollTop) {
         // NOTE we don't invalidate the component here because we need only
         // reposition the view and row header. Invalidating would yield
@@ -990,6 +998,7 @@ public class ScrollPaneSkin extends ContainerSkin
     }
 
     @SuppressWarnings("deprecation")
+    @Override
     public void scrollLeftChanged(Viewport viewport, int previousScrollLeft) {
         // NOTE we don't invalidate the component here because we need only
         // reposition the view and column header. Invalidating would yield
@@ -1070,12 +1079,14 @@ public class ScrollPaneSkin extends ContainerSkin
         }
     }
 
+    @Override
     public void viewChanged(Viewport viewport, Component previousView) {
         invalidateComponent();
     }
 
     // ScrollBarValueListener methods
 
+    @Override
     public void valueChanged(ScrollBar scrollBar, int previousValue) {
         ScrollPane scrollPane = (ScrollPane)getComponent();
 

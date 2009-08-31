@@ -40,6 +40,7 @@ public class WindowSkin extends ContainerSkin
      * ensures that focus does not traverse out of the window.
      */
     public static class WindowFocusTraversalPolicy implements FocusTraversalPolicy {
+        @Override
         public Component getNextComponent(Container container, Component component, Direction direction) {
             assert (container instanceof Window) : "container is not a Window";
 
@@ -83,6 +84,7 @@ public class WindowSkin extends ContainerSkin
         super.uninstall();
     }
 
+    @Override
     public int getPreferredWidth(int height) {
         Window window = (Window)getComponent();
         Component content = window.getContent();
@@ -90,6 +92,7 @@ public class WindowSkin extends ContainerSkin
         return (content != null) ? content.getPreferredWidth(height) : 0;
     }
 
+    @Override
     public int getPreferredHeight(int width) {
         Window window = (Window)getComponent();
         Component content = window.getContent();
@@ -97,6 +100,7 @@ public class WindowSkin extends ContainerSkin
         return (content != null) ? content.getPreferredHeight(width) : 0;
     }
 
+    @Override
     public Dimensions getPreferredSize() {
         Window window = (Window)getComponent();
         Component content = window.getContent();
@@ -104,6 +108,7 @@ public class WindowSkin extends ContainerSkin
         return (content != null) ? content.getPreferredSize() : new Dimensions(0, 0);
     }
 
+    @Override
     public void layout() {
         Window window = (Window)getComponent();
         Component content = window.getContent();
@@ -114,54 +119,67 @@ public class WindowSkin extends ContainerSkin
     }
 
     // Window events
+    @Override
     public void titleChanged(Window window, String previousTitle) {
         // No-op
     }
 
+    @Override
     public void iconChanged(Window window, Image previousIcon) {
         // No-op
     }
 
+    @Override
     public void contentChanged(Window window, Component previousContent) {
         invalidateComponent();
     }
 
+    @Override
     public void ownerChanged(Window window, Window previousOwner) {
         // No-op
     }
 
+    @Override
     public void activeChanged(Window window, Window obverseWindow) {
         // No-op
     }
 
+    @Override
     public void maximizedChanged(Window window) {
         // No-op
     }
 
+    @Override
     public void windowMoved(Window window, int from, int to) {
         // No-op
     }
 
     // Window state events
+    @Override
     public Vote previewWindowOpen(Window window, Display display) {
         return Vote.APPROVE;
     }
 
+    @Override
     public void windowOpenVetoed(Window window, Vote reason) {
         // No-op
     }
 
+    @Override
     public void windowOpened(Window window) {
     }
 
+    @Override
     public Vote previewWindowClose(Window window) {
         return Vote.APPROVE;
     }
 
+    @Override
     public void windowCloseVetoed(Window window, Vote reason) {
         // No-op
     }
 
+    @Override
     public void windowClosed(Window window, Display display) {
     }
 }

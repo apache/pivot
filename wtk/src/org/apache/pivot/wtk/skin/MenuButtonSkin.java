@@ -189,10 +189,12 @@ public abstract class MenuButtonSkin extends ButtonSkin
         return consumed;
     }
 
+    @Override
     public void menuChanged(MenuButton menuButton, Menu previousMenu) {
         menuPopup.setMenu(menuButton.getMenu());
     }
 
+    @Override
     public void repeatableChanged(MenuButton menuButton) {
         invalidateComponent();
     }

@@ -115,11 +115,13 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             node.getNodeListeners().remove(this);
         }
 
+        @Override
         public int getWidth() {
             validate();
             return width;
         }
 
+        @Override
         public int getHeight() {
             return getHeight(true);
         }
@@ -245,18 +247,22 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         public abstract int getCharacterAt(int x, int y);
         public abstract Bounds getCharacterBounds(int offset);
 
+        @Override
         public void parentChanged(Node node, Element previousParent) {
             // No-op
         }
 
+        @Override
         public void offsetChanged(Node node, int previousOffset) {
             // No-op
         }
 
+        @Override
         public void rangeInserted(Node node, int offset, int span) {
             // No-op
         }
 
+        @Override
         public void rangeRemoved(Node node, int offset, int span) {
             // No-op
         }
@@ -301,6 +307,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 return null;
             }
 
+            @Override
             public void paint(Graphics2D graphics) {
                 // No-op
             }
@@ -310,6 +317,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
          * Comparator used to perform binary searches on node views by location.
          */
         private class NodeViewLocationComparator implements Comparator<NodeView> {
+            @Override
             public int compare(NodeView nodeView1, NodeView nodeView2) {
                 int x1 = nodeView1.getX();
                 int y1 = nodeView1.getY();
@@ -327,6 +335,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
          * Comparator used to perform binary searches on node views by offset.
          */
         private class NodeViewOffsetComparator implements Comparator<NodeView> {
+            @Override
             public int compare(NodeView nodeView1, NodeView nodeView2) {
                 int offset1 = nodeView1.getOffset();
                 int offset2 = nodeView2.getOffset();
@@ -365,6 +374,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             remove(0, getLength());
         }
 
+        @Override
         public int add(NodeView nodeView) {
             int index = getLength();
             insert(nodeView, index);
@@ -372,6 +382,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             return index;
         }
 
+        @Override
         public void insert(NodeView nodeView, int index) {
             nodeView.setParent(this);
             nodeView.attach();
@@ -379,10 +390,12 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             nodeViews.insert(nodeView, index);
         }
 
+        @Override
         public NodeView update(int index, NodeView nodeView) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public int remove(NodeView nodeView) {
             int index = indexOf(nodeView);
             if (index != -1) {
@@ -392,6 +405,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             return index;
         }
 
+        @Override
         public Sequence<NodeView> remove(int index, int count) {
             Sequence<NodeView> removed = nodeViews.remove(index, count);
 
@@ -404,18 +418,22 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             return removed;
         }
 
+        @Override
         public NodeView get(int index) {
             return nodeViews.get(index);
         }
 
+        @Override
         public int indexOf(NodeView nodeView) {
             return nodeViews.indexOf(nodeView);
         }
 
+        @Override
         public int getLength() {
             return nodeViews.getLength();
         }
 
+        @Override
         public void paint(Graphics2D graphics) {
             // Determine the paint bounds
             Bounds paintBounds = new Bounds(0, 0, getWidth(), getHeight());
@@ -515,14 +533,17 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             return bounds;
         }
 
+        @Override
         public void nodeInserted(Element element, int index) {
             invalidate();
         }
 
+        @Override
         public void nodesRemoved(Element element, int index, Sequence<Node> nodes) {
             invalidate();
         }
 
+        @Override
         public Iterator<NodeView> iterator() {
             return new ImmutableIterator<NodeView>(nodeViews.iterator());
         }
@@ -539,6 +560,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 this.index = index;
             }
 
+            @Override
             public void run() {
                 if (index != -1) {
                     NodeView nodeView = get(index++);
@@ -661,6 +683,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             return null;
         }
 
+        @Override
         public void nodeInserted(Element element, int index) {
             super.nodeInserted(element, index);
 
@@ -668,6 +691,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             insert(createNodeView(document.get(index)), index);
         }
 
+        @Override
         public void nodesRemoved(Element element, int index, Sequence<Node> nodes) {
             remove(index, nodes.getLength());
 
@@ -809,6 +833,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             super.validate();
         }
 
+        @Override
         public void paint(Graphics2D graphics) {
             super.paint(graphics);
 
@@ -985,6 +1010,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             super.validate();
         }
 
+        @Override
         public void paint(Graphics2D graphics) {
             TextNode textNode = (TextNode)getNode();
             String text = textNode.getText();
@@ -1060,10 +1086,12 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             return bounds;
         }
 
+        @Override
         public void charactersInserted(TextNode textNode, int index, int count) {
             invalidate();
         }
 
+        @Override
         public void charactersRemoved(TextNode textNode, int index, String characters) {
             invalidate();
         }
@@ -1113,6 +1141,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             }
         }
 
+        @Override
         public void paint(Graphics2D graphics) {
             ImageNode imageNode = (ImageNode)getNode();
             Image image = imageNode.getImage();
@@ -1132,6 +1161,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             return null;
         }
 
+        @Override
         public int getCharacterAt(int x, int y) {
             return 0;
         }
@@ -1141,12 +1171,14 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             return new Bounds(0, 0, getWidth(), getHeight());
         }
 
+        @Override
         public void imageChanged(ImageNode imageNode, Image previousImage) {
             invalidate();
         }
     }
 
     private class BlinkCursorCallback implements Runnable {
+        @Override
         public void run() {
             caretOn = !caretOn;
 
@@ -1180,6 +1212,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         color = Color.BLACK;
     }
 
+    @Override
     public void install(Component component) {
         super.install(component);
 
@@ -1198,6 +1231,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         selectionChanged(textArea, 0, 0);
     }
 
+    @Override
     public void uninstall() {
         TextArea textArea = (TextArea)getComponent();
         textArea.getTextAreaListeners().remove(this);
@@ -1219,6 +1253,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         return textArea.isEditable();
     }
 
+    @Override
     public int getPreferredWidth(int height) {
         int preferredWidth;
         if (documentView == null) {
@@ -1231,6 +1266,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         return preferredWidth;
     }
 
+    @Override
     public int getPreferredHeight(int width) {
         int preferredHeight;
         if (documentView == null) {
@@ -1244,6 +1280,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         return preferredHeight;
     }
 
+    @Override
     public Dimensions getPreferredSize() {
         int preferredWidth;
         int preferredHeight;
@@ -1266,6 +1303,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         return false;
     }
 
+    @Override
     public void layout() {
         if (documentView != null) {
             documentView.abortValidateCallback();
@@ -1277,6 +1315,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
     }
 
+    @Override
     public void paint(Graphics2D graphics) {
         if (documentView != null) {
             TextArea textArea = (TextArea)getComponent();
@@ -1293,11 +1332,13 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
     }
 
+    @Override
     public int getCharacterAt(int x, int y) {
         return (documentView == null) ?
             -1 : documentView.getCharacterAt(x - margin.left, y - margin.top);
     }
 
+    @Override
     public Bounds getCharacterBounds(int offset) {
         return (documentView == null) ? null : documentView.getCharacterBounds(offset);
     }
@@ -1583,6 +1624,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     }
 
     // Text area events
+    @Override
     public void documentChanged(TextArea textArea, Document previousDocument) {
         if (documentView != null) {
             documentView.detach();
@@ -1598,15 +1640,18 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         invalidateComponent();
     }
 
+    @Override
     public void editableChanged(TextArea textArea) {
         // No-op
     }
 
+    @Override
     public void textKeyChanged(TextArea textArea, String previousTextKey) {
         // No-op
     }
 
     // Text area selection events
+    @Override
     public void selectionChanged(TextArea textArea, int previousSelectionStart,
         int previousSelectionLength) {
         if (textArea.getDocument() != null) {

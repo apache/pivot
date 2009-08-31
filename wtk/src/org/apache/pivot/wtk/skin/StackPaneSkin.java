@@ -28,6 +28,7 @@ import org.apache.pivot.wtk.StackPane;
 public class StackPaneSkin extends ContainerSkin {
     private Insets padding = Insets.NONE;
 
+    @Override
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
         StackPane stackPane = (StackPane)getComponent();
@@ -42,6 +43,7 @@ public class StackPaneSkin extends ContainerSkin {
         return preferredWidth;
     }
 
+    @Override
     public int getPreferredHeight(int width) {
         int preferredHeight = 0;
         StackPane stackPane = (StackPane)getComponent();
@@ -56,6 +58,7 @@ public class StackPaneSkin extends ContainerSkin {
         return preferredHeight;
     }
 
+    @Override
     public Dimensions getPreferredSize() {
         int preferredWidth = 0;
         int preferredHeight = 0;
@@ -78,6 +81,7 @@ public class StackPaneSkin extends ContainerSkin {
         return new Dimensions(preferredWidth, preferredHeight);
     }
 
+    @Override
     public void layout() {
         // Set the size of all components to match the size of the stack pane,
         // minus padding

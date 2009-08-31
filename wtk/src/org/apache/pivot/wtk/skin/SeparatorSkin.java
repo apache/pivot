@@ -75,6 +75,7 @@ public class SeparatorSkin extends ComponentSkin
         super.uninstall();
     }
 
+    @Override
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 
@@ -91,6 +92,7 @@ public class SeparatorSkin extends ComponentSkin
         return preferredWidth;
     }
 
+    @Override
     public int getPreferredHeight(int width) {
         int preferredHeight = thickness;
 
@@ -109,15 +111,18 @@ public class SeparatorSkin extends ComponentSkin
         return preferredHeight;
     }
 
+    @Override
     public Dimensions getPreferredSize() {
         // TODO Optimize
         return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
     }
 
+    @Override
     public void layout() {
         // No-op
     }
 
+    @Override
     public void paint(Graphics2D graphics) {
         Separator separator = (Separator)getComponent();
         int width = getWidth();
@@ -289,6 +294,7 @@ public class SeparatorSkin extends ComponentSkin
     }
 
     // Separator events
+    @Override
     public void headingChanged(Separator separator, String previousHeading) {
         invalidateComponent();
     }
