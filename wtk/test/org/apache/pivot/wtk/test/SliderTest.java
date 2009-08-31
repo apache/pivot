@@ -19,6 +19,7 @@ package org.apache.pivot.wtk.test;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.Slider;
@@ -31,6 +32,7 @@ public class SliderTest implements Application {
     private Slider slider = null;
     private Label valueLabel = null;
 
+    @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -49,6 +51,7 @@ public class SliderTest implements Application {
         window.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (window != null) {
             window.close();
@@ -57,10 +60,16 @@ public class SliderTest implements Application {
         return false;
     }
 
+    @Override
     public void resume() {
     }
 
 
+    @Override
     public void suspend() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(SliderTest.class, args);
     }
 }

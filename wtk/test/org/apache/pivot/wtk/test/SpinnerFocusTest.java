@@ -21,6 +21,7 @@ import org.apache.pivot.wtk.Action;
 import org.apache.pivot.wtk.Alert;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.Spinner;
@@ -29,6 +30,7 @@ import org.apache.pivot.wtkx.WTKXSerializer;
 public class SpinnerFocusTest implements Application {
     private Frame frame = null;
 
+    @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         Action action = new Action() {
@@ -54,6 +56,7 @@ public class SpinnerFocusTest implements Application {
         action.setEnabled(false);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (frame != null) {
             frame.close();
@@ -62,9 +65,15 @@ public class SpinnerFocusTest implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(SpinnerFocusTest.class, args);
     }
 }

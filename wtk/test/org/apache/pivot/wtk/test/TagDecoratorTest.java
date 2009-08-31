@@ -18,6 +18,7 @@ package org.apache.pivot.wtk.test;
 
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.HorizontalAlignment;
@@ -28,6 +29,7 @@ import org.apache.pivot.wtk.media.Image;
 public class TagDecoratorTest implements Application {
     private Frame frame = null;
 
+    @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         frame = new Frame();
@@ -43,6 +45,7 @@ public class TagDecoratorTest implements Application {
         frame.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (frame!= null) {
             frame.close();
@@ -51,9 +54,15 @@ public class TagDecoratorTest implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(TagDecoratorTest.class, args);
     }
 }
