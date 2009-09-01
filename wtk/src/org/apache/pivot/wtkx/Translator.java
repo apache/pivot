@@ -65,26 +65,32 @@ public class Translator {
             }
         }
 
+        @Override
         public URI toUri() {
             return file.toURI();
         }
 
+        @Override
         public String getName() {
             return file.getPath();
         }
 
+        @Override
         public InputStream openInputStream() throws IOException {
             return new FileInputStream(file);
         }
 
+        @Override
         public OutputStream openOutputStream() throws IOException {
             return new FileOutputStream(file);
         }
 
+        @Override
         public Reader openReader(boolean ignoreEncodingErrors) throws IOException {
             return new FileReader(file);
         }
 
+        @Override
         public CharSequence getCharContent(boolean ignoreEncodingErrors) throws IOException {
             String result;
 
@@ -100,30 +106,37 @@ public class Translator {
             return result;
         }
 
+        @Override
         public PrintWriter openWriter() throws IOException {
             return new PrintWriter(file);
         }
 
+        @Override
         public long getLastModified() {
             return file.lastModified();
         }
 
+        @Override
         public boolean delete() {
             return file.delete();
         }
 
+        @Override
         public Kind getKind() {
             return Kind.SOURCE;
         }
 
+        @Override
         public boolean isNameCompatible(String simpleName, Kind kind) {
             return (kind == Kind.SOURCE);
         }
 
+        @Override
         public NestingKind getNestingKind() {
             return NestingKind.TOP_LEVEL;
         }
 
+        @Override
         public Modifier getAccessLevel() {
             return Modifier.PUBLIC;
         }

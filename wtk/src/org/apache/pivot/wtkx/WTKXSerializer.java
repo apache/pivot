@@ -65,32 +65,39 @@ import org.apache.pivot.util.Vote;
  */
 public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Object> {
     private class NamedObjectBindings implements Bindings {
+        @Override
         public Object get(Object key) {
             return namedObjects.get(key.toString());
         }
 
+        @Override
         public Object put(String key, Object value) {
             return namedObjects.put(key, value);
         }
 
+        @Override
         public void putAll(Map<? extends String, ? extends Object> map) {
             for (String key : map.keySet()) {
                 put(key, map.get(key));
             }
         }
 
+        @Override
         public Object remove(Object key) {
             return namedObjects.remove(key.toString());
         }
 
+        @Override
         public void clear() {
             namedObjects.clear();
         }
 
+        @Override
         public boolean containsKey(Object key) {
             return namedObjects.containsKey(key.toString());
         }
 
+        @Override
         public boolean containsValue(Object value) {
             boolean contains = false;
             for (String key : namedObjects) {
@@ -103,10 +110,12 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             return contains;
         }
 
+        @Override
         public boolean isEmpty() {
             return namedObjects.isEmpty();
         }
 
+        @Override
         public Set<String> keySet() {
             java.util.HashSet<String> keySet = new java.util.HashSet<String>();
             for (String key : namedObjects) {
@@ -116,6 +125,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             return keySet;
         }
 
+        @Override
         public Set<Entry<String, Object>> entrySet() {
             java.util.HashMap<String, Object> hashMap = new java.util.HashMap<String, Object>();
             for (String key : namedObjects) {
@@ -125,10 +135,12 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             return hashMap.entrySet();
         }
 
+        @Override
         public int size() {
             return namedObjects.getCount();
         }
 
+        @Override
         public Collection<Object> values() {
             java.util.ArrayList<Object> values = new java.util.ArrayList<Object>();
             for (String key : namedObjects) {
@@ -184,12 +196,14 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
 
     private static class WTKXSerializerListenerList extends ListenerList<WTKXSerializerListener>
         implements WTKXSerializerListener {
+        @Override
         public void includeLoaded(WTKXSerializer serializer, String id) {
             for (WTKXSerializerListener listener : this) {
                 listener.includeLoaded(serializer, id);
             }
         }
 
+        @Override
         public void allIncludesLoaded(WTKXSerializer serializer) {
             for (WTKXSerializerListener listener : this) {
                 listener.allIncludesLoaded(serializer);
@@ -306,6 +320,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
     }
 
     @SuppressWarnings({"unchecked"})
+    @Override
     public Object readObject(InputStream inputStream)
         throws IOException, SerializationException {
         if (inputStream == null) {
@@ -793,6 +808,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                         }
 
                                         InvocationHandler handler = new InvocationHandler() {
+                                            @Override
                                             public Object invoke(Object proxy, Method method, Object[] args)
                                                 throws Throwable {
                                                 Object result = null;
@@ -895,11 +911,13 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         exception.printStackTrace();
     }
 
+    @Override
     public void writeObject(Object object, OutputStream outputStream) throws IOException,
         SerializationException {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public String getMIMEType(Object object) {
         return MIME_TYPE;
     }
@@ -916,6 +934,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
      * name does not exist. Use {@link #containsKey(String)} to distinguish
      * between the two cases.
      */
+    @Override
     public Object get(String name) {
         if (name == null) {
             throw new IllegalArgumentException("name is null.");
@@ -947,6 +966,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         return object;
     }
 
+    @Override
     public Object put(String id, Object value) {
         if (id == null) {
             throw new IllegalArgumentException("id is null.");
@@ -959,6 +979,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         return initialBindings.put(id, value);
     }
 
+    @Override
     public Object remove(String id) {
         if (id == null) {
             throw new IllegalArgumentException("id is null.");
@@ -971,6 +992,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         return initialBindings.remove(id);
     }
 
+    @Override
     public boolean containsKey(String name) {
         if (name == null) {
             throw new IllegalArgumentException("name is null.");
@@ -1000,6 +1022,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         return result;
     }
 
+    @Override
     public boolean isEmpty() {
         boolean empty = false;
 
