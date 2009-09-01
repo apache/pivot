@@ -33,6 +33,7 @@ public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
         private int i = 0;
         private E next = null;
 
+        @Override
         public boolean hasNext() {
             if (next == null) {
                 while (i < elements.length
@@ -50,6 +51,7 @@ public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
             return (next != null);
         }
 
+        @Override
         public E next() {
             if (!hasNext()) {
                 throw new NoSuchElementException();
@@ -62,6 +64,7 @@ public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
             return next;
         }
 
+        @Override
         public void remove() {
             throw new UnsupportedOperationException();
         }
@@ -87,6 +90,7 @@ public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
         return enumClass;
     }
 
+    @Override
     public boolean add(E element) {
         boolean added = false;
 
@@ -102,6 +106,7 @@ public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
         return added;
     }
 
+    @Override
     public boolean remove(E element) {
         boolean removed = false;
 
@@ -117,6 +122,7 @@ public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
         return removed;
     }
 
+    @Override
     public void clear() {
         if (count > 0) {
             members = new boolean[members.length];
@@ -125,30 +131,37 @@ public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
         }
     }
 
+    @Override
     public boolean contains(E element) {
         return members[element.ordinal()];
     }
 
+    @Override
     public boolean isEmpty() {
         return count == 0;
     }
 
+    @Override
     public int getCount() {
         return count;
     }
 
+    @Override
     public Comparator<E> getComparator() {
         return null;
     }
 
+    @Override
     public void setComparator(Comparator<E> comparator) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public Iterator<E> iterator() {
         return new ElementIterator();
     }
 
+    @Override
     public ListenerList<SetListener<E>> getSetListeners() {
         return setListeners;
     }

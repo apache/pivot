@@ -43,6 +43,7 @@ public class EnumMap<E extends Enum<E>, V> implements Map<E, V>, Serializable {
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public V get(E key) {
         if (key == null) {
             throw new IllegalArgumentException();
@@ -52,6 +53,7 @@ public class EnumMap<E extends Enum<E>, V> implements Map<E, V>, Serializable {
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public V put(E key, V value) {
         if (key == null) {
             throw new IllegalArgumentException();
@@ -72,6 +74,7 @@ public class EnumMap<E extends Enum<E>, V> implements Map<E, V>, Serializable {
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public V remove(E key) {
         if (key == null) {
             throw new IllegalArgumentException();
@@ -89,6 +92,7 @@ public class EnumMap<E extends Enum<E>, V> implements Map<E, V>, Serializable {
         return value;
     }
 
+    @Override
     public void clear() {
         if (!keySet.isEmpty()) {
             values = new Object[values.length];
@@ -97,30 +101,37 @@ public class EnumMap<E extends Enum<E>, V> implements Map<E, V>, Serializable {
         }
     }
 
+    @Override
     public boolean containsKey(E key) {
         return keySet.contains(key);
     }
 
+    @Override
     public boolean isEmpty() {
         return keySet.isEmpty();
     }
 
+    @Override
     public int getCount() {
         return keySet.getCount();
     }
 
+    @Override
     public Comparator<E> getComparator() {
         return null;
     }
 
+    @Override
     public void setComparator(Comparator<E> comparator) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public Iterator<E> iterator() {
         return keySet.iterator();
     }
 
+    @Override
     public ListenerList<MapListener<E, V>> getMapListeners() {
         return mapListeners;
     }

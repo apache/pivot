@@ -35,10 +35,12 @@ public class EnumList<E extends Enum<E>> implements List<E>, Serializable {
     private class ItemIterator implements Iterator<E> {
         private int i = 0;
 
+        @Override
         public boolean hasNext() {
             return (i < items.length);
         }
 
+        @Override
         public E next() {
             if (i >= items.length) {
                 throw new NoSuchElementException();
@@ -47,6 +49,7 @@ public class EnumList<E extends Enum<E>> implements List<E>, Serializable {
             return items[i++];
         }
 
+        @Override
         public void remove() {
             throw new UnsupportedOperationException();
         }
@@ -68,34 +71,42 @@ public class EnumList<E extends Enum<E>> implements List<E>, Serializable {
         return enumClass;
     }
 
+    @Override
     public int add(E item) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public void insert(E item, int index) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public E update(int index, E item) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public int remove(E item) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public Sequence<E> remove(int index, int count) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public void clear() {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public E get(int index) {
         return items[index];
     }
 
+    @Override
     public int indexOf(E item) {
         if (item == null) {
             throw new IllegalArgumentException();
@@ -104,6 +115,7 @@ public class EnumList<E extends Enum<E>> implements List<E>, Serializable {
         return item.ordinal();
     }
 
+    @Override
     public int getLength() {
         return items.length;
     }
@@ -112,18 +124,22 @@ public class EnumList<E extends Enum<E>> implements List<E>, Serializable {
         return Arrays.copyOf(items, items.length);
     }
 
+    @Override
     public Comparator<E> getComparator() {
         return null;
     }
 
+    @Override
     public void setComparator(Comparator<E> comparator) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public Iterator<E> iterator() {
         return new ItemIterator();
     }
 
+    @Override
     public ListenerList<ListListener<E>> getListListeners() {
         return listListeners;
     }

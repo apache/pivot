@@ -42,6 +42,7 @@ public class ArrayQueue<T> extends ArrayList<T> implements Queue<T> {
         super(capacity);
     }
 
+    @Override
     public void enqueue(T item) {
         if (getComparator() == null) {
             insert(item, 0);
@@ -52,6 +53,7 @@ public class ArrayQueue<T> extends ArrayList<T> implements Queue<T> {
         queueListeners.itemEnqueued(this, item);
     }
 
+    @Override
     public T dequeue() {
         int length = getLength();
         if (length == 0) {
@@ -64,6 +66,7 @@ public class ArrayQueue<T> extends ArrayList<T> implements Queue<T> {
         return item;
     }
 
+    @Override
     public T peek() {
         T item = null;
         int length = getLength();
@@ -74,10 +77,12 @@ public class ArrayQueue<T> extends ArrayList<T> implements Queue<T> {
         return item;
     }
 
+    @Override
     public boolean isEmpty() {
         return (getLength() == 0);
     }
 
+    @Override
     public ListenerList<QueueListener<T>> getQueueListeners() {
         return queueListeners;
     }
