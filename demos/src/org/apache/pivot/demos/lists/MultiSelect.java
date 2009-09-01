@@ -43,14 +43,17 @@ public class MultiSelect implements Application {
         selectionListView = (ListView)wtkxSerializer.get("selectionListView");
 
         dataListView.getListViewSelectionListeners().add(new ListViewSelectionListener() {
+            @Override
             public void selectedRangeAdded(ListView listView, int rangeStart, int rangeEnd) {
                 refreshSelectionListData();
             }
 
+            @Override
             public void selectedRangeRemoved(ListView listView, int rangeStart, int rangeEnd) {
                 refreshSelectionListData();
             }
 
+            @Override
             public void selectedRangesChanged(ListView listView, Sequence<Span> previousSelectedRanges) {
                 refreshSelectionListData();
             }

@@ -55,6 +55,7 @@ public class IMClient implements Application {
      * Task for asynchronously logging into Jabber.
      */
     private class LoginTask extends Task<Void> {
+        @Override
         public Void execute() throws TaskExecutionException {
             try {
                 String domain = domainTextInput.getText();
@@ -89,6 +90,7 @@ public class IMClient implements Application {
 
     private ApplicationContext.ScheduledCallback scheduledFadeCallback = null;
 
+    @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -96,10 +98,12 @@ public class IMClient implements Application {
         wtkxSerializer.bind(this, IMClient.class);
 
         loginForm.getComponentKeyListeners().add(new ComponentKeyListener() {
+            @Override
             public boolean keyTyped(Component component, char character) {
                 return false;
             }
 
+            @Override
             public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
                 if (keyCode == Keyboard.KeyCode.ENTER) {
                     login();
@@ -108,12 +112,14 @@ public class IMClient implements Application {
                 return false;
             }
 
+            @Override
             public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
                 return false;
             }
         });
 
         loginButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
             public void buttonPressed(final Button button) {
                 login();
             }
@@ -122,6 +128,7 @@ public class IMClient implements Application {
         window.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) throws Exception {
         if (window != null) {
             window.close();
@@ -130,10 +137,12 @@ public class IMClient implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
         // No-op
     }
 
+    @Override
     public void resume() {
         // No-op
     }
@@ -148,12 +157,14 @@ public class IMClient implements Application {
         } else {
             LoginTask loginTask = new LoginTask();
             loginTask.execute(new TaskListener<Void>() {
+                @Override
                 public void taskExecuted(Task<Void> task) {
                     loginButton.setEnabled(true);
                     cardPane.setSelectedIndex(1);
                     listenForMessages();
                 }
 
+                @Override
                 public void executeFailed(Task<Void> task) {
                     loginButton.setEnabled(true);
                     errorMessageLabel.setText(task.getFault().getMessage());
@@ -169,10 +180,12 @@ public class IMClient implements Application {
         PacketFilter filter = new PacketTypeFilter(Message.class);
 
         PacketListener packetListener = new PacketListener() {
+            @Override
             public void processPacket(Packet packet) {
                 final Message message = (Message)packet;
 
                 ApplicationContext.queueCallback(new Runnable() {
+                    @Override
                     public void run() {
                         // Show the message text
                         String body = message.getBody();
@@ -187,10 +200,12 @@ public class IMClient implements Application {
                         }
 
                         scheduledFadeCallback = ApplicationContext.scheduleCallback(new Runnable() {
+                            @Override
                             public void run() {
                                 FadeTransition fadeTransition = new FadeTransition(messageLabel, 500, 30);
 
                                 fadeTransition.start(new TransitionListener() {
+                                    @Override
                                     public void transitionCompleted(Transition transition) {
                                         messageLabel.setText(null);
                                     }

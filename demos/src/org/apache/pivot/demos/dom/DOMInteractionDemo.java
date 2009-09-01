@@ -32,6 +32,7 @@ public class DOMInteractionDemo implements Application {
     private Window window = null;
     private PushButton helloButton = null;
 
+    @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         BoxPane boxPane = new BoxPane();
@@ -41,6 +42,7 @@ public class DOMInteractionDemo implements Application {
         boxPane.add(helloButton);
 
         helloButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
             public void buttonPressed(Button button) {
                 BrowserApplicationContext.eval("sayHello(\"Hello from Pivot!\")", DOMInteractionDemo.this);
             }
@@ -51,6 +53,7 @@ public class DOMInteractionDemo implements Application {
         window.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (window != null) {
             window.close();
@@ -59,9 +62,11 @@ public class DOMInteractionDemo implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 
