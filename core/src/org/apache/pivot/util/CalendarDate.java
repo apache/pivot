@@ -203,6 +203,7 @@ public class CalendarDate implements Comparable<CalendarDate>, Serializable {
      * date is less than, equal to, or greater than this calendar date,
      * respectively.
      */
+    @Override
     public int compareTo(CalendarDate calendarDate) {
         int result = year - calendarDate.year;
 
