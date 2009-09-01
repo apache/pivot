@@ -138,6 +138,7 @@ public abstract class ChartView extends Component {
             return elementIndex;
         }
 
+        @Override
         public String toString() {
             String string = getClass().getName()
                 + seriesIndex + ", " + elementIndex;
@@ -156,6 +157,7 @@ public abstract class ChartView extends Component {
      * Internal class for managing the chart's category list.
      */
     public final class CategorySequence implements Sequence<Category> {
+        @Override
         public int add(Category category) {
             int i = getLength();
             insert(category, i);
@@ -163,6 +165,7 @@ public abstract class ChartView extends Component {
             return i;
         }
 
+        @Override
         public void insert(Category category, int index) {
             if (category == null) {
                 throw new IllegalArgumentException("category is null.");
@@ -178,10 +181,12 @@ public abstract class ChartView extends Component {
             chartViewCategoryListeners.categoryInserted(ChartView.this, index);
         }
 
+        @Override
         public Category update(int index, Category category) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public int remove(Category category) {
             int index = indexOf(category);
             if (index != -1) {
@@ -191,6 +196,7 @@ public abstract class ChartView extends Component {
             return index;
         }
 
+        @Override
         public Sequence<Category> remove(int index, int count) {
             Sequence<Category> removed = categories.remove(index, count);
 
@@ -205,14 +211,17 @@ public abstract class ChartView extends Component {
             return removed;
         }
 
+        @Override
         public Category get(int index) {
             return categories.get(index);
         }
 
+        @Override
         public int indexOf(Category category) {
             return categories.indexOf(category);
         }
 
+        @Override
         public int getLength() {
             return categories.getLength();
         }
@@ -222,23 +231,28 @@ public abstract class ChartView extends Component {
      * List event handler.
      */
     private class ListHandler implements ListListener<Object> {
+        @Override
         public void itemInserted(List<Object> list, int index) {
             chartViewSeriesListeners.seriesInserted(ChartView.this, index);
         }
 
+        @Override
         public void itemsRemoved(List<Object> list, int index, Sequence<Object> items) {
             int count = items.getLength();
             chartViewSeriesListeners.seriesRemoved(ChartView.this, index, count);
         }
 
+        @Override
         public void itemUpdated(List<Object> list, int index, Object previousItem) {
             chartViewSeriesListeners.seriesUpdated(ChartView.this, index);
         }
 
+        @Override
         public void listCleared(List<Object> list) {
             chartViewSeriesListeners.seriesCleared(ChartView.this);
         }
 
+        @Override
         public void comparatorChanged(List<Object> list,
             Comparator<Object> previousComparator) {
             if (list.getComparator() != null) {
@@ -252,36 +266,42 @@ public abstract class ChartView extends Component {
      */
     private static class ChartViewListenerList extends ListenerList<ChartViewListener>
         implements ChartViewListener {
+        @Override
         public void chartDataChanged(ChartView chartView, List<?> previousChartData) {
             for (ChartViewListener listener : this) {
                 listener.chartDataChanged(chartView, previousChartData);
             }
         }
 
+        @Override
         public void seriesNameKeyChanged(ChartView chartView, String previousSeriesNameKey) {
             for (ChartViewListener listener : this) {
                 listener.seriesNameKeyChanged(chartView, previousSeriesNameKey);
             }
         }
 
+        @Override
         public void titleChanged(ChartView chartView, String previousTitle) {
             for (ChartViewListener listener : this) {
                 listener.titleChanged(chartView, previousTitle);
             }
         }
 
+        @Override
         public void horizontalAxisLabelChanged(ChartView chartView, String previousXAxisLabel) {
             for (ChartViewListener listener : this) {
                 listener.horizontalAxisLabelChanged(chartView, previousXAxisLabel);
             }
         }
 
+        @Override
         public void verticalAxisLabelChanged(ChartView chartView, String previousYAxisLabel) {
             for (ChartViewListener listener : this) {
                 listener.verticalAxisLabelChanged(chartView, previousYAxisLabel);
             }
         }
 
+        @Override
         public void showLegendChanged(ChartView chartView) {
             for (ChartViewListener listener : this) {
                 listener.showLegendChanged(chartView);
@@ -294,24 +314,28 @@ public abstract class ChartView extends Component {
      */
     private static class ChartViewCategoryListenerList extends ListenerList<ChartViewCategoryListener>
         implements ChartViewCategoryListener {
+        @Override
         public void categoryInserted(ChartView chartView, int index) {
             for (ChartViewCategoryListener listener : this) {
                 listener.categoryInserted(chartView, index);
             }
         }
 
+        @Override
         public void categoriesRemoved(ChartView chartView, int index, Sequence<ChartView.Category> categories) {
             for (ChartViewCategoryListener listener : this) {
                 listener.categoriesRemoved(chartView, index, categories);
             }
         }
 
+        @Override
         public void categoryKeyChanged(ChartView chartView, int index, String previousKey) {
             for (ChartViewCategoryListener listener : this) {
                 listener.categoryKeyChanged(chartView, index, previousKey);
             }
         }
 
+        @Override
         public void categoryLabelChanged(ChartView chartView, int index, String previousLabel) {
             for (ChartViewCategoryListener listener : this) {
                 listener.categoryLabelChanged(chartView, index, previousLabel);
@@ -324,30 +348,35 @@ public abstract class ChartView extends Component {
      */
     private static class ChartViewSeriesListenerList extends ListenerList<ChartViewSeriesListener>
         implements ChartViewSeriesListener {
+        @Override
         public void seriesInserted(ChartView chartView, int index) {
             for (ChartViewSeriesListener listener : this) {
                 listener.seriesInserted(chartView, index);
             }
         }
 
+        @Override
         public void seriesRemoved(ChartView chartView, int index, int count) {
             for (ChartViewSeriesListener listener : this) {
                 listener.seriesRemoved(chartView, index, count);
             }
         }
 
+        @Override
         public void seriesUpdated(ChartView chartView, int index) {
             for (ChartViewSeriesListener listener : this) {
                 listener.seriesUpdated(chartView, index);
             }
         }
 
+        @Override
         public void seriesCleared(ChartView chartView) {
             for (ChartViewSeriesListener listener : this) {
                 listener.seriesCleared(chartView);
             }
         }
 
+        @Override
         public void seriesSorted(ChartView chartView) {
             for (ChartViewSeriesListener listener : this) {
                 listener.seriesSorted(chartView);
