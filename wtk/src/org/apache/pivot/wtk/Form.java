@@ -74,14 +74,21 @@ public class Form extends Container {
         }
 
         public void insert(Component field, int index) {
+            if (field == null) {
+                throw new IllegalArgumentException();
+            }
+
+            if (field.getParent() != null) {
+                throw new IllegalArgumentException("Field already has a parent.");
+            }
+
             fields.insert(field, index);
+            field.setAttributes(new Attributes(this));
 
             if (form != null) {
                 form.add(field);
                 form.formListeners.fieldInserted(this, index);
             }
-
-            field.setAttributes(new Attributes(this));
         }
 
         public Component update(int index, Component field) {

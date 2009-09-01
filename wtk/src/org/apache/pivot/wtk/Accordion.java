@@ -57,10 +57,6 @@ public class Accordion extends Container {
                 throw new IllegalArgumentException("panel is null.");
             }
 
-            if (panel.getParent() != null) {
-                throw new IllegalArgumentException("Panel already has a parent.");
-            }
-
             // Add the panel to the component sequence
             Accordion.this.add(panel);
             panels.insert(panel, index);

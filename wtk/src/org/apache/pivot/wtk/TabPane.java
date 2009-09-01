@@ -55,10 +55,6 @@ public class TabPane extends Container {
                 throw new IllegalArgumentException("tab is null.");
             }
 
-            if (tab.getParent() != null) {
-                throw new IllegalArgumentException("Tab already has a parent.");
-            }
-
             // Add the tab to the component sequence
             TabPane.this.add(tab);
             tabs.insert(tab, index);
