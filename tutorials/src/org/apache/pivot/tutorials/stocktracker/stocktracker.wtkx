@@ -24,7 +24,6 @@ limitations under the License.
     <content>
         <TablePane styles="{padding:8, horizontalSpacing:6, verticalSpacing:6}">
             <columns>
-                <TablePane.Column width="244" />
                 <TablePane.Column width="1*" />
             </columns>
 
@@ -35,44 +34,53 @@ limitations under the License.
                 </TablePane.Row>
 
                 <TablePane.Row height="1*">
-                    <Border styles="{padding:0, color:10}">
-                        <content>
-                            <ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
-                                verticalScrollBarPolicy="fill_to_capacity">
-                                <view>
-                                    <TableView wtkx:id="stocksTableView" selectMode="multi"
-                                        styles="{showHorizontalGridLines:false}">
-                                        <columns>
-                                            <TableView.Column name="symbol"
-                                                headerData="%symbol" width="80" />
-                                            <TableView.Column name="value" headerData="%value" width="80">
-                                                <cellRenderer>
-                                                    <content:TableViewNumberCellRenderer styles="{horizontalAlignment:'right'}"
-                                                        numberFormat="$$0.00"/>
-                                                </cellRenderer>
-                                            </TableView.Column>
-                                            <TableView.Column name="change" headerData="%change" width="80">
-                                                <cellRenderer>
-                                                    <stocktracker:ChangeCellRenderer styles="{horizontalAlignment:'right'}"
-                                                        numberFormat="+0.00;-0.00"/>
-                                                </cellRenderer>
-                                            </TableView.Column>
-                                        </columns>
-                                    </TableView>
-                                </view>
+                    <SplitPane splitRatio="0.4">
+                        <left>
+                            <Border styles="{padding:0, color:10}">
+                                <content>
+                                    <ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
+                                        verticalScrollBarPolicy="fill_to_capacity">
+                                        <view>
+                                            <TableView wtkx:id="stocksTableView" selectMode="multi"
+                                                styles="{showHorizontalGridLines:false}">
+                                                <columns>
+                                                    <TableView.Column name="symbol"
+                                                        headerData="%symbol" width="1*" />
+                                                    <TableView.Column name="value" headerData="%value" width="1*">
+                                                        <cellRenderer>
+                                                            <content:TableViewNumberCellRenderer styles="{horizontalAlignment:'right'}"
+                                                                numberFormat="$$0.00"/>
+                                                        </cellRenderer>
+                                                    </TableView.Column>
+                                                    <TableView.Column name="change" headerData="%change" width="1*">
+                                                        <cellRenderer>
+                                                            <stocktracker:ChangeCellRenderer styles="{horizontalAlignment:'right'}"
+                                                                numberFormat="+0.00;-0.00"/>
+                                                        </cellRenderer>
+                                                    </TableView.Column>
+                                                </columns>
+                                            </TableView>
+                                        </view>
 
-                                <columnHeader>
-                                    <TableViewHeader tableView="$stocksTableView" styles="{headersPressable:false}"/>
-                                </columnHeader>
-                            </ScrollPane>
-                        </content>
-                    </Border>
-
-                    <Border styles="{padding:6, color:10}">
-                        <content>
-                            <wtkx:include wtkx:id="detail" src="stocktracker.detail.wtkx" />
-                        </content>
-                    </Border>
+                                        <columnHeader>
+                                            <TableViewHeader tableView="$stocksTableView">
+                                                <tableViewHeaderPressListeners>
+                                                    <TableView.SortHandler/>
+                                                </tableViewHeaderPressListeners>
+                                            </TableViewHeader>
+                                        </columnHeader>
+                                    </ScrollPane>
+                                </content>
+                            </Border>
+                        </left>
+                        <right>
+                            <Border styles="{padding:6, color:10}">
+                                <content>
+                                    <wtkx:include wtkx:id="detail" src="stocktracker.detail.wtkx" />
+                                </content>
+                            </Border>
+                        </right>
+                    </SplitPane>
                 </TablePane.Row>
 
                 <TablePane.Row height="-1">
@@ -97,15 +105,25 @@ limitations under the License.
                 </TablePane.Row>
 
                 <TablePane.Row height="-1">
-                    <BoxPane>
-                        <Label text="%lastUpdate"/>
-                        <Label wtkx:id="lastUpdateLabel"/>
-                    </BoxPane>
-                    <BoxPane styles="{horizontalAlignment:'right'}">
-                        <Label text="%dataProvidedBy" />
-                        <LinkButton wtkx:id="yahooFinanceButton"
-                            buttonData="%yahooFinance" />
-                    </BoxPane>
+                    <TablePane>
+                        <columns>
+                            <TablePane.Column width="1*"/>
+                            <TablePane.Column width="-1"/>
+                        </columns>
+                        <rows>
+                            <TablePane.Row>
+                                <BoxPane>
+                                    <Label text="%lastUpdate"/>
+                                    <Label wtkx:id="lastUpdateLabel"/>
+                                </BoxPane>
+                                <BoxPane styles="{horizontalAlignment:'right'}">
+                                    <Label text="%dataProvidedBy" />
+                                    <LinkButton wtkx:id="yahooFinanceButton"
+                                        buttonData="%yahooFinance" />
+                                </BoxPane>
+                            </TablePane.Row>
+                        </rows>
+                    </TablePane>
                 </TablePane.Row>
             </rows>
         </TablePane>
