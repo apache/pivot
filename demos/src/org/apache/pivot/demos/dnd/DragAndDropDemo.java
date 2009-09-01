@@ -56,6 +56,7 @@ public class DragAndDropDemo implements Application {
     @WTKX private PushButton copyFilesButton;
     @WTKX private PushButton pasteFilesButton;
 
+    @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -66,6 +67,7 @@ public class DragAndDropDemo implements Application {
         label.setDragSource(new DragSource() {
             private LocalManifest content = null;
 
+            @Override
             public boolean beginDrag(Component component, int x, int y) {
                 String text = label.getText();
                 if (text != null) {
@@ -76,32 +78,39 @@ public class DragAndDropDemo implements Application {
                 return (content != null);
             }
 
+            @Override
             public void endDrag(Component component, DropAction dropAction) {
                 content = null;
             }
 
+            @Override
             public boolean isNative() {
                 return true;
             }
 
+            @Override
             public LocalManifest getContent() {
                 return content;
             }
 
+            @Override
             public Visual getRepresentation() {
                 return null;
             }
 
+            @Override
             public Point getOffset() {
                 return null;
             }
 
+            @Override
             public int getSupportedDropActions() {
                 return DropAction.COPY.getMask();
             }
         });
 
         label.setDropTarget(new DropTarget() {
+            @Override
             public DropAction dragEnter(Component component, Manifest dragContent,
                 int supportedDropActions, DropAction userDropAction) {
                 DropAction dropAction = null;
@@ -114,19 +123,23 @@ public class DragAndDropDemo implements Application {
                 return dropAction;
             }
 
+            @Override
             public void dragExit(Component component) {
             }
 
+            @Override
             public DropAction dragMove(Component component, Manifest dragContent,
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
                 return (dragContent.containsText() ? DropAction.COPY : null);
             }
 
+            @Override
             public DropAction userDropActionChange(Component component, Manifest dragContent,
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
                 return (dragContent.containsText() ? DropAction.COPY : null);
             }
 
+            @Override
             public DropAction drop(Component component, Manifest dragContent,
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
                 DropAction dropAction = null;
@@ -147,6 +160,7 @@ public class DragAndDropDemo implements Application {
         });
 
         copyTextButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
             public void buttonPressed(Button button) {
                 String text = label.getText();
                 LocalManifest clipboardContent = new LocalManifest();
@@ -156,6 +170,7 @@ public class DragAndDropDemo implements Application {
         });
 
         pasteTextButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
             public void buttonPressed(Button button) {
                 Manifest clipboardContent = Clipboard.getContent();
 
@@ -174,6 +189,7 @@ public class DragAndDropDemo implements Application {
         imageView.setDragSource(new DragSource() {
             private LocalManifest content = null;
 
+            @Override
             public boolean beginDrag(Component component, int x, int y) {
                 Image image = imageView.getImage();
 
@@ -185,32 +201,39 @@ public class DragAndDropDemo implements Application {
                 return (content != null);
             }
 
+            @Override
             public void endDrag(Component component, DropAction dropAction) {
                 content = null;
             }
 
+            @Override
             public boolean isNative() {
                 return true;
             }
 
+            @Override
             public LocalManifest getContent() {
                 return content;
             }
 
+            @Override
             public Visual getRepresentation() {
                 return null;
             }
 
+            @Override
             public Point getOffset() {
                 return null;
             }
 
+            @Override
             public int getSupportedDropActions() {
                 return DropAction.COPY.getMask();
             }
         });
 
         imageView.setDropTarget(new DropTarget() {
+            @Override
             public DropAction dragEnter(Component component, Manifest dragContent,
                 int supportedDropActions, DropAction userDropAction) {
                 DropAction dropAction = null;
@@ -223,19 +246,23 @@ public class DragAndDropDemo implements Application {
                 return dropAction;
             }
 
+            @Override
             public void dragExit(Component component) {
             }
 
+            @Override
             public DropAction dragMove(Component component, Manifest dragContent,
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
                 return (dragContent.containsImage() ? DropAction.COPY : null);
             }
 
+            @Override
             public DropAction userDropActionChange(Component component, Manifest dragContent,
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
                 return (dragContent.containsImage() ? DropAction.COPY : null);
             }
 
+            @Override
             public DropAction drop(Component component, Manifest dragContent,
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
                 DropAction dropAction = null;
@@ -256,6 +283,7 @@ public class DragAndDropDemo implements Application {
         });
 
         copyImageButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
             public void buttonPressed(Button button) {
                 Image image = imageView.getImage();
                 if (image != null) {
@@ -267,6 +295,7 @@ public class DragAndDropDemo implements Application {
         });
 
         pasteImageButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
             public void buttonPressed(Button button) {
                 Manifest clipboardContent = Clipboard.getContent();
 
@@ -287,6 +316,7 @@ public class DragAndDropDemo implements Application {
         listView.setDragSource(new DragSource() {
             private LocalManifest content = null;
 
+            @Override
             public boolean beginDrag(Component component, int x, int y) {
                 ListView listView = (ListView)component;
                 FileList fileList = (FileList)listView.getListData();
@@ -299,32 +329,39 @@ public class DragAndDropDemo implements Application {
                 return (content != null);
             }
 
+            @Override
             public void endDrag(Component component, DropAction dropAction) {
                 content = null;
             }
 
+            @Override
             public boolean isNative() {
                 return true;
             }
 
+            @Override
             public LocalManifest getContent() {
                 return content;
             }
 
+            @Override
             public Visual getRepresentation() {
                 return null;
             }
 
+            @Override
             public Point getOffset() {
                 return null;
             }
 
+            @Override
             public int getSupportedDropActions() {
                 return DropAction.COPY.getMask();
             }
         });
 
         listView.setDropTarget(new DropTarget() {
+            @Override
             public DropAction dragEnter(Component component, Manifest dragContent,
                 int supportedDropActions, DropAction userDropAction) {
                 DropAction dropAction = null;
@@ -337,19 +374,23 @@ public class DragAndDropDemo implements Application {
                 return dropAction;
             }
 
+            @Override
             public void dragExit(Component component) {
             }
 
+            @Override
             public DropAction dragMove(Component component, Manifest dragContent,
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
                 return (dragContent.containsFileList() ? DropAction.COPY : null);
             }
 
+            @Override
             public DropAction userDropActionChange(Component component, Manifest dragContent,
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
                 return (dragContent.containsFileList() ? DropAction.COPY : null);
             }
 
+            @Override
             public DropAction drop(Component component, Manifest dragContent,
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
                 DropAction dropAction = null;
@@ -370,12 +411,14 @@ public class DragAndDropDemo implements Application {
         });
 
         copyFilesButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
             public void buttonPressed(Button button) {
                 // TODO
             }
         });
 
         pasteFilesButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
             public void buttonPressed(Button button) {
                 // TODO
             }
@@ -384,6 +427,7 @@ public class DragAndDropDemo implements Application {
         window.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (window != null) {
             window.close();
@@ -392,9 +436,11 @@ public class DragAndDropDemo implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 

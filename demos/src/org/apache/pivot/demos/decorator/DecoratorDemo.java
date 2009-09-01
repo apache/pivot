@@ -31,6 +31,7 @@ public class DecoratorDemo implements Application {
     private Window reflectionWindow = null;
     private Frame translucentFrame = null;
 
+    @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -41,11 +42,13 @@ public class DecoratorDemo implements Application {
         translucentFrame.getDecorators().insert(fadeDecorator, 0);
 
         translucentFrame.getComponentMouseListeners().add(new ComponentMouseListener.Adapter() {
+            @Override
             public void mouseOver(Component component) {
                 fadeDecorator.setOpacity(0.9f);
                 component.repaint();
             }
 
+            @Override
             public void mouseOut(Component component) {
                 fadeDecorator.setOpacity(0.5f);
                 component.repaint();
@@ -56,6 +59,7 @@ public class DecoratorDemo implements Application {
         translucentFrame.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (reflectionWindow != null) {
             reflectionWindow.close();
@@ -68,9 +72,11 @@ public class DecoratorDemo implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 

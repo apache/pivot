@@ -52,6 +52,7 @@ public class FileDropTargetDemo implements Application {
 
     private FileList fileList = null;
 
+    @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -62,10 +63,12 @@ public class FileDropTargetDemo implements Application {
         fileTableView.setTableData(fileList);
 
         fileList.getListListeners().add(new ListListener.Adapter<File>() {
+            @Override
             public void itemInserted(List<File> list, int index) {
                 uploadButton.setEnabled(list.getLength() > 0);
             }
 
+            @Override
             public void itemsRemoved(List<File> list, int index, Sequence<File> files) {
                 uploadButton.setEnabled(list.getLength() > 0);
 
@@ -77,6 +80,7 @@ public class FileDropTargetDemo implements Application {
         });
 
         fileTableView.getComponentKeyListeners().add(new ComponentKeyListener.Adapter() {
+            @Override
             public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
                 if (keyCode == Keyboard.KeyCode.DELETE
                     || keyCode == Keyboard.KeyCode.BACKSPACE) {
@@ -95,6 +99,7 @@ public class FileDropTargetDemo implements Application {
         });
 
         fileTableView.setDropTarget(new DropTarget() {
+            @Override
             public DropAction dragEnter(Component component, Manifest dragContent,
                 int supportedDropActions, DropAction userDropAction) {
                 DropAction dropAction = null;
@@ -107,19 +112,23 @@ public class FileDropTargetDemo implements Application {
                 return dropAction;
             }
 
+            @Override
             public void dragExit(Component component) {
             }
 
+            @Override
             public DropAction dragMove(Component component, Manifest dragContent,
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
                 return (dragContent.containsFileList() ? DropAction.COPY : null);
             }
 
+            @Override
             public DropAction userDropActionChange(Component component, Manifest dragContent,
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
                 return (dragContent.containsFileList() ? DropAction.COPY : null);
             }
 
+            @Override
             public DropAction drop(Component component, Manifest dragContent,
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
                 DropAction dropAction = null;
@@ -149,6 +158,7 @@ public class FileDropTargetDemo implements Application {
         });
 
         uploadButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
             public void buttonPressed(Button button) {
                 Prompt.prompt(MessageType.INFO, "Pretending to upload...", window);
             }
@@ -157,6 +167,7 @@ public class FileDropTargetDemo implements Application {
         window.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) throws Exception {
         if (window != null) {
             window.close();
@@ -165,9 +176,11 @@ public class FileDropTargetDemo implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 

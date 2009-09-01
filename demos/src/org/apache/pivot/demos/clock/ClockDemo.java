@@ -30,6 +30,7 @@ public class ClockDemo implements Application {
     private Window window;
     private Clock clock = new Clock();
 
+    @Override
     public void startup(Display display, Map<String, String> properties) {
         window = new Window(new MovieView(clock));
         window.setMaximized(true);
@@ -37,6 +38,7 @@ public class ClockDemo implements Application {
         clock.play();
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (window != null) {
             window.close();
@@ -45,9 +47,11 @@ public class ClockDemo implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 

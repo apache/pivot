@@ -43,10 +43,12 @@ public class Clock extends Movie {
         }
 
         image.getImageListeners().add(new ImageListener() {
+            @Override
             public void sizeChanged(Image image, int previousWidth, int previousHeight) {
                 movieListeners.sizeChanged(Clock.this, previousWidth, previousHeight);
             }
 
+            @Override
             public void regionUpdated(Image image, int x, int y, int width, int height) {
                 movieListeners.regionUpdated(Clock.this, x, y, width, height);
             }
@@ -56,6 +58,7 @@ public class Clock extends Movie {
         setFrameRate(1);
     }
 
+    @Override
     public void setCurrentFrame(int currentFrame) {
         Shape.Rotate secondsRotation = (Shape.Rotate)wtkxSerializer.get("secondsRotation");
         Shape.Rotate minutesRotation = (Shape.Rotate)wtkxSerializer.get("minutesRotation");
@@ -74,18 +77,22 @@ public class Clock extends Movie {
         super.setCurrentFrame(currentFrame);
     }
 
+    @Override
     public int getWidth() {
         return image.getWidth();
     }
 
+    @Override
     public int getHeight() {
         return image.getHeight();
     }
 
+    @Override
     public void paint(Graphics2D graphics) {
         image.paint(graphics);
     }
 
+    @Override
     public int getTotalFrames() {
         return 60;
     }
