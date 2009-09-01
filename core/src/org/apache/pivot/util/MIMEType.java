@@ -41,30 +41,37 @@ public class MIMEType implements Dictionary<String, String>, Iterable<String> {
         return baseType;
     }
 
+    @Override
     public String get(String key) {
         return parameters.get(key);
     }
 
+    @Override
     public String put(String key, String value) {
         return parameters.put(key, value);
     }
 
+    @Override
     public String remove(String key) {
         return parameters.remove(key);
     }
 
+    @Override
     public boolean containsKey(String key) {
         return parameters.containsKey(key);
     }
 
+    @Override
     public boolean isEmpty() {
         return parameters.isEmpty();
     }
 
+    @Override
     public Iterator<String> iterator() {
         return new ImmutableIterator<String>(parameters.iterator());
     }
 
+    @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
 

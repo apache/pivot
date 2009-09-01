@@ -49,10 +49,12 @@ public abstract class ListenerList<T> implements Iterable<T> {
             this.node = first;
         }
 
+        @Override
         public boolean hasNext() {
             return (node != null);
         }
 
+        @Override
         public T next() {
             if (node == null) {
                 throw new NoSuchElementException();
@@ -64,6 +66,7 @@ public abstract class ListenerList<T> implements Iterable<T> {
             return listener;
         }
 
+        @Override
         public void remove() {
             throw new UnsupportedOperationException();
         }
@@ -137,6 +140,7 @@ public abstract class ListenerList<T> implements Iterable<T> {
         }
     }
 
+    @Override
     public Iterator<T> iterator() {
         return new NodeIterator();
     }

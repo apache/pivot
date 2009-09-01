@@ -179,6 +179,7 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
         return charset;
     }
 
+    @Override
     public Object get(String key) {
         Object o = JSONSerializer.get(resourceMap, key);
         if (o == null && parent != null) {
@@ -267,16 +268,19 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
         return map;
     }
 
+    @Override
     public Object put(String key, Object value) {
         throw new UnsupportedOperationException(
                 "Resources instances are immutable");
     }
 
+    @Override
     public Object remove(String key) {
         throw new UnsupportedOperationException(
                 "Resources instances are immutable");
     }
 
+    @Override
     public boolean containsKey(String key) {
         boolean containsKey = resourceMap.containsKey(key);
         if (!containsKey && parent != null) {
@@ -285,6 +289,7 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
         return containsKey;
     }
 
+    @Override
     public boolean isEmpty() {
         boolean empty = resourceMap.isEmpty();
         if (empty && parent != null) {
@@ -293,6 +298,7 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
         return empty;
     }
 
+    @Override
     public Iterator<String> iterator() {
         return new ImmutableIterator<String>(resourceMap.iterator());
     }

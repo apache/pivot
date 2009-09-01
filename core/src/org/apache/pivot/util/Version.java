@@ -93,6 +93,7 @@ public class Version implements Comparable<Version>, Serializable {
         return number;
     }
 
+    @Override
     public int compareTo(Version version) {
         return (getNumber() - version.getNumber());
     }
