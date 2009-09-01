@@ -71,13 +71,16 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 
             int length = cardPane.getLength();
             if (circular
-                && from == length - 1
-                && to == 0) {
-                direction = 1;
-            } else if (circular
-                && from == 0
-                && to == length - 1) {
-                direction = -1;
+                && length >= 3) {
+                if (from == length - 1
+                    && to == 0) {
+                    direction = 1;
+                } else if (from == 0
+                    && to == length - 1) {
+                    direction = -1;
+                } else {
+                    direction = Integer.signum(from - to);
+                }
             } else {
                 direction = Integer.signum(from - to);
             }
@@ -511,6 +514,9 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
      * directional transitions will appear to move forward when transitioning
      * from the last card to the first, and backward when they transition from
      * the first card to the last.
+     * <p>
+     * Note: to avoid ambiguity, the circular style will be ignored if the card
+     * pane has fewer than three cards.
      *
      * @return
      * <tt>true</tt> if directional transitions will be circular;
@@ -530,6 +536,9 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
      * directional transitions will appear to move forward when transitioning
      * from the last card to the first, and backward when they transition from
      * the first card to the last.
+     * <p>
+     * Note: to avoid ambiguity, the circular style will be ignored if the card
+     * pane has fewer than three cards.
      *
      * @param circular
      * <tt>true</tt> if directional transitions should be circular;
