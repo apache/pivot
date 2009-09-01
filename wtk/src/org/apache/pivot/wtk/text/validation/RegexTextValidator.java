@@ -51,6 +51,7 @@ public class RegexTextValidator implements Validator {
         this.p = Pattern.compile(regexPattern);
     }
 
+    @Override
     public boolean isValid(String text) {
         return p.matcher(text).matches();
     }

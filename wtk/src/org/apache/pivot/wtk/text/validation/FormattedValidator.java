@@ -28,6 +28,7 @@ public class FormattedValidator<F extends Format> implements Validator {
         this.format = format;
     }
 
+    @Override
     public boolean isValid(String text) {
         final ParsePosition pos = new ParsePosition(0);
         Object obj = format.parseObject(text, pos);
