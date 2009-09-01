@@ -57,6 +57,7 @@ public abstract class ChartViewSkin extends ComponentSkin
         super.uninstall();
     }
 
+    @Override
     public void layout() {
         // No-op
     }
@@ -71,64 +72,79 @@ public abstract class ChartViewSkin extends ComponentSkin
     }
 
     // Chart view events
+    @Override
     public void chartDataChanged(ChartView chartView, List<?> previousChartData) {
         repaintComponent();
     }
 
+    @Override
     public void seriesNameKeyChanged(ChartView chartView, String previousSeriesNameKey) {
         repaintComponent();
     }
 
+    @Override
     public void titleChanged(ChartView chartView, String previousTitle) {
         repaintComponent();
     }
 
+    @Override
     public void horizontalAxisLabelChanged(ChartView chartView, String previousHorizontalAxisLabel) {
         repaintComponent();
     }
 
+    @Override
     public void verticalAxisLabelChanged(ChartView chartView, String previousVerticalAxisLabel) {
         repaintComponent();
     }
 
+    @Override
     public void showLegendChanged(ChartView chartView) {
         repaintComponent();
     }
 
     // Chart view category events
+    @Override
     public void categoryInserted(ChartView chartView, int index) {
         repaintComponent();
     }
 
+    @Override
     public void categoriesRemoved(ChartView chartView, int index, Sequence<ChartView.Category> categories) {
         repaintComponent();
     }
 
+    @Override
     public void categoryKeyChanged(ChartView chartView, int index, String previousKey) {
         repaintComponent();
     }
 
+    @Override
     public void categoryLabelChanged(ChartView chartView, int index, String previousLabel) {
         repaintComponent();
     }
 
     // Chart view series events
+    @Override
     public void seriesInserted(ChartView chartView, int index) {
         repaintComponent();
     }
 
+    @Override
     public void seriesRemoved(ChartView chartView, int index, int count) {
         repaintComponent();
     }
 
+    @Override
     public void seriesUpdated(ChartView chartView, int index) {
         repaintComponent();
     }
 
+    @Override
     public void seriesCleared(ChartView chartView) {
         repaintComponent();
     }
 
+    @Override
     public void seriesSorted(ChartView chartView) {
         repaintComponent();
     }
