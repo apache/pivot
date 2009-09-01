@@ -87,10 +87,12 @@ import org.apache.pivot.wtkx.WTKXSerializer;
 public class KitchenSink implements Application, Application.AboutHandler {
     private abstract class RollupStateHandler
         implements RollupStateListener {
+        @Override
         public void expandedChangeVetoed(Rollup rollup, Vote reason) {
             // No-op
         }
 
+        @Override
         public void expandedChanged(Rollup rollup) {
             // No-op
         }
@@ -99,6 +101,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
     private class ButtonsRollupStateHandler extends RollupStateHandler {
         private Component component = null;
 
+        @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
                 WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -125,6 +128,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         private ListButton iconListButton = null;
 
         @SuppressWarnings("unchecked")
+        @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
                 WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -145,6 +149,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
 
                 List<ListItem> listData = (List<ListItem>)editableListView.getListData();
                 listData.setComparator(new Comparator<ListItem>() {
+                    @Override
                     public int compare(ListItem listItem1, ListItem listItem2) {
                         String text1 = listItem1.getText();
                         String text2 = listItem2.getText();
@@ -154,6 +159,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
 
 
                 Filter<ListItem> disabledItemFilter = new Filter<ListItem>() {
+                    @Override
                     public boolean include(ListItem listItem) {
                         return Character.toLowerCase(listItem.getText().charAt(0)) == 'c';
                     }
@@ -175,6 +181,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         private Component component = null;
         private TextArea textArea = null;
 
+        @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
                 WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -215,6 +222,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
     private class CalendarsRollupStateHandler extends RollupStateHandler {
         private Component component = null;
 
+        @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
                 WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -236,6 +244,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
     private class NavigationRollupStateHandler extends RollupStateHandler {
         private Component component = null;
 
+        @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
                 WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -257,6 +266,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
     private class SplittersRollupStateHandler extends RollupStateHandler {
         private Component component = null;
 
+        @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
                 WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -282,13 +292,16 @@ public class KitchenSink implements Application, Application.AboutHandler {
 
         private Menu.Section menuSection = null;
 
+        @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
                 Action.getNamedActions().put("selectImageAction", new Action() {
+                    @Override
                     public String getDescription() {
                         return "Select Image Action";
                     }
 
+                    @Override
                     public void perform() {
                         Button.Group imageMenuGroup = Button.getNamedGroups().get("imageMenuGroup");
                         Button selectedItem = imageMenuGroup.getSelection();
@@ -338,6 +351,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                 }
 
                 menuImageView.setMenuHandler(new MenuHandler.Adapter() {
+                    @Override
                     public boolean configureContextMenu(Component component, Menu menu, int x, int y) {
                         menu.getSections().add(menuSection);
                         return false;
@@ -345,6 +359,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                 });
 
                 helpAboutMenuItem.getButtonPressListeners().add(new ButtonPressListener() {
+                    @Override
                     public void buttonPressed(Button button) {
                         aboutRequested();
                     }
@@ -361,6 +376,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         private ActivityIndicator activityIndicator2 = null;
         private ActivityIndicator activityIndicator3 = null;
 
+        @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
                 WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -379,14 +395,17 @@ public class KitchenSink implements Application, Application.AboutHandler {
                 rollup.setContent(component);
 
                 metersRollup.getRollupStateListeners().add(new RollupStateListener() {
+                    @Override
                     public Vote previewExpandedChange(Rollup rollup) {
                         return Vote.APPROVE;
                     }
 
+                    @Override
                     public void expandedChangeVetoed(Rollup rollup, Vote reason) {
                         // No-op
                     }
 
+                    @Override
                     public void expandedChanged(Rollup rollup) {
                         activityIndicator1.setActive(rollup.isExpanded());
                         activityIndicator2.setActive(rollup.isExpanded());
@@ -410,6 +429,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         private Slider blueSlider = null;
         private Border colorBorder = null;
 
+        @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
                 WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -435,6 +455,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                 initializeDateSpinner(dateSpinner);
 
                 SliderValueListener sliderValueListener = new SliderValueListener() {
+                    @Override
                     public void valueChanged(Slider slider, int previousValue) {
                         Color color = new Color(redSlider.getValue(), greenSlider.getValue(),
                             blueSlider.getValue());
@@ -477,6 +498,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         private TableView customTableView = null;
         private TableViewHeader sortableTableViewHeader = null;
 
+        @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
                 WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -554,6 +576,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         private TreeView editableTreeView = null;
         private TreeView checkTreeView = null;
 
+        @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
                 WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -574,6 +597,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                 treeData.setComparator(new TreeNodeComparator());
 
                 checkTreeView.setDisabledNodeFilter(new Filter<TreeNode>() {
+                    @Override
                     public boolean include(TreeNode treeNode) {
                         boolean include = false;
 
@@ -601,6 +625,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         private ImageView imageView2 = null;
         private ImageView imageView3 = null;
 
+        @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
                 WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -623,6 +648,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                     private Point offset = null;
                     private LocalManifest content = null;
 
+                    @Override
                     public boolean beginDrag(Component component, int x, int y) {
                         ImageView imageView = (ImageView)component;
                         image = imageView.getImage();
@@ -638,6 +664,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                         return (image != null);
                     }
 
+                    @Override
                     public void endDrag(Component component, DropAction dropAction) {
                         if (dropAction == null) {
                             ImageView imageView = (ImageView)component;
@@ -649,28 +676,34 @@ public class KitchenSink implements Application, Application.AboutHandler {
                         content = null;
                     }
 
+                    @Override
                     public boolean isNative() {
                         return false;
                     }
 
+                    @Override
                     public LocalManifest getContent() {
                         return content;
                     }
 
+                    @Override
                     public Visual getRepresentation() {
                         return image;
                     }
 
+                    @Override
                     public Point getOffset() {
                         return offset;
                     }
 
+                    @Override
                     public int getSupportedDropActions() {
                         return DropAction.MOVE.getMask();
                     }
                 };
 
                 DropTarget imageDropTarget = new DropTarget() {
+                    @Override
                     public DropAction dragEnter(Component component, Manifest dragContent,
                         int supportedDropActions, DropAction userDropAction) {
                         DropAction dropAction = null;
@@ -686,20 +719,24 @@ public class KitchenSink implements Application, Application.AboutHandler {
                         return dropAction;
                     }
 
+                    @Override
                     public void dragExit(Component component) {
                         component.getStyles().put("backgroundColor", null);
                     }
 
+                    @Override
                     public DropAction dragMove(Component component, Manifest dragContent,
                         int supportedDropActions, int x, int y, DropAction userDropAction) {
                         return (dragContent.containsImage() ? DropAction.MOVE : null);
                     }
 
+                    @Override
                     public DropAction userDropActionChange(Component component, Manifest dragContent,
                         int supportedDropActions, int x, int y, DropAction userDropAction) {
                         return (dragContent.containsImage() ? DropAction.MOVE : null);
                     }
 
+                    @Override
                     public DropAction drop(Component component, Manifest dragContent,
                         int supportedDropActions, int x, int y, DropAction userDropAction) {
                         DropAction dropAction = null;
@@ -739,6 +776,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         private PushButton alertButton = null;
         private PushButton promptButton = null;
 
+        @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
                 WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -756,6 +794,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                 rollup.setContent(component);
 
                 alertButton.getButtonPressListeners().add(new ButtonPressListener() {
+                    @Override
                     public void buttonPressed(Button button) {
                         Button.Group messageTypeGroup = Button.getNamedGroups().get("messageType");
                         Button selection = messageTypeGroup.getSelection();
@@ -797,6 +836,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                 });
 
                 promptButton.getButtonPressListeners().add(new ButtonPressListener() {
+                    @Override
                     public void buttonPressed(Button button) {
                         Button.Group messageTypeGroup = Button.getNamedGroups().get("messageType");
                         Button selection = messageTypeGroup.getSelection();
@@ -861,6 +901,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         DesktopApplicationContext.main(KitchenSink.class, args);
     }
 
+    @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "kitchen_sink.wtkx");
@@ -909,12 +950,14 @@ public class KitchenSink implements Application, Application.AboutHandler {
 
         // Start with the "Buttons" rollup expanded
         ApplicationContext.scheduleCallback(new Runnable() {
+            @Override
             public void run() {
                 buttonsRollup.setExpanded(true);
             }
         }, 0);
     }
 
+    @Override
     public boolean shutdown(boolean optional) throws Exception {
         if (window != null) {
             window.close();
@@ -923,12 +966,15 @@ public class KitchenSink implements Application, Application.AboutHandler {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 
+    @Override
     public void aboutRequested() {
         String about = "Origin: " + ApplicationContext.getOrigin()
             + "; JVM version: " + ApplicationContext.getJVMVersion();

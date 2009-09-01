@@ -31,6 +31,7 @@ import org.apache.pivot.wtk.Window;
 public class HelloJava implements Application {
     private Window window = null;
 
+    @Override
     public void startup(Display display, Map<String, String> properties) {
         Label label = new Label();
         label.setText("Hello World!");
@@ -48,6 +49,7 @@ public class HelloJava implements Application {
         window.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (window != null) {
             window.close();
@@ -56,9 +58,11 @@ public class HelloJava implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 

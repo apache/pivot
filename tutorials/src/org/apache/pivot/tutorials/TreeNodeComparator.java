@@ -24,6 +24,7 @@ import org.apache.pivot.wtk.content.TreeNode;
  * Orders TreeNode instances by their name using string comparison.
  */
 public class TreeNodeComparator implements Comparator<TreeNode> {
+    @Override
     public int compare(TreeNode treeNode1, TreeNode treeNode2) {
         String text1 = treeNode1.getText();
         String text2 = treeNode2.getText();
