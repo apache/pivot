@@ -45,6 +45,7 @@ public class Accordions implements Application {
     private AccordionSelectionListener accordionSelectionListener = new AccordionSelectionListener() {
         private int selectedIndex = -1;
 
+        @Override
         public Vote previewSelectedIndexChange(Accordion accordion, int selectedIndex) {
             this.selectedIndex = selectedIndex;
 
@@ -63,6 +64,7 @@ public class Accordions implements Application {
             return Vote.APPROVE;
         }
 
+        @Override
         public void selectedIndexChangeVetoed(Accordion accordion, Vote reason) {
             if (reason == Vote.DENY
                 && selectedIndex != -1) {
@@ -71,11 +73,13 @@ public class Accordions implements Application {
             }
         }
 
+        @Override
         public void selectedIndexChanged(Accordion accordion, int previousSelection) {
             updateAccordion();
         }
     };
 
+    @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -85,6 +89,7 @@ public class Accordions implements Application {
         accordion.getAccordionSelectionListeners().add(accordionSelectionListener);
 
         ButtonPressListener nextButtonPressListener = new ButtonPressListener() {
+            @Override
             public void buttonPressed(Button button) {
                 accordion.setSelectedIndex(accordion.getSelectedIndex() + 1);
             }
@@ -98,6 +103,7 @@ public class Accordions implements Application {
 
         confirmOrderButton = (PushButton)wtkxSerializer.get("summaryPanel.confirmOrderButton");
         confirmOrderButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
             public void buttonPressed(Button button) {
                 // Pretend to submit or cancel the order
                 activityIndicator.setActive(!activityIndicator.isActive());
@@ -115,6 +121,7 @@ public class Accordions implements Application {
         window.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (window != null) {
             window.close();
@@ -123,9 +130,11 @@ public class Accordions implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 

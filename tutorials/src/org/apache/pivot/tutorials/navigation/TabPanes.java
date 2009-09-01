@@ -38,6 +38,7 @@ public class TabPanes implements Application {
     private RadioButton verticalRadioButton = null;
     private BoxPane cornerBoxPane = null;
 
+    @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -49,6 +50,7 @@ public class TabPanes implements Application {
         cornerBoxPane = (BoxPane)wtkxSerializer.get("cornerBoxPane");
 
         ButtonStateListener checkboxStateListener = new ButtonStateListener() {
+            @Override
             public void stateChanged(Button button, Button.State previousState) {
                 updateTabPane();
             }
@@ -57,6 +59,7 @@ public class TabPanes implements Application {
         collapsibleCheckbox.getButtonStateListeners().add(checkboxStateListener);
 
         ButtonStateListener radioButtonStateListener = new ButtonStateListener() {
+            @Override
             public void stateChanged(Button button, Button.State previousState) {
                 if (button.isSelected()) {
                     updateTabPane();
@@ -72,6 +75,7 @@ public class TabPanes implements Application {
         window.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (window != null) {
             window.close();
@@ -80,9 +84,11 @@ public class TabPanes implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 

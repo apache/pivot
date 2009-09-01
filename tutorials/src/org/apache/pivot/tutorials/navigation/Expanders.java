@@ -31,6 +31,7 @@ public class Expanders implements Application {
     private Expander weatherExpander = null;
     private Expander calendarExpander = null;
 
+    @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -40,6 +41,7 @@ public class Expanders implements Application {
         calendarExpander = (Expander)wtkxSerializer.get("calendarExpander");
 
         ExpanderListener expanderListener = new ExpanderListener.Adapter() {
+            @Override
             public void expandedChanged(Expander expander) {
                 if (expander.isExpanded()) {
                     expander.scrollAreaToVisible(0, 0, expander.getWidth(), expander.getHeight());
@@ -54,6 +56,7 @@ public class Expanders implements Application {
         window.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (window != null) {
             window.close();
@@ -62,9 +65,11 @@ public class Expanders implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 

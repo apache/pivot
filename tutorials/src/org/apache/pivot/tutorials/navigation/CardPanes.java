@@ -46,6 +46,7 @@ public class CardPanes implements Application {
     private RadioButton zoomRadioButton = null;
     private RadioButton noneRadioButton = null;
 
+    @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -63,24 +64,28 @@ public class CardPanes implements Application {
         noneRadioButton = (RadioButton)wtkxSerializer.get("noneRadioButton");
 
         cardPane.getCardPaneListeners().add(new CardPaneListener.Adapter() {
+            @Override
             public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex) {
                 updateLinkButtonState();
             }
         });
 
         previousButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
             public void buttonPressed(Button button) {
                 cardPane.setSelectedIndex(cardPane.getSelectedIndex() - 1);
             }
         });
 
         nextButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
             public void buttonPressed(Button button) {
                 cardPane.setSelectedIndex(cardPane.getSelectedIndex() + 1);
             }
         });
 
         ButtonStateListener checkboxStateListener = new ButtonStateListener() {
+            @Override
             public void stateChanged(Button button, Button.State previousState) {
                 updateCardPane();
             }
@@ -89,6 +94,7 @@ public class CardPanes implements Application {
         sizeToSelectionCheckbox.getButtonStateListeners().add(checkboxStateListener);
 
         ButtonStateListener radioButtonStateListener = new ButtonStateListener() {
+            @Override
             public void stateChanged(Button button, Button.State previousState) {
                 if (button.isSelected()) {
                     updateCardPane();
@@ -110,6 +116,7 @@ public class CardPanes implements Application {
         window.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (window != null) {
             window.close();
@@ -118,9 +125,11 @@ public class CardPanes implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 
