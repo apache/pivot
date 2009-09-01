@@ -66,6 +66,7 @@ public class SynchronizedSet<E> extends SynchronizedCollection<E>
         super(set);
     }
 
+    @Override
     public synchronized boolean add(E element) {
         boolean added = false;
 
@@ -79,6 +80,7 @@ public class SynchronizedSet<E> extends SynchronizedCollection<E>
         return added;
     }
 
+    @Override
     public synchronized boolean remove(E element) {
         boolean removed = false;
 
@@ -92,18 +94,22 @@ public class SynchronizedSet<E> extends SynchronizedCollection<E>
         return removed;
     }
 
+    @Override
     public synchronized boolean contains(E element) {
         return ((Set<E>)collection).contains(element);
     }
 
+    @Override
     public synchronized boolean isEmpty() {
         return ((Set<E>)collection).isEmpty();
     }
 
+    @Override
     public synchronized int getCount() {
         return ((Set<E>)collection).getCount();
     }
 
+    @Override
     public ListenerList<SetListener<E>> getSetListeners() {
         return setListeners;
     }

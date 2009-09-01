@@ -55,6 +55,7 @@ public class SynchronizedQueue<T> extends SynchronizedCollection<T>
         super(queue);
     }
 
+    @Override
     public synchronized void enqueue(T item) {
         ((Queue<T>)collection).enqueue(item);
         queueListeners.itemEnqueued(this, item);
@@ -62,6 +63,7 @@ public class SynchronizedQueue<T> extends SynchronizedCollection<T>
         notify();
     }
 
+    @Override
     public synchronized T dequeue() {
         T item = null;
         try {
@@ -77,14 +79,17 @@ public class SynchronizedQueue<T> extends SynchronizedCollection<T>
         return item;
     }
 
+    @Override
     public synchronized T peek() {
         return ((Queue<T>)collection).peek();
     }
 
+    @Override
     public synchronized boolean isEmpty() {
         return ((Queue<T>)collection).isEmpty();
     }
 
+    @Override
     public ListenerList<QueueListener<T>> getQueueListeners() {
         return queueListeners;
     }

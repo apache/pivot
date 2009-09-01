@@ -73,6 +73,7 @@ public class SynchronizedList<T> extends SynchronizedCollection<T>
         super(list);
     }
 
+    @Override
     public synchronized int add(T item) {
         int index = ((List<T>)collection).add(item);
         listListeners.itemInserted(this, index);
@@ -80,11 +81,13 @@ public class SynchronizedList<T> extends SynchronizedCollection<T>
         return index;
     }
 
+    @Override
     public synchronized void insert(T item, int index) {
         ((List<T>)collection).insert(item, index);
         listListeners.itemInserted(this, index);
     }
 
+    @Override
     public synchronized T update(int index, T item) {
         T previousItem = ((List<T>)collection).update(index, item);
         if (previousItem != item) {
@@ -94,6 +97,7 @@ public class SynchronizedList<T> extends SynchronizedCollection<T>
         return previousItem;
     }
 
+    @Override
     public synchronized int remove (T item) {
         int index = indexOf(item);
         if (index == -1) {
@@ -105,6 +109,7 @@ public class SynchronizedList<T> extends SynchronizedCollection<T>
         return index;
     }
 
+    @Override
     public synchronized Sequence<T> remove(int index, int count) {
         Sequence<T> removed = ((List<T>)collection).remove(index, count);
         if (count > 0) {
@@ -114,18 +119,22 @@ public class SynchronizedList<T> extends SynchronizedCollection<T>
         return removed;
     }
 
+    @Override
     public synchronized T get(int index) {
         return ((List<T>)collection).get(index);
     }
 
+    @Override
     public synchronized int indexOf(T item) {
         return ((List<T>)collection).indexOf(item);
     }
 
+    @Override
     public synchronized int getLength() {
         return ((List<T>)collection).getLength();
     }
 
+    @Override
     public ListenerList<ListListener<T>> getListListeners() {
         return listListeners;
     }

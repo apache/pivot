@@ -73,11 +73,13 @@ public class SynchronizedMap<K, V> extends SynchronizedCollection<K>
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public synchronized V get(K key) {
         return ((Map<K, V>)collection).get(key);
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public synchronized V put(K key, V value) {
         boolean update = containsKey(key);
         V previousValue = ((Map<K, V>)collection).put(key, value);
@@ -93,6 +95,7 @@ public class SynchronizedMap<K, V> extends SynchronizedCollection<K>
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public synchronized V remove(K key) {
         V value = null;
 
@@ -105,20 +108,24 @@ public class SynchronizedMap<K, V> extends SynchronizedCollection<K>
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public synchronized boolean isEmpty() {
         return ((Map<K, V>)collection).isEmpty();
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public synchronized boolean containsKey(K key) {
         return ((Map<K, V>)collection).containsKey(key);
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public synchronized int getCount() {
         return ((Map<K, V>)collection).getCount();
     }
 
+    @Override
     public ListenerList<MapListener<K, V>> getMapListeners() {
         return mapListeners;
     }

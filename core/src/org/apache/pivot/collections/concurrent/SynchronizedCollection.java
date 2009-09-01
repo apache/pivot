@@ -40,14 +40,17 @@ public abstract class SynchronizedCollection<T> implements Collection<T> {
         this.collection = collection;
     }
 
+    @Override
     public synchronized void clear() {
         collection.clear();
     }
 
+    @Override
     public synchronized Comparator<T> getComparator() {
         return collection.getComparator();
     }
 
+    @Override
     public synchronized void setComparator(Comparator<T> comparator) {
         collection.setComparator(comparator);
     }
@@ -56,6 +59,7 @@ public abstract class SynchronizedCollection<T> implements Collection<T> {
      * NOTE Callers must manually synchronize on the SynchronizedCollection
      * instance to ensure thread safety during iteration.
      */
+    @Override
     public Iterator<T> iterator() {
         return new ImmutableIterator<T>(collection.iterator());
     }

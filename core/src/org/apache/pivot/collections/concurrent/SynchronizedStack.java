@@ -55,6 +55,7 @@ public class SynchronizedStack<T> extends SynchronizedCollection<T>
         super(stack);
     }
 
+    @Override
     public synchronized void push(T item) {
         ((Stack<T>)collection).push(item);
         stackListeners.itemPushed(this, item);
@@ -62,6 +63,7 @@ public class SynchronizedStack<T> extends SynchronizedCollection<T>
         notify();
     }
 
+    @Override
     public synchronized T pop() {
         T item = null;
         try {
@@ -78,14 +80,17 @@ public class SynchronizedStack<T> extends SynchronizedCollection<T>
         return item;
     }
 
+    @Override
     public synchronized T peek() {
         return ((Stack<T>)collection).peek();
     }
 
+    @Override
     public synchronized boolean isEmpty() {
         return ((Stack<T>)collection).isEmpty();
     }
 
+    @Override
     public ListenerList<StackListener<T>> getStackListeners() {
         return stackListeners;
     }
