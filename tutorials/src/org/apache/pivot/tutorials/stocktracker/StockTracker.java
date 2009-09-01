@@ -81,6 +81,7 @@ public class StockTracker implements Application {
 
     public StockTracker() {
         symbols.setComparator(new Comparator<String>() {
+            @Override
             public int compare(String s1, String s2) {
                 return s1.compareTo(s2);
             }
@@ -95,6 +96,7 @@ public class StockTracker implements Application {
         symbols.add("JAVA");
     }
 
+    @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         // Set the locale
@@ -111,12 +113,14 @@ public class StockTracker implements Application {
 
         // Wire up event handlers
         stocksTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener.Adapter() {
+            @Override
             public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges) {
                 refreshDetail();
             }
         });
 
         stocksTableView.getComponentKeyListeners().add(new ComponentKeyListener.Adapter() {
+            @Override
             public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
                 if (keyCode == Keyboard.KeyCode.DELETE) {
                     removeSelectedSymbols();
@@ -127,6 +131,7 @@ public class StockTracker implements Application {
         });
 
         symbolTextInput.getTextInputTextListeners().add(new TextInputTextListener() {
+            @Override
             public void textChanged(TextInput textInput) {
                 TextNode textNode = textInput.getTextNode();
                 addSymbolButton.setEnabled(textNode.getCharacterCount() > 0);
@@ -134,6 +139,7 @@ public class StockTracker implements Application {
         });
 
         symbolTextInput.getComponentKeyListeners().add(new ComponentKeyListener.Adapter() {
+            @Override
             public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
                 if (keyCode == Keyboard.KeyCode.ENTER) {
                     addSymbol();
@@ -144,18 +150,21 @@ public class StockTracker implements Application {
         });
 
         addSymbolButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
             public void buttonPressed(Button button) {
                 addSymbol();
             }
         });
 
         removeSymbolsButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
             public void buttonPressed(Button button) {
                 removeSelectedSymbols();
             }
         });
 
         yahooFinanceButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
             public void buttonPressed(Button button) {
                 try {
                     ApplicationContext.open(new URL(YAHOO_FINANCE_HOME));
@@ -169,6 +178,7 @@ public class StockTracker implements Application {
         refreshTable();
 
         ApplicationContext.scheduleRecurringCallback(new Runnable() {
+            @Override
             public void run() {
                 refreshTable();
             }
@@ -177,6 +187,7 @@ public class StockTracker implements Application {
         symbolTextInput.requestFocus();
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (window != null) {
             window.close();
@@ -185,9 +196,11 @@ public class StockTracker implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 
@@ -231,6 +244,7 @@ public class StockTracker implements Application {
         getQuery.setSerializer(quoteSerializer);
 
         getQuery.execute(new TaskAdapter<Object>(new TaskListener<Object>() {
+            @Override
             public void taskExecuted(Task<Object> task) {
                 if (task == getQuery) {
                     Sequence<Span> selectedRanges = stocksTableView.getSelectedRanges();
@@ -254,6 +268,7 @@ public class StockTracker implements Application {
                 }
             }
 
+            @Override
             public void executeFailed(Task<Object> task) {
                 if (task == getQuery) {
                     System.out.println(task.getFault());

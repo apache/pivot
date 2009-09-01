@@ -34,6 +34,7 @@ public class ActivityIndicators implements Application {
     private ActivityIndicator activityIndicator3 = null;
     private PushButton activityButton = null;
 
+    @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -44,6 +45,7 @@ public class ActivityIndicators implements Application {
         activityButton = (PushButton)wtkxSerializer.get("activityButton");
 
         activityButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
             public void buttonPressed(Button button) {
                 activityIndicator1.setActive(!activityIndicator1.isActive());
                 activityIndicator2.setActive(!activityIndicator2.isActive());
@@ -57,6 +59,7 @@ public class ActivityIndicators implements Application {
         window.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (window != null) {
             window.close();
@@ -65,9 +68,11 @@ public class ActivityIndicators implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 

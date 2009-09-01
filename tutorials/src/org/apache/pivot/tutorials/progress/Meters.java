@@ -36,6 +36,7 @@ public class Meters implements Application {
     public class SampleTask extends Task<Void> {
         private int percentage = 0;
 
+        @Override
         public Void execute() throws TaskExecutionException {
             // Simulate a long-running operation
             percentage = 0;
@@ -48,6 +49,7 @@ public class Meters implements Application {
 
                     // Update the meter on the UI thread
                     ApplicationContext.queueCallback(new Runnable() {
+                        @Override
                         public void run() {
                             meter.setPercentage((double)percentage / 100);
                         }
@@ -67,6 +69,7 @@ public class Meters implements Application {
 
     private SampleTask sampleTask = null;
 
+    @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -75,6 +78,7 @@ public class Meters implements Application {
         progressButton = (PushButton)wtkxSerializer.get("progressButton");
 
         progressButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
             public void buttonPressed(Button button) {
                 if (sampleTask == null) {
                     // Create and start the simulated task; wrap it in a
@@ -82,10 +86,12 @@ public class Meters implements Application {
                     // UI thread
                     sampleTask = new SampleTask();
                     sampleTask.execute(new TaskAdapter<Void>(new TaskListener<Void>() {
+                        @Override
                         public void taskExecuted(Task<Void> task) {
                             reset();
                         }
 
+                        @Override
                         public void executeFailed(Task<Void> task) {
                             reset();
                         }
@@ -111,6 +117,7 @@ public class Meters implements Application {
         window.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (window != null) {
             window.close();
@@ -119,9 +126,11 @@ public class Meters implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 

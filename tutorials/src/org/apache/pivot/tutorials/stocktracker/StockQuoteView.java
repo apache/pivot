@@ -29,6 +29,7 @@ public class StockQuoteView extends BeanDictionary {
         super(stockQuote);
     }
 
+    @Override
     public Object get(String key) {
         if (key == null) {
             throw new IllegalArgumentException("key is null.");
