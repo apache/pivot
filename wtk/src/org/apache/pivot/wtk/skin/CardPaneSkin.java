@@ -134,7 +134,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         public SlideTransition(int from, int to) {
             super(from, to);
 
-            direction = Integer.signum(from - to);
+            direction = (circular ? 1 : Integer.signum(from - to));
         }
 
         @Override
@@ -265,7 +265,8 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         protected void update() {
             float percentComplete = getPercentComplete();
 
-            if (from < to) {
+            if (circular
+                || from < to) {
                 fromScaleDecorator.setScale(1.0f + percentComplete);
                 toScaleDecorator.setScale(percentComplete);
             } else {
@@ -280,6 +281,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     private Insets padding = Insets.NONE;
     private boolean sizeToSelection = false;
     private SelectionChangeEffect selectionChangeEffect = null;
+    private boolean circular = false;
 
     private SelectionChangeTransition selectionChangeTransition = null;
 
@@ -487,6 +489,14 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         }
 
         setSelectionChangeEffect(SelectionChangeEffect.valueOf(selectionChangeEffect.toUpperCase()));
+    }
+
+    public boolean isCircular() {
+        return circular;
+    }
+
+    public void setCircular(boolean circular) {
+        this.circular = circular;
     }
 
     @Override
