@@ -33,6 +33,7 @@ public class RotateLine implements Application {
 
     private Window window = null;
 
+    @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception{
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -40,6 +41,7 @@ public class RotateLine implements Application {
         rotation = (Shape.Rotate)wtkxSerializer.get("rotation");
 
         ApplicationContext.scheduleRecurringCallback(new Runnable() {
+            @Override
             public void run() {
                 int angle = (int)rotation.getAngle();
                 angle = (angle + 6) % 360;
@@ -52,6 +54,7 @@ public class RotateLine implements Application {
         window.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (window != null) {
             window.close();
@@ -60,9 +63,11 @@ public class RotateLine implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 

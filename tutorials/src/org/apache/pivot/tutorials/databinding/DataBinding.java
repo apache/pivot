@@ -44,6 +44,7 @@ public class DataBinding implements Application {
         "(617) 555-1234", "joe_smith@foo.com",
         new IMAccount("jsmith1234", "AIM"));
 
+    @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -55,6 +56,7 @@ public class DataBinding implements Application {
         sourceLabel = (Label)wtkxSerializer.get("sourceLabel");
 
         loadJavaButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
             public void buttonPressed(Button button) {
                 form.load(CONTACT);
                 sourceLabel.setText("Java");
@@ -63,6 +65,7 @@ public class DataBinding implements Application {
 
         loadJSONButton.getButtonPressListeners().add(new ButtonPressListener() {
             @SuppressWarnings("unchecked")
+            @Override
             public void buttonPressed(Button button) {
                 JSONSerializer serializer = new JSONSerializer();
                 InputStream inputStream = getClass().getResourceAsStream("contact.json");
@@ -79,6 +82,7 @@ public class DataBinding implements Application {
         });
 
         clearButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
             public void buttonPressed(Button button) {
                 form.load(new Contact());
                 sourceLabel.setText(null);
@@ -88,6 +92,7 @@ public class DataBinding implements Application {
         window.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (window != null) {
             window.close();
@@ -97,9 +102,11 @@ public class DataBinding implements Application {
     }
 
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 
