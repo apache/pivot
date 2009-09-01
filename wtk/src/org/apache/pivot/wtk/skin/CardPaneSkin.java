@@ -57,6 +57,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         public final int to;
         public final Component fromCard;
         public final Component toCard;
+        public final int direction;
 
         public SelectionChangeTransition(int from, int to) {
             super(SELECTION_CHANGE_DURATION, SELECTION_CHANGE_RATE, false);
@@ -67,6 +68,19 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
             CardPane cardPane = (CardPane)getComponent();
             fromCard = (from == -1) ? null : cardPane.get(from);
             toCard = (to == -1) ? null : cardPane.get(to);
+
+            int length = cardPane.getLength();
+            if (circular
+                && from == length - 1
+                && to == 0) {
+                direction = 1;
+            } else if (circular
+                && from == 0
+                && to == length - 1) {
+                direction = -1;
+            } else {
+                direction = Integer.signum(from - to);
+            }
         }
     }
 
@@ -128,13 +142,10 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
      * Class that performs slide selection change transitions.
      */
     public class SlideTransition extends SelectionChangeTransition {
-        private int direction;
         private Easing slideEasing = new Quartic();
 
         public SlideTransition(int from, int to) {
             super(from, to);
-
-            direction = (circular ? 1 : Integer.signum(from - to));
         }
 
         @Override
@@ -265,8 +276,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         protected void update() {
             float percentComplete = getPercentComplete();
 
-            if (circular
-                || from < to) {
+            if (direction == 1) {
                 fromScaleDecorator.setScale(1.0f + percentComplete);
                 toScaleDecorator.setScale(percentComplete);
             } else {
@@ -491,10 +501,40 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         setSelectionChangeEffect(SelectionChangeEffect.valueOf(selectionChangeEffect.toUpperCase()));
     }
 
+    /**
+     * Sets the circular style, which controls the direction of certain
+     * transitions (transitions for which a direction makes sense) when looping
+     * from the first index of a card pane to the last, or vice versa. When
+     * this style is <tt>false</tt> (the default), directional transitions will
+     * always appear to move forward when transitioning from a lower card index
+     * to a higher card index, and vice versa. When this style is <tt>true</tt>,
+     * directional transitions will appear to move forward when transitioning
+     * from the last card to the first, and backward when they transition from
+     * the first card to the last.
+     *
+     * @return
+     * <tt>true</tt> if directional transitions will be circular;
+     * <tt>false</tt> otherwise
+     */
     public boolean isCircular() {
         return circular;
     }
 
+    /**
+     * Sets the circular style, which controls the direction of certain
+     * transitions (transitions for which a direction makes sense) when looping
+     * from the first index of a card pane to the last, or vice versa. When
+     * this style is <tt>false</tt> (the default), directional transitions will
+     * always appear to move forward when transitioning from a lower card index
+     * to a higher card index, and vice versa. When this style is <tt>true</tt>,
+     * directional transitions will appear to move forward when transitioning
+     * from the last card to the first, and backward when they transition from
+     * the first card to the last.
+     *
+     * @param circular
+     * <tt>true</tt> if directional transitions should be circular;
+     * <tt>false</tt> otherwise
+     */
     public void setCircular(boolean circular) {
         this.circular = circular;
     }
