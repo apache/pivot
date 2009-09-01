@@ -28,12 +28,14 @@ public interface Stack<T> extends Collection<T> {
      */
     public static class StackListenerList<T> extends ListenerList<StackListener<T>>
         implements StackListener<T> {
+        @Override
         public void itemPushed(Stack<T> stack, T item) {
             for (StackListener<T> listener : this) {
                 listener.itemPushed(stack, item);
             }
         }
 
+        @Override
         public void itemPopped(Stack<T> stack, T item) {
             for (StackListener<T> listener : this) {
                 listener.itemPopped(stack, item);

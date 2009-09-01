@@ -29,24 +29,28 @@ public interface Set<E> extends Group<E>, Collection<E> {
      */
     public static class SetListenerList<E>
         extends ListenerList<SetListener<E>> implements SetListener<E> {
+        @Override
         public void elementAdded(Set<E> set, E element) {
             for (SetListener<E> listener : this) {
                 listener.elementAdded(set, element);
             }
         }
 
+        @Override
         public void elementRemoved(Set<E> set, E element) {
             for (SetListener<E> listener : this) {
                 listener.elementRemoved(set, element);
             }
         }
 
+        @Override
         public void setCleared(Set<E> set) {
             for (SetListener<E> listener : this) {
                 listener.setCleared(set);
             }
         }
 
+        @Override
         public void comparatorChanged(Set<E> set, Comparator<E> previousComparator) {
             for (SetListener<E> listener : this) {
                 listener.comparatorChanged(set, previousComparator);
@@ -57,16 +61,19 @@ public interface Set<E> extends Group<E>, Collection<E> {
     /**
      * @see SetListener#elementAdded(Set, Object)
      */
+    @Override
     public boolean add(E element);
 
     /**
      * @see SetListener#elementRemoved(Set, Object)
      */
+    @Override
     public boolean remove(E element);
 
     /**
      * @see SetListener#setCleared(Set)
      */
+    @Override
     public void clear();
 
     /**
@@ -77,6 +84,7 @@ public interface Set<E> extends Group<E>, Collection<E> {
     /**
      * @see SetListener#setCleared(Set)
      */
+    @Override
     public void setComparator(Comparator<E> comparator);
 
     /**

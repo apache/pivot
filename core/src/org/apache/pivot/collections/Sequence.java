@@ -61,38 +61,47 @@ public interface Sequence<T> {
                 this.elements = elements;
             }
 
+            @Override
             public int add(Integer item) {
                 return elements.add(item);
             }
 
+            @Override
             public void insert(Integer item, int index) {
                 elements.insert(item, index);
             }
 
+            @Override
             public Integer update(int index, Integer item) {
                 return elements.update(index, item);
             }
 
+            @Override
             public int remove(Integer item) {
                 throw new UnsupportedOperationException();
             }
 
+            @Override
             public Sequence<Integer> remove(int index, int count) {
                 return elements.remove(index, count);
             }
 
+            @Override
             public Integer get(int index) {
                 return elements.get(index);
             }
 
+            @Override
             public int indexOf(Integer item) {
                 return elements.indexOf(item);
             }
 
+            @Override
             public int getLength() {
                 return elements.getLength();
             }
 
+            @Override
             public Iterator<Integer> iterator() {
                 return new ImmutableIterator<Integer>(elements.iterator());
             }

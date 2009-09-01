@@ -28,12 +28,14 @@ public interface Queue<T> extends Collection<T> {
      */
     public static class QueueListenerList<T> extends ListenerList<QueueListener<T>>
         implements QueueListener<T> {
+        @Override
         public void itemEnqueued(Queue<T> queue, T item) {
             for (QueueListener<T> listener : this) {
                 listener.itemEnqueued(queue, item);
             }
         }
 
+        @Override
         public void itemDequeued(Queue<T> queue, T item) {
             for (QueueListener<T> listener : this) {
                 listener.itemDequeued(queue, item);
