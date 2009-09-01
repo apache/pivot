@@ -28,9 +28,11 @@ public interface FilteredListListener<T> {
      * @param <T>
      */
     public static class Adapter<T> implements FilteredListListener<T> {
+        @Override
         public void sourceChanged(FilteredList<T> filteredList, List<T> previousSource) {
         }
 
+        @Override
         public void filterChanged(FilteredList<T> filteredList, Filter<T> previousFilter) {
         }
     }

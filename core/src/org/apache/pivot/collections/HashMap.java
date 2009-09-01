@@ -43,6 +43,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
             count = HashMap.this.count;
         }
 
+        @Override
         public boolean hasNext() {
             // Move to the next bucket
             while (entryIterator != null
@@ -54,6 +55,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
             return (entryIterator != null);
         }
 
+        @Override
         public K next() {
             if (!hasNext()) {
                 throw new NoSuchElementException();
@@ -68,6 +70,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
             return entry.key;
         }
 
+        @Override
         public void remove() {
             throw new UnsupportedOperationException();
         }
@@ -131,6 +134,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         setComparator(comparator);
     }
 
+    @Override
     public V get(K key) {
         V value = null;
 
@@ -150,6 +154,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         return value;
     }
 
+    @Override
     public V put(K key, V value) {
         V previousValue = null;
 
@@ -200,6 +205,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         return previousValue;
     }
 
+    @Override
     public V remove(K key) {
         V value = null;
 
@@ -233,6 +239,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         return value;
     }
 
+    @Override
     public void clear() {
         if (count > 0) {
             // Remove all entries
@@ -255,6 +262,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         }
     }
 
+    @Override
     public boolean containsKey(K key) {
         // Locate the entry
         LinkedList<Pair<K, V>> bucket = getBucket(key);
@@ -274,10 +282,12 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         return (i < bucket.getLength());
     }
 
+    @Override
     public boolean isEmpty() {
         return (count == 0);
     }
 
+    @Override
     public int getCount() {
         return count;
     }
@@ -318,10 +328,12 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         return bucket;
     }
 
+    @Override
     public Comparator<K> getComparator() {
         return (keys == null) ? null : keys.getComparator();
     }
 
+    @Override
     public void setComparator(Comparator<K> comparator) {
         Comparator<K> previousComparator = getComparator();
 
@@ -348,10 +360,12 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         }
     }
 
+    @Override
     public Iterator<K> iterator() {
         return (keys == null) ? new KeyIterator() : new ImmutableIterator<K>(keys.iterator());
     }
 
+    @Override
     public ListenerList<MapListener<K, V>> getMapListeners() {
         if (mapListeners == null) {
             mapListeners = new MapListenerList<K, V>();
@@ -360,6 +374,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         return mapListeners;
     }
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
 

@@ -32,12 +32,14 @@ import org.apache.pivot.util.ListenerList;
 public class FilteredList<T> implements List<T> {
     private static class FilteredListListenerList<T> extends ListenerList<FilteredListListener<T>>
         implements FilteredListListener<T> {
+        @Override
         public void sourceChanged(FilteredList<T> filteredList, List<T> previousSource) {
             for (FilteredListListener<T> listener : this) {
                 listener.sourceChanged(filteredList, previousSource);
             }
         }
 
+        @Override
         public void filterChanged(FilteredList<T> filteredList, Filter<T> previousFilter) {
             for (FilteredListListener<T> listener : this) {
                 listener.filterChanged(filteredList, previousFilter);
@@ -54,6 +56,7 @@ public class FilteredList<T> implements List<T> {
     private boolean updating = false;
 
     private ListListener<T> listListener = new ListListener<T>() {
+        @Override
         public void itemInserted(List<T> list, int index) {
             if (!updating) {
                 T item = list.get(index);
@@ -67,6 +70,7 @@ public class FilteredList<T> implements List<T> {
             }
         }
 
+        @Override
         public void itemsRemoved(List<T> list, int index, Sequence<T> items) {
             if (!updating) {
                 // Remove the items from the view
@@ -83,6 +87,7 @@ public class FilteredList<T> implements List<T> {
             }
         }
 
+        @Override
         public void itemUpdated(List<T> list, int index, T previousItem) {
             if (!updating) {
                 T item = list.get(index);
@@ -130,6 +135,7 @@ public class FilteredList<T> implements List<T> {
             }
         }
 
+        @Override
         public void listCleared(List<T> list) {
             if (!updating) {
                 // Remove all items from the view
@@ -138,6 +144,7 @@ public class FilteredList<T> implements List<T> {
             }
         }
 
+        @Override
         public void comparatorChanged(List<T> list, Comparator<T> previousComparator) {
             // No-op
         }

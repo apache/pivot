@@ -62,10 +62,12 @@ public class LinkedList<T> implements List<T>, Serializable {
             next = (reverse) ? last : first;
         }
 
+        @Override
         public boolean hasNext() {
             return (next != null);
         }
 
+        @Override
         public T next() {
             if (!hasNext()) {
                 throw new NoSuchElementException();
@@ -79,10 +81,12 @@ public class LinkedList<T> implements List<T>, Serializable {
             return item;
         }
 
+        @Override
         public boolean hasPrevious() {
             return (next != null);
         }
 
+        @Override
         public T previous() {
             if (!hasPrevious()) {
                 throw new NoSuchElementException();
@@ -96,6 +100,7 @@ public class LinkedList<T> implements List<T>, Serializable {
             return item;
         }
 
+        @Override
         public void insert(T item) {
             if (current == null) {
                 throw new IllegalStateException();
@@ -118,6 +123,7 @@ public class LinkedList<T> implements List<T>, Serializable {
             }
         }
 
+        @Override
         public void update(T item) {
             if (current == null) {
                 throw new IllegalStateException();
@@ -131,6 +137,7 @@ public class LinkedList<T> implements List<T>, Serializable {
             }
         }
 
+        @Override
         public void remove() {
             if (current == null) {
                 throw new IllegalStateException();
@@ -194,6 +201,7 @@ public class LinkedList<T> implements List<T>, Serializable {
         }
     }
 
+    @Override
     public int add(T item) {
         int index;
         if (comparator == null) {
@@ -225,6 +233,7 @@ public class LinkedList<T> implements List<T>, Serializable {
         return index;
     }
 
+    @Override
     public void insert(T item, int index) {
         insert(item, index, true);
     }
@@ -276,6 +285,7 @@ public class LinkedList<T> implements List<T>, Serializable {
         }
     }
 
+    @Override
     public T update(int index, T item) {
         if (index < 0
             || index >= length) {
@@ -309,6 +319,7 @@ public class LinkedList<T> implements List<T>, Serializable {
         return previousItem;
     }
 
+    @Override
     public int remove(T item) {
         int index = 0;
 
@@ -329,6 +340,7 @@ public class LinkedList<T> implements List<T>, Serializable {
         return index;
     }
 
+    @Override
     public Sequence<T> remove(int index, int count) {
         if (index < 0
             || index + count > length) {
@@ -383,6 +395,7 @@ public class LinkedList<T> implements List<T>, Serializable {
         return removed;
     }
 
+    @Override
     public void clear() {
         if (length > 0) {
             first = null;
@@ -395,6 +408,7 @@ public class LinkedList<T> implements List<T>, Serializable {
         }
     }
 
+    @Override
     public T get(int index) {
         if (index < 0
             || index >= length) {
@@ -428,6 +442,7 @@ public class LinkedList<T> implements List<T>, Serializable {
         return node;
     }
 
+    @Override
     public int indexOf(T item) {
         int index = 0;
 
@@ -447,15 +462,18 @@ public class LinkedList<T> implements List<T>, Serializable {
         return index;
     }
 
+    @Override
     public int getLength() {
         return length;
     }
 
+    @Override
     public Comparator<T> getComparator() {
         return comparator;
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public void setComparator(Comparator<T> comparator) {
         Comparator<T> previousComparator = this.comparator;
 
@@ -498,6 +516,7 @@ public class LinkedList<T> implements List<T>, Serializable {
         }
     }
 
+    @Override
     public ItemIterator<T> iterator() {
         return iterator(false);
     }
@@ -506,6 +525,7 @@ public class LinkedList<T> implements List<T>, Serializable {
         return new LinkedListItemIterator(reverse);
     }
 
+    @Override
     public ListenerList<ListListener<T>> getListListeners() {
         if (listListeners == null) {
             listListeners = new ListListenerList<T>();

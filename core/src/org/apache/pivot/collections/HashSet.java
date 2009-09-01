@@ -53,6 +53,7 @@ public class HashSet<E> implements Set<E>, Serializable {
         setComparator(comparator);
     }
 
+    @Override
     public boolean add(E element) {
         boolean added = false;
 
@@ -68,6 +69,7 @@ public class HashSet<E> implements Set<E>, Serializable {
         return added;
     }
 
+    @Override
     public boolean remove(E element) {
         boolean removed = false;
 
@@ -83,6 +85,7 @@ public class HashSet<E> implements Set<E>, Serializable {
         return removed;
     }
 
+    @Override
     public void clear() {
         if (!hashMap.isEmpty()) {
             hashMap.clear();
@@ -93,30 +96,37 @@ public class HashSet<E> implements Set<E>, Serializable {
         }
     }
 
+    @Override
     public boolean contains(E element) {
         return hashMap.containsKey(element);
     }
 
+    @Override
     public boolean isEmpty() {
         return hashMap.isEmpty();
     }
 
+    @Override
     public int getCount() {
         return hashMap.getCount();
     }
 
+    @Override
     public Comparator<E> getComparator() {
         return hashMap.getComparator();
     }
 
+    @Override
     public void setComparator(Comparator<E> comparator) {
         hashMap.setComparator(comparator);
     }
 
+    @Override
     public Iterator<E> iterator() {
         return hashMap.iterator();
     }
 
+    @Override
     public ListenerList<SetListener<E>> getSetListeners() {
         if (setListeners == null) {
             setListeners = new SetListenerList<E>();
@@ -125,6 +135,7 @@ public class HashSet<E> implements Set<E>, Serializable {
         return setListeners;
     }
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
