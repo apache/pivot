@@ -41,6 +41,12 @@ public class Sheet extends Window {
                 listener.sheetCloseVetoed(sheet, reason);
             }
         }
+
+        public void sheetClosed(Sheet sheet) {
+            for (SheetStateListener listener : this) {
+                listener.sheetClosed(sheet);
+            }
+        }
     }
 
     private boolean result = false;
@@ -162,6 +168,8 @@ public class Sheet extends Window {
                         sheetCloseListener.sheetClosed(this);
                         sheetCloseListener = null;
                     }
+
+                    sheetStateListeners.sheetClosed(this);
                 }
             } else {
                 sheetStateListeners.sheetCloseVetoed(this, vote);

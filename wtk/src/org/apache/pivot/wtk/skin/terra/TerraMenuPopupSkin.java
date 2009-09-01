@@ -198,9 +198,6 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
         super.windowClosed(window, display);
 
         display.getContainerMouseListeners().remove(displayMouseListener);
-
-        window.setEnabled(true);
-        closeTransition = null;
     }
 
     @Override
@@ -221,7 +218,7 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
     public Vote previewMenuPopupClose(final MenuPopup menuPopup, boolean immediate) {
         if (!immediate
             && closeTransition == null) {
-            menuPopup.setEnabled(false);
+            border.setEnabled(false);
 
             closeTransition = new FadeWindowTransition(menuPopup,
                 CLOSE_TRANSITION_DURATION, CLOSE_TRANSITION_RATE,
@@ -244,8 +241,14 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
             && closeTransition != null) {
             closeTransition.stop();
 
-            menuPopup.setEnabled(true);
+            border.setEnabled(true);
             closeTransition = null;
         }
+    }
+
+    @Override
+    public void menuPopupClosed(MenuPopup menuPopup) {
+        border.setEnabled(true);
+        closeTransition = null;
     }
 }

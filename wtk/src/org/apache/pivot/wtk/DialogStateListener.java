@@ -21,7 +21,7 @@ import org.apache.pivot.util.Vote;
 /**
  * Dialog state listener interface.
  */
-public interface DialogStateListener {
+public interface DialogStateListener extends DialogCloseListener {
     /**
      * Dialog state listener adapter.
      */
@@ -33,6 +33,10 @@ public interface DialogStateListener {
 
         @Override
         public void dialogCloseVetoed(Dialog dialog, Vote reason) {
+        }
+
+        @Override
+        public void dialogClosed(Dialog dialog) {
         }
     }
 

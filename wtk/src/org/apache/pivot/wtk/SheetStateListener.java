@@ -21,7 +21,7 @@ import org.apache.pivot.util.Vote;
 /**
  * Sheet state listener interface.
  */
-public interface SheetStateListener {
+public interface SheetStateListener extends SheetCloseListener {
     /**
      * Sheet state listener adapter.
      */
@@ -33,6 +33,10 @@ public interface SheetStateListener {
 
         @Override
         public void sheetCloseVetoed(Sheet sheet, Vote reason) {
+        }
+
+        @Override
+        public void sheetClosed(Sheet sheet) {
         }
     }
 

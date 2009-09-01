@@ -286,7 +286,7 @@ public class HTTPClient implements Application {
                     passwdTextInput.setText(keystorePassword);
                 }
 
-                sheet.getSheetStateListeners().add(new SheetStateListener() {
+                sheet.getSheetStateListeners().add(new SheetStateListener.Adapter() {
                     @Override
                     public Vote previewSheetClose(Sheet sheet, boolean result) {
                         Vote vote = Vote.APPROVE;
