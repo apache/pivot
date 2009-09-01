@@ -16,9 +16,7 @@
  */
 package org.apache.pivot.collections.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.Comparator;
 
@@ -26,7 +24,6 @@ import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.LinkedList;
 import org.apache.pivot.collections.Sequence;
 import org.junit.Test;
-
 
 public class LinkedListTest {
     @Test
@@ -58,7 +55,9 @@ public class LinkedListTest {
         assertTrue(list.get(1).equals("F"));
 
         list.insert("G", 0);
-        assertEquals(list, new LinkedList<String>("G", "B", "F", "D"));
+        assertTrue(list.equals(new LinkedList<String>("G", "B", "F", "D")));
+        assertFalse(list.equals(new LinkedList<String>("G", "B", "F", "D", "E")));
+        assertFalse(list.equals(new LinkedList<String>("B", "F", "E")));
 
         assertEquals(4, list.getLength());
 

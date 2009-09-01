@@ -16,14 +16,11 @@
  */
 package org.apache.pivot.collections.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
 import org.junit.Test;
-
 
 public class ArrayListTest {
     @Test
@@ -54,7 +51,9 @@ public class ArrayListTest {
         assertNotNull(list.get(1));
         assertTrue(list.get(1).equals("E"));
 
-        assertEquals(list, new ArrayList<String>("B", "E", "C"));
+        assertTrue(list.equals(new ArrayList<String>("B", "E", "D")));
+        assertFalse(list.equals(new ArrayList<String>("B", "E", "D", "C")));
+        assertFalse(list.equals(new ArrayList<String>("E", "C", "D")));
     }
 
     @Test

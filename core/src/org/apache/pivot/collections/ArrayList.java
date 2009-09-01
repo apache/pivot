@@ -442,20 +442,23 @@ public class ArrayList<T> implements List<T>, Serializable {
     @Override
     @SuppressWarnings("unchecked")
     public boolean equals(Object o) {
-        boolean equals = false;
+        boolean equals = true;
 
         if (o instanceof ArrayList<?>) {
             ArrayList<T> arrayList = (ArrayList<T>)o;
 
-            Iterator<T> iterator = iterator();
-            Iterator<T> arrayListIterator = arrayList.iterator();
+            if (getLength() == arrayList.getLength()) {
+                Iterator<T> iterator = iterator();
+                Iterator<T> arrayListIterator = arrayList.iterator();
 
-            while (iterator.hasNext()
-                && arrayListIterator.hasNext()
-                && iterator.next().equals(arrayListIterator.next()));
-
-            equals = (!iterator.hasNext()
-                && !arrayListIterator.hasNext());
+                while (iterator.hasNext()
+                    && arrayListIterator.hasNext()
+                    && equals) {
+                    equals &= iterator.next().equals(arrayListIterator.next());
+                }
+            } else {
+                equals = false;
+            }
         }
 
         return equals;
