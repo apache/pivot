@@ -44,6 +44,7 @@ public class BoxPanes implements Application {
     private RadioButton verticalAlignmentCenterButton = null;
     private Checkbox fillCheckbox = null;
 
+    @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "box_panes.wtkx");
@@ -59,6 +60,7 @@ public class BoxPanes implements Application {
         fillCheckbox = (Checkbox)wtkxSerializer.get("fillCheckbox");
 
         ButtonStateListener buttonStateListener = new ButtonStateListener() {
+            @Override
             public void stateChanged(Button button, Button.State previousState) {
                 updateBoxPaneState();
             }
@@ -79,6 +81,7 @@ public class BoxPanes implements Application {
         window.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (window != null) {
             window.close();
@@ -87,9 +90,11 @@ public class BoxPanes implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 

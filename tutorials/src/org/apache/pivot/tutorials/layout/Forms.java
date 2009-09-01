@@ -40,6 +40,7 @@ public class Forms implements Application {
     private PushButton submitButton = null;
     private Label errorLabel = null;
 
+    @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "forms.wtkx");
@@ -50,6 +51,7 @@ public class Forms implements Application {
         errorLabel = (Label)wtkxSerializer.get("errorLabel");
 
         submitButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
             public void buttonPressed(Button button) {
                 String lastName = lastNameTextInput.getText();
                 String firstName = firstNameTextInput.getText();
@@ -74,6 +76,7 @@ public class Forms implements Application {
         window.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (window != null) {
             window.close();
@@ -82,9 +85,11 @@ public class Forms implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 

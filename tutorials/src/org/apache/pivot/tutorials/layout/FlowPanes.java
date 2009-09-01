@@ -35,6 +35,7 @@ public class FlowPanes implements Application {
     private RadioButton rightRadioButton = null;
     private RadioButton centerRadioButton = null;
 
+    @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "flow_panes.wtkx");
@@ -44,6 +45,7 @@ public class FlowPanes implements Application {
         centerRadioButton = (RadioButton)wtkxSerializer.get("centerRadioButton");
 
         ButtonStateListener buttonStateListener = new ButtonStateListener() {
+            @Override
             public void stateChanged(Button button, Button.State previousState) {
                 updateFlowPaneState();
             }
@@ -58,6 +60,7 @@ public class FlowPanes implements Application {
         window.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (window != null) {
             window.close();
@@ -66,9 +69,11 @@ public class FlowPanes implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 
