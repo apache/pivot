@@ -29,6 +29,7 @@ import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class ScriptingDemo implements Application {
     public static class MyButtonPressListener implements ButtonPressListener {
+        @Override
         public void buttonPressed(Button button) {
             System.out.println("[Java] A button was clicked.");
         }
@@ -39,6 +40,7 @@ public class ScriptingDemo implements Application {
     @WTKX private String foo;
     @WTKX private List<?> listData;
 
+    @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -51,6 +53,7 @@ public class ScriptingDemo implements Application {
         window.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (window != null) {
             window.close();
@@ -59,9 +62,11 @@ public class ScriptingDemo implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 

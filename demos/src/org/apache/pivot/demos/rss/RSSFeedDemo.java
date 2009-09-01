@@ -63,6 +63,7 @@ import org.xml.sax.SAXException;
 public class RSSFeedDemo implements Application {
     // Loads the feed in the background so the UI doesn't block
     private class LoadFeedTask extends IOTask<NodeList> {
+        @Override
         public NodeList execute() throws TaskExecutionException {
             NodeList itemNodeList = null;
 
@@ -131,6 +132,7 @@ public class RSSFeedDemo implements Application {
             validate();
         }
 
+        @Override
         public void render(Object item, ListView listView, boolean selected,
             boolean checked, boolean highlighted, boolean disabled) {
             if (item != null) {
@@ -233,6 +235,7 @@ public class RSSFeedDemo implements Application {
 
         // Set the namespace resolver
         xpath.setNamespaceContext(new NamespaceContext() {
+            @Override
             public String getNamespaceURI(String prefix) {
                 String namespaceURI;
                 if (prefix.equals("dz")) {
@@ -244,16 +247,19 @@ public class RSSFeedDemo implements Application {
                 return namespaceURI;
             }
 
+            @Override
             public String getPrefix(String uri) {
                 throw new UnsupportedOperationException();
             }
 
+            @Override
             public Iterator<String> getPrefixes(String uri) {
                 throw new UnsupportedOperationException();
             }
         });
     }
 
+    @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -267,11 +273,13 @@ public class RSSFeedDemo implements Application {
 
         LoadFeedTask loadFeedTask = new LoadFeedTask();
         loadFeedTask.execute(new TaskListener<NodeList>() {
+            @Override
             public void taskExecuted(Task<NodeList> task) {
                 feedListView.setListData(new NodeListAdapter(task.getResult()));
                 cardPane.setSelectedIndex(1);
             }
 
+            @Override
             public void executeFailed(Task<NodeList> task) {
                 statusLabel.setText(task.getFault().toString());
             }
@@ -281,6 +289,7 @@ public class RSSFeedDemo implements Application {
         window.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) throws Exception {
         if (window != null) {
             window.close();
@@ -289,9 +298,11 @@ public class RSSFeedDemo implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 

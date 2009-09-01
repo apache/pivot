@@ -38,6 +38,7 @@ public class FixedColumnTable implements Application {
 
     private boolean synchronizingSelection = false;
 
+    @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -49,6 +50,7 @@ public class FixedColumnTable implements Application {
 
         // Keep selection state in sync
         primaryTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener() {
+            @Override
             public void selectedRangeAdded(TableView tableView, int rangeStart, int rangeEnd) {
                 if (!synchronizingSelection) {
                     synchronizingSelection = true;
@@ -57,6 +59,7 @@ public class FixedColumnTable implements Application {
                 }
             }
 
+            @Override
             public void selectedRangeRemoved(TableView tableView, int rangeStart, int rangeEnd) {
                 if (!synchronizingSelection) {
                     synchronizingSelection = true;
@@ -65,6 +68,7 @@ public class FixedColumnTable implements Application {
                 }
             }
 
+            @Override
             public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges) {
                 if (!synchronizingSelection) {
                     synchronizingSelection = true;
@@ -75,6 +79,7 @@ public class FixedColumnTable implements Application {
         });
 
         fixedTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener() {
+            @Override
             public void selectedRangeAdded(TableView tableView, int rangeStart, int rangeEnd) {
                 if (!synchronizingSelection) {
                     synchronizingSelection = true;
@@ -83,6 +88,7 @@ public class FixedColumnTable implements Application {
                 }
             }
 
+            @Override
             public void selectedRangeRemoved(TableView tableView, int rangeStart, int rangeEnd) {
                 if (!synchronizingSelection) {
                     synchronizingSelection = true;
@@ -91,6 +97,7 @@ public class FixedColumnTable implements Application {
                 }
             }
 
+            @Override
             public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges) {
                 if (!synchronizingSelection) {
                     synchronizingSelection = true;
@@ -102,6 +109,7 @@ public class FixedColumnTable implements Application {
 
         // Keep header state in sync
         primaryTableViewHeader.getTableViewHeaderPressListeners().add(new TableView.SortHandler() {
+            @Override
             public void headerPressed(TableViewHeader tableViewHeader, int index) {
                 super.headerPressed(tableViewHeader, index);
 
@@ -114,6 +122,7 @@ public class FixedColumnTable implements Application {
         });
 
         fixedTableViewHeader.getTableViewHeaderPressListeners().add(new TableView.SortHandler() {
+            @Override
             public void headerPressed(TableViewHeader tableViewHeader, int index) {
                 super.headerPressed(tableViewHeader, index);
 
@@ -128,6 +137,7 @@ public class FixedColumnTable implements Application {
         window.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (window != null) {
             window.close();
@@ -136,9 +146,11 @@ public class FixedColumnTable implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 

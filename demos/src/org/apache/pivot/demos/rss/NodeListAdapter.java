@@ -35,10 +35,12 @@ public class NodeListAdapter implements List<Node> {
     public class NodeListIterator implements Iterator<Node> {
         private int index = 0;
 
+        @Override
         public boolean hasNext() {
             return (index < nodeList.getLength());
         }
 
+        @Override
         public Node next() {
             if (!hasNext()) {
                 throw new NoSuchElementException();
@@ -47,6 +49,7 @@ public class NodeListAdapter implements List<Node> {
             return nodeList.item(index++);
         }
 
+        @Override
         public void remove() {
             throw new UnsupportedOperationException();
         }
@@ -64,34 +67,42 @@ public class NodeListAdapter implements List<Node> {
         this.nodeList = nodeList;
     }
 
+    @Override
     public int add(Node node) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public void insert(Node node, int index) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public int remove(Node node) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public Sequence<Node> remove(int index, int count) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public void clear() {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public Node update(int index, Node node) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public Node get(int index) {
         return nodeList.item(index);
     }
 
+    @Override
     public int indexOf(Node node) {
         int index = 0;
         while (index < nodeList.getLength()
@@ -102,22 +113,27 @@ public class NodeListAdapter implements List<Node> {
         return (index < nodeList.getLength()) ? index : -1;
     }
 
+    @Override
     public int getLength() {
         return nodeList.getLength();
     }
 
+    @Override
     public Comparator<Node> getComparator() {
         return null;
     }
 
+    @Override
     public void setComparator(Comparator<Node> comparator) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public Iterator<Node> iterator() {
         return new NodeListIterator();
     }
 
+    @Override
     public ListenerList<ListListener<Node>> getListListeners() {
         return listListeners;
     }
