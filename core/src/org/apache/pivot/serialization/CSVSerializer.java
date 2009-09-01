@@ -48,34 +48,42 @@ public class CSVSerializer implements Serializer<List<?>> {
      * Class representing the serializers key sequence.
      */
     public class KeySequence implements Sequence<String> {
+        @Override
         public int add(String item) {
             return keys.add(item);
         }
 
+        @Override
         public void insert(String item, int index) {
             keys.insert(item, index);
         }
 
+        @Override
         public String update(int index, String item) {
             return keys.update(index, item);
         }
 
+        @Override
         public int remove(String item) {
             return keys.remove(item);
         }
 
+        @Override
         public Sequence<String> remove(int index, int count) {
             return keys.remove(index, count);
         }
 
+        @Override
         public String get(int index) {
             return keys.get(index);
         }
 
+        @Override
         public int indexOf(String item) {
             return keys.indexOf(item);
         }
 
+        @Override
         public int getLength() {
             return keys.getLength();
         }
@@ -189,6 +197,7 @@ public class CSVSerializer implements Serializer<List<?>> {
      *
      * @see #readObject(Reader)
      */
+    @Override
     public List<?> readObject(InputStream inputStream)
         throws IOException, SerializationException {
         if (inputStream == null) {
@@ -394,6 +403,7 @@ public class CSVSerializer implements Serializer<List<?>> {
      *
      * @see #writeObject(List, Writer)
      */
+    @Override
     public void writeObject(List<?> items, OutputStream outputStream)
         throws IOException, SerializationException {
         if (items == null) {
@@ -457,6 +467,7 @@ public class CSVSerializer implements Serializer<List<?>> {
         writer.flush();
     }
 
+    @Override
     public String getMIMEType(List<?> objects) {
         return MIME_TYPE + "; charset=" + charset.name();
     }

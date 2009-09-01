@@ -34,6 +34,7 @@ public class BinarySerializer implements Serializer<Object> {
     /**
      * Reads a graph of serialized objects from an input stream.
      */
+    @Override
     public Object readObject(InputStream inputStream) throws IOException,
         SerializationException {
         if (inputStream == null) {
@@ -55,6 +56,7 @@ public class BinarySerializer implements Serializer<Object> {
     /**
      * Writes a graph of serializable objects to an output stream.
      */
+    @Override
     public void writeObject(Object object, OutputStream outputStream)
         throws IOException, SerializationException {
         if (object == null) {
@@ -69,6 +71,7 @@ public class BinarySerializer implements Serializer<Object> {
         objectOutputStream.writeObject(object);
     }
 
+    @Override
     public String getMIMEType(Object object) {
         String mimeType = MIME_TYPE;
         if (object != null) {

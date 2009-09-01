@@ -80,6 +80,7 @@ public class JSONSerializer implements Serializer<Object> {
      *
      * @see #readObject(Reader)
      */
+    @Override
     public Object readObject(InputStream inputStream)
         throws IOException, SerializationException {
         if (inputStream == null) {
@@ -486,6 +487,7 @@ public class JSONSerializer implements Serializer<Object> {
      *
      * @see #writeObject(Object, Writer)
      */
+    @Override
     public void writeObject(Object object, OutputStream outputStream)
         throws IOException, SerializationException {
         if (outputStream == null) {
@@ -637,6 +639,7 @@ public class JSONSerializer implements Serializer<Object> {
         writer.flush();
     }
 
+    @Override
     public String getMIMEType(Object object) {
         return MIME_TYPE + "; charset=" + charset.name();
     }

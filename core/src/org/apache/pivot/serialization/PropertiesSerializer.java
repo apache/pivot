@@ -43,6 +43,7 @@ public class PropertiesSerializer implements Serializer<Map<?, ?>> {
      * An instance of {@link Map} containing the data read from the properties
      * file. Both keys and values are strings.
      */
+    @Override
     public Map<?, ?> readObject(InputStream inputStream) throws IOException,
         SerializationException {
         if (inputStream == null) {
@@ -67,6 +68,7 @@ public class PropertiesSerializer implements Serializer<Map<?, ?>> {
      * The output stream to which data will be written.
      */
     @SuppressWarnings("unchecked")
+    @Override
     public void writeObject(Map<?, ?> object, OutputStream outputStream) throws IOException,
         SerializationException {
         if (object == null) {
@@ -93,6 +95,7 @@ public class PropertiesSerializer implements Serializer<Map<?, ?>> {
         properties.store(outputStream, null);
     }
 
+    @Override
     public String getMIMEType(Map<?, ?> object) {
         return MIME_TYPE;
     }

@@ -37,6 +37,7 @@ public class ByteArraySerializer implements Serializer<byte[]> {
     /**
      * Reads a byte array from an input stream.
      */
+    @Override
     public byte[] readObject(InputStream inputStream) throws IOException,
         SerializationException {
         if (inputStream == null) {
@@ -69,6 +70,7 @@ public class ByteArraySerializer implements Serializer<byte[]> {
     /**
      * Writes a byte array to an output stream.
      */
+    @Override
     public void writeObject(byte[] bytes, OutputStream outputStream) throws IOException,
         SerializationException {
         if (bytes == null) {
@@ -89,6 +91,7 @@ public class ByteArraySerializer implements Serializer<byte[]> {
 
     }
 
+    @Override
     public String getMIMEType(byte[] bytes) {
         return MIME_TYPE;
     }
