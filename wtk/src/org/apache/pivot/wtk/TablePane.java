@@ -181,6 +181,12 @@ public class TablePane extends Container {
             }
         }
 
+        /**
+         * Sets the visible flag for all components in the row.
+         * <p>
+         * This is a convenience method that iterates through the row, calling
+         * <tt>setVisible</tt> on all components.
+         */
         public void setVisible(boolean visible) {
             if (tablePane != null) {
                 for (Component component : cells) {
@@ -197,24 +203,19 @@ public class TablePane extends Container {
         }
 
         public void insert(Component component, int index) {
-            if (index < 0
-                || index > cells.getLength()) {
-                throw new IndexOutOfBoundsException();
+            if (component == null) {
+                throw new IllegalArgumentException("Component is null.");
             }
 
-            if (component != null
-                && tablePane != null) {
-                // Add the component to the table pane
-                tablePane.add(component);
-
-                // Attach the attributes
-                component.setAttributes(new Attributes());
+            if (component.getParent() != null) {
+                throw new IllegalArgumentException("Component already has a parent.");
             }
 
             cells.insert(component, index);
+            component.setAttributes(new Attributes());
 
             if (tablePane != null) {
-                // Notify table pane listeners
+                tablePane.add(component);
                 tablePane.tablePaneListeners.cellInserted(this, index);
             }
         }
@@ -222,34 +223,24 @@ public class TablePane extends Container {
         public Component update(int index, Component component) {
             Component previousComponent = cells.get(index);
 
-            if (component != null
-                && tablePane != null) {
-                // Add the component to the table pane
-                tablePane.add(component);
+            if (component != previousComponent) {
+                if (component == null) {
+                    throw new IllegalArgumentException("Component is null.");
+                }
 
-                // Attach the attributes
-                component.setAttributes(new Attributes());
-            }
+                if (component.getParent() != null) {
+                    throw new IllegalArgumentException("Component already has a parent.");
+                }
 
-            cells.update(index, component);
-
-            if (previousComponent != null
-                && tablePane != null) {
-                // Detach the attributes
+                cells.update(index, component);
                 previousComponent.setAttributes(null);
-            }
+                component.setAttributes(new Attributes());
 
-            if (tablePane != null
-                && component != previousComponent) {
-                // Notify table pane listeners
-                tablePane.tablePaneListeners.cellUpdated(this, index,
-                    previousComponent);
-            }
-
-            if (previousComponent != null
-                && tablePane != null) {
-                // Remove the component from the table pane
-                tablePane.remove(component);
+                if (tablePane != null) {
+                    tablePane.add(component);
+                    tablePane.tablePaneListeners.cellUpdated(this, index, previousComponent);
+                    tablePane.remove(previousComponent);
+                }
             }
 
             return previousComponent;
@@ -267,22 +258,17 @@ public class TablePane extends Container {
         public Sequence<Component> remove(int index, int count) {
             Sequence<Component> removed = cells.remove(index, count);
 
-            if (tablePane != null) {
-                for (int i = 0, n = removed.getLength(); i < n; i++) {
-                    Component component = removed.get(i);
-                    if (component != null) {
-                        component.setAttributes(null);
-                    }
-                }
+            for (int i = 0, n = removed.getLength(); i < n; i++) {
+                Component component = removed.get(i);
+                component.setAttributes(null);
+            }
 
-                // Notify table pane listeners
+            if (tablePane != null) {
                 tablePane.tablePaneListeners.cellsRemoved(this, index, removed);
 
                 for (int i = 0, n = removed.getLength(); i < n; i++) {
                     Component component = removed.get(i);
-                    if (component != null) {
-                        tablePane.remove(component);
-                    }
+                    tablePane.remove(component);
                 }
             }
 
@@ -455,6 +441,12 @@ public class TablePane extends Container {
             }
         }
 
+        /**
+         * Sets the visible flag for all components in the column.
+         * <p>
+         * This is a convenience method that iterates through the components in
+         * the column, calling <tt>setVisible</tt> on all such components.
+         */
         public void setVisible(boolean visible) {
             if (tablePane != null) {
                 int columnIndex = tablePane.columns.indexOf(this);
@@ -510,12 +502,7 @@ public class TablePane extends Container {
 
             for (int i = 0, n = row.getLength(); i < n; i++) {
                 Component component = row.get(i);
-
-                // Add each component in the row to the table pane
                 TablePane.this.add(component);
-
-                // Attach attributes to each row component
-                component.setAttributes(new Attributes());
             }
 
             // Notify listeners
@@ -541,19 +528,11 @@ public class TablePane extends Container {
             if (count > 0) {
                 for (int i = 0, n = removed.getLength(); i < n; i++) {
                     Row row = removed.get(i);
-
                     row.setTablePane(null);
 
                     for (int j = 0, m = row.getLength(); j < m; j++) {
                         Component component = row.get(j);
-
-                        if (component != null) {
-                            // Detach attributes from each row component
-                            component.setAttributes(null);
-
-                            // Remove each component in the row from the table pane
-                            TablePane.this.remove(component);
-                        }
+                        TablePane.this.remove(component);
                     }
                 }
 
@@ -626,7 +605,8 @@ public class TablePane extends Container {
 
             if (count > 0) {
                 for (int i = 0, n = removed.getLength(); i < n; i++) {
-                    removed.get(i).setTablePane(null);
+                    Column column = removed.get(i);
+                    column.setTablePane(null);
                 }
 
                 tablePaneListeners.columnsRemoved(TablePane.this, index, removed);
