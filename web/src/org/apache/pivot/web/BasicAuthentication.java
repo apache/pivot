@@ -48,6 +48,7 @@ public class BasicAuthentication implements Authentication {
         this.password = (password == null) ? "" : password;
     }
 
+    @Override
     public void authenticate(Query<?> query) {
         String credentials = username + ":" + password;
         String encodedCredentials = Base64.encode(credentials.getBytes());

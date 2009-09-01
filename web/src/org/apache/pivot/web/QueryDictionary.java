@@ -30,6 +30,7 @@ import org.apache.pivot.collections.HashMap;
 public final class QueryDictionary implements Dictionary<String, String>, Iterable<String> {
     private HashMap<String, ArrayList<String>> map =  new HashMap<String, ArrayList<String>>();
 
+    @Override
     public String get(String key) {
         ArrayList<String> list = map.get(key);
         if (list != null && list.getLength() > 0) {
@@ -46,6 +47,7 @@ public final class QueryDictionary implements Dictionary<String, String>, Iterab
         return list.get(index);
     }
 
+    @Override
     public String put(String key, String value) {
         ArrayList<String> list = new ArrayList<String>();
         list.add(value);
@@ -80,6 +82,7 @@ public final class QueryDictionary implements Dictionary<String, String>, Iterab
         list.insert(value, index);
     }
 
+    @Override
     public String remove(String key) {
         ArrayList<String> list = map.remove(key);
         if (list != null && list.getLength() > 0) {
@@ -101,10 +104,12 @@ public final class QueryDictionary implements Dictionary<String, String>, Iterab
         map.clear();
     }
 
+    @Override
     public boolean containsKey(String key) {
         return map.containsKey(key);
     }
 
+    @Override
     public boolean isEmpty() {
         return map.isEmpty();
     }
@@ -117,6 +122,7 @@ public final class QueryDictionary implements Dictionary<String, String>, Iterab
         return list.getLength();
     }
 
+    @Override
     public Iterator<String> iterator() {
         return map.iterator();
     }

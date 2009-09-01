@@ -24,15 +24,19 @@ public interface QueryListener<V> {
      * Query listener adapter.
      */
     public static class Adapter<V> implements QueryListener<V> {
+        @Override
         public void connected(Query<V> query) {
         }
 
+        @Override
         public void requestSent(Query<V> query) {
         }
 
+        @Override
         public void responseReceived(Query<V> query) {
         }
 
+        @Override
         public void failed(Query<V> query) {
         }
     }

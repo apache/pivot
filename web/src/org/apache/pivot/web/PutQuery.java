@@ -32,6 +32,7 @@ public class PutQuery extends Query<Void> {
         super(hostname, port, path, secure);
     }
 
+    @Override
     public Method getMethod() {
         return METHOD;
     }

@@ -30,6 +30,7 @@ public class GetQuery extends Query<Object> {
         super(hostname, port, path, secure);
     }
 
+    @Override
     public Method getMethod() {
         return METHOD;
     }

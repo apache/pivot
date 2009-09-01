@@ -106,24 +106,28 @@ public abstract class Query<V> extends IOTask<V> {
             super.remove(listener);
         }
 
+        @Override
         public synchronized void connected(Query<V> query) {
             for (QueryListener<V> listener : this) {
                 listener.connected(query);
             }
         }
 
+        @Override
         public synchronized void requestSent(Query<V> query) {
             for (QueryListener<V> listener : this) {
                 listener.requestSent(query);
             }
         }
 
+        @Override
         public synchronized void responseReceived(Query<V> query) {
             for (QueryListener<V> listener : this) {
                 listener.responseReceived(query);
             }
         }
 
+        @Override
         public synchronized void failed(Query<V> query) {
             for (QueryListener<V> listener : this) {
                 listener.failed(query);

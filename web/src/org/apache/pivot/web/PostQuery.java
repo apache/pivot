@@ -35,6 +35,7 @@ public class PostQuery extends Query<URL> {
         super(hostname, port, path, secure);
     }
 
+    @Override
     public Method getMethod() {
         return METHOD;
     }
