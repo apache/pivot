@@ -41,42 +41,52 @@ public class ImmutableSet<E> implements Set<E> {
         this.set = set;
     }
 
+    @Override
     public boolean add(E element) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public boolean remove(E element) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public void clear() {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public boolean contains(E element) {
         return set.contains(element);
     }
 
+    @Override
     public boolean isEmpty() {
         return set.isEmpty();
     }
 
+    @Override
     public int getCount() {
         return set.getCount();
     }
 
+    @Override
     public Comparator<E> getComparator() {
         return null;
     }
 
+    @Override
     public void setComparator(Comparator<E> comparator) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public Iterator<E> iterator() {
         return new ImmutableIterator<E>(set.iterator());
     }
 
+    @Override
     public ListenerList<SetListener<E>> getSetListeners() {
         return setListeners;
     }

@@ -41,47 +41,58 @@ public class ImmutableMap<K, V> implements Map<K, V> {
         this.map = map;
     }
 
+    @Override
     public V get(K key) {
         return map.get(key);
     }
 
+    @Override
     public V put(K key, V value) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public V remove(K key) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public void clear() {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public boolean containsKey(K key) {
         return map.containsKey(key);
     }
 
 
+    @Override
     public boolean isEmpty() {
         return map.isEmpty();
     }
 
+    @Override
     public int getCount() {
         return map.getCount();
     }
 
+    @Override
     public Comparator<K> getComparator() {
         return null;
     }
 
+    @Override
     public void setComparator(Comparator<K> comparator) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public Iterator<K> iterator() {
         return new ImmutableIterator<K>(map.iterator());
     }
 
+    @Override
     public ListenerList<MapListener<K, V>> getMapListeners() {
         return mapListeners;
     }

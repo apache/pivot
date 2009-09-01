@@ -42,53 +42,66 @@ public final class ImmutableList<T> implements List<T> {
         this.list = list;
     }
 
+    @Override
     public int add(T item) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public void insert(T item, int index) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public T update(int index, T item) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public int remove(T item) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public Sequence<T> remove(int index, int count) {
         throw new UnsupportedOperationException();    }
 
+    @Override
     public void clear() {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public T get(int index) {
         return list.get(index);
     }
 
+    @Override
     public int indexOf(T item) {
         return list.indexOf(item);
     }
 
+    @Override
     public int getLength() {
         return list.getLength();
     }
 
+    @Override
     public Comparator<T> getComparator() {
         return null;
     }
 
+    @Override
     public void setComparator(Comparator<T> comparator) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public Iterator<T> iterator() {
         return new ImmutableIterator<T>(list.iterator());
     }
 
+    @Override
     public ListenerList<ListListener<T>> getListListeners() {
         return listListeners;
     }
