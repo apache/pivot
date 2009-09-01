@@ -26,6 +26,7 @@ import org.apache.pivot.wtkx.WTKXSerializer;
 public class ToggleButtons implements Application {
     private Window window = null;
 
+    @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -33,6 +34,7 @@ public class ToggleButtons implements Application {
         window.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (window != null) {
             window.close();
@@ -41,9 +43,11 @@ public class ToggleButtons implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 

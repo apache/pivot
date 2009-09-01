@@ -32,6 +32,7 @@ public class PushButtons implements Application {
     private Window window = null;
     private PushButton pushButton = null;
 
+    @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "push_buttons.wtkx");
@@ -39,6 +40,7 @@ public class PushButtons implements Application {
 
         // Add a button press listener
         pushButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
             public void buttonPressed(Button button) {
                 Alert.alert(MessageType.INFO, "You clicked me!", window);
             }
@@ -47,6 +49,7 @@ public class PushButtons implements Application {
         window.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (window != null) {
             window.close();
@@ -55,9 +58,11 @@ public class PushButtons implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 

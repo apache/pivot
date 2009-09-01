@@ -36,6 +36,7 @@ public class Checkboxes implements Application {
     private ImageView clockImageView = null;
     private ImageView houseImageView = null;
 
+    @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "checkboxes.wtkx");
@@ -48,18 +49,21 @@ public class Checkboxes implements Application {
 
         // Wire up event listeners
         bellCheckbox.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
             public void buttonPressed(Button button) {
                 bellImageView.setVisible(!bellImageView.isVisible());
             }
         });
 
         clockCheckbox.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
             public void buttonPressed(Button button) {
                 clockImageView.setVisible(!clockImageView.isVisible());
             }
         });
 
         houseCheckbox.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
             public void buttonPressed(Button button) {
                 houseImageView.setVisible(!houseImageView.isVisible());
             }
@@ -68,6 +72,7 @@ public class Checkboxes implements Application {
         window.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (window != null) {
             window.close();
@@ -76,9 +81,11 @@ public class Checkboxes implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 

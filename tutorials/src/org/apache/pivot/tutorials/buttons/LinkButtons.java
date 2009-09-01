@@ -33,6 +33,7 @@ public class LinkButtons implements Application {
     private LinkButton nextButton = null;
     private LinkButton previousButton = null;
 
+    @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "link_buttons.wtkx");
@@ -41,12 +42,14 @@ public class LinkButtons implements Application {
         previousButton = (LinkButton)wtkxSerializer.get("previousButton");
 
         nextButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
             public void buttonPressed(Button button) {
                 cardPane.setSelectedIndex(1);
             }
         });
 
         previousButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
             public void buttonPressed(Button button) {
                 cardPane.setSelectedIndex(0);
             }
@@ -55,6 +58,7 @@ public class LinkButtons implements Application {
         window.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (window != null) {
             window.close();
@@ -63,9 +67,11 @@ public class LinkButtons implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 

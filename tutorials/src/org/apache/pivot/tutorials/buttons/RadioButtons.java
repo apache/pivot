@@ -32,6 +32,7 @@ public class RadioButtons implements Application {
     private Window window = null;
     private PushButton selectButton = null;
 
+    @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -43,6 +44,7 @@ public class RadioButtons implements Application {
 
         // Add a button press listener
         selectButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
             public void buttonPressed(Button button) {
                 String message = "You selected \""
                     + numbersGroup.getSelection().getButtonData()
@@ -54,6 +56,7 @@ public class RadioButtons implements Application {
         window.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (window != null) {
             window.close();
@@ -62,9 +65,11 @@ public class RadioButtons implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 
