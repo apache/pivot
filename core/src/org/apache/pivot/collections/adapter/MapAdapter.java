@@ -50,10 +50,12 @@ public class MapAdapter<K, V> implements Map<K, V>, Serializable {
         return map;
     }
 
+    @Override
     public V get(K key) {
         return map.get(key);
     }
 
+    @Override
     public V put(K key, V value) {
         boolean update = containsKey(key);
         V previousValue = map.put(key, value);
@@ -67,6 +69,7 @@ public class MapAdapter<K, V> implements Map<K, V>, Serializable {
         return previousValue;
     }
 
+    @Override
     public V remove(K key) {
         V value = null;
 
@@ -78,6 +81,7 @@ public class MapAdapter<K, V> implements Map<K, V>, Serializable {
         return value;
     }
 
+    @Override
     public void clear() {
         if (!isEmpty()) {
             map.clear();
@@ -85,19 +89,23 @@ public class MapAdapter<K, V> implements Map<K, V>, Serializable {
         }
     }
 
+    @Override
     public boolean containsKey(K key) {
         return map.containsKey(key);
     }
 
+    @Override
     public boolean isEmpty() {
         return map.isEmpty();
     }
 
+    @Override
     public int getCount() {
         return map.size();
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public Comparator<K> getComparator() {
         if (this.map instanceof SortedMap) {
             return ((SortedMap) this.map).comparator();
@@ -106,6 +114,7 @@ public class MapAdapter<K, V> implements Map<K, V>, Serializable {
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public void setComparator(Comparator<K> comparator) {
         // If the adapted map supports it, implement setComparator by
         // constructing a new map
@@ -134,14 +143,17 @@ public class MapAdapter<K, V> implements Map<K, V>, Serializable {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public Iterator<K> iterator() {
         return new ImmutableIterator<K>(map.keySet().iterator());
     }
 
+    @Override
     public ListenerList<MapListener<K, V>> getMapListeners() {
         return mapListeners;
     }
 
+    @Override
     public String toString() {
         return map.toString();
     }

@@ -49,6 +49,7 @@ public class SetAdapter<E> implements Set<E>, Serializable {
         return set;
     }
 
+    @Override
     public boolean add(E element) {
         boolean added = false;
 
@@ -62,6 +63,7 @@ public class SetAdapter<E> implements Set<E>, Serializable {
         return added;
     }
 
+    @Override
     public boolean remove(E element) {
         boolean removed = false;
 
@@ -75,6 +77,7 @@ public class SetAdapter<E> implements Set<E>, Serializable {
         return removed;
     }
 
+    @Override
     public void clear() {
         if (!isEmpty()) {
             set.clear();
@@ -82,19 +85,23 @@ public class SetAdapter<E> implements Set<E>, Serializable {
         }
     }
 
+    @Override
     public boolean contains(E element) {
         return set.contains(element);
     }
 
+    @Override
     public boolean isEmpty() {
         return set.isEmpty();
     }
 
+    @Override
     public int getCount() {
         return set.size();
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public Comparator<E> getComparator() {
         if (this.set instanceof java.util.SortedSet) {
             return ((java.util.SortedSet) this.set).comparator();
@@ -103,6 +110,7 @@ public class SetAdapter<E> implements Set<E>, Serializable {
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public void setComparator(Comparator<E> comparator) {
         // If the adapted set supports it, implement setComparator by
         // constructing a new set
@@ -131,14 +139,17 @@ public class SetAdapter<E> implements Set<E>, Serializable {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public Iterator<E> iterator() {
         return new ImmutableIterator<E>(set.iterator());
     }
 
+    @Override
     public ListenerList<SetListener<E>> getSetListeners() {
         return setListeners;
     }
 
+    @Override
     public String toString() {
         return set.toString();
     }

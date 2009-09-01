@@ -52,6 +52,7 @@ public class ListAdapter<T> implements List<T>, Serializable {
         return list;
     }
 
+    @Override
     public int add(T item) {
         int index = -1;
 
@@ -72,6 +73,7 @@ public class ListAdapter<T> implements List<T>, Serializable {
         return index;
     }
 
+    @Override
     public void insert(T item, int index) {
         if (comparator != null
             && Collections.binarySearch(list, item, comparator) != -(index + 1)) {
@@ -82,6 +84,7 @@ public class ListAdapter<T> implements List<T>, Serializable {
         listListeners.itemInserted(this, index);
     }
 
+    @Override
     public T update(int index, T item) {
         if (comparator != null
             && Collections.binarySearch(list, item, comparator) != index) {
@@ -98,6 +101,7 @@ public class ListAdapter<T> implements List<T>, Serializable {
         return previousItem;
     }
 
+    @Override
     public int remove(T item) {
         int index = indexOf(item);
         if (index == -1) {
@@ -110,6 +114,7 @@ public class ListAdapter<T> implements List<T>, Serializable {
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public Sequence<T> remove(int index, int count) {
         java.util.List<T> removedList = null;
         try {
@@ -133,6 +138,7 @@ public class ListAdapter<T> implements List<T>, Serializable {
         return removed;
     }
 
+    @Override
     public void clear() {
         if (getLength() > 0) {
             list.clear();
@@ -140,22 +146,27 @@ public class ListAdapter<T> implements List<T>, Serializable {
         }
     }
 
+    @Override
     public T get(int index) {
         return list.get(index);
     }
 
+    @Override
     public int indexOf(T item) {
         return list.indexOf(item);
     }
 
+    @Override
     public int getLength() {
         return list.size();
     }
 
+    @Override
     public Comparator<T> getComparator() {
         return comparator;
     }
 
+    @Override
     public void setComparator(Comparator<T> comparator) {
         Comparator<T> previousComparator = this.comparator;
 
@@ -170,14 +181,17 @@ public class ListAdapter<T> implements List<T>, Serializable {
         }
     }
 
+    @Override
     public Iterator<T> iterator() {
         return new ImmutableIterator<T>(list.iterator());
     }
 
+    @Override
     public ListenerList<ListListener<T>> getListListeners() {
         return listListeners;
     }
 
+    @Override
     public String toString() {
         return list.toString();
     }

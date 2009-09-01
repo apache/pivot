@@ -55,10 +55,12 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
             nextProperty();
         }
 
+        @Override
         public boolean hasNext() {
             return (nextProperty != null);
         }
 
+        @Override
         public String next() {
             if (!hasNext()) {
                 throw new NoSuchElementException();
