@@ -60,26 +60,32 @@ public class Request extends IOTask<Response> {
      */
     public final class RequestHeadersDictionary
         implements Dictionary<String, String>, Iterable<String> {
+        @Override
         public String get(String key) {
             return requestHeaders.get(key);
         }
 
+        @Override
         public String put(String key, String value) {
             return requestHeaders.put(key, value);
         }
 
+        @Override
         public String remove(String key) {
             return requestHeaders.remove(key);
         }
 
+        @Override
         public boolean containsKey(String key) {
             return requestHeaders.containsKey(key);
         }
 
+        @Override
         public boolean isEmpty() {
             return requestHeaders.isEmpty();
         }
 
+        @Override
         public Iterator<String> iterator() {
             return requestHeaders.iterator();
         }
@@ -100,24 +106,28 @@ public class Request extends IOTask<Response> {
             super.remove(listener);
         }
 
+        @Override
         public synchronized void connected(Request httpRequest) {
             for (RequestListener listener : this) {
                 listener.connected(httpRequest);
             }
         }
 
+        @Override
         public synchronized void requestSent(Request httpRequest) {
             for (RequestListener listener : this) {
                 listener.requestSent(httpRequest);
             }
         }
 
+        @Override
         public synchronized void responseReceived(Request httpRequest) {
             for (RequestListener listener : this) {
                 listener.responseReceived(httpRequest);
             }
         }
 
+        @Override
         public synchronized void failed(Request httpRequest) {
             for (RequestListener listener : this) {
                 listener.failed(httpRequest);

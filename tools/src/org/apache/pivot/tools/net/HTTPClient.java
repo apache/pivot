@@ -90,6 +90,7 @@ public class HTTPClient implements Application {
      * Considers all SSL hostnames as valid (performs no actual verification).
      */
     private static class LenientHostnameVerifier implements HostnameVerifier {
+        @Override
         public boolean verify(String hostname, SSLSession session) {
             return true;
         }
@@ -155,12 +156,15 @@ public class HTTPClient implements Application {
 
     // Application methods
 
+    @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         Action.getNamedActions().put("setAuthenticationAction", new Action() {
+            @Override
             public String getDescription() {
                 return "Specifies authentication credentials";
             }
 
+            @Override
             public void perform() {
                 final WTKXSerializer sheetSerializer = new WTKXSerializer();
                 final Sheet sheet;
@@ -173,6 +177,7 @@ public class HTTPClient implements Application {
 
                 Button okButton = (Button)sheetSerializer.get("okButton");
                 okButton.getButtonPressListeners().add(new ButtonPressListener() {
+                    @Override
                     public void buttonPressed(Button button) {
                         sheet.close(true);
                     }
@@ -180,6 +185,7 @@ public class HTTPClient implements Application {
 
                 Button cancelButton = (Button)sheetSerializer.get("cancelButton");
                 cancelButton.getButtonPressListeners().add(new ButtonPressListener() {
+                    @Override
                     public void buttonPressed(Button button) {
                         sheet.close(false);
                     }
@@ -193,6 +199,7 @@ public class HTTPClient implements Application {
                 }
 
                 sheet.getWindowStateListeners().add(new WindowStateListener.Adapter() {
+                    @Override
                     public void windowClosed(Window window, Display display) {
 
                     }
@@ -222,10 +229,12 @@ public class HTTPClient implements Application {
         });
 
         Action.getNamedActions().put("toggleHostnameVerificationAction", new Action() {
+            @Override
             public String getDescription() {
                 return "Toggles lenient hostname verification";
             }
 
+            @Override
             public void perform() {
                 lenientHostnameVerification = !lenientHostnameVerification;
             }
@@ -235,10 +244,12 @@ public class HTTPClient implements Application {
             private String keystorePath = null;
             private String keystorePassword = null;
 
+            @Override
             public String getDescription() {
                 return "Sets a trusted keystore";
             }
 
+            @Override
             public void perform() {
                 final WTKXSerializer sheetSerializer = new WTKXSerializer();
                 final Sheet sheet;
@@ -251,6 +262,7 @@ public class HTTPClient implements Application {
 
                 Button okButton = (Button)sheetSerializer.get("okButton");
                 okButton.getButtonPressListeners().add(new ButtonPressListener() {
+                    @Override
                     public void buttonPressed(Button button) {
                         sheet.close(true);
                     }
@@ -258,6 +270,7 @@ public class HTTPClient implements Application {
 
                 Button cancelButton = (Button)sheetSerializer.get("cancelButton");
                 cancelButton.getButtonPressListeners().add(new ButtonPressListener() {
+                    @Override
                     public void buttonPressed(Button button) {
                         sheet.close(false);
                     }
@@ -274,6 +287,7 @@ public class HTTPClient implements Application {
                 }
 
                 sheet.getSheetStateListeners().add(new SheetStateListener() {
+                    @Override
                     public Vote previewSheetClose(Sheet sheet, boolean result) {
                         Vote vote = Vote.APPROVE;
 
@@ -296,6 +310,7 @@ public class HTTPClient implements Application {
                         return vote;
                     }
 
+                    @Override
                     public void sheetCloseVetoed(Sheet sheet, Vote reaso) {
                         // No-op
                     }
@@ -320,6 +335,7 @@ public class HTTPClient implements Application {
 
         TableView tableView = (TableView)serializer.get("log.tableView");
         tableView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
+            @Override
             public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
                 boolean consumed = false;
 
@@ -346,11 +362,13 @@ public class HTTPClient implements Application {
 
         PushButton submitButton = (PushButton)serializer.get("request.submit");
         submitButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
             public void buttonPressed(final Button button) {
                 button.setEnabled(false);
 
                 Request httpRequest = getRequest();
                 httpRequest.execute(new TaskAdapter<Response>(new TaskListener<Response>() {
+                    @Override
                     public void taskExecuted(Task<Response> task) {
                         button.setEnabled(true);
                         Response httpResponse = task.getResult();
@@ -361,6 +379,7 @@ public class HTTPClient implements Application {
                         tableData.add(transaction);
                     }
 
+                    @Override
                     public void executeFailed(Task<Response> task) {
                         button.setEnabled(true);
                         task.getFault().printStackTrace();
@@ -370,6 +389,7 @@ public class HTTPClient implements Application {
         });
     }
 
+    @Override
     public boolean shutdown(boolean optional) throws Exception {
         if (window != null) {
             window.close();
@@ -378,10 +398,12 @@ public class HTTPClient implements Application {
         return false;
     }
 
+    @Override
     public void suspend() throws Exception {
         // No-op
     }
 
+    @Override
     public void resume() throws Exception {
         // No-op
     }

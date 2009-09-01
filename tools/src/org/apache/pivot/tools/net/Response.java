@@ -32,36 +32,45 @@ public class Response {
      */
     public final class ResponseHeadersDictionary
         implements Dictionary<String, String>, Iterable<String> {
+        @Override
         public String get(String key) {
             return (responseHeaders == null ? null : responseHeaders.get(key));
         }
 
+        @Override
         public String put(String key, String value) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public String remove(String key) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public boolean containsKey(String key) {
             return (responseHeaders == null ? false : responseHeaders.containsKey(key));
         }
 
+        @Override
         public boolean isEmpty() {
             return (responseHeaders == null ? true : responseHeaders.isEmpty());
         }
 
+        @Override
         public Iterator<String> iterator() {
             return (responseHeaders != null ? responseHeaders.iterator() : new Iterator<String>() {
+                @Override
                 public boolean hasNext() {
                     return false;
                 }
 
+                @Override
                 public String next() {
                     throw new NoSuchElementException();
                 }
 
+                @Override
                 public void remove() {
                     throw new NoSuchElementException();
                 }
