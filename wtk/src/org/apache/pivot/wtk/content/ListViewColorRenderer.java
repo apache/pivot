@@ -35,10 +35,12 @@ public class ListViewColorRenderer extends ListViewItemRenderer {
         private Color color = Color.BLACK;
         public static final int SIZE = 14;
 
+        @Override
         public int getWidth() {
             return SIZE;
         }
 
+        @Override
         public int getHeight() {
             return SIZE;
         }
@@ -51,6 +53,7 @@ public class ListViewColorRenderer extends ListViewItemRenderer {
             this.color = color;
         }
 
+        @Override
         public void paint(Graphics2D graphics) {
             graphics.setColor(Color.WHITE);
             graphics.fillRect(0, 0, SIZE, SIZE);
@@ -68,6 +71,7 @@ public class ListViewColorRenderer extends ListViewItemRenderer {
         setShowIcon(true);
     }
 
+    @Override
     public void render(Object item, ListView listView, boolean selected,
         boolean checked, boolean highlighted, boolean disabled) {
         if (item != null) {

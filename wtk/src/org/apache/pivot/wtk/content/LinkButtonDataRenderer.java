@@ -57,6 +57,7 @@ public class LinkButtonDataRenderer extends TablePane implements Button.DataRend
         validate();
     }
 
+    @Override
     public void render(Object data, Button button, boolean highlighted) {
         Image icon = null;
         String text = null;

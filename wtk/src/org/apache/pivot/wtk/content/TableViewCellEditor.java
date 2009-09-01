@@ -178,6 +178,7 @@ public class TableViewCellEditor implements TableView.RowEditor {
      * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
+    @Override
     public void edit(TableView tableView, int rowIndex, int columnIndex) {
         if (isEditing()) {
             throw new IllegalStateException("Currently editing.");
@@ -239,6 +240,7 @@ public class TableViewCellEditor implements TableView.RowEditor {
      * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
+    @Override
     public void save() {
         if (!isEditing()) {
             throw new IllegalStateException();
@@ -277,6 +279,7 @@ public class TableViewCellEditor implements TableView.RowEditor {
         }
     }
 
+    @Override
     public void cancel() {
         if (!isEditing()) {
             throw new IllegalStateException();

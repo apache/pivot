@@ -57,14 +57,17 @@ public class TableViewRowEditor implements TableView.RowEditor {
      * Paints the row being edited.
      */
     private Image tableRowImage = new Image() {
+        @Override
         public int getWidth() {
             return (tableView == null) ? 0 : tableView.getRowBounds(rowIndex).width;
         }
 
+        @Override
         public int getHeight() {
             return (tableView == null) ? 0 : tableView.getRowBounds(rowIndex).height;
         }
 
+        @Override
         public void paint(Graphics2D graphics) {
             Bounds rowBounds = tableView.getRowBounds(rowIndex);
             int width = rowBounds.width;
@@ -416,6 +419,7 @@ public class TableViewRowEditor implements TableView.RowEditor {
      * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
+    @Override
     public void edit(TableView tableView, int rowIndex, int columnIndex) {
         if (isEditing()) {
             throw new IllegalStateException();
@@ -498,11 +502,13 @@ public class TableViewRowEditor implements TableView.RowEditor {
         popup.open(tableView.getWindow());
     }
 
+    @Override
     public boolean isEditing() {
         return (tableView != null);
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public void save() {
         if (!isEditing()) {
             throw new IllegalStateException();
@@ -539,6 +545,7 @@ public class TableViewRowEditor implements TableView.RowEditor {
         }
     }
 
+    @Override
     public void cancel() {
         if (!isEditing()) {
             throw new IllegalStateException();

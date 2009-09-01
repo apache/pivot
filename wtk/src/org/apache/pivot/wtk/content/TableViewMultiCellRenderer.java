@@ -37,22 +37,27 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
      * Internal style dictionary that supports no styles.
      */
     private static class StyleDictionary implements Dictionary<String, Object> {
+        @Override
         public Object get(String key) {
             return null;
         }
 
+        @Override
         public Object put(String key, Object value) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public Object remove(String key) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public boolean containsKey(String key) {
             return false;
         }
 
+        @Override
         public boolean isEmpty() {
             return true;
         }
@@ -133,12 +138,14 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
     private class RendererMappingSequence implements Sequence<RendererMapping> {
         private ArrayList<RendererMapping> mappings = new ArrayList<RendererMapping>();
 
+        @Override
         public int add(RendererMapping item) {
             int index = mappings.getLength();
             insert(item, index);
             return index;
         }
 
+        @Override
         public void insert(RendererMapping item, int index) {
             if (item == null) {
                 throw new IllegalArgumentException("item is null.");
@@ -159,6 +166,7 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
             item.setMultiCellRenderer(TableViewMultiCellRenderer.this);
         }
 
+        @Override
         public RendererMapping update(int index, RendererMapping item) {
             if (item == null) {
                 throw new IllegalArgumentException("item is null.");
@@ -193,6 +201,7 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
             return previousItem;
         }
 
+        @Override
         public int remove(RendererMapping item) {
             int index = mappings.indexOf(item);
 
@@ -203,6 +212,7 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
             return index;
         }
 
+        @Override
         public Sequence<RendererMapping> remove(int index, int count) {
             Sequence<RendererMapping> removed = mappings.remove(index, count);
 
@@ -217,14 +227,17 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
             return removed;
         }
 
+        @Override
         public RendererMapping get(int index) {
             return mappings.get(index);
         }
 
+        @Override
         public int indexOf(RendererMapping item) {
             return mappings.indexOf(item);
         }
 
+        @Override
         public int getLength() {
             return mappings.getLength();
         }
@@ -243,18 +256,22 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
 
     private static final StyleDictionary STYLES = new StyleDictionary();
 
+    @Override
     public int getWidth() {
         return width;
     }
 
+    @Override
     public int getHeight() {
         return height;
     }
 
+    @Override
     public void paint(Graphics2D graphics) {
         currentRenderer.paint(graphics);
     }
 
+    @Override
     public void setSize(int width, int height) {
         this.width = width;
         this.height = height;
@@ -262,10 +279,12 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
         currentRenderer.setSize(width, height);
     }
 
+    @Override
     public int getPreferredWidth(int height) {
         return currentRenderer.getPreferredWidth(height);
     }
 
+    @Override
     public int getPreferredHeight(int width) {
         // Our preferred height is the maximum of all our possible renderers'
         // preferred height
@@ -280,15 +299,18 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
         return preferredHeight;
     }
 
+    @Override
     public Dimensions getPreferredSize() {
         return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
     }
 
+    @Override
     public Dictionary<String, Object> getStyles() {
         return STYLES;
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public void render(Object value, TableView tableView, TableView.Column column,
         boolean rowSelected, boolean rowHighlighted, boolean rowDisabled) {
         if (value == null) {

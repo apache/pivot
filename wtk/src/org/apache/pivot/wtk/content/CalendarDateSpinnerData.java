@@ -47,10 +47,12 @@ public class CalendarDateSpinnerData implements List<CalendarDate> {
     private class DataIterator implements Iterator<CalendarDate> {
         private int index = 0;
 
+        @Override
         public boolean hasNext() {
             return (index < length);
         }
 
+        @Override
         public CalendarDate next() {
             if (!hasNext()) {
                 throw new NoSuchElementException();
@@ -59,6 +61,7 @@ public class CalendarDateSpinnerData implements List<CalendarDate> {
             return get(index++);
         }
 
+        @Override
         public void remove() {
             throw new UnsupportedOperationException();
         }
@@ -124,6 +127,7 @@ public class CalendarDateSpinnerData implements List<CalendarDate> {
     /**
      * Throws <tt>UnsupportedOperationException</tt>.
      */
+    @Override
     public int add(CalendarDate item) {
         throw new UnsupportedOperationException();
     }
@@ -131,6 +135,7 @@ public class CalendarDateSpinnerData implements List<CalendarDate> {
     /**
      * Throws <tt>UnsupportedOperationException</tt>.
      */
+    @Override
     public void insert(CalendarDate item, int index) {
         throw new UnsupportedOperationException();
     }
@@ -138,6 +143,7 @@ public class CalendarDateSpinnerData implements List<CalendarDate> {
     /**
      * Throws <tt>UnsupportedOperationException</tt>.
      */
+    @Override
     public CalendarDate update(int index, CalendarDate item) {
         throw new UnsupportedOperationException();
     }
@@ -145,6 +151,7 @@ public class CalendarDateSpinnerData implements List<CalendarDate> {
     /**
      * Throws <tt>UnsupportedOperationException</tt>.
      */
+    @Override
     public int remove(CalendarDate item) {
         throw new UnsupportedOperationException();
     }
@@ -152,6 +159,7 @@ public class CalendarDateSpinnerData implements List<CalendarDate> {
     /**
      * Throws <tt>UnsupportedOperationException</tt>.
      */
+    @Override
     public Sequence<CalendarDate> remove(int index, int count) {
         throw new UnsupportedOperationException();
     }
@@ -162,6 +170,7 @@ public class CalendarDateSpinnerData implements List<CalendarDate> {
      * @param index
      * The index of the calendar date to retrieve.
      */
+    @Override
     public CalendarDate get(int index) {
         if (index < 0 || index >= length) {
             throw new IndexOutOfBoundsException("Index out of bounds: " + index);
@@ -179,6 +188,7 @@ public class CalendarDateSpinnerData implements List<CalendarDate> {
         return new CalendarDate(year, month, day);
     }
 
+    @Override
     public int indexOf(CalendarDate item) {
         long currentMilliseconds = calendar.getTimeInMillis();
 
@@ -199,6 +209,7 @@ public class CalendarDateSpinnerData implements List<CalendarDate> {
     /**
      * Throws <tt>UnsupportedOperationException</tt>.
      */
+    @Override
     public void clear() {
         throw new UnsupportedOperationException();
     }
@@ -209,6 +220,7 @@ public class CalendarDateSpinnerData implements List<CalendarDate> {
      * @return
      * The number of calendar dates in this list.
      */
+    @Override
     public int getLength() {
         return length;
     }
@@ -218,6 +230,7 @@ public class CalendarDateSpinnerData implements List<CalendarDate> {
      * <tt>null</tt>. This class does not support comparators since there's no
      * real data to sort (it's all spoofed).
      */
+    @Override
     public Comparator<CalendarDate> getComparator() {
         return null;
     }
@@ -225,14 +238,17 @@ public class CalendarDateSpinnerData implements List<CalendarDate> {
     /**
      * Throws <tt>UnsupportedOperationException</tt>.
      */
+    @Override
     public void setComparator(Comparator<CalendarDate> comparator) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public Iterator<CalendarDate> iterator() {
         return new DataIterator();
     }
 
+    @Override
     public ListenerList<ListListener<CalendarDate>> getListListeners() {
         return listListeners;
     }

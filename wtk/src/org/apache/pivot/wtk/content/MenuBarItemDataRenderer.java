@@ -56,6 +56,7 @@ public class MenuBarItemDataRenderer extends BoxPane implements Button.DataRende
         validate();
     }
 
+    @Override
     public void render(Object data, Button button, boolean highlighted) {
         Image icon = null;
         String text = null;

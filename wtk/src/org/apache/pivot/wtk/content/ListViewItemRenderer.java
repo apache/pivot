@@ -62,6 +62,7 @@ public class ListViewItemRenderer extends BoxPane implements ListView.ItemRender
         validate();
     }
 
+    @Override
     public void render(Object item, ListView listView, boolean selected,
         boolean checked, boolean highlighted, boolean disabled) {
         renderStyles(listView, selected, highlighted, disabled);

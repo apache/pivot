@@ -45,10 +45,12 @@ public class NumericSpinnerData implements List<Integer> {
 
         private int value = lowerBound;
 
+        @Override
         public boolean hasNext() {
             return (value <= upperBound);
         }
 
+        @Override
         public Integer next() {
             if (lowerBound != NumericSpinnerData.this.lowerBound
                 || upperBound != NumericSpinnerData.this.upperBound
@@ -65,6 +67,7 @@ public class NumericSpinnerData implements List<Integer> {
             return next;
         }
 
+        @Override
         public void remove() {
             throw new UnsupportedOperationException();
         }
@@ -137,26 +140,32 @@ public class NumericSpinnerData implements List<Integer> {
         this.increment = increment;
     }
 
+    @Override
     public int add(Integer item) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public void insert(Integer item, int index) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public Integer update(int index, Integer item) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public int remove(Integer item) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public Sequence<Integer> remove(int index, int count) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public Integer get(int index) {
         if (index < 0 || index >= getLength()) {
             throw new IndexOutOfBoundsException("Invalid index: " + index);
@@ -165,6 +174,7 @@ public class NumericSpinnerData implements List<Integer> {
         return lowerBound + (index * increment);
     }
 
+    @Override
     public int indexOf(Integer item) {
         int index = -1;
 
@@ -180,26 +190,32 @@ public class NumericSpinnerData implements List<Integer> {
         return index;
     }
 
+    @Override
     public void clear() {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public int getLength() {
         return ((upperBound - lowerBound) / increment) + 1;
     }
 
+    @Override
     public Comparator<Integer> getComparator() {
         return null;
     }
 
+    @Override
     public void setComparator(Comparator<Integer> comparator) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public Iterator<Integer> iterator() {
         return new DataIterator();
     }
 
+    @Override
     public ListenerList<ListListener<Integer>> getListListeners() {
         return listListeners;
     }

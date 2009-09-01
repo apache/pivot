@@ -35,6 +35,7 @@ public class SpinnerItemRenderer extends Label implements Spinner.ItemRenderer {
         getStyles().put("padding", new Insets(2));
     }
 
+    @Override
     public void render(Object item, Spinner spinner) {
         setText(item == null ? null : item.toString());
 

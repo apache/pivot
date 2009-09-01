@@ -25,22 +25,27 @@ import org.apache.pivot.collections.HashMap;
 public class TableRow implements Dictionary<String, Object> {
     private HashMap<String, Object> cells = new HashMap<String, Object>();
 
+    @Override
     public Object get(String key) {
         return cells.get(key);
     }
 
+    @Override
     public Object put(String key, Object value) {
         return cells.put(key, value);
     }
 
+    @Override
     public Object remove(String key) {
         return cells.remove(key);
     }
 
+    @Override
     public boolean containsKey(String key) {
         return cells.containsKey(key);
     }
 
+    @Override
     public boolean isEmpty() {
         return cells.isEmpty();
     }

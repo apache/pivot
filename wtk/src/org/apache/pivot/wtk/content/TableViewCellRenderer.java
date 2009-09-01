@@ -39,6 +39,7 @@ public class TableViewCellRenderer extends Label
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public void render(Object value, TableView tableView, TableView.Column column,
         boolean rowSelected, boolean rowHighlighted, boolean rowDisabled) {
         renderStyles(tableView, rowSelected, rowDisabled);

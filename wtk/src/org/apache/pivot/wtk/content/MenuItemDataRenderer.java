@@ -59,6 +59,7 @@ public class MenuItemDataRenderer extends TablePane implements Button.DataRender
         imageView.getStyles().put("backgroundColor", null);
     }
 
+    @Override
     public void setSize(int width, int height) {
         super.setSize(width, height);
 
@@ -67,6 +68,7 @@ public class MenuItemDataRenderer extends TablePane implements Button.DataRender
         validate();
     }
 
+    @Override
     public void render(Object data, Button button, boolean highlighted) {
         Image icon = null;
         String text = null;

@@ -184,6 +184,7 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void edit(TreeView treeView, Path path) {
         if (isEditing()) {
             throw new IllegalStateException();
@@ -244,6 +245,7 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
         }
     }
 
+    @Override
     public boolean isEditing() {
         return (treeView != null);
     }
@@ -252,6 +254,7 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
      * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
+    @Override
     public void save() {
         if (!isEditing()) {
             throw new IllegalStateException();
@@ -294,6 +297,7 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
         }
     }
 
+    @Override
     public void cancel() {
         if (!isEditing()) {
             throw new IllegalStateException();

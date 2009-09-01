@@ -67,6 +67,7 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
         this.expandedIcon = expandedIcon;
     }
 
+    @Override
     public int add(TreeNode treeNode) {
         int index = treeNodes.add(treeNode);
         listListeners.itemInserted(this, index);
@@ -74,11 +75,13 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
         return index;
     }
 
+    @Override
     public void insert(TreeNode treeNode, int index) {
         treeNodes.insert(treeNode, index);
         listListeners.itemInserted(this, index);
     }
 
+    @Override
     public TreeNode update(int index, TreeNode treeNode) {
         TreeNode previousTreeNode = treeNodes.update(index, treeNode);
         listListeners.itemUpdated(this, index, previousTreeNode);
@@ -86,6 +89,7 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
         return previousTreeNode;
     }
 
+    @Override
     public int remove(TreeNode treeNode) {
         int index = treeNodes.indexOf(treeNode);
         if (index != -1) {
@@ -95,6 +99,7 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
         return index;
     }
 
+    @Override
     public Sequence<TreeNode> remove(int index, int count) {
         Sequence<TreeNode> removed = treeNodes.remove(index, count);
         listListeners.itemsRemoved(this, index, removed);
@@ -102,27 +107,33 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
         return removed;
     }
 
+    @Override
     public void clear() {
         treeNodes.clear();
         listListeners.listCleared(this);
     }
 
+    @Override
     public TreeNode get(int index) {
         return treeNodes.get(index);
     }
 
+    @Override
     public int indexOf(TreeNode treeNode) {
         return treeNodes.indexOf(treeNode);
     }
 
+    @Override
     public int getLength() {
         return treeNodes.getLength();
     }
 
+    @Override
     public Comparator<TreeNode> getComparator() {
         return treeNodes.getComparator();
     }
 
+    @Override
     public void setComparator(Comparator<TreeNode> comparator) {
         Comparator<TreeNode> previousComparator = treeNodes.getComparator();
         treeNodes.setComparator(comparator);
@@ -140,10 +151,12 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
         listListeners.comparatorChanged(this, previousComparator);
     }
 
+    @Override
     public Iterator<TreeNode> iterator() {
         return new ImmutableIterator<TreeNode>(treeNodes.iterator());
     }
 
+    @Override
     public ListenerList<ListListener<TreeNode>> getListListeners() {
         return listListeners;
     }

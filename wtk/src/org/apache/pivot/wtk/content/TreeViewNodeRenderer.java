@@ -55,6 +55,7 @@ public class TreeViewNodeRenderer extends BoxPane implements TreeView.NodeRender
         imageView.setVisible(DEFAULT_SHOW_ICON);
     }
 
+    @Override
     public void setSize(int width, int height) {
         super.setSize(width, height);
 
@@ -63,6 +64,7 @@ public class TreeViewNodeRenderer extends BoxPane implements TreeView.NodeRender
         validate();
     }
 
+    @Override
     public void render(Object node, TreeView treeView, boolean expanded,
         boolean selected, TreeView.NodeCheckState checkState,
         boolean highlighted, boolean disabled) {

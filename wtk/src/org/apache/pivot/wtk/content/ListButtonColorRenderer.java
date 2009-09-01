@@ -34,6 +34,7 @@ public class ListButtonColorRenderer extends ImageView
         setImage(colorBadge);
     }
 
+    @Override
     public void render(Object data, Button button, boolean highlighted) {
         Color color;
         if (data instanceof ColorItem) {

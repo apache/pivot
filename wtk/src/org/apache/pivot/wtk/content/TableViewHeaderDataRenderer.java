@@ -56,6 +56,7 @@ public class TableViewHeaderDataRenderer extends BoxPane
         validate();
     }
 
+    @Override
     public void render(Object data, TableViewHeader tableViewHeader, boolean highlighted) {
         Image icon = null;
         String text = null;

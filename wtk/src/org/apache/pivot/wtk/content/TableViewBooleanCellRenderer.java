@@ -51,6 +51,7 @@ public class TableViewBooleanCellRenderer extends BoxPane
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public void render(Object value, TableView tableView, TableView.Column column,
         boolean rowSelected, boolean rowHighlighted, boolean rowDisabled) {
         if (value != null) {
