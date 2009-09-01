@@ -64,6 +64,7 @@ public class SaturationDecorator implements Decorator {
         setMultiplier(multiplier.floatValue());
     }
 
+    @Override
     public Graphics2D prepare(Component component, Graphics2D graphics) {
         int x = 0;
         int y = 0;
@@ -93,6 +94,7 @@ public class SaturationDecorator implements Decorator {
      * Adjusts the saturation of the component image and draws the resulting
      * image using the component's graphics.
      */
+    @Override
     public void update() {
         int width = componentImage.getWidth();
         int height = componentImage.getHeight();
@@ -136,10 +138,12 @@ public class SaturationDecorator implements Decorator {
         graphics.drawImage(componentImage, x, y, null);
     }
 
+    @Override
     public Bounds getBounds(Component component) {
         return new Bounds(0, 0, component.getWidth(), component.getHeight());
     }
 
+    @Override
     public AffineTransform getTransform(Component component) {
         return new AffineTransform();
     }

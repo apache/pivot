@@ -64,19 +64,23 @@ public class ClipDecorator implements Decorator {
         this.height = height;
     }
 
+    @Override
     public Graphics2D prepare(Component component, Graphics2D graphics) {
         graphics.clipRect(x, y, width, height);
         return graphics;
     }
 
+    @Override
     public void update() {
         // No-op
     }
 
+    @Override
     public Bounds getBounds(Component component) {
         return new Bounds(x, y, width, height);
     }
 
+    @Override
     public AffineTransform getTransform(Component component) {
         return new AffineTransform();
     }

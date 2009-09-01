@@ -39,6 +39,7 @@ public class ReflectionDecorator implements Decorator {
     private BufferedImage componentImage = null;
     private Graphics2D componentImageGraphics = null;
 
+    @Override
     public Graphics2D prepare(Component component, Graphics2D graphics) {
         this.graphics = graphics;
         this.component = component;
@@ -58,6 +59,7 @@ public class ReflectionDecorator implements Decorator {
         return componentImageGraphics;
     }
 
+    @Override
     public void update() {
         // Draw the component
         graphics.drawImage(componentImage, 0, 0, null);
@@ -81,10 +83,12 @@ public class ReflectionDecorator implements Decorator {
         graphics.drawImage(componentImage, 0, 0, null);
     }
 
+    @Override
     public Bounds getBounds(Component component) {
         return new Bounds(0, 0, component.getWidth(), component.getHeight() * 2);
     }
 
+    @Override
     public AffineTransform getTransform(Component component) {
         AffineTransform transform = AffineTransform.getScaleInstance(1.0, -1.0);
         transform.translate(0, -(component.getHeight() * 2));

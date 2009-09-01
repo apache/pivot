@@ -85,15 +85,18 @@ public class TranslationDecorator implements Decorator {
         this.clip = clip;
     }
 
+    @Override
     public Graphics2D prepare(Component component, Graphics2D graphics) {
         graphics.translate(x, y);
         return graphics;
     }
 
+    @Override
     public void update() {
         // No-op
     }
 
+    @Override
     public Bounds getBounds(Component component) {
         int width = component.getWidth();
         int height = component.getHeight();
@@ -107,6 +110,7 @@ public class TranslationDecorator implements Decorator {
         return bounds;
     }
 
+    @Override
     public AffineTransform getTransform(Component component) {
         return AffineTransform.getTranslateInstance(x, y);
     }

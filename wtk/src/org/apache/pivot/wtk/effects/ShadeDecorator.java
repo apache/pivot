@@ -105,6 +105,7 @@ public class ShadeDecorator implements Decorator {
         setColor(Color.decode(color));
     }
 
+    @Override
     public Graphics2D prepare(Component component, Graphics2D graphics) {
         this.graphics = graphics;
         this.component = component;
@@ -112,16 +113,19 @@ public class ShadeDecorator implements Decorator {
         return graphics;
     }
 
+    @Override
     public void update() {
         graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
         graphics.setColor(color);
         graphics.fillRect(0, 0, component.getWidth(), component.getHeight());
     }
 
+    @Override
     public Bounds getBounds(Component component) {
         return new Bounds(0, 0, component.getWidth(), component.getHeight());
     }
 
+    @Override
     public AffineTransform getTransform(Component component) {
         return new AffineTransform();
     }

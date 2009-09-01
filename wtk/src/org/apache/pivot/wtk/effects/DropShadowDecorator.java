@@ -165,6 +165,7 @@ public class DropShadowDecorator implements Decorator {
         this.yOffset = yOffset;
     }
 
+    @Override
     public Graphics2D prepare(Component component, Graphics2D graphics) {
         int width = component.getWidth();
         int height = component.getHeight();
@@ -192,16 +193,19 @@ public class DropShadowDecorator implements Decorator {
         return graphics;
     }
 
+    @Override
     public void update() {
         // No-op
     }
 
+    @Override
     public Bounds getBounds(Component component) {
         return new Bounds(xOffset - blurRadius, yOffset - blurRadius,
             component.getWidth() + blurRadius * 2,
             component.getHeight() + blurRadius * 2);
     }
 
+    @Override
     public AffineTransform getTransform(Component component) {
         return new AffineTransform();
     }

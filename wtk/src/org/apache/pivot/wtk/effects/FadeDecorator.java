@@ -51,19 +51,23 @@ public class FadeDecorator implements Decorator {
         this.opacity = opacity;
     }
 
+    @Override
     public Graphics2D prepare(Component component, Graphics2D graphics) {
         graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
         return graphics;
     }
 
+    @Override
     public void update() {
         // No-op
     }
 
+    @Override
     public Bounds getBounds(Component component) {
         return new Bounds(0, 0, component.getWidth(), component.getHeight());
     }
 
+    @Override
     public AffineTransform getTransform(Component component) {
         return new AffineTransform();
     }

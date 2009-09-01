@@ -36,6 +36,7 @@ public abstract class Transition {
     private ApplicationContext.ScheduledCallback transitionCallback = null;
 
     private final Runnable updateCallback = new Runnable() {
+        @Override
         public void run() {
             currentTime = System.currentTimeMillis();
 

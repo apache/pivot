@@ -129,6 +129,7 @@ public class TagDecorator implements Decorator {
         this.yOffset = yOffset;
     }
 
+    @Override
     public Graphics2D prepare(Component component, Graphics2D graphics) {
         if (tag != null) {
             bounds = getBounds(component);
@@ -138,6 +139,7 @@ public class TagDecorator implements Decorator {
         return graphics;
     }
 
+    @Override
     public void update() {
         if (tag != null) {
             graphics.translate(bounds.x, bounds.y);
@@ -145,6 +147,7 @@ public class TagDecorator implements Decorator {
         }
     }
 
+    @Override
     public Bounds getBounds(Component component) {
         Bounds bounds;
 
@@ -201,6 +204,7 @@ public class TagDecorator implements Decorator {
         return bounds;
     }
 
+    @Override
     public AffineTransform getTransform(Component component) {
         return new AffineTransform();
     }

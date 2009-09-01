@@ -264,6 +264,7 @@ public class WatermarkDecorator implements Decorator {
         boxPane.validate();
     }
 
+    @Override
     public Graphics2D prepare(Component component, Graphics2D graphics) {
         this.component = component;
         this.graphics = graphics;
@@ -271,6 +272,7 @@ public class WatermarkDecorator implements Decorator {
         return graphics;
     }
 
+    @Override
     public void update() {
         int width = component.getWidth();
         int height = component.getHeight();
@@ -310,10 +312,12 @@ public class WatermarkDecorator implements Decorator {
         watermarkGraphics.dispose();
     }
 
+    @Override
     public Bounds getBounds(Component component) {
         return new Bounds(0, 0, component.getWidth(), component.getHeight());
     }
 
+    @Override
     public AffineTransform getTransform(Component component) {
         return new AffineTransform();
     }

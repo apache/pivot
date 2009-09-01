@@ -340,6 +340,7 @@ public class ScaleDecorator implements Decorator {
         return ty;
     }
 
+    @Override
     public Graphics2D prepare(Component component, Graphics2D graphics) {
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
@@ -358,6 +359,7 @@ public class ScaleDecorator implements Decorator {
         return graphics;
     }
 
+    @Override
     public void update() {
         // No-op
     }
@@ -378,6 +380,7 @@ public class ScaleDecorator implements Decorator {
         }
     }
 
+    @Override
     public Bounds getBounds(Component component) {
         int width = (int)Math.ceil(component.getWidth() * scaleX);
         int height = (int)Math.ceil(component.getHeight() * scaleY);
@@ -388,6 +391,7 @@ public class ScaleDecorator implements Decorator {
         return new Bounds(tx, ty, width, height);
     }
 
+    @Override
     public AffineTransform getTransform(Component component) {
         return AffineTransform.getScaleInstance(scaleX, scaleY);
     }

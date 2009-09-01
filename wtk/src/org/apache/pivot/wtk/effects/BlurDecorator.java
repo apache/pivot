@@ -72,6 +72,7 @@ public class BlurDecorator implements Decorator {
         this.blurMagnitude = blurMagnitude;
     }
 
+    @Override
     public Graphics2D prepare(Component component, Graphics2D graphics) {
         this.graphics = graphics;
 
@@ -90,6 +91,7 @@ public class BlurDecorator implements Decorator {
         return bufferedImageGraphics;
     }
 
+    @Override
     public void update() {
         bufferedImageGraphics.dispose();
         bufferedImage.flush();
@@ -106,10 +108,12 @@ public class BlurDecorator implements Decorator {
         this.graphics.drawImage(bufferedImage, 0, 0, null);
     }
 
+    @Override
     public Bounds getBounds(Component component) {
         return new Bounds(0, 0, component.getWidth(), component.getHeight());
     }
 
+    @Override
     public AffineTransform getTransform(Component component) {
         return new AffineTransform();
     }

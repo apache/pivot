@@ -33,6 +33,7 @@ public class GrayscaleDecorator implements Decorator {
     private BufferedImage bufferedImage = null;
     private Graphics2D bufferedImageGraphics = null;
 
+    @Override
     public Graphics2D prepare(Component component, Graphics2D graphics) {
         this.graphics = graphics;
 
@@ -51,6 +52,7 @@ public class GrayscaleDecorator implements Decorator {
         return bufferedImageGraphics;
     }
 
+    @Override
     public void update() {
         bufferedImageGraphics.dispose();
         bufferedImage.flush();
@@ -58,10 +60,12 @@ public class GrayscaleDecorator implements Decorator {
         graphics.drawImage(bufferedImage, 0, 0, null);
     }
 
+    @Override
     public Bounds getBounds(Component component) {
         return new Bounds(0, 0, component.getWidth(), component.getHeight());
     }
 
+    @Override
     public AffineTransform getTransform(Component component) {
         return new AffineTransform();
     }
