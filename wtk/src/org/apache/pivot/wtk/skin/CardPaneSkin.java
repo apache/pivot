@@ -60,7 +60,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         public final int direction;
 
         public SelectionChangeTransition(int from, int to) {
-            super(SELECTION_CHANGE_DURATION, SELECTION_CHANGE_RATE, false);
+            super(selectionChangeDuration, SELECTION_CHANGE_RATE, false);
 
             this.from = from;
             this.to = to;
@@ -79,10 +79,10 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
                     && to == length - 1) {
                     direction = -1;
                 } else {
-                    direction = Integer.signum(from - to);
+                    direction = Integer.signum(to - from);
                 }
             } else {
-                direction = Integer.signum(from - to);
+                direction = Integer.signum(to - from);
             }
         }
     }
@@ -172,15 +172,15 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 
             float percentComplete = slideEasing.easeOut(getElapsedTime(), 0, 1, getDuration());
 
-            int dx = (int)(width * percentComplete) * direction;
-            int dy = (int)(height * percentComplete) * direction;
+            int dx = (int)(width * percentComplete) * -direction;
+            int dy = (int)(height * percentComplete) * -direction;
 
             if (selectionChangeEffect == SelectionChangeEffect.HORIZONTAL_SLIDE) {
                 fromCard.setLocation(padding.left + dx, padding.top);
-                toCard.setLocation(padding.left - (width * direction) + dx, padding.top);
+                toCard.setLocation(padding.left - (width * -direction) + dx, padding.top);
             } else {
                 fromCard.setLocation(padding.left, padding.top + dy);
-                toCard.setLocation(padding.left, padding.top - (height * direction) + dy);
+                toCard.setLocation(padding.left, padding.top - (height * -direction) + dy);
             }
         }
     }
@@ -294,11 +294,12 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     private Insets padding = Insets.NONE;
     private boolean sizeToSelection = false;
     private SelectionChangeEffect selectionChangeEffect = null;
+    private int selectionChangeDuration = DEFAULT_SELECTION_CHANGE_DURATION;
     private boolean circular = false;
 
     private SelectionChangeTransition selectionChangeTransition = null;
 
-    public static final int SELECTION_CHANGE_DURATION = 250;
+    public static final int DEFAULT_SELECTION_CHANGE_DURATION = 250;
     public static final int SELECTION_CHANGE_RATE = 30;
 
     @Override
@@ -502,6 +503,14 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         }
 
         setSelectionChangeEffect(SelectionChangeEffect.valueOf(selectionChangeEffect.toUpperCase()));
+    }
+
+    public int getSelectionChangeDuration() {
+        return selectionChangeDuration;
+    }
+
+    public void setSelectionChangeDuration(int selectionChangeDuration) {
+        this.selectionChangeDuration = selectionChangeDuration;
     }
 
     /**
