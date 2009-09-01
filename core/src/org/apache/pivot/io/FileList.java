@@ -31,6 +31,7 @@ public class FileList extends ListAdapter<File> {
     private static class FilePathComparator implements Comparator<File>, Serializable {
         private static final long serialVersionUID = 0;
 
+        @Override
         public int compare(File file1, File file2) {
             String path1 = file1.getPath();
             String path2 = file2.getPath();
