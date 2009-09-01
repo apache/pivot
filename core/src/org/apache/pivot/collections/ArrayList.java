@@ -41,10 +41,12 @@ public class ArrayList<T> implements List<T>, Serializable {
             length = ArrayList.this.length;
         }
 
+        @Override
         public boolean hasNext() {
             return (index < getLength());
         }
 
+        @Override
         public T next() {
             if (!hasNext()) {
                 throw new NoSuchElementException();
@@ -57,10 +59,12 @@ public class ArrayList<T> implements List<T>, Serializable {
             return get(index++);
         }
 
+        @Override
         public boolean hasPrevious() {
             return (index >= 0);
         }
 
+        @Override
         public T previous() {
             if (!hasPrevious()) {
                 throw new NoSuchElementException();
@@ -73,6 +77,7 @@ public class ArrayList<T> implements List<T>, Serializable {
             return get(index--);
         }
 
+        @Override
         public void insert(T item) {
             if (index < 0
                 || index >= ArrayList.this.length) {
@@ -83,6 +88,7 @@ public class ArrayList<T> implements List<T>, Serializable {
             length++;
         }
 
+        @Override
         public void update(T item) {
             if (index < 0
                 || index >= ArrayList.this.length) {
@@ -92,6 +98,7 @@ public class ArrayList<T> implements List<T>, Serializable {
             ArrayList.this.update(index, item);
         }
 
+        @Override
         public void remove() {
             if (index < 0
                 || index >= ArrayList.this.length) {
@@ -181,6 +188,7 @@ public class ArrayList<T> implements List<T>, Serializable {
         length = count;
     }
 
+    @Override
     public int add(T item) {
         int index = -1;
 
@@ -201,6 +209,7 @@ public class ArrayList<T> implements List<T>, Serializable {
         return index;
     }
 
+    @Override
     public void insert(T item, int index) {
         insert(item, index, true);
     }
@@ -236,6 +245,7 @@ public class ArrayList<T> implements List<T>, Serializable {
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public T update(int index, T item) {
         if (index < 0
             || index >= length) {
@@ -260,6 +270,7 @@ public class ArrayList<T> implements List<T>, Serializable {
         return previousItem;
     }
 
+    @Override
     public int remove(T item) {
         int index = indexOf(item);
 
@@ -271,6 +282,7 @@ public class ArrayList<T> implements List<T>, Serializable {
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public Sequence<T> remove(int index, int count) {
         if (index < 0
             || index + count > length) {
@@ -299,6 +311,7 @@ public class ArrayList<T> implements List<T>, Serializable {
         return removed;
     }
 
+    @Override
     public void clear() {
         if (length > 0) {
             items = new Object[items.length];
@@ -311,6 +324,7 @@ public class ArrayList<T> implements List<T>, Serializable {
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public T get(int index) {
         if (index < 0
             || index >= length) {
@@ -320,6 +334,7 @@ public class ArrayList<T> implements List<T>, Serializable {
         return (T)items[index];
     }
 
+    @Override
     public int indexOf(T item) {
         int index = -1;
 
@@ -356,6 +371,7 @@ public class ArrayList<T> implements List<T>, Serializable {
         return index;
     }
 
+    @Override
     public int getLength() {
         return length;
     }
@@ -386,10 +402,12 @@ public class ArrayList<T> implements List<T>, Serializable {
         return Arrays.copyOf(items, length, type);
     }
 
+    @Override
     public Comparator<T> getComparator() {
         return comparator;
     }
 
+    @Override
     public void setComparator(Comparator<T> comparator) {
         Comparator<T> previousComparator = this.comparator;
 
@@ -407,10 +425,12 @@ public class ArrayList<T> implements List<T>, Serializable {
         }
     }
 
+    @Override
     public ItemIterator<T> iterator() {
         return new ArrayListItemIterator();
     }
 
+    @Override
     public ListenerList<ListListener<T>> getListListeners() {
         if (listListeners == null) {
             listListeners = new ListListenerList<T>();
@@ -490,6 +510,7 @@ public class ArrayList<T> implements List<T>, Serializable {
     public static <T extends Comparable<? super T>> int binarySearch(ArrayList<T> arrayList,
         T item) {
         return binarySearch(arrayList, item, new Comparator<T>() {
+            @Override
             public int compare(T t1, T t2) {
                 return t1.compareTo(t2);
             }
