@@ -26,18 +26,23 @@ public interface MapListener<K, V> {
      * Map listener adapter.
      */
     public static class Adapter<K, V> implements MapListener<K, V> {
+        @Override
         public void valueAdded(Map<K, V> map, K key) {
         }
 
+        @Override
         public void valueUpdated(Map<K, V> map, K key, V previousValue) {
         }
 
+        @Override
         public void valueRemoved(Map<K, V> map, K key, V value) {
         }
 
+        @Override
         public void mapCleared(Map<K, V> map) {
         }
 
+        @Override
         public void comparatorChanged(Map<K, V> map, Comparator<K> previousComparator) {
         }
     }

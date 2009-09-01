@@ -40,30 +40,35 @@ public interface List<T> extends Sequence<T>, Collection<T> {
      */
     public static class ListListenerList<T>
         extends ListenerList<ListListener<T>> implements ListListener<T> {
+        @Override
         public void itemInserted(List<T> list, int index) {
             for (ListListener<T> listener : this) {
                 listener.itemInserted(list, index);
             }
         }
 
+        @Override
         public void itemsRemoved(List<T> list, int index, Sequence<T> items) {
             for (ListListener<T> listener : this) {
                 listener.itemsRemoved(list, index, items);
             }
         }
 
+        @Override
         public void itemUpdated(List<T> list, int index, T previousItem) {
             for (ListListener<T> listener : this) {
                 listener.itemUpdated(list, index, previousItem);
             }
         }
 
+        @Override
         public void listCleared(List<T> list) {
             for (ListListener<T> listener : this) {
                 listener.listCleared(list);
             }
         }
 
+        @Override
         public void comparatorChanged(List<T> list, Comparator<T> previousComparator) {
             for (ListListener<T> listener : this) {
                 listener.comparatorChanged(list, previousComparator);
@@ -81,6 +86,7 @@ public interface List<T> extends Sequence<T>, Collection<T> {
      * @return
      * The index at which the item was added.
      */
+    @Override
     public int add(T item);
 
     /**
@@ -99,6 +105,7 @@ public interface List<T> extends Sequence<T>, Collection<T> {
      *
      * @see ListListener#itemInserted(List, int)
      */
+    @Override
     public void insert(T item, int index);
 
     /**
@@ -116,16 +123,19 @@ public interface List<T> extends Sequence<T>, Collection<T> {
      *
      * @see ListListener#itemUpdated(List, int, Object)
      */
+    @Override
     public T update(int index, T item);
 
     /**
      * @see ListListener#itemsRemoved(List, int, Sequence)
      */
+    @Override
     public Sequence<T> remove(int index, int count);
 
     /**
      * @see ListListener#itemsRemoved(List, int, Sequence)
      */
+    @Override
     public void clear();
 
     /**
@@ -135,11 +145,13 @@ public interface List<T> extends Sequence<T>, Collection<T> {
      * not known. In this case, the iterator must be used to retrieve the
      * contents of the list.
      */
+    @Override
     public int getLength();
 
     /**
      * @see ListListener#comparatorChanged(List, Comparator)
      */
+    @Override
     public void setComparator(Comparator<T> comparator);
 
     /**

@@ -38,11 +38,13 @@ public class LinkedStack<T> extends LinkedList<T> implements Stack<T> {
         super(comparator);
     }
 
+    @Override
     public void push(T item) {
         add(item);
         stackListeners.itemPushed(this, item);
     }
 
+    @Override
     public T pop() {
         int length = getLength();
         if (length == 0) {
@@ -55,6 +57,7 @@ public class LinkedStack<T> extends LinkedList<T> implements Stack<T> {
         return item;
     }
 
+    @Override
     public T peek() {
         T item = null;
         int length = getLength();
@@ -65,10 +68,12 @@ public class LinkedStack<T> extends LinkedList<T> implements Stack<T> {
         return item;
     }
 
+    @Override
     public boolean isEmpty() {
         return (getLength() == 0);
     }
 
+    @Override
     public ListenerList<StackListener<T>> getStackListeners() {
         return stackListeners;
     }

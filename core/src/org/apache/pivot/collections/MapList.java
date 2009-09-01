@@ -33,6 +33,7 @@ public class MapList<K, V> implements List<Pair<K, V>> {
      */
     private static class MapListListenerList<K, V> extends ListenerList<MapListListener<K, V>>
         implements MapListListener<K, V> {
+        @Override
         public void sourceChanged(MapList<K, V> mapList, Map<K, V> previousSource) {
             for (MapListListener<K, V> listener : this) {
                 listener.sourceChanged(mapList, previousSource);

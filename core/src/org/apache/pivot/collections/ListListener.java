@@ -26,18 +26,23 @@ public interface ListListener<T> {
      * List listener adapter.
      */
     public static class Adapter<T> implements ListListener<T> {
+        @Override
         public void itemInserted(List<T> list, int index) {
         }
 
+        @Override
         public void itemsRemoved(List<T> list, int index, Sequence<T> items) {
         }
 
+        @Override
         public void itemUpdated(List<T> list, int index, T previousItem) {
         }
 
+        @Override
         public void listCleared(List<T> list) {
         }
 
+        @Override
         public void comparatorChanged(List<T> list, Comparator<T> previousComparator) {
         }
     }

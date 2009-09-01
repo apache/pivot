@@ -30,30 +30,35 @@ public interface Map<K, V> extends Dictionary<K, V>, Collection<K> {
      */
     public static class MapListenerList<K, V>
         extends ListenerList<MapListener<K, V>> implements MapListener<K, V> {
+        @Override
         public void valueAdded(Map<K, V> map, K key) {
             for (MapListener<K, V> listener : this) {
                 listener.valueAdded(map, key);
             }
         }
 
+        @Override
         public void valueRemoved(Map<K, V> map, K key, V value) {
             for (MapListener<K, V> listener : this) {
                 listener.valueRemoved(map, key, value);
             }
         }
 
+        @Override
         public void valueUpdated(Map<K, V> map, K key, V previousValue) {
             for (MapListener<K, V> listener : this) {
                 listener.valueUpdated(map, key, previousValue);
             }
         }
 
+        @Override
         public void mapCleared(Map<K, V> map) {
             for (MapListener<K, V> listener : this) {
                 listener.mapCleared(map);
             }
         }
 
+        @Override
         public void comparatorChanged(Map<K, V> map, Comparator<K> previousComparator) {
             for (MapListener<K, V> listener : this) {
                 listener.comparatorChanged(map, previousComparator);
@@ -74,11 +79,13 @@ public interface Map<K, V> extends Dictionary<K, V>, Collection<K> {
      * @see MapListener#valueAdded(Map, Object)
      * @see MapListener#valueUpdated(Map, Object, Object)
      */
+    @Override
     public V put(K key, V value);
 
     /**
      * @see MapListener#valueRemoved(Map, Object, Object)
      */
+    @Override
     public V remove(K key);
 
     /**
@@ -86,6 +93,7 @@ public interface Map<K, V> extends Dictionary<K, V>, Collection<K> {
      *
      * @see MapListener#mapCleared(Map)
      */
+    @Override
     public void clear();
 
     /**
@@ -96,6 +104,7 @@ public interface Map<K, V> extends Dictionary<K, V>, Collection<K> {
     /**
      * @see MapListener#comparatorChanged(Map, Comparator)
      */
+    @Override
     public void setComparator(Comparator<K> comparator);
 
     /**
