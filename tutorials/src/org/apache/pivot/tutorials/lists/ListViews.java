@@ -35,14 +35,17 @@ public class ListViews implements Application {
 
     private ListViewSelectionListener listViewSelectionListener =
         new ListViewSelectionListener() {
+        @Override
         public void selectedRangeAdded(ListView listView, int rangeStart, int rangeEnd) {
             updateSelection(listView);
         }
 
+        @Override
         public void selectedRangeRemoved(ListView listView, int rangeStart, int rangeEnd) {
             updateSelection(listView);
         }
 
+        @Override
         public void selectedRangesChanged(ListView listView, Sequence<Span> previousSelectedRanges) {
             updateSelection(listView);
         }
@@ -70,6 +73,7 @@ public class ListViews implements Application {
         }
     };
 
+    @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -82,6 +86,7 @@ public class ListViews implements Application {
         window.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (window != null) {
             window.close();
@@ -90,9 +95,11 @@ public class ListViews implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 

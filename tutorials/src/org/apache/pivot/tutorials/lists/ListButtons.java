@@ -38,6 +38,7 @@ public class ListButtons implements Application {
 
     private ListButtonSelectionListener listButtonSelectionListener =
         new ListButtonSelectionListener() {
+        @Override
         public void selectedIndexChanged(ListButton listButton, int previousIndex) {
             int index = listButton.getSelectedIndex();
 
@@ -68,6 +69,7 @@ public class ListButtons implements Application {
         }
     };
 
+    @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "list_buttons.wtkx");
@@ -80,6 +82,7 @@ public class ListButtons implements Application {
         window.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (window != null) {
             window.close();
@@ -88,9 +91,11 @@ public class ListButtons implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 

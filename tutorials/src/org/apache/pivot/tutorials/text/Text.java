@@ -34,6 +34,7 @@ public class Text implements Application {
 
     private TextInputCharacterListener textInputCharacterListener =
         new TextInputCharacterListener.Adapter() {
+        @Override
         public void charactersInserted(final TextInput textInput, int index, int count) {
             String text = textInput.getText();
 
@@ -120,6 +121,7 @@ public class Text implements Application {
         states.add("Wyoming");
     }
 
+    @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -132,6 +134,7 @@ public class Text implements Application {
         stateTextInput.requestFocus();
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (window != null) {
             window.close();
@@ -140,9 +143,11 @@ public class Text implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 

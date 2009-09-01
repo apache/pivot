@@ -41,6 +41,7 @@ public class Transitions implements Application {
     public static int TRANSITION_DURATION = 250;
     public static int TRANSITION_RATE = 30;
 
+    @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -51,11 +52,13 @@ public class Transitions implements Application {
         button4 = (PushButton)wtkxSerializer.get("button4");
 
         ButtonPressListener buttonPressListener = new ButtonPressListener() {
+            @Override
             public void buttonPressed(final Button button) {
                 if (collapseTransition == null) {
                     collapseTransition = new CollapseTransition(button, TRANSITION_DURATION, TRANSITION_RATE);
 
                     TransitionListener transitionListener = new TransitionListener() {
+                        @Override
                         public void transitionCompleted(Transition transition) {
                             CollapseTransition collapseTransition = (CollapseTransition)transition;
 
@@ -87,6 +90,7 @@ public class Transitions implements Application {
         window.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (window != null) {
             window.close();
@@ -95,9 +99,11 @@ public class Transitions implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 
