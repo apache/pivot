@@ -48,6 +48,7 @@ public class TaskSequence extends Task<Void>
         return null;
     }
 
+    @Override
     public int add(Task<?> task) {
         int index = tasks.getLength();
         insert(task, index);
@@ -55,6 +56,7 @@ public class TaskSequence extends Task<Void>
         return index;
     }
 
+    @Override
     public void insert(Task<?> task, int index) {
         if (isPending()) {
             throw new IllegalStateException();
@@ -63,6 +65,7 @@ public class TaskSequence extends Task<Void>
         tasks.insert(task, index);
     }
 
+    @Override
     public Task<?> update(int index, Task<?> task) {
         if (isPending()) {
             throw new IllegalStateException();
@@ -71,6 +74,7 @@ public class TaskSequence extends Task<Void>
         return tasks.update(index, task);
     }
 
+    @Override
     public int remove(Task<?> task) {
         int index = tasks.indexOf(task);
         if (index != -1) {
@@ -80,6 +84,7 @@ public class TaskSequence extends Task<Void>
         return index;
     }
 
+    @Override
     public Sequence<Task<?>> remove(int index, int count) {
         if (isPending()) {
             throw new IllegalStateException();
@@ -88,18 +93,22 @@ public class TaskSequence extends Task<Void>
         return tasks.remove(index, count);
     }
 
+    @Override
     public Task<?> get(int index) {
         return tasks.get(index);
     }
 
+    @Override
     public int indexOf(Task<?> task) {
         return tasks.indexOf(task);
     }
 
+    @Override
     public int getLength() {
         return tasks.getLength();
     }
 
+    @Override
     public Iterator<Task<?>> iterator() {
         return new ImmutableIterator<Task<?>>(tasks.iterator());
     }
