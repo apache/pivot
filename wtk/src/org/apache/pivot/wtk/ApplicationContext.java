@@ -85,6 +85,8 @@ public abstract class ApplicationContext {
         private DropAction userDropAction = null;
         private Component dropDescendant = null;
 
+        private MenuPopup menuPopup = null;
+
         private double scale = 1;
 
         private boolean paintPending = false;
@@ -801,12 +803,12 @@ public abstract class ApplicationContext {
 
                             if (button == Mouse.Button.LEFT) {
                                 dragLocation = new Point(x, y);
-                            } else if (button == Mouse.Button.RIGHT
+                            } else if (menuPopup == null
+                                && button == Mouse.Button.RIGHT
                                 && mouseOwner.isShowing()
                                 && !mouseOwner.isBlocked()) {
                                 // Instantiate a context menu
-                                final Menu menu = new Menu();
-                                MenuPopup menuPopup = new MenuPopup(menu);
+                                Menu menu = new Menu();
 
                                 // Allow menu handlers to configure the menu
                                 Component component = mouseOwner;
@@ -838,10 +840,13 @@ public abstract class ApplicationContext {
 
                                 // Show the context menu if it contains any sections
                                 if (menu.getSections().getLength() > 0) {
+                                    menuPopup = new MenuPopup(menu);
+
                                     menuPopup.getWindowStateListeners().add(new WindowStateListener.Adapter() {
                                         @Override
                                         public void windowClosed(Window window, Display display) {
-                                            menu.getSections().clear();
+                                            menuPopup.getMenu().getSections().clear();
+                                            menuPopup = null;
                                             window.getWindowStateListeners().remove(this);
                                         }
                                     });
