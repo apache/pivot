@@ -1085,7 +1085,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public void rowsCleared(TableView listView) {
-        repaintComponent();
+        invalidateComponent();
     }
 
     public void rowsSorted(TableView tableView) {

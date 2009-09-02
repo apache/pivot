@@ -839,7 +839,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     }
 
     public void itemsCleared(ListView listView) {
-        repaintComponent();
+        invalidateComponent();
     }
 
     public void itemsSorted(ListView listView) {

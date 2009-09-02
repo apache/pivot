@@ -19,6 +19,7 @@ package org.apache.pivot.collections;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -51,6 +52,8 @@ public class LinkedList<T> implements List<T>, Serializable {
         private Node<T> current;
         private Node<T> next;
 
+        private int modificationCount;
+
         public LinkedListItemIterator() {
             this(false);
         }
@@ -60,6 +63,8 @@ public class LinkedList<T> implements List<T>, Serializable {
 
             current = null;
             next = (reverse) ? last : first;
+
+            modificationCount = LinkedList.this.modificationCount;
         }
 
         @Override
@@ -71,6 +76,10 @@ public class LinkedList<T> implements List<T>, Serializable {
         public T next() {
             if (!hasNext()) {
                 throw new NoSuchElementException();
+            }
+
+            if (modificationCount != LinkedList.this.modificationCount) {
+                throw new ConcurrentModificationException();
             }
 
             T item = next.item;
@@ -90,6 +99,10 @@ public class LinkedList<T> implements List<T>, Serializable {
         public T previous() {
             if (!hasPrevious()) {
                 throw new NoSuchElementException();
+            }
+
+            if (modificationCount != LinkedList.this.modificationCount) {
+                throw new ConcurrentModificationException();
             }
 
             T item = next.item;
@@ -130,10 +143,12 @@ public class LinkedList<T> implements List<T>, Serializable {
             }
 
             T previousItem = current.item;
-            current.item = item;
+            if (previousItem != item) {
+                current.item = item;
 
-            if (listListeners != null) {
-                listListeners.itemUpdated(LinkedList.this, index, previousItem);
+                if (listListeners != null) {
+                    listListeners.itemUpdated(LinkedList.this, index, previousItem);
+                }
             }
         }
 
@@ -176,6 +191,8 @@ public class LinkedList<T> implements List<T>, Serializable {
     private int length = 0;
 
     private Comparator<T> comparator = null;
+
+    private transient int modificationCount = 0;
     private transient ListListenerList<T> listListeners;
 
     public LinkedList() {
@@ -224,6 +241,7 @@ public class LinkedList<T> implements List<T>, Serializable {
                 nodeIterator.next.next = node;
                 node.next.previous = node;
                 length++;
+                modificationCount++;
             } else {
                 // Insert at the head or append to the tail
                 insert(item, index, false);
@@ -279,6 +297,7 @@ public class LinkedList<T> implements List<T>, Serializable {
 
         // Update length and notify listeners
         length++;
+        modificationCount++;
 
         if (listListeners != null) {
             listListeners.itemInserted(this, index);
@@ -310,10 +329,11 @@ public class LinkedList<T> implements List<T>, Serializable {
 
             // Update the item
             node.item = item;
-        }
+            modificationCount++;
 
-        if (listListeners != null) {
-            listListeners.itemUpdated(this, index, previousItem);
+            if (listListeners != null) {
+                listListeners.itemUpdated(this, index, previousItem);
+            }
         }
 
         return previousItem;
@@ -386,6 +406,7 @@ public class LinkedList<T> implements List<T>, Serializable {
 
             // Update length and notify listeners
             length -= count;
+            modificationCount++;
 
             if (listListeners != null) {
                 listListeners.itemsRemoved(this, index, removed);
@@ -401,6 +422,7 @@ public class LinkedList<T> implements List<T>, Serializable {
             first = null;
             last = null;
             length = 0;
+            modificationCount++;
 
             if (listListeners != null) {
                 listListeners.listCleared(this);
@@ -505,6 +527,8 @@ public class LinkedList<T> implements List<T>, Serializable {
                 }
 
                 last = node;
+
+                modificationCount++;
             }
 
             // Set the new comparator

@@ -410,11 +410,11 @@ public abstract class Button extends Component {
      * "Presses" the button. Performs any action associated with the button.
      */
     public void press() {
+        buttonPressListeners.buttonPressed(this);
+
         if (action != null) {
             action.perform();
         }
-
-        buttonPressListeners.buttonPressed(this);
     }
 
     /**

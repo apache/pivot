@@ -35,10 +35,10 @@ import org.apache.pivot.util.ListenerList;
 public class ArrayList<T> implements List<T>, Serializable {
     private class ArrayListItemIterator implements ItemIterator<T> {
         private int index = 0;
-        private int length;
+        private int modificationCount;
 
         public ArrayListItemIterator() {
-            length = ArrayList.this.length;
+            modificationCount = ArrayList.this.modificationCount;
         }
 
         @Override
@@ -52,7 +52,7 @@ public class ArrayList<T> implements List<T>, Serializable {
                 throw new NoSuchElementException();
             }
 
-            if (length != ArrayList.this.length) {
+            if (modificationCount != ArrayList.this.modificationCount) {
                 throw new ConcurrentModificationException();
             }
 
@@ -70,7 +70,7 @@ public class ArrayList<T> implements List<T>, Serializable {
                 throw new NoSuchElementException();
             }
 
-            if (length != ArrayList.this.length) {
+            if (modificationCount != ArrayList.this.modificationCount) {
                 throw new ConcurrentModificationException();
             }
 
@@ -85,7 +85,7 @@ public class ArrayList<T> implements List<T>, Serializable {
             }
 
             ArrayList.this.insert(item, index);
-            length++;
+            modificationCount++;
         }
 
         @Override
@@ -96,6 +96,7 @@ public class ArrayList<T> implements List<T>, Serializable {
             }
 
             ArrayList.this.update(index, item);
+            modificationCount++;
         }
 
         @Override
@@ -106,7 +107,7 @@ public class ArrayList<T> implements List<T>, Serializable {
             }
 
             ArrayList.this.remove(index, 1);
-            length--;
+            modificationCount++;
         }
     }
 
@@ -116,6 +117,8 @@ public class ArrayList<T> implements List<T>, Serializable {
     private int length = 0;
 
     private Comparator<T> comparator = null;
+
+    private transient int modificationCount = 0;
     private transient ListListenerList<T> listListeners = null;
 
     public static final int DEFAULT_CAPACITY = 10;
@@ -238,6 +241,7 @@ public class ArrayList<T> implements List<T>, Serializable {
         items[index] = item;
 
         length++;
+        modificationCount++;
 
         if (listListeners != null) {
             listListeners.itemInserted(this, index);
@@ -261,6 +265,8 @@ public class ArrayList<T> implements List<T>, Serializable {
             }
 
             items[index] = item;
+
+            modificationCount++;
         }
 
         if (listListeners != null) {
@@ -297,6 +303,7 @@ public class ArrayList<T> implements List<T>, Serializable {
             System.arraycopy(items, index + count, items, index, length - end);
 
             length -= count;
+            modificationCount++;
 
             // Clear any orphaned references
             for (int i = length, n = length + count; i < n; i++) {
@@ -316,6 +323,7 @@ public class ArrayList<T> implements List<T>, Serializable {
         if (length > 0) {
             items = new Object[items.length];
             length = 0;
+            modificationCount++;
 
             if (listListeners != null) {
                 listListeners.listCleared(this);
@@ -508,6 +516,8 @@ public class ArrayList<T> implements List<T>, Serializable {
         }
 
         Arrays.sort((T[])arrayList.items, from, to, comparator);
+
+        arrayList.modificationCount++;
     }
 
     public static <T extends Comparable<? super T>> int binarySearch(ArrayList<T> arrayList,
