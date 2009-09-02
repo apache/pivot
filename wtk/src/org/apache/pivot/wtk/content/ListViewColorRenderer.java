@@ -83,7 +83,7 @@ public class ListViewColorRenderer extends ListViewItemRenderer {
                 if (item instanceof Color) {
                     color = (Color)item;
                 } else {
-                    color = Color.decode(item.toString());
+                    color = GraphicsUtilities.decodeColor(item.toString());
                 }
 
                 colorItem = new ColorItem(color);

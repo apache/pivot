@@ -25,6 +25,7 @@ import java.awt.image.WritableRaster;
 
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.GraphicsUtilities;
 
 /**
  * Decorator that adds a drop shadows to a component.
@@ -82,7 +83,7 @@ public class DropShadowDecorator implements Decorator {
             throw new IllegalArgumentException("shadowColor is null.");
         }
 
-        setShadowColor(Color.decode(shadowColor));
+        setShadowColor(GraphicsUtilities.decodeColor(shadowColor));
     }
 
     /**

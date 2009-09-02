@@ -19,8 +19,8 @@ package org.apache.pivot.wtk.content;
 import java.awt.Color;
 
 import org.apache.pivot.wtk.Button;
+import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.ImageView;
-
 
 /**
  * List button renderer for displaying color swatches.
@@ -44,7 +44,7 @@ public class ListButtonColorRenderer extends ImageView
             if (data instanceof Color) {
                 color = (Color)data;
             } else {
-                color = Color.decode(data.toString());
+                color = GraphicsUtilities.decodeColor(data.toString());
             }
         }
 

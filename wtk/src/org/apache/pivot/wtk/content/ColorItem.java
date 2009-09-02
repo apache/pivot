@@ -18,6 +18,8 @@ package org.apache.pivot.wtk.content;
 
 import java.awt.Color;
 
+import org.apache.pivot.wtk.GraphicsUtilities;
+
 /**
  * List item representing a color.
  */
@@ -34,8 +36,8 @@ public class ColorItem {
     }
 
     public ColorItem(Color color, String name) {
-        this.color = color;
-        this.name = name;
+        setColor(color);
+        setName(name);
     }
 
     public Color getColor() {
@@ -55,7 +57,7 @@ public class ColorItem {
             throw new IllegalArgumentException("color is null.");
         }
 
-        setColor(Color.decode(color));
+        setColor(GraphicsUtilities.decodeColor(color));
     }
 
     public String getName() {
@@ -71,5 +73,16 @@ public class ColorItem {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return (o instanceof ColorItem
+            && ((ColorItem)o).color.equals(color));
+    }
+
+    @Override
+    public int hashCode() {
+        return color.hashCode();
     }
 }

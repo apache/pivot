@@ -16,13 +16,13 @@
  */
 package org.apache.pivot.wtk.media;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.RenderingHints;
 
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.Bounds;
+import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.media.drawing.Canvas;
 import org.apache.pivot.wtk.media.drawing.CanvasListener;
 
@@ -143,7 +143,7 @@ public class Drawing extends Image {
             throw new IllegalArgumentException("background is null.");
         }
 
-        setBackground(Color.decode(background));
+        setBackground(GraphicsUtilities.decodePaint(background));
     }
 
     @Override

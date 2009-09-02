@@ -23,6 +23,7 @@ import java.awt.geom.AffineTransform;
 
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.GraphicsUtilities;
 
 /**
  * Decorator that applies a "shade" to a component. The shade is a rectangle
@@ -102,7 +103,7 @@ public class ShadeDecorator implements Decorator {
             throw new IllegalArgumentException("color is null.");
         }
 
-        setColor(Color.decode(color));
+        setColor(GraphicsUtilities.decodeColor(color));
     }
 
     @Override
