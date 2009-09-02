@@ -67,11 +67,12 @@ public class TerraDialogSkin extends TerraFrameSkin implements DialogStateListen
                     Window window = descendant.getWindow();
 
                     if (window.isOwner(dialog)) {
-                        ApplicationContext.beep();
                         window = window.getRootOwner();
                         window.moveToFront();
-
+                        dialog.requestActive();
                         consumed = true;
+
+                        ApplicationContext.beep();
                     }
                 }
             }

@@ -134,6 +134,8 @@ public class TerraAlertSkin extends TerraDialogSkin
 
         if (index >= 0) {
             optionButtons.get(index).requestFocus();
+        } else {
+            window.requestFocus();
         }
     }
 

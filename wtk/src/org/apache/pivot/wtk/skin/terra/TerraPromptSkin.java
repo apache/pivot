@@ -132,6 +132,8 @@ public class TerraPromptSkin extends TerraSheetSkin
 
         if (index >= 0) {
             optionButtons.get(index).requestFocus();
+        } else {
+            window.requestFocus();
         }
     }
 

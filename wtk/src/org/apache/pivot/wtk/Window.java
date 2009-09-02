@@ -929,13 +929,12 @@ public class Window extends Container {
     }
 
     /**
-     * Moves the window to the top of the window stack. If it is not an
-     * auxilliary window, it is made active, and focus is restored to the
-     * most recently focused decendant.
+     * Moves the window to the top of the window stack and restores focus
+     * to the window. All windows owned by this window are subsequently moved
+     * to front, ensuring that this window's owned windows remain on top of
+     * it.
      * <p>
-     * All windows owned by this window are subsequently moved to the front,
-     * ensuring that this window's owned windows remain on top of it.
-     * <p>
+     * Finally, if it is not an auxilliary window, the window is made active.
      */
     public void moveToFront() {
         if (!isOpen()) {
@@ -952,13 +951,9 @@ public class Window extends Container {
             windowListeners.windowMoved(this, i, n);
         }
 
-        // Activate/restore the window
+        // Restore focus to the window
         if (isShowing()
             && isEnabled()) {
-            if (!isAuxilliary()) {
-                setActiveWindow(this);
-            }
-
             restoreFocus();
         }
 
@@ -982,6 +977,13 @@ public class Window extends Container {
 
         for (Window ownedWindow : sortedOwnedWindows) {
             ownedWindow.moveToFront();
+        }
+
+        // Activate the window
+        if (isShowing()
+            && isEnabled()
+            && !isAuxilliary()) {
+            setActiveWindow(this);
         }
     }
 

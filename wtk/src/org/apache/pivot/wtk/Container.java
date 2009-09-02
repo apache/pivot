@@ -708,6 +708,9 @@ public abstract class Container extends Component
     protected boolean mouseDown(Mouse.Button button, int x, int y) {
         boolean consumed = false;
 
+        // Clear the mouse down component
+        mouseDownComponent = null;
+
         if (isEnabled()) {
             // Notify container listeners
             consumed = containerMouseListeners.mouseDown(this, button, x, y);
@@ -753,6 +756,9 @@ public abstract class Container extends Component
     protected boolean mouseUp(Mouse.Button button, int x, int y) {
         boolean consumed = false;
 
+        // Clear the mouse click consumed flag
+        mouseClickConsumed = false;
+
         if (isEnabled()) {
             // Notify container listeners
             consumed = containerMouseListeners.mouseUp(this, button, x, y);
@@ -786,6 +792,10 @@ public abstract class Container extends Component
                 }
             }
         }
+
+        // Clear the mouse down component, in case the next container mouse down
+        // event is consumed before it can propagate down to this container
+        mouseDownComponent = null;
 
         return consumed;
     }

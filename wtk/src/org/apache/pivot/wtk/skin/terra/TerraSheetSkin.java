@@ -97,9 +97,10 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
 
                     Bounds clientArea = window.getClientArea();
                     if (clientArea.contains(location)) {
-                        ApplicationContext.beep();
                         window.moveToFront();
                         consumed = true;
+
+                        ApplicationContext.beep();
                     }
                 }
             }

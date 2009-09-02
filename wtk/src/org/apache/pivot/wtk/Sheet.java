@@ -142,13 +142,6 @@ public class Sheet extends Window {
         }
     }
 
-    @Override
-    public void moveToFront() {
-        super.moveToFront();
-
-        restoreFocus();
-    }
-
     public SheetCloseListener getSheetCloseListener() {
         return sheetCloseListener;
     }
