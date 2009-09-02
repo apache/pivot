@@ -52,16 +52,21 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
 
     private ContainerMouseListener displayMouseListener = new ContainerMouseListener.Adapter() {
         public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
-            Display display = (Display)container;
-            Component descendant = display.getDescendantAt(x, y);
-            Window window = descendant.getWindow();
-
             MenuPopup menuPopup = (MenuPopup)getComponent();
-            if (!menuPopup.isAncestor(descendant)
-                && (window == null
-                    || !menuPopup.isOwner(window))
-                && menuPopup.isAutoClose()) {
-                menuPopup.close();
+
+            if (menuPopup.isAutoClose()) {
+                Display display = (Display)container;
+                Component descendant = display.getDescendantAt(x, y);
+
+                if (descendant != display) {
+                    Window window = descendant.getWindow();
+
+                    if (!menuPopup.isAncestor(descendant)
+                        && (window == null
+                            || !menuPopup.isOwner(window))) {
+                        menuPopup.close();
+                    }
+                }
             }
 
             return false;

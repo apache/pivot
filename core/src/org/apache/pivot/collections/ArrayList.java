@@ -520,9 +520,8 @@ public class ArrayList<T> implements List<T>, Serializable {
         arrayList.modificationCount++;
     }
 
-    public static <T extends Comparable<? super T>> int binarySearch(ArrayList<T> arrayList,
-        T item) {
-        return binarySearch(arrayList, item, new Comparator<T>() {
+    public static <T extends Comparable<? super T>> void sort(ArrayList<T> arrayList) {
+        sort(arrayList, new Comparator<T>() {
             @Override
             public int compare(T t1, T t2) {
                 return t1.compareTo(t2);
@@ -542,5 +541,15 @@ public class ArrayList<T> implements List<T>, Serializable {
         int index = Arrays.binarySearch((T[])arrayList.items, 0, arrayList.length, item, comparator);
 
         return index;
+    }
+
+    public static <T extends Comparable<? super T>> int binarySearch(ArrayList<T> arrayList,
+        T item) {
+        return binarySearch(arrayList, item, new Comparator<T>() {
+            @Override
+            public int compare(T t1, T t2) {
+                return t1.compareTo(t2);
+            }
+        });
     }
 }

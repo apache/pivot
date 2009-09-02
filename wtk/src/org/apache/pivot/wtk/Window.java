@@ -19,7 +19,6 @@ package org.apache.pivot.wtk;
 import java.net.URL;
 
 import org.apache.pivot.collections.ArrayList;
-import org.apache.pivot.collections.ArrayStack;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ListenerList;
@@ -933,66 +932,44 @@ public class Window extends Container {
 
         // If this window is not currently top-most, move it to the top
         Display display = getDisplay();
+        int n = display.getLength() - 1;
 
-        Window window = this;
-        ArrayStack<Integer> ownedWindowIndexes = new ArrayStack<Integer>();
-        ownedWindowIndexes.push(0);
+        int i = display.indexOf(this);
+        if (i < n) {
+            display.move(i, n);
+            windowListeners.windowMoved(this, i, n);
+        }
 
-        while (ownedWindowIndexes.getLength() > 0) {
-            // Get the next owned window index for this window
-            int j = ownedWindowIndexes.peek();
-
-            if (j == 0) {
-                // Move the window within the window stack
-                int i = display.indexOf(window);
-
-                if (i < display.getLength() - 1) {
-                    int k = display.getLength() - 1;
-                    display.move(i, k);
-                    window.windowListeners.windowMoved(window, i, k);
-                }
+        // Activate/restore the window
+        if (isShowing()
+            && isEnabled()) {
+            if (!isAuxilliary()) {
+                setActiveWindow(this);
             }
 
-            if (j < window.ownedWindows.getLength()) {
-                // There is another owned window to traverse; move down
-                // the tree
-                ownedWindowIndexes.update(ownedWindowIndexes.getLength() - 1, j + 1);
-                window = window.ownedWindows.get(j);
+            restoreFocus();
+        }
 
-                // If the window is not open, ignore it
-                if (window.isOpen()) {
-                    ownedWindowIndexes.push(0);
-                } else {
-                    window = window.owner;
-                }
-            } else {
-                // Activate/restore the window
-                if (window.isShowing()
-                    && window.isEnabled()) {
-                    if (!window.isAuxilliary()) {
-                        setActiveWindow(window);
-                    }
+        // Move all open owned windows to the front of this window, preserving the
+        // current z-order
+        ArrayList<Integer> ownedWindowIndexes =
+            new ArrayList<Integer>(ownedWindows.getLength());
 
-                    window.restoreFocus();
-                }
-
-                // This was the last owned window for the current window; move
-                // up the tree
-                ownedWindowIndexes.pop();
-                window = window.owner;
+        for (Window ownedWindow : ownedWindows) {
+            if (ownedWindow.isOpen()) {
+                ownedWindowIndexes.add(display.indexOf(ownedWindow));
             }
         }
 
-        // Move this window to the top of its owner's owned window list,
-        // so it becomes top-most of all windows owned by this window's
-        // owner
-        if (owner != null) {
-            int j = owner.ownedWindows.indexOf(this);
+        ArrayList.sort(ownedWindowIndexes);
 
-            if (j < owner.ownedWindows.getLength() - 1) {
-                owner.ownedWindows.remove(j, 1);
-                owner.ownedWindows.add(this);
-            }
+        ArrayList<Window> sortedOwnedWindows = new ArrayList<Window>(ownedWindows.getLength());
+        for (Integer index : ownedWindowIndexes) {
+            sortedOwnedWindows.add((Window)display.get(index));
+        }
+
+        for (Window ownedWindow : sortedOwnedWindows) {
+            ownedWindow.moveToFront();
         }
     }
 
@@ -1014,32 +991,18 @@ public class Window extends Container {
             clearFocus();
         }
 
-        Display display = getDisplay();
-
         // Ensure that the window and all of its owning ancestors are moved
         // to the back
-        Window window = this;
-        while (window != null) {
-            // If this window is not currently bottom-most, move it to the
-            // bottom
-            int i = display.indexOf(window);
+        Display display = getDisplay();
 
-            if (i > 0) {
-                display.move(i, 0);
-                window.windowListeners.windowMoved(window, i, 0);
-            }
-
-            window = window.getOwner();
+        int i = display.indexOf(this);
+        if (i > 0) {
+            display.move(i, 0);
+            windowListeners.windowMoved(this, i, 0);
         }
 
-        // Move this window to the bottom of its owner's owned window list
         if (owner != null) {
-            int j = owner.ownedWindows.indexOf(this);
-
-            if (j > 0) {
-                owner.ownedWindows.remove(j, 1);
-                owner.ownedWindows.insert(this, 0);
-            }
+            owner.moveToBack();
         }
     }
 
