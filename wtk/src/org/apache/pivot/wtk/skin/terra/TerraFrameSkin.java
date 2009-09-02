@@ -63,7 +63,6 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
     public static class FrameButton extends PushButton {
         public FrameButton(Object buttonData) {
             super(buttonData);
-
             installSkin(FrameButton.class);
         }
     }
@@ -462,6 +461,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
 
         return new Dimensions(preferredWidth, preferredHeight);
     }
+
     public void layout() {
         Frame frame = (Frame)getComponent();
 
@@ -582,6 +582,26 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
             GraphicsUtilities.drawLine(graphics, contentAreaRectangle.x + 1,
                 contentAreaRectangle.y + 1, contentAreaRectangle.width - 2, Orientation.HORIZONTAL);
         }
+    }
+
+    @Override
+    public Bounds getClientArea() {
+        int width = getWidth();
+        int height = getHeight();
+        int titleBarHeight = titleBarTablePane.getHeight();
+
+        Frame frame = (Frame)getComponent();
+        boolean maximized = frame.isMaximized();
+
+        Bounds clientArea;
+        if (maximized
+            && !getShowWindowControls()) {
+            clientArea = new Bounds(0, 0, width, height);
+        } else {
+            clientArea = new Bounds(1, titleBarHeight + 2, width - 2, height - (titleBarHeight + 2));
+        }
+
+        return clientArea;
     }
 
     @Override

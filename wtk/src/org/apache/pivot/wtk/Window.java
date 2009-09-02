@@ -33,6 +33,13 @@ import org.apache.pivot.wtk.media.Image;
  */
 public class Window extends Container {
     /**
+     * Window skin interface.
+     */
+    public interface Skin extends org.apache.pivot.wtk.Skin {
+        public Bounds getClientArea();
+    }
+
+    /**
      * Class representing a mapping from keystrokes to actions.
      */
     public static class ActionMapping {
@@ -785,6 +792,14 @@ public class Window extends Container {
     }
 
     /**
+     * Returns the bounds of the window's client area.
+     */
+    public Bounds getClientArea() {
+        Window.Skin windowSkin = (Window.Skin)getSkin();
+        return windowSkin.getClientArea();
+    }
+
+    /**
      * Returns the window's auxilliary flag. Auxilliary windows can't become
      * active and can only own other auxilliary windows.
      *
@@ -914,16 +929,13 @@ public class Window extends Container {
     }
 
     /**
-     * Moves the window to the top of the window stack. The window is removed
-     * from its current position in the display's component sequence and
-     * appended to the end. It is also moved to the top of its owner's owned
-     * window list so it becomes top-most of all windows owned by its owner.
+     * Moves the window to the top of the window stack. If it is not an
+     * auxilliary window, it is made active, and focus is restored to the
+     * most recently focused decendant.
      * <p>
      * All windows owned by this window are subsequently moved to the front,
      * ensuring that this window's owned windows remain on top of it.
      * <p>
-     * Finally, the window is made active and focus is restored to the most
-     * recently focused decendant component.
      */
     public void moveToFront() {
         if (!isOpen()) {

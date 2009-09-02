@@ -278,7 +278,7 @@ public class TerraPaletteSkin extends WindowSkin {
         // Size/position title bar
         titleBarTablePane.setLocation(1, 1);
         titleBarTablePane.setSize(Math.max(width - 2, 0),
-            Math.max(titleBarTablePane.getPreferredHeight(width - 2), 0));
+            titleBarTablePane.getPreferredHeight());
 
         // Size/position content
         Component content = palette.getContent();
@@ -324,6 +324,15 @@ public class TerraPaletteSkin extends WindowSkin {
         graphics.setPaint(contentBevelColor);
         GraphicsUtilities.drawLine(graphics, contentAreaRectangle.x + 1,
             contentAreaRectangle.y + 1, contentAreaRectangle.width - 2, Orientation.HORIZONTAL);
+    }
+
+    @Override
+    public Bounds getClientArea() {
+        int width = getWidth();
+        int height = getHeight();
+        int titleBarHeight = titleBarTablePane.getHeight();
+
+        return new Bounds(1, titleBarHeight + 2, width - 2, height - (titleBarHeight + 2));
     }
 
     @Override

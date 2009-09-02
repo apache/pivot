@@ -47,7 +47,7 @@ public class TerraTooltipSkin extends WindowSkin implements TooltipListener {
 
     private boolean fade = true;
 
-    private ContainerMouseListener displayContainerMouseListener = new ContainerMouseListener() {
+    private ContainerMouseListener displayMouseListener = new ContainerMouseListener() {
         public boolean mouseMove(Container container, int x, int y) {
             Tooltip tooltip = (Tooltip)getComponent();
             tooltip.close();
@@ -142,7 +142,7 @@ public class TerraTooltipSkin extends WindowSkin implements TooltipListener {
 
         // Add this as a display mouse and key listener
         Display display = window.getDisplay();
-        display.getContainerMouseListeners().add(displayContainerMouseListener);
+        display.getContainerMouseListeners().add(displayMouseListener);
         display.getComponentKeyListeners().add(displayKeyListener);
     }
 
@@ -186,7 +186,7 @@ public class TerraTooltipSkin extends WindowSkin implements TooltipListener {
         super.windowClosed(window, display);
 
         // Remove this as a display mouse and key listener
-        display.getContainerMouseListeners().remove(displayContainerMouseListener);
+        display.getContainerMouseListeners().remove(displayMouseListener);
         display.getComponentKeyListeners().remove(displayKeyListener);
 
         closeTransition = null;

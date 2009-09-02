@@ -22,6 +22,7 @@ import java.awt.Graphics2D;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.ApplicationContext;
+import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentListener;
 import org.apache.pivot.wtk.Container;
@@ -69,16 +70,13 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     private OpenTransition openTransition = null;
     private Quadratic easing = new Quadratic();
 
-    // TODO Eliminate these and replace with a window component listener
-    private ComponentListener ownerComponentListener = new ComponentListener.Adapter() {
+    private ComponentListener ownerListener = new ComponentListener.Adapter() {
         public void locationChanged(Component component, int previousX, int previousY) {
-            alignToOwnerContent();
+            alignToOwner();
         }
-    };
 
-    private ComponentListener ownerContentComponentListener = new ComponentListener.Adapter() {
         public void sizeChanged(Component component, int previousWidth, int previousHeight) {
-            alignToOwnerContent();
+            alignToOwner();
         }
     };
 
@@ -95,12 +93,14 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
                 Window window = descendant.getWindow();
 
                 if (window.isOwner(sheet)) {
-                    // TODO Block for mouse over the client area only
+                    Point location = window.mapPointFromAncestor(display, x, y);
 
-                    ApplicationContext.beep();
-                    window.moveToFront();
-
-                    consumed = true;
+                    Bounds clientArea = window.getClientArea();
+                    if (clientArea.contains(location)) {
+                        ApplicationContext.beep();
+                        window.moveToFront();
+                        consumed = true;
+                    }
                 }
             }
 
@@ -270,7 +270,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     public void sizeChanged(Component component, int previousWidth, int previousHeight) {
         super.sizeChanged(component, previousWidth, previousHeight);
 
-        alignToOwnerContent();
+        alignToOwner();
     }
 
     @Override
@@ -379,10 +379,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         dropShadowDecorator.setShadowOpacity(DropShadowDecorator.DEFAULT_SHADOW_OPACITY);
 
         Window owner = window.getOwner();
-        owner.getComponentListeners().add(ownerComponentListener);
-
-        Component ownerContent = owner.getContent();
-        ownerContent.getComponentListeners().add(ownerContentComponentListener);
+        owner.getComponentListeners().add(ownerListener);
 
         openTransition = new OpenTransition(false);
         openTransition.start(new TransitionListener() {
@@ -444,19 +441,16 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
 
     public void sheetClosed(Sheet sheet) {
         Window owner = sheet.getOwner();
-        owner.getComponentListeners().remove(ownerComponentListener);
-
-        Component ownerContent = owner.getContent();
-        ownerContent.getComponentListeners().remove(ownerContentComponentListener);
+        owner.getComponentListeners().remove(ownerListener);
     }
 
-    public void alignToOwnerContent() {
+    public void alignToOwner() {
         Sheet sheet = (Sheet)getComponent();
 
         Window owner = sheet.getOwner();
-        Component content = owner.getContent();
-        Point contentLocation = content.mapPointToAncestor(owner.getDisplay(), 0, 0);
-        sheet.setLocation(contentLocation.x + (content.getWidth() - getWidth()) / 2,
-            contentLocation.y);
+        Bounds clientArea = owner.getClientArea();
+
+        Point location = owner.mapPointToAncestor(owner.getDisplay(), clientArea.x, clientArea.y);
+        sheet.setLocation(location.x + (clientArea.width - getWidth()) / 2, location.y);
     }
 }

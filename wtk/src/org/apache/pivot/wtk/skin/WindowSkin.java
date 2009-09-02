@@ -19,6 +19,7 @@ package org.apache.pivot.wtk.skin;
 import java.awt.Color;
 
 import org.apache.pivot.util.Vote;
+import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.Dimensions;
@@ -34,8 +35,8 @@ import org.apache.pivot.wtk.media.Image;
 /**
  * Window skin.
  */
-public class WindowSkin extends ContainerSkin
-    implements WindowListener, WindowStateListener {
+public class WindowSkin extends ContainerSkin implements Window.Skin,
+    WindowListener, WindowStateListener {
     /**
      * Focus traversal policy that always returns the window's content. This
      * ensures that focus does not traverse out of the window.
@@ -117,6 +118,11 @@ public class WindowSkin extends ContainerSkin
         if (content != null) {
             content.setSize(window.getSize());
         }
+    }
+
+    @Override
+    public Bounds getClientArea() {
+        return new Bounds(0, 0, getWidth(), getHeight());
     }
 
     @Override
