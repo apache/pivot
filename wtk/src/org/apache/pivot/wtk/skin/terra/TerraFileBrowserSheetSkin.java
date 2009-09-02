@@ -262,7 +262,9 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
     public void windowOpened(Window window) {
         super.windowOpened(window);
 
-        window.requestFocus();
+        if (window.isOpen()) {
+            window.requestFocus();
+        }
     }
 
     @Override

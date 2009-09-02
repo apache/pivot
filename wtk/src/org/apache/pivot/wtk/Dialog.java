@@ -52,7 +52,6 @@ public class Dialog extends Frame {
 
     private boolean modal = false;
     private DialogCloseListener dialogCloseListener = null;
-    private Window disabledOwner = null;
     private boolean result = false;
 
     private DialogStateListenerList dialogStateListeners = new DialogStateListenerList();
@@ -151,36 +150,6 @@ public class Dialog extends Frame {
         if (isOpen()) {
             this.dialogCloseListener = dialogCloseListener;
             this.modal = modal;
-
-            if (modal) {
-                if (!owner.isEnabled()) {
-                    throw new IllegalStateException("Owner is already disabled.");
-                }
-
-                // Walk owner tree to find the nearest enabled owning ancestor
-                // and disable it
-                Window disabledOwner = null;
-
-                while (owner != null
-                    && owner.isEnabled()) {
-                    disabledOwner = owner;
-                    owner = owner.getOwner();
-                }
-
-                // Disable the ancestor and maintain a reference to it so we can
-                // enable it when this dialog is closed
-                if (disabledOwner != null) {
-                    disabledOwner.setEnabled(false);
-                }
-
-                this.disabledOwner = disabledOwner;
-
-                // Disabling the owner tree also disabled this dialog; re-enable it
-                // and make it the active window
-                setEnabled(true);
-                requestActive();
-                restoreFocus();
-            }
         }
     }
 
@@ -199,19 +168,12 @@ public class Dialog extends Frame {
                 if (isClosed()) {
                     this.result = result;
 
-                    // Enable the ancestor that was disabled when this dialog
-                    // was opened
-                    if (disabledOwner != null) {
-                        disabledOwner.setEnabled(true);
-
-                        // Move the owner to the front
-                        if (modal) {
-                            disabledOwner.moveToFront();
-                        }
+                    Window owner = getOwner();
+                    if (owner.isOpen()) {
+                        owner.moveToFront();
                     }
 
                     modal = false;
-                    disabledOwner = null;
 
                     // Notify listeners
                     if (dialogCloseListener != null) {
@@ -233,10 +195,6 @@ public class Dialog extends Frame {
 
     public DialogCloseListener getDialogCloseListener() {
         return dialogCloseListener;
-    }
-
-    public Window getDisabledOwner() {
-        return disabledOwner;
     }
 
     public boolean getResult() {

@@ -20,11 +20,13 @@ import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Container;
+import org.apache.pivot.wtk.ContainerMouseListener;
 import org.apache.pivot.wtk.Dialog;
 import org.apache.pivot.wtk.DialogStateListener;
+import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Keyboard;
+import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Window;
-
 
 /**
  * Dialog skin.
@@ -50,6 +52,33 @@ public class TerraDialogSkin extends TerraFrameSkin implements DialogStateListen
             dialog.setLocation(x, y);
         }
     }
+
+    private ContainerMouseListener displayMouseListener = new ContainerMouseListener.Adapter() {
+        public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
+            boolean consumed = false;
+
+            Dialog dialog = (Dialog)getComponent();
+
+            if (dialog.isModal()) {
+                Display display = (Display)container;
+                Component descendant = display.getDescendantAt(x, y);
+
+                if (descendant != display) {
+                    Window window = descendant.getWindow();
+
+                    if (window.isOwner(dialog)) {
+                        ApplicationContext.beep();
+                        window = window.getRootOwner();
+                        window.moveToFront();
+
+                        consumed = true;
+                    }
+                }
+            }
+
+            return consumed;
+        }
+    };
 
     @Override
     public void install(Component component) {
@@ -93,7 +122,17 @@ public class TerraDialogSkin extends TerraFrameSkin implements DialogStateListen
     public void windowOpened(Window window) {
         super.windowOpened(window);
 
+        Display display = window.getDisplay();
+        display.getContainerMouseListeners().add(displayMouseListener);
+
         ApplicationContext.queueCallback(new RepositionCallback());
+    }
+
+    @Override
+    public void windowClosed(Window window, Display display) {
+        super.windowClosed(window, display);
+
+        display.getContainerMouseListeners().remove(displayMouseListener);
     }
 
     public Vote previewDialogClose(Dialog dialog, boolean result) {

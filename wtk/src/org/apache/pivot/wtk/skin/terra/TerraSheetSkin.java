@@ -21,12 +21,17 @@ import java.awt.Graphics2D;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.util.Vote;
+import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentListener;
+import org.apache.pivot.wtk.Container;
+import org.apache.pivot.wtk.ContainerMouseListener;
 import org.apache.pivot.wtk.Dimensions;
+import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
+import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Sheet;
@@ -64,6 +69,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     private OpenTransition openTransition = null;
     private Quadratic easing = new Quadratic();
 
+    // TODO Eliminate these and replace with a window component listener
     private ComponentListener ownerComponentListener = new ComponentListener.Adapter() {
         public void locationChanged(Component component, int previousX, int previousY) {
             alignToOwnerContent();
@@ -73,6 +79,32 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     private ComponentListener ownerContentComponentListener = new ComponentListener.Adapter() {
         public void sizeChanged(Component component, int previousWidth, int previousHeight) {
             alignToOwnerContent();
+        }
+    };
+
+    private ContainerMouseListener displayMouseListener = new ContainerMouseListener.Adapter() {
+        public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
+            boolean consumed = false;
+
+            Sheet sheet = (Sheet)getComponent();
+
+            Display display = (Display)container;
+            Component descendant = display.getDescendantAt(x, y);
+
+            if (descendant != display) {
+                Window window = descendant.getWindow();
+
+                if (window.isOwner(sheet)) {
+                    // TODO Block for mouse over the client area only
+
+                    ApplicationContext.beep();
+                    window.moveToFront();
+
+                    consumed = true;
+                }
+            }
+
+            return consumed;
         }
     };
 
@@ -341,6 +373,9 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     public void windowOpened(final Window window) {
         super.windowOpened(window);
 
+        Display display = window.getDisplay();
+        display.getContainerMouseListeners().add(displayMouseListener);
+
         dropShadowDecorator.setShadowOpacity(DropShadowDecorator.DEFAULT_SHADOW_OPACITY);
 
         Window owner = window.getOwner();
@@ -355,6 +390,13 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
                 openTransition = null;
             }
         });
+    }
+
+    @Override
+    public void windowClosed(Window window, Display display) {
+        super.windowClosed(window, display);
+
+        display.getContainerMouseListeners().remove(displayMouseListener);
     }
 
     public Vote previewSheetClose(final Sheet sheet, final boolean result) {

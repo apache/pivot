@@ -25,6 +25,7 @@ import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Direction;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.FocusTraversalPolicy;
+import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.WindowListener;
 import org.apache.pivot.wtk.WindowStateListener;
@@ -116,6 +117,16 @@ public class WindowSkin extends ContainerSkin
         if (content != null) {
             content.setSize(window.getSize());
         }
+    }
+
+    @Override
+    public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+        boolean consumed = super.mouseDown(component, button, x, y);
+
+        Window window = (Window)component;
+        window.moveToFront();
+
+        return consumed;
     }
 
     // Window events

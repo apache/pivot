@@ -966,11 +966,13 @@ public class Window extends Container {
                     window = window.owner;
                 }
             } else {
-                // Activate the window
+                // Activate/restore the window
                 if (window.isShowing()
-                    && window.isEnabled()
-                    && !window.isAuxilliary()) {
-                    setActiveWindow(window);
+                    && window.isEnabled()) {
+                    if (!window.isAuxilliary()) {
+                        setActiveWindow(window);
+                    }
+
                     window.restoreFocus();
                 }
 
@@ -1101,26 +1103,6 @@ public class Window extends Container {
         y += verticalOffset;
 
         setLocation(x, y);
-    }
-
-    @Override
-    protected boolean mouseDown(Mouse.Button button, int x, int y) {
-        // NOTE This is done here rather than in WindowSkin because the
-        // user input methods are not called on the skin when the component
-        // is disabled
-
-        if (isEnabled()) {
-            // Bring this window to the front
-            moveToFront();
-        } else {
-            ApplicationContext.beep();
-
-            // Bring the window's owner tree to the front
-            Window rootOwner = getRootOwner();
-            rootOwner.moveToFront();
-        }
-
-        return super.mouseDown(button, x, y);
     }
 
     @Override
