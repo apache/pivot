@@ -26,22 +26,28 @@ public interface ExpanderListener {
      * Expander listener adapter.
      */
     public static class Adapter implements ExpanderListener {
+        @Override
         public void titleChanged(Expander expander, String previousTitle) {
         }
 
+        @Override
         public void collapsibleChanged(Expander expander) {
         }
 
+        @Override
         public Vote previewExpandedChange(Expander expander) {
             return Vote.APPROVE;
         }
 
+        @Override
         public void expandedChangeVetoed(Expander expander, Vote reason) {
         }
 
+        @Override
         public void expandedChanged(Expander expander) {
         }
 
+        @Override
         public void contentChanged(Expander expander, Component previousContent) {
         }
     }

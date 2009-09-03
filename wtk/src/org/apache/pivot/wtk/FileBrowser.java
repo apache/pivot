@@ -38,24 +38,28 @@ public class FileBrowser extends Container {
 
     private static class FileBrowserListenerList extends ListenerList<FileBrowserListener>
         implements FileBrowserListener {
+        @Override
         public void rootDirectoryChanged(FileBrowser fileBrowser, File previousRootDirectory) {
             for (FileBrowserListener listener : this) {
                 listener.rootDirectoryChanged(fileBrowser, previousRootDirectory);
             }
         }
 
+        @Override
         public void selectedFileAdded(FileBrowser fileBrowser, File file) {
             for (FileBrowserListener listener : this) {
                 listener.selectedFileAdded(fileBrowser, file);
             }
         }
 
+        @Override
         public void selectedFileRemoved(FileBrowser fileBrowser, File file) {
             for (FileBrowserListener listener : this) {
                 listener.selectedFileRemoved(fileBrowser, file);
             }
         }
 
+        @Override
         public void selectedFilesChanged(FileBrowser fileBrowser,
             Sequence<File> previousSelectedFiles) {
             for (FileBrowserListener listener : this) {
@@ -63,12 +67,14 @@ public class FileBrowser extends Container {
             }
         }
 
+        @Override
         public void multiSelectChanged(FileBrowser fileBrowser) {
             for (FileBrowserListener listener : this) {
                 listener.multiSelectChanged(fileBrowser);
             }
         }
 
+        @Override
         public void disabledFileFilterChanged(FileBrowser fileBrowser,
             Filter<File> previousDisabledFileFilter) {
             for (FileBrowserListener listener : this) {

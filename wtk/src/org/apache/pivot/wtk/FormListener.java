@@ -26,18 +26,23 @@ public interface FormListener {
      * Form listener adapter.
      */
     public static class Adapter implements FormListener {
+        @Override
         public void sectionInserted(Form form, int index) {
         }
 
+        @Override
         public void sectionsRemoved(Form form, int index, Sequence<Form.Section> removed) {
         }
 
+        @Override
         public void sectionHeadingChanged(Form.Section section) {
         }
 
+        @Override
         public void fieldInserted(Form.Section section, int index) {
         }
 
+        @Override
         public void fieldsRemoved(Form.Section section, int index, Sequence<Component> fields) {
         }
     }

@@ -29,22 +29,28 @@ public interface FileBrowserListener {
      * File browser listener adapter.
      */
     public static class Adapter implements FileBrowserListener {
+        @Override
         public void rootDirectoryChanged(FileBrowser fileBrowser, File previousRootDirectory) {
         }
 
+        @Override
         public void selectedFileAdded(FileBrowser fileBrowser, File file) {
         }
 
+        @Override
         public void selectedFileRemoved(FileBrowser fileBrowser, File file) {
         }
 
+        @Override
         public void selectedFilesChanged(FileBrowser fileBrowser,
             Sequence<File> previousSelectedFiles) {
         }
 
+        @Override
         public void multiSelectChanged(FileBrowser fileBrowser) {
         }
 
+        @Override
         public void disabledFileFilterChanged(FileBrowser fileBrowser,
             Filter<File> previousDisabledFileFilter) {
         }

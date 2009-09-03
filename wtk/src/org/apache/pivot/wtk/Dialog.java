@@ -26,6 +26,7 @@ import org.apache.pivot.util.Vote;
 public class Dialog extends Frame {
     private static class DialogStateListenerList extends ListenerList<DialogStateListener>
         implements DialogStateListener {
+        @Override
         public Vote previewDialogClose(Dialog dialog, boolean result) {
             Vote vote = Vote.APPROVE;
 
@@ -36,6 +37,7 @@ public class Dialog extends Frame {
             return vote;
         }
 
+        @Override
         public void dialogCloseVetoed(Dialog dialog, Vote reason) {
             for (DialogStateListener listener : this) {
                 listener.dialogCloseVetoed(dialog, reason);

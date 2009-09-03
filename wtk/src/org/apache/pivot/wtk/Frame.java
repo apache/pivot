@@ -26,6 +26,7 @@ import org.apache.pivot.util.ListenerList;
 public class Frame extends Window {
     private static class FrameListenerList extends ListenerList<FrameListener>
         implements FrameListener {
+        @Override
         public void menuBarChanged(Frame frame, MenuBar previousMenuBar) {
             for (FrameListener listener : this) {
                 listener.menuBarChanged(frame, previousMenuBar);

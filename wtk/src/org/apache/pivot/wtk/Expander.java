@@ -28,18 +28,21 @@ import org.apache.pivot.util.Vote;
 public class Expander extends Container {
     private static class ExpanderListenerList extends ListenerList<ExpanderListener>
     implements ExpanderListener {
+        @Override
         public void titleChanged(Expander expander, String previousTitle) {
             for (ExpanderListener listener : this) {
                 listener.titleChanged(expander, previousTitle);
             }
         }
 
+        @Override
         public void collapsibleChanged(Expander expander) {
             for (ExpanderListener listener : this) {
                 listener.collapsibleChanged(expander);
             }
         }
 
+        @Override
         public Vote previewExpandedChange(Expander expander) {
             Vote vote = Vote.APPROVE;
 
@@ -50,18 +53,21 @@ public class Expander extends Container {
             return vote;
         }
 
+        @Override
         public void expandedChangeVetoed(Expander expander, Vote reason) {
             for (ExpanderListener listener : this) {
                 listener.expandedChangeVetoed(expander, reason);
             }
         }
 
+        @Override
         public void expandedChanged(Expander expander) {
             for (ExpanderListener listener : this) {
                 listener.expandedChanged(expander);
             }
         }
 
+        @Override
         public void contentChanged(Expander expander, Component previousContent) {
             for (ExpanderListener listener : this) {
                 listener.contentChanged(expander, previousContent);

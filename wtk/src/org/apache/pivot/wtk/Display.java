@@ -25,6 +25,7 @@ import org.apache.pivot.wtk.skin.DisplaySkin;
  */
 public final class Display extends Container {
     private class ValidateCallback implements Runnable {
+        @Override
         public void run() {
             validate();
             validateCallback = null;

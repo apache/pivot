@@ -29,14 +29,17 @@ public interface FileBrowserSheetListener {
      * File browser sheet listener adapter.
      */
     public static class Adapter implements FileBrowserSheetListener {
+        @Override
         public void rootDirectoryChanged(FileBrowserSheet fileBrowserSheet,
             File previousRootDirectory) {
         }
 
+        @Override
         public void selectedFilesChanged(FileBrowserSheet fileBrowserSheet,
             Sequence<File> previousSelectedFiles) {
         }
 
+        @Override
         public void disabledFileFilterChanged(FileBrowserSheet fileBrowserSheet,
             Filter<File> previousDisabledFileFilter) {
         }
