@@ -21,7 +21,6 @@ import java.awt.Color;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Action;
 import org.apache.pivot.wtk.Application;
-import org.apache.pivot.wtk.Checkbox;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
@@ -107,11 +106,6 @@ public class TablePanes implements Application {
 
     private Window window = null;
     private TablePane tablePane = null;
-    
-    @SuppressWarnings("unused") private Checkbox horizontalGridLinesCheckbox = null;
-    @SuppressWarnings("unused") private Checkbox verticalGridLinesCheckbox = null;
-    @SuppressWarnings("unused") private Spinner horizontalSpacingSpinner = null;
-    @SuppressWarnings("unused") private Spinner verticalSpacingSpinner = null;
 
     private Menu.Section cellSection = null;
     private Menu.Section rowSection = null;
@@ -263,10 +257,6 @@ public class TablePanes implements Application {
         window = (Window)wtkxSerializer.readObject(this, "table_panes.wtkx");
 
         tablePane = (TablePane)wtkxSerializer.get("tablePane");
-        horizontalGridLinesCheckbox = (Checkbox)wtkxSerializer.get("horizontalGridLines");
-        verticalGridLinesCheckbox = (Checkbox)wtkxSerializer.get("verticalGridLines");
-        horizontalSpacingSpinner = (Spinner)wtkxSerializer.get("horizontalSpacing");
-        verticalSpacingSpinner = (Spinner)wtkxSerializer.get("verticalSpacing");
         cellSection = (Menu.Section)wtkxSerializer.get("cellSection");
         rowSection = (Menu.Section)wtkxSerializer.get("rowSection");
         columnSection = (Menu.Section)wtkxSerializer.get("columnSection");
