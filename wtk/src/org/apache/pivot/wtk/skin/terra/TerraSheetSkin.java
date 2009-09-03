@@ -439,7 +439,8 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         // Don't start the transition if the sheet is being closed as a result
         // of the owner closing
         Window owner = sheet.getOwner();
-        if (!owner.isClosing()) {
+        if (!(owner.isClosing()
+            || owner.isClosed())) {
             TransitionListener transitionListener = new TransitionListener() {
                 @Override
                 public void transitionCompleted(Transition transition) {

@@ -121,7 +121,7 @@ public class Sheet extends Window {
         if (!isClosed()) {
             Vote vote = sheetStateListeners.previewSheetClose(this, result);
 
-            if (vote.isApproved()) {
+            if (vote == Vote.APPROVE) {
                 super.close();
 
                 if (isClosed()) {

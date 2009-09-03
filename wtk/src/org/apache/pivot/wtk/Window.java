@@ -581,9 +581,7 @@ public class Window extends Container {
     }
 
     /**
-     * Opens the window. Opening a window adds it to the display's component
-     * sequence. If the window is activatable, it will become the active
-     * window.
+     * Opens the window.
      *
      * @param display
      * The display on which the window will be opened.
@@ -608,26 +606,18 @@ public class Window extends Container {
             throw new IllegalArgumentException("Owner is opened on a different display.");
         }
 
-        if (!isOpen()
-            && !opening) {
+        if (!isOpen()) {
+            opening = true;
             Vote vote = windowStateListeners.previewWindowOpen(this, display);
 
             if (vote == Vote.APPROVE) {
-                opening = true;
-
-                // Add this as child of display
                 display.add(this);
-
-                // Notify listeners
+                opening = false;
                 windowStateListeners.windowOpened(this);
 
-                // Move this window to the front (which, unless this window is
-                // disabled or incapable of becoming active, will activate the
-                // window)
                 moveToFront();
-
+            } else if (vote == Vote.DENY) {
                 opening = false;
-            } else {
                 windowStateListeners.windowOpenVetoed(this, vote);
             }
         }
@@ -674,36 +664,37 @@ public class Window extends Container {
     }
 
     /**
-     * Closes the window. Closing a window closes all owned windows and
-     * removes the window from the display's component sequence. If the window
-     * was the active window, the active window will be cleared. If the window
-     * was the focus host, the focused component will be cleared.
+     * Closes the window and all of its owned windows. If any owned window fails to close,
+     * this window will also fail to close.
      */
     public void close() {
-        if (!isClosed()
-            && !closing) {
-            Vote vote = windowStateListeners.previewWindowClose(this);
+        if (!isClosed()) {
+            closing = true;
 
-            if (vote.isApproved()) {
-                closing = true;
+            // Close all owned windows (create a copy of the owned window
+            // list so owned windows can remove themselves from the list
+            // without interrupting the iteration)
+            boolean cancel = false;
+            for (Window ownedWindow : new ArrayList<Window>(this.ownedWindows)) {
+                ownedWindow.close();
+                cancel |= !(ownedWindow.isClosing() || ownedWindow.isClosed());
+            }
 
-                // Close all owned windows (create a copy of the owned window
-                // list so owned windows can remove themselves from the list
-                // without interrupting the iteration)
-                for (Window ownedWindow : new ArrayList<Window>(this.ownedWindows)) {
-                    ownedWindow.close();
-                }
-
-                // Detach from display
-                Display display = getDisplay();
-                display.remove(this);
-
-                // Notify listeners
-                windowStateListeners.windowClosed(this, display);
-
+            // Close this window only if all owned windows are closing or closed
+            if (cancel) {
                 closing = false;
             } else {
-                windowStateListeners.windowCloseVetoed(this, vote);
+                Vote vote = windowStateListeners.previewWindowClose(this);
+
+                if (vote == Vote.APPROVE) {
+                    Display display = getDisplay();
+                    display.remove(this);
+                    closing = false;
+                    windowStateListeners.windowClosed(this, display);
+                } else if (vote == Vote.DENY) {
+                    closing = false;
+                    windowStateListeners.windowCloseVetoed(this, vote);
+                }
             }
         }
     }

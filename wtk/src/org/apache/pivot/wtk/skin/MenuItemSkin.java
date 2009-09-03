@@ -170,7 +170,7 @@ public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListen
             menuItem.transferFocus(Direction.FORWARD);
             consumed = true;
         } else if (keyCode == Keyboard.KeyCode.LEFT) {
-            // If this is not a top-level menu, close the window
+            // If this is not a top-level menu, close this item's window
             Menu.Section parentSection = menuItem.getSection();
             Menu parentMenu = parentSection.getMenu();
             Menu.Item parentMenuItem = parentMenu.getItem();

@@ -461,7 +461,7 @@ public abstract class Container extends Component
 
                     // Ensure that we don't get into an infinite loop
                     if (component == first) {
-                        throw new RuntimeException("Infinite loop in focus traversal policy for " + this);
+                        break;
                     }
                 }
 

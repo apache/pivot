@@ -138,7 +138,7 @@ public class MenuPopup extends Window {
         if (!isClosed()) {
             Vote vote = menuPopupStateListeners.previewMenuPopupClose(this, immediate);
 
-            if (vote.isApproved()) {
+            if (vote == Vote.APPROVE) {
                 super.close();
 
                 if (isClosed()) {
