@@ -117,6 +117,7 @@ public class HashMapTest {
     @Test
     public void comparatorTest() {
         Comparator<Character> comparator = new Comparator<Character>() {
+            @Override
             public int compare(Character c1, Character c2) {
                 return c1.compareTo(c2);
             }

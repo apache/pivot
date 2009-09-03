@@ -72,6 +72,7 @@ public class LinkedListTest {
     public void sortTest1() {
         LinkedList<String> linkedList = new LinkedList<String>();
         linkedList.setComparator(new Comparator<String>() {
+            @Override
             public int compare(String s1, String s2) {
                 return s1.toLowerCase().compareTo(s2.toLowerCase());
             }
@@ -97,6 +98,7 @@ public class LinkedListTest {
         linkedList.add("z");
 
         linkedList.setComparator(new Comparator<String>() {
+            @Override
             public int compare(String s1, String s2) {
                 return s1.toLowerCase().compareTo(s2.toLowerCase());
             }

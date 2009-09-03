@@ -39,6 +39,7 @@ public class SynchronizedStackTest {
             new SynchronizedStack<String>(stack);
 
         Task<Void> testTask = new Task<Void>() {
+            @Override
             public Void execute() {
                 int i = 0;
                 while (i < 5) {
@@ -51,10 +52,12 @@ public class SynchronizedStackTest {
         };
 
         testTask.execute(new TaskListener<Void>() {
+            @Override
             public synchronized void taskExecuted(Task<Void> task) {
                 notify();
             }
 
+            @Override
             public synchronized void executeFailed(Task<Void> task) {
                 notify();
             }

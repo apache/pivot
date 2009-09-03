@@ -55,11 +55,13 @@ public class TaskTest {
     @Test
     public void testTaskSequence() {
         TaskListener<Void> taskListener = new TaskListener<Void>() {
+            @Override
             public synchronized void taskExecuted(Task<Void> task) {
                 System.out.println("EXECUTED");
                 notify();
             }
 
+            @Override
             public synchronized void executeFailed(Task<Void> task) {
                 System.out.println("FAILED: " + task.getFault());
                 notify();
@@ -90,11 +92,13 @@ public class TaskTest {
     @Test
     public void testTaskGroup() {
         TaskListener<Void> taskListener = new TaskListener<Void>() {
+            @Override
             public synchronized void taskExecuted(Task<Void> task) {
                 System.out.println("EXECUTED");
                 notify();
             }
 
+            @Override
             public synchronized void executeFailed(Task<Void> task) {
                 System.out.println("FAILED: " + task.getFault());
                 notify();

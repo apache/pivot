@@ -41,6 +41,7 @@ public class FilteredListTest {
 
         // Filter the list
         filteredList.setFilter(new Filter<String>() {
+            @Override
             public boolean include(String string) {
                 return !string.startsWith("D");
             }
@@ -96,12 +97,14 @@ public class FilteredListTest {
 
         // Apply different comparators
         sourceList.setComparator(new Comparator<String>() {
+            @Override
             public int compare(String s1, String s2) {
                 return -s1.compareTo(s2);
             }
         });
 
         filteredList.setComparator(new Comparator<String>() {
+            @Override
             public int compare(String s1, String s2) {
                 return s1.compareTo(s2);
             }
