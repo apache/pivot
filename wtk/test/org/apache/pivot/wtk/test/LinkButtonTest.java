@@ -38,14 +38,17 @@ public class LinkButtonTest implements Application {
         boxPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
         boxPane.getStyles().put("spacing", 8);
         boxPane.getComponentMouseListeners().add(new ComponentMouseListener() {
+            @Override
             public boolean mouseMove(Component component, int x, int y) {
                 System.out.println("BOX PANE " + x + ", " + y);
                 return false;
             }
 
+            @Override
             public void mouseOver(Component component) {
             }
 
+            @Override
             public void mouseOut(Component component) {
             }
         });
@@ -57,13 +60,16 @@ public class LinkButtonTest implements Application {
         linkButton = new LinkButton("ABCDE");
         boxPane.add(linkButton);
         linkButton.getComponentMouseListeners().add(new ComponentMouseListener() {
+            @Override
             public boolean mouseMove(Component component, int x, int y) {
                 return true;
             }
 
+            @Override
             public void mouseOver(Component component) {
             }
 
+            @Override
             public void mouseOut(Component component) {
             }
         });

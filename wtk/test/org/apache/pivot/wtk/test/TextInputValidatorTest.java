@@ -56,28 +56,36 @@ public class TextInputValidatorTest implements Application {
 
         // test the listener by updating a label
         textinputFloatRange.getTextInputListeners().add(new TextInputListener() {
+            @Override
             public void maximumLengthChanged(TextInput textInput, int previousMaximumLength) {
             }
 
+            @Override
             public void passwordChanged(TextInput textInput) {
             }
 
+            @Override
             public void promptChanged(TextInput textInput, String previousPrompt) {
             }
 
+            @Override
             public void textKeyChanged(TextInput textInput, String previousTextKey) {
             }
 
+            @Override
             public void textNodeChanged(TextInput textInput, TextNode previousTextNode) {
             }
 
+            @Override
             public void textSizeChanged(TextInput textInput, int previousTextSize) {
             }
 
+            @Override
             public void textValidChanged(TextInput textInput) {
                 invalidLabel.setText(textInput.isTextValid() ? "valid" : "invalid");
             }
 
+            @Override
             public void textValidatorChanged(TextInput textInput, Validator validator) {
             }
         });
@@ -96,6 +104,7 @@ public class TextInputValidatorTest implements Application {
         // creating a custom model that only accepts "true" or "false"
         textinputCustomBoolean.setText("true");
         textinputCustomBoolean.setValidator(new Validator() {
+            @Override
             public boolean isValid(String s) {
                 return "true".equals(s) || "false".equals(s);
             }

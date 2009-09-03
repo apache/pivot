@@ -42,6 +42,7 @@ public class FileBrowserTest implements Application {
 
     private ArrayList<File> selectedFiles = new ArrayList<File>();
 
+    @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -50,6 +51,7 @@ public class FileBrowserTest implements Application {
         wtkxSerializer.bind(this, FileBrowserTest.class);
 
         final Comparator<File> filePathComparator = new Comparator<File>() {
+            @Override
             public int compare(File file1, File file2) {
                 String path1 = file1.getPath();
                 String path2 = file2.getPath();
@@ -59,10 +61,12 @@ public class FileBrowserTest implements Application {
         };
 
         fileBrowser.getFileBrowserListeners().add(new FileBrowserListener.Adapter() {
+            @Override
             public void rootDirectoryChanged(FileBrowser fileBrowser, File previousRootDirectory) {
                 updateSelectedFolder();
             }
 
+            @Override
             public void selectedFileAdded(FileBrowser fileBrowser, File file) {
                 int index = ArrayList.binarySearch(selectedFiles, file, filePathComparator);
                 if (index < 0) {
@@ -72,6 +76,7 @@ public class FileBrowserTest implements Application {
                 selectedFiles.insert(file, index);
             }
 
+            @Override
             public void selectedFileRemoved(FileBrowser fileBrowser, File file) {
                 int index = ArrayList.binarySearch(selectedFiles, file, filePathComparator);
                 if (index < 0) {
@@ -81,6 +86,7 @@ public class FileBrowserTest implements Application {
                 selectedFiles.remove(index, 1);
             }
 
+            @Override
             public void selectedFilesChanged(FileBrowser fileBrowser, Sequence<File> previousSelectedFiles) {
                 updateSelectedFiles();
             }
@@ -93,6 +99,7 @@ public class FileBrowserTest implements Application {
         fileBrowser.requestFocus();
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (window != null) {
             window.close();
@@ -101,9 +108,11 @@ public class FileBrowserTest implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 

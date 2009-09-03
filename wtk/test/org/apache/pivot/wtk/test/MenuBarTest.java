@@ -38,6 +38,7 @@ public class MenuBarTest implements Application {
     @WTKX private TextInput textInput2 = null;
     @WTKX private TextInput textInput3 = null;
 
+    @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BoxPane boxPane = new BoxPane(Orientation.VERTICAL);
         boxPane.add(new TextInput());
@@ -71,6 +72,7 @@ public class MenuBarTest implements Application {
         frame2.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (frame2 != null) {
             frame2.close();
@@ -79,9 +81,11 @@ public class MenuBarTest implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 

@@ -34,10 +34,12 @@ public class SpinnerFocusTest implements Application {
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         Action action = new Action() {
+            @Override
             public String getDescription() {
                 return null;
             }
 
+            @Override
             public void perform() {
                 Alert.alert("Foo", frame);
             }

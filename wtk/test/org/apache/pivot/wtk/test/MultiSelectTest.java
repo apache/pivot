@@ -32,14 +32,17 @@ public class MultiSelectTest {
     @Test
     public void basicTest() {
         listView1.getListViewSelectionListeners().add(new ListViewSelectionListener() {
+            @Override
             public void selectedRangeAdded(ListView listView, int rangeStart, int rangeEnd) {
                 listView2.addSelectedRange(rangeStart, rangeEnd);
             }
 
+            @Override
             public void selectedRangeRemoved(ListView listView, int rangeStart, int rangeEnd) {
                 listView2.removeSelectedRange(rangeStart, rangeEnd);
             }
 
+            @Override
             public void selectedRangesChanged(ListView listView, Sequence<Span> previousSelectedRanges) {
                 listView2.setSelectedRanges(listView1.getSelectedRanges());
             }

@@ -52,6 +52,7 @@ public class NativeDragDropTest implements Application {
         label.setDragSource(new DragSource() {
             private LocalManifest content = null;
 
+            @Override
             public boolean beginDrag(Component component, int x, int y) {
                 content = new LocalManifest();
 
@@ -68,32 +69,39 @@ public class NativeDragDropTest implements Application {
                 return true;
             }
 
+            @Override
             public void endDrag(Component component, DropAction dropAction) {
                 content = null;
             }
 
+            @Override
             public boolean isNative() {
                 return true;
             }
 
+            @Override
             public LocalManifest getContent() {
                 return content;
             }
 
+            @Override
             public Visual getRepresentation() {
                 return null;
             }
 
+            @Override
             public Point getOffset() {
                 return null;
             }
 
+            @Override
             public int getSupportedDropActions() {
                 return DropAction.COPY.getMask();
             }
         });
 
         label.setDropTarget(new DropTarget() {
+            @Override
             public DropAction dragEnter(Component component, Manifest dragContent,
                 int supportedDropActions, DropAction userDropAction) {
                 DropAction dropAction = null;
@@ -106,20 +114,24 @@ public class NativeDragDropTest implements Application {
                 return dropAction;
             }
 
+            @Override
             public void dragExit(Component component) {
                 frame.getStyles().put("backgroundColor", "#ffffff");
             }
 
+            @Override
             public DropAction dragMove(Component component, Manifest dragContent,
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
                 return (dragContent.containsURL() ? DropAction.COPY : null);
             }
 
+            @Override
             public DropAction userDropActionChange(Component component, Manifest dragContent,
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
                 return (dragContent.containsURL() ? DropAction.COPY : null);
             }
 
+            @Override
             public DropAction drop(Component component, Manifest dragContent,
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
                 DropAction dropAction = null;

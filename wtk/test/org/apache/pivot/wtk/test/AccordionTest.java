@@ -27,6 +27,7 @@ import org.apache.pivot.wtkx.WTKXSerializer;
 public class AccordionTest implements Application {
     private Frame frame = null;
 
+    @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -34,6 +35,7 @@ public class AccordionTest implements Application {
         frame.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (frame != null) {
             frame.close();
@@ -42,9 +44,11 @@ public class AccordionTest implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 

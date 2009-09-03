@@ -31,6 +31,7 @@ public class ShutdownTest implements Application {
     private Alert alert = null;
     private boolean cancelShutdown = true;
 
+    @Override
     public void startup(Display display, Map<String, String> properties) {
         this.display = display;
         cancelShutdown = true;
@@ -38,6 +39,7 @@ public class ShutdownTest implements Application {
         System.out.println("startup()");
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         System.out.println("shutdown()");
 
@@ -66,9 +68,11 @@ public class ShutdownTest implements Application {
         return cancelShutdown;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 

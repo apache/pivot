@@ -29,6 +29,7 @@ import org.apache.pivot.wtk.Window;
 public class ListViewTest implements Application {
     private Window window = null;
 
+    @Override
     public void startup(Display display, Map<String, String> properties) {
         ListView listView = new ListView();
 
@@ -70,6 +71,7 @@ public class ListViewTest implements Application {
         listData.remove(0, 3);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (window != null) {
             window.close();
@@ -78,9 +80,11 @@ public class ListViewTest implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 

@@ -42,6 +42,7 @@ public class CalendarTest implements Application {
         wtkxSerializer.bind(this, CalendarTest.class);
 
         Filter<CalendarDate> disabledDateFilter = new Filter<CalendarDate>() {
+            @Override
             public boolean include(CalendarDate date) {
                 CalendarDate today = new CalendarDate();
                 return (!date.equals(today));

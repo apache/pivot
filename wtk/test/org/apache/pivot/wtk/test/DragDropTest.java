@@ -53,6 +53,7 @@ public class DragDropTest implements Application {
             private Point offset = null;
             private LocalManifest content = null;
 
+            @Override
             public boolean beginDrag(Component component, int x, int y) {
                 ImageView imageView = (ImageView)component;
                 image = imageView.getImage();
@@ -68,6 +69,7 @@ public class DragDropTest implements Application {
                 return (image != null);
             }
 
+            @Override
             public void endDrag(Component component, DropAction dropAction) {
                 if (dropAction == null) {
                     ImageView imageView = (ImageView)component;
@@ -79,28 +81,34 @@ public class DragDropTest implements Application {
                 content = null;
             }
 
+            @Override
             public boolean isNative() {
                 return false;
             }
 
+            @Override
             public LocalManifest getContent() {
                 return content;
             }
 
+            @Override
             public Visual getRepresentation() {
                 return image;
             }
 
+            @Override
             public Point getOffset() {
                 return offset;
             }
 
+            @Override
             public int getSupportedDropActions() {
                 return DropAction.MOVE.getMask();
             }
         };
 
         DropTarget imageDropTarget = new DropTarget() {
+            @Override
             public DropAction dragEnter(Component component, Manifest dragContent,
                 int supportedDropActions, DropAction userDropAction) {
                 DropAction dropAction = null;
@@ -116,20 +124,24 @@ public class DragDropTest implements Application {
                 return dropAction;
             }
 
+            @Override
             public void dragExit(Component component) {
                 component.getStyles().put("backgroundColor", IMAGE_VIEW_BACKGROUND_COLOR);
             }
 
+            @Override
             public DropAction dragMove(Component component, Manifest dragContent,
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
                 return (dragContent.containsImage() ? DropAction.MOVE : null);
             }
 
+            @Override
             public DropAction userDropActionChange(Component component, Manifest dragContent,
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
                 return (dragContent.containsImage() ? DropAction.MOVE : null);
             }
 
+            @Override
             public DropAction drop(Component component, Manifest dragContent,
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
                 DropAction dropAction = null;

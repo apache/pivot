@@ -44,6 +44,7 @@ public class SheetTest implements Application {
     private Frame frame = null;
     private Sheet sheet = null;
 
+    @Override
     public void startup(final Display display, Map<String, String> properties)
         throws Exception {
         Picture picture = (Picture)Image.load(getClass().getResource("IMG_0767_2.jpg"));
@@ -93,12 +94,14 @@ public class SheetTest implements Application {
         sheet = new Sheet(tablePane);
 
         closeButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
             public void buttonPressed(Button button) {
                 button.getWindow().close();
             }
         });
 
         windowContent.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
             public void buttonPressed(Button button) {
                 // sheet.open(frame);
                 prompt.open(frame);
@@ -107,29 +110,36 @@ public class SheetTest implements Application {
         });
 
         sheet.getWindowStateListeners().add(new WindowStateListener() {
+            @Override
             public Vote previewWindowOpen(Window window, Display display) {
                 return Vote.APPROVE;
             }
 
+            @Override
             public void windowOpenVetoed(Window window, Vote reason) {
             }
 
+            @Override
             public void windowOpened(Window window) {
                 closeButton.requestFocus();
             }
 
+            @Override
             public Vote previewWindowClose(Window window) {
                 return Vote.APPROVE;
             }
 
+            @Override
             public void windowCloseVetoed(Window window, Vote reason) {
             }
 
+            @Override
             public void windowClosed(Window window, Display display) {
             }
         });
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (frame != null) {
             frame.close();
@@ -138,9 +148,11 @@ public class SheetTest implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 

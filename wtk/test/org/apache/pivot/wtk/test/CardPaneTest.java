@@ -35,6 +35,7 @@ public class CardPaneTest implements Application {
 
     private CardPane cardPane;
 
+    @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         frame = new Frame(new BoxPane());
@@ -49,11 +50,13 @@ public class CardPaneTest implements Application {
 
         Button.Group sizeGroup = Button.getNamedGroups().get("sizeGroup");
         sizeGroup.getGroupListeners().add(new Button.GroupListener() {
+            @Override
             public void selectionChanged(Button.Group buttonGroup, Button previousSelection) {
                 final Button selection = buttonGroup.getSelection();
                 int selectedIndex = selection == null ? -1 : selection.getParent().indexOf(selection);
 
                 cardPane.getCardPaneListeners().add(new CardPaneListener.Adapter() {
+                    @Override
                     public Vote previewSelectedIndexChange(CardPane cardPane, int selectedIndex) {
                         if (selection != null) {
                             selection.getParent().setEnabled(false);
@@ -62,6 +65,7 @@ public class CardPaneTest implements Application {
                         return Vote.APPROVE;
                     }
 
+                    @Override
                     public void selectedIndexChangeVetoed(CardPane cardPane, Vote reason) {
                         if (selection != null
                             && reason == Vote.DENY) {
@@ -69,6 +73,7 @@ public class CardPaneTest implements Application {
                         }
                     }
 
+                    @Override
                     public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex) {
                         if (selection != null) {
                             selection.getParent().setEnabled(true);
@@ -84,6 +89,7 @@ public class CardPaneTest implements Application {
         sheet.open(frame);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (frame != null) {
             frame.close();
@@ -92,9 +98,11 @@ public class CardPaneTest implements Application {
         return false;
     }
 
+    @Override
     public void resume() {
     }
 
+    @Override
     public void suspend() {
     }
 

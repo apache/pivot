@@ -27,6 +27,7 @@ import org.apache.pivot.wtkx.WTKXSerializer;
 public class ExpanderTest implements Application {
     private Window window = null;
 
+    @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -34,6 +35,7 @@ public class ExpanderTest implements Application {
         window.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (window != null) {
             window.close();
@@ -42,9 +44,11 @@ public class ExpanderTest implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 

@@ -36,6 +36,7 @@ import org.apache.pivot.wtk.effects.ReflectionDecorator;
 public class WindowTest implements Application {
     private Frame window1 = new Frame();
 
+    @Override
     public void startup(Display display, Map<String, String> properties) {
         window1.setTitle("Window 1");
         window1.setPreferredSize(320, 240);
@@ -45,6 +46,7 @@ public class WindowTest implements Application {
         window1.setMaximumPreferredHeight(340);
 
         window1.getComponentListeners().add(new ComponentListener.Adapter() {
+            @Override
             public void sizeChanged(Component component, int previousWidth, int previousHeight) {
                 window1.align(window1.getDisplay().getBounds(),
                     HorizontalAlignment.CENTER, VerticalAlignment.CENTER);
@@ -118,6 +120,7 @@ public class WindowTest implements Application {
         dialog2.open(dialog, true);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (window1 != null) {
             window1.close();
@@ -126,9 +129,11 @@ public class WindowTest implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 

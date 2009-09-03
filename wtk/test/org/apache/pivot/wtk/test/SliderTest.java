@@ -39,6 +39,7 @@ public class SliderTest implements Application {
         window = new Window((Component)wtkxSerializer.readObject(getClass().getResource("slider_test.wtkx")));
         slider = (Slider)wtkxSerializer.get("slider");
         slider.getSliderValueListeners().add(new SliderValueListener() {
+            @Override
             public void valueChanged(Slider slider, int previousValue) {
                 valueLabel.setText(Integer.toString(slider.getValue()));
             }

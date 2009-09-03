@@ -34,6 +34,7 @@ import org.apache.pivot.wtk.Window;
 public class CheckedListViewTest implements Application {
     private Window window = null;
 
+    @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         final ListView listView = new ListView(JSONSerializer.parseList("['One', 'Two', 'Three', 'Four']"));
@@ -66,6 +67,7 @@ public class CheckedListViewTest implements Application {
         window.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (window != null) {
             window.close();
@@ -74,9 +76,11 @@ public class CheckedListViewTest implements Application {
         return false;
     }
 
+    @Override
     public void resume() {
     }
 
+    @Override
     public void suspend() {
     }
 

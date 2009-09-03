@@ -28,6 +28,7 @@ import org.apache.pivot.wtk.Window;
 public class PushButtonTest implements Application {
     private Window window = null;
 
+    @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         window = new Window();
@@ -44,6 +45,7 @@ public class PushButtonTest implements Application {
         window.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (window != null) {
             window.close();
@@ -52,9 +54,11 @@ public class PushButtonTest implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 

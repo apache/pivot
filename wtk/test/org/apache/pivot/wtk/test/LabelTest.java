@@ -31,6 +31,7 @@ import org.apache.pivot.wtk.TextDecoration;
 public class LabelTest implements Application {
     private Frame frame = null;
 
+    @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         frame = new Frame();
         frame.setTitle("Label Test");
@@ -71,6 +72,7 @@ public class LabelTest implements Application {
         frame.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (frame != null) {
             frame.close();
@@ -79,9 +81,11 @@ public class LabelTest implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 
