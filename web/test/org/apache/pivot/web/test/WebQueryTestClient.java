@@ -74,6 +74,7 @@ public class WebQueryTestClient {
 
         queryGroup.execute(new TaskListener<Void>() {
             @SuppressWarnings("unchecked")
+            @Override
             public synchronized void taskExecuted(Task<Void> task) {
                 Dictionary<String, Object> result = (Dictionary<String, Object>)getQuery.getResult();
 
@@ -102,6 +103,7 @@ public class WebQueryTestClient {
                 System.out.println("DELETE fault: " + deleteQuery.getFault());
             }
 
+            @Override
             public synchronized void executeFailed(Task<Void> task) {
                 // No-op; task groups don't fail
             }
