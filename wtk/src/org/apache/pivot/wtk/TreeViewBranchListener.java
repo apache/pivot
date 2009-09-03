@@ -26,9 +26,11 @@ public interface TreeViewBranchListener {
      * Tree view branch listener adapter.
      */
     public static class Adapter implements TreeViewBranchListener {
+        @Override
         public void branchExpanded(TreeView treeView, Path path) {
         }
 
+        @Override
         public void branchCollapsed(TreeView treeView, Path path) {
         }
     }

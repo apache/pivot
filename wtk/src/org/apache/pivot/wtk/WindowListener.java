@@ -26,24 +26,31 @@ public interface WindowListener {
      * Window listener adapter.
      */
     public static class Adapter implements WindowListener {
+        @Override
         public void titleChanged(Window window, String previousTitle) {
         }
 
+        @Override
         public void iconChanged(Window window, Image previousIcon) {
         }
 
+        @Override
         public void contentChanged(Window window, Component previousContent) {
         }
 
+        @Override
         public void ownerChanged(Window window, Window previousOwner) {
         }
 
+        @Override
         public void activeChanged(Window window, Window obverseWindow) {
         }
 
+        @Override
         public void maximizedChanged(Window window) {
         }
 
+        @Override
         public void windowMoved(Window window, int from, int to) {
         }
     }

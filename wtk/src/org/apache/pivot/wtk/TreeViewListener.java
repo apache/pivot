@@ -27,24 +27,31 @@ public interface TreeViewListener {
      * Tree view listener adapter.
      */
     public static class Adapter implements TreeViewListener {
+        @Override
         public void treeDataChanged(TreeView treeView, List<?> previousTreeData) {
         }
 
+        @Override
         public void nodeRendererChanged(TreeView treeView, TreeView.NodeRenderer previousNodeRenderer) {
         }
 
+        @Override
         public void nodeEditorChanged(TreeView treeView, TreeView.NodeEditor previousNodeEditor) {
         }
 
+        @Override
         public void selectModeChanged(TreeView treeView, TreeView.SelectMode previousSelectMode) {
         }
 
+        @Override
         public void checkmarksEnabledChanged(TreeView treeView) {
         }
 
+        @Override
         public void showMixedCheckmarkStateChanged(TreeView treeView) {
         }
 
+        @Override
         public void disabledNodeFilterChanged(TreeView treeView, Filter<?> previousDisabledNodeFilter) {
         }
     }

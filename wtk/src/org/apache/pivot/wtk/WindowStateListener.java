@@ -26,23 +26,29 @@ public interface WindowStateListener {
      * Window state listener adapter.
      */
     public static class Adapter implements WindowStateListener {
+        @Override
         public Vote previewWindowOpen(Window window, Display display) {
             return Vote.APPROVE;
         }
 
+        @Override
         public void windowOpenVetoed(Window window, Vote reason) {
         }
 
+        @Override
         public void windowOpened(Window window) {
         }
 
+        @Override
         public Vote previewWindowClose(Window window) {
             return Vote.APPROVE;
         }
 
+        @Override
         public void windowCloseVetoed(Window window, Vote reason) {
         }
 
+        @Override
         public void windowClosed(Window window, Display display) {
         }
     }

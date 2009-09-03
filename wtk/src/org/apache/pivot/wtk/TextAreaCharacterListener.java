@@ -24,9 +24,11 @@ public interface TextAreaCharacterListener {
      * Text area character listener adapter.
      */
     public static class Adapter implements TextAreaCharacterListener {
+        @Override
         public void charactersInserted(TextArea textArea, int index, int count) {
         }
 
+        @Override
         public void charactersRemoved(TextArea textArea, int index, int count) {
         }
     }

@@ -36,18 +36,21 @@ public abstract class Viewport extends Container {
     private static class ViewportListenerList extends ListenerList<ViewportListener>
         implements ViewportListener {
 
+        @Override
         public void scrollTopChanged(Viewport viewport, int previousScrollTop) {
             for (ViewportListener listener : this) {
                 listener.scrollTopChanged(viewport, previousScrollTop);
             }
         }
 
+        @Override
         public void scrollLeftChanged(Viewport viewport, int previousScrollLeft) {
             for (ViewportListener listener : this) {
                 listener.scrollLeftChanged(viewport, previousScrollLeft);
             }
         }
 
+        @Override
         public void viewChanged(Viewport viewport, Component previousView) {
             for (ViewportListener listener : this) {
                 listener.viewChanged(viewport, previousView);

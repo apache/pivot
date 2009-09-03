@@ -26,12 +26,15 @@ public interface TextAreaListener {
      * Text area listener adapter.
      */
     public static class Adapter implements TextAreaListener {
+        @Override
         public void documentChanged(TextArea textArea, Document previousDocument) {
         }
 
+        @Override
         public void editableChanged(TextArea textArea) {
         }
 
+        @Override
         public void textKeyChanged(TextArea textArea, String previousTextKey) {
         }
     }

@@ -24,9 +24,11 @@ public interface TextInputCharacterListener {
      * Text input character listener adapter.
      */
     public static class Adapter implements TextInputCharacterListener {
+        @Override
         public void charactersInserted(TextInput textInput, int index, int count) {
         }
 
+        @Override
         public void charactersRemoved(TextInput textInput, int index, int count) {
         }
     }

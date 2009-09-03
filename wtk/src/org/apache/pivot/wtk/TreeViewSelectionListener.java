@@ -27,12 +27,15 @@ public interface TreeViewSelectionListener {
      * Tree view selection listener adapter.
      */
     public static class Adapter implements TreeViewSelectionListener {
+        @Override
         public void selectedPathAdded(TreeView treeView, Path path) {
         }
 
+        @Override
         public void selectedPathRemoved(TreeView treeView, Path path) {
         }
 
+        @Override
         public void selectedPathsChanged(TreeView treeView, Sequence<Path> previousSelectedPaths) {
         }
     }

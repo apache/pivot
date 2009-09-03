@@ -36,48 +36,56 @@ public class TextInput extends Component {
      */
     private static class TextInputListenerList extends ListenerList<TextInputListener>
         implements TextInputListener {
+        @Override
         public void textNodeChanged(TextInput textInput, TextNode previousTextNode) {
             for (TextInputListener listener : this) {
                 listener.textNodeChanged(textInput, previousTextNode);
             }
         }
 
+        @Override
         public void textSizeChanged(TextInput textInput, int previousTextSize) {
             for (TextInputListener listener : this) {
                 listener.textSizeChanged(textInput, previousTextSize);
             }
         }
 
+        @Override
         public void maximumLengthChanged(TextInput textInput, int previousMaximumLength) {
             for (TextInputListener listener : this) {
                 listener.maximumLengthChanged(textInput, previousMaximumLength);
             }
         }
 
+        @Override
         public void passwordChanged(TextInput textInput) {
             for (TextInputListener listener : this) {
                 listener.passwordChanged(textInput);
             }
         }
 
+        @Override
         public void promptChanged(TextInput textInput, String previousPrompt) {
             for (TextInputListener listener : this) {
                 listener.promptChanged(textInput, previousPrompt);
             }
         }
 
+        @Override
         public void textKeyChanged(TextInput textInput, String previousTextKey) {
             for (TextInputListener listener : this) {
                 listener.textKeyChanged(textInput, previousTextKey);
             }
         }
 
+        @Override
         public void textValidChanged(TextInput textInput) {
             for (TextInputListener listener : this) {
                 listener.textValidChanged(textInput);
             }
         }
 
+        @Override
         public void textValidatorChanged(TextInput textInput, Validator previousValidator) {
             for (TextInputListener listener : this) {
                 listener.textValidatorChanged(textInput, previousValidator);
@@ -90,6 +98,7 @@ public class TextInput extends Component {
      */
     private static class TextInputTextListenerList extends ListenerList<TextInputTextListener>
         implements TextInputTextListener {
+        @Override
         public void textChanged(TextInput textInput) {
             for (TextInputTextListener listener : this) {
                 listener.textChanged(textInput);
@@ -102,12 +111,14 @@ public class TextInput extends Component {
      */
     private static class TextInputCharacterListenerList extends ListenerList<TextInputCharacterListener>
         implements TextInputCharacterListener {
+        @Override
         public void charactersInserted(TextInput textInput, int index, int count) {
             for (TextInputCharacterListener listener : this) {
                 listener.charactersInserted(textInput, index, count);
             }
         }
 
+        @Override
         public void charactersRemoved(TextInput textInput, int index, int count) {
             for (TextInputCharacterListener listener : this) {
                 listener.charactersRemoved(textInput, index, count);
@@ -120,6 +131,7 @@ public class TextInput extends Component {
      */
     private static class TextInputSelectionListenerList extends ListenerList<TextInputSelectionListener>
         implements TextInputSelectionListener {
+        @Override
         public void selectionChanged(TextInput textInput,
             int previousSelectionStart, int previousSelectionEnd) {
             for (TextInputSelectionListener listener : this) {
@@ -142,12 +154,15 @@ public class TextInput extends Component {
     private boolean textValid = true;
 
     private NodeListener textNodeListener = new NodeListener() {
+        @Override
         public void parentChanged(Node node, Element previousParent) {
         }
 
+        @Override
         public void offsetChanged(Node node, int previousOffset) {
         }
 
+        @Override
         public void rangeInserted(Node node, int offset, int characterCount) {
             if (selectionStart + selectionLength > offset) {
                 if (selectionStart > offset) {
@@ -162,6 +177,7 @@ public class TextInput extends Component {
             updateTextValid();
         }
 
+        @Override
         public void rangeRemoved(Node node, int offset, int characterCount) {
             if (selectionStart + selectionLength > offset) {
                 if (selectionStart > offset) {

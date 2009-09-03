@@ -69,18 +69,21 @@ public class TextArea extends Component {
 
     private static class TextAreaListenerList extends ListenerList<TextAreaListener>
         implements TextAreaListener {
+        @Override
         public void documentChanged(TextArea textArea, Document previousText) {
             for (TextAreaListener listener : this) {
                 listener.documentChanged(textArea, previousText);
             }
         }
 
+        @Override
         public void editableChanged(TextArea textArea) {
             for (TextAreaListener listener : this) {
                 listener.editableChanged(textArea);
             }
         }
 
+        @Override
         public void textKeyChanged(TextArea textArea, String previousTextKey) {
             for (TextAreaListener listener : this) {
                 listener.textKeyChanged(textArea, previousTextKey);
@@ -90,12 +93,14 @@ public class TextArea extends Component {
 
     private static class TextAreaCharacterListenerList extends ListenerList<TextAreaCharacterListener>
         implements TextAreaCharacterListener {
+        @Override
         public void charactersInserted(TextArea textArea, int index, int count) {
             for (TextAreaCharacterListener listener : this) {
                 listener.charactersInserted(textArea, index, count);
             }
         }
 
+        @Override
         public void charactersRemoved(TextArea textArea, int index, int count) {
             for (TextAreaCharacterListener listener : this) {
                 listener.charactersRemoved(textArea, index, count);
@@ -105,6 +110,7 @@ public class TextArea extends Component {
 
     private static class TextAreaSelectionListenerList extends ListenerList<TextAreaSelectionListener>
         implements TextAreaSelectionListener {
+        @Override
         public void selectionChanged(TextArea textArea,
             int previousSelectionStart, int previousSelectionLength) {
             for (TextAreaSelectionListener listener : this) {
@@ -121,12 +127,15 @@ public class TextArea extends Component {
     private int selectionLength = 0;
 
     private NodeListener documentListener = new NodeListener() {
+        @Override
         public void parentChanged(Node node, Element previousParent) {
         }
 
+        @Override
         public void offsetChanged(Node node, int previousOffset) {
         }
 
+        @Override
         public void rangeInserted(Node node, int offset, int characterCount) {
             if (selectionStart + selectionLength > offset) {
                 if (selectionStart > offset) {
@@ -139,6 +148,7 @@ public class TextArea extends Component {
             textAreaCharacterListeners.charactersInserted(TextArea.this, offset, characterCount);
         }
 
+        @Override
         public void rangeRemoved(Node node, int offset, int characterCount) {
             if (selectionStart + selectionLength > offset) {
                 if (selectionStart > offset) {

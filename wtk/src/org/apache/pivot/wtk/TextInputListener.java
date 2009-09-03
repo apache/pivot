@@ -27,27 +27,35 @@ public interface TextInputListener {
      * Text input listener adapter.
      */
     public static class Adapter implements TextInputListener {
+        @Override
         public void textNodeChanged(TextInput textInput, TextNode previousTextNode) {
         }
 
+        @Override
         public void textSizeChanged(TextInput textInput, int previousTextSize) {
         }
 
+        @Override
         public void maximumLengthChanged(TextInput textInput, int previousMaximumLength) {
         }
 
+        @Override
         public void passwordChanged(TextInput textInput) {
         }
 
+        @Override
         public void promptChanged(TextInput textInput, String previousPrompt) {
         }
 
+        @Override
         public void textKeyChanged(TextInput textInput, String previousTextKey) {
         }
 
+        @Override
         public void textValidChanged(TextInput textInput) {
         }
 
+        @Override
         public void textValidatorChanged(TextInput textInput, Validator previousValidator) {
         }
     }

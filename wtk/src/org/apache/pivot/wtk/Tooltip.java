@@ -26,6 +26,7 @@ import org.apache.pivot.util.ListenerList;
 public class Tooltip extends Window {
     private static class TooltipListenerList extends ListenerList<TooltipListener>
         implements TooltipListener {
+        @Override
         public void textChanged(Tooltip tooltip, String previousText) {
             for (TooltipListener listener : this) {
                 listener.textChanged(tooltip, previousText);
