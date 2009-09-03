@@ -643,8 +643,8 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
 
                 for (int i = 1; i < rowCount; i++) {
                     int gridY = Math.max(rowY - (int)Math.ceil(verticalSpacing * 0.5f), 0);
-                    GraphicsUtilities.drawLine(gridGraphics, padding.left, gridY,
-                        width - (padding.left + padding.right), Orientation.HORIZONTAL);
+                    GraphicsUtilities.drawLine(gridGraphics, 0, gridY,
+                        width, Orientation.HORIZONTAL);
 
                     rowY += (rowHeights[i] + verticalSpacing);
                 }
@@ -656,8 +656,8 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
 
                 for (int j = 1; j < columnCount; j++) {
                     int gridX = Math.max(columnX - (int)Math.ceil(horizontalSpacing * 0.5), 0);
-                    GraphicsUtilities.drawLine(gridGraphics, gridX, padding.top,
-                        height - (padding.top + padding.bottom), Orientation.VERTICAL);
+                    GraphicsUtilities.drawLine(gridGraphics, gridX, 0,
+                        height, Orientation.VERTICAL);
 
                     columnX += (columnWidths[j] + horizontalSpacing);
                 }
