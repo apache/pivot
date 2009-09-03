@@ -1620,7 +1620,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         showCaret(textArea.isFocused()
             && textArea.getSelectionLength() == 0);
 
-        repaintComponent(!component.isFocused());
+        repaintComponent();
     }
 
     // Text area events

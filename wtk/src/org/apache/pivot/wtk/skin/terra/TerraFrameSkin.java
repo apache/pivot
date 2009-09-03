@@ -612,7 +612,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
             && !getShowWindowControls()) {
             clientArea = new Bounds(0, 0, width, height);
         } else {
-            clientArea = new Bounds(1, titleBarHeight + 2, width - 2, height - (titleBarHeight + 2));
+            clientArea = new Bounds(0, titleBarHeight + 2, width, height - (titleBarHeight + 2));
         }
 
         return clientArea;

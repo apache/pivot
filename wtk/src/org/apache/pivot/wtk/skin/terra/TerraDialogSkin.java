@@ -56,30 +56,53 @@ public class TerraDialogSkin extends TerraFrameSkin implements DialogStateListen
 
     private ContainerMouseListener displayMouseListener = new ContainerMouseListener.Adapter() {
         @Override
+        public boolean mouseMove(Container container, int x, int y) {
+            return isMouseOverOwner(container, x, y);
+        }
+
+        @Override
         public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
             boolean consumed = false;
+
+            if (isMouseOverOwner(container, x, y)) {
+                Dialog dialog = (Dialog)getComponent();
+                Window rootOwner = dialog.getRootOwner();
+                rootOwner.moveToFront();
+                dialog.requestActive();
+                consumed = true;
+
+                ApplicationContext.beep();
+            }
+
+            return consumed;
+        }
+
+        @Override
+        public boolean mouseUp(Container container, Mouse.Button button, int x, int y) {
+            return isMouseOverOwner(container, x, y);
+        }
+
+        @Override
+        public boolean mouseWheel(Container container, Mouse.ScrollType scrollType,
+            int scrollAmount, int wheelRotation, int x, int y) {
+            return isMouseOverOwner(container, x, y);
+        }
+
+        private boolean isMouseOverOwner(Container container, int x, int y) {
+            boolean mouseOverOwner = false;
 
             Dialog dialog = (Dialog)getComponent();
 
             if (dialog.isModal()) {
-                Display display = (Display)container;
-                Component descendant = display.getDescendantAt(x, y);
+                Component descendant = container.getDescendantAt(x, y);
 
-                if (descendant != display) {
+                if (descendant != container) {
                     Window window = descendant.getWindow();
-
-                    if (window.isOwner(dialog)) {
-                        window = window.getRootOwner();
-                        window.moveToFront();
-                        dialog.requestActive();
-                        consumed = true;
-
-                        ApplicationContext.beep();
-                    }
+                    mouseOverOwner = window.isOwner(dialog);
                 }
             }
 
-            return consumed;
+            return mouseOverOwner;
         }
     };
 
@@ -127,6 +150,10 @@ public class TerraDialogSkin extends TerraFrameSkin implements DialogStateListen
 
         Display display = window.getDisplay();
         display.getContainerMouseListeners().add(displayMouseListener);
+
+        if (!window.requestFocus()) {
+            Component.clearFocus();
+        }
 
         ApplicationContext.queueCallback(new RepositionCallback());
     }

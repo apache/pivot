@@ -29,7 +29,6 @@ import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.effects.Decorator;
 
-
 /**
  * Abstract base class for containers.
  */
@@ -198,6 +197,8 @@ public abstract class Container extends Component
 
             repaint(component.getDecoratedBounds());
             component.setParent(null);
+
+            descendantRemoved(component);
         }
 
         if (removed.getLength() > 0) {
@@ -560,6 +561,10 @@ public abstract class Container extends Component
         if (parent != null) {
             parent.descendantLostFocus(descendant);
         }
+    }
+
+    protected void descendantRemoved(Component descendant) {
+        // No-op
     }
 
     /**

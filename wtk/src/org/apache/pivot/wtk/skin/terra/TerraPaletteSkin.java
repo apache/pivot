@@ -341,7 +341,7 @@ public class TerraPaletteSkin extends WindowSkin {
         int height = getHeight();
         int titleBarHeight = titleBarTablePane.getHeight();
 
-        return new Bounds(1, titleBarHeight + 2, width - 2, height - (titleBarHeight + 2));
+        return new Bounds(0, titleBarHeight + 2, width, height - (titleBarHeight + 2));
     }
 
     @Override

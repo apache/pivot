@@ -82,33 +82,57 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         }
     };
 
-    private ContainerMouseListener displayMouseListener = new ContainerMouseListener.Adapter() {
+    private ContainerMouseListener displayMouseListener = new ContainerMouseListener() {
+        @Override
+        public boolean mouseMove(Container container, int x, int y) {
+            return isMouseOverClientArea(container, x, y);
+        }
+
         @Override
         public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
             boolean consumed = false;
 
-            Sheet sheet = (Sheet)getComponent();
+            if (isMouseOverClientArea(container, x, y)) {
+                Sheet sheet = (Sheet)getComponent();
+                Window owner = sheet.getOwner();
+                owner.moveToFront();
+                consumed = true;
 
-            Display display = (Display)container;
-            Component descendant = display.getDescendantAt(x, y);
-
-            if (descendant != display) {
-                Window window = descendant.getWindow();
-
-                if (window.isOwner(sheet)) {
-                    Point location = window.mapPointFromAncestor(display, x, y);
-
-                    Bounds clientArea = window.getClientArea();
-                    if (clientArea.contains(location)) {
-                        window.moveToFront();
-                        consumed = true;
-
-                        ApplicationContext.beep();
-                    }
-                }
+                ApplicationContext.beep();
             }
 
             return consumed;
+        }
+
+        @Override
+        public boolean mouseUp(Container container, Mouse.Button button, int x, int y) {
+            return isMouseOverClientArea(container, x, y);
+        }
+
+        @Override
+        public boolean mouseWheel(Container container, Mouse.ScrollType scrollType,
+            int scrollAmount, int wheelRotation, int x, int y) {
+            return isMouseOverClientArea(container, x, y);
+        }
+
+        private boolean isMouseOverClientArea(Container container, int x, int y) {
+            boolean mouseOverClientArea = false;
+
+            Sheet sheet = (Sheet)getComponent();
+            Component descendant = container.getDescendantAt(x, y);
+
+            if (descendant != container) {
+                Window window = descendant.getWindow();
+
+                if (window.isOwner(sheet)) {
+                    Bounds clientArea = window.getClientArea();
+
+                    Point location = window.mapPointFromAncestor(container, x, y);
+                    mouseOverClientArea = clientArea.contains(location);
+                }
+            }
+
+            return mouseOverClientArea;
         }
     };
 
@@ -375,7 +399,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     }
 
     @Override
-    public void windowOpened(final Window window) {
+    public void windowOpened(Window window) {
         super.windowOpened(window);
 
         Display display = window.getDisplay();
@@ -393,6 +417,10 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
                 openTransition = null;
             }
         });
+
+        if (!window.requestFocus()) {
+            Component.clearFocus();
+        }
     }
 
     @Override

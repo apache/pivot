@@ -798,7 +798,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     public void focusedChanged(Component component, Component obverseComponent) {
         super.focusedChanged(component, obverseComponent);
 
-        repaintComponent(!component.isFocused());
+        repaintComponent();
     }
 
     // List view events

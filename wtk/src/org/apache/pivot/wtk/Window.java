@@ -913,8 +913,8 @@ public class Window extends Container {
     }
 
     /**
-     * Returns the window descendant to which focus will be restored by a call
-     * to {@link #restoreFocus()}.
+     * Returns the window descendant to which focus will be restored when this window
+     * is moved to the front.
      */
     public Component getFocusDescendant() {
         return focusDescendant;
@@ -922,28 +922,17 @@ public class Window extends Container {
 
     @Override
     protected void descendantGainedFocus(Component descendant, Component previousFocusedComponent) {
-        super.descendantGainedFocus(descendant, previousFocusedComponent);
-
         this.focusDescendant = descendant;
+
+        super.descendantGainedFocus(descendant, previousFocusedComponent);
     }
 
-    /**
-     * Restores the focus to the focus descendant. If the window does not
-     * have a focus descendant, the focus is cleared.
-     */
-    protected void restoreFocus() {
-        assert(isShowing());
+    @Override
+    protected void descendantRemoved(Component descendant) {
+        super.descendantRemoved(descendant);
 
-        if (focusDescendant != null) {
-            if (isAncestor(focusDescendant)) {
-                focusDescendant.requestFocus();
-            } else {
-                focusDescendant = null;
-            }
-        }
-
-        if (focusDescendant == null) {
-            Component.clearFocus();
+        if (descendant == focusDescendant) {
+            focusDescendant = null;
         }
     }
 
@@ -977,10 +966,11 @@ public class Window extends Container {
             windowListeners.windowMoved(this, i, n);
         }
 
-        // Restore focus to the window
+        // Restore focus
         if (isShowing()
-            && isEnabled()) {
-            restoreFocus();
+            && isEnabled()
+            && focusDescendant != null) {
+            focusDescendant.requestFocus();
         }
 
         // Move all open owned windows to the front of this window, preserving the

@@ -92,7 +92,7 @@ public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListen
         Menu.Item menuItem = (Menu.Item)getComponent();
         menuItem.getItemListeners().remove(this);
 
-        menuPopup.close();
+        menuPopup.close(true);
         menuPopup.setMenu(null);
 
         super.uninstall();
@@ -220,7 +220,7 @@ public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListen
     public void enabledChanged(Component component) {
         super.enabledChanged(component);
 
-        menuPopup.close();
+        menuPopup.close(true);
     }
 
     @Override
