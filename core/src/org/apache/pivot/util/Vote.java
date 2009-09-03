@@ -21,15 +21,20 @@ package org.apache.pivot.util;
  * result of an event preview.
  */
 public enum Vote {
-    APPROVE(true),
-    DENY(false),
-    DEFER(false);
+    /**
+     * Represents an approval vote.
+     */
+    APPROVE,
 
-    private boolean approved;
+    /**
+     * Represents a denial vote.
+     */
+    DENY,
 
-    private Vote(boolean approved) {
-        this.approved = approved;
-    }
+    /**
+     * Represents a deferred vote, implying that the vote will be approved later.
+     */
+    DEFER;
 
     public Vote tally(Vote vote) {
         if (vote == null) {
@@ -60,9 +65,5 @@ public enum Vote {
         }
 
         return tally;
-    }
-
-    public boolean isApproved() {
-        return approved;
     }
 }
