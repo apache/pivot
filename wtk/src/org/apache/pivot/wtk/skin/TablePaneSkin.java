@@ -477,6 +477,8 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
         columnWidths = getColumnWidths(width);
         rowHeights = getRowHeights(height, columnWidths);
 
+        // Determine which rows and column should be visible so we know which
+        // ones should be collapsed
         boolean[] visibleRows = new boolean[rowCount];
         boolean[] visibleColumns = new boolean[columnCount];
 
@@ -503,12 +505,14 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
                     child.setLocation(componentX, componentY);
 
                     int columnSpan = TablePane.getColumnSpan(child);
+                    columnSpan = Math.min(columnSpan, columnCount - j);
                     int childWidth = (columnSpan - 1) * horizontalSpacing;
                     for (int k = 0; k < columnSpan && j + k < columnCount; k++) {
                         childWidth += columnWidths[j + k];
                     }
 
                     int rowSpan = TablePane.getRowSpan(child);
+                    rowSpan = Math.min(rowSpan,rowCount  - i);
                     int childHeight = (rowSpan - 1) * verticalSpacing;
                     for (int k = 0; k < rowSpan && i + k < rowCount; k++) {
                         childHeight += rowHeights[i + k];
@@ -599,11 +603,11 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
                             int rowHeight = rowHeights[i];
                             int columnWidth = columnWidths[j];
 
-                            for (int k = i + 1; k < i + rowSpan; k++) {
+                            for (int k = i + 1; k < i + rowSpan && k < rowCount; k++) {
                                 rowHeight += rowHeights[k] + verticalSpacing;
                             }
 
-                            for (int k = j + 1; k < j + columnSpan; k++) {
+                            for (int k = j + 1; k < j + columnSpan && k < columnCount; k++) {
                                 columnWidth += columnWidths[k] + horizontalSpacing;
                             }
 
