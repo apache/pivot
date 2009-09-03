@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<Window title="Table Panes" maximized="true"
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:content="org.apache.pivot.wtk.content"
+    xmlns="org.apache.pivot.wtk">
+    <wtkx:define>
+        <Menu.Section wtkx:id="cellSection">
+            <Menu.Item action="configureCell">
+                <buttonData>
+                    <content:ButtonData icon="@pencil.png" text="Configure Cell Content" />
+                </buttonData>
+            </Menu.Item>
+        </Menu.Section>
+        <Menu.Section wtkx:id="rowSection">
+            <Menu.Item action="configureRow">
+                <buttonData>
+                    <content:ButtonData icon="@pencil.png" text="Configure Row" />
+                </buttonData>
+            </Menu.Item>
+            <Menu.Item action="insertRow">
+                <buttonData>
+                    <content:ButtonData icon="@arrow_right.png" text="Insert Row" />
+                </buttonData>
+            </Menu.Item>
+            <Menu.Item action="removeRow">
+                <buttonData>
+                    <content:ButtonData icon="@arrow_left.png" text="Remove Row" />
+                </buttonData>
+            </Menu.Item>
+        </Menu.Section>
+        <Menu.Section wtkx:id="columnSection">
+            <Menu.Item action="configureColumn">
+                <buttonData>
+                    <content:ButtonData icon="@pencil.png" text="Configure Column" />
+                </buttonData>
+            </Menu.Item>
+            <Menu.Item action="insertColumn">
+                <buttonData>
+                    <content:ButtonData icon="@arrow_right.png" text="Insert Column" />
+                </buttonData>
+            </Menu.Item>
+            <Menu.Item action="removeColumn">
+                <buttonData>
+                    <content:ButtonData icon="@arrow_left.png" text="Remove Column" />
+                </buttonData>
+            </Menu.Item>
+        </Menu.Section>
+    </wtkx:define>
+
+    <content>
+        <SplitPane splitRatio="0.7">
+            <left>
+                <Border styles="{padding:0}">
+                    <content>
+                        <TablePane wtkx:id="tablePane" styles="{verticalSpacing:21, showHorizontalGridLines:true,
+                            horizontalSpacing:21, showVerticalGridLines:true, padding:10}">
+                            <columns>
+                                <TablePane.Column width="-1"/>
+                                <TablePane.Column width="100"/>
+                                <TablePane.Column width="-1"/>
+                                <TablePane.Column width="1*"/>
+                                <TablePane.Column width="2*"/>
+                            </columns>
+
+                            <rows>
+                                <TablePane.Row height="-1">
+                                    <TablePane.Filler/>
+                                    <Label text="100" styles="{horizontalAlignment:'center'}"/>
+                                    <Label text="-1" styles="{horizontalAlignment:'center'}"/>
+                                    <Label text="1*" styles="{horizontalAlignment:'center'}"/>
+                                    <Label text="2*" styles="{horizontalAlignment:'center'}"/>
+                                </TablePane.Row>
+                                <TablePane.Row height="100">
+                                    <Label text="100" styles="{verticalAlignment:'center'}"/>
+                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                                </TablePane.Row>
+                                <TablePane.Row height="-1">
+                                    <Label text="-1" styles="{verticalAlignment:'center'}"/>
+                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                                </TablePane.Row>
+                                <TablePane.Row height="1*">
+                                    <Label text="1*" styles="{verticalAlignment:'center'}"/>
+                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                                </TablePane.Row>
+                                <TablePane.Row height="2*">
+                                    <Label text="2*" styles="{verticalAlignment:'center'}"/>
+                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                                </TablePane.Row>
+                            </rows>
+                        </TablePane>
+                    </content>
+                </Border>
+            </left>
+            <right>
+                <Border styles="{padding:10}">
+                    <content>
+                        <Form>
+                            <sections>
+                                <Form.Section>
+                                    <Checkbox Form.label="Show horizontal grid lines" selected="true">
+                                        <buttonStateListeners>
+                                            <wtkx:script language="javascript">
+                                                <![CDATA[
+                                                function stateChanged(button, previousState) {
+                                                    tablePane.getStyles().put("showHorizontalGridLines",
+                                                        button.isSelected());
+                                                }
+                                                ]]>
+                                            </wtkx:script>
+                                        </buttonStateListeners>
+                                    </Checkbox>
+                                    <Checkbox Form.label="Show vertical grid lines" selected="true">
+                                        <buttonStateListeners>
+                                            <wtkx:script language="javascript">
+                                                <![CDATA[
+                                                function stateChanged(button, previousState) {
+                                                    tablePane.getStyles().put("showVerticalGridLines",
+                                                        button.isSelected());
+                                                }
+                                                ]]>
+                                            </wtkx:script>
+                                        </buttonStateListeners>
+                                    </Checkbox>
+                                    <Spinner Form.label="Horizontal spacing" selectedIndex="21"
+                                        styles="{sizeToContent:true}">
+                                        <spinnerData>
+                                            <content:NumericSpinnerData lowerBound="0" upperBound="50"/>
+                                        </spinnerData>
+                                        <spinnerSelectionListeners>
+                                            <wtkx:script language="javascript">
+                                                <![CDATA[
+                                                function selectedIndexChanged(spinner, previousSelectedIndex) {
+                                                    tablePane.getStyles().put("horizontalSpacing",
+                                                        spinner.getSelectedItem());
+                                                }
+                                                ]]>
+                                            </wtkx:script>
+                                        </spinnerSelectionListeners>
+                                    </Spinner>
+                                    <Spinner Form.label="Vertical spacing" selectedIndex="21"
+                                        styles="{sizeToContent:true}">
+                                        <spinnerData>
+                                            <content:NumericSpinnerData lowerBound="0" upperBound="50"/>
+                                        </spinnerData>
+                                        <spinnerSelectionListeners>
+                                            <wtkx:script language="javascript">
+                                                <![CDATA[
+                                                function selectedIndexChanged(spinner, previousSelectedIndex) {
+                                                    tablePane.getStyles().put("verticalSpacing",
+                                                        spinner.getSelectedItem());
+                                                }
+                                                ]]>
+                                            </wtkx:script>
+                                        </spinnerSelectionListeners>
+                                    </Spinner>
+                                    <Spinner Form.label="Padding" selectedIndex="10"
+                                        styles="{sizeToContent:true}">
+                                        <spinnerData>
+                                            <content:NumericSpinnerData lowerBound="0" upperBound="25"/>
+                                        </spinnerData>
+                                        <spinnerSelectionListeners>
+                                            <wtkx:script language="javascript">
+                                                <![CDATA[
+                                                function selectedIndexChanged(spinner, previousSelectedIndex) {
+                                                    tablePane.getStyles().put("padding",
+                                                        spinner.getSelectedItem());
+                                                }
+                                                ]]>
+                                            </wtkx:script>
+                                        </spinnerSelectionListeners>
+                                    </Spinner>
+                                </Form.Section>
+                            </sections>
+                        </Form>
+                    </content>
+                </Border>
+            </right>
+        </SplitPane>
+    </content>
+</Window>

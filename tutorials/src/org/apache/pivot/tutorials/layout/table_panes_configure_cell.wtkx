@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<Sheet wtkx:id="sheet" preferredWidth="350" styles="{padding:0}"
+    xmlns:collections="org.apache.pivot.collections"
+    xmlns:content="org.apache.pivot.wtk.content"
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns="org.apache.pivot.wtk">
+    <content>
+        <BoxPane orientation="vertical" styles="{fill:true, verticalAlignment:'bottom'}">
+            <TablePane styles="{padding:8, verticalSpacing:8}">
+                <columns>
+                    <TablePane.Column width="1*"/>
+                </columns>
+                <rows>
+                    <TablePane.Row height="1*">
+                        <Border styles="{padding:10}">
+                            <content>
+                                <!-- Payload -->
+                                <BoxPane orientation="vertical" styles="{fill:true, spacing:10}">
+                                    <Label text="Row span and column span are attributes of the cell's component, not the cell itself. For the purposes of this tutorial, we have placed an empty Panel in each cell so that we may see the effects of cell-spanning components on the table pane. In order to see the empty panel, we allow you to set its background color." styles="{wrapText:true}"/>
+                                    <Form>
+                                        <sections>
+                                            <Form.Section>
+                                                <Spinner wtkx:id="rowSpan" Form.label="Row Span"
+                                                    styles="{sizeToContent:true}">
+                                                    <spinnerData>
+                                                        <content:NumericSpinnerData lowerBound="1" upperBound="10"/>
+                                                    </spinnerData>
+                                                </Spinner>
+                                                <Spinner wtkx:id="columnSpan" Form.label="Column Span"
+                                                    styles="{sizeToContent:true}">
+                                                    <spinnerData>
+                                                        <content:NumericSpinnerData lowerBound="1" upperBound="10"/>
+                                                    </spinnerData>
+                                                </Spinner>
+                                                <ListButton wtkx:id="backgroundColor"
+                                                    Form.label="Background Color"
+                                                    selectedIndex="0" styles="{listSize:6}">
+                                                    <listData>
+                                                        <collections:ArrayList>
+                                                            <content:ColorItem color="0x00000000" name="Transparent"/>
+                                                            <content:ColorItem color="#000000" name="Black"/>
+                                                            <content:ColorItem color="#999999" name="Gray"/>
+                                                            <content:ColorItem color="#dddcd5" name="Tan"/>
+                                                            <content:ColorItem color="#3c77b2" name="Light Blue"/>
+                                                            <content:ColorItem color="#14538b" name="Dark Blue"/>
+                                                            <content:ColorItem color="#b0000f" name="Red"/>
+                                                            <content:ColorItem color="#ffffff" name="White"/>
+                                                        </collections:ArrayList>
+                                                    </listData>
+                                                    <dataRenderer>
+                                                        <content:ListButtonColorRenderer/>
+                                                    </dataRenderer>
+                                                    <itemRenderer>
+                                                        <content:ListViewColorRenderer/>
+                                                    </itemRenderer>
+                                                </ListButton>
+                                            </Form.Section>
+                                        </sections>
+                                    </Form>
+                                </BoxPane>
+                            </content>
+                        </Border>
+                    </TablePane.Row>
+                    <TablePane.Row height="24">
+                        <BoxPane styles="{spacing:6,horizontalAlignment:'right'}">
+                            <PushButton buttonData="OK"
+                                preferredWidth="72" preferredHeight="24"
+                                styles="{backgroundColor:16, borderColor:13, color:4, fontBold:true}">
+                                <buttonPressListeners>
+                                    <wtkx:script language="javascript">
+                                        <![CDATA[
+                                        function buttonPressed(button) {
+                                            sheet.close(true);
+                                        }
+                                        ]]>
+                                    </wtkx:script>
+                                </buttonPressListeners>
+                            </PushButton>
+                            <PushButton buttonData="Cancel"
+                                preferredWidth="72" preferredHeight="24"
+                                styles="{backgroundColor:16, borderColor:13, color:4, fontBold:true}">
+                                <buttonPressListeners>
+                                    <wtkx:script language="javascript">
+                                        <![CDATA[
+                                        function buttonPressed(button) {
+                                            sheet.close(false);
+                                        }
+                                        ]]>
+                                    </wtkx:script>
+                                </buttonPressListeners>
+                            </PushButton>
+                        </BoxPane>
+                    </TablePane.Row>
+                </rows>
+            </TablePane>
+        </BoxPane>
+    </content>
+</Sheet>
