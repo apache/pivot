@@ -947,8 +947,11 @@ public class TablePane extends Container {
     public Sequence<Component> remove(int index, int count) {
         for (int i = index, n = index + count; i < n; i++) {
             Component component = get(i);
-            if (component.getAttributes() != null) {
-                throw new UnsupportedOperationException();
+
+            for (Row row : rows) {
+                if (row.indexOf(component) >= 0) {
+                    throw new UnsupportedOperationException();
+                }
             }
         }
 

@@ -293,8 +293,9 @@ public class TabPane extends Container {
     public Sequence<Component> remove(int index, int count) {
         for (int i = index, n = index + count; i < n; i++) {
             Component component = get(i);
+
             if (component == corner
-                || component.getAttributes() != null) {
+                || tabs.indexOf(component) >= 0) {
                 throw new UnsupportedOperationException();
             }
         }

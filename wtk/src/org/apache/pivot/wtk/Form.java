@@ -441,8 +441,11 @@ public class Form extends Container {
     public Sequence<Component> remove(int index, int count) {
         for (int i = index, n = index + count; i < n; i++) {
             Component component = get(i);
-            if (component.getAttributes() != null) {
-                throw new UnsupportedOperationException();
+
+            for (Section section : sections) {
+                if (section.indexOf(component) >= 0) {
+                    throw new UnsupportedOperationException();
+                }
             }
         }
 
