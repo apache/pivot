@@ -546,6 +546,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
     }
 
     // Calendar button events
+    @Override
     public void localeChanged(CalendarButton calendarButton, Locale previousLocale) {
         super.localeChanged(calendarButton, previousLocale);
         invalidateComponent();

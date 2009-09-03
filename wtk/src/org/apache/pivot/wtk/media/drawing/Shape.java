@@ -127,6 +127,7 @@ public abstract class Shape {
             }
         }
 
+        @Override
         public AffineTransform getAffineTransform() {
             if (affineTransform == null) {
                 double radians = (2 * Math.PI) / 360 * angle;
@@ -138,7 +139,7 @@ public abstract class Shape {
     }
 
     /**
-     * Reprensents a scale transformation.
+     * Represents a scale transformation.
      */
     public static final class Scale extends Transform {
         private double x = 0;
@@ -177,6 +178,7 @@ public abstract class Shape {
             }
         }
 
+        @Override
         public AffineTransform getAffineTransform() {
             if (affineTransform == null) {
                 affineTransform = AffineTransform.getScaleInstance(x, y);
@@ -226,6 +228,7 @@ public abstract class Shape {
             }
         }
 
+        @Override
         public AffineTransform getAffineTransform() {
             if (affineTransform == null) {
                 affineTransform = AffineTransform.getTranslateInstance(x, y);
@@ -306,6 +309,7 @@ public abstract class Shape {
             return transforms.getLength();
         }
 
+        @Override
         public AffineTransform getAffineTransform() {
             if (affineTransform == null) {
                 affineTransform = new AffineTransform();

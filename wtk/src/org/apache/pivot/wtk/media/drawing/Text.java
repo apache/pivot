@@ -208,6 +208,7 @@ public class Text extends Shape {
         }
     }
 
+    @Override
     public void setStroke(Paint stroke) {
         // Text cannot have a stroke
         throw new UnsupportedOperationException();

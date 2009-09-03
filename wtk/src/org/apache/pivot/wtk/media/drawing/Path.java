@@ -109,6 +109,7 @@ public class Path extends Shape
         /**
          * {@inheritDoc}
          */
+        @Override
         void operate(GeneralPath generalPath) {
             generalPath.moveTo(x, y);
         }
@@ -178,6 +179,7 @@ public class Path extends Shape
         /**
          * {@inheritDoc}
          */
+        @Override
         void operate(GeneralPath generalPath) {
             generalPath.lineTo(x, y);
         }
@@ -246,6 +248,7 @@ public class Path extends Shape
         /**
          * {@inheritDoc}
          */
+        @Override
         void operate(GeneralPath generalPath) {
             generalPath.curveTo(x1, y1, x2, y2, x3, y3);
         }
@@ -374,6 +377,7 @@ public class Path extends Shape
         /**
          * {@inheritDoc}
          */
+        @Override
         void operate(GeneralPath generalPath) {
             generalPath.quadTo(x1, y1, x2, y2);
         }
@@ -647,6 +651,7 @@ public class Path extends Shape
     /**
      * {@inheritDoc}
      */
+    @Override
     public void draw(Graphics2D graphics) {
         Paint fill = getFill();
         if (fill != null) {

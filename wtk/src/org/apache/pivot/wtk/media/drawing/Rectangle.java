@@ -109,6 +109,7 @@ public class Rectangle extends Shape {
         }
     }
 
+    @Override
     public void draw(Graphics2D graphics) {
         Paint fill = getFill();
         if (fill != null) {

@@ -65,6 +65,7 @@ public class Group extends Shape implements Sequence<Shape>, Iterable<Shape> {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public void draw(Graphics2D graphics) {
         Bounds clipBounds = new Bounds(graphics.getClipBounds());
 
