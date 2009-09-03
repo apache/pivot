@@ -26,15 +26,19 @@ public interface SpinnerListener {
      * Spinner listener adapter.
      */
     public static class Adapter implements SpinnerListener {
+        @Override
         public void spinnerDataChanged(Spinner spinner, List<?> previousSpinnerData) {
         }
 
+        @Override
         public void itemRendererChanged(Spinner spinner, Spinner.ItemRenderer previousItemRenderer) {
         }
 
+        @Override
         public void circularChanged(Spinner spinner) {
         }
 
+        @Override
         public void selectedItemKeyChanged(Spinner spinner, String previousSelectedItemKey) {
         }
     }

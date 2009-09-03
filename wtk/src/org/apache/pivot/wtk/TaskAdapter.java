@@ -34,6 +34,7 @@ public class TaskAdapter<T> implements TaskListener<T> {
             this.task = task;
         }
 
+        @Override
         public void run() {
             taskListener.taskExecuted(task);
         }
@@ -50,6 +51,7 @@ public class TaskAdapter<T> implements TaskListener<T> {
             this.task = task;
         }
 
+        @Override
         public void run() {
             taskListener.executeFailed(task);
         }
@@ -77,10 +79,12 @@ public class TaskAdapter<T> implements TaskListener<T> {
 
     // TaskListener methods
 
+    @Override
     public void taskExecuted(Task<T> task) {
         ApplicationContext.queueCallback(new TaskExecutedCallback(task));
     }
 
+    @Override
     public void executeFailed(Task<T> task) {
         ApplicationContext.queueCallback(new ExecuteFailedCallback(task));
     }

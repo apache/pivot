@@ -27,15 +27,19 @@ public interface TableViewListener {
      * Table view listener adapter.
      */
     public static class Adapter implements TableViewListener {
+        @Override
         public void tableDataChanged(TableView tableView, List<?> previousTableData) {
         }
 
+        @Override
         public void rowEditorChanged(TableView tableView, TableView.RowEditor previousRowEditor) {
         }
 
+        @Override
         public void selectModeChanged(TableView tableView, TableView.SelectMode previousSelectMode) {
         }
 
+        @Override
         public void disabledRowFilterChanged(TableView tableView, Filter<?> previousDisabledRowFilter) {
         }
     }

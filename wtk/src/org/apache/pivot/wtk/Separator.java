@@ -24,6 +24,7 @@ import org.apache.pivot.util.ListenerList;
 public class Separator extends Component {
     private static class SeparatorListenerList extends ListenerList<SeparatorListener>
         implements SeparatorListener {
+        @Override
         public void headingChanged(Separator separator, String previousHeading) {
             for (SeparatorListener listener : this) {
                 listener.headingChanged(separator, previousHeading);

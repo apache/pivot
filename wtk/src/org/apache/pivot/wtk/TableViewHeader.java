@@ -42,6 +42,7 @@ public class TableViewHeader extends Component {
 
     private static class TableViewHeaderListenerList extends ListenerList<TableViewHeaderListener>
         implements TableViewHeaderListener {
+        @Override
         public void tableViewChanged(TableViewHeader tableViewHeader,
             TableView previousTableView) {
             for (TableViewHeaderListener listener : this) {
@@ -49,6 +50,7 @@ public class TableViewHeader extends Component {
             }
         }
 
+        @Override
         public void dataRendererChanged(TableViewHeader tableViewHeader,
             TableViewHeader.DataRenderer previousDataRenderer) {
             for (TableViewHeaderListener listener : this) {
@@ -59,6 +61,7 @@ public class TableViewHeader extends Component {
 
     private static class TableViewHeaderPressListenerList extends ListenerList<TableViewHeaderPressListener>
         implements TableViewHeaderPressListener {
+        @Override
         public void headerPressed(TableViewHeader tableViewHeader, int index) {
             for (TableViewHeaderPressListener listener : this) {
                 listener.headerPressed(tableViewHeader, index);

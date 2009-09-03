@@ -26,6 +26,7 @@ import org.apache.pivot.util.Vote;
 public class Sheet extends Window {
     private static class SheetStateListenerList extends ListenerList<SheetStateListener>
         implements SheetStateListener {
+        @Override
         public Vote previewSheetClose(Sheet sheet, boolean result) {
             Vote vote = Vote.APPROVE;
 
@@ -36,12 +37,14 @@ public class Sheet extends Window {
             return vote;
         }
 
+        @Override
         public void sheetCloseVetoed(Sheet sheet, Vote reason) {
             for (SheetStateListener listener : this) {
                 listener.sheetCloseVetoed(sheet, reason);
             }
         }
 
+        @Override
         public void sheetClosed(Sheet sheet) {
             for (SheetStateListener listener : this) {
                 listener.sheetClosed(sheet);

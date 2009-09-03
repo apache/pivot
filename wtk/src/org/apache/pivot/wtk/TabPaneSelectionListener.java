@@ -26,13 +26,16 @@ public interface TabPaneSelectionListener {
      * Tab pane selection listener adapter.
      */
     public static class Adapter implements TabPaneSelectionListener {
+        @Override
         public Vote previewSelectedIndexChange(TabPane tabPane, int selectedIndex) {
             return Vote.APPROVE;
         }
 
+        @Override
         public void selectedIndexChangeVetoed(TabPane tabPane, Vote reason) {
         }
 
+        @Override
         public void selectedIndexChanged(TabPane tabPane, int previousSelectedIndex) {
         }
     }

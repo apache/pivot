@@ -27,6 +27,7 @@ public class ScriptApplication implements Application {
 
     public static final String SRC_ARGUMENT = "src";
 
+    @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         String src = null;
@@ -48,6 +49,7 @@ public class ScriptApplication implements Application {
         window.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (window != null) {
             window.close();
@@ -56,9 +58,11 @@ public class ScriptApplication implements Application {
         return false;
     }
 
+    @Override
     public void resume() {
     }
 
+    @Override
     public void suspend() {
     }
 

@@ -43,6 +43,7 @@ public class TabPane extends Container {
         private TabSequence() {
         }
 
+        @Override
         public int add(Component tab) {
             int i = getLength();
             insert(tab, i);
@@ -50,6 +51,7 @@ public class TabPane extends Container {
             return i;
         }
 
+        @Override
         public void insert(Component tab, int index) {
             if (tab == null) {
                 throw new IllegalArgumentException("tab is null.");
@@ -70,10 +72,12 @@ public class TabPane extends Container {
             tabPaneListeners.tabInserted(TabPane.this, index);
         }
 
+        @Override
         public Component update(int index, Component tab) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public int remove(Component tab) {
             int index = indexOf(tab);
             if (index != -1) {
@@ -83,6 +87,7 @@ public class TabPane extends Container {
             return index;
         }
 
+        @Override
         public Sequence<Component> remove(int index, int count) {
             // Remove the tabs from the tab list
             Sequence<Component> removed = tabs.remove(index, count);
@@ -112,18 +117,22 @@ public class TabPane extends Container {
             return removed;
         }
 
+        @Override
         public Component get(int index) {
             return tabs.get(index);
         }
 
+        @Override
         public int indexOf(Component tab) {
             return tabs.indexOf(tab);
         }
 
+        @Override
         public int getLength() {
             return tabs.getLength();
         }
 
+        @Override
         public Iterator<Component> iterator() {
             return new ImmutableIterator<Component>(tabs.iterator());
         }
@@ -137,18 +146,21 @@ public class TabPane extends Container {
 
     private static class TabPaneListenerList extends ListenerList<TabPaneListener>
         implements TabPaneListener {
+        @Override
         public void tabInserted(TabPane tabPane, int index) {
             for (TabPaneListener listener : this) {
                 listener.tabInserted(tabPane, index);
             }
         }
 
+        @Override
         public void tabsRemoved(TabPane tabPane, int index, Sequence<Component> tabs) {
             for (TabPaneListener listener : this) {
                 listener.tabsRemoved(tabPane, index, tabs);
             }
         }
 
+        @Override
         public void cornerChanged(TabPane tabPane, Component previousCorner) {
             for (TabPaneListener listener : this) {
                 listener.cornerChanged(tabPane, previousCorner);
@@ -158,6 +170,7 @@ public class TabPane extends Container {
 
     private static class TabPaneSelectionListenerList extends ListenerList<TabPaneSelectionListener>
         implements TabPaneSelectionListener {
+        @Override
         public Vote previewSelectedIndexChange(TabPane tabPane, int selectedIndex) {
             Vote vote = Vote.APPROVE;
 
@@ -168,12 +181,14 @@ public class TabPane extends Container {
             return vote;
         }
 
+        @Override
         public void selectedIndexChangeVetoed(TabPane tabPane, Vote reason) {
             for (TabPaneSelectionListener listener : this) {
                 listener.selectedIndexChangeVetoed(tabPane, reason);
             }
         }
 
+        @Override
         public void selectedIndexChanged(TabPane tabPane, int previousSelectedIndex) {
             for (TabPaneSelectionListener listener : this) {
                 listener.selectedIndexChanged(tabPane, previousSelectedIndex);
@@ -183,18 +198,21 @@ public class TabPane extends Container {
 
     private static class TabPaneAttributeListenerList extends ListenerList<TabPaneAttributeListener>
         implements TabPaneAttributeListener {
+        @Override
         public void labelChanged(TabPane tabPane, Component component, String previousLabel) {
             for (TabPaneAttributeListener listener : this) {
                 listener.labelChanged(tabPane, component, previousLabel);
             }
         }
 
+        @Override
         public void iconChanged(TabPane tabPane, Component component, Image previousIcon) {
             for (TabPaneAttributeListener listener : this) {
                 listener.iconChanged(tabPane, component, previousIcon);
             }
         }
 
+        @Override
         public void closeableChanged(TabPane tabPane, Component component) {
             for (TabPaneAttributeListener listener : this) {
                 listener.closeableChanged(tabPane, component);

@@ -480,6 +480,7 @@ public class TableView extends Component {
             this.sortDirection = sortDirection;
         }
 
+        @Override
         @SuppressWarnings("unchecked")
         public int compare(Object o1, Object o2) {
             Dictionary<String, ?> row1;
@@ -519,6 +520,7 @@ public class TableView extends Component {
      * Default sort handler class. Sorts rows using {@link RowComparator}.
      */
     public static class SortHandler implements TableViewHeaderPressListener {
+        @Override
         @SuppressWarnings("unchecked")
         public void headerPressed(TableViewHeader tableViewHeader, int index) {
             TableView tableView = tableViewHeader.getTableView();
@@ -548,6 +550,7 @@ public class TableView extends Component {
      * Column sequence implementation.
      */
     public final class ColumnSequence implements Sequence<Column> {
+        @Override
         public int add(Column column) {
             int i = getLength();
             insert(column, i);
@@ -555,6 +558,7 @@ public class TableView extends Component {
             return i;
         }
 
+        @Override
         public void insert(Column column, int index) {
             if (column == null) {
                 throw new IllegalArgumentException("column is null.");
@@ -570,10 +574,12 @@ public class TableView extends Component {
             tableViewColumnListeners.columnInserted(TableView.this, index);
         }
 
+        @Override
         public Column update(int index, Column column) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public int remove(Column column) {
             int index = indexOf(column);
             if (index != -1) {
@@ -583,6 +589,7 @@ public class TableView extends Component {
             return index;
         }
 
+        @Override
         public Sequence<Column> remove(int index, int count) {
             Sequence<Column> removed = columns.remove(index, count);
 
@@ -597,14 +604,17 @@ public class TableView extends Component {
             return removed;
         }
 
+        @Override
         public Column get(int index) {
             return columns.get(index);
         }
 
+        @Override
         public int indexOf(Column column) {
             return columns.indexOf(column);
         }
 
+        @Override
         public int getLength() {
             return columns.getLength();
         }
@@ -615,12 +625,14 @@ public class TableView extends Component {
      */
     private static class TableViewListenerList extends ListenerList<TableViewListener>
         implements TableViewListener {
+        @Override
         public void tableDataChanged(TableView tableView, List<?> previousTableData) {
             for (TableViewListener listener : this) {
                 listener.tableDataChanged(tableView, previousTableData);
             }
         }
 
+        @Override
         public void rowEditorChanged(TableView tableView,
             TableView.RowEditor previousRowEditor) {
             for (TableViewListener listener : this) {
@@ -628,12 +640,14 @@ public class TableView extends Component {
             }
         }
 
+        @Override
         public void selectModeChanged(TableView tableView, SelectMode previousSelectMode) {
             for (TableViewListener listener : this) {
                 listener.selectModeChanged(tableView, previousSelectMode);
             }
         }
 
+        @Override
         public void disabledRowFilterChanged(TableView tableView, Filter<?> previousDisabledRowFilter) {
             for (TableViewListener listener : this) {
                 listener.disabledRowFilterChanged(tableView, previousDisabledRowFilter);
@@ -646,48 +660,56 @@ public class TableView extends Component {
      */
     private static class TableViewColumnListenerList extends ListenerList<TableViewColumnListener>
         implements TableViewColumnListener {
+        @Override
         public void columnInserted(TableView tableView, int index) {
             for (TableViewColumnListener listener : this) {
                 listener.columnInserted(tableView, index);
             }
         }
 
+        @Override
         public void columnsRemoved(TableView tableView, int index, Sequence<TableView.Column> columns) {
             for (TableViewColumnListener listener : this) {
                 listener.columnsRemoved(tableView, index, columns);
             }
         }
 
+        @Override
         public void columnNameChanged(Column column, String previousName) {
             for (TableViewColumnListener listener : this) {
                 listener.columnNameChanged(column, previousName);
             }
         }
 
+        @Override
         public void columnHeaderDataChanged(Column column, Object previousHeaderData) {
             for (TableViewColumnListener listener : this) {
                 listener.columnHeaderDataChanged(column, previousHeaderData);
             }
         }
 
+        @Override
         public void columnWidthChanged(Column column, int previousWidth, boolean previousRelative) {
             for (TableViewColumnListener listener : this) {
                 listener.columnWidthChanged(column, previousWidth, previousRelative);
             }
         }
 
+        @Override
         public void columnSortDirectionChanged(Column column, SortDirection previousSortDirection) {
             for (TableViewColumnListener listener : this) {
                 listener.columnSortDirectionChanged(column, previousSortDirection);
             }
         }
 
+        @Override
         public void columnFilterChanged(Column column, Object previousFilter) {
             for (TableViewColumnListener listener : this) {
                 listener.columnFilterChanged(column, previousFilter);
             }
         }
 
+        @Override
         public void columnCellRendererChanged(Column column, TableView.CellRenderer previousCellRenderer) {
             for (TableViewColumnListener listener : this) {
                 listener.columnCellRendererChanged(column, previousCellRenderer);
@@ -700,30 +722,35 @@ public class TableView extends Component {
      */
     private static class TableViewRowListenerList extends ListenerList<TableViewRowListener>
         implements TableViewRowListener {
+        @Override
         public void rowInserted(TableView tableView, int index) {
             for (TableViewRowListener listener : this) {
                 listener.rowInserted(tableView, index);
             }
         }
 
+        @Override
         public void rowsRemoved(TableView tableView, int index, int count) {
             for (TableViewRowListener listener : this) {
                 listener.rowsRemoved(tableView, index, count);
             }
         }
 
+        @Override
         public void rowUpdated(TableView tableView, int index) {
             for (TableViewRowListener listener : this) {
                 listener.rowUpdated(tableView, index);
             }
         }
 
+        @Override
         public void rowsCleared(TableView tableView) {
             for (TableViewRowListener listener : this) {
                 listener.rowsCleared(tableView);
             }
         }
 
+        @Override
         public void rowsSorted(TableView tableView) {
             for (TableViewRowListener listener : this) {
                 listener.rowsSorted(tableView);
@@ -736,18 +763,21 @@ public class TableView extends Component {
      */
     private static class TableViewSelectionListenerList extends ListenerList<TableViewSelectionListener>
         implements TableViewSelectionListener {
+        @Override
         public void selectedRangeAdded(TableView tableView, int rangeStart, int rangeEnd) {
             for (TableViewSelectionListener listener : this) {
                 listener.selectedRangeAdded(tableView, rangeStart, rangeEnd);
             }
         }
 
+        @Override
         public void selectedRangeRemoved(TableView tableView, int rangeStart, int rangeEnd) {
             for (TableViewSelectionListener listener : this) {
                 listener.selectedRangeRemoved(tableView, rangeStart, rangeEnd);
             }
         }
 
+        @Override
         public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelection) {
             for (TableViewSelectionListener listener : this) {
                 listener.selectedRangesChanged(tableView, previousSelection);
@@ -760,6 +790,7 @@ public class TableView extends Component {
 
     private List<?> tableData = null;
     private ListListener<Object> tableDataListener = new ListListener<Object>() {
+        @Override
         public void itemInserted(List<Object> list, int index) {
             // Increment selected ranges
             selectedRanges.insertIndex(index);
@@ -768,6 +799,7 @@ public class TableView extends Component {
             tableViewRowListeners.rowInserted(TableView.this, index);
         }
 
+        @Override
         public void itemsRemoved(List<Object> list, int index, Sequence<Object> items) {
             int count = items.getLength();
 
@@ -778,10 +810,12 @@ public class TableView extends Component {
             tableViewRowListeners.rowsRemoved(TableView.this, index, count);
         }
 
+        @Override
         public void itemUpdated(List<Object> list, int index, Object previousItem) {
             tableViewRowListeners.rowUpdated(TableView.this, index);
         }
 
+        @Override
         public void listCleared(List<Object> list) {
             // All items were removed; clear the selection and notify
             // listeners
@@ -790,6 +824,7 @@ public class TableView extends Component {
             tableViewRowListeners.rowsCleared(TableView.this);
         }
 
+        @Override
         public void comparatorChanged(List<Object> list,
             Comparator<Object> previousComparator) {
             if (list.getComparator() != null) {

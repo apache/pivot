@@ -39,6 +39,7 @@ public class ScrollPane extends Viewport {
     private static class ScrollPaneListenerList extends ListenerList<ScrollPaneListener>
         implements ScrollPaneListener {
 
+        @Override
         public void horizontalScrollBarPolicyChanged(ScrollPane scrollPane,
             ScrollBarPolicy previousHorizontalScrollBarPolicy) {
             for (ScrollPaneListener listener : this) {
@@ -47,6 +48,7 @@ public class ScrollPane extends Viewport {
             }
         }
 
+        @Override
         public void verticalScrollBarPolicyChanged(ScrollPane scrollPane,
             ScrollBarPolicy previousVerticalScrollBarPolicy) {
             for (ScrollPaneListener listener : this) {
@@ -55,12 +57,14 @@ public class ScrollPane extends Viewport {
             }
         }
 
+        @Override
         public void rowHeaderChanged(ScrollPane scrollPane, Component previousRowHeader) {
             for (ScrollPaneListener listener : this) {
                 listener.rowHeaderChanged(scrollPane, previousRowHeader);
             }
         }
 
+        @Override
         public void columnHeaderChanged(ScrollPane scrollPane,
             Component previousColumnHeader) {
             for (ScrollPaneListener listener : this) {
@@ -68,6 +72,7 @@ public class ScrollPane extends Viewport {
             }
         }
 
+        @Override
         public void cornerChanged(ScrollPane scrollPane, Component previousCorner) {
             for (ScrollPaneListener listener : this) {
                 listener.cornerChanged(scrollPane, previousCorner);

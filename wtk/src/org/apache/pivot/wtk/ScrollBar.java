@@ -26,6 +26,7 @@ import org.apache.pivot.util.ListenerList;
 public class ScrollBar extends Container {
     private static class ScrollBarListenerList extends ListenerList<ScrollBarListener>
         implements ScrollBarListener {
+        @Override
         public void orientationChanged(ScrollBar scrollBar,
             Orientation previousOrientation) {
             for (ScrollBarListener listener : this) {
@@ -33,6 +34,7 @@ public class ScrollBar extends Container {
             }
         }
 
+        @Override
         public void scopeChanged(ScrollBar scrollBar, int previousStart, int previousEnd,
             int previousExtent) {
             for (ScrollBarListener listener : this) {
@@ -41,12 +43,14 @@ public class ScrollBar extends Container {
             }
         }
 
+        @Override
         public void unitIncrementChanged(ScrollBar scrollBar, int previousUnitIncrement) {
             for (ScrollBarListener listener : this) {
                 listener.unitIncrementChanged(scrollBar, previousUnitIncrement);
             }
         }
 
+        @Override
         public void blockIncrementChanged(ScrollBar scrollBar,
             int previousBlockIncrement) {
             for (ScrollBarListener listener : this) {
@@ -57,6 +61,7 @@ public class ScrollBar extends Container {
 
     private static class ScrollBarValueListenerList extends ListenerList<ScrollBarValueListener>
         implements ScrollBarValueListener {
+        @Override
         public void valueChanged(ScrollBar scrollBar, int previousValue) {
             for (ScrollBarValueListener listener : this) {
                 listener.valueChanged(scrollBar, previousValue);

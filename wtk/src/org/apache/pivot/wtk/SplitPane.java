@@ -44,36 +44,42 @@ public class SplitPane extends Container {
 
     private static class SplitPaneListenerList extends ListenerList<SplitPaneListener>
         implements SplitPaneListener {
+        @Override
         public void topLeftChanged(SplitPane splitPane, Component previousTopLeft) {
             for (SplitPaneListener listener : this) {
                 listener.topLeftChanged(splitPane, previousTopLeft);
             }
         }
 
+        @Override
         public void bottomRightChanged(SplitPane splitPane, Component previousBottomRight) {
             for (SplitPaneListener listener : this) {
                 listener.bottomRightChanged(splitPane, previousBottomRight);
             }
         }
 
+        @Override
         public void orientationChanged(SplitPane splitPane) {
             for (SplitPaneListener listener : this) {
                 listener.orientationChanged(splitPane);
             }
         }
 
+        @Override
         public void primaryRegionChanged(SplitPane splitPane) {
             for (SplitPaneListener listener : this) {
                 listener.primaryRegionChanged(splitPane);
             }
         }
 
+        @Override
         public void splitRatioChanged(SplitPane splitPane, float previousSplitRatio) {
             for (SplitPaneListener listener : this) {
                 listener.splitRatioChanged(splitPane, previousSplitRatio);
             }
         }
 
+        @Override
         public void lockedChanged(SplitPane splitPane) {
             for (SplitPaneListener listener : this) {
                 listener.lockedChanged(splitPane);

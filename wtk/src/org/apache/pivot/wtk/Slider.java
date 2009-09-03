@@ -25,6 +25,7 @@ import org.apache.pivot.util.ListenerList;
 public class Slider extends Container {
     private static class SliderListenerList extends ListenerList<SliderListener>
         implements SliderListener {
+        @Override
         public void rangeChanged(Slider slider, int previousStart, int previousEnd) {
             for (SliderListener listener : this) {
                 listener.rangeChanged(slider, previousStart, previousEnd);
@@ -34,6 +35,7 @@ public class Slider extends Container {
 
     private static class SliderValueListenerList extends ListenerList<SliderValueListener>
         implements SliderValueListener {
+        @Override
         public void valueChanged(Slider slider, int previousValue) {
             for (SliderValueListener listener : this) {
                 listener.valueChanged(slider, previousValue);

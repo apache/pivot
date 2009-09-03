@@ -61,6 +61,7 @@ public class Spinner extends Container {
      * List event handler.
      */
     private class ListHandler implements ListListener<Object> {
+        @Override
         public void itemInserted(List<Object> list, int index) {
             if (index <= selectedIndex) {
                 selectedIndex++;
@@ -70,6 +71,7 @@ public class Spinner extends Container {
             spinnerItemListeners.itemInserted(Spinner.this, index);
         }
 
+        @Override
         public void itemsRemoved(List<Object> list, int index, Sequence<Object> items) {
             int count = items.getLength();
 
@@ -83,10 +85,12 @@ public class Spinner extends Container {
             spinnerItemListeners.itemsRemoved(Spinner.this, index, count);
         }
 
+        @Override
         public void itemUpdated(List<Object> list, int index, Object previousItem) {
             spinnerItemListeners.itemUpdated(Spinner.this, index);
         }
 
+        @Override
         public void listCleared(List<Object> list) {
             // All items were removed; clear the selection and notify
             // listeners
@@ -94,6 +98,7 @@ public class Spinner extends Container {
             spinnerItemListeners.itemsCleared(Spinner.this);
         }
 
+        @Override
         public void comparatorChanged(List<Object> list,
             Comparator<Object> previousComparator) {
             if (list.getComparator() != null) {
@@ -108,12 +113,14 @@ public class Spinner extends Container {
      */
     private static class SpinnerListenerList extends ListenerList<SpinnerListener>
         implements SpinnerListener {
+        @Override
         public void spinnerDataChanged(Spinner spinner, List<?> previousSpinnerData) {
             for (SpinnerListener listener : this) {
                 listener.spinnerDataChanged(spinner, previousSpinnerData);
             }
         }
 
+        @Override
         public void itemRendererChanged(Spinner spinner,
             Spinner.ItemRenderer previousItemRenderer) {
             for (SpinnerListener listener : this) {
@@ -121,12 +128,14 @@ public class Spinner extends Container {
             }
         }
 
+        @Override
         public void circularChanged(Spinner spinner) {
             for (SpinnerListener listener : this) {
                 listener.circularChanged(spinner);
             }
         }
 
+        @Override
         public void selectedItemKeyChanged(Spinner spinner, String previousSelectedItemKey) {
             for (SpinnerListener listener : this) {
                 listener.selectedItemKeyChanged(spinner, previousSelectedItemKey);
@@ -139,30 +148,35 @@ public class Spinner extends Container {
      */
     private static class SpinnerItemListenerList extends ListenerList<SpinnerItemListener>
         implements SpinnerItemListener {
+        @Override
         public void itemInserted(Spinner spinner, int index) {
             for (SpinnerItemListener listener : this) {
                 listener.itemInserted(spinner, index);
             }
         }
 
+        @Override
         public void itemsRemoved(Spinner spinner, int index, int count) {
             for (SpinnerItemListener listener : this) {
                 listener.itemsRemoved(spinner, index, count);
             }
         }
 
+        @Override
         public void itemUpdated(Spinner spinner, int index) {
             for (SpinnerItemListener listener : this) {
                 listener.itemUpdated(spinner, index);
             }
         }
 
+        @Override
         public void itemsCleared(Spinner spinner) {
             for (SpinnerItemListener listener : this) {
                 listener.itemsCleared(spinner);
             }
         }
 
+        @Override
         public void itemsSorted(Spinner spinner) {
             for (SpinnerItemListener listener : this) {
                 listener.itemsSorted(spinner);
@@ -176,6 +190,7 @@ public class Spinner extends Container {
     private static class SpinnerSelectionListenerList
         extends ListenerList<SpinnerSelectionListener>
         implements SpinnerSelectionListener {
+        @Override
         public void selectedIndexChanged(Spinner spinner, int previousSelectedIndex) {
             for (SpinnerSelectionListener listener : this) {
                 listener.selectedIndexChanged(spinner, previousSelectedIndex);

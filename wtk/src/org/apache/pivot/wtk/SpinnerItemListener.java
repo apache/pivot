@@ -24,18 +24,23 @@ public interface SpinnerItemListener {
      * Spinner item listener adapter.
      */
     public static class Adapter implements SpinnerItemListener {
+        @Override
         public void itemInserted(Spinner spinner, int index) {
         }
 
+        @Override
         public void itemsRemoved(Spinner spinner, int index, int count) {
         }
 
+        @Override
         public void itemUpdated(Spinner spinner, int index) {
         }
 
+        @Override
         public void itemsCleared(Spinner spinner) {
         }
 
+        @Override
         public void itemsSorted(Spinner spinner) {
         }
     }

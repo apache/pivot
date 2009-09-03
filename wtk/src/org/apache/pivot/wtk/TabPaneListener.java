@@ -26,12 +26,15 @@ public interface TabPaneListener {
      * Tab pane listener adapter.
      */
     public static class Adapter implements TabPaneListener {
+        @Override
         public void tabInserted(TabPane tabPane, int index) {
         }
 
+        @Override
         public void tabsRemoved(TabPane tabPane, int index, Sequence<Component> tabs) {
         }
 
+        @Override
         public void cornerChanged(TabPane tabPane, Component previousCorner) {
         }
     }
