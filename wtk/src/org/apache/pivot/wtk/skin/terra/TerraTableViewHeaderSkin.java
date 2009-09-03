@@ -55,14 +55,17 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
             this.sortDirection = sortDirection;
         }
 
+        @Override
         public int getWidth() {
             return 7;
         }
 
+        @Override
         public int getHeight() {
             return 4;
         }
 
+        @Override
         public void paint(Graphics2D graphics) {
             GeneralPath shape = new GeneralPath();
 
@@ -142,6 +145,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         disabledBevelColor = disabledBackgroundColor;
     }
 
+    @Override
     public void install(Component component) {
         super.install(component);
 
@@ -154,6 +158,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         }
     }
 
+    @Override
     public void uninstall() {
         TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
         tableViewHeader.getTableViewHeaderListeners().remove(this);
@@ -166,6 +171,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         super.uninstall();
     }
 
+    @Override
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 
@@ -195,6 +201,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         return preferredWidth;
     }
 
+    @Override
     public int getPreferredHeight(int width) {
         int preferredHeight = 0;
 
@@ -218,10 +225,12 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         return preferredHeight;
     }
 
+    @Override
     public Dimensions getPreferredSize() {
         return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
     }
 
+    @Override
     public void layout() {
         TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
         TableView tableView = tableViewHeader.getTableView();
@@ -237,6 +246,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         }
     }
 
+    @Override
     public void paint(Graphics2D graphics) {
         int width = getWidth();
         int height = getHeight();
@@ -337,6 +347,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         }
     }
 
+    @Override
     public int getHeaderAt(int x) {
         if (x < 0) {
             throw new IllegalArgumentException("x is negative");
@@ -365,6 +376,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         return index;
     }
 
+    @Override
     public Bounds getHeaderBounds(int index) {
         Bounds headerBounds = null;
 
@@ -744,6 +756,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
     }
 
     // Table view header events
+    @Override
     public void tableViewChanged(TableViewHeader tableViewHeader,
         TableView previousTableView) {
         if (previousTableView != null) {
@@ -758,40 +771,49 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         invalidateComponent();
     }
 
+    @Override
     public void dataRendererChanged(TableViewHeader tableViewHeader,
         TableViewHeader.DataRenderer previousDataRenderer) {
         invalidateComponent();
     }
 
     // Table view column events
+    @Override
     public void columnInserted(TableView tableView, int index) {
         invalidateComponent();
     }
 
+    @Override
     public void columnsRemoved(TableView tableView, int index, Sequence<TableView.Column> columns) {
         invalidateComponent();
     }
 
+    @Override
     public void columnNameChanged(TableView.Column column, String previousName) {
         // No-op
     }
 
+    @Override
     public void columnHeaderDataChanged(TableView.Column column, Object previousHeaderData) {
         invalidateComponent();
     }
 
+    @Override
     public void columnWidthChanged(TableView.Column column, int previousWidth, boolean previousRelative) {
         invalidateComponent();
     }
 
+    @Override
     public void columnSortDirectionChanged(TableView.Column column, SortDirection previousSortDirection) {
         repaintComponent();
     }
 
+    @Override
     public void columnFilterChanged(TableView.Column column, Object previousFilter) {
         // No-op
     }
 
+    @Override
     public void columnCellRendererChanged(TableView.Column column, TableView.CellRenderer previousCellRenderer) {
         // No-op
     }

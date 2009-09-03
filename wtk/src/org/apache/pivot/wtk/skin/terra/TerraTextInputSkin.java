@@ -169,6 +169,7 @@ public class TerraTextInputSkin extends ComponentSkin
     */
 
     private class BlinkCursorCallback implements Runnable {
+        @Override
         public void run() {
             caretOn = !caretOn;
 
@@ -192,6 +193,7 @@ public class TerraTextInputSkin extends ComponentSkin
     private class ScrollSelectionCallback implements Runnable {
         private int x = 0;
 
+        @Override
         public void run() {
             TextInput textInput = (TextInput)getComponent();
             TextNode textNode = textInput.getTextNode();
@@ -308,6 +310,7 @@ public class TerraTextInputSkin extends ComponentSkin
         super.uninstall();
     }
 
+    @Override
     public int getPreferredWidth(int height) {
         TextInput textInput = (TextInput)getComponent();
         int textSize = textInput.getTextSize();
@@ -322,6 +325,7 @@ public class TerraTextInputSkin extends ComponentSkin
         return textSize * averageCharWidth + (padding.left + padding.right) + 2;
     }
 
+    @Override
     public int getPreferredHeight(int width) {
         // TODO Recalculate only when font changes
         Rectangle2D maxCharBounds = font.getMaxCharBounds(fontRenderContext);
@@ -330,14 +334,17 @@ public class TerraTextInputSkin extends ComponentSkin
         return maxCharHeight + (padding.top + padding.bottom) + 2;
     }
 
+    @Override
     public Dimensions getPreferredSize() {
         return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
     }
 
+    @Override
     public void layout() {
         // No-op
     }
 
+    @Override
     public void paint(Graphics2D graphics) {
         TextInput textInput = (TextInput)getComponent();
 
@@ -1264,43 +1271,53 @@ public class TerraTextInputSkin extends ComponentSkin
     }
 
     // Text input events
+    @Override
     public void textNodeChanged(TextInput textInput, TextNode previousTextNode) {
         updateSelection(0);
     }
 
+    @Override
     public void textSizeChanged(TextInput textInput, int previousTextSize) {
         invalidateComponent();
     }
 
+    @Override
     public void maximumLengthChanged(TextInput textInput, int previousMaximumLength) {
         // No-op
     }
 
+    @Override
     public void passwordChanged(TextInput textInput) {
         repaintComponent();
     }
 
+    @Override
     public void promptChanged(TextInput textInput, String previousPrompt) {
       repaintComponent();
     }
 
+    @Override
     public void textKeyChanged(TextInput textInput, String previousTextKey) {
         // No-op
     }
 
+    @Override
     public void textValidChanged(TextInput textInput) {
         repaintComponent();
     }
 
+    @Override
     public void textValidatorChanged(TextInput textInput, Validator previousValidator) {
         // No-op
     }
 
     // Text input character events
+    @Override
     public void charactersInserted(TextInput textInput, int index, int count) {
         updateSelection(0);
     }
 
+    @Override
     public void charactersRemoved(TextInput textInput, int index, int count) {
         String text = getText();
         Rectangle2D textBounds = font.getStringBounds(text, fontRenderContext);
@@ -1318,6 +1335,7 @@ public class TerraTextInputSkin extends ComponentSkin
     }
 
     // Text input selection events
+    @Override
     public void selectionChanged(TextInput textInput, int previousSelectionStart,
         int previousSelectionLength) {
         int selectionStart = textInput.getSelectionStart();

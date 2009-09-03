@@ -87,6 +87,7 @@ public class TerraScrollBarSkin extends ContainerSkin
 
             // Wait a timeout period, then begin rapidly scrolling
             scheduledScrollCallback = ApplicationContext.scheduleRecurringCallback(new Runnable() {
+                @Override
                 public void run() {
                     scroll();
                 }
@@ -188,18 +189,22 @@ public class TerraScrollBarSkin extends ContainerSkin
             return false;
         }
 
+        @Override
         public int getPreferredWidth(int height) {
             return 15;
         }
 
+        @Override
         public int getPreferredHeight(int width) {
             return 15;
         }
 
+        @Override
         public void layout() {
             // No-op
         }
 
+        @Override
         public void paint(Graphics2D graphics) {
             // Apply scroll bar styles to the button
             ScrollButton scrollButton = (ScrollButton)getComponent();
@@ -323,12 +328,14 @@ public class TerraScrollBarSkin extends ContainerSkin
     }
 
     protected abstract class ScrollButtonImage extends Image {
+        @Override
         public int getWidth() {
             ScrollBar scrollBar = (ScrollBar)getComponent();
             Orientation orientation = scrollBar.getOrientation();
             return (orientation == Orientation.HORIZONTAL ? 5 : 7);
         }
 
+        @Override
         public int getHeight() {
             ScrollBar scrollBar = (ScrollBar)getComponent();
             Orientation orientation = scrollBar.getOrientation();
@@ -337,6 +344,7 @@ public class TerraScrollBarSkin extends ContainerSkin
     }
 
     protected class ScrollUpImage extends ScrollButtonImage {
+        @Override
         public void paint(Graphics2D graphics) {
             ScrollBar scrollBar = (ScrollBar)getComponent();
 
@@ -366,6 +374,7 @@ public class TerraScrollBarSkin extends ContainerSkin
     }
 
     protected class ScrollDownImage extends ScrollButtonImage {
+        @Override
         public void paint(Graphics2D graphics) {
             ScrollBar scrollBar = (ScrollBar)getComponent();
 
@@ -415,10 +424,12 @@ public class TerraScrollBarSkin extends ContainerSkin
             return false;
         }
 
+        @Override
         public int getPreferredWidth(int height) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public int getPreferredHeight(int width) {
             throw new UnsupportedOperationException();
         }
@@ -428,10 +439,12 @@ public class TerraScrollBarSkin extends ContainerSkin
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public void layout() {
             // No-op
         }
 
+        @Override
         public void paint(Graphics2D graphics) {
             ScrollBar scrollBar = (ScrollBar)TerraScrollBarSkin.this.getComponent();
             Orientation orientation = scrollBar.getOrientation();
@@ -619,6 +632,7 @@ public class TerraScrollBarSkin extends ContainerSkin
         super.uninstall();
     }
 
+    @Override
     public int getPreferredWidth(int height) {
         ScrollBar scrollBar = (ScrollBar)getComponent();
 
@@ -633,6 +647,7 @@ public class TerraScrollBarSkin extends ContainerSkin
         return preferredWidth;
     }
 
+    @Override
     public int getPreferredHeight(int width) {
         ScrollBar scrollBar = (ScrollBar)getComponent();
 
@@ -665,6 +680,7 @@ public class TerraScrollBarSkin extends ContainerSkin
         return new Dimensions(preferredWidth, preferredHeight);
     }
 
+    @Override
     public void layout() {
         ScrollBar scrollBar = (ScrollBar)getComponent();
 
@@ -1189,25 +1205,30 @@ public class TerraScrollBarSkin extends ContainerSkin
 
     // ScrollBarListener methods
 
+    @Override
     public void orientationChanged(ScrollBar scrollBar, Orientation previousOrientation) {
         invalidateComponent();
     }
 
+    @Override
     public void scopeChanged(ScrollBar scrollBar, int previousStart, int previousEnd,
         int previousExtent) {
         invalidateComponent();
     }
 
+    @Override
     public void unitIncrementChanged(ScrollBar scrollBar, int previousUnitIncrement) {
         // No-op
     }
 
+    @Override
     public void blockIncrementChanged(ScrollBar scrollBar, int previousBlockIncrement) {
         // No-op
     }
 
     // ScrollBarValueListener methods
 
+    @Override
     public void valueChanged(ScrollBar scrollBar, int previousValue) {
         // Invalidating the component would yield the correct behavior but
         // would be overkill. If all that has changed is the value, we can just

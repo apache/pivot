@@ -60,18 +60,22 @@ public class TerraSliderSkin extends SliderSkin {
             return true;
         }
 
+        @Override
         public int getPreferredWidth(int height) {
             return 0;
         }
 
+        @Override
         public int getPreferredHeight(int width) {
             return 0;
         }
 
+        @Override
         public void layout() {
             // No-op
         }
 
+        @Override
         public void paint(Graphics2D graphics) {
             int width = getWidth();
             int height = getHeight();
@@ -251,6 +255,7 @@ public class TerraSliderSkin extends SliderSkin {
         slider.add(thumb);
     }
 
+    @Override
     public void uninstall() {
         Slider slider = (Slider)getComponent();
         slider.remove(thumb);
@@ -258,18 +263,22 @@ public class TerraSliderSkin extends SliderSkin {
         super.uninstall();
     }
 
+    @Override
     public int getPreferredWidth(int height) {
         return DEFAULT_WIDTH;
     }
 
+    @Override
     public int getPreferredHeight(int width) {
         return thumbHeight;
     }
 
+    @Override
     public Dimensions getPreferredSize() {
         return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
     }
 
+    @Override
     public void layout() {
         Slider slider = (Slider)getComponent();
 
@@ -287,6 +296,7 @@ public class TerraSliderSkin extends SliderSkin {
             (height - thumbHeight) / 2);
     }
 
+    @Override
     public void paint(Graphics2D graphics) {
         super.paint(graphics);
 
@@ -444,6 +454,7 @@ public class TerraSliderSkin extends SliderSkin {
         return super.mouseClick(component, button, x, y, count);
     }
 
+    @Override
     public void rangeChanged(Slider slider, int previousStart, int previousEnd) {
         invalidateComponent();
     }

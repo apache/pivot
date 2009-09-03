@@ -48,24 +48,28 @@ public class TerraTooltipSkin extends WindowSkin implements TooltipListener {
     private boolean fade = true;
 
     private ContainerMouseListener displayMouseListener = new ContainerMouseListener() {
+        @Override
         public boolean mouseMove(Container container, int x, int y) {
             Tooltip tooltip = (Tooltip)getComponent();
             tooltip.close();
             return false;
         }
 
+        @Override
         public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
             Tooltip tooltip = (Tooltip)getComponent();
             tooltip.close();
             return false;
         }
 
+        @Override
         public boolean mouseUp(Container container, Mouse.Button button, int x, int y) {
             Tooltip tooltip = (Tooltip)getComponent();
             tooltip.close();
             return false;
         }
 
+        @Override
         public boolean mouseWheel(Container container, Mouse.ScrollType scrollType,
             int scrollAmount, int wheelRotation, int x, int y) {
             fade = false;
@@ -157,6 +161,7 @@ public class TerraTooltipSkin extends WindowSkin implements TooltipListener {
                     dropShadowDecorator);
 
                 closeTransition.start(new TransitionListener() {
+                    @Override
                     public void transitionCompleted(Transition transition) {
                         window.close();
                     }
@@ -192,6 +197,7 @@ public class TerraTooltipSkin extends WindowSkin implements TooltipListener {
         closeTransition = null;
     }
 
+    @Override
     public void textChanged(Tooltip tooltip, String previousText) {
         label.setText(tooltip.getText());
     }

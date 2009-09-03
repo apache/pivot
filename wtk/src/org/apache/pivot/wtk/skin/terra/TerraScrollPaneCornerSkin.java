@@ -37,25 +37,30 @@ public class TerraScrollPaneCornerSkin extends ComponentSkin {
         return false;
     }
 
+    @Override
     public int getPreferredWidth(int height) {
         // ScrollPane corners have no implicit preferred size.
         return 0;
     }
 
+    @Override
     public int getPreferredHeight(int width) {
         // ScrollPane corners have no implicit preferred size.
         return 0;
     }
 
+    @Override
     public Dimensions getPreferredSize() {
         // ScrollPane corners have no implicit preferred size.
         return new Dimensions(0, 0);
     }
 
+    @Override
     public void layout() {
         // No-op
     }
 
+    @Override
     public void paint(Graphics2D graphics) {
         int width = getWidth();
         int height = getHeight();

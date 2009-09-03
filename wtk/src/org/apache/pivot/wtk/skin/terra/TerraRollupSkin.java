@@ -102,22 +102,27 @@ public class TerraRollupSkin extends RollupSkin {
             return false;
         }
 
+        @Override
         public int getPreferredWidth(int height) {
             return 7;
         }
 
+        @Override
         public int getPreferredHeight(int width) {
             return 7;
         }
 
+        @Override
         public Dimensions getPreferredSize() {
             return new Dimensions(7, 7);
         }
 
+        @Override
         public void layout() {
             // No-op
         }
 
+        @Override
         public void paint(Graphics2D graphics) {
             Rollup rollup = (Rollup)TerraRollupSkin.this.getComponent();
 
@@ -168,6 +173,7 @@ public class TerraRollupSkin extends RollupSkin {
     private ExpandTransition expandTransition = null;
 
     private ComponentMouseButtonListener headingMouseButtonListener = new ComponentMouseButtonListener.Adapter() {
+        @Override
         public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
             boolean consumed = false;
 
@@ -289,6 +295,7 @@ public class TerraRollupSkin extends RollupSkin {
         return preferredHeight;
     }
 
+    @Override
     public void layout() {
         Rollup rollup = (Rollup)getComponent();
 
@@ -440,6 +447,7 @@ public class TerraRollupSkin extends RollupSkin {
             expandTransition = new ExpandTransition(expanded);
 
             expandTransition.start(new TransitionListener() {
+                @Override
                 public void transitionCompleted(Transition transition) {
                     rollup.setExpanded(!expanded);
                     expandTransition = null;
@@ -471,10 +479,12 @@ public class TerraRollupSkin extends RollupSkin {
         }
     }
 
+    @Override
     public void expandedChanged(final Rollup rollup) {
         invalidateComponent();
     }
 
+    @Override
     public void collapsibleChanged(Rollup rollup) {
         if (rollup.isCollapsible()) {
             rollupButton.setCursor(Cursor.HAND);

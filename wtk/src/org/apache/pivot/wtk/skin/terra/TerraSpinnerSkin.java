@@ -82,6 +82,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
 
             // Wait a timeout period, then begin rapidly spinning
             scheduledSpinnerCallback = ApplicationContext.scheduleRecurringCallback(new Runnable() {
+                @Override
                 public void run() {
                     spin();
                 }
@@ -140,6 +141,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
      * SpinnerContent skin.
      */
     protected class SpinnerContentSkin extends ComponentSkin {
+        @Override
         public int getPreferredWidth(int height) {
             int preferredWidth = 0;
 
@@ -160,6 +162,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
             return preferredWidth;
         }
 
+        @Override
         public int getPreferredHeight(int width) {
             int preferredHeight = 0;
 
@@ -172,6 +175,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
             return preferredHeight;
         }
 
+        @Override
         public Dimensions getPreferredSize() {
             Dimensions preferredSize;
 
@@ -188,10 +192,12 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
             return preferredSize;
         }
 
+        @Override
         public void layout() {
             // No-op
         }
 
+        @Override
         public void paint(Graphics2D graphics) {
             SpinnerContent spinnerContent = (SpinnerContent)getComponent();
             Spinner spinner = (Spinner)TerraSpinnerSkin.this.getComponent();
@@ -310,18 +316,22 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         private boolean highlighted = false;
         private boolean pressed = false;
 
+        @Override
         public int getPreferredWidth(int height) {
             return BUTTON_IMAGE_SIZE + 6;
         }
 
+        @Override
         public int getPreferredHeight(int width) {
             return BUTTON_IMAGE_SIZE + 2;
         }
 
+        @Override
         public void layout() {
             // No-op
         }
 
+        @Override
         public void paint(Graphics2D graphics) {
             // Apply spinner styles to the button
             SpinButton spinButton = (SpinButton)getComponent();
@@ -419,14 +429,17 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
      * Abstract base class for button images.
      */
     protected abstract class SpinButtonImage extends Image {
+        @Override
         public int getWidth() {
             return BUTTON_IMAGE_SIZE;
         }
 
+        @Override
         public int getHeight() {
             return BUTTON_IMAGE_SIZE;
         }
 
+        @Override
         public void paint(Graphics2D graphics) {
             graphics.setStroke(new BasicStroke(0));
             graphics.setPaint(buttonColor);
@@ -434,6 +447,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
     }
 
     protected class SpinUpImage extends SpinButtonImage {
+        @Override
         public void paint(Graphics2D graphics) {
             super.paint(graphics);
 
@@ -445,6 +459,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
     }
 
     protected class SpinDownImage extends SpinButtonImage {
+        @Override
         public void paint(Graphics2D graphics) {
             super.paint(graphics);
 
@@ -576,6 +591,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         return preferredHeight;
     }
 
+    @Override
     public void layout() {
         int width = getWidth();
         int height = getHeight();
@@ -761,31 +777,37 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
 
     // Spinner.Skin methods
 
+    @Override
     public Bounds getContentBounds() {
         return spinnerContent.getBounds();
     }
 
     // SpinnerListener methods
 
+    @Override
     public void spinnerDataChanged(Spinner spinner, List<?> previousSpinnerData) {
         invalidateContent();
     }
 
+    @Override
     public void itemRendererChanged(Spinner spinner,
         Spinner.ItemRenderer previousItemRenderer) {
         invalidateContent();
     }
 
+    @Override
     public void circularChanged(Spinner spinner) {
         // No-op
     }
 
+    @Override
     public void selectedItemKeyChanged(Spinner spinner, String previousSelectedItemKey) {
         // No-op
     }
 
     // SpinnerSelectionListener methods
 
+    @Override
     public void selectedIndexChanged(Spinner spinner, int previousSelectedIndex) {
         invalidateContent();
     }

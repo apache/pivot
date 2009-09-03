@@ -69,6 +69,7 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
         disabledButtonSelectionColor = theme.getColor(7);
     }
 
+    @Override
     public int getPreferredWidth(int height) {
         RadioButton radioButton = (RadioButton)getComponent();
         Button.DataRenderer dataRenderer = radioButton.getDataRenderer();
@@ -82,6 +83,7 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
         return preferredWidth;
     }
 
+    @Override
     public int getPreferredHeight(int width) {
         RadioButton radioButton = (RadioButton)getComponent();
         Button.DataRenderer dataRenderer = radioButton.getDataRenderer();
@@ -98,6 +100,7 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
         return preferredHeight;
     }
 
+    @Override
     public Dimensions getPreferredSize() {
         RadioButton radioButton = (RadioButton)getComponent();
         Button.DataRenderer dataRenderer = radioButton.getDataRenderer();
@@ -114,6 +117,7 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
         return new Dimensions(preferredWidth, preferredHeight);
     }
 
+    @Override
     public void paint(Graphics2D graphics) {
         RadioButton radioButton = (RadioButton)getComponent();
         int width = getWidth();
