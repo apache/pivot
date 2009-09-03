@@ -64,6 +64,8 @@ public class MenuPopup extends Window {
     private Menu menu;
     private boolean autoClose = false;
 
+    private boolean closing = false;
+
     private MenuPopupListenerList menuPopupListeners = new MenuPopupListenerList();
     private MenuPopupStateListenerList menuPopupStateListeners = new MenuPopupStateListenerList();
 
@@ -130,21 +132,30 @@ public class MenuPopup extends Window {
     }
 
     @Override
+    public boolean isClosing() {
+        return closing;
+    }
+
+    @Override
     public final void close() {
         close(false);
     }
 
     public void close(boolean immediate) {
         if (!isClosed()) {
+            closing = true;
+
             Vote vote = menuPopupStateListeners.previewMenuPopupClose(this, immediate);
 
             if (vote == Vote.APPROVE) {
                 super.close();
 
                 if (isClosed()) {
+                    closing = false;
                     menuPopupStateListeners.menuPopupClosed(this);
                 }
-            } else {
+            } else if (vote == Vote.DENY){
+                closing = false;
                 menuPopupStateListeners.menuPopupCloseVetoed(this, vote);
             }
         }

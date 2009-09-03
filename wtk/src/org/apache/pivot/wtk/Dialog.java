@@ -56,6 +56,8 @@ public class Dialog extends Frame {
     private DialogCloseListener dialogCloseListener = null;
     private boolean result = false;
 
+    private boolean closing = false;
+
     private DialogStateListenerList dialogStateListeners = new DialogStateListenerList();
 
     public Dialog() {
@@ -156,12 +158,19 @@ public class Dialog extends Frame {
     }
 
     @Override
+    public boolean isClosing() {
+        return closing;
+    }
+
+    @Override
     public final void close() {
         close(false);
     }
 
     public void close(boolean result) {
         if (!isClosed()) {
+            closing = true;
+
             Vote vote = dialogStateListeners.previewDialogClose(this, result);
 
             if (vote == Vote.APPROVE) {
@@ -170,12 +179,14 @@ public class Dialog extends Frame {
                 if (isClosed()) {
                     this.result = result;
 
+                    modal = false;
+                    closing = false;
+
+                    // Move the owner to the front
                     Window owner = getOwner();
                     if (owner.isOpen()) {
                         owner.moveToFront();
                     }
-
-                    modal = false;
 
                     // Notify listeners
                     if (dialogCloseListener != null) {
@@ -185,7 +196,8 @@ public class Dialog extends Frame {
 
                     dialogStateListeners.dialogClosed(this);
                 }
-            } else {
+            } else if (vote == Vote.DENY) {
+                closing = false;
                 dialogStateListeners.dialogCloseVetoed(this, vote);
             }
         }

@@ -92,7 +92,7 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
         }
     };
 
-    private MenuItemSelectionListener menuItemPressListener = new MenuItemSelectionListener() {
+    private MenuItemSelectionListener menuItemSelectionListener = new MenuItemSelectionListener() {
         @Override
         public void itemSelected(Menu.Item item) {
             MenuPopup menuPopup = (MenuPopup)getComponent();
@@ -127,7 +127,7 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
 
         Menu menu = menuPopup.getMenu();
         if (menu != null) {
-            menu.getMenuItemSelectionListeners().add(menuItemPressListener);
+            menu.getMenuItemSelectionListeners().add(menuItemSelectionListener);
         }
 
         panorama.setView(menu);
@@ -146,7 +146,7 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
 
         Menu menu = menuPopup.getMenu();
         if (menu != null) {
-            menu.getMenuItemSelectionListeners().remove(menuItemPressListener);
+            menu.getMenuItemSelectionListeners().remove(menuItemSelectionListener);
         }
 
         panorama.setView(null);
@@ -211,12 +211,12 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
     @Override
     public void menuChanged(MenuPopup menuPopup, Menu previousMenu) {
         if (previousMenu != null) {
-            previousMenu.getMenuItemSelectionListeners().remove(menuItemPressListener);
+            previousMenu.getMenuItemSelectionListeners().remove(menuItemSelectionListener);
         }
 
         Menu menu = menuPopup.getMenu();
         if (menu != null) {
-            menu.getMenuItemSelectionListeners().add(menuItemPressListener);
+            menu.getMenuItemSelectionListeners().add(menuItemSelectionListener);
         }
 
         panorama.setView(menu);

@@ -52,8 +52,10 @@ public class Sheet extends Window {
         }
     }
 
-    private boolean result = false;
     private SheetCloseListener sheetCloseListener = null;
+    private boolean result = false;
+
+    private boolean closing = false;
 
     private SheetStateListenerList sheetStateListeners = new SheetStateListenerList();
 
@@ -113,12 +115,19 @@ public class Sheet extends Window {
     }
 
     @Override
+    public boolean isClosing() {
+        return closing;
+    }
+
+    @Override
     public final void close() {
         close(false);
     }
 
     public void close(boolean result) {
         if (!isClosed()) {
+            closing = true;
+
             Vote vote = sheetStateListeners.previewSheetClose(this, result);
 
             if (vote == Vote.APPROVE) {
@@ -127,11 +136,15 @@ public class Sheet extends Window {
                 if (isClosed()) {
                     this.result = result;
 
+                    closing = false;
+
+                    // Move the owner to the front
                     Window owner = getOwner();
                     if (owner.isOpen()) {
                         owner.moveToFront();
                     }
 
+                    // Notify listeners
                     if (sheetCloseListener != null) {
                         sheetCloseListener.sheetClosed(this);
                         sheetCloseListener = null;
@@ -139,7 +152,8 @@ public class Sheet extends Window {
 
                     sheetStateListeners.sheetClosed(this);
                 }
-            } else {
+            } else if (vote == Vote.DENY) {
+                closing = false;
                 sheetStateListeners.sheetCloseVetoed(this, vote);
             }
         }
