@@ -99,6 +99,7 @@ public class TerraAlertSkin extends TerraDialogSkin
             optionButton.getStyles().put("minimumAspectRatio", 3);
 
             optionButton.getButtonPressListeners().add(new ButtonPressListener() {
+                @Override
                 public void buttonPressed(Button button) {
                     int optionIndex = optionButtons.indexOf(button);
 
@@ -139,6 +140,7 @@ public class TerraAlertSkin extends TerraDialogSkin
         }
     }
 
+    @Override
     public void selectedOptionChanged(Alert alert, int previousSelectedOption) {
         int index = alert.getSelectedOption();
 

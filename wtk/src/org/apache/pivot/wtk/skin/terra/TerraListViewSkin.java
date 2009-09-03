@@ -87,6 +87,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         showHighlight = true;
     }
 
+    @Override
     public void install(Component component) {
         super.install(component);
 
@@ -97,6 +98,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         listView.getListViewSelectionListeners().add(this);
     }
 
+    @Override
     public void uninstall() {
         ListView listView = (ListView)getComponent();
         listView.getListViewListeners().remove(this);
@@ -107,6 +109,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         super.uninstall();
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
@@ -129,6 +132,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         return preferredWidth;
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public int getPreferredHeight(int width) {
         int preferredHeight = 0;
@@ -140,10 +144,12 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         return preferredHeight;
     }
 
+    @Override
     public void layout() {
         // No-op
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public void paint(Graphics2D graphics) {
         ListView listView = (ListView)getComponent();
@@ -226,6 +232,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     }
 
     // List view skin methods
+    @Override
     @SuppressWarnings("unchecked")
     public int getItemAt(int y) {
         if (y < 0) {
@@ -244,11 +251,13 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         return index;
     }
 
+    @Override
     public Bounds getItemBounds(int index) {
         int itemHeight = getItemHeight();
         return new Bounds(0, index * itemHeight, getWidth(), itemHeight);
     }
 
+    @Override
     public int getItemIndent() {
         int itemIndent = 0;
 
@@ -793,65 +802,80 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     }
 
     // List view events
+    @Override
     public void listDataChanged(ListView listView, List<?> previousListData) {
         invalidateComponent();
     }
 
+    @Override
     public void itemRendererChanged(ListView listView, ListView.ItemRenderer previousItemRenderer) {
         invalidateComponent();
     }
 
+    @Override
     public void itemEditorChanged(ListView listView, ListView.ItemEditor previousItemEditor) {
         // No-op
     }
 
+    @Override
     public void selectModeChanged(ListView listView, ListView.SelectMode previousSelectMode) {
         repaintComponent();
     }
 
+    @Override
     public void checkmarksEnabledChanged(ListView listView) {
         invalidateComponent();
     }
 
+    @Override
     public void disabledItemFilterChanged(ListView listView, Filter<?> previousDisabledItemFilter) {
         repaintComponent();
     }
 
+    @Override
     public void selectedItemKeyChanged(ListView listView, String previousSelectedItemKey) {
         // No-op
     }
 
+    @Override
     public void selectedItemsKeyChanged(ListView listView, String previousSelectedItemsKey) {
         // No-op
     }
 
     // List view item events
+    @Override
     public void itemInserted(ListView listView, int index) {
         invalidateComponent();
     }
 
+    @Override
     public void itemsRemoved(ListView listView, int index, int count) {
         invalidateComponent();
     }
 
+    @Override
     public void itemUpdated(ListView listView, int index) {
         invalidateComponent();
     }
 
+    @Override
     public void itemsCleared(ListView listView) {
         invalidateComponent();
     }
 
+    @Override
     public void itemsSorted(ListView listView) {
         repaintComponent();
     }
 
     // List view item state events
+    @Override
     public void itemCheckedChanged(ListView listView, int index) {
         repaintComponent(getItemBounds(index));
     }
 
     // List view selection detail events
+    @Override
     public void selectedRangeAdded(ListView listView, int rangeStart, int rangeEnd) {
         // Repaint the area containing the added selection
         int itemHeight = getItemHeight();
@@ -859,6 +883,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             getWidth(), (rangeEnd - rangeStart + 1) * itemHeight);
     }
 
+    @Override
     public void selectedRangeRemoved(ListView listView, int rangeStart, int rangeEnd) {
         // Repaint the area containing the removed selection
         int itemHeight = getItemHeight();
@@ -866,6 +891,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             getWidth(), (rangeEnd - rangeStart + 1) * itemHeight);
     }
 
+    @Override
     public void selectedRangesChanged(ListView listView, Sequence<Span> previousSelectedRanges) {
         // TODO Repaint only the area that changed (intersection of previous
         // and new selection)

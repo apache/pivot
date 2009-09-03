@@ -68,6 +68,7 @@ public class TerraCalendarSkin extends CalendarSkin
             setSkin(new DateButtonSkin());
         }
 
+        @Override
         public void press() {
             setSelected(true);
 
@@ -93,6 +94,7 @@ public class TerraCalendarSkin extends CalendarSkin
             component.setCursor(Cursor.DEFAULT);
         }
 
+        @Override
         public int getPreferredWidth(int height) {
             DateButton dateButton = (DateButton)getComponent();
 
@@ -106,6 +108,7 @@ public class TerraCalendarSkin extends CalendarSkin
             return preferredWidth;
         }
 
+        @Override
         public int getPreferredHeight(int width) {
             int preferredHeight = 0;
 
@@ -119,6 +122,7 @@ public class TerraCalendarSkin extends CalendarSkin
             return preferredHeight;
         }
 
+        @Override
         public Dimensions getPreferredSize() {
             DateButton dateButton = (DateButton)getComponent();
 
@@ -131,6 +135,7 @@ public class TerraCalendarSkin extends CalendarSkin
                 preferredSize.height + padding * 2);
         }
 
+        @Override
         public void paint(Graphics2D graphics) {
             DateButton dateButton = (DateButton)getComponent();
 
@@ -339,6 +344,7 @@ public class TerraCalendarSkin extends CalendarSkin
     }
 
     private static class DateButtonDataRenderer extends ButtonDataRenderer {
+        @Override
         public void render(Object data, Button button, boolean highlighted) {
             CalendarDate date = (CalendarDate)data;
             super.render(date.getDay() + 1, button, highlighted);
@@ -400,6 +406,7 @@ public class TerraCalendarSkin extends CalendarSkin
         monthSpinner.getStyles().put("sizeToContent", true);
 
         monthSpinner.getSpinnerSelectionListeners().add(new SpinnerSelectionListener() {
+            @Override
             public void selectedIndexChanged(Spinner spinner, int previousSelectedIndex) {
                 Calendar calendar = (Calendar)getComponent();
                 calendar.setMonth((Integer)spinner.getSelectedItem());
@@ -411,6 +418,7 @@ public class TerraCalendarSkin extends CalendarSkin
         yearSpinner.setSpinnerData(new NumericSpinnerData(0, Short.MAX_VALUE));
 
         yearSpinner.getSpinnerSelectionListeners().add(new SpinnerSelectionListener() {
+            @Override
             public void selectedIndexChanged(Spinner spinner, int previousSelectedIndex) {
                 Calendar calendar = (Calendar)getComponent();
                 calendar.setYear((Integer)spinner.getSelectedItem());
@@ -419,6 +427,7 @@ public class TerraCalendarSkin extends CalendarSkin
 
         // Attach a listener to consume mouse clicks
         ComponentMouseButtonListener spinnerMouseButtonListener = new ComponentMouseButtonListener.Adapter() {
+            @Override
             public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
                 return true;
             }
@@ -461,6 +470,7 @@ public class TerraCalendarSkin extends CalendarSkin
         // Add the buttons
         dateButtonGroup = new Button.Group();
         dateButtonGroup.getGroupListeners().add(new Button.GroupListener() {
+            @Override
             public void selectionChanged(Group group, Button previousSelection) {
                 Calendar calendar = (Calendar)getComponent();
 
@@ -533,6 +543,7 @@ public class TerraCalendarSkin extends CalendarSkin
         return calendarTablePane.getPreferredSize();
     }
 
+    @Override
     public void layout() {
         calendarTablePane.setSize(getWidth(), getHeight());
         calendarTablePane.setLocation(0, 0);

@@ -123,16 +123,19 @@ public class TerraExpanderSkin extends ExpanderSkin
     }
 
     protected abstract class ButtonImage extends Image {
+        @Override
         public int getWidth() {
             return 11;
         }
 
+        @Override
         public int getHeight() {
             return 11;
         }
     }
 
     protected class CollapseImage extends ButtonImage {
+        @Override
         public void paint(Graphics2D graphics) {
             graphics.setStroke(new BasicStroke(0));
             graphics.setPaint(shadeButtonColor);
@@ -147,6 +150,7 @@ public class TerraExpanderSkin extends ExpanderSkin
     }
 
     protected class ExpandImage extends ButtonImage {
+        @Override
         public void paint(Graphics2D graphics) {
             graphics.setStroke(new BasicStroke(0));
             graphics.setPaint(shadeButtonColor);
@@ -182,6 +186,7 @@ public class TerraExpanderSkin extends ExpanderSkin
     private ExpandTransition expandTransition = null;
 
     private ComponentMouseButtonListener titleBarMouseListener = new ComponentMouseButtonListener.Adapter() {
+        @Override
         public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
             boolean consumed = false;
 
@@ -260,6 +265,7 @@ public class TerraExpanderSkin extends ExpanderSkin
         collapsibleChanged(expander);
     }
 
+    @Override
     public void uninstall() {
         Expander expander = (Expander)getComponent();
         expander.remove(titleBarTablePane);
@@ -271,6 +277,7 @@ public class TerraExpanderSkin extends ExpanderSkin
         super.uninstall();
     }
 
+    @Override
     public int getPreferredWidth(int height) {
         Expander expander = (Expander)getComponent();
         Component content = expander.getContent();
@@ -301,6 +308,7 @@ public class TerraExpanderSkin extends ExpanderSkin
         return preferredWidth;
     }
 
+    @Override
     public int getPreferredHeight(int width) {
         Expander expander = (Expander)getComponent();
         Component content = expander.getContent();
@@ -334,6 +342,7 @@ public class TerraExpanderSkin extends ExpanderSkin
         return preferredHeight;
     }
 
+    @Override
     public Dimensions getPreferredSize() {
         Expander expander = (Expander)getComponent();
         Component content = expander.getContent();
@@ -371,6 +380,7 @@ public class TerraExpanderSkin extends ExpanderSkin
         return new Dimensions(preferredWidth, preferredHeight);
     }
 
+    @Override
     public void layout() {
         Expander expander = (Expander)getComponent();
         Component content = expander.getContent();
@@ -587,6 +597,7 @@ public class TerraExpanderSkin extends ExpanderSkin
      * @param button
      *     The source of the button event.
      */
+    @Override
     public void buttonPressed(Button button) {
         Expander expander = (Expander)getComponent();
 
@@ -630,6 +641,7 @@ public class TerraExpanderSkin extends ExpanderSkin
             expandTransition = new ExpandTransition(expanded);
 
             expandTransition.start(new TransitionListener() {
+                @Override
                 public void transitionCompleted(Transition transition) {
                     expander.setExpanded(!expanded);
                     expandTransition = null;

@@ -55,18 +55,22 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
     private WindowStateListener calendarPopupStateListener = new WindowStateListener() {
         private boolean focusButtonOnClose = true;
 
+        @Override
         public Vote previewWindowOpen(Window window, Display display) {
             return Vote.APPROVE;
         }
 
+        @Override
         public void windowOpenVetoed(Window window, Vote reason) {
             // No-op
         }
 
+        @Override
         public void windowOpened(Window window) {
             focusButtonOnClose = true;
         }
 
+        @Override
         public Vote previewWindowClose(final Window window) {
             Vote vote = Vote.APPROVE;
 
@@ -76,6 +80,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
                     dropShadowDecorator);
 
                 closeTransition.start(new TransitionListener() {
+                    @Override
                     public void transitionCompleted(Transition transition) {
                         focusButtonOnClose = window.containsFocus();
                         window.close();
@@ -90,6 +95,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
             return vote;
         }
 
+        @Override
         public void windowCloseVetoed(Window window, Vote reason) {
             if (reason == Vote.DENY
                 && closeTransition != null) {
@@ -98,6 +104,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
             }
         }
 
+        @Override
         public void windowClosed(Window window, Display display) {
             closeTransition = null;
             if (focusButtonOnClose) {
@@ -163,6 +170,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
         calendarPopup.getDecorators().add(dropShadowDecorator);
     }
 
+    @Override
     public int getPreferredWidth(int height) {
         CalendarButton calendarButton = (CalendarButton)getComponent();
 
@@ -176,6 +184,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
         return preferredWidth;
     }
 
+    @Override
     public int getPreferredHeight(int width) {
         CalendarButton calendarButton = (CalendarButton)getComponent();
 
@@ -189,15 +198,18 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
         return preferredHeight;
     }
 
+    @Override
     public Dimensions getPreferredSize() {
         // TODO Optimize by performing calcuations locally
         return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
     }
 
+    @Override
     public void layout() {
         // No-op
     }
 
+    @Override
     public void paint(Graphics2D graphics) {
         CalendarButton calendarButton = (CalendarButton)getComponent();
 

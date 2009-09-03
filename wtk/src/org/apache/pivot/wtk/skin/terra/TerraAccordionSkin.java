@@ -84,6 +84,7 @@ public class TerraAccordionSkin extends ContainerSkin
     }
 
     protected class PanelHeaderSkin extends ButtonSkin {
+        @Override
         public int getPreferredWidth(int height) {
             PanelHeader panelHeader = (PanelHeader)getComponent();
 
@@ -96,6 +97,7 @@ public class TerraAccordionSkin extends ContainerSkin
             return preferredWidth;
         }
 
+        @Override
         public int getPreferredHeight(int width) {
             PanelHeader panelHeader = (PanelHeader)getComponent();
 
@@ -115,6 +117,7 @@ public class TerraAccordionSkin extends ContainerSkin
             return preferredHeight;
         }
 
+        @Override
         public Dimensions getPreferredSize() {
             PanelHeader panelHeader = (PanelHeader)getComponent();
 
@@ -132,6 +135,7 @@ public class TerraAccordionSkin extends ContainerSkin
             return new Dimensions(preferredWidth, preferredHeight);
         }
 
+        @Override
         public void paint(Graphics2D graphics) {
             PanelHeader panelHeader = (PanelHeader)getComponent();
 
@@ -291,6 +295,7 @@ public class TerraAccordionSkin extends ContainerSkin
         buttonBevelColor = TerraTheme.brighten(buttonBackgroundColor);
 
         panelHeaderGroup.getGroupListeners().add(new Button.GroupListener() {
+            @Override
             public void selectionChanged(Group group, Button previousSelection) {
                 Button button = panelHeaderGroup.getSelection();
                 int index = (button == null) ? -1 : panelHeaders.indexOf((PanelHeader)button);
@@ -310,6 +315,7 @@ public class TerraAccordionSkin extends ContainerSkin
         super.setSize(width, height);
     }
 
+    @Override
     public void install(Component component) {
         super.install(component);
 
@@ -333,6 +339,7 @@ public class TerraAccordionSkin extends ContainerSkin
         }
     }
 
+    @Override
     public void uninstall() {
         Accordion accordion = (Accordion)getComponent();
 
@@ -353,6 +360,7 @@ public class TerraAccordionSkin extends ContainerSkin
         super.uninstall();
     }
 
+    @Override
     public int getPreferredWidth(int height) {
         Accordion accordion = (Accordion)getComponent();
 
@@ -374,6 +382,7 @@ public class TerraAccordionSkin extends ContainerSkin
         return preferredWidth;
     }
 
+    @Override
     public int getPreferredHeight(int width) {
         Accordion accordion = (Accordion)getComponent();
 
@@ -399,6 +408,7 @@ public class TerraAccordionSkin extends ContainerSkin
         return preferredHeight;
     }
 
+    @Override
     public Dimensions getPreferredSize() {
         Accordion accordion = (Accordion)getComponent();
 
@@ -428,6 +438,7 @@ public class TerraAccordionSkin extends ContainerSkin
         return new Dimensions(preferredWidth, preferredHeight);
     }
 
+    @Override
     public void layout() {
         Accordion accordion = (Accordion)getComponent();
 
@@ -644,6 +655,7 @@ public class TerraAccordionSkin extends ContainerSkin
     }
 
     // Accordion events
+    @Override
     public void panelInserted(Accordion accordion, int index) {
         if (selectionChangeTransition != null) {
             selectionChangeTransition.end();
@@ -668,6 +680,7 @@ public class TerraAccordionSkin extends ContainerSkin
         invalidateComponent();
     }
 
+    @Override
     public void panelsRemoved(Accordion accordion, int index, Sequence<Component> removed) {
         if (selectionChangeTransition != null) {
             selectionChangeTransition.end();
@@ -692,6 +705,7 @@ public class TerraAccordionSkin extends ContainerSkin
     }
 
     // Accordion selection events
+    @Override
     public Vote previewSelectedIndexChange(final Accordion accordion, final int selectedIndex) {
         Vote vote = Vote.APPROVE;
 
@@ -709,6 +723,7 @@ public class TerraAccordionSkin extends ContainerSkin
 
                     layout();
                     selectionChangeTransition.start(new TransitionListener() {
+                        @Override
                         public void transitionCompleted(Transition transition) {
                             accordion.setSelectedIndex(selectedIndex);
                             selectionChangeTransition = null;
@@ -729,6 +744,7 @@ public class TerraAccordionSkin extends ContainerSkin
         return vote;
     }
 
+    @Override
     public void selectedIndexChangeVetoed(Accordion accordion, Vote reason) {
         if (reason == Vote.DENY
             && selectionChangeTransition != null) {
@@ -741,6 +757,7 @@ public class TerraAccordionSkin extends ContainerSkin
         }
     }
 
+    @Override
     public void selectedIndexChanged(Accordion accordion, int previousSelectedIndex) {
         int selectedIndex = accordion.getSelectedIndex();
 
@@ -758,10 +775,12 @@ public class TerraAccordionSkin extends ContainerSkin
     }
 
     // Accordion attribute events
+    @Override
     public void labelChanged(Accordion accordion, Component component, String previousLabel) {
         invalidateComponent();
     }
 
+    @Override
     public void iconChanged(Accordion accordion, Component component, Image previousIcon) {
         invalidateComponent();
     }

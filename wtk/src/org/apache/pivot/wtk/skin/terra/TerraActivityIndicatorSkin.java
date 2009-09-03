@@ -43,14 +43,17 @@ public class TerraActivityIndicatorSkin extends ActivityIndicatorSkin {
         backgroundColor = null;
     }
 
+    @Override
     public int getPreferredWidth(int height) {
         return 128;
     }
 
+    @Override
     public int getPreferredHeight(int width) {
         return 128;
     }
 
+    @Override
     public void paint(Graphics2D graphics) {
         ActivityIndicator activityIndicator = (ActivityIndicator)getComponent();
 
@@ -144,9 +147,11 @@ public class TerraActivityIndicatorSkin extends ActivityIndicatorSkin {
         setBackgroundColor(theme.getColor(backgroundColor));
     }
 
+    @Override
     public void activeChanged(ActivityIndicator activityIndicator) {
         if (activityIndicator.isActive()) {
             updateCallback = ApplicationContext.scheduleRecurringCallback(new Runnable() {
+                @Override
                 public void run() {
                     angle = (angle + 30) % 360;
                     repaintComponent();

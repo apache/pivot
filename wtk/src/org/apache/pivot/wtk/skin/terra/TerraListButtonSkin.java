@@ -55,18 +55,22 @@ public class TerraListButtonSkin extends ListButtonSkin {
     private WindowStateListener listViewPopupStateListener = new WindowStateListener() {
         private boolean focusButtonOnClose = true;
 
+        @Override
         public Vote previewWindowOpen(Window window, Display display) {
             return Vote.APPROVE;
         }
 
+        @Override
         public void windowOpenVetoed(Window window, Vote reason) {
             // No-op
         }
 
+        @Override
         public void windowOpened(Window window) {
             focusButtonOnClose = true;
         }
 
+        @Override
         public Vote previewWindowClose(final Window window) {
             Vote vote = Vote.APPROVE;
 
@@ -76,6 +80,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
                     dropShadowDecorator);
 
                 closeTransition.start(new TransitionListener() {
+                    @Override
                     public void transitionCompleted(Transition transition) {
                         focusButtonOnClose = window.containsFocus();
                         window.close();
@@ -90,6 +95,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
             return vote;
         }
 
+        @Override
         public void windowCloseVetoed(Window window, Vote reason) {
             if (reason == Vote.DENY
                 && closeTransition != null) {
@@ -98,6 +104,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
             }
         }
 
+        @Override
         public void windowClosed(Window window, Display display) {
             closeTransition = null;
             if (focusButtonOnClose) {
@@ -170,6 +177,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
         listViewPopup.getDecorators().add(dropShadowDecorator);
     }
 
+    @Override
     public int getPreferredWidth(int height) {
         ListButton listButton = (ListButton)getComponent();
         List<?> listData = listButton.getListData();
@@ -193,6 +201,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
         return preferredWidth;
     }
 
+    @Override
     public int getPreferredHeight(int width) {
         ListButton listButton = (ListButton)getComponent();
         Button.DataRenderer dataRenderer = listButton.getDataRenderer();
@@ -205,15 +214,18 @@ public class TerraListButtonSkin extends ListButtonSkin {
         return preferredHeight;
     }
 
+    @Override
     public Dimensions getPreferredSize() {
         // TODO Optimize by performing calcuations locally
         return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
     }
 
+    @Override
     public void layout() {
         // No-op
     }
 
+    @Override
     public void paint(Graphics2D graphics) {
         ListButton listButton = (ListButton)getComponent();
 

@@ -114,6 +114,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             imageView.getStyles().put("backgroundColor", null);
         }
 
+        @Override
         public void setSize(int width, int height) {
             super.setSize(width, height);
 
@@ -176,6 +177,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             getStyles().put("padding", new Insets(2, 3, 2, 3));
         }
 
+        @Override
         public void render(Object item, ListView listView, boolean selected,
             boolean checked, boolean highlighted, boolean disabled) {
             label.getStyles().put("font", listView.getStyles().get("font"));
@@ -229,6 +231,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             getStyles().put("padding", new Insets(2));
         }
 
+        @Override
         public void render(Object value, TableView tableView, TableView.Column column,
             boolean rowSelected, boolean rowHighlighted, boolean rowDisabled) {
             String columnName = column.getName();
@@ -297,6 +300,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             this.sortDirection = sortDirection;
         }
 
+        @Override
         public int compare(File file1, File file2) {
             int result;
 
@@ -320,6 +324,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
      * File sort handler.
      */
     public static class SortHandler implements TableViewHeaderPressListener {
+        @Override
         @SuppressWarnings("unchecked")
         public void headerPressed(TableViewHeader tableViewHeader, int index) {
             TableView tableView = tableViewHeader.getTableView();
@@ -355,6 +360,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             this.match = match.toLowerCase();
         }
 
+        @Override
         public boolean include(File file) {
             String name = file.getName();
             name = name.toLowerCase();
@@ -392,6 +398,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     private boolean updatingSelection = false;
 
     private static final FileFilter HIDDEN_FILE_FILTER = new FileFilter() {
+        @Override
         public boolean accept(File file) {
             return !file.isHidden();
         }
@@ -426,6 +433,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         wtkxSerializer.bind(this, TerraFileBrowserSkin.class);
 
         pathListButton.getListButtonSelectionListeners().add(new ListButtonSelectionListener() {
+            @Override
             public void selectedIndexChanged(ListButton listButton, int previousSelectedIndex) {
                 File ancestorDirectory = (File)listButton.getSelectedItem();
 
@@ -436,6 +444,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         });
 
         goUpButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
             public void buttonPressed(Button button) {
                 File rootDirectory = fileBrowser.getRootDirectory();
                 File parentDirectory = rootDirectory.getParentFile();
@@ -444,12 +453,14 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         });
 
         newFolderButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
             public void buttonPressed(Button button) {
                 // TODO
             }
         });
 
         goHomeButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
             public void buttonPressed(Button button) {
                 fileBrowser.setRootDirectory(new File(System.getProperty("user.home")));
             }
@@ -475,6 +486,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         });
 
         searchTextInput.getTextInputTextListeners().add(new TextInputTextListener() {
+            @Override
             public void textChanged(TextInput textInput) {
                 String text = textInput.getText();
 
@@ -487,6 +499,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         });
 
         fileTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener() {
+            @Override
             public void selectedRangeAdded(TableView tableView, int rangeStart, int rangeEnd) {
                 updatingSelection = true;
 
@@ -498,6 +511,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                 updatingSelection = false;
             }
 
+            @Override
             public void selectedRangeRemoved(TableView tableView, int rangeStart, int rangeEnd) {
                 updatingSelection = true;
 
@@ -509,6 +523,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                 updatingSelection = false;
             }
 
+            @Override
             @SuppressWarnings("unchecked")
             public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges) {
                 updatingSelection = true;
@@ -553,12 +568,14 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         });
 
         files.getListListeners().add(new ListListener.Adapter<File>() {
+            @Override
             public void comparatorChanged(List<File> list, Comparator<File> previousComparator) {
                 fileBrowser.clearSelection();
             }
         });
 
         files.getFilteredListListeners().add(new FilteredListListener.Adapter<File>() {
+            @Override
             public void filterChanged(FilteredList<File> filteredList, Filter<File> previousFilter) {
                 fileBrowser.clearSelection();
             }
@@ -618,6 +635,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         content.setSize(width, height);
     }
 
+    @Override
     public File getFileAt(int x, int y) {
         File file = null;
 
@@ -689,6 +707,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         return consumed;
     }
 
+    @Override
     public void rootDirectoryChanged(FileBrowser fileBrowser, File previousRootDirectory) {
         ArrayList<File> path = new ArrayList<File>();
 
@@ -718,6 +737,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         fileTableView.requestFocus();
     }
 
+    @Override
     public void selectedFileAdded(FileBrowser fileBrowser, File file) {
         if (!updatingSelection) {
             int index = files.indexOf(file);
@@ -727,6 +747,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         }
     }
 
+    @Override
     public void selectedFileRemoved(FileBrowser fileBrowser, File file) {
         if (!updatingSelection) {
             int index = files.indexOf(file);
@@ -736,6 +757,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         }
     }
 
+    @Override
     public void selectedFilesChanged(FileBrowser fileBrowser, Sequence<File> previousSelectedFiles) {
         if (!updatingSelection) {
             fileTableView.clearSelection();
@@ -753,11 +775,13 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         }
     }
 
+    @Override
     public void multiSelectChanged(FileBrowser fileBrowser) {
         fileTableView.setSelectMode(fileBrowser.isMultiSelect() ?
             TableView.SelectMode.MULTI : TableView.SelectMode.SINGLE);
     }
 
+    @Override
     public void disabledFileFilterChanged(FileBrowser fileBrowser, Filter<File> previousDisabledFileFilter) {
         fileTableView.setDisabledRowFilter(fileBrowser.getDisabledFileFilter());
     }

@@ -77,6 +77,7 @@ public class TerraCheckboxSkin extends CheckboxSkin {
         disabledButtonBevelColor = disabledButtonColor;
     }
 
+    @Override
     public int getPreferredWidth(int height) {
         Checkbox checkbox = (Checkbox)getComponent();
         Button.DataRenderer dataRenderer = checkbox.getDataRenderer();
@@ -93,6 +94,7 @@ public class TerraCheckboxSkin extends CheckboxSkin {
         return preferredWidth;
     }
 
+    @Override
     public int getPreferredHeight(int width) {
         Checkbox checkbox = (Checkbox)getComponent();
         Button.DataRenderer dataRenderer = checkbox.getDataRenderer();
@@ -114,6 +116,7 @@ public class TerraCheckboxSkin extends CheckboxSkin {
         return preferredHeight;
     }
 
+    @Override
     public Dimensions getPreferredSize() {
         Checkbox checkbox = (Checkbox)getComponent();
         Button.DataRenderer dataRenderer = checkbox.getDataRenderer();
@@ -136,6 +139,7 @@ public class TerraCheckboxSkin extends CheckboxSkin {
         return new Dimensions(preferredWidth, preferredHeight);
     }
 
+    @Override
     public void paint(Graphics2D graphics) {
         Checkbox checkbox = (Checkbox)getComponent();
         int width = getWidth();

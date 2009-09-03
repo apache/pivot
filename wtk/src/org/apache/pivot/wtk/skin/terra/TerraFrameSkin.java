@@ -91,10 +91,12 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
      * Abstract base class for frame button images.
      */
     protected abstract class ButtonImage extends Image {
+        @Override
         public int getWidth() {
             return 8;
         }
 
+        @Override
         public int getHeight() {
             return 8;
         }
@@ -104,6 +106,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
      * Minimize button image.
      */
     protected class MinimizeImage extends ButtonImage {
+        @Override
         public void paint(Graphics2D graphics) {
             Frame frame = (Frame)getComponent();
             graphics.setPaint(frame.isActive() ? titleBarColor : inactiveTitleBarColor);
@@ -115,6 +118,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
      * Maximize button image.
      */
     protected class MaximizeImage extends ButtonImage {
+        @Override
         public void paint(Graphics2D graphics) {
             Frame frame = (Frame)getComponent();
             graphics.setPaint(frame.isActive() ? titleBarColor : inactiveTitleBarColor);
@@ -129,6 +133,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
      * Restore button image.
      */
     protected class RestoreImage extends ButtonImage {
+        @Override
         public void paint(Graphics2D graphics) {
             Frame frame = (Frame)getComponent();
             graphics.setPaint(frame.isActive() ?
@@ -145,6 +150,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
      * Close button image.
      */
     protected class CloseImage extends ButtonImage {
+        @Override
         public void paint(Graphics2D graphics) {
             Frame frame = (Frame)getComponent();
             graphics.setPaint(frame.isActive() ?
@@ -165,14 +171,17 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
     protected class ResizeImage extends Image {
         public static final int ALPHA = 64;
 
+        @Override
         public int getWidth() {
             return 5;
         }
 
+        @Override
         public int getHeight() {
             return 5;
         }
 
+        @Override
         public void paint(Graphics2D graphics) {
             graphics.setPaint(new Color(0, 0, 0, ALPHA));
             graphics.fillRect(3, 0, 2, 1);
@@ -300,6 +309,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         buttonBoxPane.add(closeButton);
 
         ButtonPressListener buttonPressListener = new ButtonPressListener() {
+            @Override
             public void buttonPressed(Button button) {
                 Frame frame = (Frame)getComponent();
 
@@ -347,6 +357,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         super.uninstall();
     }
 
+    @Override
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 
@@ -393,6 +404,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         return preferredWidth;
     }
 
+    @Override
     public int getPreferredHeight(int width) {
         int preferredHeight = 0;
 
@@ -425,6 +437,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         return preferredHeight;
     }
 
+    @Override
     public Dimensions getPreferredSize() {
         int preferredWidth = 0;
         int preferredHeight = 0;
@@ -462,6 +475,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         return new Dimensions(preferredWidth, preferredHeight);
     }
 
+    @Override
     public void layout() {
         Frame frame = (Frame)getComponent();
 
@@ -869,6 +883,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         updateMaximizedState();
     }
 
+    @Override
     public void menuBarChanged(Frame frame, MenuBar previousMenuBar) {
         invalidateComponent();
     }

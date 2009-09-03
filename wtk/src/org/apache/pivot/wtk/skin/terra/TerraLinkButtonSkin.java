@@ -43,6 +43,7 @@ public class TerraLinkButtonSkin extends LinkButtonSkin {
         disabledColor = theme.getColor(7);
     }
 
+    @Override
     public int getPreferredWidth(int height) {
         LinkButton linkButton = (LinkButton)getComponent();
 
@@ -52,6 +53,7 @@ public class TerraLinkButtonSkin extends LinkButtonSkin {
         return dataRenderer.getPreferredWidth(height);
     }
 
+    @Override
     public int getPreferredHeight(int width) {
         LinkButton linkButton = (LinkButton)getComponent();
 
@@ -61,6 +63,7 @@ public class TerraLinkButtonSkin extends LinkButtonSkin {
         return dataRenderer.getPreferredHeight(width);
     }
 
+    @Override
     public Dimensions getPreferredSize() {
         LinkButton linkButton = (LinkButton)getComponent();
 
@@ -70,6 +73,7 @@ public class TerraLinkButtonSkin extends LinkButtonSkin {
         return dataRenderer.getPreferredSize();
     }
 
+    @Override
     public void paint(Graphics2D graphics) {
         LinkButton linkButton = (LinkButton)getComponent();
         int width = getWidth();

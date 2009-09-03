@@ -35,6 +35,7 @@ public class TerraDialogSkin extends TerraFrameSkin implements DialogStateListen
     private class RepositionCallback implements Runnable {
         private static final float GOLDEN_SECTION = 0.382f;
 
+        @Override
         public void run() {
             Dialog dialog = (Dialog)getComponent();
             Container ancestor = dialog.getOwner();
@@ -54,6 +55,7 @@ public class TerraDialogSkin extends TerraFrameSkin implements DialogStateListen
     }
 
     private ContainerMouseListener displayMouseListener = new ContainerMouseListener.Adapter() {
+        @Override
         public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
             boolean consumed = false;
 
@@ -136,14 +138,17 @@ public class TerraDialogSkin extends TerraFrameSkin implements DialogStateListen
         display.getContainerMouseListeners().remove(displayMouseListener);
     }
 
+    @Override
     public Vote previewDialogClose(Dialog dialog, boolean result) {
         return Vote.APPROVE;
     }
 
+    @Override
     public void dialogCloseVetoed(Dialog dialog, Vote reason) {
         // No-op
     }
 
+    @Override
     public void dialogClosed(Dialog dialog) {
         // No-op
     }
