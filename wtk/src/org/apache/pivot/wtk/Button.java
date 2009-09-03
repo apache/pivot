@@ -583,17 +583,14 @@ public abstract class Button extends Component {
         if (previousGroup != group) {
             this.group = group;
 
-            // If this was the selected button in the previous group,
-            // clear the group's selection
-            if (previousGroup != null
-                && previousGroup.getSelection() == this) {
-                previousGroup.setSelection(null);
-            }
+            if (isSelected()) {
+                if (previousGroup != null) {
+                    previousGroup.setSelection(null);
+                }
 
-            // If this button is selected, set it as the group's selection
-            if (group != null
-                && isSelected()) {
-                group.setSelection(this);
+                if (group != null) {
+                    group.setSelection(this);
+                }
             }
 
             buttonListeners.groupChanged(this, previousGroup);

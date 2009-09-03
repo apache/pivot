@@ -16,7 +16,6 @@
  */
 package org.apache.pivot.wtk.skin;
 
-import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentKeyListener;
 import org.apache.pivot.wtk.Container;
@@ -49,12 +48,12 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
             if (keyCode == Keyboard.KeyCode.LEFT
                 || (keyCode == Keyboard.KeyCode.TAB
                     && Keyboard.isPressed(Keyboard.Modifier.SHIFT))) {
-                menuBar.selectPreviousItem();
+                menuBar.activatePreviousItem();
                 consumed = true;
 
             } else if (keyCode == Keyboard.KeyCode.RIGHT
                 || keyCode == Keyboard.KeyCode.TAB) {
-                menuBar.selectNextItem();
+                menuBar.activateNextItem();
                 consumed = true;
             }
 
@@ -72,12 +71,12 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
         @Override
         public void windowClosed(Window window, Display display) {
             MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
-            menuBarItem.setSelected(false);
+            menuBarItem.setActive(false);
 
             // If the menu bar is no longer active, move the window to the
             // front to restore focus
             MenuBar menuBar = menuBarItem.getMenuBar();
-            if (menuBar.getSelectedItem() == null) {
+            if (menuBar.getActiveItem() == null) {
                 Window menuBarWindow = menuBar.getWindow();
 
                 if (menuBarWindow.isOpen()) {
@@ -145,8 +144,8 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
         MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
         MenuBar menuBar = menuBarItem.getMenuBar();
 
-        if (menuBar.getSelectedItem() != null) {
-            menuBarItem.setSelected(true);
+        if (menuBar.getActiveItem() != null) {
+            menuBarItem.setActive(true);
         }
     }
 
@@ -155,8 +154,8 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
         boolean consumed = super.mouseDown(component, button, x, y);
 
         MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
-        closeMenuPopup = menuBarItem.isSelected();
-        menuBarItem.setSelected(true);
+        closeMenuPopup = menuBarItem.isActive();
+        menuBarItem.setActive(true);
 
         return consumed;
     }
@@ -189,13 +188,13 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
         menuPopup.close(true);
     }
 
-    @Override
-    public void stateChanged(Button button, Button.State previousState) {
-        super.stateChanged(button, previousState);
+    public void menuChanged(MenuBar.Item menuBarItem, Menu previousMenu) {
+        menuPopup.setMenu(menuBarItem.getMenu());
+        repaintComponent();
+    }
 
-        MenuBar.Item menuBarItem = (MenuBar.Item)button;
-
-        if (menuBarItem.isSelected()) {
+    public void activeChanged(MenuBar.Item menuBarItem) {
+        if (menuBarItem.isActive()) {
             Display display = menuBarItem.getDisplay();
             Point menuBarItemLocation = menuBarItem.mapPointToAncestor(display, 0, getHeight());
 
@@ -207,10 +206,7 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
         } else {
             menuPopup.close(true);
         }
-    }
 
-    public void menuChanged(MenuBar.Item menuBarItem, Menu previousMenu) {
-        menuPopup.setMenu(menuBarItem.getMenu());
         repaintComponent();
     }
 }

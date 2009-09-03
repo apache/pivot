@@ -24,7 +24,6 @@ import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.content.MenuBarItemDataRenderer;
 
-
 /**
  * Component representing a menu bar.
  */
@@ -41,10 +40,18 @@ public class MenuBar extends Container {
                     listener.menuChanged(item, previousMenu);
                 }
             }
+
+            @Override
+            public void activeChanged(Item item) {
+                for (ItemListener listener : this) {
+                    listener.activeChanged(item);
+                }
+            }
         }
 
         private MenuBar menuBar = null;
         private Menu menu = null;
+        private boolean active = false;
 
         private ItemListenerList itemListeners = new ItemListenerList();
 
@@ -56,7 +63,6 @@ public class MenuBar extends Container {
 
         public Item(Object buttonData) {
             super(buttonData);
-            super.setToggleButton(true);
 
             setDataRenderer(DEFAULT_DATA_RENDERER);
             installSkin(Item.class);
@@ -77,7 +83,21 @@ public class MenuBar extends Container {
         }
 
         private void setMenuBar(MenuBar menuBar) {
-            this.menuBar = menuBar;
+            MenuBar previousMenuBar = this.menuBar;
+
+            if (previousMenuBar != menuBar) {
+                this.menuBar = menuBar;
+
+                if (isActive()) {
+                    if (previousMenuBar != null) {
+                        previousMenuBar.setActiveItem(null);
+                    }
+
+                    if (menuBar != null) {
+                        menuBar.setActiveItem(this);
+                    }
+                }
+            }
         }
 
         public Menu getMenu() {
@@ -98,9 +118,45 @@ public class MenuBar extends Container {
             }
         }
 
+        public boolean isActive() {
+            return active;
+        }
+
+        public void setActive(boolean active) {
+            if (this.active != active) {
+                this.active = active;
+
+                if (menuBar != null) {
+                    // Update the active item
+                    Item activeItem = menuBar.getActiveItem();
+
+                    if (active) {
+                        // Set this as the new actie item (do this before
+                        // de-selecting any currently active item so the
+                        // menu bar's change event isn't fired twice)
+                        menuBar.setActiveItem(this);
+
+                        // Deactivate any previously active item
+                        if (activeItem != null) {
+                            activeItem.setActive(false);
+                        }
+                    }
+                    else {
+                        // If this item is currently active, clear the
+                        // selection
+                        if (activeItem == this) {
+                            menuBar.setActiveItem(null);
+                        }
+                    }
+                }
+
+                itemListeners.activeChanged(this);
+            }
+        }
+
         @Override
         public void setToggleButton(boolean toggleButton) {
-            throw new UnsupportedOperationException("Menu bar items are always toggle buttons.");
+            throw new UnsupportedOperationException("Menu bar items cannot be toggle buttons.");
         }
 
         @Override
@@ -119,6 +175,7 @@ public class MenuBar extends Container {
      */
     public interface ItemListener {
         public void menuChanged(Item item, Menu previousMenu);
+        public void activeChanged(Item item);
     }
 
     /**
@@ -141,7 +198,6 @@ public class MenuBar extends Container {
 
             MenuBar.this.add(item);
             items.insert(item, index);
-            item.setGroup(itemGroup);
             item.setMenuBar(MenuBar.this);
 
             menuBarListeners.itemInserted(MenuBar.this, index);
@@ -214,11 +270,19 @@ public class MenuBar extends Container {
                 listener.itemsRemoved(menuBar, index, removed);
             }
         }
+
+        @Override
+        public void activeItemChanged(MenuBar menuBar, MenuBar.Item previousActiveItem) {
+            for (MenuBarListener listener : this) {
+                listener.activeItemChanged(menuBar, previousActiveItem);
+            }
+        }
     }
 
     private ArrayList<Item> items = new ArrayList<Item>();
-    private Button.Group itemGroup = new Button.Group();
     private ItemSequence itemSequence = new ItemSequence();
+
+    private Item activeItem = null;
 
     private MenuBarListenerList menuBarListeners = new MenuBarListenerList();
 
@@ -230,47 +294,54 @@ public class MenuBar extends Container {
         return itemSequence;
     }
 
-    public Item getSelectedItem() {
-        return (Item)itemGroup.getSelection();
+    public Item getActiveItem() {
+        return activeItem;
     }
 
-    public void selectNextItem() {
+    private void setActiveItem(Item activeItem) {
+        Item previousActiveItem = this.activeItem;
+
+        if (previousActiveItem != activeItem) {
+            this.activeItem = activeItem;
+            menuBarListeners.activeItemChanged(this, previousActiveItem);
+        }
+    }
+
+    public void activateNextItem() {
         int n = items.getLength();
 
         if (n > 0) {
             int index = n;
 
-            Item selectedItem = getSelectedItem();
-            if (selectedItem != null) {
-                index = items.indexOf(selectedItem) + 1;
+            if (activeItem != null) {
+                index = items.indexOf(activeItem) + 1;
             }
 
             if (index == n) {
                 index = 0;
             }
 
-            selectedItem = items.get(index);
-            selectedItem.setSelected(true);
+            activeItem = items.get(index);
+            activeItem.setActive(true);
         }
     }
 
-    public void selectPreviousItem() {
+    public void activatePreviousItem() {
         int n = items.getLength();
 
         if (n > 0) {
             int index = -1;
 
-            Item selectedItem = getSelectedItem();
-            if (selectedItem != null) {
-                index = items.indexOf(selectedItem) - 1;
+            if (activeItem != null) {
+                index = items.indexOf(activeItem) - 1;
             }
 
             if (index < 0) {
                 index = n - 1;
             }
 
-            selectedItem = items.get(index);
-            selectedItem.setSelected(true);
+            activeItem = items.get(index);
+            activeItem.setSelected(true);
         }
     }
 

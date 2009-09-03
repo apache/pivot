@@ -35,8 +35,8 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
     private Font font;
     private Color color;
     private Color disabledColor;
-    private Color highlightColor;
-    private Color highlightBackgroundColor;
+    private Color activeColor;
+    private Color activeBackgroundColor;
     private int spacing;
 
     public TerraMenuBarSkin() {
@@ -45,8 +45,8 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
         font = theme.getFont().deriveFont(Font.BOLD);
         color = theme.getColor(1);
         disabledColor = theme.getColor(7);
-        highlightColor = theme.getColor(4);
-        highlightBackgroundColor = theme.getColor(20);
+        activeColor = theme.getColor(4);
+        activeBackgroundColor = theme.getColor(20);
         spacing = 2;
     }
 
@@ -225,56 +225,56 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
         setDisabledColor(theme.getColor(color));
     }
 
-    public Color getHighlightColor() {
-        return highlightColor;
+    public Color getActiveColor() {
+        return activeColor;
     }
 
-    public void setHighlightColor(Color highlightColor) {
-        if (highlightColor == null) {
-            throw new IllegalArgumentException("highlightColor is null.");
+    public void setActiveColor(Color activeColor) {
+        if (activeColor == null) {
+            throw new IllegalArgumentException("activeColor is null.");
         }
 
-        this.highlightColor = highlightColor;
+        this.activeColor = activeColor;
         repaintComponent();
     }
 
-    public final void setHighlightColor(String highlightColor) {
-        if (highlightColor == null) {
-            throw new IllegalArgumentException("highlightColor is null.");
+    public final void setActiveColor(String activeColor) {
+        if (activeColor == null) {
+            throw new IllegalArgumentException("activeColor is null.");
         }
 
-        setHighlightColor(GraphicsUtilities.decodeColor(highlightColor));
+        setActiveColor(GraphicsUtilities.decodeColor(activeColor));
     }
 
-    public final void setHighlightColor(int color) {
+    public final void setActiveColor(int color) {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
-        setHighlightColor(theme.getColor(color));
+        setActiveColor(theme.getColor(color));
     }
 
-    public Color getHighlightBackgroundColor() {
-        return highlightBackgroundColor;
+    public Color getActiveBackgroundColor() {
+        return activeBackgroundColor;
     }
 
-    public void setHighlightBackgroundColor(Color highlightBackgroundColor) {
-        if (highlightBackgroundColor == null) {
-            throw new IllegalArgumentException("highlightBackgroundColor is null.");
+    public void setActiveBackgroundColor(Color activeBackgroundColor) {
+        if (activeBackgroundColor == null) {
+            throw new IllegalArgumentException("activeBackgroundColor is null.");
         }
 
-        this.highlightBackgroundColor = highlightBackgroundColor;
+        this.activeBackgroundColor = activeBackgroundColor;
         repaintComponent();
     }
 
-    public final void setHighlightBackgroundColor(String highlightBackgroundColor) {
-        if (highlightBackgroundColor == null) {
-            throw new IllegalArgumentException("highlightBackgroundColor is null.");
+    public final void setActiveBackgroundColor(String activeBackgroundColor) {
+        if (activeBackgroundColor == null) {
+            throw new IllegalArgumentException("activeBackgroundColor is null.");
         }
 
-        setHighlightBackgroundColor(GraphicsUtilities.decodeColor(highlightBackgroundColor));
+        setActiveBackgroundColor(GraphicsUtilities.decodeColor(activeBackgroundColor));
     }
 
-    public final void setHighlightBackgroundColor(int color) {
+    public final void setActiveBackgroundColor(int color) {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
-        setHighlightBackgroundColor(theme.getColor(color));
+        setActiveBackgroundColor(theme.getColor(color));
     }
 
     public int getSpacing() {
@@ -298,5 +298,10 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
     @Override
     public void itemsRemoved(MenuBar menuBar, int index, Sequence<MenuBar.Item> removed) {
         invalidateComponent();
+    }
+
+    @Override
+    public void activeItemChanged(MenuBar menuBar, MenuBar.Item previousActiveItem) {
+        // No-op
     }
 }

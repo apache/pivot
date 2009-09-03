@@ -99,7 +99,7 @@ public class MenuBarItemDataRenderer extends BoxPane implements Button.DataRende
             Color color;
             if (button.isEnabled()) {
                 if (highlighted) {
-                    color = (Color)menuBar.getStyles().get("highlightColor");
+                    color = (Color)menuBar.getStyles().get("activeColor");
                 } else {
                     color = (Color)menuBar.getStyles().get("color");
                 }

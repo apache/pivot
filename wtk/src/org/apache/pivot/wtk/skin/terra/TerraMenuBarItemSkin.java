@@ -82,13 +82,13 @@ public class TerraMenuBarItemSkin extends MenuBarItemSkin {
         int width = getWidth();
         int height = getHeight();
 
-        boolean highlight = menuPopup.isOpen();
+        boolean highlight = menuBarItem.isActive();
 
         // Paint highlight state
         if (highlight) {
             MenuBar menuBar = menuBarItem.getMenuBar();
-            Color highlightBackgroundColor = (Color)menuBar.getStyles().get("highlightBackgroundColor");
-            graphics.setColor(highlightBackgroundColor);
+            Color activeBackgroundColor = (Color)menuBar.getStyles().get("activeBackgroundColor");
+            graphics.setColor(activeBackgroundColor);
             graphics.fillRect(0, 0, width, height);
         }
 
@@ -104,11 +104,12 @@ public class TerraMenuBarItemSkin extends MenuBarItemSkin {
     public boolean isOpaque() {
         boolean opaque = false;
 
-        if (menuPopup.isOpen()) {
-            MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
+        MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
+
+        if (menuBarItem.isActive()) {
             MenuBar menuBar = menuBarItem.getMenuBar();
-            Color highlightBackgroundColor = (Color)menuBar.getStyles().get("highlightBackgroundColor");
-            opaque = (highlightBackgroundColor.getTransparency() == Transparency.OPAQUE);
+            Color activeBackgroundColor = (Color)menuBar.getStyles().get("activeBackgroundColor");
+            opaque = (activeBackgroundColor.getTransparency() == Transparency.OPAQUE);
         }
 
         return opaque;
