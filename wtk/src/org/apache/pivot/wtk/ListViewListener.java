@@ -27,27 +27,35 @@ public interface ListViewListener {
      * List view listener adapter.
      */
     public static class Adapter implements ListViewListener {
+        @Override
         public void listDataChanged(ListView listView, List<?> previousListData) {
         }
 
+        @Override
         public void itemRendererChanged(ListView listView, ListView.ItemRenderer previousItemRenderer) {
         }
 
+        @Override
         public void itemEditorChanged(ListView listView, ListView.ItemEditor previousItemEditor) {
         }
 
+        @Override
         public void selectModeChanged(ListView listView, ListView.SelectMode previousSelectMode) {
         }
 
+        @Override
         public void checkmarksEnabledChanged(ListView listView) {
         }
 
+        @Override
         public void disabledItemFilterChanged(ListView listView, Filter<?> previousDisabledItemFilter) {
         }
 
+        @Override
         public void selectedItemKeyChanged(ListView listView, String previousSelectedItemKey) {
         }
 
+        @Override
         public void selectedItemsKeyChanged(ListView listView, String previousSelectedItemsKey) {
         }
     }

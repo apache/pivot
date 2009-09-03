@@ -26,12 +26,14 @@ import org.apache.pivot.util.ListenerList;
 public class Label extends Component {
     private static class LabelListenerList extends ListenerList<LabelListener>
         implements LabelListener {
+        @Override
         public void textChanged(Label label, String previousText) {
             for (LabelListener listener : this) {
                 listener.textChanged(label, previousText);
             }
         }
 
+        @Override
         public void textKeyChanged(Label label, String previousTextKey) {
             for (LabelListener listener : this) {
                 listener.textKeyChanged(label, previousTextKey);

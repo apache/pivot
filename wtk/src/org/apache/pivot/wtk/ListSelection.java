@@ -31,6 +31,7 @@ class ListSelection {
      * Comparator that determines the index of the first intersecting range.
      */
     public static final Comparator<Span> START_COMPARATOR = new Comparator<Span>() {
+        @Override
         public int compare(Span range1, Span range2) {
             return (range1.end - range2.start);
         }
@@ -40,6 +41,7 @@ class ListSelection {
      * Comparator that determines the index of the last intersecting range.
      */
     public static final Comparator<Span> END_COMPARATOR = new Comparator<Span>() {
+        @Override
         public int compare(Span range1, Span range2) {
             return (range1.start - range2.end);
         }
@@ -49,6 +51,7 @@ class ListSelection {
      * Comparator that determines if two ranges intersect.
      */
     public static final Comparator<Span> INTERSECTION_COMPARATOR = new Comparator<Span>() {
+        @Override
         public int compare(Span range1, Span range2) {
             return (range1.start > range2.end) ? 1 : (range2.start > range1.end) ? -1 : 0;
         }

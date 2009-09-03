@@ -39,6 +39,7 @@ public class LocalManifest implements Manifest {
     protected URL url = null;
     protected HashMap<String, Object> values = new HashMap<String, Object>();
 
+    @Override
     public String getText() {
         return text;
     }
@@ -51,10 +52,12 @@ public class LocalManifest implements Manifest {
         this.text = text;
     }
 
+    @Override
     public boolean containsText() {
         return (text != null);
     }
 
+    @Override
     public Image getImage() {
         return image;
     }
@@ -67,10 +70,12 @@ public class LocalManifest implements Manifest {
         this.image = image;
     }
 
+    @Override
     public boolean containsImage() {
         return image != null;
     }
 
+    @Override
     public FileList getFileList() {
         return fileList;
     }
@@ -83,10 +88,12 @@ public class LocalManifest implements Manifest {
         this.fileList = fileList;
     }
 
+    @Override
     public boolean containsFileList() {
         return fileList != null;
     }
 
+    @Override
     public URL getURL() {
         return url;
     }
@@ -99,10 +106,12 @@ public class LocalManifest implements Manifest {
         this.url = url;
     }
 
+    @Override
     public boolean containsURL() {
         return url != null;
     }
 
+    @Override
     public Object getValue(String key) {
         return values.get(key);
     }
@@ -111,6 +120,7 @@ public class LocalManifest implements Manifest {
         return values.put(key, value);
     }
 
+    @Override
     public boolean containsValue(String key) {
         return values.containsKey(key);
     }
@@ -140,6 +150,7 @@ class LocalManifestAdapter implements Transferable {
         }
     }
 
+    @Override
     public Object getTransferData(DataFlavor dataFlavor)
         throws UnsupportedFlavorException {
         Object transferData = null;
@@ -180,10 +191,12 @@ class LocalManifestAdapter implements Transferable {
         return transferData;
     }
 
+    @Override
     public DataFlavor[] getTransferDataFlavors() {
         return transferDataFlavors.toArray(DataFlavor[].class);
     }
 
+    @Override
     public boolean isDataFlavorSupported(DataFlavor dataFlavor) {
         return (transferDataFlavors.indexOf(dataFlavor) != -1);
     }

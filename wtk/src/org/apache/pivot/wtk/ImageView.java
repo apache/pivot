@@ -30,6 +30,7 @@ import org.apache.pivot.wtk.media.Image;
 public class ImageView extends Component {
     private static class ImageViewListenerList extends ListenerList<ImageViewListener>
         implements ImageViewListener {
+        @Override
         public void imageChanged(ImageView imageView, Image previousImage) {
             for (ImageViewListener listener : this) {
                 listener.imageChanged(imageView, previousImage);

@@ -24,18 +24,23 @@ public interface ListViewItemListener {
      * List view item listener adapter.
      */
     public static class Adapter implements ListViewItemListener {
+        @Override
         public void itemInserted(ListView listView, int index) {
         }
 
+        @Override
         public void itemsRemoved(ListView listView, int index, int count) {
         }
 
+        @Override
         public void itemUpdated(ListView listView, int index) {
         }
 
+        @Override
         public void itemsCleared(ListView listView) {
         }
 
+        @Override
         public void itemsSorted(ListView listView) {
         }
     }

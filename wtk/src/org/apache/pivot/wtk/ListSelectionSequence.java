@@ -28,34 +28,42 @@ class ListSelectionSequence implements Sequence<Span> {
         this.listSelection = listSelection;
     }
 
+    @Override
     public int add(Span span) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public void insert(Span span, int index) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public Span update(int index, Span span) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public int remove(Span span) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public Sequence<Span> remove(int index, int count) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public Span get(int index) {
         return listSelection.get(index);
     }
 
+    @Override
     public int indexOf(Span span) {
         return listSelection.indexOf(span);
     }
 
+    @Override
     public int getLength() {
         return listSelection.getLength();
     }
