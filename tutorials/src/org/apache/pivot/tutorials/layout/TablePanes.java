@@ -107,10 +107,12 @@ public class TablePanes implements Application {
 
     private Window window = null;
     private TablePane tablePane = null;
-    private Checkbox horizontalGridLinesCheckbox = null;
-    private Checkbox verticalGridLinesCheckbox = null;
-    private Spinner horizontalSpacingSpinner = null;
-    private Spinner verticalSpacingSpinner = null;
+    
+    @SuppressWarnings("unused") private Checkbox horizontalGridLinesCheckbox = null;
+    @SuppressWarnings("unused") private Checkbox verticalGridLinesCheckbox = null;
+    @SuppressWarnings("unused") private Spinner horizontalSpacingSpinner = null;
+    @SuppressWarnings("unused") private Spinner verticalSpacingSpinner = null;
+
     private Menu.Section cellSection = null;
     private Menu.Section rowSection = null;
     private Menu.Section columnSection = null;
