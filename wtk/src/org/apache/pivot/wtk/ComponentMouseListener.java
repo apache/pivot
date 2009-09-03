@@ -25,13 +25,16 @@ public interface ComponentMouseListener {
      * Component mouse button listener adapter.
      */
     public static class Adapter implements ComponentMouseListener {
+        @Override
         public boolean mouseMove(Component component, int x, int y) {
             return false;
         }
 
+        @Override
         public void mouseOver(Component component) {
         }
 
+        @Override
         public void mouseOut(Component component) {
         }
     }

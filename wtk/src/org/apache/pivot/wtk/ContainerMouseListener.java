@@ -25,18 +25,22 @@ public interface ContainerMouseListener {
      * Container mouse listener adapter.
      */
     public static class Adapter implements ContainerMouseListener {
+        @Override
         public boolean mouseMove(Container container, int x, int y) {
             return false;
         }
 
+        @Override
         public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
             return false;
         }
 
+        @Override
         public boolean mouseUp(Container container, Mouse.Button button, int x, int y) {
             return false;
         }
 
+        @Override
         public boolean mouseWheel(Container container, Mouse.ScrollType scrollType,
             int scrollAmount, int wheelRotation, int x, int y) {
             return false;

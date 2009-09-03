@@ -26,13 +26,16 @@ public interface CardPaneListener {
      * Card pane listener adapter.
      */
     public static class Adapter implements CardPaneListener {
+        @Override
         public Vote previewSelectedIndexChange(CardPane cardPane, int selectedIndex) {
             return Vote.APPROVE;
         }
 
+        @Override
         public void selectedIndexChangeVetoed(CardPane cardPane, Vote reason) {
         }
 
+        @Override
         public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex) {
         }
     }

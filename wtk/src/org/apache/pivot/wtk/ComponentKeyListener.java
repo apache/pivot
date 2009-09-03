@@ -24,14 +24,17 @@ public interface ComponentKeyListener {
      * Component key listener adapter.
      */
     public static class Adapter implements ComponentKeyListener {
+        @Override
         public boolean keyTyped(Component component, char character) {
             return false;
         }
 
+        @Override
         public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
             return false;
         }
 
+        @Override
         public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
             return false;
         }

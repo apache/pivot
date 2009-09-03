@@ -24,45 +24,58 @@ public interface ComponentListener {
      * Component listener adapter.
      */
     public static class Adapter implements ComponentListener {
+        @Override
         public void parentChanged(Component component, Container previousParent) {
         }
 
+        @Override
         public void sizeChanged(Component component, int previousWidth, int previousHeight) {
         }
 
+        @Override
         public void preferredSizeChanged(Component component, int previousPreferredWidth,
             int previousPreferredHeight) {
         }
 
+        @Override
         public void preferredWidthLimitsChanged(Component component, int previousMinimumPreferredWidth,
             int previousMaximumPreferredWidth) {
         }
 
+        @Override
         public void preferredHeightLimitsChanged(Component component, int previousMinimumPreferredHeight,
             int previousMaximumPreferredHeight) {
         }
 
+        @Override
         public void locationChanged(Component component, int previousX, int previousY) {
         }
 
+        @Override
         public void visibleChanged(Component component) {
         }
 
+        @Override
         public void styleUpdated(Component component, String styleKey, Object previousValue) {
         }
 
+        @Override
         public void cursorChanged(Component component, Cursor previousCursor) {
         }
 
+        @Override
         public void tooltipTextChanged(Component component, String previousTooltipText) {
         }
 
+        @Override
         public void dragSourceChanged(Component component, DragSource previousDragSource) {
         }
 
+        @Override
         public void dropTargetChanged(Component component, DropTarget previousDropTarget) {
         }
 
+        @Override
         public void menuHandlerChanged(Component component, MenuHandler previousMenuHandler) {
         }
     }

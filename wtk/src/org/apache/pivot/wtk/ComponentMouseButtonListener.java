@@ -24,14 +24,17 @@ public interface ComponentMouseButtonListener {
      * Component mouse button listener adapter.
      */
     public static class Adapter implements ComponentMouseButtonListener {
+        @Override
         public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
             return false;
         }
 
+        @Override
         public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
             return false;
         }
 
+        @Override
         public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
             return false;
         }

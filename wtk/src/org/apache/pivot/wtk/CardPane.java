@@ -28,6 +28,7 @@ import org.apache.pivot.util.Vote;
 public class CardPane extends Container {
     private static class CardPaneListenerList extends ListenerList<CardPaneListener>
         implements CardPaneListener {
+        @Override
         public Vote previewSelectedIndexChange(CardPane cardPane, int selectedIndex) {
             Vote vote = Vote.APPROVE;
 
@@ -38,12 +39,14 @@ public class CardPane extends Container {
             return vote;
         }
 
+        @Override
         public void selectedIndexChangeVetoed(CardPane cardPane, Vote reason) {
             for (CardPaneListener listener : this) {
                 listener.selectedIndexChangeVetoed(cardPane, reason);
             }
         }
 
+        @Override
         public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex) {
             for (CardPaneListener listener : this) {
                 listener.selectedIndexChanged(cardPane, previousSelectedIndex);

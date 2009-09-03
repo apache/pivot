@@ -38,12 +38,14 @@ public class CalendarButton extends Button {
     private static class CalendarButtonListenerList
         extends ListenerList<CalendarButtonListener>
         implements CalendarButtonListener {
+        @Override
         public void localeChanged(CalendarButton calendarButton, Locale previousLocale) {
             for (CalendarButtonListener listener : this) {
                 listener.localeChanged(calendarButton, previousLocale);
             }
         }
 
+        @Override
         public void disabledDateFilterChanged(CalendarButton calendarButton,
             Filter<CalendarDate> previousDisabledDateFilter) {
             for (CalendarButtonListener listener : this) {
@@ -51,6 +53,7 @@ public class CalendarButton extends Button {
             }
         }
 
+        @Override
         public void selectedDateKeyChanged(CalendarButton calendarButton,
             String previousSelectedDateKey) {
             for (CalendarButtonListener listener : this) {
@@ -66,6 +69,7 @@ public class CalendarButton extends Button {
         extends ListenerList<CalendarButtonSelectionListener>
         implements CalendarButtonSelectionListener {
 
+        @Override
         public void selectedDateChanged(CalendarButton calendarButton,
             CalendarDate previousSelectedDate) {
             for (CalendarButtonSelectionListener listener : this) {

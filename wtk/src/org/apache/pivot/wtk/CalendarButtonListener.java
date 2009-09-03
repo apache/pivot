@@ -29,13 +29,16 @@ public interface CalendarButtonListener {
      * Calendar button listener adapter.
      */
     public static class Adapter implements CalendarButtonListener {
+        @Override
         public void localeChanged(CalendarButton calendarButton, Locale previousLocale) {
         }
 
+        @Override
         public void disabledDateFilterChanged(CalendarButton calendarButton,
             Filter<CalendarDate> previousDisabledDateFilter) {
         }
 
+        @Override
         public void selectedDateKeyChanged(CalendarButton calendarButton,
             String previousSelectedDateKey) {
         }

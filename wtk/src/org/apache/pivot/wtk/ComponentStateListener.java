@@ -24,9 +24,11 @@ public interface ComponentStateListener {
      * Component state listener adapter.
      */
     public static class Adapter implements ComponentStateListener {
+        @Override
         public void enabledChanged(Component component) {
         }
 
+        @Override
         public void focusedChanged(Component component, Component obverseComponent) {
         }
     }

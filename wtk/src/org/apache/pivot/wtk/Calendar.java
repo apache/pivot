@@ -36,30 +36,35 @@ public class Calendar extends Container {
     private static class CalendarListenerList extends ListenerList<CalendarListener>
         implements CalendarListener {
 
+        @Override
         public void yearChanged(Calendar calendar, int previousYear) {
             for (CalendarListener listener : this) {
                 listener.yearChanged(calendar, previousYear);
             }
         }
 
+        @Override
         public void monthChanged(Calendar calendar, int previousMonth) {
             for (CalendarListener listener : this) {
                 listener.monthChanged(calendar, previousMonth);
             }
         }
 
+        @Override
         public void localeChanged(Calendar calendar, Locale previousLocale) {
             for (CalendarListener listener : this) {
                 listener.localeChanged(calendar, previousLocale);
             }
         }
 
+        @Override
         public void disabledDateFilterChanged(Calendar calendar, Filter<CalendarDate> previousDisabledDateFilter) {
             for (CalendarListener listener : this) {
                 listener.disabledDateFilterChanged(calendar, previousDisabledDateFilter);
             }
         }
 
+        @Override
         public void selectedDateKeyChanged(Calendar calendar,
             String previousSelectedDateKey) {
             for (CalendarListener listener : this) {
@@ -75,6 +80,7 @@ public class Calendar extends Container {
         extends ListenerList<CalendarSelectionListener>
         implements CalendarSelectionListener {
 
+        @Override
         public void selectedDateChanged(Calendar calendar,
             CalendarDate previousSelectedDate) {
             for (CalendarSelectionListener listener : this) {

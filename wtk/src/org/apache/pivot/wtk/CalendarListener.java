@@ -29,18 +29,23 @@ public interface CalendarListener {
      * Calendar listener adapter.
      */
     public static class Adapter implements CalendarListener {
+        @Override
         public void yearChanged(Calendar calendar, int previousYear) {
         }
 
+        @Override
         public void monthChanged(Calendar calendar, int previousMonth) {
         }
 
+        @Override
         public void localeChanged(Calendar calendar, Locale previousLocale) {
         }
 
+        @Override
         public void disabledDateFilterChanged(Calendar calendar, Filter<CalendarDate> previousDisabledDateFilter) {
         }
 
+        @Override
         public void selectedDateKeyChanged(Calendar calendar,
             String previousSelectedDateKey) {
         }

@@ -73,6 +73,7 @@ public final class Clipboard {
 
             LocalManifestAdapter localManifestAdapter = new LocalManifestAdapter(content);
             awtClipboard.setContents(localManifestAdapter, new ClipboardOwner() {
+                @Override
                 public void lostOwnership(java.awt.datatransfer.Clipboard clipboard,
                     Transferable contents) {
                     LocalManifest previousContent = Clipboard.content;
