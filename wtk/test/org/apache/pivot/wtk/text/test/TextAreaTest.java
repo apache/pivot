@@ -81,6 +81,7 @@ public class TextAreaTest implements Application {
 
         textArea = (TextArea)wtkxSerializer.get("textArea");
         textArea.getTextAreaSelectionListeners().add(new TextAreaSelectionListener() {
+            @Override
             public void selectionChanged(TextArea textArea,
                 int previousSelectionStart, int previousSelectionLength) {
                 selectionStartLabel.setText(Integer.toString(textArea.getSelectionStart()));
@@ -93,14 +94,17 @@ public class TextAreaTest implements Application {
 
         treeView = (TreeView)wtkxSerializer.get("treeView");
         treeView.getTreeViewSelectionListeners().add(new TreeViewSelectionListener() {
+            @Override
             public void selectedPathAdded(TreeView treeView, Path path) {
                 // No-op
             }
 
+            @Override
             public void selectedPathRemoved(TreeView treeView, Path path) {
                 // No-op
             }
 
+            @Override
             public void selectedPathsChanged(TreeView treeView,
                 Sequence<Path> previousSelectedPaths) {
                 Path selectedPath = treeView.getSelectedPath();
