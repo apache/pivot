@@ -121,6 +121,7 @@ public abstract class Container extends Component
 
     private Component mouseOverComponent = null;
 
+    private boolean mouseDown = false;
     private Component mouseDownComponent = null;
     private long mouseDownTime = 0;
     private int mouseClickCount = 0;
@@ -713,6 +714,8 @@ public abstract class Container extends Component
     protected boolean mouseDown(Mouse.Button button, int x, int y) {
         boolean consumed = false;
 
+        mouseDown = true;
+
         if (isEnabled()) {
             // Notify container listeners
             consumed = containerMouseListeners.mouseDown(this, button, x, y);
@@ -782,7 +785,8 @@ public abstract class Container extends Component
                 }
 
                 // Synthesize mouse click event
-                if (component != null
+                if (mouseDown
+                    && component != null
                     && component == mouseDownComponent
                     && component.isEnabled()
                     && component.isVisible()) {
@@ -791,6 +795,8 @@ public abstract class Container extends Component
                 }
             }
         }
+
+        mouseDown = false;
 
         return consumed;
     }
