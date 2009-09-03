@@ -26,13 +26,16 @@ public interface MenuPopupStateListener {
      * Menu popup state listener adapter.
      */
     public static class Adapter implements MenuPopupStateListener {
+        @Override
         public Vote previewMenuPopupClose(MenuPopup menuPopup, boolean immediate) {
             return Vote.APPROVE;
         }
 
+        @Override
         public void menuPopupCloseVetoed(MenuPopup menuPopup, Vote reason) {
         }
 
+        @Override
         public void menuPopupClosed(MenuPopup menuPopup) {
         }
     }

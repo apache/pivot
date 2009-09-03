@@ -26,12 +26,15 @@ public interface RollupListener {
      * Rollup listener adapter.
      */
     public static class Adapter implements RollupListener {
+        @Override
         public void headingChanged(Rollup rollup, Component previousHeading) {
         }
 
+        @Override
         public void contentChanged(Rollup rollup, Component previousContent) {
         }
 
+        @Override
         public void collapsibleChanged(Rollup rollup) {
         }
     }

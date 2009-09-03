@@ -29,18 +29,21 @@ import org.apache.pivot.util.Vote;
 public class Rollup extends Container {
     private static class RollupListenerList extends ListenerList<RollupListener>
         implements RollupListener {
+        @Override
         public void headingChanged(Rollup rollup, Component previousHeading) {
             for (RollupListener listener : this) {
                 listener.headingChanged(rollup, previousHeading);
             }
         }
 
+        @Override
         public void contentChanged(Rollup rollup, Component previousContent) {
             for (RollupListener listener : this) {
                 listener.contentChanged(rollup, previousContent);
             }
         }
 
+        @Override
         public void collapsibleChanged(Rollup rollup) {
             for (RollupListener listener : this) {
                 listener.collapsibleChanged(rollup);
@@ -50,6 +53,7 @@ public class Rollup extends Container {
 
     private static class RollupStateListenerList extends ListenerList<RollupStateListener>
         implements RollupStateListener {
+        @Override
         public Vote previewExpandedChange(Rollup rollup) {
             Vote vote = Vote.APPROVE;
 
@@ -60,12 +64,14 @@ public class Rollup extends Container {
             return vote;
         }
 
+        @Override
         public void expandedChangeVetoed(Rollup rollup, Vote reason) {
             for (RollupStateListener listener : this) {
                 listener.expandedChangeVetoed(rollup, reason);
             }
         }
 
+        @Override
         public void expandedChanged(Rollup rollup) {
             for (RollupStateListener listener : this) {
                 listener.expandedChanged(rollup);

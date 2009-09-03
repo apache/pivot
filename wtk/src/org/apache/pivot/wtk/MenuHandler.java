@@ -24,12 +24,15 @@ public interface MenuHandler {
      * Menu handler adapter.
      */
     public static class Adapter implements MenuHandler {
+        @Override
         public void configureMenuBar(Component component, MenuBar menuBar) {
         }
 
+        @Override
         public void cleanupMenuBar(Component component, MenuBar menuBar) {
         }
 
+        @Override
         public boolean configureContextMenu(Component component, Menu menu, int x, int y) {
             return false;
         }

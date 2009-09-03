@@ -26,6 +26,7 @@ import org.apache.pivot.wtk.media.Movie;
 public class MovieView extends Component {
     private static class MovieViewListenerList extends ListenerList<MovieViewListener>
         implements MovieViewListener {
+        @Override
         public void movieChanged(MovieView movieView, Movie previousMovie) {
             for (MovieViewListener listener : this) {
                 listener.movieChanged(movieView, previousMovie);

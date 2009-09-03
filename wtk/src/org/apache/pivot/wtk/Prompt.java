@@ -35,6 +35,7 @@ import org.apache.pivot.util.Resources;
 public class Prompt extends Sheet {
     private static class PromptListenerList extends ListenerList<PromptListener>
         implements PromptListener {
+        @Override
         public void selectedOptionChanged(Prompt prompt, int previousSelectedOption) {
             for (PromptListener listener : this) {
                 listener.selectedOptionChanged(prompt, previousSelectedOption);

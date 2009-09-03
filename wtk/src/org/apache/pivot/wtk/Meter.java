@@ -24,12 +24,14 @@ import org.apache.pivot.util.ListenerList;
 public class Meter extends Component {
     private static class MeterListenerList extends ListenerList<MeterListener>
     implements MeterListener {
+        @Override
         public void percentageChanged(Meter meter, double oldPercentage) {
             for (MeterListener listener : this) {
                 listener.percentageChanged(meter, oldPercentage);
             }
         }
 
+        @Override
         public void textChanged(Meter meter, String oldText) {
             for (MeterListener listener : this) {
                 listener.textChanged(meter, oldText);

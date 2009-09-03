@@ -28,13 +28,16 @@ public interface RollupStateListener {
      * Rollup state listener adapter.
      */
     public static class Adapter implements RollupStateListener {
+        @Override
         public Vote previewExpandedChange(Rollup rollup) {
             return Vote.APPROVE;
         }
 
+        @Override
         public void expandedChangeVetoed(Rollup rollup, Vote reason) {
         }
 
+        @Override
         public void expandedChanged(Rollup rollup) {
         }
     }

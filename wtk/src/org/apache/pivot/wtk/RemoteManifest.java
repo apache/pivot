@@ -68,6 +68,7 @@ public class RemoteManifest implements Manifest {
         }
     }
 
+    @Override
     public String getText() throws IOException {
         String text = null;
         try {
@@ -79,10 +80,12 @@ public class RemoteManifest implements Manifest {
         return text;
     }
 
+    @Override
     public boolean containsText() {
         return (textDataFlavor != null);
     }
 
+    @Override
     public Image getImage() throws IOException {
         Image image = null;
         try {
@@ -94,10 +97,12 @@ public class RemoteManifest implements Manifest {
         return image;
     }
 
+    @Override
     public boolean containsImage() {
         return (imageDataFlavor != null);
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public FileList getFileList() throws IOException {
         FileList fileList = null;
@@ -110,10 +115,12 @@ public class RemoteManifest implements Manifest {
         return fileList;
     }
 
+    @Override
     public boolean containsFileList() {
         return (fileListDataFlavor != null);
     }
 
+    @Override
     public URL getURL() throws IOException {
         URL url = null;
         try {
@@ -125,14 +132,17 @@ public class RemoteManifest implements Manifest {
         return url;
     }
 
+    @Override
     public boolean containsURL() {
         return (urlDataFlavor != null);
     }
 
+    @Override
     public Object getValue(String key) {
         return null;
     }
 
+    @Override
     public boolean containsValue(String key) {
         return false;
     }

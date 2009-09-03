@@ -36,12 +36,14 @@ public class Menu extends Container {
     public static class Item extends Button {
         private static class ItemListenerList extends ListenerList<ItemListener>
             implements ItemListener {
+            @Override
             public void nameChanged(Item item, String previousName) {
                 for (ItemListener listener : this) {
                     listener.nameChanged(item, previousName);
                 }
             }
 
+            @Override
             public void menuChanged(Item item, Menu previousMenu) {
                 for (ItemListener listener : this) {
                     listener.menuChanged(item, previousMenu);
@@ -196,18 +198,21 @@ public class Menu extends Container {
     public static class Section implements Sequence<Item>, Iterable<Item> {
         private static class SectionListenerList extends ListenerList<SectionListener>
             implements SectionListener {
+            @Override
             public void itemInserted(Menu.Section section, int index) {
                 for (SectionListener listener : this) {
                     listener.itemInserted(section, index);
                 }
             }
 
+            @Override
             public void itemsRemoved(Menu.Section section, int index, Sequence<Item> removed) {
                 for (SectionListener listener : this) {
                     listener.itemsRemoved(section, index, removed);
                 }
             }
 
+            @Override
             public void nameChanged(Menu.Section section, String previousName) {
                 for (SectionListener listener : this) {
                     listener.nameChanged(section, previousName);
@@ -253,6 +258,7 @@ public class Menu extends Container {
             }
         }
 
+        @Override
         public int add(Item item) {
             int index = getLength();
             insert(item, index);
@@ -260,6 +266,7 @@ public class Menu extends Container {
             return index;
         }
 
+        @Override
         public void insert(Item item, int index) {
             if (item.getSection() != null) {
                 throw new IllegalArgumentException("item already has a section.");
@@ -274,10 +281,12 @@ public class Menu extends Container {
             }
         }
 
+        @Override
         public Item update(int index, Item item) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public int remove(Item item) {
             int index = items.indexOf(item);
             if (index != -1) {
@@ -287,6 +296,7 @@ public class Menu extends Container {
             return index;
         }
 
+        @Override
         public Sequence<Item> remove(int index, int count) {
             Sequence<Item> removed = items.remove(index, count);
 
@@ -305,18 +315,22 @@ public class Menu extends Container {
             return removed;
         }
 
+        @Override
         public Item get(int index) {
             return items.get(index);
         }
 
+        @Override
         public int indexOf(Item item) {
             return items.indexOf(item);
         }
 
+        @Override
         public int getLength() {
             return items.getLength();
         }
 
+        @Override
         public Iterator<Item> iterator() {
             return new ImmutableIterator<Item>(items.iterator());
         }
@@ -363,6 +377,7 @@ public class Menu extends Container {
         private SectionSequence() {
         }
 
+        @Override
         public int add(Section section) {
             int index = getLength();
             insert(section, index);
@@ -370,6 +385,7 @@ public class Menu extends Container {
             return index;
         }
 
+        @Override
         public void insert(Section section, int index) {
             if (section.menu != null) {
                 throw new IllegalArgumentException("section already has a menu.");
@@ -406,10 +422,12 @@ public class Menu extends Container {
             menuListeners.sectionInserted(Menu.this, index);
         }
 
+        @Override
         public Section update(int index, Section section) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public int remove(Section section) {
             int index = sections.indexOf(section);
             if (index != -1) {
@@ -419,6 +437,7 @@ public class Menu extends Container {
             return index;
         }
 
+        @Override
         public Sequence<Section> remove(int index, int count) {
             Sequence<Section> removed = sections.remove(index, count);
 
@@ -451,18 +470,22 @@ public class Menu extends Container {
             remove(0, sections.getLength());
         }
 
+        @Override
         public Section get(int index) {
             return sections.get(index);
         }
 
+        @Override
         public int indexOf(Section item) {
             return sections.indexOf(item);
         }
 
+        @Override
         public int getLength() {
             return sections.getLength();
         }
 
+        @Override
         public Iterator<Section> iterator() {
             return new ImmutableIterator<Section>(sections.iterator());
         }
@@ -470,12 +493,14 @@ public class Menu extends Container {
 
     private static class MenuListenerList extends ListenerList<MenuListener>
         implements MenuListener {
+        @Override
         public void sectionInserted(Menu menu, int index) {
             for (MenuListener listener : this) {
                 listener.sectionInserted(menu, index);
             }
         }
 
+        @Override
         public void sectionsRemoved(Menu menu, int index, Sequence<Section> removed) {
             for (MenuListener listener : this) {
                 listener.sectionsRemoved(menu, index, removed);
@@ -485,6 +510,7 @@ public class Menu extends Container {
 
     private static class MenuItemSelectionListenerList extends ListenerList<MenuItemSelectionListener>
         implements MenuItemSelectionListener {
+        @Override
         public void itemSelected(Menu.Item menuItem) {
             for (MenuItemSelectionListener listener : this) {
                 listener.itemSelected(menuItem);

@@ -35,6 +35,7 @@ public class MenuBar extends Container {
     public static class Item extends Button {
         private static class ItemListenerList extends ListenerList<ItemListener>
             implements ItemListener {
+            @Override
             public void menuChanged(Item item, Menu previousMenu) {
                 for (ItemListener listener : this) {
                     listener.menuChanged(item, previousMenu);
@@ -124,6 +125,7 @@ public class MenuBar extends Container {
      * Item sequence implementation.
      */
     public final class ItemSequence implements Sequence<Item>, Iterable<Item> {
+        @Override
         public int add(Item item) {
             int index = getLength();
             insert(item, index);
@@ -131,6 +133,7 @@ public class MenuBar extends Container {
             return index;
         }
 
+        @Override
         public void insert(Item item, int index) {
             if (item.getMenuBar() != null) {
                 throw new IllegalArgumentException("item already has a menu bar.");
@@ -144,10 +147,12 @@ public class MenuBar extends Container {
             menuBarListeners.itemInserted(MenuBar.this, index);
         }
 
+        @Override
         public Item update(int index, Item item) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public int remove(Item item) {
             int index = items.indexOf(item);
             if (index != -1) {
@@ -157,6 +162,7 @@ public class MenuBar extends Container {
             return index;
         }
 
+        @Override
         public Sequence<Item> remove(int index, int count) {
             Sequence<Item> removed = items.remove(index, count);
 
@@ -172,18 +178,22 @@ public class MenuBar extends Container {
             return removed;
         }
 
+        @Override
         public Item get(int index) {
             return items.get(index);
         }
 
+        @Override
         public int indexOf(Item item) {
             return items.indexOf(item);
         }
 
+        @Override
         public int getLength() {
             return items.getLength();
         }
 
+        @Override
         public Iterator<Item> iterator() {
             return new ImmutableIterator<Item>(items.iterator());
         }
@@ -191,12 +201,14 @@ public class MenuBar extends Container {
 
     private static class MenuBarListenerList extends ListenerList<MenuBarListener>
         implements MenuBarListener {
+        @Override
         public void itemInserted(MenuBar menuBar, int index) {
             for (MenuBarListener listener : this) {
                 listener.itemInserted(menuBar, index);
             }
         }
 
+        @Override
         public void itemsRemoved(MenuBar menuBar, int index, Sequence<MenuBar.Item> removed) {
             for (MenuBarListener listener : this) {
                 listener.itemsRemoved(menuBar, index, removed);

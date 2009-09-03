@@ -33,12 +33,14 @@ import org.apache.pivot.wtk.content.ButtonDataRenderer;
 public class MenuButton extends Button {
     private static class MenuButtonListenerList extends ListenerList<MenuButtonListener>
         implements MenuButtonListener {
+        @Override
         public void menuChanged(MenuButton menuButton, Menu previousMenu) {
             for (MenuButtonListener listener : this) {
                 listener.menuChanged(menuButton, previousMenu);
             }
         }
 
+        @Override
         public void repeatableChanged(MenuButton menuButton) {
             for (MenuButtonListener listener : this) {
                 listener.repeatableChanged(menuButton);

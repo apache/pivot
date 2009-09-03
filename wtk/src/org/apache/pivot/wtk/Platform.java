@@ -49,6 +49,7 @@ public class Platform {
 
                 // Listen for changes to the property
                 toolkit.addPropertyChangeListener("awt.font.desktophints", new PropertyChangeListener() {
+                    @Override
                     public void propertyChange(PropertyChangeEvent event) {
                         Platform.textAntialiasingHint = null;
                     }

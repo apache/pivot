@@ -25,6 +25,7 @@ import org.apache.pivot.util.Vote;
 public class MenuPopup extends Window {
     private static class MenuPopupListenerList extends ListenerList<MenuPopupListener>
         implements MenuPopupListener {
+        @Override
         public void menuChanged(MenuPopup menuPopup, Menu previousMenu) {
             for (MenuPopupListener listener : this) {
                 listener.menuChanged(menuPopup, previousMenu);
@@ -34,6 +35,7 @@ public class MenuPopup extends Window {
 
     private static class MenuPopupStateListenerList extends ListenerList<MenuPopupStateListener>
         implements MenuPopupStateListener {
+        @Override
         public Vote previewMenuPopupClose(MenuPopup menuPopup, boolean immediate) {
             Vote vote = Vote.APPROVE;
 
@@ -44,12 +46,14 @@ public class MenuPopup extends Window {
             return vote;
         }
 
+        @Override
         public void menuPopupCloseVetoed(MenuPopup menuPopup, Vote reason) {
             for (MenuPopupStateListener listener : this) {
                 listener.menuPopupCloseVetoed(menuPopup, reason);
             }
         }
 
+        @Override
         public void menuPopupClosed(MenuPopup menuPopup) {
             for (MenuPopupStateListener listener : this) {
                 listener.menuPopupClosed(menuPopup);
