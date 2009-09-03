@@ -121,10 +121,8 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
     public HashMap(Map<K, V> map) {
         this(Math.max((int)((float)map.getCount() / DEFAULT_LOAD_FACTOR) + 1, DEFAULT_CAPACITY));
 
-        if (map != null) {
-            for (K key : map) {
-                put(key, map.get(key));
-            }
+        for (K key : map) {
+            put(key, map.get(key));
         }
     }
 

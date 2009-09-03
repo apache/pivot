@@ -677,7 +677,8 @@ public class Window extends Container {
             boolean cancel = false;
             for (Window ownedWindow : new ArrayList<Window>(this.ownedWindows)) {
                 ownedWindow.close();
-                cancel |= !(ownedWindow.isClosing() || ownedWindow.isClosed());
+                cancel |= !(ownedWindow.isClosing()
+                    || ownedWindow.isClosed());
             }
 
             // Close this window only if all owned windows are closing or closed

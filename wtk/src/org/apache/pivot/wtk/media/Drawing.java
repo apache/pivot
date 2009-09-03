@@ -58,7 +58,7 @@ public class Drawing extends Image {
         public void regionUpdated(Canvas canvas, int x, int y, int width, int height) {
             Bounds bounds = new Bounds(0, 0, Drawing.this.width, Drawing.this.height);
             bounds = bounds.intersect(new Bounds(x, y, width, height));
-            imageListeners.regionUpdated(Drawing.this, x, y, width, height);
+            imageListeners.regionUpdated(Drawing.this, bounds.x, bounds.y, bounds.width, bounds.height);
         }
     };
 
