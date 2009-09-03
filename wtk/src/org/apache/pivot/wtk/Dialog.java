@@ -176,11 +176,12 @@ public class Dialog extends Frame {
             if (vote == Vote.APPROVE) {
                 super.close();
 
+                closing = super.isClosing();
+
                 if (isClosed()) {
                     this.result = result;
 
                     modal = false;
-                    closing = false;
 
                     // Move the owner to the front
                     Window owner = getOwner();

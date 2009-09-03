@@ -150,8 +150,9 @@ public class MenuPopup extends Window {
             if (vote == Vote.APPROVE) {
                 super.close();
 
+                closing = super.isClosing();
+
                 if (isClosed()) {
-                    closing = false;
                     menuPopupStateListeners.menuPopupClosed(this);
                 }
             } else if (vote == Vote.DENY){

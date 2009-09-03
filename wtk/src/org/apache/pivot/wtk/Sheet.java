@@ -133,10 +133,10 @@ public class Sheet extends Window {
             if (vote == Vote.APPROVE) {
                 super.close();
 
+                closing = super.isClosing();
+
                 if (isClosed()) {
                     this.result = result;
-
-                    closing = false;
 
                     // Move the owner to the front
                     Window owner = getOwner();
