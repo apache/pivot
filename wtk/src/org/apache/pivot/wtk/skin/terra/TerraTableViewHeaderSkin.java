@@ -122,8 +122,8 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
     private static final int RESIZE_HANDLE_SIZE = 6;
     public static final int MINIMUM_COLUMN_WIDTH = 2;
 
-    protected SortIndicatorImage sortAscendingImage = new SortIndicatorImage(SortDirection.ASCENDING);
-    protected SortIndicatorImage sortDescendingImage = new SortIndicatorImage(SortDirection.DESCENDING);
+    private SortIndicatorImage sortAscendingImage = new SortIndicatorImage(SortDirection.ASCENDING);
+    private SortIndicatorImage sortDescendingImage = new SortIndicatorImage(SortDirection.DESCENDING);
 
     public TerraTableViewHeaderSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();

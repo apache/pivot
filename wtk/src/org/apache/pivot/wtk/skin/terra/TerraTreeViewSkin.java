@@ -1225,7 +1225,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                 // descendant of our younger sibling
                 for (int n = visibleNodes.getLength(), nodeDepth = youngerSibling.depth;
                     insertIndex < n && visibleNodes.get(insertIndex).depth > nodeDepth;
-                    insertIndex++);
+                    insertIndex++) {
+                }
             }
 
             visibleNodes.insert(nodeInfo, insertIndex);
@@ -1276,7 +1277,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                 // it's a descendant of the last child node
                 for (int n = visibleNodes.getLength(), nodeDepth = last.depth;
                     rangeEnd < n && visibleNodes.get(rangeEnd).depth > nodeDepth;
-                    rangeEnd++);
+                    rangeEnd++) {
+                }
 
                 visibleNodes.remove(rangeStart, rangeEnd - rangeStart);
 
