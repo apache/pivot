@@ -16,14 +16,46 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Sheet wtkx:id="sheet" styles="{padding:0}"
+<Sheet wtkx:id="sheet" preferredWidth="350" styles="{padding:0}"
     xmlns:collections="org.apache.pivot.collections"
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
     <wtkx:define>
-        <Button.Group wtkx:id="rowHeightGroup"/>
+        <Button.Group wtkx:id="rowHeightGroup">
+            <groupListeners>
+                <wtkx:script language="javascript">
+                    <![CDATA[
+                    function selectionChanged(group, previousSelection) {
+                        setRowHeight();
+                    }
+                    ]]>
+                </wtkx:script>
+            </groupListeners>
+        </Button.Group>
     </wtkx:define>
+
+    <wtkx:script language="javascript">
+        <![CDATA[
+        function setRowHeight() {
+            var selectedButton = rowHeightGroup.getSelection();
+            var label = row.get(0);
+
+            if (selectedButton == defaultHeightButton) {
+                row.setHeight(-1);
+                label.setText("-1");
+            } else if (selectedButton == relativeHeightButton) {
+                var weight = relativeHeightSpinner.getSelectedItem();
+                row.setHeight(weight, true);
+                label.setText(weight + "*");
+            } else if (selectedButton == absoluteHeightButton) {
+                var height = absoluteHeightSpinner.getSelectedItem();
+                row.setHeight(height);
+                label.setText(height);
+            }
+        }
+        ]]>
+    </wtkx:script>
 
     <content>
         <BoxPane orientation="vertical" styles="{fill:true, verticalAlignment:'bottom'}">
@@ -39,14 +71,57 @@ limitations under the License.
                                 <Form wtkx:id="form">
                                     <sections>
                                         <Form.Section>
-                                            <FlowPane Form.label="Row Height">
-                                                <RadioButton wtkx:id="defaultHeight"
-                                                    buttonData="Default" group="$rowHeightGroup"/>
-                                                <RadioButton wtkx:id="relativeHeight"
-                                                    buttonData="Relative" group="$rowHeightGroup"/>
-                                                <RadioButton wtkx:id="defaultHeight"
-                                                    buttonData="Absolute" group="$rowHeightGroup"/>
-                                            </FlowPane>
+                                            <TablePane Form.label="Row Height"
+                                                styles="{horizontalSpacing:8, verticalSpacing:4}">
+                                                <columns>
+                                                    <TablePane.Column width="-1"/>
+                                                    <TablePane.Column width="1*"/>
+                                                </columns>
+                                                <rows>
+                                                    <TablePane.Row height="1*">
+                                                        <RadioButton wtkx:id="defaultHeightButton"
+                                                            buttonData="Default" group="$rowHeightGroup"/>
+                                                    </TablePane.Row>
+                                                    <TablePane.Row height="1*">
+                                                        <RadioButton wtkx:id="relativeHeightButton"
+                                                            buttonData="Relative" group="$rowHeightGroup"/>
+                                                        <Spinner wtkx:id="relativeHeightSpinner" styles="{sizeToContent:true}">
+                                                            <spinnerData>
+                                                                <content:NumericSpinnerData lowerBound="1"
+                                                                    upperBound="256"/>
+                                                            </spinnerData>
+                                                            <spinnerSelectionListeners>
+                                                                <wtkx:script language="javascript">
+                                                                    <![CDATA[
+                                                                    function selectedIndexChanged(spinner, previousSelectedIndex) {
+                                                                        setRowHeight();
+                                                                    }
+                                                                    ]]>
+                                                                </wtkx:script>
+                                                            </spinnerSelectionListeners>
+                                                        </Spinner>
+                                                    </TablePane.Row>
+                                                    <TablePane.Row height="1*">
+                                                        <RadioButton wtkx:id="absoluteHeightButton"
+                                                            buttonData="Absolute" group="$rowHeightGroup"/>
+                                                        <Spinner wtkx:id="absoluteHeightSpinner" styles="{sizeToContent:true}">
+                                                            <spinnerData>
+                                                                <content:NumericSpinnerData lowerBound="50"
+                                                                    upperBound="300"/>
+                                                            </spinnerData>
+                                                            <spinnerSelectionListeners>
+                                                                <wtkx:script language="javascript">
+                                                                    <![CDATA[
+                                                                    function selectedIndexChanged(spinner, previousSelectedIndex) {
+                                                                        setRowHeight();
+                                                                    }
+                                                                    ]]>
+                                                                </wtkx:script>
+                                                            </spinnerSelectionListeners>
+                                                        </Spinner>
+                                                    </TablePane.Row>
+                                                </rows>
+                                            </TablePane>
                                         </Form.Section>
                                     </sections>
                                 </Form>
@@ -68,23 +143,27 @@ limitations under the License.
                                     </wtkx:script>
                                 </buttonPressListeners>
                             </PushButton>
-                            <PushButton wtkx:id="cancelButton" buttonData="Cancel"
-                                preferredWidth="72" preferredHeight="24"
-                                styles="{backgroundColor:16, borderColor:13, color:4, fontBold:true}">
-                                <buttonPressListeners>
-                                    <wtkx:script language="javascript">
-                                        <![CDATA[
-                                        function buttonPressed(button) {
-                                            sheet.close(false);
-                                        }
-                                        ]]>
-                                    </wtkx:script>
-                                </buttonPressListeners>
-                            </PushButton>
                         </BoxPane>
                     </TablePane.Row>
                 </rows>
             </TablePane>
         </BoxPane>
     </content>
+
+    <wtkx:script language="javascript">
+        <![CDATA[
+        relativeHeightSpinner.setSelectedIndex(0);
+        absoluteHeightSpinner.setSelectedIndex(0);
+
+        if (row.isRelative()) {
+            relativeHeightSpinner.setSelectedIndex(row.getHeight() - 1);
+            relativeHeightButton.setSelected(true);
+        } else if (row.getHeight() == -1) {
+            defaultHeightButton.setSelected(true);
+        } else {
+            absoluteHeightSpinner.setSelectedIndex(row.getHeight() - 50);
+            absoluteHeightButton.setSelected(true);
+        }
+        ]]>
+    </wtkx:script>
 </Sheet>

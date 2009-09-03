@@ -37,21 +37,39 @@ limitations under the License.
                                     <Form>
                                         <sections>
                                             <Form.Section>
-                                                <Spinner wtkx:id="rowSpan" Form.label="Row Span"
+                                                <Spinner wtkx:id="rowSpanSpinner" Form.label="Row Span"
                                                     styles="{sizeToContent:true}">
                                                     <spinnerData>
                                                         <content:NumericSpinnerData lowerBound="1" upperBound="10"/>
                                                     </spinnerData>
+                                                    <spinnerSelectionListeners>
+                                                        <wtkx:script language="javascript">
+                                                            <![CDATA[
+                                                            function selectedIndexChanged(spinner, previousSelectedIndex) {
+                                                                TablePane.setRowSpan(component, spinner.getSelectedItem());
+                                                            }
+                                                            ]]>
+                                                        </wtkx:script>
+                                                    </spinnerSelectionListeners>
                                                 </Spinner>
-                                                <Spinner wtkx:id="columnSpan" Form.label="Column Span"
+                                                <Spinner wtkx:id="columnSpanSpinner" Form.label="Column Span"
                                                     styles="{sizeToContent:true}">
                                                     <spinnerData>
                                                         <content:NumericSpinnerData lowerBound="1" upperBound="10"/>
                                                     </spinnerData>
+                                                    <spinnerSelectionListeners>
+                                                        <wtkx:script language="javascript">
+                                                            <![CDATA[
+                                                            function selectedIndexChanged(spinner, previousSelectedIndex) {
+                                                                TablePane.setColumnSpan(component, spinner.getSelectedItem());
+                                                            }
+                                                            ]]>
+                                                        </wtkx:script>
+                                                    </spinnerSelectionListeners>
                                                 </Spinner>
-                                                <ListButton wtkx:id="backgroundColor"
+                                                <ListButton wtkx:id="backgroundColorListButton"
                                                     Form.label="Background Color"
-                                                    selectedIndex="0" styles="{listSize:6}">
+                                                    styles="{listSize:6}">
                                                     <listData>
                                                         <collections:ArrayList>
                                                             <content:ColorItem color="0x00000000" name="Transparent"/>
@@ -70,6 +88,16 @@ limitations under the License.
                                                     <itemRenderer>
                                                         <content:ListViewColorRenderer/>
                                                     </itemRenderer>
+                                                    <listButtonSelectionListeners>
+                                                        <wtkx:script language="javascript">
+                                                            <![CDATA[
+                                                            function selectedIndexChanged(listButton, previousSelectedIndex) {
+                                                                var colorItem = backgroundColorListButton.getSelectedItem();
+                                                                component.getStyles().put("backgroundColor", colorItem.getColor());
+                                                            }
+                                                            ]]>
+                                                        </wtkx:script>
+                                                    </listButtonSelectionListeners>
                                                 </ListButton>
                                             </Form.Section>
                                         </sections>
@@ -93,23 +121,23 @@ limitations under the License.
                                     </wtkx:script>
                                 </buttonPressListeners>
                             </PushButton>
-                            <PushButton buttonData="Cancel"
-                                preferredWidth="72" preferredHeight="24"
-                                styles="{backgroundColor:16, borderColor:13, color:4, fontBold:true}">
-                                <buttonPressListeners>
-                                    <wtkx:script language="javascript">
-                                        <![CDATA[
-                                        function buttonPressed(button) {
-                                            sheet.close(false);
-                                        }
-                                        ]]>
-                                    </wtkx:script>
-                                </buttonPressListeners>
-                            </PushButton>
                         </BoxPane>
                     </TablePane.Row>
                 </rows>
             </TablePane>
         </BoxPane>
     </content>
+
+    <wtkx:script language="javascript">
+        <![CDATA[
+        importPackage(org.apache.pivot.wtk);
+        importPackage(org.apache.pivot.wtk.content);
+
+        var backgroundColor = component.getStyles().get("backgroundColor");
+
+        rowSpanSpinner.setSelectedIndex(TablePane.getRowSpan(component) - 1);
+        columnSpanSpinner.setSelectedIndex(TablePane.getColumnSpan(component) - 1);
+        backgroundColorListButton.setSelectedItem(new ColorItem(backgroundColor));
+        ]]>
+    </wtkx:script>
 </Sheet>

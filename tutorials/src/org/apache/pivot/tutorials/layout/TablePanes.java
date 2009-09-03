@@ -16,23 +16,26 @@
  */
 package org.apache.pivot.tutorials.layout;
 
-import java.awt.Color;
+import java.io.IOException;
 
+import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Map;
+import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.wtk.Action;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.ListButton;
+import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.Menu;
 import org.apache.pivot.wtk.MenuHandler;
+import org.apache.pivot.wtk.MessageType;
+import org.apache.pivot.wtk.Panel;
+import org.apache.pivot.wtk.Prompt;
 import org.apache.pivot.wtk.Sheet;
 import org.apache.pivot.wtk.SheetCloseListener;
-import org.apache.pivot.wtk.Spinner;
 import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtk.content.ColorItem;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class TablePanes implements Application {
@@ -65,42 +68,12 @@ public class TablePanes implements Application {
             return false;
         }
 
-        public TablePane.Row getRow() {
-            TablePane.Row row = null;
-
-            int rowIndex = tablePane.getRowAt(y);
-
-            if (rowIndex >= 0) {
-                row = tablePane.getRows().get(rowIndex);
-            }
-
-            return row;
+        public int getX() {
+            return x;
         }
 
-        public TablePane.Column getColumn() {
-            TablePane.Column column = null;
-
-            int columnIndex = tablePane.getColumnAt(x);
-
-            if (columnIndex >= 0) {
-                column = tablePane.getColumns().get(columnIndex);
-            }
-
-            return column;
-        }
-
-        public Component getCellComponent() {
-            Component component = null;
-
-            int rowIndex = tablePane.getRowAt(y);
-            int columnIndex = tablePane.getColumnAt(x);
-
-            if (rowIndex > 0
-                && columnIndex > 0) {
-                component = tablePane.getCellComponent(rowIndex, columnIndex);
-            }
-
-            return component;
+        public int getY() {
+            return y;
         }
     }
 
@@ -122,39 +95,19 @@ public class TablePanes implements Application {
                 WTKXSerializer wtkxSerializer = new WTKXSerializer();
                 Sheet sheet;
 
+                // Make the cell component available to script blocks
+                int rowIndex = tablePane.getRowAt(contextMenuHandler.getY());
+                int columnIndex = tablePane.getColumnAt(contextMenuHandler.getX());
+                Component component = tablePane.getCellComponent(rowIndex, columnIndex);
+                wtkxSerializer.put("component", component);
+
                 try {
                     sheet = (Sheet)wtkxSerializer.readObject(this, "table_panes_configure_cell.wtkx");
                 } catch (Exception exception) {
                     throw new RuntimeException(exception);
                 }
 
-                final Component cellComponent = contextMenuHandler.getCellComponent();
-
-                final Spinner rowSpanSpinner = (Spinner)wtkxSerializer.get("rowSpan");
-                final Spinner columnSpanSpinner = (Spinner)wtkxSerializer.get("columnSpan");
-                final ListButton backgroundColorListButton = (ListButton)wtkxSerializer.get("backgroundColor");
-
-                // Pre-populate the form
-                Color backgroundColor = (Color)cellComponent.getStyles().get("backgroundColor");
-                rowSpanSpinner.setSelectedItem(TablePane.getRowSpan(cellComponent));
-                columnSpanSpinner.setSelectedItem(TablePane.getColumnSpan(cellComponent));
-                backgroundColorListButton.setSelectedItem(new ColorItem(backgroundColor));
-
-                sheet.open(window, new SheetCloseListener() {
-                    @Override
-                    public void sheetClosed(Sheet sheet) {
-                        if (sheet.getResult()) {
-                            // Update the component based on the form input
-                            TablePane.setRowSpan(cellComponent,
-                                (Integer)rowSpanSpinner.getSelectedItem());
-                            TablePane.setColumnSpan(cellComponent,
-                                (Integer)columnSpanSpinner.getSelectedItem());
-
-                            ColorItem colorItem = (ColorItem)backgroundColorListButton.getSelectedItem();
-                            cellComponent.getStyles().put("backgroundColor", colorItem.getColor());
-                        }
-                    }
-                });
+                sheet.open(window);
             }
         });
 
@@ -164,17 +117,20 @@ public class TablePanes implements Application {
                 WTKXSerializer wtkxSerializer = new WTKXSerializer();
                 Sheet sheet;
 
+                // Make the selected row available to script blocks
+                int rowIndex = tablePane.getRowAt(contextMenuHandler.getY());
+                TablePane.Row row = tablePane.getRows().get(rowIndex);
+                wtkxSerializer.put("row", row);
+
                 try {
                     sheet = (Sheet)wtkxSerializer.readObject(this, "table_panes_configure_row.wtkx");
-                } catch (Exception exception) {
+                } catch (SerializationException exception) {
+                    throw new RuntimeException(exception);
+                } catch (IOException exception) {
                     throw new RuntimeException(exception);
                 }
 
-                sheet.open(window, new SheetCloseListener() {
-                    @Override
-                    public void sheetClosed(Sheet sheet) {
-                    }
-                });
+                sheet.open(window);
             }
         });
 
@@ -184,23 +140,54 @@ public class TablePanes implements Application {
                 WTKXSerializer wtkxSerializer = new WTKXSerializer();
                 Sheet sheet;
 
+                // Create and insert a new row
+                TablePane.Row row = new TablePane.Row();
+                int insertIndex = tablePane.getRowAt(contextMenuHandler.getY());
+                tablePane.getRows().insert(row, insertIndex);
+
+                // Populate the row with the expected content
+                row.add(new Label("-1"));
+                for (int i = 1, n = tablePane.getColumns().getLength(); i < n; i++) {
+                    Panel panel = new Panel();
+                    panel.getStyles().put("backgroundColor", "#dddcd5");
+                    row.add(panel);
+                }
+
+                // Make the new row available to script blocks
+                wtkxSerializer.put("row", row);
+
                 try {
                     sheet = (Sheet)wtkxSerializer.readObject(this, "table_panes_configure_row.wtkx");
-                } catch (Exception exception) {
+                } catch (SerializationException exception) {
+                    throw new RuntimeException(exception);
+                } catch (IOException exception) {
                     throw new RuntimeException(exception);
                 }
 
-                sheet.open(window, new SheetCloseListener() {
-                    @Override
-                    public void sheetClosed(Sheet sheet) {
-                    }
-                });
+                sheet.open(window);
             }
         });
 
         namedActions.put("removeRow", new Action() {
             @Override
             public void perform() {
+                ArrayList<String> options = new ArrayList<String>("OK", "Cancel");
+                String message = "Remove Row?";
+                Label body = new Label("Are you sure you want to remove the row?");
+                body.getStyles().put("wrapText", true);
+
+                final Prompt prompt = new Prompt(MessageType.QUESTION, message, options, body);
+                prompt.setSelectedOption(0);
+
+                prompt.open(window, new SheetCloseListener() {
+                    @Override
+                    public void sheetClosed(Sheet sheet) {
+                        if (prompt.getResult() && prompt.getSelectedOption() == 0) {
+                            int rowIndex = tablePane.getRowAt(contextMenuHandler.getY());
+                            tablePane.getRows().remove(rowIndex, 1);
+                        }
+                    }
+                });
             }
         });
 
