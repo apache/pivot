@@ -142,8 +142,8 @@ public class TablePanes implements Application {
 
                 // Create and insert a new row
                 TablePane.Row row = new TablePane.Row();
-                int insertIndex = tablePane.getRowAt(contextMenuHandler.getY());
-                tablePane.getRows().insert(row, insertIndex);
+                int rowIndex = tablePane.getRowAt(contextMenuHandler.getY());
+                tablePane.getRows().insert(row, rowIndex);
 
                 // Populate the row with the expected content
                 row.add(new Label("-1"));
@@ -197,17 +197,20 @@ public class TablePanes implements Application {
                 WTKXSerializer wtkxSerializer = new WTKXSerializer();
                 Sheet sheet;
 
+                // Make the selected column available to script blocks
+                int columnIndex = tablePane.getColumnAt(contextMenuHandler.getX());
+                TablePane.Column column = tablePane.getColumns().get(columnIndex);
+                wtkxSerializer.put("column", column);
+
                 try {
                     sheet = (Sheet)wtkxSerializer.readObject(this, "table_panes_configure_column.wtkx");
-                } catch (Exception exception) {
+                } catch (SerializationException exception) {
+                    throw new RuntimeException(exception);
+                } catch (IOException exception) {
                     throw new RuntimeException(exception);
                 }
 
-                sheet.open(window, new SheetCloseListener() {
-                    @Override
-                    public void sheetClosed(Sheet sheet) {
-                    }
-                });
+                sheet.open(window);
             }
         });
 
@@ -217,23 +220,55 @@ public class TablePanes implements Application {
                 WTKXSerializer wtkxSerializer = new WTKXSerializer();
                 Sheet sheet;
 
+                // Create and insert a new column
+                TablePane.Column column = new TablePane.Column();
+                int columnIndex = tablePane.getColumnAt(contextMenuHandler.getX());
+                tablePane.getColumns().insert(column, columnIndex);
+
+                // Populate the column with the expected content
+                TablePane.RowSequence rows = tablePane.getRows();
+                rows.get(0).insert(new Label("-1"), columnIndex);
+                for (int i = 1, n = rows.getLength(); i < n; i++) {
+                    Panel panel = new Panel();
+                    panel.getStyles().put("backgroundColor", "#dddcd5");
+                    rows.get(i).insert(panel, columnIndex);
+                }
+
+                // Make the new column available to script blocks
+                wtkxSerializer.put("column", column);
+
                 try {
                     sheet = (Sheet)wtkxSerializer.readObject(this, "table_panes_configure_column.wtkx");
-                } catch (Exception exception) {
+                } catch (SerializationException exception) {
+                    throw new RuntimeException(exception);
+                } catch (IOException exception) {
                     throw new RuntimeException(exception);
                 }
 
-                sheet.open(window, new SheetCloseListener() {
-                    @Override
-                    public void sheetClosed(Sheet sheet) {
-                    }
-                });
+                sheet.open(window);
             }
         });
 
         namedActions.put("removeColumn", new Action() {
             @Override
             public void perform() {
+                ArrayList<String> options = new ArrayList<String>("OK", "Cancel");
+                String message = "Remove Column?";
+                Label body = new Label("Are you sure you want to remove the column?");
+                body.getStyles().put("wrapText", true);
+
+                final Prompt prompt = new Prompt(MessageType.QUESTION, message, options, body);
+                prompt.setSelectedOption(0);
+
+                prompt.open(window, new SheetCloseListener() {
+                    @Override
+                    public void sheetClosed(Sheet sheet) {
+                        if (prompt.getResult() && prompt.getSelectedOption() == 0) {
+                            int columnIndex = tablePane.getColumnAt(contextMenuHandler.getX());
+                            tablePane.getColumns().remove(columnIndex, 1);
+                        }
+                    }
+                });
             }
         });
     }
