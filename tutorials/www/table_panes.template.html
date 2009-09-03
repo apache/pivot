@@ -75,6 +75,19 @@ row2.add(new ImageView(Image.load(getClass().getResource("d.png"))));
 tablePane.getRows().add(row2);
 </pre>
 
+<script>
+var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
+    archive:"lib/@project_name@-core-@version@.jar,lib/@project_name@-wtk-@version@.jar,lib/@project_name@-wtk-@version@.terra.jar,lib/@project_name@-tutorials-@version@.jar",
+    width:460,
+    height:310,
+    style:"border:solid 1px #999999"
+};
+var parameters = {application_class_name:"org.apache.pivot.tutorials.layout.TablePanes",
+    codebase_lookup:false
+};
+deployJava.writeAppletTag(attributes, parameters);
+</script>
+
 <p>Next: <a href="borders.html">Borders</a></p>
 </body>
 </html>
