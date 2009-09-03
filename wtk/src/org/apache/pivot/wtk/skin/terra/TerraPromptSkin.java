@@ -97,6 +97,7 @@ public class TerraPromptSkin extends TerraSheetSkin
             optionButton.getStyles().put("minimumAspectRatio", 3);
 
             optionButton.getButtonPressListeners().add(new ButtonPressListener() {
+                @Override
                 public void buttonPressed(Button button) {
                     int optionIndex = optionButtons.indexOf(button);
 
@@ -137,6 +138,7 @@ public class TerraPromptSkin extends TerraSheetSkin
         }
     }
 
+    @Override
     public void selectedOptionChanged(Prompt prompt, int previousSelectedOption) {
         int index = prompt.getSelectedOption();
 

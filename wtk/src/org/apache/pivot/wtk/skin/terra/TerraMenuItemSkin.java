@@ -40,14 +40,17 @@ public class TerraMenuItemSkin extends MenuItemSkin {
         public static final int SIZE = 14;
         public static final int CHECKMARK_SIZE = 10;
 
+        @Override
         public int getWidth() {
             return SIZE;
         }
 
+        @Override
         public int getHeight() {
             return SIZE;
         }
 
+        @Override
         public void paint(Graphics2D graphics) {
             Menu.Item menuItem = (Menu.Item)getComponent();
             Menu menu = menuItem.getSection().getMenu();
@@ -85,6 +88,7 @@ public class TerraMenuItemSkin extends MenuItemSkin {
         menuItem.setCursor(Cursor.DEFAULT);
     }
 
+    @Override
     public int getPreferredWidth(int height) {
         Menu.Item menuItem = (Menu.Item)getComponent();
 
@@ -94,6 +98,7 @@ public class TerraMenuItemSkin extends MenuItemSkin {
         return dataRenderer.getPreferredWidth(height) + EXPANDER_SIZE;
     }
 
+    @Override
     public int getPreferredHeight(int width) {
         Menu.Item menuItem = (Menu.Item)getComponent();
 
@@ -103,6 +108,7 @@ public class TerraMenuItemSkin extends MenuItemSkin {
         return Math.max(dataRenderer.getPreferredHeight(width), EXPANDER_SIZE);
     }
 
+    @Override
     public Dimensions getPreferredSize() {
         Menu.Item menuItem = (Menu.Item)getComponent();
 
@@ -115,10 +121,12 @@ public class TerraMenuItemSkin extends MenuItemSkin {
             Math.max(preferredSize.height, EXPANDER_SIZE));
     }
 
+    @Override
     public void layout() {
         // No-op
     }
 
+    @Override
     public void paint(Graphics2D graphics) {
         Menu.Item menuItem = (Menu.Item)getComponent();
         Menu menu = menuItem.getSection().getMenu();

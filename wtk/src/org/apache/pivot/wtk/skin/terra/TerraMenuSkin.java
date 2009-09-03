@@ -68,6 +68,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
         showKeyboardShortcuts = true;
     }
 
+    @Override
     public void install(Component component) {
         super.install(component);
 
@@ -81,6 +82,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
         menu.setFocusTraversalPolicy(new IndexFocusTraversalPolicy(true));
     }
 
+    @Override
     public void uninstall() {
         Menu menu = (Menu)getComponent();
         menu.getMenuListeners().remove(this);
@@ -97,6 +99,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
         return true;
     }
 
+    @Override
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 
@@ -117,6 +120,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
         return preferredWidth;
     }
 
+    @Override
     public int getPreferredHeight(int width) {
         int preferredHeight = 0;
 
@@ -140,6 +144,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
         return preferredHeight;
     }
 
+    @Override
     public Dimensions getPreferredSize() {
         int preferredWidth = 0;
         int preferredHeight = 0;
@@ -166,6 +171,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
         return new Dimensions(preferredWidth, preferredHeight);
     }
 
+    @Override
     public void layout() {
         Menu menu = (Menu)getComponent();
         Menu.SectionSequence sections = menu.getSections();
@@ -192,6 +198,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
         }
     }
 
+    @Override
     public void paint(Graphics2D graphics) {
         super.paint(graphics);
 
@@ -401,6 +408,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
         return consumed;
     }
 
+    @Override
     public void sectionInserted(Menu menu, int index) {
         Menu.Section section = menu.getSections().get(index);
         section.getSectionListeners().add(this);
@@ -408,6 +416,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
         invalidateComponent();
     }
 
+    @Override
     public void sectionsRemoved(Menu menu, int index, Sequence<Menu.Section> removed) {
         for (int i = 0, n = removed.getLength(); i < n; i++) {
             Menu.Section section = removed.get(i);
@@ -417,14 +426,17 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
         invalidateComponent();
     }
 
+    @Override
     public void itemInserted(Menu.Section section, int index) {
         invalidateComponent();
     }
 
+    @Override
     public void itemsRemoved(Menu.Section section, int index, Sequence<Menu.Item> removed) {
         invalidateComponent();
     }
 
+    @Override
     public void nameChanged(Menu.Section section, String previousName) {
         // No-op
     }

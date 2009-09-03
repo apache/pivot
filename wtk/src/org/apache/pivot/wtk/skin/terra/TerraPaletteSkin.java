@@ -60,14 +60,17 @@ public class TerraPaletteSkin extends WindowSkin {
      * Close button image.
      */
     protected class CloseImage extends Image {
+        @Override
         public int getWidth() {
             return 6;
         }
 
+        @Override
         public int getHeight() {
             return 6;
         }
 
+        @Override
         public void paint(Graphics2D graphics) {
             graphics.setPaint(titleBarColor);
             graphics.setStroke(new BasicStroke(2));
@@ -96,6 +99,7 @@ public class TerraPaletteSkin extends WindowSkin {
     private Insets padding = new Insets(4);
 
     private WindowListener ownerListener = new WindowListener.Adapter() {
+        @Override
         public void activeChanged(Window owner, Window obverseWindow) {
             Window window = (Window)getComponent();
             window.setVisible(owner.isActive());
@@ -161,6 +165,7 @@ public class TerraPaletteSkin extends WindowSkin {
         });
 
         closeButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
             public void buttonPressed(Button button) {
                 Palette palette = (Palette)getComponent();
                 palette.close();
@@ -195,6 +200,7 @@ public class TerraPaletteSkin extends WindowSkin {
         super.uninstall();
     }
 
+    @Override
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 
@@ -219,6 +225,7 @@ public class TerraPaletteSkin extends WindowSkin {
         return preferredWidth;
     }
 
+    @Override
     public int getPreferredHeight(int width) {
         int preferredHeight = 0;
 
@@ -244,6 +251,7 @@ public class TerraPaletteSkin extends WindowSkin {
         return preferredHeight;
     }
 
+    @Override
     public Dimensions getPreferredSize() {
         int preferredWidth = 0;
         int preferredHeight = 0;
@@ -269,6 +277,7 @@ public class TerraPaletteSkin extends WindowSkin {
         return new Dimensions(preferredWidth, preferredHeight);
     }
 
+    @Override
     public void layout() {
         Palette palette = (Palette)getComponent();
 

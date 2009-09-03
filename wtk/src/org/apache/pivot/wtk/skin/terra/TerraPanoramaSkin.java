@@ -47,14 +47,17 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
      * Abstract base class for button images.
      */
     protected abstract class ScrollButtonImage extends Image {
+        @Override
         public int getWidth() {
             return BUTTON_SIZE;
         }
 
+        @Override
         public int getHeight() {
             return BUTTON_SIZE;
         }
 
+        @Override
         public void paint(Graphics2D graphics) {
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
@@ -68,6 +71,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
      * North button image.
      */
     protected class NorthButtonImage extends ScrollButtonImage {
+        @Override
         public void paint(Graphics2D graphics) {
             super.paint(graphics);
 
@@ -82,6 +86,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
      * South button image.
      */
     protected class SouthButtonImage extends ScrollButtonImage {
+        @Override
         public void paint(Graphics2D graphics) {
             super.paint(graphics);
 
@@ -96,6 +101,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
      * East button image.
      */
     protected class EastButtonImage extends ScrollButtonImage {
+        @Override
         public void paint(Graphics2D graphics) {
             super.paint(graphics);
 
@@ -110,6 +116,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
      * West button image.
      */
     protected class WestButtonImage extends ScrollButtonImage {
+        @Override
         public void paint(Graphics2D graphics) {
             super.paint(graphics);
 
@@ -135,18 +142,22 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
     }
 
     public class ScrollButtonSkin extends ButtonSkin {
+        @Override
         public int getPreferredWidth(int height) {
             return BUTTON_SIZE + buttonPadding;
         }
 
+        @Override
         public int getPreferredHeight(int width) {
             return BUTTON_SIZE + buttonPadding;
         }
 
+        @Override
         public Dimensions getPreferredSize() {
             return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
         }
 
+        @Override
         public void paint(Graphics2D graphics) {
             ScrollButton scrollButton = (ScrollButton)getComponent();
             int width = getWidth();
@@ -176,6 +187,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
     }
 
     private class ScrollCallback implements Runnable {
+        @Override
         public void run() {
             Panorama panorama = (Panorama)getComponent();
 
@@ -248,6 +260,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
     }
 
     private ComponentMouseListener buttonMouseListener = new ComponentMouseListener.Adapter() {
+        @Override
         public void mouseOver(Component component) {
             // Start scroll timer
             scrollDistance = INITIAL_SCROLL_DISTANCE;
@@ -255,6 +268,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
                 ApplicationContext.scheduleRecurringCallback(scrollCallback, SCROLL_RATE);
         }
 
+        @Override
         public void mouseOut(Component component) {
             // Stop scroll timer
             if (scheduledScrollCallback != null) {
@@ -356,6 +370,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
         return preferredSize;
     }
 
+    @Override
     public void layout() {
         Panorama panorama = (Panorama)getComponent();
         int width = getWidth();
@@ -404,6 +419,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
         updateScrollButtonVisibility();
     }
 
+    @Override
     public Bounds getViewportBounds() {
         int x = 0;
         int y = 0;
@@ -621,6 +637,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
     }
 
     // Viewport events
+    @Override
     public void scrollTopChanged(Viewport panorama, int previousScrollTop) {
         Component view = panorama.getView();
         if (view != null) {
@@ -631,6 +648,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
         }
     }
 
+    @Override
     public void scrollLeftChanged(Viewport panorama, int previousScrollLeft) {
         Component view = panorama.getView();
         if (view != null) {
@@ -641,6 +659,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
         }
     }
 
+    @Override
     public void viewChanged(Viewport panorama, Component previousView) {
         invalidateComponent();
     }

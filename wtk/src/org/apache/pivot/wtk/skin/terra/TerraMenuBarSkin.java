@@ -50,6 +50,7 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
         spacing = 2;
     }
 
+    @Override
     public void install(Component component) {
         super.install(component);
 
@@ -57,6 +58,7 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
         menuBar.getMenuBarListeners().add(this);
     }
 
+    @Override
     public void uninstall() {
         MenuBar menuBar = (MenuBar)getComponent();
         menuBar.getMenuBarListeners().remove(this);
@@ -64,6 +66,7 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
         super.uninstall();
     }
 
+    @Override
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 
@@ -86,6 +89,7 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
         return preferredWidth;
     }
 
+    @Override
     public int getPreferredHeight(int width) {
         int preferredHeight = 0;
 
@@ -102,6 +106,7 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
         return preferredHeight;
     }
 
+    @Override
     public Dimensions getPreferredSize() {
         int preferredWidth = 0;
         int preferredHeight = 0;
@@ -125,6 +130,7 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
         return new Dimensions(preferredWidth, preferredHeight);
     }
 
+    @Override
     public void layout() {
         MenuBar menuBar = (MenuBar)getComponent();
 
@@ -284,10 +290,12 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
         invalidateComponent();
     }
 
+    @Override
     public void itemInserted(MenuBar menuBar, int index) {
         invalidateComponent();
     }
 
+    @Override
     public void itemsRemoved(MenuBar menuBar, int index, Sequence<MenuBar.Item> removed) {
         invalidateComponent();
     }

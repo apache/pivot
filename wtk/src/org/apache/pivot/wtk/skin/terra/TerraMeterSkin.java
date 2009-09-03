@@ -71,27 +71,32 @@ public class TerraMeterSkin extends ComponentSkin
         return false;
     }
 
+    @Override
     public int getPreferredWidth(int height) {
         // Meter has no content, so its preferred width is hard coded in the
         // class and is not affected by the height constraint.
         return DEFAULT_WIDTH;
     }
 
+    @Override
     public int getPreferredHeight(int width) {
         // Meter has no content, so its preferred height is hard coded in the
         // class and is not affected by the width constraint.
         return DEFAULT_HEIGHT;
     }
 
+    @Override
     public Dimensions getPreferredSize() {
         // Meter has no content, so its preferred size is hard coded in the class.
         return new Dimensions(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     }
 
+    @Override
     public void layout() {
         // No-op
     }
 
+    @Override
     public void paint(Graphics2D graphics) {
         Meter meter = (Meter)getComponent();
 
@@ -178,6 +183,7 @@ public class TerraMeterSkin extends ComponentSkin
      * @param previousPercentage
      *     The previous percentage value.
      */
+    @Override
     public void percentageChanged(Meter meter, double previousPercentage) {
         repaintComponent();
     }
@@ -191,6 +197,7 @@ public class TerraMeterSkin extends ComponentSkin
      * @param previousText
      *    The previous text value.
      */
+    @Override
     public void textChanged(Meter meter, String previousText) {
         invalidateComponent();
     }

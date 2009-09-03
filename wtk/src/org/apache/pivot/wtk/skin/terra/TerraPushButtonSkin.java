@@ -77,6 +77,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         disabledBevelColor = disabledBackgroundColor;
     }
 
+    @Override
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 
@@ -107,6 +108,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         return preferredWidth;
     }
 
+    @Override
     public int getPreferredHeight(int width) {
         int preferredHeight = 0;
 
@@ -137,6 +139,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         return preferredHeight;
     }
 
+    @Override
     public Dimensions getPreferredSize() {
         PushButton pushButton = (PushButton)getComponent();
         Button.DataRenderer dataRenderer = pushButton.getDataRenderer();
@@ -167,6 +170,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         return new Dimensions(preferredWidth, preferredHeight);
     }
 
+    @Override
     public void paint(Graphics2D graphics) {
         PushButton pushButton = (PushButton)getComponent();
 

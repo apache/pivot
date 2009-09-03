@@ -40,6 +40,7 @@ public class TerraMenuBarItemSkin extends MenuBarItemSkin {
         menuBarItem.setCursor(Cursor.DEFAULT);
     }
 
+    @Override
     public int getPreferredWidth(int height) {
         MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
 
@@ -49,6 +50,7 @@ public class TerraMenuBarItemSkin extends MenuBarItemSkin {
         return dataRenderer.getPreferredWidth(height);
     }
 
+    @Override
     public int getPreferredHeight(int width) {
         MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
 
@@ -58,6 +60,7 @@ public class TerraMenuBarItemSkin extends MenuBarItemSkin {
         return dataRenderer.getPreferredHeight(width);
     }
 
+    @Override
     public Dimensions getPreferredSize() {
         MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
 
@@ -67,10 +70,12 @@ public class TerraMenuBarItemSkin extends MenuBarItemSkin {
         return dataRenderer.getPreferredSize();
     }
 
+    @Override
     public void layout() {
         // No-op
     }
 
+    @Override
     public void paint(Graphics2D graphics) {
         MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
 

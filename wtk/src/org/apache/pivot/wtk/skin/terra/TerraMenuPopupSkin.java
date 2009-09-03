@@ -51,6 +51,7 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
     private Transition closeTransition = null;
 
     private ContainerMouseListener displayMouseListener = new ContainerMouseListener.Adapter() {
+        @Override
         public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
             MenuPopup menuPopup = (MenuPopup)getComponent();
 
@@ -72,6 +73,7 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
             return false;
         }
 
+        @Override
         public boolean mouseWheel(Container container, Mouse.ScrollType scrollType,
             int scrollAmount, int wheelRotation, int x, int y) {
             boolean consumed = false;
@@ -91,6 +93,7 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
     };
 
     private MenuItemSelectionListener menuItemPressListener = new MenuItemSelectionListener() {
+        @Override
         public void itemSelected(Menu.Item item) {
             MenuPopup menuPopup = (MenuPopup)getComponent();
             menuPopup.close();
@@ -230,6 +233,7 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
                 dropShadowDecorator);
 
             closeTransition.start(new TransitionListener() {
+                @Override
                 public void transitionCompleted(Transition transition) {
                     menuPopup.close();
                 }

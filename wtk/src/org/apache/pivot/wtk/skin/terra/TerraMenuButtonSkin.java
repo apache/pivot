@@ -63,6 +63,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     private Color disabledBevelColor;
 
     private WindowStateListener menuPopupWindowStateListener = new WindowStateListener.Adapter() {
+        @Override
         public void windowClosed(Window window, Display display) {
             if (toolbar) {
                 repaintComponent();
@@ -97,6 +98,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         menuPopup.getWindowStateListeners().add(menuPopupWindowStateListener);
     }
 
+    @Override
     public int getPreferredWidth(int height) {
         MenuButton menuButton = (MenuButton)getComponent();
         Button.DataRenderer dataRenderer = menuButton.getDataRenderer();
@@ -109,6 +111,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         return preferredWidth;
     }
 
+    @Override
     public int getPreferredHeight(int width) {
         MenuButton menuButton = (MenuButton)getComponent();
         Button.DataRenderer dataRenderer = menuButton.getDataRenderer();
@@ -121,15 +124,18 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         return preferredHeight;
     }
 
+    @Override
     public Dimensions getPreferredSize() {
         // TODO Optimize by performing calcuations locally
         return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
     }
 
+    @Override
     public void layout() {
         // No-op
     }
 
+    @Override
     public void paint(Graphics2D graphics) {
         MenuButton menuButton = (MenuButton)getComponent();
 
