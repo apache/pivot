@@ -15,22 +15,15 @@ This software contains images distributed as part of the Silk Companion Set,
 developed by Damien Guard.
 http://damieng.com/creative/icons/silk-companion-1-icons
 
-This software contains images distributed as part of the Tango Icon Theme
-0.8.90, which is available as public domain.
+This software contains images distributed as part of the Tango Icon Theme,
+available in Public Domain.
 http://tango.freedesktop.org/
 
 Pivot's easing equations (pivot.wtk.effects.easing) are derivative works
 originating from Robert Penner's Action Script easing equations.
-http://www.robertpenner.com/easing_terms_of_use.html
+http://www.robertpenner.com/easing/
 
-The drop shadow decorator (pivot.wtk.effects.DropShadowDecorator) uses code
-from "Filthy Rich Clients" by Chet Haase and Romain Guy.
+The drop shadow decorator (pivot.wtk.effects.DropShadowDecorator) is a
+derivative work originating from "Filthy Rich Clients" by Chet Haase and
+Romain Guy.
 https://filthyrichclients.dev.java.net/
-
-The IM client demo (pivot.demos.dom.IMClient) uses the Smack Jabber API
-developed by Ignite Realtime.
-http://www.igniterealtime.org/
-
-The scripting demo (pivot.demos.scripting.ScriptingDemo) uses the Groovy
-scripting engine.
-http://groovy.codehaus.org/

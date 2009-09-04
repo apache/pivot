@@ -215,11 +215,11 @@ the following licenses.
 
 The following components are licensed under the Apache Software License 2.0:
 
+  demos/lib/groovy-all-1.6.3.jar   (http://groovy.codehaus.org/)
   demos/lib/groovy-engine.jar
-  demos/lib/smackx.jar
+  demos/lib/smackx.jar             (http://www.igniterealtime.org/)
   demos/lib/smack.jar
-  demos/lib/groovy-all-1.6.3.jar
-  web/lib/servlet-api.jar (Apache Tomcat's Servlet 2.5 spec implementation)
+  web/lib/servlet-api.jar          (http://tomcat.apache.org/)
 
 ===============================================================================
 
