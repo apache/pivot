@@ -48,10 +48,11 @@ public class TablePanes implements Application {
             this.x = x;
             this.y = y;
 
+            // Set the enabled state of actions based on where the user clicked
+            Action.NamedActionDictionary namedActions = Action.getNamedActions();
+
             int rowIndex = tablePane.getRowAt(y);
             int columnIndex = tablePane.getColumnAt(x);
-
-            Action.NamedActionDictionary namedActions = Action.getNamedActions();
 
             namedActions.get("configureCell").setEnabled(rowIndex > 0 && columnIndex > 0);
             namedActions.get("configureRow").setEnabled(rowIndex > 0);
@@ -61,6 +62,7 @@ public class TablePanes implements Application {
             namedActions.get("insertColumn").setEnabled(columnIndex > 0);
             namedActions.get("removeColumn").setEnabled(columnIndex > 0);
 
+            // Add our menu sections
             menu.getSections().add(cellSection);
             menu.getSections().add(rowSection);
             menu.getSections().add(columnSection);
@@ -103,7 +105,9 @@ public class TablePanes implements Application {
 
                 try {
                     sheet = (Sheet)wtkxSerializer.readObject(this, "table_panes_configure_cell.wtkx");
-                } catch (Exception exception) {
+                } catch (SerializationException exception) {
+                    throw new RuntimeException(exception);
+                } catch (IOException exception) {
                     throw new RuntimeException(exception);
                 }
 
@@ -265,6 +269,12 @@ public class TablePanes implements Application {
                     public void sheetClosed(Sheet sheet) {
                         if (prompt.getResult() && prompt.getSelectedOption() == 0) {
                             int columnIndex = tablePane.getColumnAt(contextMenuHandler.getX());
+
+                            // Remove the component at that index from each row
+                            for (TablePane.Row row : tablePane.getRows()) {
+                                row.remove(columnIndex, 1);
+                            }
+
                             tablePane.getColumns().remove(columnIndex, 1);
                         }
                     }
