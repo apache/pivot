@@ -16,8 +16,11 @@
  */
 package org.apache.pivot.wtk;
 
+import java.util.Iterator;
+
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 
 
@@ -29,7 +32,7 @@ public class TablePane extends Container {
     /**
      * Represents a table pane row.
      */
-    public static final class Row implements Sequence<Component> {
+    public static final class Row implements Sequence<Component>, Iterable<Component> {
         private int height;
         private boolean relative;
         private boolean highlighted;
@@ -293,6 +296,11 @@ public class TablePane extends Container {
         @Override
         public int getLength() {
             return cells.getLength();
+        }
+
+        @Override
+        public Iterator<Component> iterator() {
+            return new ImmutableIterator<Component>(cells.iterator());
         }
     }
 
