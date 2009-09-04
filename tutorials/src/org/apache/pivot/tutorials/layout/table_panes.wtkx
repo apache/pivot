@@ -65,7 +65,7 @@ limitations under the License.
     </wtkx:define>
 
     <content>
-        <SplitPane splitRatio="0.7">
+        <SplitPane splitRatio="0.6">
             <left>
                 <Border styles="{padding:0}">
                     <content>
@@ -73,7 +73,7 @@ limitations under the License.
                             horizontalSpacing:21, showVerticalGridLines:true, padding:10}">
                             <columns>
                                 <TablePane.Column width="-1"/>
-                                <TablePane.Column width="100"/>
+                                <TablePane.Column width="50"/>
                                 <TablePane.Column width="-1"/>
                                 <TablePane.Column width="1*"/>
                                 <TablePane.Column width="2*"/>
@@ -82,13 +82,13 @@ limitations under the License.
                             <rows>
                                 <TablePane.Row height="-1">
                                     <TablePane.Filler/>
-                                    <Label text="100" styles="{horizontalAlignment:'center'}"/>
+                                    <Label text="50" styles="{horizontalAlignment:'center'}"/>
                                     <Label text="-1" styles="{horizontalAlignment:'center'}"/>
                                     <Label text="1*" styles="{horizontalAlignment:'center'}"/>
                                     <Label text="2*" styles="{horizontalAlignment:'center'}"/>
                                 </TablePane.Row>
-                                <TablePane.Row height="100">
-                                    <Label text="100" styles="{verticalAlignment:'center'}"/>
+                                <TablePane.Row height="50">
+                                    <Label text="50" styles="{verticalAlignment:'center'}"/>
                                     <Panel styles="{backgroundColor:'#dddcd5'}"/>
                                     <Panel styles="{backgroundColor:'#dddcd5'}"/>
                                     <Panel styles="{backgroundColor:'#dddcd5'}"/>
