@@ -44,9 +44,6 @@ public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListen
 
         @Override
         public void windowClosed(Window window, Display display) {
-            Menu.Item menuItem = (Menu.Item)getComponent();
-            menuItem.setActive(false);
-
             display.getContainerMouseListeners().remove(displayMouseListener);
         }
     };

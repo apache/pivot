@@ -197,6 +197,11 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
         MenuPopup menuPopup = (MenuPopup)window;
         Menu menu = menuPopup.getMenu();
         if (menu != null) {
+            Menu.Item activeItem = menu.getActiveItem();
+            if (activeItem != null) {
+                activeItem.setActive(false);
+            }
+
             menu.requestFocus();
         }
     }
