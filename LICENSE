@@ -215,8 +215,6 @@ the following licenses.
 
 The following components are licensed under the Apache Software License 2.0:
 
-  demos/lib/smackx.jar             (http://www.igniterealtime.org/)
-  demos/lib/smack.jar
   web/lib/servlet-api.jar          (http://tomcat.apache.org/)
 
 ===============================================================================
