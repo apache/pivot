@@ -8,13 +8,11 @@ The original software was developed at VMware, Inc. (http://www.vmware.com/)
 and donated to the Apache Software Foundation. Copyright (c) 2009 VMware, Inc.
 
 This software contains images distributed as part of the Silk Icon Set,
-developed by Mark James and licensed under the Creative Commons Attribution 2.5
-License.
+developed by Mark James.
 http://www.famfamfam.com/lab/icons/silk/
 
 This software contains images distributed as part of the Silk Companion Set,
-developed by Damien Guard and licensed under the Creative Commons Attribution
-2.5 License.
+developed by Damien Guard.
 http://damieng.com/creative/icons/silk-companion-1-icons
 
 This software contains images distributed as part of the Tango Icon Theme
@@ -22,19 +20,17 @@ This software contains images distributed as part of the Tango Icon Theme
 http://tango.freedesktop.org/
 
 Pivot's easing equations (pivot.wtk.effects.easing) are derivative works
-originating from Robert Penner's Action Script easing equations, which are
-licensed under the Berkeley Software Distribution (BSD) License.
+originating from Robert Penner's Action Script easing equations.
 http://www.robertpenner.com/easing_terms_of_use.html
 
 The drop shadow decorator (pivot.wtk.effects.DropShadowDecorator) uses code
-from "Filthy Rich Clients" by Chet Haase and Romain Guy, which is licensed
-under the Berkeley Software Distribution (BSD) License.
+from "Filthy Rich Clients" by Chet Haase and Romain Guy.
 https://filthyrichclients.dev.java.net/
 
 The IM client demo (pivot.demos.dom.IMClient) uses the Smack Jabber API
-developed by Ignite Realtime and licensed under the Apache License 2.0.
+developed by Ignite Realtime.
 http://www.igniterealtime.org/
 
 The scripting demo (pivot.demos.scripting.ScriptingDemo) uses the Groovy
-scripting engine, which is licensed under the Apache License 2.0.
+scripting engine.
 http://groovy.codehaus.org/
