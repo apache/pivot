@@ -73,6 +73,7 @@ public class ApplicationHandlerTest implements Application,
 
     @Override
     public void uncaughtExceptionThrown(Exception exception) {
+        System.out.println("Uncaught exception thrown.");
         exception.printStackTrace();
     }
 

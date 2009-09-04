@@ -498,7 +498,7 @@ public class TableViewRowEditor implements TableView.RowEditor {
 
         // Open the popup over the row
         popup.setLocation(editBounds.x, editBounds.y);
-        popup.setPreferredSize(editBounds.width, editBounds.height);
+        popup.setPreferredSize(editBounds.width, editBounds.height + 1);
         popup.open(tableView.getWindow());
     }
 

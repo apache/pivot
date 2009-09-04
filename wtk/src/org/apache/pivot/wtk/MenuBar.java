@@ -132,6 +132,11 @@ public class MenuBar extends Container {
         }
 
         public void setActive(boolean active) {
+            if (active
+                && !isEnabled()) {
+                throw new IllegalStateException();
+            }
+
             if (this.active != active) {
                 this.active = active;
 

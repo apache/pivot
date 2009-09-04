@@ -68,7 +68,7 @@ public class Clock extends Movie {
 
         int seconds = calendar.get(Calendar.SECOND);
         int minutes = calendar.get(Calendar.MINUTE);
-        int hours = calendar.get(Calendar.HOUR) + 1;
+        int hours = calendar.get(Calendar.HOUR);
 
         secondsRotation.setAngle(seconds * 6);
         minutesRotation.setAngle(minutes * 6 + seconds * (6d / 60));

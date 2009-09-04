@@ -24,7 +24,6 @@ import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class ScriptingDemo implements Application {
@@ -37,15 +36,16 @@ public class ScriptingDemo implements Application {
 
     private Window window = null;
 
-    @WTKX private String foo;
-    @WTKX private List<?> listData;
+    private String foo;
+    private List<?> listData;
 
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "scripting_demo.wtkx");
-        wtkxSerializer.bind(this, ScriptingDemo.class);
+        foo = (String)wtkxSerializer.get("foo");
+        listData = (List<?>)wtkxSerializer.get("listData");
 
         System.out.println("foo = " + (foo == null ? null : "\"" + foo + "\""));
         System.out.println("listData.getLength() = " + listData.getLength());

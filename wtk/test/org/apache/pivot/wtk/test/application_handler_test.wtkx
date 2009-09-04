@@ -21,7 +21,7 @@ limitations under the License.
     xmlns="org.apache.pivot.wtk">
     <content>
         <BoxPane>
-            <PushButton buttonData="Push Button">
+            <PushButton buttonData="Throw Exception">
                 <buttonPressListeners>
                     <wtkx:script>
                     function buttonPressed(button) {

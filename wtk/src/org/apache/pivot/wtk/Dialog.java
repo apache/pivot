@@ -185,7 +185,8 @@ public class Dialog extends Frame {
 
                     // Move the owner to the front
                     Window owner = getOwner();
-                    if (owner.isOpen()) {
+                    if (owner != null
+                        && owner.isOpen()) {
                         owner.moveToFront();
                     }
 
