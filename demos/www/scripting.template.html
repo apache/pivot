@@ -22,14 +22,13 @@ limitations under the License.
 </head>
 <body>
 <p>This application demonstrates Pivot's scripting capabilities. It uses
-JavaScript and Groovy to implement event handlers and populate a list view
-component with data. It also demonstrates data sharing between script and Java
-code:</p>
+JavaScript to implement event handlers and populate a list view component with data. It also
+demonstrates data sharing between script and Java code:</p>
 
 <script src="http://java.com/js/deployJava.js"></script>
 <script>
 var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
-    archive:"lib/@project_name@-core-@version@.signed.jar,lib/@project_name@-wtk-@version@.signed.jar,lib/@project_name@-wtk-@version@.terra.signed.jar,lib/@project_name@-demos-@version@.signed.jar,lib/groovy-engine.signed.jar,lib/groovy-all-1.6.3.signed.jar",
+    archive:"lib/@project_name@-core-@version@.jar,lib/@project_name@-wtk-@version@.jar,lib/@project_name@-wtk-@version@.terra.jar,lib/@project_name@-demos-@version@.jar",
     width:640,
     height:480
 };
@@ -39,8 +38,5 @@ var parameters = {application_class_name:"org.apache.pivot.demos.scripting.Scrip
 var version = "1.6";
 deployJava.runApplet(attributes, parameters, version);
 </script>
-
-<p>The applet is signed because the Groovy scripting engine relies on bytecode
-generation, which is not allowed in untrusted applets.</p>
 </body>
 </html>

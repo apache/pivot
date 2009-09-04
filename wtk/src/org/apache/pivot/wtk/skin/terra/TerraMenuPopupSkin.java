@@ -208,7 +208,8 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
         display.getContainerMouseListeners().remove(displayMouseListener);
 
         Window owner = window.getOwner();
-        if (owner != null) {
+        if (owner != null
+            && owner.isOpen()) {
             owner.moveToFront();
         }
     }

@@ -14,4 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+importPackage(org.apache.pivot.collections);
+
 var foo = "ABCDE";
+
+var listData = new ArrayList();
+listData.add("One");
+listData.add("Two");
+listData.add("Three");
+
