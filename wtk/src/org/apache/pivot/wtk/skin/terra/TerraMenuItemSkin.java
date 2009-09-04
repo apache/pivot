@@ -134,14 +134,13 @@ public class TerraMenuItemSkin extends MenuItemSkin {
         int width = getWidth();
         int height = getHeight();
 
-        boolean highlight = (menuItem.isFocused()
-            || menuPopup.isOpen());
+        boolean highlight = menuItem.isActive();
 
         // Paint highlight state
         if (highlight) {
-            Color highlightBackgroundColor = (Color)menu.getStyles().get("highlightBackgroundColor");
-            graphics.setPaint(new GradientPaint(width / 2, 0, TerraTheme.brighten(highlightBackgroundColor),
-                width / 2, height, highlightBackgroundColor));
+            Color activeBackgroundColor = (Color)menu.getStyles().get("activeBackgroundColor");
+            graphics.setPaint(new GradientPaint(width / 2, 0, TerraTheme.brighten(activeBackgroundColor),
+                width / 2, height, activeBackgroundColor));
             graphics.fillRect(0, 0, width, height);
         }
 
@@ -155,7 +154,7 @@ public class TerraMenuItemSkin extends MenuItemSkin {
         // Paint the expander
         if (menuItem.getMenu() != null) {
             Color color = (Color)(highlight ?
-                menu.getStyles().get("highlightColor") : menu.getStyles().get("color"));
+                menu.getStyles().get("activeColor") : menu.getStyles().get("color"));
             graphics.setColor(color);
             graphics.setStroke(new BasicStroke(0));
 
@@ -178,11 +177,10 @@ public class TerraMenuItemSkin extends MenuItemSkin {
 
         Menu.Item menuItem = (Menu.Item)getComponent();
 
-        if (menuItem.isFocused()
-            || menuPopup.isOpen()) {
+        if (menuItem.isActive()) {
             Menu menu = menuItem.getSection().getMenu();
-            Color highlightBackgroundColor = (Color)menu.getStyles().get("highlightBackgroundColor");
-            opaque = (highlightBackgroundColor.getTransparency() == Transparency.OPAQUE);
+            Color activeBackgroundColor = (Color)menu.getStyles().get("activeBackgroundColor");
+            opaque = (activeBackgroundColor.getTransparency() == Transparency.OPAQUE);
         }
 
         return opaque;

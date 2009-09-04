@@ -131,7 +131,7 @@ public class MenuBar extends Container {
                     Item activeItem = menuBar.getActiveItem();
 
                     if (active) {
-                        // Set this as the new actie item (do this before
+                        // Set this as the new active item (do this before
                         // de-selecting any currently active item so the
                         // menu bar's change event isn't fired twice)
                         menuBar.setActiveItem(this);
@@ -311,14 +311,15 @@ public class MenuBar extends Container {
         int n = items.getLength();
 
         if (n > 0) {
-            int index = n;
-
-            if (activeItem != null) {
-                index = items.indexOf(activeItem) + 1;
-            }
-
-            if (index == n) {
+            int index;
+            if (activeItem == null) {
                 index = 0;
+            } else {
+                index = items.indexOf(activeItem) + 1;
+
+                if (index == n) {
+                    index = 0;
+                }
             }
 
             activeItem = items.get(index);
@@ -330,14 +331,15 @@ public class MenuBar extends Container {
         int n = items.getLength();
 
         if (n > 0) {
-            int index = -1;
-
-            if (activeItem != null) {
-                index = items.indexOf(activeItem) - 1;
-            }
-
-            if (index < 0) {
+            int index;
+            if (activeItem == null) {
                 index = n - 1;
+            } else {
+                index = items.indexOf(activeItem) - 1;
+
+                if (index < 0) {
+                    index = n - 1;
+                }
             }
 
             activeItem = items.get(index);

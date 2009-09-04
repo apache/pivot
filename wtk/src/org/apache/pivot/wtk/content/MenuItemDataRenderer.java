@@ -118,7 +118,7 @@ public class MenuItemDataRenderer extends TablePane implements Button.DataRender
         Color color;
         if (button.isEnabled()) {
             if (highlighted) {
-                color = (Color)menu.getStyles().get("highlightColor");
+                color = (Color)menu.getStyles().get("activeColor");
             } else {
                 color = (Color)menu.getStyles().get("color");
             }

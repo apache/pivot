@@ -21,9 +21,7 @@ import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.ContainerMouseListener;
-import org.apache.pivot.wtk.Direction;
 import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Menu;
 import org.apache.pivot.wtk.MenuPopup;
 import org.apache.pivot.wtk.Mouse;
@@ -46,12 +44,10 @@ public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListen
 
         @Override
         public void windowClosed(Window window, Display display) {
-            display.getContainerMouseListeners().remove(displayMouseListener);
-
-            repaintComponent();
-
             Menu.Item menuItem = (Menu.Item)getComponent();
-            menuItem.requestFocus();
+            menuItem.setActive(false);
+
+            display.getContainerMouseListeners().remove(displayMouseListener);
         }
     };
 
@@ -70,8 +66,8 @@ public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListen
         }
     };
 
-    protected int buttonPressInterval = 200;
-    protected ApplicationContext.ScheduledCallback buttonPressCallback = null;
+    protected int openPopupInterval = 200;
+    protected ApplicationContext.ScheduledCallback openPopupCallback = null;
 
     public MenuItemSkin() {
         menuPopup.getWindowStateListeners().add(menuPopupWindowStateListener);
@@ -99,33 +95,43 @@ public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListen
     }
 
     @Override
+    public boolean isFocusable() {
+        return false;
+    }
+
+    @Override
     public void mouseOver(Component component) {
         super.mouseOver(component);
 
-        if (buttonPressCallback != null) {
-            buttonPressCallback.cancel();
-            buttonPressCallback = null;
+        Menu.Item menuItem = (Menu.Item)getComponent();
+        menuItem.setActive(true);
+
+        if (openPopupCallback != null) {
+            openPopupCallback.cancel();
+            openPopupCallback = null;
         }
 
-        final Menu.Item menuItem = (Menu.Item)getComponent();
         if (menuItem.getMenu() != null) {
-            buttonPressCallback = ApplicationContext.scheduleCallback(new Runnable() {
+            openPopupCallback = ApplicationContext.scheduleCallback(new Runnable() {
                 public void run() {
-                    menuItem.press();
+                    openPopup();
                 }
-            }, buttonPressInterval);
+            }, openPopupInterval);
         }
-
-        menuItem.requestFocus();
     }
 
     @Override
     public void mouseOut(Component component) {
         super.mouseOut(component);
 
-        if (buttonPressCallback != null) {
-            buttonPressCallback.cancel();
-            buttonPressCallback = null;
+        if (openPopupCallback != null) {
+            openPopupCallback.cancel();
+            openPopupCallback = null;
+        }
+
+        if (!menuPopup.isOpen()) {
+            Menu.Item menuItem = (Menu.Item)getComponent();
+            menuItem.setActive(false);
         }
     }
 
@@ -133,9 +139,9 @@ public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListen
     public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
         boolean consumed = super.mouseDown(component, button, x, y);
 
-        if (buttonPressCallback != null) {
-            buttonPressCallback.cancel();
-            buttonPressCallback = null;
+        if (openPopupCallback != null) {
+            openPopupCallback.cancel();
+            openPopupCallback = null;
         }
 
         return consumed;
@@ -147,71 +153,6 @@ public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListen
 
         Menu.Item menuItem = (Menu.Item)getComponent();
         menuItem.press();
-
-        return consumed;
-    }
-
-    @Override
-    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
-        boolean consumed = false;
-
-        if (buttonPressCallback != null) {
-            buttonPressCallback.cancel();
-            buttonPressCallback = null;
-        }
-
-        Menu.Item menuItem = (Menu.Item)getComponent();
-        Menu menu = menuItem.getMenu();
-
-        if (keyCode == Keyboard.KeyCode.UP) {
-            menuItem.transferFocus(Direction.BACKWARD);
-            consumed = true;
-        } else if (keyCode == Keyboard.KeyCode.DOWN) {
-            menuItem.transferFocus(Direction.FORWARD);
-            consumed = true;
-        } else if (keyCode == Keyboard.KeyCode.LEFT) {
-            // If this is not a top-level menu, close this item's window
-            Menu.Section parentSection = menuItem.getSection();
-            Menu parentMenu = parentSection.getMenu();
-            Menu.Item parentMenuItem = parentMenu.getItem();
-
-            if (parentMenuItem != null) {
-                Window window = menuItem.getWindow();
-                window.close();
-            }
-        } else if (keyCode == Keyboard.KeyCode.RIGHT) {
-            if (menu != null) {
-                if (!menuPopup.isOpen()) {
-                    menuItem.press();
-                }
-
-                menu.transferFocus(null, Direction.FORWARD);
-                consumed = true;
-            }
-        } else if (keyCode == Keyboard.KeyCode.ENTER) {
-            menuItem.press();
-            consumed = true;
-        } else if (keyCode == Keyboard.KeyCode.TAB) {
-            // No-op
-        } else {
-            consumed = super.keyPressed(component, keyCode, keyLocation);
-        }
-
-        return consumed;
-    }
-
-    @Override
-    public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
-        boolean consumed = false;
-
-        Menu.Item menuItem = (Menu.Item)getComponent();
-
-        if (keyCode == Keyboard.KeyCode.SPACE) {
-            menuItem.press();
-            consumed = true;
-        } else {
-            consumed = super.keyReleased(component, keyCode, keyLocation);
-        }
 
         return consumed;
     }
@@ -230,15 +171,7 @@ public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListen
 
         if (menu != null
             && !menuPopup.isOpen()) {
-            // Determine the popup's location and preferred size, relative
-            // to the menu item
-            Display display = menuItem.getDisplay();
-            Point menuItemLocation = menuItem.mapPointToAncestor(display, getWidth(), 0);
-
-            // TODO Ensure that the popup remains within the bounds of the display
-
-            menuPopup.setLocation(menuItemLocation.x, menuItemLocation.y);
-            menuPopup.open(menuItem.getWindow());
+            openPopup();
         }
     }
 
@@ -251,5 +184,27 @@ public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListen
     public void menuChanged(Menu.Item menuItem, Menu previousMenu) {
         menuPopup.setMenu(menuItem.getMenu());
         repaintComponent();
+    }
+
+    @Override
+    public void activeChanged(Menu.Item menuItem) {
+        if (!menuItem.isActive()) {
+            menuPopup.close(true);
+        }
+
+        repaintComponent();
+    }
+
+    private void openPopup() {
+        Menu.Item menuItem = (Menu.Item)getComponent();
+
+        Display display = menuItem.getDisplay();
+        Point location = menuItem.mapPointToAncestor(display, getWidth(), 0);
+
+        // TODO Ensure that the popup remains within the bounds of the display
+
+        menuPopup.setLocation(location.x, location.y);
+        menuPopup.open(menuItem.getWindow());
+        menuPopup.requestFocus();
     }
 }

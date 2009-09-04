@@ -139,6 +139,20 @@ limitations under the License.
                     </menu>
                 </MenuBar.Item>
 
+                <MenuBar.Item buttonData="View">
+                    <menu>
+                        <Menu>
+                            <sections>
+                                <Menu.Section>
+                                    <Menu.Item buttonData="Large" toggleButton="true" group="view" selected="true"/>
+                                    <Menu.Item buttonData="Medium" toggleButton="true" group="view"/>
+                                    <Menu.Item buttonData="Small" toggleButton="true" group="view"/>
+                                </Menu.Section>
+                            </sections>
+                        </Menu>
+                    </menu>
+                </MenuBar.Item>
+
                 <MenuBar.Item buttonData="Window">
                     <menu>
                         <Menu>

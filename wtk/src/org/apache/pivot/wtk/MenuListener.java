@@ -38,4 +38,12 @@ public interface MenuListener {
      * @param removed
      */
     public void sectionsRemoved(Menu menu, int index, Sequence<Menu.Section> removed);
+
+    /**
+     * Called when a menu's active item has changed.
+     *
+     * @param menu
+     * @param previousActiveItem
+     */
+    public void activeItemChanged(Menu menu, Menu.Item previousActiveItem);
 }

@@ -39,8 +39,8 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
     private Font font;
     private Color color;
     private Color disabledColor;
-    private Color highlightColor;
-    private Color highlightBackgroundColor;
+    private Color activeColor;
+    private Color activeBackgroundColor;
     private Color marginColor;
     private int margin;
     private Color separatorColor;
@@ -57,8 +57,8 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
         font = theme.getFont();
         color = theme.getColor(1);
         disabledColor = theme.getColor(7);
-        highlightColor = theme.getColor(4);
-        highlightBackgroundColor = theme.getColor(19);
+        activeColor = theme.getColor(4);
+        activeBackgroundColor = theme.getColor(19);
         marginColor = theme.getColor(11);
         marginColor = new Color(marginColor.getRed(), marginColor.getGreen(),
             marginColor.getBlue(), 228);
@@ -292,46 +292,46 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
         setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
     }
 
-    public Color getHighlightColor() {
-        return highlightColor;
+    public Color getActiveColor() {
+        return activeColor;
     }
 
-    public void setHighlightColor(Color highlightColor) {
-        if (highlightColor == null) {
-            throw new IllegalArgumentException("highlightColor is null.");
+    public void setActiveColor(Color activeColor) {
+        if (activeColor == null) {
+            throw new IllegalArgumentException("activeColor is null.");
         }
 
-        this.highlightColor = highlightColor;
+        this.activeColor = activeColor;
         repaintComponent();
     }
 
-    public final void setHighlightColor(String highlightColor) {
-        if (highlightColor == null) {
-            throw new IllegalArgumentException("highlightColor is null.");
+    public final void setActiveColor(String activeColor) {
+        if (activeColor == null) {
+            throw new IllegalArgumentException("activeColor is null.");
         }
 
-        setHighlightColor(GraphicsUtilities.decodeColor(highlightColor));
+        setActiveColor(GraphicsUtilities.decodeColor(activeColor));
     }
 
-    public Color getHighlightBackgroundColor() {
-        return highlightBackgroundColor;
+    public Color getActiveBackgroundColor() {
+        return activeBackgroundColor;
     }
 
-    public void setHighlightBackgroundColor(Color highlightBackgroundColor) {
-        if (highlightBackgroundColor == null) {
-            throw new IllegalArgumentException("highlightBackgroundColor is null.");
+    public void setActiveBackgroundColor(Color activeBackgroundColor) {
+        if (activeBackgroundColor == null) {
+            throw new IllegalArgumentException("activeBackgroundColor is null.");
         }
 
-        this.highlightBackgroundColor = highlightBackgroundColor;
+        this.activeBackgroundColor = activeBackgroundColor;
         repaintComponent();
     }
 
-    public final void setHighlightBackgroundColor(String highlightBackgroundColor) {
-        if (highlightBackgroundColor == null) {
-            throw new IllegalArgumentException("highlightBackgroundColor is null.");
+    public final void setActiveBackgroundColor(String activeBackgroundColor) {
+        if (activeBackgroundColor == null) {
+            throw new IllegalArgumentException("activeBackgroundColor is null.");
         }
 
-        setHighlightBackgroundColor(GraphicsUtilities.decodeColor(highlightBackgroundColor));
+        setActiveBackgroundColor(GraphicsUtilities.decodeColor(activeBackgroundColor));
     }
 
     public Color getMarginColor() {
@@ -434,6 +434,11 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
     @Override
     public void itemsRemoved(Menu.Section section, int index, Sequence<Menu.Item> removed) {
         invalidateComponent();
+    }
+
+    @Override
+    public void activeItemChanged(Menu menu, Menu.Item previousActiveItem) {
+        // No-op
     }
 
     @Override

@@ -25,7 +25,6 @@ import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.content.MenuItemDataRenderer;
 
-
 /**
  * Component that presents a cascading menu.
  */
@@ -49,12 +48,20 @@ public class Menu extends Container {
                     listener.menuChanged(item, previousMenu);
                 }
             }
+
+            @Override
+            public void activeChanged(Item item) {
+                for (ItemListener listener : this) {
+                    listener.activeChanged(item);
+                }
+            }
         }
 
         private Section section = null;
 
         private String name = null;
         private Menu menu = null;
+        private boolean active = false;
 
         private ItemListenerList itemListeners = new ItemListenerList();
 
@@ -141,6 +148,43 @@ public class Menu extends Container {
             }
         }
 
+        public boolean isActive() {
+            return active;
+        }
+
+        public void setActive(boolean active) {
+            if (this.active != active) {
+                this.active = active;
+
+                if (section != null
+                    && section.menu != null) {
+                    // Update the active item
+                    Item activeItem = section.menu.getActiveItem();
+
+                    if (active) {
+                        // Set this as the new active item (do this before
+                        // de-selecting any currently active item so the
+                        // menu bar's change event isn't fired twice)
+                        section.menu.setActiveItem(this);
+
+                        // Deactivate any previously active item
+                        if (activeItem != null) {
+                            activeItem.setActive(false);
+                        }
+                    }
+                    else {
+                        // If this item is currently active, clear the
+                        // selection
+                        if (activeItem == this) {
+                            section.menu.setActiveItem(null);
+                        }
+                    }
+                }
+
+                itemListeners.activeChanged(this);
+            }
+        }
+
         @Override
         public void setTriState(boolean triState) {
             throw new UnsupportedOperationException("Menu items can't be tri-state.");
@@ -189,6 +233,13 @@ public class Menu extends Container {
          * @param previousMenu
          */
         public void menuChanged(Item item, Menu previousMenu);
+
+        /**
+         * Called when an item's active state has changed.
+         *
+         * @param item
+         */
+        public void activeChanged(Item item);
     }
 
     /**
@@ -506,6 +557,13 @@ public class Menu extends Container {
                 listener.sectionsRemoved(menu, index, removed);
             }
         }
+
+        @Override
+        public void activeItemChanged(Menu menu, Menu.Item previousActiveItem) {
+            for (MenuListener listener : this) {
+                listener.activeItemChanged(menu, previousActiveItem);
+            }
+        }
     }
 
     private static class MenuItemSelectionListenerList extends ListenerList<MenuItemSelectionListener>
@@ -525,6 +583,8 @@ public class Menu extends Container {
 
     private HashMap<String, Section> sectionMap = new HashMap<String, Section>();
     private HashMap<String, Item> itemMap = new HashMap<String, Item>();
+
+    private Item activeItem = null;
 
     private MenuListenerList menuListeners = new MenuListenerList();
     private MenuItemSelectionListenerList menuItemSelectionListeners = new MenuItemSelectionListenerList();
@@ -568,6 +628,57 @@ public class Menu extends Container {
      */
     public Item getItem(String name) {
         return itemMap.get(name);
+    }
+
+    public Item getActiveItem() {
+        return activeItem;
+    }
+
+    private void setActiveItem(Item activeItem) {
+        Item previousActiveItem = this.activeItem;
+
+        if (previousActiveItem != activeItem) {
+            this.activeItem = activeItem;
+            menuListeners.activeItemChanged(this, previousActiveItem);
+        }
+    }
+
+    public void activateNextItem() {
+        // If nothing is active, activate the first item; otherwise, activate the
+        // next item
+        if (activeItem == null) {
+            if (sections.getLength() > 0) {
+                Section activeSection = sections.get(0);
+
+                if (activeSection.getLength() > 0) {
+                    Item activeItem = activeSection.get(0);
+                    activeItem.setActive(true);
+                }
+            }
+        } else {
+            // TODO Activate the next item
+
+            // Section activeSection = activeItem.section;
+        }
+    }
+
+    public void activatePreviousItem() {
+        // If nothing is active, activate the last item; otherwise, activate the
+        // previous item
+        if (activeItem == null) {
+            if (sections.getLength() > 0) {
+                Section activeSection = sections.get(sections.getLength() - 1);
+
+                if (activeSection.getLength() > 0) {
+                    Item activeItem = activeSection.get(activeSection.getLength() - 1);
+                    activeItem.setActive(true);
+                }
+            }
+        } else {
+            // TODO Activate the previous item
+
+            // Section activeSection = activeItem.section;
+        }
     }
 
     @Override
