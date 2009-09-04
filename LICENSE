@@ -225,6 +225,9 @@ The following components are licensed under the Apache Software License 2.0:
 
 For wtk/src/pivot/wtk/effects/easing/*.java:
 
+                  Berkeley Software Distribution (BSD) License
+               http://www.opensource.org/licenses/bsd-license.php
+
   Copyright (c) 2001 Robert Penner
   All rights reserved.
 
@@ -255,6 +258,9 @@ For wtk/src/pivot/wtk/effects/easing/*.java:
 ===============================================================================
 
 For wtk/src/pivot/wtk/effects/DropShadowDecorator.java:
+
+                  Berkeley Software Distribution (BSD) License
+               http://www.opensource.org/licenses/bsd-license.php
 
   Copyright (c) 2006 Chet Haase and Romain Guy
   All rights reserved.
@@ -288,7 +294,6 @@ For wtk/src/pivot/wtk/effects/DropShadowDecorator.java:
 For the Silk Icons and Silk Companion Icons:
 
                     Creative Commons Attribution 2.5 License
-                                   Version 2.5
                http://creativecommons.org/licenses/by/2.5/legalcode
 
   License
