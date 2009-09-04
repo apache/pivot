@@ -23,14 +23,13 @@ import java.awt.Graphics2D;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
-import org.apache.pivot.wtk.Direction;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Menu;
 import org.apache.pivot.wtk.MenuListener;
 import org.apache.pivot.wtk.Theme;
+import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.skin.ContainerSkin;
-
 
 /**
  * Menu skin.
@@ -398,11 +397,48 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
         Menu menu = (Menu)component;
 
         if (keyCode == Keyboard.KeyCode.UP) {
-            menu.transferFocus(null, Direction.BACKWARD);
+            menu.activatePreviousItem();
             consumed = true;
         } else if (keyCode == Keyboard.KeyCode.DOWN) {
-            menu.transferFocus(null, Direction.FORWARD);
+            menu.activateNextItem();
             consumed = true;
+        } else if (keyCode == Keyboard.KeyCode.LEFT) {
+            // Close the window if this is not a top-level menu
+            if (menu.getItem() != null) {
+                Window window = menu.getWindow();
+                window.close();
+                consumed = true;
+            }
+        } else if (keyCode == Keyboard.KeyCode.RIGHT
+            || keyCode == Keyboard.KeyCode.ENTER) {
+            Menu.Item activeItem = menu.getActiveItem();
+
+            // Press if the item has a sub-menu
+            if (activeItem != null
+                && activeItem.getMenu() != null) {
+                activeItem.press();
+                consumed = true;
+            }
+        }
+
+        return consumed;
+    }
+
+    @Override
+    public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+        boolean consumed = super.keyReleased(component, keyCode, keyLocation);
+
+        Menu menu = (Menu)component;
+
+        if (keyCode == Keyboard.KeyCode.SPACE) {
+            Menu.Item activeItem = menu.getActiveItem();
+
+            // Press if the item does not have a sub-menu
+            if (activeItem != null
+                && activeItem.getMenu() == null) {
+                activeItem.press();
+                consumed = true;
+            }
         }
 
         return consumed;

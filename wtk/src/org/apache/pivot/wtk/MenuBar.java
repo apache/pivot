@@ -322,8 +322,7 @@ public class MenuBar extends Container {
                 }
             }
 
-            activeItem = items.get(index);
-            activeItem.setActive(true);
+            items.get(index).setActive(true);
         }
     }
 
@@ -342,8 +341,7 @@ public class MenuBar extends Container {
                 }
             }
 
-            activeItem = items.get(index);
-            activeItem.setSelected(true);
+            items.get(index).setActive(true);
         }
     }
 
