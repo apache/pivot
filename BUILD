@@ -3,7 +3,7 @@ System Requirements
 
 * JDK 1.6 or greater (http://java.sun.com/)
 * Ant 1.7 or greater (http://ant.apache.org/)
-* JUnit 4 (http://www.junit.org/)
+* JUnit 4.3 or greater (http://www.junit.org/)
 
 
 Project Set-Up
