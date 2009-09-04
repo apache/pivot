@@ -43,14 +43,6 @@ http://www.robertpenner.com/easing_terms_of_use.html
 
 ======================================================================
 
-Pivot's servlets (pivot.web.server) are built using Apache Tomcat's
-implementation of the Servlet 2.5 specification, which is licensed
-under the Apache License 2.0.
-
-http://tomcat.apache.org/
-
-======================================================================
-
 The drop shadow decorator (pivot.wtk.effects.DropShadowDecorator) uses
 code from "Filthy Rich Clients" by Chet Haase and Romain Guy, which is
 licensed under the Berkeley Software Distribution (BSD) License.
