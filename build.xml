@@ -409,7 +409,6 @@ limitations under the License.
             <pathelement location="core/${folder.bin}"/>
             <pathelement location="web/${folder.bin}"/>
             <pathelement location="wtk/${folder.bin}"/>
-            <fileset dir="demos/lib" includes="**/*.jar"/>
         </compile>
     </target>
 
@@ -592,30 +591,6 @@ limitations under the License.
                 <exclude name="*.server.jar"/>
             </fileset>
         </copy>
-
-        <!-- Sign demo dependencies -->
-        <mkdir dir="demos/lib/signed"/>
-        <copy todir="demos/lib/signed">
-            <fileset dir="demos/lib" includes="*.jar"/>
-        </copy>
-
-        <signjar keystore="${keystore.location}" storepass="${keystore.passwd}" alias="${keystore.alias}"
-            preservelastmodified="true" lazy="true">
-            <path>
-                <fileset dir="demos/lib/signed" includes="*.jar" />
-            </path>
-        </signjar>
-
-        <copy todir="demos/www/lib">
-            <fileset dir="demos/lib" includes="*.jar" />
-        </copy>
-
-        <copy todir="demos/www/lib">
-            <fileset dir="demos/lib/signed" includes="*.jar" />
-            <mapper type="glob" from="*.jar" to="*.signed.jar"/>
-        </copy>
-
-        <delete dir="demos/lib/signed"/>
 
         <!-- Generate demo HTML and JNLP files -->
         <copy todir="demos/www" filtering="true">
