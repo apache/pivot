@@ -163,6 +163,8 @@ limitations under the License.
             </menu>
         </MenuBar.Item>
 
+        <MenuBar.Item buttonData="Empty"/>
+
         <MenuBar.Item>
             <buttonData>
                 <content:ButtonData icon="@help.png"/>

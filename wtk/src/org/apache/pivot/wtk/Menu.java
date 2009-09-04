@@ -89,6 +89,15 @@ public class Menu extends Container {
             super.setParent(parent);
         }
 
+        @Override
+        public void setEnabled(boolean enabled) {
+            super.setEnabled(enabled);
+
+            if (!enabled) {
+                setActive(false);
+            }
+        }
+
         public Section getSection() {
             return section;
         }

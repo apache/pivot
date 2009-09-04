@@ -78,6 +78,15 @@ public class MenuBar extends Container {
             super.setParent(parent);
         }
 
+        @Override
+        public void setEnabled(boolean enabled) {
+            super.setEnabled(enabled);
+
+            if (!enabled) {
+                setActive(false);
+            }
+        }
+
         public MenuBar getMenuBar() {
             return menuBar;
         }
