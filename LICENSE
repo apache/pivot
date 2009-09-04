@@ -219,7 +219,7 @@ The following components are licensed under the Apache Software License 2.0:
   demos/lib/smackx.jar
   demos/lib/smack.jar
   demos/lib/groovy-all-1.6.3.jar
-  web/lib/servlet-api.jar
+  web/lib/servlet-api.jar (Apache Tomcat's Servlet 2.5 spec implementation)
 
 ===============================================================================
 
