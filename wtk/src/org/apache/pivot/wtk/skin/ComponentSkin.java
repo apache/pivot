@@ -229,7 +229,9 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
     @Override
     public void focusedChanged(Component component, Component obverseComponent) {
         // Ensure that the component is visible if it is in a viewport
-        if (component.isFocused()) {
+        if (component.isFocused()
+            && obverseComponent != null
+            && obverseComponent.getWindow() == component.getWindow()) {
             component.scrollAreaToVisible(0, 0, getWidth(), getHeight());
         }
     }
