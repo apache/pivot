@@ -492,7 +492,7 @@ public class TablePane extends Container {
      * Class that manages a table pane's row list. Callers get access to the
      * row sequence via {@link TablePane#getRows()}.
      */
-    public final class RowSequence implements Sequence<Row> {
+    public final class RowSequence implements Sequence<Row>, Iterable<Row> {
         private RowSequence() {
         }
 
@@ -577,13 +577,18 @@ public class TablePane extends Container {
         public int getLength() {
             return rows.getLength();
         }
+
+        @Override
+        public Iterator<Row> iterator() {
+            return new ImmutableIterator<Row>(rows.iterator());
+        }
     }
 
     /**
      * Class that manages a table pane's column list. Callers get access to the
      * column sequence via {@link TablePane#getColumns()}.
      */
-    public final class ColumnSequence implements Sequence<Column> {
+    public final class ColumnSequence implements Sequence<Column>, Iterable<Column> {
         private ColumnSequence() {
         }
 
@@ -657,6 +662,11 @@ public class TablePane extends Container {
         @Override
         public int getLength() {
             return columns.getLength();
+        }
+
+        @Override
+        public Iterator<Column> iterator() {
+            return new ImmutableIterator<Column>(columns.iterator());
         }
     }
 
