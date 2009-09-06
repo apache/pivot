@@ -147,7 +147,7 @@ public class Prompt extends Sheet {
         List<Object> options = new ArrayList<Object>();
         options.add(resources.get("defaultOption"));
 
-        Prompt prompt = new Prompt(messageType, message, options, null);
+        Prompt prompt = new Prompt(messageType, message, options, body);
         prompt.setTitle((String)resources.get("defaultTitle"));
         prompt.setSelectedOption(0);
 
