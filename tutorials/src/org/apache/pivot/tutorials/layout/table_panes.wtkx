@@ -22,45 +22,17 @@ limitations under the License.
     xmlns="org.apache.pivot.wtk">
     <wtkx:define>
         <Menu.Section wtkx:id="cellSection">
-            <Menu.Item action="configureCell">
-                <buttonData>
-                    <content:ButtonData icon="@pencil.png" text="Configure Cell Content" />
-                </buttonData>
-            </Menu.Item>
+            <Menu.Item action="configureCell" buttonData="Configure Cell Content"/>
         </Menu.Section>
         <Menu.Section wtkx:id="rowSection">
-            <Menu.Item action="configureRow">
-                <buttonData>
-                    <content:ButtonData icon="@pencil.png" text="Configure Row" />
-                </buttonData>
-            </Menu.Item>
-            <Menu.Item action="insertRow">
-                <buttonData>
-                    <content:ButtonData icon="@arrow_right.png" text="Insert Row" />
-                </buttonData>
-            </Menu.Item>
-            <Menu.Item action="removeRow">
-                <buttonData>
-                    <content:ButtonData icon="@arrow_left.png" text="Remove Row" />
-                </buttonData>
-            </Menu.Item>
+            <Menu.Item action="configureRow" buttonData="Configure Row"/>
+            <Menu.Item action="insertRow" buttonData="Insert Row"/>
+            <Menu.Item action="removeRow" buttonData="Remove Row"/>
         </Menu.Section>
         <Menu.Section wtkx:id="columnSection">
-            <Menu.Item action="configureColumn">
-                <buttonData>
-                    <content:ButtonData icon="@pencil.png" text="Configure Column" />
-                </buttonData>
-            </Menu.Item>
-            <Menu.Item action="insertColumn">
-                <buttonData>
-                    <content:ButtonData icon="@arrow_right.png" text="Insert Column" />
-                </buttonData>
-            </Menu.Item>
-            <Menu.Item action="removeColumn">
-                <buttonData>
-                    <content:ButtonData icon="@arrow_left.png" text="Remove Column" />
-                </buttonData>
-            </Menu.Item>
+            <Menu.Item action="configureColumn" buttonData="Configure Column"/>
+            <Menu.Item action="insertColumn" buttonData="Insert Column"/>
+            <Menu.Item action="removeColumn" buttonData="Remove Column"/>
         </Menu.Section>
     </wtkx:define>
 

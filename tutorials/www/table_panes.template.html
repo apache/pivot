@@ -34,46 +34,176 @@ limitations under the License.
 <body>
 <h1>Table Panes</h1>
 
-<p>TablePane has a "columns" collection and a "rows" collection. In WTKX, a table pane might be defined as follows:</p>
+<p>Table panes are used to arrange components in a variable 2-dimensional grid, much like an HTML table. Table panes have a "columns" collection that defines the column structure of the table and a "rows" collection that defines both the row structure of the table and the contents of each row.</p>
+
+<p>Table panes support a number of styles that allow a caller to customize the arrangement of child components:</p>
+
+<ul>
+<li><tt>padding</tt> - the amount of space the table pane reserves around the perimeter of the container.</li>
+<li><tt>horizontalSpacing</tt> - the amount of space the table pane inserts between columns.</li>
+<li><tt>verticalSpacing</tt> - the amount of space the table pane inserts between rows.</li>
+<li><tt>showHorizontalGridLines</tt> - whether horizontal grid lines will be painted in the space between rows. Note that this will be ignored if <tt>verticalSpacing</tt> is zero, as there would be no space in which to paint the grid lines.</li>
+<li><tt>showVerticalGridLines</tt> - whether vertical grid lines will be painted in the space between columns. Note that this will be ignored if <tt>horizontalSpacing</tt> is zero, as there would be no space in which to paint the grid lines.</li>
+<li><tt>gridColor</tt> - the color of the grid lines.</li>
+<li><tt>highlightBackgroundColor</tt> - the background color of rows and columns whose <tt>highlighted</tt> flag is set to <tt>true</tt>.</li>
+</ul>
+
+<p>Below is a sample application that demonstrates a basic table pane structure and responds to mouse clicks with information about where the user clicked:</p>
+
+<script>
+var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
+    archive:"lib/@project_name@-core-@version@.jar,lib/@project_name@-wtk-@version@.jar,lib/@project_name@-wtk-@version@.terra.jar,lib/@project_name@-tutorials-@version@.jar",
+    width:500,
+    height:350,
+    style:"border:solid 1px #999999"
+};
+var parameters = {application_class_name:"org.apache.pivot.tutorials.layout.SimpleTablePanes",
+    codebase_lookup:false
+};
+deployJava.writeAppletTag(attributes, parameters);
+</script>
+
+<p>The WTKX source for the application is shown below:</p>
 
 <pre class="brush:xml">
-&lt;TablePane&gt;
-    &lt;columns&gt;
-        &lt;TablePane.Column width="120"/&gt;
-        &lt;TablePane.Column width="240"/&gt;
-    &lt;/columns&gt;
-    &lt;rows&gt;
-        &lt;TablePane.Row height="80"&gt;
-            &lt;ImageView image="a.png"/&gt;
-            &lt;ImageView image="b.png"/&gt;
-        &lt;/TablePane.Row&gt;
-        &lt;TablePane.Row height="160"&gt;
-            &lt;ImageView image="c.png"/&gt;
-            &lt;ImageView image="d.png"/&gt;
-        &lt;/TablePane.Row&gt;
-    &lt;/rows&gt;
-&lt;/TablePane&gt;
+&lt;Window wtkx:id="window" title="Table Panes" maximized="true"
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns="org.apache.pivot.wtk"&gt;
+    &lt;content&gt;
+        &lt;Border styles="{padding:0}"&gt;
+            &lt;content&gt;
+                &lt;TablePane wtkx:id="tablePane" styles="{verticalSpacing:1, showHorizontalGridLines:true,
+                    horizontalSpacing:1, showVerticalGridLines:true}"&gt;
+                    &lt;columns&gt;
+                        &lt;TablePane.Column width="-1"/&gt;
+                        &lt;TablePane.Column width="50"/&gt;
+                        &lt;TablePane.Column width="-1"/&gt;
+                        &lt;TablePane.Column width="1*"/&gt;
+                        &lt;TablePane.Column width="2*"/&gt;
+                    &lt;/columns&gt;
+
+                    &lt;rows&gt;
+                        &lt;TablePane.Row height="-1"&gt;
+                            &lt;TablePane.Filler/&gt;
+                            &lt;Label text="50" styles="{horizontalAlignment:'center'}"/&gt;
+                            &lt;Label text="-1" styles="{horizontalAlignment:'center'}"/&gt;
+                            &lt;Label text="1*" styles="{horizontalAlignment:'center'}"/&gt;
+                            &lt;Label text="2*" styles="{horizontalAlignment:'center'}"/&gt;
+                        &lt;/TablePane.Row&gt;
+                        &lt;TablePane.Row height="50"&gt;
+                            &lt;Label text="50" styles="{verticalAlignment:'center'}"/&gt;
+                        &lt;/TablePane.Row&gt;
+                        &lt;TablePane.Row height="-1"&gt;
+                            &lt;Label text="-1" styles="{verticalAlignment:'center'}"/&gt;
+                        &lt;/TablePane.Row&gt;
+                        &lt;TablePane.Row height="1*"&gt;
+                            &lt;Label text="1*" styles="{verticalAlignment:'center'}"/&gt;
+                        &lt;/TablePane.Row&gt;
+                        &lt;TablePane.Row height="2*"&gt;
+                            &lt;Label text="2*" styles="{verticalAlignment:'center'}"/&gt;
+                        &lt;/TablePane.Row&gt;
+                    &lt;/rows&gt;
+                &lt;/TablePane&gt;
+            &lt;/content&gt;
+        &lt;/Border&gt;
+    &lt;/content&gt;
+&lt;/Window&gt;
 </pre>
 
-<p>This table pane would contain four <tt>ImageView</tt> cells, with column widths and row heights as specified. It is analogous to defining a table in HTML, only the table's columns must be defined up front (so they don't have to be inferred), and the equivalent of a &lt;td&gt; tag is not required, since any component can be a cell.</p>
-
-<p>In Java, it would look like this:</p>
+<p>The Java source is as follows. Most of the code is simply event handling logic that responds to mouse clicks:</p>
 
 <pre class="brush:java">
-TablePane tablePane = new TablePane();
-tablePane.getColumns().add(new TablePane.Column(120));
-tablePane.getColumns().add(new TablePane.Column(240));
+package org.apache.pivot.tutorials.layout;
 
-TablePane.Row row1 = new TablePane.Row(80);
-row1.add(new ImageView(Image.load(getClass().getResource("a.png"))));
-row1.add(new ImageView(Image.load(getClass().getResource("b.png"))));
-tablePane.getRows().add(row1);
+import org.apache.pivot.collections.Map;
+import org.apache.pivot.wtk.BoxPane;
+import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.ComponentMouseButtonListener;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.DesktopApplicationContext;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.Label;
+import org.apache.pivot.wtk.MessageType;
+import org.apache.pivot.wtk.Mouse;
+import org.apache.pivot.wtk.Orientation;
+import org.apache.pivot.wtk.Prompt;
+import org.apache.pivot.wtk.TablePane;
+import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtkx.WTKXSerializer;
 
-TablePane.Row row2 = new TablePane.Row(160);
-row2.add(new ImageView(Image.load(getClass().getResource("c.png"))));
-row2.add(new ImageView(Image.load(getClass().getResource("d.png"))));
-tablePane.getRows().add(row2);
+public class SimpleTablePanes implements Application {
+    private Window window = null;
+    private TablePane tablePane = null;
+
+    @Override
+    public void startup(Display display, Map&lt;String, String&gt; properties) throws Exception {
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        window = (Window)wtkxSerializer.readObject(this, "simple_table_panes.wtkx");
+        tablePane = (TablePane)wtkxSerializer.get("tablePane");
+
+        tablePane.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
+            @Override
+            public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+                int rowIndex = tablePane.getRowAt(y);
+                int columnIndex = tablePane.getColumnAt(x);
+
+                if (rowIndex &gt;= 0
+                    && columnIndex &gt;= 0) {
+                    TablePane.Row row = tablePane.getRows().get(rowIndex);
+                    TablePane.Column column = tablePane.getColumns().get(columnIndex);
+
+                    int rowHeight = row.getHeight();
+                    int columnWidth = column.getWidth();
+
+                    String message = "Registered Click At " + rowIndex + "," + columnIndex;
+
+                    Label heightLabel = new Label(String.format("The row's height is %d (%s)",
+                        rowHeight,
+                        rowHeight == -1 ? "default" : (row.isRelative() ? "relative" : "absolute")));
+                    Label widthLabel = new Label(String.format("The column's width is %d (%s)",
+                        columnWidth,
+                        columnWidth == -1 ? "default" : (column.isRelative() ? "relative" : "absolute")));
+
+                    BoxPane body = new BoxPane(Orientation.VERTICAL);
+                    body.add(heightLabel);
+                    body.add(widthLabel);
+
+                    Prompt.prompt(MessageType.INFO, message, body, window);
+                }
+
+                return false;
+            }
+        });
+
+        window.open(display);
+    }
+
+    @Override
+    public boolean shutdown(boolean optional) {
+        if (window != null) {
+            window.close();
+        }
+
+        return false;
+    }
+
+    @Override
+    public void suspend() {
+        // No-op
+    }
+
+    @Override
+    public void resume() {
+        // No-op
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(SimpleTablePanes.class, args);
+    }
+}
 </pre>
+
+<p>Next, let's look at a more involved application that allows you to interact with the table pane to get a feel for how you can achieve the layout that you desire. The following application allows you to control the table pane's styles via the controls on the left and responds to right-clicks over the table pane itself. You can also move the splitter to see the effect it has on the relative columns in the table pane.</p>
 
 <script>
 var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
