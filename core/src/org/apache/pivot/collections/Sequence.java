@@ -106,6 +106,27 @@ public interface Sequence<T> {
                 return new ImmutableIterator<Integer>(elements.iterator());
             }
 
+            @Override
+            public String toString() {
+                StringBuilder sb = new StringBuilder();
+
+                sb.append("[");
+
+                int i = 0;
+                for (Integer item : elements) {
+                    if (i > 0) {
+                        sb.append(", ");
+                    }
+
+                    sb.append(item);
+                    i++;
+                }
+
+                sb.append("]");
+
+                return sb.toString();
+            }
+
             public Integer[] toArray() {
                 return elements.toArray(Integer[].class);
             }
