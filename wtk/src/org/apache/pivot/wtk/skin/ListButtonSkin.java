@@ -320,6 +320,6 @@ public abstract class ListButtonSkin extends ButtonSkin
         Object buttonData = (selectedIndex == -1) ? null : listButton.getListData().get(selectedIndex);
         listButton.setButtonData(buttonData);
 
-        listView.setSelectedIndex(listButton.getSelectedIndex());
+        listView.setSelectedIndex(selectedIndex);
     }
 }

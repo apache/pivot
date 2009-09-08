@@ -28,6 +28,7 @@ import java.awt.geom.Rectangle2D;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.util.Vote;
+import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Border;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Button;
@@ -46,7 +47,6 @@ import org.apache.pivot.wtk.effects.DropShadowDecorator;
 import org.apache.pivot.wtk.effects.Transition;
 import org.apache.pivot.wtk.effects.TransitionListener;
 import org.apache.pivot.wtk.skin.ListButtonSkin;
-
 
 /**
  * Terra list button skin.
@@ -666,10 +666,19 @@ public class TerraListButtonSkin extends ListButtonSkin {
                     listViewPopup.setPreferredSize(popupWidth, popupHeight);
                     listViewPopup.open(listButton.getWindow());
 
-                    if (listView.getFirstSelectedIndex() == -1
+                    if (listView.getSelectedIndex() == -1
                         && listView.getListData().getLength() > 0) {
                         listView.setSelectedIndex(0);
                     }
+
+                    ApplicationContext.queueCallback(new Runnable() {
+                        @Override
+                        public void run() {
+                            int selectedIndex = listView.getSelectedIndex();
+                            Bounds itemBounds = listView.getItemBounds(selectedIndex);
+                            listView.scrollAreaToVisible(itemBounds);
+                        }
+                    });
 
                     listView.requestFocus();
                 }
