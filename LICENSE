@@ -215,7 +215,13 @@ the following licenses.
 
 The following components are licensed under the Apache Software License 2.0:
 
-  web/lib/servlet-api.jar          (http://tomcat.apache.org/)
+  * web/lib/servlet-api.jar          (http://tomcat.apache.org/)
+
+===============================================================================
+
+The following components are available in Public Domain:
+
+  * The Tango Icon Theme icons       (http://tango.freedesktop.org/)
 
 ===============================================================================
 
