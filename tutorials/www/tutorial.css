@@ -31,7 +31,7 @@ p.command {
     padding-top:12px;
     padding-left:24px;
     padding-bottom:12px;
-    padding-right:24px;    
+    padding-right:24px;
 }
 
 pre.snippet {
@@ -47,4 +47,9 @@ tt {
 
 table {
     font-size:11px;
+}
+
+ul {
+    list-style-type: none;
+    padding-left: 20px;
 }
