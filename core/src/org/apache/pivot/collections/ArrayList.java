@@ -43,7 +43,7 @@ public class ArrayList<T> implements List<T>, Serializable {
 
         @Override
         public boolean hasNext() {
-            return (index < getLength());
+            return (index < length);
         }
 
         @Override
@@ -61,7 +61,7 @@ public class ArrayList<T> implements List<T>, Serializable {
 
         @Override
         public boolean hasPrevious() {
-            return (index >= 0);
+            return (index > 0);
         }
 
         @Override
@@ -74,7 +74,7 @@ public class ArrayList<T> implements List<T>, Serializable {
                 throw new ConcurrentModificationException();
             }
 
-            return get(index--);
+            return get(--index);
         }
 
         @Override
@@ -196,7 +196,7 @@ public class ArrayList<T> implements List<T>, Serializable {
         int index = -1;
 
         if (comparator == null) {
-            index = getLength();
+            index = length;
             insert(item, index);
         }
         else {
@@ -356,24 +356,22 @@ public class ArrayList<T> implements List<T>, Serializable {
         int index = -1;
 
         if (comparator == null) {
-            int i = 0;
-            while (i < length) {
+            index = 0;
+            while (index < length) {
                 if (item == null) {
-                    if (items[i] == null) {
+                    if (items[index] == null) {
                         break;
                     }
                 } else {
-                    if (item.equals(items[i])) {
+                    if (item.equals(items[index])) {
                         break;
                     }
                 }
 
-                i++;
+                index++;
             }
 
-            if (i < length) {
-                index = i;
-            } else {
+            if (index == length) {
                 index = -1;
             }
         }
@@ -464,7 +462,7 @@ public class ArrayList<T> implements List<T>, Serializable {
         if (o instanceof ArrayList<?>) {
             ArrayList<T> arrayList = (ArrayList<T>)o;
 
-            if (getLength() == arrayList.getLength()) {
+            if (arrayList.getLength() == length) {
                 Iterator<T> iterator = iterator();
                 Iterator<T> arrayListIterator = arrayList.iterator();
 

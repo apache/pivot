@@ -48,6 +48,7 @@ import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.MessageType;
 import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.TableView;
+import org.apache.pivot.wtk.TableViewRowListener;
 import org.apache.pivot.wtk.TableViewSelectionListener;
 import org.apache.pivot.wtk.TaskAdapter;
 import org.apache.pivot.wtk.TextInput;
@@ -112,6 +113,16 @@ public class StockTracker implements Application {
         wtkxSerializer.bind(this, StockTracker.class);
 
         // Wire up event handlers
+        stocksTableView.getTableViewRowListeners().add(new TableViewRowListener.Adapter() {
+            @Override
+            public void rowsSorted(TableView tableView) {
+                List<?> tableData = stocksTableView.getTableData();
+                if (tableData.getLength() > 0) {
+                    stocksTableView.setSelectedIndex(0);
+                }
+            }
+        });
+
         stocksTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener.Adapter() {
             @Override
             public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges) {

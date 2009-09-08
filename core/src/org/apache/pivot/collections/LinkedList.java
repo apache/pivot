@@ -47,29 +47,18 @@ public class LinkedList<T> implements List<T>, Serializable {
     }
 
     private class LinkedListItemIterator implements ItemIterator<T> {
-        private boolean reverse;
-        private int index = -1;
-        private Node<T> current;
-        private Node<T> next;
+        private int index = 0;
+        private Node<T> current = null;
 
         private int modificationCount;
 
         public LinkedListItemIterator() {
-            this(false);
-        }
-
-        public LinkedListItemIterator(boolean reverse) {
-            this.reverse = reverse;
-
-            current = null;
-            next = (reverse) ? last : first;
-
             modificationCount = LinkedList.this.modificationCount;
         }
 
         @Override
         public boolean hasNext() {
-            return (next != null);
+            return (index < length);
         }
 
         @Override
@@ -82,17 +71,20 @@ public class LinkedList<T> implements List<T>, Serializable {
                 throw new ConcurrentModificationException();
             }
 
-            T item = next.item;
-            current = next;
-            index++;
-            next = (reverse) ? next.previous : next.next;
+            if (current == null) {
+                current = first;
+            } else {
+                current = current.next;
+            }
 
-            return item;
+            index++;
+
+            return current.item;
         }
 
         @Override
         public boolean hasPrevious() {
-            return (next != null);
+            return (index > 0);
         }
 
         @Override
@@ -105,12 +97,11 @@ public class LinkedList<T> implements List<T>, Serializable {
                 throw new ConcurrentModificationException();
             }
 
-            T item = next.item;
-            current = next;
+            Node<T> previous = current;
+            current = current.previous;
             index--;
-            next = (reverse) ? next.next: next.previous;
 
-            return item;
+            return previous.item;
         }
 
         @Override
@@ -227,31 +218,39 @@ public class LinkedList<T> implements List<T>, Serializable {
     @Override
     public int add(T item) {
         int index;
-        if (comparator == null) {
+        if (comparator == null
+            || length == 0) {
             // Append to the tail
             index = length;
             insert(item, index);
         } else {
             // Find the insertion point
             index = 0;
-            LinkedListItemIterator nodeIterator = new LinkedListItemIterator();
-            while (nodeIterator.hasNext()
-                && comparator.compare(item, nodeIterator.next()) > 0) {
+
+            Node<T> next = first;
+            while (next != null
+                && comparator.compare(item, next.item) > 0) {
+                next = next.next;
                 index++;
             }
 
-            if (nodeIterator.hasNext()
-                && index > 0) {
-                // Insert the new node here
-                Node<T> node = new Node<T>(nodeIterator.next, nodeIterator.next.next, item);
-                nodeIterator.next.next = node;
-                node.next.previous = node;
-                length++;
-                modificationCount++;
+            Node<T> previous = (next == null) ? last : next.previous;
+
+            Node<T> node = new Node<T>(previous, next, item);
+            if (previous == null) {
+                first = node;
             } else {
-                // Insert at the head or append to the tail
-                insert(item, index, false);
+                previous.next = node;
             }
+
+            if (next == null) {
+                last = node;
+            } else {
+                next.previous = node;
+            }
+
+            length++;
+            modificationCount++;
         }
 
         return index;
@@ -329,33 +328,14 @@ public class LinkedList<T> implements List<T>, Serializable {
         return previousItem;
     }
 
-    /**
-     * Verifies that the specified item may be placed in this list in between
-     * the two specified nodes by throwing an exception if the placement is not
-     * valid.
-     *
-     * @param item
-     * The item to verify
-     *
-     * @param predecessor
-     * The node that will become the item's predecessor, or <tt>null</tt> if
-     * the item is being placed at the head of the list
-     *
-     * @param successor
-     * The node that will become the item's successor, or <tt>null</tt> if the
-     * item is being placed at the tail of the list
-     *
-     * @throws IllegalArgumentException
-     * If the location is not valid
-     */
-    private void verifyLocation(T item, Node<T> predecessor, Node<T> successor) {
+    private void verifyLocation(T item, Node<T> previous, Node<T> next) {
         if (comparator != null) {
             // Ensure that the new item is greater or equal to its
             // predecessor and less than or equal to its successor
-            if ((predecessor != null
-                && comparator.compare(item, predecessor.item) == -1)
-                || (successor != null
-                && comparator.compare(item, successor.item) == 1)) {
+            if ((previous != null
+                && comparator.compare(item, previous.item) == -1)
+                || (next != null
+                && comparator.compare(item, next.item) == 1)) {
                 throw new IllegalArgumentException("Illegal item modification.");
             }
         }
@@ -490,16 +470,23 @@ public class LinkedList<T> implements List<T>, Serializable {
     public int indexOf(T item) {
         int index = 0;
 
-        LinkedListItemIterator nodeIterator = new LinkedListItemIterator();
-        while (nodeIterator.hasNext()) {
-            if (nodeIterator.next() == item) {
-                break;
+        Node<T> node = first;
+        while (node != null) {
+            if (item == null) {
+                if (node.item == null) {
+                    break;
+                }
             } else {
-                index++;
+                if (item.equals(node.item)) {
+                    break;
+                }
             }
+
+            node = node.next;
+            index++;
         }
 
-        if (!nodeIterator.hasNext()) {
+        if (node == null) {
             index = -1;
         }
 
@@ -564,11 +551,7 @@ public class LinkedList<T> implements List<T>, Serializable {
 
     @Override
     public ItemIterator<T> iterator() {
-        return iterator(false);
-    }
-
-    public ItemIterator<T> iterator(boolean reverse) {
-        return new LinkedListItemIterator(reverse);
+        return new LinkedListItemIterator();
     }
 
     @Override

@@ -22,6 +22,7 @@ import java.util.Comparator;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.LinkedList;
+import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Sequence;
 import org.junit.Test;
 
@@ -65,6 +66,18 @@ public class LinkedListTest {
         int i = 0;
         for (String item : list) {
             assertEquals(item, copy.get(i++));
+        }
+
+        int j = 0;
+        List.ItemIterator<String> iterator = list.iterator();
+        while (j < list.getLength()) {
+            iterator.next();
+            j++;
+        }
+
+        while (iterator.hasPrevious()) {
+            String s = iterator.previous();
+            assertEquals(s, copy.get(--j));
         }
     }
 

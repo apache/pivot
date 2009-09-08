@@ -19,6 +19,7 @@ package org.apache.pivot.collections.test;
 import static org.junit.Assert.*;
 
 import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Sequence;
 import org.junit.Test;
 
@@ -54,6 +55,24 @@ public class ArrayListTest {
         assertTrue(list.equals(new ArrayList<String>("B", "E", "D")));
         assertFalse(list.equals(new ArrayList<String>("B", "E", "D", "C")));
         assertFalse(list.equals(new ArrayList<String>("E", "C", "D")));
+
+        ArrayList<String> copy = new ArrayList<String>("B", "E", "D");
+        int i = 0;
+        for (String item : list) {
+            assertEquals(item, copy.get(i++));
+        }
+
+        int j = 0;
+        List.ItemIterator<String> iterator = list.iterator();
+        while (j < list.getLength()) {
+            iterator.next();
+            j++;
+        }
+
+        while (iterator.hasPrevious()) {
+            String s = iterator.previous();
+            assertEquals(s, copy.get(--j));
+        }
     }
 
     @Test
