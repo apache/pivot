@@ -658,89 +658,83 @@ public class Menu extends Container {
     }
 
     public void activateNextItem() {
-        // If nothing is active, activate the first item; otherwise, activate the
-        // next item
+        int sectionCount = sections.getLength();
+
+        int sectionIndex;
+        int itemIndex;
+
         if (activeItem == null) {
-            if (sections.getLength() > 0) {
-                Section activeSection = sections.get(0);
-
-                if (activeSection.getLength() > 0) {
-                    Item activeItem = activeSection.get(0);
-                    activeItem.setActive(true);
-                }
-            }
+            sectionIndex = 0;
+            itemIndex = 0;
         } else {
-            Section activeSection = activeItem.section;
+            sectionIndex = sections.indexOf(activeItem.section);
+            itemIndex = activeItem.section.indexOf(activeItem) + 1;
+        }
 
-            int itemIndex = activeSection.indexOf(activeItem) + 1;
+        while (sectionIndex < sectionCount) {
+            Section section = sections.get(sectionIndex);
+            int sectionLength = section.getLength();
 
-            if (itemIndex == activeSection.getLength()) {
-                // Move to the next section
-                int sectionCount = sections.getLength();
-                int sectionIndex = sections.indexOf(activeSection) + 1;
+            while (itemIndex < sectionLength) {
+                Item item = section.get(itemIndex);
 
-                while (sectionIndex < sectionCount) {
-                    activeSection = sections.get(sectionIndex);
-
-                    if (activeSection.getLength() > 0) {
-                        itemIndex = 0;
-                        break;
-                    } else {
-                        sectionIndex++;
-                    }
-                }
-
-                if (sectionIndex == sectionCount) {
-                    activeSection = null;
+                if (item.isEnabled()) {
+                    item.setActive(true);
+                    break;
+                } else {
+                    itemIndex++;
                 }
             }
 
-            if (activeSection != null) {
-                activeSection.get(itemIndex).setActive(true);
+            if (itemIndex < sectionLength) {
+                break;
+            } else {
+                sectionIndex++;
+                itemIndex = 0;
             }
         }
     }
 
     public void activatePreviousItem() {
-        // If nothing is active, activate the last item; otherwise, activate the
-        // previous item
+        int sectionCount = sections.getLength();
+
+        int sectionIndex;
+        int itemIndex;
+
         if (activeItem == null) {
-            if (sections.getLength() > 0) {
-                Section activeSection = sections.get(sections.getLength() - 1);
-
-                if (activeSection.getLength() > 0) {
-                    Item activeItem = activeSection.get(activeSection.getLength() - 1);
-                    activeItem.setActive(true);
-                }
-            }
+            sectionIndex = sectionCount - 1;
+            itemIndex = -1;
         } else {
-            // Activate the previous item
-            Section activeSection = activeItem.section;
-
-            int itemIndex = activeSection.indexOf(activeItem) - 1;
+            sectionIndex = sections.indexOf(activeItem.section);
+            itemIndex = activeItem.section.indexOf(activeItem) - 1;
 
             if (itemIndex == -1) {
-                // Move to the previous section
-                int sectionIndex = sections.indexOf(activeSection) - 1;
+                sectionIndex--;
+            }
+        }
 
-                while (sectionIndex >= 0) {
-                    activeSection = sections.get(sectionIndex);
+        while (sectionIndex >= 0) {
+            Section section = sections.get(sectionIndex);
+            if (itemIndex == -1) {
+                int sectionLength = section.getLength();
+                itemIndex = sectionLength - 1;
+            }
 
-                    if (activeSection.getLength() > 0) {
-                        itemIndex = activeSection.getLength() - 1;
-                        break;
-                    } else {
-                        sectionIndex--;
-                    }
-                }
+            while (itemIndex >= 0) {
+                Item item = section.get(itemIndex);
 
-                if (sectionIndex == -1) {
-                    activeSection = null;
+                if (item.isEnabled()) {
+                    item.setActive(true);
+                    break;
+                } else {
+                    itemIndex--;
                 }
             }
 
-            if (activeSection != null) {
-                activeSection.get(itemIndex).setActive(true);
+            if (itemIndex >= 0) {
+                break;
+            } else {
+                sectionIndex--;
             }
         }
     }

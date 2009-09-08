@@ -905,20 +905,14 @@ public class KitchenSink implements Application, Application.AboutHandler {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        
-        // if the (optional) argument terraColors has been given from the command line, 
-        // use it to load a custom Color definition for the Terra skin.
-        // example: --terraColors=org/apache/pivot/wtk/skin/terra/TerraTheme_test.json
-        // example: --terraColors=org/apache/pivot/tutorials/TerraTheme_dark.json
-        String terraCustomColorsFile = properties.get("terraColors");
+        String terraColors = properties.get("terraColors");
         try {
-            if (terraCustomColorsFile != null) {
-                Theme.setTheme(new TerraTheme(terraCustomColorsFile));
-                System.out.println("Terra Custom Colors File successfully loaded."); 
+            if (terraColors != null) {
+                Theme.setTheme(new TerraTheme(terraColors));
             }
         } catch (Exception exception) {
-            System.err.println("Unable to Load Terra Custom Colors File from \"" 
-                + terraCustomColorsFile + "\": " + exception.getMessage());
+            System.err.println("Unable to load custom colors from \"" + terraColors
+                + "\": " + exception.getMessage());
         }
 
         WTKXSerializer wtkxSerializer = new WTKXSerializer();

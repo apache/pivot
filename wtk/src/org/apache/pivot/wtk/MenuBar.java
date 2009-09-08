@@ -324,38 +324,40 @@ public class MenuBar extends Container {
     public void activateNextItem() {
         int n = items.getLength();
 
-        if (n > 0) {
-            int index;
-            if (activeItem == null) {
-                index = 0;
-            } else {
-                index = items.indexOf(activeItem) + 1;
+        int index;
+        if (activeItem == null) {
+            index = 0;
+        } else {
+            index = items.indexOf(activeItem) + 1;
+        }
 
-                if (index == n) {
-                    index = 0;
-                }
+        while (index < n) {
+            Item item = items.get(index++);
+
+            if (item.isEnabled()) {
+                item.setActive(true);
+                break;
             }
-
-            items.get(index).setActive(true);
         }
     }
 
     public void activatePreviousItem() {
         int n = items.getLength();
 
-        if (n > 0) {
-            int index;
-            if (activeItem == null) {
-                index = n - 1;
-            } else {
-                index = items.indexOf(activeItem) - 1;
+        int index;
+        if (activeItem == null) {
+            index = n - 1;
+        } else {
+            index = items.indexOf(activeItem) - 1;
+        }
 
-                if (index < 0) {
-                    index = n - 1;
-                }
+        while (index >= 0) {
+            Item item = items.get(index--);
+
+            if (item.isEnabled()) {
+                item.setActive(true);
+                break;
             }
-
-            items.get(index).setActive(true);
         }
     }
 
