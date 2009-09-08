@@ -65,11 +65,16 @@ New Features
 
 - Add delimiter:String style to TerraFormSkin (PIVOT-242)
 
+- Add Startup Property in KitchenSink Tutorial to load a custom json file for
+  the Skin Colors to use (PIVOT-243)
+
 
 Improvements
 ------------
 
 - Complete collection classes (PIVOT-20)
+
+- TablePane rows and columns should collapse when vacant (PIVOT-21)
 
 - Remove dynamic code execution from WTKXSerializer (PIVOT-34)
 
@@ -77,6 +82,8 @@ Improvements
 
 - Optimize performance of constrained preferred size calculations in Component
   (PIVOT-86)
+
+- Hide last row of calendar when none of the dates are selectable (PIVOT-89)
 
 - Update JFreeChart provider to latest JFreeChart version (PIVOT-114)
 
@@ -91,8 +98,6 @@ Improvements
   Task<V>) (PIVOT-134)
 
 - Make transitions reversible (PIVOT-135)
-
-- Update Groovy scripting demo to Groovy 1.6 (PIVOT-139)
 
 - Use common Shortcuts in Input fields (PIVOT-142)
 
@@ -150,6 +155,12 @@ Improvements
 - MenuItemDataRenderer unsuccessfully attempts to right-align keyboard shortcut
   (PIVOT-230)
 
+- Add CardPaneSkin "circular" style (PIVOT-256)
+
+- CardPane transition duration should be configurable (PIVOT-257)
+
+- TablePane padding should not affect grid lines (PIVOT-271)
+
 
 Bug Fixes
 ---------
@@ -204,6 +215,39 @@ Bug Fixes
 - Clicking on a MenuBar.Item with no menu yields exception (PIVOT-241)
 
 - HashMap iteration produces duplicate entries (PIVOT-252)
+
+- Nested menus don't fade when closed (PIVOT-253)
+
+- Possible rounding error in TerraTableViewSkin.paint() (PIVOT-255)
+
+- LinkButtonDataRenderer's label doesn't wrap (PIVOT-258)
+
+- Concurrent modification check in ArrayList is too naive (PIVOT-264)
+
+- Frame menus are not disabled when a sheet is opened (PIVOT-265)
+
+- Sheet opened over a frame with a menu does not align with frame title bar
+  (PIVOT-266)
+
+- Window#moveToFront() does not correctly restore focus to the top-most window
+  (PIVOT-267)
+
+- Not all String to Color conversion are using GraphicsUtilities (PIVOT-269)
+
+- Context menu handler can be called while previous context menu is still
+  closing (PIVOT-270)
+
+- Mousing over a different menu item does not close any open menu popup
+  (PIVOT-273)
+
+- Prompt.prompt() ignores body component (PIVOT-277)
+
+- ArrayList.update(): illegal item modification check is too strict (PIVOT-278)
+
+- LinkedListItemIterator's mutator methods don't check the list's comparator
+  (PIVOT-282)
+
+- Keyboard navigation over disabled menu item throws exception (PIVOT-284)
 
 
 Tasks Accomplished
