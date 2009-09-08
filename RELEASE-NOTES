@@ -287,6 +287,10 @@ Tasks Accomplished
 
 - Move Map.Pair to Dictionary interface (PIVOT-250)
 
+- Add @Override annotations where applicable (PIVOT-262)
+
+- SVN properties missing for lots of files (PIVOT-263)
+
 
 Additional Notes
 ----------------
