@@ -157,6 +157,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
                     case WindowEvent.WINDOW_CLOSED: {
                         destroyTimer();
+                        System.exit(0);
                         break;
                     }
 
