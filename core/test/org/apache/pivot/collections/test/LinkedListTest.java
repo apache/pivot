@@ -79,6 +79,21 @@ public class LinkedListTest {
             String s = iterator.previous();
             assertEquals(s, copy.get(--j));
         }
+
+        iterator = list.iterator();
+        assertEquals(iterator.next(), "G");
+        assertEquals(iterator.next(), "B");
+        assertEquals(iterator.previous(), "B");
+        assertEquals(iterator.previous(), "G");
+        assertEquals(iterator.next(), "G");
+
+        iterator = list.iterator();
+        iterator.insert("M");
+        assertEquals(list, new LinkedList<String>("M", "G", "B", "F", "D"));
+
+        assertEquals(iterator.next(), "M");
+        iterator.insert("N");
+        assertEquals(list, new LinkedList<String>("M", "N", "G", "B", "F", "D"));
     }
 
     @Test

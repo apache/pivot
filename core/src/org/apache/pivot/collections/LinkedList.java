@@ -49,6 +49,7 @@ public class LinkedList<T> implements List<T>, Serializable {
     private class LinkedListItemIterator implements ItemIterator<T> {
         private int index = 0;
         private Node<T> current = null;
+        private boolean forward = false;
 
         private int modificationCount;
 
@@ -74,10 +75,13 @@ public class LinkedList<T> implements List<T>, Serializable {
             if (current == null) {
                 current = first;
             } else {
-                current = current.next;
+                if (forward) {
+                    current = current.next;
+                }
             }
 
             index++;
+            forward = true;
 
             return current.item;
         }
@@ -97,32 +101,47 @@ public class LinkedList<T> implements List<T>, Serializable {
                 throw new ConcurrentModificationException();
             }
 
-            Node<T> previous = current;
-            current = current.previous;
-            index--;
+            if (!forward) {
+                current = current.previous;
+            }
 
-            return previous.item;
+            index--;
+            forward = false;
+
+            return current.item;
         }
 
         @Override
         public void insert(T item) {
-            if (current == null) {
-                throw new IllegalStateException();
+            Node<T> next = null;
+            Node<T> previous = null;
+
+            if (length > 0) {
+                if (index == 0) {
+                    // Insert at head
+                    next = first;
+                    previous = null;
+                } else if (index < length) {
+                    if (forward) {
+                        // Insert after current
+                        next = current.next;
+                        previous = current;
+                    } else {
+                        // Insert before current
+                        next = current;
+                        previous = current.next;
+                    }
+                } else {
+                    // Insert at tail
+                    next = null;
+                    previous = last;
+                }
             }
 
-            // Verify that the item is allowed at the specified index
-            verifyLocation(item, current.previous, current);
+            verifyLocation(item, previous, next);
 
-            // Insert a new node immediately prior to the current node
-            Node<T> node = new Node<T>(current.previous, current, item);
+            LinkedList.this.insert(item, previous, next);
 
-            if (current.previous == null) {
-                first = node;
-            } else {
-                current.previous.next = node;
-            }
-
-            current.previous = node;
             length++;
 
             if (listListeners != null) {
@@ -218,36 +237,28 @@ public class LinkedList<T> implements List<T>, Serializable {
     @Override
     public int add(T item) {
         int index;
-        if (comparator == null
-            || length == 0) {
-            // Append to the tail
+
+        if (comparator == null) {
             index = length;
             insert(item, index);
         } else {
-            // Find the insertion point
             index = 0;
 
-            Node<T> next = first;
-            while (next != null
-                && comparator.compare(item, next.item) > 0) {
-                next = next.next;
-                index++;
+            Node<T> next = null;
+            Node<T> previous = null;
+
+            if (length > 0) {
+                next = first;
+                while (next != null
+                    && comparator.compare(item, next.item) > 0) {
+                    next = next.next;
+                    index++;
+                }
+
+                previous = (next == null) ? last : next.previous;
             }
 
-            Node<T> previous = (next == null) ? last : next.previous;
-
-            Node<T> node = new Node<T>(previous, next, item);
-            if (previous == null) {
-                first = node;
-            } else {
-                previous.next = node;
-            }
-
-            if (next == null) {
-                last = node;
-            } else {
-                next.previous = node;
-            }
+            insert(item, previous, next);
 
             length++;
             modificationCount++;
@@ -267,37 +278,39 @@ public class LinkedList<T> implements List<T>, Serializable {
             throw new IndexOutOfBoundsException();
         }
 
-        if (length == 0) {
-            Node<T> node = new Node<T>(null, null, item);
-            first = node;
-            last = node;
-        } else {
-            Node<T> next = (index == length) ? null : getNode(index);
-            Node<T> previous = (next == null) ? last : next.previous;
+        Node<T> next = null;
+        Node<T> previous = null;
 
-            // Verify that the item is allowed at the specified index
+        if (length > 0) {
+            next = (index == length) ? null : getNode(index);
+            previous = (next == null) ? last : next.previous;
+
             verifyLocation(item, previous, next);
-
-            Node<T> node = new Node<T>(previous, next, item);
-            if (previous == null) {
-                first = node;
-            } else {
-                previous.next = node;
-            }
-
-            if (next == null) {
-                last = node;
-            } else {
-                next.previous = node;
-            }
         }
 
-        // Update length and notify listeners
+        insert(item, previous, next);
+
         length++;
         modificationCount++;
 
         if (listListeners != null) {
             listListeners.itemInserted(this, index);
+        }
+    }
+
+    private void insert(T item, Node<T> previous, Node<T> next) {
+        Node<T> node = new Node<T>(previous, next, item);
+
+        if (previous == null) {
+            first = node;
+        } else {
+            previous.next = node;
+        }
+
+        if (next == null) {
+            last = node;
+        } else {
+            next.previous = node;
         }
     }
 
