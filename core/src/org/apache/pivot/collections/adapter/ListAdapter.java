@@ -20,6 +20,8 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.ListIterator;
+import java.util.RandomAccess;
 
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.ListListener;
@@ -27,10 +29,9 @@ import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 
-
 /**
  * Implementation of the {@link List} interface that is backed by an
- * instance of <tt>java.util.List</tt>.
+ * instance of {@link java.util.List java.util.List}</tt>.
  */
 public class ListAdapter<T> implements List<T>, Serializable {
     private static final long serialVersionUID = 0;
@@ -86,16 +87,70 @@ public class ListAdapter<T> implements List<T>, Serializable {
 
     @Override
     public T update(int index, T item) {
-        if (comparator != null
-            && Collections.binarySearch(list, item, comparator) != index) {
-            throw new IllegalArgumentException("Illegal item modification.");
+        if (comparator != null) {
+            // Ensure that the new item is greater or equal to its
+            // predecessor and less than or equal to its successor
+            T predecessorItem = null;
+            T successorItem = null;
+
+            if (list instanceof RandomAccess) {
+                if (index > 0) {
+                    predecessorItem = list.get(index - 1);
+                }
+
+                if (index < getLength() - 1) {
+                    successorItem = list.get(index + 1);
+                }
+            } else {
+                if (index == 0) {
+                    // We're at the head of the list; successor is at index 1
+                    successorItem = list.get(1);
+                } else {
+                    ListIterator<T> listIterator = list.listIterator(index - 1);
+
+                    // Get the predecessor
+                    predecessorItem = listIterator.next();
+
+                    // Advance to the item being updated
+                    listIterator.next();
+
+                    // Get the successor if one exists
+                    if (listIterator.hasNext()) {
+                        successorItem = listIterator.next();
+                    }
+                }
+            }
+
+            if ((predecessorItem != null
+                && comparator.compare(item, predecessorItem) == -1)
+                || (successorItem != null
+                && comparator.compare(item, successorItem) == 1)) {
+                throw new IllegalArgumentException("Illegal item modification.");
+            }
         }
 
-        T previousItem = list.get(index);
+        T previousItem;
 
-        if (previousItem != item) {
-            list.set(index, item);
-            listListeners.itemUpdated(this, index, previousItem);
+        if (list instanceof RandomAccess) {
+            previousItem = list.get(index);
+
+            if (previousItem != item) {
+                list.set(index, item);
+                listListeners.itemUpdated(this, index, previousItem);
+            }
+        } else {
+            ListIterator<T> listIterator = list.listIterator(index);
+            previousItem = listIterator.next();
+
+            if (previousItem != item) {
+                try {
+                    listIterator.set(item);
+                } catch (UnsupportedOperationException exception) {
+                    list.set(index, item);
+                }
+
+                listListeners.itemUpdated(this, index, previousItem);
+            }
         }
 
         return previousItem;
