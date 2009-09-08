@@ -409,13 +409,21 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
                 window.close();
                 consumed = true;
             }
-        } else if (keyCode == Keyboard.KeyCode.RIGHT
-            || keyCode == Keyboard.KeyCode.ENTER) {
+        } else if (keyCode == Keyboard.KeyCode.RIGHT) {
             Menu.Item activeItem = menu.getActiveItem();
 
             // Press if the item has a sub-menu
             if (activeItem != null
                 && activeItem.getMenu() != null) {
+                activeItem.press();
+                consumed = true;
+            }
+        } else if (keyCode == Keyboard.KeyCode.ENTER) {
+            Menu.Item activeItem = menu.getActiveItem();
+
+            // Press if the item does not have a sub-menu
+            if (activeItem != null
+                && activeItem.getMenu() == null) {
                 activeItem.press();
                 consumed = true;
             }
