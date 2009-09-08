@@ -1086,6 +1086,8 @@ public class TerraTextInputSkin extends ComponentSkin
 
         if (keyCode == Keyboard.KeyCode.DELETE
             || keyCode == Keyboard.KeyCode.BACKSPACE) {
+            consumed = true;
+
             Direction direction = (keyCode == Keyboard.KeyCode.DELETE ?
                 Direction.FORWARD : Direction.BACKWARD);
 
@@ -1118,9 +1120,9 @@ public class TerraTextInputSkin extends ComponentSkin
             } else {
                 textInput.delete(direction);
             }
-
-            consumed = true;
         } else if (keyCode == Keyboard.KeyCode.LEFT) {
+            consumed = true;
+
             int selectionStart = textInput.getSelectionStart();
             int selectionLength = textInput.getSelectionLength();
 
@@ -1143,18 +1145,21 @@ public class TerraTextInputSkin extends ComponentSkin
             } else {
                 // Clear the selection and move the caret back by one
                 // character
-                if (selectionLength == 0
-                    && selectionStart > 0) {
-                    selectionStart--;
+                if (selectionLength == 0) {
+                    if (selectionStart > 0) {
+                        selectionStart--;
+                    } else {
+                        consumed = false;
+                    }
                 }
 
                 selectionLength = 0;
             }
 
             textInput.setSelection(selectionStart, selectionLength);
-
-            consumed = true;
         } else if (keyCode == Keyboard.KeyCode.RIGHT) {
+            consumed = true;
+
             int selectionStart = textInput.getSelectionStart();
             int selectionLength = textInput.getSelectionLength();
 
@@ -1177,52 +1182,57 @@ public class TerraTextInputSkin extends ComponentSkin
                 // character
                 selectionStart += selectionLength;
 
-                if (selectionLength == 0
-                    && selectionStart < textNode.getCharacterCount()) {
-                    selectionStart++;
+                if (selectionLength == 0) {
+                    if (selectionStart < textNode.getCharacterCount()) {
+                        selectionStart++;
+                    } else {
+                        consumed = false;
+                    }
                 }
 
                 selectionLength = 0;
             }
 
             textInput.setSelection(selectionStart, selectionLength);
-
-            consumed = true;
         } else if (keyCode == Keyboard.KeyCode.HOME) {
+            consumed = true;
+
             // Move the caret to the beginning of the text
             textInput.setSelection(0, 0);
-            consumed = true;
         } else if (keyCode == Keyboard.KeyCode.END) {
+            consumed = true;
+
             // Move the caret to the end of the text
             textInput.setSelection(textNode.getCharacterCount(), 0);
-            consumed = true;
         } else if (keyCode == Keyboard.KeyCode.A
             && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
+            consumed = true;
+
             // Select all
             textInput.setSelection(0, textNode.getCharacterCount());
-            consumed = true;
         } else if (keyCode == Keyboard.KeyCode.X
             && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
+            consumed = true;
+
             if (textInput.isPassword()) {
                 ApplicationContext.beep();
             } else {
                 textInput.cut();
             }
-
-            consumed = true;
         } else if (keyCode == Keyboard.KeyCode.C
             && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
+            consumed = true;
+
             if (textInput.isPassword()) {
                 ApplicationContext.beep();
             } else {
                 textInput.copy();
             }
-
-            consumed = true;
         } else if (keyCode == Keyboard.KeyCode.V
             && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
-            textInput.paste();
             consumed = true;
+
+            textInput.paste();
         } else {
             consumed = super.keyPressed(component, keyCode, keyLocation);
         }
