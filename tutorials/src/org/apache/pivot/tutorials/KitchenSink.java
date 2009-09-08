@@ -67,6 +67,7 @@ import org.apache.pivot.wtk.Spinner;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TableViewHeader;
 import org.apache.pivot.wtk.TextArea;
+import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.TreeView;
 import org.apache.pivot.wtk.Visual;
 import org.apache.pivot.wtk.Window;
@@ -80,6 +81,7 @@ import org.apache.pivot.wtk.content.TreeNode;
 import org.apache.pivot.wtk.effects.ReflectionDecorator;
 import org.apache.pivot.wtk.effects.WatermarkDecorator;
 import org.apache.pivot.wtk.media.Image;
+import org.apache.pivot.wtk.skin.terra.TerraTheme;
 import org.apache.pivot.wtk.text.Document;
 import org.apache.pivot.wtk.text.PlainTextSerializer;
 import org.apache.pivot.wtkx.WTKXSerializer;
@@ -903,6 +905,22 @@ public class KitchenSink implements Application, Application.AboutHandler {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
+        
+        // if the (optional) argument terraColors has been given from the command line, 
+        // use it to load a custom Color definition for the Terra skin.
+        // example: --terraColors=org/apache/pivot/wtk/skin/terra/TerraTheme_test.json
+        // example: --terraColors=org/apache/pivot/tutorials/TerraTheme_dark.json
+        String terraCustomColorsFile = properties.get("terraColors");
+        try {
+            if (terraCustomColorsFile != null) {
+                Theme.setTheme(new TerraTheme(terraCustomColorsFile));
+                System.out.println("Terra Custom Colors File successfully loaded."); 
+            }
+        } catch (Exception exception) {
+            System.err.println("Unable to Load Terra Custom Colors File from \"" 
+                + terraCustomColorsFile + "\": " + exception.getMessage());
+        }
+
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "kitchen_sink.wtkx");
         wtkxSerializer.bind(this, KitchenSink.class);
