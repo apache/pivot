@@ -144,6 +144,20 @@ public class LinkedList<T> implements List<T>, Serializable {
 
             T previousItem = current.item;
             if (previousItem != item) {
+                if (comparator != null) {
+                    // Ensure that the new item is greater or equal to its
+                    // predecessor and less than or equal to its successor
+                    T predecessorItem = (current.previous != null ? current.previous.item : null);
+                    T successorItem = (current.next != null ? current.next.item : null);
+
+                    if ((predecessorItem != null
+                        && comparator.compare(item, predecessorItem) == -1)
+                        || (successorItem != null
+                        && comparator.compare(item, successorItem) == 1)) {
+                        throw new IllegalArgumentException("Illegal item modification.");
+                    }
+                }
+
                 current.item = item;
 
                 if (listListeners != null) {
