@@ -259,9 +259,18 @@ public class ArrayList<T> implements List<T>, Serializable {
         T previousItem = (T)items[index];
 
         if (previousItem != item) {
-            if (comparator != null
-                && binarySearch(this, item, comparator) != index) {
-                throw new IllegalArgumentException("Illegal item modification.");
+            if (comparator != null) {
+                // Ensure that the new item is greater or equal to its
+                // predecessor and less than or equal to its successor
+                T predecessorItem = (index > 0 ? (T)items[index - 1] : null);
+                T successorItem = (index < length - 1 ? (T)items[index + 1] : null);
+
+                if ((predecessorItem != null
+                    && comparator.compare(item, predecessorItem) == -1)
+                    || (successorItem != null
+                    && comparator.compare(item, successorItem) == 1)) {
+                    throw new IllegalArgumentException("Illegal item modification.");
+                }
             }
 
             items[index] = item;
