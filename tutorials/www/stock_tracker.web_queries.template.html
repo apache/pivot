@@ -38,9 +38,9 @@ limitations under the License.
 <p>For example, the data presented by the Stock Tracker application is retrieved from Yahoo! Finance as a comma-separated value (CSV) file:</p>
 
 <p>
-<tt>"AAPL","APPLE INC",171.06,169.59,172.17,166.00,+2.88,12995693</tt><br>
-<tt>"AMZN","AMAZON.COM INC",72.54,72.35,73.83,70.52,+1.10,2748930</tt><br>
-<tt>"EBAY","EBAY INC",27.09,27.35,27.44,27.04,-0.02,3426369</tt></br>
+<tt>"AAPL","APPLE INC",171.06,169.59,172.17,166.00,+2.88,12995693</tt><br/>
+<tt>"AMZN","AMAZON.COM INC",72.54,72.35,73.83,70.52,+1.10,2748930</tt><br/>
+<tt>"EBAY","EBAY INC",27.09,27.35,27.44,27.04,-0.02,3426369</tt><br/>
 </p>
 
 <p>This data is returned by submitting an HTTP GET request to <a href="http://download.finance.yahoo.com/d/quotes.csv/">http://download.finance.yahoo.com/d/quotes.csv/</a> with an appropriate set of query string arguments. For example, the Stock Tracker application passes the following arguments to the service URL:</p>
@@ -76,8 +76,8 @@ getQuery = new GetQuery(SERVICE_HOSTNAME, SERVICE_PATH);
 
 <pre class="snippet">
 StringBuilder symbolsArgumentBuilder = new StringBuilder();
-for (int i = 0, n = symbols.getLength(); i < n; i++) {
-    if (i > 0) {
+for (int i = 0, n = symbols.getLength(); i &lt; n; i++) {
+    if (i &gt; 0) {
         symbolsArgumentBuilder.append(",");
     }
 
@@ -92,7 +92,7 @@ getQuery.getArguments().put("f", "snl1ohgc1v");
 
 <p>The resulting query URL would be similar to:</p>
 
-<p style="padding-left:24px"><a href="http://download.finance.yahoo.com/d/quotes.csv?s=aapl,amzn,ebay&f=snl1ohgc1v">http://download.finance.yahoo.com/d/quotes.csv?s=aapl,amzn,ebay&f=snl1ohgc1v</a></p>
+<p style="padding-left:24px"><a href="http://download.finance.yahoo.com/d/quotes.csv?s=aapl,amzn,ebay&f=snl1ohgc1v">http://download.finance.yahoo.com/d/quotes.csv?s=aapl,amzn,ebay&nbsp;f=snl1ohgc1v</a></p>
 
 <p>Next, an instance of CSVSerializer is created and configured:</p>
 
@@ -235,7 +235,7 @@ getQuery.execute(new TaskAdapter<Object>(new TaskListener<Object>() {
 }
 </pre>
 
-<p>The argument passed to the <tt>execute()</tt> method is a <tt>TaskAdapter</tt> wrapped around an anonymous inner class implementation of <tt>TaskListener&lt;Object>&gt;</tt>. <tt>TaskListener</tt> is an interface defined in the <tt>pivot.util.concurrent</tt> package and serves as a callback handler for asynchronous operations implemented by the <tt>pivot.util.concurrent.Task</tt> class, of which <tt>GetQuery</tt> is a subclass. <tt>TaskAdapter</tt> is defined in the <tt>pivot.wtk</tt> package and ensures that the callback occurs on the UI thread (otherwise, the listener is called in the context of the background thread).</p>
+<p>The argument passed to the <tt>execute()</tt> method is a <tt>TaskAdapter</tt> wrapped around an anonymous inner class implementation of <tt>TaskListener&lt;Object&gt;</tt>. <tt>TaskListener</tt> is an interface defined in the <tt>pivot.util.concurrent</tt> package and serves as a callback handler for asynchronous operations implemented by the <tt>pivot.util.concurrent.Task</tt> class, of which <tt>GetQuery</tt> is a subclass. <tt>TaskAdapter</tt> is defined in the <tt>pivot.wtk</tt> package and ensures that the callback occurs on the UI thread (otherwise, the listener is called in the context of the background thread).</p>
 
 <p><tt>TaskListener</tt> defines two methods:</p>
 
