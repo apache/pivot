@@ -205,7 +205,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                 try {
                     document = plainTextSerializer.readObject(inputStream);
                 } catch(Exception exception) {
-                    System.out.println(exception);
+                    System.err.println(exception);
                 }
 
                 textArea.setDocument(document);
@@ -820,7 +820,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                             try {
                                 body = (Component)wtkxSerializer.readObject(this, "alert.wtkx");
                             } catch(Exception exception) {
-                                System.out.println(exception);
+                                System.err.println(exception);
                             }
 
                             Alert alert = new Alert(MessageType.QUESTION, "Please select your favorite icon:",
@@ -862,7 +862,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                             try {
                                 body = (Component)wtkxSerializer.readObject(this, "alert.wtkx");
                             } catch(Exception exception) {
-                                System.out.println(exception);
+                                System.err.println(exception);
                             }
 
                             Prompt prompt = new Prompt(MessageType.QUESTION, "Please select your favorite icon:",

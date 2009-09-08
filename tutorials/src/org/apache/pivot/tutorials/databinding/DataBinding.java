@@ -74,7 +74,7 @@ public class DataBinding implements Application {
                     form.load((Map<String, Object>)serializer.readObject(inputStream));
                     sourceLabel.setText("JSON");
                 } catch(Exception exception) {
-                    System.out.println(exception);
+                    System.err.println(exception);
                 }
 
                 button.setEnabled(true);

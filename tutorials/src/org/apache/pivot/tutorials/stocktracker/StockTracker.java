@@ -271,7 +271,7 @@ public class StockTracker implements Application {
             @Override
             public void executeFailed(Task<Object> task) {
                 if (task == getQuery) {
-                    System.out.println(task.getFault());
+                    System.err.println(task.getFault());
                     getQuery = null;
                 }
             }

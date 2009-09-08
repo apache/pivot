@@ -1455,9 +1455,9 @@ public abstract class ApplicationContext {
         try {
             desktop.browse(location.toURI());
         } catch(IOException exception) {
-            System.out.println("Unable to open URL in default browser: " + exception.getMessage());
+            System.err.println("Unable to open URL in default browser: " + exception.getMessage());
         } catch(URISyntaxException exception) {
-            System.out.println("Unable to open URL in default browser: " + exception.getMessage());
+            System.err.println("Unable to open URL in default browser: " + exception.getMessage());
         }
     }
 
