@@ -119,6 +119,9 @@ public class LinkedList<T> implements List<T>, Serializable {
                 throw new IllegalStateException();
             }
 
+            // Verify that the item is allowed at the specified index
+            verifyLocation(item, current.previous, current);
+
             // Insert a new node immediately prior to the current node
             Node<T> node = new Node<T>(current.previous, current, item);
 
@@ -144,19 +147,8 @@ public class LinkedList<T> implements List<T>, Serializable {
 
             T previousItem = current.item;
             if (previousItem != item) {
-                if (comparator != null) {
-                    // Ensure that the new item is greater or equal to its
-                    // predecessor and less than or equal to its successor
-                    T predecessorItem = (current.previous != null ? current.previous.item : null);
-                    T successorItem = (current.next != null ? current.next.item : null);
-
-                    if ((predecessorItem != null
-                        && comparator.compare(item, predecessorItem) == -1)
-                        || (successorItem != null
-                        && comparator.compare(item, successorItem) == 1)) {
-                        throw new IllegalArgumentException("Illegal item modification.");
-                    }
-                }
+                // Verify that the item is allowed at the specified index
+                verifyLocation(item, current.previous, current.next);
 
                 current.item = item;
 
@@ -284,16 +276,8 @@ public class LinkedList<T> implements List<T>, Serializable {
             Node<T> next = (index == length) ? null : getNode(index);
             Node<T> previous = (next == null) ? last : next.previous;
 
-            if (comparator != null) {
-                // Ensure that the new item is greater or equal to its
-                // predecessor and less than or equal to its successor
-                if ((previous != null
-                        && comparator.compare(item, previous.item) == -1)
-                    || (next != null
-                        && comparator.compare(item, next.item) == 1)) {
-                    throw new IllegalArgumentException("Illegal item modification.");
-                }
-            }
+            // Verify that the item is allowed at the specified index
+            verifyLocation(item, previous, next);
 
             Node<T> node = new Node<T>(previous, next, item);
             if (previous == null) {
@@ -330,16 +314,8 @@ public class LinkedList<T> implements List<T>, Serializable {
         T previousItem = node.item;
 
         if (previousItem != item) {
-            if (comparator != null) {
-                // Ensure that the new item is greater or equal to its
-                // predecessor and less than or equal to its successor
-                if ((node.previous != null
-                        && comparator.compare(item, node.previous.item) == -1)
-                    || (node.next != null
-                        && comparator.compare(item, node.next.item) == 1)) {
-                    throw new IllegalArgumentException("Illegal item modification.");
-                }
-            }
+            // Verify that the item is allowed at the specified index
+            verifyLocation(item, node.previous, node.next);
 
             // Update the item
             node.item = item;
@@ -351,6 +327,38 @@ public class LinkedList<T> implements List<T>, Serializable {
         }
 
         return previousItem;
+    }
+
+    /**
+     * Verifies that the specified item may be placed in this list in between
+     * the two specified nodes by throwing an exception if the placement is not
+     * valid.
+     *
+     * @param item
+     * The item to verify
+     *
+     * @param predecessor
+     * The node that will become the item's predecessor, or <tt>null</tt> if
+     * the item is being placed at the head of the list
+     *
+     * @param successor
+     * The node that will become the item's successor, or <tt>null</tt> if the
+     * item is being placed at the tail of the list
+     *
+     * @throws IllegalArgumentException
+     * If the location is not valid
+     */
+    private void verifyLocation(T item, Node<T> predecessor, Node<T> successor) {
+        if (comparator != null) {
+            // Ensure that the new item is greater or equal to its
+            // predecessor and less than or equal to its successor
+            if ((predecessor != null
+                && comparator.compare(item, predecessor.item) == -1)
+                || (successor != null
+                && comparator.compare(item, successor.item) == 1)) {
+                throw new IllegalArgumentException("Illegal item modification.");
+            }
+        }
     }
 
     @Override
