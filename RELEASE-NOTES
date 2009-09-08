@@ -161,6 +161,8 @@ Improvements
 
 - TablePane padding should not affect grid lines (PIVOT-271)
 
+- Menu popups should respond to ENTER key (PIVOT-285)
+
 
 Bug Fixes
 ---------
@@ -232,10 +234,15 @@ Bug Fixes
 - Window#moveToFront() does not correctly restore focus to the top-most window
   (PIVOT-267)
 
+- TextInput always consumes LEFT and RIGHT arrow key presses (PIVOT-268)
+
 - Not all String to Color conversion are using GraphicsUtilities (PIVOT-269)
 
 - Context menu handler can be called while previous context menu is still
   closing (PIVOT-270)
+
+- ListButton doesn't automatically scroll the selected item to be visible
+  (PIVOT-272)
 
 - Mousing over a different menu item does not close any open menu popup
   (PIVOT-273)
@@ -243,6 +250,9 @@ Bug Fixes
 - Prompt.prompt() ignores body component (PIVOT-277)
 
 - ArrayList.update(): illegal item modification check is too strict (PIVOT-278)
+
+- Selected row is not maintained when column sort is changed in stock tracker
+  demo (PIVOT-279)
 
 - LinkedListItemIterator's mutator methods don't check the list's comparator
   (PIVOT-282)
