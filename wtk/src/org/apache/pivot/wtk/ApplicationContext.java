@@ -1491,7 +1491,18 @@ public abstract class ApplicationContext {
      */
     public static ScheduledCallback scheduleCallback(Runnable callback, long delay) {
         ScheduledCallback scheduledCallback = new ScheduledCallback(callback);
-        timer.schedule(scheduledCallback, delay);
+
+        // TODO This is a workaround for a potential OS X bug; revisit
+        try {
+            try {
+                timer.schedule(scheduledCallback, delay);
+            } catch (IllegalStateException exception) {
+                createTimer();
+                timer.schedule(scheduledCallback, delay);
+            }
+        } catch (Throwable throwable) {
+            System.err.println("Unable to schedule callback: " + throwable);
+        }
 
         return scheduledCallback;
     }
@@ -1525,7 +1536,18 @@ public abstract class ApplicationContext {
      */
     public static ScheduledCallback scheduleRecurringCallback(Runnable callback, long delay, long period) {
         ScheduledCallback scheduledCallback = new ScheduledCallback(callback);
-        timer.schedule(scheduledCallback, delay, period);
+
+        // TODO This is a workaround for a potential OS X bug; revisit
+        try {
+            try {
+                timer.schedule(scheduledCallback, delay, period);
+            } catch (IllegalStateException exception) {
+                createTimer();
+                timer.schedule(scheduledCallback, delay, period);
+            }
+        } catch (Throwable throwable) {
+            System.err.println("Unable to schedule callback: " + throwable);
+        }
 
         return scheduledCallback;
     }
