@@ -143,20 +143,26 @@ public class LinkedList<T> implements List<T>, Serializable {
                     } else {
                         // Insert before current
                         next = current;
-                        previous = current.next;
+                        previous = current.previous;
                     }
                 } else {
                     // Insert at tail
                     next = null;
                     previous = last;
                 }
-            }
 
-            verifyLocation(item, previous, next);
+                verifyLocation(item, previous, next);
+
+                if (!forward) {
+                    index++;
+                }
+            }
 
             LinkedList.this.insert(item, previous, next);
 
             length++;
+            modificationCount++;
+            LinkedList.this.modificationCount++;
 
             if (listListeners != null) {
                 listListeners.itemInserted(LinkedList.this, index);
@@ -175,6 +181,8 @@ public class LinkedList<T> implements List<T>, Serializable {
                 verifyLocation(item, current.previous, current.next);
 
                 current.item = item;
+                modificationCount++;
+                LinkedList.this.modificationCount++;
 
                 if (listListeners != null) {
                     listListeners.itemUpdated(LinkedList.this, index, previousItem);
@@ -182,6 +190,7 @@ public class LinkedList<T> implements List<T>, Serializable {
             }
         }
 
+        @SuppressWarnings("unchecked")
         @Override
         public void remove() {
             if (current == null) {
@@ -203,11 +212,19 @@ public class LinkedList<T> implements List<T>, Serializable {
                 current.next.previous = current.previous;
             }
 
+            if (forward) {
+                current = current.previous;
+                index--;
+            } else {
+                current = current.next;
+            }
+
             length--;
+            modificationCount++;
+            LinkedList.this.modificationCount++;
 
             if (listListeners != null) {
-                LinkedList<T> removed = new LinkedList<T>();
-                removed.add(item);
+                LinkedList<T> removed = new LinkedList<T>(item);
 
                 listListeners.itemsRemoved(LinkedList.this, index, removed);
             }
@@ -276,6 +293,10 @@ public class LinkedList<T> implements List<T>, Serializable {
 
             length++;
             modificationCount++;
+
+            if (listListeners != null) {
+                listListeners.itemInserted(this, index);
+            }
         }
 
         return index;
@@ -283,10 +304,6 @@ public class LinkedList<T> implements List<T>, Serializable {
 
     @Override
     public void insert(T item, int index) {
-        insert(item, index, true);
-    }
-
-    private void insert(T item, int index, boolean validate) {
         if (index < 0
             || index > length) {
             throw new IndexOutOfBoundsException();
