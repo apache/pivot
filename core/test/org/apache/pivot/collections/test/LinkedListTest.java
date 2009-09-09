@@ -163,6 +163,5 @@ public class LinkedListTest {
 
         iterator1.insert("a1");
         iterator2.next();
-        System.out.println("!");
     }
 }
