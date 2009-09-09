@@ -26,7 +26,7 @@ create_tag() {
     tag=$1
 
     ## Check that we're in an SVN repository folder
-    svn info >&/dev/null
+    svn info &> /dev/null
     if [ $? -ne 0 ]; then
         echo "Error: Current folder is not managed by SVN"
         echo
@@ -46,9 +46,9 @@ create_tag() {
 
     ## Get latest from SVN
     printf "%-*s" 50 "Getting latest code from SVN..."
-    svn up >&/dev/null
+    svn up &> /dev/null
     if [ $? -ne 0 ]; then
-        echo "error!"
+        echo "error"
         echo "SVN update failed"
         echo
         exit 1
@@ -65,9 +65,9 @@ create_tag() {
 
     ## Copy the trunk to the tag
     printf "%-*s" 50 "Creating $tag tag..."
-    svn cp trunk tags/$tag >&/dev/null
+    svn cp trunk tags/$tag &> /dev/null
     if [ $? -ne 0 ]; then
-        echo "error!"
+        echo "error"
         echo "Tag creation failed"
         echo
         exit 1
@@ -77,16 +77,16 @@ create_tag() {
 
     ## Remove hidden files and folders from the release
     printf "%-*s" 50 "Removing hidden files and folders from tag..."
-    find tags/$tag -name \.\* | grep -v \.svn | xargs svn rm >&/dev/null
+    find tags/$tag -name \.\* | grep -v \.svn | xargs svn rm &> /dev/null
     if [ $? -ne 0 ]; then
-        echo "error!"
+        echo "error"
         echo "SVN remove failed"
         echo
         exit 1
     else
-        svn up >&/dev/null
+        svn up &> /dev/null
         if [ $? -ne 0 ]; then
-            echo "error!"
+            echo "error"
             echo "SVN remove failed"
             echo
             exit 1
@@ -98,16 +98,16 @@ create_tag() {
 
     ## Remove project folder from the release
     printf "%-*s" 50 "Removing project folder from tag..."
-    svn rm tags/$tag/project >&/dev/null
+    svn rm tags/$tag/project &> /dev/null
     if [ $? -ne 0 ]; then
-        echo "error!"
+        echo "error"
         echo "SVN remove failed"
         echo
         exit 1
     else
-        svn up >&/dev/null
+        svn up &> /dev/null
         if [ $? -ne 0 ]; then
-            echo "error!"
+            echo "error"
             echo "SVN remove failed"
             echo
             exit 1
