@@ -112,6 +112,20 @@ public class LinkedList<T> implements List<T>, Serializable {
         }
 
         @Override
+        public void toStart() {
+            index = 0;
+            current = null;
+            forward = true;
+        }
+
+        @Override
+        public void toEnd() {
+            index = length;
+            current = last;
+            forward = true;
+        }
+
+        @Override
         public void insert(T item) {
             Node<T> next = null;
             Node<T> previous = null;

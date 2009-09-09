@@ -78,6 +78,16 @@ public class ArrayList<T> implements List<T>, Serializable {
         }
 
         @Override
+        public void toStart() {
+            index = 0;
+        }
+
+        @Override
+        public void toEnd() {
+            index = length;
+        }
+
+        @Override
         public void insert(T item) {
             if (index < 0
                 || index >= ArrayList.this.length) {

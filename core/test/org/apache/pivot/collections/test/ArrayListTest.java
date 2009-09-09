@@ -73,6 +73,29 @@ public class ArrayListTest {
             String s = iterator.previous();
             assertEquals(s, copy.get(--j));
         }
+
+        iterator = list.iterator();
+        assertEquals(iterator.next(), "B");
+        assertEquals(iterator.next(), "E");
+        assertEquals(iterator.previous(), "E");
+        assertEquals(iterator.previous(), "B");
+        assertEquals(iterator.next(), "B");
+
+        iterator = list.iterator();
+        iterator.insert("M");
+
+        assertEquals(list, new ArrayList<String>("M", "B", "E", "D"));
+
+        assertEquals(iterator.next(), "M");
+        iterator.insert("N");
+        assertEquals(list, new ArrayList<String>("M", "N", "B", "E", "D"));
+
+        iterator = list.iterator();
+        iterator.toEnd();
+        assertEquals(iterator.previous(), "D");
+
+        iterator.toStart();
+        assertEquals(iterator.next(), "M");
     }
 
     @Test

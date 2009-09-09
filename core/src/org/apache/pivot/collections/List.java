@@ -31,6 +31,10 @@ public interface List<T> extends Sequence<T>, Collection<T> {
     public interface ItemIterator<T> extends Iterator<T> {
         public boolean hasPrevious();
         public T previous();
+
+        public void toStart();
+        public void toEnd();
+
         public void insert(T item);
         public void update(T item);
     }

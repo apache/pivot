@@ -94,6 +94,13 @@ public class LinkedListTest {
         assertEquals(iterator.next(), "M");
         iterator.insert("N");
         assertEquals(list, new LinkedList<String>("M", "N", "G", "B", "F", "D"));
+
+        iterator = list.iterator();
+        iterator.toEnd();
+        assertEquals(iterator.previous(), "D");
+
+        iterator.toStart();
+        assertEquals(iterator.next(), "M");
     }
 
     @Test
