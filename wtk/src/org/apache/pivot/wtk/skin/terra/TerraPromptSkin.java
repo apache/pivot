@@ -23,6 +23,7 @@ import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.ImageView;
+import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.Prompt;
 import org.apache.pivot.wtk.PromptListener;
@@ -92,6 +93,7 @@ public class TerraPromptSkin extends TerraSheetSkin
             optionButtonStyles.put("color", theme.getColor(4));
             optionButtonStyles.put("backgroundColor", theme.getColor(16));
             optionButtonStyles.put("borderColor", theme.getColor(13));
+            optionButtonStyles.put("padding", new Insets(3, 4, 3, 4));
 
             optionButton.setStyles(optionButtonStyles);
             optionButton.getStyles().put("minimumAspectRatio", 3);
