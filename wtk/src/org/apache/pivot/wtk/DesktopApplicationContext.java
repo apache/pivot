@@ -29,6 +29,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 import org.apache.pivot.collections.HashMap;
@@ -117,15 +118,17 @@ public final class DesktopApplicationContext extends ApplicationContext {
                                     @Override
                                         public Object invoke(Object proxy, Method method, Object[] args)
                                             throws Throwable {
+                                            boolean handled = true;
+
                                             String methodName = method.getName();
                                             if (methodName.equals("handleAbout"))  {
                                                 handleAbout();
                                             } else if (methodName.equals("handleQuit")) {
-                                                exit();
+                                                handled = !exit();
                                             }
 
-                                            // Invoke setHandled(true)
-                                            setHandledMethod.invoke(args[0], new Object[] {true});
+                                            // Invoke setHandled()
+                                            setHandledMethod.invoke(args[0], new Object[] {handled});
 
                                             return null;
                                         }
@@ -247,7 +250,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
     /**
      * Terminates the application context.
      */
-    public static void exit() {
+    public static boolean exit() {
         boolean cancelShutdown = false;
 
         Application application = applicationContext.getApplication();
@@ -266,13 +269,18 @@ public final class DesktopApplicationContext extends ApplicationContext {
                 preferences.putInt(Y_ARGUMENT, windowedHostFrame.getY());
                 preferences.putInt(WIDTH_ARGUMENT, windowedHostFrame.getWidth());
                 preferences.putInt(HEIGHT_ARGUMENT, windowedHostFrame.getHeight());
+                preferences.flush();
             } catch (SecurityException exception) {
+                // No-op
+            } catch (BackingStoreException exception) {
                 // No-op
             }
 
             windowedHostFrame.dispose();
             fullScreenHostFrame.dispose();
         }
+
+        return cancelShutdown;
     }
 
     /**
@@ -311,7 +319,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
             width = preferences.getInt(WIDTH_ARGUMENT, width);
             height = preferences.getInt(HEIGHT_ARGUMENT, height);
         } catch (SecurityException exception) {
-            // No-op
+            System.err.println("Unable to retrieve startup preferences: " + exception);
         }
 
         for (int i = 1, n = args.length; i < n; i++) {
