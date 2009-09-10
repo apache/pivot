@@ -67,9 +67,6 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         public void windowClosed(Window window, Display display) {
             if (toolbar) {
                 repaintComponent();
-            } else {
-                MenuButton menuButton = (MenuButton)getComponent();
-                menuButton.requestFocus();
             }
         }
     };
