@@ -120,10 +120,9 @@ public class TableView extends Component {
          * specifies a fixed column width.
          */
         public Column(String name, Object headerData, int width, boolean relative) {
-            this.name = name;
-            this.headerData = headerData;
-            this.width = width;
-            this.relative = relative;
+            setName(name);
+            setHeaderData(headerData);
+            setWidth(width, relative);
         }
 
         /**
@@ -165,10 +164,6 @@ public class TableView extends Component {
          * The column name.
          */
         public void setName(String name) {
-            if (name == null) {
-                throw new IllegalArgumentException("name is null.");
-            }
-
             String previousName = this.name;
 
             if (previousName != name) {
@@ -272,6 +267,10 @@ public class TableView extends Component {
          * is fixed.
          */
         public void setWidth(int width, boolean relative) {
+            if (width < (relative ? 0 : -1)) {
+                throw new IllegalArgumentException();
+            }
+
             int previousWidth = this.width;
             boolean previousRelative = this.relative;
 
