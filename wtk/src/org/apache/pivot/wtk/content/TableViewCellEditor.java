@@ -34,7 +34,6 @@ import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.WindowStateListener;
 
-
 /**
  * Default table view cell editor.
  */
@@ -120,8 +119,8 @@ public class TableViewCellEditor implements TableView.RowEditor {
             tableView.getTableViewListeners().remove(tableViewListener);
             tableView.getTableViewRowListeners().remove(tableViewRowListener);
 
-            // Restore focus to the table view
-            tableView.requestFocus();
+            // Move the owner to front
+            window.getOwner().moveToFront();
 
             // Free memory
             tableView = null;

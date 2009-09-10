@@ -66,8 +66,8 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
             treeView.getTreeViewListeners().remove(treeViewHandler);
             treeView.getTreeViewNodeListeners().remove(treeViewNodeHandler);
 
-            // Restore focus to the tree view
-            treeView.requestFocus();
+            // Move the owner to front
+            window.getOwner().moveToFront();
 
             // Free memory
             treeView = null;

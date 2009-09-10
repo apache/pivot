@@ -172,8 +172,8 @@ public class TableViewRowEditor implements TableView.RowEditor {
                 if (!closing) {
                     closing = true;
 
-                    // Restore focus to the table view
-                    tableView.requestFocus();
+                    // Disable the table pane to prevent user input
+                    editorTablePane.setEnabled(false);
 
                     // Flip to the image card
                     editorCardPane.setSelectedIndex(IMAGE_CARD_INDEX);
@@ -201,8 +201,12 @@ public class TableViewRowEditor implements TableView.RowEditor {
             tableView.getTableViewListeners().remove(tableViewHandler);
             tableView.getTableViewRowListeners().remove(tableViewRowHandler);
 
-            // Reset flags
+            // Reset state
             closing = false;
+            editorTablePane.setEnabled(true);
+
+            // Move the owner to front
+            window.getOwner().moveToFront();
 
             // Free memory
             tableView = null;
@@ -239,8 +243,6 @@ public class TableViewRowEditor implements TableView.RowEditor {
     private ContainerMouseListener displayMouseHandler = new ContainerMouseListener.Adapter() {
         @Override
         public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
-            boolean consumed = false;
-
             // If the event occurred outside the popup, close the popup
             Display display = (Display)container;
             Window window = (Window)display.getComponentAt(x, y);
@@ -248,10 +250,9 @@ public class TableViewRowEditor implements TableView.RowEditor {
             if (popup != window &&
                 (window == null || !popup.isOwner(window))) {
                 save();
-                consumed = true;
             }
 
-            return consumed;
+            return false;
         }
 
         @Override

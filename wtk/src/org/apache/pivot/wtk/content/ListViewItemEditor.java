@@ -33,7 +33,6 @@ import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.WindowStateListener;
 
-
 /**
  * Default list view item editor.
  */
@@ -108,7 +107,7 @@ public class ListViewItemEditor implements ListView.ItemEditor {
             listView.getListViewListeners().remove(listViewListener);
             listView.getListViewItemListeners().remove(listViewItemListener);
 
-            listView.requestFocus();
+            window.getOwner().moveToFront();
 
             listView = null;
             index = -1;
@@ -122,6 +121,7 @@ public class ListViewItemEditor implements ListView.ItemEditor {
         public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
             Display display = (Display)container;
             Window window = (Window)display.getComponentAt(x, y);
+
             if (popup != window) {
                 save();
             }

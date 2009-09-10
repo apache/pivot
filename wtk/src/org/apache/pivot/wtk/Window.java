@@ -908,6 +908,15 @@ public class Window extends Container {
         return focusDescendant;
     }
 
+    /**
+     * Clears the window descendant to which focus will be restored when this
+     * window is moved to the front, meaning that when this window is moved to
+     * front, focus will not be restored to the window.
+     */
+    public void clearFocusDescendant() {
+        focusDescendant = null;
+    }
+
     @Override
     protected void descendantGainedFocus(Component descendant, Component previousFocusedComponent) {
         this.focusDescendant = descendant;
