@@ -120,10 +120,6 @@ public class TableView extends Component {
          * specifies a fixed column width.
          */
         public Column(String name, Object headerData, int width, boolean relative) {
-            if (width < 0) {
-                throw new IllegalArgumentException("width is negative.");
-            }
-
             this.name = name;
             this.headerData = headerData;
             this.width = width;
