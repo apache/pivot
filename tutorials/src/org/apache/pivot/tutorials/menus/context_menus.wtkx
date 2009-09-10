@@ -16,10 +16,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<BoxPane orientation="vertical" styles="{padding:4}"
+<Window title="Context Menus" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <TextInput wtkx:id="textInput1" text="abcd"/>
-    <TextInput wtkx:id="textInput2" text="1234"/>
-    <PushButton wtkx:id="pushButton" buttonData="Click Me"/>
-</BoxPane>
+    <content>
+        <!-- TODO -->
+    </content>
+</Window>

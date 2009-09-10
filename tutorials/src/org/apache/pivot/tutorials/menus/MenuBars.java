@@ -16,31 +16,65 @@
  */
 package org.apache.pivot.tutorials.menus;
 
+import java.io.IOException;
+
 import org.apache.pivot.collections.Map;
+import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.wtk.Action;
 import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.Border;
+import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.FileBrowserSheet;
-import org.apache.pivot.wtk.Panel;
+import org.apache.pivot.wtk.MenuBar;
+import org.apache.pivot.wtk.MenuHandler;
+import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.TabPane;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
-public class Menus implements Application {
+public class MenuBars implements Application {
     private Window window = null;
     private TabPane tabPane = null;
 
-    public Menus() {
+    private MenuHandler menuHandler = new MenuHandler.Adapter() {
+        @Override
+        public void configureMenuBar(Component component, MenuBar menuBar) {
+            boolean enabled = (component instanceof TextInput);
+
+            Action.getNamedActions().get("cut").setEnabled(enabled);
+            Action.getNamedActions().get("copy").setEnabled(enabled);
+            Action.getNamedActions().get("paste").setEnabled(enabled);
+        }
+    };
+
+    public MenuBars() {
         Action.getNamedActions().put("fileNew", new Action() {
             @Override
             public void perform() {
-                // TODO Read document.wtkx
+                WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                Component tab;
+                try {
+                    tab = new Border((Component)wtkxSerializer.readObject(this, "document.wtkx"));
 
-                Panel panel = new Panel();
-                tabPane.getTabs().add(panel);
-                TabPane.setLabel(panel, "Document " + tabPane.getTabs().getLength());
+                    TextInput textInput1 = (TextInput)wtkxSerializer.get("textInput1");
+                    textInput1.setMenuHandler(menuHandler);
+
+                    TextInput textInput2 = (TextInput)wtkxSerializer.get("textInput2");
+                    textInput2.setMenuHandler(menuHandler);
+
+                    PushButton pushButton = (PushButton)wtkxSerializer.get("pushButton");
+                    pushButton.setMenuHandler(menuHandler);
+                } catch (IOException exception) {
+                    throw new RuntimeException(exception);
+                } catch (SerializationException exception) {
+                    throw new RuntimeException(exception);
+                }
+
+                tabPane.getTabs().add(tab);
+                TabPane.setLabel(tab, "Document " + tabPane.getTabs().getLength());
             }
         });
 
@@ -81,7 +115,7 @@ public class Menus implements Application {
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "menus.wtkx");
+        window = (Window)wtkxSerializer.readObject(this, "menu_bars.wtkx");
 
         tabPane = (TabPane)wtkxSerializer.get("tabPane");
 
@@ -106,6 +140,6 @@ public class Menus implements Application {
     }
 
     public static void main(String[] args) {
-        DesktopApplicationContext.main(Menus.class, args);
+        DesktopApplicationContext.main(MenuBars.class, args);
     }
 }

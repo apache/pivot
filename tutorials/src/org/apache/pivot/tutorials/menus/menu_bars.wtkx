@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Frame title="Menus" maximized="true"
+<Frame title="Menu Bars" maximized="true"
     styles="{padding:{top:0, left:4, bottom:4, right:4}, showWindowControls:false}"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:content="org.apache.pivot.wtk.content"

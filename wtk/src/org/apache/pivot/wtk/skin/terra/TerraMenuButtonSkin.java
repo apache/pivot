@@ -65,9 +65,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     private WindowStateListener menuPopupWindowStateListener = new WindowStateListener.Adapter() {
         @Override
         public void windowClosed(Window window, Display display) {
-            if (toolbar) {
-                repaintComponent();
-            }
+            repaintComponent();
         }
     };
 
