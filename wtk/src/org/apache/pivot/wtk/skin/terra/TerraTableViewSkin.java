@@ -133,13 +133,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             TableView.Column column = columns.get(i);
 
             if (!column.isRelative()) {
-                int columnWidth = column.getWidth();
-
-                if (columnWidth == -1) {
-                    columnWidth = getPreferredColumnWidth(column);
-                }
-
-                preferredWidth += columnWidth;
+                preferredWidth += column.getWidth();
 
                 // Include space for vertical gridlines; even if we are
                 // not painting them, the header does
@@ -196,7 +190,16 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                 int columnWidth = column.getWidth();
 
                 if (columnWidth == -1) {
-                    columnWidth = getPreferredColumnWidth(column);
+                    // Calculate the maximum cell width
+                    columnWidth = 0;
+
+                    TableView.CellRenderer cellRenderer = column.getCellRenderer();
+                    List<?> tableData = tableView.getTableData();
+
+                    for (Object rowData : tableData) {
+                        cellRenderer.render(rowData, tableView, column, false, false, false);
+                        columnWidth = Math.max(cellRenderer.getPreferredWidth(-1), columnWidth);
+                    }
                 }
 
                 columnWidths.add(columnWidth);
@@ -368,26 +371,6 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                 }
             }
         }
-    }
-
-    /**
-     * Gets the preferred width of a column, which is the maximum preferred
-     * width of the column's cells.
-     */
-    private int getPreferredColumnWidth(TableView.Column column) {
-        int columnWidth = 0;
-
-        TableView tableView = (TableView)getComponent();
-
-        TableView.CellRenderer cellRenderer = column.getCellRenderer();
-        List<?> tableData = tableView.getTableData();
-
-        for (Object rowData : tableData) {
-            cellRenderer.render(rowData, tableView, column, false, false, false);
-            columnWidth = Math.max(cellRenderer.getPreferredWidth(-1), columnWidth);
-        }
-
-        return columnWidth;
     }
 
     /**
