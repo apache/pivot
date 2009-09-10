@@ -265,10 +265,13 @@ public final class DesktopApplicationContext extends ApplicationContext {
         if (!cancelShutdown) {
             try {
                 Preferences preferences = Preferences.userNodeForPackage(DesktopApplicationContext.class);
+                preferences = preferences.node(applicationClassName);
+
                 preferences.putInt(X_ARGUMENT, windowedHostFrame.getX());
                 preferences.putInt(Y_ARGUMENT, windowedHostFrame.getY());
                 preferences.putInt(WIDTH_ARGUMENT, windowedHostFrame.getWidth());
                 preferences.putInt(HEIGHT_ARGUMENT, windowedHostFrame.getHeight());
+
                 preferences.flush();
             } catch (SecurityException exception) {
                 // No-op
@@ -314,6 +317,8 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
         try {
             Preferences preferences = Preferences.userNodeForPackage(DesktopApplicationContext.class);
+            preferences = preferences.node(applicationClassName);
+
             x = preferences.getInt(X_ARGUMENT, x);
             y = preferences.getInt(Y_ARGUMENT, y);
             width = preferences.getInt(WIDTH_ARGUMENT, width);
