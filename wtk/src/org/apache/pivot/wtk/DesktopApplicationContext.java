@@ -29,6 +29,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.prefs.Preferences;
 
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.immutable.ImmutableMap;
@@ -259,6 +260,16 @@ public final class DesktopApplicationContext extends ApplicationContext {
         }
 
         if (!cancelShutdown) {
+            try {
+                Preferences preferences = Preferences.userNodeForPackage(DesktopApplicationContext.class);
+                preferences.putInt(X_ARGUMENT, windowedHostFrame.getX());
+                preferences.putInt(Y_ARGUMENT, windowedHostFrame.getY());
+                preferences.putInt(WIDTH_ARGUMENT, windowedHostFrame.getWidth());
+                preferences.putInt(HEIGHT_ARGUMENT, windowedHostFrame.getHeight());
+            } catch (SecurityException exception) {
+                // No-op
+            }
+
             windowedHostFrame.dispose();
             fullScreenHostFrame.dispose();
         }
@@ -277,6 +288,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
         // Get the application class name
         if (args.length == 0) {
             System.err.println("Application class name is required.");
+            return;
         }
 
         applicationClassName = args[0];
@@ -291,6 +303,16 @@ public final class DesktopApplicationContext extends ApplicationContext {
         boolean center = false;
         boolean resizable = true;
         boolean fullScreen = false;
+
+        try {
+            Preferences preferences = Preferences.userNodeForPackage(DesktopApplicationContext.class);
+            x = preferences.getInt(X_ARGUMENT, x);
+            y = preferences.getInt(Y_ARGUMENT, y);
+            width = preferences.getInt(WIDTH_ARGUMENT, width);
+            height = preferences.getInt(HEIGHT_ARGUMENT, height);
+        } catch (SecurityException exception) {
+            // No-op
+        }
 
         for (int i = 1, n = args.length; i < n; i++) {
             String arg = args[i];
