@@ -326,14 +326,15 @@ public class StockTracker implements Application {
     private void addSymbol() {
         String symbol = symbolTextInput.getText().toUpperCase();
         if (symbols.indexOf(symbol) == -1) {
-            int index = symbols.add(symbol);
+            symbols.add(symbol);
 
             List<StockQuote> tableData = (List<StockQuote>)stocksTableView.getTableData();
             StockQuote stockQuote = new StockQuote();
             stockQuote.setSymbol(symbol);
-            tableData.insert(stockQuote, index);
+            int index = tableData.add(stockQuote);
 
             stocksTableView.setSelectedIndex(index);
+            System.out.println(index);
         }
 
         symbolTextInput.setText("");
