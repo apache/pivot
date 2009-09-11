@@ -99,7 +99,7 @@ public class MenuItemDataRenderer extends TablePane implements Button.DataRender
 
         // Update the image view
         Menu.Item menuItem = (Menu.Item)button;
-        Menu menu = menuItem.getSection().getMenu();
+        Menu menu = (Menu)menuItem.getParent();
 
         int margin = (Integer)menu.getStyles().get("margin");
         Insets padding = (Insets)getStyles().get("padding");

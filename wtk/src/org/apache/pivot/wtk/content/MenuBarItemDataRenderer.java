@@ -75,7 +75,7 @@ public class MenuBarItemDataRenderer extends BoxPane implements Button.DataRende
 
         // Update the image view
         MenuBar.Item menuBarItem = (MenuBar.Item)button;
-        MenuBar menuBar = menuBarItem.getMenuBar();
+        MenuBar menuBar = (MenuBar)menuBarItem.getParent();
 
         if (icon == null) {
             imageView.setVisible(false);

@@ -53,7 +53,7 @@ public class TerraMenuItemSkin extends MenuItemSkin {
         @Override
         public void paint(Graphics2D graphics) {
             Menu.Item menuItem = (Menu.Item)getComponent();
-            Menu menu = menuItem.getSection().getMenu();
+            Menu menu = (Menu)menuItem.getParent();
 
             Color color = (Color)menu.getStyles().get("color");
             graphics.setColor(color);
@@ -129,7 +129,7 @@ public class TerraMenuItemSkin extends MenuItemSkin {
     @Override
     public void paint(Graphics2D graphics) {
         Menu.Item menuItem = (Menu.Item)getComponent();
-        Menu menu = menuItem.getSection().getMenu();
+        Menu menu = (Menu)menuItem.getParent();
 
         int width = getWidth();
         int height = getHeight();
@@ -178,7 +178,7 @@ public class TerraMenuItemSkin extends MenuItemSkin {
         Menu.Item menuItem = (Menu.Item)getComponent();
 
         if (menuItem.isActive()) {
-            Menu menu = menuItem.getSection().getMenu();
+            Menu menu = (Menu)menuItem.getParent();
             Color activeBackgroundColor = (Color)menu.getStyles().get("activeBackgroundColor");
             opaque = (activeBackgroundColor.getTransparency() == Transparency.OPAQUE);
         }

@@ -86,7 +86,7 @@ public class TerraMenuBarItemSkin extends MenuBarItemSkin {
 
         // Paint highlight state
         if (highlight) {
-            MenuBar menuBar = menuBarItem.getMenuBar();
+            MenuBar menuBar = (MenuBar)menuBarItem.getParent();
             Color activeBackgroundColor = (Color)menuBar.getStyles().get("activeBackgroundColor");
             graphics.setColor(activeBackgroundColor);
             graphics.fillRect(0, 0, width, height);
@@ -107,7 +107,7 @@ public class TerraMenuBarItemSkin extends MenuBarItemSkin {
         MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
 
         if (menuBarItem.isActive()) {
-            MenuBar menuBar = menuBarItem.getMenuBar();
+            MenuBar menuBar = (MenuBar)menuBarItem.getParent();
             Color activeBackgroundColor = (Color)menuBar.getStyles().get("activeBackgroundColor");
             opaque = (activeBackgroundColor.getTransparency() == Transparency.OPAQUE);
         }

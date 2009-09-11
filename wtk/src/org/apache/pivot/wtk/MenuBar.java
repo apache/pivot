@@ -49,7 +49,6 @@ public class MenuBar extends Container {
             }
         }
 
-        private MenuBar menuBar = null;
         private Menu menu = null;
         private boolean active = false;
 
@@ -75,6 +74,8 @@ public class MenuBar extends Container {
                     + MenuBar.class.getName());
             }
 
+            setActive(false);
+
             super.setParent(parent);
         }
 
@@ -84,28 +85,6 @@ public class MenuBar extends Container {
 
             if (!enabled) {
                 setActive(false);
-            }
-        }
-
-        public MenuBar getMenuBar() {
-            return menuBar;
-        }
-
-        private void setMenuBar(MenuBar menuBar) {
-            MenuBar previousMenuBar = this.menuBar;
-
-            if (previousMenuBar != menuBar) {
-                this.menuBar = menuBar;
-
-                if (isActive()) {
-                    if (previousMenuBar != null) {
-                        previousMenuBar.setActiveItem(null);
-                    }
-
-                    if (menuBar != null) {
-                        menuBar.setActiveItem(this);
-                    }
-                }
             }
         }
 
@@ -133,34 +112,34 @@ public class MenuBar extends Container {
 
         public void setActive(boolean active) {
             if (active
-                && !isEnabled()) {
+                && (getParent() == null
+                || !isEnabled())) {
                 throw new IllegalStateException();
             }
 
             if (this.active != active) {
                 this.active = active;
 
-                if (menuBar != null) {
-                    // Update the active item
-                    Item activeItem = menuBar.getActiveItem();
+                // Update the active item
+                MenuBar menuBar = (MenuBar)getParent();
+                Item activeItem = menuBar.getActiveItem();
 
-                    if (active) {
-                        // Set this as the new active item (do this before
-                        // de-selecting any currently active item so the
-                        // menu bar's change event isn't fired twice)
-                        menuBar.setActiveItem(this);
+                if (active) {
+                    // Set this as the new active item (do this before
+                    // de-selecting any currently active item so the
+                    // menu bar's change event isn't fired twice)
+                    menuBar.setActiveItem(this);
 
-                        // Deactivate any previously active item
-                        if (activeItem != null) {
-                            activeItem.setActive(false);
-                        }
+                    // Deactivate any previously active item
+                    if (activeItem != null) {
+                        activeItem.setActive(false);
                     }
-                    else {
-                        // If this item is currently active, clear the
-                        // selection
-                        if (activeItem == this) {
-                            menuBar.setActiveItem(null);
-                        }
+                }
+                else {
+                    // If this item is currently active, clear the
+                    // selection
+                    if (activeItem == this) {
+                        menuBar.setActiveItem(null);
                     }
                 }
 
@@ -206,13 +185,8 @@ public class MenuBar extends Container {
 
         @Override
         public void insert(Item item, int index) {
-            if (item.getMenuBar() != null) {
-                throw new IllegalArgumentException("item already has a menu bar.");
-            }
-
             MenuBar.this.add(item);
             items.insert(item, index);
-            item.setMenuBar(MenuBar.this);
 
             menuBarListeners.itemInserted(MenuBar.this, index);
         }
@@ -238,8 +212,8 @@ public class MenuBar extends Container {
 
             for (int i = 0, n = removed.getLength(); i < n; i++) {
                 Item item = removed.get(i);
-                item.setGroup((Button.Group)null);
-                item.setMenuBar(null);
+                item.setActive(false);
+
                 MenuBar.this.remove(item);
             }
 
@@ -359,20 +333,6 @@ public class MenuBar extends Container {
                 break;
             }
         }
-    }
-
-    @Override
-    public Sequence<Component> remove(int index, int count) {
-        for (int i = index, n = index + count; i < n; i++) {
-            Item item = (Item)get(i);
-
-            if (item.getMenuBar() != null) {
-                throw new UnsupportedOperationException();
-            }
-        }
-
-        // Call the base method to remove the components
-        return super.remove(index, count);
     }
 
     public ListenerList<MenuBarListener> getMenuBarListeners() {

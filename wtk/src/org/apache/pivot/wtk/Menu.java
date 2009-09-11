@@ -86,6 +86,8 @@ public class Menu extends Container {
                     + Menu.class.getName());
             }
 
+            setActive(false);
+
             super.setParent(parent);
         }
 
@@ -163,35 +165,34 @@ public class Menu extends Container {
 
         public void setActive(boolean active) {
             if (active
-                && !isEnabled()) {
+                && (getParent() == null
+                    || !isEnabled())) {
                 throw new IllegalStateException();
             }
 
             if (this.active != active) {
                 this.active = active;
 
-                if (section != null
-                    && section.menu != null) {
-                    // Update the active item
-                    Item activeItem = section.menu.getActiveItem();
+                // Update the active item
+                Menu menu = (Menu)getParent();
+                Item activeItem = menu.getActiveItem();
 
-                    if (active) {
-                        // Set this as the new active item (do this before
-                        // de-selecting any currently active item so the
-                        // menu bar's change event isn't fired twice)
-                        section.menu.setActiveItem(this);
+                if (active) {
+                    // Set this as the new active item (do this before
+                    // de-selecting any currently active item so the
+                    // menu bar's change event isn't fired twice)
+                    menu.setActiveItem(this);
 
-                        // Deactivate any previously active item
-                        if (activeItem != null) {
-                            activeItem.setActive(false);
-                        }
+                    // Deactivate any previously active item
+                    if (activeItem != null) {
+                        activeItem.setActive(false);
                     }
-                    else {
-                        // If this item is currently active, clear the
-                        // selection
-                        if (activeItem == this) {
-                            section.menu.setActiveItem(null);
-                        }
+                }
+                else {
+                    // If this item is currently active, clear the
+                    // selection
+                    if (activeItem == this) {
+                        menu.setActiveItem(null);
                     }
                 }
 
@@ -214,11 +215,16 @@ public class Menu extends Container {
 
             if (menu == null) {
                 Item item = this;
-                while (item != null
-                    && item.section != null
-                    && item.section.menu != null) {
-                    item.section.menu.menuItemSelectionListeners.itemSelected(this);
-                    item = item.section.menu.item;
+
+                while (item != null) {
+                    Menu menu = (Menu)item.getParent();
+
+                    if (menu == null) {
+                        item = null;
+                    } else {
+                        menu.menuItemSelectionListeners.itemSelected(this);
+                        item = menu.item;
+                    }
                 }
             }
         }
@@ -742,11 +748,12 @@ public class Menu extends Container {
     @Override
     public Sequence<Component> remove(int index, int count) {
         for (int i = index, n = index + count; i < n; i++) {
-            Item item = (Item)get(i);
+            Component component = get(i);
 
-            if (item.getSection() != null
-                && item.getSection().getMenu() != null) {
-                throw new UnsupportedOperationException();
+            for (Section section : sections) {
+                if (section.indexOf((Menu.Item)component) >= 0) {
+                    throw new UnsupportedOperationException();
+                }
             }
         }
 

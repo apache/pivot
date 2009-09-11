@@ -43,7 +43,7 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
             boolean consumed = false;
 
             MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
-            MenuBar menuBar = menuBarItem.getMenuBar();
+            MenuBar menuBar = (MenuBar)menuBarItem.getParent();
 
             if (keyCode == Keyboard.KeyCode.LEFT
                 || (keyCode == Keyboard.KeyCode.TAB
@@ -75,7 +75,7 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
 
             // If the menu bar is no longer active, move the window to the
             // front to restore focus
-            MenuBar menuBar = menuBarItem.getMenuBar();
+            MenuBar menuBar = (MenuBar)menuBarItem.getParent();
             if (menuBar.getActiveItem() == null) {
                 Window menuBarWindow = menuBar.getWindow();
 
@@ -142,7 +142,7 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
         super.mouseOver(component);
 
         MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
-        MenuBar menuBar = menuBarItem.getMenuBar();
+        MenuBar menuBar = (MenuBar)menuBarItem.getParent();
 
         if (menuBar.getActiveItem() != null) {
             menuBarItem.setActive(true);
