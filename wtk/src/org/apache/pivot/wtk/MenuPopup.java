@@ -98,8 +98,6 @@ public class MenuPopup extends Window {
     }
 
     public void open(Display display, int x, int y) {
-        // TODO Determine x, y and width, height based on display bounds
-
         autoClose = true;
 
         setLocation(x, y);
@@ -115,8 +113,6 @@ public class MenuPopup extends Window {
     }
 
     public void open(Window owner, int x, int y) {
-        // TODO Determine x, y and width, height based on display bounds
-
         autoClose = true;
 
         setLocation(x, y);

@@ -17,20 +17,49 @@
 package org.apache.pivot.tutorials.menus;
 
 import org.apache.pivot.collections.Map;
+import org.apache.pivot.wtk.Action;
 import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.Menu;
+import org.apache.pivot.wtk.MenuHandler;
+import org.apache.pivot.wtk.Prompt;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class ContextMenus implements Application {
     private Window window = null;
+    private MenuHandler menuHandler = new MenuHandler.Adapter() {
+        @Override
+        public boolean configureContextMenu(Component component, Menu menu, int x, int y) {
+            final Component descendant = window.getDescendantAt(x, y);
+
+            Menu.Section menuSection = new Menu.Section();
+            menu.getSections().add(menuSection);
+
+            Menu.Item whatIsThisMenuItem = new Menu.Item("What is this?");
+            whatIsThisMenuItem.setAction(new Action() {
+                @Override
+                public void perform() {
+                    String description = (String)descendant.getUserData().get("description");
+                    String message = "This is a " + description + ".";
+
+                    Prompt.prompt(message, window);
+                }
+            });
+
+            menuSection.add(whatIsThisMenuItem);
+
+            return false;
+        }
+    };
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "context_menus.wtkx");
-
-        // TODO
+        window.setMenuHandler(menuHandler);
 
         window.open(display);
     }
@@ -50,5 +79,9 @@ public class ContextMenus implements Application {
 
     @Override
     public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(ContextMenus.class, args);
     }
 }

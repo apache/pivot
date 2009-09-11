@@ -19,10 +19,12 @@ package org.apache.pivot.wtk.skin.terra;
 import java.awt.Color;
 
 import org.apache.pivot.util.Vote;
+import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Border;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.ContainerMouseListener;
+import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Menu;
@@ -32,6 +34,7 @@ import org.apache.pivot.wtk.MenuPopupListener;
 import org.apache.pivot.wtk.MenuPopupStateListener;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Panorama;
+import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.effects.DropShadowDecorator;
@@ -44,6 +47,29 @@ import org.apache.pivot.wtk.skin.WindowSkin;
  */
 public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
     MenuPopupStateListener {
+    private class RepositionCallback implements Runnable {
+        @Override
+        public void run() {
+            MenuPopup menuPopup = (MenuPopup)getComponent();
+            Display display = menuPopup.getDisplay();
+
+            Point location = menuPopup.getLocation();
+            Dimensions size = menuPopup.getSize();
+
+            int x = location.x;
+            if (x + size.width > display.getWidth()) {
+                x -= size.width;
+            }
+
+            int y = location.y;
+            if (y + size.height > display.getHeight()) {
+                y-= size.height;
+            }
+
+            menuPopup.setLocation(x, y);
+        }
+    }
+
     private Panorama panorama;
     private Border border;
 
@@ -204,6 +230,8 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
 
             menu.requestFocus();
         }
+
+        ApplicationContext.queueCallback(new RepositionCallback());
     }
 
     @Override

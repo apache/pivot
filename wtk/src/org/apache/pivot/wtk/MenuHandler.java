@@ -39,7 +39,7 @@ public interface MenuHandler {
     }
 
     /**
-     * Called to allow an implementation to configure a menu bar.
+     * Called when a component to which this handler is attached gains the focus.
      *
      * @param component
      * @param menuBar
@@ -47,7 +47,7 @@ public interface MenuHandler {
     public void configureMenuBar(Component component, MenuBar menuBar);
 
     /**
-     * Called to allow an implementation to perform cleanup on a menu bar.
+     * Called when a component to which this handler is attached loses the focus.
      *
      * @param component
      * @param menuBar
@@ -55,7 +55,7 @@ public interface MenuHandler {
     public void cleanupMenuBar(Component component, MenuBar menuBar);
 
     /**
-     * Called to allow an implementation to configure a context menu.
+     * Called when the user right-clicks on a component to which this handler is attached.
      *
      * @param component
      * @param menu
@@ -64,7 +64,7 @@ public interface MenuHandler {
      *
      * @return
      * <tt>true</tt> to stop propagation of context menu configuration;
-     * <tt>false</tt> to allow it to continue
+     * <tt>false</tt> to allow it to continue.
      */
     public boolean configureContextMenu(Component component, Menu menu, int x, int y);
 }
