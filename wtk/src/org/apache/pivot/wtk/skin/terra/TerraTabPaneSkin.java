@@ -33,6 +33,7 @@ import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Insets;
+import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Panorama;
@@ -1098,6 +1099,75 @@ public class TerraTabPaneSkin extends ContainerSkin
         this.collapsible = collapsible;
     }
 
+    @Override
+    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+        boolean consumed = super.keyPressed(component, keyCode, keyLocation);
+
+        if (!consumed
+            && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
+            TabPane tabPane = (TabPane)getComponent();
+            TabPane.TabSequence tabs = tabPane.getTabs();
+
+            int selectedIndex = -1;
+
+            switch (keyCode) {
+                case Keyboard.KeyCode.N1: {
+                    selectedIndex = 0;
+                    break;
+                }
+
+                case Keyboard.KeyCode.N2: {
+                    selectedIndex = 1;
+                    break;
+                }
+
+                case Keyboard.KeyCode.N3: {
+                    selectedIndex = 2;
+                    break;
+                }
+
+                case Keyboard.KeyCode.N4: {
+                    selectedIndex = 3;
+                    break;
+                }
+
+                case Keyboard.KeyCode.N5: {
+                    selectedIndex = 4;
+                    break;
+                }
+
+                case Keyboard.KeyCode.N6: {
+                    selectedIndex = 5;
+                    break;
+                }
+
+                case Keyboard.KeyCode.N7: {
+                    selectedIndex = 6;
+                    break;
+                }
+
+                case Keyboard.KeyCode.N8: {
+                    selectedIndex = 7;
+                    break;
+                }
+
+                case Keyboard.KeyCode.N9: {
+                    selectedIndex = 8;
+                    break;
+                }
+            }
+
+            if (selectedIndex >= 0
+                && selectedIndex < tabs.getLength()
+                && tabs.get(selectedIndex).isEnabled()) {
+                tabPane.setSelectedIndex(selectedIndex);
+                consumed = true;
+            }
+        }
+
+        return consumed;
+    }
+
     // Tab pane events
     @Override
     public void tabInserted(TabPane tabPane, int index) {
@@ -1233,6 +1303,7 @@ public class TerraTabPaneSkin extends ContainerSkin
 
             Component selectedTab = tabPane.getTabs().get(selectedIndex);
             selectedTab.setVisible(true);
+            selectedTab.requestFocus();
         }
 
         if (previousSelectedIndex != -1) {

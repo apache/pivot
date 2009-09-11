@@ -36,6 +36,7 @@ import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Insets;
+import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Button.Group;
@@ -654,6 +655,106 @@ public class TerraAccordionSkin extends ContainerSkin
         setButtonPadding(new Insets(buttonPadding));
     }
 
+    @Override
+    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+        boolean consumed = super.keyPressed(component, keyCode, keyLocation);
+
+        if (!consumed) {
+            Accordion accordion = (Accordion)getComponent();
+            Accordion.PanelSequence panels = accordion.getPanels();
+
+            if (Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
+                int selectedIndex = -1;
+
+                switch (keyCode) {
+                    case Keyboard.KeyCode.N1: {
+                        selectedIndex = 0;
+                        break;
+                    }
+
+                    case Keyboard.KeyCode.N2: {
+                        selectedIndex = 1;
+                        break;
+                    }
+
+                    case Keyboard.KeyCode.N3: {
+                        selectedIndex = 2;
+                        break;
+                    }
+
+                    case Keyboard.KeyCode.N4: {
+                        selectedIndex = 3;
+                        break;
+                    }
+
+                    case Keyboard.KeyCode.N5: {
+                        selectedIndex = 4;
+                        break;
+                    }
+
+                    case Keyboard.KeyCode.N6: {
+                        selectedIndex = 5;
+                        break;
+                    }
+
+                    case Keyboard.KeyCode.N7: {
+                        selectedIndex = 6;
+                        break;
+                    }
+
+                    case Keyboard.KeyCode.N8: {
+                        selectedIndex = 7;
+                        break;
+                    }
+
+                    case Keyboard.KeyCode.N9: {
+                        selectedIndex = 8;
+                        break;
+                    }
+                }
+
+                if (selectedIndex >= 0
+                    && selectedIndex < panels.getLength()
+                    && panels.get(selectedIndex).isEnabled()) {
+                    accordion.setSelectedIndex(selectedIndex);
+                    consumed = true;
+                }
+            } else if (Keyboard.isPressed(Keyboard.Modifier.ALT)) {
+                int n = panels.getLength();
+                int selectedIndex = accordion.getSelectedIndex();
+
+                switch (keyCode) {
+                    case Keyboard.KeyCode.UP: {
+                        do {
+                            selectedIndex--;
+                        } while (selectedIndex >= 0
+                            && !panels.get(selectedIndex).isEnabled());
+
+                        break;
+                    }
+
+                    case Keyboard.KeyCode.DOWN: {
+                        do {
+                            selectedIndex++;
+                        } while (selectedIndex < n
+                            && !panels.get(selectedIndex).isEnabled());
+
+                        break;
+                    }
+                }
+
+                if (selectedIndex >= 0
+                    && selectedIndex < n
+                    && panels.get(selectedIndex).isEnabled()) {
+                    accordion.setSelectedIndex(selectedIndex);
+                    consumed = true;
+                }
+            }
+        }
+
+        return consumed;
+    }
+
     // Accordion events
     @Override
     public void panelInserted(Accordion accordion, int index) {
@@ -769,6 +870,9 @@ public class TerraAccordionSkin extends ContainerSkin
         } else {
             Button button = panelHeaders.get(selectedIndex);
             button.setSelected(true);
+
+            Component selectedPanel = accordion.getPanels().get(selectedIndex);
+            selectedPanel.requestFocus();
         }
 
         invalidateComponent();

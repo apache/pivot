@@ -227,6 +227,11 @@ public class Accordion extends Container {
     }
 
     public void setSelectedIndex(int selectedIndex) {
+        if (selectedIndex < -1
+            || selectedIndex > panels.getLength() - 1) {
+            throw new IndexOutOfBoundsException();
+        }
+
         int previousSelectedIndex = this.selectedIndex;
 
         if (previousSelectedIndex != selectedIndex) {
