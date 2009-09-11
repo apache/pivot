@@ -231,7 +231,9 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
             menu.requestFocus();
         }
 
-        ApplicationContext.queueCallback(new RepositionCallback());
+        if (menuPopup.isAutoClose()) {
+            ApplicationContext.queueCallback(new RepositionCallback());
+        }
     }
 
     @Override
