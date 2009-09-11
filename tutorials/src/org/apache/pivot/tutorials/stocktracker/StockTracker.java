@@ -334,7 +334,6 @@ public class StockTracker implements Application {
             int index = tableData.add(stockQuote);
 
             stocksTableView.setSelectedIndex(index);
-            System.out.println(index);
         }
 
         symbolTextInput.setText("");
