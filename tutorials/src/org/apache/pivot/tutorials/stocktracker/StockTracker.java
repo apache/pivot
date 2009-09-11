@@ -260,7 +260,13 @@ public class StockTracker implements Application {
                 if (task == getQuery) {
                     Sequence<Span> selectedRanges = stocksTableView.getSelectedRanges();
 
-                    List<StockQuote> quotes = (List<StockQuote>)task.getResult();
+                    List<Object> quotes = (List<Object>)task.getResult();
+
+                    // Preserve any existing sort
+                    List<Object> tableData = (List<Object>)stocksTableView.getTableData();
+                    Comparator<Object> comparator = tableData.getComparator();
+                    quotes.setComparator(comparator);
+
                     stocksTableView.setTableData(quotes);
 
                     if (selectedRanges.getLength() > 0) {
