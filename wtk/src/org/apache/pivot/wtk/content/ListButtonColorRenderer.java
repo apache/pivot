@@ -35,6 +35,15 @@ public class ListButtonColorRenderer extends ImageView
     }
 
     @Override
+    public void setSize(int width, int height) {
+        super.setSize(width, height);
+
+        // Since this component doesn't have a parent, it won't be validated
+        // via layout; ensure that it is valid here
+        validate();
+    }
+
+    @Override
     public void render(Object data, Button button, boolean highlighted) {
         Color color;
         if (data instanceof ColorItem) {

@@ -206,6 +206,8 @@ public class Text extends Shape {
             // Text must have a fill
             throw new IllegalArgumentException();
         }
+
+        super.setFill(fill);
     }
 
     @Override

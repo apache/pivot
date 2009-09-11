@@ -65,11 +65,12 @@ public class Drawing extends Image {
     private DrawingListenerList drawingListeners = new DrawingListenerList();
 
     public Drawing() {
-        this(new Canvas());
+        this(640, 480);
     }
 
-    public Drawing(Canvas canvas) {
-        setCanvas(canvas);
+    public Drawing(int width, int height) {
+        setCanvas(new Canvas());
+        setSize(width, height);
     }
 
     public Canvas getCanvas() {
