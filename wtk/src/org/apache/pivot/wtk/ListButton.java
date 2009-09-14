@@ -260,13 +260,13 @@ public class ListButton extends Button {
 
     @SuppressWarnings("unchecked")
     public void setSelectedItem(Object item) {
-        if (item == null) {
-            throw new IllegalArgumentException("item is null");
-        }
+        int index = -1;
 
-        int index = ((List<Object>)listData).indexOf(item);
-        if (index == -1) {
-            throw new IllegalArgumentException("\"" + item + "\" is not a valid selection.");
+        if (item != null) {
+            index = ((List<Object>)listData).indexOf(item);
+            if (index == -1) {
+                throw new IllegalArgumentException("\"" + item + "\" is not a valid selection.");
+            }
         }
 
         setSelectedIndex(index);
