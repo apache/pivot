@@ -24,7 +24,7 @@ import java.awt.geom.RectangularShape;
 import java.awt.geom.RoundRectangle2D;
 
 import org.apache.pivot.util.ListenerList;
-
+import org.apache.pivot.wtk.Point;
 
 /**
  * Shape representing a rectangle.
@@ -45,8 +45,10 @@ public class Rectangle extends Shape {
         }
     }
 
+    // TODO Use only RoundRectangle2D.Float when Sun fixes rendering issues with zero-value
+    // arc width and height
     private RectangularShape rectangularShape = new Rectangle2D.Float();
-    private int cornerRadius = 0;
+    private java.awt.Shape boundingShape = null;
 
     private RectangleListenerList rectangleListeners = new RectangleListenerList();
 
@@ -67,18 +69,16 @@ public class Rectangle extends Shape {
     }
 
     public void setSize(int width, int height) {
-        int previousWidth = getWidth();
-        int previousHeight = getHeight();
+        int previousWidth = (int)rectangularShape.getWidth();
+        int previousHeight = (int)rectangularShape.getHeight();
         if (previousWidth != width
             || previousHeight != height) {
-            if (cornerRadius == 0) {
-                Rectangle2D.Float rectangle2D
-                    = (Rectangle2D.Float)rectangularShape;
+            if (rectangularShape instanceof Rectangle2D) {
+                Rectangle2D.Float rectangle2D = (Rectangle2D.Float)rectangularShape;
                 rectangle2D.width = width;
                 rectangle2D.height = height;
             } else {
-                RoundRectangle2D.Float roundRectangle2D
-                    = (RoundRectangle2D.Float)rectangularShape;
+                RoundRectangle2D.Float roundRectangle2D = (RoundRectangle2D.Float)rectangularShape;
                 roundRectangle2D.width = width;
                 roundRectangle2D.height = height;
             }
@@ -89,24 +89,47 @@ public class Rectangle extends Shape {
     }
 
     public int getCornerRadius() {
+        int cornerRadius;
+        if (rectangularShape instanceof Rectangle2D) {
+            cornerRadius = 0;
+        } else {
+            RoundRectangle2D.Float roundRectangle2D = (RoundRectangle2D.Float)rectangularShape;
+            cornerRadius = (int)roundRectangle2D.archeight;
+        }
+
         return cornerRadius;
     }
 
     public void setCornerRadius(int cornerRadius) {
-        int previousCornerRadius = this.cornerRadius;
-        if (previousCornerRadius != cornerRadius) {
-            this.cornerRadius = cornerRadius;
+        int previousCornerRadius = getCornerRadius();
 
-            if (cornerRadius == 0) {
-                rectangularShape = new Rectangle2D.Float(0, 0, getWidth(), getHeight());
-            } else {
-                rectangularShape = new RoundRectangle2D.Float(0, 0, getWidth(), getHeight(),
-                    cornerRadius, cornerRadius);
-            }
+        int width = getWidth();
+        int height = getHeight();
 
-            update();
-            rectangleListeners.cornerRadiusChanged(this, previousCornerRadius);
+        if (cornerRadius == 0) {
+            Rectangle2D.Float rectangle2D = new Rectangle2D.Float();
+            rectangle2D.width = width;
+            rectangle2D.height = height;
+
+            rectangularShape = new Rectangle2D.Float();
+        } else {
+            RoundRectangle2D.Float roundRectangle2D = new RoundRectangle2D.Float();
+            roundRectangle2D.width = width;
+            roundRectangle2D.height = height;
+            roundRectangle2D.arcwidth = cornerRadius;
+            roundRectangle2D.archeight = cornerRadius;
+
+            rectangularShape = roundRectangle2D;
         }
+
+        invalidate();
+
+        rectangleListeners.cornerRadiusChanged(this, previousCornerRadius);
+    }
+
+    @Override
+    public boolean contains(int x, int y) {
+        return boundingShape.contains(x, y);
     }
 
     @Override
@@ -127,12 +150,28 @@ public class Rectangle extends Shape {
     }
 
     @Override
+    protected void invalidate() {
+        super.invalidate();
+        boundingShape = null;
+    }
+
+    @Override
     protected void validate() {
+        if (boundingShape == null) {
+            if (getStroke() == null) {
+                boundingShape = rectangularShape;
+            } else {
+                int strokeThickness = getStrokeThickness();
+                BasicStroke basicStroke = new BasicStroke(strokeThickness);
+                boundingShape = basicStroke.createStrokedShape(rectangularShape);
+            }
+        }
+
         if (!isValid()) {
-            int strokeThickness = getStrokeThickness();
-            setBounds(-strokeThickness / 2, -strokeThickness / 2,
-                (int)rectangularShape.getWidth() + strokeThickness,
-                (int)rectangularShape.getHeight() + strokeThickness);
+            java.awt.Rectangle bounds = boundingShape.getBounds();
+
+            Point origin = getOrigin();
+            setBounds(origin.x + bounds.x, origin.y + bounds.y, bounds.width, bounds.height);
         }
     }
 

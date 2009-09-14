@@ -22,6 +22,7 @@ import java.awt.Paint;
 import java.awt.geom.Ellipse2D;
 
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.wtk.Point;
 
 
 /**
@@ -38,6 +39,7 @@ public class Ellipse extends Shape {
     }
 
     private Ellipse2D.Float ellipse2D = new Ellipse2D.Float();
+    private java.awt.Shape boundingShape = null;
 
     private EllipseListenerList ellipseListeners = new EllipseListenerList();
 
@@ -70,6 +72,11 @@ public class Ellipse extends Shape {
     }
 
     @Override
+    public boolean contains(int x, int y) {
+        return boundingShape.contains(x, y);
+    }
+
+    @Override
     public void draw(Graphics2D graphics) {
         Paint fill = getFill();
         if (fill != null) {
@@ -87,12 +94,28 @@ public class Ellipse extends Shape {
     }
 
     @Override
+    protected void invalidate() {
+        super.invalidate();
+        boundingShape = null;
+    }
+
+    @Override
     protected void validate() {
+        if (boundingShape == null) {
+            if (getStroke() == null) {
+                boundingShape = ellipse2D;
+            } else {
+                int strokeThickness = getStrokeThickness();
+                BasicStroke basicStroke = new BasicStroke(strokeThickness);
+                boundingShape = basicStroke.createStrokedShape(ellipse2D);
+            }
+        }
+
         if (!isValid()) {
-            int strokeThickness = getStrokeThickness();
-            setBounds(-strokeThickness / 2, -strokeThickness / 2,
-                (int)ellipse2D.width + strokeThickness,
-                (int)ellipse2D.height + strokeThickness);
+            java.awt.Rectangle bounds = boundingShape.getBounds();
+
+            Point origin = getOrigin();
+            setBounds(origin.x + bounds.x, origin.y + bounds.y, bounds.width, bounds.height);
         }
     }
 

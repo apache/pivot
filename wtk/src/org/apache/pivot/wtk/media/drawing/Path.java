@@ -652,6 +652,15 @@ public class Path extends Shape
      * {@inheritDoc}
      */
     @Override
+    public boolean contains(int x, int y) {
+        // TODO
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void draw(Graphics2D graphics) {
         Paint fill = getFill();
         if (fill != null) {

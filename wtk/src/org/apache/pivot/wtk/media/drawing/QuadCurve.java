@@ -135,6 +135,12 @@ public class QuadCurve extends Shape {
     }
 
     @Override
+    public boolean contains(int x, int y) {
+        // TODO
+        return false;
+    }
+
+    @Override
     public void draw(Graphics2D graphics) {
         Paint fill = getFill();
         if (fill != null) {

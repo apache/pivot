@@ -473,7 +473,10 @@ public abstract class Shape {
         update();
 
         bounds = new Bounds(x, y, width, height);
-        transformedBounds = transform(bounds.x, bounds.y, bounds.width, bounds.height);
+
+        transformedBounds = transform(0, 0, bounds.width, bounds.height);
+        transformedBounds = new Bounds(bounds.x + transformedBounds.x, bounds.y + transformedBounds.y,
+            transformedBounds.width, transformedBounds.height);
 
         // Repaint the region currently occupied by this shape
         update();
@@ -489,6 +492,8 @@ public abstract class Shape {
         validate();
         return transformedBounds;
     }
+
+    public abstract boolean contains(int x, int y);
 
     public Paint getFill() {
         return fill;

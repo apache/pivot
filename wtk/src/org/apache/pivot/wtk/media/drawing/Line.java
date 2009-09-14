@@ -121,6 +121,12 @@ public class Line extends Shape {
     }
 
     @Override
+    public boolean contains(int x, int y) {
+        // TODO
+        return false;
+    }
+
+    @Override
     public void draw(Graphics2D graphics) {
         Paint stroke = getStroke();
         int strokeThickness = getStrokeThickness();

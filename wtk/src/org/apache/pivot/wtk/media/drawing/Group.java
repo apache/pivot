@@ -18,6 +18,8 @@ package org.apache.pivot.wtk.media.drawing;
 
 import java.awt.Graphics2D;
 import java.awt.Paint;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.NoninvertibleTransformException;
 import java.util.Iterator;
 
 import org.apache.pivot.collections.ArrayList;
@@ -25,6 +27,7 @@ import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.Bounds;
+import org.apache.pivot.wtk.Point;
 
 
 /**
@@ -63,6 +66,63 @@ public class Group extends Shape implements Sequence<Shape>, Iterable<Shape> {
     @Override
     public void setStrokeThickness(int strokeThickness) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean contains(int x, int y) {
+        // TODO
+        return false;
+    }
+
+    public Shape getShapeAt(int x, int y) {
+        Shape shape = null;
+
+        int i = shapes.getLength() - 1;
+        while (i >= 0) {
+            shape = shapes.get(i);
+            Bounds transformedBounds = shape.getTransformedBounds();
+
+            if (transformedBounds.contains(x, y)) {
+                Point origin = shape.getOrigin();
+
+                // Transform into shape coordinates
+                AffineTransform affineTransform = shape.getTransforms().getAffineTransform();
+                java.awt.Point location = new java.awt.Point(x - origin.x, y - origin.y);
+
+                try {
+                    affineTransform.inverseTransform(location, location);
+                    if (shape.contains(location.x, location.y)) {
+                        break;
+                    }
+                } catch (NoninvertibleTransformException exception) {
+                    // No-op
+                }
+            }
+
+            i--;
+        }
+
+        if (i < 0) {
+            shape = null;
+        }
+
+        return shape;
+    }
+
+    public Shape getDescendantAt(int x, int y) {
+        Shape shape = getShapeAt(x, y);
+
+        if (shape instanceof Group) {
+            Group group = (Group)shape;
+            Point origin = group.getOrigin();
+            shape = group.getDescendantAt(x - origin.x, y - origin.y);
+        }
+
+        if (shape == null) {
+            shape = this;
+        }
+
+        return shape;
     }
 
     @Override

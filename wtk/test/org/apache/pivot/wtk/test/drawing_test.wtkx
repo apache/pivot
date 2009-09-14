@@ -17,12 +17,29 @@ limitations under the License.
 -->
 
 <Window xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:media="org.apache.pivot.wtk.media"
+    xmlns:drawing="org.apache.pivot.wtk.media.drawing"
     xmlns="org.apache.pivot.wtk">
     <content>
-        <ScrollPane>
-            <view>
-                <ImageView styles="{backgroundColor:'#999999'}" image="@sample.wtkd"/>
-            </view>
-        </ScrollPane>
+        <ImageView wtkx:id="imageView"
+            styles="{horizontalAlignment:'left', verticalAlignment:'top', backgroundColor:'#999999'}">
+            <image>
+                <media:Drawing width="640" height="480">
+                    <canvas>
+                        <drawing:Canvas>
+                            <drawing:Rectangle x="0" y="0" width="120" height="60"
+                                fill="#ff0000" stroke=""/>
+                            <drawing:Ellipse x="60" y="30" width="120" height="60"
+                                fill="#00ff00" stroke="#000000" strokeThickness="10">
+                                <transforms>
+                                    <drawing:Shape.Scale x="0.5" y="0.5"/>
+                                    <drawing:Shape.Translate x="40" y="40"/>
+                                </transforms>
+                            </drawing:Ellipse>
+                        </drawing:Canvas>
+                    </canvas>
+                </media:Drawing>
+            </image>
+        </ImageView>
     </content>
 </Window>
