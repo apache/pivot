@@ -39,7 +39,7 @@ public class Ellipse extends Shape {
     }
 
     private Ellipse2D.Float ellipse2D = new Ellipse2D.Float();
-    private java.awt.Shape boundingShape = null;
+    private java.awt.Shape strokeShape = null;
 
     private EllipseListenerList ellipseListeners = new EllipseListenerList();
 
@@ -73,7 +73,9 @@ public class Ellipse extends Shape {
 
     @Override
     public boolean contains(int x, int y) {
-        return boundingShape.contains(x, y);
+        return (ellipse2D.contains(x, y)
+            || (strokeShape != null
+                && strokeShape.contains(x, y)));
     }
 
     @Override
@@ -86,32 +88,26 @@ public class Ellipse extends Shape {
 
         Paint stroke = getStroke();
         if (stroke != null) {
-            int strokeThickness = getStrokeThickness();
             graphics.setPaint(stroke);
-            graphics.setStroke(new BasicStroke(strokeThickness));
-            graphics.draw(ellipse2D);
+            graphics.fill(strokeShape);
         }
-    }
-
-    @Override
-    protected void invalidate() {
-        super.invalidate();
-        boundingShape = null;
     }
 
     @Override
     protected void validate() {
-        if (boundingShape == null) {
+        if (!isValid()) {
+            java.awt.Shape boundingShape;
+
             if (getStroke() == null) {
+                strokeShape = null;
                 boundingShape = ellipse2D;
             } else {
                 int strokeThickness = getStrokeThickness();
                 BasicStroke basicStroke = new BasicStroke(strokeThickness);
-                boundingShape = basicStroke.createStrokedShape(ellipse2D);
+                strokeShape = basicStroke.createStrokedShape(ellipse2D);
+                boundingShape = strokeShape;
             }
-        }
 
-        if (!isValid()) {
             java.awt.Rectangle bounds = boundingShape.getBounds();
 
             Point origin = getOrigin();

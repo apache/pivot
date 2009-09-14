@@ -80,22 +80,25 @@ public class Group extends Shape implements Sequence<Shape>, Iterable<Shape> {
         int i = shapes.getLength() - 1;
         while (i >= 0) {
             shape = shapes.get(i);
-            Bounds transformedBounds = shape.getTransformedBounds();
 
-            if (transformedBounds.contains(x, y)) {
-                Point origin = shape.getOrigin();
+            if (shape.isVisible()) {
+                Bounds transformedBounds = shape.getTransformedBounds();
 
-                // Transform into shape coordinates
-                AffineTransform affineTransform = shape.getTransforms().getAffineTransform();
-                java.awt.Point location = new java.awt.Point(x - origin.x, y - origin.y);
+                if (transformedBounds.contains(x, y)) {
+                    Point origin = shape.getOrigin();
 
-                try {
-                    affineTransform.inverseTransform(location, location);
-                    if (shape.contains(location.x, location.y)) {
-                        break;
+                    // Transform into shape coordinates
+                    AffineTransform affineTransform = shape.getTransforms().getAffineTransform();
+                    java.awt.Point location = new java.awt.Point(x - origin.x, y - origin.y);
+
+                    try {
+                        affineTransform.inverseTransform(location, location);
+                        if (shape.contains(location.x, location.y)) {
+                            break;
+                        }
+                    } catch (NoninvertibleTransformException exception) {
+                        // No-op
                     }
-                } catch (NoninvertibleTransformException exception) {
-                    // No-op
                 }
             }
 

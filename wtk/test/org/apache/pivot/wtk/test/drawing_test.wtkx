@@ -27,14 +27,18 @@ limitations under the License.
                 <media:Drawing width="640" height="480">
                     <canvas>
                         <drawing:Canvas>
+                            <!--
                             <drawing:Rectangle x="0" y="0" width="120" height="60"
                                 fill="#ff0000" stroke=""/>
+                            -->
                             <drawing:Ellipse x="60" y="30" width="120" height="60"
                                 fill="#00ff00" stroke="#000000" strokeThickness="10">
+                                <!--
                                 <transforms>
-                                    <drawing:Shape.Scale x="0.5" y="0.5"/>
                                     <drawing:Shape.Translate x="40" y="40"/>
+                                    <drawing:Shape.Scale x="0.5" y="0.5"/>
                                 </transforms>
+                                -->
                             </drawing:Ellipse>
                         </drawing:Canvas>
                     </canvas>

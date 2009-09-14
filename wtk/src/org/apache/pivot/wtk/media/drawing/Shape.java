@@ -384,7 +384,7 @@ public abstract class Shape {
 
     private int x = 0;
     private int y = 0;
-    private Bounds bounds = new Bounds(0, 0, 0, 0);
+    private Bounds bounds = null;
     private Bounds transformedBounds = new Bounds(0, 0, 0, 0);
 
     private Paint fill = null;
@@ -392,8 +392,6 @@ public abstract class Shape {
     private int strokeThickness = 1;
 
     private boolean visible = true;
-
-    private boolean valid = true;
 
     private ArrayList<Transform> transforms = new ArrayList<Transform>();
     private TransformSequence transformSequence = new TransformSequence();
@@ -430,17 +428,24 @@ public abstract class Shape {
     }
 
     public void setOrigin(int x, int y) {
-        // Repaint the region formerly occupied by this shape
-        update();
+        int previousX = this.x;
+        int previousY = this.y;
+        if (previousX != x
+            || previousY != y) {
+            // Repaint the region formerly occupied by this shape
+            update();
 
-        this.x = x;
-        this.y = y;
+            this.x = x;
+            this.y = y;
 
-        // Repaint the region currently occupied by this shape
-        update();
+            // Repaint the region currently occupied by this shape
+            update();
+
+            shapeListeners.originChanged(this, previousX, previousY);
+        }
     }
 
-    public void setOrigin(Point origin) {
+    public final void setOrigin(Point origin) {
         if (origin == null) {
             throw new IllegalArgumentException("origin is null.");
         }
@@ -500,8 +505,12 @@ public abstract class Shape {
     }
 
     public void setFill(Paint fill) {
-        this.fill = fill;
-        update();
+        Paint previousFill = this.fill;
+        if (previousFill != fill) {
+            this.fill = fill;
+            update();
+            shapeListeners.fillChanged(this, previousFill);
+        }
     }
 
     public final void setFill(String fill) {
@@ -517,8 +526,12 @@ public abstract class Shape {
     }
 
     public void setStroke(Paint stroke) {
-        this.stroke = stroke;
-        update();
+        Paint previousStroke = this.stroke;
+        if (previousStroke != stroke) {
+            this.stroke = stroke;
+            update();
+            shapeListeners.strokeChanged(this, previousStroke);
+        }
     }
 
     public final void setStroke(String stroke) {
@@ -538,9 +551,12 @@ public abstract class Shape {
             throw new IllegalArgumentException();
         }
 
-        this.strokeThickness = strokeThickness;
-
-        invalidate();
+        int previousStrokeThickness = this.strokeThickness;
+        if (previousStrokeThickness != strokeThickness) {
+            this.strokeThickness = strokeThickness;
+            invalidate();
+            shapeListeners.strokeThicknessChanged(this, previousStrokeThickness);
+        }
     }
 
     public boolean isVisible() {
@@ -562,8 +578,8 @@ public abstract class Shape {
     }
 
     protected void invalidate() {
-        if (valid) {
-            valid = false;
+        if (bounds != null) {
+            bounds = null;
 
             if (parent != null) {
                 parent.invalidate();
@@ -574,7 +590,7 @@ public abstract class Shape {
     protected abstract void validate();
 
     protected boolean isValid() {
-        return valid;
+        return (bounds != null);
     }
 
     protected final void update() {

@@ -48,7 +48,7 @@ public class Rectangle extends Shape {
     // TODO Use only RoundRectangle2D.Float when Sun fixes rendering issues with zero-value
     // arc width and height
     private RectangularShape rectangularShape = new Rectangle2D.Float();
-    private java.awt.Shape boundingShape = null;
+    private java.awt.Shape strokeShape = null;
 
     private RectangleListenerList rectangleListeners = new RectangleListenerList();
 
@@ -129,7 +129,9 @@ public class Rectangle extends Shape {
 
     @Override
     public boolean contains(int x, int y) {
-        return boundingShape.contains(x, y);
+        return (rectangularShape.contains(x, y)
+            || (strokeShape != null
+                && strokeShape.contains(x, y)));
     }
 
     @Override
@@ -142,32 +144,26 @@ public class Rectangle extends Shape {
 
         Paint stroke = getStroke();
         if (stroke != null) {
-            int strokeThickness = getStrokeThickness();
             graphics.setPaint(stroke);
-            graphics.setStroke(new BasicStroke(strokeThickness));
-            graphics.draw(rectangularShape);
+            graphics.fill(strokeShape);
         }
-    }
-
-    @Override
-    protected void invalidate() {
-        super.invalidate();
-        boundingShape = null;
     }
 
     @Override
     protected void validate() {
-        if (boundingShape == null) {
+        if (!isValid()) {
+            java.awt.Shape boundingShape;
+
             if (getStroke() == null) {
+                strokeShape = null;
                 boundingShape = rectangularShape;
             } else {
                 int strokeThickness = getStrokeThickness();
                 BasicStroke basicStroke = new BasicStroke(strokeThickness);
-                boundingShape = basicStroke.createStrokedShape(rectangularShape);
+                strokeShape = basicStroke.createStrokedShape(rectangularShape);
+                boundingShape = strokeShape;
             }
-        }
 
-        if (!isValid()) {
             java.awt.Rectangle bounds = boundingShape.getBounds();
 
             Point origin = getOrigin();
