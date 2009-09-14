@@ -695,8 +695,6 @@ public class Path extends Shape
                 (int)Math.ceil(bounds.getWidth() + 2 * radius + 1),
                 (int)Math.ceil(bounds.getHeight() + 2 * radius + 1));
         }
-
-        super.validate();
     }
 
     /**

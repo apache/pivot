@@ -186,8 +186,6 @@ public class CubicCurve extends Shape {
                 (int)Math.ceil(boundingRectangle.getWidth() + radius * 2),
                 (int)Math.ceil(boundingRectangle.getHeight() + radius * 2));
         }
-
-        super.validate();
     }
 
     public ListenerList<CubicCurveListener> getCubicCurveListeners() {

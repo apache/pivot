@@ -202,8 +202,6 @@ public class Arc extends Shape {
                 (int)arc2D.width + strokeThickness,
                 (int)arc2D.height + strokeThickness);
         }
-
-        super.validate();
     }
 
     public ListenerList<ArcListener> getArcListeners() {

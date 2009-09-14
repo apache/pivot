@@ -146,8 +146,6 @@ public class Line extends Shape {
                 (int)Math.ceil(right - left + radius * 2 + 1),
                 (int)Math.ceil(bottom - top + radius * 2 + 1));
         }
-
-        super.validate();
     }
 
     public ListenerList<LineListener> getLineListeners() {

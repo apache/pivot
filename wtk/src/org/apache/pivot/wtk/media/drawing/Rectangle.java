@@ -134,8 +134,6 @@ public class Rectangle extends Shape {
                 (int)rectangularShape.getWidth() + strokeThickness,
                 (int)rectangularShape.getHeight() + strokeThickness);
         }
-
-        super.validate();
     }
 
     public ListenerList<RectangleListener> getRectangleListeners() {

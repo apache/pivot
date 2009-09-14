@@ -306,8 +306,6 @@ public class Text extends Shape {
 
             setBounds(0, 0, width, height);
         }
-
-        super.validate();
     }
 
     public ListenerList<TextListener> getTextListeners() {

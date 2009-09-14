@@ -134,8 +134,6 @@ public class Group extends Shape implements Sequence<Shape>, Iterable<Shape> {
 
             setBounds(left, top, right - left + 1, bottom - top + 1);
         }
-
-        super.validate();
     }
 
     public int add(Shape shape) {

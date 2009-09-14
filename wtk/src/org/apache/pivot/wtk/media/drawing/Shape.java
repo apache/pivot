@@ -456,6 +456,7 @@ public abstract class Shape {
      * y coordinates are relative to the parent group's origin.
      */
     public Bounds getBounds() {
+        validate();
         return bounds;
     }
 
@@ -468,7 +469,14 @@ public abstract class Shape {
      * @param height
      */
     protected void setBounds(int x, int y, int width, int height) {
+        // Repaint the region formerly occupied by this shape
+        update();
+
         bounds = new Bounds(x, y, width, height);
+        transformedBounds = transform(bounds.x, bounds.y, bounds.width, bounds.height);
+
+        // Repaint the region currently occupied by this shape
+        update();
     }
 
     /**
@@ -558,30 +566,14 @@ public abstract class Shape {
         }
     }
 
-    protected void validate() {
-        if (!valid) {
-            // Repaint the region formerly occupied by this shape
-            update(transformedBounds.x, transformedBounds.y,
-                transformedBounds.width, transformedBounds.height, false);
-
-            // Transform the current bounds
-            transformedBounds = transform(bounds.x, bounds.y, bounds.width,
-                bounds.height);
-
-            // Repaint the region currently occupied by this shape
-            update(transformedBounds.x, transformedBounds.y,
-                transformedBounds.width, transformedBounds.height, false);
-
-            valid = true;
-        }
-    }
+    protected abstract void validate();
 
     protected boolean isValid() {
         return valid;
     }
 
     protected final void update() {
-        update(bounds);
+        update(transformedBounds);
     }
 
     protected final void update(Bounds bounds) {
@@ -589,20 +581,11 @@ public abstract class Shape {
     }
 
     protected void update(int x, int y, int width, int height) {
-        update(x, y, width, height, true);
-    }
-
-    private void update(int x, int y, int width, int height, boolean transform) {
-        if (transform) {
-            Bounds bounds = transform(x, y, width, height);
-            x = bounds.x;
-            y = bounds.y;
-            width = bounds.width;
-            height = bounds.height;
-        }
+        Bounds transformedBounds = transform(x, y, width, height);
 
         if (parent != null) {
-            parent.update(this.x + x, this.y + y, width, height);
+            parent.update(transformedBounds.x + x, transformedBounds.y + y,
+                transformedBounds.width, transformedBounds.height);
         }
     }
 

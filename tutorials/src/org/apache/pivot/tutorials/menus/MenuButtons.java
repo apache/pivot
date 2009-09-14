@@ -22,6 +22,7 @@ import java.awt.Paint;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Action;
 import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.ImageView;
@@ -32,6 +33,7 @@ import org.apache.pivot.wtk.content.ColorItem;
 import org.apache.pivot.wtk.media.Drawing;
 import org.apache.pivot.wtk.media.drawing.Ellipse;
 import org.apache.pivot.wtk.media.drawing.Rectangle;
+import org.apache.pivot.wtk.media.drawing.Shape;
 import org.apache.pivot.wtk.media.drawing.Text;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
@@ -51,7 +53,7 @@ public class MenuButtons implements Application {
 
                 ellipse.setStroke((Paint)null);
                 ellipse.setFill(getSelectedColor());
-                ellipse.setOrigin(getRandomLocation());
+                ellipse.setOrigin(getRandomLocation(ellipse));
 
                 drawing.getCanvas().add(ellipse);
             }
@@ -65,7 +67,7 @@ public class MenuButtons implements Application {
 
                 rectangle.setStroke((Paint)null);
                 rectangle.setFill(getSelectedColor());
-                rectangle.setOrigin(getRandomLocation());
+                rectangle.setOrigin(getRandomLocation(rectangle));
 
                 drawing.getCanvas().add(rectangle);
             }
@@ -79,7 +81,7 @@ public class MenuButtons implements Application {
                 text.setFont("Arial BOLD 24");
 
                 text.setFill(getSelectedColor());
-                text.setOrigin(getRandomLocation());
+                text.setOrigin(getRandomLocation(text));
 
                 drawing.getCanvas().add(text);
             }
@@ -129,9 +131,11 @@ public class MenuButtons implements Application {
         return colorItem.getColor();
     }
 
-    public Point getRandomLocation() {
-        int x = (int)(Math.random() * (double)drawing.getWidth());
-        int y = (int)(Math.random() * (double)drawing.getHeight() - 20);
+    public Point getRandomLocation(Shape shape) {
+        Bounds bounds = shape.getBounds();
+
+        int x = (int)(Math.random() * (double)(drawing.getWidth() - bounds.width));
+        int y = (int)(Math.random() * (double)(drawing.getHeight() - bounds.height));
 
         return new Point(x, y);
     }

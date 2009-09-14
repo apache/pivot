@@ -94,8 +94,6 @@ public class Ellipse extends Shape {
                 (int)ellipse2D.width + strokeThickness,
                 (int)ellipse2D.height + strokeThickness);
         }
-
-        super.validate();
     }
 
     public ListenerList<EllipseListener> getEllipseListeners() {
