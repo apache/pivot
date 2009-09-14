@@ -18,23 +18,29 @@ package org.apache.pivot.wtk.content;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.Transparency;
+import java.awt.image.BufferedImage;
 
 import org.apache.pivot.beans.BeanDictionary;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
-import org.apache.pivot.util.Vote;
+import org.apache.pivot.util.Filter;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.CardPane;
 import org.apache.pivot.wtk.CardPaneListener;
 import org.apache.pivot.wtk.Component;
-import org.apache.pivot.wtk.ComponentKeyListener;
 import org.apache.pivot.wtk.ComponentListener;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.ContainerMouseListener;
+import org.apache.pivot.wtk.Cursor;
 import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.DragSource;
+import org.apache.pivot.wtk.DropTarget;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Keyboard;
+import org.apache.pivot.wtk.MenuHandler;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.ScrollPane;
 import org.apache.pivot.wtk.TablePane;
@@ -45,8 +51,8 @@ import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.Viewport;
 import org.apache.pivot.wtk.ViewportListener;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtk.WindowStateListener;
 import org.apache.pivot.wtk.media.Image;
+import org.apache.pivot.wtk.media.Picture;
 import org.apache.pivot.wtk.skin.CardPaneSkin;
 
 /**
@@ -54,204 +60,401 @@ import org.apache.pivot.wtk.skin.CardPaneSkin;
  */
 public class TableViewRowEditor implements TableView.RowEditor {
     /**
-     * Paints the row being edited.
+     *
      */
-    private Image tableRowImage = new Image() {
-        @Override
-        public int getWidth() {
-            return (tableView == null) ? 0 : tableView.getRowBounds(rowIndex).width;
-        }
+    private class Delegate extends Window implements ContainerMouseListener,
+        ComponentListener, TableViewListener, TableViewRowListener {
+        /**
+         * Paints the row being edited.
+         */
+        private class RowImage extends Image {
+            @Override
+            public int getWidth() {
+                return tableView.getRowBounds(rowIndex).width;
+            }
 
-        @Override
-        public int getHeight() {
-            return (tableView == null) ? 0 : tableView.getRowBounds(rowIndex).height;
-        }
+            @Override
+            public int getHeight() {
+                return tableView.getRowBounds(rowIndex).height;
+            }
 
-        @Override
-        public void paint(Graphics2D graphics) {
-            Bounds rowBounds = tableView.getRowBounds(rowIndex);
-            int width = rowBounds.width;
-            int height = rowBounds.height;
+            @Override
+            public void paint(Graphics2D graphics) {
+                Bounds rowBounds = tableView.getRowBounds(rowIndex);
+                int width = rowBounds.width;
+                int height = rowBounds.height;
 
-            TableView.ColumnSequence columns = tableView.getColumns();
-            Component.StyleDictionary styles = tableView.getStyles();
+                TableView.ColumnSequence columns = tableView.getColumns();
+                Component.StyleDictionary styles = tableView.getStyles();
 
-            boolean rowSelected = tableView.isRowSelected(rowIndex);
-            boolean rowDisabled = tableView.isRowDisabled(rowIndex);
+                boolean rowSelected = tableView.isRowSelected(rowIndex);
+                boolean rowDisabled = tableView.isRowDisabled(rowIndex);
 
-            // Paint the background
-            Color backgroundColor = (Color)styles.get("backgroundColor");
+                // Paint the background
+                Color backgroundColor = (Color)styles.get("backgroundColor");
 
-            if (rowSelected) {
-                backgroundColor = tableView.isFocused() ?
-                    (Color)styles.get("selectionBackgroundColor") :
-                    (Color)styles.get("inactiveSelectionBackgroundColor");
-            } else {
-                Color alternateRowColor = (Color)styles.get("alternateRowColor");
+                if (rowSelected) {
+                    backgroundColor = tableView.isFocused() ?
+                        (Color)styles.get("selectionBackgroundColor") :
+                        (Color)styles.get("inactiveSelectionBackgroundColor");
+                } else {
+                    Color alternateRowColor = (Color)styles.get("alternateRowColor");
 
-                if (alternateRowColor != null && rowIndex % 2 > 0) {
-                    backgroundColor = alternateRowColor;
+                    if (alternateRowColor != null && rowIndex % 2 > 0) {
+                        backgroundColor = alternateRowColor;
+                    }
+                }
+
+                if (backgroundColor != null) {
+                    graphics.setPaint(backgroundColor);
+                    graphics.fillRect(0, 0, width, height);
+                }
+
+                // Paint the cells
+                Object tableRow = tableView.getTableData().get(rowIndex);
+                int cellX = 0;
+
+                for (int i = 0, n = columns.getLength(); i < n; i++) {
+                    TableView.Column column = columns.get(i);
+                    TableView.CellRenderer cellRenderer = column.getCellRenderer();
+
+                    int columnWidth = tableView.getColumnBounds(i).width;
+
+                    Graphics2D rendererGraphics = (Graphics2D)graphics.create(cellX, 0, columnWidth, height);
+
+                    cellRenderer.render(tableRow, tableView, column, rowSelected, false, rowDisabled);
+                    cellRenderer.setSize(columnWidth, height - 1);
+                    cellRenderer.paint(rendererGraphics);
+
+                    rendererGraphics.dispose();
+
+                    cellX += columnWidth + 1;
                 }
             }
-
-            if (backgroundColor != null) {
-                graphics.setPaint(backgroundColor);
-                graphics.fillRect(0, 0, width, height);
-            }
-
-            // Paint the cells
-            Object tableRow = tableView.getTableData().get(rowIndex);
-            int cellX = 0;
-
-            for (int i = 0, n = columns.getLength(); i < n; i++) {
-                TableView.Column column = columns.get(i);
-                TableView.CellRenderer cellRenderer = column.getCellRenderer();
-
-                int columnWidth = tableView.getColumnBounds(i).width;
-
-                Graphics2D rendererGraphics = (Graphics2D)graphics.create(cellX, 0, columnWidth, height);
-
-                cellRenderer.render(tableRow, tableView, column, rowSelected, false, rowDisabled);
-                cellRenderer.setSize(columnWidth, height - 1);
-                cellRenderer.paint(rendererGraphics);
-
-                rendererGraphics.dispose();
-
-                cellX += columnWidth + 1;
-            }
         }
-    };
 
-    /**
-     * Responsible for "edit initialization" and "edit finalization" tasks when
-     * the edit popup is opened and closed, respectively.
-     */
-    private WindowStateListener popupStateHandler = new WindowStateListener.Adapter() {
+        // Fields that determine what is being edited
+        private final TableView tableView;
+        private final int rowIndex;
+        private final int columnIndex;
+
+        // Child components
+        private ScrollPane scrollPane;
+        private CardPane cardPane;
+        private TablePane tablePane;
+
+        private boolean opening = false;
         private boolean closing = false;
 
-        @Override
-        public void windowOpened(Window window) {
-            Display display = window.getDisplay();
-            display.getContainerMouseListeners().add(displayMouseHandler);
+        private ScrollPane tableViewScrollPane = null;
 
-            tableView.getComponentListeners().add(tableViewComponentHandler);
-            tableView.getTableViewListeners().add(tableViewHandler);
-            tableView.getTableViewRowListeners().add(tableViewRowHandler);
+        @SuppressWarnings("unchecked")
+        public Delegate(TableView tableView, int rowIndex, int columnIndex) {
+            super(true);
 
-            // Scroll the editor to match that of the table view
-            if (tableViewScrollPane != null) {
-                editorScrollPane.setScrollLeft(tableViewScrollPane.getScrollLeft());
+            this.tableView = tableView;
+            this.rowIndex = rowIndex;
+            this.columnIndex = columnIndex;
+
+            // Get the row data, represented as a Dictionary
+            Object tableRow = tableView.getTableData().get(rowIndex);
+            Dictionary<String, Object> rowData;
+            BeanDictionary beanDictionary = null;
+            if (tableRow instanceof Dictionary<?, ?>) {
+                rowData = (Dictionary<String, Object>)tableRow;
+            } else {
+                beanDictionary = new BeanDictionary(tableRow);
+                rowData = beanDictionary;
             }
 
-            // Reset to the image card
-            editorCardPane.getStyles().put("selectionChangeEffect", (CardPaneSkin.SelectionChangeEffect)null);
-            editorCardPane.setSelectedIndex(IMAGE_CARD_INDEX);
+            // Set up the editor component hierarchy
+            scrollPane = new ScrollPane(ScrollPane.ScrollBarPolicy.NEVER,
+                ScrollPane.ScrollBarPolicy.FILL);
+            setContent(scrollPane);
 
-            // Set the editor focus after the flip has completed
-            editorCardPane.getCardPaneListeners().add(new CardPaneListener.Adapter() {
+            cardPane = new CardPane();
+            scrollPane.setView(cardPane);
+
+            cardPane.add(new ImageView(new RowImage()));
+            cardPane.setSelectedIndex(0);
+            cardPane.getStyles().put("selectionChangeEffect",
+                CardPaneSkin.SelectionChangeEffect.VERTICAL_FLIP);
+
+            tablePane = new TablePane();
+            tablePane.getStyles().put("horizontalSpacing", 1);
+            cardPane.add(tablePane);
+
+            TablePane.Row tablePaneRow = new TablePane.Row(1, true);
+            tablePane.getRows().add(tablePaneRow);
+
+            // Match the table pane's columns to the table view's
+            TableView.ColumnSequence tableViewColumns = tableView.getColumns();
+            TablePane.ColumnSequence tablePaneColumns = tablePane.getColumns();
+
+            for (int i = 0, n = tableViewColumns.getLength(); i < n; i++) {
+                // Add a new column to the table pane to match the table view column
+                TablePane.Column tablePaneColumn = new TablePane.Column();
+                tablePaneColumns.add(tablePaneColumn);
+
+                // Size the table pane column to match that of the table view
+                // column. We get the real-time column width from the table view as
+                // opposed to the width property of the column, because the latter
+                // may represent a relative width, and we need the actual width
+                int columnWidth = tableView.getColumnBounds(i).width;
+                tablePaneColumn.setWidth(columnWidth);
+
+                // Determine which component to use as the editor for this column
+                String columnName = tableViewColumns.get(i).getName();
+                Component editorComponent = cellEditors.get(columnName);
+
+                // Default to a TextInput editor
+                if (editorComponent == null) {
+                    TextInput editorTextInput = new TextInput();
+                    editorTextInput.setTextKey(columnName);
+                    editorComponent = editorTextInput;
+                }
+
+                // Disable the component for read-only properties
+                if (beanDictionary != null
+                    && beanDictionary.isReadOnly(columnName)) {
+                    editorComponent.setEnabled(false);
+                }
+
+                // Add the editor component to the table pane
+                tablePaneRow.add(editorComponent);
+
+                if (columnWidth == 0) {
+                    // Remove non-visible components from focus contention
+                    editorComponent.setEnabled(false);
+                }
+            }
+
+            // Load the row data into the editor components
+            tablePane.load(rowData);
+
+            // Keep the table view's scroll in sync with the editor's
+            scrollPane.getViewportListeners().add(new ViewportListener.Adapter() {
                 @Override
-                public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex) {
-                    Component focusComponent = editorTablePane.getCellComponent(0, columnIndex);
-                    focusComponent.requestFocus();
-                    editorCardPane.getCardPaneListeners().remove(this);
+                public void scrollLeftChanged(Viewport viewport, int previousScrollLeft) {
+                    if (tableViewScrollPane != null) {
+                        tableViewScrollPane.setScrollLeft(viewport.getScrollLeft());
+                    }
                 }
             });
-
-            // Flip to the editor card
-            editorCardPane.getStyles().put("selectionChangeEffect", CardPaneSkin.SelectionChangeEffect.VERTICAL_FLIP);
-            editorCardPane.setSelectedIndex(EDITOR_CARD_INDEX);
         }
 
         @Override
-        public Vote previewWindowClose(Window window) {
-            Vote vote = Vote.APPROVE;
+        public void open(Display display) {
+            if (!isOpen()) {
+                super.open(display);
 
-            if (editorCardPane.getSelectedIndex() != IMAGE_CARD_INDEX) {
-                vote = Vote.DEFER;
+                if (isOpen()) {
+                    display.getContainerMouseListeners().add(this);
+                    tableView.getComponentListeners().add(this);
+                    tableView.getTableViewListeners().add(this);
+                    tableView.getTableViewRowListeners().add(this);
 
-                if (!closing) {
-                    closing = true;
+                    // Scroll the editor to match that of the table view
+                    if (tableViewScrollPane != null) {
+                        scrollPane.setScrollLeft(tableViewScrollPane.getScrollLeft());
+                    }
 
-                    // Disable the table pane to prevent user input
-                    editorTablePane.setEnabled(false);
+                    // Set the opening flag
+                    opening = true;
 
-                    // Flip to the image card
-                    editorCardPane.setSelectedIndex(IMAGE_CARD_INDEX);
-
-                    // Close the popup when the selected index changes
-                    editorCardPane.getCardPaneListeners().add(new CardPaneListener.Adapter() {
+                    // Give the editor focus after the transition has completed.
+                    // When the transition starts, the row image is the selected
+                    // card. so we have to wait until the selected index changes
+                    // to give focus to the appropriate editor component
+                    cardPane.getCardPaneListeners().add(new CardPaneListener.Adapter() {
                         @Override
                         public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex) {
-                            popup.close();
-                            editorCardPane.getCardPaneListeners().remove(this);
+                            // Clear the opening flag
+                            opening = false;
+
+                            // Focus the initial editor component
+                            Component focusComponent = tablePane.getCellComponent(0, columnIndex);
+                            focusComponent.requestFocus();
+
+                            // Remove this listener
+                            cardPane.getCardPaneListeners().remove(this);
                         }
                     });
+
+                    // Transition to the editor card
+                    cardPane.setSelectedIndex(EDITOR_CARD_INDEX);
                 }
             }
-
-            return vote;
         }
 
         @Override
-        public void windowClosed(Window window, Display display) {
-            // Clean up
-            display.getContainerMouseListeners().remove(displayMouseHandler);
+        public void close() {
+            if (!isClosed()
+                && !opening) {
+                // Close once we've transitioned back to the image card
+                if (cardPane.getSelectedIndex() == IMAGE_CARD_INDEX) {
+                    Display display = getDisplay();
+                    display.getContainerMouseListeners().remove(this);
 
-            tableView.getComponentListeners().remove(tableViewComponentHandler);
-            tableView.getTableViewListeners().remove(tableViewHandler);
-            tableView.getTableViewRowListeners().remove(tableViewRowHandler);
+                    super.close();
+                    closing = false;
 
-            // Reset state
-            closing = false;
-            editorTablePane.setEnabled(true);
+                    // Move the owner to front
+                    getOwner().moveToFront();
 
-            // Move the owner to front
-            window.getOwner().moveToFront();
+                    // Clear the owner, or we'll leak memory!
+                    setOwner(null);
+                } else if (!closing) {
+                    closing = true;
+                    delegate = null;
 
-            // Free memory
-            tableView = null;
-            tableViewScrollPane = null;
+                    tableView.getComponentListeners().remove(this);
+                    tableView.getTableViewListeners().remove(this);
+                    tableView.getTableViewRowListeners().remove(this);
 
-            TablePane.ColumnSequence tablePaneColumns = editorTablePane.getColumns();
-            TablePane.Row tablePaneRow = editorTablePane.getRows().get(0);
-            tablePaneColumns.remove(0, tablePaneColumns.getLength());
-            tablePaneRow.remove(0, tablePaneRow.getLength());
+                    // Replace the editor card with a buffered image "snapshot"
+                    // of the editor card. This allows us to remove the editor
+                    // components without affecting the visual presentation
+                    // of the transition
+                    Image snapshot = getSnapshot(tablePane);
+                    cardPane.getStyles().put("selectionChangeEffect",
+                        (CardPaneSkin.SelectionChangeEffect)null);
+                    cardPane.remove(EDITOR_CARD_INDEX, 1);
+                    cardPane.insert(new ImageView(snapshot), EDITOR_CARD_INDEX);
+                    cardPane.setSelectedIndex(EDITOR_CARD_INDEX);
+                    cardPane.getStyles().put("selectionChangeEffect",
+                        CardPaneSkin.SelectionChangeEffect.VERTICAL_FLIP);
+
+                    // Clear the table pane row so the custom cell editors
+                    // can be re-used in the next delegate
+                    TablePane.Row tablePaneRow = tablePane.getRows().get(0);
+                    tablePaneRow.remove(0, tablePaneRow.getLength());
+
+                    // Close this delegate when the transition has completed
+                    cardPane.getCardPaneListeners().add(new CardPaneListener.Adapter() {
+                        @Override
+                        public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex) {
+                            close();
+                            cardPane.getCardPaneListeners().remove(this);
+                        }
+                    });
+
+                    // Transition to the image card
+                    cardPane.setSelectedIndex(IMAGE_CARD_INDEX);
+                }
+            }
         }
-    };
 
-    /**
-     * Responsible for saving or cancelling the edit based on the user pressing
-     * the <tt>ENTER</tt> key or the <tt>ESCAPE</tt> key, respectively.
-     */
-    private ComponentKeyListener popupKeyHandler = new ComponentKeyListener.Adapter() {
         @Override
-        public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+        protected boolean keyPressed(int keyCode, Keyboard.KeyLocation keyLocation) {
             if (keyCode == Keyboard.KeyCode.ENTER) {
                 save();
             } else if (keyCode == Keyboard.KeyCode.ESCAPE) {
                 cancel();
             }
 
-            return false;
+            return super.keyPressed(keyCode, keyLocation);
         }
-    };
 
-    /**
-     * Responsible for closing the popup whenever the user clicks outside the
-     * bounds of the popup.
-     */
-    private ContainerMouseListener displayMouseHandler = new ContainerMouseListener.Adapter() {
-        @Override
-        public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
-            // If the event occurred outside the popup, close the popup
-            Display display = (Display)container;
-            Window window = (Window)display.getComponentAt(x, y);
+        private Image getSnapshot(Component component) {
+            Image image = null;
 
-            if (popup != window &&
-                (window == null || !popup.isOwner(window))) {
-                save();
+            int width = component.getWidth();
+            int height = component.getHeight();
+
+            GraphicsConfiguration gc = component.getGraphics().getDeviceConfiguration();
+            BufferedImage bufferedImage = gc.createCompatibleImage(width, height,
+                Transparency.OPAQUE);
+
+            if (bufferedImage != null) {
+                Graphics2D graphics = (Graphics2D)bufferedImage.getGraphics();
+                component.paint(graphics);
+                image = new Picture(bufferedImage);
+                graphics.dispose();
             }
 
+            return image;
+        }
+
+        public void setTableViewScrollPane(ScrollPane tableViewScrollPane) {
+            this.tableViewScrollPane = tableViewScrollPane;
+        }
+
+        public void edit() {
+            // Calculate the visible bounds of the row
+            Bounds bounds = tableView.getRowBounds(rowIndex);
+            tableView.scrollAreaToVisible(bounds);
+            bounds = tableView.getVisibleArea(bounds);
+
+            // Open this popup over the row
+            setLocation(bounds.x, bounds.y);
+            setPreferredSize(bounds.width, bounds.height + 1);
+
+            open(tableView.getWindow());
+        }
+
+        @SuppressWarnings("unchecked")
+        public void save() {
+            List<Object> tableData = (List<Object>)tableView.getTableData();
+
+            // Get the row data, represented as a Dictionary
+            Object tableRow = tableData.get(rowIndex);
+            Dictionary<String, Object> rowData;
+            if (tableRow instanceof Dictionary<?, ?>) {
+                rowData = (Dictionary<String, Object>)tableRow;
+            } else {
+                rowData = new BeanDictionary(tableRow);
+            }
+
+            // Update the row data using data binding
+            tablePane.store(rowData);
+
+            // Modifying the table data will close this popup
+            if (tableData.getComparator() == null) {
+                tableData.update(rowIndex, tableRow);
+            } else {
+                tableData.remove(rowIndex, 1);
+                tableData.add(tableRow);
+
+                // Re-select the row, and make sure it's visible
+                int newRowIndex = tableData.indexOf(tableRow);
+                tableView.setSelectedIndex(newRowIndex);
+                tableView.scrollAreaToVisible(tableView.getRowBounds(newRowIndex));
+            }
+        }
+
+        public void cancel() {
+            // Close without updating the table data
+            close();
+        }
+
+        // ContainerMouseListener methods
+
+        @Override
+        public boolean mouseMove(Container container, int x, int y) {
+            return false;
+        }
+
+        @Override
+        public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
+            if (!opening
+                && !closing) {
+                // If the event occurred outside the popup, close the popup
+                Display display = (Display)container;
+                Window window = (Window)display.getComponentAt(x, y);
+
+                if (window != this &&
+                    (window == null || !isOwner(window))) {
+                    save();
+                }
+            }
+
+            return opening;
+        }
+
+        @Override
+        public boolean mouseUp(Container container, Mouse.Button button, int x, int y) {
+            // No-op
             return false;
         }
 
@@ -264,46 +467,108 @@ public class TableViewRowEditor implements TableView.RowEditor {
             Display display = (Display)container;
             Window window = (Window)display.getComponentAt(x, y);
 
-            if (popup != window &&
-                (window == null || !popup.isOwner(window))) {
+            if (window != this &&
+                (window == null || !isOwner(window))) {
                 consumed = true;
             }
 
             return consumed;
         }
-    };
 
-    /**
-     * Responsible for cancelling the edit if the table view's size changes.
-     */
-    private ComponentListener tableViewComponentHandler = new ComponentListener.Adapter() {
+        // ComponentListener methods
+
+        @Override
+        public void parentChanged(Component component, Container previousParent) {
+            // No-op
+        }
+
         @Override
         public void sizeChanged(Component component, int previousWidth, int previousHeight) {
             cancel();
         }
-    };
 
-    /**
-     * Responsible for cancelling the edit if any relevant changes are made to
-     * the table view while we're editing.
-     */
-    private TableViewListener tableViewHandler = new TableViewListener.Adapter() {
+        @Override
+        public void preferredSizeChanged(Component component, int previousPreferredWidth,
+            int previousPreferredHeight) {
+            // No-op
+        }
+
+        @Override
+        public void preferredWidthLimitsChanged(Component component, int previousMinimumPreferredWidth,
+            int previousMaximumPreferredWidth) {
+            // No-op
+        }
+
+        @Override
+        public void preferredHeightLimitsChanged(Component component, int previousMinimumPreferredHeight,
+            int previousMaximumPreferredHeight) {
+            // No-op
+        }
+
+        @Override
+        public void locationChanged(Component component, int previousX, int previousY) {
+            // No-op
+        }
+
+        @Override
+        public void visibleChanged(Component component) {
+            cancel();
+        }
+
+        @Override
+        public void styleUpdated(Component component, String styleKey, Object previousValue) {
+            // No-op
+        }
+
+        @Override
+        public void cursorChanged(Component component, Cursor previousCursor) {
+            // No-op
+        }
+
+        @Override
+        public void tooltipTextChanged(Component component, String previousTooltipText) {
+            // No-op
+        }
+
+        @Override
+        public void dragSourceChanged(Component component, DragSource previousDragSource) {
+            // No-op
+        }
+
+        @Override
+        public void dropTargetChanged(Component component, DropTarget previousDropTarget) {
+            // No-op
+        }
+
+        @Override
+        public void menuHandlerChanged(Component component, MenuHandler previousMenuHandler) {
+            // No-op
+        }
+
+        // TableViewListener methods
+
+        @Override
+        public void tableDataChanged(TableView tableView, List<?> previousTableData) {
+            cancel();
+        }
+
         @Override
         public void rowEditorChanged(TableView tableView, TableView.RowEditor previousRowEditor) {
             cancel();
         }
 
         @Override
-        public void tableDataChanged(TableView tableView, List<?> previousTableData) {
-            cancel();
+        public void selectModeChanged(TableView tableView, TableView.SelectMode previousSelectMode) {
+            // No-op
         }
-    };
 
-    /**
-     * Responsible for cancelling the edit if any changes are made to the table
-     * data while we're editing.
-     */
-    private TableViewRowListener tableViewRowHandler = new TableViewRowListener.Adapter() {
+        @Override
+        public void disabledRowFilterChanged(TableView tableView, Filter<?> previousDisabledRowFilter) {
+            // No-op
+        }
+
+        // TableViewRowListener methods
+
         @Override
         public void rowInserted(TableView tableView, int index) {
             cancel();
@@ -315,7 +580,7 @@ public class TableViewRowEditor implements TableView.RowEditor {
         }
 
         @Override
-        public void rowsSorted(TableView tableView) {
+        public void rowUpdated(TableView tableView, int index) {
             cancel();
         }
 
@@ -325,66 +590,17 @@ public class TableViewRowEditor implements TableView.RowEditor {
         }
 
         @Override
-        public void rowUpdated(TableView tableView, int index) {
+        public void rowsSorted(TableView tableView) {
             cancel();
         }
-    };
+    }
 
-    /**
-     * Responsible for keeping the table view scroll pane's scrollLeft value in
-     * sync with the editor scroll pane's scrollLeft value.
-     */
-    private ViewportListener viewportHandler = new ViewportListener.Adapter() {
-        @Override
-        public void scrollLeftChanged(Viewport viewport, int previousScrollLeft) {
-            if (tableViewScrollPane != null) {
-                tableViewScrollPane.setScrollLeft(viewport.getScrollLeft());
-            }
-        }
-    };
+    private Delegate delegate = null;
 
-    // Transient data (only meaningful during editing)
-    private TableView tableView = null;
-    private ScrollPane tableViewScrollPane = null;
-    private int rowIndex;
-    private int columnIndex;
-
-    // Editor components (persistent across edits)
-    private Window popup;
-    private ScrollPane editorScrollPane;
-    private CardPane editorCardPane;
-    private TablePane editorTablePane;
-
-    // Cell editors specified by the caller
     private HashMap<String, Component> cellEditors = new HashMap<String, Component>();
 
     private static final int IMAGE_CARD_INDEX = 0;
     private static final int EDITOR_CARD_INDEX = 1;
-
-    /**
-     * Creates a new <tt>TableViewRowEditor</tt>. This object should only be
-     * associated with one table view at a time.
-     */
-    public TableViewRowEditor() {
-        // Create the editor components
-        popup = new Window(true);
-        editorScrollPane = new ScrollPane(ScrollPane.ScrollBarPolicy.NEVER, ScrollPane.ScrollBarPolicy.FILL);
-        editorCardPane = new CardPane();
-        editorTablePane = new TablePane();
-        editorTablePane.getStyles().put("horizontalSpacing", 1);
-
-        // Set up the editor component hierarchy
-        popup.setContent(editorScrollPane);
-        editorScrollPane.setView(editorCardPane);
-        editorCardPane.add(new ImageView(tableRowImage));
-        editorCardPane.add(editorTablePane);
-        editorTablePane.getRows().add(new TablePane.Row(1, true));
-
-        // Register listeners
-        editorScrollPane.getViewportListeners().add(viewportHandler);
-        popup.getWindowStateListeners().add(popupStateHandler);
-        popup.getComponentKeyListeners().add(popupKeyHandler);
-    }
 
     /**
      * Gets this row editor's cell editor dictionary. The caller may specify
@@ -407,151 +623,64 @@ public class TableViewRowEditor implements TableView.RowEditor {
     }
 
     /**
-     * Gets the container that houses the individual cell editors.
-     *
-     * @return
-     * This editor's container editor
+     * {@inheritDoc}
      */
-    protected final Container getRowEditor() {
-        return editorTablePane;
+    @Override
+    public void edit(TableView tableView, int rowIndex, int columnIndex) {
+        if (delegate != null) {
+            throw new IllegalStateException("Edit already in progress.");
+        }
+
+        if (tableView == null) {
+            throw new IllegalArgumentException("tableView is null.");
+        }
+
+        if (rowIndex < 0
+            || rowIndex >= tableView.getTableData().getLength()
+            || columnIndex < 0
+            || columnIndex >= tableView.getColumns().getLength()) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        delegate = new Delegate(tableView, rowIndex, columnIndex);
+
+        Container tableViewParent = tableView.getParent();
+        if (tableViewParent instanceof ScrollPane) {
+            delegate.setTableViewScrollPane((ScrollPane)tableViewParent);
+        }
+
+        delegate.edit();
     }
 
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings("unchecked")
-    @Override
-    public void edit(TableView tableView, int rowIndex, int columnIndex) {
-        if (isEditing()) {
-            throw new IllegalStateException();
-        }
-
-        this.tableView = tableView;
-        this.rowIndex = rowIndex;
-        this.columnIndex = columnIndex;
-
-        Container tableViewParent = tableView.getParent();
-        if (tableViewParent instanceof ScrollPane) {
-            tableViewScrollPane = (ScrollPane)tableViewParent;
-        }
-
-        // Get the row data, represented as a Dictionary
-        Object tableRow = tableView.getTableData().get(rowIndex);
-        Dictionary<String, Object> rowData;
-        BeanDictionary beanDictionary = null;
-        if (tableRow instanceof Dictionary<?, ?>) {
-            rowData = (Dictionary<String, Object>)tableRow;
-        } else {
-            beanDictionary = new BeanDictionary(tableRow);
-            rowData = beanDictionary;
-        }
-
-        // Match the table pane's columns to the table view's
-        TableView.ColumnSequence tableViewColumns = tableView.getColumns();
-        TablePane.ColumnSequence tablePaneColumns = editorTablePane.getColumns();
-        TablePane.Row tablePaneRow = editorTablePane.getRows().get(0);
-
-        for (int i = 0, n = tableViewColumns.getLength(); i < n; i++) {
-            // Add a new column to the table pane to match the table view column
-            TablePane.Column tablePaneColumn = new TablePane.Column();
-            tablePaneColumns.add(tablePaneColumn);
-
-            // Size the table pane column to match that of the table view
-            // column. We get the real-time column width from the table view as
-            // opposed to the width property of the column, because the latter
-            // may represent a relative width, and we need the actual width
-            int columnWidth = tableView.getColumnBounds(i).width;
-            tablePaneColumn.setWidth(columnWidth, false);
-
-            // Determine which component to use as the editor for this column
-            String columnName = tableViewColumns.get(i).getName();
-            Component editorComponent = cellEditors.get(columnName);
-
-            // Default to a TextInput editor
-            if (editorComponent == null) {
-                TextInput editorTextInput = new TextInput();
-                editorTextInput.setTextKey(columnName);
-                editorComponent = editorTextInput;
-            }
-
-            // Disable the component for read-only properties
-            if (beanDictionary != null
-                && beanDictionary.isReadOnly(columnName)) {
-                editorComponent.setEnabled(false);
-            }
-
-            // Add the editor component to the table pane
-            tablePaneRow.add(editorComponent);
-
-            if (columnWidth == 0) {
-                // Remove non-visible components from focus contention
-                editorComponent.setEnabled(false);
-            }
-        }
-
-        // Load the row data into the editor components
-        editorTablePane.load(rowData);
-
-        // Calculate the visible bounds of the row
-        Bounds editBounds = tableView.getRowBounds(rowIndex);
-        tableView.scrollAreaToVisible(editBounds);
-        editBounds = tableView.getVisibleArea(editBounds);
-
-        // Open the popup over the row
-        popup.setLocation(editBounds.x, editBounds.y);
-        popup.setPreferredSize(editBounds.width, editBounds.height + 1);
-        popup.open(tableView.getWindow());
-    }
-
     @Override
     public boolean isEditing() {
-        return (tableView != null);
+        return (delegate != null);
     }
 
-    @SuppressWarnings("unchecked")
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void save() {
-        if (!isEditing()) {
-            throw new IllegalStateException();
+        if (delegate == null) {
+            throw new IllegalStateException("No edit in progress.");
         }
 
-        List<Object> tableData = (List<Object>)tableView.getTableData();
-
-        // Get the row data, represented as a Dictionary
-        Object tableRow = tableData.get(rowIndex);
-        Dictionary<String, Object> rowData;
-        if (tableRow instanceof Dictionary<?, ?>) {
-            rowData = (Dictionary<String, Object>)tableRow;
-        } else {
-            rowData = new BeanDictionary(tableRow);
-        }
-
-        // Update the row data using data binding
-        editorTablePane.store(rowData);
-
-        // Notifying the parent will close the popup
-        if (tableData.getComparator() == null) {
-            tableData.update(rowIndex, tableRow);
-        } else {
-            // Save local reference to members variables before they get cleared
-            TableView tableView = this.tableView;
-
-            tableData.remove(rowIndex, 1);
-            tableData.add(tableRow);
-
-            // Re-select the row, and make sure it's visible
-            rowIndex = tableData.indexOf(tableRow);
-            tableView.setSelectedIndex(rowIndex);
-            tableView.scrollAreaToVisible(tableView.getRowBounds(rowIndex));
-        }
+        delegate.save();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void cancel() {
-        if (!isEditing()) {
-            throw new IllegalStateException();
+        if (delegate == null) {
+            throw new IllegalStateException("No edit in progress.");
         }
 
-        popup.close();
+        delegate.cancel();
     }
 }
