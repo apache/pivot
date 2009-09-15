@@ -20,8 +20,6 @@ import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 
-import org.apache.pivot.wtk.Point;
-
 /**
  * Abstract base class for shapes that encapsulate a Java2D shape.
  */
@@ -80,9 +78,7 @@ public abstract class Shape2D extends Shape {
             }
 
             java.awt.Rectangle bounds = boundingShape.getBounds();
-
-            Point origin = getOrigin();
-            setBounds(origin.x + bounds.x, origin.y + bounds.y, bounds.width, bounds.height);
+            setBounds(bounds.x, bounds.y, bounds.width, bounds.height);
         }
     }
 

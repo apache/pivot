@@ -457,7 +457,7 @@ public abstract class Shape {
      *
      * @return
      * The component's bounding area, including the stroke thickness. The x and
-     * y coordinates are relative to the parent group's origin.
+     * y coordinates are relative to the shape's origin.
      */
     public Bounds getBounds() {
         validate();
@@ -465,7 +465,8 @@ public abstract class Shape {
     }
 
     /**
-     * Sets the bounds of the shape.
+     * Sets the bounds of the shape. The x and y coordinates are relative to the
+     * shape's origin.
      *
      * @param x
      * @param y
@@ -477,7 +478,7 @@ public abstract class Shape {
         update();
 
         bounds = new Bounds(x, y, width, height);
-        transformedBounds = transform(this.x + x, this.y + y, width, height);
+        transformedBounds = transform(x, y, width, height);
 
         // Repaint the region currently occupied by this shape
         update();
