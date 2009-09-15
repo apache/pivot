@@ -99,8 +99,8 @@ public class Drawing extends Image {
                 height = 0;
             } else {
                 Bounds canvasBounds = canvas.getBounds();
-                width = Math.max(canvasBounds.x, 0) + canvasBounds.width;
-                height = Math.max(canvasBounds.y, 0) + canvasBounds.height;
+                width = canvasBounds.x + canvasBounds.width;
+                height = canvasBounds.y + canvasBounds.height;
             }
 
             size = new Dimensions(width, height);
