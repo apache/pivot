@@ -23,6 +23,7 @@ import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.util.Filter;
+import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.CardPane;
 import org.apache.pivot.wtk.CardPaneListener;
@@ -161,13 +162,6 @@ public class TableViewRowEditor implements TableView.RowEditor {
                 TablePane.Column tablePaneColumn = new TablePane.Column();
                 tablePaneColumns.add(tablePaneColumn);
 
-                // Size the table pane column to match that of the table view
-                // column. We get the real-time column width from the table view as
-                // opposed to the width property of the column, because the latter
-                // may represent a relative width, and we need the actual width
-                int columnWidth = tableView.getColumnBounds(i).width;
-                tablePaneColumn.setWidth(columnWidth);
-
                 // Determine which component to use as the editor for this column
                 String columnName = tableViewColumns.get(i).getName();
                 Component editorComponent = cellEditors.get(columnName);
@@ -182,16 +176,11 @@ public class TableViewRowEditor implements TableView.RowEditor {
                 // Disable the component for read-only properties
                 if (beanDictionary != null
                     && beanDictionary.isReadOnly(columnName)) {
-                    editorComponent.setEnabled(false);
+                    editorComponent.getUserData().put(READ_ONLY_KEY, true);
                 }
 
                 // Add the editor component to the table pane
                 tablePaneRow.add(editorComponent);
-
-                if (columnWidth == 0) {
-                    // Remove non-visible components from focus contention
-                    editorComponent.setEnabled(false);
-                }
             }
 
             // Load the row data into the editor components
@@ -320,16 +309,8 @@ public class TableViewRowEditor implements TableView.RowEditor {
         }
 
         public void edit() {
-            // Calculate the visible bounds of the row
-            Bounds bounds = tableView.getRowBounds(rowIndex);
-            tableView.scrollAreaToVisible(bounds);
-            bounds = tableView.getVisibleArea(bounds);
-
-            // Open this popup over the row
-            setLocation(bounds.x, bounds.y);
-            setPreferredSize(bounds.width, bounds.height + 1);
-
             open(tableView.getWindow());
+            reposition();
         }
 
         @SuppressWarnings("unchecked")
@@ -365,6 +346,41 @@ public class TableViewRowEditor implements TableView.RowEditor {
         public void cancel() {
             // Close without updating the table data
             close();
+        }
+
+        /**
+         * Repositions this editor popup to be over the row being edited.
+         */
+        private void reposition() {
+            // Calculate the visible bounds of the row
+            Bounds bounds = tableView.getRowBounds(rowIndex);
+            tableView.scrollAreaToVisible(bounds);
+            bounds = tableView.getVisibleArea(bounds);
+
+            // Open this popup over the row
+            setLocation(bounds.x, bounds.y);
+            setPreferredSize(bounds.width, bounds.height + 1);
+
+            // Match the table pane's columns to the table view's
+            TableView.ColumnSequence tableViewColumns = tableView.getColumns();
+            TablePane.ColumnSequence tablePaneColumns = tablePane.getColumns();
+            TablePane.Row tablePaneRow = tablePane.getRows().get(0);
+
+            for (int i = 0, n = tableViewColumns.getLength(); i < n; i++) {
+                TablePane.Column tablePaneColumn = tablePaneColumns.get(i);
+
+                // Size the table pane column to match that of the table view
+                // column. We get the real-time column width from the table view as
+                // opposed to the width property of the column, because the latter
+                // may represent a relative width, and we need the actual width
+                int columnWidth = tableView.getColumnBounds(i).width;
+                tablePaneColumn.setWidth(columnWidth);
+
+                // Disable the editor component if necessary
+                Component editorComponent = tablePaneRow.get(i);
+                boolean isReadOnly = (editorComponent.getUserData().get(READ_ONLY_KEY) != null);
+                editorComponent.setEnabled(!isReadOnly && columnWidth > 0);
+            }
         }
 
         // ContainerMouseListener methods
@@ -423,7 +439,13 @@ public class TableViewRowEditor implements TableView.RowEditor {
 
         @Override
         public void sizeChanged(Component component, int previousWidth, int previousHeight) {
-            cancel();
+            // Re-position the editor popup
+            ApplicationContext.queueCallback(new Runnable() {
+                @Override
+                public void run() {
+                    reposition();
+                }
+            });
         }
 
         @Override
@@ -542,6 +564,8 @@ public class TableViewRowEditor implements TableView.RowEditor {
 
     private static final int IMAGE_CARD_INDEX = 0;
     private static final int EDITOR_CARD_INDEX = 1;
+
+    private static final String READ_ONLY_KEY = "readOnly";
 
     /**
      * Gets this row editor's cell editor dictionary. The caller may specify
