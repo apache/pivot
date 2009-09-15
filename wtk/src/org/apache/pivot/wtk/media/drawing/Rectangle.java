@@ -16,20 +16,16 @@
  */
 package org.apache.pivot.wtk.media.drawing;
 
-import java.awt.BasicStroke;
-import java.awt.Graphics2D;
-import java.awt.Paint;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RectangularShape;
 import java.awt.geom.RoundRectangle2D;
 
 import org.apache.pivot.util.ListenerList;
-import org.apache.pivot.wtk.Point;
 
 /**
  * Shape representing a rectangle.
  */
-public class Rectangle extends Shape {
+public class Rectangle extends Shape2D {
     private static class RectangleListenerList extends ListenerList<RectangleListener>
         implements RectangleListener {
         public void sizeChanged(Rectangle rectangle, int previousWidth, int previousHeight) {
@@ -48,7 +44,6 @@ public class Rectangle extends Shape {
     // TODO Use only RoundRectangle2D.Float when Sun fixes rendering issues with zero-value
     // arc width and height
     private RectangularShape rectangularShape = new Rectangle2D.Float();
-    private java.awt.Shape strokeShape = null;
 
     private RectangleListenerList rectangleListeners = new RectangleListenerList();
 
@@ -128,47 +123,8 @@ public class Rectangle extends Shape {
     }
 
     @Override
-    public boolean contains(int x, int y) {
-        return (rectangularShape.contains(x, y)
-            || (strokeShape != null
-                && strokeShape.contains(x, y)));
-    }
-
-    @Override
-    public void draw(Graphics2D graphics) {
-        Paint fill = getFill();
-        if (fill != null) {
-            graphics.setPaint(fill);
-            graphics.fill(rectangularShape);
-        }
-
-        Paint stroke = getStroke();
-        if (stroke != null) {
-            graphics.setPaint(stroke);
-            graphics.fill(strokeShape);
-        }
-    }
-
-    @Override
-    protected void validate() {
-        if (!isValid()) {
-            java.awt.Shape boundingShape;
-
-            if (getStroke() == null) {
-                strokeShape = null;
-                boundingShape = rectangularShape;
-            } else {
-                int strokeThickness = getStrokeThickness();
-                BasicStroke basicStroke = new BasicStroke(strokeThickness);
-                strokeShape = basicStroke.createStrokedShape(rectangularShape);
-                boundingShape = strokeShape;
-            }
-
-            java.awt.Rectangle bounds = boundingShape.getBounds();
-
-            Point origin = getOrigin();
-            setBounds(origin.x + bounds.x, origin.y + bounds.y, bounds.width, bounds.height);
-        }
+    protected java.awt.Shape getShape2D() {
+        return rectangularShape;
     }
 
     public ListenerList<RectangleListener> getRectangleListeners() {

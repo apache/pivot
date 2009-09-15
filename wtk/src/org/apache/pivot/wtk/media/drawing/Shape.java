@@ -31,7 +31,6 @@ import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Point;
 
-
 /**
  * Abstract base class for shapes.
  * <p>

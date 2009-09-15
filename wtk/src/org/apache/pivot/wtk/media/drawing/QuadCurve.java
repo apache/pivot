@@ -16,19 +16,14 @@
  */
 package org.apache.pivot.wtk.media.drawing;
 
-import java.awt.BasicStroke;
-import java.awt.Graphics2D;
-import java.awt.Paint;
 import java.awt.geom.QuadCurve2D;
-import java.awt.geom.Rectangle2D;
 
 import org.apache.pivot.util.ListenerList;
-
 
 /**
  * Shape representing a quad curve.
  */
-public class QuadCurve extends Shape {
+public class QuadCurve extends Shape2D {
     private static class QuadCurveListenerList extends ListenerList<QuadCurveListener>
         implements QuadCurveListener {
         public void endpointsChanged(QuadCurve quadCurve, int previousX1, int previousY1,
@@ -135,41 +130,8 @@ public class QuadCurve extends Shape {
     }
 
     @Override
-    public boolean contains(int x, int y) {
-        // TODO
-        return false;
-    }
-
-    @Override
-    public void draw(Graphics2D graphics) {
-        Paint fill = getFill();
-        if (fill != null) {
-            graphics.setPaint(fill);
-            graphics.fill(quadCurve2D);
-        }
-
-        Paint stroke = getStroke();
-        if (stroke != null) {
-            int strokeThickness = getStrokeThickness();
-            graphics.setPaint(stroke);
-            graphics.setStroke(new BasicStroke(strokeThickness));
-            graphics.draw(quadCurve2D);
-        }
-    }
-
-    @Override
-    protected void validate() {
-        if (!isValid()) {
-            // Over-estimate the bounds to keep the logic simple
-            int strokeThickness = getStrokeThickness();
-            double radius = (strokeThickness / Math.cos(Math.PI / 4)) / 2;
-
-            Rectangle2D boundingRectangle = quadCurve2D.getBounds2D();
-            setBounds((int)Math.floor(boundingRectangle.getX() - radius),
-                (int)Math.floor(boundingRectangle.getY() - radius),
-                (int)Math.ceil(boundingRectangle.getWidth() + radius * 2),
-                (int)Math.ceil(boundingRectangle.getHeight() + radius * 2));
-        }
+    protected java.awt.Shape getShape2D() {
+        return quadCurve2D;
     }
 
     public ListenerList<QuadCurveListener> getQuadCurveListeners() {

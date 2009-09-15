@@ -70,8 +70,16 @@ public class Group extends Shape implements Sequence<Shape>, Iterable<Shape> {
 
     @Override
     public boolean contains(int x, int y) {
-        // TODO
-        return false;
+        boolean contains = false;
+
+        for (Shape shape : shapes) {
+            if (shape.contains(x - shape.getX(), y - shape.getY())) {
+                contains = true;
+                break;
+            }
+        }
+
+        return contains;
     }
 
     public Shape getShapeAt(int x, int y) {
@@ -197,6 +205,7 @@ public class Group extends Shape implements Sequence<Shape>, Iterable<Shape> {
         }
     }
 
+    @Override
     public int add(Shape shape) {
         int index = shapes.getLength();
         insert(shape, index);
@@ -204,6 +213,7 @@ public class Group extends Shape implements Sequence<Shape>, Iterable<Shape> {
         return index;
     }
 
+    @Override
     public void insert(Shape shape, int index) {
         if (shape.getParent() != null) {
             throw new IllegalArgumentException();
@@ -215,10 +225,12 @@ public class Group extends Shape implements Sequence<Shape>, Iterable<Shape> {
         groupListeners.shapeInserted(this, index);
     }
 
+    @Override
     public Shape update(int index, Shape shape) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public int remove(Shape shape) {
         int index = shapes.indexOf(shape);
         if (index != -1) {
@@ -228,6 +240,7 @@ public class Group extends Shape implements Sequence<Shape>, Iterable<Shape> {
         return index;
     }
 
+    @Override
     public Sequence<Shape> remove(int index, int count) {
         Sequence<Shape> removed = shapes.remove(index, count);
 
@@ -244,18 +257,22 @@ public class Group extends Shape implements Sequence<Shape>, Iterable<Shape> {
         return removed;
     }
 
+    @Override
     public Shape get(int index) {
         return shapes.get(index);
     }
 
+    @Override
     public int indexOf(Shape shape) {
         return shapes.indexOf(shape);
     }
 
+    @Override
     public int getLength() {
         return shapes.getLength();
     }
 
+    @Override
     public Iterator<Shape> iterator() {
         return new ImmutableIterator<Shape>(shapes.iterator());
     }

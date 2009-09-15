@@ -16,9 +16,6 @@
  */
 package org.apache.pivot.wtk.media.drawing;
 
-import java.awt.BasicStroke;
-import java.awt.Graphics2D;
-import java.awt.Paint;
 import java.awt.geom.Arc2D;
 
 import org.apache.pivot.util.ListenerList;
@@ -26,7 +23,7 @@ import org.apache.pivot.util.ListenerList;
 /**
  * Shape representing an arc.
  */
-public class Arc extends Shape {
+public class Arc extends Shape2D {
     /**
      * Enum representing an arc closure type.
      */
@@ -178,36 +175,8 @@ public class Arc extends Shape {
     }
 
     @Override
-    public boolean contains(int x, int y) {
-        // TODO
-        return false;
-    }
-
-    @Override
-    public void draw(Graphics2D graphics) {
-        Paint fill = getFill();
-        if (fill != null) {
-            graphics.setPaint(fill);
-            graphics.fill(arc2D);
-        }
-
-        Paint stroke = getStroke();
-        if (stroke != null) {
-            int strokeThickness = getStrokeThickness();
-            graphics.setPaint(stroke);
-            graphics.setStroke(new BasicStroke(strokeThickness));
-            graphics.draw(arc2D);
-        }
-    }
-
-    @Override
-    protected void validate() {
-        if (!isValid()) {
-            int strokeThickness = getStrokeThickness();
-            setBounds(-strokeThickness / 2, -strokeThickness / 2,
-                (int)arc2D.width + strokeThickness,
-                (int)arc2D.height + strokeThickness);
-        }
+    protected java.awt.Shape getShape2D() {
+        return arc2D;
     }
 
     public ListenerList<ArcListener> getArcListeners() {

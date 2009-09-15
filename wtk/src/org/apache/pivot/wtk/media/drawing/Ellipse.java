@@ -16,19 +16,14 @@
  */
 package org.apache.pivot.wtk.media.drawing;
 
-import java.awt.BasicStroke;
-import java.awt.Graphics2D;
-import java.awt.Paint;
 import java.awt.geom.Ellipse2D;
 
 import org.apache.pivot.util.ListenerList;
-import org.apache.pivot.wtk.Point;
-
 
 /**
  * Shape representing an ellipse.
  */
-public class Ellipse extends Shape {
+public class Ellipse extends Shape2D {
     private static class EllipseListenerList extends ListenerList<EllipseListener>
         implements EllipseListener {
         public void sizeChanged(Ellipse ellipse, int previousWidth, int previousHeight) {
@@ -39,7 +34,6 @@ public class Ellipse extends Shape {
     }
 
     private Ellipse2D.Float ellipse2D = new Ellipse2D.Float();
-    private java.awt.Shape strokeShape = null;
 
     private EllipseListenerList ellipseListeners = new EllipseListenerList();
 
@@ -62,57 +56,21 @@ public class Ellipse extends Shape {
     public void setSize(int width, int height) {
         int previousWidth = (int)ellipse2D.width;
         int previousHeight = (int)ellipse2D.height;
+
         if (previousWidth != width
             || previousHeight != height) {
             ellipse2D.width = width;
             ellipse2D.height = height;
+
             invalidate();
+
             ellipseListeners.sizeChanged(this, previousWidth, previousHeight);
         }
     }
 
     @Override
-    public boolean contains(int x, int y) {
-        return (ellipse2D.contains(x, y)
-            || (strokeShape != null
-                && strokeShape.contains(x, y)));
-    }
-
-    @Override
-    public void draw(Graphics2D graphics) {
-        Paint fill = getFill();
-        if (fill != null) {
-            graphics.setPaint(fill);
-            graphics.fill(ellipse2D);
-        }
-
-        Paint stroke = getStroke();
-        if (stroke != null) {
-            graphics.setPaint(stroke);
-            graphics.fill(strokeShape);
-        }
-    }
-
-    @Override
-    protected void validate() {
-        if (!isValid()) {
-            java.awt.Shape boundingShape;
-
-            if (getStroke() == null) {
-                strokeShape = null;
-                boundingShape = ellipse2D;
-            } else {
-                int strokeThickness = getStrokeThickness();
-                BasicStroke basicStroke = new BasicStroke(strokeThickness);
-                strokeShape = basicStroke.createStrokedShape(ellipse2D);
-                boundingShape = strokeShape;
-            }
-
-            java.awt.Rectangle bounds = boundingShape.getBounds();
-
-            Point origin = getOrigin();
-            setBounds(origin.x + bounds.x, origin.y + bounds.y, bounds.width, bounds.height);
-        }
+    protected java.awt.Shape getShape2D() {
+        return ellipse2D;
     }
 
     public ListenerList<EllipseListener> getEllipseListeners() {

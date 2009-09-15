@@ -218,8 +218,12 @@ public class Text extends Shape {
 
     @Override
     public boolean contains(int x, int y) {
-        // TODO
-        return false;
+        Bounds bounds = getBounds();
+
+        return (x >= 0
+            && x < bounds.width
+            && y >= 0
+            && y < bounds.height);
     }
 
     @Override

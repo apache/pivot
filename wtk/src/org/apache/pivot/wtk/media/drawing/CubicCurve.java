@@ -16,19 +16,14 @@
  */
 package org.apache.pivot.wtk.media.drawing;
 
-import java.awt.BasicStroke;
-import java.awt.Graphics2D;
-import java.awt.Paint;
 import java.awt.geom.CubicCurve2D;
-import java.awt.geom.Rectangle2D;
 
 import org.apache.pivot.util.ListenerList;
-
 
 /**
  * Shape representing a cubic curve.
  */
-public class CubicCurve extends Shape {
+public class CubicCurve extends Shape2D {
     private static class CubicCurveListenerList extends ListenerList<CubicCurveListener>
         implements CubicCurveListener {
         public void endpointsChanged(CubicCurve cubicCurve, int previousX1, int previousY1,
@@ -157,41 +152,8 @@ public class CubicCurve extends Shape {
     }
 
     @Override
-    public boolean contains(int x, int y) {
-        // TODO
-        return false;
-    }
-
-    @Override
-    public void draw(Graphics2D graphics) {
-        Paint fill = getFill();
-        if (fill != null) {
-            graphics.setPaint(fill);
-            graphics.fill(cubicCurve2D);
-        }
-
-        Paint stroke = getStroke();
-        if (stroke != null) {
-            int strokeThickness = getStrokeThickness();
-            graphics.setPaint(stroke);
-            graphics.setStroke(new BasicStroke(strokeThickness));
-            graphics.draw(cubicCurve2D);
-        }
-    }
-
-    @Override
-    protected void validate() {
-        if (!isValid()) {
-            // Over-estimate the bounds to keep the logic simple
-            int strokeThickness = getStrokeThickness();
-            double radius = (strokeThickness / Math.cos(Math.PI / 4)) / 2;
-
-            Rectangle2D boundingRectangle = cubicCurve2D.getBounds2D();
-            setBounds((int)Math.floor(boundingRectangle.getX() - radius),
-                (int)Math.floor(boundingRectangle.getY() - radius),
-                (int)Math.ceil(boundingRectangle.getWidth() + radius * 2),
-                (int)Math.ceil(boundingRectangle.getHeight() + radius * 2));
-        }
+    protected java.awt.Shape getShape2D() {
+        return cubicCurve2D;
     }
 
     public ListenerList<CubicCurveListener> getCubicCurveListeners() {

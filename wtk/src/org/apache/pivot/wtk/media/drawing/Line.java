@@ -16,19 +16,16 @@
  */
 package org.apache.pivot.wtk.media.drawing;
 
-import java.awt.BasicStroke;
-import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.geom.Line2D;
 
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.Point;
 
-
 /**
  * Shape representing a line.
  */
-public class Line extends Shape {
+public class Line extends Shape2D {
     private static class LineListenerList extends ListenerList<LineListener>
         implements LineListener {
         public void endpointsChanged(Line line, int previousX1, int previousY1,
@@ -121,37 +118,8 @@ public class Line extends Shape {
     }
 
     @Override
-    public boolean contains(int x, int y) {
-        // TODO
-        return false;
-    }
-
-    @Override
-    public void draw(Graphics2D graphics) {
-        Paint stroke = getStroke();
-        int strokeThickness = getStrokeThickness();
-        graphics.setPaint(stroke);
-        graphics.setStroke(new BasicStroke(strokeThickness));
-        graphics.draw(line2D);
-    }
-
-    @Override
-    protected void validate() {
-        if (!isValid()) {
-            // Over-estimate the bounds to keep the logic simple
-            int strokeThickness = getStrokeThickness();
-            double radius = (strokeThickness / Math.cos(Math.PI / 4)) / 2;
-
-            double top = Math.min(line2D.y1, line2D.y2);
-            double left = Math.min(line2D.x1, line2D.x2);
-            double bottom = Math.max(line2D.y1, line2D.y2);
-            double right = Math.max(line2D.x1, line2D.x2);
-
-            setBounds((int)Math.floor(left - radius),
-                (int)Math.floor(top - radius),
-                (int)Math.ceil(right - left + radius * 2 + 1),
-                (int)Math.ceil(bottom - top + radius * 2 + 1));
-        }
+    protected java.awt.Shape getShape2D() {
+        return line2D;
     }
 
     public ListenerList<LineListener> getLineListeners() {
