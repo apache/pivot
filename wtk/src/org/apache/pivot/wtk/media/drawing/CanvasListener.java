@@ -30,4 +30,11 @@ public interface CanvasListener {
      * @param height
      */
     public void regionUpdated(Canvas canvas, int x, int y, int width, int height);
+
+    /**
+     * Called when a canvas has been invalidated.
+     *
+     * @param canvas
+     */
+    public void canvasInvalidated(Canvas canvas);
 }

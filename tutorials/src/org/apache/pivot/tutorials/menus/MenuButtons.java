@@ -95,10 +95,10 @@ public class MenuButtons implements Application {
         colorListButton = (ListButton)wtkxSerializer.get("colorListButton");
         imageView = (ImageView)wtkxSerializer.get("imageView");
 
-        drawing = new Drawing(480, 360);
+        drawing = new Drawing();
 
         Rectangle border = new Rectangle();
-        border.setSize(479, 359);
+        border.setSize(480, 360);
         border.setFill((Paint)null);
         border.setStrokeThickness(1);
 

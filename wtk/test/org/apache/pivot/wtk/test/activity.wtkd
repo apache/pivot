@@ -16,11 +16,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Drawing width="256" height="256" background="#ffffff"
+<Drawing background="#ffffff"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk.media">
     <canvas>
         <Canvas xmlns="org.apache.pivot.wtk.media.drawing">
+            <Rectangle width="256" height="256"/>
             <Group>
                 <transforms>
                     <Shape.Translate x="128" y="128"/>

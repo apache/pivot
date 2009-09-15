@@ -24,13 +24,11 @@ limitations under the License.
         <ImageView wtkx:id="imageView"
             styles="{horizontalAlignment:'left', verticalAlignment:'top', backgroundColor:'#999999'}">
             <image>
-                <media:Drawing width="640" height="480">
+                <media:Drawing>
                     <canvas>
                         <drawing:Canvas>
-                            <!--
                             <drawing:Rectangle x="0" y="0" width="120" height="60"
                                 fill="#ff0000" stroke=""/>
-                            -->
                             <drawing:Ellipse x="60" y="30" width="120" height="60"
                                 fill="#00ff00" stroke="#000000" strokeThickness="10">
                                 <!--

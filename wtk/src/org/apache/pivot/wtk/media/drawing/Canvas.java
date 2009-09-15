@@ -17,20 +17,11 @@
 package org.apache.pivot.wtk.media.drawing;
 
 import org.apache.pivot.util.ListenerList;
-import org.apache.pivot.wtk.ApplicationContext;
-
 
 /**
  * Shape representing the root of a shape hierarchy.
  */
 public class Canvas extends Group {
-    private class ValidateCallback implements Runnable {
-        public void run() {
-            validate();
-            validateCallback = null;
-        }
-    }
-
     private static class CanvasListenerList extends ListenerList<CanvasListener>
         implements CanvasListener {
         public void regionUpdated(Canvas canvas, int x, int y, int width, int height) {
@@ -38,9 +29,14 @@ public class Canvas extends Group {
                 listener.regionUpdated(canvas, x, y, width, height);
             }
         }
-    }
 
-    private ValidateCallback validateCallback = null;
+        @Override
+        public void canvasInvalidated(Canvas canvas) {
+            for (CanvasListener listener : this) {
+                listener.canvasInvalidated(canvas);
+            }
+        }
+    }
 
     @Override
     protected void setParent(Group parent) {
@@ -59,12 +55,10 @@ public class Canvas extends Group {
 
     @Override
     public void invalidate() {
-        if (validateCallback == null) {
-            validateCallback = new ValidateCallback();
-            ApplicationContext.queueCallback(validateCallback);
+        if (isValid()) {
+            super.invalidate();
+            canvasListeners.canvasInvalidated(this);
         }
-
-        super.invalidate();
     }
 
     @Override

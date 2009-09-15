@@ -22,6 +22,7 @@ import java.awt.RenderingHints;
 
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.Bounds;
+import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.media.drawing.Canvas;
 import org.apache.pivot.wtk.media.drawing.CanvasListener;
@@ -48,29 +49,62 @@ public class Drawing extends Image {
         }
     }
 
-    private Canvas canvas;
+    private Canvas canvas = null;
     private Paint background = null;
-    private int width = 0;
-    private int height = 0;
+
+    private Dimensions size = null;
 
     private CanvasListener canvasListener = new CanvasListener() {
         @Override
         public void regionUpdated(Canvas canvas, int x, int y, int width, int height) {
-            Bounds bounds = new Bounds(0, 0, Drawing.this.width, Drawing.this.height);
-            bounds = bounds.intersect(new Bounds(x, y, width, height));
-            imageListeners.regionUpdated(Drawing.this, bounds.x, bounds.y, bounds.width, bounds.height);
+            imageListeners.regionUpdated(Drawing.this, x, y, width, height);
+        }
+
+        @Override
+        public void canvasInvalidated(Canvas canvas) {
+            int previousWidth = size.width;
+            int previousHeight = size.height;
+
+            invalidate();
+
+            imageListeners.sizeChanged(Drawing.this, previousWidth, previousHeight);
         }
     };
 
     private DrawingListenerList drawingListeners = new DrawingListenerList();
 
     public Drawing() {
-        this(640, 480);
+        setCanvas(new Canvas());
     }
 
-    public Drawing(int width, int height) {
-        setCanvas(new Canvas());
-        setSize(width, height);
+    public int getWidth() {
+        validate();
+        return size.width;
+    }
+
+    public int getHeight() {
+        validate();
+        return size.height;
+    }
+
+    private void invalidate() {
+        size = null;
+    }
+
+    private void validate() {
+        if (size == null) {
+            int width, height;
+            if (canvas == null) {
+                width = 0;
+                height = 0;
+            } else {
+                Bounds canvasBounds = canvas.getBounds();
+                width = Math.max(canvasBounds.x, 0) + canvasBounds.width;
+                height = Math.max(canvasBounds.y, 0) + canvasBounds.height;
+            }
+
+            size = new Dimensions(width, height);
+        }
     }
 
     public Canvas getCanvas() {
@@ -91,38 +125,9 @@ public class Drawing extends Image {
                 canvas.getCanvasListeners().add(canvasListener);
             }
 
+            size = null;
+
             drawingListeners.canvasChanged(this, previousCanvas);
-            imageListeners.regionUpdated(this, 0, 0, width, height);
-        }
-    }
-
-    @Override
-    public int getWidth() {
-        return width;
-    }
-
-    public void setWidth(int width) {
-        setSize(width, height);
-    }
-
-    @Override
-    public int getHeight() {
-        return height;
-    }
-
-    public void setHeight(int height) {
-        setSize(width, height);
-    }
-
-    public void setSize(int width, int height) {
-        int previousWidth = this.width;
-        int previousHeight = this.height;
-
-        if (previousWidth != width
-            || previousHeight != height) {
-            this.width = width;
-            this.height = height;
-            imageListeners.sizeChanged(this, previousWidth, previousHeight);
         }
     }
 
@@ -134,7 +139,6 @@ public class Drawing extends Image {
         Paint previousBackground = this.background;
         if (previousBackground != background) {
             this.background = background;
-            imageListeners.regionUpdated(this, 0, 0, width, height);
             drawingListeners.backgroundChanged(this, previousBackground);
         }
     }
@@ -149,6 +153,9 @@ public class Drawing extends Image {
 
     @Override
     public void paint(Graphics2D graphics) {
+        int width = getWidth();
+        int height = getHeight();
+
         graphics.clipRect(0, 0, width, height);
 
         if (background != null) {
