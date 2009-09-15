@@ -91,12 +91,13 @@ public class Group extends Shape implements Sequence<Shape>, Iterable<Shape> {
 
             if (shape.isVisible()) {
                 Bounds transformedBounds = shape.getTransformedBounds();
-                transformedBounds = transformedBounds.translate(x, y);
+
+                // Translate bounds to group coordinates
+                Point origin = shape.getOrigin();
+                transformedBounds = transformedBounds.translate(origin.x, origin.y);
 
                 if (transformedBounds.contains(x, y)) {
-                    Point origin = shape.getOrigin();
-
-                    // Transform into shape coordinates
+                    // Transform location into shape coordinates
                     AffineTransform affineTransform = shape.getTransforms().getAffineTransform();
                     java.awt.Point location = new java.awt.Point(x - origin.x, y - origin.y);
 

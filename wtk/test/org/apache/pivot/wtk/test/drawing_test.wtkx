@@ -36,10 +36,9 @@ limitations under the License.
                                     <drawing:Shape.Scale x="0.5" y="0.5"/>
                                 </transforms>
                             </drawing:Ellipse>
-                            <drawing:Line x1="50" y1="100" x2="150" y2="100" strokeThickness="10">
+                            <drawing:Line x="50" y="50" x1="0" y1="0" x2="100" y2="0" strokeThickness="10">
                                 <transforms>
-                                    <drawing:Shape.Translate x="40" y="40"/>
-                                    <drawing:Shape.Scale x="0.5" y="0.5"/>
+                                    <drawing:Shape.Rotate angle="90"/>
                                 </transforms>
                             </drawing:Line>
                         </drawing:Canvas>
