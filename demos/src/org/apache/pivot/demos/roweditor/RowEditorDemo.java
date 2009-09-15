@@ -28,6 +28,7 @@ import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.CalendarDateSpinnerData;
 import org.apache.pivot.wtk.content.TableViewRowEditor;
+import org.apache.pivot.wtk.skin.CardPaneSkin;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 /**
@@ -45,6 +46,7 @@ public class RowEditorDemo implements Application {
         tableView = (TableView)wtkxSerializer.get("tableView");
 
         TableViewRowEditor tableViewRowEditor = new TableViewRowEditor();
+        tableViewRowEditor.setEditEffect(CardPaneSkin.SelectionChangeEffect.HORIZONTAL_SLIDE);
         tableView.setRowEditor(tableViewRowEditor);
 
         // Date uses a Spinner with a CalendarDateSpinnerData model

@@ -143,7 +143,7 @@ public class TableViewRowEditor implements TableView.RowEditor {
 
             cardPane.add(new ImageView(new ComponentImage(tableView, tableView.getRowBounds(rowIndex))));
             cardPane.setSelectedIndex(0);
-            cardPane.getStyles().put("selectionChangeEffect", selectionChangeEffect);
+            cardPane.getStyles().put("selectionChangeEffect", editEffect);
 
             tablePane = new TablePane();
             tablePane.getStyles().put("horizontalSpacing", 1);
@@ -538,7 +538,7 @@ public class TableViewRowEditor implements TableView.RowEditor {
 
     private HashMap<String, Component> cellEditors = new HashMap<String, Component>();
 
-    private CardPaneSkin.SelectionChangeEffect selectionChangeEffect = null;
+    private CardPaneSkin.SelectionChangeEffect editEffect = null;
 
     private static final int IMAGE_CARD_INDEX = 0;
     private static final int EDITOR_CARD_INDEX = 1;
@@ -568,38 +568,38 @@ public class TableViewRowEditor implements TableView.RowEditor {
      * row to an editable row. By default, this editor uses no effect.
      *
      * @return
-     * The effect, or <tt>null</tt> if no effect is being used.
+     * The edit effect, or <tt>null</tt> if no effect is being used.
      */
-    public CardPaneSkin.SelectionChangeEffect getEffect() {
-        return selectionChangeEffect;
+    public CardPaneSkin.SelectionChangeEffect getEditEffect() {
+        return editEffect;
     }
 
     /**
      * Sets the effect that this editor uses when changing from a read-only
      * row to an editable row.
      *
-     * @param effect
-     * The effect, or <tt>null</tt> to not use an effect.
+     * @param editEffect
+     * The edit effect, or <tt>null</tt> to not use an effect.
      */
-    public void setEffect(CardPaneSkin.SelectionChangeEffect effect) {
-        this.selectionChangeEffect = effect;
+    public void setEditEffect(CardPaneSkin.SelectionChangeEffect editEffect) {
+        this.editEffect = editEffect;
     }
 
     /**
      * Sets the effect that this editor uses when changing from a read-only
      * row to an editable row.
      *
-     * @param effect
-     * The effect, or <tt>null</tt> to not use an effect.
+     * @param editEffect
+     * The edit effect, or <tt>null</tt> to not use an effect.
      *
-     * @see #setEffect(CardPaneSkin.SelectionChangeEffect)
+     * @see #setEditEffect(CardPaneSkin.SelectionChangeEffect)
      */
-    public void setEffect(String effect) {
-        if (effect == null) {
+    public void setEditEffect(String editEffect) {
+        if (editEffect == null) {
             throw new IllegalArgumentException();
         }
 
-        setEffect(CardPaneSkin.SelectionChangeEffect.valueOf(effect.toUpperCase()));
+        setEditEffect(CardPaneSkin.SelectionChangeEffect.valueOf(editEffect.toUpperCase()));
     }
 
     /**
