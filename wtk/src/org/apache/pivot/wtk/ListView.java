@@ -852,16 +852,7 @@ public class ListView extends Component {
 
     @SuppressWarnings("unchecked")
     public void setSelectedItem(Object item) {
-        int index = -1;
-
-        if (item != null) {
-            index = ((List<Object>)listData).indexOf(item);
-            if (index == -1) {
-                throw new IllegalArgumentException("\"" + item + "\" is not a valid selection.");
-            }
-        }
-
-        setSelectedIndex(index);
+        setSelectedIndex((item == null) ? -1 : ((List<Object>)listData).indexOf(item));
     }
 
     public Sequence<?> getSelectedItems() {
@@ -881,6 +872,10 @@ public class ListView extends Component {
 
     @SuppressWarnings("unchecked")
     public void setSelectedItems(Sequence<Object> items) {
+        if (items == null) {
+            throw new IllegalArgumentException();
+        }
+
         ArrayList<Span> selectedRanges = new ArrayList<Span>();
 
         for (int i = 0, n = items.getLength(); i < n; i++) {

@@ -33,7 +33,6 @@ import org.apache.pivot.wtkx.WTKXSerializer;
 public class DrawingTest implements Application {
     private Window window = null;
     private ImageView imageView = null;
-
     private ComponentMouseButtonListener imageViewMouseButtonListener = new ComponentMouseButtonListener.Adapter() {
         @Override
         public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {

@@ -373,16 +373,7 @@ public class Spinner extends Container {
 
     @SuppressWarnings("unchecked")
     public void setSelectedItem(Object item) {
-        int index = -1;
-
-        if (item != null) {
-            index = ((List<Object>)spinnerData).indexOf(item);
-            if (index == -1) {
-                throw new IllegalArgumentException("\"" + item + "\" is not a valid selection.");
-            }
-        }
-
-        setSelectedIndex(index);
+        setSelectedIndex((item == null) ? -1 : ((List<Object>)spinnerData).indexOf(item));
     }
 
     /**

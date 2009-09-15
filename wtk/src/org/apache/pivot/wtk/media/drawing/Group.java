@@ -137,9 +137,7 @@ public class Group extends Shape implements Sequence<Shape>, Iterable<Shape> {
             if (shape.isVisible()) {
                 int x = shape.getX();
                 int y = shape.getY();
-
                 Bounds transformedBounds = shape.getTransformedBounds();
-                transformedBounds = transformedBounds.translate(x, y);
 
                 if (transformedBounds.intersects(clipBounds)) {
                     Graphics2D shapeGraphics = (Graphics2D)graphics.create();
