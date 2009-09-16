@@ -27,6 +27,7 @@ import org.apache.pivot.collections.Sequence.Tree.Path;
 import org.apache.pivot.collections.immutable.ImmutableList;
 import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.content.TreeViewNodeRenderer;
 
 /**
@@ -98,10 +99,81 @@ public class TreeView extends Component {
      */
     public interface NodeEditor extends Editor {
         /**
+         * Node editor listener list.
+         */
+        public static class NodeEditorListenerList
+            extends ListenerList<NodeEditorListener>
+            implements NodeEditorListener {
+            @Override
+            public Vote previewEditNode(NodeEditor nodeEditor, TreeView treeView,
+                Path path) {
+                Vote vote = Vote.APPROVE;
+
+                for (NodeEditorListener listener : this) {
+                    vote = vote.tally(listener.previewEditNode(nodeEditor,
+                        treeView, path));
+                }
+
+                return vote;
+            }
+
+            @Override
+            public void editNodeVetoed(NodeEditor nodeEditor, Vote reason) {
+                for (NodeEditorListener listener : this) {
+                    listener.editNodeVetoed(nodeEditor, reason);
+                }
+            }
+
+            @Override
+            public void nodeEditing(NodeEditor nodeEditor, TreeView treeView,
+                Path path) {
+                for (NodeEditorListener listener : this) {
+                    listener.nodeEditing(nodeEditor, treeView, path);
+                }
+            }
+
+            @Override
+            public Vote previewSaveChanges(NodeEditor nodeEditor, TreeView treeView,
+                Path path, Object changes) {
+                Vote vote = Vote.APPROVE;
+
+                for (NodeEditorListener listener : this) {
+                    vote = vote.tally(listener.previewSaveChanges(nodeEditor,
+                        treeView, path, changes));
+                }
+
+                return vote;
+            }
+
+            @Override
+            public void saveChangesVetoed(NodeEditor nodeEditor, Vote reason) {
+                for (NodeEditorListener listener : this) {
+                    listener.saveChangesVetoed(nodeEditor, reason);
+                }
+            }
+
+            @Override
+            public void changesSaved(NodeEditor nodeEditor, TreeView treeView,
+                Path path) {
+                for (NodeEditorListener listener : this) {
+                    listener.changesSaved(nodeEditor, treeView, path);
+                }
+            }
+
+            @Override
+            public void editCancelled(NodeEditor nodeEditor, TreeView treeView,
+                Path path) {
+                for (NodeEditorListener listener : this) {
+                    listener.editCancelled(nodeEditor, treeView, path);
+                }
+            }
+        }
+
+        /**
          * Notifies the editor that editing should begin. If the editor is
-         * currently installed on the tree view, the skin may choose to
-         * call this method when the user executes the appropriate gesture
-         * (as defined by the skin).
+         * currently installed on the tree view, the skin may call this method
+         * when the user executes the appropriate gesture (as defined by the
+         * skin).
          *
          * @param treeView
          * The tree view containing the node to be edited.
@@ -112,7 +184,156 @@ public class TreeView extends Component {
          * @see
          * #setNodeEditor(NodeEditor)
          */
-        public void edit(TreeView treeView, Path path);
+        public void editNode(TreeView treeView, Path path);
+
+        /**
+         * Gets the node editor listener list.
+         */
+        public ListenerList<NodeEditorListener> getNodeEditorListeners();
+    }
+
+    /**
+     * The node editor listener interface. This provides callers with
+     * notifications about a node editor's activity.
+     */
+    public interface NodeEditorListener {
+        /**
+         * Node editor listener adapter.
+         */
+        public static class Adapter implements NodeEditorListener {
+            @Override
+            public Vote previewEditNode(NodeEditor nodeEditor, TreeView treeView, Path path) {
+                return Vote.APPROVE;
+            }
+
+            @Override
+            public void editNodeVetoed(NodeEditor nodeEditor, Vote reason) {
+            }
+
+            @Override
+            public void nodeEditing(NodeEditor nodeEditor, TreeView treeView, Path path) {
+            }
+
+            @Override
+            public Vote previewSaveChanges(NodeEditor nodeEditor, TreeView treeView, Path path, Object changes) {
+                return Vote.APPROVE;
+            }
+
+            @Override
+            public void saveChangesVetoed(NodeEditor nodeEditor, Vote reason) {
+            }
+
+            @Override
+            public void changesSaved(NodeEditor nodeEditor, TreeView treeView, Path path) {
+            }
+
+            @Override
+            public void editCancelled(NodeEditor nodeEditor, TreeView treeView, Path path) {
+            }
+        }
+
+        /**
+         * Called to preview a node edit.
+         *
+         * @param nodeEditor
+         * The node editor
+         *
+         * @param treeView
+         * The tree view containing the node to be edited.
+         *
+         * @param path
+         * The path to the node to edit.
+         *
+         * @return
+         * A vote on whether editing should be allowed to begin.
+         */
+        public Vote previewEditNode(NodeEditor nodeEditor, TreeView treeView, Path path);
+
+        /**
+         * Called when a node edit was vetoed by a listener in the preview
+         * event.
+         *
+         * @param nodeEditor
+         * The node editor
+         *
+         * @param reason
+         * The reason for the veto
+         */
+        public void editNodeVetoed(NodeEditor nodeEditor, Vote reason);
+
+        /**
+         * Called when editing has begun.
+         *
+         * @param nodeEditor
+         * The node editor
+         *
+         * @param treeView
+         * The tree view containing the node being edited.
+         *
+         * @param path
+         * The path to the node being edited.
+         */
+        public void nodeEditing(NodeEditor nodeEditor, TreeView treeView, Path path);
+
+        /**
+         * Called to preview a save.
+         *
+         * @param nodeEditor
+         * The node editor
+         *
+         * @param treeView
+         * The tree view containing the node being edited.
+         *
+         * @param path
+         * The path to the node being edited.
+         *
+         * @param changes
+         * The proposed changes. The type of this object will depend on the
+         * editor implementation.
+         *
+         * @return
+         * A vote on whether the changes should be allowed to be saved.
+         */
+        public Vote previewSaveChanges(NodeEditor nodeEditor, TreeView treeView, Path path, Object changes);
+
+        /**
+         * Called when a save was vetoed by a listener in the preview event.
+         *
+         * @param nodeEditor
+         * The node editor
+         *
+         * @param reason
+         * The reason for the veto
+         */
+        public void saveChangesVetoed(NodeEditor nodeEditor, Vote reason);
+
+        /**
+         * Called when changes have been saved.
+         *
+         * @param nodeEditor
+         * The node editor
+         *
+         * @param treeView
+         * The tree view containing the node that was edited.
+         *
+         * @param path
+         * The path to the node that was edited.
+         */
+        public void changesSaved(NodeEditor nodeEditor, TreeView treeView, Path path);
+
+        /**
+         * Called when an edit has been cancelled.
+         *
+         * @param nodeEditor
+         * The node editor
+         *
+         * @param treeView
+         * The tree view containing the node that was being edited.
+         *
+         * @param path
+         * The path to the node that was being edited.
+         */
+        public void editCancelled(NodeEditor nodeEditor, TreeView treeView, Path path);
     }
 
     /**

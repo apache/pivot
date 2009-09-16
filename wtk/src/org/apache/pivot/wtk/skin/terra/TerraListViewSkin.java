@@ -676,7 +676,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                     ListView.ItemEditor itemEditor = listView.getItemEditor();
 
                     if (itemEditor != null) {
-                        itemEditor.edit(listView, editIndex);
+                        itemEditor.editItem(listView, editIndex);
                     }
                 }
 

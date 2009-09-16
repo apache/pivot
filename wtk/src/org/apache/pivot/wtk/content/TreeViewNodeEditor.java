@@ -19,6 +19,7 @@ package org.apache.pivot.wtk.content;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.collections.Sequence.Tree.Path;
+import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
@@ -116,9 +117,9 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
         @Override
         public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
             if (keyCode == Keyboard.KeyCode.ENTER) {
-                save();
+                saveChanges();
             } else if (keyCode == Keyboard.KeyCode.ESCAPE) {
-                cancel();
+                cancelEdit();
             }
 
             return false;
@@ -136,7 +137,7 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
             Window window = (Window)display.getComponentAt(x, y);
 
             if (popup != window) {
-                save();
+                saveChanges();
             }
 
             return false;
@@ -156,12 +157,12 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
     private TreeViewListener treeViewHandler = new TreeViewListener.Adapter() {
         @Override
         public void treeDataChanged(TreeView treeView, List<?> previousTreeData) {
-            cancel();
+            cancelEdit();
         }
 
         @Override
         public void nodeEditorChanged(TreeView treeView, TreeView.NodeEditor previousNodeEditor) {
-            cancel();
+            cancelEdit();
         }
     };
 
@@ -172,22 +173,22 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
     private TreeViewNodeListener treeViewNodeHandler = new TreeViewNodeListener.Adapter() {
         @Override
         public void nodeInserted(TreeView treeView, Path path, int index) {
-            cancel();
+            cancelEdit();
         }
 
         @Override
         public void nodesRemoved(TreeView treeView, Path path, int index, int count) {
-            cancel();
+            cancelEdit();
         }
 
         @Override
         public void nodeUpdated(TreeView treeView, Path path, int index) {
-            cancel();
+            cancelEdit();
         }
 
         @Override
         public void nodesSorted(TreeView treeView, Path path) {
-            cancel();
+            cancelEdit();
         }
     };
 
@@ -196,6 +197,8 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
 
     private Window popup = null;
     private TextInput textInput = null;
+
+    private NodeEditorListenerList nodeEditorListeners = new NodeEditorListenerList();
 
     /**
      * Gets the text input that serves as the editor component. This component
@@ -214,7 +217,7 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
      * {@inheritDoc}
      */
     @Override
-    public void edit(TreeView treeView, Path path) {
+    public void editNode(TreeView treeView, Path path) {
         if (isEditing()) {
             throw new IllegalStateException();
         }
@@ -293,7 +296,7 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
      */
     @SuppressWarnings("unchecked")
     @Override
-    public void save() {
+    public void saveChanges() {
         if (!isEditing()) {
             throw new IllegalStateException();
         }
@@ -339,11 +342,19 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
      * {@inheritDoc}
      */
     @Override
-    public void cancel() {
+    public void cancelEdit() {
         if (!isEditing()) {
             throw new IllegalStateException();
         }
 
         popup.close();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ListenerList<TreeView.NodeEditorListener> getNodeEditorListeners() {
+        return nodeEditorListeners;
     }
 }

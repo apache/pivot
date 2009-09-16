@@ -23,6 +23,7 @@ import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.util.Filter;
+import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.CardPane;
@@ -294,9 +295,9 @@ public class TableViewRowEditor implements TableView.RowEditor {
         @Override
         protected boolean keyPressed(int keyCode, Keyboard.KeyLocation keyLocation) {
             if (keyCode == Keyboard.KeyCode.ENTER) {
-                save();
+                saveChanges();
             } else if (keyCode == Keyboard.KeyCode.ESCAPE) {
-                cancel();
+                cancelEdit();
             }
 
             return super.keyPressed(keyCode, keyLocation);
@@ -306,14 +307,13 @@ public class TableViewRowEditor implements TableView.RowEditor {
             this.tableViewScrollPane = tableViewScrollPane;
         }
 
-        public void edit() {
-            Window window = tableView.getWindow();
-            open(window.getDisplay());
+        public void editRow() {
+            open(tableView.getDisplay());
             reposition();
         }
 
         @SuppressWarnings("unchecked")
-        public void save() {
+        public void saveChanges() {
             List<Object> tableData = (List<Object>)tableView.getTableData();
 
             // Get the row data, represented as a Dictionary
@@ -342,7 +342,7 @@ public class TableViewRowEditor implements TableView.RowEditor {
             }
         }
 
-        public void cancel() {
+        public void cancelEdit() {
             // Close without updating the table data
             close();
         }
@@ -399,7 +399,7 @@ public class TableViewRowEditor implements TableView.RowEditor {
 
                 if (window != this &&
                     (window == null || !isOwner(window))) {
-                    save();
+                    saveChanges();
                 }
             }
 
@@ -478,7 +478,7 @@ public class TableViewRowEditor implements TableView.RowEditor {
 
         @Override
         public void visibleChanged(Component component) {
-            cancel();
+            cancelEdit();
         }
 
         @Override
@@ -515,12 +515,12 @@ public class TableViewRowEditor implements TableView.RowEditor {
 
         @Override
         public void tableDataChanged(TableView tableView, List<?> previousTableData) {
-            cancel();
+            cancelEdit();
         }
 
         @Override
         public void rowEditorChanged(TableView tableView, TableView.RowEditor previousRowEditor) {
-            cancel();
+            cancelEdit();
         }
 
         @Override
@@ -537,27 +537,27 @@ public class TableViewRowEditor implements TableView.RowEditor {
 
         @Override
         public void rowInserted(TableView tableView, int index) {
-            cancel();
+            cancelEdit();
         }
 
         @Override
         public void rowsRemoved(TableView tableView, int index, int count) {
-            cancel();
+            cancelEdit();
         }
 
         @Override
         public void rowUpdated(TableView tableView, int index) {
-            cancel();
+            cancelEdit();
         }
 
         @Override
         public void rowsCleared(TableView tableView) {
-            cancel();
+            cancelEdit();
         }
 
         @Override
         public void rowsSorted(TableView tableView) {
-            cancel();
+            cancelEdit();
         }
     }
 
@@ -566,6 +566,8 @@ public class TableViewRowEditor implements TableView.RowEditor {
     private HashMap<String, Component> cellEditors = new HashMap<String, Component>();
 
     private CardPaneSkin.SelectionChangeEffect editEffect = null;
+
+    private RowEditorListenerList rowEditorListeners = new RowEditorListenerList();
 
     private static final int IMAGE_CARD_INDEX = 0;
     private static final int EDITOR_CARD_INDEX = 1;
@@ -635,7 +637,7 @@ public class TableViewRowEditor implements TableView.RowEditor {
      * {@inheritDoc}
      */
     @Override
-    public void edit(TableView tableView, int rowIndex, int columnIndex) {
+    public void editRow(TableView tableView, int rowIndex, int columnIndex) {
         if (editorPopup != null) {
             throw new IllegalStateException("Edit already in progress.");
         }
@@ -658,7 +660,7 @@ public class TableViewRowEditor implements TableView.RowEditor {
             editorPopup.setTableViewScrollPane((ScrollPane)tableViewParent);
         }
 
-        editorPopup.edit();
+        editorPopup.editRow();
     }
 
     /**
@@ -673,23 +675,31 @@ public class TableViewRowEditor implements TableView.RowEditor {
      * {@inheritDoc}
      */
     @Override
-    public void save() {
+    public void saveChanges() {
         if (editorPopup == null) {
             throw new IllegalStateException("No edit in progress.");
         }
 
-        editorPopup.save();
+        editorPopup.saveChanges();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void cancel() {
+    public void cancelEdit() {
         if (editorPopup == null) {
             throw new IllegalStateException("No edit in progress.");
         }
 
-        editorPopup.cancel();
+        editorPopup.cancelEdit();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ListenerList<TableView.RowEditorListener> getRowEditorListeners() {
+        return rowEditorListeners;
     }
 }

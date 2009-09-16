@@ -17,6 +17,7 @@
 package org.apache.pivot.wtk.content;
 
 import org.apache.pivot.collections.List;
+import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
@@ -45,6 +46,8 @@ public class ListViewItemEditor implements ListView.ItemEditor {
     private TextInput textInput = null;
     private Window popup = null;
 
+    private ItemEditorListenerList itemEditorListeners = new ItemEditorListenerList();
+
     private ComponentListener componentListener = new ComponentListener.Adapter() {
         @Override
         public void sizeChanged(Component component, int previousWidth, int previousHeight) {
@@ -70,34 +73,34 @@ public class ListViewItemEditor implements ListView.ItemEditor {
     private ListViewListener listViewListener = new ListViewListener.Adapter() {
         @Override
         public void listDataChanged(ListView listView, List<?> previousListData) {
-            cancel();
+            cancelEdit();
         }
 
         @Override
         public void itemEditorChanged(ListView listView, ListView.ItemEditor previousItemEditor) {
-            cancel();
+            cancelEdit();
         }
     };
 
     private ListViewItemListener listViewItemListener = new ListViewItemListener.Adapter() {
         @Override
         public void itemInserted(ListView listView, int index) {
-            cancel();
+            cancelEdit();
         }
 
         @Override
         public void itemsRemoved(ListView listView, int index, int count) {
-            cancel();
+            cancelEdit();
         }
 
         @Override
         public void itemUpdated(ListView listView, int index) {
-            cancel();
+            cancelEdit();
         }
 
         @Override
         public void itemsSorted(ListView listView) {
-            cancel();
+            cancelEdit();
         }
     };
 
@@ -105,9 +108,9 @@ public class ListViewItemEditor implements ListView.ItemEditor {
         @Override
         public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
             if (keyCode == Keyboard.KeyCode.ENTER) {
-                save();
+                saveChanges();
             } else if (keyCode == Keyboard.KeyCode.ESCAPE) {
-                cancel();
+                cancelEdit();
             }
 
             return false;
@@ -152,7 +155,7 @@ public class ListViewItemEditor implements ListView.ItemEditor {
             Window window = (Window)display.getComponentAt(x, y);
 
             if (popup != window) {
-                save();
+                saveChanges();
             }
 
             return false;
@@ -182,7 +185,7 @@ public class ListViewItemEditor implements ListView.ItemEditor {
      * {@inheritDoc}
      */
     @Override
-    public void edit(ListView listView, int index) {
+    public void editItem(ListView listView, int index) {
         if (this.listView != null) {
             throw new IllegalStateException("Currently editing.");
         }
@@ -262,7 +265,7 @@ public class ListViewItemEditor implements ListView.ItemEditor {
      */
     @SuppressWarnings("unchecked")
     @Override
-    public void save() {
+    public void saveChanges() {
         if (!isEditing()) {
             throw new IllegalStateException();
         }
@@ -295,11 +298,16 @@ public class ListViewItemEditor implements ListView.ItemEditor {
      * {@inheritDoc}
      */
     @Override
-    public void cancel() {
+    public void cancelEdit() {
         if (!isEditing()) {
             throw new IllegalStateException();
         }
 
         popup.close();
+    }
+
+    @Override
+    public ListenerList<ListView.ItemEditorListener> getItemEditorListeners() {
+        return itemEditorListeners;
     }
 }

@@ -19,6 +19,7 @@ package org.apache.pivot.wtk.content;
 import org.apache.pivot.beans.BeanDictionary;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
+import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
@@ -72,12 +73,12 @@ public class TableViewCellEditor implements TableView.RowEditor {
     private TableViewListener tableViewListener = new TableViewListener.Adapter() {
         @Override
         public void tableDataChanged(TableView tableView, List<?> previousTableData) {
-            cancel();
+            cancelEdit();
         }
 
         @Override
         public void rowEditorChanged(TableView tableView, TableView.RowEditor previousRowEditor) {
-            cancel();
+            cancelEdit();
         }
     };
 
@@ -88,22 +89,22 @@ public class TableViewCellEditor implements TableView.RowEditor {
     private TableViewRowListener tableViewRowListener = new TableViewRowListener.Adapter() {
         @Override
         public void rowInserted(TableView tableView, int rowIndex) {
-            cancel();
+            cancelEdit();
         }
 
         @Override
         public void rowsRemoved(TableView tableView, int rowIndex, int count) {
-            cancel();
+            cancelEdit();
         }
 
         @Override
         public void rowUpdated(TableView tableView, int rowIndex) {
-            cancel();
+            cancelEdit();
         }
 
         @Override
         public void rowsSorted(TableView tableView) {
-            cancel();
+            cancelEdit();
         }
     };
 
@@ -115,9 +116,9 @@ public class TableViewCellEditor implements TableView.RowEditor {
         @Override
         public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
             if (keyCode == Keyboard.KeyCode.ENTER) {
-                save();
+                saveChanges();
             } else if (keyCode == Keyboard.KeyCode.ESCAPE) {
-                cancel();
+                cancelEdit();
             }
 
             return false;
@@ -172,7 +173,7 @@ public class TableViewCellEditor implements TableView.RowEditor {
             Window window = (Window)display.getComponentAt(x, y);
 
             if (popup != window) {
-                save();
+                saveChanges();
             }
 
             return false;
@@ -192,6 +193,8 @@ public class TableViewCellEditor implements TableView.RowEditor {
     private TextInput textInput = null;
     private Window popup = null;
 
+    private RowEditorListenerList rowEditorListeners = new RowEditorListenerList();
+
     /**
      * Gets the text input that serves as the editor component. This component
      * will only be non-<tt>null</tt> while editing.
@@ -210,7 +213,7 @@ public class TableViewCellEditor implements TableView.RowEditor {
      */
     @SuppressWarnings("unchecked")
     @Override
-    public void edit(TableView tableView, int rowIndex, int columnIndex) {
+    public void editRow(TableView tableView, int rowIndex, int columnIndex) {
         if (isEditing()) {
             throw new IllegalStateException("Currently editing.");
         }
@@ -284,7 +287,7 @@ public class TableViewCellEditor implements TableView.RowEditor {
      */
     @SuppressWarnings("unchecked")
     @Override
-    public void save() {
+    public void saveChanges() {
         if (!isEditing()) {
             throw new IllegalStateException();
         }
@@ -326,11 +329,19 @@ public class TableViewCellEditor implements TableView.RowEditor {
      * {@inheritDoc}
      */
     @Override
-    public void cancel() {
+    public void cancelEdit() {
         if (!isEditing()) {
             throw new IllegalStateException();
         }
 
         popup.close();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ListenerList<TableView.RowEditorListener> getRowEditorListeners() {
+        return rowEditorListeners;
     }
 }

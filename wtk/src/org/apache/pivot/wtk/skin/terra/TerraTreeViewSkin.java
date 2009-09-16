@@ -1480,7 +1480,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                         TreeView.NodeEditor nodeEditor = treeView.getNodeEditor();
 
                         if (nodeEditor != null) {
-                            nodeEditor.edit(treeView, nodeInfo.getPath());
+                            nodeEditor.editNode(treeView, nodeInfo.getPath());
                         }
                     }
 

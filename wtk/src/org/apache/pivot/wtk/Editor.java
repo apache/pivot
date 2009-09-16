@@ -27,15 +27,15 @@ public interface Editor {
 
     /**
      * Saves an edit that is in progress by updating the appropriate data
-     * object. It is up to subclasses to define the behavior when
+     * object. It is up to implementations to define the behavior when
      * <tt>isEditing() == false</tt>.
      */
-    public void save();
+    public void saveChanges();
 
     /**
      * Cancels an edit that is in progress by reverting any edits the user has
-     * made. It is up to subclasses to define the behavior when
+     * made. It is up to implementations to define the behavior when
      * <tt>isEditing() == false</tt>.
      */
-    public void cancel();
+    public void cancelEdit();
 }

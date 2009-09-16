@@ -29,6 +29,7 @@ import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.content.TableViewCellRenderer;
 
 /**
@@ -429,10 +430,84 @@ public class TableView extends Component {
      */
     public interface RowEditor extends Editor {
         /**
+         * Row editor listener list.
+         */
+        public static class RowEditorListenerList
+            extends ListenerList<RowEditorListener>
+            implements RowEditorListener {
+            @Override
+            public Vote previewEditRow(RowEditor rowEditor, TableView tableView,
+                int rowIndex, int columnIndex) {
+                Vote vote = Vote.APPROVE;
+
+                for (RowEditorListener listener : this) {
+                    vote = vote.tally(listener.previewEditRow(rowEditor,
+                        tableView, rowIndex, columnIndex));
+                }
+
+                return vote;
+            }
+
+            @Override
+            public void editRowVetoed(RowEditor rowEditor, Vote reason) {
+                for (RowEditorListener listener : this) {
+                    listener.editRowVetoed(rowEditor, reason);
+                }
+            }
+
+            @Override
+            public void rowEditing(RowEditor rowEditor, TableView tableView,
+                int rowIndex, int columnIndex) {
+                for (RowEditorListener listener : this) {
+                    listener.rowEditing(rowEditor, tableView, rowIndex,
+                        columnIndex);
+                }
+            }
+
+            @Override
+            public Vote previewSaveChanges(RowEditor rowEditor, TableView tableView,
+                int rowIndex, int columnIndex, Dictionary<String, Object> changes) {
+                Vote vote = Vote.APPROVE;
+
+                for (RowEditorListener listener : this) {
+                    vote = vote.tally(listener.previewSaveChanges(rowEditor,
+                        tableView, rowIndex, columnIndex, changes));
+                }
+
+                return vote;
+            }
+
+            @Override
+            public void saveChangesVetoed(RowEditor rowEditor, Vote reason) {
+                for (RowEditorListener listener : this) {
+                    listener.saveChangesVetoed(rowEditor, reason);
+                }
+            }
+
+            @Override
+            public void changesSaved(RowEditor rowEditor, TableView tableView,
+                int rowIndex, int columnIndex) {
+                for (RowEditorListener listener : this) {
+                    listener.changesSaved(rowEditor, tableView, rowIndex,
+                        columnIndex);
+                }
+            }
+
+            @Override
+            public void editCancelled(RowEditor rowEditor, TableView tableView,
+                int rowIndex, int columnIndex) {
+                for (RowEditorListener listener : this) {
+                    listener.editCancelled(rowEditor, tableView, rowIndex,
+                        columnIndex);
+                }
+            }
+        }
+
+        /**
          * Notifies the editor that editing should begin. If the editor is
-         * currently installed on the table view, the skin may choose to call
-         * this method when the user executes the appropriate gesture (as
-         * defined by the skin).
+         * currently installed on the table view, the skin may call this method
+         * when the user executes the appropriate gesture (as defined by the
+         * skin).
          *
          * @param tableView
          * The table view
@@ -446,7 +521,182 @@ public class TableView extends Component {
          * @see
          * #setRowEditor(RowEditor)
          */
-        public void edit(TableView tableView, int rowIndex, int columnIndex);
+        public void editRow(TableView tableView, int rowIndex, int columnIndex);
+
+        /**
+         * Gets the row editor listener list.
+         */
+        public ListenerList<RowEditorListener> getRowEditorListeners();
+    }
+
+    /**
+     * The row editor listener interface. This provides callers with
+     * notifications about a row editor's activity.
+     */
+    public interface RowEditorListener {
+        /**
+         * Row editor listener adapter.
+         */
+        public static class Adapter implements RowEditorListener {
+            @Override
+            public Vote previewEditRow(RowEditor rowEditor, TableView tableView,
+                int rowIndex, int columnIndex) {
+                return Vote.APPROVE;
+            }
+
+            @Override
+            public void editRowVetoed(RowEditor rowEditor, Vote reason) {
+            }
+
+            @Override
+            public void rowEditing(RowEditor rowEditor, TableView tableView,
+                int rowIndex, int columnIndex) {
+            }
+
+            @Override
+            public Vote previewSaveChanges(RowEditor rowEditor, TableView tableView,
+                int rowIndex, int columnIndex, Dictionary<String, Object> changes) {
+                return Vote.APPROVE;
+            }
+
+            @Override
+            public void saveChangesVetoed(RowEditor rowEditor, Vote reason) {
+            }
+
+            @Override
+            public void changesSaved(RowEditor rowEditor, TableView tableView,
+                int rowIndex, int columnIndex) {
+            }
+
+            @Override
+            public void editCancelled(RowEditor rowEditor, TableView tableView,
+                int rowIndex, int columnIndex) {
+            }
+        }
+
+        /**
+         * Called to preview a row edit.
+         *
+         * @param rowEditor
+         * The row editor
+         *
+         * @param tableView
+         * The table view containing the row to be edited.
+         *
+         * @param rowIndex
+         * The index of the row to edit.
+         *
+         * @param columnIndex
+         * The index of the column to edit.
+         *
+         * @return
+         * A vote on whether editing should be allowed to begin.
+         */
+        public Vote previewEditRow(RowEditor rowEditor, TableView tableView,
+            int rowIndex, int columnIndex);
+
+        /**
+         * Called when a row edit was vetoed by a listener in the preview
+         * event.
+         *
+         * @param rowEditor
+         * The row editor
+         *
+         * @param reason
+         * The reason for the veto
+         */
+        public void editRowVetoed(RowEditor rowEditor, Vote reason);
+
+        /**
+         * Called when editing has begun.
+         *
+         * @param rowEditor
+         * The row editor
+         *
+         * @param tableView
+         * The table view containing the row being edited.
+         *
+         * @param rowIndex
+         * The index of the row being edited.
+         *
+         * @param columnIndex
+         * The index of the column being edited.
+         */
+        public void rowEditing(RowEditor rowEditor, TableView tableView,
+            int rowIndex, int columnIndex);
+
+        /**
+         * Called to preview a save.
+         *
+         * @param rowEditor
+         * The row editor
+         *
+         * @param tableView
+         * The table view containing the row being edited.
+         *
+         * @param rowIndex
+         * The index of the row being edited.
+         *
+         * @param columnIndex
+         * The index of the column being edited.
+         *
+         * @param changes
+         * The proposed changes, indexed by table view column name. The type of
+         * each entry in this dictionary will depend on the editor
+         * implementation.
+         *
+         * @return
+         * A vote on whether the changes should be allowed to be saved.
+         */
+        public Vote previewSaveChanges(RowEditor rowEditor, TableView tableView,
+            int rowIndex, int columnIndex, Dictionary<String, Object> changes);
+
+        /**
+         * Called when a save was vetoed by a listener in the preview event.
+         *
+         * @param rowEditor
+         * The row editor
+         *
+         * @param reason
+         * The reason for the veto
+         */
+        public void saveChangesVetoed(RowEditor rowEditor, Vote reason);
+
+        /**
+         * Called when changes have been saved.
+         *
+         * @param rowEditor
+         * The row editor
+         *
+         * @param tableView
+         * The table view containing the row that was edited.
+         *
+         * @param rowIndex
+         * The index of the row that was edited.
+         *
+         * @param columnIndex
+         * The index of the column that was edited.
+         */
+        public void changesSaved(RowEditor rowEditor, TableView tableView,
+            int rowIndex, int columnIndex);
+
+        /**
+         * Called when an edit has been cancelled.
+         *
+         * @param rowEditor
+         * The row editor
+         *
+         * @param tableView
+         * The table view containing the row that was being edited.
+         *
+         * @param rowIndex
+         * The index of the row that was being edited.
+         *
+         * @param columnIndex
+         * The index of the column that was being edited.
+         */
+        public void editCancelled(RowEditor rowEditor, TableView tableView,
+            int rowIndex, int columnIndex);
     }
 
     /**

@@ -51,7 +51,6 @@ import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.skin.ButtonSkin;
 import org.apache.pivot.wtk.skin.ContainerSkin;
 
-
 /**
  * Accordion skin.
  */
