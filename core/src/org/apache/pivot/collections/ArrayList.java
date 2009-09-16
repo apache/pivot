@@ -43,6 +43,10 @@ public class ArrayList<T> implements List<T>, Serializable {
 
         @Override
         public boolean hasNext() {
+            if (modificationCount != ArrayList.this.modificationCount) {
+                throw new ConcurrentModificationException();
+            }
+
             return (index < length);
         }
 
@@ -52,15 +56,15 @@ public class ArrayList<T> implements List<T>, Serializable {
                 throw new NoSuchElementException();
             }
 
-            if (modificationCount != ArrayList.this.modificationCount) {
-                throw new ConcurrentModificationException();
-            }
-
             return get(index++);
         }
 
         @Override
         public boolean hasPrevious() {
+            if (modificationCount != ArrayList.this.modificationCount) {
+                throw new ConcurrentModificationException();
+            }
+
             return (index > 0);
         }
 
@@ -68,10 +72,6 @@ public class ArrayList<T> implements List<T>, Serializable {
         public T previous() {
             if (!hasPrevious()) {
                 throw new NoSuchElementException();
-            }
-
-            if (modificationCount != ArrayList.this.modificationCount) {
-                throw new ConcurrentModificationException();
             }
 
             return get(--index);

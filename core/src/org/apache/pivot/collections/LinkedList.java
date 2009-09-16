@@ -59,6 +59,10 @@ public class LinkedList<T> implements List<T>, Serializable {
 
         @Override
         public boolean hasNext() {
+            if (modificationCount != LinkedList.this.modificationCount) {
+                throw new ConcurrentModificationException();
+            }
+
             return (index < length);
         }
 
@@ -66,10 +70,6 @@ public class LinkedList<T> implements List<T>, Serializable {
         public T next() {
             if (!hasNext()) {
                 throw new NoSuchElementException();
-            }
-
-            if (modificationCount != LinkedList.this.modificationCount) {
-                throw new ConcurrentModificationException();
             }
 
             if (current == null) {
@@ -88,6 +88,10 @@ public class LinkedList<T> implements List<T>, Serializable {
 
         @Override
         public boolean hasPrevious() {
+            if (modificationCount != LinkedList.this.modificationCount) {
+                throw new ConcurrentModificationException();
+            }
+
             return (index > 0);
         }
 
@@ -95,10 +99,6 @@ public class LinkedList<T> implements List<T>, Serializable {
         public T previous() {
             if (!hasPrevious()) {
                 throw new NoSuchElementException();
-            }
-
-            if (modificationCount != LinkedList.this.modificationCount) {
-                throw new ConcurrentModificationException();
             }
 
             if (!forward) {

@@ -45,6 +45,10 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
 
         @Override
         public boolean hasNext() {
+            if (count != HashMap.this.count) {
+                throw new ConcurrentModificationException();
+            }
+
             // Move to the next bucket
             while (entryIterator != null
                 && !entryIterator.hasNext()) {
@@ -59,10 +63,6 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         public K next() {
             if (!hasNext()) {
                 throw new NoSuchElementException();
-            }
-
-            if (count != HashMap.this.count) {
-                throw new ConcurrentModificationException();
             }
 
             Pair<K, V> entry = entryIterator.next();
