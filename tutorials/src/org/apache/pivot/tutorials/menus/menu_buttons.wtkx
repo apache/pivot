@@ -81,7 +81,11 @@ limitations under the License.
                         <TablePane.Row height="1*">
                             <Border>
                                 <content>
-                                    <ImageView wtkx:id="imageView"/>
+                                    <ScrollPane>
+                                        <view>
+                                            <ImageView wtkx:id="imageView"/>
+                                        </view>
+                                    </ScrollPane>
                                 </content>
                             </Border>
                         </TablePane.Row>

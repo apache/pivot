@@ -32,7 +32,9 @@ public class WindowFocusTest implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BoxPane boxPane1 = new BoxPane(Orientation.VERTICAL);
-        boxPane1.add(new TextInput());
+        TextInput textInput1 = new TextInput();
+        textInput1.setText("ABCD");
+        boxPane1.add(textInput1);
         boxPane1.add(new TextInput());
         boxPane1.add(new TextInput());
         frame1 = new Frame(boxPane1);
@@ -40,7 +42,9 @@ public class WindowFocusTest implements Application {
         frame1.open(display);
 
         BoxPane boxPane2 = new BoxPane(Orientation.VERTICAL);
-        boxPane2.add(new TextInput());
+        TextInput textInput2 = new TextInput();
+        textInput2.setText("1234");
+        boxPane2.add(textInput2);
         boxPane2.add(new TextInput());
         boxPane2.add(new TextInput());
         frame2 = new Frame(boxPane2);

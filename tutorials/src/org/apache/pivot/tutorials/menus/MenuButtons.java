@@ -44,6 +44,9 @@ public class MenuButtons implements Application {
 
     private Drawing drawing = null;
 
+    public static final int MAX_X = 480;
+    public static final int MAX_Y = 360;
+
     public MenuButtons() {
         Action.getNamedActions().put("newCircle", new Action() {
             @Override
@@ -97,12 +100,12 @@ public class MenuButtons implements Application {
 
         drawing = new Drawing();
 
-        Rectangle border = new Rectangle();
-        border.setSize(480, 360);
-        border.setFill((Paint)null);
-        border.setStrokeThickness(1);
+        Rectangle borderRectangle = new Rectangle();
+        borderRectangle.setSize(MAX_X, MAX_Y);
+        borderRectangle.setStroke((Paint)null);
+        borderRectangle.setFill("#eeeeee");
 
-        drawing.getCanvas().add(border);
+        drawing.getCanvas().add(borderRectangle);
 
         imageView.setImage(drawing);
 
@@ -134,8 +137,8 @@ public class MenuButtons implements Application {
     public Point getRandomLocation(Shape shape) {
         Bounds bounds = shape.getBounds();
 
-        int x = (int)(Math.random() * (double)(drawing.getWidth() - bounds.width));
-        int y = (int)(Math.random() * (double)(drawing.getHeight() - bounds.height));
+        int x = (int)(Math.random() * (double)(MAX_X - bounds.width));
+        int y = (int)(Math.random() * (double)(MAX_Y - bounds.height));
 
         return new Point(x, y);
     }

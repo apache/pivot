@@ -1258,8 +1258,8 @@ public class TerraTextInputSkin extends ComponentSkin
         if (component.isFocused()) {
             // If focus was permanently transferred within this window,
             // select all
-            if (obverseComponent != null
-                && obverseComponent.getWindow() == window) {
+            if (obverseComponent == null
+                || obverseComponent.getWindow() == window) {
                 if (Mouse.getCapturer() != component) {
                     textInput.selectAll();
                 }
@@ -1269,8 +1269,8 @@ public class TerraTextInputSkin extends ComponentSkin
         } else {
             // If focus was permanently transferred within this window,
             // clear the selection
-            if (obverseComponent != null
-                && obverseComponent.getWindow() == window) {
+            if (obverseComponent == null
+                || obverseComponent.getWindow() == window) {
                 textInput.clearSelection();
             }
 
