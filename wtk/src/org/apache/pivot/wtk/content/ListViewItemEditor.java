@@ -17,9 +17,11 @@
 package org.apache.pivot.wtk.content;
 
 import org.apache.pivot.collections.List;
+import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentKeyListener;
+import org.apache.pivot.wtk.ComponentListener;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.ContainerMouseListener;
 import org.apache.pivot.wtk.Display;
@@ -42,6 +44,28 @@ public class ListViewItemEditor implements ListView.ItemEditor {
 
     private TextInput textInput = null;
     private Window popup = null;
+
+    private ComponentListener componentListener = new ComponentListener.Adapter() {
+        @Override
+        public void sizeChanged(Component component, int previousWidth, int previousHeight) {
+            ApplicationContext.queueCallback(new Runnable() {
+                @Override
+                public void run() {
+                    reposition();
+                }
+            });
+        }
+
+        @Override
+        public void locationChanged(Component component, int previousX, int previousY) {
+            ApplicationContext.queueCallback(new Runnable() {
+                @Override
+                public void run() {
+                    reposition();
+                }
+            });
+        }
+    };
 
     private ListViewListener listViewListener = new ListViewListener.Adapter() {
         @Override
@@ -96,6 +120,7 @@ public class ListViewItemEditor implements ListView.ItemEditor {
             Display display = window.getDisplay();
             display.getContainerMouseListeners().add(displayMouseHandler);
 
+            listView.getComponentListeners().add(componentListener);
             listView.getListViewListeners().add(listViewListener);
             listView.getListViewItemListeners().add(listViewItemListener);
         }
@@ -104,6 +129,7 @@ public class ListViewItemEditor implements ListView.ItemEditor {
         public void windowClosed(Window window, Display display) {
             display.getContainerMouseListeners().remove(displayMouseHandler);
 
+            listView.getComponentListeners().remove(componentListener);
             listView.getListViewListeners().remove(listViewListener);
             listView.getListViewItemListeners().remove(listViewItemListener);
 
@@ -165,6 +191,29 @@ public class ListViewItemEditor implements ListView.ItemEditor {
         List<?> listData = listView.getListData();
         ListItem listItem = (ListItem)listData.get(index);
 
+
+        textInput = new TextInput();
+        textInput.setText(listItem.getText());
+        textInput.getComponentKeyListeners().add(textInputKeyHandler);
+
+        // Create and open the popup
+        popup = new Window(textInput, true);
+        popup.getWindowStateListeners().add(popupWindowStateHandler);
+        popup.open(listView.getWindow());
+        reposition();
+
+        textInput.selectAll();
+        textInput.requestFocus();
+    }
+
+    /**
+     * Repositions the popup to be located over the item being edited.
+     */
+    private void reposition() {
+        // Get the data being edited
+        List<?> listData = listView.getListData();
+        ListItem listItem = (ListItem)listData.get(index);
+
         // Get the item bounds
         Bounds itemBounds = listView.getItemBounds(index);
         int itemIndent = listView.getItemIndent();
@@ -179,40 +228,27 @@ public class ListViewItemEditor implements ListView.ItemEditor {
         // Calculate the text bounds
         Bounds textBounds = itemRenderer.getTextBounds();
 
-        if (textBounds != null) {
-            textInput = new TextInput();
-            Insets padding = (Insets)textInput.getStyles().get("padding");
+        // Calculate the bounds of what we're editing
+        Insets padding = (Insets)textInput.getStyles().get("padding");
+        Bounds editBounds = new Bounds(itemBounds.x + textBounds.x - (padding.left + 1),
+            itemBounds.y, itemBounds.width - textBounds.x + (padding.left + 1),
+            itemBounds.height);
 
-            // Calculate the bounds of what we're editing
-            Bounds editBounds = new Bounds(itemBounds.x + textBounds.x - (padding.left + 1),
-                itemBounds.y, itemBounds.width - textBounds.x + (padding.left + 1),
-                itemBounds.height);
+        // Scroll to make the text as visible as possible
+        listView.scrollAreaToVisible(editBounds.x, editBounds.y,
+            textBounds.width + padding.left + 1, editBounds.height);
 
-            // Scroll to make the text as visible as possible
-            listView.scrollAreaToVisible(editBounds.x, editBounds.y,
-                textBounds.width + padding.left + 1, editBounds.height);
+        // Constrain the bounds by what is visible through Viewport ancestors
+        editBounds = listView.getVisibleArea(editBounds);
 
-            // Constrain the bounds by what is visible through Viewport ancestors
-            editBounds = listView.getVisibleArea(editBounds.x, editBounds.y,
-                editBounds.width, editBounds.height);
-
-            textInput.setText(listItem.getText());
-            textInput.setPreferredWidth(editBounds.width);
-            textInput.getComponentKeyListeners().add(textInputKeyHandler);
-
-            // Create and open the popup
-            popup = new Window(textInput, true);
-            popup.getWindowStateListeners().add(popupWindowStateHandler);
-
-            popup.setLocation(editBounds.x, editBounds.y
-                + (editBounds.height - textInput.getPreferredHeight(-1)) / 2);
-            popup.open(listView.getWindow());
-
-            textInput.selectAll();
-            textInput.requestFocus();
-        }
+        textInput.setPreferredWidth(editBounds.width);
+        popup.setLocation(editBounds.x, editBounds.y
+            + (editBounds.height - textInput.getPreferredHeight(-1)) / 2);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isEditing() {
         return (listView != null);
@@ -252,6 +288,9 @@ public class ListViewItemEditor implements ListView.ItemEditor {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void cancel() {
         if (!isEditing()) {

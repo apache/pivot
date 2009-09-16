@@ -19,9 +19,11 @@ package org.apache.pivot.wtk.content;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.collections.Sequence.Tree.Path;
+import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentKeyListener;
+import org.apache.pivot.wtk.ComponentListener;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.ContainerMouseListener;
 import org.apache.pivot.wtk.Display;
@@ -37,13 +39,37 @@ import org.apache.pivot.wtk.WindowStateListener;
 import org.apache.pivot.wtk.content.TreeNode;
 import org.apache.pivot.wtk.content.TreeViewNodeRenderer;
 
-
 /**
  * Default tree view node editor, which allows the user to edit the text of a
  * tree node in a <tt>TextInput</tt>. It is only intended to work with
  * {@link TreeNode} data and {@link TreeViewNodeRenderer} renderers.
  */
 public class TreeViewNodeEditor implements TreeView.NodeEditor {
+    /**
+     * Responsible for repositioning the popup when the table view's size changes.
+     */
+    private ComponentListener componentListener = new ComponentListener.Adapter() {
+        @Override
+        public void sizeChanged(Component component, int previousWidth, int previousHeight) {
+            ApplicationContext.queueCallback(new Runnable() {
+                @Override
+                public void run() {
+                    reposition();
+                }
+            });
+        }
+
+        @Override
+        public void locationChanged(Component component, int previousX, int previousY) {
+            ApplicationContext.queueCallback(new Runnable() {
+                @Override
+                public void run() {
+                    reposition();
+                }
+            });
+        }
+    };
+
     /**
      * Responsible for "edit initialization" and "edit finalization" tasks when
      * the edit popup is opened and closed, respectively.
@@ -54,6 +80,7 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
             Display display = window.getDisplay();
             display.getContainerMouseListeners().add(displayMouseHandler);
 
+            treeView.getComponentListeners().add(componentListener);
             treeView.getTreeViewListeners().add(treeViewHandler);
             treeView.getTreeViewNodeListeners().add(treeViewNodeHandler);
         }
@@ -63,6 +90,7 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
             // Clean up
             display.getContainerMouseListeners().remove(displayMouseHandler);
 
+            treeView.getComponentListeners().remove(componentListener);
             treeView.getTreeViewListeners().remove(treeViewHandler);
             treeView.getTreeViewNodeListeners().remove(treeViewNodeHandler);
 
@@ -101,8 +129,6 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
     private ContainerMouseListener displayMouseHandler = new ContainerMouseListener.Adapter() {
         @Override
         public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
-            // If the event did not occur within a window that is owned by
-            // this popup, close the popup
             Display display = (Display)container;
             Window window = (Window)display.getComponentAt(x, y);
 
@@ -197,6 +223,27 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
         List<?> treeData = treeView.getTreeData();
         TreeNode nodeData = (TreeNode)Sequence.Tree.get(treeData, path);
 
+        textInput = new TextInput();
+        textInput.setText(nodeData.getText());
+        textInput.getComponentKeyListeners().add(textInputKeyHandler);
+
+        popup = new Window(textInput, true);
+        popup.getWindowStateListeners().add(popupStateHandler);
+        popup.open(treeView.getWindow());
+        reposition();
+
+        textInput.selectAll();
+        textInput.requestFocus();
+    }
+
+    /**
+     * Repositions the popup to be located over the node being edited.
+     */
+    private void reposition() {
+        // Get the data being edited
+        List<?> treeData = treeView.getTreeData();
+        TreeNode nodeData = (TreeNode)Sequence.Tree.get(treeData, path);
+
         // Get the node bounds
         Bounds nodeBounds = treeView.getNodeBounds(path);
         int nodeIndent = treeView.getNodeIndent(path.getLength());
@@ -212,39 +259,27 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
         // Get the text bounds
         Bounds textBounds = nodeRenderer.getTextBounds();
 
-        if (textBounds != null) {
-            textInput = new TextInput();
-            Insets padding = (Insets)textInput.getStyles().get("padding");
+        // Calculate the bounds of what we're editing
+        Insets padding = (Insets)textInput.getStyles().get("padding");
+        Bounds editBounds = new Bounds(nodeBounds.x + textBounds.x - (padding.left + 1),
+            nodeBounds.y, nodeBounds.width - textBounds.x + (padding.left + 1),
+            nodeBounds.height);
 
-            // Calculate the bounds of what we're editing
-            Bounds editBounds = new Bounds(nodeBounds.x + textBounds.x - (padding.left + 1),
-                nodeBounds.y, nodeBounds.width - textBounds.x + (padding.left + 1),
-                nodeBounds.height);
+        // Scroll to make the text as visible as possible
+        treeView.scrollAreaToVisible(editBounds.x, editBounds.y,
+            textBounds.width + padding.left + 1, editBounds.height);
 
-            // Scroll to make the text as visible as possible
-            treeView.scrollAreaToVisible(editBounds.x, editBounds.y,
-                textBounds.width + padding.left + 1, editBounds.height);
+        // Constrain the bounds by what is visible through Viewport ancestors
+        editBounds = treeView.getVisibleArea(editBounds);
 
-            // Constrain the bounds by what is visible through Viewport ancestors
-            editBounds = treeView.getVisibleArea(editBounds.x, editBounds.y,
-                editBounds.width, editBounds.height);
-
-            textInput.setText(nodeData.getText());
-            textInput.setPreferredWidth(editBounds.width);
-            textInput.getComponentKeyListeners().add(textInputKeyHandler);
-
-            popup = new Window(textInput, true);
-            popup.getWindowStateListeners().add(popupStateHandler);
-
-            popup.setLocation(editBounds.x, editBounds.y
-                + (editBounds.height - textInput.getPreferredHeight(-1)) / 2);
-            popup.open(treeView.getWindow());
-
-            textInput.selectAll();
-            textInput.requestFocus();
-        }
+        textInput.setPreferredWidth(editBounds.width);
+        popup.setLocation(editBounds.x, editBounds.y
+            + (editBounds.height - textInput.getPreferredHeight(-1)) / 2);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isEditing() {
         return (treeView != null);
@@ -297,6 +332,9 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void cancel() {
         if (!isEditing()) {

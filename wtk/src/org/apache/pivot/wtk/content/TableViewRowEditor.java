@@ -468,7 +468,13 @@ public class TableViewRowEditor implements TableView.RowEditor {
 
         @Override
         public void locationChanged(Component component, int previousX, int previousY) {
-            // No-op
+            // Re-position the editor popup
+            ApplicationContext.queueCallback(new Runnable() {
+                @Override
+                public void run() {
+                    reposition();
+                }
+            });
         }
 
         @Override

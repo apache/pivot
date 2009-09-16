@@ -19,9 +19,11 @@ package org.apache.pivot.wtk.content;
 import org.apache.pivot.beans.BeanDictionary;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
+import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentKeyListener;
+import org.apache.pivot.wtk.ComponentListener;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.ContainerMouseListener;
 import org.apache.pivot.wtk.Display;
@@ -38,6 +40,31 @@ import org.apache.pivot.wtk.WindowStateListener;
  * Default table view cell editor.
  */
 public class TableViewCellEditor implements TableView.RowEditor {
+    /**
+     * Responsible for repositioning the popup when the table view's size changes.
+     */
+    private ComponentListener componentListener = new ComponentListener.Adapter() {
+        @Override
+        public void sizeChanged(Component component, int previousWidth, int previousHeight) {
+            ApplicationContext.queueCallback(new Runnable() {
+                @Override
+                public void run() {
+                    reposition();
+                }
+            });
+        }
+
+        @Override
+        public void locationChanged(Component component, int previousX, int previousY) {
+            ApplicationContext.queueCallback(new Runnable() {
+                @Override
+                public void run() {
+                    reposition();
+                }
+            });
+        }
+    };
+
     /**
      * Responsible for cancelling the edit if any relevant changes are made to
      * the table view while we're editing.
@@ -107,6 +134,7 @@ public class TableViewCellEditor implements TableView.RowEditor {
             Display display = window.getDisplay();
             display.getContainerMouseListeners().add(displayMouseHandler);
 
+            tableView.getComponentListeners().add(componentListener);
             tableView.getTableViewListeners().add(tableViewListener);
             tableView.getTableViewRowListeners().add(tableViewRowListener);
         }
@@ -116,6 +144,7 @@ public class TableViewCellEditor implements TableView.RowEditor {
             // Clean up
             display.getContainerMouseListeners().remove(displayMouseHandler);
 
+            tableView.getComponentListeners().remove(componentListener);
             tableView.getTableViewListeners().remove(tableViewListener);
             tableView.getTableViewRowListeners().remove(tableViewRowListener);
 
@@ -208,29 +237,41 @@ public class TableViewCellEditor implements TableView.RowEditor {
             // Get the data being edited
             Object cellData = rowData.get(columnName);
 
-            // Get the cell bounds
-            Bounds cellBounds = tableView.getCellBounds(rowIndex, columnIndex);
-            tableView.scrollAreaToVisible(cellBounds);
-            cellBounds = tableView.getVisibleArea(cellBounds);
-
             // Create the text input
             textInput = new TextInput();
             textInput.setText(cellData == null ? "" : cellData.toString());
-            textInput.setPreferredWidth(cellBounds.width);
             textInput.getComponentKeyListeners().add(textInputKeyHandler);
 
             // Create and open the popup
             popup = new Window(textInput, true);
             popup.getWindowStateListeners().add(popupWindowStateHandler);
-            popup.setLocation(cellBounds.x, cellBounds.y
-                + (cellBounds.height - textInput.getPreferredHeight(-1)) / 2);
             popup.open(tableView.getWindow());
+            reposition();
 
             textInput.selectAll();
             textInput.requestFocus();
         }
     }
 
+    /**
+     * Repositions the popup to be located over the row being edited.
+     */
+    private void reposition() {
+        // Get the cell bounds
+        Bounds cellBounds = tableView.getCellBounds(rowIndex, columnIndex);
+        tableView.scrollAreaToVisible(cellBounds);
+        cellBounds = tableView.getVisibleArea(cellBounds);
+
+        // Position the popup/editor to fit over the cell bounds
+        textInput.setPreferredWidth(cellBounds.width);
+        popup.setLocation(cellBounds.x, cellBounds.y
+            + (cellBounds.height - textInput.getPreferredHeight(-1)) / 2);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean isEditing() {
         return (tableView != null);
     }
@@ -278,6 +319,9 @@ public class TableViewCellEditor implements TableView.RowEditor {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void cancel() {
         if (!isEditing()) {
