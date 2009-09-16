@@ -41,6 +41,8 @@ import org.apache.pivot.wtk.Border;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.ComponentMouseButtonListener;
+import org.apache.pivot.wtk.Dialog;
+import org.apache.pivot.wtk.DialogCloseListener;
 import org.apache.pivot.wtk.ListButton;
 import org.apache.pivot.wtk.MenuHandler;
 import org.apache.pivot.wtk.DesktopApplicationContext;
@@ -61,6 +63,8 @@ import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Rollup;
 import org.apache.pivot.wtk.RollupStateListener;
+import org.apache.pivot.wtk.Sheet;
+import org.apache.pivot.wtk.SheetCloseListener;
 import org.apache.pivot.wtk.Slider;
 import org.apache.pivot.wtk.SliderValueListener;
 import org.apache.pivot.wtk.Spinner;
@@ -823,13 +827,19 @@ public class KitchenSink implements Application, Application.AboutHandler {
                                 System.err.println(exception);
                             }
 
-                            Alert alert = new Alert(MessageType.QUESTION, "Please select your favorite icon:",
+                            final Alert alert = new Alert(MessageType.QUESTION, "Please select your favorite icon:",
                                 options, body);
                             alert.setTitle("Select Icon");
                             alert.setSelectedOption(0);
                             alert.getDecorators().update(0, new ReflectionDecorator());
 
-                            alert.open(window);
+                            alert.setOwner(window);
+                            alert.open(window.getDisplay(), new DialogCloseListener() {
+                                @Override
+                                public void dialogClosed(Dialog dialog) {
+                                    alert.setOwner(null);
+                                }
+                            });
                         } else {
                             String message = (String)userData.get("message");
                             Alert.alert(MessageType.valueOf(messageType.toUpperCase()), message, window);
@@ -865,13 +875,19 @@ public class KitchenSink implements Application, Application.AboutHandler {
                                 System.err.println(exception);
                             }
 
-                            Prompt prompt = new Prompt(MessageType.QUESTION, "Please select your favorite icon:",
+                            final Prompt prompt = new Prompt(MessageType.QUESTION, "Please select your favorite icon:",
                                 options, body);
                             prompt.setTitle("Select Icon");
                             prompt.setSelectedOption(0);
                             prompt.getDecorators().update(0, new ReflectionDecorator());
 
-                            prompt.open(window);
+                            prompt.setOwner(window);
+                            prompt.open(window.getDisplay(), new SheetCloseListener() {
+                                @Override
+                                public void sheetClosed(Sheet sheet) {
+                                    prompt.setOwner(null);
+                                }
+                            });
                         } else {
                             String message = (String)userData.get("message");
                             Prompt.prompt(MessageType.valueOf(messageType.toUpperCase()), message, window);

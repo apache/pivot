@@ -38,6 +38,7 @@ import org.apache.pivot.wtkx.WTKXSerializer;
 public class MenuBars implements Application {
     private Window window = null;
     private TabPane tabPane = null;
+    private FileBrowserSheet fileBrowserSheet = null;
 
     private MenuHandler menuHandler = new MenuHandler.Adapter() {
         @Override
@@ -81,8 +82,7 @@ public class MenuBars implements Application {
         Action.getNamedActions().put("fileOpen", new Action() {
             @Override
             public void perform() {
-                FileBrowserSheet fileBrowserSheet = new FileBrowserSheet(FileBrowserSheet.Mode.OPEN);
-                fileBrowserSheet.open(window);
+                fileBrowserSheet.open(window.getDisplay());
             }
         });
 
@@ -118,6 +118,9 @@ public class MenuBars implements Application {
         window = (Window)wtkxSerializer.readObject(this, "menu_bars.wtkx");
 
         tabPane = (TabPane)wtkxSerializer.get("tabPane");
+
+        fileBrowserSheet = new FileBrowserSheet(FileBrowserSheet.Mode.OPEN);
+        fileBrowserSheet.setOwner(window);
 
         window.open(display);
     }

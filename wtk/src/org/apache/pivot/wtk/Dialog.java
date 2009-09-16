@@ -77,6 +77,16 @@ public class Dialog extends Frame {
         installSkin(Dialog.class);
     }
 
+    @Override
+    public final void setOwner(Window owner) {
+        if (isOpen()
+            && modal) {
+            throw new IllegalStateException("Dialog is open.");
+        }
+
+        super.setOwner(owner);
+    }
+
     /**
      * Opens the dialog.
      *
@@ -84,7 +94,17 @@ public class Dialog extends Frame {
      */
     @Override
     public final void open(Display display) {
-        open(display, null);
+        open(display, true, null);
+    }
+
+    /**
+     * Opens the dialog.
+     *
+     * @param display
+     * @param modal
+     */
+    public final void open(Display display, boolean modal) {
+        open(display, modal, null);
     }
 
     /**
@@ -93,67 +113,31 @@ public class Dialog extends Frame {
      * @param display
      * @param dialogCloseListener
      */
-    public void open(Display display, DialogCloseListener dialogCloseListener) {
+    public final void open(Display display, DialogCloseListener dialogCloseListener) {
+        open(display, true, dialogCloseListener);
+    }
+
+    /**
+     * Opens the dialog.
+     *
+     * @param display
+     * @param modal
+     * @param dialogCloseListener
+     */
+    public void open(Display display, boolean modal, DialogCloseListener dialogCloseListener) {
+        Window owner = getOwner();
+        if (modal
+            && owner == null) {
+            throw new IllegalStateException("Dialog does not have an owner.");
+        }
+
         super.open(display);
 
         if (isOpen()) {
-            this.dialogCloseListener = dialogCloseListener;
-            this.modal = false;
-        }
-    }
-
-    /**
-     * Opens the dialog as modal over its owner.
-     *
-     * @param owner
-     */
-    @Override
-    public final void open(Window owner) {
-        open(owner, true, null);
-    }
-
-    /**
-     * Opens the dialog.
-     *
-     * @param owner
-     * @param modal
-     */
-    public final void open(Window owner, boolean modal) {
-        open(owner, modal, null);
-    }
-
-    /**
-     * Opens the dialog as modal over its owner.
-     *
-     * @param owner
-     * The dialog's owner.
-     *
-     * @param dialogCloseListener
-     * Optional dialog close listener to be called when the dialog is closed.
-     */
-    public final void open(Window owner, DialogCloseListener dialogCloseListener) {
-        open(owner, true, dialogCloseListener);
-    }
-
-    /**
-     * Opens the dialog.
-     *
-     * @param owner
-     * The dialog's owner.
-     *
-     * @param modal
-     * If <tt>true</tt>, the dialog is opened as modal, disabling its owner
-     * tree.
-     *
-     * @param dialogCloseListener
-     * Optional dialog close listener to be called when the dialog is closed.
-     */
-    public void open(Window owner, boolean modal, DialogCloseListener dialogCloseListener) {
-        super.open(owner);
-
-        if (isOpen()) {
-            this.dialogCloseListener = dialogCloseListener;
             this.modal = modal;
+            this.dialogCloseListener = dialogCloseListener;
+
+            result = false;
         }
     }
 

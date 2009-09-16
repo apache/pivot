@@ -494,8 +494,8 @@ public class Window extends Container {
 
     public void setOwner(Window owner) {
         if (owner != null
-            && owner.isAuxilliary()
-            && !isAuxilliary()) {
+            && !isAuxilliary()
+            && owner.isAuxilliary()) {
             throw new IllegalArgumentException("Primary windows must have a"
                 + " primary owner.");
         }
@@ -617,26 +617,6 @@ public class Window extends Container {
                 windowStateListeners.windowOpenVetoed(this, vote);
             }
         }
-    }
-
-    /**
-     * Opens the window.
-     *
-     * @param owner
-     * The window's owner.
-     */
-    public void open(Window owner) {
-        if (owner == null) {
-            throw new IllegalArgumentException("owner is null.");
-        }
-
-        if (isOpen()
-            && getOwner() != owner) {
-            throw new IllegalStateException("Window is already open with a different owner.");
-        }
-
-        setOwner(owner);
-        open(owner.getDisplay());
     }
 
     /**

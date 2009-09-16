@@ -131,6 +131,8 @@ public class TableViewCellEditor implements TableView.RowEditor {
     private WindowStateListener popupWindowStateHandler = new WindowStateListener.Adapter() {
         @Override
         public void windowOpened(Window window) {
+            window.setOwner(tableView.getWindow());
+
             Display display = window.getDisplay();
             display.getContainerMouseListeners().add(displayMouseHandler);
 
@@ -150,6 +152,7 @@ public class TableViewCellEditor implements TableView.RowEditor {
 
             // Move the owner to front
             window.getOwner().moveToFront();
+            window.setOwner(null);
 
             // Free memory
             tableView = null;
@@ -245,7 +248,7 @@ public class TableViewCellEditor implements TableView.RowEditor {
             // Create and open the popup
             popup = new Window(textInput, true);
             popup.getWindowStateListeners().add(popupWindowStateHandler);
-            popup.open(tableView.getWindow());
+            popup.open(tableView.getDisplay());
             reposition();
 
             textInput.selectAll();

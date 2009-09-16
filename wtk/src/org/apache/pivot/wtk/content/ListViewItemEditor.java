@@ -117,6 +117,8 @@ public class ListViewItemEditor implements ListView.ItemEditor {
     private WindowStateListener popupWindowStateHandler = new WindowStateListener.Adapter() {
         @Override
         public void windowOpened(Window window) {
+            window.setOwner(listView.getWindow());
+
             Display display = window.getDisplay();
             display.getContainerMouseListeners().add(displayMouseHandler);
 
@@ -134,6 +136,7 @@ public class ListViewItemEditor implements ListView.ItemEditor {
             listView.getListViewItemListeners().remove(listViewItemListener);
 
             window.getOwner().moveToFront();
+            window.setOwner(null);
 
             listView = null;
             index = -1;
@@ -199,7 +202,7 @@ public class ListViewItemEditor implements ListView.ItemEditor {
         // Create and open the popup
         popup = new Window(textInput, true);
         popup.getWindowStateListeners().add(popupWindowStateHandler);
-        popup.open(listView.getWindow());
+        popup.open(listView.getDisplay());
         reposition();
 
         textInput.selectAll();

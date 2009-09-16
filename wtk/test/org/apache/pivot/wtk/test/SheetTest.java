@@ -75,6 +75,7 @@ public class SheetTest implements Application {
 
         final Prompt prompt = new Prompt(MessageType.INFO, "Prompt", new ArrayList<String>("OK"), promptBody);
         prompt.setTitle("Prompt");
+        prompt.setOwner(frame);
 
         Label alertBody = new Label("Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an AS IS BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.");
         alertBody.getStyles().put("wrapText", true);
@@ -103,9 +104,7 @@ public class SheetTest implements Application {
         windowContent.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {
-                // sheet.open(frame);
-                prompt.open(frame);
-                // alert.open(frame);
+                prompt.open(display);
             }
         });
 

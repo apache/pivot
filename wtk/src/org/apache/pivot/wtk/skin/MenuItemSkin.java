@@ -38,12 +38,16 @@ public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListen
     private WindowStateListener menuPopupWindowStateListener = new WindowStateListener.Adapter() {
         @Override
         public void windowOpened(Window window) {
+            window.setOwner(getComponent().getWindow());
+
             Display display = window.getDisplay();
             display.getContainerMouseListeners().add(displayMouseListener);
         }
 
         @Override
         public void windowClosed(Window window, Display display) {
+            window.setOwner(null);
+
             display.getContainerMouseListeners().remove(displayMouseListener);
         }
     };
@@ -174,7 +178,7 @@ public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListen
             // TODO Ensure that the popup remains within the bounds of the display
 
             menuPopup.setLocation(location.x, location.y);
-            menuPopup.open(menuItem.getWindow());
+            menuPopup.open(menuItem.getDisplay());
             menuPopup.requestFocus();
         }
     }

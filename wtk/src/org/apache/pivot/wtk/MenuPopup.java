@@ -112,21 +112,6 @@ public class MenuPopup extends Window {
         open(display, location.x, location.y);
     }
 
-    public void open(Window owner, int x, int y) {
-        autoClose = true;
-
-        setLocation(x, y);
-        super.open(owner);
-    }
-
-    public final void open(Window owner, Point location) {
-        if (location == null) {
-            throw new IllegalArgumentException("location is null.");
-        }
-
-        open(owner, location.x, location.y);
-    }
-
     @Override
     public boolean isClosing() {
         return closing;

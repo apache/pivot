@@ -64,7 +64,13 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
 
     private WindowStateListener menuPopupWindowStateListener = new WindowStateListener.Adapter() {
         @Override
+        public void windowOpened(Window window) {
+            window.setOwner(getComponent().getWindow());
+        }
+
+        @Override
         public void windowClosed(Window window, Display display) {
+            window.setOwner(null);
             repaintComponent();
         }
     };
@@ -519,7 +525,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
 
                 menuPopup.setLocation(x, y);
                 menuPopup.setPreferredSize(popupWidth, popupHeight);
-                menuPopup.open(menuButton.getWindow());
+                menuPopup.open(menuButton.getDisplay());
 
                 menuPopup.requestFocus();
             }

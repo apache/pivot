@@ -53,8 +53,6 @@ import org.apache.pivot.wtk.skin.ListButtonSkin;
  */
 public class TerraListButtonSkin extends ListButtonSkin {
     private WindowStateListener listViewPopupStateListener = new WindowStateListener() {
-        private boolean focusButtonOnClose = true;
-
         @Override
         public Vote previewWindowOpen(Window window, Display display) {
             return Vote.APPROVE;
@@ -67,7 +65,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
 
         @Override
         public void windowOpened(Window window) {
-            focusButtonOnClose = true;
+            window.setOwner(getComponent().getWindow());
         }
 
         @Override
@@ -82,7 +80,6 @@ public class TerraListButtonSkin extends ListButtonSkin {
                 closeTransition.start(new TransitionListener() {
                     @Override
                     public void transitionCompleted(Transition transition) {
-                        focusButtonOnClose = window.containsFocus();
                         window.close();
                     }
                 });
@@ -107,10 +104,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
         @Override
         public void windowClosed(Window window, Display display) {
             closeTransition = null;
-            if (focusButtonOnClose) {
-                ListButton listButton = (ListButton)getComponent();
-                listButton.requestFocus();
-            }
+            window.setOwner(null);
         }
     };
 
@@ -664,7 +658,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
 
                     listViewPopup.setLocation(x, y);
                     listViewPopup.setPreferredSize(popupWidth, popupHeight);
-                    listViewPopup.open(listButton.getWindow());
+                    listViewPopup.open(listButton.getDisplay());
 
                     if (listView.getSelectedIndex() == -1
                         && listView.getListData().getLength() > 0) {

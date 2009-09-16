@@ -80,34 +80,25 @@ public class Sheet extends Window {
 
     @Override
     public final void setOwner(Window owner) {
-        if (owner == null) {
-            throw new UnsupportedOperationException("A sheet must have an owner.");
-        }
-
-        if (owner.getContent() == null) {
-            throw new UnsupportedOperationException("A sheet's owner must have a content component.");
+        if (isOpen()) {
+            throw new IllegalStateException("Sheet is open.");
         }
 
         super.setOwner(owner);
     }
 
     @Override
-    public void open(Display display) {
+    public final void open(Display display) {
+        open(display, null);
+    }
+
+    public void open(Display display, SheetCloseListener sheetCloseListener) {
         Window owner = getOwner();
         if (owner == null) {
             throw new IllegalStateException("Sheet does not have an owner.");
         }
 
         super.open(display);
-    }
-
-    @Override
-    public final void open(Window owner) {
-        open(owner, null);
-    }
-
-    public void open(Window owner, SheetCloseListener sheetCloseListener) {
-        super.open(owner);
 
         if (isOpen()) {
             this.sheetCloseListener = sheetCloseListener;

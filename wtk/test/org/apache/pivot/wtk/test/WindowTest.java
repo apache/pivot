@@ -60,49 +60,58 @@ public class WindowTest implements Application {
 
         Sheet sheet = new Sheet();
         sheet.setContent(new Label("Hello Foo"));
-        sheet.open(window1);
+        sheet.setOwner(window1);
+        sheet.open(display);
 
         Frame window1a = new Frame();
         window1a.setTitle("Window 1 A");
         window1a.setPreferredSize(160, 120);
-        window1a.open(display); // window1);
+        window1a.setOwner(window1);
+        window1a.open(display);
 
         Frame window1ai = new Frame();
         window1ai.setTitle("Window 1 A I");
         window1ai.setPreferredSize(160, 60);
-        window1ai.open(display); // window1a);
+        window1ai.setOwner(window1a);
+        window1ai.open(display);
         window1ai.getDecorators().update(0, new ReflectionDecorator());
 
         Frame window1aii = new Frame();
         window1aii.setTitle("Window 1 A II");
         window1aii.setPreferredSize(160, 60);
-        window1aii.open(window1a);
+        window1aii.setOwner(window1a);
+        window1aii.open(display);
 
         Frame window1b = new Frame();
         window1b.setTitle("Window 1 B");
         window1b.setPreferredSize(160, 120);
         window1b.setLocation(20, 20);
-        window1b.open(window1);
+        window1b.setOwner(window1);
+        window1b.open(display);
 
         Frame window1bi = new Frame();
         window1bi.setTitle("Window 1 B I");
         window1bi.setPreferredSize(160, 60);
-        window1bi.open(window1b);
+        window1bi.setOwner(window1b);
+        window1bi.open(display);
 
         Frame window1bii = new Frame();
         window1bii.setTitle("Window 1 B II");
         window1bii.setPreferredSize(160, 60);
-        window1bii.open(window1b);
+        window1bii.setOwner(window1b);
+        window1bii.open(display);
 
         Palette palette1 = new Palette();
         palette1.setTitle("Palette 1bii 1");
         palette1.setPreferredSize(160, 60);
-        palette1.open(window1bii);
+        palette1.setOwner(window1bii);
+        palette1.open(display);
 
         Palette palette2 = new Palette();
         palette2.setTitle("Palette 1bii 2");
         palette2.setPreferredSize(160, 60);
-        palette2.open(window1bii);
+        palette2.setOwner(window1bii);
+        palette2.open(display);
 
         Frame dialogOwner = new Frame();
         dialogOwner.setTitle("Dialog Owner");
@@ -112,12 +121,14 @@ public class WindowTest implements Application {
         Dialog dialog = new Dialog();
         dialog.setTitle("Dialog 1");
         dialog.setPreferredSize(160, 60);
-        dialog.open(dialogOwner, true);
+        dialog.setOwner(dialogOwner);
+        dialog.open(display, true);
 
         Dialog dialog2 = new Dialog();
         dialog2.setTitle("Dialog 2");
         dialog2.setPreferredSize(160, 60);
-        dialog2.open(dialog, true);
+        dialog2.setOwner(dialog);
+        dialog2.open(display, true);
     }
 
     @Override

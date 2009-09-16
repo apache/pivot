@@ -77,6 +77,8 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
     private WindowStateListener popupStateHandler = new WindowStateListener.Adapter() {
         @Override
         public void windowOpened(Window window) {
+            window.setOwner(treeView.getWindow());
+
             Display display = window.getDisplay();
             display.getContainerMouseListeners().add(displayMouseHandler);
 
@@ -96,6 +98,7 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
 
             // Move the owner to front
             window.getOwner().moveToFront();
+            window.setOwner(null);
 
             // Free memory
             treeView = null;
@@ -229,7 +232,7 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
 
         popup = new Window(textInput, true);
         popup.getWindowStateListeners().add(popupStateHandler);
-        popup.open(treeView.getWindow());
+        popup.open(treeView.getDisplay());
         reposition();
 
         textInput.selectAll();

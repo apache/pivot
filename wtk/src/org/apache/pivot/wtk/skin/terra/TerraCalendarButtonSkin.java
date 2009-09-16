@@ -53,8 +53,6 @@ import org.apache.pivot.wtk.skin.CalendarButtonSkin;
  */
 public class TerraCalendarButtonSkin extends CalendarButtonSkin {
     private WindowStateListener calendarPopupStateListener = new WindowStateListener() {
-        private boolean focusButtonOnClose = true;
-
         @Override
         public Vote previewWindowOpen(Window window, Display display) {
             return Vote.APPROVE;
@@ -67,7 +65,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
 
         @Override
         public void windowOpened(Window window) {
-            focusButtonOnClose = true;
+            window.setOwner(getComponent().getWindow());
         }
 
         @Override
@@ -82,7 +80,6 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
                 closeTransition.start(new TransitionListener() {
                     @Override
                     public void transitionCompleted(Transition transition) {
-                        focusButtonOnClose = window.containsFocus();
                         window.close();
                     }
                 });
@@ -107,10 +104,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
         @Override
         public void windowClosed(Window window, Display display) {
             closeTransition = null;
-            if (focusButtonOnClose) {
-                CalendarButton calendarButton = (CalendarButton)getComponent();
-                calendarButton.requestFocus();
-            }
+            window.setOwner(null);
         }
     };
 
@@ -538,7 +532,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
 
                 calendarPopup.setLocation(x, y);
                 calendarPopup.setPreferredSize(popupWidth, popupHeight);
-                calendarPopup.open(calendarButton.getWindow());
+                calendarPopup.open(calendarButton.getDisplay());
 
                 calendar.requestFocus();
             }
