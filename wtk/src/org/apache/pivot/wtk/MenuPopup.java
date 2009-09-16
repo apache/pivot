@@ -74,8 +74,6 @@ public class MenuPopup extends Window {
     }
 
     public MenuPopup(Menu menu) {
-        super(true);
-
         setMenu(menu);
         installSkin(MenuPopup.class);
     }

@@ -34,7 +34,7 @@ public class Palette extends Window {
     }
 
     public Palette(String title, Component content) {
-        super(content, true);
+        super(content);
 
         setTitle(title);
         installSkin(Palette.class);

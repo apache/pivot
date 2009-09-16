@@ -147,7 +147,7 @@ public abstract class ListButtonSkin extends ButtonSkin
     public ListButtonSkin() {
         listView = new ListView();
 
-        listViewPopup = new Window(true);
+        listViewPopup = new Window();
         listViewPopup.getComponentMouseButtonListeners().add(listViewPopupMouseButtonListener);
         listViewPopup.getComponentKeyListeners().add(listViewPopupKeyListener);
         listViewPopup.getWindowStateListeners().add(listViewPopupWindowStateListener);

@@ -372,8 +372,6 @@ public class Window extends Container {
         }
     }
 
-    private boolean auxilliary;
-
     private Window owner = null;
     private ArrayList<Window> ownedWindows = new ArrayList<Window>();
 
@@ -401,20 +399,10 @@ public class Window extends Container {
     private static Window activeWindow = null;
 
     public Window() {
-        this(null, false);
-    }
-
-    public Window(boolean auxilliary) {
-        this(null, auxilliary);
+        this(null);
     }
 
     public Window(Component content) {
-        this(content, false);
-    }
-
-    public Window(Component content, boolean auxilliary) {
-        this.auxilliary = auxilliary;
-
         setContent(content);
         installSkin(Window.class);
     }
@@ -494,10 +482,9 @@ public class Window extends Container {
 
     public void setOwner(Window owner) {
         if (owner != null
-            && !isAuxilliary()
-            && owner.isAuxilliary()) {
-            throw new IllegalArgumentException("Primary windows must have a"
-                + " primary owner.");
+            && isOpen()
+            && !owner.isOpen()) {
+            throw new IllegalArgumentException("Owner is not open.");
         }
 
         Window previousOwner = this.owner;
@@ -595,11 +582,6 @@ public class Window extends Container {
         if (owner != null
             && !owner.isOpen()) {
             throw new IllegalArgumentException("Owner is not open.");
-        }
-
-        if (owner != null
-            && owner.getDisplay() != display) {
-            throw new IllegalArgumentException("Owner is opened on a different display.");
         }
 
         if (!isOpen()) {
@@ -794,17 +776,6 @@ public class Window extends Container {
     }
 
     /**
-     * Returns the window's auxilliary flag. Auxilliary windows can't become
-     * active and can only own other auxilliary windows.
-     *
-     * @return
-     * <tt>true</tt> if this is an auxilliary window; <tt>false</tt>, otherwise.
-     */
-    public boolean isAuxilliary() {
-        return auxilliary;
-    }
-
-    /**
      * Returns the window's active state.
      *
      * @return
@@ -821,8 +792,7 @@ public class Window extends Container {
      * <tt>true</tt> if the window became active; <tt>false</tt>, otherwise.
      */
     public boolean requestActive() {
-        if (!isAuxilliary()
-            && isOpen()
+        if (isOpen()
             && isEnabled()) {
             setActiveWindow(this);
         }
@@ -970,13 +940,6 @@ public class Window extends Container {
 
         for (Window ownedWindow : sortedOwnedWindows) {
             ownedWindow.moveToFront();
-        }
-
-        // Activate the window
-        if (isShowing()
-            && isEnabled()
-            && !isAuxilliary()) {
-            setActiveWindow(this);
         }
     }
 

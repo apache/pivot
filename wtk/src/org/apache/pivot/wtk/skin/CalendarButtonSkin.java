@@ -148,7 +148,7 @@ public abstract class CalendarButtonSkin extends ButtonSkin
     public CalendarButtonSkin() {
         calendar = new Calendar();
 
-        calendarPopup = new Window(true);
+        calendarPopup = new Window();
         calendarPopup.getComponentMouseButtonListeners().add(calendarPopupMouseButtonListener);
         calendarPopup.getComponentKeyListeners().add(calendarPopupKeyListener);
         calendarPopup.getWindowStateListeners().add(calendarPopupWindowStateListener);

@@ -200,7 +200,7 @@ public class ListViewItemEditor implements ListView.ItemEditor {
         textInput.getComponentKeyListeners().add(textInputKeyHandler);
 
         // Create and open the popup
-        popup = new Window(textInput, true);
+        popup = new Window(textInput);
         popup.getWindowStateListeners().add(popupWindowStateHandler);
         popup.open(listView.getDisplay());
         reposition();

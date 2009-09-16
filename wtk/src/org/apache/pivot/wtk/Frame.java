@@ -51,7 +51,7 @@ public class Frame extends Window {
     }
 
     public Frame(String title, Component content) {
-        super(content, false);
+        super(content);
 
         setTitle(title);
         installSkin(Frame.class);
@@ -77,6 +77,12 @@ public class Frame extends Window {
 
             frameListeners.menuBarChanged(this, previousMenuBar);
         }
+    }
+
+    @Override
+    public void moveToFront() {
+        super.moveToFront();
+        requestActive();
     }
 
     @Override

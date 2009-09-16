@@ -27,9 +27,6 @@ import org.apache.pivot.wtk.Window;
  * Display skin.
  */
 public class DisplaySkin extends ContainerSkin {
-    // Style properties
-    private boolean activeWindowFollowsMouse = false;
-
     public DisplaySkin() {
         super();
         setBackgroundColor(Color.LIGHT_GRAY);
@@ -66,32 +63,6 @@ public class DisplaySkin extends ContainerSkin {
                 }
             }
         }
-    }
-
-    public boolean getActiveWindowFollowsMouse() {
-        return activeWindowFollowsMouse;
-    }
-
-    public void setActiveWindowFollowsMouse(boolean activeWindowFollowsMouse) {
-        this.activeWindowFollowsMouse = activeWindowFollowsMouse;
-    }
-
-    @Override
-    public boolean mouseMove(Component component, int x, int y) {
-        boolean consumed = super.mouseMove(component, x, y);
-
-        if (activeWindowFollowsMouse) {
-            Display display = (Display)getComponent();
-
-            Window window = (Window)display.getComponentAt(x, y);
-            if (window != null
-                && window.isEnabled()
-                && !window.isAuxilliary()) {
-                window.requestActive();
-            }
-        }
-
-        return consumed;
     }
 }
 

@@ -230,7 +230,7 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
         textInput.setText(nodeData.getText());
         textInput.getComponentKeyListeners().add(textInputKeyHandler);
 
-        popup = new Window(textInput, true);
+        popup = new Window(textInput);
         popup.getWindowStateListeners().add(popupStateHandler);
         popup.open(treeView.getDisplay());
         reposition();

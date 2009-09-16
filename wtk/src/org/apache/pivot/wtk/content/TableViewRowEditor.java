@@ -117,8 +117,6 @@ public class TableViewRowEditor implements TableView.RowEditor {
 
         @SuppressWarnings("unchecked")
         public EditorPopup(TableView tableView, int rowIndex, int columnIndex) {
-            super(true);
-
             this.tableView = tableView;
             this.rowIndex = rowIndex;
             this.columnIndex = columnIndex;

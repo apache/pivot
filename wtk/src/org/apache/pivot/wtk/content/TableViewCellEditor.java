@@ -246,7 +246,7 @@ public class TableViewCellEditor implements TableView.RowEditor {
             textInput.getComponentKeyListeners().add(textInputKeyHandler);
 
             // Create and open the popup
-            popup = new Window(textInput, true);
+            popup = new Window(textInput);
             popup.getWindowStateListeners().add(popupWindowStateHandler);
             popup.open(tableView.getDisplay());
             reposition();

@@ -827,7 +827,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                                 System.err.println(exception);
                             }
 
-                            final Alert alert = new Alert(MessageType.QUESTION, "Please select your favorite icon:",
+                            Alert alert = new Alert(MessageType.QUESTION, "Please select your favorite icon:",
                                 options, body);
                             alert.setTitle("Select Icon");
                             alert.setSelectedOption(0);
@@ -837,7 +837,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                             alert.open(window.getDisplay(), new DialogCloseListener() {
                                 @Override
                                 public void dialogClosed(Dialog dialog) {
-                                    alert.setOwner(null);
+                                    dialog.setOwner(null);
                                 }
                             });
                         } else {
@@ -875,7 +875,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                                 System.err.println(exception);
                             }
 
-                            final Prompt prompt = new Prompt(MessageType.QUESTION, "Please select your favorite icon:",
+                            Prompt prompt = new Prompt(MessageType.QUESTION, "Please select your favorite icon:",
                                 options, body);
                             prompt.setTitle("Select Icon");
                             prompt.setSelectedOption(0);
@@ -885,7 +885,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                             prompt.open(window.getDisplay(), new SheetCloseListener() {
                                 @Override
                                 public void sheetClosed(Sheet sheet) {
-                                    prompt.setOwner(null);
+                                    sheet.setOwner(null);
                                 }
                             });
                         } else {

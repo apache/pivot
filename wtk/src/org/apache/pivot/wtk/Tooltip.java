@@ -39,8 +39,6 @@ public class Tooltip extends Window {
     private TooltipListenerList tooltipListeners = new TooltipListenerList();
 
     public Tooltip(String text) {
-        super(true);
-
         setText(text);
         installSkin(Tooltip.class);
     }
