@@ -24,7 +24,9 @@ import org.apache.pivot.wtk.SortDirection;
 import org.apache.pivot.wtk.TableView;
 
 /**
- * Compares two rows. The dictionary values are expected to implement {@link Comparable}.
+ * Compares two rows. If the column values implement {@link Comparable}, the
+ * {@link Comparable#compareTo(Object)} method will be used to compare the values.
+ * Otherwise, the values will be compared as strings using {@link Object#toString()}.
  */
 public class TableViewRowComparator implements Comparator<Object> {
     private TableView tableView;
@@ -71,11 +73,18 @@ public class TableViewRowComparator implements Comparator<Object> {
                 String columnName = pair.key;
                 SortDirection sortDirection = sort.get(columnName);
 
-                Comparable<Object> comparable = (Comparable<Object>)row1.get(columnName);
-                Object value = row2.get(columnName);
+                Object value1 = row1.get(columnName);
+                Object value2 = row2.get(columnName);
 
-                result = (comparable.compareTo(value))
-                    * (sortDirection == SortDirection.ASCENDING ? 1 : -1);
+                if (value1 instanceof Comparable<?>) {
+                    result = ((Comparable<Object>)value1).compareTo(value2);
+                } else {
+                    String s1 = value1.toString();
+                    String s2 = value2.toString();
+                    result = s1.compareTo(s2);
+                }
+
+                result *= (sortDirection == SortDirection.ASCENDING ? 1 : -1);
 
                 i++;
             }
