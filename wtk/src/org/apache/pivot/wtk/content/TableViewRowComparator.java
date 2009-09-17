@@ -24,8 +24,7 @@ import org.apache.pivot.wtk.SortDirection;
 import org.apache.pivot.wtk.TableView;
 
 /**
- * Compares two rows. The dictionary values are expected to implement {@link Comparable}. If
- * not, the string representation of the value will be used.
+ * Compares two rows. The dictionary values are expected to implement {@link Comparable}.
  */
 public class TableViewRowComparator implements Comparator<Object> {
     private TableView tableView;
@@ -46,11 +45,6 @@ public class TableViewRowComparator implements Comparator<Object> {
         TableView.SortDictionary sort = tableView.getSort();
 
         if (sort.getLength() > 0) {
-            // TODO Support sorting on multiple columns
-            if (sort.getLength() > 1) {
-                throw new UnsupportedOperationException("Multi-column sort not yet supported.");
-            }
-
             Dictionary<String, ?> row1;
             if (o1 instanceof Dictionary<?, ?>) {
                 row1 = (Dictionary<String, ?>)o1;
@@ -65,21 +59,25 @@ public class TableViewRowComparator implements Comparator<Object> {
                 row2 = new BeanDictionary(o2);
             }
 
-            String columnName = sort.get(0).key;
-            SortDirection sortDirection = sort.get(0).value;
+            result = 0;
 
-            Comparable<Object> comparable = (Comparable<Object>)row1.get(columnName);
-            Object value = row2.get(columnName);
+            int n = sort.getLength();
+            int i = 0;
 
-            if (comparable == null
-                && value == null) {
-                result = 0;
-            } else if (comparable == null) {
-                result = 1;
-            } else if (value == null) {
-                result = -1;
-            } else {
-                result = (comparable.compareTo(value)) * (sortDirection == SortDirection.ASCENDING ? 1 : -1);
+            while (i < n
+                && result == 0) {
+                Dictionary.Pair<String, SortDirection> pair = sort.get(i);
+
+                String columnName = pair.key;
+                SortDirection sortDirection = sort.get(columnName);
+
+                Comparable<Object> comparable = (Comparable<Object>)row1.get(columnName);
+                Object value = row2.get(columnName);
+
+                result = (comparable.compareTo(value))
+                    * (sortDirection == SortDirection.ASCENDING ? 1 : -1);
+
+                i++;
             }
         } else {
             result = 0;

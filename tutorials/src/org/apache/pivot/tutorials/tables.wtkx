@@ -43,7 +43,7 @@ limitations under the License.
                                 </TableView>
                             </view>
                             <columnHeader>
-                                <TableViewHeader tableView="$sortableTableView" sortMode="single_column"/>
+                                <TableViewHeader tableView="$sortableTableView" sortMode="multi_column"/>
                             </columnHeader>
                         </ScrollPane>
                     </content>

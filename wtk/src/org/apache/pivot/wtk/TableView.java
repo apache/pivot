@@ -799,6 +799,7 @@ public class TableView extends Component {
                 if (update) {
                     tableViewSortListeners.sortUpdated(TableView.this, columnName, previousSortDirection);
                 } else {
+                    sortList.add(columnName);
                     tableViewSortListeners.sortAdded(TableView.this, columnName);
                 }
             }

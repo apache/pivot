@@ -68,6 +68,7 @@ import org.apache.pivot.wtk.Sheet;
 import org.apache.pivot.wtk.SheetCloseListener;
 import org.apache.pivot.wtk.Slider;
 import org.apache.pivot.wtk.SliderValueListener;
+import org.apache.pivot.wtk.SortDirection;
 import org.apache.pivot.wtk.Spinner;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TableViewSortListener;
@@ -545,10 +546,31 @@ public class KitchenSink implements Application, Application.AboutHandler {
                 }
 
                 sortableTableView.setTableData(tableData);
-                sortableTableView.getTableViewSortListeners().add(new TableViewSortListener.Adapter() {
+                sortableTableView.getTableViewSortListeners().add(new TableViewSortListener() {
                     @Override
-                    @SuppressWarnings("unchecked")
+                    public void sortAdded(TableView tableView, String columnName) {
+                        resort(tableView);
+                    }
+
+                    @Override
+                    public void sortUpdated(TableView tableView, String columnName,
+                        SortDirection previousSortDirection) {
+                        resort(tableView);
+                    }
+
+                    @Override
+                    public void sortRemoved(TableView tableView, String columnName,
+                        SortDirection sortDirection) {
+                        resort(tableView);
+                    }
+
+                    @Override
                     public void sortChanged(TableView tableView) {
+                        resort(tableView);
+                    }
+
+                    @SuppressWarnings("unchecked")
+                    private void resort(TableView tableView) {
                         List<Object> tableData = (List<Object>)tableView.getTableData();
                         tableData.setComparator(new TableViewRowComparator(tableView));
                     }

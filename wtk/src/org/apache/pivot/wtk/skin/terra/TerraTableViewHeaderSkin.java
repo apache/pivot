@@ -31,6 +31,7 @@ import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Cursor;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
+import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.SortDirection;
@@ -753,10 +754,11 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
                         sortDirection = SortDirection.ASCENDING;
                     }
 
-                    if (sortMode == TableViewHeader.SortMode.SINGLE_COLUMN) {
-                        tableView.setSort(columnName, sortDirection);
-                    } else if (sortMode == TableViewHeader.SortMode.MULTI_COLUMN) {
+                    if (sortMode == TableViewHeader.SortMode.MULTI_COLUMN
+                        && Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
                         tableView.getSort().put(columnName, sortDirection);
+                    } else {
+                        tableView.setSort(columnName, sortDirection);
                     }
 
                     consumed = true;
