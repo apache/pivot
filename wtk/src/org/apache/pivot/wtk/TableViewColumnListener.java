@@ -65,14 +65,6 @@ public interface TableViewColumnListener {
     public void columnWidthChanged(TableView.Column column, int previousWidth, boolean previousRelative);
 
     /**
-     * Called when a column's sort direction has changed.
-     *
-     * @param column
-     * @param previousSortDirection
-     */
-    public void columnSortDirectionChanged(TableView.Column column, SortDirection previousSortDirection);
-
-    /**
      * Called when a column's filter has changed.
      *
      * @param column

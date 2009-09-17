@@ -24,6 +24,7 @@ import java.net.URL;
 import java.util.Comparator;
 
 import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.serialization.JSONSerializer;
@@ -77,7 +78,6 @@ import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.CalendarDateSpinnerData;
 import org.apache.pivot.wtk.content.ListItem;
 import org.apache.pivot.wtk.content.NumericSpinnerData;
-import org.apache.pivot.wtk.content.TableRow;
 import org.apache.pivot.wtk.content.TableViewHeaderData;
 import org.apache.pivot.wtk.content.TreeBranch;
 import org.apache.pivot.wtk.content.TreeNode;
@@ -531,7 +531,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                 ArrayList<Object> tableData = new ArrayList<Object>(10000);
 
                 for (int i = 0, n = tableData.getCapacity(); i < n; i++) {
-                    TableRow tableRow = new TableRow();
+                    HashMap<String, Integer> tableRow = new HashMap<String, Integer>();
 
                     tableRow.put("i", i);
                     tableRow.put("a", (int)Math.round(Math.random() * 10));

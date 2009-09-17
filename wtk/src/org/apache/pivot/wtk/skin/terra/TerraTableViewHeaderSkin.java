@@ -25,6 +25,7 @@ import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
 
 import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
@@ -38,17 +39,18 @@ import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TableViewColumnListener;
 import org.apache.pivot.wtk.TableViewHeader;
 import org.apache.pivot.wtk.TableViewHeaderListener;
+import org.apache.pivot.wtk.TableViewSortListener;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.TableViewHeader.SortMode;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.skin.ComponentSkin;
 
-
 /**
  * Table view header skin.
  */
 public class TerraTableViewHeaderSkin extends ComponentSkin
-    implements TableViewHeader.Skin, TableViewHeaderListener, TableViewColumnListener {
+    implements TableViewHeader.Skin, TableViewHeaderListener, TableViewColumnListener,
+        TableViewSortListener {
     private class SortIndicatorImage extends Image {
         private SortDirection sortDirection = null;
 
@@ -156,6 +158,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         TableView tableView = tableViewHeader.getTableView();
         if (tableView != null) {
             tableView.getTableViewColumnListeners().add(this);
+            tableView.getTableViewSortListeners().add(this);
         }
     }
 
@@ -167,6 +170,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         TableView tableView = tableViewHeader.getTableView();
         if (tableView != null) {
             tableView.getTableViewColumnListeners().remove(this);
+            tableView.getTableViewSortListeners().remove(this);
         }
 
         super.uninstall();
@@ -308,7 +312,8 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
 
                 // Draw the sort image
                 Image sortImage = null;
-                SortDirection sortDirection = column.getSortDirection();
+                String columnName = column.getName();
+                SortDirection sortDirection = tableView.getSort().get(columnName);
 
                 if (sortDirection != null) {
                     switch (sortDirection) {
@@ -762,11 +767,13 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         TableView previousTableView) {
         if (previousTableView != null) {
             previousTableView.getTableViewColumnListeners().remove(this);
+            previousTableView.getTableViewSortListeners().remove(this);
         }
 
         TableView tableView = tableViewHeader.getTableView();
         if (tableView != null) {
             tableView.getTableViewColumnListeners().add(this);
+            tableView.getTableViewSortListeners().add(this);
         }
 
         invalidateComponent();
@@ -810,11 +817,6 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
     }
 
     @Override
-    public void columnSortDirectionChanged(TableView.Column column, SortDirection previousSortDirection) {
-        repaintComponent();
-    }
-
-    @Override
     public void columnFilterChanged(TableView.Column column, Object previousFilter) {
         // No-op
     }
@@ -822,5 +824,25 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
     @Override
     public void columnCellRendererChanged(TableView.Column column, TableView.CellRenderer previousCellRenderer) {
         // No-op
+    }
+
+    // Table view sort events
+    public void sortAdded(TableView tableView, String columnName) {
+        repaintComponent();
+    }
+
+    public void sortUpdated(TableView tableView, String columnName,
+        SortDirection previousSortDirection) {
+        repaintComponent();
+    }
+
+    public void sortRemoved(TableView tableView, String columnName,
+        SortDirection sortDirection) {
+        repaintComponent();
+    }
+
+    public void sortChanged(TableView tableView,
+        Sequence<Dictionary.Pair<String, SortDirection>> previousSort) {
+        repaintComponent();
     }
 }

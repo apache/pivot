@@ -61,8 +61,6 @@ import org.apache.pivot.wtk.ScrollPane;
 import org.apache.pivot.wtk.SortDirection;
 import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.TableView;
-import org.apache.pivot.wtk.TableViewHeader;
-import org.apache.pivot.wtk.TableViewHeaderPressListener;
 import org.apache.pivot.wtk.TableViewSelectionListener;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextInputTextListener;
@@ -317,36 +315,6 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             result *= (sortDirection == SortDirection.ASCENDING) ? 1 : -1;
 
             return result;
-        }
-    }
-
-    /**
-     * File sort handler.
-     */
-    public static class SortHandler implements TableViewHeaderPressListener {
-        @Override
-        @SuppressWarnings("unchecked")
-        public void headerPressed(TableViewHeader tableViewHeader, int index) {
-            TableView tableView = tableViewHeader.getTableView();
-            TableView.ColumnSequence columns = tableView.getColumns();
-            TableView.Column column = columns.get(index);
-
-            SortDirection sortDirection = column.getSortDirection();
-
-            if (sortDirection == null
-                || sortDirection == SortDirection.DESCENDING) {
-                sortDirection = SortDirection.ASCENDING;
-            } else {
-                sortDirection = SortDirection.DESCENDING;
-            }
-
-            List<File> files = (List<File>)tableView.getTableData();
-            files.setComparator(new FileComparator(column.getName(), sortDirection));
-
-            for (int i = 0, n = columns.getLength(); i < n; i++) {
-                column = columns.get(i);
-                column.setSortDirection(i == index ? sortDirection : null);
-            }
         }
     }
 

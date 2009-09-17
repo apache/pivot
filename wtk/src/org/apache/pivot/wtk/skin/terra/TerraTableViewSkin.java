@@ -300,7 +300,9 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                 TableView.Column column = columns.get(columnIndex);
                 int columnWidth = getColumnWidth(columnIndex);
 
-                if (column.getSortDirection() != null) {
+                String columnName = column.getName();
+                SortDirection sortDirection = tableView.getSort().get(columnName);
+                if (sortDirection != null) {
                     graphics.fillRect(columnX, 0, columnWidth, height);
                 }
 
@@ -1092,13 +1094,6 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     @Override
     public void columnWidthChanged(TableView.Column column, int previousWidth, boolean previousRelative)  {
         invalidateComponent();
-    }
-
-    @Override
-    public void columnSortDirectionChanged(TableView.Column column, SortDirection previousSortDirection) {
-        TableView tableView = column.getTableView();
-        int columnIndex = tableView.getColumns().indexOf(column);
-        repaintComponent(getColumnBounds(columnIndex));
     }
 
     @Override

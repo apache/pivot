@@ -19,7 +19,6 @@ limitations under the License.
 <Window title="Fixed Column Table Demo" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:collections="org.apache.pivot.collections"
-    xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
     <content>
         <Border styles="{color:10, padding:0}">
@@ -37,14 +36,14 @@ limitations under the License.
                             </columns>
                             <tableData>
                                 <collections:ArrayList wtkx:id="tableData">
-                                    <content:TableRow name="User 1" colA="1.A" colB="1.B" colC="1.C" />
-                                    <content:TableRow name="User 2" colA="2.A" colB="2.B" colC="2.C" />
-                                    <content:TableRow name="User 3" colA="3.A" colB="3.B" colC="3.C" />
-                                    <content:TableRow name="User 4" colA="4.A" colB="4.B" colC="4.C" />
-                                    <content:TableRow name="User 5" colA="5.A" colB="5.B" colC="5.C" />
-                                    <content:TableRow name="User 6" colA="6.A" colB="6.B" colC="6.C" />
-                                    <content:TableRow name="User 7" colA="7.A" colB="7.B" colC="7.C" />
-                                    <content:TableRow name="User 8" colA="8.A" colB="8.B" colC="8.C" />
+                                    <collections:HashMap name="User 1" colA="1.A" colB="1.B" colC="1.C" />
+                                    <collections:HashMap name="User 2" colA="2.A" colB="2.B" colC="2.C" />
+                                    <collections:HashMap name="User 3" colA="3.A" colB="3.B" colC="3.C" />
+                                    <collections:HashMap name="User 4" colA="4.A" colB="4.B" colC="4.C" />
+                                    <collections:HashMap name="User 5" colA="5.A" colB="5.B" colC="5.C" />
+                                    <collections:HashMap name="User 6" colA="6.A" colB="6.B" colC="6.C" />
+                                    <collections:HashMap name="User 7" colA="7.A" colB="7.B" colC="7.C" />
+                                    <collections:HashMap name="User 8" colA="8.A" colB="8.B" colC="8.C" />
                                 </collections:ArrayList>
                             </tableData>
                         </TableView>

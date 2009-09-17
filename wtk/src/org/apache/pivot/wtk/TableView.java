@@ -49,7 +49,6 @@ public class TableView extends Component {
         private Object headerData = null;
         private int width = 0;
         private boolean relative = false;
-        private SortDirection sortDirection = null;
         private Object filter = null;
         private CellRenderer cellRenderer = DEFAULT_CELL_RENDERER;
 
@@ -286,52 +285,6 @@ public class TableView extends Component {
                     tableView.tableViewColumnListeners.columnWidthChanged(this,
                         previousWidth, previousRelative);
                 }
-            }
-        }
-
-        /**
-         * Returns the column's sort direction.
-         *
-         * @return
-         * The column's sort direction, or <tt>null</tt> if the column is not
-         * sorted.
-         */
-        public SortDirection getSortDirection() {
-            return sortDirection;
-        }
-
-        /**
-         * Sets the column's sort direction.
-         *
-         * @param sortDirection
-         * The column's sort direction, or <tt>null</tt> to specify no
-         * sort direction
-         */
-        public void setSortDirection(SortDirection sortDirection) {
-            SortDirection previousSortDirection = this.sortDirection;
-
-            if (previousSortDirection != sortDirection) {
-                this.sortDirection = sortDirection;
-
-                if (tableView != null) {
-                    tableView.tableViewColumnListeners.columnSortDirectionChanged(this,
-                        previousSortDirection);
-                }
-            }
-        }
-
-        /**
-         * Sets the column's sort direction.
-         *
-         * @param sortDirection
-         * The column's sort direction, or <tt>null</tt> to specify no
-         * sort direction
-         */
-        public final void setSortDirection(String sortDirection) {
-            if (sortDirection == null) {
-                setSortDirection((SortDirection)null);
-            } else {
-                setSortDirection(SortDirection.valueOf(sortDirection.toUpperCase()));
             }
         }
 
@@ -930,13 +883,6 @@ public class TableView extends Component {
         }
 
         @Override
-        public void columnSortDirectionChanged(Column column, SortDirection previousSortDirection) {
-            for (TableViewColumnListener listener : this) {
-                listener.columnSortDirectionChanged(column, previousSortDirection);
-            }
-        }
-
-        @Override
         public void columnFilterChanged(Column column, Object previousFilter) {
             for (TableViewColumnListener listener : this) {
                 listener.columnFilterChanged(column, previousFilter);
@@ -1104,6 +1050,7 @@ public class TableView extends Component {
 
     private HashMap<String, SortDirection> sortMap = new HashMap<String, SortDirection>();
     private ArrayList<String> sortList = new ArrayList<String>();
+    private SortDictionary sortDictionary = new SortDictionary();
 
     private Filter<?> disabledRowFilter = null;
 
@@ -1632,6 +1579,44 @@ public class TableView extends Component {
         }
 
         setSelectMode(SelectMode.valueOf(selectMode.toUpperCase()));
+    }
+
+    /**
+     * Returns the table view's sort dictionary.
+     */
+    public SortDictionary getSort() {
+        return sortDictionary;
+    }
+
+    /**
+     * Sets the table view's sort.
+     *
+     * @param sort
+     * A sequence of key/value pairs representing the sort. Keys represent column names and
+     * values represent sort direction.
+     */
+    public void setSort(Sequence<Dictionary.Pair<String, SortDirection>> sort) {
+        if (sort == null) {
+            throw new IllegalArgumentException();
+        }
+
+        // TODO
+    }
+
+    /**
+     * Sets the table view's sort.
+     *
+     * @param sort
+     * A JSON list containing JSON objects representing the sort.
+     *
+     * @see #setSort(Sequence)
+     */
+    public void setSort(String sort) {
+        if (sort == null) {
+            throw new IllegalArgumentException();
+        }
+
+        // TODO
     }
 
     /**
