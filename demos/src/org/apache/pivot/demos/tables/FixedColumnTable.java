@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.demos.tables;
 
+import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.wtk.Application;
@@ -24,7 +25,9 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TableViewSelectionListener;
+import org.apache.pivot.wtk.TableViewSortListener;
 import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtk.content.TableViewRowComparator;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class FixedColumnTable implements Application {
@@ -102,34 +105,31 @@ public class FixedColumnTable implements Application {
         });
 
         // Keep header state in sync
-        // TODO Add sort listeners to both table views
-        /*
-        primaryTableViewHeader.getTableViewHeaderPressListeners().add(new TableView.SortHandler() {
+        primaryTableView.getTableViewSortListeners().add(new TableViewSortListener.Adapter() {
             @Override
-            public void headerPressed(TableViewHeader tableViewHeader, int index) {
-                super.headerPressed(tableViewHeader, index);
-
-                TableView.ColumnSequence columns = fixedTableView.getColumns();
-                for (int i = 0, n = columns.getLength(); i < n; i++) {
-                    TableView.Column column = columns.get(i);
-                    column.setSortDirection((SortDirection)null);
+            @SuppressWarnings("unchecked")
+            public void sortChanged(TableView tableView) {
+                if (!tableView.getSort().isEmpty()) {
+                    fixedTableView.clearSort();
                 }
+
+                List<Object> tableData = (List<Object>)tableView.getTableData();
+                tableData.setComparator(new TableViewRowComparator(tableView));
             }
         });
 
-        fixedTableViewHeader.getTableViewHeaderPressListeners().add(new TableView.SortHandler() {
+        fixedTableView.getTableViewSortListeners().add(new TableViewSortListener.Adapter() {
             @Override
-            public void headerPressed(TableViewHeader tableViewHeader, int index) {
-                super.headerPressed(tableViewHeader, index);
-
-                TableView.ColumnSequence columns = primaryTableView.getColumns();
-                for (int i = 0, n = columns.getLength(); i < n; i++) {
-                    TableView.Column column = columns.get(i);
-                    column.setSortDirection((SortDirection)null);
+            @SuppressWarnings("unchecked")
+            public void sortChanged(TableView tableView) {
+                if (!tableView.getSort().isEmpty()) {
+                    primaryTableView.clearSort();
                 }
+
+                List<Object> tableData = (List<Object>)tableView.getTableData();
+                tableData.setComparator(new TableViewRowComparator(tableView));
             }
         });
-        */
 
         window.open(display);
     }

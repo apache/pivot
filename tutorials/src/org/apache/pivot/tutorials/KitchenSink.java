@@ -70,6 +70,7 @@ import org.apache.pivot.wtk.Slider;
 import org.apache.pivot.wtk.SliderValueListener;
 import org.apache.pivot.wtk.Spinner;
 import org.apache.pivot.wtk.TableView;
+import org.apache.pivot.wtk.TableViewSortListener;
 import org.apache.pivot.wtk.TextArea;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.TreeView;
@@ -79,6 +80,7 @@ import org.apache.pivot.wtk.content.CalendarDateSpinnerData;
 import org.apache.pivot.wtk.content.ListItem;
 import org.apache.pivot.wtk.content.NumericSpinnerData;
 import org.apache.pivot.wtk.content.TableViewHeaderData;
+import org.apache.pivot.wtk.content.TableViewRowComparator;
 import org.apache.pivot.wtk.content.TreeBranch;
 import org.apache.pivot.wtk.content.TreeNode;
 import org.apache.pivot.wtk.effects.ReflectionDecorator;
@@ -543,12 +545,14 @@ public class KitchenSink implements Application, Application.AboutHandler {
                 }
 
                 sortableTableView.setTableData(tableData);
-
-                // TODO
-                /*
-                // Install header press listener
-                sortableTableViewHeader.getTableViewHeaderPressListeners().add(new TableView.SortHandler());
-                */
+                sortableTableView.getTableViewSortListeners().add(new TableViewSortListener.Adapter() {
+                    @Override
+                    @SuppressWarnings("unchecked")
+                    public void sortChanged(TableView tableView) {
+                        List<Object> tableData = (List<Object>)tableView.getTableData();
+                        tableData.setComparator(new TableViewRowComparator(tableView));
+                    }
+                });
 
                 customTableView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
                     @Override

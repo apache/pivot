@@ -55,7 +55,7 @@ limitations under the License.
                                     </TableView>
                                 </view>
                                 <columnHeader>
-                                    <TableViewHeader tableView="$tableView"/>
+                                    <TableViewHeader tableView="$tableView" sortMode="single_column"/>
                                 </columnHeader>
                             </ScrollPane>
                         </content>

@@ -36,7 +36,9 @@ import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.ListButton;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.TableView;
+import org.apache.pivot.wtk.TableViewSortListener;
 import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtk.content.TableViewRowComparator;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class LargeData implements Application {
@@ -193,19 +195,19 @@ public class LargeData implements Application {
             }
         });
 
-        // TODO
-        /*
-        tableViewHeader.getTableViewHeaderPressListeners().add(new TableView.SortHandler() {
+        tableView.getTableViewSortListeners().add(new TableViewSortListener.Adapter() {
             @Override
-            public void headerPressed(TableViewHeader tableViewHeader, int index) {
+            @SuppressWarnings("unchecked")
+            public void sortChanged(TableView tableView) {
+                List<Object> tableData = (List<Object>)tableView.getTableData();
+
                 long startTime = System.currentTimeMillis();
-                super.headerPressed(tableViewHeader, index);
+                tableData.setComparator(new TableViewRowComparator(tableView));
                 long endTime = System.currentTimeMillis();
 
                 statusLabel.setText("Data sorted in " + (endTime - startTime) + " ms.");
             }
         });
-        */
 
         window.open(display);
     }

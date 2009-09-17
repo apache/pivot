@@ -50,10 +50,12 @@ import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TableViewRowListener;
 import org.apache.pivot.wtk.TableViewSelectionListener;
+import org.apache.pivot.wtk.TableViewSortListener;
 import org.apache.pivot.wtk.TaskAdapter;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextInputTextListener;
 import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtk.content.TableViewRowComparator;
 import org.apache.pivot.wtk.text.TextNode;
 import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
@@ -127,6 +129,15 @@ public class StockTracker implements Application {
             @Override
             public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges) {
                 refreshDetail();
+            }
+        });
+
+        stocksTableView.getTableViewSortListeners().add(new TableViewSortListener.Adapter() {
+            @Override
+            @SuppressWarnings("unchecked")
+            public void sortChanged(TableView tableView) {
+                List<Object> tableData = (List<Object>)tableView.getTableData();
+                tableData.setComparator(new TableViewRowComparator(tableView));
             }
         });
 

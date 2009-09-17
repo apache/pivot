@@ -161,14 +161,22 @@ limitations under the License.
                                                             ]]>
                                                             </wtkx:script>
                                                         </tableViewSelectionListeners>
+
+                                                        <tableViewSortListeners>
+                                                            <wtkx:script>
+                                                            <![CDATA[
+                                                            function sortChanged(tableView) {
+                                                                var tableData = tableView.getTableData();
+                                                                tableData.setComparator(new org.apache.pivot.wtk.content.TableViewRowComparator(tableView));
+                                                            }
+                                                            ]]>
+                                                            </wtkx:script>
+                                                        </tableViewSortListeners>
+
                                                     </TableView>
                                                 </view>
                                                 <columnHeader>
-                                                    <TableViewHeader tableView="$resultsTableView">
-                                                        <tableViewHeaderPressListeners>
-                                                            <TableView.SortHandler/>
-                                                        </tableViewHeaderPressListeners>
-                                                    </TableViewHeader>
+                                                    <TableViewHeader tableView="$resultsTableView" sortMode="single_column"/>
                                                 </columnHeader>
                                             </ScrollPane>
                                         </content>

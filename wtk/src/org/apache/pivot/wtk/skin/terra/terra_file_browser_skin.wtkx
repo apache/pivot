@@ -107,7 +107,7 @@ limitations under the License.
                             </TableView>
                         </view>
                         <columnHeader>
-                            <TableViewHeader tableView="$fileTableView"/>
+                            <TableViewHeader tableView="$fileTableView" sortMode="single_column"/>
                         </columnHeader>
                     </ScrollPane>
                 </content>

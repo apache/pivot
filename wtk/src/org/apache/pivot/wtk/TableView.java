@@ -987,10 +987,9 @@ public class TableView extends Component {
             }
         }
 
-        public void sortChanged(TableView tableView,
-            Sequence<Dictionary.Pair<String, SortDirection>> previousSort) {
+        public void sortChanged(TableView tableView) {
             for (TableViewSortListener listener : this) {
-                listener.sortChanged(tableView, previousSort);
+                listener.sortChanged(tableView);
             }
         }
     }
@@ -1061,6 +1060,9 @@ public class TableView extends Component {
     private TableViewRowListenerList tableViewRowListeners = new TableViewRowListenerList();
     private TableViewSelectionListenerList tableViewSelectionListeners = new TableViewSelectionListenerList();
     private TableViewSortListenerList tableViewSortListeners = new TableViewSortListenerList();
+
+    public static final String COLUMN_NAME_KEY = "columnName";
+    public static final String SORT_DIRECTION_KEY = "sortDirection";
 
     /**
      * Creates a new table view populated with an empty array list.
@@ -1591,16 +1593,46 @@ public class TableView extends Component {
     /**
      * Sets the table view's sort.
      *
+     * @param columnName
+     * @param sortDirection
+     */
+    @SuppressWarnings("unchecked")
+    public Dictionary<String, SortDirection> setSort(String columnName, SortDirection sortDirection) {
+        Dictionary.Pair<String, SortDirection> sort =
+            new Dictionary.Pair<String, SortDirection>(columnName, sortDirection);
+
+        setSort(new ArrayList<Dictionary.Pair<String, SortDirection>>(sort));
+
+        return getSort();
+    }
+
+    /**
+     * Sets the table view's sort.
+     *
      * @param sort
      * A sequence of key/value pairs representing the sort. Keys represent column names and
      * values represent sort direction.
      */
-    public void setSort(Sequence<Dictionary.Pair<String, SortDirection>> sort) {
+    public Dictionary<String, SortDirection> setSort(Sequence<Dictionary.Pair<String, SortDirection>> sort) {
         if (sort == null) {
             throw new IllegalArgumentException();
         }
 
-        // TODO
+        sortMap.clear();
+        sortList.clear();
+
+        for (int i = 0, n = sort.getLength(); i < n; i++) {
+            Dictionary.Pair<String, SortDirection> pair = sort.get(i);
+
+            if (!sortMap.containsKey(pair.key)) {
+                sortMap.put(pair.key, pair.value);
+                sortList.add(pair.key);
+            }
+        }
+
+        tableViewSortListeners.sortChanged(this);
+
+        return getSort();
     }
 
     /**
@@ -1611,12 +1643,48 @@ public class TableView extends Component {
      *
      * @see #setSort(Sequence)
      */
-    public void setSort(String sort) {
+    public final Dictionary<String, SortDirection> setSort(String sort) {
         if (sort == null) {
             throw new IllegalArgumentException();
         }
 
-        // TODO
+        try {
+            setSort(parseSort(sort));
+        } catch (SerializationException exception) {
+            throw new IllegalArgumentException(exception);
+        }
+
+        return getSort();
+    }
+
+    @SuppressWarnings("unchecked")
+    private Sequence<Dictionary.Pair<String, SortDirection>> parseSort(String json)
+        throws SerializationException {
+        ArrayList<Dictionary.Pair<String, SortDirection>> sort =
+            new ArrayList<Dictionary.Pair<String, SortDirection>>();
+
+        List<?> list = JSONSerializer.parseList(json);
+        for (Object item : list) {
+            Map<String, ?> map = (Map<String, ?>)item;
+
+            Dictionary.Pair<String, SortDirection> pair =
+                new Dictionary.Pair<String, SortDirection>((String)map.get(COLUMN_NAME_KEY),
+                    SortDirection.valueOf(((String)map.get(SORT_DIRECTION_KEY)).toLowerCase()));
+            sort.add(pair);
+        }
+
+        return sort;
+    }
+
+    /**
+     * Clears the sort.
+     */
+    public void clearSort() {
+        if (!sortMap.isEmpty()) {
+            sortMap.clear();
+            sortList.clear();
+            tableViewSortListeners.sortChanged(this);
+        }
     }
 
     /**

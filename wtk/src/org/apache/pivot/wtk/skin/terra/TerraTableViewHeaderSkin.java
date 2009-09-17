@@ -25,7 +25,6 @@ import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
 
 import org.apache.pivot.collections.ArrayList;
-import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
@@ -730,15 +729,40 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
 
         if (button == Mouse.Button.LEFT) {
             TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
+            TableView tableView = tableViewHeader.getTableView();
 
             if (count == 1
                 && pressedHeaderIndex != -1
                 && headersPressable) {
+                // Press the header
                 tableViewHeader.pressHeader(pressedHeaderIndex);
+
+                // Update the sort
+                TableViewHeader.SortMode sortMode = tableViewHeader.getSortMode();
+
+                if (sortMode != TableViewHeader.SortMode.NONE) {
+                    TableView.Column column = tableView.getColumns().get(pressedHeaderIndex);
+                    String columnName = column.getName();
+
+                    SortDirection sortDirection = tableView.getSort().get(columnName);
+                    if (sortDirection == null) {
+                        sortDirection = SortDirection.ASCENDING;
+                    } else if (sortDirection == SortDirection.ASCENDING) {
+                        sortDirection = SortDirection.DESCENDING;
+                    } else {
+                        sortDirection = SortDirection.ASCENDING;
+                    }
+
+                    if (sortMode == TableViewHeader.SortMode.SINGLE_COLUMN) {
+                        tableView.setSort(columnName, sortDirection);
+                    } else if (sortMode == TableViewHeader.SortMode.MULTI_COLUMN) {
+                        tableView.getSort().put(columnName, sortDirection);
+                    }
+
+                    consumed = true;
+                }
             } else if (count == 2
                 && columnsResizable) {
-                TableView tableView = tableViewHeader.getTableView();
-
                 if (tableView != null) {
                     int headerIndex = getHeaderAt(x);
 
@@ -750,6 +774,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
                             && column.getWidth() != -1
                             && x > headerBounds.x + headerBounds.width - RESIZE_HANDLE_SIZE) {
                             // TODO PIVOT-248
+                            consumed = true;
                         }
                     }
                 }
@@ -841,8 +866,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         repaintComponent();
     }
 
-    public void sortChanged(TableView tableView,
-        Sequence<Dictionary.Pair<String, SortDirection>> previousSort) {
+    public void sortChanged(TableView tableView) {
         repaintComponent();
     }
 }

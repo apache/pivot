@@ -26,6 +26,7 @@ import java.util.Comparator;
 import java.util.Date;
 
 import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.FilteredList;
 import org.apache.pivot.collections.FilteredListListener;
 import org.apache.pivot.collections.List;
@@ -62,6 +63,7 @@ import org.apache.pivot.wtk.SortDirection;
 import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TableViewSelectionListener;
+import org.apache.pivot.wtk.TableViewSortListener;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextInputTextListener;
 import org.apache.pivot.wtk.VerticalAlignment;
@@ -505,6 +507,20 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                 fileBrowser.setSelectedFiles(files);
 
                 updatingSelection = false;
+            }
+        });
+
+        fileTableView.getTableViewSortListeners().add(new TableViewSortListener.Adapter() {
+            @Override
+            @SuppressWarnings("unchecked")
+            public void sortChanged(TableView tableView) {
+                TableView.SortDictionary sort = tableView.getSort();
+
+                if (!sort.isEmpty()) {
+                    Dictionary.Pair<String, SortDirection> pair = tableView.getSort().get(0);
+                    List<File> files = (List<File>)tableView.getTableData();
+                    files.setComparator(new FileComparator(pair.key, pair.value));
+                }
             }
         });
 

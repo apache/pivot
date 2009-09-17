@@ -16,13 +16,29 @@
  */
 package org.apache.pivot.wtk;
 
-import org.apache.pivot.collections.Dictionary;
-import org.apache.pivot.collections.Sequence;
-
 /**
  * Table view sort listener interface.
  */
 public interface TableViewSortListener {
+    /**
+     * Table view sort listener adapter.
+     */
+    public static class Adapter implements TableViewSortListener {
+        public void sortAdded(TableView tableView, String columnName) {
+        }
+
+        public void sortUpdated(TableView tableView, String columnName,
+            SortDirection previousSortDirection) {
+        }
+
+        public void sortRemoved(TableView tableView, String columnName,
+            SortDirection sortDirection) {
+        }
+
+        public void sortChanged(TableView tableView) {
+        }
+    }
+
     /**
      * Called when a sort has been added to a table view.
      *
@@ -55,8 +71,6 @@ public interface TableViewSortListener {
      * Called when a table view's sort has changed.
      *
      * @param tableView
-     * @param previousSort
      */
-    public void sortChanged(TableView tableView,
-        Sequence<Dictionary.Pair<String, SortDirection>> previousSort);
+    public void sortChanged(TableView tableView);
 }
