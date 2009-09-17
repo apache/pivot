@@ -49,10 +49,6 @@ public interface WindowListener {
         @Override
         public void maximizedChanged(Window window) {
         }
-
-        @Override
-        public void windowMoved(Window window, int from, int to) {
-        }
     }
 
     /**
@@ -101,13 +97,4 @@ public interface WindowListener {
      * @param window
      */
     public void maximizedChanged(Window window);
-
-    /**
-     * Called when a window's position has changed.
-     *
-     * @param window
-     * @param from
-     * @param to
-     */
-    public void windowMoved(Window window, int from, int to);
 }

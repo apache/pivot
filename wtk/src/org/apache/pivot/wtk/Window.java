@@ -249,13 +249,6 @@ public class Window extends Container {
         }
 
         @Override
-        public void windowMoved(Window window, int from, int to) {
-            for (WindowListener listener : this) {
-                listener.windowMoved(window, from, to);
-            }
-        }
-
-        @Override
         public void ownerChanged(Window window, Window previousOwner) {
             for (WindowListener listener : this) {
                 listener.ownerChanged(window, previousOwner);
@@ -485,6 +478,11 @@ public class Window extends Container {
             && isOpen()
             && !owner.isOpen()) {
             throw new IllegalArgumentException("Owner is not open.");
+        }
+
+        if (owner != null
+            && isOwner(owner)) {
+            throw new IllegalArgumentException("Owner is already an owned descendant");
         }
 
         Window previousOwner = this.owner;
@@ -910,7 +908,6 @@ public class Window extends Container {
         int i = display.indexOf(this);
         if (i < n) {
             display.move(i, n);
-            windowListeners.windowMoved(this, i, n);
         }
 
         // Restore focus
@@ -941,10 +938,6 @@ public class Window extends Container {
         for (Window ownedWindow : sortedOwnedWindows) {
             ownedWindow.moveToFront();
         }
-
-        if (owner == null) {
-            requestActive();
-        }
     }
 
     /**
@@ -972,7 +965,6 @@ public class Window extends Container {
         int i = display.indexOf(this);
         if (i > 0) {
             display.move(i, 0);
-            windowListeners.windowMoved(this, i, 0);
         }
 
         if (owner != null) {

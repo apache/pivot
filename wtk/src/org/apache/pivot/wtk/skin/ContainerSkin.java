@@ -242,6 +242,10 @@ public abstract class ContainerSkin extends ComponentSkin
     }
 
     @Override
+    public void componentMoved(Container container, int from, int to) {
+    }
+
+    @Override
     public void contextKeyChanged(Container container, String previousContextKey) {
         // No-op
     }

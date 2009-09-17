@@ -166,11 +166,6 @@ public class WindowSkin extends ContainerSkin implements Window.Skin,
         // No-op
     }
 
-    @Override
-    public void windowMoved(Window window, int from, int to) {
-        // No-op
-    }
-
     // Window state events
     @Override
     public Vote previewWindowOpen(Window window, Display display) {

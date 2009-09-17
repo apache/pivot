@@ -23,6 +23,32 @@ import org.apache.pivot.collections.Sequence;
  */
 public interface ContainerListener  {
     /**
+     * Container listener adapter.
+     */
+    public static class Adapter implements ContainerListener {
+        @Override
+        public void componentInserted(Container container, int index) {
+        }
+
+        @Override
+        public void componentsRemoved(Container container, int index, Sequence<Component> removed) {
+        }
+
+        @Override
+        public void componentMoved(Container container, int from, int to) {
+        }
+
+        @Override
+        public void contextKeyChanged(Container container, String previousContextKey) {
+        }
+
+        @Override
+        public void focusTraversalPolicyChanged(Container container,
+            FocusTraversalPolicy previousFocusTraversalPolicy) {
+        }
+    }
+
+    /**
      * Called when a component has been inserted into a container's component
      * sequence.
      *
@@ -40,6 +66,16 @@ public interface ContainerListener  {
      * @param removed
      */
     public void componentsRemoved(Container container, int index, Sequence<Component> removed);
+
+    /**
+     * Called when a component has moved from one z-index to another within a
+     * container.
+     *
+     * @param container
+     * @param from
+     * @param to
+     */
+    public void componentMoved(Container container, int from, int to);
 
     /**
      * Called when a container's context key has changed.

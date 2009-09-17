@@ -33,6 +33,7 @@ import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 import org.apache.pivot.collections.HashMap;
+import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.collections.immutable.ImmutableMap;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.media.Picture;
@@ -393,56 +394,6 @@ public final class DesktopApplicationContext extends ApplicationContext {
             }
         }
 
-        // Add a listener for active window changes
-        final WindowListener rootOwnerListener = new WindowListener.Adapter() {
-            @Override
-            public void titleChanged(Window window, String previousTitle) {
-                updateFrameTitleBar(window);
-            }
-
-            @Override
-            public void iconChanged(Window window, Image previousIcon) {
-                updateFrameTitleBar(window);
-            }
-        };
-
-        Window.getWindowClassListeners().add(new WindowClassListener() {
-            @Override
-            public void activeWindowChanged(Window previousActiveWindow) {
-                if (previousActiveWindow != null) {
-                    Window previousRootOwner = previousActiveWindow.getRootOwner();
-                    previousRootOwner.getWindowListeners().remove(rootOwnerListener);
-                }
-
-                Window activeWindow = Window.getActiveWindow();
-
-                if (activeWindow != null) {
-                    Window rootOwner = activeWindow.getRootOwner();
-                    rootOwner.getWindowListeners().add(rootOwnerListener);
-                }
-
-                if (updateFrameTitleBarCallback == null) {
-                    updateFrameTitleBarCallback = new Runnable() {
-                        @Override
-                        public void run() {
-                            Window activeWindow = Window.getActiveWindow();
-                            if (activeWindow == null) {
-                                windowedHostFrame.setTitle(DEFAULT_HOST_FRAME_TITLE);
-                                windowedHostFrame.setIconImage(null);
-                            } else {
-                                Window rootOwner = activeWindow.getRootOwner();
-                                updateFrameTitleBar(rootOwner);
-                            }
-
-                            updateFrameTitleBarCallback = null;
-                        }
-                    };
-
-                    queueCallback(updateFrameTitleBarCallback);
-                }
-            }
-        });
-
         // Create the application context
         applicationContext = new DesktopApplicationContext();
         DisplayHost displayHost = applicationContext.getDisplayHost();
@@ -457,10 +408,65 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
         if (center) {
             java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-            windowedHostFrame.setLocation((screenSize.width - width) / 2, (screenSize.height - height) / 2);
+            windowedHostFrame.setLocation((screenSize.width - width) / 2,
+                (screenSize.height - height) / 2);
         } else {
             windowedHostFrame.setLocation(x, y);
         }
+
+        applicationContext.getDisplay().getContainerListeners().add(new ContainerListener.Adapter() {
+            @Override
+            public void componentInserted(Container container, int index) {
+                if (index == container.getLength() - 1) {
+                    topWindowChanged((Display)container,
+                        (index > 0) ? (Window)container.get(index - 1) : null);
+                }
+            }
+
+            @Override
+            public void componentsRemoved(Container container, int index,
+                Sequence<Component> removed) {
+                if (index == container.getLength()) {
+                    topWindowChanged((Display)container,
+                        (Window)removed.get(removed.getLength() - 1));
+                }
+            }
+
+            @Override
+            public void componentMoved(Container container, int from, int to) {
+                int n = container.getLength();
+                if (from == n) {
+                    topWindowChanged((Display)container, (Window)container.get(from));
+                } else if (to == n) {
+                    topWindowChanged((Display)container, (Window)container.get(n - 1));
+                }
+            }
+
+            private void topWindowChanged(Display display, Window previousTopWindow) {
+                if (updateFrameTitleBarCallback == null) {
+                    updateFrameTitleBarCallback = new Runnable() {
+                        @Override
+                        public void run() {
+                            Display display = applicationContext.getDisplay();
+                            int n = display.getLength();
+
+                            if (n == 0) {
+                                windowedHostFrame.setTitle(DEFAULT_HOST_FRAME_TITLE);
+                                windowedHostFrame.setIconImage(null);
+                            } else {
+                                Window topWindow = (Window)display.get(n - 1);
+                                Window rootOwner = topWindow.getRootOwner();
+                                updateFrameTitleBar(rootOwner);
+                            }
+
+                            updateFrameTitleBarCallback = null;
+                        }
+                    };
+
+                    queueCallback(updateFrameTitleBarCallback);
+                }
+            }
+        });
 
         // Add a key listener to the display host to toggle between full-screen
         // and windowed mode

@@ -51,6 +51,13 @@ public abstract class Container extends Component
         }
 
         @Override
+        public void componentMoved(Container container, int from, int to) {
+            for (ContainerListener listener : this) {
+                listener.componentMoved(container, from, to);
+            }
+        }
+
+        @Override
         public void contextKeyChanged(Container container, String previousContextKey) {
             for (ContainerListener listener : this) {
                 listener.contextKeyChanged(container, previousContextKey);
@@ -215,22 +222,31 @@ public abstract class Container extends Component
     }
 
     /**
-     * Moves a component within the component sequence. This method does not
-     * fire any events; it is the caller's responsibility to ensure that
-     * appropriate events are fired (see
-     * {@link WindowListener#windowMoved(Window, int, int)} as an example).
+     * Moves a component within the component sequence.
      *
      * @param from
      * @param to
      */
-    protected void move(int from, int to) {
+    public void move(int from, int to) {
         if (from != to) {
+            int n = components.getLength();
+
+            if (from < 0
+                || from >= n
+                || to < 0
+                || to >= n) {
+                throw new IndexOutOfBoundsException();
+            }
+
             Sequence<Component> removed = components.remove(from, 1);
             Component component = removed.get(0);
             components.insert(component, to);
 
             // Repaint the area occupied by the component
             repaint(component.getDecoratedBounds());
+
+            // Notify listeners
+            containerListeners.componentMoved(this, from, to);
         }
     }
 
