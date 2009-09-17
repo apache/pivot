@@ -17,16 +17,17 @@
 package org.apache.pivot.collections.concurrent;
 
 import java.util.Comparator;
+import java.util.Iterator;
 
 import org.apache.pivot.collections.Set;
 import org.apache.pivot.collections.SetListener;
+import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 
 /**
  * Synchronized implementation of the {@link Set} interface.
  */
-public class SynchronizedSet<E> extends SynchronizedCollection<E>
-    implements Set<E> {
+public class SynchronizedSet<E> implements Set<E> {
     private static class SynchronizedSetListenerList<E>
         extends SetListenerList<E> {
         @Override
@@ -60,10 +61,15 @@ public class SynchronizedSet<E> extends SynchronizedCollection<E>
         }
     }
 
+    private Set<E> set;
     private SynchronizedSetListenerList<E> setListeners = new SynchronizedSetListenerList<E>();
 
     public SynchronizedSet(Set<E> set) {
-        super(set);
+        if (set == null) {
+            throw new IllegalArgumentException();
+        }
+
+        this.set = set;
     }
 
     @Override
@@ -71,7 +77,7 @@ public class SynchronizedSet<E> extends SynchronizedCollection<E>
         boolean added = false;
 
         if (!contains(element)) {
-            ((Set<E>)collection).add(element);
+            set.add(element);
             added = true;
 
             setListeners.elementAdded(this, element);
@@ -85,7 +91,7 @@ public class SynchronizedSet<E> extends SynchronizedCollection<E>
         boolean removed = false;
 
         if (contains(element)) {
-            ((Set<E>)collection).remove(element);
+            set.remove(element);
             removed = true;
 
             setListeners.elementRemoved(this, element);
@@ -96,17 +102,46 @@ public class SynchronizedSet<E> extends SynchronizedCollection<E>
 
     @Override
     public synchronized boolean contains(E element) {
-        return ((Set<E>)collection).contains(element);
+        return set.contains(element);
     }
 
     @Override
     public synchronized boolean isEmpty() {
-        return ((Set<E>)collection).isEmpty();
+        return set.isEmpty();
+    }
+
+    @Override
+    public synchronized void clear() {
+        if (!set.isEmpty()) {
+            set.clear();
+            setListeners.setCleared(this);
+        }
     }
 
     @Override
     public synchronized int getCount() {
-        return ((Set<E>)collection).getCount();
+        return set.getCount();
+    }
+
+    @Override
+    public synchronized Comparator<E> getComparator() {
+        return set.getComparator();
+    }
+
+    @Override
+    public synchronized void setComparator(Comparator<E> comparator) {
+        Comparator<E> previousComparator = getComparator();
+        set.setComparator(comparator);
+        setListeners.comparatorChanged(this, previousComparator);
+    }
+
+    /**
+     * NOTE Callers must manually synchronize on the SynchronizedSet
+     * instance to ensure thread safety during iteration.
+     */
+    @Override
+    public Iterator<E> iterator() {
+        return new ImmutableIterator<E>(set.iterator());
     }
 
     @Override

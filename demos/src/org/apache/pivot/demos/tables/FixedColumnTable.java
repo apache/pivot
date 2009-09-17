@@ -21,10 +21,8 @@ import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.SortDirection;
 import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.TableView;
-import org.apache.pivot.wtk.TableViewHeader;
 import org.apache.pivot.wtk.TableViewSelectionListener;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtkx.WTKXSerializer;
@@ -32,9 +30,7 @@ import org.apache.pivot.wtkx.WTKXSerializer;
 public class FixedColumnTable implements Application {
     private Window window = null;
     private TableView primaryTableView = null;
-    private TableViewHeader primaryTableViewHeader = null;
     private TableView fixedTableView = null;
-    private TableViewHeader fixedTableViewHeader = null;
 
     private boolean synchronizingSelection = false;
 
@@ -44,9 +40,7 @@ public class FixedColumnTable implements Application {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "fixed_column_table.wtkx");
         primaryTableView = (TableView)wtkxSerializer.get("primaryTableView");
-        primaryTableViewHeader = (TableViewHeader)wtkxSerializer.get("primaryTableViewHeader");
         fixedTableView = (TableView)wtkxSerializer.get("fixedTableView");
-        fixedTableViewHeader = (TableViewHeader)wtkxSerializer.get("fixedTableViewHeader");
 
         // Keep selection state in sync
         primaryTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener() {
@@ -108,6 +102,8 @@ public class FixedColumnTable implements Application {
         });
 
         // Keep header state in sync
+        // TODO Add sort listeners to both table views
+        /*
         primaryTableViewHeader.getTableViewHeaderPressListeners().add(new TableView.SortHandler() {
             @Override
             public void headerPressed(TableViewHeader tableViewHeader, int index) {
@@ -133,6 +129,7 @@ public class FixedColumnTable implements Application {
                 }
             }
         });
+        */
 
         window.open(display);
     }

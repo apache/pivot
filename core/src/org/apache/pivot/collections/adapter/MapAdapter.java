@@ -116,13 +116,14 @@ public class MapAdapter<K, V> implements Map<K, V>, Serializable {
     @SuppressWarnings("unchecked")
     @Override
     public void setComparator(Comparator<K> comparator) {
-        // If the adapted map supports it, implement setComparator by
-        // constructing a new map
+        Comparator<K> previousComparator = getComparator();
+
+        // If the adapted map supports it, construct a new sorted map
         if (this.map instanceof SortedMap) {
             try {
                 Constructor constructor = this.map.getClass().getConstructor(Comparator.class);
                 if (constructor != null) {
-                    java.util.Map<K, V> map = (java.util.Map) constructor.newInstance(comparator);
+                    java.util.Map<K, V> map = (java.util.Map)constructor.newInstance(comparator);
                     map.putAll(this.map);
                     this.map = map;
                 }
@@ -140,7 +141,8 @@ public class MapAdapter<K, V> implements Map<K, V>, Serializable {
                 throw new RuntimeException(exception);
             }
         }
-        throw new UnsupportedOperationException();
+
+        mapListeners.comparatorChanged(this, previousComparator);
     }
 
     @Override

@@ -16,16 +16,19 @@
  */
 package org.apache.pivot.collections.concurrent;
 
+import java.util.Comparator;
+import java.util.Iterator;
+
 import org.apache.pivot.collections.Queue;
 import org.apache.pivot.collections.QueueListener;
+import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 
 
 /**
  * Synchronized implementation of the {@link Queue} interface.
  */
-public class SynchronizedQueue<T> extends SynchronizedCollection<T>
-    implements Queue<T> {
+public class SynchronizedQueue<T> implements Queue<T> {
     private static class SynchronizedQueueListenerList<T>
         extends QueueListenerList<T> {
         @Override
@@ -49,15 +52,20 @@ public class SynchronizedQueue<T> extends SynchronizedCollection<T>
         }
     }
 
+    private Queue<T> queue;
     private SynchronizedQueueListenerList<T> queueListeners = new SynchronizedQueueListenerList<T>();
 
     public SynchronizedQueue(Queue<T> queue) {
-        super(queue);
+        if (queue == null) {
+            throw new IllegalArgumentException();
+        }
+
+        this.queue = queue;
     }
 
     @Override
     public synchronized void enqueue(T item) {
-        ((Queue<T>)collection).enqueue(item);
+        queue.enqueue(item);
         queueListeners.itemEnqueued(this, item);
 
         notify();
@@ -71,7 +79,7 @@ public class SynchronizedQueue<T> extends SynchronizedCollection<T>
                 wait();
             }
 
-            item = ((Queue<T>)collection).dequeue();
+            item = queue.dequeue();
             queueListeners.itemDequeued(this, item);
         } catch(InterruptedException exception) {
         }
@@ -81,12 +89,38 @@ public class SynchronizedQueue<T> extends SynchronizedCollection<T>
 
     @Override
     public synchronized T peek() {
-        return ((Queue<T>)collection).peek();
+        return queue.peek();
+    }
+
+    @Override
+    public synchronized void clear() {
+        // TODO Fire event
+        queue.clear();
     }
 
     @Override
     public synchronized boolean isEmpty() {
-        return ((Queue<T>)collection).isEmpty();
+        return queue.isEmpty();
+    }
+
+    @Override
+    public synchronized Comparator<T> getComparator() {
+        return queue.getComparator();
+    }
+
+    @Override
+    public synchronized void setComparator(Comparator<T> comparator) {
+        // TODO Fire event
+        queue.setComparator(comparator);
+    }
+
+    /**
+     * NOTE Callers must manually synchronize on the SynchronizedQueue
+     * instance to ensure thread safety during iteration.
+     */
+    @Override
+    public Iterator<T> iterator() {
+        return new ImmutableIterator<T>(queue.iterator());
     }
 
     @Override

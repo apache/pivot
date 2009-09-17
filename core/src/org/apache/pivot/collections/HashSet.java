@@ -118,7 +118,13 @@ public class HashSet<E> implements Set<E>, Serializable {
 
     @Override
     public void setComparator(Comparator<E> comparator) {
+        Comparator<E> previousComparator = getComparator();
+
         hashMap.setComparator(comparator);
+
+        if (setListeners != null) {
+            setListeners.comparatorChanged(this, previousComparator);
+        }
     }
 
     @Override

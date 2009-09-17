@@ -16,16 +16,19 @@
  */
 package org.apache.pivot.collections.concurrent;
 
+import java.util.Comparator;
+import java.util.Iterator;
+
 import org.apache.pivot.collections.Stack;
 import org.apache.pivot.collections.StackListener;
+import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 
 
 /**
  * Synchronized implementation of the {@link Stack} interface.
  */
-public class SynchronizedStack<T> extends SynchronizedCollection<T>
-    implements Stack<T> {
+public class SynchronizedStack<T> implements Stack<T> {
     private static class SynchronizedStackListenerList<T>
         extends StackListenerList<T> {
         @Override
@@ -49,15 +52,20 @@ public class SynchronizedStack<T> extends SynchronizedCollection<T>
         }
     }
 
+    private Stack<T> stack;
     private SynchronizedStackListenerList<T> stackListeners = new SynchronizedStackListenerList<T>();
 
     public SynchronizedStack(Stack<T> stack) {
-        super(stack);
+        if (stack == null) {
+            throw new IllegalArgumentException();
+        }
+
+        this.stack = stack;
     }
 
     @Override
     public synchronized void push(T item) {
-        ((Stack<T>)collection).push(item);
+        stack.push(item);
         stackListeners.itemPushed(this, item);
 
         notify();
@@ -71,7 +79,7 @@ public class SynchronizedStack<T> extends SynchronizedCollection<T>
                 wait();
             }
 
-            item = ((Stack<T>)collection).pop();
+            item = stack.pop();
             stackListeners.itemPopped(this, item);
         }
         catch(InterruptedException exception) {
@@ -82,12 +90,38 @@ public class SynchronizedStack<T> extends SynchronizedCollection<T>
 
     @Override
     public synchronized T peek() {
-        return ((Stack<T>)collection).peek();
+        return stack.peek();
+    }
+
+    @Override
+    public synchronized void clear() {
+        // TODO Fire event
+        stack.clear();
     }
 
     @Override
     public synchronized boolean isEmpty() {
-        return ((Stack<T>)collection).isEmpty();
+        return stack.isEmpty();
+    }
+
+    @Override
+    public synchronized Comparator<T> getComparator() {
+        return stack.getComparator();
+    }
+
+    @Override
+    public synchronized void setComparator(Comparator<T> comparator) {
+        // TODO Fire event
+        stack.setComparator(comparator);
+    }
+
+    /**
+     * NOTE Callers must manually synchronize on the SynchronizedStack
+     * instance to ensure thread safety during iteration.
+     */
+    @Override
+    public Iterator<T> iterator() {
+        return new ImmutableIterator<T>(stack.iterator());
     }
 
     @Override

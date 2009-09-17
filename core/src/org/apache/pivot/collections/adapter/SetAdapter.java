@@ -112,8 +112,9 @@ public class SetAdapter<E> implements Set<E>, Serializable {
     @SuppressWarnings("unchecked")
     @Override
     public void setComparator(Comparator<E> comparator) {
-        // If the adapted set supports it, implement setComparator by
-        // constructing a new set
+        Comparator<E> previousComparator = getComparator();
+
+        // If the adapted set supports it, construct a new sorted set
         if (this.set instanceof java.util.SortedSet) {
             try {
                 Constructor constructor = this.set.getClass().getConstructor(Comparator.class);
@@ -136,7 +137,8 @@ public class SetAdapter<E> implements Set<E>, Serializable {
                 throw new RuntimeException(exception);
             }
         }
-        throw new UnsupportedOperationException();
+
+        setListeners.comparatorChanged(this, previousComparator);
     }
 
     @Override

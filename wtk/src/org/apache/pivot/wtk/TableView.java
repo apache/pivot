@@ -19,9 +19,9 @@ package org.apache.pivot.wtk;
 import java.util.Comparator;
 import java.util.Iterator;
 
-import org.apache.pivot.beans.BeanDictionary;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Map;
@@ -713,87 +713,6 @@ public class TableView extends Component {
     }
 
     /**
-     * Compares two rows. The dictionary values must implement
-     * {@link Comparable}.
-     * <p>
-     * TODO Allow a caller to sort on multiple columns.
-     */
-    public static class RowComparator implements Comparator<Object> {
-        private String columnName = null;
-        private SortDirection sortDirection = null;
-
-        public RowComparator(String columnName, SortDirection sortDirection) {
-            this.columnName = columnName;
-            this.sortDirection = sortDirection;
-        }
-
-        @Override
-        @SuppressWarnings("unchecked")
-        public int compare(Object o1, Object o2) {
-            Dictionary<String, ?> row1;
-            if (o1 instanceof Dictionary<?, ?>) {
-                row1 = (Dictionary<String, ?>)o1;
-            } else {
-                row1 = new BeanDictionary(o1);
-            }
-
-            Dictionary<String, ?> row2;
-            if (o2 instanceof Dictionary<?, ?>) {
-                row2 = (Dictionary<String, ?>)o2;
-            } else {
-                row2 = new BeanDictionary(o2);
-            }
-
-            Comparable<Object> comparable = (Comparable<Object>)row1.get(columnName);
-            Object value = row2.get(columnName);
-
-            int result;
-            if (comparable == null
-                && value == null) {
-                result = 0;
-            } else if (comparable == null) {
-                result = 1;
-            } else if (value == null) {
-                result = -1;
-            } else {
-                result = (comparable.compareTo(value)) * (sortDirection == SortDirection.ASCENDING ? 1 : -1);
-            }
-
-            return result;
-        }
-    }
-
-    /**
-     * Default sort handler class. Sorts rows using {@link RowComparator}.
-     */
-    public static class SortHandler implements TableViewHeaderPressListener {
-        @Override
-        @SuppressWarnings("unchecked")
-        public void headerPressed(TableViewHeader tableViewHeader, int index) {
-            TableView tableView = tableViewHeader.getTableView();
-            TableView.ColumnSequence columns = tableView.getColumns();
-            TableView.Column column = columns.get(index);
-
-            SortDirection sortDirection = column.getSortDirection();
-
-            if (sortDirection == null
-                || sortDirection == SortDirection.DESCENDING) {
-                sortDirection = SortDirection.ASCENDING;
-            } else {
-                sortDirection = SortDirection.DESCENDING;
-            }
-
-            List<Object> tableData = (List<Object>)tableView.getTableData();
-            tableData.setComparator(new TableView.RowComparator(column.getName(), sortDirection));
-
-            for (int i = 0, n = columns.getLength(); i < n; i++) {
-                column = columns.get(i);
-                column.setSortDirection(i == index ? sortDirection : null);
-            }
-        }
-    }
-
-    /**
      * Column sequence implementation.
      */
     public final class ColumnSequence implements Sequence<Column>, Iterable<Column> {
@@ -904,6 +823,69 @@ public class TableView extends Component {
             for (TableViewListener listener : this) {
                 listener.disabledRowFilterChanged(tableView, previousDisabledRowFilter);
             }
+        }
+    }
+
+    /**
+     * Sort dictionary implementation.
+     */
+    public final class SortDictionary implements Dictionary<String, SortDirection>, Iterable<String> {
+        public SortDirection get(String columnName) {
+            return sortMap.get(columnName);
+        }
+
+        public SortDirection put(String columnName, SortDirection sortDirection) {
+            SortDirection previousSortDirection;
+
+            if (sortDirection == null) {
+                previousSortDirection = remove(columnName);
+            } else {
+                boolean update = containsKey(columnName);
+                previousSortDirection = sortMap.put(columnName, sortDirection);
+
+                if (update) {
+                    tableViewSortListeners.sortUpdated(TableView.this, columnName, previousSortDirection);
+                } else {
+                    tableViewSortListeners.sortAdded(TableView.this, columnName);
+                }
+            }
+
+            return previousSortDirection;
+        }
+
+        public SortDirection remove(String columnName) {
+            SortDirection sortDirection = null;
+
+            if (containsKey(columnName)) {
+                sortDirection = sortMap.remove(columnName);
+                sortList.remove(columnName);
+                tableViewSortListeners.sortRemoved(TableView.this, columnName, sortDirection);
+            }
+
+            return sortDirection;
+        }
+
+        public boolean containsKey(String columnName) {
+            return sortMap.containsKey(columnName);
+        }
+
+        public boolean isEmpty() {
+            return sortMap.isEmpty();
+        }
+
+        public Dictionary.Pair<String, SortDirection> get(int index) {
+            String columnName = sortList.get(index);
+            SortDirection sortDirection = sortMap.get(columnName);
+
+            return new Dictionary.Pair<String, SortDirection>(columnName, sortDirection);
+        }
+
+        public int getLength() {
+            return sortList.getLength();
+        }
+
+        public Iterator<String> iterator() {
+            return sortList.iterator();
         }
     }
 
@@ -1037,6 +1019,36 @@ public class TableView extends Component {
         }
     }
 
+    private static class TableViewSortListenerList extends ListenerList<TableViewSortListener>
+        implements TableViewSortListener {
+        public void sortAdded(TableView tableView, String columnName) {
+            for (TableViewSortListener listener : this) {
+                listener.sortAdded(tableView, columnName);
+            }
+        }
+
+        public void sortUpdated(TableView tableView, String columnName,
+            SortDirection previousSortDirection) {
+            for (TableViewSortListener listener : this) {
+                listener.sortUpdated(tableView, columnName, previousSortDirection);
+            }
+        }
+
+        public void sortRemoved(TableView tableView, String columnName,
+            SortDirection sortDirection) {
+            for (TableViewSortListener listener : this) {
+                listener.sortRemoved(tableView, columnName, sortDirection);
+            }
+        }
+
+        public void sortChanged(TableView tableView,
+            Sequence<Dictionary.Pair<String, SortDirection>> previousSort) {
+            for (TableViewSortListener listener : this) {
+                listener.sortChanged(tableView, previousSort);
+            }
+        }
+    }
+
     private ArrayList<Column> columns = new ArrayList<Column>();
     private ColumnSequence columnSequence = new ColumnSequence();
 
@@ -1090,6 +1102,9 @@ public class TableView extends Component {
     private ListSelection selectedRanges = new ListSelection();
     private SelectMode selectMode = SelectMode.SINGLE;
 
+    private HashMap<String, SortDirection> sortMap = new HashMap<String, SortDirection>();
+    private ArrayList<String> sortList = new ArrayList<String>();
+
     private Filter<?> disabledRowFilter = null;
 
     private RowEditor rowEditor = null;
@@ -1098,6 +1113,7 @@ public class TableView extends Component {
     private TableViewColumnListenerList tableViewColumnListeners = new TableViewColumnListenerList();
     private TableViewRowListenerList tableViewRowListeners = new TableViewRowListenerList();
     private TableViewSelectionListenerList tableViewSelectionListeners = new TableViewSelectionListenerList();
+    private TableViewSortListenerList tableViewSortListeners = new TableViewSortListenerList();
 
     /**
      * Creates a new table view populated with an empty array list.
@@ -1755,5 +1771,9 @@ public class TableView extends Component {
 
     public ListenerList<TableViewSelectionListener> getTableViewSelectionListeners() {
         return tableViewSelectionListeners;
+    }
+
+    public ListenerList<TableViewSortListener> getTableViewSortListeners() {
+        return tableViewSortListeners;
     }
 }

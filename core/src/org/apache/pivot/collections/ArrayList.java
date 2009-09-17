@@ -436,17 +436,14 @@ public class ArrayList<T> implements List<T>, Serializable {
     public void setComparator(Comparator<T> comparator) {
         Comparator<T> previousComparator = this.comparator;
 
-        if (previousComparator != comparator) {
-            if (comparator != null) {
-                sort(this, comparator);
-            }
+        if (comparator != null) {
+            sort(this, comparator);
+        }
 
-            // Set the new comparator
-            this.comparator = comparator;
+        this.comparator = comparator;
 
-            if (listListeners != null) {
-                listListeners.comparatorChanged(this, previousComparator);
-            }
+        if (listListeners != null) {
+            listListeners.comparatorChanged(this, previousComparator);
         }
     }
 

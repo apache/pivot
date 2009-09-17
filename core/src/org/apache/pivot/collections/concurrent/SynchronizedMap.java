@@ -17,17 +17,17 @@
 package org.apache.pivot.collections.concurrent;
 
 import java.util.Comparator;
+import java.util.Iterator;
 
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.MapListener;
+import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
-
 
 /**
  * Synchronized implementation of the {@link Map} interface.
  */
-public class SynchronizedMap<K, V> extends SynchronizedCollection<K>
-    implements Map<K, V> {
+public class SynchronizedMap<K, V> implements Map<K, V> {
     private static class SynchronizedMapListenerList<K, V>
         extends MapListenerList<K, V> {
         @Override
@@ -66,23 +66,26 @@ public class SynchronizedMap<K, V> extends SynchronizedCollection<K>
         }
     }
 
+    private Map<K, V> map;
     private SynchronizedMapListenerList<K, V> mapListeners = new SynchronizedMapListenerList<K, V>();
 
     public SynchronizedMap(Map<K, V> map) {
-        super(map);
+        if (map == null) {
+            throw new IllegalArgumentException();
+        }
+
+        this.map = map;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public synchronized V get(K key) {
-        return ((Map<K, V>)collection).get(key);
+        return map.get(key);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public synchronized V put(K key, V value) {
         boolean update = containsKey(key);
-        V previousValue = ((Map<K, V>)collection).put(key, value);
+        V previousValue = map.put(key, value);
 
         if (update) {
             mapListeners.valueUpdated(this, key, previousValue);
@@ -94,35 +97,60 @@ public class SynchronizedMap<K, V> extends SynchronizedCollection<K>
         return previousValue;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public synchronized V remove(K key) {
         V value = null;
 
         if (containsKey(key)) {
-            value = ((Map<K, V>)collection).remove(key);
+            value = map.remove(key);
             mapListeners.valueRemoved(this, key, value);
         }
 
         return value;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public synchronized boolean isEmpty() {
-        return ((Map<K, V>)collection).isEmpty();
+        return map.isEmpty();
     }
 
-    @SuppressWarnings("unchecked")
+    @Override
+    public synchronized void clear() {
+        if (!map.isEmpty()) {
+            map.clear();
+            mapListeners.mapCleared(this);
+        }
+    }
+
     @Override
     public synchronized boolean containsKey(K key) {
-        return ((Map<K, V>)collection).containsKey(key);
+        return map.containsKey(key);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public synchronized int getCount() {
-        return ((Map<K, V>)collection).getCount();
+        return map.getCount();
+    }
+
+    @Override
+    public synchronized Comparator<K> getComparator() {
+        return map.getComparator();
+    }
+
+    @Override
+    public synchronized void setComparator(Comparator<K> comparator) {
+        Comparator<K> previousComparator = getComparator();
+        map.setComparator(comparator);
+        mapListeners.comparatorChanged(this, previousComparator);
+    }
+
+    /**
+     * NOTE Callers must manually synchronize on the SynchronizedMap
+     * instance to ensure thread safety during iteration.
+     */
+    @Override
+    public Iterator<K> iterator() {
+        return new ImmutableIterator<K>(map.iterator());
     }
 
     @Override

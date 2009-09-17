@@ -136,12 +136,12 @@ public class Sheet extends Window {
                     }
 
                     // Notify listeners
+                    sheetStateListeners.sheetClosed(this);
+
                     if (sheetCloseListener != null) {
                         sheetCloseListener.sheetClosed(this);
                         sheetCloseListener = null;
                     }
-
-                    sheetStateListeners.sheetClosed(this);
                 }
             } else if (vote == Vote.DENY) {
                 closing = false;

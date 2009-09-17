@@ -335,26 +335,24 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
     public void setComparator(Comparator<K> comparator) {
         Comparator<K> previousComparator = getComparator();
 
-        if (comparator != previousComparator) {
-            if (comparator == null) {
-                keys = null;
-            } else {
-                if (keys == null) {
-                    // Populate key list
-                    ArrayList<K> keys = new ArrayList<K>((int)((float)getCapacity() * loadFactor));
-                    for (K key : this) {
-                        keys.add(key);
-                    }
-
-                    this.keys = keys;
+        if (comparator == null) {
+            keys = null;
+        } else {
+            if (keys == null) {
+                // Populate key list
+                ArrayList<K> keys = new ArrayList<K>((int)((float)getCapacity() * loadFactor));
+                for (K key : this) {
+                    keys.add(key);
                 }
 
-                keys.setComparator(comparator);
+                this.keys = keys;
             }
 
-            if (mapListeners != null) {
-                mapListeners.comparatorChanged(this, previousComparator);
-            }
+            keys.setComparator(comparator);
+        }
+
+        if (mapListeners != null) {
+            mapListeners.comparatorChanged(this, previousComparator);
         }
     }
 

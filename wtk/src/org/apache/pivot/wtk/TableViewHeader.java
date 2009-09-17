@@ -25,6 +25,15 @@ import org.apache.pivot.wtk.content.TableViewHeaderDataRenderer;
  */
 public class TableViewHeader extends Component {
     /**
+     * Enumeration representing a sort mode.
+     */
+    public enum SortMode {
+        NONE,
+        SINGLE_COLUMN,
+        MULTI_COLUMN
+    }
+
+    /**
      * Table view header data renderer interface.
      */
     public interface DataRenderer extends Renderer {
@@ -57,6 +66,13 @@ public class TableViewHeader extends Component {
                 listener.dataRendererChanged(tableViewHeader, previousDataRenderer);
             }
         }
+
+        @Override
+        public void sortModeChanged(TableViewHeader tableViewHeader, SortMode previousSortMode) {
+            for (TableViewHeaderListener listener : this) {
+                listener.sortModeChanged(tableViewHeader, previousSortMode);
+            }
+        }
     }
 
     private static class TableViewHeaderPressListenerList extends ListenerList<TableViewHeaderPressListener>
@@ -69,8 +85,9 @@ public class TableViewHeader extends Component {
         }
     }
 
-    private TableView tableView = null;
-    private DataRenderer dataRenderer = null;
+    private TableView tableView;
+    private DataRenderer dataRenderer;
+    private SortMode sortMode = SortMode.NONE;
 
     private TableViewHeaderListenerList tableViewHeaderListeners = new TableViewHeaderListenerList();
     private TableViewHeaderPressListenerList tableViewHeaderPressListeners = new TableViewHeaderPressListenerList();
@@ -123,6 +140,30 @@ public class TableViewHeader extends Component {
             this.dataRenderer = dataRenderer;
             tableViewHeaderListeners.dataRendererChanged(this, previousDataRenderer);
         }
+    }
+
+    public SortMode getSortMode() {
+        return sortMode;
+    }
+
+    public void setSortMode(SortMode sortMode) {
+        if (sortMode == null) {
+            throw new IllegalArgumentException();
+        }
+
+        SortMode previousSortMode = this.sortMode;
+        if (previousSortMode != sortMode) {
+            this.sortMode = sortMode;
+            tableViewHeaderListeners.sortModeChanged(this, previousSortMode);
+        }
+    }
+
+    public void setSortMode(String sortMode) {
+        if (sortMode == null) {
+            throw new IllegalArgumentException();
+        }
+
+        setSortMode(SortMode.valueOf(sortMode.toUpperCase()));
     }
 
     public void pressHeader(int index) {

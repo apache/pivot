@@ -552,44 +552,42 @@ public class LinkedList<T> implements List<T>, Serializable {
     public void setComparator(Comparator<T> comparator) {
         Comparator<T> previousComparator = this.comparator;
 
-        if (previousComparator != comparator) {
-            if (comparator != null) {
-                // Copy the nodes into an array and sort
-                T[] array = (T[])new Object[length];
+        if (comparator != null) {
+            // Copy the nodes into an array and sort
+            T[] array = (T[])new Object[length];
 
-                int i = 0;
-                for (T item : this) {
-                    array[i++] = item;
-                }
-
-                Arrays.sort(array, comparator);
-
-                // Rebuild the node list
-                first = null;
-
-                Node<T> node = null;
-                for (i = 0; i < length; i++) {
-                    Node<T> previousNode = node;
-                    node = new Node<T>(previousNode, null, array[i]);
-
-                    if (previousNode == null) {
-                        first = node;
-                    } else {
-                        previousNode.next = node;
-                    }
-                }
-
-                last = node;
-
-                modificationCount++;
+            int i = 0;
+            for (T item : this) {
+                array[i++] = item;
             }
 
-            // Set the new comparator
-            this.comparator = comparator;
+            Arrays.sort(array, comparator);
 
-            if (listListeners != null) {
-                listListeners.comparatorChanged(this, previousComparator);
+            // Rebuild the node list
+            first = null;
+
+            Node<T> node = null;
+            for (i = 0; i < length; i++) {
+                Node<T> previousNode = node;
+                node = new Node<T>(previousNode, null, array[i]);
+
+                if (previousNode == null) {
+                    first = node;
+                } else {
+                    previousNode.next = node;
+                }
             }
+
+            last = node;
+
+            modificationCount++;
+        }
+
+        // Set the new comparator
+        this.comparator = comparator;
+
+        if (listListeners != null) {
+            listListeners.comparatorChanged(this, previousComparator);
         }
     }
 

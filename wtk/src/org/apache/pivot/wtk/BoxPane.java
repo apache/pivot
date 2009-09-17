@@ -41,7 +41,7 @@ public class BoxPane extends Container {
     }
 
     public BoxPane(Orientation orientation) {
-        this.orientation = orientation;
+        setOrientation(orientation);
 
         installSkin(BoxPane.class);
     }
@@ -51,6 +51,10 @@ public class BoxPane extends Container {
     }
 
     public void setOrientation(Orientation orientation) {
+        if (orientation == null) {
+            throw new IllegalArgumentException();
+        }
+
         if (this.orientation != orientation) {
             this.orientation = orientation;
             boxPaneListeners.orientationChanged(this);

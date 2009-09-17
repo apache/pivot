@@ -386,10 +386,8 @@ public class MapList<K, V> implements List<Pair<K, V>> {
     public void setComparator(Comparator<Pair<K, V>> comparator) {
         Comparator<Pair<K, V>> previousComparator = view.getComparator();
 
-        if (previousComparator != comparator) {
-            view.setComparator(comparator);
-            listListeners.comparatorChanged(this, previousComparator);
-        }
+        view.setComparator(comparator);
+        listListeners.comparatorChanged(this, previousComparator);
     }
 
     /**

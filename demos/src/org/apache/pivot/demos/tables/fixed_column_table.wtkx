@@ -50,7 +50,7 @@ limitations under the License.
                         </TableView>
                     </view>
                     <columnHeader>
-                        <TableViewHeader wtkx:id="primaryTableViewHeader" tableView="$primaryTableView"/>
+                        <TableViewHeader tableView="$primaryTableView"/>
                     </columnHeader>
                     <rowHeader>
                         <TableView wtkx:id="fixedTableView" tableData="$tableData" selectMode="multi"
@@ -63,7 +63,7 @@ limitations under the License.
                         </TableView>
                     </rowHeader>
                     <corner>
-                        <TableViewHeader wtkx:id="fixedTableViewHeader" tableView="$fixedTableView"
+                        <TableViewHeader tableView="$fixedTableView"
                             styles="{includeTrailingVerticalGridLine:true}"/>
                     </corner>
                 </ScrollPane>

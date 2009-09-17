@@ -480,16 +480,13 @@ public class FilteredList<T> implements List<T> {
     @Override
     public void setComparator(Comparator<T> comparator) {
         Comparator<T> previousComparator = this.comparator;
+        this.comparator = comparator;
 
-        if (previousComparator != comparator) {
-            this.comparator = comparator;
-
-            if (view != null) {
-                view.setComparator(comparator);
-            }
-
-            listListeners.comparatorChanged(this, previousComparator);
+        if (view != null) {
+            view.setComparator(comparator);
         }
+
+        listListeners.comparatorChanged(this, previousComparator);
     }
 
     @Override

@@ -69,7 +69,6 @@ import org.apache.pivot.wtk.Slider;
 import org.apache.pivot.wtk.SliderValueListener;
 import org.apache.pivot.wtk.Spinner;
 import org.apache.pivot.wtk.TableView;
-import org.apache.pivot.wtk.TableViewHeader;
 import org.apache.pivot.wtk.TextArea;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.TreeView;
@@ -502,7 +501,6 @@ public class KitchenSink implements Application, Application.AboutHandler {
         private Component component = null;
         private TableView sortableTableView = null;
         private TableView customTableView = null;
-        private TableViewHeader sortableTableViewHeader = null;
 
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
@@ -518,7 +516,6 @@ public class KitchenSink implements Application, Application.AboutHandler {
 
                 sortableTableView = (TableView)wtkxSerializer.get("sortableTableView");
                 customTableView = (TableView)wtkxSerializer.get("customTableView");
-                sortableTableViewHeader = (TableViewHeader)wtkxSerializer.get("sortableTableViewHeader");
 
                 rollup.setContent(component);
 
@@ -547,8 +544,11 @@ public class KitchenSink implements Application, Application.AboutHandler {
 
                 sortableTableView.setTableData(tableData);
 
+                // TODO
+                /*
                 // Install header press listener
                 sortableTableViewHeader.getTableViewHeaderPressListeners().add(new TableView.SortHandler());
+                */
 
                 customTableView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
                     @Override

@@ -39,6 +39,7 @@ import org.apache.pivot.wtk.TableViewColumnListener;
 import org.apache.pivot.wtk.TableViewHeader;
 import org.apache.pivot.wtk.TableViewHeaderListener;
 import org.apache.pivot.wtk.Theme;
+import org.apache.pivot.wtk.TableViewHeader.SortMode;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.skin.ComponentSkin;
 
@@ -775,6 +776,11 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
     public void dataRendererChanged(TableViewHeader tableViewHeader,
         TableViewHeader.DataRenderer previousDataRenderer) {
         invalidateComponent();
+    }
+
+    @Override
+    public void sortModeChanged(TableViewHeader tableViewHeader, SortMode previousSortMode) {
+        // No-op
     }
 
     // Table view column events

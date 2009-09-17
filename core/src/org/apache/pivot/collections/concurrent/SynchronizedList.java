@@ -17,18 +17,19 @@
 package org.apache.pivot.collections.concurrent;
 
 import java.util.Comparator;
+import java.util.Iterator;
 
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 
 
 /**
  * Synchronized implementation of the {@link List} interface.
  */
-public class SynchronizedList<T> extends SynchronizedCollection<T>
-    implements List<T> {
+public class SynchronizedList<T> implements List<T> {
     private static class SynchronizedListListenerList<T>
         extends ListListenerList<T> {
         @Override
@@ -67,15 +68,20 @@ public class SynchronizedList<T> extends SynchronizedCollection<T>
         }
     }
 
+    private List<T> list;
     private SynchronizedListListenerList<T> listListeners = new SynchronizedListListenerList<T>();
 
     public SynchronizedList(List<T> list) {
-        super(list);
+        if (list == null) {
+            throw new IllegalArgumentException();
+        }
+
+        this.list = list;
     }
 
     @Override
     public synchronized int add(T item) {
-        int index = ((List<T>)collection).add(item);
+        int index = list.add(item);
         listListeners.itemInserted(this, index);
 
         return index;
@@ -83,13 +89,13 @@ public class SynchronizedList<T> extends SynchronizedCollection<T>
 
     @Override
     public synchronized void insert(T item, int index) {
-        ((List<T>)collection).insert(item, index);
+        list.insert(item, index);
         listListeners.itemInserted(this, index);
     }
 
     @Override
     public synchronized T update(int index, T item) {
-        T previousItem = ((List<T>)collection).update(index, item);
+        T previousItem = list.update(index, item);
         if (previousItem != item) {
             listListeners.itemUpdated(this, index, previousItem);
         }
@@ -111,7 +117,7 @@ public class SynchronizedList<T> extends SynchronizedCollection<T>
 
     @Override
     public synchronized Sequence<T> remove(int index, int count) {
-        Sequence<T> removed = ((List<T>)collection).remove(index, count);
+        Sequence<T> removed = list.remove(index, count);
         if (count > 0) {
             listListeners.itemsRemoved(this, index, removed);
         }
@@ -120,18 +126,47 @@ public class SynchronizedList<T> extends SynchronizedCollection<T>
     }
 
     @Override
+    public synchronized void clear() {
+        if (list.getLength() > 0) {
+            list.clear();
+            listListeners.listCleared(this);
+        }
+    }
+
+    @Override
     public synchronized T get(int index) {
-        return ((List<T>)collection).get(index);
+        return list.get(index);
     }
 
     @Override
     public synchronized int indexOf(T item) {
-        return ((List<T>)collection).indexOf(item);
+        return list.indexOf(item);
     }
 
     @Override
     public synchronized int getLength() {
-        return ((List<T>)collection).getLength();
+        return list.getLength();
+    }
+
+    @Override
+    public synchronized Comparator<T> getComparator() {
+        return list.getComparator();
+    }
+
+    @Override
+    public synchronized void setComparator(Comparator<T> comparator) {
+        Comparator<T> previousComparator = getComparator();
+        list.setComparator(comparator);
+        listListeners.comparatorChanged(this, previousComparator);
+    }
+
+    /**
+     * NOTE Callers must manually synchronize on the SynchronizedList
+     * instance to ensure thread safety during iteration.
+     */
+    @Override
+    public Iterator<T> iterator() {
+        return new ImmutableIterator<T>(list.iterator());
     }
 
     @Override

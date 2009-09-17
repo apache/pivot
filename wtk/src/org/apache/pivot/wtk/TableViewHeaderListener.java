@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.wtk.TableViewHeader.SortMode;
+
 /**
  * Table view header listener interface.
  */
@@ -26,8 +28,7 @@ public interface TableViewHeaderListener {
      * @param tableViewHeader
      * @param previousTableView
      */
-    public void tableViewChanged(TableViewHeader tableViewHeader,
-        TableView previousTableView);
+    public void tableViewChanged(TableViewHeader tableViewHeader, TableView previousTableView);
 
     /**
      * Called when a table view header's data renderer has changed.
@@ -37,4 +38,12 @@ public interface TableViewHeaderListener {
      */
     public void dataRendererChanged(TableViewHeader tableViewHeader,
         TableViewHeader.DataRenderer previousDataRenderer);
+
+    /**
+     * Called when a table view header's sort mode has changed.
+     *
+     * @param tableViewHeader
+     * @param previousSortMode
+     */
+    public void sortModeChanged(TableViewHeader tableViewHeader, SortMode previousSortMode);
 }

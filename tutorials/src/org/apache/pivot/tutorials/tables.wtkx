@@ -43,7 +43,7 @@ limitations under the License.
                                 </TableView>
                             </view>
                             <columnHeader>
-                                <TableViewHeader wtkx:id="sortableTableViewHeader" tableView="$sortableTableView"/>
+                                <TableViewHeader tableView="$sortableTableView"/>
                             </columnHeader>
                         </ScrollPane>
                     </content>

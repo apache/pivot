@@ -175,12 +175,12 @@ public class Dialog extends Frame {
                     }
 
                     // Notify listeners
+                    dialogStateListeners.dialogClosed(this);
+
                     if (dialogCloseListener != null) {
                         dialogCloseListener.dialogClosed(this);
                         dialogCloseListener = null;
                     }
-
-                    dialogStateListeners.dialogClosed(this);
                 }
             } else if (vote == Vote.DENY) {
                 closing = false;
