@@ -17,7 +17,9 @@
 package org.apache.pivot.collections;
 
 import java.util.Comparator;
+import java.util.Iterator;
 
+import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 
 
@@ -25,9 +27,10 @@ import org.apache.pivot.util.ListenerList;
  * Implementation of the {@link Queue} interface that is backed by a linked
  * list.
  */
-public class LinkedQueue<T> extends LinkedList<T> implements Queue<T> {
+public class LinkedQueue<T> implements Queue<T> {
     private static final long serialVersionUID = 0;
 
+    private LinkedList<T> linkedList = new LinkedList<T>();
     private transient QueueListenerList<T> queueListeners = new QueueListenerList<T>();
 
     public LinkedQueue() {
@@ -35,15 +38,15 @@ public class LinkedQueue<T> extends LinkedList<T> implements Queue<T> {
     }
 
     public LinkedQueue(Comparator<T> comparator) {
-        super(comparator);
+        setComparator(comparator);
     }
 
     @Override
     public void enqueue(T item) {
         if (getComparator() == null) {
-            insert(item, 0);
+            linkedList.insert(item, 0);
         } else {
-            add(item);
+            linkedList.add(item);
         }
 
         queueListeners.itemEnqueued(this, item);
@@ -51,12 +54,12 @@ public class LinkedQueue<T> extends LinkedList<T> implements Queue<T> {
 
     @Override
     public T dequeue() {
-        int length = getLength();
+        int length = linkedList.getLength();
         if (length == 0) {
             throw new IllegalStateException();
         }
 
-        T item = remove(length - 1, 1).get(0);
+        T item = linkedList.remove(length - 1, 1).get(0);
         queueListeners.itemDequeued(this, item);
 
         return item;
@@ -65,17 +68,43 @@ public class LinkedQueue<T> extends LinkedList<T> implements Queue<T> {
     @Override
     public T peek() {
         T item = null;
-        int length = getLength();
+        int length = linkedList.getLength();
         if (length > 0) {
-            item = get(length - 1);
+            item = linkedList.get(length - 1);
         }
 
         return item;
     }
 
     @Override
+    public void clear() {
+        if (linkedList.getLength() > 0) {
+            linkedList.clear();
+            queueListeners.queueCleared(this);
+        }
+    }
+
+    @Override
     public boolean isEmpty() {
-        return (getLength() == 0);
+        return (linkedList.getLength() == 0);
+    }
+
+    @Override
+    public Comparator<T> getComparator() {
+        return linkedList.getComparator();
+    }
+
+    @Override
+    public void setComparator(Comparator<T> comparator) {
+        Comparator<T> previousComparator = getComparator();
+        linkedList.setComparator(comparator);
+
+        queueListeners.comparatorChanged(this, previousComparator);
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new ImmutableIterator<T>(linkedList.iterator());
     }
 
     @Override

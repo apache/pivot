@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.collections;
 
+import java.util.Comparator;
+
 /**
  * Queue listener interface.
  */
@@ -35,4 +37,19 @@ public interface QueueListener<T> {
      * @param item
      */
     public void itemDequeued(Queue<T> queue, T item);
+
+    /**
+     * Called when a queue has been cleared.
+     *
+     * @param queue
+     */
+    public void queueCleared(Queue<T> queue);
+
+    /**
+     * Called when a queue's comparator has changed.
+     *
+     * @param queue
+     * @param previousComparator
+     */
+    public void comparatorChanged(Queue<T> queue, Comparator<T> previousComparator);
 }

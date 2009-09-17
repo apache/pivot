@@ -17,7 +17,9 @@
 package org.apache.pivot.collections;
 
 import java.util.Comparator;
+import java.util.Iterator;
 
+import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 
 
@@ -25,9 +27,10 @@ import org.apache.pivot.util.ListenerList;
  * Implementation of the {@link Stack} interface that is backed by an
  * array.
  */
-public class ArrayStack<T> extends ArrayList<T> implements Stack<T> {
+public class ArrayStack<T> implements Stack<T> {
     private static final long serialVersionUID = 0;
 
+    private ArrayList<T> arrayList = new ArrayList<T>();
     private transient StackListenerList<T> stackListeners = new StackListenerList<T>();
 
     public ArrayStack() {
@@ -35,27 +38,27 @@ public class ArrayStack<T> extends ArrayList<T> implements Stack<T> {
     }
 
     public ArrayStack(Comparator<T> comparator) {
-        super(comparator);
+        setComparator(comparator);
     }
 
     public ArrayStack(int capacity) {
-        super(capacity);
+        ensureCapacity(capacity);
     }
 
     @Override
     public void push(T item) {
-        add(item);
+        arrayList.add(item);
         stackListeners.itemPushed(this, item);
     }
 
     @Override
     public T pop() {
-        int length = getLength();
+        int length = arrayList.getLength();
         if (length == 0) {
             throw new IllegalStateException();
         }
 
-        T item = remove(length - 1, 1).get(0);
+        T item = arrayList.remove(length - 1, 1).get(0);
         stackListeners.itemPopped(this, item);
 
         return item;
@@ -64,17 +67,47 @@ public class ArrayStack<T> extends ArrayList<T> implements Stack<T> {
     @Override
     public T peek() {
         T item = null;
-        int length = getLength();
+        int length = arrayList.getLength();
         if (length > 0) {
-            item = get(length - 1);
+            item = arrayList.get(length - 1);
         }
 
         return item;
     }
 
     @Override
+    public void clear() {
+        if (arrayList.getLength() > 0) {
+            arrayList.clear();
+            stackListeners.stackCleared(this);
+        }
+    }
+
+    @Override
     public boolean isEmpty() {
-        return (getLength() == 0);
+        return (arrayList.getLength() == 0);
+    }
+
+    public void ensureCapacity(int capacity) {
+        arrayList.ensureCapacity(capacity);
+    }
+
+    @Override
+    public Comparator<T> getComparator() {
+        return arrayList.getComparator();
+    }
+
+    @Override
+    public void setComparator(Comparator<T> comparator) {
+        Comparator<T> previousComparator = getComparator();
+        arrayList.setComparator(comparator);
+
+        stackListeners.comparatorChanged(this, previousComparator);
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new ImmutableIterator<T>(arrayList.iterator());
     }
 
     @Override

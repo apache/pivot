@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.collections;
 
+import java.util.Comparator;
+
 /**
  * Stack listener interface.
  */
@@ -35,4 +37,19 @@ public interface StackListener<T> {
      * @param item
      */
     public void itemPopped(Stack<T> stack, T item);
+
+    /**
+     * Called when a stack has been cleared.
+     *
+     * @param stack
+     */
+    public void stackCleared(Stack<T> stack);
+
+    /**
+     * Called when a stack's comparator has changed.
+     *
+     * @param stack
+     * @param previousComparator
+     */
+    public void comparatorChanged(Stack<T> stack, Comparator<T> previousComparator);
 }

@@ -95,8 +95,10 @@ public class SynchronizedStack<T> implements Stack<T> {
 
     @Override
     public synchronized void clear() {
-        // TODO Fire event
-        stack.clear();
+        if (!stack.isEmpty()) {
+            stack.clear();
+            stackListeners.stackCleared(this);
+        }
     }
 
     @Override
@@ -111,8 +113,9 @@ public class SynchronizedStack<T> implements Stack<T> {
 
     @Override
     public synchronized void setComparator(Comparator<T> comparator) {
-        // TODO Fire event
+        Comparator<T> previousComparator = getComparator();
         stack.setComparator(comparator);
+        stackListeners.comparatorChanged(this, previousComparator);
     }
 
     /**

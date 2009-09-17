@@ -94,8 +94,10 @@ public class SynchronizedQueue<T> implements Queue<T> {
 
     @Override
     public synchronized void clear() {
-        // TODO Fire event
-        queue.clear();
+        if (!queue.isEmpty()) {
+            queue.clear();
+            queueListeners.queueCleared(this);
+        }
     }
 
     @Override
@@ -110,8 +112,9 @@ public class SynchronizedQueue<T> implements Queue<T> {
 
     @Override
     public synchronized void setComparator(Comparator<T> comparator) {
-        // TODO Fire event
+        Comparator<T> previousComparator = getComparator();
         queue.setComparator(comparator);
+        queueListeners.comparatorChanged(this, previousComparator);
     }
 
     /**

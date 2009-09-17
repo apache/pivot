@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.collections;
 
+import java.util.Comparator;
+
 import org.apache.pivot.util.ListenerList;
 
 /**
@@ -39,6 +41,20 @@ public interface Queue<T> extends Collection<T> {
         public void itemDequeued(Queue<T> queue, T item) {
             for (QueueListener<T> listener : this) {
                 listener.itemDequeued(queue, item);
+            }
+        }
+
+        @Override
+        public void queueCleared(Queue<T> queue) {
+            for (QueueListener<T> listener : this) {
+                listener.queueCleared(queue);
+            }
+        }
+
+        @Override
+        public void comparatorChanged(Queue<T> queue, Comparator<T> previousComparator) {
+            for (QueueListener<T> listener : this) {
+                listener.comparatorChanged(queue, previousComparator);
             }
         }
     }

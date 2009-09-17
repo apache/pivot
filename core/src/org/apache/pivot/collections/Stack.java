@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.collections;
 
+import java.util.Comparator;
+
 import org.apache.pivot.util.ListenerList;
 
 /**
@@ -39,6 +41,20 @@ public interface Stack<T> extends Collection<T> {
         public void itemPopped(Stack<T> stack, T item) {
             for (StackListener<T> listener : this) {
                 listener.itemPopped(stack, item);
+            }
+        }
+
+        @Override
+        public void stackCleared(Stack<T> stack) {
+            for (StackListener<T> listener : this) {
+                listener.stackCleared(stack);
+            }
+        }
+
+        @Override
+        public void comparatorChanged(Stack<T> stack, Comparator<T> previousComparator) {
+            for (StackListener<T> listener : this) {
+                listener.comparatorChanged(stack, previousComparator);
             }
         }
     }
