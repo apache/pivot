@@ -941,6 +941,10 @@ public class Window extends Container {
         for (Window ownedWindow : sortedOwnedWindows) {
             ownedWindow.moveToFront();
         }
+
+        if (owner == null) {
+            requestActive();
+        }
     }
 
     /**
