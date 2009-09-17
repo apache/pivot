@@ -17,6 +17,7 @@
 package org.apache.pivot.wtk;
 
 import java.util.Comparator;
+import java.util.Iterator;
 
 import org.apache.pivot.beans.BeanDictionary;
 import org.apache.pivot.collections.ArrayList;
@@ -28,6 +29,7 @@ import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.Filter;
+import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.content.TableViewCellRenderer;
@@ -794,7 +796,7 @@ public class TableView extends Component {
     /**
      * Column sequence implementation.
      */
-    public final class ColumnSequence implements Sequence<Column> {
+    public final class ColumnSequence implements Sequence<Column>, Iterable<Column> {
         @Override
         public int add(Column column) {
             int i = getLength();
@@ -862,6 +864,11 @@ public class TableView extends Component {
         @Override
         public int getLength() {
             return columns.getLength();
+        }
+
+        @Override
+        public Iterator<Column> iterator() {
+            return new ImmutableIterator<Column>(columns.iterator());
         }
     }
 
