@@ -24,6 +24,7 @@ import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.CardPane;
@@ -113,6 +114,7 @@ public class TableViewRowEditor implements TableView.RowEditor {
 
         private boolean opening = false;
         private boolean closing = false;
+        private boolean saving = false;
 
         private ScrollPane tableViewScrollPane = null;
 
@@ -141,7 +143,8 @@ public class TableViewRowEditor implements TableView.RowEditor {
             cardPane = new CardPane();
             scrollPane.setView(cardPane);
 
-            cardPane.add(new ImageView(new ComponentImage(tableView, tableView.getRowBounds(rowIndex))));
+            cardPane.add(new ImageView(new ComponentImage(tableView,
+                tableView.getRowBounds(rowIndex))));
             cardPane.setSelectedIndex(0);
             cardPane.getStyles().put("selectionChangeEffect", editEffect);
 
@@ -265,6 +268,14 @@ public class TableViewRowEditor implements TableView.RowEditor {
 
                     // This marks our editor as no longer editing
                     editorPopup = null;
+
+                    if (saving) {
+                        rowEditorListeners.changesSaved(TableViewRowEditor.this, tableView,
+                            rowIndex, columnIndex);
+                    } else {
+                        rowEditorListeners.editCancelled(TableViewRowEditor.this, tableView,
+                            rowIndex, columnIndex);
+                    }
                 } else if (!closing) {
                     closing = true;
 
@@ -278,7 +289,8 @@ public class TableViewRowEditor implements TableView.RowEditor {
                     // Close this editor popup when the transition has completed
                     cardPane.getCardPaneListeners().add(new CardPaneListener.Adapter() {
                         @Override
-                        public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex) {
+                        public void selectedIndexChanged(CardPane cardPane,
+                            int previousSelectedIndex) {
                             close();
 
                             // Remove this listener
@@ -314,36 +326,47 @@ public class TableViewRowEditor implements TableView.RowEditor {
 
         @SuppressWarnings("unchecked")
         public void saveChanges() {
-            List<Object> tableData = (List<Object>)tableView.getTableData();
+            // Preview the changes
+            HashMap<String, Object> changes = new HashMap<String, Object>();
+            tablePane.store(changes);
+            Vote vote = rowEditorListeners.previewSaveChanges(TableViewRowEditor.this, tableView,
+                rowIndex, columnIndex, changes);
 
-            // Get the row data, represented as a Dictionary
-            Object tableRow = tableData.get(rowIndex);
-            Dictionary<String, Object> rowData;
-            if (tableRow instanceof Dictionary<?, ?>) {
-                rowData = (Dictionary<String, Object>)tableRow;
-            } else {
-                rowData = new BeanDictionary(tableRow);
-            }
+            if (vote == Vote.APPROVE) {
+                saving = true;
+                List<Object> tableData = (List<Object>)tableView.getTableData();
 
-            // Update the row data using data binding
-            tablePane.store(rowData);
+                // Get the row data, represented as a Dictionary
+                Object tableRow = tableData.get(rowIndex);
+                Dictionary<String, Object> rowData;
+                if (tableRow instanceof Dictionary<?, ?>) {
+                    rowData = (Dictionary<String, Object>)tableRow;
+                } else {
+                    rowData = new BeanDictionary(tableRow);
+                }
 
-            // Modifying the table data will close this popup
-            if (tableData.getComparator() == null) {
-                tableData.update(rowIndex, tableRow);
-            } else {
-                tableData.remove(rowIndex, 1);
-                tableData.add(tableRow);
+                // Update the row data using data binding
+                tablePane.store(rowData);
 
-                // Re-select the row, and make sure it's visible
-                int newRowIndex = tableData.indexOf(tableRow);
-                tableView.setSelectedIndex(newRowIndex);
-                tableView.scrollAreaToVisible(tableView.getRowBounds(newRowIndex));
+                // Modifying the table data will close this popup
+                if (tableData.getComparator() == null) {
+                    tableData.update(rowIndex, tableRow);
+                } else {
+                    tableData.remove(rowIndex, 1);
+                    tableData.add(tableRow);
+
+                    // Re-select the row, and make sure it's visible
+                    int newRowIndex = tableData.indexOf(tableRow);
+                    tableView.setSelectedIndex(newRowIndex);
+                    tableView.scrollAreaToVisible(tableView.getRowBounds(newRowIndex));
+                }
+            } else if (vote == Vote.DENY) {
+                saving = false;
+                rowEditorListeners.saveChangesVetoed(TableViewRowEditor.this, vote);
             }
         }
 
         public void cancelEdit() {
-            // Close without updating the table data
             close();
         }
 
@@ -653,14 +676,22 @@ public class TableViewRowEditor implements TableView.RowEditor {
             throw new IndexOutOfBoundsException();
         }
 
-        editorPopup = new EditorPopup(tableView, rowIndex, columnIndex);
+        Vote vote = rowEditorListeners.previewEditRow(this, tableView, rowIndex, columnIndex);
 
-        Container tableViewParent = tableView.getParent();
-        if (tableViewParent instanceof ScrollPane) {
-            editorPopup.setTableViewScrollPane((ScrollPane)tableViewParent);
+        if (vote == Vote.APPROVE) {
+            editorPopup = new EditorPopup(tableView, rowIndex, columnIndex);
+
+            Container tableViewParent = tableView.getParent();
+            if (tableViewParent instanceof ScrollPane) {
+                editorPopup.setTableViewScrollPane((ScrollPane)tableViewParent);
+            }
+
+            editorPopup.editRow();
+
+            rowEditorListeners.rowEditing(this, tableView, rowIndex, columnIndex);
+        } else if (vote == Vote.DENY) {
+            rowEditorListeners.editRowVetoed(this, vote);
         }
-
-        editorPopup.editRow();
     }
 
     /**
