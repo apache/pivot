@@ -16,8 +16,15 @@
  */
 package org.apache.pivot.wtk.skin.terra;
 
+import java.io.InputStream;
+import java.io.IOException;
+import java.net.URL;
+
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
+import org.apache.pivot.collections.Map;
+import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.wtk.Alert;
 import org.apache.pivot.wtk.AlertListener;
 import org.apache.pivot.wtk.Button;
@@ -32,13 +39,34 @@ import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
-
 /**
  * Alert skin.
  */
+@SuppressWarnings("unchecked")
 public class TerraAlertSkin extends TerraDialogSkin
     implements AlertListener {
     private ArrayList<Button> optionButtons = new ArrayList<Button>();
+
+    private static Map<String, ?> commandButtonStyles;
+
+    static {
+        URL location = TerraAlertSkin.class.getResource("command_button.json");
+
+        try {
+            InputStream inputStream = location.openStream();
+
+            try {
+                JSONSerializer serializer = new JSONSerializer();
+                commandButtonStyles = (Map<String, ?>)serializer.readObject(inputStream);
+            } finally {
+                inputStream.close();
+            }
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
+        } catch (SerializationException exception) {
+            throw new RuntimeException(exception);
+        }
+    }
 
     public TerraAlertSkin() {
         setResizable(false);
@@ -91,14 +119,7 @@ public class TerraAlertSkin extends TerraDialogSkin
             Object option = alert.getOption(i);
 
             PushButton optionButton = new PushButton(option);
-            HashMap<String, Object> optionButtonStyles = new HashMap<String, Object>();
-            optionButtonStyles.put("color", theme.getColor(4));
-            optionButtonStyles.put("backgroundColor", theme.getColor(16));
-            optionButtonStyles.put("borderColor", theme.getColor(13));
-            optionButtonStyles.put("padding", new Insets(3, 4, 3, 4));
-
-            optionButton.setStyles(optionButtonStyles);
-            optionButton.getStyles().put("minimumAspectRatio", 3);
+            optionButton.setStyles(commandButtonStyles);
 
             optionButton.getButtonPressListeners().add(new ButtonPressListener() {
                 @Override
