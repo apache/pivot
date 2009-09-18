@@ -827,7 +827,8 @@ public abstract class ApplicationContext {
 
                                     if (component instanceof Container) {
                                         Container container = (Container)component;
-                                        component = container.getComponentAt(componentX, componentY);
+                                        component = container.getComponentAt(componentX,
+                                            componentY);
 
                                         if (component != null) {
                                             componentX -= component.getX();
@@ -845,14 +846,25 @@ public abstract class ApplicationContext {
                                     menuPopup.getWindowStateListeners().add(new WindowStateListener.Adapter() {
                                         @Override
                                         public void windowClosed(Window window, Display display) {
+                                            window.setOwner(null);
                                             menuPopup.getMenu().getSections().clear();
                                             menuPopup = null;
                                             window.getWindowStateListeners().remove(this);
                                         }
                                     });
 
-                                    Display display = mouseOwner.getDisplay();
-                                    menuPopup.open(display, mouseOwner.mapPointToAncestor(display, x, y));
+                                    Window window = null;
+                                    if (mouseOwner == display) {
+                                        window = (Window)display.getComponentAt(x, y);
+                                    } else {
+                                        window = mouseOwner.getWindow();
+                                    }
+
+                                    menuPopup.setOwner(window);
+
+                                    Display display = window.getDisplay();
+                                    menuPopup.open(display, mouseOwner.mapPointToAncestor(display,
+                                        x, y));
                                 }
                             }
 
@@ -871,8 +883,9 @@ public abstract class ApplicationContext {
                                     dragSource.endDrag(dragDescendant, null);
                                 } else {
                                     DropTarget dropTarget = dropDescendant.getDropTarget();
-                                    DropAction dropAction = dropTarget.drop(dropDescendant, dragManifest,
-                                        dragSource.getSupportedDropActions(), x, y, getUserDropAction(event));
+                                    DropAction dropAction = dropTarget.drop(dropDescendant,
+                                        dragManifest, dragSource.getSupportedDropActions(), x, y,
+                                        getUserDropAction(event));
                                     dragSource.endDrag(dragDescendant, dropAction);
                                 }
 
