@@ -36,6 +36,7 @@ import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.ThreadUtilities;
 import org.apache.pivot.wtk.effects.Decorator;
 
 
@@ -2503,7 +2504,13 @@ public abstract class Component implements ConstrainedVisual {
         }
 
         try {
-            setStyles(JSONSerializer.parseMap(styles));
+            if (styles.charAt(0) == '{') {
+                setStyles(JSONSerializer.parseMap(styles));
+            } else {
+                setStyles(ThreadUtilities.getClassLoader().getResource(styles));
+            }
+        } catch (IOException exception) {
+            throw new IllegalArgumentException(exception);
         } catch (SerializationException exception) {
             throw new IllegalArgumentException(exception);
         }
