@@ -1111,46 +1111,55 @@ public class TerraTabPaneSkin extends ContainerSkin
             int selectedIndex = -1;
 
             switch (keyCode) {
+                case Keyboard.KeyCode.KEYPAD_1:
                 case Keyboard.KeyCode.N1: {
                     selectedIndex = 0;
                     break;
                 }
 
+                case Keyboard.KeyCode.KEYPAD_2:
                 case Keyboard.KeyCode.N2: {
                     selectedIndex = 1;
                     break;
                 }
 
+                case Keyboard.KeyCode.KEYPAD_3:
                 case Keyboard.KeyCode.N3: {
                     selectedIndex = 2;
                     break;
                 }
 
+                case Keyboard.KeyCode.KEYPAD_4:
                 case Keyboard.KeyCode.N4: {
                     selectedIndex = 3;
                     break;
                 }
 
+                case Keyboard.KeyCode.KEYPAD_5:
                 case Keyboard.KeyCode.N5: {
                     selectedIndex = 4;
                     break;
                 }
 
+                case Keyboard.KeyCode.KEYPAD_6:
                 case Keyboard.KeyCode.N6: {
                     selectedIndex = 5;
                     break;
                 }
 
+                case Keyboard.KeyCode.KEYPAD_7:
                 case Keyboard.KeyCode.N7: {
                     selectedIndex = 6;
                     break;
                 }
 
+                case Keyboard.KeyCode.KEYPAD_8:
                 case Keyboard.KeyCode.N8: {
                     selectedIndex = 7;
                     break;
                 }
 
+                case Keyboard.KeyCode.KEYPAD_9:
                 case Keyboard.KeyCode.N9: {
                     selectedIndex = 8;
                     break;
