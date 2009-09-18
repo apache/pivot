@@ -24,9 +24,7 @@ import org.apache.pivot.wtk.SortDirection;
 import org.apache.pivot.wtk.TableView;
 
 /**
- * Compares two rows. If the column values implement {@link Comparable}, the
- * {@link Comparable#compareTo(Object)} method will be used to compare the values.
- * Otherwise, the values will be compared as strings using {@link Object#toString()}.
+ * Compares two rows in a table view.
  */
 public class TableViewRowComparator implements Comparator<Object> {
     private TableView tableView;
@@ -39,6 +37,14 @@ public class TableViewRowComparator implements Comparator<Object> {
         this.tableView = tableView;
     }
 
+    /**
+     * Compares two rows in a table view. If the column values implement
+     * {@link Comparable}, the {@link Comparable#compareTo(Object)} method will be used
+     * to compare the values. Otherwise, the values will be compared as strings using
+     * {@link Object#toString()}. If either value is <tt>null</tt>, it will be
+     * considered as less than the other value. If both values are <tt>null</tt>, they
+     * will be considered equal.
+     */
     @Override
     @SuppressWarnings("unchecked")
     public int compare(Object o1, Object o2) {
@@ -76,12 +82,21 @@ public class TableViewRowComparator implements Comparator<Object> {
                 Object value1 = row1.get(columnName);
                 Object value2 = row2.get(columnName);
 
-                if (value1 instanceof Comparable<?>) {
-                    result = ((Comparable<Object>)value1).compareTo(value2);
+                if (value1 == null
+                    && value2 == null) {
+                    result = 0;
+                } else if (value1 == null) {
+                    result = -1;
+                } else if (value2 == null) {
+                    result = 1;
                 } else {
-                    String s1 = value1.toString();
-                    String s2 = value2.toString();
-                    result = s1.compareTo(s2);
+                    if (value1 instanceof Comparable<?>) {
+                        result = ((Comparable<Object>)value1).compareTo(value2);
+                    } else {
+                        String s1 = value1.toString();
+                        String s2 = value2.toString();
+                        result = s1.compareTo(s2);
+                    }
                 }
 
                 result *= (sortDirection == SortDirection.ASCENDING ? 1 : -1);
