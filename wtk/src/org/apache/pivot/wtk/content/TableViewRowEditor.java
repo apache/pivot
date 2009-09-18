@@ -147,6 +147,7 @@ public class TableViewRowEditor implements TableView.RowEditor {
                 tableView.getRowBounds(rowIndex))));
             cardPane.setSelectedIndex(0);
             cardPane.getStyles().put("selectionChangeEffect", editEffect);
+            cardPane.getStyles().put("selectionChangeDuration", editEffectDuration);
 
             tablePane = new TablePane();
             tablePane.getStyles().put("horizontalSpacing", 1);
@@ -589,6 +590,7 @@ public class TableViewRowEditor implements TableView.RowEditor {
     private HashMap<String, Component> cellEditors = new HashMap<String, Component>();
 
     private CardPaneSkin.SelectionChangeEffect editEffect = null;
+    private int editEffectDuration = 250;
 
     private RowEditorListenerList rowEditorListeners = new RowEditorListenerList();
 
@@ -654,6 +656,28 @@ public class TableViewRowEditor implements TableView.RowEditor {
         }
 
         setEditEffect(CardPaneSkin.SelectionChangeEffect.valueOf(editEffect.toUpperCase()));
+    }
+
+    /**
+     * Gets the effect duration that this editor uses when changing from a
+     * read-only row to an editable row. The default value is 250 milliseconds.
+     *
+     * @return
+     * The effect duration in milliseconds.
+     */
+    public int getEditEffectDuration() {
+        return editEffectDuration;
+    }
+
+    /**
+     * Sets the effect duration that this editor uses when changing from a
+     * read-only row to an editable row.
+     *
+     * @param effectDuration
+     * Effect duration in milliseconds
+     */
+    public void setEditEffectDuration(int effectDuration) {
+        this.editEffectDuration = effectDuration;
     }
 
     /**
