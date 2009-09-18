@@ -176,9 +176,12 @@ public class TableViewRowEditor implements TableView.RowEditor {
                     editorComponent = editorTextInput;
                 }
 
-                // Disable the component for read-only properties
-                if (beanDictionary != null
-                    && beanDictionary.isReadOnly(columnName)) {
+                // Disable the component for read-only properties. Components
+                // that are already disabled must be custom cell editor
+                // components and assumed to represent read-only properties.
+                if (!editorComponent.isEnabled()
+                    || (beanDictionary != null
+                    && beanDictionary.isReadOnly(columnName))) {
                     editorComponent.getUserData().put(READ_ONLY_KEY, true);
                 }
 
