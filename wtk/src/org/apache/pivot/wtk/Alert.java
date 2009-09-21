@@ -157,7 +157,7 @@ public class Alert extends Dialog {
 
         alert.getDialogStateListeners().add(new DialogStateListener.Adapter() {
             @Override
-            public void dialogClosed(Dialog dialog) {
+            public void dialogClosed(Dialog dialog, boolean modal) {
                 dialog.setOwner(null);
             }
         });

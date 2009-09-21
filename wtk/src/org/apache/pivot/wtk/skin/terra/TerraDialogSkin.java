@@ -176,7 +176,7 @@ public class TerraDialogSkin extends TerraFrameSkin implements DialogStateListen
     }
 
     @Override
-    public void dialogClosed(Dialog dialog) {
+    public void dialogClosed(Dialog dialog, boolean modal) {
         // No-op
     }
 }

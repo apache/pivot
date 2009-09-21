@@ -36,7 +36,7 @@ public interface DialogStateListener extends DialogCloseListener {
         }
 
         @Override
-        public void dialogClosed(Dialog dialog) {
+        public void dialogClosed(Dialog dialog, boolean modal) {
         }
     }
 

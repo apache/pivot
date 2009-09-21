@@ -862,7 +862,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                             alert.setOwner(window);
                             alert.open(window.getDisplay(), new DialogCloseListener() {
                                 @Override
-                                public void dialogClosed(Dialog dialog) {
+                                public void dialogClosed(Dialog dialog, boolean modal) {
                                     dialog.setOwner(null);
                                 }
                             });

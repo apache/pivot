@@ -50,7 +50,7 @@ public class ShutdownTest implements Application {
 
             alert = new Alert(MessageType.QUESTION, "Cancel shutdown?", options);
             alert.open(display, new DialogCloseListener() {
-                public void dialogClosed(Dialog dialog) {
+                public void dialogClosed(Dialog dialog, boolean modal) {
                     Alert alert = (Alert)dialog;
 
                     if (alert.getResult()) {

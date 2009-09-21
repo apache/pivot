@@ -45,9 +45,9 @@ public class Dialog extends Frame {
         }
 
         @Override
-        public void dialogClosed(Dialog dialog) {
+        public void dialogClosed(Dialog dialog, boolean modal) {
             for (DialogStateListener listener : this) {
-                listener.dialogClosed(dialog);
+                listener.dialogClosed(dialog, modal);
             }
         }
     }
@@ -165,7 +165,8 @@ public class Dialog extends Frame {
                 if (isClosed()) {
                     this.result = result;
 
-                    modal = false;
+                    boolean modal = this.modal;
+                    this.modal = false;
 
                     // Move the owner to the front
                     Window owner = getOwner();
@@ -175,10 +176,10 @@ public class Dialog extends Frame {
                     }
 
                     // Notify listeners
-                    dialogStateListeners.dialogClosed(this);
+                    dialogStateListeners.dialogClosed(this, modal);
 
                     if (dialogCloseListener != null) {
-                        dialogCloseListener.dialogClosed(this);
+                        dialogCloseListener.dialogClosed(this, modal);
                         dialogCloseListener = null;
                     }
                 }

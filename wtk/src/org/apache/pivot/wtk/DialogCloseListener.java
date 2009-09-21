@@ -25,5 +25,5 @@ public interface DialogCloseListener {
      *
      * @param dialog
      */
-    public void dialogClosed(Dialog dialog);
+    public void dialogClosed(Dialog dialog, boolean modal);
 }
