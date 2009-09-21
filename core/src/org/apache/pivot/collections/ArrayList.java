@@ -201,6 +201,32 @@ public class ArrayList<T> implements List<T>, Serializable {
         length = count;
     }
 
+    public ArrayList(ArrayList<T> arrayList) {
+        this(arrayList, 0, arrayList.length);
+    }
+
+    public ArrayList(ArrayList<T> arrayList, int index, int count) {
+        if (arrayList == null) {
+            throw new IllegalArgumentException();
+        }
+
+        if (count < 0) {
+            throw new IllegalArgumentException();
+        }
+
+        if (index < 0
+            || index + count > arrayList.length) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        items = new Object[count];
+        length = count;
+
+        System.arraycopy(arrayList.items, index, items, 0, count);
+
+        comparator = arrayList.comparator;
+    }
+
     @Override
     public int add(T item) {
         int index = -1;

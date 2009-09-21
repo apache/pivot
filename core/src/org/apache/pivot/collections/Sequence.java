@@ -46,15 +46,11 @@ public interface Sequence<T> {
             }
 
             public Path(Path path) {
-                this(path, path.getLength());
+                elements = new ArrayList<Integer>(path.elements);
             }
 
             public Path(Path path, int depth) {
-                elements = new ArrayList<Integer>(depth);
-
-                for (int i = 0; i < depth; i++) {
-                    elements.add(path.get(i));
-                }
+                elements = new ArrayList<Integer>(path.elements, 0, depth);
             }
 
             private Path(ArrayList<Integer> elements) {
