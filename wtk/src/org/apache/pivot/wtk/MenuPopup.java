@@ -127,7 +127,7 @@ public class MenuPopup extends Window {
         contextMenu = true;
 
         setLocation(x, y);
-        super.open(display);
+        super.open(display, owner);
     }
 
     @Override
