@@ -456,6 +456,7 @@ public class TerraPaletteSkin extends WindowSkin {
 
         Window owner = window.getOwner();
         if (owner != null) {
+            window.setVisible(owner.isActive());
             owner.getWindowListeners().add(ownerListener);
         }
     }

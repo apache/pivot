@@ -55,7 +55,6 @@ public abstract class ListButtonSkin extends ButtonSkin
             ListButton listButton = (ListButton)getComponent();
 
             listViewPopup.close();
-            getComponent().requestFocus();
 
             int index = listView.getSelectedIndex();
             listButton.setSelectedIndex(index);
@@ -72,7 +71,6 @@ public abstract class ListButtonSkin extends ButtonSkin
             switch (keyCode) {
                 case Keyboard.KeyCode.ESCAPE: {
                     listViewPopup.close();
-                    listButton.requestFocus();
                     break;
                 }
 
@@ -84,8 +82,6 @@ public abstract class ListButtonSkin extends ButtonSkin
                         Direction direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ?
                             Direction.BACKWARD : Direction.FORWARD;
                         listButton.transferFocus(direction);
-                    } else {
-                        listButton.requestFocus();
                     }
 
                     int index = listView.getSelectedIndex();
@@ -109,6 +105,7 @@ public abstract class ListButtonSkin extends ButtonSkin
         @Override
         public void windowClosed(Window window, Display display) {
             display.getContainerMouseListeners().remove(displayMouseListener);
+            getComponent().getWindow().moveToFront();
         }
     };
 

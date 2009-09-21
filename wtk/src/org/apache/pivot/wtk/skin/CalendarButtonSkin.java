@@ -58,7 +58,6 @@ public abstract class CalendarButtonSkin extends ButtonSkin
             CalendarButton calendarButton = (CalendarButton)getComponent();
 
             calendarPopup.close();
-            calendarButton.requestFocus();
 
             CalendarDate date = calendar.getSelectedDate();
             calendarButton.setSelectedDate(date);
@@ -75,7 +74,6 @@ public abstract class CalendarButtonSkin extends ButtonSkin
             switch (keyCode) {
                 case Keyboard.KeyCode.ESCAPE: {
                     calendarPopup.close();
-                    calendarButton.requestFocus();
                     break;
                 }
 
@@ -87,8 +85,6 @@ public abstract class CalendarButtonSkin extends ButtonSkin
                         Direction direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ?
                             Direction.BACKWARD : Direction.FORWARD;
                         calendarButton.transferFocus(direction);
-                    } else {
-                        calendarButton.requestFocus();
                     }
 
                     CalendarDate date = calendar.getSelectedDate();
@@ -112,6 +108,7 @@ public abstract class CalendarButtonSkin extends ButtonSkin
         @Override
         public void windowClosed(Window window, Display display) {
             display.getContainerMouseListeners().remove(displayMouseListener);
+            getComponent().getWindow().moveToFront();
         }
     };
 
