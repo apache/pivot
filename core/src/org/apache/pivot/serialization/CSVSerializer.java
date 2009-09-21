@@ -266,7 +266,8 @@ public class CSVSerializer implements Serializer<List<?>> {
     }
 
     private void logException(Exception exception) {
-        System.err.println("An error occurred while processing input at line number " + getLineNumber());
+        System.err.println("An error occurred while processing input at line number "
+            + getLineNumber());
     }
 
     /**
@@ -367,14 +368,24 @@ public class CSVSerializer implements Serializer<List<?>> {
             }
 
             while (c != -1
-                && (quoted || c != ',')
-                && (c != '\r' && c != '\n')) {
+                && (quoted || (c != ',' && c != '\r' && c != '\n'))) {
                 if (c == '"') {
+                    if (!quoted) {
+                        throw new SerializationException("Dangling quote.");
+                    }
+
                     c = reader.read();
+
+                    if (c != '"'
+                        && (c != ',' && c != '\r' && c != '\n' && c != -1)) {
+                        throw new SerializationException("Prematurely terminated quote.");
+                    }
+
                     quoted &= (c == '"');
                 }
 
-                if (quoted || c != ',') {
+                if (c != -1
+                    && (quoted || (c != ',' && c != '\r' && c != '\n'))) {
                     valueBuilder.append((char)c);
                     c = reader.read();
                 }
@@ -458,7 +469,27 @@ public class CSVSerializer implements Serializer<List<?>> {
                 }
 
                 Object value = itemDictionary.get(key);
-                writer.append(value.toString());
+
+                if (value != null) {
+                    String string = value.toString();
+
+                    if (string.indexOf(',') >= 0
+                        || string.indexOf('"') >= 0
+                        || string.indexOf('\r') >= 0
+                        || string.indexOf('\n') >= 0) {
+                        writer.append('"');
+
+                        if (string.indexOf('"') == -1) {
+                            writer.append(string);
+                        } else {
+                            writer.append(string.replace("\"", "\"\""));
+                        }
+
+                        writer.append('"');
+                    } else {
+                        writer.append(string);
+                    }
+                }
             }
 
             writer.append("\r\n");
