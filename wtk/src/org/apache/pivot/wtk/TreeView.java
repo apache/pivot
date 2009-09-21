@@ -1762,16 +1762,19 @@ public class TreeView extends Component {
     }
 
     /**
-     * Sets the disabled node filter, which determines the disabled state of
-     * all nodes. Disabled nodes are not interactive to the user. Note, however,
-     * that disabled nodes may still be expanded, selected, and checked
-     * <i>programatically</i>. A disabled node may have enabled children.
+     * Sets the disabled checkmark filter, which determines which checkboxes
+     * are interactive and which are not. Note that this filter only affects
+     * user interaction; nodes may still be checked programatically despite
+     * their inclusion in this filter. If this filter is set to <tt>null</tt>,
+     * all checkboxes will be interactive.
      * <p>
-     * If the disabled node filter is set to <tt>null</tt>, all nodes are
+     * <b>Note:</b> this filter is only relavent if
+     * {@link #setCheckmarksEnabled(boolean) checkmarksEnabled} is set to true.
      * enabled.
      *
-     * @param disabledNodeFilter
-     * The disabled node filter, or <tt>null</tt> for no disabled node filter
+     * @param disabledCheckmarkFilter
+     * The disabled checkmark filter, or <tt>null</tt> for no disabled
+     * checkmark filter
      */
     public void setDisabledCheckmarkFilter(Filter<?> disabledCheckmarkFilter) {
         Filter<?> previousDisabledCheckmarkFilter = this.disabledCheckmarkFilter;
