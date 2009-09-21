@@ -18,7 +18,6 @@ package org.apache.pivot.wtk.test;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Map;
-import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Alert;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Button;
@@ -75,7 +74,6 @@ public class SheetTest implements Application {
 
         final Prompt prompt = new Prompt(MessageType.INFO, "Prompt", new ArrayList<String>("OK"), promptBody);
         prompt.setTitle("Prompt");
-        prompt.setOwner(frame);
 
         Label alertBody = new Label("Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an AS IS BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.");
         alertBody.getStyles().put("wrapText", true);
@@ -104,36 +102,14 @@ public class SheetTest implements Application {
         windowContent.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {
-                prompt.open(display);
+                prompt.open(frame);
             }
         });
 
-        sheet.getWindowStateListeners().add(new WindowStateListener() {
-            @Override
-            public Vote previewWindowOpen(Window window, Display display) {
-                return Vote.APPROVE;
-            }
-
-            @Override
-            public void windowOpenVetoed(Window window, Vote reason) {
-            }
-
+        sheet.getWindowStateListeners().add(new WindowStateListener.Adapter() {
             @Override
             public void windowOpened(Window window) {
                 closeButton.requestFocus();
-            }
-
-            @Override
-            public Vote previewWindowClose(Window window) {
-                return Vote.APPROVE;
-            }
-
-            @Override
-            public void windowCloseVetoed(Window window, Vote reason) {
-            }
-
-            @Override
-            public void windowClosed(Window window, Display display) {
             }
         });
     }

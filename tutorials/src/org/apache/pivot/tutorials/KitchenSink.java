@@ -42,8 +42,6 @@ import org.apache.pivot.wtk.Border;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.ComponentMouseButtonListener;
-import org.apache.pivot.wtk.Dialog;
-import org.apache.pivot.wtk.DialogCloseListener;
 import org.apache.pivot.wtk.ListButton;
 import org.apache.pivot.wtk.MenuHandler;
 import org.apache.pivot.wtk.DesktopApplicationContext;
@@ -64,8 +62,6 @@ import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Rollup;
 import org.apache.pivot.wtk.RollupStateListener;
-import org.apache.pivot.wtk.Sheet;
-import org.apache.pivot.wtk.SheetCloseListener;
 import org.apache.pivot.wtk.Slider;
 import org.apache.pivot.wtk.SliderValueListener;
 import org.apache.pivot.wtk.SortDirection;
@@ -858,14 +854,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                             alert.setTitle("Select Icon");
                             alert.setSelectedOption(0);
                             alert.getDecorators().update(0, new ReflectionDecorator());
-
-                            alert.setOwner(window);
-                            alert.open(window.getDisplay(), new DialogCloseListener() {
-                                @Override
-                                public void dialogClosed(Dialog dialog, boolean modal) {
-                                    dialog.setOwner(null);
-                                }
-                            });
+                            alert.open(window);
                         } else {
                             String message = (String)userData.get("message");
                             Alert.alert(MessageType.valueOf(messageType.toUpperCase()), message, window);
@@ -906,14 +895,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                             prompt.setTitle("Select Icon");
                             prompt.setSelectedOption(0);
                             prompt.getDecorators().update(0, new ReflectionDecorator());
-
-                            prompt.setOwner(window);
-                            prompt.open(window.getDisplay(), new SheetCloseListener() {
-                                @Override
-                                public void sheetClosed(Sheet sheet) {
-                                    sheet.setOwner(null);
-                                }
-                            });
+                            prompt.open(window);
                         } else {
                             String message = (String)userData.get("message");
                             Prompt.prompt(MessageType.valueOf(messageType.toUpperCase()), message, window);

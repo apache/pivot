@@ -36,8 +36,6 @@ public class FileBrowserSheetTest implements Application {
         wtkxSerializer.put("fileOpenSheet", fileOpenSheet);
 
         frame = (Frame)wtkxSerializer.readObject(getClass().getResource("file_browser_sheet_test.wtkx"));
-        fileOpenSheet.setOwner(frame);
-
         frame.open(display);
     }
 

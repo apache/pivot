@@ -64,14 +64,12 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
     private WindowStateListener menuPopupWindowStateListener = new WindowStateListener.Adapter() {
         @Override
         public void windowOpened(Window window) {
-            window.setOwner(getComponent().getWindow());
-
             Display display = window.getDisplay();
             display.getContainerMouseListeners().add(displayMouseListener);
         }
 
         @Override
-        public void windowClosed(Window window, Display display) {
+        public void windowClosed(Window window, Display display, Window owner) {
             MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
             menuBarItem.setActive(false);
 
@@ -85,8 +83,6 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
                     menuBarWindow.moveToFront();
                 }
             }
-
-            window.setOwner(null);
 
             display.getContainerMouseListeners().remove(displayMouseListener);
 
@@ -205,7 +201,7 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
             // TODO Ensure that the popup remains within the bounds of the display
 
             menuPopup.setLocation(menuBarItemLocation.x, menuBarItemLocation.y);
-            menuPopup.open(menuBarItem.getDisplay());
+            menuPopup.open(menuBarItem.getWindow());
             menuPopup.requestFocus();
         } else {
             menuPopup.close(true);

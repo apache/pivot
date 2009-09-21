@@ -159,8 +159,8 @@ public class TerraDialogSkin extends TerraFrameSkin implements DialogStateListen
     }
 
     @Override
-    public void windowClosed(Window window, Display display) {
-        super.windowClosed(window, display);
+    public void windowClosed(Window window, Display display, Window owner) {
+        super.windowClosed(window, display, owner);
 
         display.getContainerMouseListeners().remove(displayMouseListener);
     }

@@ -77,61 +77,73 @@ public class Dialog extends Frame {
         installSkin(Dialog.class);
     }
 
-    @Override
-    public final void setOwner(Window owner) {
-        if (isOpen()
-            && modal) {
-            throw new IllegalStateException("Dialog is open.");
-        }
-
-        super.setOwner(owner);
-    }
-
     /**
      * Opens the dialog.
      *
      * @param display
+     * The display on which the dialog will be opened.
+     *
+     * @param owner
+     * The window's owner. The dialog will be modal over this window.
      */
     @Override
-    public final void open(Display display) {
-        open(display, true, null);
+    public final void open(Display display, Window owner) {
+        open(display, owner, owner != null, null);
     }
 
     /**
      * Opens the dialog.
      *
      * @param display
-     * @param modal
-     */
-    public final void open(Display display, boolean modal) {
-        open(display, modal, null);
-    }
-
-    /**
-     * Opens the dialog.
+     * The display on which the dialog will be opened.
      *
-     * @param display
      * @param dialogCloseListener
+     * A listener that will be called when the dialog is closed.
      */
     public final void open(Display display, DialogCloseListener dialogCloseListener) {
-        open(display, true, dialogCloseListener);
+        open(display, null, false, dialogCloseListener);
+    }
+
+    /**
+     * Opens the dialog.
+     *
+     * @param owner
+     * The window's owner. The dialog will be modal over this window.
+     *
+     * @param dialogCloseListener
+     * A listener that will be called when the dialog is closed.
+     */
+    public final void open(Window owner, DialogCloseListener dialogCloseListener) {
+        if (owner == null) {
+            throw new IllegalArgumentException();
+        }
+
+        open(owner.getDisplay(), owner, true, dialogCloseListener);
     }
 
     /**
      * Opens the dialog.
      *
      * @param display
+     * The display on which the dialog will be opened.
+     *
+     * @param owner
+     * The window's owner, or <tt>null</tt> if the window has no owner. Required if the dialog
+     * is modal.
+     *
      * @param modal
+     * <tt>true</tt> if the dialog should be modal; <tt>false</tt>, otherwise.
+     *
      * @param dialogCloseListener
+     * A listener that will be called when the dialog is closed.
      */
-    public void open(Display display, boolean modal, DialogCloseListener dialogCloseListener) {
-        Window owner = getOwner();
+    public void open(Display display, Window owner, boolean modal, DialogCloseListener dialogCloseListener) {
         if (modal
             && owner == null) {
-            throw new IllegalStateException("Dialog does not have an owner.");
+            throw new IllegalArgumentException("Modal dialogs must have an owner.");
         }
 
-        super.open(display);
+        super.open(display, owner);
 
         if (isOpen()) {
             this.modal = modal;
@@ -158,6 +170,8 @@ public class Dialog extends Frame {
             Vote vote = dialogStateListeners.previewDialogClose(this, result);
 
             if (vote == Vote.APPROVE) {
+                Window owner = getOwner();
+
                 super.close();
 
                 closing = super.isClosing();
@@ -169,7 +183,6 @@ public class Dialog extends Frame {
                     this.modal = false;
 
                     // Move the owner to the front
-                    Window owner = getOwner();
                     if (owner != null
                         && owner.isOpen()) {
                         owner.moveToFront();
@@ -183,8 +196,11 @@ public class Dialog extends Frame {
                         dialogCloseListener = null;
                     }
                 }
-            } else if (vote == Vote.DENY) {
-                closing = false;
+            } else {
+                if (vote == Vote.DENY) {
+                    closing = false;
+                }
+
                 dialogStateListeners.dialogCloseVetoed(this, vote);
             }
         }

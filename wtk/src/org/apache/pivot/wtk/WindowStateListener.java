@@ -49,7 +49,7 @@ public interface WindowStateListener {
         }
 
         @Override
-        public void windowClosed(Window window, Display display) {
+        public void windowClosed(Window window, Display display, Window owner) {
         }
     }
 
@@ -96,6 +96,7 @@ public interface WindowStateListener {
      *
      * @param window
      * @param display
+     * @param owner
      */
-    public void windowClosed(Window window, Display display);
+    public void windowClosed(Window window, Display display, Window owner);
 }

@@ -78,27 +78,25 @@ public class Sheet extends Window {
         installSkin(Sheet.class);
     }
 
-    @Override
-    public final void setOwner(Window owner) {
-        if (isOpen()) {
-            throw new IllegalStateException("Sheet is open.");
-        }
-
-        super.setOwner(owner);
-    }
-
-    @Override
-    public final void open(Display display) {
-        open(display, null);
-    }
-
-    public void open(Display display, SheetCloseListener sheetCloseListener) {
-        Window owner = getOwner();
+    public final void open(Window owner, SheetCloseListener sheetCloseListener) {
         if (owner == null) {
-            throw new IllegalStateException("Sheet does not have an owner.");
+            throw new IllegalArgumentException("owner is null");
         }
 
-        super.open(display);
+        open(owner.getDisplay(), owner, sheetCloseListener);
+    }
+
+    @Override
+    public final void open(Display display, Window owner) {
+        open(display, owner, null);
+    }
+
+    public void open(Display display, Window owner, SheetCloseListener sheetCloseListener) {
+        if (owner == null) {
+            throw new IllegalArgumentException("Sheets must have an owner.");
+        }
+
+        super.open(display, owner);
 
         if (isOpen()) {
             this.sheetCloseListener = sheetCloseListener;
@@ -122,6 +120,8 @@ public class Sheet extends Window {
             Vote vote = sheetStateListeners.previewSheetClose(this, result);
 
             if (vote == Vote.APPROVE) {
+                Window owner = getOwner();
+
                 super.close();
 
                 closing = super.isClosing();
@@ -130,7 +130,6 @@ public class Sheet extends Window {
                     this.result = result;
 
                     // Move the owner to the front
-                    Window owner = getOwner();
                     if (owner.isOpen()) {
                         owner.moveToFront();
                     }
@@ -143,8 +142,11 @@ public class Sheet extends Window {
                         sheetCloseListener = null;
                     }
                 }
-            } else if (vote == Vote.DENY) {
-                closing = false;
+            } else {
+                if (vote == Vote.DENY) {
+                    closing = false;
+                }
+
                 sheetStateListeners.sheetCloseVetoed(this, vote);
             }
         }

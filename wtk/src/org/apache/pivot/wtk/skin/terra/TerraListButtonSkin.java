@@ -52,22 +52,7 @@ import org.apache.pivot.wtk.skin.ListButtonSkin;
  * Terra list button skin.
  */
 public class TerraListButtonSkin extends ListButtonSkin {
-    private WindowStateListener listViewPopupStateListener = new WindowStateListener() {
-        @Override
-        public Vote previewWindowOpen(Window window, Display display) {
-            return Vote.APPROVE;
-        }
-
-        @Override
-        public void windowOpenVetoed(Window window, Vote reason) {
-            // No-op
-        }
-
-        @Override
-        public void windowOpened(Window window) {
-            window.setOwner(getComponent().getWindow());
-        }
-
+    private WindowStateListener listViewPopupStateListener = new WindowStateListener.Adapter() {
         @Override
         public Vote previewWindowClose(final Window window) {
             Vote vote = Vote.APPROVE;
@@ -102,9 +87,8 @@ public class TerraListButtonSkin extends ListButtonSkin {
         }
 
         @Override
-        public void windowClosed(Window window, Display display) {
+        public void windowClosed(Window window, Display display, Window owner) {
             closeTransition = null;
-            window.setOwner(null);
         }
     };
 

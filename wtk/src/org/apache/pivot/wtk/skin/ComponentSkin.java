@@ -38,8 +38,6 @@ import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Skin;
 import org.apache.pivot.wtk.Tooltip;
-import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtk.WindowStateListener;
 
 /**
  * Abstract base class for component skins.
@@ -70,18 +68,7 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
                 }
 
                 tooltip.setLocation(x + 16, y);
-
-                Window window = component.getWindow();
-                tooltip.setOwner(window);
-
-                tooltip.getWindowStateListeners().add(new WindowStateListener.Adapter() {
-                    @Override
-                    public void windowClosed(Window window, Display display) {
-                        tooltip.setOwner(null);
-                    }
-                });
-
-                tooltip.open(window.getDisplay());
+                tooltip.open(component.getWindow());
             }
         }
     }

@@ -111,13 +111,7 @@ public class TablePanes implements Application {
                     throw new RuntimeException(exception);
                 }
 
-                sheet.setOwner(window);
-                sheet.open(window.getDisplay(), new SheetCloseListener() {
-                    @Override
-                    public void sheetClosed(Sheet sheet) {
-                        sheet.setOwner(null);
-                    }
-                });
+                sheet.open(window);
             }
         });
 
@@ -140,13 +134,7 @@ public class TablePanes implements Application {
                     throw new RuntimeException(exception);
                 }
 
-                sheet.setOwner(window);
-                sheet.open(window.getDisplay(), new SheetCloseListener() {
-                    @Override
-                    public void sheetClosed(Sheet sheet) {
-                        sheet.setOwner(null);
-                    }
-                });
+                sheet.open(window);
             }
         });
 
@@ -180,13 +168,7 @@ public class TablePanes implements Application {
                     throw new RuntimeException(exception);
                 }
 
-                sheet.setOwner(window);
-                sheet.open(window.getDisplay(), new SheetCloseListener() {
-                    @Override
-                    public void sheetClosed(Sheet sheet) {
-                        sheet.setOwner(null);
-                    }
-                });
+                sheet.open(window);
             }
         });
 
@@ -201,16 +183,13 @@ public class TablePanes implements Application {
                 final Prompt prompt = new Prompt(MessageType.QUESTION, message, options, body);
                 prompt.setSelectedOption(0);
 
-                prompt.setOwner(window);
-                prompt.open(window.getDisplay(), new SheetCloseListener() {
+                prompt.open(window, new SheetCloseListener() {
                     @Override
                     public void sheetClosed(Sheet sheet) {
                         if (prompt.getResult() && prompt.getSelectedOption() == 0) {
                             int rowIndex = tablePane.getRowAt(contextMenuHandler.getY());
                             tablePane.getRows().remove(rowIndex, 1);
                         }
-
-                        prompt.setOwner(null);
                     }
                 });
             }
@@ -235,13 +214,7 @@ public class TablePanes implements Application {
                     throw new RuntimeException(exception);
                 }
 
-                sheet.setOwner(window);
-                sheet.open(window.getDisplay(), new SheetCloseListener() {
-                    @Override
-                    public void sheetClosed(Sheet sheet) {
-                        sheet.setOwner(null);
-                    }
-                });
+                sheet.open(window);
             }
         });
 
@@ -276,13 +249,7 @@ public class TablePanes implements Application {
                     throw new RuntimeException(exception);
                 }
 
-                sheet.setOwner(window);
-                sheet.open(window.getDisplay(), new SheetCloseListener() {
-                    @Override
-                    public void sheetClosed(Sheet sheet) {
-                        sheet.setOwner(null);
-                    }
-                });
+                sheet.open(window);
             }
         });
 
@@ -297,8 +264,7 @@ public class TablePanes implements Application {
                 final Prompt prompt = new Prompt(MessageType.QUESTION, message, options, body);
                 prompt.setSelectedOption(0);
 
-                prompt.setOwner(window);
-                prompt.open(window.getDisplay(), new SheetCloseListener() {
+                prompt.open(window, new SheetCloseListener() {
                     @Override
                     public void sheetClosed(Sheet sheet) {
                         if (prompt.getResult() && prompt.getSelectedOption() == 0) {
@@ -311,8 +277,6 @@ public class TablePanes implements Application {
 
                             tablePane.getColumns().remove(columnIndex, 1);
                         }
-
-                        prompt.setOwner(null);
                     }
                 });
             }

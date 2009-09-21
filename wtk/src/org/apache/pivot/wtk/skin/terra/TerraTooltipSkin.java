@@ -187,8 +187,8 @@ public class TerraTooltipSkin extends WindowSkin implements TooltipListener {
     }
 
     @Override
-    public void windowClosed(Window window, Display display) {
-        super.windowClosed(window, display);
+    public void windowClosed(Window window, Display display, Window owner) {
+        super.windowClosed(window, display, owner);
 
         // Remove this as a display mouse and key listener
         display.getContainerMouseListeners().remove(displayMouseListener);

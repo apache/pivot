@@ -184,7 +184,6 @@ public class TerraPaletteSkin extends WindowSkin {
         dropShadowDecorator = new DropShadowDecorator(3, 3, 3);
         palette.getDecorators().add(dropShadowDecorator);
 
-        ownerChanged(palette, null);
         titleChanged(palette, null);
     }
 
@@ -447,26 +446,27 @@ public class TerraPaletteSkin extends WindowSkin {
     }
 
     @Override
-    public void ownerChanged(Window window, Window previousOwner) {
-        super.ownerChanged(window, previousOwner);
-
-        if (previousOwner != null) {
-            previousOwner.getWindowListeners().remove(ownerListener);
-        }
-
-        Window owner = window.getOwner();
-        if (owner != null) {
-            window.setVisible(owner.isActive());
-            owner.getWindowListeners().add(ownerListener);
-        }
-    }
-
-    @Override
     public void titleChanged(Window window, String previousTitle) {
         super.titleChanged(window, previousTitle);
 
         String title = window.getTitle();
         titleLabel.setVisible(title != null);
         titleLabel.setText(title);
+    }
+
+    @Override
+    public void windowOpened(Window window) {
+        super.windowOpened(window);
+
+        Window owner = window.getOwner();
+        window.setVisible(owner.isActive());
+        owner.getWindowListeners().add(ownerListener);
+    }
+
+    @Override
+    public void windowClosed(Window window, Display display, Window owner) {
+        super.windowClosed(window, display, owner);
+
+        owner.getWindowListeners().remove(ownerListener);
     }
 }

@@ -152,11 +152,6 @@ public class WindowSkin extends ContainerSkin implements Window.Skin,
     }
 
     @Override
-    public void ownerChanged(Window window, Window previousOwner) {
-        // No-op
-    }
-
-    @Override
     public void activeChanged(Window window, Window obverseWindow) {
         // No-op
     }
@@ -192,6 +187,7 @@ public class WindowSkin extends ContainerSkin implements Window.Skin,
     }
 
     @Override
-    public void windowClosed(Window window, Display display) {
+    public void windowClosed(Window window, Display display, Window owner) {
+        // No-op
     }
 }

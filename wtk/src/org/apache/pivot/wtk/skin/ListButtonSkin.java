@@ -103,7 +103,7 @@ public abstract class ListButtonSkin extends ButtonSkin
         }
 
         @Override
-        public void windowClosed(Window window, Display display) {
+        public void windowClosed(Window window, Display display, Window owner) {
             display.getContainerMouseListeners().remove(displayMouseListener);
             getComponent().getWindow().moveToFront();
         }

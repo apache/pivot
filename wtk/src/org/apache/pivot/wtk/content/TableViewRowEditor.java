@@ -204,13 +204,11 @@ public class TableViewRowEditor implements TableView.RowEditor {
         }
 
         @Override
-        public void open(Display display) {
+        public void open(Display display, Window owner) {
             if (!isOpen()) {
-                super.open(display);
+                super.open(display, owner);
 
                 if (isOpen()) {
-                    setOwner(tableView.getWindow());
-
                     display.getContainerMouseListeners().add(this);
                     tableView.getComponentListeners().add(this);
                     tableView.getTableViewListeners().add(this);
@@ -258,12 +256,13 @@ public class TableViewRowEditor implements TableView.RowEditor {
                     Display display = getDisplay();
                     display.getContainerMouseListeners().remove(this);
 
+                    Window owner = getOwner();
+
                     super.close();
                     closing = false;
 
                     // Move the owner to front
-                    getOwner().moveToFront();
-                    setOwner(null);
+                    owner.moveToFront();
 
                     // Clear the table pane row so the custom cell editors
                     // can be re-used in the next editor popup
@@ -324,7 +323,7 @@ public class TableViewRowEditor implements TableView.RowEditor {
         }
 
         public void editRow() {
-            open(tableView.getDisplay());
+            open(tableView.getWindow());
             reposition();
         }
 

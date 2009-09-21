@@ -39,10 +39,6 @@ public interface WindowListener {
         }
 
         @Override
-        public void ownerChanged(Window window, Window previousOwner) {
-        }
-
-        @Override
         public void activeChanged(Window window, Window obverseWindow) {
         }
 
@@ -74,14 +70,6 @@ public interface WindowListener {
      * @param previousContent
      */
     public void contentChanged(Window window, Component previousContent);
-
-    /**
-     * Called when a window's owner has changed.
-     *
-     * @param window
-     * @param previousOwner
-     */
-    public void ownerChanged(Window window, Window previousOwner);
 
     /**
      * Called when a window's active state has changed.

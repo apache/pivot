@@ -52,22 +52,7 @@ import org.apache.pivot.wtk.skin.CalendarButtonSkin;
  * TODO Calendar pass-through styles
  */
 public class TerraCalendarButtonSkin extends CalendarButtonSkin {
-    private WindowStateListener calendarPopupStateListener = new WindowStateListener() {
-        @Override
-        public Vote previewWindowOpen(Window window, Display display) {
-            return Vote.APPROVE;
-        }
-
-        @Override
-        public void windowOpenVetoed(Window window, Vote reason) {
-            // No-op
-        }
-
-        @Override
-        public void windowOpened(Window window) {
-            window.setOwner(getComponent().getWindow());
-        }
-
+    private WindowStateListener calendarPopupStateListener = new WindowStateListener.Adapter() {
         @Override
         public Vote previewWindowClose(final Window window) {
             Vote vote = Vote.APPROVE;
@@ -102,9 +87,8 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
         }
 
         @Override
-        public void windowClosed(Window window, Display display) {
+        public void windowClosed(Window window, Display display, Window owner) {
             closeTransition = null;
-            window.setOwner(null);
         }
     };
 
@@ -532,7 +516,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
 
                 calendarPopup.setLocation(x, y);
                 calendarPopup.setPreferredSize(popupWidth, popupHeight);
-                calendarPopup.open(calendarButton.getDisplay());
+                calendarPopup.open(calendarButton.getWindow());
 
                 calendar.requestFocus();
             }

@@ -81,7 +81,7 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
         public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
             MenuPopup menuPopup = (MenuPopup)getComponent();
 
-            if (menuPopup.isAutoClose()) {
+            if (menuPopup.isContextMenu()) {
                 Display display = (Display)container;
                 Component descendant = display.getDescendantAt(x, y);
 
@@ -231,18 +231,17 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
             menu.requestFocus();
         }
 
-        if (menuPopup.isAutoClose()) {
+        if (menuPopup.isContextMenu()) {
             ApplicationContext.queueCallback(new RepositionCallback());
         }
     }
 
     @Override
-    public void windowClosed(Window window, Display display) {
-        super.windowClosed(window, display);
+    public void windowClosed(Window window, Display display, Window owner) {
+        super.windowClosed(window, display, owner);
 
         display.getContainerMouseListeners().remove(displayMouseListener);
 
-        Window owner = window.getOwner();
         if (owner != null
             && owner.isOpen()) {
             owner.moveToFront();

@@ -62,7 +62,7 @@ public class MenuPopup extends Window {
     }
 
     private Menu menu;
-    private boolean autoClose = false;
+    private boolean contextMenu = false;
 
     private boolean closing = false;
 
@@ -91,15 +91,12 @@ public class MenuPopup extends Window {
         }
     }
 
-    public boolean isAutoClose() {
-        return autoClose;
+    public boolean isContextMenu() {
+        return contextMenu;
     }
 
-    public void open(Display display, int x, int y) {
-        autoClose = true;
-
-        setLocation(x, y);
-        super.open(display);
+    public final void open(Display display, int x, int y) {
+        open(display, null, x, y);
     }
 
     public final void open(Display display, Point location) {
@@ -107,7 +104,30 @@ public class MenuPopup extends Window {
             throw new IllegalArgumentException("location is null.");
         }
 
-        open(display, location.x, location.y);
+        open(display, null, location.x, location.y);
+    }
+
+    public final void open(Window owner, int x, int y) {
+        if (owner == null) {
+            throw new IllegalArgumentException();
+        }
+
+        open(owner.getDisplay(), owner, x, y);
+    }
+
+    public final void open(Window owner, Point location) {
+        if (location == null) {
+            throw new IllegalArgumentException("location is null.");
+        }
+
+        open(owner, location.x, location.y);
+    }
+
+    public void open(Display display, Window owner, int x, int y) {
+        contextMenu = true;
+
+        setLocation(x, y);
+        super.open(display);
     }
 
     @Override
@@ -141,7 +161,7 @@ public class MenuPopup extends Window {
         }
 
         if (isClosed()) {
-            autoClose = false;
+            contextMenu = false;
         }
     }
 

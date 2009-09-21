@@ -86,9 +86,7 @@ public class CardPaneTest implements Application {
         });
 
         frame.open(display);
-
-        sheet.setOwner(frame);
-        sheet.open(display);
+        sheet.open(frame);
     }
 
     @Override

@@ -845,8 +845,7 @@ public abstract class ApplicationContext {
 
                                     menuPopup.getWindowStateListeners().add(new WindowStateListener.Adapter() {
                                         @Override
-                                        public void windowClosed(Window window, Display display) {
-                                            window.setOwner(null);
+                                        public void windowClosed(Window window, Display display, Window owner) {
                                             menuPopup.getMenu().getSections().clear();
                                             menuPopup = null;
                                             window.getWindowStateListeners().remove(this);
@@ -860,11 +859,9 @@ public abstract class ApplicationContext {
                                         window = mouseOwner.getWindow();
                                     }
 
-                                    menuPopup.setOwner(window);
-
                                     Display display = window.getDisplay();
-                                    menuPopup.open(display, mouseOwner.mapPointToAncestor(display,
-                                        x, y));
+                                    Point location = mouseOwner.mapPointToAncestor(display, x, y);
+                                    menuPopup.open(window, location);
                                 }
                             }
 

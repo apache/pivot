@@ -424,10 +424,12 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     }
 
     @Override
-    public void windowClosed(Window window, Display display) {
-        super.windowClosed(window, display);
+    public void windowClosed(Window window, Display display, Window owner) {
+        super.windowClosed(window, display, owner);
 
         display.getContainerMouseListeners().remove(displayMouseListener);
+
+        owner.getComponentListeners().remove(ownerListener);
     }
 
     @Override
@@ -479,8 +481,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
 
     @Override
     public void sheetClosed(Sheet sheet) {
-        Window owner = sheet.getOwner();
-        owner.getComponentListeners().remove(ownerListener);
+        // No-op
     }
 
     public void alignToOwner() {

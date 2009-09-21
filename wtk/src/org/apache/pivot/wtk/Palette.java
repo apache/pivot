@@ -41,22 +41,11 @@ public class Palette extends Window {
     }
 
     @Override
-    public final void setOwner(Window owner) {
-        if (isOpen()
-            && owner == null) {
-            throw new IllegalStateException("Palette is open.");
-        }
-
-        super.setOwner(owner);
-    }
-
-    @Override
-    public void open(Display display) {
-        Window owner = getOwner();
+    public void open(Display display, Window owner) {
         if (owner == null) {
-            throw new IllegalStateException("Palette does not have an owner.");
+            throw new IllegalStateException("Palettes must have an owner.");
         }
 
-        super.open(display);
+        super.open(display, owner);
     }
 }

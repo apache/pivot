@@ -47,7 +47,7 @@ limitations under the License.
                         <buttonPressListeners>
                             <wtkx:script>
                             function buttonPressed(button) {
-                                fileOpenSheet.open(frame.getDisplay(), sheetCloseListener);
+                                fileOpenSheet.open(frame, sheetCloseListener);
                             }
                             </wtkx:script>
                         </buttonPressListeners>

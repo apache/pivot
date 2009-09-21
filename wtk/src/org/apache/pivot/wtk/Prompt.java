@@ -140,16 +140,7 @@ public class Prompt extends Sheet {
     public static void prompt(MessageType messageType, String message, Component body, Window owner,
         SheetCloseListener sheetCloseListener) {
         Prompt prompt = createPrompt(messageType, message, body);
-        prompt.setOwner(owner);
-
-        prompt.getSheetStateListeners().add(new SheetStateListener.Adapter() {
-            @Override
-            public void sheetClosed(Sheet sheet) {
-                sheet.setOwner(null);
-            }
-        });
-
-        prompt.open(owner.getDisplay(), sheetCloseListener);
+        prompt.open(owner, sheetCloseListener);
     }
 
     private static Prompt createPrompt(MessageType messageType, String message, Component body) {

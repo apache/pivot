@@ -153,16 +153,7 @@ public class Alert extends Dialog {
     public static void alert(MessageType messageType, String message, Component body, Window owner,
         DialogCloseListener dialogCloseListener) {
         Alert alert = createAlert(messageType, message, body);
-        alert.setOwner(owner);
-
-        alert.getDialogStateListeners().add(new DialogStateListener.Adapter() {
-            @Override
-            public void dialogClosed(Dialog dialog, boolean modal) {
-                dialog.setOwner(null);
-            }
-        });
-
-        alert.open(owner.getDisplay(), dialogCloseListener);
+        alert.open(owner.getDisplay(), owner, true, dialogCloseListener);
     }
 
     private static Alert createAlert(MessageType messageType, String message, Component body) {

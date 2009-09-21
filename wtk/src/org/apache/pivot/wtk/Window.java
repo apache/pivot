@@ -249,13 +249,6 @@ public class Window extends Container {
         }
 
         @Override
-        public void ownerChanged(Window window, Window previousOwner) {
-            for (WindowListener listener : this) {
-                listener.ownerChanged(window, previousOwner);
-            }
-        }
-
-        @Override
         public void activeChanged(Window window, Window obverseWindow) {
             for (WindowListener listener : this) {
                 listener.activeChanged(window, obverseWindow);
@@ -316,9 +309,9 @@ public class Window extends Container {
         }
 
         @Override
-        public void windowClosed(Window window, Display display) {
+        public void windowClosed(Window window, Display display, Window owner) {
             for (WindowStateListener listener : this) {
-                listener.windowClosed(window, display);
+                listener.windowClosed(window, display, owner);
             }
         }
     }
@@ -409,7 +402,7 @@ public class Window extends Container {
 
         if (parent == null
             && isActive()) {
-            setActiveWindow(null);
+            clearActive();
         }
 
         super.setParent(parent);
@@ -428,80 +421,28 @@ public class Window extends Container {
         return super.remove(index, count);
     }
 
-    /**
-     * Sets the visible state of this window and all of its owned
-     * descendant windows.
-     *
-     * @param visible
-     * If <tt>true</tt>, the window and its owned descendants are visible;
-     * otherwise, they are not visible.
-     */
     @Override
     public void setVisible(boolean visible) {
         super.setVisible(visible);
 
-        // Show/hide owned windows
-        for (Window ownedWindow : ownedWindows) {
-            ownedWindow.setVisible(visible);
+        if (visible
+            && isActive()) {
+            clearActive();
         }
     }
 
-    /**
-     * Sets the enabled state of this window and all of its owned
-     * descendant windows.
-     *
-     * @param enabled
-     * If <tt>true</tt>, the window and its owned descendants are enabled;
-     * otherwise, they are not enabled.
-     */
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
 
         if (!enabled
             && isActive()) {
-            setActiveWindow(null);
-        }
-
-        // Enable/disable owned windows
-        for (Window ownedWindow : ownedWindows) {
-            ownedWindow.setEnabled(enabled);
+            clearActive();
         }
     }
 
     public Window getOwner() {
         return owner;
-    }
-
-    public void setOwner(Window owner) {
-        if (owner != null
-            && isOpen()
-            && !owner.isOpen()) {
-            throw new IllegalArgumentException("Owner is not open.");
-        }
-
-        if (owner != null
-            && isOwner(owner)) {
-            throw new IllegalArgumentException("Owner is already an owned descendant");
-        }
-
-        Window previousOwner = this.owner;
-
-        if (previousOwner != owner) {
-            if (previousOwner != null) {
-                previousOwner.ownedWindows.remove(this);
-            }
-
-            if (owner != null) {
-                owner.ownedWindows.add(this);
-                setVisible(owner.isVisible());
-                setEnabled(owner.isEnabled());
-            }
-
-            this.owner = owner;
-
-            windowListeners.ownerChanged(this, previousOwner);
-        }
     }
 
     public Window getRootOwner() {
@@ -565,21 +506,57 @@ public class Window extends Container {
      * Opens the window.
      *
      * @param display
-     * The display on which the window will be opened.
      */
-    public void open(Display display) {
+    public final void open(Display display) {
+        open(display, null);
+    }
+
+    /**
+     * Opens the window.
+     *
+     * @param owner
+     * The window's owner. The window is opened on the owner's display.
+     */
+    public final void open(Window owner) {
+        if (owner == null) {
+            throw new IllegalArgumentException();
+        }
+
+        open(owner.getDisplay(), owner);
+    }
+
+    /**
+     * Opens the window.
+     *
+     * @param display
+     * The display on which the window will be opened.
+     *
+     * @param owner
+     * The window's owner, or <tt>null<tt> if the window has no owner.
+     */
+    public void open(Display display, Window owner) {
         if (display == null) {
             throw new IllegalArgumentException("display is null.");
         }
 
-        if (isOpen()
-            && getDisplay() != display) {
-            throw new IllegalStateException("Window is already open on a different display.");
+        if (owner != null) {
+            if (!owner.isOpen()) {
+                throw new IllegalArgumentException("owner is not open.");
+            }
+
+            if (isOwner(owner)) {
+                throw new IllegalArgumentException("owner is an owned descendant of this window.");
+            }
         }
 
-        if (owner != null
-            && !owner.isOpen()) {
-            throw new IllegalArgumentException("Owner is not open.");
+        if (isOpen()) {
+            if (getDisplay() != display) {
+                throw new IllegalStateException("Window is already open on a different display.");
+            }
+
+            if (this.owner != owner) {
+                throw new IllegalStateException("Window is already open with a different owner.");
+            }
         }
 
         if (!isOpen()) {
@@ -587,13 +564,26 @@ public class Window extends Container {
             Vote vote = windowStateListeners.previewWindowOpen(this, display);
 
             if (vote == Vote.APPROVE) {
+                // Add the window to the display
                 display.add(this);
+
+                // Set the owner and add to the owner's owned window list
+                this.owner = owner;
+
+                if (owner != null) {
+                    owner.ownedWindows.add(this);
+                }
+
+                // Notify listeners
                 opening = false;
                 windowStateListeners.windowOpened(this);
 
                 moveToFront();
-            } else if (vote == Vote.DENY) {
-                opening = false;
+            } else {
+                if (vote == Vote.DENY) {
+                    opening = false;
+                }
+
                 windowStateListeners.windowOpenVetoed(this, vote);
             }
         }
@@ -644,12 +634,27 @@ public class Window extends Container {
                 Vote vote = windowStateListeners.previewWindowClose(this);
 
                 if (vote == Vote.APPROVE) {
+                    // Remove the window from the display
                     Display display = getDisplay();
                     display.remove(this);
+
+                    // Clear the owner and remove from the owner's owned window list
+                    Window owner = this.owner;
+                    this.owner = null;
+
+                    if (owner != null) {
+                        owner.ownedWindows.remove(this);
+                    }
+
+                    // Notify listeners
                     closing = false;
-                    windowStateListeners.windowClosed(this, display);
-                } else if (vote == Vote.DENY) {
-                    closing = false;
+
+                    windowStateListeners.windowClosed(this, display, owner);
+                } else {
+                    if (vote == Vote.DENY) {
+                        closing = false;
+                    }
+
                     windowStateListeners.windowCloseVetoed(this, vote);
                 }
             }
@@ -791,6 +796,7 @@ public class Window extends Container {
      */
     public boolean requestActive() {
         if (isOpen()
+            && isVisible()
             && isEnabled()) {
             setActiveWindow(this);
         }
@@ -846,6 +852,13 @@ public class Window extends Container {
 
             windowClassListeners.activeWindowChanged(previousActiveWindow);
         }
+    }
+
+    /**
+     * Clears the active window.
+     */
+    public static void clearActive() {
+        setActiveWindow(null);
     }
 
     /**
@@ -951,7 +964,7 @@ public class Window extends Container {
         }
 
         if (isActive()) {
-            setActiveWindow(null);
+            clearActive();
         }
 
         if (containsFocus()) {
