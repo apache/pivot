@@ -641,6 +641,13 @@ public class KitchenSink implements Application, Application.AboutHandler {
                         return include;
                     }
                 });
+
+                checkTreeView.setDisabledCheckmarkFilter(new Filter<TreeNode>() {
+                    @Override
+                    public boolean include(TreeNode treeNode) {
+                        return (treeNode instanceof TreeBranch);
+                    }
+                });
             }
 
             return Vote.APPROVE;

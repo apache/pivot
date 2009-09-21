@@ -54,16 +54,16 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     TreeViewNodeStateListener, TreeViewSelectionListener{
 
     /**
-     * Callback that can be executed on a node info object.
+     * Node info visitor interface.
      */
-    protected interface NodeInfoCallback {
+    protected interface NodeInfoVisitor {
         /**
-         * Called to execute this callback on the specified node info.
+         * Visits the specified node info.
          *
          * @param nodeInfo
-         * The object on which to execute this callback
+         * The object to visit
          */
-        public void run(NodeInfo nodeInfo);
+        public void visit(NodeInfo nodeInfo);
     }
 
     /**
@@ -95,10 +95,12 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         public static final byte HIGHLIGHTED_MASK = 1 << 0;
         public static final byte SELECTED_MASK = 1 << 1;
         public static final byte DISABLED_MASK = 1 << 2;
-        public static final byte CHECK_STATE_CHECKED_MASK = 1 << 3;
-        public static final byte CHECK_STATE_MIXED_MASK = 1 << 4;
+        public static final byte CHECKMARK_DISABLED_MASK = 1 << 3;
+        public static final byte CHECK_STATE_CHECKED_MASK = 1 << 4;
+        public static final byte CHECK_STATE_MIXED_MASK = 1 << 5;
 
-        public static final byte CHECK_STATE_MASK = CHECK_STATE_CHECKED_MASK | CHECK_STATE_MIXED_MASK;
+        public static final byte CHECK_STATE_MASK = CHECK_STATE_CHECKED_MASK
+            | CHECK_STATE_MIXED_MASK;
 
         @SuppressWarnings("unchecked")
         public NodeInfo(TreeView treeView, BranchInfo parent, Object data) {
@@ -109,10 +111,18 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             depth = (parent == null) ? 0 : parent.depth + 1;
 
             // Newly created nodes are guaranteed to not be selected or checked,
-            // but they may be disabled, so we set that flag appropriately here
+            // but they may be disabled or have their checkmarks disabled, so
+            // we set those flags appropriately here.
+
             Filter<Object> disabledNodeFilter = (Filter<Object>)treeView.getDisabledNodeFilter();
             if (disabledNodeFilter != null) {
                 setDisabled(disabledNodeFilter.include(data));
+            }
+
+            Filter<Object> disabledCheckmarkFilter = (Filter<Object>)
+                treeView.getDisabledCheckmarkFilter();
+            if (disabledCheckmarkFilter != null) {
+                setCheckmarkDisabled(disabledCheckmarkFilter.include(data));
             }
         }
 
@@ -182,6 +192,18 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             }
         }
 
+        public boolean isCheckmarkDisabled() {
+            return ((fields & CHECKMARK_DISABLED_MASK) != 0);
+        }
+
+        public void setCheckmarkDisabled(boolean checkmarkDisabled) {
+            if (checkmarkDisabled) {
+                fields |= CHECKMARK_DISABLED_MASK;
+            } else {
+                fields &= ~CHECKMARK_DISABLED_MASK;
+            }
+        }
+
         public TreeView.NodeCheckState getCheckState() {
             TreeView.NodeCheckState checkState;
 
@@ -230,7 +252,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         // Core skin metadata
         protected List<NodeInfo> children = null;
 
-        public static final byte EXPANDED_MASK = 1 << 5;
+        public static final byte EXPANDED_MASK = 1 << 6;
 
         public BranchInfo(TreeView treeView, BranchInfo parent, List<Object> data) {
             super(treeView, parent, data);
@@ -543,6 +565,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                 }
 
                 CHECKBOX.setState(state);
+                CHECKBOX.setEnabled(!nodeInfo.isCheckmarkDisabled());
                 CHECKBOX.paint(checkboxGraphics);
                 checkboxGraphics.dispose();
 
@@ -564,7 +587,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             if (showGridLines) {
                 graphics.setPaint(gridColor);
 
-                GraphicsUtilities.drawLine(graphics, 0, nodeY + nodeHeight, width, Orientation.HORIZONTAL);
+                GraphicsUtilities.drawLine(graphics, 0, nodeY + nodeHeight, width,
+                    Orientation.HORIZONTAL);
             }
 
             nodeY += nodeHeight + VERTICAL_SPACING;
@@ -1107,10 +1131,10 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
      * Executes the specified callback on all node info objects that exist in
      * this skin's node info hierarchy.
      *
-     * @param nodeInfoCallback
+     * @param visitor
      * The callback to execute on each node info object
      */
-    protected final void propagateNodeInfoCallback(NodeInfoCallback nodeInfoCallback) {
+    protected final void accept(NodeInfoVisitor visitor) {
         Sequence<NodeInfo> nodes = new ArrayList<NodeInfo>();
         nodes.add(rootBranchInfo);
 
@@ -1118,7 +1142,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             NodeInfo nodeInfo = nodes.get(0);
             nodes.remove(0, 1);
 
-            nodeInfoCallback.run(nodeInfo);
+            visitor.visit(nodeInfo);
 
             if (nodeInfo instanceof BranchInfo) {
                 BranchInfo branchInfo = (BranchInfo)nodeInfo;
@@ -1316,9 +1340,9 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
      * The bitmask specifying which field to clear.
      */
     private void clearFields(final byte mask) {
-        propagateNodeInfoCallback(new NodeInfoCallback() {
+        accept(new NodeInfoVisitor() {
             @Override
-            public void run(NodeInfo nodeInfo) {
+            public void visit(NodeInfo nodeInfo) {
                 nodeInfo.clearField(mask);
             }
         });
@@ -1383,6 +1407,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
                 // Only proceed if the user DIDN'T click on a checkbox
                 if (!treeView.getCheckmarksEnabled()
+                    || nodeInfo.isCheckmarkDisabled()
                     || x < nodeX + checkboxX
                     || x >= nodeX + checkboxX + checkboxWidth
                     || y < nodeY + checkboxY
@@ -1468,6 +1493,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                 int checkboxY = (nodeHeight - checkboxHeight) / 2;
 
                 if (treeView.getCheckmarksEnabled()
+                    && !nodeInfo.isCheckmarkDisabled()
                     && x >= nodeX + checkboxX
                     && x < nodeX + checkboxX + checkboxWidth
                     && y >= nodeY + checkboxY
@@ -1646,7 +1672,12 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                 Path selectedPath = treeView.getSelectedPath();
 
                 if (selectedPath != null) {
-                    treeView.setNodeChecked(selectedPath, !treeView.isNodeChecked(selectedPath));
+                    NodeInfo nodeInfo = getNodeInfoAt(selectedPath);
+
+                    if (!nodeInfo.isCheckmarkDisabled()) {
+                        treeView.setNodeChecked(selectedPath,
+                            !treeView.isNodeChecked(selectedPath));
+                    }
                 }
             }
         } else {
@@ -1801,11 +1832,29 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     public void disabledNodeFilterChanged(TreeView treeView, Filter<?> previousDisabledNodeFilter) {
         final Filter<Object> disabledNodeFilter = (Filter<Object>)treeView.getDisabledNodeFilter();
 
-        propagateNodeInfoCallback(new NodeInfoCallback() {
+        accept(new NodeInfoVisitor() {
             @Override
-            public void run(NodeInfo nodeInfo) {
+            public void visit(NodeInfo nodeInfo) {
                 nodeInfo.setDisabled(disabledNodeFilter != null
                     && disabledNodeFilter.include(nodeInfo.data));
+            }
+        });
+
+        repaintComponent();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void disabledCheckmarkFilterChanged(TreeView treeView,
+        Filter<?> previousDisabledCheckmarkFilter) {
+        final Filter<Object> disabledCheckmarkFilter = (Filter<Object>)
+            treeView.getDisabledCheckmarkFilter();
+
+        accept(new NodeInfoVisitor() {
+            @Override
+            public void visit(NodeInfo nodeInfo) {
+                nodeInfo.setCheckmarkDisabled(disabledCheckmarkFilter != null
+                    && disabledCheckmarkFilter.include(nodeInfo.data));
             }
         });
 

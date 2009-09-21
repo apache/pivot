@@ -32,7 +32,8 @@ public interface TreeViewListener {
         }
 
         @Override
-        public void nodeRendererChanged(TreeView treeView, TreeView.NodeRenderer previousNodeRenderer) {
+        public void nodeRendererChanged(TreeView treeView,
+            TreeView.NodeRenderer previousNodeRenderer) {
         }
 
         @Override
@@ -52,7 +53,13 @@ public interface TreeViewListener {
         }
 
         @Override
-        public void disabledNodeFilterChanged(TreeView treeView, Filter<?> previousDisabledNodeFilter) {
+        public void disabledNodeFilterChanged(TreeView treeView,
+            Filter<?> previousDisabledNodeFilter) {
+        }
+
+        @Override
+        public void disabledCheckmarkFilterChanged(TreeView treeView,
+            Filter<?> previousDisabledCheckmarkFilter) {
         }
     }
 
@@ -109,4 +116,13 @@ public interface TreeViewListener {
      * @param previousDisabledNodeFilter
      */
     public void disabledNodeFilterChanged(TreeView treeView, Filter<?> previousDisabledNodeFilter);
+
+    /**
+     * Called when a tree view's disabled checkmark filter has changed.
+     *
+     * @param treeView
+     * @param previousDisabledCheckmarkFilter
+     */
+    public void disabledCheckmarkFilterChanged(TreeView treeView,
+        Filter<?> previousDisabledCheckmarkFilter);
 }

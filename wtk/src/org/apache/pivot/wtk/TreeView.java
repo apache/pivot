@@ -433,9 +433,18 @@ public class TreeView extends Component {
         }
 
         @Override
-        public void disabledNodeFilterChanged(TreeView treeView, Filter<?> previousDisabledNodeFilter) {
+        public void disabledNodeFilterChanged(TreeView treeView,
+            Filter<?> previousDisabledNodeFilter) {
             for (TreeViewListener listener : this) {
                 listener.disabledNodeFilterChanged(treeView, previousDisabledNodeFilter);
+            }
+        }
+
+        @Override
+        public void disabledCheckmarkFilterChanged(TreeView treeView,
+            Filter<?> previousDisabledCheckmarkFilter) {
+            for (TreeViewListener listener : this) {
+                listener.disabledCheckmarkFilterChanged(treeView, previousDisabledCheckmarkFilter);
             }
         }
     }
@@ -955,8 +964,9 @@ public class TreeView extends Component {
     private boolean checkmarksEnabled = false;
     private boolean showMixedCheckmarkState = false;
 
-    // Disabled node filter
+    // Filters
     private Filter<?> disabledNodeFilter = null;
+    private Filter<?> disabledCheckmarkFilter = null;
 
     // Handlers
     private BranchHandler rootBranchHandler;
@@ -1731,6 +1741,45 @@ public class TreeView extends Component {
      */
     public Sequence<Path> getCheckedPaths() {
         return new ImmutableList<Path>(checkedPaths);
+    }
+
+    /**
+     * Returns the disabled checkmark filter, which determines which checkboxes
+     * are interactive and which are not. Note that this filter only affects
+     * user interaction; nodes may still be checked programatically despite
+     * their inclusion in this filter. If this filter is set to <tt>null</tt>,
+     * all checkboxes will be interactive.
+     * <p>
+     * <b>Note:</b> this filter is only relavent if
+     * {@link #setCheckmarksEnabled(boolean) checkmarksEnabled} is set to true.
+     *
+     * @return
+     * The disabled checkmark filter, or <tt>null</tt> if no disabled checkmark
+     * filter is set
+     */
+    public Filter<?> getDisabledCheckmarkFilter() {
+        return disabledCheckmarkFilter;
+    }
+
+    /**
+     * Sets the disabled node filter, which determines the disabled state of
+     * all nodes. Disabled nodes are not interactive to the user. Note, however,
+     * that disabled nodes may still be expanded, selected, and checked
+     * <i>programatically</i>. A disabled node may have enabled children.
+     * <p>
+     * If the disabled node filter is set to <tt>null</tt>, all nodes are
+     * enabled.
+     *
+     * @param disabledNodeFilter
+     * The disabled node filter, or <tt>null</tt> for no disabled node filter
+     */
+    public void setDisabledCheckmarkFilter(Filter<?> disabledCheckmarkFilter) {
+        Filter<?> previousDisabledCheckmarkFilter = this.disabledCheckmarkFilter;
+
+        if (previousDisabledCheckmarkFilter !=disabledCheckmarkFilter ) {
+            this.disabledCheckmarkFilter = disabledCheckmarkFilter;
+            treeViewListeners.disabledCheckmarkFilterChanged(this, previousDisabledCheckmarkFilter);
+        }
     }
 
     /**
