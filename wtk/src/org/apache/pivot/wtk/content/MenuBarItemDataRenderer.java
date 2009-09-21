@@ -23,6 +23,7 @@ import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.ImageView;
+import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.MenuBar;
 import org.apache.pivot.wtk.VerticalAlignment;
@@ -39,7 +40,7 @@ public class MenuBarItemDataRenderer extends BoxPane implements Button.DataRende
     public MenuBarItemDataRenderer() {
         getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
         getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
-        getStyles().put("padding", 3);
+        getStyles().put("padding", new Insets(4, 6, 4, 6));
 
         add(imageView);
         add(label);

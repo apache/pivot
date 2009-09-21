@@ -183,13 +183,10 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
 
             for (Menu.Item item : section) {
                 if (item.isVisible()) {
-                    item.setVisible(true);
                     item.setSize(width, item.getPreferredHeight(width));
                     item.setLocation(0, itemY);
 
                     itemY += item.getHeight();
-                } else {
-                    item.setVisible(false);
                 }
             }
 
