@@ -23,12 +23,15 @@ limitations under the License.
     <content>
         <Border styles="{color:10, padding:0}">
             <content>
-                <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
+                <ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
+                    verticalScrollBarPolicy="fill_to_capacity">
                     <view>
                         <TableView wtkx:id="primaryTableView" selectMode="multi"
                             styles="{selectionColor:'#ffffff', inactiveSelectionColor:'#ffffff',
                                 selectionBackgroundColor:'#144f8b', inactiveSelectionBackgroundColor:'#144f8b',
-                                showHighlight:false}">
+                                alternateRowColor:null, showHighlight:false,
+                                includeTrailingHorizontalGridLine:true,
+                                includeTrailingVerticalGridLine:true}">
                             <columns>
                                 <TableView.Column name="colA" headerData="Column A"/>
                                 <TableView.Column name="colB" headerData="Column B"/>
@@ -49,13 +52,16 @@ limitations under the License.
                         </TableView>
                     </view>
                     <columnHeader>
-                        <TableViewHeader tableView="$primaryTableView" sortMode="single_column"/>
+                        <TableViewHeader tableView="$primaryTableView" sortMode="single_column"
+                            styles="{includeTrailingVerticalGridLine:true}"/>
                     </columnHeader>
                     <rowHeader>
                         <TableView wtkx:id="fixedTableView" tableData="$tableData" selectMode="multi"
                             styles="{selectionColor:'#ffffff', inactiveSelectionColor:'#ffffff',
                                 selectionBackgroundColor:'#144f8b', inactiveSelectionBackgroundColor:'#144f8b',
-                                showHighlight:false, includeTrailingVerticalGridLine:true}">
+                                alternateRowColor:null, showHighlight:false,
+                                includeTrailingVerticalGridLine:true,
+                                includeTrailingHorizontalGridLine:true}">
                             <columns>
                                 <TableView.Column name="name" headerData="Name"/>
                             </columns>

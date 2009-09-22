@@ -66,10 +66,11 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     private Color alternateRowColor;
     private Color columnSelectionColor;
     private Color gridColor;
+    private boolean showHighlight;
     private boolean showHorizontalGridLines;
     private boolean showVerticalGridLines;
-    private boolean showHighlight;
     private boolean includeTrailingVerticalGridLine;
+    private boolean includeTrailingHorizontalGridLine;
 
     private ArrayList<Integer> columnWidths = null;
     private int rowHeight = -1;
@@ -91,10 +92,12 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         alternateRowColor = theme.getColor(11);
         columnSelectionColor = null;
         gridColor = theme.getColor(11);
+
+        showHighlight = true;
         showHorizontalGridLines = true;
         showVerticalGridLines = true;
-        showHighlight = true;
         includeTrailingVerticalGridLine = false;
+        includeTrailingHorizontalGridLine = false;
     }
 
     @Override
@@ -127,8 +130,6 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         TableView.ColumnSequence columns = tableView.getColumns();
 
         int n = columns.getLength();
-        int gridLineStop = includeTrailingVerticalGridLine ? n : n - 1;
-
         for (int i = 0; i < n; i++) {
             TableView.Column column = columns.get(i);
 
@@ -149,13 +150,15 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                 }
 
                 preferredWidth += columnWidth;
-
-                // Include space for vertical gridlines; even if we are
-                // not painting them, the header does
-                if (i < gridLineStop) {
-                    preferredWidth++;
-                }
             }
+        }
+
+        // Include space for vertical gridlines; even if we are not painting them,
+        // the header does
+        preferredWidth += (n - 1);
+
+        if (includeTrailingVerticalGridLine) {
+            preferredWidth++;
         }
 
         return preferredWidth;
@@ -170,7 +173,14 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         int n = tableView.getTableData().getLength();
 
         int rowHeight = getRowHeight();
-        preferredHeight = (rowHeight + 1) * n;
+        preferredHeight = rowHeight * n;
+
+        // Include space for horizontal grid lines
+        preferredHeight += (n - 1);
+
+        if (includeTrailingHorizontalGridLine) {
+            preferredHeight++;
+        }
 
         return preferredHeight;
     }
@@ -374,16 +384,24 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                 columnIndex < columnCount; columnIndex++) {
                 columnX += getColumnWidth(columnIndex);
 
-                GraphicsUtilities.drawLine(graphics, columnX, 0, height, Orientation.VERTICAL);
+                if (columnIndex < columnCount - 1
+                    || includeTrailingVerticalGridLine) {
+                    GraphicsUtilities.drawLine(graphics, columnX, 0, height, Orientation.VERTICAL);
+                }
+
                 columnX++;
             }
         }
 
         // Paint the horizontal grid line
         if (showHorizontalGridLines) {
+            int rowCount = tableData.getLength();
+
             for (int rowIndex = rowStart; rowIndex <= rowEnd; rowIndex++) {
-                if (rowIndex > 0) {
-                    int gridY = rowIndex * (rowHeight + 1) - 1;
+                int gridY = (rowIndex + 1) * (rowHeight + 1) - 1;
+
+                if (rowIndex < rowCount - 1
+                    || includeTrailingHorizontalGridLine) {
                     GraphicsUtilities.drawLine(graphics, 0, gridY, width, Orientation.HORIZONTAL);
                 }
             }
@@ -808,6 +826,15 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         setGridColor(theme.getColor(gridColor));
     }
 
+    public boolean getShowHighlight() {
+        return showHighlight;
+    }
+
+    public void setShowHighlight(boolean showHighlight) {
+        this.showHighlight = showHighlight;
+        repaintComponent();
+    }
+
     public boolean getShowHorizontalGridLines() {
         return showHorizontalGridLines;
     }
@@ -826,21 +853,21 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         repaintComponent();
     }
 
-    public boolean getShowHighlight() {
-        return showHighlight;
-    }
-
-    public void setShowHighlight(boolean showHighlight) {
-        this.showHighlight = showHighlight;
-        repaintComponent();
-    }
-
     public boolean getIncludeTrailingVerticalGridLine() {
         return includeTrailingVerticalGridLine;
     }
 
     public void setIncludeTrailingVerticalGridLine(boolean includeTrailingVerticalGridLine) {
         this.includeTrailingVerticalGridLine = includeTrailingVerticalGridLine;
+        invalidateComponent();
+    }
+
+    public boolean getIncludeTrailingHorizontalGridLine() {
+        return includeTrailingHorizontalGridLine;
+    }
+
+    public void setIncludeTrailingHorizontalGridLine(boolean includeTrailingHorizontalGridLine) {
+        this.includeTrailingHorizontalGridLine = includeTrailingHorizontalGridLine;
         invalidateComponent();
     }
 

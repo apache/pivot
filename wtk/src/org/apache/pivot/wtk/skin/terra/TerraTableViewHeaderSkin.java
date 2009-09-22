@@ -187,19 +187,19 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
             TableView.ColumnSequence columns = tableView.getColumns();
 
             int n = columns.getLength();
-            int gridLineStop = includeTrailingVerticalGridLine ? n : n - 1;
-
             for (int i = 0; i < n; i++) {
                 TableView.Column column = columns.get(i);
 
                 if (!column.isRelative()) {
                     preferredWidth += column.getWidth();
-
-                    // Include space for vertical gridlines
-                    if (i < gridLineStop) {
-                        preferredWidth++;
-                    }
                 }
+            }
+
+            // Include space for vertical gridlines
+            preferredWidth += (n - 1);
+
+            if (includeTrailingVerticalGridLine) {
+                preferredWidth++;
             }
         }
 
@@ -345,8 +345,11 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
                 // Draw the divider
                 cellX += columnWidth;
 
-                graphics.setPaint(borderColor);
-                GraphicsUtilities.drawLine(graphics, cellX, 0, height, Orientation.VERTICAL);
+                if (columnIndex < columnCount - 1
+                    || includeTrailingVerticalGridLine) {
+                    graphics.setPaint(borderColor);
+                    GraphicsUtilities.drawLine(graphics, cellX, 0, height, Orientation.VERTICAL);
+                }
 
                 cellX++;
             }
