@@ -1310,6 +1310,10 @@ public class TreeView extends Component {
             throw new IllegalArgumentException("path is null.");
         }
 
+        if (path.getLength() == 0) {
+            throw new IllegalArgumentException("path is empty.");
+        }
+
         setSelectedPaths(new ArrayList<Path>(path));
     }
 
@@ -1350,6 +1354,10 @@ public class TreeView extends Component {
             throw new IllegalArgumentException("path is null.");
         }
 
+        if (path.getLength() == 0) {
+            throw new IllegalArgumentException("path is empty.");
+        }
+
         if (selectMode != SelectMode.MULTI) {
             throw new IllegalStateException("Tree view is not in multi-select mode.");
         }
@@ -1384,6 +1392,10 @@ public class TreeView extends Component {
     public boolean removeSelectedPath(Path path) {
         if (path == null) {
             throw new IllegalArgumentException("path is null.");
+        }
+
+        if (path.getLength() == 0) {
+            throw new IllegalArgumentException("path is empty.");
         }
 
         if (selectMode != SelectMode.MULTI) {
@@ -1667,6 +1679,10 @@ public class TreeView extends Component {
             throw new IllegalArgumentException("path is null.");
         }
 
+        if (path.getLength() == 0) {
+            throw new IllegalArgumentException("path is empty.");
+        }
+
         if (!checkmarksEnabled) {
             throw new IllegalStateException("Checkmarks are not enabled.");
         }
@@ -1935,6 +1951,14 @@ public class TreeView extends Component {
      * The bounds, or <tt>null</tt> if the node is not currently visible.
      */
     public Bounds getNodeBounds(Path path) {
+        if (path == null) {
+            throw new IllegalArgumentException("path is null.");
+        }
+
+        if (path.getLength() == 0) {
+            throw new IllegalArgumentException("path is empty.");
+        }
+
         TreeView.Skin treeViewSkin = (TreeView.Skin)getSkin();
         return treeViewSkin.getNodeBounds(path);
     }

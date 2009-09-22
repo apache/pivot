@@ -1078,7 +1078,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
     /**
      * Gets the metadata associated with the node at the specified path.
-     * The path must be valid.
+     * The path must be valid. The empty path is supported and represents the
+     * root node info.
      */
     protected NodeInfo getNodeInfoAt(Path path) {
         assert(path != null) : "Path is null";
@@ -1128,7 +1129,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     /**
-     * Executes the specified callback on all node info objects that exist in
+     * Accepts the specified visitor on all node info objects that exist in
      * this skin's node info hierarchy.
      *
      * @param visitor
@@ -1835,8 +1836,10 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         accept(new NodeInfoVisitor() {
             @Override
             public void visit(NodeInfo nodeInfo) {
-                nodeInfo.setDisabled(disabledNodeFilter != null
-                    && disabledNodeFilter.include(nodeInfo.data));
+                if (nodeInfo != rootBranchInfo) {
+                    nodeInfo.setDisabled(disabledNodeFilter != null
+                        && disabledNodeFilter.include(nodeInfo.data));
+                }
             }
         });
 
@@ -1853,8 +1856,10 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         accept(new NodeInfoVisitor() {
             @Override
             public void visit(NodeInfo nodeInfo) {
-                nodeInfo.setCheckmarkDisabled(disabledCheckmarkFilter != null
-                    && disabledCheckmarkFilter.include(nodeInfo.data));
+                if (nodeInfo != rootBranchInfo) {
+                    nodeInfo.setCheckmarkDisabled(disabledCheckmarkFilter != null
+                        && disabledCheckmarkFilter.include(nodeInfo.data));
+                }
             }
         });
 
