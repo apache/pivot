@@ -133,6 +133,14 @@ public abstract class Action {
 
     private static ActionClassListenerList actionClassListeners = new ActionClassListenerList();
 
+    public Action() {
+        this(true);
+    }
+
+    public Action(boolean enabled) {
+        setEnabled(enabled);
+    }
+
     /**
      * Returns a text description of the action. Subclasses should override this
      * to return a meaningful description if one is needed.

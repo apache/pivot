@@ -86,7 +86,7 @@ public class MenuBars implements Application {
             }
         });
 
-        Action.getNamedActions().put("cut", new Action() {
+        Action.getNamedActions().put("cut", new Action(false) {
             @Override
             public void perform() {
                 TextInput textInput = (TextInput)window.getFocusDescendant();
@@ -94,7 +94,7 @@ public class MenuBars implements Application {
             }
         });
 
-        Action.getNamedActions().put("copy", new Action() {
+        Action.getNamedActions().put("copy", new Action(false) {
             @Override
             public void perform() {
                 TextInput textInput = (TextInput)window.getFocusDescendant();
@@ -102,7 +102,7 @@ public class MenuBars implements Application {
             }
         });
 
-        Action.getNamedActions().put("paste", new Action() {
+        Action.getNamedActions().put("paste", new Action(false) {
             @Override
             public void perform() {
                 TextInput textInput = (TextInput)window.getFocusDescendant();

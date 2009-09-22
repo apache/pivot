@@ -234,7 +234,6 @@ public class CSVSerializerTest {
     }
 
     @Test
-    @SuppressWarnings("unchecked")
     public void testStreamReader() throws IOException, SerializationException {
         // TODO
     }

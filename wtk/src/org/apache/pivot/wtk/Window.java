@@ -374,7 +374,7 @@ public class Window extends Container {
     private boolean opening = false;
     private boolean closing = false;
 
-    private boolean maximized = false;
+    private Point restoreLocation = null;
 
     private WindowListenerList windowListeners = new WindowListenerList();
     private WindowStateListenerList windowStateListeners = new WindowStateListenerList();
@@ -423,11 +423,21 @@ public class Window extends Container {
 
     @Override
     public void setVisible(boolean visible) {
+        if (visible
+            && owner != null
+            && !owner.isVisible()) {
+            throw new IllegalStateException("Owner is not visible.");
+        }
+
         super.setVisible(visible);
 
         if (visible
             && isActive()) {
             clearActive();
+        }
+
+        for (Window ownedWindow : ownedWindows) {
+            ownedWindow.setVisible(visible);
         }
     }
 
@@ -986,12 +996,18 @@ public class Window extends Container {
     }
 
     public boolean isMaximized() {
-        return maximized;
+        return (restoreLocation != null);
     }
 
     public void setMaximized(boolean maximized) {
-        if (maximized != this.maximized) {
-            this.maximized = maximized;
+        if (maximized != isMaximized()) {
+            if (maximized) {
+                restoreLocation = getLocation();
+                setLocation(0, 0);
+            } else {
+                setLocation(restoreLocation.x, restoreLocation.y);
+                restoreLocation = null;
+            }
 
             invalidate();
 

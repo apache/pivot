@@ -220,8 +220,6 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
     private Point dragOffset = null;
     private Point resizeOffset = null;
 
-    private Point restoreLocation = null;
-
     private Color titleBarColor;
     private Color titleBarBackgroundColor;
     private Color titleBarBorderColor;
@@ -316,6 +314,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
                 if (button == minimizeButton) {
                     frame.setVisible(false);
                 } else if (button == maximizeButton) {
+                    frame.moveToFront();
                     frame.setMaximized(!frame.isMaximized());
                 } else if (button == closeButton) {
                     frame.close();
@@ -332,8 +331,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         iconChanged(frame, null);
         titleChanged(frame, null);
         activeChanged(frame, null);
-
-        updateMaximizedState();
+        maximizedChanged(frame);
     }
 
     @Override
@@ -488,8 +486,8 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
             || getShowWindowControls()) {
             int clientX = 1;
             int clientY = 1;
-            int clientWidth = width - 2;
-            int clientHeight = height - 2;
+            int clientWidth = Math.max(width - 2, 0);
+            int clientHeight = Math.max(height - 2, 0);
 
             // Size/position title bar
             titleBarTablePane.setLocation(clientX, clientY);
@@ -715,22 +713,6 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         invalidateComponent();
     }
 
-    private void updateMaximizedState() {
-        Frame frame = (Frame)getComponent();
-        boolean maximized = frame.isMaximized();
-
-        if (!maximized) {
-            maximizeButton.setButtonData(maximizeImage);
-
-            if (restoreLocation != null) {
-                frame.setLocation(restoreLocation.x, restoreLocation.y);
-            }
-        } else {
-            maximizeButton.setButtonData(restoreImage);
-            restoreLocation = frame.getLocation();
-        }
-    }
-
     @Override
     public boolean mouseMove(Component component, int x, int y) {
         boolean consumed = super.mouseMove(component, x, y);
@@ -869,6 +851,17 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         repaintComponent();
     }
 
+    @Override
+    public void maximizedChanged(Window window) {
+        super.maximizedChanged(window);
+        maximizeButton.setButtonData(window.isMaximized() ? restoreImage : maximizeImage);
+    }
+
+    @Override
+    public void menuBarChanged(Frame frame, MenuBar previousMenuBar) {
+        invalidateComponent();
+    }
+
     private void updateButtonStyles(FrameButton frameButton, boolean active) {
         frameButton.getStyles().put("color", active ?
             titleBarColor : inactiveTitleBarColor);
@@ -876,15 +869,5 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
             titleBarBackgroundColor : inactiveTitleBarBackgroundColor);
         frameButton.getStyles().put("borderColor", active ?
             titleBarBorderColor : inactiveTitleBarBorderColor);
-    }
-
-    @Override
-    public void maximizedChanged(Window window) {
-        updateMaximizedState();
-    }
-
-    @Override
-    public void menuBarChanged(Frame frame, MenuBar previousMenuBar) {
-        invalidateComponent();
     }
 }

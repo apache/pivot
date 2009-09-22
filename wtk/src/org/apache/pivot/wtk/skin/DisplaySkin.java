@@ -51,7 +51,6 @@ public class DisplaySkin extends ContainerSkin {
 
             if (window.isVisible()) {
                 if (window.isMaximized()) {
-                    window.setLocation(0, 0);
                     window.setSize(display.getSize());
                 } else {
                     Dimensions preferredSize = window.getPreferredSize();
