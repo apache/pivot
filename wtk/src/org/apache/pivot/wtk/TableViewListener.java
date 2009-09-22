@@ -32,6 +32,10 @@ public interface TableViewListener {
         }
 
         @Override
+        public void columnSourceChanged(TableView tableView, TableView previousColumnSource) {
+        }
+
+        @Override
         public void rowEditorChanged(TableView tableView, TableView.RowEditor previousRowEditor) {
         }
 
@@ -51,6 +55,14 @@ public interface TableViewListener {
      * @param previousTableData
      */
     public void tableDataChanged(TableView tableView, List<?> previousTableData);
+
+    /**
+     * Called when a table view's column source has changed.
+     *
+     * @param tableView
+     * @param previousColumnSource
+     */
+    public void columnSourceChanged(TableView tableView, TableView previousColumnSource);
 
     /**
      * Called when a table view's row editor has changed.

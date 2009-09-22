@@ -757,6 +757,13 @@ public class TableView extends Component {
         }
 
         @Override
+        public void columnSourceChanged(TableView tableView, TableView previousColumnSource) {
+            for (TableViewListener listener : this) {
+                listener.columnSourceChanged(tableView, previousColumnSource);
+            }
+        }
+
+        @Override
         public void rowEditorChanged(TableView tableView,
             TableView.RowEditor previousRowEditor) {
             for (TableViewListener listener : this) {
@@ -1045,6 +1052,8 @@ public class TableView extends Component {
         }
     };
 
+    private TableView columnSource = null;
+
     private ListSelection selectedRanges = new ListSelection();
     private SelectMode selectMode = SelectMode.SINGLE;
 
@@ -1099,6 +1108,12 @@ public class TableView extends Component {
      * The table column sequence.
      */
     public ColumnSequence getColumns() {
+        ColumnSequence columnSequence = this.columnSequence;
+
+        if (columnSource != null) {
+            columnSequence = columnSource.getColumns();
+        }
+
         return columnSequence;
     }
 
@@ -1158,6 +1173,19 @@ public class TableView extends Component {
             setTableData(JSONSerializer.parseList(tableData));
         } catch (SerializationException exception) {
             throw new IllegalArgumentException(exception);
+        }
+    }
+
+    public TableView getColumnSource() {
+        return columnSource;
+    }
+
+    public void setColumnSource(TableView columnSource) {
+        TableView previousColumnSource = this.columnSource;
+
+        if (previousColumnSource != columnSource) {
+            this.columnSource = columnSource;
+            tableViewListeners.columnSourceChanged(this, previousColumnSource);
         }
     }
 

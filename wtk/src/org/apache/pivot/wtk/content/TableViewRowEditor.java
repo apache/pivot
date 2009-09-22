@@ -545,6 +545,11 @@ public class TableViewRowEditor implements TableView.RowEditor {
         }
 
         @Override
+        public void columnSourceChanged(TableView tableView, TableView previousColumnSource) {
+            // No-op
+        }
+
+        @Override
         public void rowEditorChanged(TableView tableView, TableView.RowEditor previousRowEditor) {
             cancelEdit();
         }

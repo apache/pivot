@@ -1056,6 +1056,21 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     @Override
+    public void columnSourceChanged(TableView tableView, TableView previousColumnSource) {
+        if (previousColumnSource != null) {
+            previousColumnSource.getTableViewColumnListeners().remove(this);
+        }
+
+        TableView columnSource = tableView.getColumnSource();
+
+        if (columnSource != null) {
+            columnSource.getTableViewColumnListeners().add(this);
+        }
+
+        invalidateComponent();
+    }
+
+    @Override
     public void rowEditorChanged(TableView tableView, TableView.RowEditor previousRowEditor) {
         // No-op
     }
