@@ -18,18 +18,18 @@ package org.apache.pivot.tutorials.tableviews;
 
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
-public class TableViews implements Application {
+public class BasicTableView implements Application {
     private Window window = null;
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "table_views.wtkx");
-
+        window = (Window)wtkxSerializer.readObject(this, "basic_table_view.wtkx");
         window.open(display);
     }
 
@@ -48,5 +48,9 @@ public class TableViews implements Application {
 
     @Override
     public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(BasicTableView.class, args);
     }
 }
