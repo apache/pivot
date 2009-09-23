@@ -64,14 +64,25 @@ deployJava.writeAppletTag(attributes, parameters);
                         &lt;ImageView image="org/apache/pivot/tutorials/IMG_1147.jpg"
                             tooltipText="Pemaquid Point Lighthouse, Bristol ME"/&gt;
                     &lt;/view&gt;
-                &lt;/ScrollPane&gt;
+
+                    &lt;columnHeader&gt;
+                        &lt;navigation:Ruler orientation="horizontal"/&gt;
+                    &lt;/columnHeader&gt;
+
+                    &lt;rowHeader&gt;
+                        &lt;navigation:Ruler orientation="vertical"/&gt;
+                    &lt;/rowHeader&gt;                &lt;/ScrollPane&gt;
             &lt;/content&gt;
         &lt;/Border&gt;
     &lt;/content&gt;
 &lt;/Window&gt;
 </pre>
 
-<p>The Java source is as follows:</p>
+<p>In addition to the view (an <tt>ImageView</tt>, in this example), scroll panes also support the concept of row and column "header" components. A column header remains fixed vertically at the top of the scroll pane but scrolls horizontally with the view, and a row header is fixed horizontally at the left of the scroll pane but scrolls vertically with the view.</p>
+
+<p>The column header is commonly used to display a <tt>TableViewHeader</tt> component for a <tt>TableView</tt>, discussed in more detail in the <a href="table_views.html">Table Views</a> section. In this example, the header components are set to instances of a custom <tt>Ruler</tt> component that displays a tick mark every 5 pixels.</p>
+
+<p>The Java source for this example is as follows, and simply serves to load the WTKX:</p>
 
 <pre class="brush:java">
 package org.apache.pivot.tutorials.navigation;
@@ -111,8 +122,6 @@ public class ScrollPanes implements Application {
     }
 }
 </pre>
-
-<p>In addition to the view component, scroll panes also support row and column header components. The column header remains fixed vertically at the top of the scroll pane but scrolls horizontally with the view, and the row header is fixed horizontally at the left of the scroll pane but scrolls vertically with the view. An example of a column header is shown in the <a href="table_views.html">Table Views</a> section.</p>
 
 <p>Next: <a href="panoramas.html">Panoramas</a></p>
 </body>
