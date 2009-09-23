@@ -24,6 +24,7 @@ import java.awt.Graphics2D;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.Vote;
+import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Component;
@@ -1307,12 +1308,19 @@ public class TerraTabPaneSkin extends ContainerSkin
                 button.setSelected(false);
             }
         } else {
-            Button button = (Button)buttonBoxPane.get(selectedIndex);
+            final Button button = (Button)buttonBoxPane.get(selectedIndex);
             button.setSelected(true);
 
             Component selectedTab = tabPane.getTabs().get(selectedIndex);
             selectedTab.setVisible(true);
             selectedTab.requestFocus();
+
+            ApplicationContext.queueCallback(new Runnable(){
+                @Override
+                public void run() {
+                    button.scrollAreaToVisible(0, 0, button.getWidth(), button.getHeight());
+                }
+            });
         }
 
         if (previousSelectedIndex != -1) {

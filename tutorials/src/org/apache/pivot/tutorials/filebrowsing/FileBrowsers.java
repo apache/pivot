@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.tutorials.filebrowsing;
 
+import java.awt.Color;
 import java.io.File;
 
 import org.apache.pivot.collections.Map;
@@ -28,9 +29,11 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.FileBrowser;
 import org.apache.pivot.wtk.FileBrowserListener;
-import org.apache.pivot.wtk.Panel;
+import org.apache.pivot.wtk.HorizontalAlignment;
+import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.TabPane;
+import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
@@ -73,10 +76,16 @@ public class FileBrowsers implements Application {
                 File selectedFile = fileBrowser.getSelectedFile();
                 String fileName = selectedFile.getName();
 
-                Panel panel = new Panel();
-                tabPane.getTabs().add(panel);
+                Label label = new Label();
+                label.setText("(content of " + fileName + ")");
+                label.getStyles().put("backgroundColor", Color.WHITE);
+                label.getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
+                label.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
 
-                TabPane.setLabel(panel, fileName);
+                tabPane.getTabs().add(label);
+                TabPane.setLabel(label, fileName);
+
+                tabPane.setSelectedIndex(tabPane.getTabs().getLength() - 1);
 
                 cardPane.setSelectedIndex(0);
             }
