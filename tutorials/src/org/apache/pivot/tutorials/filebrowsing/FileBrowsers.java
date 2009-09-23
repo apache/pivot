@@ -16,21 +16,72 @@
  */
 package org.apache.pivot.tutorials.filebrowsing;
 
+import java.io.File;
+
 import org.apache.pivot.collections.Map;
+import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.Button;
+import org.apache.pivot.wtk.ButtonPressListener;
+import org.apache.pivot.wtk.CardPane;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.FileBrowser;
+import org.apache.pivot.wtk.FileBrowserListener;
+import org.apache.pivot.wtk.Panel;
+import org.apache.pivot.wtk.PushButton;
+import org.apache.pivot.wtk.TabPane;
 import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class FileBrowsers implements Application {
     private Window window = null;
+
+    @WTKX private CardPane cardPane = null;
+    @WTKX private TabPane tabPane = null;
+    @WTKX private PushButton openFileButton = null;
+    @WTKX private FileBrowser fileBrowser = null;
+    @WTKX private PushButton okButton = null;
 
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(getClass().getResource("file_browsers.wtkx"));
+        wtkxSerializer.bind(this, FileBrowsers.class);
+
+        openFileButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
+            public void buttonPressed(Button button) {
+                cardPane.setSelectedIndex(1);
+            }
+        });
+
+        fileBrowser.getFileBrowserListeners().add(new FileBrowserListener.Adapter() {
+            @Override
+            public void selectedFilesChanged(FileBrowser fileBrowser, Sequence<File> previousSelectedFiles) {
+                File selectedFile = fileBrowser.getSelectedFile();
+                okButton.setEnabled(selectedFile != null
+                    && !selectedFile.isDirectory());
+            }
+        });
+
+        okButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
+            public void buttonPressed(Button button) {
+                File selectedFile = fileBrowser.getSelectedFile();
+                String fileName = selectedFile.getName();
+
+                Panel panel = new Panel();
+                tabPane.getTabs().add(panel);
+
+                TabPane.setLabel(panel, fileName);
+
+                cardPane.setSelectedIndex(0);
+            }
+        });
+
         window.open(display);
     }
 

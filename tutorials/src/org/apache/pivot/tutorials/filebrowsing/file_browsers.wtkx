@@ -19,5 +19,50 @@ limitations under the License.
 <Window title="File Browsers" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
+    <content>
+        <CardPane wtkx:id="cardPane" styles="{padding:6, selectionChangeEffect:'horizontal_slide'}">
+            <TablePane styles="{verticalSpacing:6}">
+                <columns>
+                    <TablePane.Column width="1*"/>
+                </columns>
+                <rows>
+                    <TablePane.Row height="1*">
+                        <Border>
+                            <content>
+                                <TabPane wtkx:id="tabPane"/>
+                            </content>
+                        </Border>
+                    </TablePane.Row>
+                    <TablePane.Row height="-1">
+                        <BoxPane>
+                            <PushButton wtkx:id="openFileButton" buttonData="Open File"
+                                styles="{minimumAspectRatio:3}"/>
+                        </BoxPane>
+                    </TablePane.Row>
+                </rows>
+            </TablePane>
+
+            <TablePane styles="{verticalSpacing:6}">
+                <columns>
+                    <TablePane.Column width="1*"/>
+                </columns>
+                <rows>
+                    <TablePane.Row height="1*">
+                        <Border styles="{padding:6}">
+                            <content>
+                                <FileBrowser wtkx:id="fileBrowser"/>
+                            </content>
+                        </Border>
+                    </TablePane.Row>
+                    <TablePane.Row height="-1">
+                        <BoxPane styles="{horizontalAlignment:'right'}">
+                            <PushButton wtkx:id="okButton" buttonData="OK" enabled="false"
+                                styles="{minimumAspectRatio:3}"/>
+                        </BoxPane>
+                    </TablePane.Row>
+                </rows>
+            </TablePane>
+        </CardPane>
+    </content>
 </Window>
 
