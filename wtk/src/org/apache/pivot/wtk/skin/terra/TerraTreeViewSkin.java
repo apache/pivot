@@ -21,6 +21,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.Transparency;
 import java.awt.geom.GeneralPath;
 
 import org.apache.pivot.collections.ArrayList;
@@ -446,8 +447,10 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         int nodeHeight = getNodeHeight();
 
         // Paint the background
-        graphics.setPaint(backgroundColor);
-        graphics.fillRect(0, 0, width, height);
+        if (backgroundColor != null) {
+            graphics.setPaint(backgroundColor);
+            graphics.fillRect(0, 0, width, height);
+        }
 
         // nodeStart and nodeEnd are both inclusive
         int nodeStart = 0;
@@ -673,10 +676,6 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     public void setBackgroundColor(Color backgroundColor) {
-        if (backgroundColor == null) {
-            throw new IllegalArgumentException("backgroundColor is null.");
-        }
-
         this.backgroundColor = backgroundColor;
         repaintComponent();
     }
@@ -1692,6 +1691,12 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     public boolean isFocusable() {
         TreeView treeView = (TreeView)getComponent();
         return (treeView.getSelectMode() != TreeView.SelectMode.NONE);
+    }
+
+    @Override
+    public boolean isOpaque() {
+        return (backgroundColor != null
+            && backgroundColor.getTransparency() == Transparency.OPAQUE);
     }
 
     // ComponentStateListener methods

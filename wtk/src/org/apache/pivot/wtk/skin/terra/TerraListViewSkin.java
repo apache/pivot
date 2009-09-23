@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.Transparency;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
@@ -161,8 +162,10 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         int itemHeight = getItemHeight();
 
         // Paint the background
-        graphics.setPaint(backgroundColor);
-        graphics.fillRect(0, 0, width, height);
+        if (backgroundColor != null) {
+            graphics.setPaint(backgroundColor);
+            graphics.fillRect(0, 0, width, height);
+        }
 
         // Paint the list contents
         int itemStart = 0;
@@ -289,6 +292,12 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         return (listView.getSelectMode() != ListView.SelectMode.NONE);
     }
 
+    @Override
+    public boolean isOpaque() {
+        return (backgroundColor != null
+            && backgroundColor.getTransparency() == Transparency.OPAQUE);
+    }
+
     public Font getFont() {
         return font;
     }
@@ -357,10 +366,6 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     }
 
     public void setBackgroundColor(Color backgroundColor) {
-        if (backgroundColor == null) {
-            throw new IllegalArgumentException("backgroundColor is null.");
-        }
-
         this.backgroundColor = backgroundColor;
         repaintComponent();
     }

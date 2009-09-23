@@ -180,19 +180,10 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
         return false;
     }
 
-    /**
-     * A movie view's background color dictates whether or not it's opaque.
-     */
     @Override
     public boolean isOpaque() {
-        boolean opaque = false;
-
-        if (backgroundColor != null
-            && backgroundColor.getTransparency() == Transparency.OPAQUE) {
-            opaque = true;
-        }
-
-        return opaque;
+        return (backgroundColor != null
+            && backgroundColor.getTransparency() == Transparency.OPAQUE);
     }
 
     public Color getBackgroundColor() {

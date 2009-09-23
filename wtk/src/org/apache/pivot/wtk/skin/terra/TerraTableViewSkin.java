@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.Transparency;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.List;
@@ -269,8 +270,10 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         int rowHeight = getRowHeight();
 
         // Paint the background
-        graphics.setPaint(backgroundColor);
-        graphics.fillRect(0, 0, width, height);
+        if (backgroundColor != null) {
+            graphics.setPaint(backgroundColor);
+            graphics.fillRect(0, 0, width, height);
+        }
 
         // Ensure that we only paint items that are visible
         int rowStart = 0;
@@ -527,6 +530,12 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         return (tableView.getSelectMode() != TableView.SelectMode.NONE);
     }
 
+    @Override
+    public boolean isOpaque() {
+        return (backgroundColor != null
+            && backgroundColor.getTransparency() == Transparency.OPAQUE);
+    }
+
     public Font getFont() {
         return font;
     }
@@ -605,10 +614,6 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public void setBackgroundColor(Color backgroundColor) {
-        if (backgroundColor == null) {
-            throw new IllegalArgumentException("backgroundColor is null.");
-        }
-
         this.backgroundColor = backgroundColor;
         repaintComponent();
     }
