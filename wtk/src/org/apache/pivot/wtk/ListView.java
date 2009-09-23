@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.wtk;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.Comparator;
 
 import org.apache.pivot.collections.ArrayList;
@@ -653,7 +655,8 @@ public class ListView extends Component {
      * Sets the list data.
      *
      * @param listData
-     * The data to be presented by the list view as a JSON array.
+     * A JSON string (must begin with <tt>[</tt> and end with <tt>]</tt>)
+     * denoting the data to be presented by the list view.
      */
     public void setListData(String listData) {
         if (listData == null) {
@@ -663,6 +666,29 @@ public class ListView extends Component {
         try {
             setListData(JSONSerializer.parseList(listData));
         } catch (SerializationException exception) {
+            throw new IllegalArgumentException(exception);
+        }
+    }
+
+    /**
+     * Sets the list data.
+     *
+     * @param tableData
+     * A URL referring to a JSON file containing the data to be presented by
+     * the list view.
+     */
+    public void setListData(URL listData) {
+        if (listData == null) {
+            throw new IllegalArgumentException("listData is null.");
+        }
+
+        JSONSerializer jsonSerializer = new JSONSerializer();
+
+        try {
+            setListData((List<?>)jsonSerializer.readObject(listData.openStream()));
+        } catch (SerializationException exception) {
+            throw new IllegalArgumentException(exception);
+        } catch (IOException exception) {
             throw new IllegalArgumentException(exception);
         }
     }

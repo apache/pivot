@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.wtk;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.Comparator;
 import java.util.Iterator;
 
@@ -1128,10 +1130,10 @@ public class TableView extends Component {
     }
 
     /**
-     * Sets the table data. Clears any existing selection state.
+     * Sets the table data.
      *
      * @param tableData
-     * The data to be presented by the table.
+     * The data to be presented by the table view.
      */
     @SuppressWarnings("unchecked")
     public void setTableData(List<?> tableData) {
@@ -1158,11 +1160,11 @@ public class TableView extends Component {
     }
 
     /**
-     * Sets the table data. Clears any existing selection state.
+     * Sets the table data.
      *
      * @param tableData
      * A JSON string (must begin with <tt>[</tt> and end with <tt>]</tt>)
-     * denoting the data to be presented by this table.
+     * denoting the data to be presented by the table view.
      */
     public void setTableData(String tableData) {
         if (tableData == null) {
@@ -1172,6 +1174,29 @@ public class TableView extends Component {
         try {
             setTableData(JSONSerializer.parseList(tableData));
         } catch (SerializationException exception) {
+            throw new IllegalArgumentException(exception);
+        }
+    }
+
+    /**
+     * Sets the table data.
+     *
+     * @param tableData
+     * A URL referring to a JSON file containing the data to be presented by
+     * the table view.
+     */
+    public void setTableData(URL tableData) {
+        if (tableData == null) {
+            throw new IllegalArgumentException("tableData is null.");
+        }
+
+        JSONSerializer jsonSerializer = new JSONSerializer();
+
+        try {
+            setTableData((List<?>)jsonSerializer.readObject(tableData.openStream()));
+        } catch (SerializationException exception) {
+            throw new IllegalArgumentException(exception);
+        } catch (IOException exception) {
             throw new IllegalArgumentException(exception);
         }
     }

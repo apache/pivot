@@ -19,6 +19,7 @@ limitations under the License.
 <Window title="Table Views" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:collections="org.apache.pivot.collections"
+    xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
     <content>
         <Border styles="{padding:0}">
@@ -27,7 +28,11 @@ limitations under the License.
                     <view>
                         <TableView wtkx:id="tableView">
                             <columns>
-                                <TableView.Column name="flag" width="-1"/>
+                                <TableView.Column name="flag" width="20">
+                                    <cellRenderer>
+                                        <content:TableViewImageCellRenderer/>
+                                    </cellRenderer>
+                                </TableView.Column>
                                 <TableView.Column name="nation" width="3*" headerData="Nation"/>
                                 <TableView.Column name="gold" width="1*" headerData="Gold"/>
                                 <TableView.Column name="silver" width="1*" headerData="Silver"/>
@@ -54,7 +59,8 @@ limitations under the License.
                                 <wtkx:script>
                                 <![CDATA[
                                 function sortChanged(tableView) {
-                                    // TODO
+                                    var tableData = tableView.getTableData();
+                                    tableData.setComparator(new org.apache.pivot.wtk.content.TableViewRowComparator(tableView));
                                 }
                                 ]]>
                                 </wtkx:script>
@@ -63,7 +69,7 @@ limitations under the License.
                     </view>
 
                     <columnHeader>
-                        <TableViewHeader tableView="$tableView"/>
+                        <TableViewHeader tableView="$tableView" sortMode="single_column"/>
                     </columnHeader>
                 </ScrollPane>
             </content>

@@ -1,0 +1,27 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except in
+ * compliance with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+[   {nation:"China", gold:51, silver:21, bronze:28, total:100},
+    {nation:"United States", gold:36, silver:38, bronze:36, total:110},
+    {nation:"Russia", gold:23, silver:21, bronze:28, total:72},
+    {nation:"Great Britain", gold:19, silver:13, bronze:15, total:47},
+    {nation:"Germany", gold:16, silver:10, bronze:15, total:41},
+    {nation:"Australia", gold:14, silver:15, bronze:17, total:46},
+    {nation:"South Korea", gold:13, silver:10, bronze:8, total:31},
+    {nation:"Japan", gold:9, silver:6, bronze:11, total:26},
+    {nation:"Italy", gold:8, silver:10, bronze:10, total:28},
+    {nation:"France", gold:7, silver:16, bronze:17, total:40}
+]

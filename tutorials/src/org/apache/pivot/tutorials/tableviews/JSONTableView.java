@@ -51,6 +51,6 @@ public class JSONTableView implements Application {
     }
 
     public static void main(String[] args) {
-        DesktopApplicationContext.main(BasicTableView.class, args);
+        DesktopApplicationContext.main(JSONTableView.class, args);
     }
 }

@@ -26,11 +26,11 @@ limitations under the License.
                     <view>
                         <TableView wtkx:id="tableView">
                             <columns>
-                                <TableView.Column name="nation" width="144" headerData="Nation"/>
-                                <TableView.Column name="gold" width="48" headerData="Gold"/>
-                                <TableView.Column name="silver" width="48" headerData="Silver"/>
-                                <TableView.Column name="bronze" width="48" headerData="Bronze"/>
-                                <TableView.Column name="total" width="48" headerData="Total"/>
+                                <TableView.Column name="nation" width="180" headerData="Nation"/>
+                                <TableView.Column name="gold" width="60" headerData="Gold"/>
+                                <TableView.Column name="silver" width="60" headerData="Silver"/>
+                                <TableView.Column name="bronze" width="60" headerData="Bronze"/>
+                                <TableView.Column name="total" width="60" headerData="Total"/>
                             </columns>
 
                             <tableData xmlns="org.apache.pivot.collections">
