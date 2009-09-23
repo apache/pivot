@@ -403,7 +403,7 @@ public class TerraAccordionSkin extends ContainerSkin
             maxPanelHeight = Math.max(maxPanelHeight, panel.getPreferredHeight(width));
         }
 
-        preferredHeight += (maxPanelHeight + padding.top + padding.bottom);
+        preferredHeight += (maxPanelHeight + padding.top + padding.bottom + 2);
 
         return preferredHeight;
     }
@@ -433,7 +433,7 @@ public class TerraAccordionSkin extends ContainerSkin
         int preferredWidth = Math.max(maxPanelHeaderWidth, maxPanelWidth
             + (padding.left + padding.right + 2));
 
-        preferredHeight += (maxPanelHeight + padding.top + padding.bottom);
+        preferredHeight += (maxPanelHeight + padding.top + padding.bottom + 2);
 
         return new Dimensions(preferredWidth, preferredHeight);
     }
@@ -458,7 +458,7 @@ public class TerraAccordionSkin extends ContainerSkin
                 panelHeight -= (panelHeader.getHeight() - 1);
             }
 
-            panelHeight = Math.max(panelHeight - 1, 0);
+            panelHeight = Math.max(panelHeight - 2, 0);
             contentHeight = Math.max(panelHeight - (padding.top + padding.bottom), 0);
         } else {
             panelHeight = selectionChangeTransition.toPanel.getHeight()
@@ -483,27 +483,27 @@ public class TerraAccordionSkin extends ContainerSkin
                     panel.setVisible(true);
 
                     panel.setSize(contentWidth, contentHeight);
-                    panel.setLocation(padding.left + 1, panelY + padding.top);
+                    panel.setLocation(padding.left + 1, panelY + padding.top + 1);
 
-                    panelY += panelHeight;
+                    panelY += panelHeight + 1;
                 } else {
                     panel.setVisible(false);
                 }
             } else {
                 if (selectionChangeTransition.isRunning()) {
                     if (panel == selectionChangeTransition.fromPanel) {
-                        panel.setLocation(padding.left + 1, panelY + padding.top);
+                        panel.setLocation(padding.left + 1, panelY + padding.top + 1);
 
                         int previousSelectedPanelHeight = Math.round(panelHeight * (1.0f
                             - selectionChangeTransition.getEasedPercentComplete()));
                         previousSelectedPanelClipDecorator.setWidth(contentWidth);
                         previousSelectedPanelClipDecorator.setHeight(previousSelectedPanelHeight);
 
-                        panelY += previousSelectedPanelHeight;
+                        panelY += previousSelectedPanelHeight + 1;
                     }
 
                     if (panel == selectionChangeTransition.toPanel) {
-                        panel.setLocation(padding.left + 1, panelY + padding.top);
+                        panel.setLocation(padding.left + 1, panelY + padding.top + 1);
 
                         int selectedPanelHeight = Math.round(panelHeight
                             * selectionChangeTransition.getEasedPercentComplete());
