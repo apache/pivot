@@ -37,7 +37,7 @@ public class ActivityIndicator extends Component {
     private ActivityIndicatorListenerList activityIndicatorListeners = new ActivityIndicatorListenerList();
 
     public ActivityIndicator() {
-        installSkin(ActivityIndicator.class);
+        installThemeSkin(ActivityIndicator.class);
     }
 
     public boolean isActive() {

@@ -74,7 +74,7 @@ public class Dialog extends Frame {
 
     public Dialog(String title, Component content) {
         super(title, content);
-        installSkin(Dialog.class);
+        installThemeSkin(Dialog.class);
     }
 
     /**

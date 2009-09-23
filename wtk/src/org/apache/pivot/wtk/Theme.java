@@ -135,7 +135,7 @@ public abstract class Theme {
                 if (theme.componentSkinMap.containsKey(componentClass)
                     && (componentClass.getEnclosingClass() == null
                         || (componentClass.getModifiers() & Modifier.STATIC) == Modifier.STATIC)) {
-                    component.installSkin(componentClass);
+                    component.installThemeSkin(componentClass);
                 }
             }
         }

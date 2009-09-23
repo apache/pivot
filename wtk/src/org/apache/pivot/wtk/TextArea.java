@@ -167,7 +167,7 @@ public class TextArea extends Component {
     private TextAreaSelectionListenerList textAreaSelectionListeners = new TextAreaSelectionListenerList();
 
     public TextArea() {
-        installSkin(TextArea.class);
+        installThemeSkin(TextArea.class);
         setText("");
     }
 

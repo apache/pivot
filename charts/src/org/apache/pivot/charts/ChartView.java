@@ -425,7 +425,7 @@ public abstract class ChartView extends Component {
         setShowLegend(showLegend);
     }
 
-    protected void installChartSkin(Class<? extends ChartView> chartViewClass) {
+    protected final void installChartSkin(Class<? extends ChartView> chartViewClass) {
         Class<? extends org.apache.pivot.wtk.Skin> skinClass = provider.getSkinClass(chartViewClass);
 
         try {

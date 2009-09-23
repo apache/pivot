@@ -202,7 +202,7 @@ public class TextInput extends Component {
 
     public TextInput() {
         setTextNode(new TextNode());
-        installSkin(TextInput.class);
+        installThemeSkin(TextInput.class);
     }
 
     public TextNode getTextNode() {

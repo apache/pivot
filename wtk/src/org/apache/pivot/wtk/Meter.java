@@ -44,7 +44,7 @@ public class Meter extends Component {
     private MeterListenerList meterListeners = new MeterListenerList();
 
     public Meter() {
-        installSkin(Meter.class);
+        installThemeSkin(Meter.class);
     }
 
     public double getPercentage() {

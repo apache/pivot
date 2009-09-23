@@ -85,7 +85,7 @@ public class FileBrowserSheet extends Sheet {
         String userHome = System.getProperty("user.home");
         rootDirectory = new File(userHome);
 
-        installSkin(FileBrowserSheet.class);
+        installThemeSkin(FileBrowserSheet.class);
     }
 
     public Mode getMode() {

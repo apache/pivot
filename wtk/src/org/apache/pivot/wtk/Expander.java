@@ -83,7 +83,7 @@ public class Expander extends Container {
     private ExpanderListenerList expanderListeners = new ExpanderListenerList();
 
     public Expander() {
-        installSkin(Expander.class);
+        installThemeSkin(Expander.class);
     }
 
     /**

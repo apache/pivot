@@ -25,7 +25,7 @@ public class Panorama extends Viewport {
     }
 
     public Panorama(Component view) {
-        installSkin(Panorama.class);
+        installThemeSkin(Panorama.class);
         setView(view);
     }
 }

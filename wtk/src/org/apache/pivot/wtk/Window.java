@@ -390,7 +390,7 @@ public class Window extends Container {
 
     public Window(Component content) {
         setContent(content);
-        installSkin(Window.class);
+        installThemeSkin(Window.class);
     }
 
     @Override

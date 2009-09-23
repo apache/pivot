@@ -98,7 +98,7 @@ public class TableViewHeader extends Component {
 
     public TableViewHeader(TableView tableView) {
         setDataRenderer(new TableViewHeaderDataRenderer());
-        installSkin(TableViewHeader.class);
+        installThemeSkin(TableViewHeader.class);
 
         setTableView(tableView);
     }

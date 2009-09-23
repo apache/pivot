@@ -37,7 +37,7 @@ public class Palette extends Window {
         super(content);
 
         setTitle(title);
-        installSkin(Palette.class);
+        installThemeSkin(Palette.class);
     }
 
     @Override

@@ -128,7 +128,7 @@ public class ListButton extends Button {
         setItemRenderer(DEFAULT_ITEM_RENDERER);
         setListData(listData);
 
-        installSkin(ListButton.class);
+        installThemeSkin(ListButton.class);
     }
 
     /**

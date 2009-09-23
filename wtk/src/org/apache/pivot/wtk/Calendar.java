@@ -117,7 +117,7 @@ public class Calendar extends Container {
         this.year = year;
         this.month = month;
 
-        installSkin(Calendar.class);
+        installThemeSkin(Calendar.class);
     }
 
     /**

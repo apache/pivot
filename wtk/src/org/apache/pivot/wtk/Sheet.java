@@ -75,7 +75,7 @@ public class Sheet extends Window {
     public Sheet(Component content) {
         super(content);
 
-        installSkin(Sheet.class);
+        installThemeSkin(Sheet.class);
     }
 
     public final void open(Window owner, SheetCloseListener sheetCloseListener) {

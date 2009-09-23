@@ -42,7 +42,7 @@ public class Separator extends Component {
 
     public Separator(String heading) {
         setHeading(heading);
-        installSkin(Separator.class);
+        installThemeSkin(Separator.class);
     }
 
     /**

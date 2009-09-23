@@ -21,6 +21,6 @@ package org.apache.pivot.wtk;
  */
 public class Panel extends Container {
     public Panel() {
-        installSkin(Panel.class);
+        installThemeSkin(Panel.class);
     }
 }

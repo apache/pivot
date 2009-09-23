@@ -80,7 +80,7 @@ public class Prompt extends Sheet {
         this.options = new ArrayList<Object>((Sequence<Object>)options);
         this.body = body;
 
-        installSkin(Prompt.class);
+        installThemeSkin(Prompt.class);
     }
 
     public MessageType getMessageType() {

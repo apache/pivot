@@ -233,7 +233,7 @@ public class TabPane extends Container {
 
     public TabPane() {
         super();
-        installSkin(TabPane.class);
+        installThemeSkin(TabPane.class);
     }
 
     public int getSelectedIndex() {

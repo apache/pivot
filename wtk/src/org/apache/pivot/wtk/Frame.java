@@ -54,7 +54,7 @@ public class Frame extends Window {
         super(content);
 
         setTitle(title);
-        installSkin(Frame.class);
+        installThemeSkin(Frame.class);
     }
 
     public MenuBar getMenuBar() {

@@ -607,7 +607,7 @@ public class ListView extends Component {
         setItemRenderer(DEFAULT_ITEM_RENDERER);
         setListData(listData);
 
-        installSkin(ListView.class);
+        installThemeSkin(ListView.class);
     }
 
     /**

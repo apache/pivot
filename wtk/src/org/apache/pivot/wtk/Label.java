@@ -52,7 +52,7 @@ public class Label extends Component {
     public Label(String text) {
         this.text = text;
 
-        installSkin(Label.class);
+        installThemeSkin(Label.class);
     }
 
     public String getText() {

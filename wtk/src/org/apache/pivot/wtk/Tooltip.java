@@ -40,7 +40,7 @@ public class Tooltip extends Window {
 
     public Tooltip(String text) {
         setText(text);
-        installSkin(Tooltip.class);
+        installThemeSkin(Tooltip.class);
     }
 
     public String getText() {

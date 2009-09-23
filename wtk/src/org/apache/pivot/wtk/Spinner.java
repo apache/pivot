@@ -229,7 +229,7 @@ public class Spinner extends Container {
         setItemRenderer(new SpinnerItemRenderer());
         setSpinnerData(spinnerData);
 
-        installSkin(Spinner.class);
+        installThemeSkin(Spinner.class);
     }
 
     /**

@@ -399,7 +399,7 @@ public class Form extends Container {
     public Form() {
         super();
 
-        installSkin(Form.class);
+        installThemeSkin(Form.class);
     }
 
     /**

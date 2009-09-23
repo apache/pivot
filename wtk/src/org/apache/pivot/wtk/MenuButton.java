@@ -57,7 +57,7 @@ public class MenuButton extends Button {
 
     public MenuButton() {
         setDataRenderer(DEFAULT_DATA_RENDERER);
-        installSkin(MenuButton.class);
+        installThemeSkin(MenuButton.class);
     }
 
     @Override

@@ -63,7 +63,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
     public static class FrameButton extends PushButton {
         public FrameButton(Object buttonData) {
             super(buttonData);
-            installSkin(FrameButton.class);
+            installThemeSkin(FrameButton.class);
         }
     }
 

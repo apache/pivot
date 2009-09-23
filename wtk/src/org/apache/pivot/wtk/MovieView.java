@@ -54,7 +54,7 @@ public class MovieView extends Component {
     public MovieView(Movie movie) {
         setMovie(movie);
 
-        installSkin(MovieView.class);
+        installThemeSkin(MovieView.class);
     }
 
     /**

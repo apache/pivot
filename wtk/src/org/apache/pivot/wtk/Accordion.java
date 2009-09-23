@@ -215,7 +215,7 @@ public class Accordion extends Container {
     private AccordionAttributeListenerList accordionAttributeListeners = new AccordionAttributeListenerList();
 
     public Accordion() {
-        installSkin(Accordion.class);
+        installThemeSkin(Accordion.class);
     }
 
     public PanelSequence getPanels() {

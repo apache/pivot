@@ -746,14 +746,13 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     /**
-     * Installs the skin for the given component class, unless a subclass has
-     * defined a more specific skin. Any component that defines a custom skin
-     * class must call this method.
+     * Installs the skin for the given component class, as defined by the current
+     * theme.
      *
      * @param componentClass
      */
     @SuppressWarnings("unchecked")
-    protected final void installSkin(Class<? extends Component> componentClass) {
+    protected final void installThemeSkin(Class<? extends Component> componentClass) {
         // Walk up component hierarchy from this type; if we find a match
         // and the super class equals the given component class, install
         // the skin. Otherwise, ignore - it will be installed later by a

@@ -75,7 +75,7 @@ public class Alert extends Dialog {
         this.options = new ArrayList<Object>((Sequence<Object>)options);
         this.body = body;
 
-        installSkin(Alert.class);
+        installThemeSkin(Alert.class);
     }
 
     public MessageType getMessageType() {

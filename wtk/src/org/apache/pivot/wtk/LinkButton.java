@@ -32,7 +32,7 @@ public class LinkButton extends Button {
         super(buttonData);
         setDataRenderer(DEFAULT_DATA_RENDERER);
 
-        installSkin(LinkButton.class);
+        installThemeSkin(LinkButton.class);
     }
 
     @Override

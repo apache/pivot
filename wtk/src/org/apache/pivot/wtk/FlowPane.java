@@ -22,6 +22,6 @@ package org.apache.pivot.wtk;
  */
 public class FlowPane extends Container {
     public FlowPane() {
-        installSkin(FlowPane.class);
+        installThemeSkin(FlowPane.class);
     }
 }

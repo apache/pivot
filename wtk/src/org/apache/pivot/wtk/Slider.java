@@ -55,7 +55,7 @@ public class Slider extends Container {
     public static final int DEFAULT_VALUE = 0;
 
     public Slider() {
-        installSkin(Slider.class);
+        installThemeSkin(Slider.class);
     }
 
     public int getStart() {

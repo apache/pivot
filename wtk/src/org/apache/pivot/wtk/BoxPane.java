@@ -43,7 +43,7 @@ public class BoxPane extends Container {
     public BoxPane(Orientation orientation) {
         setOrientation(orientation);
 
-        installSkin(BoxPane.class);
+        installThemeSkin(BoxPane.class);
     }
 
     public Orientation getOrientation() {
