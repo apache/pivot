@@ -39,6 +39,12 @@ function check-svn-props() {
         if [[ "$SVN_MIME_TYPE" != "$MIME_TYPE" && "$TYPE" != "text" ]]; then
             echo "svn ps svn:mime-type $MIME_TYPE $f"
         fi
+
+        ## Check for origination-name on images
+        ORIGINATION_NAME=`svn pg origination-name $f 2>/dev/null`
+        if [[ -z "$ORIGINATION_NAME" && "$TYPE" == "image" ]]; then
+            echo "svn ps origination-name ?? $f"
+        fi
     done
 }
 
