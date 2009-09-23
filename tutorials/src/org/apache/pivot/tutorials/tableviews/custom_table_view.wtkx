@@ -40,6 +40,7 @@ limitations under the License.
                                 <TableView.Column name="total" width="1*" headerData="Total"/>
                             </columns>
 
+                            <!-- Source: http://en.wikipedia.org/wiki/2008_Summer_Olympics_medal_table -->
                             <tableData>
                                 <collections:ArrayList xmlns="org.apache.pivot.tutorials.tableviews">
                                     <OlympicStanding nation="China" gold="51" silver="21" bronze="28" flag="@cn.png"/>
