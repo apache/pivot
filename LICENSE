@@ -215,17 +215,60 @@ the following licenses.
 
 The following components are licensed under the Apache Software License 2.0:
 
-  * web/lib/servlet-api.jar          (http://tomcat.apache.org/)
+  * web/lib/servlet-api.jar (http://tomcat.apache.org/)
 
 ===============================================================================
 
 The following components are available in Public Domain:
 
-  * The Tango Icon Theme icons       (http://tango.freedesktop.org/)
+  1. The Tango Icon Theme icons (http://tango.freedesktop.org/)
+
+     tutorials/src/org/apache/pivot/tutorials/edit-delete.png
+     tutorials/src/org/apache/pivot/tutorials/edit-undo.png
+     tutorials/src/org/apache/pivot/tutorials/edit-paste.png
+     tutorials/src/org/apache/pivot/tutorials/weather-few-clouds-32x32.png
+     tutorials/src/org/apache/pivot/tutorials/go-home.png
+     tutorials/src/org/apache/pivot/tutorials/document-save.png
+     tutorials/src/org/apache/pivot/tutorials/edit-redo.png
+     tutorials/src/org/apache/pivot/tutorials/edit-select-all.png
+     tutorials/src/org/apache/pivot/tutorials/edit-cut.png
+     tutorials/src/org/apache/pivot/tutorials/stocktracker/go-up.png
+     tutorials/src/org/apache/pivot/tutorials/stocktracker/go-down.png
+     tutorials/src/org/apache/pivot/tutorials/edit-copy.png
+     tutorials/src/org/apache/pivot/tutorials/document-save-as.png
+     tutorials/src/org/apache/pivot/tutorials/weather-clear.png
+     tutorials/src/org/apache/pivot/tutorials/menus/edit-paste.png
+     tutorials/src/org/apache/pivot/tutorials/menus/battery.png
+     tutorials/src/org/apache/pivot/tutorials/menus/weather-clear.png
+     tutorials/src/org/apache/pivot/tutorials/menus/emblem-favorite.png
+     tutorials/src/org/apache/pivot/tutorials/menus/face-smile.png
+     tutorials/src/org/apache/pivot/tutorials/document-open.png
+     tutorials/src/org/apache/pivot/tutorials/x-office-document.png
+     tutorials/src/org/apache/pivot/tutorials/weather-few-clouds.png
+     tutorials/src/org/apache/pivot/tutorials/weather-showers-scattered.png
+     tutorials/src/org/apache/pivot/tutorials/weather-overcast.png
+     tutorials/src/org/apache/pivot/tutorials/document-new.png
+     wtk/test/org/apache/pivot/wtk/test/go-home.png
+     wtk/test/org/apache/pivot/wtk/test/applications-games.png
+
+  2. The FamFamFam Flag icons (http://www.famfamfam.com/lab/icons/flags/)
+
+     tutorials/src/org/apache/pivot/tutorials/tableviews/au.png
+     tutorials/src/org/apache/pivot/tutorials/tableviews/kr.png
+     tutorials/src/org/apache/pivot/tutorials/tableviews/it.png
+     tutorials/src/org/apache/pivot/tutorials/tableviews/fr.png
+     tutorials/src/org/apache/pivot/tutorials/tableviews/us.png
+     tutorials/src/org/apache/pivot/tutorials/tableviews/ru.png
+     tutorials/src/org/apache/pivot/tutorials/tableviews/cn.png
+     tutorials/src/org/apache/pivot/tutorials/tableviews/gb.png
+     tutorials/src/org/apache/pivot/tutorials/tableviews/jp.png
+     tutorials/src/org/apache/pivot/tutorials/tableviews/de.png
 
 ===============================================================================
 
-For wtk/src/pivot/wtk/effects/easing/*.java:
+Pivot's easing equations (org.apache.pivot.wtk.effects.easing.*) are derivative
+works originating from Robert Penner's Action Script easing equations, which
+are licensed under the Berkeley Software Distribution (BSD) License.
 
                   Berkeley Software Distribution (BSD) License
                http://www.opensource.org/licenses/bsd-license.php
@@ -259,7 +302,9 @@ For wtk/src/pivot/wtk/effects/easing/*.java:
 
 ===============================================================================
 
-For wtk/src/pivot/wtk/effects/DropShadowDecorator.java:
+The drop shadow decorator (org.apache.pivot.wtk.effects.DropShadowDecorator)
+uses code from "Filthy Rich Clients" by Chet Haase and Romain Guy, which is
+licensed under the Berkeley Software Distribution (BSD) License.
 
                   Berkeley Software Distribution (BSD) License
                http://www.opensource.org/licenses/bsd-license.php
@@ -293,7 +338,50 @@ For wtk/src/pivot/wtk/effects/DropShadowDecorator.java:
 
 ===============================================================================
 
-For the Silk Icons and Silk Companion Icons:
+The following components are licensed under the Creative Commons Attribution
+2.5 License:
+
+  1. The Silk Icons (http://www.famfamfam.com/lab/icons/silk/)
+
+     demos/www/page_go.png
+     demos/src/org/apache/pivot/demos/itunes/magnifier.png
+     demos/src/org/apache/pivot/demos/itunes/bullet_cross.png
+     tutorials/src/org/apache/pivot/tutorials/book_open.png
+     tutorials/src/org/apache/pivot/tutorials/page_white.png
+     tutorials/src/org/apache/pivot/tutorials/anchor.png
+     tutorials/src/org/apache/pivot/tutorials/flag_red.png
+     tutorials/src/org/apache/pivot/tutorials/magnifier.png
+     tutorials/src/org/apache/pivot/tutorials/folder.png
+     tutorials/src/org/apache/pivot/tutorials/application.png
+     tutorials/src/org/apache/pivot/tutorials/star.png
+     tutorials/src/org/apache/pivot/tutorials/page_edit.png
+     tutorials/src/org/apache/pivot/tutorials/cup.png
+     tutorials/src/org/apache/pivot/tutorials/house.png
+     tutorials/src/org/apache/pivot/tutorials/stocktracker/add.png
+     tutorials/src/org/apache/pivot/tutorials/stocktracker/delete.png
+     tutorials/src/org/apache/pivot/tutorials/menus/shape_square_add.png
+     tutorials/src/org/apache/pivot/tutorials/buttons/resultset_previous.png
+     tutorials/src/org/apache/pivot/tutorials/buttons/resultset_next.png
+     tutorials/src/org/apache/pivot/tutorials/help.png
+     tutorials/src/org/apache/pivot/tutorials/bell.png
+     tutorials/src/org/apache/pivot/tutorials/clock.png
+     wtk/src/org/apache/pivot/wtk/skin/terra/page_white.png
+     wtk/src/org/apache/pivot/wtk/skin/terra/message_type-error-16x16.png
+     wtk/src/org/apache/pivot/wtk/skin/terra/message_type-info-16x16.png
+     wtk/src/org/apache/pivot/wtk/skin/terra/folder.png
+     wtk/src/org/apache/pivot/wtk/skin/terra/message_type-warning-16x16.png
+     wtk/src/org/apache/pivot/wtk/skin/terra/house.png
+     wtk/src/org/apache/pivot/wtk/skin/terra/message_type-question-16x16.png
+     wtk/src/org/apache/pivot/wtk/skin/terra/folder_home.png
+     wtk/src/org/apache/pivot/wtk/skin/terra/folder_add.png
+     wtk/src/org/apache/pivot/wtk/skin/terra/folder_up.png
+
+  2. The Silk Companion Icons (http://damieng.com/creative/icons/silk-companion-1-icons)
+
+     demos/src/org/apache/pivot/demos/itunes/bullet_cross.png
+     wtk/src/org/apache/pivot/wtk/skin/terra/message_type-info-16x16.png
+     wtk/src/org/apache/pivot/wtk/skin/terra/folder_home.png
+     wtk/src/org/apache/pivot/wtk/skin/terra/folder_up.png
 
                     Creative Commons Attribution 2.5 License
                http://creativecommons.org/licenses/by/2.5/legalcode
