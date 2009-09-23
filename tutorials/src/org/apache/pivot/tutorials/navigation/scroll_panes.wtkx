@@ -18,6 +18,7 @@ limitations under the License.
 
 <Window title="Scroll Panes" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:navigation="org.apache.pivot.tutorials.navigation"
     xmlns="org.apache.pivot.wtk">
     <content>
         <Border styles="{padding:0, color:10}">
@@ -27,6 +28,14 @@ limitations under the License.
                         <ImageView image="org/apache/pivot/tutorials/IMG_1147.jpg"
                             tooltipText="Pemaquid Point Lighthouse, Bristol ME"/>
                     </view>
+
+                    <columnHeader>
+                        <navigation:Ruler orientation="horizontal"/>
+                    </columnHeader>
+
+                    <rowHeader>
+                        <navigation:Ruler orientation="vertical"/>
+                    </rowHeader>
                 </ScrollPane>
             </content>
         </Border>

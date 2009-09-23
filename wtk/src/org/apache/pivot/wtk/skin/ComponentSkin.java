@@ -68,7 +68,7 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
                 }
 
                 tooltip.setLocation(x + 16, y);
-                tooltip.open(component.getDisplay());
+                tooltip.open(component.getWindow());
             }
         }
     }
