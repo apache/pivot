@@ -194,23 +194,6 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         }
     }
 
-    private static class WTKXSerializerListenerList extends ListenerList<WTKXSerializerListener>
-        implements WTKXSerializerListener {
-        @Override
-        public void includeLoaded(WTKXSerializer serializer, String id) {
-            for (WTKXSerializerListener listener : this) {
-                listener.includeLoaded(serializer, id);
-            }
-        }
-
-        @Override
-        public void allIncludesLoaded(WTKXSerializer serializer) {
-            for (WTKXSerializerListener listener : this) {
-                listener.allIncludesLoaded(serializer);
-            }
-        }
-    }
-
     private URL location = null;
     private Resources resources = null;
     private HashMap<String, Object> initialBindings = new HashMap<String, Object>();
@@ -224,8 +207,6 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
     private XMLInputFactory xmlInputFactory;
     private Element element = null;
 
-    private WTKXSerializerListenerList wtkxSerializerListeners = new WTKXSerializerListenerList();
-
     public static final char URL_PREFIX = '@';
     public static final char RESOURCE_KEY_PREFIX = '%';
     public static final char OBJECT_REFERENCE_PREFIX = '$';
@@ -236,7 +217,6 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
     public static final String INCLUDE_TAG = "include";
     public static final String INCLUDE_SRC_ATTRIBUTE = "src";
     public static final String INCLUDE_RESOURCES_ATTRIBUTE = "resources";
-    public static final String INCLUDE_ASYNCHRONOUS_ATTRIBUTE = "asynchronous";
 
     public static final String SCRIPT_TAG = "script";
     public static final String SCRIPT_SRC_ATTRIBUTE = "src";
@@ -538,10 +518,6 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                                     src = attribute.value;
                                                 } else if (attribute.localName.equals(INCLUDE_RESOURCES_ATTRIBUTE)) {
                                                     resources = new Resources(resources, attribute.value);
-                                                } else if (attribute.localName.equals(INCLUDE_ASYNCHRONOUS_ATTRIBUTE)) {
-                                                    // TODO
-                                                    throw new UnsupportedOperationException("Asynchronous includes are not"
-                                                        + " yet supported.");
                                                 } else {
                                                     if (!Character.isUpperCase(attribute.localName.charAt(0))) {
                                                         throw new SerializationException("Instance property setters are not"
@@ -1365,9 +1341,5 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         }
 
         return method;
-    }
-
-    public ListenerList<WTKXSerializerListener> getWTKXSerializerListeners() {
-        return wtkxSerializerListeners;
     }
 }
