@@ -345,7 +345,6 @@ The following components are licensed under the Creative Commons Attribution
 
      demos/www/page_go.png
      demos/src/org/apache/pivot/demos/itunes/magnifier.png
-     demos/src/org/apache/pivot/demos/itunes/bullet_cross.png
      tutorials/src/org/apache/pivot/tutorials/book_open.png
      tutorials/src/org/apache/pivot/tutorials/page_white.png
      tutorials/src/org/apache/pivot/tutorials/anchor.png
@@ -367,14 +366,11 @@ The following components are licensed under the Creative Commons Attribution
      tutorials/src/org/apache/pivot/tutorials/clock.png
      wtk/src/org/apache/pivot/wtk/skin/terra/page_white.png
      wtk/src/org/apache/pivot/wtk/skin/terra/message_type-error-16x16.png
-     wtk/src/org/apache/pivot/wtk/skin/terra/message_type-info-16x16.png
      wtk/src/org/apache/pivot/wtk/skin/terra/folder.png
      wtk/src/org/apache/pivot/wtk/skin/terra/message_type-warning-16x16.png
      wtk/src/org/apache/pivot/wtk/skin/terra/house.png
      wtk/src/org/apache/pivot/wtk/skin/terra/message_type-question-16x16.png
-     wtk/src/org/apache/pivot/wtk/skin/terra/folder_home.png
      wtk/src/org/apache/pivot/wtk/skin/terra/folder_add.png
-     wtk/src/org/apache/pivot/wtk/skin/terra/folder_up.png
 
   2. The Silk Companion Icons (http://damieng.com/creative/icons/silk-companion-1-icons)
 
