@@ -42,9 +42,9 @@ limitations under the License.
                     <TablePane.Row height="-1">
                         <BoxPane styles="{horizontalAlignment:'right', verticalAlignment:'center'}">
                             <PushButton wtkx:id="okButton" buttonData="%ok"
-                                styles="{minimumAspectRatio:3}"/>
+                                styles="@command_button.json"/>
                             <PushButton wtkx:id="cancelButton" buttonData="%cancel"
-                                styles="{minimumAspectRatio:3}"/>
+                                styles="@command_button.json"/>
                         </BoxPane>
                     </TablePane.Row>
                 </rows>
