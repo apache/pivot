@@ -31,7 +31,7 @@ limitations under the License.
             <Label wtkx:id="barLabel"/>
             <PushButton buttonData="Click Me">
                 <buttonPressListeners>
-                    <wtkx:script language="javascript">
+                    <wtkx:script>
                     <![CDATA[
                     function buttonPressed(button) {
                         testFrame.open(window);

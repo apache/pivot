@@ -100,7 +100,7 @@ limitations under the License.
                                 <Form.Section>
                                     <Checkbox Form.label="Show horizontal grid lines" selected="true">
                                         <buttonStateListeners>
-                                            <wtkx:script language="javascript">
+                                            <wtkx:script>
                                                 <![CDATA[
                                                 function stateChanged(button, previousState) {
                                                     tablePane.getStyles().put("showHorizontalGridLines",
@@ -112,7 +112,7 @@ limitations under the License.
                                     </Checkbox>
                                     <Checkbox Form.label="Show vertical grid lines" selected="true">
                                         <buttonStateListeners>
-                                            <wtkx:script language="javascript">
+                                            <wtkx:script>
                                                 <![CDATA[
                                                 function stateChanged(button, previousState) {
                                                     tablePane.getStyles().put("showVerticalGridLines",
@@ -128,7 +128,7 @@ limitations under the License.
                                             <content:NumericSpinnerData lowerBound="0" upperBound="50"/>
                                         </spinnerData>
                                         <spinnerSelectionListeners>
-                                            <wtkx:script language="javascript">
+                                            <wtkx:script>
                                                 <![CDATA[
                                                 function selectedIndexChanged(spinner, previousSelectedIndex) {
                                                     tablePane.getStyles().put("horizontalSpacing",
@@ -144,7 +144,7 @@ limitations under the License.
                                             <content:NumericSpinnerData lowerBound="0" upperBound="50"/>
                                         </spinnerData>
                                         <spinnerSelectionListeners>
-                                            <wtkx:script language="javascript">
+                                            <wtkx:script>
                                                 <![CDATA[
                                                 function selectedIndexChanged(spinner, previousSelectedIndex) {
                                                     tablePane.getStyles().put("verticalSpacing",
@@ -160,7 +160,7 @@ limitations under the License.
                                             <content:NumericSpinnerData lowerBound="0" upperBound="25"/>
                                         </spinnerData>
                                         <spinnerSelectionListeners>
-                                            <wtkx:script language="javascript">
+                                            <wtkx:script>
                                                 <![CDATA[
                                                 function selectedIndexChanged(spinner, previousSelectedIndex) {
                                                     tablePane.getStyles().put("padding",

@@ -43,7 +43,7 @@ limitations under the License.
                                                         <content:NumericSpinnerData lowerBound="1" upperBound="10"/>
                                                     </spinnerData>
                                                     <spinnerSelectionListeners>
-                                                        <wtkx:script language="javascript">
+                                                        <wtkx:script>
                                                             <![CDATA[
                                                             function selectedIndexChanged(spinner, previousSelectedIndex) {
                                                                 TablePane.setRowSpan(component, spinner.getSelectedItem());
@@ -58,7 +58,7 @@ limitations under the License.
                                                         <content:NumericSpinnerData lowerBound="1" upperBound="10"/>
                                                     </spinnerData>
                                                     <spinnerSelectionListeners>
-                                                        <wtkx:script language="javascript">
+                                                        <wtkx:script>
                                                             <![CDATA[
                                                             function selectedIndexChanged(spinner, previousSelectedIndex) {
                                                                 TablePane.setColumnSpan(component, spinner.getSelectedItem());
@@ -89,7 +89,7 @@ limitations under the License.
                                                         <content:ListViewColorRenderer/>
                                                     </itemRenderer>
                                                     <listButtonSelectionListeners>
-                                                        <wtkx:script language="javascript">
+                                                        <wtkx:script>
                                                             <![CDATA[
                                                             function selectedIndexChanged(listButton, previousSelectedIndex) {
                                                                 var colorItem = backgroundColorListButton.getSelectedItem();
@@ -112,7 +112,7 @@ limitations under the License.
                                 preferredWidth="72" preferredHeight="24"
                                 styles="{backgroundColor:16, borderColor:13, color:4, fontBold:true}">
                                 <buttonPressListeners>
-                                    <wtkx:script language="javascript">
+                                    <wtkx:script>
                                         <![CDATA[
                                         function buttonPressed(button) {
                                             sheet.close(true);
@@ -128,7 +128,7 @@ limitations under the License.
         </BoxPane>
     </content>
 
-    <wtkx:script language="javascript">
+    <wtkx:script>
         <![CDATA[
         importPackage(org.apache.pivot.wtk);
         importPackage(org.apache.pivot.wtk.content);

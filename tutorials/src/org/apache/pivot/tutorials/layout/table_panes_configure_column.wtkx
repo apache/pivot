@@ -24,7 +24,7 @@ limitations under the License.
     <wtkx:define>
         <Button.Group wtkx:id="columnWidthGroup">
             <groupListeners>
-                <wtkx:script language="javascript">
+                <wtkx:script>
                     <![CDATA[
                     function selectionChanged(group, previousSelection) {
                         setColumnWidth();
@@ -35,7 +35,7 @@ limitations under the License.
         </Button.Group>
     </wtkx:define>
 
-    <wtkx:script language="javascript">
+    <wtkx:script>
         <![CDATA[
         function setColumnWidth() {
             var tablePane = column.getTablePane();
@@ -95,7 +95,7 @@ limitations under the License.
                                                                     upperBound="256"/>
                                                             </spinnerData>
                                                             <spinnerSelectionListeners>
-                                                                <wtkx:script language="javascript">
+                                                                <wtkx:script>
                                                                     <![CDATA[
                                                                     function selectedIndexChanged(spinner, previousSelectedIndex) {
                                                                         setColumnWidth();
@@ -115,7 +115,7 @@ limitations under the License.
                                                                     upperBound="300"/>
                                                             </spinnerData>
                                                             <spinnerSelectionListeners>
-                                                                <wtkx:script language="javascript">
+                                                                <wtkx:script>
                                                                     <![CDATA[
                                                                     function selectedIndexChanged(spinner, previousSelectedIndex) {
                                                                         setColumnWidth();
@@ -139,7 +139,7 @@ limitations under the License.
                                 preferredWidth="72" preferredHeight="24"
                                 styles="{backgroundColor:16, borderColor:13, color:4, fontBold:true}">
                                 <buttonPressListeners>
-                                    <wtkx:script language="javascript">
+                                    <wtkx:script>
                                         <![CDATA[
                                         function buttonPressed(button) {
                                             sheet.close(true);
@@ -155,7 +155,7 @@ limitations under the License.
         </BoxPane>
     </content>
 
-    <wtkx:script language="javascript">
+    <wtkx:script>
         <![CDATA[
         relativeWidthSpinner.setSelectedIndex(0);
         absoluteWidthSpinner.setSelectedIndex(0);
