@@ -677,9 +677,11 @@ public abstract class Component implements ConstrainedVisual {
         this.automationID = automationID;
 
         if (getDisplay() != null) {
-            if (automationID == null) {
+            if (previousAutomationID != null) {
                 Automation.remove(previousAutomationID);
-            } else {
+            }
+
+            if (automationID != null) {
                 Automation.add(automationID, this);
             }
         }
