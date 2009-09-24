@@ -110,16 +110,8 @@ limitations under the License.
                         <BoxPane styles="{spacing:6,horizontalAlignment:'right'}">
                             <PushButton buttonData="OK"
                                 preferredWidth="72" preferredHeight="24"
-                                styles="{backgroundColor:16, borderColor:13, color:4, fontBold:true}">
-                                <buttonPressListeners>
-                                    <wtkx:script>
-                                        <![CDATA[
-                                        function buttonPressed(button) {
-                                            sheet.close(true);
-                                        }
-                                        ]]>
-                                    </wtkx:script>
-                                </buttonPressListeners>
+                                styles="{backgroundColor:16, borderColor:13, color:4, fontBold:true}"
+                                ButtonPressListener.buttonPressed="sheet.close(true)">
                             </PushButton>
                         </BoxPane>
                     </TablePane.Row>
