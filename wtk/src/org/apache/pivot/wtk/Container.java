@@ -204,9 +204,8 @@ public abstract class Container extends Component
             }
 
             repaint(component.getDecoratedBounds());
-            component.setParent(null);
 
-            descendantRemoved(component);
+            component.setParent(null);
         }
 
         if (removed.getLength() > 0) {
@@ -564,6 +563,22 @@ public abstract class Container extends Component
             && isAncestor(focusedComponent));
     }
 
+    protected void descendantAdded(Component descendant) {
+        Container parent = getParent();
+
+        if (parent != null) {
+            parent.descendantAdded(descendant);
+        }
+    }
+
+    protected void descendantRemoved(Component descendant) {
+        Container parent = getParent();
+
+        if (parent != null) {
+            parent.descendantRemoved(descendant);
+        }
+    }
+
     protected void descendantGainedFocus(Component descendant, Component previousFocusedComponent) {
         Container parent = getParent();
 
@@ -578,10 +593,6 @@ public abstract class Container extends Component
         if (parent != null) {
             parent.descendantLostFocus(descendant);
         }
-    }
-
-    protected void descendantRemoved(Component descendant) {
-        // No-op
     }
 
     /**

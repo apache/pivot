@@ -274,45 +274,6 @@ public abstract class Component implements ConstrainedVisual {
         }
     }
 
-    /**
-     * Provides dictionary access to all components by handle.
-     */
-    public static class ComponentDictionary implements
-        Dictionary<Integer, Component>, Iterable<Integer> {
-        private ComponentDictionary() {
-        }
-
-        @Override
-        public Component get(Integer key) {
-            return components.get(key);
-        }
-
-        @Override
-        public Component put(Integer key, Component value) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public Component remove(Integer key) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public boolean containsKey(Integer key) {
-            return components.containsKey(key);
-        }
-
-        @Override
-        public boolean isEmpty() {
-            return components.isEmpty();
-        }
-
-        @Override
-        public Iterator<Integer> iterator() {
-            return new ImmutableIterator<Integer>(components.iterator());
-        }
-    }
-
     private static class ComponentListenerList extends ListenerList<ComponentListener>
         implements ComponentListener {
         @Override
@@ -605,11 +566,8 @@ public abstract class Component implements ConstrainedVisual {
         }
     }
 
-    // The component's handle
-    private final Integer handle;
-
     // The currently installed skin, or null if no skin is installed
-    private org.apache.pivot.wtk.Skin skin = null;
+    private Skin skin = null;
     private BeanDictionary styles = null;
     private StyleDictionary styleDictionary = new StyleDictionary();
 
@@ -675,6 +633,9 @@ public abstract class Component implements ConstrainedVisual {
     // Container attributes
     private Object attributes = null;
 
+    // The component's automation ID
+    private String automationID;
+
     // Event listener lists.
     private ComponentListenerList componentListeners = new ComponentListenerList();
     private ComponentStateListenerList componentStateListeners = new ComponentStateListenerList();
@@ -688,28 +649,40 @@ public abstract class Component implements ConstrainedVisual {
     // The component that currently has the focus
     private static Component focusedComponent = null;
 
-    // The next available component handle
-    private static int nextHandle = 0;
-
-    // Map of all components by handle
-    private static HashMap<Integer, Component> components = new HashMap<Integer, Component>();
-    private static ComponentDictionary componentDictionary = new ComponentDictionary();
-
     // Class event listeners
     private static ComponentClassListenerList componentClassListeners = new ComponentClassListenerList();
 
     /**
-     * Creates a new component.
+     * Returns the component's automation ID.
+     *
+     * @return
+     * The component's automation ID, or <tt>null</tt> if the component does not
+     * have an automation ID.
      */
-    public Component() {
-        handle = nextHandle++;
+    public String getAutomationID() {
+        return automationID;
     }
 
     /**
-     * Return's the component's handle.
+     * Sets the component's automation ID. This value can be used to obtain a
+     * reference to the component via {@link Automation#get(String)} when the
+     * component is attached to a component hierarchy.
+     *
+     * @param automationID
+     * The automation ID to use for the component, or <tt>null</tt> to clear the
+     * automation ID.
      */
-    public Integer getHandle() {
-        return handle;
+    public void setAutomationID(String automationID) {
+        String previousAutomationID = this.automationID;
+        this.automationID = automationID;
+
+        if (getDisplay() != null) {
+            if (automationID == null) {
+                Automation.remove(previousAutomationID);
+            } else {
+                Automation.add(automationID, this);
+            }
+        }
     }
 
     /**
@@ -718,7 +691,7 @@ public abstract class Component implements ConstrainedVisual {
      * @return
      * The currently installed skin.
      */
-    protected org.apache.pivot.wtk.Skin getSkin() {
+    protected Skin getSkin() {
         return skin;
     }
 
@@ -728,7 +701,7 @@ public abstract class Component implements ConstrainedVisual {
      * @param skin
      * The new skin.
      */
-    protected void setSkin(org.apache.pivot.wtk.Skin skin) {
+    protected void setSkin(Skin skin) {
         if (skin == null) {
             throw new IllegalArgumentException("skin is null.");
         }
@@ -814,14 +787,16 @@ public abstract class Component implements ConstrainedVisual {
             clearFocus();
         }
 
-        if (parent == null) {
-            components.remove(handle);
-        } else {
-            components.put(handle, this);
-        }
-
         Container previousParent = this.parent;
         this.parent = parent;
+
+        if (previousParent != null) {
+            previousParent.descendantRemoved(this);
+        }
+
+        if (parent != null) {
+            parent.descendantAdded(this);
+        }
 
         componentListeners.parentChanged(this, previousParent);
     }
@@ -2346,13 +2321,6 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     /**
-     * Returns the component dictionary.
-     */
-    public static ComponentDictionary getComponents() {
-        return componentDictionary;
-    }
-
-    /**
      * Copies bound values from the bind context to the component. This
      * functionality must be provided by the subclass; the base implementation
      * is a no-op.
@@ -2645,7 +2613,12 @@ public abstract class Component implements ConstrainedVisual {
 
     @Override
     public String toString() {
-        String s = this.getClass().getName() + "#" + getHandle();
+        String s = this.getClass().getName();
+
+        if (automationID != null) {
+            s += "#" + automationID;
+        }
+
         return s;
     }
 

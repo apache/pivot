@@ -17,9 +17,7 @@
 package org.apache.pivot.wtk;
 
 import java.awt.Font;
-import java.lang.reflect.Modifier;
 
-import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.util.Service;
 import org.apache.pivot.wtk.media.Image;
@@ -121,23 +119,7 @@ public abstract class Theme {
         Theme.theme = theme;
 
         if (previousTheme != null) {
-            Component.ComponentDictionary components = Component.getComponents();
-            ArrayList<Integer> componentHandles = new ArrayList<Integer>();
-
-            for (Integer handle : components) {
-                componentHandles.add(handle);
-            }
-
-            for (Integer handle : componentHandles) {
-                Component component = components.get(handle);
-                Class<? extends Component> componentClass = component.getClass();
-
-                if (theme.componentSkinMap.containsKey(componentClass)
-                    && (componentClass.getEnclosingClass() == null
-                        || (componentClass.getModifiers() & Modifier.STATIC) == Modifier.STATIC)) {
-                    component.installThemeSkin(componentClass);
-                }
-            }
+            // TODO Remove this method
         }
     }
 }

@@ -32,7 +32,6 @@ import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Visual;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
-
 /**
  * Abstract base class for images. An image is either a bitmapped "picture"
  * or a vector "drawing".
@@ -86,15 +85,14 @@ public abstract class Image implements Visual {
                     // NOTE We don't open the stream until the callback
                     // executes because this is a potentially time-consuming
                     // operation
-                    inputStream = new BufferedInputStream(url.openStream());
+                    inputStream = new MonitoredInputStream(new BufferedInputStream(url.openStream()));
 
                     if (url.getFile().endsWith("wtkd")) {
                         WTKXSerializer serializer = new WTKXSerializer();
                         image = (Drawing)serializer.readObject(inputStream);
                     } else {
                         BufferedImageSerializer serializer = new BufferedImageSerializer();
-                        BufferedImage bufferedImage =
-                            serializer.readObject(new MonitoredInputStream(inputStream));
+                        BufferedImage bufferedImage = serializer.readObject(inputStream);
                         image = new Picture(bufferedImage);
                     }
                 } finally {

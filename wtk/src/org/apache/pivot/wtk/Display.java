@@ -108,6 +108,28 @@ public final class Display extends Container {
     }
 
     @Override
+    protected void descendantAdded(Component descendant) {
+        super.descendantAdded(descendant);
+
+        String automationID = descendant.getAutomationID();
+
+        if (automationID != null) {
+            Automation.add(automationID, descendant);
+        }
+    }
+
+    @Override
+    protected void descendantRemoved(Component descendant) {
+        super.descendantRemoved(descendant);
+
+        String automationID = descendant.getAutomationID();
+
+        if (automationID != null) {
+            Automation.remove(automationID);
+        }
+    }
+
+    @Override
     public FocusTraversalPolicy getFocusTraversalPolicy() {
         return null;
     }
