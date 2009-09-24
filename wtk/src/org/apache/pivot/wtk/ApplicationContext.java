@@ -91,7 +91,7 @@ public abstract class ApplicationContext {
 
         private boolean paintPending = false;
 
-        private boolean debugRepaint = false;
+        private boolean debugPaint = false;
 
         private Random random = null;
 
@@ -277,8 +277,8 @@ public abstract class ApplicationContext {
             }
 
             try {
-                debugRepaint = Boolean.parseBoolean(System.getProperty("org.apache.pivot.wtk.debugRepaint"));
-                if (debugRepaint == true)
+                debugPaint = Boolean.parseBoolean(System.getProperty("org.apache.pivot.wtk.debugpaint"));
+                if (debugPaint == true)
                     random = new Random();
 
             } catch (SecurityException ex) {
@@ -391,7 +391,7 @@ public abstract class ApplicationContext {
                         }
                     }
 
-                    if (debugRepaint) {
+                    if (debugPaint) {
                         graphics.setColor(new java.awt.Color(random.nextInt(256),
                             random.nextInt(256), random.nextInt(256), 75));
                         graphics.fillRect(0, 0, getWidth(), getHeight());
