@@ -31,19 +31,17 @@ limitations under the License.
                     <BoxPane styles="{padding:10}">
                         <PushButton buttonData="Toggle Watermark" toggleButton="true">
                             <buttonStateListeners>
-                                <wtkx:script>
-                                    <![CDATA[
-                                    importPackage(org.apache.pivot.wtk.effects);
+                                <![CDATA[
+                                importPackage(org.apache.pivot.wtk.effects);
 
-                                    function stateChanged(button, previousState) {
-                                        if (button.isSelected()) {
-                                            cardPane.getDecorators().add(new WatermarkDecorator("Only below the line"));
-                                        } else {
-                                            cardPane.getDecorators().removeAll();
-                                        }
+                                function stateChanged(button, previousState) {
+                                    if (button.isSelected()) {
+                                        cardPane.getDecorators().add(new WatermarkDecorator("Only below the line"));
+                                    } else {
+                                        cardPane.getDecorators().removeAll();
                                     }
-                                    ]]>
-                                </wtkx:script>
+                                }
+                                ]]>
                             </buttonStateListeners>
                         </PushButton>
                     </BoxPane>

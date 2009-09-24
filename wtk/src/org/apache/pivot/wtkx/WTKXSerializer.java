@@ -194,6 +194,80 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         }
     }
 
+    private class ElementInvocationHandler implements InvocationHandler {
+        private ScriptEngine scriptEngine;
+
+        public ElementInvocationHandler(ScriptEngine scriptEngine) {
+            this.scriptEngine = scriptEngine;
+        }
+
+        @Override
+        public Object invoke(Object proxy, Method method, Object[] args)
+            throws Throwable {
+            Object result = null;
+
+            String methodName = method.getName();
+            Bindings bindings = scriptEngine.getBindings(ScriptContext.ENGINE_SCOPE);
+            if (bindings.containsKey(methodName)) {
+                Invocable invocable;
+                try {
+                    invocable = (Invocable)scriptEngine;
+                } catch (ClassCastException exception) {
+                    throw new SerializationException(exception);
+                }
+
+                result = invocable.invokeFunction(methodName, args);
+            }
+
+            // If the function didn't return a value, return the default
+            if (result == null) {
+                Class<?> returnType = method.getReturnType();
+                if (returnType == Vote.class) {
+                    result = Vote.APPROVE;
+                } else if (returnType == Boolean.TYPE) {
+                    result = false;
+                }
+            }
+
+            return result;
+        }
+    };
+
+    private class AttributeInvocationHandler implements InvocationHandler {
+        private ScriptEngine scriptEngine;
+        private String event;
+        private String script;
+
+        public AttributeInvocationHandler(ScriptEngine scriptEngine, String event, String script) {
+            this.scriptEngine = scriptEngine;
+            this.event = event;
+            this.script = script;
+        }
+
+        @Override
+        public Object invoke(Object proxy, Method method, Object[] args)
+            throws Throwable {
+            Object result = null;
+
+            String methodName = method.getName();
+            if (methodName.equals(event)) {
+                scriptEngine.eval(script);
+            }
+
+            // If the function didn't return a value, return the default
+            if (result == null) {
+                Class<?> returnType = method.getReturnType();
+                if (returnType == Vote.class) {
+                    result = Vote.APPROVE;
+                } else if (returnType == Boolean.TYPE) {
+                    result = false;
+                }
+            }
+
+            return result;
+        }
+    }
+
     private Resources resources;
     private String language;
     private XMLInputFactory xmlInputFactory;
@@ -365,6 +439,52 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                                 } catch (InvocationTargetException exception) {
                                                     throw new SerializationException(exception);
                                                 } catch (IllegalAccessException exception) {
+                                                    throw new SerializationException(exception);
+                                                }
+                                            }
+
+                                            break;
+                                        }
+
+                                        case READ_ONLY_PROPERTY: {
+                                            if (element.value instanceof ListenerList<?>) {
+                                                // Don't pollute the engine namespace with the listener functions
+                                                ScriptEngine scriptEngine = scriptEngineManager.getEngineByName(language);
+                                                scriptEngine.setBindings(new SimpleBindings(), ScriptContext.ENGINE_SCOPE);
+
+                                                // Execute the script
+                                                try {
+                                                    scriptEngine.eval(text);
+                                                } catch (ScriptException exception) {
+                                                    System.err.println(exception);
+                                                    System.err.println(text);
+                                                }
+
+                                                Class<?> listenerListClass = element.value.getClass();
+
+                                                java.lang.reflect.Type[] genericInterfaces = listenerListClass.getGenericInterfaces();
+                                                Class<?> listenerClass = (Class<?>)genericInterfaces[0];
+
+                                                // Create an invocation handler for this listener
+                                                ElementInvocationHandler handler = new ElementInvocationHandler(scriptEngine);
+                                                Object listener =
+                                                    Proxy.newProxyInstance(ThreadUtilities.getClassLoader(),
+                                                        new Class[]{listenerClass}, handler);
+
+                                                // Add it to the listener list
+                                                Method addMethod;
+                                                try {
+                                                    addMethod = listenerListClass.getMethod("add",
+                                                        new Class<?>[] {Object.class});
+                                                } catch (NoSuchMethodException exception) {
+                                                    throw new RuntimeException(exception);
+                                                }
+
+                                                try {
+                                                    addMethod.invoke(element.value, new Object[] {listener});
+                                                } catch (IllegalAccessException exception) {
+                                                    throw new SerializationException(exception);
+                                                } catch (InvocationTargetException exception) {
                                                     throw new SerializationException(exception);
                                                 }
                                             }
@@ -703,17 +823,10 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                         language = "javascript";
                                     }
 
-                                    Bindings bindings;
-                                    if (element.parent.value instanceof ListenerList<?>) {
-                                        // Don't pollute the engine namespace with the listener functions
-                                        bindings = new SimpleBindings();
-                                    } else {
-                                        bindings = scriptEngineManager.getBindings();
-                                    }
-
                                     // Execute script
-                                    final ScriptEngine scriptEngine = scriptEngineManager.getEngineByName(language);
-                                    scriptEngine.setBindings(bindings, ScriptContext.ENGINE_SCOPE);
+                                    ScriptEngine scriptEngine = scriptEngineManager.getEngineByName(language);
+                                    scriptEngine.setBindings(scriptEngineManager.getBindings(),
+                                        ScriptContext.ENGINE_SCOPE);
 
                                     if (src != null) {
                                         // The script is located in an external file
@@ -748,68 +861,6 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                             } catch (ScriptException exception) {
                                                 exception.printStackTrace(System.err);
                                             }
-                                        }
-                                    }
-
-                                    if (element.parent.value instanceof ListenerList<?>) {
-                                        // Create an invocation handler for this listener
-                                        Class<?> listenerListClass = element.parent.value.getClass();
-
-                                        InvocationHandler handler = new InvocationHandler() {
-                                            @Override
-                                            public Object invoke(Object proxy, Method method, Object[] args)
-                                                throws Throwable {
-                                                Object result = null;
-
-                                                String methodName = method.getName();
-                                                Bindings bindings = scriptEngine.getBindings(ScriptContext.ENGINE_SCOPE);
-                                                if (bindings.containsKey(methodName)) {
-                                                    Invocable invocable;
-                                                    try {
-                                                        invocable = (Invocable)scriptEngine;
-                                                    } catch (ClassCastException exception) {
-                                                        throw new SerializationException(exception);
-                                                    }
-
-                                                    result = invocable.invokeFunction(methodName, args);
-                                                }
-
-                                                // If the function didn't return a value, return the default
-                                                if (result == null) {
-                                                    Class<?> returnType = method.getReturnType();
-                                                    if (returnType == Vote.class) {
-                                                        result = Vote.APPROVE;
-                                                    } else if (returnType == Boolean.TYPE) {
-                                                        result = false;
-                                                    }
-                                                }
-
-                                                return result;
-                                            }
-                                        };
-
-                                        // Create the listener and add it to the list
-                                        java.lang.reflect.Type[] genericInterfaces = listenerListClass.getGenericInterfaces();
-                                        Class<?> listenerClass = (Class<?>)genericInterfaces[0];
-
-                                        Object listener =
-                                            Proxy.newProxyInstance(ThreadUtilities.getClassLoader(),
-                                                new Class[]{listenerClass}, handler);
-
-                                        Method addMethod;
-                                        try {
-                                            addMethod = listenerListClass.getMethod("add",
-                                                new Class<?>[] {Object.class});
-                                        } catch (NoSuchMethodException exception) {
-                                            throw new RuntimeException(exception);
-                                        }
-
-                                        try {
-                                            addMethod.invoke(element.parent.value, new Object[] {listener});
-                                        } catch (IllegalAccessException exception) {
-                                            throw new SerializationException(exception);
-                                        } catch (InvocationTargetException exception) {
-                                            throw new SerializationException(exception);
                                         }
                                     }
 
@@ -1242,40 +1293,17 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             }
 
             // Don't pollute the engine namespace with the listener functions
-            final ScriptEngine scriptEngine = scriptEngineManager.getEngineByName(language);
+            ScriptEngine scriptEngine = scriptEngineManager.getEngineByName(language);
             scriptEngine.setBindings(new SimpleBindings(), ScriptContext.ENGINE_SCOPE);
 
             // TODO It isn't very efficient to construct the event name this way; try to clean
-            // up this method a bit
-            final String eventName =
-                Character.toLowerCase(propertyName.charAt(0)) + propertyName.substring(1);
-            final String script = attribute.value;
+            // up this method a bit - possibly detect what kind of attribute it is outside
+            // this method and call a different method
+            String event = Character.toLowerCase(propertyName.charAt(0)) + propertyName.substring(1);
+            String script = attribute.value;
 
             // Create an invocation handler for this listener
-            InvocationHandler handler = new InvocationHandler() {
-                @Override
-                public Object invoke(Object proxy, Method method, Object[] args)
-                    throws Throwable {
-                    Object result = null;
-
-                    String methodName = method.getName();
-                    if (methodName.equals(eventName)) {
-                        scriptEngine.eval(script);
-                    }
-
-                    // If the function didn't return a value, return the default
-                    if (result == null) {
-                        Class<?> returnType = method.getReturnType();
-                        if (returnType == Vote.class) {
-                            result = Vote.APPROVE;
-                        } else if (returnType == Boolean.TYPE) {
-                            result = false;
-                        }
-                    }
-
-                    return result;
-                }
-            };
+            AttributeInvocationHandler handler = new AttributeInvocationHandler(scriptEngine, event, script);
 
             Object listener = Proxy.newProxyInstance(ThreadUtilities.getClassLoader(),
                 new Class[]{propertyClass}, handler);

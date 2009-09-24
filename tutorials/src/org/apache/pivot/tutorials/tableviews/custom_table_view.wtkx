@@ -57,14 +57,12 @@ limitations under the License.
                             </tableData>
 
                             <tableViewSortListeners>
-                                <wtkx:script>
                                 <![CDATA[
                                 function sortChanged(tableView) {
                                     var tableData = tableView.getTableData();
                                     tableData.setComparator(new org.apache.pivot.wtk.content.TableViewRowComparator(tableView));
                                 }
                                 ]]>
-                                </wtkx:script>
                             </tableViewSortListeners>
                         </TableView>
                     </view>

@@ -24,40 +24,38 @@ limitations under the License.
     <wtkx:define>
         <Button.Group wtkx:id="columnWidthGroup">
             <groupListeners>
-                <wtkx:script>
-                    <![CDATA[
-                    function selectionChanged(group, previousSelection) {
-                        setColumnWidth();
-                    }
-                    ]]>
-                </wtkx:script>
+                <![CDATA[
+                function selectionChanged(group, previousSelection) {
+                    setColumnWidth();
+                }
+                ]]>
             </groupListeners>
         </Button.Group>
     </wtkx:define>
 
     <wtkx:script>
-        <![CDATA[
-        function setColumnWidth() {
-            var tablePane = column.getTablePane();
-            var columnIndex = tablePane.getColumns().indexOf(column);
-            var label = tablePane.getRows().get(0).get(columnIndex);
+    <![CDATA[
+    function setColumnWidth() {
+        var tablePane = column.getTablePane();
+        var columnIndex = tablePane.getColumns().indexOf(column);
+        var label = tablePane.getRows().get(0).get(columnIndex);
 
-            var selectedButton = columnWidthGroup.getSelection();
+        var selectedButton = columnWidthGroup.getSelection();
 
-            if (selectedButton == defaultWidthButton) {
-                column.setWidth(-1);
-                label.setText("-1");
-            } else if (selectedButton == relativeWidthButton) {
-                var weight = relativeWidthSpinner.getSelectedItem();
-                column.setWidth(weight, true);
-                label.setText(weight + "*");
-            } else if (selectedButton == absoluteWidthButton) {
-                var width = absoluteWidthSpinner.getSelectedItem();
-                column.setWidth(width);
-                label.setText(width);
-            }
+        if (selectedButton == defaultWidthButton) {
+            column.setWidth(-1);
+            label.setText("-1");
+        } else if (selectedButton == relativeWidthButton) {
+            var weight = relativeWidthSpinner.getSelectedItem();
+            column.setWidth(weight, true);
+            label.setText(weight + "*");
+        } else if (selectedButton == absoluteWidthButton) {
+            var width = absoluteWidthSpinner.getSelectedItem();
+            column.setWidth(width);
+            label.setText(width);
         }
-        ]]>
+    }
+    ]]>
     </wtkx:script>
 
     <content>
@@ -95,13 +93,11 @@ limitations under the License.
                                                                     upperBound="256"/>
                                                             </spinnerData>
                                                             <spinnerSelectionListeners>
-                                                                <wtkx:script>
-                                                                    <![CDATA[
-                                                                    function selectedIndexChanged(spinner, previousSelectedIndex) {
-                                                                        setColumnWidth();
-                                                                    }
-                                                                    ]]>
-                                                                </wtkx:script>
+                                                                <![CDATA[
+                                                                function selectedIndexChanged(spinner, previousSelectedIndex) {
+                                                                    setColumnWidth();
+                                                                }
+                                                                ]]>
                                                             </spinnerSelectionListeners>
                                                         </Spinner>
                                                     </TablePane.Row>
@@ -115,13 +111,11 @@ limitations under the License.
                                                                     upperBound="300"/>
                                                             </spinnerData>
                                                             <spinnerSelectionListeners>
-                                                                <wtkx:script>
-                                                                    <![CDATA[
-                                                                    function selectedIndexChanged(spinner, previousSelectedIndex) {
-                                                                        setColumnWidth();
-                                                                    }
-                                                                    ]]>
-                                                                </wtkx:script>
+                                                                <![CDATA[
+                                                                function selectedIndexChanged(spinner, previousSelectedIndex) {
+                                                                    setColumnWidth();
+                                                                }
+                                                                ]]>
                                                             </spinnerSelectionListeners>
                                                         </Spinner>
                                                     </TablePane.Row>
@@ -136,18 +130,8 @@ limitations under the License.
                     <TablePane.Row height="24">
                         <BoxPane styles="{spacing:6,horizontalAlignment:'right'}">
                             <PushButton wtkx:id="okButton" buttonData="OK"
-                                preferredWidth="72" preferredHeight="24"
-                                styles="{backgroundColor:16, borderColor:13, color:4, fontBold:true}">
-                                <buttonPressListeners>
-                                    <wtkx:script>
-                                        <![CDATA[
-                                        function buttonPressed(button) {
-                                            sheet.close(true);
-                                        }
-                                        ]]>
-                                    </wtkx:script>
-                                </buttonPressListeners>
-                            </PushButton>
+                                styles="org/apache/pivot/wtk/skin/terra/command_button.json"
+                                ButtonPressListener.buttonPressed="sheet.close(true)"/>
                         </BoxPane>
                     </TablePane.Row>
                 </rows>

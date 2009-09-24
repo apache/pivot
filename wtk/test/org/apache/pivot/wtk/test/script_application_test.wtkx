@@ -31,7 +31,6 @@ limitations under the License.
             <Label wtkx:id="barLabel"/>
             <PushButton buttonData="Click Me">
                 <buttonPressListeners>
-                    <wtkx:script>
                     <![CDATA[
                     function buttonPressed(button) {
                         testFrame.open(window);
@@ -39,7 +38,6 @@ limitations under the License.
                         java.lang.System.out.println(label2.getText());
                     }
                     ]]>
-                    </wtkx:script>
                     <wtkx:define>
                         <Label wtkx:id="label2" text="World"/>
                     </wtkx:define>

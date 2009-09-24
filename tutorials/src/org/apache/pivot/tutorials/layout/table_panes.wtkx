@@ -100,26 +100,22 @@ limitations under the License.
                                 <Form.Section>
                                     <Checkbox Form.label="Show horizontal grid lines" selected="true">
                                         <buttonStateListeners>
-                                            <wtkx:script>
-                                                <![CDATA[
-                                                function stateChanged(button, previousState) {
-                                                    tablePane.getStyles().put("showHorizontalGridLines",
-                                                        button.isSelected());
-                                                }
-                                                ]]>
-                                            </wtkx:script>
+                                            <![CDATA[
+                                            function stateChanged(button, previousState) {
+                                                tablePane.getStyles().put("showHorizontalGridLines",
+                                                    button.isSelected());
+                                            }
+                                            ]]>
                                         </buttonStateListeners>
                                     </Checkbox>
                                     <Checkbox Form.label="Show vertical grid lines" selected="true">
                                         <buttonStateListeners>
-                                            <wtkx:script>
-                                                <![CDATA[
-                                                function stateChanged(button, previousState) {
-                                                    tablePane.getStyles().put("showVerticalGridLines",
-                                                        button.isSelected());
-                                                }
-                                                ]]>
-                                            </wtkx:script>
+                                            <![CDATA[
+                                            function stateChanged(button, previousState) {
+                                                tablePane.getStyles().put("showVerticalGridLines",
+                                                    button.isSelected());
+                                            }
+                                            ]]>
                                         </buttonStateListeners>
                                     </Checkbox>
                                     <Spinner Form.label="Horizontal spacing" selectedIndex="21"
@@ -128,14 +124,12 @@ limitations under the License.
                                             <content:NumericSpinnerData lowerBound="0" upperBound="50"/>
                                         </spinnerData>
                                         <spinnerSelectionListeners>
-                                            <wtkx:script>
-                                                <![CDATA[
-                                                function selectedIndexChanged(spinner, previousSelectedIndex) {
-                                                    tablePane.getStyles().put("horizontalSpacing",
-                                                        spinner.getSelectedItem());
-                                                }
-                                                ]]>
-                                            </wtkx:script>
+                                            <![CDATA[
+                                            function selectedIndexChanged(spinner, previousSelectedIndex) {
+                                                tablePane.getStyles().put("horizontalSpacing",
+                                                    spinner.getSelectedItem());
+                                            }
+                                            ]]>
                                         </spinnerSelectionListeners>
                                     </Spinner>
                                     <Spinner Form.label="Vertical spacing" selectedIndex="21"
@@ -144,14 +138,12 @@ limitations under the License.
                                             <content:NumericSpinnerData lowerBound="0" upperBound="50"/>
                                         </spinnerData>
                                         <spinnerSelectionListeners>
-                                            <wtkx:script>
-                                                <![CDATA[
-                                                function selectedIndexChanged(spinner, previousSelectedIndex) {
-                                                    tablePane.getStyles().put("verticalSpacing",
-                                                        spinner.getSelectedItem());
-                                                }
-                                                ]]>
-                                            </wtkx:script>
+                                            <![CDATA[
+                                            function selectedIndexChanged(spinner, previousSelectedIndex) {
+                                                tablePane.getStyles().put("verticalSpacing",
+                                                    spinner.getSelectedItem());
+                                            }
+                                            ]]>
                                         </spinnerSelectionListeners>
                                     </Spinner>
                                     <Spinner Form.label="Padding" selectedIndex="10"
@@ -160,14 +152,12 @@ limitations under the License.
                                             <content:NumericSpinnerData lowerBound="0" upperBound="25"/>
                                         </spinnerData>
                                         <spinnerSelectionListeners>
-                                            <wtkx:script>
-                                                <![CDATA[
-                                                function selectedIndexChanged(spinner, previousSelectedIndex) {
-                                                    tablePane.getStyles().put("padding",
-                                                        spinner.getSelectedItem());
-                                                }
-                                                ]]>
-                                            </wtkx:script>
+                                            <![CDATA[
+                                            function selectedIndexChanged(spinner, previousSelectedIndex) {
+                                                tablePane.getStyles().put("padding",
+                                                    spinner.getSelectedItem());
+                                            }
+                                            ]]>
                                         </spinnerSelectionListeners>
                                     </Spinner>
                                 </Form.Section>

@@ -43,13 +43,11 @@ limitations under the License.
                                                         <content:NumericSpinnerData lowerBound="1" upperBound="10"/>
                                                     </spinnerData>
                                                     <spinnerSelectionListeners>
-                                                        <wtkx:script>
-                                                            <![CDATA[
-                                                            function selectedIndexChanged(spinner, previousSelectedIndex) {
-                                                                TablePane.setRowSpan(component, spinner.getSelectedItem());
-                                                            }
-                                                            ]]>
-                                                        </wtkx:script>
+                                                        <![CDATA[
+                                                        function selectedIndexChanged(spinner, previousSelectedIndex) {
+                                                            TablePane.setRowSpan(component, spinner.getSelectedItem());
+                                                        }
+                                                        ]]>
                                                     </spinnerSelectionListeners>
                                                 </Spinner>
                                                 <Spinner wtkx:id="columnSpanSpinner" Form.label="Column Span"
@@ -58,13 +56,11 @@ limitations under the License.
                                                         <content:NumericSpinnerData lowerBound="1" upperBound="10"/>
                                                     </spinnerData>
                                                     <spinnerSelectionListeners>
-                                                        <wtkx:script>
-                                                            <![CDATA[
-                                                            function selectedIndexChanged(spinner, previousSelectedIndex) {
-                                                                TablePane.setColumnSpan(component, spinner.getSelectedItem());
-                                                            }
-                                                            ]]>
-                                                        </wtkx:script>
+                                                        <![CDATA[
+                                                        function selectedIndexChanged(spinner, previousSelectedIndex) {
+                                                            TablePane.setColumnSpan(component, spinner.getSelectedItem());
+                                                        }
+                                                        ]]>
                                                     </spinnerSelectionListeners>
                                                 </Spinner>
                                                 <ListButton wtkx:id="backgroundColorListButton"
@@ -89,14 +85,12 @@ limitations under the License.
                                                         <content:ListViewColorRenderer/>
                                                     </itemRenderer>
                                                     <listButtonSelectionListeners>
-                                                        <wtkx:script>
-                                                            <![CDATA[
-                                                            function selectedIndexChanged(listButton, previousSelectedIndex) {
-                                                                var colorItem = backgroundColorListButton.getSelectedItem();
-                                                                component.getStyles().put("backgroundColor", colorItem.getColor());
-                                                            }
-                                                            ]]>
-                                                        </wtkx:script>
+                                                        <![CDATA[
+                                                        function selectedIndexChanged(listButton, previousSelectedIndex) {
+                                                            var colorItem = backgroundColorListButton.getSelectedItem();
+                                                            component.getStyles().put("backgroundColor", colorItem.getColor());
+                                                        }
+                                                        ]]>
                                                     </listButtonSelectionListeners>
                                                 </ListButton>
                                             </Form.Section>
@@ -109,10 +103,8 @@ limitations under the License.
                     <TablePane.Row height="24">
                         <BoxPane styles="{spacing:6,horizontalAlignment:'right'}">
                             <PushButton buttonData="OK"
-                                preferredWidth="72" preferredHeight="24"
-                                styles="{backgroundColor:16, borderColor:13, color:4, fontBold:true}"
-                                ButtonPressListener.buttonPressed="sheet.close(true)">
-                            </PushButton>
+                                styles="org/apache/pivot/wtk/skin/terra/command_button.json"
+                                ButtonPressListener.buttonPressed="sheet.close(true)"/>
                         </BoxPane>
                     </TablePane.Row>
                 </rows>
@@ -121,15 +113,15 @@ limitations under the License.
     </content>
 
     <wtkx:script>
-        <![CDATA[
-        importPackage(org.apache.pivot.wtk);
-        importPackage(org.apache.pivot.wtk.content);
+    <![CDATA[
+    importPackage(org.apache.pivot.wtk);
+    importPackage(org.apache.pivot.wtk.content);
 
-        var backgroundColor = component.getStyles().get("backgroundColor");
+    var backgroundColor = component.getStyles().get("backgroundColor");
 
-        rowSpanSpinner.setSelectedIndex(TablePane.getRowSpan(component) - 1);
-        columnSpanSpinner.setSelectedIndex(TablePane.getColumnSpan(component) - 1);
-        backgroundColorListButton.setSelectedItem(new ColorItem(backgroundColor));
-        ]]>
+    rowSpanSpinner.setSelectedIndex(TablePane.getRowSpan(component) - 1);
+    columnSpanSpinner.setSelectedIndex(TablePane.getColumnSpan(component) - 1);
+    backgroundColorListButton.setSelectedItem(new ColorItem(backgroundColor));
+    ]]>
     </wtkx:script>
 </Sheet>
