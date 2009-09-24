@@ -252,6 +252,9 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
 
         xmlInputFactory = XMLInputFactory.newInstance();
         xmlInputFactory.setProperty("javax.xml.stream.isCoalescing", true);
+
+        scriptEngineManager = new javax.script.ScriptEngineManager();
+        scriptEngineManager.setBindings(new NamedObjectBindings());
     }
 
     public Resources getResources() {
@@ -677,12 +680,6 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                 }
 
                                 case SCRIPT: {
-                                    // Load the script engine manager
-                                    if (scriptEngineManager == null) {
-                                        scriptEngineManager = new javax.script.ScriptEngineManager();
-                                        scriptEngineManager.setBindings(new NamedObjectBindings());
-                                    }
-
                                     // Process attributes looking for src and language
                                     String src = null;
                                     for (Attribute attribute : element.attributes) {
@@ -758,14 +755,6 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                         // Create an invocation handler for this listener
                                         Class<?> listenerListClass = element.parent.value.getClass();
 
-                                        Method addMethod;
-                                        try {
-                                            addMethod = listenerListClass.getMethod("add",
-                                                new Class<?>[] {Object.class});
-                                        } catch (NoSuchMethodException exception) {
-                                            throw new RuntimeException(exception);
-                                        }
-
                                         InvocationHandler handler = new InvocationHandler() {
                                             @Override
                                             public Object invoke(Object proxy, Method method, Object[] args)
@@ -786,13 +775,13 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                                 }
 
                                                 // If the function didn't return a value, return the default
-                                                Class<?> returnType = method.getReturnType();
-                                                if (returnType == Vote.class
-                                                    && result == null) {
-                                                    result = Vote.APPROVE;
-                                                } else if (returnType == Boolean.TYPE
-                                                    && result == null) {
-                                                    result = false;
+                                                if (result == null) {
+                                                    Class<?> returnType = method.getReturnType();
+                                                    if (returnType == Vote.class) {
+                                                        result = Vote.APPROVE;
+                                                    } else if (returnType == Boolean.TYPE) {
+                                                        result = false;
+                                                    }
                                                 }
 
                                                 return result;
@@ -806,6 +795,14 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                         Object listener =
                                             Proxy.newProxyInstance(ThreadUtilities.getClassLoader(),
                                                 new Class[]{listenerClass}, handler);
+
+                                        Method addMethod;
+                                        try {
+                                            addMethod = listenerListClass.getMethod("add",
+                                                new Class<?>[] {Object.class});
+                                        } catch (NoSuchMethodException exception) {
+                                            throw new RuntimeException(exception);
+                                        }
 
                                         try {
                                             addMethod.invoke(element.parent.value, new Object[] {listener});
@@ -1208,7 +1205,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         String propertyName =
             attribute.localName.substring(attribute.localName.lastIndexOf(".") + 1);
         propertyName = Character.toUpperCase(propertyName.charAt(0)) +
-            propertyName.substring(1);
+        propertyName.substring(1);
 
         String propertyClassName = attribute.namespaceURI + "."
             + attribute.localName.substring(0, attribute.localName.length()
@@ -1221,35 +1218,117 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             throw new SerializationException(exception);
         }
 
-        Method setterMethod = null;
-        if (value != null) {
-            setterMethod = getStaticSetterMethod(propertyClass, propertyName,
-                objectType, value.getClass());
-        }
+        if (propertyClass.isInterface()) {
+            // The attribute represents an event listener
+            String listenerClassName = propertyClassName.substring(propertyClassName.lastIndexOf('.') + 1);
+            String getListenerListMethodName = "get" + Character.toUpperCase(listenerClassName.charAt(0))
+                + listenerClassName.substring(1) + "s";
 
-        if (setterMethod == null) {
-            Method getterMethod = getStaticGetterMethod(propertyClass, propertyName, objectType);
+            // Get the listener list
+            Method getListenerListMethod;
+            try {
+                getListenerListMethod = objectType.getMethod(getListenerListMethodName, new Class<?>[]{});
+            } catch (NoSuchMethodException exception) {
+                throw new SerializationException(exception);
+            }
 
-            if (getterMethod != null) {
-                Class<?> propertyType = getterMethod.getReturnType();
+            Object listenerList;
+            try {
+                listenerList = getListenerListMethod.invoke(object, new Object[]{});
+            } catch (InvocationTargetException exception) {
+                throw new SerializationException(exception);
+            } catch (IllegalAccessException exception) {
+                throw new SerializationException(exception);
+            }
+
+            // Don't pollute the engine namespace with the listener functions
+            final ScriptEngine scriptEngine = scriptEngineManager.getEngineByName(language);
+            scriptEngine.setBindings(new SimpleBindings(), ScriptContext.ENGINE_SCOPE);
+
+            // TODO It isn't very efficient to construct the event name this way; try to clean
+            // up this method a bit
+            final String eventName =
+                Character.toLowerCase(propertyName.charAt(0)) + propertyName.substring(1);
+            final String script = attribute.value;
+
+            // Create an invocation handler for this listener
+            InvocationHandler handler = new InvocationHandler() {
+                @Override
+                public Object invoke(Object proxy, Method method, Object[] args)
+                    throws Throwable {
+                    Object result = null;
+
+                    String methodName = method.getName();
+                    if (methodName.equals(eventName)) {
+                        scriptEngine.eval(script);
+                    }
+
+                    // If the function didn't return a value, return the default
+                    if (result == null) {
+                        Class<?> returnType = method.getReturnType();
+                        if (returnType == Vote.class) {
+                            result = Vote.APPROVE;
+                        } else if (returnType == Boolean.TYPE) {
+                            result = false;
+                        }
+                    }
+
+                    return result;
+                }
+            };
+
+            Object listener = Proxy.newProxyInstance(ThreadUtilities.getClassLoader(),
+                new Class[]{propertyClass}, handler);
+
+            // Add the listener
+            Class<?> listenerListClass = listenerList.getClass();
+            Method addMethod;
+            try {
+                addMethod = listenerListClass.getMethod("add",
+                    new Class<?>[] {Object.class});
+            } catch (NoSuchMethodException exception) {
+                throw new RuntimeException(exception);
+            }
+
+            try {
+                addMethod.invoke(listenerList, new Object[] {listener});
+            } catch (IllegalAccessException exception) {
+                throw new SerializationException(exception);
+            } catch (InvocationTargetException exception) {
+                throw new SerializationException(exception);
+            }
+        } else {
+            // The attribute represents a static setter
+            Method setterMethod = null;
+            if (value != null) {
                 setterMethod = getStaticSetterMethod(propertyClass, propertyName,
-                    objectType, propertyType);
+                    objectType, value.getClass());
+            }
 
-                if (value instanceof String) {
-                    value = BeanDictionary.coerce((String)value, propertyType);
+            if (setterMethod == null) {
+                Method getterMethod = getStaticGetterMethod(propertyClass, propertyName, objectType);
+
+                if (getterMethod != null) {
+                    Class<?> propertyType = getterMethod.getReturnType();
+                    setterMethod = getStaticSetterMethod(propertyClass, propertyName,
+                        objectType, propertyType);
+
+                    if (value instanceof String) {
+                        value = BeanDictionary.coerce((String)value, propertyType);
+                    }
                 }
             }
-        }
 
-        if (setterMethod == null) {
-            throw new SerializationException(attribute.localName + " is not valid static property.");
-        }
+            if (setterMethod == null) {
+                throw new SerializationException(attribute.localName + " is not valid static property.");
+            }
 
-        // Invoke the setter
-        try {
-            setterMethod.invoke(null, new Object[] {object, value});
-        } catch (Exception exception) {
-            throw new SerializationException(exception);
+            // Invoke the setter
+            try {
+                setterMethod.invoke(null, new Object[] {object, value});
+            } catch (Exception exception) {
+                throw new SerializationException(exception);
+            }
         }
     }
 

@@ -17,26 +17,12 @@ limitations under the License.
 -->
 
 <Window title="Scripting Demo" maximized="true"
+    WindowStateListener.windowOpened="java.lang.System.out.println('Window opened')"
+    WindowStateListener.windowClosed="java.lang.System.out.println('Window closed')"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:scripting="org.apache.pivot.demos.scripting"
     xmlns="org.apache.pivot.wtk">
     <wtkx:script src="demo.js"/>
-
-    <windowStateListeners>
-        <wtkx:script>
-        <![CDATA[
-        importPackage(java.lang);
-
-        function windowOpened(window) {
-            System.out.println("Window opened");
-        }
-
-        function windowClosed(window, display) {
-            System.out.println("Window closed");
-        }
-        ]]>
-        </wtkx:script>
-    </windowStateListeners>
 
     <content>
         <Border>
