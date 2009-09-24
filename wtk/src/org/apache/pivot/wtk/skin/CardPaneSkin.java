@@ -311,14 +311,6 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     }
 
     @Override
-    public void uninstall() {
-        CardPane cardPane = (CardPane)getComponent();
-        cardPane.getCardPaneListeners().remove(this);
-
-        super.uninstall();
-    }
-
-    @Override
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 

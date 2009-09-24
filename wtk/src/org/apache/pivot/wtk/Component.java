@@ -709,7 +709,7 @@ public abstract class Component implements ConstrainedVisual {
         }
 
         if (this.skin != null) {
-            this.skin.uninstall();
+            throw new IllegalStateException("Skin is already installed.");
         }
 
         this.skin = skin;

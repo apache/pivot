@@ -136,19 +136,6 @@ public abstract class ContainerSkin extends ComponentSkin
     }
 
     @Override
-    public void uninstall() {
-        Container container = (Container)getComponent();
-
-        // Remove this as a container listener
-        container.getContainerListeners().remove(this);
-
-        // Clear the focus traversal policy
-        container.setFocusTraversalPolicy(null);
-
-        super.uninstall();
-    }
-
-    @Override
     public int getPreferredWidth(int height) {
         return 0;
     }

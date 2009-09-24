@@ -66,17 +66,6 @@ public class TerraFormSkin extends ContainerSkin
     }
 
     @Override
-    public void uninstall() {
-        Form form = (Form)getComponent();
-        form.getFormListeners().remove(this);
-        form.getFormAttributeListeners().remove(this);
-
-        removeSections(0, form.getSections());
-
-        super.uninstall();
-    }
-
-    @Override
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 

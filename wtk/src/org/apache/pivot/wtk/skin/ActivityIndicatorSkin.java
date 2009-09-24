@@ -34,14 +34,6 @@ public abstract class ActivityIndicatorSkin extends ComponentSkin
     }
 
     @Override
-    public void uninstall() {
-        ActivityIndicator activityIndicator = (ActivityIndicator)getComponent();
-        activityIndicator.getActivityIndicatorListeners().remove(this);
-
-        super.uninstall();
-    }
-
-    @Override
     public boolean isFocusable() {
         return false;
     }

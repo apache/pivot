@@ -315,18 +315,6 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
     }
 
     @Override
-    public void uninstall() {
-        Panorama panorama = (Panorama)getComponent();
-        panorama.getViewportListeners().remove(this);
-
-        // Remove scroll arrow link buttons
-        panorama.remove(northButton);
-        panorama.remove(southButton);
-        panorama.remove(eastButton);
-        panorama.remove(westButton);
-    }
-
-    @Override
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 

@@ -68,14 +68,6 @@ public class SeparatorSkin extends ComponentSkin
     }
 
     @Override
-    public void uninstall() {
-        Separator separator = (Separator)getComponent();
-        separator.getSeparatorListeners().remove(this);
-
-        super.uninstall();
-    }
-
-    @Override
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 

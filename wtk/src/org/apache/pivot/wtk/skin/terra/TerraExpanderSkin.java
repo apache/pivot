@@ -266,18 +266,6 @@ public class TerraExpanderSkin extends ExpanderSkin
     }
 
     @Override
-    public void uninstall() {
-        Expander expander = (Expander)getComponent();
-        expander.remove(titleBarTablePane);
-
-        shadeButton.getButtonPressListeners().remove(this);
-        buttonBoxPane.remove(shadeButton);
-        shadeButton = null;
-
-        super.uninstall();
-    }
-
-    @Override
     public int getPreferredWidth(int height) {
         Expander expander = (Expander)getComponent();
         Component content = expander.getContent();

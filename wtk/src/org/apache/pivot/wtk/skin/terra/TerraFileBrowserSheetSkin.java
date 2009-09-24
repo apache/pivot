@@ -253,16 +253,6 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
     }
 
     @Override
-    public void uninstall() {
-        FileBrowserSheet fileBrowserSheet = (FileBrowserSheet)getComponent();
-
-        fileBrowserSheet.setContent(null);
-        fileBrowserSheet.getFileBrowserSheetListeners().remove(this);
-
-        super.uninstall();
-    }
-
-    @Override
     public void windowOpened(Window window) {
         super.windowOpened(window);
 

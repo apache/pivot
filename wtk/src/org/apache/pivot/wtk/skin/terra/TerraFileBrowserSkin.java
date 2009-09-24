@@ -586,16 +586,6 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     }
 
     @Override
-    public void uninstall() {
-        FileBrowser fileBrowser = (FileBrowser)getComponent();
-        fileBrowser.remove(content);
-
-        content = null;
-
-        super.uninstall();
-    }
-
-    @Override
     public int getPreferredWidth(int height) {
         return content.getPreferredWidth(height);
     }

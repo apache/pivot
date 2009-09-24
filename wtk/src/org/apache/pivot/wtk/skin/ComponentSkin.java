@@ -119,18 +119,6 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
     }
 
     @Override
-    public void uninstall() {
-        component.getComponentListeners().remove(this);
-        component.getComponentStateListeners().remove(this);
-        component.getComponentMouseListeners().remove(this);
-        component.getComponentMouseButtonListeners().remove(this);
-        component.getComponentMouseWheelListeners().remove(this);
-        component.getComponentKeyListeners().remove(this);
-
-        component = null;
-    }
-
-    @Override
     public Component getComponent() {
         return component;
     }

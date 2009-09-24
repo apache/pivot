@@ -218,23 +218,6 @@ public class TerraRollupSkin extends RollupSkin {
     }
 
     @Override
-    public void uninstall() {
-        Rollup rollup = (Rollup)getComponent();
-
-        // Uninitialize state
-        Component heading = rollup.getHeading();
-        if (heading != null) {
-            heading.getComponentMouseButtonListeners().remove(headingMouseButtonListener);
-        }
-
-        // Remove the rollup button
-        rollup.remove(rollupButton);
-        rollupButton = null;
-
-        super.uninstall();
-    }
-
-    @Override
     public int getPreferredWidth(int height) {
         Rollup rollup = (Rollup)getComponent();
 

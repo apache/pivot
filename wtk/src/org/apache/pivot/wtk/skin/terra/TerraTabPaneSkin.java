@@ -442,26 +442,6 @@ public class TerraTabPaneSkin extends ContainerSkin
     }
 
     @Override
-    public void uninstall() {
-        TabPane tabPane = (TabPane)getComponent();
-
-        // Remove this as a listener on the tab pane
-        tabPane.getTabPaneListeners().remove(this);
-        tabPane.getTabPaneSelectionListeners().remove(this);
-        tabPane.getTabPaneAttributeListeners().remove(this);
-
-        // Remove the tab state listeners
-        for (Component tab : tabPane.getTabs()) {
-            tab.getComponentStateListeners().remove(tabStateListener);
-        }
-
-        // Remove the tab buttons
-        tabPane.remove(buttonPanorama);
-
-        super.uninstall();
-    }
-
-    @Override
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 

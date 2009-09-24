@@ -82,18 +82,6 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
     }
 
     @Override
-    public void uninstall() {
-        Menu menu = (Menu)getComponent();
-        menu.getMenuListeners().remove(this);
-
-        for (Menu.Section section : menu.getSections()) {
-            section.getSectionListeners().remove(this);
-        }
-
-        super.uninstall();
-    }
-
-    @Override
     public boolean isFocusable() {
         return true;
     }

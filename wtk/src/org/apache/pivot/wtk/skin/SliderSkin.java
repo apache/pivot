@@ -34,13 +34,4 @@ public abstract class SliderSkin extends ContainerSkin
         slider.getSliderListeners().add(this);
         slider.getSliderValueListeners().add(this);
     }
-
-    @Override
-    public void uninstall() {
-        Slider slider = (Slider)getComponent();
-        slider.getSliderListeners().remove(this);
-        slider.getSliderValueListeners().remove(this);
-
-        super.uninstall();
-    }
 }

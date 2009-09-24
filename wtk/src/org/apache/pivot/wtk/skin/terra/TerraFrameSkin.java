@@ -335,27 +335,6 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
     }
 
     @Override
-    public void uninstall() {
-        Frame frame = (Frame)getComponent();
-
-        // Detach the drop shadow decorator
-        frame.getDecorators().remove(dropShadowDecorator);
-        dropShadowDecorator = null;
-
-        frame.remove(titleBarTablePane);
-
-        buttonBoxPane.remove(minimizeButton);
-        buttonBoxPane.remove(maximizeButton);
-        buttonBoxPane.remove(closeButton);
-
-        minimizeButton = null;
-        maximizeButton = null;
-        closeButton = null;
-
-        super.uninstall();
-    }
-
-    @Override
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 

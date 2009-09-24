@@ -620,19 +620,6 @@ public class TerraScrollBarSkin extends ContainerSkin
     }
 
     @Override
-    public void uninstall() {
-        ScrollBar scrollBar = (ScrollBar)getComponent();
-        scrollBar.getScrollBarListeners().remove(this);
-        scrollBar.getScrollBarValueListeners().remove(this);
-
-        scrollBar.remove(scrollUpButton);
-        scrollBar.remove(scrollDownButton);
-        scrollBar.remove(handle);
-
-        super.uninstall();
-    }
-
-    @Override
     public int getPreferredWidth(int height) {
         ScrollBar scrollBar = (ScrollBar)getComponent();
 

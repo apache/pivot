@@ -61,15 +61,6 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
     }
 
     @Override
-    public void uninstall() {
-        TablePane tablePane = (TablePane)getComponent();
-        tablePane.getTablePaneListeners().remove(this);
-        tablePane.getTablePaneAttributeListeners().remove(this);
-
-        super.uninstall();
-    }
-
-    @Override
     public int getPreferredWidth(int height) {
         TablePane tablePane = (TablePane)getComponent();
         TablePane.RowSequence rows = tablePane.getRows();

@@ -530,19 +530,6 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
     }
 
     @Override
-    public void uninstall() {
-        Spinner spinner = (Spinner)getComponent();
-        spinner.getSpinnerListeners().remove(this);
-        spinner.getSpinnerSelectionListeners().remove(this);
-
-        spinner.remove(spinnerContent);
-        spinner.remove(upButton);
-        spinner.remove(downButton);
-
-        super.uninstall();
-    }
-
-    @Override
     public int getPreferredWidth(int height) {
         // Preferred width is the sum of our maximum button width plus the
         // content width, plus the border

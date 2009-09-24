@@ -164,27 +164,6 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
         menuPopup.getDecorators().add(dropShadowDecorator);
     }
 
-    @Override
-    public void uninstall() {
-        MenuPopup menuPopup = (MenuPopup)getComponent();
-        menuPopup.getMenuPopupListeners().remove(this);
-        menuPopup.getMenuPopupStateListeners().remove(this);
-
-        Menu menu = menuPopup.getMenu();
-        if (menu != null) {
-            menu.getMenuItemSelectionListeners().remove(menuItemSelectionListener);
-        }
-
-        panorama.setView(null);
-        menuPopup.setContent(null);
-
-        // Detach the drop shadow decorator
-        menuPopup.getDecorators().remove(dropShadowDecorator);
-        dropShadowDecorator = null;
-
-        super.uninstall();
-    }
-
     public Color getBorderColor() {
         return (Color)border.getStyles().get("color");
     }

@@ -93,26 +93,6 @@ public class ScrollPaneSkin extends ContainerSkin
     }
 
     @Override
-    public void uninstall() {
-        ScrollPane scrollPane = (ScrollPane)getComponent();
-        scrollPane.getViewportListeners().remove(this);
-        scrollPane.getScrollPaneListeners().remove(this);
-
-        scrollPane.remove(horizontalScrollBar);
-        scrollPane.remove(verticalScrollBar);
-
-        scrollPane.remove(topLeftCorner);
-        scrollPane.remove(bottomLeftCorner);
-        scrollPane.remove(bottomRightCorner);
-        scrollPane.remove(topRightCorner);
-
-        horizontalScrollBar.getScrollBarValueListeners().remove(this);
-        verticalScrollBar.getScrollBarValueListeners().remove(this);
-
-        super.uninstall();
-    }
-
-    @Override
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 

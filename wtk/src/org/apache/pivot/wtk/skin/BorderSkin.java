@@ -77,14 +77,6 @@ public class BorderSkin extends ContainerSkin
     }
 
     @Override
-    public void uninstall() {
-        Border border = (Border)getComponent();
-        border.getBorderListeners().remove(this);
-
-        super.uninstall();
-    }
-
-    @Override
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 

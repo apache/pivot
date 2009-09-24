@@ -86,14 +86,6 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     }
 
     @Override
-    public void uninstall() {
-        Label label = (Label)getComponent();
-        label.getLabelListeners().remove(this);
-
-        super.uninstall();
-    }
-
-    @Override
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 

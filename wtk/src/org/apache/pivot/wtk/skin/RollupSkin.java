@@ -22,7 +22,6 @@ import org.apache.pivot.wtk.Rollup;
 import org.apache.pivot.wtk.RollupListener;
 import org.apache.pivot.wtk.RollupStateListener;
 
-
 /**
  * Abstract base class for rollup skins.
  */
@@ -35,15 +34,6 @@ public abstract class RollupSkin extends ContainerSkin
         Rollup rollup = (Rollup)component;
         rollup.getRollupListeners().add(this);
         rollup.getRollupStateListeners().add(this);
-    }
-
-    @Override
-    public void uninstall() {
-        Rollup rollup = (Rollup)getComponent();
-        rollup.getRollupListeners().remove(this);
-        rollup.getRollupStateListeners().remove(this);
-
-        super.uninstall();
     }
 
     @Override

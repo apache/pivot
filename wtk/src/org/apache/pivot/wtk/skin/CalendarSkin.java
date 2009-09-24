@@ -37,15 +37,6 @@ public abstract class CalendarSkin extends ContainerSkin
     }
 
     @Override
-    public void uninstall() {
-        Calendar calendar = (Calendar)getComponent();
-        calendar.getCalendarListeners().remove(this);
-        calendar.getCalendarSelectionListeners().remove(this);
-
-        super.uninstall();
-    }
-
-    @Override
     public void selectedDateKeyChanged(Calendar calendar,
         String previousSelectedDateKey) {
         // No-op

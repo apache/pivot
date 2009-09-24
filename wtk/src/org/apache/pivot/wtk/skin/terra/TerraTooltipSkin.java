@@ -130,17 +130,6 @@ public class TerraTooltipSkin extends WindowSkin implements TooltipListener {
     }
 
     @Override
-    public void uninstall() {
-        Tooltip tooltip = (Tooltip)getComponent();
-
-        tooltip.getDecorators().remove(dropShadowDecorator);
-        dropShadowDecorator = null;
-
-        tooltip.setContent(null);
-        tooltip.getTooltipListeners().remove(this);
-    }
-
-    @Override
     public void windowOpened(Window window) {
         super.windowOpened(window);
 

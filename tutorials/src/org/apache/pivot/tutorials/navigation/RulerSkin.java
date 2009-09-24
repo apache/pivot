@@ -33,14 +33,6 @@ class RulerSkin extends ComponentSkin implements RulerListener {
     }
 
     @Override
-    public void uninstall() {
-        Ruler ruler = (Ruler)getComponent();
-        ruler.getRulerListeners().remove(this);
-
-        super.uninstall();
-    }
-
-    @Override
     public void layout() {
         // No-op
     }

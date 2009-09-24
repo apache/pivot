@@ -72,19 +72,6 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
     }
 
     @Override
-    public void uninstall() {
-        MovieView movieView = (MovieView)getComponent();
-        Movie movie = movieView.getMovie();
-        if (movie != null) {
-            movie.getMovieListeners().remove(movieListener);
-        }
-
-        movieView.getMovieViewListeners().remove(this);
-
-        super.uninstall();
-    }
-
-    @Override
     public int getPreferredWidth(int height) {
         MovieView movieView = (MovieView)getComponent();
         Movie movie = movieView.getMovie();

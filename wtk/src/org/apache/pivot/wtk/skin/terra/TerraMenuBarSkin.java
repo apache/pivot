@@ -59,14 +59,6 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
     }
 
     @Override
-    public void uninstall() {
-        MenuBar menuBar = (MenuBar)getComponent();
-        menuBar.getMenuBarListeners().remove(this);
-
-        super.uninstall();
-    }
-
-    @Override
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 

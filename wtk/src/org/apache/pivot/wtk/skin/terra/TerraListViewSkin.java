@@ -100,17 +100,6 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     }
 
     @Override
-    public void uninstall() {
-        ListView listView = (ListView)getComponent();
-        listView.getListViewListeners().remove(this);
-        listView.getListViewItemListeners().remove(this);
-        listView.getListViewItemStateListeners().remove(this);
-        listView.getListViewSelectionListeners().remove(this);
-
-        super.uninstall();
-    }
-
-    @Override
     @SuppressWarnings("unchecked")
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;

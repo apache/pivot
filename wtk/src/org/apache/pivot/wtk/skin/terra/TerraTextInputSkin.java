@@ -299,18 +299,6 @@ public class TerraTextInputSkin extends ComponentSkin
     }
 
     @Override
-    public void uninstall() {
-        TextInput textInput = (TextInput)getComponent();
-        textInput.getTextInputListeners().remove(this);
-        textInput.getTextInputCharacterListeners().remove(this);
-        textInput.getTextInputSelectionListeners().remove(this);
-
-        textInput.setCursor(Cursor.DEFAULT);
-
-        super.uninstall();
-    }
-
-    @Override
     public int getPreferredWidth(int height) {
         TextInput textInput = (TextInput)getComponent();
         int textSize = textInput.getTextSize();

@@ -170,18 +170,6 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     }
 
     @Override
-    public void uninstall() {
-        Sheet sheet = (Sheet)getComponent();
-        sheet.getSheetStateListeners().remove(this);
-
-        // Detach the drop shadow decorator
-        sheet.getDecorators().remove(dropShadowDecorator);
-        dropShadowDecorator = null;
-
-        super.uninstall();
-    }
-
-    @Override
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 

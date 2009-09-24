@@ -80,16 +80,6 @@ public abstract class MenuButtonSkin extends ButtonSkin
         menuPopup.getWindowStateListeners().add(menuPopupWindowStateListener);
     }
 
-    @Override
-    public void uninstall() {
-        MenuButton menuButton = (MenuButton)getComponent();
-        menuButton.getMenuButtonListeners().remove(this);
-
-        menuPopup.setMenu(null);
-
-        super.uninstall();
-    }
-
     // Component state events
     @Override
     public void enabledChanged(Component component) {

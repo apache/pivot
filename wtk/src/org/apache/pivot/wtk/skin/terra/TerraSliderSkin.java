@@ -256,14 +256,6 @@ public class TerraSliderSkin extends SliderSkin {
     }
 
     @Override
-    public void uninstall() {
-        Slider slider = (Slider)getComponent();
-        slider.remove(thumb);
-
-        super.uninstall();
-    }
-
-    @Override
     public int getPreferredWidth(int height) {
         return DEFAULT_WIDTH;
     }

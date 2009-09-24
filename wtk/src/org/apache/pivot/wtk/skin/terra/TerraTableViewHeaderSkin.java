@@ -163,20 +163,6 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
     }
 
     @Override
-    public void uninstall() {
-        TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
-        tableViewHeader.getTableViewHeaderListeners().remove(this);
-
-        TableView tableView = tableViewHeader.getTableView();
-        if (tableView != null) {
-            tableView.getTableViewColumnListeners().remove(this);
-            tableView.getTableViewSortListeners().remove(this);
-        }
-
-        super.uninstall();
-    }
-
-    @Override
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 

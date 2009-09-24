@@ -138,16 +138,6 @@ public class TerraAlertSkin extends TerraDialogSkin
     }
 
     @Override
-    public void uninstall() {
-        Alert alert = (Alert)getComponent();
-        alert.getAlertListeners().remove(this);
-
-        alert.setContent(null);
-
-        super.uninstall();
-    }
-
-    @Override
     public void windowOpened(Window window) {
         super.windowOpened(window);
 

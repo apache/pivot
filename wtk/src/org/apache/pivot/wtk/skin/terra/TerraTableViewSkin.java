@@ -113,17 +113,6 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     @Override
-    public void uninstall() {
-        TableView tableView = (TableView)getComponent();
-        tableView.getTableViewListeners().remove(this);
-        tableView.getTableViewColumnListeners().remove(this);
-        tableView.getTableViewRowListeners().remove(this);
-        tableView.getTableViewSelectionListeners().remove(this);
-
-        super.uninstall();
-    }
-
-    @Override
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 

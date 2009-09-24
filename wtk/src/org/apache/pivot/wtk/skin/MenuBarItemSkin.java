@@ -122,17 +122,6 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
     }
 
     @Override
-    public void uninstall() {
-        MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
-        menuBarItem.getItemListeners().remove(this);
-
-        menuPopup.close(true);
-        menuPopup.setMenu(null);
-
-        super.uninstall();
-    }
-
-    @Override
     public boolean isFocusable() {
         return false;
     }

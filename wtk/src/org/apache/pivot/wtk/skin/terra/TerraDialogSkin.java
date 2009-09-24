@@ -118,14 +118,6 @@ public class TerraDialogSkin extends TerraFrameSkin implements DialogStateListen
     }
 
     @Override
-    public void uninstall() {
-        Dialog dialog = (Dialog)getComponent();
-        dialog.getDialogStateListeners().remove(this);
-
-        super.uninstall();
-    }
-
-    @Override
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 

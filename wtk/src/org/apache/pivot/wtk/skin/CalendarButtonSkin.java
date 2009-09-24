@@ -162,19 +162,6 @@ public abstract class CalendarButtonSkin extends ButtonSkin
         calendar.setLocale(calendarButton.getLocale());
     }
 
-    @Override
-    public void uninstall() {
-        calendarPopup.close();
-
-        CalendarButton calendarButton = (CalendarButton)getComponent();
-        calendarButton.getCalendarButtonListeners().remove(this);
-        calendarButton.getCalendarButtonSelectionListeners().remove(this);
-
-        calendar.setLocale(Locale.getDefault());
-
-        super.uninstall();
-    }
-
     // Component state events
     @Override
     public void enabledChanged(Component component) {

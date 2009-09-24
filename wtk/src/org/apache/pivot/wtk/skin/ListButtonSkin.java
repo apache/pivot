@@ -16,7 +16,6 @@
  */
 package org.apache.pivot.wtk.skin;
 
-import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.util.Filter;
 import org.apache.pivot.wtk.Component;
@@ -160,19 +159,6 @@ public abstract class ListButtonSkin extends ButtonSkin
 
         listView.setListData(listButton.getListData());
         listView.setItemRenderer(listButton.getItemRenderer());
-    }
-
-    @Override
-    public void uninstall() {
-        listViewPopup.close();
-
-        ListButton listButton = (ListButton)getComponent();
-        listButton.getListButtonListeners().remove(this);
-        listButton.getListButtonSelectionListeners().remove(this);
-
-        listView.setListData(new ArrayList<Object>());
-
-        super.uninstall();
     }
 
     // Component state events

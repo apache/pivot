@@ -35,16 +35,6 @@ public class FlowPaneSkin extends ContainerSkin {
     private boolean alignToBaseline = false;
 
     @Override
-    public void install(Component component) {
-        super.install(component);
-    }
-
-    @Override
-    public void uninstall() {
-        super.uninstall();
-    }
-
-    @Override
     public int getPreferredWidth(int height) {
         FlowPane flowPane = (FlowPane)getComponent();
 

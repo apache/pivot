@@ -340,27 +340,6 @@ public class TerraAccordionSkin extends ContainerSkin
     }
 
     @Override
-    public void uninstall() {
-        Accordion accordion = (Accordion)getComponent();
-
-        // Remove this as a listener on the accordion
-        accordion.getAccordionListeners().remove(this);
-        accordion.getAccordionSelectionListeners().remove(this);
-        accordion.getAccordionAttributeListeners().remove(this);
-
-        for (PanelHeader panelHeader : panelHeaders) {
-            // Stop listening for state changes on the panel
-            Component panel = (Component)panelHeader.getButtonData();
-            panel.getComponentStateListeners().remove(panelStateListener);
-
-            // Remove the header
-            accordion.remove(panelHeader);
-        }
-
-        super.uninstall();
-    }
-
-    @Override
     public int getPreferredWidth(int height) {
         Accordion accordion = (Accordion)getComponent();
 

@@ -1232,22 +1232,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     }
 
     @Override
-    public void uninstall() {
-        TextArea textArea = (TextArea)getComponent();
-        textArea.getTextAreaListeners().remove(this);
-        textArea.getTextAreaSelectionListeners().remove(this);
-
-        textArea.setCursor(Cursor.DEFAULT);
-
-        if (documentView != null) {
-            documentView.detach();
-            documentView = null;
-        }
-
-        super.uninstall();
-    }
-
-    @Override
     public boolean isFocusable() {
         TextArea textArea = (TextArea)getComponent();
         return textArea.isEditable();

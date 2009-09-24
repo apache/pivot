@@ -521,14 +521,6 @@ public class TerraCalendarSkin extends CalendarSkin
     }
 
     @Override
-    public void uninstall() {
-        Calendar calendar = (Calendar)getComponent();
-        calendar.remove(calendarTablePane);
-
-        super.uninstall();
-    }
-
-    @Override
     public int getPreferredWidth(int height) {
         return calendarTablePane.getPreferredWidth(height);
     }

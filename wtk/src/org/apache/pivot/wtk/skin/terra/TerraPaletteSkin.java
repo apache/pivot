@@ -188,18 +188,6 @@ public class TerraPaletteSkin extends WindowSkin {
     }
 
     @Override
-    public void uninstall() {
-        Palette palette = (Palette)getComponent();
-        palette.remove(titleBarTablePane);
-
-        // Detach the drop shadow decorator
-        palette.getDecorators().remove(dropShadowDecorator);
-        dropShadowDecorator = null;
-
-        super.uninstall();
-    }
-
-    @Override
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 

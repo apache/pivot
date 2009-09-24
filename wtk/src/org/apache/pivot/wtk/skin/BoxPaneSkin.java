@@ -46,14 +46,6 @@ public class BoxPaneSkin extends ContainerSkin
     }
 
     @Override
-    public void uninstall() {
-        BoxPane boxPane = (BoxPane)getComponent();
-        boxPane.getBoxPaneListeners().remove(this);
-
-        super.uninstall();
-    }
-
-    @Override
     public int getPreferredWidth(int height) {
         BoxPane boxPane = (BoxPane)getComponent();
 

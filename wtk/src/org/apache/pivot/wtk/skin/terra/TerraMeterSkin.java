@@ -59,14 +59,6 @@ public class TerraMeterSkin extends ComponentSkin
     }
 
     @Override
-    public void uninstall() {
-        Meter meter = (Meter)getComponent();
-        meter.getMeterListeners().remove(this);
-
-        super.uninstall();
-    }
-
-    @Override
     public boolean isFocusable() {
         return false;
     }

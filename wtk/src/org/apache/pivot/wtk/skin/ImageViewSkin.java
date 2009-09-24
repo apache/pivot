@@ -84,19 +84,6 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
     }
 
     @Override
-    public void uninstall() {
-        ImageView imageView = (ImageView)getComponent();
-        Image image = imageView.getImage();
-        if (image != null) {
-            image.getImageListeners().remove(imageListener);
-        }
-
-        imageView.getImageViewListeners().remove(this);
-
-        super.uninstall();
-    }
-
-    @Override
     public int getPreferredWidth(int height) {
         ImageView imageView = (ImageView)getComponent();
         Image image = imageView.getImage();

@@ -376,18 +376,6 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     @Override
-    public void uninstall() {
-        TreeView treeView = (TreeView)getComponent();
-        treeView.getTreeViewListeners().remove(this);
-        treeView.getTreeViewBranchListeners().remove(this);
-        treeView.getTreeViewNodeListeners().remove(this);
-        treeView.getTreeViewNodeStateListeners().remove(this);
-        treeView.getTreeViewSelectionListeners().remove(this);
-
-        super.uninstall();
-    }
-
-    @Override
     public int getPreferredWidth(int height) {
         TreeView treeView = (TreeView)getComponent();
         TreeView.NodeRenderer nodeRenderer = treeView.getNodeRenderer();

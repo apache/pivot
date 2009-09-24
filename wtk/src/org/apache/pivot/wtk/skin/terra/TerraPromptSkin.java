@@ -136,16 +136,6 @@ public class TerraPromptSkin extends TerraSheetSkin
     }
 
     @Override
-    public void uninstall() {
-        Prompt prompt = (Prompt)getComponent();
-        prompt.getPromptListeners().remove(this);
-
-        prompt.setContent(null);
-
-        super.uninstall();
-    }
-
-    @Override
     public void windowOpened(Window window) {
         super.windowOpened(window);
 

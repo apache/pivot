@@ -59,11 +59,6 @@ public interface Skin extends ConstrainedVisual {
     public void install(Component component);
 
     /**
-     * Dissociates a skin from a component.
-     */
-    public void uninstall();
-
-    /**
      * Returns the component with which a skin is associated.
      */
     public Component getComponent();

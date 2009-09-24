@@ -300,16 +300,6 @@ public class TerraSplitPaneSkin extends ContainerSkin implements SplitPaneListen
     }
 
     @Override
-    public void uninstall() {
-        SplitPane splitPane = (SplitPane)getComponent();
-        splitPane.getSplitPaneListeners().remove(this);
-
-        splitPane.remove(splitter);
-
-        super.uninstall();
-    }
-
-    @Override
     public int getPreferredWidth(int height) {
         return 0;
     }

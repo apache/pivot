@@ -33,12 +33,4 @@ public abstract class FileBrowserSkin extends ContainerSkin
         FileBrowser fileBrowser = (FileBrowser)component;
         fileBrowser.getFileBrowserListeners().add(this);
     }
-
-    @Override
-    public void uninstall() {
-        FileBrowser fileBrowser = (FileBrowser)getComponent();
-        fileBrowser.getFileBrowserListeners().remove(this);
-
-        super.uninstall();
-    }
 }

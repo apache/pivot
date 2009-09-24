@@ -47,17 +47,6 @@ public abstract class ChartViewSkin extends ComponentSkin
     }
 
     @Override
-    public void uninstall() {
-        // Remove listeners
-        ChartView chartView = (ChartView)getComponent();
-        chartView.getChartViewListeners().remove(this);
-        chartView.getChartViewCategoryListeners().remove(this);
-        chartView.getChartViewSeriesListeners().remove(this);
-
-        super.uninstall();
-    }
-
-    @Override
     public void layout() {
         // No-op
     }

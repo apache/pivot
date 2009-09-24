@@ -34,14 +34,6 @@ public abstract class ExpanderSkin extends ContainerSkin
         expander.getExpanderListeners().add(this);
     }
 
-    @Override
-    public void uninstall() {
-        Expander expander = (Expander)getComponent();
-        expander.getExpanderListeners().remove(this);
-
-        super.uninstall();
-    }
-
     // ExpanderListener methods
 
     @Override

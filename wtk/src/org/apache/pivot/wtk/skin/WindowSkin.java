@@ -76,17 +76,6 @@ public class WindowSkin extends ContainerSkin implements Window.Skin,
     }
 
     @Override
-    public void uninstall() {
-        Window window = (Window)getComponent();
-        window.getWindowListeners().remove(this);
-        window.getWindowStateListeners().remove(this);
-
-        window.setFocusTraversalPolicy(null);
-
-        super.uninstall();
-    }
-
-    @Override
     public int getPreferredWidth(int height) {
         Window window = (Window)getComponent();
         Component content = window.getContent();
