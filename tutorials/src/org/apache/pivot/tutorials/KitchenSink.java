@@ -69,7 +69,6 @@ import org.apache.pivot.wtk.Spinner;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TableViewSortListener;
 import org.apache.pivot.wtk.TextArea;
-import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.TreeView;
 import org.apache.pivot.wtk.Visual;
 import org.apache.pivot.wtk.Window;
@@ -83,7 +82,6 @@ import org.apache.pivot.wtk.content.TreeNode;
 import org.apache.pivot.wtk.effects.ReflectionDecorator;
 import org.apache.pivot.wtk.effects.WatermarkDecorator;
 import org.apache.pivot.wtk.media.Image;
-import org.apache.pivot.wtk.skin.terra.TerraTheme;
 import org.apache.pivot.wtk.text.Document;
 import org.apache.pivot.wtk.text.PlainTextSerializer;
 import org.apache.pivot.wtkx.WTKXSerializer;
@@ -936,16 +934,6 @@ public class KitchenSink implements Application, Application.AboutHandler {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        String terraColors = properties.get("terraColors");
-        try {
-            if (terraColors != null) {
-                Theme.setTheme(new TerraTheme(terraColors));
-            }
-        } catch (Exception exception) {
-            System.err.println("Unable to load custom colors from \"" + terraColors
-                + "\": " + exception.getMessage());
-        }
-
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "kitchen_sink.wtkx");
         wtkxSerializer.bind(this, KitchenSink.class);

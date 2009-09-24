@@ -76,86 +76,16 @@ import org.apache.pivot.wtk.Tooltip;
 import org.apache.pivot.wtk.TreeView;
 import org.apache.pivot.wtk.media.Image;
 
-
 /**
- * Terra theme. The default color palette is shown below:
- * <p>
- *   <a name="palette"/>
- *   <img src="doc-files/palette.png" border="0"/>
- *   <br/>
- *   <font color="#000000" size="-1" face="arial,helvetica,sanserif">
- *     <i>The default color palette</i>
- *   </font>
- * </p>
+ * Terra theme.
  */
 public final class TerraTheme extends Theme {
     private Font font = null;
     private Color[] colors = null;
 
-    /**
-     * Creates a new theme using the default font and color palette.
-     */
+    public static final String LOCATION_PROPERTY = "org.apache.pivot.wtk.skin.terra.location";
+
     public TerraTheme() {
-        this(TerraTheme.class.getResource("TerraTheme_default.json"));
-    }
-
-    /**
-     * Constructs a theme, pulling the font and color palette from a JSON file
-     * at the specified location.
-     *
-     * @param location
-     *
-     * @see #TerraTheme(URL)
-     */
-    public TerraTheme(String location) {
-        this(ThreadUtilities.getClassLoader().getResource(location));
-    }
-
-    /**
-     * Constructs a theme, pulling the font and color palette from a JSON file
-     * at the specified location. The JSON file should represent a <tt>Map</tt>
-     * containing the following properties:
-     * <p>
-     * <table border="1" cellpadding="5">
-     *   <tr>
-     *     <th nowrap="nowrap">Property:</th>
-     *     <th nowrap="nowrap">Type:</th>
-     *     <th nowrap="nowrap">Description:</th>
-     *   </tr>
-     *   <tr valign="top">
-     *     <td><tt>font</tt></td>
-     *     <td><tt>String</tt></td>
-     *     <td>
-     *       The default theme font; must be understandable by
-     *       <tt>java.awt.Font.decode()</tt>.
-     *     </td>
-     *   </tr>
-     *   <tr valign="top">
-     *     <td><tt>colors</tt></td>
-     *     <td><tt>List&lt;String&gt;</tt></td>
-     *     <td>
-     *       This list should contain 8 colors in a form understandable by
-     *       <tt>java.awt.Color.decode()</tt>. This list represents the theme's
-     *       "base color palette", from which the full color palette is
-     *       derived. Each of these 8 colors will be expanded to comprise 3
-     *       colors in the final palette: a darker version, the color itself,
-     *       and a lighter version. Thus, the final color palette will contain
-     *       24 colors. For instance, in the <a href="#palette">default color
-     *       palette</a> the "base palette" colors are the colors in the middle
-     *       column.
-     *     </td>
-     *   </tr>
-     * </table>
-     *
-     * @param location
-     * The location of the JSON file that defines the theme's font and colors.
-     */
-    @SuppressWarnings("unchecked")
-    public TerraTheme(URL location) {
-        if (location == null) {
-            throw new IllegalArgumentException("location is null.");
-        }
-
         componentSkinMap.put(Accordion.class, TerraAccordionSkin.class);
         componentSkinMap.put(ActivityIndicator.class, TerraActivityIndicatorSkin.class);
         componentSkinMap.put(Alert.class, TerraAlertSkin.class);
@@ -216,6 +146,16 @@ public final class TerraTheme extends Theme {
         componentSkinMap.put(TerraSplitPaneSkin.SplitterShadow.class, TerraSplitPaneSkin.SplitterShadowSkin.class);
         componentSkinMap.put(TerraTabPaneSkin.TabButton.class, TerraTabPaneSkin.TabButtonSkin.class);
 
+        String location = System.getProperty(LOCATION_PROPERTY);
+        if (location == null) {
+            load(getClass().getResource("TerraTheme_default.json"));
+        } else {
+            load(ThreadUtilities.getClassLoader().getResource(location));
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void load(URL location) {
         try {
             InputStream inputStream = location.openStream();
 
@@ -244,14 +184,6 @@ public final class TerraTheme extends Theme {
         } catch (SerializationException ex) {
             throw new RuntimeException(ex);
         }
-    }
-
-    @Override
-    protected void install() {
-    }
-
-    @Override
-    protected void uninstall() {
     }
 
     /**

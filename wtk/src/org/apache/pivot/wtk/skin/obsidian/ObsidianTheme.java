@@ -37,14 +37,6 @@ public final class ObsidianTheme extends Theme {
     }
 
     @Override
-    protected void install() {
-    }
-
-    @Override
-    protected void uninstall() {
-    }
-
-    @Override
     public Font getFont() {
         return font;
     }

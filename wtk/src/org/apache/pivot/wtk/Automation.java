@@ -22,7 +22,7 @@ import org.apache.pivot.collections.HashMap;
  * Supports UI automation by providing a means to obtain a reference to
  * a component via an automation ID.
  */
-public class Automation {
+public final class Automation {
     private Automation() {
     }
 

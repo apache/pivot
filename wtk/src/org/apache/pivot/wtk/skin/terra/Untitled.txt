@@ -23,7 +23,7 @@ Defines skin classes for the "Terra" theme.
 </p>
 <p>
 Terra skins get their colors from the theme's color palette, which contains
-24 indexed colors.  Each Terra skin exposes setter methods for each of its
+24 indexed colors. Each Terra skin exposes setter methods for each of its
 color styles that take an integer value; such methods allow callers to style
 the component by referencing the theme's color palette.  The default palette
 is shown below:
@@ -35,11 +35,8 @@ is shown below:
 <i>The default color palette</i>
 </font>
 </p>
-
-<p>The font and color palette is defined in a JSON file that should contain a
-<tt>Map</tt> containing the following properties:</p>
-
-<p>
+<p>The font and color palette are pulled from a JSON file that should contain
+a <tt>Map</tt> defining the following properties:</p>
 <table border="1" cellpadding="5">
 <tr>
 <th nowrap="nowrap">Property:</th>
@@ -70,8 +67,12 @@ column.
 </td>
 </tr>
 </table>
-<p>By default, the theme definition in <tt>TerraTheme_default.json</tt> is used,
+<p>
+By default, the theme definition in <tt>TerraTheme_default.json</tt> is used,
 but can be overridden via the <tt>org.apache.pivot.wtk.skin.terra.location</tt>
-property.</p>
+property.
+<p>
 </body>
 </html>
+
+

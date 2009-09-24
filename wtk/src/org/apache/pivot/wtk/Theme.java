@@ -37,7 +37,6 @@ import org.apache.pivot.wtk.skin.TablePaneSkin;
 import org.apache.pivot.wtk.skin.TextAreaSkin;
 import org.apache.pivot.wtk.skin.WindowSkin;
 
-
 /**
  * Base class for Pivot themes. A theme defines a complete "look and feel"
  * for a Pivot application.
@@ -54,18 +53,16 @@ public abstract class Theme {
     protected HashMap<Class<? extends Component>, Class<? extends Skin>> componentSkinMap =
         new HashMap<Class<? extends Component>, Class<? extends Skin>>();
 
-    public static final String PROVIDER_NAME = "org.apache.pivot.wtk.Theme";
-
     private static Theme theme = null;
 
+    public static final String PROVIDER_NAME = "org.apache.pivot.wtk.Theme";
+
     static {
-        Theme theme = (Theme)Service.getProvider(PROVIDER_NAME);
+        theme = (Theme)Service.getProvider(PROVIDER_NAME);
 
         if (theme == null) {
             throw new ThemeNotFoundException();
         }
-
-        setTheme(theme);
     }
 
     public Theme() {
@@ -90,9 +87,6 @@ public abstract class Theme {
         return componentSkinMap.get(componentClass);
     }
 
-    protected abstract void install();
-    protected abstract void uninstall();
-
     public abstract Font getFont();
     public abstract Image getMessageIcon(MessageType messageType);
     public abstract Image getSmallMessageIcon(MessageType messageType);
@@ -103,23 +97,5 @@ public abstract class Theme {
         }
 
         return theme;
-    }
-
-    public static void setTheme(Theme theme) {
-        if (theme == null) {
-            throw new IllegalArgumentException("theme is null.");
-        }
-
-        Theme previousTheme = Theme.theme;
-        if (previousTheme != null) {
-            previousTheme.uninstall();
-        }
-
-        theme.install();
-        Theme.theme = theme;
-
-        if (previousTheme != null) {
-            // TODO Remove this method
-        }
     }
 }
