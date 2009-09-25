@@ -383,11 +383,11 @@ public class TableView extends Component {
          *
          * @param value
          * The cell value to render, or <tt>null</tt> if called to calculate
-         * preferred size.
+         * preferred height.
          *
          * @param rowIndex
          * The index of the row being rendered, or <tt>-1</tt> if called to
-         * calculate preferred size.
+         * calculate preferred height.
          *
          * @param columnIndex
          * The index of the column being rendered.

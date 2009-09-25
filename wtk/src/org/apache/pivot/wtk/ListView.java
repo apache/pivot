@@ -68,11 +68,11 @@ public class ListView extends Component {
          *
          * @param item
          * The item to render, or <tt>null</tt> if called to calculate
-         * preferred size.
+         * preferred height.
          *
          * @param index
          * The index of the item being rendered, or <tt>-1</tt> if called to
-         * calculate preferred size.
+         * calculate preferred height.
          *
          * @param listView
          * The list view that contains the item.

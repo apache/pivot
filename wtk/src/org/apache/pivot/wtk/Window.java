@@ -723,24 +723,41 @@ public class Window extends Container {
 
     /**
      * Sets the window's icon by URL.
+     * <p>
+     * <b>Note</b>: Using this signature will cause an entry to be added in the
+     * application context's {@linkplain ApplicationContext#getResourceCache()
+     * resource cache} if one does not already exist.
      *
-     * @param icon
+     * @param iconURL
      * The location of the icon to set.
      */
-    public void setIcon(URL icon) {
-        if (icon == null) {
-            throw new IllegalArgumentException("icon is null.");
+    public void setIcon(URL iconURL) {
+        if (iconURL == null) {
+            throw new IllegalArgumentException("iconURL is null.");
         }
 
-        try {
-            setIcon(Image.load(icon));
-        } catch (TaskExecutionException exception) {
-            throw new IllegalArgumentException(exception);
+        Image icon = (Image)ApplicationContext.getResourceCache().get(iconURL);
+
+        if (icon == null) {
+            try {
+                icon = Image.load(iconURL);
+            } catch (TaskExecutionException exception) {
+                throw new IllegalArgumentException(exception);
+            }
+
+            ApplicationContext.getResourceCache().put(iconURL, icon);
         }
+
+        setIcon(icon);
     }
 
     /**
-     * Sets the window's icon by resource name.
+     * Sets the window's icon by {@linkplain ClassLoader#getResource(String)
+     * resource name}.
+     * <p>
+     * <b>Note</b>: Using this signature will cause an entry to be added in the
+     * application context's {@linkplain ApplicationContext#getResourceCache()
+     * resource cache} if one does not already exist.
      *
      * @param icon
      * The resource name of the icon to set.

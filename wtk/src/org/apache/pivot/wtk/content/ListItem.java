@@ -56,7 +56,21 @@ public class ListItem {
         this.icon = icon;
     }
 
+    /**
+     * Sets the list item's icon by URL.
+     * <p>
+     * <b>Note</b>: Using this signature will cause an entry to be added in the
+     * application context's {@linkplain ApplicationContext#getResourceCache()
+     * resource cache} if one does not already exist.
+     *
+     * @param iconURL
+     * The location of the icon to set.
+     */
     public void setIcon(URL iconURL) {
+        if (iconURL == null) {
+            throw new IllegalArgumentException("iconURL is null.");
+        }
+
         Image icon = (Image)ApplicationContext.getResourceCache().get(iconURL);
 
         if (icon == null) {
@@ -72,7 +86,22 @@ public class ListItem {
         setIcon(icon);
     }
 
+    /**
+     * Sets the list item's icon by {@linkplain ClassLoader#getResource(String)
+     * resource name}.
+     * <p>
+     * <b>Note</b>: Using this signature will cause an entry to be added in the
+     * application context's {@linkplain ApplicationContext#getResourceCache()
+     * resource cache} if one does not already exist.
+     *
+     * @param iconName
+     * The resource name of the icon to set.
+     */
     public void setIcon(String iconName) {
+        if (iconName == null) {
+            throw new IllegalArgumentException("iconName is null.");
+        }
+
         ClassLoader classLoader = ThreadUtilities.getClassLoader();
         setIcon(classLoader.getResource(iconName));
     }

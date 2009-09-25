@@ -117,7 +117,7 @@ public class ImageView extends Component {
     }
 
     /**
-     * Sets the image view's icon by {@linkplain ClassLoader#getResource(String)
+     * Sets the image view's image by {@linkplain ClassLoader#getResource(String)
      * resource name}.
      * <p>
      * <b>Note</b>: Using this signature will cause an entry to be added in the

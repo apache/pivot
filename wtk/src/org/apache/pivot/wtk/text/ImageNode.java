@@ -21,6 +21,7 @@ import java.net.URL;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.ThreadUtilities;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
+import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.media.Image;
 
 
@@ -76,18 +77,47 @@ public class ImageNode extends Node {
         }
     }
 
-    public void setImage(URL image) {
-        if (image == null) {
-            throw new IllegalArgumentException("image is null.");
+    /**
+     * Sets the image node's current image by URL.
+     * <p>
+     * <b>Note</b>: Using this signature will cause an entry to be added in the
+     * application context's {@linkplain ApplicationContext#getResourceCache()
+     * resource cache} if one does not already exist.
+     *
+     * @param imageURL
+     * The location of the image to set.
+     */
+    public void setImage(URL imageURL) {
+        if (imageURL == null) {
+            throw new IllegalArgumentException("imageURL is null.");
         }
 
-        try {
-            setImage(Image.load(image));
-        } catch (TaskExecutionException exception) {
-            throw new IllegalArgumentException(exception);
+        Image image = (Image)ApplicationContext.getResourceCache().get(imageURL);
+
+        if (image == null) {
+            try {
+                image = Image.load(imageURL);
+            } catch (TaskExecutionException exception) {
+                throw new IllegalArgumentException(exception);
+            }
+
+            ApplicationContext.getResourceCache().put(imageURL, image);
         }
+
+        setImage(image);
     }
 
+    /**
+     * Sets the image node's icon by {@linkplain ClassLoader#getResource(String)
+     * resource name}.
+     * <p>
+     * <b>Note</b>: Using this signature will cause an entry to be added in the
+     * application context's {@linkplain ApplicationContext#getResourceCache()
+     * resource cache} if one does not already exist.
+     *
+     * @param image
+     * The resource name of the image to set.
+     */
     public void setImage(String image) {
         if (image == null) {
             throw new IllegalArgumentException("image is null.");

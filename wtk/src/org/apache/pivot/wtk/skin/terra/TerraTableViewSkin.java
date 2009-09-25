@@ -133,8 +133,9 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                     TableView.CellRenderer cellRenderer = column.getCellRenderer();
                     List<?> tableData = tableView.getTableData();
 
+                    int rowIndex = 0;
                     for (Object rowData : tableData) {
-                        cellRenderer.render(rowData, -1, i, tableView, column.getName(),
+                        cellRenderer.render(rowData, rowIndex++, i, tableView, column.getName(),
                             false, false, false);
                         columnWidth = Math.max(cellRenderer.getPreferredWidth(-1), columnWidth);
                     }
@@ -212,8 +213,9 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                     TableView.CellRenderer cellRenderer = column.getCellRenderer();
                     List<?> tableData = tableView.getTableData();
 
+                    int rowIndex = 0;
                     for (Object rowData : tableData) {
-                        cellRenderer.render(rowData, -1, i, tableView, column.getName(),
+                        cellRenderer.render(rowData, rowIndex++, i, tableView, column.getName(),
                             false, false, false);
                         columnWidth = Math.max(cellRenderer.getPreferredWidth(-1), columnWidth);
                     }

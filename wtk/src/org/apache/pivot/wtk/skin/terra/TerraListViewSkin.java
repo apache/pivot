@@ -109,8 +109,9 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
         ListView.ItemRenderer renderer = listView.getItemRenderer();
 
+        int index = 0;
         for (Object item : listData) {
-            renderer.render(item, -1, listView, false, false, false, false);
+            renderer.render(item, index++, listView, false, false, false, false);
             preferredWidth = Math.max(preferredWidth, renderer.getPreferredWidth(-1));
         }
 

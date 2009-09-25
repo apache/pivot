@@ -67,6 +67,10 @@ public class ButtonData {
      * The location of the icon to set.
      */
     public void setIcon(URL iconURL) {
+        if (iconURL == null) {
+            throw new IllegalArgumentException("iconURL is null.");
+        }
+
         Image icon = (Image)ApplicationContext.getResourceCache().get(iconURL);
 
         if (icon == null) {
@@ -94,6 +98,10 @@ public class ButtonData {
      * The resource name of the icon to set.
      */
     public void setIcon(String iconName) {
+        if (iconName == null) {
+            throw new IllegalArgumentException("iconName is null.");
+        }
+
         ClassLoader classLoader = ThreadUtilities.getClassLoader();
         setIcon(classLoader.getResource(iconName));
     }

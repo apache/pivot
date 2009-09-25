@@ -24,6 +24,7 @@ import java.net.URL;
 
 import org.apache.pivot.util.ThreadUtilities;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
+import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.BoxPane;
@@ -177,25 +178,42 @@ public class WatermarkDecorator implements Decorator {
     }
 
     /**
-     * Sets the image that will be painted over this decorator's component.
+     * Sets the image that will be painted over this decorator's component by
+     * URL.
+     * <p>
+     * <b>Note</b>: Using this signature will cause an entry to be added in the
+     * application context's {@linkplain ApplicationContext#getResourceCache()
+     * resource cache} if one does not already exist.
      *
-     * @param image
-     * This decorator's image
+     * @param imageURL
+     * This location of the image to set.
      */
-    public void setImage(URL image) {
-        if (image == null) {
-            throw new IllegalArgumentException("image is null.");
+    public void setImage(URL imageURL) {
+        if (imageURL == null) {
+            throw new IllegalArgumentException("imageURL is null.");
         }
 
-        try {
-            setImage(Image.load(image));
-        } catch (TaskExecutionException exception) {
-            throw new IllegalArgumentException(exception);
+        Image image = (Image)ApplicationContext.getResourceCache().get(imageURL);
+
+        if (image == null) {
+            try {
+                image = Image.load(imageURL);
+            } catch (TaskExecutionException exception) {
+                throw new IllegalArgumentException(exception);
+            }
+
+            ApplicationContext.getResourceCache().put(imageURL, image);
         }
+
+        setImage(image);
     }
 
     /**
      * Sets the image that will be painted over this decorator's component.
+     * <p>
+     * <b>Note</b>: Using this signature will cause an entry to be added in the
+     * application context's {@linkplain ApplicationContext#getResourceCache()
+     * resource cache} if one does not already exist.
      *
      * @param image
      * This decorator's image
