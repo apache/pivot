@@ -251,7 +251,12 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
 
             String methodName = method.getName();
             if (methodName.equals(event)) {
-                scriptEngine.eval(script);
+                try {
+                    scriptEngine.eval(script);
+                } catch (ScriptException exception) {
+                    System.err.println(exception);
+                    System.err.println(script);
+                }
             }
 
             // If the function didn't return a value, return the default
@@ -963,7 +968,8 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                             try {
                                                 scriptEngine.eval((String)element.value);
                                             } catch (ScriptException exception) {
-                                                exception.printStackTrace(System.err);
+                                                System.err.println(exception);
+                                                System.err.println(element.value);
                                             }
                                         }
                                     }
