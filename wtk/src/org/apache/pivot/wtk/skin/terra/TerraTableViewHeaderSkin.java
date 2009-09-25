@@ -170,23 +170,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         TableView tableView = tableViewHeader.getTableView();
 
         if (tableView != null) {
-            TableView.ColumnSequence columns = tableView.getColumns();
-
-            int n = columns.getLength();
-            for (int i = 0; i < n; i++) {
-                TableView.Column column = columns.get(i);
-
-                if (!column.isRelative()) {
-                    preferredWidth += column.getWidth();
-                }
-            }
-
-            // Include space for vertical gridlines
-            preferredWidth += (n - 1);
-
-            if (includeTrailingVerticalGridLine) {
-                preferredWidth++;
-            }
+            preferredWidth = tableView.getPreferredWidth(height);
         }
 
         return preferredWidth;
