@@ -21,6 +21,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
+import java.awt.Paint;
 import java.awt.RenderingHints;
 import java.awt.geom.Rectangle2D;
 
@@ -51,10 +52,6 @@ public class TerraCheckboxSkin extends CheckboxSkin {
     private Color disabledButtonBorderColor;
     private Color disabledButtonSelectionColor;
 
-    // Derived colors
-    private Color buttonBevelColor;
-    private Color disabledButtonBevelColor;
-
     private static final int CHECKBOX_SIZE = 14;
     private static final int CHECKMARK_SIZE = 10;
 
@@ -68,13 +65,9 @@ public class TerraCheckboxSkin extends CheckboxSkin {
         buttonColor = theme.getColor(4);
         buttonBorderColor = theme.getColor(7);
         buttonSelectionColor = theme.getColor(13);
-        disabledButtonColor = theme.getColor(4);
+        disabledButtonColor = theme.getColor(3);
         disabledButtonBorderColor = theme.getColor(7);
         disabledButtonSelectionColor = theme.getColor(7);
-
-        // Set the derived colors
-        buttonBevelColor = TerraTheme.darken(buttonColor);
-        disabledButtonBevelColor = disabledButtonColor;
     }
 
     @Override
@@ -179,19 +172,18 @@ public class TerraCheckboxSkin extends CheckboxSkin {
     }
 
     private void paintButton(Graphics2D graphics, Checkbox checkbox, int height) {
-        Color buttonColor = null;
-        Color buttonBevelColor = null;
-        Color buttonBorderColor = null;
-        Color buttonSelectionColor = null;
+        Paint buttonPaint;
+        Color buttonBorderColor;
+        Color buttonSelectionColor;
 
         if (checkbox.isEnabled()) {
-            buttonColor = this.buttonColor;
-            buttonBevelColor = this.buttonBevelColor;
+            buttonPaint = new GradientPaint(CHECKBOX_SIZE / 2, 0, TerraTheme.darken(buttonColor),
+                CHECKBOX_SIZE / 2, CHECKBOX_SIZE, buttonColor);
             buttonBorderColor = this.buttonBorderColor;
             buttonSelectionColor = this.buttonSelectionColor;
         } else {
-            buttonColor = disabledButtonColor;
-            buttonBevelColor = disabledButtonBevelColor;
+            buttonPaint = disabledButtonColor;
+            System.out.println(buttonPaint);
             buttonBorderColor = disabledButtonBorderColor;
             buttonSelectionColor = disabledButtonSelectionColor;
         }
@@ -199,8 +191,8 @@ public class TerraCheckboxSkin extends CheckboxSkin {
         // Center the button vertically
         graphics.translate(0, (height - CHECKBOX_SIZE) / 2);
 
-        graphics.setPaint(new GradientPaint(CHECKBOX_SIZE / 2, 0, buttonBevelColor,
-            CHECKBOX_SIZE / 2, CHECKBOX_SIZE, buttonColor));
+        // Paint the background
+        graphics.setPaint(buttonPaint);
         graphics.fillRect(0, 0, CHECKBOX_SIZE, CHECKBOX_SIZE);
 
         // Paint the border
@@ -208,14 +200,15 @@ public class TerraCheckboxSkin extends CheckboxSkin {
         GraphicsUtilities.drawRect(graphics, 0, 0, CHECKBOX_SIZE, CHECKBOX_SIZE);
 
         // Paint the checkmark
+        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+            RenderingHints.VALUE_ANTIALIAS_ON);
+
         Button.State state = checkbox.getState();
 
         if (state == Button.State.SELECTED) {
             graphics.setColor(buttonSelectionColor);
             graphics.setStroke(new BasicStroke(2.5f));
 
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
 
             // Draw a checkmark
             int n = CHECKMARK_SIZE / 2;
@@ -239,8 +232,8 @@ public class TerraCheckboxSkin extends CheckboxSkin {
         } else {
             if (state == Button.State.MIXED) {
                 graphics.setColor(buttonSelectionColor);
-                GraphicsUtilities.drawLine(graphics, 3, (CHECKBOX_SIZE - 3) / 2, CHECKBOX_SIZE - 7,
-                    Orientation.HORIZONTAL, 3);
+                GraphicsUtilities.drawLine(graphics, 4, (CHECKBOX_SIZE - 3) / 2 + 1, CHECKBOX_SIZE - 8,
+                    Orientation.HORIZONTAL, 2);
             }
         }
     }

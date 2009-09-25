@@ -20,6 +20,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Paint;
 import java.awt.RadialGradientPaint;
 import java.awt.RenderingHints;
 import java.awt.geom.Ellipse2D;
@@ -64,7 +65,7 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
         buttonColor = theme.getColor(4);
         buttonBorderColor = theme.getColor(7);
         buttonSelectionColor = theme.getColor(13);
-        disabledButtonColor = theme.getColor(4);
+        disabledButtonColor = theme.getColor(3);
         disabledButtonBorderColor = theme.getColor(7);
         disabledButtonSelectionColor = theme.getColor(7);
     }
@@ -157,38 +158,39 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
     }
 
     private void paintButton(Graphics2D graphics, RadioButton radioButton, int height) {
-        Color buttonColor = null;
+        Paint buttonPaint;
         Color buttonBorderColor = null;
         Color buttonSelectionColor = null;
 
+        Ellipse2D buttonBackgroundCircle = new Ellipse2D.Double(1, 1,
+            BUTTON_DIAMETER - 3, BUTTON_DIAMETER - 3);
+
         if (radioButton.isEnabled()) {
-            buttonColor = this.buttonColor;
+            buttonPaint = new RadialGradientPaint((float)buttonBackgroundCircle.getCenterX(),
+                (float)buttonBackgroundCircle.getCenterY(),
+                (float)buttonBackgroundCircle.getWidth() * 2 / 3,
+                new float[] {0f, 1f}, new Color[] {TerraTheme.darken(buttonColor), buttonColor});
             buttonBorderColor = this.buttonBorderColor;
             buttonSelectionColor = this.buttonSelectionColor;
         }
         else {
-            buttonColor = disabledButtonColor;
+            buttonPaint = disabledButtonColor;
             buttonBorderColor = disabledButtonBorderColor;
             buttonSelectionColor = disabledButtonSelectionColor;
         }
 
-        // Center the button vertically
-        graphics.translate(0, (height - BUTTON_DIAMETER) / 2);
-
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
+
+        // Center the button vertically
+        graphics.translate(0, (height - BUTTON_DIAMETER) / 2);
 
         // Paint the border
         graphics.setColor(buttonBorderColor);
         graphics.fillOval(0, 0, BUTTON_DIAMETER - 1, BUTTON_DIAMETER - 1);
 
         // Paint the background
-        Ellipse2D buttonBackgroundCircle = new Ellipse2D.Double(1, 1,
-            BUTTON_DIAMETER - 3, BUTTON_DIAMETER - 3);
-        graphics.setPaint(new RadialGradientPaint((float)buttonBackgroundCircle.getCenterX(),
-            (float)buttonBackgroundCircle.getCenterY(),
-            (float)buttonBackgroundCircle.getWidth() * 2 / 3,
-            new float[] {0f, 1f}, new Color[] {TerraTheme.darken(buttonColor), buttonColor}));
+        graphics.setPaint(buttonPaint);
         graphics.fill(buttonBackgroundCircle);
 
         // Paint the selection
