@@ -682,7 +682,7 @@ public class ListView extends Component {
     /**
      * Sets the list data.
      *
-     * @param tableData
+     * @param listData
      * A URL referring to a JSON file containing the data to be presented by
      * the list view.
      */

@@ -88,24 +88,41 @@ public class ImageView extends Component {
 
     /**
      * Sets the image view's current image by URL.
+     * <p>
+     * <b>Note</b>: Using this signature will cause an entry to be added in the
+     * application context's {@linkplain ApplicationContext#getResourceCache()
+     * resource cache} if one does not already exist.
      *
-     * @param image
+     * @param imageURL
      * The location of the image to set.
      */
-    public final void setImage(URL image) {
-        if (image == null) {
-            throw new IllegalArgumentException("image is null.");
+    public final void setImage(URL imageURL) {
+        if (imageURL == null) {
+            throw new IllegalArgumentException("imageURL is null.");
         }
 
-        try {
-            setImage(Image.load(image));
-        } catch (TaskExecutionException exception) {
-            throw new IllegalArgumentException(exception);
+        Image image = (Image)ApplicationContext.getResourceCache().get(imageURL);
+
+        if (image == null) {
+            try {
+                image = Image.load(imageURL);
+            } catch (TaskExecutionException exception) {
+                throw new IllegalArgumentException(exception);
+            }
+
+            ApplicationContext.getResourceCache().put(imageURL, image);
         }
+
+        setImage(image);
     }
 
     /**
-     * Sets the image view's current image by resource name.
+     * Sets the image view's icon by {@linkplain ClassLoader#getResource(String)
+     * resource name}.
+     * <p>
+     * <b>Note</b>: Using this signature will cause an entry to be added in the
+     * application context's {@linkplain ApplicationContext#getResourceCache()
+     * resource cache} if one does not already exist.
      *
      * @param image
      * The resource name of the image to set.

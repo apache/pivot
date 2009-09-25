@@ -56,6 +56,16 @@ public class ButtonData {
         this.icon = icon;
     }
 
+    /**
+     * Sets the button data's icon by URL.
+     * <p>
+     * <b>Note</b>: Using this signature will cause an entry to be added in the
+     * application context's {@linkplain ApplicationContext#getResourceCache()
+     * resource cache} if one does not already exist.
+     *
+     * @param iconURL
+     * The location of the icon to set.
+     */
     public void setIcon(URL iconURL) {
         Image icon = (Image)ApplicationContext.getResourceCache().get(iconURL);
 
@@ -72,6 +82,17 @@ public class ButtonData {
         setIcon(icon);
     }
 
+    /**
+     * Sets the button data's icon by {@linkplain ClassLoader#getResource(String)
+     * resource name}.
+     * <p>
+     * <b>Note</b>: Using this signature will cause an entry to be added in the
+     * application context's {@linkplain ApplicationContext#getResourceCache()
+     * resource cache} if one does not already exist.
+     *
+     * @param iconName
+     * The resource name of the icon to set.
+     */
     public void setIcon(String iconName) {
         ClassLoader classLoader = ThreadUtilities.getClassLoader();
         setIcon(classLoader.getResource(iconName));
