@@ -183,7 +183,6 @@ public class TerraCheckboxSkin extends CheckboxSkin {
             buttonSelectionColor = this.buttonSelectionColor;
         } else {
             buttonPaint = disabledButtonColor;
-            System.out.println(buttonPaint);
             buttonBorderColor = disabledButtonBorderColor;
             buttonSelectionColor = disabledButtonSelectionColor;
         }
