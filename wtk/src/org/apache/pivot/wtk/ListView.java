@@ -67,12 +67,12 @@ public class ListView extends Component {
          * Prepares the renderer for layout or paint.
          *
          * @param item
-         * The item to render, or <tt>null</tt> if called to calculate
-         * preferred height.
+         * The item to render, or <tt>null</tt> if called to calculate preferred
+         * height for skins that assume a fixed renderer height.
          *
          * @param index
-         * The index of the item being rendered, or <tt>-1</tt> if called to
-         * calculate preferred height.
+         * The index of the item being rendered, or <tt>-1</tt> if <tt>item</tt>
+         * is <tt>null</tt>.
          *
          * @param listView
          * The list view that contains the item.

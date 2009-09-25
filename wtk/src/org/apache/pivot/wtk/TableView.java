@@ -381,13 +381,13 @@ public class TableView extends Component {
         /**
          * Prepares the renderer for layout or paint.
          *
-         * @param value
+         * @param item
          * The cell value to render, or <tt>null</tt> if called to calculate
-         * preferred height.
+         * preferred height for skins that assume a fixed renderer height.
          *
          * @param rowIndex
-         * The index of the row being rendered, or <tt>-1</tt> if called to
-         * calculate preferred height.
+         * The index of the row being rendered, or <tt>-1</tt> if <tt>value</tt>
+         * is <tt>null</tt>.
          *
          * @param columnIndex
          * The index of the column being rendered.
