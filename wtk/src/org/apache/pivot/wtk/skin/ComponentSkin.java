@@ -255,6 +255,11 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
     // Component mouse button events
     @Override
     public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+        if (scheduledShowTooltipCallback != null) {
+            scheduledShowTooltipCallback.cancel();
+            scheduledShowTooltipCallback = null;
+        }
+
         return false;
     }
 

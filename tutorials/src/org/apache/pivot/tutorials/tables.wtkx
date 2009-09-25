@@ -28,6 +28,7 @@ limitations under the License.
                 <Border styles="{padding:0, color:10}">
                     <content>
                         <ScrollPane wtkx:id="sortableScrollPane" horizontalScrollBarPolicy="fill_to_capacity"
+                            tooltipText="Shift-click to sort on multiple columns"
                             preferredWidth="276" preferredHeight="160">
                             <view>
                                 <TableView wtkx:id="sortableTableView" selectMode="multi"
