@@ -158,6 +158,7 @@ limitations under the License.
 <ul>
 <li><p>A standard JavaBean property setter</p></li>
 <li><p>A "static" property setter (explained below)</p></li>
+<li><p>An event listener</p></li>
 </ul>
 
 <h4>JavaBean Property Setters</h4>
@@ -210,6 +211,9 @@ TabPane.setLabel(label, "First Tab");
 <p>The call to <tt>TabPane.setLabel()</tt> attaches the "name" property to the <tt>Label</tt> instance. The tab pane then uses the value of this property as the button data for the label's tab in the tab panes button bar. <tt>TabPane</tt> also defines a static setter for a tab's icon. Other containers, including <tt>Accordion</tt> and <tt>TablePane</tt>, define similar setters.</p>
 
 <p>Note that, although the static setter attribute is declared first in the WTKX, it is actually invoked after the setter for the "text" property (as well as after the <tt>Label</tt> instance has been added to the tab pane). This is because static setters often cannot be called until after the object on which they are invoked has been added to an instance of the parent class that defines the setter. The act of adding the object to the parent effectively makes the attached properties available. Conversely, removing the object from the parent also removes any previously attached properties.</p>
+
+<h4>Event Listeners</h4>
+<p>Finally, an attribute may represent an event listener. The attribute value contains script code that is executed in response to the event. This is discussed in more detail in the <a href="#scripting">Scripting</a> section.</p>
 
 <h3>Resolution Operators</h3>
 <p>Setter attributes (either bean or static) in WTKX support several resolution operators that extend their type handling capabilities:</p>
@@ -334,14 +338,14 @@ Label label = (Label)wtkxSerializer.get("content.label");
 </pre>
 
 <h2><a name="scripting">Scripting</a></h2>
-<p>The <tt>&lt;wtkx:script&gt;</tt> tag allows a caller to import scripting code into or embed script within a WTKX file. Any JVM scripting language can be used.</p>
+<p>The <tt>&lt;wtkx:script&gt;</tt> tag allows a caller to import scripting code into or embed script within a WTKX file. Any JVM scripting language can be used. The name of the scripting language is passed to the <tt>WTKXSerializer</tt> instance that is used to load the WTKX file. <tt>WTKXSerializer</tt> is discussed in more detail below.</p>
 
 <p>For example, the following WTKX defines a JavaScript block that defines a variable named "foo". The value of this variable is used to populate the <tt>Label</tt> instance that is declared as the window's content:</p>
 
 <pre class="brush:xml">
 &lt;Window xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk"&gt;
-    &lt;wtkx:script language="javascript"&gt;
+    &lt;wtkx:script&gt;
     var foo = "Hello, World!";
     &lt;/wtkx:script&gt;
     &lt;content&gt;
@@ -364,7 +368,7 @@ Label label = (Label)wtkxSerializer.get("content.label");
 
 <p>In either case, any global variables declared in a script are added to the WTKX file's namespace, and become available for use by the object dereference operator (as shown) as well as to callers via the <tt>WTKXSerializer#get()</tt> method discussed below.</p>
 
-<h3>Listener Lists</h3>
+<h3>Listener List Elements</h3>
 <p>Script code can also be used to define event handlers in WTKX. Event handlers can often be defined more succinctly in script than in Java. For example, given the following WTKX:</p>
 
 <pre class="brush:xml">
@@ -387,27 +391,37 @@ pushButton.getButtonPressListeners().add(new ButtonPressListener() {
 
 <p>While this is simple enough, it can become cumbersome in any non-trivial application where many such event handlers are defined. It also dissociates the event handler from the element to which it applies, making it difficult to track down event handling logic.</p>
 
-<p>A similar event handler might be defined in JavaScript as follows:</p>
+<p>A similar event handler might be defined in JavaScript as follows (note that a <tt>&lt;wtkx:script&gt;</tt> block is not required in this case, because listener list elements may only contain script code):</p>
 
 <pre class="brush:xml">
 &lt;PushButton xmlns="org.apache.pivot.wtk"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     buttonData="Click Me!"&gt;
     &lt;buttonPressListeners&gt;
-        &lt;wtkx:script&gt;
         function buttonPressed(button) {
             // Handle event
         }
-        &lt;/wtkx:script&gt;
     &lt;/buttonPressListeners&gt;
 &lt;/PushButton&gt;
 </pre>
 
 <p>This version is quite a bit easier to read, and creates a much stronger association between the button and the handler. It doesn't even require the button to be given an ID.</p>
 
-<p>When a <tt>&lt;wtkx:script&gt;</tt> block is declared within a listener list element, <tt>WTKXSerializer</tt> creates a special scope that is local to the handler. As a result, any variables or functions defined within the script block do not pollute the page's global namespace and are only visible within the block.</p>
+<p>When script is declared within a listener list element, <tt>WTKXSerializer</tt> creates a special scope that is local to the handler. As a result, any variables or functions defined within the script block do not pollute the page's global namespace and are only visible within the block.</p>
 
 <p>Also, though it isn't obvious from this simple example, script-based event handlers are not required to provide implementations for every method defined by the listener interface. Any omitted methods are simply processed by a default no-op handler.</p>
+
+<h3>Event Listener Attributes</h3>
+<p>Event listeners can also be declared in attributes, using a syntax similar to that used for static property setters. The attribute name for an event listener consists of the name of the interface that defines the event plus the name of the event, separated by a period. For example, the above button press listener can be declared in an attribute as follows:</p>
+
+<pre class="brush:xml">
+&lt;PushButton xmlns="org.apache.pivot.wtk"
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    buttonData="Click Me!"
+    ButtonPressListener.buttonPressed="// Handle event"/&gt;
+</pre>
+
+<p>Attribute-based event handlers are even more succinct than element-based listener lists, and are well suited to short handler code that, ideally, fits on a single line. Longer event handler code may be better suited to an element-based listener list, or, depending on the level of complexity, a Java-based event handler.</p>
 
 <h2>WTKXSerializer</h2>
 <p>The <tt>org.apache.pivot.wtkx.WTKXSerializer</tt> class, which has been mentioned in previous sections, is what drives the actual loading and processing of a WTKX file and its associated script and includes. It implements the <tt>org.apache.pivot.serialization.Serializer</tt> interface, and returns the object hierarchy corresponding to the structure declared within the WTKX file. It defines the following overloads for the <tt>readObject()</tt> method:</p>
