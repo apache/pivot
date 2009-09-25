@@ -178,7 +178,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         }
 
         @Override
-        public void render(Object item, ListView listView, boolean selected,
+        public void render(Object item, int index, ListView listView, boolean selected,
             boolean checked, boolean highlighted, boolean disabled) {
             label.getStyles().put("font", listView.getStyles().get("font"));
 
@@ -232,10 +232,9 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         }
 
         @Override
-        public void render(Object value, TableView tableView, TableView.Column column,
+        public void render(Object value, int rowIndex, int columnIndex,
+            TableView tableView, String columnName,
             boolean rowSelected, boolean rowHighlighted, boolean rowDisabled) {
-            String columnName = column.getName();
-
             if (value != null) {
                 File file = (File)value;
 

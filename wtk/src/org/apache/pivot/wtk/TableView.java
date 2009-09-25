@@ -378,7 +378,37 @@ public class TableView extends Component {
      * Table cell renderer interface.
      */
     public interface CellRenderer extends Renderer {
-        public void render(Object value, TableView tableView, TableView.Column column,
+        /**
+         * Prepares the renderer for layout or paint.
+         *
+         * @param value
+         * The cell value to render, or <tt>null</tt> if called to calculate
+         * preferred size.
+         *
+         * @param rowIndex
+         * The index of the row being rendered, or <tt>-1</tt> if called to
+         * calculate preferred size.
+         *
+         * @param columnIndex
+         * The index of the column being rendered.
+         *
+         * @param tableView
+         * The table view that contains the cell.
+         *
+         * @param columnName
+         * The name of the column being rendered.
+         *
+         * @param rowSelected
+         * If <tt>true</tt>, the row is selected.
+         *
+         * @param rowHighlighted
+         * If <tt>true</tt>, the row is highlighted.
+         *
+         * @param rowDisabled
+         * If <tt>true</tt>, the row is disabled.
+         */
+        public void render(Object value, int rowIndex, int columnIndex,
+            TableView tableView, String columnName,
             boolean rowSelected, boolean rowHighlighted, boolean rowDisabled);
     }
 

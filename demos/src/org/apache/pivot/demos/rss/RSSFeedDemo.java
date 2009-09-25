@@ -133,7 +133,7 @@ public class RSSFeedDemo implements Application {
         }
 
         @Override
-        public void render(Object item, ListView listView, boolean selected,
+        public void render(Object item, int index, ListView listView, boolean selected,
             boolean checked, boolean highlighted, boolean disabled) {
             if (item != null) {
                 Element itemElement = (Element)item;

@@ -134,7 +134,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                     List<?> tableData = tableView.getTableData();
 
                     for (Object rowData : tableData) {
-                        cellRenderer.render(rowData, tableView, column, false, false, false);
+                        cellRenderer.render(rowData, -1, i, tableView, column.getName(),
+                            false, false, false);
                         columnWidth = Math.max(cellRenderer.getPreferredWidth(-1), columnWidth);
                     }
                 }
@@ -212,7 +213,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                     List<?> tableData = tableView.getTableData();
 
                     for (Object rowData : tableData) {
-                        cellRenderer.render(rowData, tableView, column, false, false, false);
+                        cellRenderer.render(rowData, -1, i, tableView, column.getName(),
+                            false, false, false);
                         columnWidth = Math.max(cellRenderer.getPreferredWidth(-1), columnWidth);
                     }
                 }
@@ -240,7 +242,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         for (int i = 0; i < n; i++) {
             TableView.Column column = columns.get(i);
             TableView.CellRenderer cellRenderer = column.getCellRenderer();
-            cellRenderer.render(null, tableView, column, false, false, false);
+            cellRenderer.render(null, -1, i, tableView, column.getName(), false, false, false);
 
             rowHeight = Math.max(rowHeight, cellRenderer.getPreferredHeight(-1));
         }
@@ -352,8 +354,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                 Graphics2D rendererGraphics = (Graphics2D)graphics.create(columnX, rowY,
                     columnWidth, rowHeight);
 
-                cellRenderer.render(rowData, tableView, column, rowSelected,
-                    rowHighlighted, rowDisabled);
+                cellRenderer.render(rowData, rowIndex, columnIndex, tableView, column.getName(),
+                    rowSelected, rowHighlighted, rowDisabled);
                 cellRenderer.setSize(columnWidth, rowHeight);
                 cellRenderer.paint(rendererGraphics);
 

@@ -311,19 +311,19 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
 
     @SuppressWarnings("unchecked")
     @Override
-    public void render(Object value, TableView tableView, TableView.Column column,
+    public void render(Object value, int rowIndex, int columnIndex,
+        TableView tableView, String columnName,
         boolean rowSelected, boolean rowHighlighted, boolean rowDisabled) {
         if (value == null) {
             for (Class<?> key : cellRenderers) {
                 TableView.CellRenderer renderer = cellRenderers.get(key);
-                renderer.render(null, tableView, column, rowSelected,
-                    rowHighlighted, rowDisabled);
+                renderer.render(null, rowIndex, columnIndex, tableView, columnName,
+                    rowSelected, rowHighlighted, rowDisabled);
             }
         } else {
             Object cellData = null;
 
             // Get the row and cell data
-            String columnName = column.getName();
             if (columnName != null) {
                 Dictionary<String, Object> rowData;
                 if (value instanceof Dictionary<?, ?>) {
@@ -347,7 +347,8 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
                 cellRenderer.setSize(width, height);
             }
 
-            cellRenderer.render(value, tableView, column, rowSelected, rowHighlighted, rowDisabled);
+            cellRenderer.render(value, rowIndex, columnIndex, tableView, columnName,
+                rowSelected, rowHighlighted, rowDisabled);
         }
     }
 

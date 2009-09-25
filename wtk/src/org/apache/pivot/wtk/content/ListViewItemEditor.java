@@ -225,7 +225,7 @@ public class ListViewItemEditor implements ListView.ItemEditor {
 
         // Render the item data
         ListViewItemRenderer itemRenderer = (ListViewItemRenderer)listView.getItemRenderer();
-        itemRenderer.render(listItem, listView, false, false, false, false);
+        itemRenderer.render(listItem, index, listView, false, false, false, false);
         itemRenderer.setSize(itemBounds.width, itemBounds.height);
 
         // Calculate the text bounds

@@ -70,18 +70,27 @@ public class ListView extends Component {
          * The item to render, or <tt>null</tt> if called to calculate
          * preferred size.
          *
+         * @param index
+         * The index of the item being rendered, or <tt>-1</tt> if called to
+         * calculate preferred size.
+         *
          * @param listView
-         * The host component.
+         * The list view that contains the item.
          *
          * @param selected
-         * If <tt>true</tt>, the renderer should present a selected state for
+         * If <tt>true</tt>, the item is selected.
          * the item.
          *
+         * @param checked
+         * If <tt>true</tt>, the item is checked.
+         *
          * @param highlighted
-         * If <tt>true</tt>, the renderer should present a highlighted state
-         * for the item.
+         * If <tt>true</tt>, the item is highlighted.
+         *
+         * @param disabled
+         * If <tt>true</tt>, the item is disabled.
          */
-        public void render(Object item, ListView listView, boolean selected,
+        public void render(Object item, int index, ListView listView, boolean selected,
             boolean checked, boolean highlighted, boolean disabled);
     }
 

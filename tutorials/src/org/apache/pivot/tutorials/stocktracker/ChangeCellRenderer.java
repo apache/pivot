@@ -26,9 +26,11 @@ public class ChangeCellRenderer extends TableViewNumberCellRenderer {
     public static final Color DOWN_COLOR = new Color(0xff, 0x00, 0x00);
 
     @Override
-    public void render(Object value, TableView tableView, TableView.Column column,
+    public void render(Object value, int rowIndex, int columnIndex,
+        TableView tableView, String columnName,
         boolean rowSelected, boolean rowHighlighted, boolean rowDisabled) {
-        super.render(value, tableView, column, rowSelected, rowHighlighted, rowDisabled);
+        super.render(value, rowIndex, columnIndex, tableView, columnName,
+            rowSelected, rowHighlighted, rowDisabled);
 
         if (value != null
             && !rowSelected) {

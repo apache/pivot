@@ -63,14 +63,18 @@ public class FileBrowserSheets implements Application {
                 fileBrowserSheet.open(window, new SheetCloseListener() {
                     @Override
                     public void sheetClosed(Sheet sheet) {
-                        Sequence<File> selectedFiles = fileBrowserSheet.getSelectedFiles();
+                        if (sheet.getResult()) {
+                            Sequence<File> selectedFiles = fileBrowserSheet.getSelectedFiles();
 
-                        ListView listView = new ListView();
-                        listView.setListData(new ArrayList<File>(selectedFiles));
-                        listView.setSelectMode(ListView.SelectMode.NONE);
-                        listView.getStyles().put("backgroundColor", null);
+                            ListView listView = new ListView();
+                            listView.setListData(new ArrayList<File>(selectedFiles));
+                            listView.setSelectMode(ListView.SelectMode.NONE);
+                            listView.getStyles().put("backgroundColor", null);
 
-                        Alert.alert(MessageType.INFO, "You selected:", listView, window);
+                            Alert.alert(MessageType.INFO, "You selected:", listView, window);
+                        } else {
+                            Alert.alert(MessageType.INFO, "You didn't select anything.", window);
+                        }
                     }
                 });
             }
