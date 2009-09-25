@@ -642,7 +642,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
 
                     listViewPopup.setLocation(x, y);
                     listViewPopup.setPreferredSize(popupWidth, popupHeight);
-                    listViewPopup.open(listButton.getDisplay());
+                    listViewPopup.open(listButton.getWindow());
 
                     if (listView.getSelectedIndex() == -1
                         && listView.getListData().getLength() > 0) {

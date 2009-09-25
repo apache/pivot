@@ -66,7 +66,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     private Color highlightBackgroundColor;
     private Color alternateRowColor;
     private Color columnSelectionColor;
-    private Color gridColor;
+    private Color horizontalGridColor;
+    private Color verticalGridColor;
     private boolean showHighlight;
     private boolean showHorizontalGridLines;
     private boolean showVerticalGridLines;
@@ -92,7 +93,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         highlightBackgroundColor = theme.getColor(10);
         alternateRowColor = theme.getColor(11);
         columnSelectionColor = null;
-        gridColor = theme.getColor(11);
+        horizontalGridColor = theme.getColor(11);
+        verticalGridColor = theme.getColor(11);
 
         showHighlight = true;
         showHorizontalGridLines = true;
@@ -369,10 +371,9 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             rowY += rowHeight + 1;
         }
 
-        // Set the grid stroke and color
-        graphics.setPaint(gridColor);
-
         // Paint the vertical grid lines
+        graphics.setPaint(verticalGridColor);
+
         if (showVerticalGridLines) {
             columnX = 0;
 
@@ -390,6 +391,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         }
 
         // Paint the horizontal grid line
+        graphics.setPaint(horizontalGridColor);
+
         if (showHorizontalGridLines) {
             int rowCount = tableData.getLength();
 
@@ -798,30 +801,56 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         setColumnSelectionColor(theme.getColor(columnSelectionColor));
     }
 
-    public Color getGridColor() {
-        return gridColor;
+    public Color getHorizontalGridColor() {
+        return horizontalGridColor;
     }
 
-    public void setGridColor(Color gridColor) {
-        if (gridColor == null) {
-            throw new IllegalArgumentException("gridColor is null.");
+    public void setHorizontalGridColor(Color horizontalGridColor) {
+        if (horizontalGridColor == null) {
+            throw new IllegalArgumentException("horizontalGridColor is null.");
         }
 
-        this.gridColor = gridColor;
+        this.horizontalGridColor = horizontalGridColor;
         repaintComponent();
     }
 
-    public final void setGridColor(String gridColor) {
-        if (gridColor == null) {
-            throw new IllegalArgumentException("gridColor is null.");
+    public final void setHorizontalGridColor(String horizontalGridColor) {
+        if (horizontalGridColor == null) {
+            throw new IllegalArgumentException("horizontalGridColor is null.");
         }
 
-        setGridColor(GraphicsUtilities.decodeColor(gridColor));
+        setHorizontalGridColor(GraphicsUtilities.decodeColor(horizontalGridColor));
     }
 
-    public final void setGridColor(int gridColor) {
+    public final void setHorizontalGridColor(int horizontalGridColor) {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
-        setGridColor(theme.getColor(gridColor));
+        setHorizontalGridColor(theme.getColor(horizontalGridColor));
+    }
+
+    public Color getVerticalGridColor() {
+        return verticalGridColor;
+    }
+
+    public void setVerticalGridColor(Color verticalGridColor) {
+        if (verticalGridColor == null) {
+            throw new IllegalArgumentException("verticalGridColor is null.");
+        }
+
+        this.verticalGridColor = verticalGridColor;
+        repaintComponent();
+    }
+
+    public final void setVerticalGridColor(String verticalGridColor) {
+        if (verticalGridColor == null) {
+            throw new IllegalArgumentException("verticalGridColor is null.");
+        }
+
+        setVerticalGridColor(GraphicsUtilities.decodeColor(verticalGridColor));
+    }
+
+    public final void setVerticalGridColor(int verticalGridColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setVerticalGridColor(theme.getColor(verticalGridColor));
     }
 
     public boolean getShowHighlight() {

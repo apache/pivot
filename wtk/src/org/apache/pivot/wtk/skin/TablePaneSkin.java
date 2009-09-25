@@ -45,7 +45,8 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
     private int verticalSpacing = 0;
     private boolean showHorizontalGridLines = false;
     private boolean showVerticalGridLines = false;
-    private Color gridColor = Color.BLACK;
+    private Color horizontalGridColor = Color.BLACK;
+    private Color verticalGridColor = Color.BLACK;
     private Color highlightBackgroundColor = Color.GRAY;
 
     private int[] columnWidths = null;
@@ -569,7 +570,6 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
             Graphics2D gridGraphics = (Graphics2D)graphics.create();
 
             gridGraphics.setStroke(new BasicStroke());
-            gridGraphics.setPaint(gridColor);
             gridGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -634,6 +634,8 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
 
             if (showHorizontalGridLines
                 && verticalSpacing > 0) {
+                gridGraphics.setPaint(horizontalGridColor);
+
                 int rowY = padding.top + (rowHeights[0] + verticalSpacing);
 
                 for (int i = 1; i < rowCount; i++) {
@@ -647,6 +649,8 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
 
             if (showVerticalGridLines
                 && horizontalSpacing > 0) {
+                gridGraphics.setPaint(verticalGridColor);
+
                 int columnX = padding.left + (columnWidths[0] + horizontalSpacing);
 
                 for (int j = 1; j < columnCount; j++) {
@@ -792,21 +796,21 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
     }
 
     /**
-     * Gets the color used to paint the table pane's grid lines.
+     * Gets the color used to paint the table pane's horizontal grid lines.
      */
-    public Color getGridColor() {
-        return gridColor;
+    public Color getHorizontalGridColor() {
+        return horizontalGridColor;
     }
 
     /**
-     * Sets the color used to paint the table pane's grid lines.
+     * Sets the color used to paint the table pane's horizontal grid lines.
      */
-    public void setGridColor(Color gridColor) {
-        if (gridColor == null) {
-            throw new IllegalArgumentException("gridColor is null.");
+    public void setHorizontalGridColor(Color horizontalGridColor) {
+        if (horizontalGridColor == null) {
+            throw new IllegalArgumentException("horizontalGridColor is null.");
         }
 
-        this.gridColor = gridColor;
+        this.horizontalGridColor = horizontalGridColor;
 
         if (showHorizontalGridLines || showVerticalGridLines) {
             repaintComponent();
@@ -814,14 +818,47 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
     }
 
     /**
-     * Sets the color used to paint the table pane's grid lines.
+     * Sets the color used to paint the table pane's horizontal grid lines.
      */
-    public final void setGridColor(String gridColor) {
-        if (gridColor == null) {
-            throw new IllegalArgumentException("gridColor is null.");
+    public final void setHorizontalGridColor(String horizontalGridColor) {
+        if (horizontalGridColor == null) {
+            throw new IllegalArgumentException("horizontalGridColor is null.");
         }
 
-        setGridColor(GraphicsUtilities.decodeColor(gridColor));
+        setHorizontalGridColor(GraphicsUtilities.decodeColor(horizontalGridColor));
+    }
+
+    /**
+     * Gets the color used to paint the table pane's vertical grid lines.
+     */
+    public Color getVerticalGridColor() {
+        return verticalGridColor;
+    }
+
+    /**
+     * Sets the color used to paint the table pane's vertical grid lines.
+     */
+    public void setVerticalGridColor(Color verticalGridColor) {
+        if (verticalGridColor == null) {
+            throw new IllegalArgumentException("verticalGridColor is null.");
+        }
+
+        this.verticalGridColor = verticalGridColor;
+
+        if (showHorizontalGridLines || showVerticalGridLines) {
+            repaintComponent();
+        }
+    }
+
+    /**
+     * Sets the color used to paint the table pane's vertical grid lines.
+     */
+    public final void setVerticalGridColor(String verticalGridColor) {
+        if (verticalGridColor == null) {
+            throw new IllegalArgumentException("verticalGridColor is null.");
+        }
+
+        setVerticalGridColor(GraphicsUtilities.decodeColor(verticalGridColor));
     }
 
     /**
