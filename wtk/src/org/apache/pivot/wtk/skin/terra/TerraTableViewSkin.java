@@ -873,10 +873,14 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     public boolean mouseMove(Component component, int x, int y) {
         boolean consumed = super.mouseMove(component, x, y);
 
+        TableView tableView = (TableView)getComponent();
+
         int previousHighlightedIndex = this.highlightedIndex;
         highlightedIndex = getRowAt(y);
 
-        if (previousHighlightedIndex != highlightedIndex) {
+        if (previousHighlightedIndex != highlightedIndex
+            && tableView.getSelectMode() != TableView.SelectMode.NONE
+            && showHighlight) {
             if (previousHighlightedIndex != -1) {
                 repaintComponent(getRowBounds(previousHighlightedIndex));
             }
@@ -893,7 +897,11 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     public void mouseOut(Component component) {
         super.mouseOut(component);
 
-        if (highlightedIndex != -1) {
+        TableView tableView = (TableView)getComponent();
+
+        if (highlightedIndex != -1
+            && tableView.getSelectMode() != TableView.SelectMode.NONE
+            && showHighlight) {
             repaintComponent(getRowBounds(highlightedIndex));
         }
 
@@ -985,12 +993,16 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     @Override
     public boolean mouseWheel(Component component, Mouse.ScrollType scrollType, int scrollAmount,
         int wheelRotation, int x, int y) {
-        if (highlightedIndex != -1) {
-            Bounds rowBounds = getRowBounds(highlightedIndex);
+        TableView tableView = (TableView)getComponent();
 
-            highlightedIndex = -1;
+        if (highlightedIndex != -1
+            && tableView.getSelectMode() != TableView.SelectMode.NONE
+            && showHighlight) {
+            Bounds rowBounds = getRowBounds(highlightedIndex);
             repaintComponent(rowBounds.x, rowBounds.y, rowBounds.width, rowBounds.height, true);
         }
+
+        highlightedIndex = -1;
 
         return super.mouseWheel(component, scrollType, scrollAmount, wheelRotation, x, y);
     }
@@ -1051,10 +1063,13 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         }
 
         // Clear the highlight
-        if (highlightedIndex != -1) {
-            highlightedIndex = -1;
+        if (highlightedIndex != -1
+            && tableView.getSelectMode() != TableView.SelectMode.NONE
+            && showHighlight) {
             repaintComponent(getRowBounds(highlightedIndex));
         }
+
+        highlightedIndex = -1;
 
         return consumed;
     }
