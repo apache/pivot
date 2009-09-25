@@ -33,6 +33,42 @@ limitations under the License.
 </head>
 <body>
 <h1>Windows</h1>
-This section is not yet complete.
+<p>Though every tutorial example thus far has used windows, Pivot's actual window classes have not yet been explicitly discussed. This is because, for many applications (especially those that are browser-based), a single main application window is sufficient. However, more complex applications often require multiple windows, allowing a user to see and interact with a variety of information.</p>
+
+<p>Though the root of the WTK component hierarchy is an instance of <tt>Display</tt>, windows generally represent an application's primary entry point into the UI. Windows are always direct descendants of the display. They represent a place on the screen where the application can draw or place user interface elements.</p>
+
+<p>The class diagram below shows the Pivot window class hierarchy (though it is not shown in this diagram, Window actually extends Container, which extends Component, the root of all WTK UI classes):</p>
+
+<p><img src="windows/windows.png"></p>
+<p class="caption">Window class hierarchy.</p>
+
+<p>The following is a description of the window types shown in the diagram:</p>
+
+<ul>
+<li><p><b>Window</b> - Base window class; it is not abstract and is the most basic means by which content may be placed on the screen. It simply provides an undecorated region in which other components may be placed.</p></li>
+<li><p><b>Frame</b> - A window with a title bar and border for dragging and resizing.</p></li>
+<li><p><b>Dialog</b> - A frame that is generally used for collecting user input (engaging in a "dialog" with the user); may optionally be "modal", blocking input to its owner.</p></li>
+<li><p><b>Alert</b> - A dialog that is generally used to present brief notifications to the user.</p></li>
+<li><p><b>Sheet</b> - A window that, like a dialog, is generally used for collecting user input; however, unlike dialogs, sheets always have an owner, and are always modal over the owner's client area.</p></li>
+<li><p><b>Prompt</b> - A sheet that is generally used to present brief notifications to the user; the sheet equivalent of <tt>Alert</tt>.</p></li>
+<li><p><b>MenuPopup</b> - A "popup" window that is used to present a menu to the user. It can be used stand-alone as a context menu, but is also used by other components including <tt>MenuBar</tt> and <tt>MenuButton</tt>.</p></li>
+<li><p><b>Palette</b> - A floating tool palette window.</p></li>
+<li><p><b>FileBrowserSheet</b> - A sheet that allows the user to browse the local file system.</p></li>
+<li><p><b>Tooltip</b> - A small, popup-like window that disappears as soon as the user moves the mouse.</p></li>
+</ul>
+
+<p>Most of the tutorial examples up to this point have used a single, maximized, decorationless <tt>Window</tt> to host their example content, since this type of user interface is well-suited to browser-based deployment as employed by this tutorial. However, Pivot applications are not limited to this sort of interface. Just like a native windowing toolkit, a Pivot application can open as many windows on the display of as many different types as are required by the application.</p>
+
+<p>The following sample application simulates an "application launcher", such as the Microsoft Windows¨ task bar or the Mac OS X dock. It allows the user to create multiple top-level <tt>Frame</tt> instances, each of which can, in turn, open a selection of additional windows for which the frame will be the owner:</p>
+
+alert
+prompt
+modal dialog
+sheet
+file browser sheet
+palette
+menu popup
+tooltip
+
 </body>
 </html>
