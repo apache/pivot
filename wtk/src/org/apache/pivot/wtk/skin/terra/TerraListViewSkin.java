@@ -541,10 +541,14 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     public boolean mouseMove(Component component, int x, int y) {
         boolean consumed = super.mouseMove(component, x, y);
 
+        ListView listView = (ListView)getComponent();
+
         int previousHighlightedIndex = this.highlightedIndex;
         highlightedIndex = getItemAt(y);
 
-        if (previousHighlightedIndex != highlightedIndex) {
+        if (previousHighlightedIndex != highlightedIndex
+            && listView.getSelectMode() != ListView.SelectMode.NONE
+            && showHighlight) {
             if (previousHighlightedIndex != -1) {
                 repaintComponent(getItemBounds(previousHighlightedIndex));
             }
@@ -561,7 +565,11 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     public void mouseOut(Component component) {
         super.mouseOut(component);
 
-        if (highlightedIndex != -1) {
+        ListView listView = (ListView)getComponent();
+
+        if (highlightedIndex != -1
+            && listView.getSelectMode() != ListView.SelectMode.NONE
+            && showHighlight) {
             Bounds itemBounds = getItemBounds(highlightedIndex);
             repaintComponent(itemBounds.x, itemBounds.y, itemBounds.width, itemBounds.height);
         }
@@ -685,12 +693,16 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     @Override
     public boolean mouseWheel(Component component, Mouse.ScrollType scrollType, int scrollAmount,
         int wheelRotation, int x, int y) {
-        if (highlightedIndex != -1) {
-            Bounds itemBounds = getItemBounds(highlightedIndex);
+        ListView listView = (ListView)getComponent();
 
-            highlightedIndex = -1;
+        if (highlightedIndex != -1
+            && listView.getSelectMode() != ListView.SelectMode.NONE
+            && showHighlight) {
+            Bounds itemBounds = getItemBounds(highlightedIndex);
             repaintComponent(itemBounds.x, itemBounds.y, itemBounds.width, itemBounds.height, true);
         }
+
+        highlightedIndex = -1;
 
         return super.mouseWheel(component, scrollType, scrollAmount, wheelRotation, x, y);
     }
@@ -751,10 +763,13 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         }
 
         // Clear the highlight
-        if (highlightedIndex != -1) {
-            highlightedIndex = -1;
+        if (highlightedIndex != -1
+            && listView.getSelectMode() != ListView.SelectMode.NONE
+            && showHighlight) {
             repaintComponent(getItemBounds(highlightedIndex));
         }
+
+        highlightedIndex = -1;
 
         return consumed;
     }
