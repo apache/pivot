@@ -17,8 +17,8 @@ limitations under the License.
 -->
 
 <Window title="Scripting Demo" maximized="true"
-    WindowStateListener.windowOpened="java.lang.System.out.println('Window opened')"
-    WindowStateListener.windowClosed="java.lang.System.out.println('Window closed')"
+    WindowStateListener.windowOpened="java.lang.System.out.println('Window opened: ' + x)"
+    WindowStateListener.windowClosed="java.lang.System.out.println('Window closed: ' + y)"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:scripting="org.apache.pivot.demos.scripting"
     xmlns="org.apache.pivot.wtk">
@@ -26,7 +26,10 @@ limitations under the License.
 
     <wtkx:script src="demo.js"/>
     <wtkx:script>
-        java.lang.System.out.println("Executing inline script block.");
+    importClass(java.lang.System);
+    System.out.println("Executing inline script block.");
+    var x = 10;
+    var y = 20;
     </wtkx:script>
 
     <content>
@@ -39,7 +42,7 @@ limitations under the License.
                             <![CDATA[
                             importPackage(org.apache.pivot.wtk);
                             function buttonPressed(button) {
-                                Alert.alert("Hello from JavaScript!", button.getWindow());
+                                Alert.alert("x = " + x + ", y = " + y, button.getWindow());
                             }
                             ]]>
                             </wtkx:script>

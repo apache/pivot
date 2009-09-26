@@ -17,10 +17,16 @@ limitations under the License.
 -->
 
 <Frame icon="@application_form.png"
-    preferredWidth="320" preferredHeight="240"
+    preferredWidth="480" preferredHeight="360"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
+    <wtkx:define>
+        <wtkx:include wtkx:id="dialog" src="dialog.wtkx"/>
+        <wtkx:include wtkx:id="sheet" src="sheet.wtkx"/>
+        <wtkx:include wtkx:id="palette" src="palette.wtkx"/>
+    </wtkx:define>
+
     <content>
         <BoxPane orientation="vertical">
             <PushButton buttonData="Show Alert">
@@ -43,6 +49,45 @@ limitations under the License.
                     importPackage(org.apache.pivot.wtk);
                     function buttonPressed(button) {
                         Prompt.prompt("This is a Prompt.", button.getWindow());
+                    }
+                    ]]>
+                    </wtkx:script>
+                </buttonPressListeners>
+            </PushButton>
+
+            <PushButton buttonData="Show Dialog">
+                <buttonPressListeners>
+                    <wtkx:script>
+                    <![CDATA[
+                    importPackage(org.apache.pivot.wtk);
+                    function buttonPressed(button) {
+                        dialog.open(button.getWindow(), null);
+                    }
+                    ]]>
+                    </wtkx:script>
+                </buttonPressListeners>
+            </PushButton>
+
+            <PushButton buttonData="Show Sheet">
+                <buttonPressListeners>
+                    <wtkx:script>
+                    <![CDATA[
+                    importPackage(org.apache.pivot.wtk);
+                    function buttonPressed(button) {
+                        sheet.open(button.getWindow(), null);
+                    }
+                    ]]>
+                    </wtkx:script>
+                </buttonPressListeners>
+            </PushButton>
+
+            <PushButton buttonData="Show Palette">
+                <buttonPressListeners>
+                    <wtkx:script>
+                    <![CDATA[
+                    importPackage(org.apache.pivot.wtk);
+                    function buttonPressed(button) {
+                        palette.open(button.getWindow());
                     }
                     ]]>
                     </wtkx:script>

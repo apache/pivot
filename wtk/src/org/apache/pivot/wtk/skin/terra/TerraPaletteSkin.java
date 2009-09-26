@@ -96,7 +96,7 @@ public class TerraPaletteSkin extends WindowSkin {
 
     private Point dragOffset = null;
 
-    private Insets padding = new Insets(4);
+    private Insets padding = new Insets(1);
 
     private WindowListener ownerListener = new WindowListener.Adapter() {
         @Override
