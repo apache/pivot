@@ -391,16 +391,18 @@ pushButton.getButtonPressListeners().add(new ButtonPressListener() {
 
 <p>While this is simple enough, it can become cumbersome in any non-trivial application where many such event handlers are defined. It also dissociates the event handler from the element to which it applies, making it difficult to track down event handling logic.</p>
 
-<p>A similar event handler might be defined in JavaScript as follows (note that a <tt>&lt;wtkx:script&gt;</tt> block is not required in this case, because listener list elements may only contain script code):</p>
+<p>A similar event handler might be defined in JavaScript as follows:</p>
 
 <pre class="brush:xml">
 &lt;PushButton xmlns="org.apache.pivot.wtk"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     buttonData="Click Me!"&gt;
     &lt;buttonPressListeners&gt;
+        &lt;wtkx:script&gt;
         function buttonPressed(button) {
             // Handle event
         }
+        &lt;/wtkx:script&gt;
     &lt;/buttonPressListeners&gt;
 &lt;/PushButton&gt;
 </pre>
@@ -412,7 +414,9 @@ pushButton.getButtonPressListeners().add(new ButtonPressListener() {
 <p>Also, though it isn't obvious from this simple example, script-based event handlers are not required to provide implementations for every method defined by the listener interface. Any omitted methods are simply processed by a default no-op handler.</p>
 
 <h3>Event Listener Attributes</h3>
-<p>Event listeners can also be declared in attributes, using a syntax similar to that used for static property setters. The attribute name for an event listener consists of the name of the interface that defines the event plus the name of the event, separated by a period. For example, the above button press listener can be declared in an attribute as follows:</p>
+<p>Event listeners can also be declared in attributes, using a syntax similar to that used for static property setters. The attribute name for an event listener consists of the name of the interface that defines the event plus the name of the event, separated by a period. Like listener list elements, a special scope is created for listener attributes that is local to the handler; any variables defined within the attribute are only visible within the handler.</p>
+
+<p>For example, the above button press listener can be declared in an attribute as follows:</p>
 
 <pre class="brush:xml">
 &lt;PushButton xmlns="org.apache.pivot.wtk"
@@ -421,7 +425,7 @@ pushButton.getButtonPressListeners().add(new ButtonPressListener() {
     ButtonPressListener.buttonPressed="// Handle event"/&gt;
 </pre>
 
-<p>Attribute-based event handlers are even more succinct than element-based listener lists, and are well suited to short handler code that, ideally, fits on a single line. Longer event handler code may be better suited to an element-based listener list, or, depending on the level of complexity, a Java-based event handler.</p>
+<p>Attribute-based event handlers are well suited to short handler code that, ideally, fits on a single line. Longer event handler code may be better suited to an element-based listener list, or, depending on the level of complexity, a Java-based event handler.</p>
 
 <h2>WTKXSerializer</h2>
 <p>The <tt>org.apache.pivot.wtkx.WTKXSerializer</tt> class, which has been mentioned in previous sections, is what drives the actual loading and processing of a WTKX file and its associated script and includes. It implements the <tt>org.apache.pivot.serialization.Serializer</tt> interface, and returns the object hierarchy corresponding to the structure declared within the WTKX file. It defines the following overloads for the <tt>readObject()</tt> method:</p>
