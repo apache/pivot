@@ -39,6 +39,7 @@ public class Windows implements Application {
 
         for (int i = 0; i < 3; i++) {
             WTKXSerializer wtkxSerializer = new WTKXSerializer();
+            wtkxSerializer.put("application", this);
 
             Frame frame;
             try {
@@ -74,6 +75,12 @@ public class Windows implements Application {
 
     @Override
     public void resume() {
+    }
+
+    public Window load(String fileName)
+        throws SerializationException, IOException {
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        return (Window)wtkxSerializer.readObject(this, fileName);
     }
 
     public static void main(String[] args) {

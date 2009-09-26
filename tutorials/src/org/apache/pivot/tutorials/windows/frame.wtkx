@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Frame icon="@application_form.png"
+<Frame wtkx:id="frame" icon="@application_form.png"
     preferredWidth="480" preferredHeight="360"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:content="org.apache.pivot.wtk.content"
@@ -24,8 +24,11 @@ limitations under the License.
     <wtkx:define>
         <wtkx:include wtkx:id="dialog" src="dialog.wtkx"/>
         <wtkx:include wtkx:id="sheet" src="sheet.wtkx"/>
-        <wtkx:include wtkx:id="palette" src="palette.wtkx"/>
     </wtkx:define>
+
+    <wtkx:script>
+    var palette = null;
+    </wtkx:script>
 
     <content>
         <BoxPane orientation="vertical">
@@ -35,7 +38,7 @@ limitations under the License.
                     <![CDATA[
                     importPackage(org.apache.pivot.wtk);
                     function buttonPressed(button) {
-                        Alert.alert("This is an Alert.", button.getWindow());
+                        Alert.alert("This is an Alert.", frame);
                     }
                     ]]>
                     </wtkx:script>
@@ -48,7 +51,7 @@ limitations under the License.
                     <![CDATA[
                     importPackage(org.apache.pivot.wtk);
                     function buttonPressed(button) {
-                        Prompt.prompt("This is a Prompt.", button.getWindow());
+                        Prompt.prompt("This is a Prompt.", frame);
                     }
                     ]]>
                     </wtkx:script>
@@ -61,7 +64,7 @@ limitations under the License.
                     <![CDATA[
                     importPackage(org.apache.pivot.wtk);
                     function buttonPressed(button) {
-                        dialog.open(button.getWindow(), null);
+                        dialog.open(frame, null);
                     }
                     ]]>
                     </wtkx:script>
@@ -74,7 +77,7 @@ limitations under the License.
                     <![CDATA[
                     importPackage(org.apache.pivot.wtk);
                     function buttonPressed(button) {
-                        sheet.open(button.getWindow(), null);
+                        sheet.open(frame, null);
                     }
                     ]]>
                     </wtkx:script>
@@ -87,7 +90,12 @@ limitations under the License.
                     <![CDATA[
                     importPackage(org.apache.pivot.wtk);
                     function buttonPressed(button) {
-                        palette.open(button.getWindow());
+                        if (palette == null) {
+                            palette = application.load("palette.wtkx");
+                            palette.setLocation(frame.getX() + frame.getWidth() + 20, frame.getY() + 20);
+                        }
+
+                        palette.open(frame);
                     }
                     ]]>
                     </wtkx:script>
