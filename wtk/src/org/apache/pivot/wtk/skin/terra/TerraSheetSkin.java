@@ -84,15 +84,15 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
 
     private ContainerMouseListener displayMouseListener = new ContainerMouseListener() {
         @Override
-        public boolean mouseMove(Container container, int x, int y) {
-            return isMouseOverClientArea(container, x, y);
+        public boolean mouseMove(Container display, int x, int y) {
+            return isMouseOverClientArea(display, x, y);
         }
 
         @Override
-        public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
+        public boolean mouseDown(Container display, Mouse.Button button, int x, int y) {
             boolean consumed = false;
 
-            if (isMouseOverClientArea(container, x, y)) {
+            if (isMouseOverClientArea(display, x, y)) {
                 Sheet sheet = (Sheet)getComponent();
                 Window owner = sheet.getOwner();
                 owner.moveToFront();
@@ -105,29 +105,29 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         }
 
         @Override
-        public boolean mouseUp(Container container, Mouse.Button button, int x, int y) {
-            return isMouseOverClientArea(container, x, y);
+        public boolean mouseUp(Container display, Mouse.Button button, int x, int y) {
+            return isMouseOverClientArea(display, x, y);
         }
 
         @Override
-        public boolean mouseWheel(Container container, Mouse.ScrollType scrollType,
+        public boolean mouseWheel(Container display, Mouse.ScrollType scrollType,
             int scrollAmount, int wheelRotation, int x, int y) {
-            return isMouseOverClientArea(container, x, y);
+            return isMouseOverClientArea(display, x, y);
         }
 
-        private boolean isMouseOverClientArea(Container container, int x, int y) {
+        private boolean isMouseOverClientArea(Container display, int x, int y) {
             boolean mouseOverClientArea = false;
 
             Sheet sheet = (Sheet)getComponent();
-            Component descendant = container.getDescendantAt(x, y);
+            Component descendant = display.getDescendantAt(x, y);
 
-            if (descendant != container) {
+            if (descendant != display) {
                 Window window = descendant.getWindow();
 
                 if (sheet.getOwner() == window) {
                     Bounds clientArea = window.getClientArea();
 
-                    Point location = window.mapPointFromAncestor(container, x, y);
+                    Point location = window.mapPointFromAncestor(display, x, y);
                     mouseOverClientArea = clientArea.contains(location);
                 }
             }

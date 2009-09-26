@@ -30,11 +30,13 @@ import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentMouseButtonListener;
+import org.apache.pivot.wtk.Cursor;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.HorizontalAlignment;
+import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.LinkButton;
@@ -46,11 +48,10 @@ import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtk.WindowListener;
+import org.apache.pivot.wtk.WindowClassListener;
 import org.apache.pivot.wtk.effects.DropShadowDecorator;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.skin.WindowSkin;
-
 
 /**
  * Palette skin class.
@@ -83,7 +84,40 @@ public class TerraPaletteSkin extends WindowSkin {
         }
     }
 
+    /**
+     * Resize button image.
+     */
+    protected class ResizeImage extends Image {
+        public static final int ALPHA = 64;
+
+        @Override
+        public int getWidth() {
+            return 5;
+        }
+
+        @Override
+        public int getHeight() {
+            return 5;
+        }
+
+        @Override
+        public void paint(Graphics2D graphics) {
+            graphics.setPaint(new Color(0, 0, 0, ALPHA));
+            graphics.fillRect(3, 0, 2, 1);
+            graphics.fillRect(0, 3, 2, 1);
+            graphics.fillRect(3, 3, 2, 1);
+
+            graphics.setPaint(new Color(contentBorderColor.getRed(),
+                contentBorderColor.getGreen(), contentBorderColor.getBlue(),
+                ALPHA));
+            graphics.fillRect(3, 1, 2, 1);
+            graphics.fillRect(0, 4, 2, 1);
+            graphics.fillRect(3, 4, 2, 1);
+        }
+    }
+
     private Image closeImage = new CloseImage();
+    private Image resizeImage = new ResizeImage();
 
     private TablePane titleBarTablePane = new TablePane();
     private BoxPane titleBoxPane = new BoxPane();
@@ -91,18 +125,25 @@ public class TerraPaletteSkin extends WindowSkin {
 
     private Label titleLabel = new Label();
     private LinkButton closeButton = new LinkButton(closeImage);
+    private ImageView resizeHandle = new ImageView(resizeImage);
 
     private DropShadowDecorator dropShadowDecorator = null;
 
     private Point dragOffset = null;
+    private Point resizeOffset = null;
 
     private Insets padding = new Insets(1);
 
-    private WindowListener ownerListener = new WindowListener.Adapter() {
+    private WindowClassListener windowClassListener = new WindowClassListener() {
         @Override
-        public void activeChanged(Window owner, Window obverseWindow) {
-            Window window = (Window)getComponent();
-            window.setVisible(owner.isActive());
+        public void activeWindowChanged(Window previousActiveWindow) {
+            Palette palette = (Palette)getComponent();
+            Window owner = palette.getOwner();
+
+            Window activeWindow = Window.getActiveWindow();
+            palette.setVisible(activeWindow != null
+                && (owner == activeWindow
+                    || owner.isOwner(activeWindow)));
         }
     };
 
@@ -183,6 +224,8 @@ public class TerraPaletteSkin extends WindowSkin {
         // Attach the drop-shadow decorator
         dropShadowDecorator = new DropShadowDecorator(3, 3, 3);
         palette.getDecorators().add(dropShadowDecorator);
+
+        palette.add(resizeHandle);
 
         titleChanged(palette, null);
     }
@@ -271,10 +314,21 @@ public class TerraPaletteSkin extends WindowSkin {
         int width = getWidth();
         int height = getHeight();
 
+        int clientX = 1;
+        int clientY = 1;
+        int clientWidth = Math.max(width - 2, 0);
+        int clientHeight = Math.max(height - 2, 0);
+
         // Size/position title bar
-        titleBarTablePane.setLocation(1, 1);
-        titleBarTablePane.setSize(Math.max(width - 2, 0),
-            titleBarTablePane.getPreferredHeight());
+        titleBarTablePane.setLocation(clientX, clientY);
+        titleBarTablePane.setSize(clientWidth, titleBarTablePane.getPreferredHeight());
+
+        // Size/position resize handle
+        resizeHandle.setSize(resizeHandle.getPreferredSize());
+        resizeHandle.setLocation(clientWidth - resizeHandle.getWidth(),
+            clientHeight - resizeHandle.getHeight());
+        resizeHandle.setVisible(palette.isPreferredWidthSet()
+            || palette.isPreferredHeightSet());
 
         // Size/position content
         Component content = palette.getContent();
@@ -383,10 +437,10 @@ public class TerraPaletteSkin extends WindowSkin {
         boolean consumed = super.mouseMove(component, x, y);
 
         if (Mouse.getCapturer() == component) {
-            Window window = (Window)getComponent();
-            Display display = window.getDisplay();
+            Palette palette = (Palette)getComponent();
+            Display display = palette.getDisplay();
 
-            Point location = window.mapPointToAncestor(display, x, y);
+            Point location = palette.mapPointToAncestor(display, x, y);
 
             // Pretend that the mouse can't move off screen (off the display)
             location = new Point(Math.min(Math.max(location.x, 0), display.getWidth() - 1),
@@ -394,8 +448,53 @@ public class TerraPaletteSkin extends WindowSkin {
 
             if (dragOffset != null) {
                 // Move the window
-                window.setLocation(location.x - dragOffset.x, location.y - dragOffset.y);
+                palette.setLocation(location.x - dragOffset.x, location.y - dragOffset.y);
+            } else {
+                if (resizeOffset != null) {
+                    // Resize the frame
+                    int preferredWidth = -1;
+                    int preferredHeight = -1;
+
+                    if (palette.isPreferredWidthSet()) {
+                        preferredWidth = Math.max(location.x - palette.getX() + resizeOffset.x,
+                            titleBarTablePane.getPreferredWidth(-1) + 2);
+                        preferredWidth = Math.min(preferredWidth, palette.getMaximumPreferredWidth());
+                        preferredWidth = Math.max(preferredWidth, palette.getMinimumPreferredWidth());
+                    }
+
+                    if (palette.isPreferredHeightSet()) {
+                        preferredHeight = Math.max(location.y - palette.getY() + resizeOffset.y,
+                            titleBarTablePane.getHeight() + resizeHandle.getHeight() + 7);
+                        preferredHeight = Math.min(preferredHeight, palette.getMaximumPreferredHeight());
+                        preferredHeight = Math.max(preferredHeight, palette.getMinimumPreferredHeight());
+                    }
+
+                    palette.setPreferredSize(preferredWidth, preferredHeight);
+                }
             }
+        } else {
+            Cursor cursor = null;
+            if (resizeHandle.isVisible()
+                && x > resizeHandle.getX()
+                && y > resizeHandle.getY()) {
+                boolean preferredWidthSet = component.isPreferredWidthSet();
+                boolean preferredHeightSet = component.isPreferredHeightSet();
+
+                if (preferredWidthSet
+                    && preferredHeightSet) {
+                    cursor = Cursor.RESIZE_SOUTH_EAST;
+                } else if (preferredWidthSet) {
+                    cursor = Cursor.RESIZE_EAST;
+                } else if (preferredHeightSet) {
+                    cursor = Cursor.RESIZE_SOUTH;
+                } else {
+                    cursor = null;
+                }
+            } else {
+                cursor = null;
+            }
+
+            component.setCursor(cursor);
         }
 
         return consumed;
@@ -415,6 +514,13 @@ public class TerraPaletteSkin extends WindowSkin {
             if (titleBarBounds.contains(x, y)) {
                 dragOffset = new Point(x, y);
                 Mouse.capture(component);
+            } else {
+                Bounds resizeHandleBounds = resizeHandle.getBounds();
+
+                if (resizeHandleBounds.contains(x, y)) {
+                    resizeOffset = new Point(getWidth() - x, getHeight() - y);
+                    Mouse.capture(component);
+                }
             }
         }
 
@@ -427,6 +533,7 @@ public class TerraPaletteSkin extends WindowSkin {
 
         if (Mouse.getCapturer() == component) {
             dragOffset = null;
+            resizeOffset = null;
             Mouse.release();
         }
 
@@ -446,15 +553,13 @@ public class TerraPaletteSkin extends WindowSkin {
     public void windowOpened(Window window) {
         super.windowOpened(window);
 
-        Window owner = window.getOwner();
-        window.setVisible(owner.isActive());
-        owner.getWindowListeners().add(ownerListener);
+        Window.getWindowClassListeners().add(windowClassListener);
     }
 
     @Override
     public void windowClosed(Window window, Display display, Window owner) {
         super.windowClosed(window, display, owner);
 
-        owner.getWindowListeners().remove(ownerListener);
+        Window.getWindowClassListeners().remove(windowClassListener);
     }
 }

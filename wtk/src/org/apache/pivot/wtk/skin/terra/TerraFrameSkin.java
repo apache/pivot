@@ -52,7 +52,6 @@ import org.apache.pivot.wtk.effects.DropShadowDecorator;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.skin.WindowSkin;
 
-
 /**
  * Frame skin.
  */

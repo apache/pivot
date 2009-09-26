@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.wtk.skin.terra;
 
+import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Component;
@@ -56,15 +57,15 @@ public class TerraDialogSkin extends TerraFrameSkin implements DialogStateListen
 
     private ContainerMouseListener displayMouseListener = new ContainerMouseListener.Adapter() {
         @Override
-        public boolean mouseMove(Container container, int x, int y) {
-            return isMouseOverOwner(container, x, y);
+        public boolean mouseMove(Container display, int x, int y) {
+            return isMouseOverRelative(display, x, y);
         }
 
         @Override
-        public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
+        public boolean mouseDown(Container display, Mouse.Button button, int x, int y) {
             boolean consumed = false;
 
-            if (isMouseOverOwner(container, x, y)) {
+            if (isMouseOverRelative(display, x, y)) {
                 Dialog dialog = (Dialog)getComponent();
                 Window rootOwner = dialog.getRootOwner();
                 rootOwner.moveToFront();
@@ -78,27 +79,53 @@ public class TerraDialogSkin extends TerraFrameSkin implements DialogStateListen
         }
 
         @Override
-        public boolean mouseUp(Container container, Mouse.Button button, int x, int y) {
-            return isMouseOverOwner(container, x, y);
+        public boolean mouseUp(Container display, Mouse.Button button, int x, int y) {
+            return isMouseOverRelative(display, x, y);
         }
 
         @Override
-        public boolean mouseWheel(Container container, Mouse.ScrollType scrollType,
+        public boolean mouseWheel(Container display, Mouse.ScrollType scrollType,
             int scrollAmount, int wheelRotation, int x, int y) {
-            return isMouseOverOwner(container, x, y);
+            return isMouseOverRelative(display, x, y);
         }
 
-        private boolean isMouseOverOwner(Container container, int x, int y) {
+        private boolean isMouseOverRelative(Container display, int x, int y) {
             boolean mouseOverOwner = false;
 
             Dialog dialog = (Dialog)getComponent();
 
             if (dialog.isModal()) {
-                Component descendant = container.getDescendantAt(x, y);
+                Component descendant = display.getDescendantAt(x, y);
 
-                if (descendant != container) {
+                if (descendant != display) {
                     Window window = descendant.getWindow();
-                    mouseOverOwner = window.isOwner(dialog);
+
+                    if (window != dialog) {
+                        // Compare the windows' owner paths (including the windows themselves);
+                        // the windows are relatives if they have any ancestry in common
+                        ArrayList<Window> dialogOwnerPath = new ArrayList<Window>();
+                        Window dialogOwner = dialog;
+                        while (dialogOwner != null) {
+                            dialogOwnerPath.insert(dialogOwner, 0);
+                            dialogOwner = dialogOwner.getOwner();
+                        }
+
+                        ArrayList<Window> windowOwnerPath = new ArrayList<Window>();
+                        Window windowOwner = window;
+                        while (windowOwner != null) {
+                            windowOwnerPath.insert(windowOwner, 0);
+                            windowOwner = windowOwner.getOwner();
+                        }
+
+                        int i = 0;
+                        while (i < dialogOwnerPath.getLength()
+                            && i < windowOwnerPath.getLength()
+                            && dialogOwnerPath.get(i) == windowOwnerPath.get(i)) {
+                            i++;
+                        }
+
+                        mouseOverOwner = (i > 0);
+                    }
                 }
             }
 
