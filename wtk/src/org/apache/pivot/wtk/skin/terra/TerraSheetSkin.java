@@ -124,7 +124,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
             if (descendant != container) {
                 Window window = descendant.getWindow();
 
-                if (window.isOwner(sheet)) {
+                if (sheet.getOwner() == window) {
                     Bounds clientArea = window.getClientArea();
 
                     Point location = window.mapPointFromAncestor(container, x, y);

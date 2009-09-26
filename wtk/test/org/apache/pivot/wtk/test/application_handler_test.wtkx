@@ -23,11 +23,13 @@ limitations under the License.
         <BoxPane>
             <PushButton buttonData="Throw Exception">
                 <buttonPressListeners>
+                    <wtkx:script>
                     <![CDATA[
                     function buttonPressed(button) {
                         throw new java.lang.RuntimeException("Button pressed");
                     }
                     ]]>
+                    </wtkx:script>
                 </buttonPressListeners>
             </PushButton>
         </BoxPane>

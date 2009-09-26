@@ -22,5 +22,32 @@ limitations under the License.
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
     <content>
+        <BoxPane orientation="vertical">
+            <PushButton buttonData="Show Alert">
+                <buttonPressListeners>
+                    <wtkx:script>
+                    <![CDATA[
+                    importPackage(org.apache.pivot.wtk);
+                    function buttonPressed(button) {
+                        Alert.alert("This is an Alert.", button.getWindow());
+                    }
+                    ]]>
+                    </wtkx:script>
+                </buttonPressListeners>
+            </PushButton>
+
+            <PushButton buttonData="Show Prompt">
+                <buttonPressListeners>
+                    <wtkx:script>
+                    <![CDATA[
+                    importPackage(org.apache.pivot.wtk);
+                    function buttonPressed(button) {
+                        Prompt.prompt("This is a Prompt.", button.getWindow());
+                    }
+                    ]]>
+                    </wtkx:script>
+                </buttonPressListeners>
+            </PushButton>
+        </BoxPane>
     </content>
 </Frame>

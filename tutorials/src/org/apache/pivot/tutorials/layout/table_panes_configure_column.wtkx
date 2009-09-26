@@ -24,11 +24,13 @@ limitations under the License.
     <wtkx:define>
         <Button.Group wtkx:id="columnWidthGroup">
             <groupListeners>
+                <wtkx:script>
                 <![CDATA[
                 function selectionChanged(group, previousSelection) {
                     setColumnWidth();
                 }
                 ]]>
+                </wtkx:script>
             </groupListeners>
         </Button.Group>
     </wtkx:define>
@@ -93,11 +95,13 @@ limitations under the License.
                                                                     upperBound="256"/>
                                                             </spinnerData>
                                                             <spinnerSelectionListeners>
+                                                                <wtkx:script>
                                                                 <![CDATA[
                                                                 function selectedIndexChanged(spinner, previousSelectedIndex) {
                                                                     setColumnWidth();
                                                                 }
                                                                 ]]>
+                                                                </wtkx:script>
                                                             </spinnerSelectionListeners>
                                                         </Spinner>
                                                     </TablePane.Row>
@@ -111,11 +115,13 @@ limitations under the License.
                                                                     upperBound="300"/>
                                                             </spinnerData>
                                                             <spinnerSelectionListeners>
+                                                                <wtkx:script>
                                                                 <![CDATA[
                                                                 function selectedIndexChanged(spinner, previousSelectedIndex) {
                                                                     setColumnWidth();
                                                                 }
                                                                 ]]>
+                                                                </wtkx:script>
                                                             </spinnerSelectionListeners>
                                                         </Spinner>
                                                     </TablePane.Row>

@@ -273,11 +273,8 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         }
     }
 
-    private Resources resources;
-    private String language;
-    private XMLInputFactory xmlInputFactory;
-
     private URL location = null;
+    private Resources resources = null;
     private HashMap<String, Object> initialBindings = new HashMap<String, Object>();
 
     private Object root = null;
@@ -285,12 +282,16 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
     private HashMap<String, WTKXSerializer> includeSerializers = new HashMap<String, WTKXSerializer>();
 
     private ScriptEngineManager scriptEngineManager = null;
+    private String language = "javascript";
 
+    private XMLInputFactory xmlInputFactory;
     private Element element = null;
 
     public static final char URL_PREFIX = '@';
     public static final char RESOURCE_KEY_PREFIX = '%';
     public static final char OBJECT_REFERENCE_PREFIX = '$';
+
+    public static final String LANGUAGE_PROCESSING_INSTRUCTION = "language";
 
     public static final String WTKX_PREFIX = "wtkx";
     public static final String ID_ATTRIBUTE = "id";
@@ -298,36 +299,21 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
     public static final String INCLUDE_TAG = "include";
     public static final String INCLUDE_SRC_ATTRIBUTE = "src";
     public static final String INCLUDE_RESOURCES_ATTRIBUTE = "resources";
-    public static final String INCLUDE_LANGUAGE_ATTRIBUTE = "language";
 
     public static final String SCRIPT_TAG = "script";
     public static final String SCRIPT_SRC_ATTRIBUTE = "src";
+    public static final String SCRIPT_LANGUAGE_ATTRIBUTE = "language";
 
     public static final String DEFINE_TAG = "define";
 
     public static final String MIME_TYPE = "application/wtkx";
 
-    public static final String DEFAULT_LANGUAGE = "javascript";
-
     public WTKXSerializer() {
-        this(null, DEFAULT_LANGUAGE);
+        this(null);
     }
 
     public WTKXSerializer(Resources resources) {
-        this(resources, DEFAULT_LANGUAGE);
-    }
-
-    public WTKXSerializer(String language) {
-        this(null, language);
-    }
-
-    public WTKXSerializer(Resources resources, String language) {
-        if (language == null) {
-            throw new IllegalArgumentException();
-        }
-
         this.resources = resources;
-        this.language = language;
 
         xmlInputFactory = XMLInputFactory.newInstance();
         xmlInputFactory.setProperty("javax.xml.stream.isCoalescing", true);
@@ -424,6 +410,17 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                     int event = reader.next();
 
                     switch (event) {
+                        case XMLStreamConstants.PROCESSING_INSTRUCTION: {
+                            String piTarget = reader.getPITarget();
+                            String piData = reader.getPIData();
+
+                            if (piTarget.equals(LANGUAGE_PROCESSING_INSTRUCTION)) {
+                                language = piData;
+                            }
+
+                            break;
+                        }
+
                         case XMLStreamConstants.CHARACTERS: {
                             if (!reader.isWhiteSpace()) {
                                 String text = reader.getText();
@@ -444,52 +441,6 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                                 } catch (InvocationTargetException exception) {
                                                     throw new SerializationException(exception);
                                                 } catch (IllegalAccessException exception) {
-                                                    throw new SerializationException(exception);
-                                                }
-                                            }
-
-                                            break;
-                                        }
-
-                                        case READ_ONLY_PROPERTY: {
-                                            if (element.value instanceof ListenerList<?>) {
-                                                // Don't pollute the engine namespace with the listener functions
-                                                ScriptEngine scriptEngine = scriptEngineManager.getEngineByName(language);
-                                                scriptEngine.setBindings(new SimpleBindings(), ScriptContext.ENGINE_SCOPE);
-
-                                                // Execute the script
-                                                try {
-                                                    scriptEngine.eval(text);
-                                                } catch (ScriptException exception) {
-                                                    System.err.println(exception);
-                                                    System.err.println(text);
-                                                }
-
-                                                Class<?> listenerListClass = element.value.getClass();
-
-                                                java.lang.reflect.Type[] genericInterfaces = listenerListClass.getGenericInterfaces();
-                                                Class<?> listenerClass = (Class<?>)genericInterfaces[0];
-
-                                                // Create an invocation handler for this listener
-                                                ElementInvocationHandler handler = new ElementInvocationHandler(scriptEngine);
-                                                Object listener =
-                                                    Proxy.newProxyInstance(ThreadUtilities.getClassLoader(),
-                                                        new Class[]{listenerClass}, handler);
-
-                                                // Add it to the listener list
-                                                Method addMethod;
-                                                try {
-                                                    addMethod = listenerListClass.getMethod("add",
-                                                        new Class<?>[] {Object.class});
-                                                } catch (NoSuchMethodException exception) {
-                                                    throw new RuntimeException(exception);
-                                                }
-
-                                                try {
-                                                    addMethod.invoke(element.value, new Object[] {listener});
-                                                } catch (IllegalAccessException exception) {
-                                                    throw new SerializationException(exception);
-                                                } catch (InvocationTargetException exception) {
                                                     throw new SerializationException(exception);
                                                 }
                                             }
@@ -648,7 +599,6 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                         // and static property setters only
                                         String src = null;
                                         Resources resources = this.resources;
-                                        String language = this.language;
 
                                         for (Attribute attribute : element.attributes) {
                                             if (attribute.prefix != null
@@ -664,8 +614,6 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                                     src = attribute.value;
                                                 } else if (attribute.localName.equals(INCLUDE_RESOURCES_ATTRIBUTE)) {
                                                     resources = new Resources(resources, attribute.value);
-                                                } else if (attribute.localName.equals(INCLUDE_LANGUAGE_ATTRIBUTE)) {
-                                                    language = attribute.value;
                                                 } else {
                                                     if (!Character.isUpperCase(attribute.localName.charAt(0))) {
                                                         throw new SerializationException("Instance property setters are not"
@@ -685,7 +633,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                         }
 
                                         // Read the object
-                                        WTKXSerializer serializer = new WTKXSerializer(resources, language);
+                                        WTKXSerializer serializer = new WTKXSerializer(resources);
                                         if (id != null) {
                                             includeSerializers.put(id, serializer);
                                         }
@@ -911,6 +859,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                 case SCRIPT: {
                                     // Process attributes looking for src and language
                                     String src = null;
+                                    String language = this.language;
                                     for (Attribute attribute : element.attributes) {
                                         if (attribute.prefix != null
                                             && attribute.prefix.length() > 0) {
@@ -921,24 +870,43 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
 
                                         if (attribute.localName.equals(SCRIPT_SRC_ATTRIBUTE)) {
                                             src = attribute.value;
+                                        } else if (attribute.localName.equals(SCRIPT_LANGUAGE_ATTRIBUTE)) {
+                                            language = attribute.value;
                                         } else {
                                             throw new SerializationException(attribute.localName + " is not a valid"
                                                 + " attribute for the " + WTKX_PREFIX + ":" + SCRIPT_TAG + " tag.");
                                         }
                                     }
 
-                                    if (element.value != null
-                                        && language == null) {
-                                        language = "javascript";
+                                    Bindings bindings;
+                                    if (element.parent.value instanceof ListenerList<?>) {
+                                        // Don't pollute the engine namespace with the listener functions
+                                        bindings = new SimpleBindings();
+                                    } else {
+                                        bindings = scriptEngineManager.getBindings();
                                     }
 
                                     // Execute script
-                                    ScriptEngine scriptEngine = scriptEngineManager.getEngineByName(language);
-                                    scriptEngine.setBindings(scriptEngineManager.getBindings(),
-                                        ScriptContext.ENGINE_SCOPE);
+                                    final ScriptEngine scriptEngine;
 
                                     if (src != null) {
                                         // The script is located in an external file
+                                        int i = src.lastIndexOf(".");
+                                        if (i == -1) {
+                                            throw new SerializationException("Cannot determine type of script \""
+                                                + src + "\".");
+                                        }
+
+                                        String extension = src.substring(i + 1);
+                                        scriptEngine = scriptEngineManager.getEngineByExtension(extension);
+
+                                        if (scriptEngine == null) {
+                                            throw new SerializationException("Unable to find scripting engine for"
+                                                + " extension " + extension + ".");
+                                        }
+
+                                        scriptEngine.setBindings(bindings, ScriptContext.ENGINE_SCOPE);
+
                                         try {
                                             URL scriptLocation;
                                             if (src.charAt(0) == '/') {
@@ -964,13 +932,51 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                         }
                                     } else {
                                         // The script is inline
+                                        scriptEngine = scriptEngineManager.getEngineByName(language);
+
+                                        if (scriptEngine == null) {
+                                            throw new SerializationException("Unable to find scripting engine for"
+                                                + " language \"" + language + "\".");
+                                        }
+
+                                        scriptEngine.setBindings(bindings, ScriptContext.ENGINE_SCOPE);
+
                                         if (element.value != null) {
                                             try {
                                                 scriptEngine.eval((String)element.value);
                                             } catch (ScriptException exception) {
-                                                System.err.println(exception);
-                                                System.err.println(element.value);
+                                                exception.printStackTrace(System.err);
                                             }
+                                        }
+                                    }
+
+                                    if (element.parent.value instanceof ListenerList<?>) {
+                                        // Create the listener and add it to the list
+                                        Class<?> listenerListClass = element.parent.value.getClass();
+
+                                        java.lang.reflect.Type[] genericInterfaces = listenerListClass.getGenericInterfaces();
+                                        Class<?> listenerClass = (Class<?>)genericInterfaces[0];
+
+                                        ElementInvocationHandler handler = new ElementInvocationHandler(scriptEngine);
+
+                                        Method addMethod;
+                                        try {
+                                            addMethod = listenerListClass.getMethod("add",
+                                                new Class<?>[] {Object.class});
+                                        } catch (NoSuchMethodException exception) {
+                                            throw new RuntimeException(exception);
+                                        }
+
+                                        Object listener =
+                                            Proxy.newProxyInstance(ThreadUtilities.getClassLoader(),
+                                                new Class[]{listenerClass}, handler);
+
+                                        try {
+                                            addMethod.invoke(element.parent.value, new Object[] {listener});
+                                        } catch (IllegalAccessException exception) {
+                                            throw new SerializationException(exception);
+                                        } catch (InvocationTargetException exception) {
+                                            throw new SerializationException(exception);
                                         }
                                     }
 

@@ -574,15 +574,15 @@ public class Window extends Container {
             Vote vote = windowStateListeners.previewWindowOpen(this, display);
 
             if (vote == Vote.APPROVE) {
-                // Add the window to the display
-                display.add(this);
-
                 // Set the owner and add to the owner's owned window list
                 this.owner = owner;
 
                 if (owner != null) {
                     owner.ownedWindows.add(this);
                 }
+
+                // Add the window to the display
+                display.add(this);
 
                 // Notify listeners
                 opening = false;

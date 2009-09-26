@@ -32,6 +32,7 @@ limitations under the License.
                                 <content:TreeViewNodeRenderer showIcon="false"/>
                             </nodeRenderer>
                             <componentKeyListeners>
+                                <wtkx:script>
                                 <![CDATA[
                                 importPackage(org.apache.pivot.wtk);
                                 function keyPressed(component, keyCode, keyLocation) {
@@ -41,6 +42,7 @@ limitations under the License.
                                     }
                                 }
                                 ]]>
+                                </wtkx:script>
                             </componentKeyListeners>
                         </TreeView>
                     </view>

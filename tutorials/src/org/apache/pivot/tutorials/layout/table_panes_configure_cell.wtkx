@@ -43,11 +43,13 @@ limitations under the License.
                                                         <content:NumericSpinnerData lowerBound="1" upperBound="10"/>
                                                     </spinnerData>
                                                     <spinnerSelectionListeners>
+                                                        <wtkx:script>
                                                         <![CDATA[
                                                         function selectedIndexChanged(spinner, previousSelectedIndex) {
                                                             TablePane.setRowSpan(component, spinner.getSelectedItem());
                                                         }
                                                         ]]>
+                                                        </wtkx:script>
                                                     </spinnerSelectionListeners>
                                                 </Spinner>
                                                 <Spinner wtkx:id="columnSpanSpinner" Form.label="Column Span"
@@ -56,11 +58,13 @@ limitations under the License.
                                                         <content:NumericSpinnerData lowerBound="1" upperBound="10"/>
                                                     </spinnerData>
                                                     <spinnerSelectionListeners>
+                                                        <wtkx:script>
                                                         <![CDATA[
                                                         function selectedIndexChanged(spinner, previousSelectedIndex) {
                                                             TablePane.setColumnSpan(component, spinner.getSelectedItem());
                                                         }
                                                         ]]>
+                                                        </wtkx:script>
                                                     </spinnerSelectionListeners>
                                                 </Spinner>
                                                 <ListButton wtkx:id="backgroundColorListButton"
@@ -85,12 +89,14 @@ limitations under the License.
                                                         <content:ListViewColorRenderer/>
                                                     </itemRenderer>
                                                     <listButtonSelectionListeners>
+                                                        <wtkx:script>
                                                         <![CDATA[
                                                         function selectedIndexChanged(listButton, previousSelectedIndex) {
                                                             var colorItem = backgroundColorListButton.getSelectedItem();
                                                             component.getStyles().put("backgroundColor", colorItem.getColor());
                                                         }
                                                         ]]>
+                                                        </wtkx:script>
                                                     </listButtonSelectionListeners>
                                                 </ListButton>
                                             </Form.Section>

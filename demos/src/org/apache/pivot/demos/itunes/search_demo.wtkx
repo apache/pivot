@@ -37,6 +37,7 @@ limitations under the License.
                                 <BoxPane styles="{verticalAlignment:'center'}">
                                     <TextInput textSize="32" wtkx:id="termTextInput">
                                         <componentKeyListeners>
+                                            <wtkx:script>
                                             <![CDATA[
                                             importPackage(org.apache.pivot.wtk);
                                             function keyPressed(component, keyCode, keyLocation) {
@@ -52,19 +53,23 @@ limitations under the License.
                                                 return false;
                                             }
                                             ]]>
+                                            </wtkx:script>
                                         </componentKeyListeners>
                                         <textInputTextListeners>
+                                            <wtkx:script>
                                             <![CDATA[
                                             function textChanged(textInput) {
                                                 var term = termTextInput.getText();
                                                 searchButton.setEnabled(term.length() > 0);
                                             }
                                             ]]>
+                                            </wtkx:script>
                                         </textInputTextListeners>
                                     </TextInput>
                                     <PushButton wtkx:id="searchButton" enabled="false"
                                         styles="{toolbar:true, padding:1}">
                                         <buttonPressListeners>
+                                            <wtkx:script>
                                             <![CDATA[
                                             function buttonPressed(button) {
                                                 if (application.isQueryExecuting()) {
@@ -74,8 +79,10 @@ limitations under the License.
                                                 }
                                             }
                                             ]]>
+                                            </wtkx:script>
                                         </buttonPressListeners>
                                         <componentKeyListeners>
+                                            <wtkx:script>
                                             <![CDATA[
                                             importPackage(org.apache.pivot.wtk);
                                             function keyPressed(component, keyCode, keyLocation) {
@@ -88,6 +95,7 @@ limitations under the License.
                                                 return false;
                                             }
                                             ]]>
+                                            </wtkx:script>
                                         </componentKeyListeners>
                                     </PushButton>
                                 </BoxPane>
@@ -118,6 +126,7 @@ limitations under the License.
                                                             <TableView.Column name="artistName" width="1*" headerData="Artist"/>
                                                         </columns>
                                                         <componentMouseButtonListeners>
+                                                            <wtkx:script>
                                                             <![CDATA[
                                                             importPackage(org.apache.pivot.wtk);
                                                             var selectedResult;
@@ -132,9 +141,11 @@ limitations under the License.
                                                                 }
                                                             }
                                                             ]]>
+                                                            </wtkx:script>
                                                         </componentMouseButtonListeners>
 
                                                         <tableViewSelectionListeners>
+                                                            <wtkx:script>
                                                             <![CDATA[
                                                             function selectedRangeAdded(tableView, rangeStart, rangeEnd) {
                                                                 application.updateArtwork();
@@ -148,15 +159,18 @@ limitations under the License.
                                                                 application.updateArtwork();
                                                             }
                                                             ]]>
+                                                            </wtkx:script>
                                                         </tableViewSelectionListeners>
 
                                                         <tableViewSortListeners>
+                                                            <wtkx:script>
                                                             <![CDATA[
                                                             function sortChanged(tableView) {
                                                                 var tableData = tableView.getTableData();
                                                                 tableData.setComparator(new org.apache.pivot.wtk.content.TableViewRowComparator(tableView));
                                                             }
                                                             ]]>
+                                                            </wtkx:script>
                                                         </tableViewSortListeners>
 
                                                     </TableView>
@@ -185,6 +199,7 @@ limitations under the License.
                                     <BoxPane styles="{horizontalAlignment:'center'}">
                                         <PushButton wtkx:id="previewButton" buttonData="Preview" enabled="false">
                                             <buttonPressListeners>
+                                                <wtkx:script>
                                                 <![CDATA[
                                                 importPackage(org.apache.pivot.wtk);
                                                 function buttonPressed(button) {
@@ -192,6 +207,7 @@ limitations under the License.
                                                     ApplicationContext.open(selectedResult.get("previewUrl"));
                                                 }
                                                 ]]>
+                                                </wtkx:script>
                                             </buttonPressListeners>
                                         </PushButton>
                                     </BoxPane>

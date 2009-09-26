@@ -22,6 +22,8 @@ limitations under the License.
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:scripting="org.apache.pivot.demos.scripting"
     xmlns="org.apache.pivot.wtk">
+    <?language javascript?>
+
     <wtkx:script src="demo.js"/>
     <wtkx:script>
         java.lang.System.out.println("Executing inline script block.");
@@ -33,12 +35,14 @@ limitations under the License.
                 <BoxPane orientation="vertical" styles="{padding:6}">
                     <PushButton wtkx:id="pushButton" buttonData="Click Me!">
                         <buttonPressListeners>
+                            <wtkx:script>
                             <![CDATA[
                             importPackage(org.apache.pivot.wtk);
                             function buttonPressed(button) {
                                 Alert.alert("Hello from JavaScript!", button.getWindow());
                             }
                             ]]>
+                            </wtkx:script>
                         </buttonPressListeners>
                     </PushButton>
 
