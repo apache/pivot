@@ -85,29 +85,26 @@ deployJava.writeAppletTag(attributes, parameters);
                             &lt;/BoxPane&gt;
                         &lt;/content&gt;
                     &lt;/Border&gt;
-                    &lt;BoxPane orientation="vertical" styles="{padding:6, spacing:8,
-                        fill:true}"&gt;
+                    &lt;BoxPane orientation="vertical" styles="{padding:6, spacing:8, fill:true}"&gt;
+                        &lt;wtkx:define&gt;
+                            &lt;ButtonGroup wtkx:id="orientation"/&gt;
+                            &lt;ButtonGroup wtkx:id="horizontalAlignment"/&gt;
+                            &lt;ButtonGroup wtkx:id="verticalAlignment"/&gt;
+                        &lt;/wtkx:define&gt;
+
                         &lt;Label text="Orientation" styles="{fontBold:true}"/&gt;
-                        &lt;RadioButton wtkx:id="horizontalOrientationButton"
-                            buttonData="Horizontal" group="orientation" selected="true"/&gt;
-                        &lt;RadioButton wtkx:id="verticalOrientationButton"
-                            buttonData="Vertical" group="orientation"/&gt;
+                        &lt;RadioButton wtkx:id="horizontalOrientationButton" buttonData="Horizontal" buttonGroup="$orientation" selected="true"/&gt;
+                        &lt;RadioButton wtkx:id="verticalOrientationButton" buttonData="Vertical" buttonGroup="$orientation"/&gt;
 
                         &lt;Label text="Horizontal Alignment" styles="{fontBold:true}"/&gt;
-                        &lt;RadioButton wtkx:id="horizontalAlignmentLeftButton"
-                            buttonData="Left" group="horizontalAlignment" selected="true"/&gt;
-                        &lt;RadioButton wtkx:id="horizontalAlignmentRightButton"
-                            buttonData="Right" group="horizontalAlignment"/&gt;
-                        &lt;RadioButton wtkx:id="horizontalAlignmentCenterButton"
-                            buttonData="Center" group="horizontalAlignment"/&gt;
+                        &lt;RadioButton wtkx:id="horizontalAlignmentLeftButton" buttonData="Left" buttonGroup="$horizontalAlignment" selected="true"/&gt;
+                        &lt;RadioButton wtkx:id="horizontalAlignmentRightButton" buttonData="Right" buttonGroup="$horizontalAlignment"/&gt;
+                        &lt;RadioButton wtkx:id="horizontalAlignmentCenterButton" buttonData="Center" buttonGroup="$horizontalAlignment"/&gt;
 
                         &lt;Label text="Vertical Alignment" styles="{fontBold:true}"/&gt;
-                        &lt;RadioButton wtkx:id="verticalAlignmentTopButton"
-                            buttonData="Top" group="verticalAlignment" selected="true"/&gt;
-                        &lt;RadioButton wtkx:id="verticalAlignmentBottomButton"
-                            buttonData="Bottom" group="verticalAlignment"/&gt;
-                        &lt;RadioButton wtkx:id="verticalAlignmentCenterButton"
-                            buttonData="Center" group="verticalAlignment"/&gt;
+                        &lt;RadioButton wtkx:id="verticalAlignmentTopButton" buttonData="Top" buttonGroup="$verticalAlignment" selected="true"/&gt;
+                        &lt;RadioButton wtkx:id="verticalAlignmentBottomButton" buttonData="Bottom" buttonGroup="$verticalAlignment"/&gt;
+                        &lt;RadioButton wtkx:id="verticalAlignmentCenterButton" buttonData="Center" buttonGroup="$verticalAlignment"/&gt;
 
                         &lt;BoxPane styles="{padding:{top:8}}"&gt;
                             &lt;Checkbox wtkx:id="fillCheckbox" buttonData="Fill"/&gt;

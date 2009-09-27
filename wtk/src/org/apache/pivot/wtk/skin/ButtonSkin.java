@@ -18,6 +18,7 @@ package org.apache.pivot.wtk.skin;
 
 import org.apache.pivot.wtk.Action;
 import org.apache.pivot.wtk.Button;
+import org.apache.pivot.wtk.ButtonGroup;
 import org.apache.pivot.wtk.ButtonListener;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.ButtonStateListener;
@@ -108,7 +109,7 @@ public abstract class ButtonSkin extends ComponentSkin
     }
 
     @Override
-    public void groupChanged(Button button, Button.Group previousGroup) {
+    public void buttonGroupChanged(Button button, ButtonGroup previousButtonGroup) {
         // No-op
     }
 

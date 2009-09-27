@@ -67,20 +67,25 @@ limitations under the License.
                             <BoxPane orientation="vertical" styles="{padding:4, spacing:6}">
                                 <Checkbox wtkx:id="sizeToSelectionCheckbox" buttonData="Size to selection"/>
                                 <Label text="Selection change effect:"/>
+
+                                <wtkx:define>
+                                    <ButtonGroup wtkx:id="selectionChangeEffect"/>
+                                </wtkx:define>
+
                                 <RadioButton wtkx:id="crossfadeRadioButton" buttonData="Crossfade" selected="true"
-                                    group="selectionChangeEffect"/>
+                                    buttonGroup="$selectionChangeEffect"/>
                                 <RadioButton wtkx:id="horizontalSlideRadioButton" buttonData="Horizontal Slide"
-                                    group="selectionChangeEffect"/>
+                                    buttonGroup="$selectionChangeEffect"/>
                                 <RadioButton wtkx:id="verticalSlideRadioButton" buttonData="Vertical Slide"
-                                    group="selectionChangeEffect"/>
+                                    buttonGroup="$selectionChangeEffect"/>
                                 <RadioButton wtkx:id="horizontalFlipRadioButton" buttonData="Horizontal Flip"
-                                    group="selectionChangeEffect"/>
+                                    buttonGroup="$selectionChangeEffect"/>
                                 <RadioButton wtkx:id="verticalFlipRadioButton" buttonData="Vertical Flip"
-                                    group="selectionChangeEffect"/>
+                                    buttonGroup="$selectionChangeEffect"/>
                                 <RadioButton wtkx:id="zoomRadioButton" buttonData="Zoom"
-                                    group="selectionChangeEffect"/>
+                                    buttonGroup="$selectionChangeEffect"/>
                                 <RadioButton wtkx:id="noneRadioButton" buttonData="None"
-                                    group="selectionChangeEffect"/>
+                                    buttonGroup="$selectionChangeEffect"/>
                             </BoxPane>
                         </content>
                     </Border>

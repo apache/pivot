@@ -24,6 +24,7 @@ import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.wtk.Alert;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Button;
+import org.apache.pivot.wtk.ButtonGroup;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
@@ -40,7 +41,7 @@ import org.apache.pivot.wtkx.WTKXSerializer;
 public class FileBrowserSheets implements Application {
     private Window window = null;
 
-    @WTKX private Button.Group fileBrowserSheetModeGroup = null;
+    @WTKX private ButtonGroup fileBrowserSheetModeGroup = null;
     @WTKX private PushButton openSheetButton = null;
 
     @Override

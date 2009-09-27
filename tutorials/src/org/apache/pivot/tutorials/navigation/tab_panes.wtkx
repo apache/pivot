@@ -79,10 +79,13 @@ limitations under the License.
                             <BoxPane orientation="vertical" styles="{padding:4, spacing:6}">
                                 <Checkbox wtkx:id="collapsibleCheckbox" buttonData="Collapsible"/>
                                 <Label text="Tab orientation:"/>
+                                <wtkx:define>
+                                    <ButtonGroup wtkx:id="tabOrientation"/>
+                                </wtkx:define>
                                 <RadioButton wtkx:id="horizontalRadioButton" buttonData="Horizontal" selected="true"
-                                    group="tabOrientation"/>
+                                    buttonGroup="$tabOrientation"/>
                                 <RadioButton wtkx:id="verticalRadioButton" buttonData="Vertical"
-                                    group="tabOrientation"/>
+                                    buttonGroup="$tabOrientation"/>
                             </BoxPane>
                         </content>
                     </Border>

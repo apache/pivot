@@ -30,6 +30,8 @@ import org.apache.pivot.wtk.AccordionAttributeListener;
 import org.apache.pivot.wtk.AccordionListener;
 import org.apache.pivot.wtk.AccordionSelectionListener;
 import org.apache.pivot.wtk.Button;
+import org.apache.pivot.wtk.ButtonGroup;
+import org.apache.pivot.wtk.ButtonGroupListener;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentStateListener;
 import org.apache.pivot.wtk.Dimensions;
@@ -39,7 +41,6 @@ import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Theme;
-import org.apache.pivot.wtk.Button.Group;
 import org.apache.pivot.wtk.content.ButtonData;
 import org.apache.pivot.wtk.content.ButtonDataRenderer;
 import org.apache.pivot.wtk.effects.ClipDecorator;
@@ -232,7 +233,7 @@ public class TerraAccordionSkin extends ContainerSkin
         }
     }
 
-    private Button.Group panelHeaderGroup = new Button.Group();
+    private ButtonGroup panelHeaderGroup = new ButtonGroup();
     private ArrayList<PanelHeader> panelHeaders = new ArrayList<PanelHeader>();
 
     private Color borderColor;
@@ -294,9 +295,9 @@ public class TerraAccordionSkin extends ContainerSkin
         // Set the derived colors
         buttonBevelColor = TerraTheme.brighten(buttonBackgroundColor);
 
-        panelHeaderGroup.getGroupListeners().add(new Button.GroupListener() {
+        panelHeaderGroup.getButtonGroupListeners().add(new ButtonGroupListener.Adapter() {
             @Override
-            public void selectionChanged(Group group, Button previousSelection) {
+            public void selectionChanged(ButtonGroup buttonGroup, Button previousSelection) {
                 Button button = panelHeaderGroup.getSelection();
                 int index = (button == null) ? -1 : panelHeaders.indexOf((PanelHeader)button);
 
@@ -329,7 +330,7 @@ public class TerraAccordionSkin extends ContainerSkin
         // Add headers for all existing panels
         for (Component panel : accordion.getPanels()) {
             PanelHeader panelHeader = new PanelHeader(panel);
-            panelHeader.setGroup(panelHeaderGroup);
+            panelHeader.setButtonGroup(panelHeaderGroup);
             panelHeaders.add(panelHeader);
             accordion.add(panelHeader);
 
@@ -752,7 +753,7 @@ public class TerraAccordionSkin extends ContainerSkin
         // Add a header for the panel
         Component panel = accordion.getPanels().get(index);
         PanelHeader panelHeader = new PanelHeader(panel);
-        panelHeader.setGroup(panelHeaderGroup);
+        panelHeader.setButtonGroup(panelHeaderGroup);
         panelHeaders.insert(panelHeader, index);
         accordion.add(panelHeader);
 
@@ -779,7 +780,7 @@ public class TerraAccordionSkin extends ContainerSkin
 
         for (int i = 0, n = removedHeaders.getLength(); i < n; i++) {
             PanelHeader panelHeader = removedHeaders.get(i);
-            panelHeader.setGroup((Group)null);
+            panelHeader.setButtonGroup(null);
 
             // Stop listening for state changes on the panel
             Component panel = (Component)panelHeader.getButtonData();

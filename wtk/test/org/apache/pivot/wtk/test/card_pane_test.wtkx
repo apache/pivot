@@ -26,9 +26,12 @@ limitations under the License.
             <rows>
                 <TablePane.Row height="-1">
                     <BoxPane>
-                        <PushButton buttonData="320x240" toggleButton="true" group="sizeGroup"/>
-                        <PushButton buttonData="640x480" toggleButton="true" group="sizeGroup"/>
-                        <PushButton buttonData="800x600" toggleButton="true" group="sizeGroup"/>
+                        <wtkx:define>
+                            <ButtonGroup wtkx:id="sizeGroup"/>
+                        </wtkx:define>
+                        <PushButton buttonData="320x240" toggleButton="true" buttonGroup="$sizeGroup"/>
+                        <PushButton buttonData="640x480" toggleButton="true" buttonGroup="$sizeGroup"/>
+                        <PushButton buttonData="800x600" toggleButton="true" buttonGroup="$sizeGroup"/>
                     </BoxPane>
                 </TablePane.Row>
                 <TablePane.Row height="1*">

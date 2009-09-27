@@ -55,6 +55,8 @@ public class CardPanes implements Application {
         previousButton = (LinkButton)wtkxSerializer.get("previousButton");
         nextButton = (LinkButton)wtkxSerializer.get("nextButton");
         sizeToSelectionCheckbox = (Checkbox)wtkxSerializer.get("sizeToSelectionCheckbox");
+
+
         crossfadeRadioButton = (RadioButton)wtkxSerializer.get("crossfadeRadioButton");
         horizontalSlideRadioButton = (RadioButton)wtkxSerializer.get("horizontalSlideRadioButton");
         verticalSlideRadioButton = (RadioButton)wtkxSerializer.get("verticalSlideRadioButton");

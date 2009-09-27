@@ -40,6 +40,7 @@ import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Border;
 import org.apache.pivot.wtk.Button;
+import org.apache.pivot.wtk.ButtonGroup;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.ComponentMouseButtonListener;
 import org.apache.pivot.wtk.ListButton;
@@ -293,6 +294,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         private Menu.Item helpAboutMenuItem = null;
 
         private Menu.Section menuSection = null;
+        private ButtonGroup imageMenuGroup = null;
 
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
@@ -305,7 +307,6 @@ public class KitchenSink implements Application, Application.AboutHandler {
 
                     @Override
                     public void perform() {
-                        Button.Group imageMenuGroup = Button.getNamedGroups().get("imageMenuGroup");
                         Button selectedItem = imageMenuGroup.getSelection();
 
                         String imageName = (String)selectedItem.getUserData().get("image");
@@ -346,6 +347,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
 
                 try {
                     menuSection = (Menu.Section)wtkxSerializer.readObject(this, "menu_section.wtkx");
+                    imageMenuGroup = (ButtonGroup)wtkxSerializer.get("imageMenuGroup");
                 } catch(IOException exception) {
                     throw new RuntimeException(exception);
                 } catch(SerializationException exception) {
@@ -808,6 +810,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         private Component component = null;
         private PushButton alertButton = null;
         private PushButton promptButton = null;
+        private ButtonGroup messageTypeGroup = null;
 
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
@@ -823,13 +826,13 @@ public class KitchenSink implements Application, Application.AboutHandler {
 
                 alertButton = (PushButton)wtkxSerializer.get("alertButton");
                 promptButton = (PushButton)wtkxSerializer.get("promptButton");
+                messageTypeGroup = (ButtonGroup)wtkxSerializer.get("messageTypeGroup");
 
                 rollup.setContent(component);
 
                 alertButton.getButtonPressListeners().add(new ButtonPressListener() {
                     @Override
                     public void buttonPressed(Button button) {
-                        Button.Group messageTypeGroup = Button.getNamedGroups().get("messageType");
                         Button selection = messageTypeGroup.getSelection();
 
                         Map<String, ?> userData;
@@ -870,7 +873,6 @@ public class KitchenSink implements Application, Application.AboutHandler {
                 promptButton.getButtonPressListeners().add(new ButtonPressListener() {
                     @Override
                     public void buttonPressed(Button button) {
-                        Button.Group messageTypeGroup = Button.getNamedGroups().get("messageType");
                         Button selection = messageTypeGroup.getSelection();
 
                         Map<String, ?> userData;

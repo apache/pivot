@@ -42,9 +42,13 @@ limitations under the License.
                     <content>
                         <BoxPane orientation="vertical">
                             <Label text="Alignment" styles="{fontBold:true}"/>
-                            <RadioButton wtkx:id="leftRadioButton" buttonData="Left" group="alignment" selected="true"/>
-                            <RadioButton wtkx:id="rightRadioButton" buttonData="Right" group="alignment"/>
-                            <RadioButton wtkx:id="centerRadioButton" buttonData="Center" group="alignment"/>
+
+                            <wtkx:define>
+                                <ButtonGroup wtkx:id="alignment"/>
+                            </wtkx:define>
+                            <RadioButton wtkx:id="leftRadioButton" buttonData="Left" buttonGroup="$alignment" selected="true"/>
+                            <RadioButton wtkx:id="rightRadioButton" buttonData="Right" buttonGroup="$alignment"/>
+                            <RadioButton wtkx:id="centerRadioButton" buttonData="Center" buttonGroup="$alignment"/>
                         </BoxPane>
                     </content>
                 </Border>

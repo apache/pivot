@@ -16,13 +16,8 @@
  */
 package org.apache.pivot.wtk;
 
-import java.util.Iterator;
-
 import org.apache.pivot.collections.Dictionary;
-import org.apache.pivot.collections.HashMap;
-import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
-
 
 /**
  * Abstract base class for button components.
@@ -43,122 +38,6 @@ public abstract class Button extends Component {
     public interface DataRenderer extends Renderer {
         public void render(Object data, Button button, boolean highlighted);
     }
-
-    /**
-     * Class representing a toggle button group.
-     */
-    public static class Group {
-        private static class GroupListenerList extends ListenerList<GroupListener>
-            implements GroupListener {
-            @Override
-            public void selectionChanged(Group group, Button previousSelection) {
-                for (GroupListener listener : this) {
-                    listener.selectionChanged(group, previousSelection);
-                }
-            }
-        }
-
-        private Button selection = null;
-        private GroupListenerList groupListeners = new GroupListenerList();
-
-        public Group() {
-        }
-
-        public Button getSelection() {
-            return selection;
-        }
-
-        private void setSelection(Button selection) {
-            Button previousSelection = this.selection;
-
-            if (previousSelection != selection) {
-                this.selection = selection;
-                groupListeners.selectionChanged(this, previousSelection);
-            }
-        }
-
-        public ListenerList<GroupListener> getGroupListeners() {
-            return groupListeners;
-        }
-    }
-
-    /**
-     * Listener interface for toggle button groups.
-     */
-    public interface GroupListener {
-        /**
-         * Called when a button group's selection has changed.
-         *
-         * @param group
-         * @param previousSelection
-         */
-        public void selectionChanged(Group group, Button previousSelection);
-    }
-
-    /**
-     * Named group dictionary.
-     */
-    public static class NamedGroupDictionary
-        implements Dictionary<String, Group>, Iterable<String> {
-        private NamedGroupDictionary() {
-        }
-
-        @Override
-        public Group get(String name) {
-            return namedGroups.get(name);
-        }
-
-        @Override
-        public Group put(String name, Group group) {
-            boolean update = containsKey(name);
-            Group previousGroup = namedGroups.put(name, group);
-
-            if (update) {
-                namedGroupDictionaryListeners.groupUpdated(name, previousGroup);
-            }
-            else {
-                namedGroupDictionaryListeners.groupAdded(name);
-            }
-
-            return previousGroup;
-        }
-
-        @Override
-        public Group remove(String name) {
-            Group group = null;
-
-            if (containsKey(name)) {
-                group = namedGroups.remove(name);
-                namedGroupDictionaryListeners.groupRemoved(name, group);
-            }
-
-            return group;
-        }
-
-        @Override
-        public boolean containsKey(String name) {
-            return namedGroups.containsKey(name);
-        }
-
-        @Override
-        public boolean isEmpty() {
-            return namedGroups.isEmpty();
-        }
-
-        @Override
-        public Iterator<String> iterator() {
-            return new ImmutableIterator<String>(namedGroups.iterator());
-        }
-    }
-
-    /**
-     * Named group dictionary listener interface.
-     */
-    public interface NamedGroupDictionaryListener {
-        public void groupAdded(String name);
-        public void groupUpdated(String name, Group previousGroup);
-        public void groupRemoved(String name, Group group);
-    };
 
     /**
      * Button listener list.
@@ -201,9 +80,9 @@ public abstract class Button extends Component {
         }
 
         @Override
-        public void groupChanged(Button button, Button.Group previousGroup) {
+        public void buttonGroupChanged(Button button, ButtonGroup previousButtonGroup) {
             for (ButtonListener listener : this) {
-                listener.groupChanged(button, previousGroup);
+                listener.buttonGroupChanged(button, previousButtonGroup);
             }
         }
 
@@ -248,30 +127,6 @@ public abstract class Button extends Component {
         }
     }
 
-    private static class NamedGroupDictionaryListenerList extends ListenerList<NamedGroupDictionaryListener>
-        implements NamedGroupDictionaryListener {
-        @Override
-        public void groupAdded(String name) {
-            for (NamedGroupDictionaryListener listener : this) {
-                listener.groupAdded(name);
-            }
-        }
-
-        @Override
-        public void groupUpdated(String name, Group previousGroup) {
-            for (NamedGroupDictionaryListener listener : this) {
-                listener.groupUpdated(name, previousGroup);
-            }
-        }
-
-        @Override
-        public void groupRemoved(String name, Group group) {
-            for (NamedGroupDictionaryListener listener : this) {
-                listener.groupRemoved(name, group);
-            }
-        }
-    }
-
     private Object buttonData = null;
     private DataRenderer dataRenderer = null;
     private Action action = null;
@@ -283,7 +138,7 @@ public abstract class Button extends Component {
     };
 
     private State state = null;
-    private Group group = null;
+    private ButtonGroup buttonGroup = null;
 
     private boolean toggleButton = false;
     private boolean triState = false;
@@ -293,10 +148,6 @@ public abstract class Button extends Component {
     private ButtonListenerList buttonListeners = new ButtonListenerList();
     private ButtonStateListenerList buttonStateListeners = new ButtonStateListenerList();
     private ButtonPressListenerList buttonPressListeners = new ButtonPressListenerList();
-
-    private static HashMap<String, Group> namedGroups = new HashMap<String, Group>();
-    private static NamedGroupDictionary namedGroupDictionary = new NamedGroupDictionary();
-    private static NamedGroupDictionaryListenerList namedGroupDictionaryListeners = new NamedGroupDictionaryListenerList();
 
     public Button() {
         this(null);
@@ -464,15 +315,15 @@ public abstract class Button extends Component {
         if (previousState != state) {
             this.state = state;
 
-            if (group != null) {
+            if (buttonGroup != null) {
                 // Update the group's selection
-                Button selection = group.getSelection();
+                Button selection = buttonGroup.getSelection();
 
                 if (state == State.SELECTED) {
                     // Set this as the new selection (do this before
                     // de-selecting any currently selected button so the
                     // group's change event isn't fired twice)
-                    group.setSelection(this);
+                    buttonGroup.setSelection(this);
 
                     // De-select any previously selected button
                     if (selection != null) {
@@ -483,7 +334,7 @@ public abstract class Button extends Component {
                     // If this button is currently selected, clear the
                     // selection
                     if (selection == this) {
-                        group.setSelection(null);
+                        buttonGroup.setSelection(null);
                     }
                 }
             }
@@ -518,7 +369,7 @@ public abstract class Button extends Component {
             // group, and can't be tri-state
             if (!toggleButton) {
                 setSelected(false);
-                setGroup((Group)null);
+                setButtonGroup(null);
                 setTriState(false);
             }
 
@@ -546,7 +397,7 @@ public abstract class Button extends Component {
         }
 
         if (triState
-            && group != null) {
+            && buttonGroup != null) {
             throw new IllegalStateException("Toggle button is a member of a group.");
         }
 
@@ -557,56 +408,48 @@ public abstract class Button extends Component {
     }
 
     /**
-     * Returns the button's group.
+     * Returns the button's button group.
+     *
+     * @return
+     * The group to which the button belongs, or <tt>null</tt> if the button
+     * does not belong to a group.
      */
-    public Group getGroup() {
-        return group;
+    public ButtonGroup getButtonGroup() {
+        return buttonGroup;
     }
 
     /**
-     * Sets the button's group.
+     * Sets the button's button group.
      *
-     * @param group
+     * @param buttonGroup
+     * The group to which the button will belong, or <tt>null</tt> if the button
+     * will not belong to a group.
      */
-    public void setGroup(Group group) {
+    public void setButtonGroup(ButtonGroup buttonGroup) {
         if (!toggleButton) {
             throw new IllegalStateException("Button is not in toggle mode.");
         }
 
-        if (group != null
+        if (buttonGroup != null
             && triState) {
             throw new IllegalStateException("Toggle button is tri-state.");
         }
 
-        Group previousGroup = this.group;
+        ButtonGroup previousButtonGroup = this.buttonGroup;
 
-        if (previousGroup != group) {
-            this.group = group;
+        if (previousButtonGroup != buttonGroup) {
+            this.buttonGroup = buttonGroup;
 
-            if (isSelected()) {
-                if (previousGroup != null) {
-                    previousGroup.setSelection(null);
-                }
-
-                if (group != null) {
-                    group.setSelection(this);
-                }
+            if (previousButtonGroup != null) {
+                previousButtonGroup.remove(this);
             }
 
-            buttonListeners.groupChanged(this, previousGroup);
-        }
-    }
+            if (buttonGroup != null) {
+                buttonGroup.add(this);
+            }
 
-    public void setGroup(String group) {
-        if (group == null) {
-            throw new IllegalArgumentException("group is null.");
+            buttonListeners.buttonGroupChanged(this, previousButtonGroup);
         }
-
-        if (!namedGroups.containsKey(group)) {
-            namedGroups.put(group, new Group());
-        }
-
-        setGroup(namedGroups.get(group));
     }
 
     public String getSelectedKey() {
@@ -680,13 +523,5 @@ public abstract class Button extends Component {
 
     public ListenerList<ButtonPressListener> getButtonPressListeners() {
         return buttonPressListeners;
-    }
-
-    public static NamedGroupDictionary getNamedGroups() {
-        return namedGroupDictionary;
-    }
-
-    public static ListenerList<NamedGroupDictionaryListener> getNamedGroupDictionaryListeners() {
-        return namedGroupDictionaryListeners;
     }
 }

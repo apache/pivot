@@ -119,18 +119,25 @@ deployJava.writeAppletTag(attributes, parameters);
                             &lt;BoxPane orientation="vertical" styles="{padding:4, spacing:6}"&gt;
                                 &lt;Checkbox wtkx:id="sizeToSelectionCheckbox" buttonData="Size to selection"/&gt;
                                 &lt;Label text="Selection change effect:"/&gt;
+
+                                &lt;wtkx:define&gt;
+                                    &lt;ButtonGroup wtkx:id="selectionChangeEffect"/&gt;
+                                &lt;/wtkx:define&gt;
+
                                 &lt;RadioButton wtkx:id="crossfadeRadioButton" buttonData="Crossfade" selected="true"
-                                    group="selectionChangeEffect"/&gt;
+                                    buttonGroup="$selectionChangeEffect"/&gt;
                                 &lt;RadioButton wtkx:id="horizontalSlideRadioButton" buttonData="Horizontal Slide"
-                                    group="selectionChangeEffect"/&gt;
+                                    buttonGroup="$selectionChangeEffect"/&gt;
                                 &lt;RadioButton wtkx:id="verticalSlideRadioButton" buttonData="Vertical Slide"
-                                    group="selectionChangeEffect"/&gt;
+                                    buttonGroup="$selectionChangeEffect"/&gt;
                                 &lt;RadioButton wtkx:id="horizontalFlipRadioButton" buttonData="Horizontal Flip"
-                                    group="selectionChangeEffect"/&gt;
+                                    buttonGroup="$selectionChangeEffect"/&gt;
                                 &lt;RadioButton wtkx:id="verticalFlipRadioButton" buttonData="Vertical Flip"
-                                    group="selectionChangeEffect"/&gt;
+                                    buttonGroup="$selectionChangeEffect"/&gt;
+                                &lt;RadioButton wtkx:id="zoomRadioButton" buttonData="Zoom"
+                                    buttonGroup="$selectionChangeEffect"/&gt;
                                 &lt;RadioButton wtkx:id="noneRadioButton" buttonData="None"
-                                    group="selectionChangeEffect"/&gt;
+                                    buttonGroup="$selectionChangeEffect"/&gt;
                             &lt;/BoxPane&gt;
                         &lt;/content&gt;
                     &lt;/Border&gt;
@@ -173,8 +180,10 @@ public class CardPanes implements Application {
     private RadioButton verticalSlideRadioButton = null;
     private RadioButton horizontalFlipRadioButton = null;
     private RadioButton verticalFlipRadioButton = null;
+    private RadioButton zoomRadioButton = null;
     private RadioButton noneRadioButton = null;
 
+    @Override
     public void startup(Display display, Map&lt;String, String&gt; properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -183,32 +192,39 @@ public class CardPanes implements Application {
         previousButton = (LinkButton)wtkxSerializer.get("previousButton");
         nextButton = (LinkButton)wtkxSerializer.get("nextButton");
         sizeToSelectionCheckbox = (Checkbox)wtkxSerializer.get("sizeToSelectionCheckbox");
+
+
         crossfadeRadioButton = (RadioButton)wtkxSerializer.get("crossfadeRadioButton");
         horizontalSlideRadioButton = (RadioButton)wtkxSerializer.get("horizontalSlideRadioButton");
         verticalSlideRadioButton = (RadioButton)wtkxSerializer.get("verticalSlideRadioButton");
         horizontalFlipRadioButton = (RadioButton)wtkxSerializer.get("horizontalFlipRadioButton");
         verticalFlipRadioButton = (RadioButton)wtkxSerializer.get("verticalFlipRadioButton");
+        zoomRadioButton = (RadioButton)wtkxSerializer.get("zoomRadioButton");
         noneRadioButton = (RadioButton)wtkxSerializer.get("noneRadioButton");
 
         cardPane.getCardPaneListeners().add(new CardPaneListener.Adapter() {
+            @Override
             public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex) {
                 updateLinkButtonState();
             }
         });
 
         previousButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
             public void buttonPressed(Button button) {
                 cardPane.setSelectedIndex(cardPane.getSelectedIndex() - 1);
             }
         });
 
         nextButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
             public void buttonPressed(Button button) {
                 cardPane.setSelectedIndex(cardPane.getSelectedIndex() + 1);
             }
         });
 
         ButtonStateListener checkboxStateListener = new ButtonStateListener() {
+            @Override
             public void stateChanged(Button button, Button.State previousState) {
                 updateCardPane();
             }
@@ -217,6 +233,7 @@ public class CardPanes implements Application {
         sizeToSelectionCheckbox.getButtonStateListeners().add(checkboxStateListener);
 
         ButtonStateListener radioButtonStateListener = new ButtonStateListener() {
+            @Override
             public void stateChanged(Button button, Button.State previousState) {
                 if (button.isSelected()) {
                     updateCardPane();
@@ -229,6 +246,7 @@ public class CardPanes implements Application {
         verticalSlideRadioButton.getButtonStateListeners().add(radioButtonStateListener);
         horizontalFlipRadioButton.getButtonStateListeners().add(radioButtonStateListener);
         verticalFlipRadioButton.getButtonStateListeners().add(radioButtonStateListener);
+        zoomRadioButton.getButtonStateListeners().add(radioButtonStateListener);
         noneRadioButton.getButtonStateListeners().add(radioButtonStateListener);
 
         updateCardPane();
@@ -237,6 +255,7 @@ public class CardPanes implements Application {
         window.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (window != null) {
             window.close();
@@ -245,9 +264,11 @@ public class CardPanes implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 
@@ -269,6 +290,9 @@ public class CardPanes implements Application {
         } else if (verticalFlipRadioButton.isSelected()) {
             cardPane.getStyles().put("selectionChangeEffect",
                 CardPaneSkin.SelectionChangeEffect.VERTICAL_FLIP);
+        } else if (zoomRadioButton.isSelected()) {
+            cardPane.getStyles().put("selectionChangeEffect",
+                CardPaneSkin.SelectionChangeEffect.ZOOM);
         } else {
             cardPane.getStyles().put("selectionChangeEffect", null);
         }
@@ -276,7 +300,7 @@ public class CardPanes implements Application {
 
     private void updateLinkButtonState() {
         int selectedIndex = cardPane.getSelectedIndex();
-        previousButton.setEnabled(selectedIndex > 0);
+        previousButton.setEnabled(selectedIndex &gt; 0);
         nextButton.setEnabled(selectedIndex &lt; cardPane.getLength() - 1);
     }
 

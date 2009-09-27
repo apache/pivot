@@ -146,7 +146,14 @@ public final class TerraTheme extends Theme {
         componentSkinMap.put(TerraSplitPaneSkin.SplitterShadow.class, TerraSplitPaneSkin.SplitterShadowSkin.class);
         componentSkinMap.put(TerraTabPaneSkin.TabButton.class, TerraTabPaneSkin.TabButtonSkin.class);
 
-        String location = System.getProperty(LOCATION_PROPERTY);
+        String location = null;
+
+        try {
+            location = System.getProperty(LOCATION_PROPERTY);
+        } catch (SecurityException exception) {
+            // No-op
+        }
+
         if (location == null) {
             load(getClass().getResource("TerraTheme_default.json"));
         } else {

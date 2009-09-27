@@ -210,32 +210,36 @@ limitations under the License.
                     </heading>
                     <content>
                         <BoxPane orientation="vertical">
-                            <RadioButton group="images" selected="true">
+                            <wtkx:define>
+                                <ButtonGroup wtkx:id="images"/>
+                            </wtkx:define>
+
+                            <RadioButton buttonGroup="$images" selected="true">
                                 <buttonData>
                                     <content:ButtonData text="Anchor" icon="@anchor.png"/>
                                 </buttonData>
                             </RadioButton>
-                            <RadioButton group="images" selected="true">
+                            <RadioButton buttonGroup="$images" selected="true">
                                 <buttonData>
                                     <content:ButtonData text="Bell" icon="@bell.png"/>
                                 </buttonData>
                             </RadioButton>
-                            <RadioButton group="images" selected="true">
+                            <RadioButton buttonGroup="$images" selected="true">
                                 <buttonData>
                                     <content:ButtonData text="Clock" icon="@clock.png"/>
                                 </buttonData>
                             </RadioButton>
-                            <RadioButton group="images" selected="true">
+                            <RadioButton buttonGroup="$images" selected="true">
                                 <buttonData>
                                     <content:ButtonData text="Cup" icon="@cup.png"/>
                                 </buttonData>
                             </RadioButton>
-                            <RadioButton group="images" selected="true">
+                            <RadioButton buttonGroup="$images" selected="true">
                                 <buttonData>
                                     <content:ButtonData text="House" icon="@house.png"/>
                                 </buttonData>
                             </RadioButton>
-                            <RadioButton group="images" selected="true">
+                            <RadioButton buttonGroup="$images" selected="true">
                                 <buttonData>
                                     <content:ButtonData text="Star" icon="@star.png"/>
                                 </buttonData>

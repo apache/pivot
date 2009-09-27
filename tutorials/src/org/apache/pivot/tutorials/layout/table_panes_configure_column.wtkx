@@ -22,7 +22,7 @@ limitations under the License.
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
     <wtkx:define>
-        <Button.Group wtkx:id="columnWidthGroup">
+        <ButtonGroup wtkx:id="columnWidthGroup">
             <groupListeners>
                 <wtkx:script>
                 <![CDATA[
@@ -32,7 +32,7 @@ limitations under the License.
                 ]]>
                 </wtkx:script>
             </groupListeners>
-        </Button.Group>
+        </ButtonGroup>
     </wtkx:define>
 
     <wtkx:script>
@@ -83,11 +83,11 @@ limitations under the License.
                                                 <rows>
                                                     <TablePane.Row height="1*">
                                                         <RadioButton wtkx:id="defaultWidthButton"
-                                                            buttonData="Default" group="$columnWidthGroup"/>
+                                                            buttonData="Default" buttonGroup="$columnWidthGroup"/>
                                                     </TablePane.Row>
                                                     <TablePane.Row height="1*">
                                                         <RadioButton wtkx:id="relativeWidthButton"
-                                                            buttonData="Relative" group="$columnWidthGroup"/>
+                                                            buttonData="Relative" buttonGroup="$columnWidthGroup"/>
                                                         <Spinner wtkx:id="relativeWidthSpinner"
                                                             styles="{sizeToContent:true}">
                                                             <spinnerData>
@@ -107,7 +107,7 @@ limitations under the License.
                                                     </TablePane.Row>
                                                     <TablePane.Row height="1*">
                                                         <RadioButton wtkx:id="absoluteWidthButton"
-                                                            buttonData="Absolute" group="$columnWidthGroup"/>
+                                                            buttonData="Absolute" buttonGroup="$columnWidthGroup"/>
                                                         <Spinner wtkx:id="absoluteWidthSpinner"
                                                             styles="{sizeToContent:true}">
                                                             <spinnerData>

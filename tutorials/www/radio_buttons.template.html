@@ -57,18 +57,19 @@ deployJava.writeAppletTag(attributes, parameters);
     xmlns="org.apache.pivot.wtk"&gt;
     &lt;content&gt;
         &lt;BoxPane orientation="vertical" styles="{padding:4}"&gt;
-            &lt;RadioButton wtkx:id="oneButton" buttonData="One" group="numbers" selected="true"/&gt;
-            &lt;RadioButton wtkx:id="twoButton" buttonData="Two" group="numbers"/&gt;
-            &lt;RadioButton wtkx:id="threeButton" buttonData="Three" group="numbers"/&gt;
+            &lt;wtkx:define&gt;
+                &lt;ButtonGroup wtkx:id="numbers"/&gt;
+            &lt;/wtkx:define&gt;
+            &lt;RadioButton wtkx:id="oneButton" buttonData="One" buttonGroup="$numbers" selected="true"/&gt;
+            &lt;RadioButton wtkx:id="twoButton" buttonData="Two" buttonGroup="$numbers"/&gt;
+            &lt;RadioButton wtkx:id="threeButton" buttonData="Three" buttonGroup="$numbers"/&gt;
             &lt;PushButton wtkx:id="selectButton" buttonData="Select"/&gt;
         &lt;/BoxPane&gt;
     &lt;/content&gt;
 &lt;/Window&gt;
 </pre>
 
-<p>The following is the Java source for the example. Like the push button example, the application registers an event listener that is called when the button is pressed. It also gets a reference to the button group, which is used by the handler. This is an instance of <tt>Button.Group</tt> that is automatically created by the WTKX serializer, which creates one <tt>Group</tt> per unique button group name. The loader ensures that group names are unique within the application that defines them. Button groups can also be created and assigned programmatically.</p>
-
-<p><tt>numbersGroup</tt> is defined as a final local variable so the handler method will have access to it. When called, the handler gets a reference to the currently selected button from the button group and displays an alert containing the data of the selected button.</p>
+<p>The following is the Java source for the example. Like the push button example, the application registers an event listener that is called when the button is pressed. It also gets a reference to a button group named <tt>numbersGroup</tt> (<tt>numbersGroup</tt> is defined as a final local variable so the handler method will have access to it). When called, the handler gets a reference to the currently selected button from the button group and displays an alert containing the data of the selected button.</p>
 
 <pre class="brush:java;">
 package org.apache.pivot.tutorials.buttons;
@@ -77,6 +78,7 @@ import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Alert;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Button;
+import org.apache.pivot.wtk.ButtonGroup;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
@@ -89,6 +91,7 @@ public class RadioButtons implements Application {
     private Window window = null;
     private PushButton selectButton = null;
 
+    @Override
     public void startup(Display display, Map&lt;String, String&gt; properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -96,10 +99,11 @@ public class RadioButtons implements Application {
         selectButton = (PushButton)wtkxSerializer.get("selectButton");
 
         // Get a reference to the button group
-        final Button.Group numbersGroup = Button.getNamedGroups().get("numbers");
+        final ButtonGroup numbersGroup = (ButtonGroup)wtkxSerializer.get("numbers");
 
         // Add a button press listener
         selectButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
             public void buttonPressed(Button button) {
                 String message = "You selected \""
                     + numbersGroup.getSelection().getButtonData()
@@ -111,6 +115,7 @@ public class RadioButtons implements Application {
         window.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (window != null) {
             window.close();
@@ -119,9 +124,11 @@ public class RadioButtons implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 

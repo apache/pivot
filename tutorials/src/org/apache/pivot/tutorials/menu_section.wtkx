@@ -18,16 +18,20 @@ limitations under the License.
 
 <Menu.Section xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-  <Menu.Item buttonData="IMG_0725_2.jpg" toggleButton="true"
-      group="imageMenuGroup" action="selectImageAction">
-      <userData image="IMG_0725_2.jpg"/>
-  </Menu.Item>
-  <Menu.Item buttonData="IMG_0735_2.jpg" toggleButton="true"
-      group="imageMenuGroup" action="selectImageAction">
-      <userData image="IMG_0735_2.jpg"/>
-  </Menu.Item>
-  <Menu.Item buttonData="IMG_0767_2.jpg" toggleButton="true"
-      group="imageMenuGroup" action="selectImageAction">
-      <userData image="IMG_0767_2.jpg"/>
-  </Menu.Item>
+    <wtkx:define>
+        <ButtonGroup wtkx:id="imageMenuGroup"/>
+    </wtkx:define>
+
+    <Menu.Item buttonData="IMG_0725_2.jpg" toggleButton="true"
+        buttonGroup="$imageMenuGroup" action="selectImageAction">
+        <userData image="IMG_0725_2.jpg"/>
+    </Menu.Item>
+    <Menu.Item buttonData="IMG_0735_2.jpg" toggleButton="true"
+        buttonGroup="$imageMenuGroup" action="selectImageAction">
+        <userData image="IMG_0735_2.jpg"/>
+    </Menu.Item>
+    <Menu.Item buttonData="IMG_0767_2.jpg" toggleButton="true"
+        buttonGroup="$imageMenuGroup" action="selectImageAction">
+        <userData image="IMG_0767_2.jpg"/>
+    </Menu.Item>
 </Menu.Section>

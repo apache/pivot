@@ -45,7 +45,7 @@ public interface ButtonListener {
         }
 
         @Override
-        public void groupChanged(Button button, Button.Group previousGroup) {
+        public void buttonGroupChanged(Button button, ButtonGroup previousButtonGroup) {
         }
 
         @Override
@@ -96,12 +96,12 @@ public interface ButtonListener {
     public void triStateChanged(Button button);
 
     /**
-     * Called when a button's group has changed.
+     * Called when a button's button group has changed.
      *
      * @param button
-     * @param previousGroup
+     * @param previousButtonGroup
      */
-    public void groupChanged(Button button, Button.Group previousGroup);
+    public void buttonGroupChanged(Button button, ButtonGroup previousButtonGroup);
 
     /**
      * Called when a button's selected key has changed.

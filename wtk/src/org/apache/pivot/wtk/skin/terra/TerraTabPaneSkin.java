@@ -27,6 +27,8 @@ import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Button;
+import org.apache.pivot.wtk.ButtonGroup;
+import org.apache.pivot.wtk.ButtonGroupListener;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentStateListener;
 import org.apache.pivot.wtk.Dimensions;
@@ -44,7 +46,6 @@ import org.apache.pivot.wtk.TabPaneListener;
 import org.apache.pivot.wtk.TabPaneSelectionListener;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.VerticalAlignment;
-import org.apache.pivot.wtk.Button.Group;
 import org.apache.pivot.wtk.content.ButtonData;
 import org.apache.pivot.wtk.content.ButtonDataRenderer;
 import org.apache.pivot.wtk.effects.Transition;
@@ -54,7 +55,6 @@ import org.apache.pivot.wtk.effects.easing.Quadratic;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.skin.ButtonSkin;
 import org.apache.pivot.wtk.skin.ContainerSkin;
-
 
 /**
  * Tab pane skin.
@@ -332,7 +332,7 @@ public class TerraTabPaneSkin extends ContainerSkin
 
     protected Panorama buttonPanorama = new Panorama();
     protected BoxPane buttonBoxPane = new BoxPane();
-    private Button.Group tabButtonGroup = new Button.Group();
+    private ButtonGroup tabButtonGroup = new ButtonGroup();
 
     private Color activeTabColor;
     private Color inactiveTabColor;
@@ -394,9 +394,9 @@ public class TerraTabPaneSkin extends ContainerSkin
         buttonPanorama.getStyles().put("buttonPadding", 6);
         buttonPanorama.setView(buttonBoxPane);
 
-        tabButtonGroup.getGroupListeners().add(new Button.GroupListener() {
+        tabButtonGroup.getButtonGroupListeners().add(new ButtonGroupListener.Adapter() {
             @Override
-            public void selectionChanged(Group group, Button previousSelection) {
+            public void selectionChanged(ButtonGroup buttonGroup, Button previousSelection) {
                 Button button = tabButtonGroup.getSelection();
                 int index = (button == null) ? -1 : buttonBoxPane.indexOf(button);
 
@@ -430,7 +430,7 @@ public class TerraTabPaneSkin extends ContainerSkin
             tab.setVisible(i == selectedIndex);
 
             TabButton tabButton = new TabButton(tab);
-            tabButton.setGroup(tabButtonGroup);
+            tabButton.setButtonGroup(tabButtonGroup);
             buttonBoxPane.add(tabButton);
 
             // Listen for state changes on the tab
@@ -1170,7 +1170,7 @@ public class TerraTabPaneSkin extends ContainerSkin
 
         // Create a new button for the tab
         TabButton tabButton = new TabButton(tab);
-        tabButton.setGroup(tabButtonGroup);
+        tabButton.setButtonGroup(tabButtonGroup);
         buttonBoxPane.insert(tabButton, index);
 
         // Listen for state changes on the tab
@@ -1196,7 +1196,7 @@ public class TerraTabPaneSkin extends ContainerSkin
 
         for (int i = 0, n = removed.getLength(); i < n; i++) {
             TabButton tabButton = (TabButton)removedButtons.get(i);
-            tabButton.setGroup((Group)null);
+            tabButton.setButtonGroup(null);
 
             // Stop listening for state changes on the tab
             Component tab = (Component)tabButton.getButtonData();

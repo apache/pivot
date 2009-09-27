@@ -144,9 +144,12 @@ limitations under the License.
                         <Menu>
                             <sections>
                                 <Menu.Section>
-                                    <Menu.Item buttonData="Large" toggleButton="true" group="view" selected="true"/>
-                                    <Menu.Item buttonData="Medium" toggleButton="true" group="view"/>
-                                    <Menu.Item buttonData="Small" toggleButton="true" group="view"/>
+                                    <wtkx:define>
+                                        <ButtonGroup wtkx:id="view"/>
+                                    </wtkx:define>
+                                    <Menu.Item buttonData="Large" toggleButton="true" buttonGroup="$view" selected="true"/>
+                                    <Menu.Item buttonData="Medium" toggleButton="true" buttonGroup="$view"/>
+                                    <Menu.Item buttonData="Small" toggleButton="true" buttonGroup="$view"/>
                                 </Menu.Section>
                             </sections>
                         </Menu>

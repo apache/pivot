@@ -64,7 +64,7 @@ public class Checkbox extends Button {
     }
 
     @Override
-    public void setGroup(Group group) {
+    public void setButtonGroup(ButtonGroup buttonGroup) {
         throw new UnsupportedOperationException("Checkboxes can't be added to a group.");
     }
 }

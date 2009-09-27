@@ -28,6 +28,8 @@ import org.apache.pivot.util.CalendarDate;
 import org.apache.pivot.util.Filter;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Button;
+import org.apache.pivot.wtk.ButtonGroup;
+import org.apache.pivot.wtk.ButtonGroupListener;
 import org.apache.pivot.wtk.Calendar;
 import org.apache.pivot.wtk.CalendarListener;
 import org.apache.pivot.wtk.CalendarSelectionListener;
@@ -46,7 +48,6 @@ import org.apache.pivot.wtk.Spinner;
 import org.apache.pivot.wtk.SpinnerSelectionListener;
 import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.Theme;
-import org.apache.pivot.wtk.Button.Group;
 import org.apache.pivot.wtk.content.ButtonDataRenderer;
 import org.apache.pivot.wtk.content.NumericSpinnerData;
 import org.apache.pivot.wtk.content.SpinnerItemRenderer;
@@ -360,7 +361,7 @@ public class TerraCalendarSkin extends CalendarSkin
     private Spinner yearSpinner;
 
     private DateButton[][] dateButtons = new DateButton[6][7];
-    private Button.Group dateButtonGroup;
+    private ButtonGroup dateButtonGroup;
 
     private Button.DataRenderer dateButtonDataRenderer = new DateButtonDataRenderer();
 
@@ -468,13 +469,13 @@ public class TerraCalendarSkin extends CalendarSkin
         calendarTablePane.getRows().add(calendarRow);
 
         // Add the buttons
-        dateButtonGroup = new Button.Group();
-        dateButtonGroup.getGroupListeners().add(new Button.GroupListener() {
+        dateButtonGroup = new ButtonGroup();
+        dateButtonGroup.getButtonGroupListeners().add(new ButtonGroupListener.Adapter() {
             @Override
-            public void selectionChanged(Group group, Button previousSelection) {
+            public void selectionChanged(ButtonGroup buttonGroup, Button previousSelection) {
                 Calendar calendar = (Calendar)getComponent();
 
-                Button selection = group.getSelection();
+                Button selection = buttonGroup.getSelection();
                 if (selection == null) {
                     CalendarDate selectedDate = calendar.getSelectedDate();
 
@@ -498,7 +499,7 @@ public class TerraCalendarSkin extends CalendarSkin
             for (int i = 0; i < 7; i++) {
                 DateButton dateButton = new DateButton();
                 dateButtons[j][i] = dateButton;
-                dateButton.setGroup(dateButtonGroup);
+                dateButton.setButtonGroup(dateButtonGroup);
 
                 calendarRow.add(dateButton);
             }

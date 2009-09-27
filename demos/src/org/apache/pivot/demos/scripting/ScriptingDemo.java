@@ -43,6 +43,8 @@ public class ScriptingDemo implements Application {
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        wtkxSerializer.put("bar", "12345");
+
         window = (Window)wtkxSerializer.readObject(this, "scripting_demo.wtkx");
         foo = (String)wtkxSerializer.get("foo");
         listData = (List<?>)wtkxSerializer.get("listData");

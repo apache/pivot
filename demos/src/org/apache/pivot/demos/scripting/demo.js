@@ -14,7 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+importClass(java.lang.System);
 importPackage(org.apache.pivot.collections);
+
+System.out.println("Executing external script block.");
 
 var foo = "ABCDE";
 

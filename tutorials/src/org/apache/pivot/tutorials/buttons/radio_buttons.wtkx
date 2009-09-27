@@ -21,9 +21,12 @@ limitations under the License.
     xmlns="org.apache.pivot.wtk">
     <content>
         <BoxPane orientation="vertical" styles="{padding:4}">
-            <RadioButton wtkx:id="oneButton" buttonData="One" group="numbers" selected="true"/>
-            <RadioButton wtkx:id="twoButton" buttonData="Two" group="numbers"/>
-            <RadioButton wtkx:id="threeButton" buttonData="Three" group="numbers"/>
+            <wtkx:define>
+                <ButtonGroup wtkx:id="numbers"/>
+            </wtkx:define>
+            <RadioButton wtkx:id="oneButton" buttonData="One" buttonGroup="$numbers" selected="true"/>
+            <RadioButton wtkx:id="twoButton" buttonData="Two" buttonGroup="$numbers"/>
+            <RadioButton wtkx:id="threeButton" buttonData="Three" buttonGroup="$numbers"/>
             <PushButton wtkx:id="selectButton" buttonData="Select"/>
         </BoxPane>
     </content>

@@ -50,7 +50,7 @@ public class PushButton extends Button {
         if (isToggleButton()) {
             State state = getState();
 
-            if (getGroup() == null) {
+            if (getButtonGroup() == null) {
                 if (state == State.SELECTED) {
                     setState(State.UNSELECTED);
                 }

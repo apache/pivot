@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="Scripting Demo" maximized="true"
+<Window wtkx:id="window" title="Scripting Demo" maximized="true"
     WindowStateListener.windowOpened="java.lang.System.out.println('Window opened: ' + x)"
     WindowStateListener.windowClosed="java.lang.System.out.println('Window closed: ' + y)"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
@@ -27,16 +27,22 @@ limitations under the License.
     <wtkx:script src="demo.js"/>
     <wtkx:script>
     importClass(java.lang.System);
-    System.out.println("Executing inline script block.");
+    importPackage(org.apache.pivot.wtk);
+    System.out.println("bar = " + (bar == null ? null : "\"" + bar + "\""));
+
     var x = 10;
     var y = 20;
+
+    function buttonClicked() {
+        Alert.alert("x = " + x + ", y = " + y, window);
+    }
     </wtkx:script>
 
     <content>
         <Border>
             <content>
                 <BoxPane orientation="vertical" styles="{padding:6}">
-                    <PushButton wtkx:id="pushButton" buttonData="Click Me!">
+                    <PushButton buttonData="Click Me!">
                         <buttonPressListeners>
                             <wtkx:script>
                             <![CDATA[
@@ -48,6 +54,9 @@ limitations under the License.
                             </wtkx:script>
                         </buttonPressListeners>
                     </PushButton>
+
+                    <PushButton buttonData="No, Click Me!"
+                        ButtonPressListener.buttonPressed="buttonClicked()"/>
 
                     <Border styles="{padding:0, color:10}">
                         <content>

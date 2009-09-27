@@ -20,17 +20,21 @@ limitations under the License.
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
-    <RadioButton group="icons" selected="true">
+    <wtkx:define>
+        <ButtonGroup wtkx:id="icons"/>
+    </wtkx:define>
+
+    <RadioButton buttonGroup="$icons" selected="true">
         <buttonData>
             <content:ButtonData text="Bell" icon="@bell.png"/>
         </buttonData>
     </RadioButton>
-    <RadioButton group="icons" selected="true">
+    <RadioButton buttonGroup="$icons" selected="true">
         <buttonData>
             <content:ButtonData text="Clock" icon="@clock.png"/>
         </buttonData>
     </RadioButton>
-    <RadioButton group="icons" selected="true">
+    <RadioButton buttonGroup="$icons" selected="true">
         <buttonData>
             <content:ButtonData text="House" icon="@house.png"/>
         </buttonData>

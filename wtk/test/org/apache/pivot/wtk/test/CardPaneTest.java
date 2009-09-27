@@ -20,6 +20,8 @@ import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Button;
+import org.apache.pivot.wtk.ButtonGroup;
+import org.apache.pivot.wtk.ButtonGroupListener;
 import org.apache.pivot.wtk.CardPane;
 import org.apache.pivot.wtk.CardPaneListener;
 import org.apache.pivot.wtk.DesktopApplicationContext;
@@ -33,7 +35,8 @@ public class CardPaneTest implements Application {
     private Frame frame = null;
     private Sheet sheet = null;
 
-    private CardPane cardPane;
+    private CardPane cardPane = null;
+    private ButtonGroup sizeGroup = null;
 
     @Override
     public void startup(Display display, Map<String, String> properties)
@@ -47,11 +50,11 @@ public class CardPaneTest implements Application {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         sheet = (Sheet)wtkxSerializer.readObject(this, "card_pane_test.wtkx");
         cardPane = (CardPane)wtkxSerializer.get("cardPane");
+        sizeGroup = (ButtonGroup)wtkxSerializer.get("sizeGroup");
 
-        Button.Group sizeGroup = Button.getNamedGroups().get("sizeGroup");
-        sizeGroup.getGroupListeners().add(new Button.GroupListener() {
+        sizeGroup.getButtonGroupListeners().add(new ButtonGroupListener.Adapter() {
             @Override
-            public void selectionChanged(Button.Group buttonGroup, Button previousSelection) {
+            public void selectionChanged(ButtonGroup buttonGroup, Button previousSelection) {
                 final Button selection = buttonGroup.getSelection();
                 int selectedIndex = selection == null ? -1 : selection.getParent().indexOf(selection);
 

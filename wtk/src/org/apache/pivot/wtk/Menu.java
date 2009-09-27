@@ -208,7 +208,7 @@ public class Menu extends Container {
         @Override
         public void press() {
             if (isToggleButton()) {
-                setSelected(getGroup() == null ? !isSelected() : true);
+                setSelected(getButtonGroup() == null ? !isSelected() : true);
             }
 
             super.press();

@@ -20,6 +20,7 @@ import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Alert;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Button;
+import org.apache.pivot.wtk.ButtonGroup;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
@@ -40,7 +41,7 @@ public class RadioButtons implements Application {
         selectButton = (PushButton)wtkxSerializer.get("selectButton");
 
         // Get a reference to the button group
-        final Button.Group numbersGroup = Button.getNamedGroups().get("numbers");
+        final ButtonGroup numbersGroup = (ButtonGroup)wtkxSerializer.get("numbers");
 
         // Add a button press listener
         selectButton.getButtonPressListeners().add(new ButtonPressListener() {

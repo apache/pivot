@@ -20,7 +20,7 @@ limitations under the License.
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
     <wtkx:define>
-        <Button.Group wtkx:id="fileBrowserSheetModeGroup"/>
+        <ButtonGroup wtkx:id="fileBrowserSheetModeGroup"/>
     </wtkx:define>
 
     <content>
@@ -29,16 +29,16 @@ limitations under the License.
                 <BoxPane orientation="vertical" styles="{spacing:6}">
                     <Label text="Mode:" styles="{fontBold:true}"/>
 
-                    <RadioButton buttonData="Open" group="$fileBrowserSheetModeGroup" selected="true">
+                    <RadioButton buttonData="Open" buttonGroup="$fileBrowserSheetModeGroup" selected="true">
                         <userData mode="open"/>
                     </RadioButton>
-                    <RadioButton buttonData="Open Multiple" group="$fileBrowserSheetModeGroup">
+                    <RadioButton buttonData="Open Multiple" buttonGroup="$fileBrowserSheetModeGroup">
                         <userData mode="open_multiple"/>
                     </RadioButton>
-                    <RadioButton buttonData="Save As" group="$fileBrowserSheetModeGroup">
+                    <RadioButton buttonData="Save As" buttonGroup="$fileBrowserSheetModeGroup">
                         <userData mode="save_as"/>
                     </RadioButton>
-                    <RadioButton buttonData="Save To" group="$fileBrowserSheetModeGroup">
+                    <RadioButton buttonData="Save To" buttonGroup="$fileBrowserSheetModeGroup">
                         <userData mode="save_to"/>
                     </RadioButton>
 

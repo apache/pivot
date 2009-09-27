@@ -32,19 +32,19 @@ public class RadioButton extends Button {
         this(null, null);
     }
 
-    public RadioButton(Group group) {
-        this(group, null);
+    public RadioButton(ButtonGroup buttonGroup) {
+        this(buttonGroup, null);
     }
 
     public RadioButton(Object buttonData) {
         this(null, buttonData);
     }
 
-    public RadioButton(Group group, Object buttonData) {
+    public RadioButton(ButtonGroup buttonGroup, Object buttonData) {
         super(buttonData);
         super.setToggleButton(true);
 
-        setGroup(group);
+        setButtonGroup(buttonGroup);
         setDataRenderer(DEFAULT_DATA_RENDERER);
 
         installThemeSkin(RadioButton.class);

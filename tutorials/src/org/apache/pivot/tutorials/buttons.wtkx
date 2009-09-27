@@ -43,9 +43,12 @@ limitations under the License.
                 <BoxPane orientation="vertical">
                     <Label text="Grouped Toggle Buttons" styles="{fontBold:true}"/>
                     <BoxPane>
-                        <PushButton buttonData="One" toggleButton="true" group="toggleButtons"/>
-                        <PushButton buttonData="Two" toggleButton="true" group="toggleButtons"/>
-                        <PushButton buttonData="Three" toggleButton="true" group="toggleButtons" selected="true" enabled="false"/>
+                        <wtkx:define>
+                            <ButtonGroup wtkx:id="toggleButtons"/>
+                        </wtkx:define>
+                        <PushButton buttonData="One" toggleButton="true" buttonGroup="$toggleButtons"/>
+                        <PushButton buttonData="Two" toggleButton="true" buttonGroup="$toggleButtons"/>
+                        <PushButton buttonData="Three" toggleButton="true" buttonGroup="$toggleButtons" selected="true" enabled="false"/>
                     </BoxPane>
                 </BoxPane>
 
@@ -103,26 +106,32 @@ limitations under the License.
                 <BoxPane orientation="vertical">
                     <Label text="Basic Radio Buttons" styles="{fontBold:true}"/>
                     <BoxPane>
-                        <RadioButton buttonData="One" group="radioButtons"/>
-                        <RadioButton buttonData="Two" group="radioButtons"/>
-                        <RadioButton buttonData="Three" group="radioButtons" selected="true" enabled="false"/>
+                        <wtkx:define>
+                            <ButtonGroup wtkx:id="radioButtons"/>
+                        </wtkx:define>
+                        <RadioButton buttonData="One" buttonGroup="$radioButtons"/>
+                        <RadioButton buttonData="Two" buttonGroup="$radioButtons"/>
+                        <RadioButton buttonData="Three" buttonGroup="$radioButtons" selected="true" enabled="false"/>
                     </BoxPane>
                 </BoxPane>
 
                 <BoxPane orientation="vertical">
                     <Label text="Image Radio Buttons" styles="{fontBold:true}"/>
                     <BoxPane orientation="vertical">
-                        <RadioButton group="imageRadioButtons">
+                        <wtkx:define>
+                            <ButtonGroup wtkx:id="imageRadioButtons"/>
+                        </wtkx:define>
+                        <RadioButton buttonGroup="$imageRadioButtons">
                             <buttonData>
                                 <content:ButtonData icon="@bell.png" text="Bell"/>
                             </buttonData>
                         </RadioButton>
-                        <RadioButton group="imageRadioButtons">
+                        <RadioButton buttonGroup="$imageRadioButtons">
                             <buttonData>
                                 <content:ButtonData icon="@clock.png" text="Clock"/>
                             </buttonData>
                         </RadioButton>
-                        <RadioButton group="imageRadioButtons" selected="true" enabled="false">
+                        <RadioButton buttonGroup="$imageRadioButtons" selected="true" enabled="false">
                             <buttonData>
                                 <content:ButtonData icon="@house.png" text="House"/>
                             </buttonData>
