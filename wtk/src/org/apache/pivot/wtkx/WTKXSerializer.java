@@ -1070,7 +1070,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             throw new IllegalArgumentException("name is null.");
         }
 
-        Object value;
+        Object value = null;
 
         int i = name.lastIndexOf('.');
         if (i == -1) {
@@ -1079,7 +1079,10 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             String serializerName = name.substring(0, name.lastIndexOf('.'));
             String id = name.substring(serializerName.length() + 1);
             WTKXSerializer serializer = getSerializer(serializerName);
-            value = serializer.get(id);
+
+            if (serializer != null) {
+                value = serializer.get(id);
+            }
         }
 
         return value;
@@ -1133,7 +1136,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             throw new IllegalArgumentException("name is null.");
         }
 
-        boolean containsKey;
+        boolean containsKey = false;
 
         int i = name.lastIndexOf('.');
         if (i == -1) {
@@ -1142,7 +1145,10 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             String serializerName = name.substring(0, name.lastIndexOf('.'));
             String id = name.substring(serializerName.length() + 1);
             WTKXSerializer serializer = getSerializer(serializerName);
-            containsKey = serializer.containsKey(id);
+
+            if (serializer != null) {
+                containsKey = serializer.containsKey(id);
+            }
         }
 
         return containsKey;
