@@ -163,16 +163,18 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
 
         public final Element parent;
         public final Type type;
+        public final String id;
         public final String tagName;
         public final int lineNumber;
         public final List<Attribute> attributes;
 
         public Object value;
 
-        public Element(Element parent, Type type, String tagName, int lineNumber,
+        public Element(Element parent, Type type, String id, String tagName, int lineNumber,
             List<Attribute> attributes, Object value) {
             this.parent = parent;
             this.type = type;
+            this.id = id;
             this.tagName = tagName;
             this.lineNumber = lineNumber;
             this.attributes = attributes;
@@ -182,15 +184,53 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
 
     private static class Attribute {
         public final String namespaceURI;
-        public final String prefix;
         public final String localName;
         public final String value;
 
-        public Attribute(String namespaceURI, String prefix, String localName, String value) {
+        public Attribute(String namespaceURI, String localName, String value) {
             this.namespaceURI = namespaceURI;
-            this.prefix = prefix;
             this.localName = localName;
             this.value = value;
+        }
+    }
+
+    private class AttributeInvocationHandler implements InvocationHandler {
+        private ScriptEngine scriptEngine;
+        private String event;
+        private String script;
+
+        public AttributeInvocationHandler(ScriptEngine scriptEngine, String event, String script) {
+            this.scriptEngine = scriptEngine;
+            this.event = event;
+            this.script = script;
+        }
+
+        @Override
+        public Object invoke(Object proxy, Method method, Object[] args)
+            throws Throwable {
+            Object result = null;
+
+            String methodName = method.getName();
+            if (methodName.equals(event)) {
+                try {
+                    scriptEngine.eval(script);
+                } catch (ScriptException exception) {
+                    System.err.println(exception);
+                    System.err.println(script);
+                }
+            }
+
+            // If the function didn't return a value, return the default
+            if (result == null) {
+                Class<?> returnType = method.getReturnType();
+                if (returnType == Vote.class) {
+                    result = Vote.APPROVE;
+                } else if (returnType == Boolean.TYPE) {
+                    result = false;
+                }
+            }
+
+            return result;
         }
     }
 
@@ -232,46 +272,6 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             return result;
         }
     };
-
-    private class AttributeInvocationHandler implements InvocationHandler {
-        private ScriptEngine scriptEngine;
-        private String event;
-        private String script;
-
-        public AttributeInvocationHandler(ScriptEngine scriptEngine, String event, String script) {
-            this.scriptEngine = scriptEngine;
-            this.event = event;
-            this.script = script;
-        }
-
-        @Override
-        public Object invoke(Object proxy, Method method, Object[] args)
-            throws Throwable {
-            Object result = null;
-
-            String methodName = method.getName();
-            if (methodName.equals(event)) {
-                try {
-                    scriptEngine.eval(script);
-                } catch (ScriptException exception) {
-                    System.err.println(exception);
-                    System.err.println(script);
-                }
-            }
-
-            // If the function didn't return a value, return the default
-            if (result == null) {
-                Class<?> returnType = method.getReturnType();
-                if (returnType == Vote.class) {
-                    result = Vote.APPROVE;
-                } else if (returnType == Boolean.TYPE) {
-                    result = false;
-                }
-            }
-
-            return result;
-        }
-    }
 
     private URL location = null;
     private Resources resources = null;
@@ -510,20 +510,31 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         String localName = reader.getLocalName();
 
         // Build attribute list; these will be processed in the close tag
+        String id = null;
         ArrayList<Attribute> attributes = new ArrayList<Attribute>();
 
         for (int i = 0, n = reader.getAttributeCount(); i < n; i++) {
-            String attributeNamespaceURI = reader.getAttributeNamespace(i);
-            if (attributeNamespaceURI == null) {
-                attributeNamespaceURI = reader.getNamespaceURI("");
-            }
-
             String attributePrefix = reader.getAttributePrefix(i);
             String attributeLocalName = reader.getAttributeLocalName(i);
             String attributeValue = reader.getAttributeValue(i);
 
-            attributes.add(new Attribute(attributeNamespaceURI,
-                attributePrefix, attributeLocalName, attributeValue));
+            if (attributePrefix != null
+                && attributePrefix.equals(WTKX_PREFIX)) {
+                if (attributeLocalName.equals(ID_ATTRIBUTE)) {
+                    id = attributeValue;
+                } else {
+                    throw new SerializationException(attributePrefix + ":" + attributeLocalName
+                        + " is not a valid attribute.");
+                }
+            } else {
+                String attributeNamespaceURI = reader.getAttributeNamespace(i);
+                if (attributeNamespaceURI == null) {
+                    attributeNamespaceURI = reader.getNamespaceURI("");
+                }
+
+                attributes.add(new Attribute(attributeNamespaceURI, attributeLocalName,
+                    attributeValue));
+            }
         }
 
         // Determine the type and value of this element
@@ -567,6 +578,12 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                     Class<?> type = Class.forName(className);
                     elementType = Element.Type.INSTANCE;
                     value = type.newInstance();
+
+                    // Add the value to the named objects map here so it is available to
+                    // sub-elements (rather than waiting until the close tag)
+                    if (id != null) {
+                        namedObjects.put(id, value);
+                    }
                 } catch (Exception exception) {
                     throw new SerializationException(exception);
                 }
@@ -611,7 +628,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         }
 
         Location xmlStreamLocation = reader.getLocation();
-        element = new Element(element, elementType, tagName, xmlStreamLocation.getLineNumber(),
+        element = new Element(element, elementType, id, tagName, xmlStreamLocation.getLineNumber(),
             attributes, value);
 
         // If this is the root, set it
@@ -628,7 +645,6 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         switch (element.type) {
             case INSTANCE:
             case INCLUDE: {
-                String id = null;
                 ArrayList<Attribute> instancePropertyAttributes = new ArrayList<Attribute>();
                 ArrayList<Attribute> staticPropertyAttributes = new ArrayList<Attribute>();
 
@@ -639,28 +655,18 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                     Resources resources = this.resources;
 
                     for (Attribute attribute : element.attributes) {
-                        if (attribute.prefix != null
-                            && attribute.prefix.equals(WTKX_PREFIX)) {
-                            if (attribute.localName.equals(ID_ATTRIBUTE)) {
-                                id = attribute.value;
-                            } else {
-                                throw new SerializationException(WTKX_PREFIX + ":" + attribute.localName
-                                    + " is not a valid attribute.");
-                            }
+                        if (attribute.localName.equals(INCLUDE_SRC_ATTRIBUTE)) {
+                            src = attribute.value;
+                        } else if (attribute.localName.equals(INCLUDE_RESOURCES_ATTRIBUTE)) {
+                            resources = new Resources(resources, attribute.value);
                         } else {
-                            if (attribute.localName.equals(INCLUDE_SRC_ATTRIBUTE)) {
-                                src = attribute.value;
-                            } else if (attribute.localName.equals(INCLUDE_RESOURCES_ATTRIBUTE)) {
-                                resources = new Resources(resources, attribute.value);
-                            } else {
-                                if (!Character.isUpperCase(attribute.localName.charAt(0))) {
-                                    throw new SerializationException("Instance property setters are not"
-                                        + " supported for " + WTKX_PREFIX + ":" + INCLUDE_TAG
-                                        + " " + " tag.");
-                                }
-
-                                staticPropertyAttributes.add(attribute);
+                            if (!Character.isUpperCase(attribute.localName.charAt(0))) {
+                                throw new SerializationException("Instance property setters are not"
+                                    + " supported for " + WTKX_PREFIX + ":" + INCLUDE_TAG
+                                    + " " + " tag.");
                             }
+
+                            staticPropertyAttributes.add(attribute);
                         }
                     }
 
@@ -672,8 +678,8 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
 
                     // Read the object
                     WTKXSerializer serializer = new WTKXSerializer(resources);
-                    if (id != null) {
-                        includeSerializers.put(id, serializer);
+                    if (element.id != null) {
+                        includeSerializers.put(element.id, serializer);
                     }
 
                     if (src.charAt(0) == '/') {
@@ -682,7 +688,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                         element.value = serializer.readObject(new URL(location, src));
                     }
 
-                    if (id == null
+                    if (element.id == null
                         && !serializer.isEmpty()
                         && serializer.scriptEngineManager == null) {
                         System.err.println("Include \"" + src + "\" defines unreachable objects.");
@@ -690,32 +696,12 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                 } else {
                     // Process attributes looking for wtkx:id and all property setters
                     for (Attribute attribute : element.attributes) {
-                        if (attribute.prefix != null
-                            && attribute.prefix.equals(WTKX_PREFIX)) {
-                            if (attribute.localName.equals(ID_ATTRIBUTE)) {
-                                id = attribute.value;
-                            } else {
-                                throw new SerializationException(WTKX_PREFIX + ":" + attribute.localName
-                                    + " is not a valid attribute.");
-                            }
+                        if (Character.isUpperCase(attribute.localName.charAt(0))) {
+                            staticPropertyAttributes.add(attribute);
                         } else {
-                            if (Character.isUpperCase(attribute.localName.charAt(0))) {
-                                staticPropertyAttributes.add(attribute);
-                            } else {
-                                instancePropertyAttributes.add(attribute);
-                            }
+                            instancePropertyAttributes.add(attribute);
                         }
                     }
-                }
-
-                // If an ID was specified, add the value to the named object map
-                if (id != null) {
-                    if (id.length() == 0) {
-                        throw new IllegalArgumentException(WTKX_PREFIX + ":" + ID_ATTRIBUTE
-                            + " must not be null.");
-                    }
-
-                    namedObjects.put(id, element.value);
                 }
 
                 // Apply instance attributes
@@ -899,13 +885,6 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                 String src = null;
                 String language = this.language;
                 for (Attribute attribute : element.attributes) {
-                    if (attribute.prefix != null
-                        && attribute.prefix.length() > 0) {
-                        throw new SerializationException(attribute.prefix + ":" +
-                            attribute.localName + " is not a valid" + " attribute for the "
-                            + WTKX_PREFIX + ":" + SCRIPT_TAG + " tag.");
-                    }
-
                     if (attribute.localName.equals(SCRIPT_SRC_ATTRIBUTE)) {
                         src = attribute.value;
                     } else if (attribute.localName.equals(SCRIPT_LANGUAGE_ATTRIBUTE)) {
