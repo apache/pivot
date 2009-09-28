@@ -53,7 +53,7 @@ limitations under the License.
                                                             function selectionChanged(buttonGroup, previousSelection) {
                                                                 var selection = buttonGroup.getSelection();
                                                                 if (selection != null) {
-                                                                    var index = copyImageButtonBoxPane.indexOf(buttonGroup.getSelection());
+                                                                    var index = copyImageButtonBoxPane.indexOf(selection);
                                                                     copyImageCardPane.setSelectedIndex(index);
                                                                 }
                                                             }

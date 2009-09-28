@@ -145,6 +145,15 @@ public class TerraDialogSkin extends TerraFrameSkin implements DialogStateListen
     }
 
     @Override
+    public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+        Dialog dialog = (Dialog)component;
+        Window rootOwner = dialog.getRootOwner();
+        rootOwner.moveToFront();
+
+        return super.mouseDown(component, button, x, y);
+    }
+
+    @Override
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 

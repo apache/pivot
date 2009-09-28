@@ -1028,8 +1028,14 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
     }
 
     private void logException(Exception exception) {
-        String message = "An error occurred while processing element <" + element.tagName + ">"
-            + " starting at line number " + element.lineNumber;
+        String message = "An error occurred while processing ";
+
+        if (element == null) {
+            message += " the root element";
+        } else {
+            message += " element <" + element.tagName + ">"
+                + " starting at line number " + element.lineNumber;
+        }
 
         if (location != null) {
             message += " in file " + location.getPath();

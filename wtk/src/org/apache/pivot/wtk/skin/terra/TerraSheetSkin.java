@@ -85,14 +85,14 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     private ContainerMouseListener displayMouseListener = new ContainerMouseListener() {
         @Override
         public boolean mouseMove(Container display, int x, int y) {
-            return isMouseOverClientArea(display, x, y);
+            return isMouseOverOwnerClientArea(display, x, y);
         }
 
         @Override
         public boolean mouseDown(Container display, Mouse.Button button, int x, int y) {
             boolean consumed = false;
 
-            if (isMouseOverClientArea(display, x, y)) {
+            if (isMouseOverOwnerClientArea(display, x, y)) {
                 Sheet sheet = (Sheet)getComponent();
                 Window owner = sheet.getOwner();
                 owner.moveToFront();
@@ -106,16 +106,16 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
 
         @Override
         public boolean mouseUp(Container display, Mouse.Button button, int x, int y) {
-            return isMouseOverClientArea(display, x, y);
+            return isMouseOverOwnerClientArea(display, x, y);
         }
 
         @Override
         public boolean mouseWheel(Container display, Mouse.ScrollType scrollType,
             int scrollAmount, int wheelRotation, int x, int y) {
-            return isMouseOverClientArea(display, x, y);
+            return isMouseOverOwnerClientArea(display, x, y);
         }
 
-        private boolean isMouseOverClientArea(Container display, int x, int y) {
+        private boolean isMouseOverOwnerClientArea(Container display, int x, int y) {
             boolean mouseOverClientArea = false;
 
             Sheet sheet = (Sheet)getComponent();
@@ -288,6 +288,15 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         super.sizeChanged(component, previousWidth, previousHeight);
 
         alignToOwner();
+    }
+
+    @Override
+    public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+        Sheet sheet = (Sheet)component;
+        Window owner = sheet.getOwner();
+        owner.moveToFront();
+
+        return super.mouseDown(component, button, x, y);
     }
 
     @Override
