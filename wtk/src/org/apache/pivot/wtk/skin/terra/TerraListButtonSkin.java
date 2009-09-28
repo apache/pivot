@@ -644,17 +644,15 @@ public class TerraListButtonSkin extends ListButtonSkin {
                     listViewPopup.setPreferredSize(popupWidth, popupHeight);
                     listViewPopup.open(listButton.getWindow());
 
-                    if (listView.getSelectedIndex() == -1
-                        && listView.getListData().getLength() > 0) {
-                        listView.setSelectedIndex(0);
-                    }
-
                     ApplicationContext.queueCallback(new Runnable() {
                         @Override
                         public void run() {
                             int selectedIndex = listView.getSelectedIndex();
-                            Bounds itemBounds = listView.getItemBounds(selectedIndex);
-                            listView.scrollAreaToVisible(itemBounds);
+
+                            if (selectedIndex >= 0) {
+                                Bounds itemBounds = listView.getItemBounds(selectedIndex);
+                                listView.scrollAreaToVisible(itemBounds);
+                            }
                         }
                     });
 
