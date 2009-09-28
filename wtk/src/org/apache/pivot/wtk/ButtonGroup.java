@@ -119,11 +119,11 @@ public class ButtonGroup implements Group<Button>, Iterable<Button> {
 
         Button previousSelection = this.selection;
         if (previousSelection != selection) {
-            this.selection = selection;
-
             if (selection != null) {
                 selection.setSelected(true);
             }
+
+            this.selection = selection;
 
             buttonGroupListeners.selectionChanged(this, previousSelection);
         }

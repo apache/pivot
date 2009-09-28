@@ -317,23 +317,21 @@ public abstract class Button extends Component {
 
             if (buttonGroup != null) {
                 // Update the group's selection
-                Button selection = buttonGroup.getSelection();
+                Button previousSelection = buttonGroup.getSelection();
 
                 if (state == State.SELECTED) {
-                    // Set this as the new selection (do this before
-                    // de-selecting any currently selected button so the
-                    // group's change event isn't fired twice)
-                    buttonGroup.setSelection(this);
-
                     // De-select any previously selected button
-                    if (selection != null) {
-                        selection.setSelected(false);
+                    if (previousSelection != null) {
+                        previousSelection.setSelected(false);
                     }
+
+                    // Set this as the new selection
+                    buttonGroup.setSelection(this);
                 }
                 else {
                     // If this button is currently selected, clear the
                     // selection
-                    if (selection == this) {
+                    if (previousSelection == this) {
                         buttonGroup.setSelection(null);
                     }
                 }
