@@ -194,7 +194,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         }
     }
 
-    private class AttributeInvocationHandler implements InvocationHandler {
+    private static class AttributeInvocationHandler implements InvocationHandler {
         private ScriptEngine scriptEngine;
         private String event;
         private String script;
@@ -239,7 +239,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         }
     }
 
-    private class ElementInvocationHandler implements InvocationHandler {
+    private static class ElementInvocationHandler implements InvocationHandler {
         private ScriptEngine scriptEngine;
 
         public ElementInvocationHandler(ScriptEngine scriptEngine) {
