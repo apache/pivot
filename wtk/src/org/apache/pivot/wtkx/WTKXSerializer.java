@@ -210,14 +210,19 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             throws Throwable {
             Object result = null;
 
-            String methodName = method.getName();
-            if (methodName.equals(event)) {
-                try {
-                    scriptEngine.eval(script);
-                } catch (ScriptException exception) {
-                    System.err.println(exception);
-                    System.err.println(script);
+            try {
+                String methodName = method.getName();
+                if (methodName.equals(event)) {
+                    try {
+                        scriptEngine.eval(script);
+                    } catch (ScriptException exception) {
+                        System.err.println(exception);
+                        System.err.println(script);
+                    }
                 }
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
+                throw throwable;
             }
 
             // If the function didn't return a value, return the default
@@ -246,17 +251,22 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             throws Throwable {
             Object result = null;
 
-            String methodName = method.getName();
-            Bindings bindings = scriptEngine.getBindings(ScriptContext.ENGINE_SCOPE);
-            if (bindings.containsKey(methodName)) {
-                Invocable invocable;
-                try {
-                    invocable = (Invocable)scriptEngine;
-                } catch (ClassCastException exception) {
-                    throw new SerializationException(exception);
-                }
+            try {
+                String methodName = method.getName();
+                Bindings bindings = scriptEngine.getBindings(ScriptContext.ENGINE_SCOPE);
+                if (bindings.containsKey(methodName)) {
+                    Invocable invocable;
+                    try {
+                        invocable = (Invocable)scriptEngine;
+                    } catch (ClassCastException exception) {
+                        throw new SerializationException(exception);
+                    }
 
-                result = invocable.invokeFunction(methodName, args);
+                    result = invocable.invokeFunction(methodName, args);
+                }
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
+                throw throwable;
             }
 
             // If the function didn't return a value, return the default
@@ -521,9 +531,14 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             if (attributePrefix != null
                 && attributePrefix.equals(WTKX_PREFIX)) {
                 if (attributeLocalName.equals(ID_ATTRIBUTE)) {
+                    if (attributeValue.length() == 0) {
+                        throw new IllegalArgumentException(WTKX_PREFIX + ":" + ID_ATTRIBUTE
+                            + " must not be empty.");
+                    }
+
                     id = attributeValue;
                 } else {
-                    throw new SerializationException(attributePrefix + ":" + attributeLocalName
+                    throw new SerializationException(WTKX_PREFIX + ":" + attributeLocalName
                         + " is not a valid attribute.");
                 }
             } else {
@@ -578,12 +593,6 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                     Class<?> type = Class.forName(className);
                     elementType = Element.Type.INSTANCE;
                     value = type.newInstance();
-
-                    // Add the value to the named objects map here so it is available to
-                    // sub-elements (rather than waiting until the close tag)
-                    if (id != null) {
-                        namedObjects.put(id, value);
-                    }
                 } catch (Exception exception) {
                     throw new SerializationException(exception);
                 }
@@ -702,6 +711,11 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                             instancePropertyAttributes.add(attribute);
                         }
                     }
+                }
+
+                // Add the value to the named objects map
+                if (element.id != null) {
+                    namedObjects.put(element.id, element.value);
                 }
 
                 // Apply instance attributes
@@ -938,7 +952,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                             scriptReader = new BufferedReader(new InputStreamReader(scriptLocation.openStream()));
                             scriptEngine.eval(scriptReader);
                         } catch(ScriptException exception) {
-                            exception.printStackTrace(System.err);
+                            exception.printStackTrace();
                         } finally {
                             if (scriptReader != null) {
                                 scriptReader.close();
@@ -958,11 +972,13 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
 
                     scriptEngine.setBindings(bindings, ScriptContext.ENGINE_SCOPE);
 
-                    if (element.value != null) {
+                    String script = (String)element.value;
+                    if (script != null) {
                         try {
-                            scriptEngine.eval((String)element.value);
+                            scriptEngine.eval(script);
                         } catch (ScriptException exception) {
-                            exception.printStackTrace(System.err);
+                            System.err.println(exception);
+                            System.err.println(script);
                         }
                     }
                 }
