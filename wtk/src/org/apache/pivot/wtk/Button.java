@@ -513,9 +513,4 @@ public abstract class Button extends Component {
     public ListenerList<ButtonPressListener> getButtonPressListeners() {
         return buttonPressListeners;
     }
-
-    @Override
-    public String toString() {
-        return getClass().getName() + ": " + buttonData;
-    }
 }

@@ -74,7 +74,7 @@ public class RemoteManifest implements Manifest {
         try {
             text = (String)transferable.getTransferData(textDataFlavor);
         } catch(UnsupportedFlavorException exception) {
-            exception.printStackTrace(System.err);
+            // No-op
         }
 
         return text;
@@ -91,7 +91,7 @@ public class RemoteManifest implements Manifest {
         try {
             image = new Picture((BufferedImage)transferable.getTransferData(imageDataFlavor));
         } catch(UnsupportedFlavorException exception) {
-            exception.printStackTrace(System.err);
+            // No-op
         }
 
         return image;
@@ -109,7 +109,7 @@ public class RemoteManifest implements Manifest {
         try {
             fileList = new FileList((java.util.List<File>)transferable.getTransferData(fileListDataFlavor));
         } catch(UnsupportedFlavorException exception) {
-            exception.printStackTrace(System.err);
+            // No-op
         }
 
         return fileList;
@@ -126,7 +126,7 @@ public class RemoteManifest implements Manifest {
         try {
             url = (URL)transferable.getTransferData(urlDataFlavor);
         } catch(UnsupportedFlavorException exception) {
-            exception.printStackTrace(System.err);
+            // No-op
         }
 
         return url;

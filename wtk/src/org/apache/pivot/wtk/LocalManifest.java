@@ -33,11 +33,11 @@ import org.apache.pivot.wtk.media.Picture;
  * operation.
  */
 public class LocalManifest implements Manifest {
-    protected String text = null;
-    protected Image image = null;
-    protected FileList fileList = null;
-    protected URL url = null;
-    protected HashMap<String, Object> values = new HashMap<String, Object>();
+    private String text = null;
+    private Image image = null;
+    private FileList fileList = null;
+    private URL url = null;
+    private HashMap<String, Object> values = new HashMap<String, Object>();
 
     @Override
     public String getText() {

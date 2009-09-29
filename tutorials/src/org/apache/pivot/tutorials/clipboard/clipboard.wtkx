@@ -19,8 +19,48 @@ limitations under the License.
 <Window title="Clipboard" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
+    <wtkx:script>
+    importPackage(org.apache.pivot.wtk);
+
+    function copy() {
+        // Copy the selected image to the clipboard
+        var selectedSourceIndex = sourceImageCardPane.getSelectedIndex();
+        var sourceImageView = sourceImageCardPane.get(selectedSourceIndex);
+        var sourceImage = sourceImageView.getImage();
+
+        var content = new LocalManifest();
+        content.putImage(sourceImage);
+
+        Clipboard.setContent(content);
+    }
+
+    function paste() {
+        // Paste any available image from the clipboard
+        var content = Clipboard.getContent();
+
+        if (content != null) {
+            var image = content.getImage();
+
+            if (image != null) {
+                destinationImageView.setImage(image);
+            }
+        }
+    }
+    </wtkx:script>
+
+    <windowStateListeners>
+        <wtkx:script>
+        <![CDATA[
+        function windowOpened(window) {
+            sourceImageButtonGroup.setSelection(sourceImageButton1);
+            sourceImageButton1.requestFocus();
+        }
+        ]]>
+        </wtkx:script>
+    </windowStateListeners>
+
     <content>
-        <TablePane styles="{horizontalSpacing:2}">
+        <TablePane styles="{horizontalSpacing:4, verticalSpacing:4}">
             <columns>
                 <TablePane.Column width="1*"/>
                 <TablePane.Column width="1*"/>
@@ -29,84 +69,66 @@ limitations under the License.
                 <TablePane.Row height="1*">
                     <Border>
                         <content>
-                            <TablePane>
-                                <columns>
-                                    <TablePane.Column width="1*"/>
-                                </columns>
-                                <rows>
-                                    <TablePane.Row height="1*">
-                                        <CardPane wtkx:id="copyImageCardPane" styles="{padding:4}">
-                                            <ImageView image="org/apache/pivot/tutorials/IMG_0725_2.jpg"/>
-                                            <ImageView image="org/apache/pivot/tutorials/IMG_0735_2.jpg"/>
-                                            <ImageView image="org/apache/pivot/tutorials/IMG_0767_2.jpg"/>
-                                        </CardPane>
-                                    </TablePane.Row>
-                                    <TablePane.Row height="-1">
-                                        <BoxPane orientation="vertical" styles="{fill:true}">
-                                            <BoxPane wtkx:id="copyImageButtonBoxPane"
-                                                styles="{horizontalAlignment:'center'}">
-                                                <wtkx:define>
-                                                    <ButtonGroup wtkx:id="copyImageButtonGroup">
-                                                        <buttonGroupListeners>
-                                                            <wtkx:script>
-                                                            <![CDATA[
-                                                            function selectionChanged(buttonGroup, previousSelection) {
-                                                                var selection = buttonGroup.getSelection();
-                                                                if (selection != null) {
-                                                                    var index = copyImageButtonBoxPane.indexOf(selection);
-                                                                    copyImageCardPane.setSelectedIndex(index);
-                                                                }
-                                                            }
-                                                            ]]>
-                                                            </wtkx:script>
-                                                        </buttonGroupListeners>
-                                                    </ButtonGroup>
-                                                </wtkx:define>
-
-                                                <PushButton buttonData="IMG_0725_2.jpg" toggleButton="true"
-                                                    buttonGroup="$copyImageButtonGroup"/>
-                                                <PushButton buttonData="IMG_0735_2.jpg" toggleButton="true"
-                                                    buttonGroup="$copyImageButtonGroup"/>
-                                                <PushButton buttonData="IMG_0767_2.jpg" toggleButton="true"
-                                                    buttonGroup="$copyImageButtonGroup"/>
-                                            </BoxPane>
-
-                                            <wtkx:script>
-                                            <![CDATA[
-                                            copyImageButtonGroup.setSelection(copyImageButtonBoxPane.get(0));
-                                            ]]>
-                                            </wtkx:script>
-
-                                            <BoxPane styles="{horizontalAlignment:'center'}">
-                                                <PushButton wtkx:id="copyButton" buttonData="Copy"/>
-                                            </BoxPane>
-                                        </BoxPane>
-                                    </TablePane.Row>
-                                </rows>
-                            </TablePane>
+                            <CardPane wtkx:id="sourceImageCardPane" styles="{padding:4}">
+                                <ImageView image="org/apache/pivot/tutorials/IMG_0725_2.jpg"/>
+                                <ImageView image="org/apache/pivot/tutorials/IMG_0735_2.jpg"/>
+                                <ImageView image="org/apache/pivot/tutorials/IMG_0767_2.jpg"/>
+                            </CardPane>
                         </content>
                     </Border>
                     <Border>
                         <content>
-                            <TablePane>
-                                <columns>
-                                    <TablePane.Column width="1*"/>
-                                </columns>
-                                <rows>
-                                    <TablePane.Row height="1*">
-                                        <BoxPane styles="{padding:4}">
-                                            <ImageView wtkx:id="pasteImageView"/>
-                                        </BoxPane>
-                                    </TablePane.Row>
-                                    <TablePane.Row height="-1">
-                                        <BoxPane styles="{horizontalAlignment:'center'}">
-                                            <PushButton wtkx:id="pasteButton" buttonData="Paste"/>
-                                        </BoxPane>
-                                    </TablePane.Row>
-                                </rows>
-                            </TablePane>
+                            <CardPane selectedIndex="0" styles="{padding:4}">
+                                <ImageView wtkx:id="destinationImageView"/>
+                            </CardPane>
                         </content>
                     </Border>
+                </TablePane.Row>
+
+                <TablePane.Row height="-1">
+                    <BoxPane orientation="vertical" styles="{fill:true}">
+                        <BoxPane wtkx:id="sourceImageButtonBoxPane"
+                            styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                            <wtkx:define>
+                                <ButtonGroup wtkx:id="sourceImageButtonGroup">
+                                    <buttonGroupListeners>
+                                        <wtkx:script>
+                                        <![CDATA[
+                                        function selectionChanged(buttonGroup, previousSelection) {
+                                            var selection = buttonGroup.getSelection();
+
+                                            if (selection != null) {
+                                                var index = sourceImageButtonBoxPane.indexOf(selection);
+                                                sourceImageCardPane.setSelectedIndex(index);
+                                            }
+                                        }
+                                        ]]>
+                                        </wtkx:script>
+                                    </buttonGroupListeners>
+                                </ButtonGroup>
+                            </wtkx:define>
+
+                            <PushButton wtkx:id="sourceImageButton1"
+                                buttonData="IMG_0725_2.jpg" toggleButton="true"
+                                buttonGroup="$sourceImageButtonGroup"/>
+                            <PushButton wtkx:id="sourceImageButton2"
+                                buttonData="IMG_0735_2.jpg" toggleButton="true"
+                                buttonGroup="$sourceImageButtonGroup"/>
+                            <PushButton wtkx:id="sourceImageButton3"
+                                buttonData="IMG_0767_2.jpg" toggleButton="true"
+                                buttonGroup="$sourceImageButtonGroup"/>
+                        </BoxPane>
+
+                        <BoxPane styles="{horizontalAlignment:'center'}">
+                            <PushButton wtkx:id="copyButton" buttonData="Copy"
+                                ButtonPressListener.buttonPressed="copy()"/>
+                        </BoxPane>
+                    </BoxPane>
+
+                    <BoxPane styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                        <PushButton wtkx:id="pasteButton" buttonData="Paste"
+                            ButtonPressListener.buttonPressed="paste()"/>
+                    </BoxPane>
                 </TablePane.Row>
             </rows>
         </TablePane>
