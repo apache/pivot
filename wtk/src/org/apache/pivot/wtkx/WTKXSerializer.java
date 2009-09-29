@@ -387,6 +387,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         }
 
         this.location = location;
+
         InputStream inputStream = new BufferedInputStream(location.openStream());
         try {
             return readObject(inputStream);
@@ -453,10 +454,6 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             logException(exception);
             throw exception;
         }
-
-        // Clear the location so the previous value won't be re-used in a
-        // subsequent call to this method
-        location = null;
 
         return root;
     }
@@ -1167,8 +1164,11 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
     }
 
     public void reset() {
+        location = null;
+
         namedObjects.clear();
         includeSerializers.clear();
+
         root = null;
         language = DEFAULT_LANGUAGE;
     }
@@ -1215,11 +1215,12 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
     }
 
     /**
-     * Returns the location of the WTKX currently being processed.
+     * Returns the location of the WTKX most recently processed by this
+     * serializer.
      *
      * @return
-     * The location of the WTKX, or <tt>null</tt> if no WTKX is currently being
-     * processed or the location is not known.
+     * The location of the WTKX, or <tt>null</tt> if this serializer has not
+     * yet read an object from a URL.
      */
     public URL getLocation() {
         return location;

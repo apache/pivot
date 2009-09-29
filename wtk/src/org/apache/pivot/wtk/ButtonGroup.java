@@ -113,17 +113,22 @@ public class ButtonGroup implements Group<Button>, Iterable<Button> {
 
     public void setSelection(Button selection) {
         if (selection != null
-            && !contains(selection)) {
+            && selection.getButtonGroup() != this) {
             throw new IllegalArgumentException();
         }
 
         Button previousSelection = this.selection;
+
         if (previousSelection != selection) {
+            this.selection = selection;
+
+            if (previousSelection != null) {
+                previousSelection.setSelected(false);
+            }
+
             if (selection != null) {
                 selection.setSelected(true);
             }
-
-            this.selection = selection;
 
             buttonGroupListeners.selectionChanged(this, previousSelection);
         }

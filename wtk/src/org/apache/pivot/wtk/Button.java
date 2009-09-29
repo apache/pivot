@@ -137,11 +137,13 @@ public abstract class Button extends Component {
         }
     };
 
-    private State state = null;
-    private ButtonGroup buttonGroup = null;
+    private State state = State.UNSELECTED;
 
     private boolean toggleButton = false;
     private boolean triState = false;
+
+    private ButtonGroup buttonGroup = null;
+
     private String selectedKey = null;
     private String stateKey = null;
 
@@ -315,23 +317,12 @@ public abstract class Button extends Component {
         if (previousState != state) {
             this.state = state;
 
+            // Update the button group's state
             if (buttonGroup != null) {
-                // Update the group's selection
-                Button previousSelection = buttonGroup.getSelection();
-
                 if (state == State.SELECTED) {
-                    // De-select any previously selected button
-                    if (previousSelection != null) {
-                        previousSelection.setSelected(false);
-                    }
-
-                    // Set this as the new selection
                     buttonGroup.setSelection(this);
-                }
-                else {
-                    // If this button is currently selected, clear the
-                    // selection
-                    if (previousSelection == this) {
+                } else {
+                    if (buttonGroup.getSelection() == this) {
                         buttonGroup.setSelection(null);
                     }
                 }
@@ -521,5 +512,10 @@ public abstract class Button extends Component {
 
     public ListenerList<ButtonPressListener> getButtonPressListeners() {
         return buttonPressListeners;
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getName() + ": " + buttonData;
     }
 }
