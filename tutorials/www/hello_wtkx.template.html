@@ -104,7 +104,48 @@ public class HelloWTKX implements Application {
 &lt;/Window&gt;
 </pre>
 
-<p>Most Pivot applications will be constructed this way, by declaring the structure of the UI in WTKX rather than in Java. However, event handlers, which allow an application to respond to user input, are often defined in Java (though they can also be defined within script blocks in the WTKX file). Event handlers are discussed in more detail in later sections.</p>
+<p>Most Pivot applications will be constructed this way, declaring the structure of the UI in WTKX rather than creating it programmatically in code. However, event handlers, which allow an application to respond to user input, are always defined in code (either Java or a compatible JVM scripting language). For example, the following WTKX produces output very similar to the previous two versions, using a combination of WTKX and JavaScript:</p>
+
+<pre class="brush:xml">
+&lt;Window title="Hello JavaScript!" maximized="true"
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns="org.apache.pivot.wtk"&gt;
+    &lt;windowStateListeners&gt;
+        &lt;wtkx:script&gt;
+        &lt;![CDATA[
+        importPackage(org.apache.pivot.wtk);
+
+        function windowOpened(window) {
+            var label = new Label();
+            label.setText("Hello JavaScript!");
+            label.getStyles().put("font", "Arial BOLD 24");
+            label.getStyles().put("color", "#ff0000");
+            label.getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
+            label.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
+
+            window.setContent(label);
+        }
+        ]]&gt;
+        &lt;/wtkx:script&gt;
+    &lt;/windowStateListeners&gt;
+&lt;/Window&gt;
+</pre>
+
+<p>The actual output is shown below:</p>
+
+<script>
+var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
+    archive:"lib/@project_name@-core-@version@.jar,lib/@project_name@-wtk-@version@.jar,lib/@project_name@-wtk-@version@.terra.jar,lib/@project_name@-tutorials-@version@.jar",
+    width:240,
+    height:80
+};
+var parameters = {application_class_name:"org.apache.pivot.tutorials.HelloJavaScript",
+    codebase_lookup:false
+};
+deployJava.writeAppletTag(attributes, parameters);
+</script>
+
+<p>Though most examples in this tutorial implement event handlers in Java, some use script code when it is more concise or convenient to do so. Scripting is discussed in more detail in the <a href="scripting.html">Scripting</a> section.</p>
 
 <p>Next: <a href="component_and_container.html">Component & Container</a></p>
 </body>

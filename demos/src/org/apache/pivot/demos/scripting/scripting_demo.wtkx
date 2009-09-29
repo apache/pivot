@@ -26,6 +26,7 @@ limitations under the License.
 
     <wtkx:script src="demo.js"/>
     <wtkx:script>
+    <![CDATA[
     importClass(java.lang.System);
     importPackage(org.apache.pivot.wtk);
     System.out.println("bar = " + (bar == null ? null : "\"" + bar + "\""));
@@ -36,6 +37,7 @@ limitations under the License.
     function buttonClicked() {
         Alert.alert("x = " + x + ", y = " + y, window);
     }
+    ]]>
     </wtkx:script>
 
     <content>
