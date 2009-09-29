@@ -262,11 +262,21 @@ public abstract class QueryServlet extends HttpServlet {
      * serialized by this servlet's serializer before being included in the
      * HTTP response
      *
+     * @throws ServletException
+     * If the server encounters an error while processing the request.
+     *
+     * @throws ClientException
+     * If the client request is invalid in any way. This will cause the client
+     * to receive an HTTP 400 (bad request) response.
+     *
+     * @throws UnsupportedOperationException
+     * If HTTP <tt>GET</tt> is not supported by the servlet.
+     *
      * @see #getParameters()
      * @see #getRequestHeaders()
      * @see #getResponseHeaders()
      */
-    protected Object doGet() throws ServletException {
+    protected Object doGet() throws ServletException, ClientException {
         throw new UnsupportedOperationException();
     }
 
@@ -287,11 +297,21 @@ public abstract class QueryServlet extends HttpServlet {
      * The URL identifying the location of the object that was posted. The
      * semantics of this URL are up to the subclass to define
      *
+     * @throws ServletException
+     * If the server encounters an error while processing the request.
+     *
+     * @throws ClientException
+     * If the client request is invalid in any way. This will cause the client
+     * to receive an HTTP 400 (bad request) response.
+     *
+     * @throws UnsupportedOperationException
+     * If HTTP <tt>POST</tt> is not supported by the servlet.
+     *
      * @see #getParameters()
      * @see #getRequestHeaders()
      * @see #getResponseHeaders()
      */
-    protected URL doPost(Object value) throws ServletException {
+    protected URL doPost(Object value) throws ServletException, ClientException {
         throw new UnsupportedOperationException();
     }
 
@@ -308,11 +328,21 @@ public abstract class QueryServlet extends HttpServlet {
      * The object that is being updated by the client. This object will have
      * been de-serialized from within the request by this servlet's serializer
      *
+     * @throws ServletException
+     * If the server encounters an error while processing the request.
+     *
+     * @throws ClientException
+     * If the client request is invalid in any way. This will cause the client
+     * to receive an HTTP 400 (bad request) response.
+     *
+     * @throws UnsupportedOperationException
+     * If HTTP <tt>PUT</tt> is not supported by the servlet.
+     *
      * @see #getParameters()
      * @see #getRequestHeaders()
      * @see #getResponseHeaders()
      */
-    protected void doPut(Object value) throws ServletException {
+    protected void doPut(Object value) throws ServletException, ClientException {
         throw new UnsupportedOperationException();
     }
 
@@ -325,11 +355,21 @@ public abstract class QueryServlet extends HttpServlet {
      * Request parameters, and request/response headers are available to
      * subclasses via the corresponding query dictionary.
      *
+     * @throws ServletException
+     * If the server encounters an error while processing the request.
+     *
+     * @throws ClientException
+     * If the client request is invalid in any way. This will cause the client
+     * to receive an HTTP 400 (bad request) response.
+     *
+     * @throws UnsupportedOperationException
+     * If HTTP <tt>DELETE</tt> is not supported by the servlet.
+     *
      * @see #getParameters()
      * @see #getRequestHeaders()
      * @see #getResponseHeaders()
      */
-    protected void doDelete() throws ServletException {
+    protected void doDelete() throws ServletException, ClientException {
         throw new UnsupportedOperationException();
     }
 
@@ -506,6 +546,8 @@ public abstract class QueryServlet extends HttpServlet {
             }
         } catch (UnsupportedOperationException exception) {
             doMethodNotAllowed(response);
+        } catch (ClientException exception) {
+            doBadRequest(response);
         } catch (SerializationException exception) {
             throw new ServletException(exception);
         }
@@ -528,6 +570,8 @@ public abstract class QueryServlet extends HttpServlet {
             response.flushBuffer();
         } catch (UnsupportedOperationException exception) {
             doMethodNotAllowed(response);
+        } catch (ClientException exception) {
+            doBadRequest(response);
         } catch (SerializationException exception) {
             throw new ServletException(exception);
         }
@@ -549,6 +593,8 @@ public abstract class QueryServlet extends HttpServlet {
             response.flushBuffer();
         } catch (UnsupportedOperationException exception) {
             doMethodNotAllowed(response);
+        } catch (ClientException exception) {
+            doBadRequest(response);
         } catch (SerializationException exception) {
             throw new ServletException(exception);
         }
@@ -566,6 +612,8 @@ public abstract class QueryServlet extends HttpServlet {
             response.flushBuffer();
         } catch (UnsupportedOperationException exception) {
             doMethodNotAllowed(response);
+        } catch (ClientException exception) {
+            doBadRequest(response);
         }
     }
 
@@ -587,8 +635,6 @@ public abstract class QueryServlet extends HttpServlet {
         doMethodNotAllowed(response);
     }
 
-    /**
-     */
     private void doUnauthorized(HttpServletRequest request, HttpServletResponse response)
         throws IOException {
         response.setHeader("WWW-Authenticate", "BASIC realm=\""
@@ -598,8 +644,6 @@ public abstract class QueryServlet extends HttpServlet {
         response.flushBuffer();
     }
 
-    /**
-     */
     private void doForbidden(HttpServletRequest request, HttpServletResponse response)
         throws IOException {
         response.setStatus(403);
@@ -607,16 +651,18 @@ public abstract class QueryServlet extends HttpServlet {
         response.flushBuffer();
     }
 
-    /**
-     */
     private void doMethodNotAllowed(HttpServletResponse response) throws IOException {
         response.setStatus(405);
         response.setContentLength(0);
         response.flushBuffer();
     }
 
-    /**
-     */
+    private void doBadRequest(HttpServletResponse response) throws IOException {
+        response.setStatus(400);
+        response.setContentLength(0);
+        response.flushBuffer();
+    }
+
     private void setResponseHeaders(HttpServletResponse response) {
         QueryDictionary responseHeaderDictionary = responseHeaders.get();
 
