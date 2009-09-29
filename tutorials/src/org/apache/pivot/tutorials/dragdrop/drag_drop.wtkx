@@ -19,6 +19,13 @@ limitations under the License.
 <Window title="Drag and Drop" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
+    <wtkx:script src="dragdrop.js"/>
     <content>
+        <Border>
+            <content>
+                <ImageView wtkx:id="imageView" image="org/apache/pivot/tutorials/IMG_0767_2.jpg"
+                    dragSource="$dragSoure" dropTarget="$dropTarget"/>
+            </content>
+        </Border>
     </content>
 </Window>
