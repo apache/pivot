@@ -19,34 +19,7 @@ limitations under the License.
 <Window title="Clipboard" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <wtkx:script>
-    importPackage(org.apache.pivot.wtk);
-
-    function copy() {
-        // Copy the selected image to the clipboard
-        var selectedSourceIndex = sourceImageCardPane.getSelectedIndex();
-        var sourceImageView = sourceImageCardPane.get(selectedSourceIndex);
-        var sourceImage = sourceImageView.getImage();
-
-        var content = new LocalManifest();
-        content.putImage(sourceImage);
-
-        Clipboard.setContent(content);
-    }
-
-    function paste() {
-        // Paste any available image from the clipboard
-        var content = Clipboard.getContent();
-
-        if (content != null) {
-            var image = content.getImage();
-
-            if (image != null) {
-                destinationImageView.setImage(image);
-            }
-        }
-    }
-    </wtkx:script>
+    <wtkx:script src="clipboard.js"/>
 
     <windowStateListeners>
         <wtkx:script>
