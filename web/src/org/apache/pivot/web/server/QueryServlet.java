@@ -32,7 +32,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.serialization.Serializer;
 import org.apache.pivot.util.Base64;
@@ -79,8 +78,6 @@ public abstract class QueryServlet extends HttpServlet {
 
     private boolean authenticationRequired = false;
     private boolean determineContentLength = false;
-
-    private Class<? extends Serializer<?>> serializerClass = JSONSerializer.class;
 
     private transient ThreadLocal<Credentials> credentials = new ThreadLocal<Credentials>();
 
@@ -147,51 +144,20 @@ public abstract class QueryServlet extends HttpServlet {
     }
 
     /**
-     * Returns the class of serializer that will be used to stream the value
-     * passed to or from the web query. By default, {@link JSONSerializer} is
-     * used.
-     *
-     * @return
-     * This servlet's serializer class
-     */
-    public Class<? extends Serializer<?>> getSerializerClass() {
-        return serializerClass;
-    }
-
-    /**
-     * Sets the class of serializer that will be used to stream the value
-     * passed to or from the web query.
-     *
-     * @param serializerClass
-     * This servlet's serializer class (must be non-<tt>null</tt>)
-     */
-    public void setSerializerClass(Class<? extends Serializer<?>> serializerClass) {
-        if (serializerClass == null) {
-            throw new IllegalArgumentException("serializerClass is null.");
-        }
-
-        this.serializerClass = serializerClass;
-    }
-
-    /**
-     * Returns a newly allocated instance of this servlet's serializer class.
+     * Creates a new serializer capable of serializing the objects that this
+     * servlet reads and writes. For <tt>GET</tt> requests, this serializer
+     * will be used to write the response back to the client. For <tt>PUT</tt>
+     * and <tt>POST</tt> requests, this serializer will be used to read the
+     * object passed by the client.
+     * <p>
+     * <b>Note</b>: Since this servlet may be accessed by multiple threads,
+     * subclasses should <b>not</b> re-use servlets unless they do so in a
+     * thread-safe manner.
      *
      * @return
      * A new serializer
      */
-    private Serializer<?> newSerializer() {
-        Serializer<?> serializer;
-
-        try {
-            serializer = serializerClass.newInstance();
-        } catch (IllegalAccessException exception) {
-            throw new RuntimeException(exception);
-        } catch (InstantiationException exception) {
-            throw new RuntimeException(exception);
-        }
-
-        return serializer;
-    }
+    protected abstract Serializer<?> newSerializer();
 
     /**
      * Gets the host name that was requested.
