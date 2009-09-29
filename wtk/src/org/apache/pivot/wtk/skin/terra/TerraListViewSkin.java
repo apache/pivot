@@ -195,6 +195,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
             int itemX = 0;
             int itemY = itemIndex * itemHeight;
+            int itemWidth = width;
 
             boolean checked = false;
             if (listView.getCheckmarksEnabled()) {
@@ -211,14 +212,16 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
                 itemX = CHECKBOX.getWidth() + (checkboxPadding.left
                     + checkboxPadding.right);
+
+                itemWidth -= itemX;
             }
 
             // Paint the data
             Graphics2D rendererGraphics = (Graphics2D)graphics.create(itemX, itemY,
-                width, itemHeight);
+                itemWidth, itemHeight);
 
             renderer.render(item, itemIndex, listView, selected, checked, highlighted, disabled);
-            renderer.setSize(width, itemHeight);
+            renderer.setSize(itemWidth, itemHeight);
             renderer.paint(rendererGraphics);
             rendererGraphics.dispose();
         }
