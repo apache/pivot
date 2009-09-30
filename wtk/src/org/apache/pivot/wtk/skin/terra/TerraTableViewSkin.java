@@ -66,6 +66,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     private Color highlightBackgroundColor;
     private Color alternateRowColor;
     private Color columnSelectionColor;
+    private Color columnSelectionHorizontalGridColor;
     private Color horizontalGridColor;
     private Color verticalGridColor;
     private boolean showHighlight;
@@ -93,6 +94,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         highlightBackgroundColor = theme.getColor(10);
         alternateRowColor = theme.getColor(11);
         columnSelectionColor = null;
+        columnSelectionHorizontalGridColor = null;
         horizontalGridColor = theme.getColor(11);
         verticalGridColor = theme.getColor(11);
 
@@ -390,7 +392,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             }
         }
 
-        // Paint the horizontal grid line
+        // Paint the horizontal grid lines
         graphics.setPaint(horizontalGridColor);
 
         if (showHorizontalGridLines) {
@@ -402,6 +404,34 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                 if (rowIndex < rowCount - 1
                     || includeTrailingHorizontalGridLine) {
                     GraphicsUtilities.drawLine(graphics, 0, gridY, width, Orientation.HORIZONTAL);
+                }
+            }
+
+            if (columnSelectionHorizontalGridColor != null) {
+                graphics.setColor(columnSelectionHorizontalGridColor);
+
+                columnX = 0;
+
+                for (int columnIndex = 0, columnCount = columns.getLength();
+                    columnIndex < columnCount; columnIndex++) {
+                    TableView.Column column = columns.get(columnIndex);
+                    int columnWidth = getColumnWidth(columnIndex);
+
+                    String columnName = column.getName();
+                    SortDirection sortDirection = tableView.getSort().get(columnName);
+                    if (sortDirection != null) {
+                        for (int rowIndex = rowStart; rowIndex <= rowEnd; rowIndex++) {
+                            int gridY = (rowIndex + 1) * (rowHeight + 1) - 1;
+
+                            if (rowIndex < rowCount - 1
+                                || includeTrailingHorizontalGridLine) {
+                                GraphicsUtilities.drawLine(graphics, columnX, gridY, columnWidth,
+                                    Orientation.HORIZONTAL);
+                            }
+                        }
+                    }
+
+                    columnX += columnWidth + 1;
                 }
             }
         }
@@ -799,6 +829,32 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     public final void setColumnSelectionColor(int columnSelectionColor) {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
         setColumnSelectionColor(theme.getColor(columnSelectionColor));
+    }
+
+    public Color getColumnSelectionHorizontalGridColor() {
+        return columnSelectionHorizontalGridColor;
+    }
+
+    public void setColumnSelectionHorizontalGridColor(Color columnSelectionHorizontalGridColor) {
+        if (columnSelectionHorizontalGridColor == null) {
+            throw new IllegalArgumentException("columnSelectionHorizontalGridColor is null.");
+        }
+
+        this.columnSelectionHorizontalGridColor = columnSelectionHorizontalGridColor;
+        repaintComponent();
+    }
+
+    public final void setColumnSelectionHorizontalGridColor(String columnSelectionHorizontalGridColor) {
+        if (columnSelectionHorizontalGridColor == null) {
+            throw new IllegalArgumentException("columnSelectionHorizontalGridColor is null.");
+        }
+
+        setColumnSelectionHorizontalGridColor(GraphicsUtilities.decodeColor(columnSelectionHorizontalGridColor));
+    }
+
+    public final void setColumnSelectionHorizontalGridColor(int columnSelectionHorizontalGridColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setColumnSelectionHorizontalGridColor(theme.getColor(columnSelectionHorizontalGridColor));
     }
 
     public Color getHorizontalGridColor() {
