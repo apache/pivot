@@ -24,18 +24,18 @@ limitations under the License.
     xmlns="org.apache.pivot.wtk">
     <?language javascript?>
 
-    <wtkx:script src="demo.js"/>
+    <wtkx:script src="example.js"/>
     <wtkx:script>
     <![CDATA[
     importClass(java.lang.System);
     importPackage(org.apache.pivot.wtk);
-    System.out.println("bar = " + (bar == null ? null : "\"" + bar + "\""));
+    System.out.println("bar = " + bar);
 
     var x = 10;
     var y = 20;
 
     function buttonClicked() {
-        Alert.alert("x = " + x + ", y = " + y, window);
+        Prompt.prompt("x = " + x + ", y = " + y, window);
     }
     ]]>
     </wtkx:script>
@@ -50,7 +50,7 @@ limitations under the License.
                             <![CDATA[
                             importPackage(org.apache.pivot.wtk);
                             function buttonPressed(button) {
-                                Alert.alert("x = " + x + ", y = " + y, button.getWindow());
+                                Prompt.prompt("x = " + x + ", y = " + y, button.getWindow());
                             }
                             ]]>
                             </wtkx:script>

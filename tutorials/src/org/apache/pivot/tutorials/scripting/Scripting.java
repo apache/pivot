@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.pivot.demos.scripting;
+package org.apache.pivot.tutorials.scripting;
 
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
@@ -26,7 +26,7 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
-public class ScriptingDemo implements Application {
+public class Scripting implements Application {
     public static class MyButtonPressListener implements ButtonPressListener {
         @Override
         public void buttonPressed(Button button) {
@@ -45,11 +45,11 @@ public class ScriptingDemo implements Application {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         wtkxSerializer.put("bar", "12345");
 
-        window = (Window)wtkxSerializer.readObject(this, "scripting_demo.wtkx");
+        window = (Window)wtkxSerializer.readObject(this, "scripting.wtkx");
         foo = (String)wtkxSerializer.get("foo");
         listData = (List<?>)wtkxSerializer.get("listData");
 
-        System.out.println("foo = " + (foo == null ? null : "\"" + foo + "\""));
+        System.out.println("foo = " + foo);
         System.out.println("listData.getLength() = " + listData.getLength());
 
         window.open(display);
@@ -73,6 +73,6 @@ public class ScriptingDemo implements Application {
     }
 
     public static void main(String[] args) {
-        DesktopApplicationContext.main(ScriptingDemo.class, args);
+        DesktopApplicationContext.main(Scripting.class, args);
     }
 }
