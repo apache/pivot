@@ -25,7 +25,7 @@ limitations under the License.
         <effects:FadeDecorator wtkx:id="fadeDecorator" opacity="0.33"/>
         <effects:GrayscaleDecorator wtkx:id="grayscaleDecorator"/>
         <effects:ReflectionDecorator wtkx:id="reflectionDecorator"/>
-        <effects:SaturationDecorator wtkx:id="saturationDecorator"/>
+        <effects:SaturationDecorator wtkx:id="saturationDecorator" multiplier="2.5"/>
         <effects:ShadeDecorator wtkx:id="shadeDecorator" color="#ff0000" opacity="0.33"/>
         <effects:WatermarkDecorator wtkx:id="watermarkDecorator" text="Watermark"
             font="Arial BOLD 24" opacity="0.33"/>
