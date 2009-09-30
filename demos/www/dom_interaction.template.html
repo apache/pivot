@@ -51,7 +51,8 @@ var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApple
     id:"domTestApplet"
 };
 var parameters = {application_class_name:"org.apache.pivot.demos.dom.DOMInteractionDemo",
-    codebase_lookup:false
+    codebase_lookup:false,
+    java_arguments:"-Dsun.awt.noerasebackground=true -Dsun.awt.erasebackgroundonresize=true"
 };
 var version = "1.6";
 deployJava.runApplet(attributes, parameters, version);

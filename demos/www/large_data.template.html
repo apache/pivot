@@ -43,7 +43,7 @@ var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApple
 var parameters = {application_class_name:"org.apache.pivot.demos.million.LargeData",
     startup_properties:"basePath=pivot-demos/assets",
     codebase_lookup:false,
-    java_arguments:"-Xms512M"
+    java_arguments:"-Xms512M -Dsun.awt.noerasebackground=true -Dsun.awt.erasebackgroundonresize=true"
 };
 var version = "1.6";
 deployJava.runApplet(attributes, parameters, version);

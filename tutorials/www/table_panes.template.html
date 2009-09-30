@@ -59,7 +59,8 @@ var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApple
     style:"border:solid 1px #999999"
 };
 var parameters = {application_class_name:"org.apache.pivot.tutorials.layout.SimpleTablePanes",
-    codebase_lookup:false
+    codebase_lookup:false,
+    java_arguments:"-Dsun.awt.noerasebackground=true -Dsun.awt.erasebackgroundonresize=true"
 };
 deployJava.writeAppletTag(attributes, parameters);
 </script>
@@ -214,7 +215,8 @@ var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApple
     style:"border:solid 1px #999999"
 };
 var parameters = {application_class_name:"org.apache.pivot.tutorials.layout.TablePanes",
-    codebase_lookup:false
+    codebase_lookup:false,
+    java_arguments:"-Dsun.awt.noerasebackground=true -Dsun.awt.erasebackgroundonresize=true"
 };
 deployJava.writeAppletTag(attributes, parameters);
 </script>
