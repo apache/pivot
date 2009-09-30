@@ -57,9 +57,9 @@ public class TableViewDateCellRenderer extends TableViewCellRenderer {
         boolean rowSelected, boolean rowHighlighted, boolean rowDisabled) {
         renderStyles(tableView, rowSelected, rowDisabled);
 
-        if (value != null) {
-            String formattedDate = null;
+        String formattedDate = null;
 
+        if (value != null) {
             // Get the row and cell data
             if (columnName != null) {
                 Dictionary<String, Object> rowData;
@@ -71,15 +71,19 @@ public class TableViewDateCellRenderer extends TableViewCellRenderer {
 
                 Object cellData = rowData.get(columnName);
 
-                if (cellData instanceof Date) {
-                    formattedDate = dateFormat.format((Date)cellData);
-                } else {
-                    System.err.println("Data for \"" + columnName + "\" is not an instance of "
-                        + Date.class.getName());
+                if (cellData != null) {
+                    if (cellData instanceof Date) {
+                        formattedDate = dateFormat.format((Date)cellData);
+                    } else if (cellData instanceof Long) {
+                        formattedDate = dateFormat.format(new Date((Long)cellData));
+                    } else {
+                        System.err.println("Data for \"" + columnName + "\" is not an instance of "
+                            + Date.class.getName());
+                    }
                 }
             }
-
-            setText(formattedDate);
         }
+
+        setText(formattedDate);
     }
 }
