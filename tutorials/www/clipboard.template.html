@@ -33,6 +33,19 @@ limitations under the License.
 </head>
 <body>
 <h1>Clipboard</h1>
-This section is not yet complete.
+<p>This section is not yet complete.</p>
+
+<script>
+var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
+    archive:"lib/@project_name@-core-@version@.signed.jar,lib/@project_name@-wtk-@version@.signed.jar,lib/@project_name@-wtk-@version@.terra.signed.jar,lib/@project_name@-tutorials-@version@.signed.jar",
+    width:720,
+    height:480
+};
+var parameters = {application_class_name:"org.apache.pivot.tutorials.clipboard.Clipboard",
+    codebase_lookup:false
+};
+deployJava.writeAppletTag(attributes, parameters);
+</script>
+
 </body>
 </html>

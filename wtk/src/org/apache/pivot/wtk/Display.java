@@ -24,16 +24,7 @@ import org.apache.pivot.wtk.skin.DisplaySkin;
  * Container that serves as the root of a component hierarchy.
  */
 public final class Display extends Container {
-    private class ValidateCallback implements Runnable {
-        @Override
-        public void run() {
-            validate();
-            validateCallback = null;
-        }
-    }
-
     private ApplicationContext.DisplayHost displayHost;
-    private ValidateCallback validateCallback = null;
 
     protected Display(ApplicationContext.DisplayHost displayHost) {
         this.displayHost = displayHost;
@@ -64,13 +55,8 @@ public final class Display extends Container {
     }
 
     @Override
-    public void invalidate() {
-        if (validateCallback == null) {
-            validateCallback = new ValidateCallback();
-            ApplicationContext.queueCallback(validateCallback);
-        }
-
-        super.invalidate();
+    public void setVisible(boolean visible) {
+        throw new UnsupportedOperationException("Can't change the visibility of the display.");
     }
 
     @Override

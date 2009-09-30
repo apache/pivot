@@ -69,6 +69,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
             if (this == windowedHostFrame) {
                 switch(event.getID()) {
                     case WindowEvent.WINDOW_OPENED: {
+                        addDisplay(applicationContext.getDisplay());
                         createTimer();
 
                         // Load the application
@@ -161,6 +162,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                     }
 
                     case WindowEvent.WINDOW_CLOSED: {
+                        removeDisplay(applicationContext.getDisplay());
                         destroyTimer();
                         System.exit(0);
                         break;

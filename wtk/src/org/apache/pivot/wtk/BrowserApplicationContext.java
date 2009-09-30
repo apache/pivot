@@ -109,6 +109,9 @@ public final class BrowserApplicationContext extends ApplicationContext {
                 // Clear the background
                 setBackground(null);
 
+                // Add the display to the display list
+                addDisplay(applicationContext.getDisplay());
+
                 // Start the timer and add this applet to the host applet list
                 if (hostApplets.getLength() == 0) {
                     createTimer();
@@ -172,6 +175,10 @@ public final class BrowserApplicationContext extends ApplicationContext {
         private class DestroyCallback implements Runnable {
             @Override
             public void run() {
+                // Remove the display from the display list
+                removeDisplay(applicationContext.getDisplay());
+
+                // Remove this applet from the host applets list and stop the timer
                 hostApplets.remove(HostApplet.this);
 
                 if (hostApplets.getLength() == 0) {

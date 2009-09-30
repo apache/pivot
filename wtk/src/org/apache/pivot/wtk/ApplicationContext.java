@@ -52,6 +52,7 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.util.ImmutableIterator;
@@ -651,6 +652,12 @@ public abstract class ApplicationContext {
                     context.setCursor(java.awt.Cursor.getDefaultCursor());
                 }
             });
+        }
+
+        @Override
+        protected void processEvent(AWTEvent event) {
+            super.processEvent(event);
+            display.validate();
         }
 
         @Override
@@ -1364,28 +1371,40 @@ public abstract class ApplicationContext {
      * Class representing a scheduled callback.
      */
     public static final class ScheduledCallback extends TimerTask {
-        private Runnable runnable = null;
+        private Runnable callback;
         private volatile boolean cancelled = false;
 
-        private ScheduledCallback(final Runnable runnable) {
-            this.runnable = new Runnable() {
-                public void run() {
-                    if (!cancelled) {
-                        runnable.run();
-                    }
-                }
-            };
+        private ScheduledCallback(final Runnable callback) {
+            this.callback = callback;
         }
 
         @Override
         public void run() {
-            queueCallback(runnable);
+            if (!cancelled) {
+                queueCallback(callback);
+            }
         }
 
         @Override
         public boolean cancel() {
             cancelled = true;
             return super.cancel();
+        }
+    }
+
+    private static class QueuedCallback implements Runnable {
+        private Runnable callback;
+
+        public QueuedCallback(Runnable callback) {
+            this.callback = callback;
+        }
+
+        public void run() {
+            callback.run();
+
+            for (Display display : displays) {
+                display.validate();
+            }
         }
     }
 
@@ -1400,6 +1419,7 @@ public abstract class ApplicationContext {
     private static ResourceCacheDictionary resourceCacheDictionary = new ResourceCacheDictionary();
 
     private static Timer timer = null;
+    private static ArrayList<Display> displays = new ArrayList<Display>();
 
     private static Version jvmVersion = null;
     static {
@@ -1585,16 +1605,23 @@ public abstract class ApplicationContext {
      * Otherwise, returns immediately.
      */
     public static void queueCallback(Runnable callback, boolean wait) {
-        if (wait) {
-            try {
-                java.awt.EventQueue.invokeAndWait(callback);
-            } catch (InvocationTargetException exception) {
-                throw new RuntimeException(exception.getCause());
-            } catch (InterruptedException exception) {
-                throw new RuntimeException(exception);
+        QueuedCallback queuedCallback = new QueuedCallback(callback);
+
+        // TODO This is a workaround for a potential OS X bug; revisit
+        try {
+            if (wait) {
+                try {
+                    java.awt.EventQueue.invokeAndWait(queuedCallback);
+                } catch (InvocationTargetException exception) {
+                    throw new RuntimeException(exception.getCause());
+                } catch (InterruptedException exception) {
+                    throw new RuntimeException(exception);
+                }
+            } else {
+                java.awt.EventQueue.invokeLater(queuedCallback);
             }
-        } else {
-            java.awt.EventQueue.invokeLater(callback);
+        } catch (Throwable throwable) {
+            System.err.println("Unable to queue callback: " + throwable);
         }
     }
 
@@ -1605,6 +1632,14 @@ public abstract class ApplicationContext {
     protected static void destroyTimer() {
         timer.cancel();
         timer = null;
+    }
+
+    protected static void addDisplay(Display display) {
+        displays.add(display);
+    }
+
+    protected static void removeDisplay(Display display) {
+        displays.remove(display);
     }
 
     private static DropAction getUserDropAction(InputEvent event) {
