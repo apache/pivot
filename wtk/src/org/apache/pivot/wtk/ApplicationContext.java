@@ -1372,7 +1372,7 @@ public abstract class ApplicationContext {
      */
     public static final class ScheduledCallback extends TimerTask {
         private Runnable callback;
-        private volatile boolean cancelled = false;
+        private QueuedCallback queuedCallback = null;
 
         private ScheduledCallback(final Runnable callback) {
             this.callback = callback;
@@ -1380,31 +1380,52 @@ public abstract class ApplicationContext {
 
         @Override
         public void run() {
-            if (!cancelled) {
-                queueCallback(callback);
+            // Cancel any outstanding callback
+            if (queuedCallback != null) {
+                queuedCallback.cancel();
             }
+
+            queuedCallback = queueCallback(callback);
         }
 
         @Override
         public boolean cancel() {
-            cancelled = true;
+            // Cancel any outstanding callback
+            if (queuedCallback != null) {
+                queuedCallback.cancel();
+            }
+
             return super.cancel();
         }
     }
 
-    private static class QueuedCallback implements Runnable {
+    /**
+     * Class representing a queued callback.
+     */
+    public static class QueuedCallback implements Runnable {
         private Runnable callback;
+        private boolean executed = false;
+        private volatile boolean canceled = false;
 
-        public QueuedCallback(Runnable callback) {
+        private QueuedCallback(Runnable callback) {
             this.callback = callback;
         }
 
         public void run() {
-            callback.run();
+            if (!canceled) {
+                callback.run();
 
-            for (Display display : displays) {
-                display.validate();
+                for (Display display : displays) {
+                    display.validate();
+                }
+
+                executed = true;
             }
+        }
+
+        public synchronized boolean cancel() {
+            canceled = true;
+            return (!executed);
         }
     }
 
@@ -1589,8 +1610,8 @@ public abstract class ApplicationContext {
      * @param callback
      * The task to execute.
      */
-    public static void queueCallback(Runnable callback) {
-        queueCallback(callback, false);
+    public static QueuedCallback queueCallback(Runnable callback) {
+        return queueCallback(callback, false);
     }
 
     /**
@@ -1604,7 +1625,7 @@ public abstract class ApplicationContext {
      * If <tt>true</tt>, does not return until the task has executed.
      * Otherwise, returns immediately.
      */
-    public static void queueCallback(Runnable callback, boolean wait) {
+    public static QueuedCallback queueCallback(Runnable callback, boolean wait) {
         QueuedCallback queuedCallback = new QueuedCallback(callback);
 
         // TODO This is a workaround for a potential OS X bug; revisit
@@ -1623,6 +1644,8 @@ public abstract class ApplicationContext {
         } catch (Throwable throwable) {
             System.err.println("Unable to queue callback: " + throwable);
         }
+
+        return queuedCallback;
     }
 
     protected static void createTimer() {
