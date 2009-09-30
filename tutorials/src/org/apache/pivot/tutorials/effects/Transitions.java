@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.pivot.tutorials.transition;
+package org.apache.pivot.tutorials.effects;
 
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
