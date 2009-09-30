@@ -1435,7 +1435,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                                     treeView.setSelectedPath(path);
                                 }
                             } else if (selectMode == TreeView.SelectMode.MULTI) {
-                                if (Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
+                                Keyboard.Modifier multiSelectModifier = Keyboard.getMultiSelectModifier();
+                                if (Keyboard.isPressed(multiSelectModifier)) {
                                     if (nodeInfo.isSelected()) {
                                         treeView.removeSelectedPath(path);
                                     } else {

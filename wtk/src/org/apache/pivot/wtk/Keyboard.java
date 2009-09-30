@@ -114,7 +114,7 @@ public final class Keyboard {
                 awtModifiers |= KeyEvent.SHIFT_DOWN_MASK;
             }
 
-            return KeyEvent.getModifiersExText(awtModifiers)
+            return KeyEvent.getModifiersExText(awtModifiers) + KEYSTROKE_MODIFIER_SEPARATOR
                 + KeyEvent.getKeyText(keyCode);
         }
 
@@ -249,6 +249,21 @@ public final class Keyboard {
 
     private static int modifiers = 0;
 
+    private static final Modifier MULTI_SELECT_MODIFIER;
+    private static final String KEYSTROKE_MODIFIER_SEPARATOR;
+
+    static {
+        String osName = System.getProperty("os.name").toLowerCase();
+
+        if (osName.startsWith("mac os x")) {
+            MULTI_SELECT_MODIFIER = Modifier.META;
+            KEYSTROKE_MODIFIER_SEPARATOR = "";
+        } else {
+            MULTI_SELECT_MODIFIER = Modifier.CTRL;
+            KEYSTROKE_MODIFIER_SEPARATOR = "-";
+        }
+    }
+
     /**
      * Returns a bitfield representing the keyboard modifiers that are
      * currently pressed.
@@ -297,6 +312,14 @@ public final class Keyboard {
         }
 
         return dropAction;
+    }
+
+    public static Modifier getMultiSelectModifier() {
+        return MULTI_SELECT_MODIFIER;
+    }
+
+    public static String getKeyStrokeModifierSeparator() {
+        return KEYSTROKE_MODIFIER_SEPARATOR;
     }
 }
 
