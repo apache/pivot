@@ -550,7 +550,10 @@ public class TerraPushButtonSkin extends PushButtonSkin {
 
     @Override
     public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-        if (!toolbar) {
+        if (toolbar) {
+            highlighted = false;
+            repaintComponent();
+        } else {
             component.requestFocus();
         }
 

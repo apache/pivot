@@ -402,6 +402,8 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         Display display = window.getDisplay();
         display.getContainerMouseListeners().add(displayMouseListener);
 
+        Mouse.setCursor(display);
+
         dropShadowDecorator.setShadowOpacity(DropShadowDecorator.DEFAULT_SHADOW_OPACITY);
 
         Window owner = window.getOwner();

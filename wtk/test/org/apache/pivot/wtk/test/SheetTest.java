@@ -49,7 +49,11 @@ public class SheetTest implements Application {
         Picture picture = (Picture)Image.load(getClass().getResource("IMG_0767_2.jpg"));
         picture.resample(120);
 
-        PushButton windowContent = new PushButton(picture);
+        BoxPane windowContent = new BoxPane();
+        PushButton button = new PushButton(picture);
+        button.getStyles().put("toolbar", true);
+
+        windowContent.add(button);
         windowContent.setPreferredSize(480, 360);
 
         frame = new Frame(windowContent);
@@ -99,7 +103,7 @@ public class SheetTest implements Application {
             }
         });
 
-        windowContent.getButtonPressListeners().add(new ButtonPressListener() {
+        button.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {
                 prompt.open(frame);
