@@ -18,6 +18,7 @@ package org.apache.pivot.wtk.content;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import org.apache.pivot.beans.BeanDictionary;
@@ -76,6 +77,8 @@ public class TableViewDateCellRenderer extends TableViewCellRenderer {
                         formattedDate = dateFormat.format((Date)cellData);
                     } else if (cellData instanceof Long) {
                         formattedDate = dateFormat.format(new Date((Long)cellData));
+                    } else if (cellData instanceof Calendar) {
+                        formattedDate = dateFormat.format( ((Calendar)cellData).getTime() );
                     } else {
                         System.err.println("Data for \"" + columnName + "\" is not an instance of "
                             + Date.class.getName());
