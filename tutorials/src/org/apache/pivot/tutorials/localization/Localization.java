@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.tutorials.localization;
 
+import java.util.Locale;
+
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Application;
@@ -27,9 +29,16 @@ import org.apache.pivot.wtkx.WTKXSerializer;
 public class Localization implements Application {
     private Window window = null;
 
+    public static final String LANGUAGE_KEY = "language";
+
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        Resources resources = new Resources(getClass().getName());
+        String language = properties.get(LANGUAGE_KEY);
+        if (language != null) {
+            Locale.setDefault(new Locale(language));
+        }
+
+        Resources resources = new Resources(getClass().getName(), "UTF-8");
         WTKXSerializer wtkxSerializer = new WTKXSerializer(resources);
 
         window = (Window)wtkxSerializer.readObject(this, "localization.wtkx");
