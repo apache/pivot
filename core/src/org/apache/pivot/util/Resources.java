@@ -33,8 +33,8 @@ import org.apache.pivot.serialization.SerializationException;
  * Reads a JSON resource at {@link #baseName} using
  * {@link ClassLoader#getResourceAsStream(String)}. It applies localization to
  * the resource using a method similar to that of
- * {@link java.util.ResourceBundle} in that it loads the base resource, then
- * applies a country specified resource over-writing the values in the base
+ * {@link java.util.ResourceBundle} in that it attempts to load the base resource,
+ * then applies a country specified resource over-writing the values in the base
  * using the country specified. It then does the same for country/language
  * specific.
  *
@@ -142,24 +142,32 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
 
         String resourceName = baseName.replace('.', '/');
         resourceMap = readJSONResource(resourceName + ".json");
+
+        // Try to find resource for the language (e.g. resourceName_en)
+        Map<String, Object> overrideMap = readJSONResource(resourceName + "_"
+            + locale.getLanguage() + ".json");
+        if (overrideMap != null) {
+            if (resourceMap == null) {
+                resourceMap = overrideMap;
+            } else {
+                applyOverrides(resourceMap, overrideMap);
+            }
+        }
+
+        // Try to find resource for the entire locale (e.g. resourceName_en_GB)
+        overrideMap = readJSONResource(resourceName + "_" + locale.toString() + ".json");
+        if (overrideMap != null) {
+            if (resourceMap == null) {
+                resourceMap = overrideMap;
+            } else {
+                applyOverrides(resourceMap, overrideMap);
+            }
+        }
+
         if (resourceMap == null) {
             throw new MissingResourceException(
-                    "Can't find resource for base name " + baseName
-                            + ", locale " + locale, baseName, "");
-        }
-
-        // try to find resource for the language (e.g. resourceName_en)
-        Map<String, Object> overrideMap = readJSONResource(resourceName + "_"
-                + locale.getLanguage() + ".json");
-        if (overrideMap != null) {
-            applyOverrides(resourceMap, overrideMap);
-        }
-
-        // try to find resource for the entire locale (e.g. resourceName_en_GB)
-        overrideMap = readJSONResource(resourceName + "_" + locale.toString()
-                + ".json");
-        if (null != overrideMap) {
-            applyOverrides(resourceMap, overrideMap);
+                "Can't find resource for base name " + baseName + ", locale "
+                    + locale, baseName, "");
         }
     }
 

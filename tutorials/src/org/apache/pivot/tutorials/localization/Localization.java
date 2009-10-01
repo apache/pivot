@@ -14,36 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.pivot.wtk;
+package org.apache.pivot.tutorials.localization;
 
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.DesktopApplicationContext;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
-/**
- * Script application loader.
- */
-public class ScriptApplication implements Application {
+public class Localization implements Application {
     private Window window = null;
 
-    public static final String SRC_KEY = "src";
-    public static final String RESOURCES_KEY = "resources";
-
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
-        String src = properties.get(SRC_KEY);
-        if (src == null) {
-            throw new IllegalArgumentException(SRC_KEY + " argument is required.");
-        }
-
-        Resources resources = null;
-        if (properties.containsKey(RESOURCES_KEY)) {
-            resources = new Resources(properties.get(RESOURCES_KEY));
-        }
-
+    public void startup(Display display, Map<String, String> properties) throws Exception {
+        Resources resources = new Resources(getClass().getName());
         WTKXSerializer wtkxSerializer = new WTKXSerializer(resources);
-        window = (Window)wtkxSerializer.readObject(src);
+
+        window = (Window)wtkxSerializer.readObject(this, "localization.wtkx");
         window.open(display);
     }
 
@@ -57,14 +46,14 @@ public class ScriptApplication implements Application {
     }
 
     @Override
-    public void resume() {
-    }
-
-    @Override
     public void suspend() {
     }
 
+    @Override
+    public void resume() {
+    }
+
     public static void main(String[] args) {
-        DesktopApplicationContext.main(ScriptApplication.class, args);
+        DesktopApplicationContext.main(Localization.class, args);
     }
 }
