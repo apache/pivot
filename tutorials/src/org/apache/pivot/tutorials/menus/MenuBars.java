@@ -32,6 +32,8 @@ import org.apache.pivot.wtk.MenuHandler;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.TabPane;
 import org.apache.pivot.wtk.TextInput;
+import org.apache.pivot.wtk.TextInputSelectionListener;
+import org.apache.pivot.wtk.TextInputTextListener;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
@@ -41,13 +43,50 @@ public class MenuBars implements Application {
     private FileBrowserSheet fileBrowserSheet = null;
 
     private MenuHandler menuHandler = new MenuHandler.Adapter() {
+        TextInputTextListener textInputTextListener = new TextInputTextListener() {
+            @Override
+            public void textChanged(TextInput textInput) {
+                updateActionState(textInput);
+            }
+        };
+
+        TextInputSelectionListener textInputSelectionListener = new TextInputSelectionListener() {
+            @Override
+            public void selectionChanged(TextInput textInput, int previousSelectionStart,
+                int previousSelectionLength) {
+                updateActionState(textInput);
+            }
+        };
+
         @Override
         public void configureMenuBar(Component component, MenuBar menuBar) {
-            boolean enabled = (component instanceof TextInput);
+            if (component instanceof TextInput) {
+                TextInput textInput = (TextInput)component;
 
-            Action.getNamedActions().get("cut").setEnabled(enabled);
-            Action.getNamedActions().get("copy").setEnabled(enabled);
-            Action.getNamedActions().get("paste").setEnabled(enabled);
+                updateActionState(textInput);
+                Action.getNamedActions().get("paste").setEnabled(true);
+
+                textInput.getTextInputTextListeners().add(textInputTextListener);
+                textInput.getTextInputSelectionListeners().add(textInputSelectionListener);
+            } else {
+                Action.getNamedActions().get("cut").setEnabled(false);
+                Action.getNamedActions().get("copy").setEnabled(false);
+                Action.getNamedActions().get("paste").setEnabled(false);
+            }
+        }
+
+        @Override
+        public void cleanupMenuBar(Component component, MenuBar menuBar) {
+            if (component instanceof TextInput) {
+                TextInput textInput = (TextInput)component;
+                textInput.getTextInputTextListeners().remove(textInputTextListener);
+                textInput.getTextInputSelectionListeners().remove(textInputSelectionListener);
+            }
+        }
+
+        private void updateActionState(TextInput textInput) {
+            Action.getNamedActions().get("cut").setEnabled(textInput.getSelectionLength() > 0);
+            Action.getNamedActions().get("copy").setEnabled(textInput.getSelectionLength() > 0);
         }
     };
 

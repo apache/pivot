@@ -2505,6 +2505,26 @@ public abstract class Component implements ConstrainedVisual {
         this.attributes = attributes;
     }
 
+    /**
+     * If the mouse is currently over the component, causes the component to
+     * fire <tt>mouseOut()</tt> and a <tt>mouseMove()</tt> at the current mouse
+     * location.
+     * <p>
+     * This method is primarily useful when consuming container mouse motion
+     * events, since it allows a caller to reset the mouse state based on the
+     * event consumption logic.
+     */
+    public void reenterMouse() {
+        if (isMouseOver()) {
+            mouseOut();
+
+            Display display = getDisplay();
+            Point location = display.getMouseLocation();
+            location = mapPointFromAncestor(display, x, y);
+            mouseMove(location.x, location.y);
+        }
+    }
+
     protected boolean mouseMove(int x, int y) {
         boolean consumed = false;
 

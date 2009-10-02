@@ -178,7 +178,7 @@ public class TerraDialogSkin extends TerraFrameSkin implements DialogStateListen
         Display display = window.getDisplay();
         display.getContainerMouseListeners().add(displayMouseListener);
 
-        Mouse.setCursor(display);
+        display.reenterMouse();
 
         if (!window.requestFocus()) {
             Component.clearFocus();
