@@ -464,9 +464,6 @@ limitations under the License.
                 <!-- Exclude hidden files and folders -->
                 <exclude name="**/.*/**"/>
 
-                <!-- Exclude project folder -->
-                <exclude name="project/**"/>
-
                 <!-- Exclude folders containing compilation artifacts -->
                 <exclude name="**/${folder.bin}/**"/>
                 <exclude name="${folder.dist}/**"/>
