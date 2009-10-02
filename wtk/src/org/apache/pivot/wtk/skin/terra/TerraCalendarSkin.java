@@ -635,7 +635,7 @@ public class TerraCalendarSkin extends CalendarSkin
                 dateButton.setButtonData(buttonData);
                 dateButton.setEnabled(enabled
                     && (disabledDateFilter == null
-                        || disabledDateFilter.include(buttonData)));
+                        || !disabledDateFilter.include(buttonData)));
             }
         }
 
