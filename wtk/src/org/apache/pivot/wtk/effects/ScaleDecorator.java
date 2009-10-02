@@ -354,7 +354,9 @@ public class ScaleDecorator implements Decorator {
             graphics.translate(tx, ty);
         }
 
-        graphics.scale(scaleX, scaleY);
+        // TODO revisit. This is a workaround for Sun bug #6513150, which
+        // fails if we apply a zero scale on the graphics (should be legal).
+        graphics.scale(Math.max(scaleX, Float.MIN_NORMAL), Math.max(scaleY, Float.MIN_NORMAL));
 
         return graphics;
     }

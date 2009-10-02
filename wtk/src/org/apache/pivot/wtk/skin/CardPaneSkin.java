@@ -223,9 +223,9 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
                 float scale = (float)Math.abs(Math.cos(theta));
 
                 if (orientation == Orientation.HORIZONTAL) {
-                    scaleDecorator.setScale(Math.max(scale, 0.01f), 1.0f);
+                    scaleDecorator.setScale(scale, 1.0f);
                 } else {
-                    scaleDecorator.setScale(1.0f, Math.max(scale, 0.01f));
+                    scaleDecorator.setScale(1.0f, scale);
                 }
 
                 fromCard.setVisible(theta < Math.PI / 2);
