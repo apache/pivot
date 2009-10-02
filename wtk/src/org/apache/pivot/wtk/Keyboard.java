@@ -249,17 +249,17 @@ public final class Keyboard {
 
     private static int modifiers = 0;
 
-    private static final Modifier MULTI_SELECT_MODIFIER;
+    private static final Modifier COMMAND_MODIFIER;
     private static final String KEYSTROKE_MODIFIER_SEPARATOR;
 
     static {
         String osName = System.getProperty("os.name").toLowerCase();
 
         if (osName.startsWith("mac os x")) {
-            MULTI_SELECT_MODIFIER = Modifier.META;
+            COMMAND_MODIFIER = Modifier.META;
             KEYSTROKE_MODIFIER_SEPARATOR = "";
         } else {
-            MULTI_SELECT_MODIFIER = Modifier.CTRL;
+            COMMAND_MODIFIER = Modifier.CTRL;
             KEYSTROKE_MODIFIER_SEPARATOR = "-";
         }
     }
@@ -314,8 +314,8 @@ public final class Keyboard {
         return dropAction;
     }
 
-    public static Modifier getMultiSelectModifier() {
-        return MULTI_SELECT_MODIFIER;
+    public static Modifier getCommandModifier() {
+        return COMMAND_MODIFIER;
     }
 
     public static String getKeyStrokeModifierSeparator() {

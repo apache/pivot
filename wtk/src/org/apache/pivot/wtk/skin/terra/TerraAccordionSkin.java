@@ -642,7 +642,8 @@ public class TerraAccordionSkin extends ContainerSkin
             Accordion accordion = (Accordion)getComponent();
             Accordion.PanelSequence panels = accordion.getPanels();
 
-            if (Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
+            Keyboard.Modifier commandModifier = Keyboard.getCommandModifier();
+            if (Keyboard.isPressed(commandModifier)) {
                 int selectedIndex = -1;
 
                 switch (keyCode) {

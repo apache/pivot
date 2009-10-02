@@ -76,6 +76,7 @@ public class MenuBars implements Application {
 
                 tabPane.getTabs().add(tab);
                 TabPane.setLabel(tab, "Document " + tabPane.getTabs().getLength());
+                tabPane.setSelectedIndex(tabPane.getTabs().getLength() - 1);
             }
         });
 

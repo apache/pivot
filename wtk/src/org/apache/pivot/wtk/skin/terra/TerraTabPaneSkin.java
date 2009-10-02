@@ -1084,8 +1084,9 @@ public class TerraTabPaneSkin extends ContainerSkin
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = super.keyPressed(component, keyCode, keyLocation);
 
+        Keyboard.Modifier commandModifier = Keyboard.getCommandModifier();
         if (!consumed
-            && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
+            && Keyboard.isPressed(commandModifier)) {
             TabPane tabPane = (TabPane)getComponent();
             TabPane.TabSequence tabs = tabPane.getTabs();
 

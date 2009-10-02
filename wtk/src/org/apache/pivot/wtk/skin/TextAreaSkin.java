@@ -1483,6 +1483,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         if (textArea.isEditable()) {
             Document document = textArea.getDocument();
 
+            Keyboard.Modifier commandModifier = Keyboard.getCommandModifier();
             if (document != null) {
                 if (keyCode == Keyboard.KeyCode.ENTER) {
                     textArea.insertParagraph();
@@ -1563,7 +1564,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                     // TODO Make sure we scroll the next view to visible
 
                     consumed = true;
-                } else if (Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
+                } else if (Keyboard.isPressed(commandModifier)) {
                     if (keyCode == Keyboard.KeyCode.A) {
                         textArea.setSelection(0, document.getCharacterCount());
                     } else if (keyCode == Keyboard.KeyCode.X) {

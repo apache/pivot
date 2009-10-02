@@ -609,7 +609,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                         listView.setSelectedIndex(itemIndex);
                     }
                 } else {
-                    Keyboard.Modifier multiSelectModifier = Keyboard.getMultiSelectModifier();
+                    Keyboard.Modifier commandModifier = Keyboard.getCommandModifier();
 
                     if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
                         && selectMode == ListView.SelectMode.MULTI) {
@@ -627,7 +627,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
                             listView.setSelectedRanges(selectedRanges);
                         }
-                    } else if (Keyboard.isPressed(multiSelectModifier)
+                    } else if (Keyboard.isPressed(commandModifier)
                         && selectMode == ListView.SelectMode.MULTI) {
                         // Toggle the item's selection state
                         if (listView.isItemSelected(itemIndex)) {

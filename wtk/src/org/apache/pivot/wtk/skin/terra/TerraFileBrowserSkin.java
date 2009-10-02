@@ -671,8 +671,9 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = super.keyReleased(component, keyCode, keyLocation);
 
+        Keyboard.Modifier commandModifier = Keyboard.getCommandModifier();
         if (keyCode == Keyboard.KeyCode.F
-            && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
+            && Keyboard.isPressed(commandModifier)) {
             searchTextInput.requestFocus();
             consumed = true;
         }

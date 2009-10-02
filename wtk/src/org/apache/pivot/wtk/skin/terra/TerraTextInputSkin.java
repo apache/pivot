@@ -1072,6 +1072,7 @@ public class TerraTextInputSkin extends ComponentSkin
         TextInput textInput = (TextInput)getComponent();
         TextNode textNode = textInput.getTextNode();
 
+        Keyboard.Modifier commandModifier = Keyboard.getCommandModifier();
         if (keyCode == Keyboard.KeyCode.DELETE
             || keyCode == Keyboard.KeyCode.BACKSPACE) {
             consumed = true;
@@ -1193,13 +1194,13 @@ public class TerraTextInputSkin extends ComponentSkin
             // Move the caret to the end of the text
             textInput.setSelection(textNode.getCharacterCount(), 0);
         } else if (keyCode == Keyboard.KeyCode.A
-            && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
+            && Keyboard.isPressed(commandModifier)) {
             consumed = true;
 
             // Select all
             textInput.setSelection(0, textNode.getCharacterCount());
         } else if (keyCode == Keyboard.KeyCode.X
-            && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
+            && Keyboard.isPressed(commandModifier)) {
             consumed = true;
 
             if (textInput.isPassword()) {
@@ -1208,7 +1209,7 @@ public class TerraTextInputSkin extends ComponentSkin
                 textInput.cut();
             }
         } else if (keyCode == Keyboard.KeyCode.C
-            && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
+            && Keyboard.isPressed(commandModifier)) {
             consumed = true;
 
             if (textInput.isPassword()) {
@@ -1217,7 +1218,7 @@ public class TerraTextInputSkin extends ComponentSkin
                 textInput.copy();
             }
         } else if (keyCode == Keyboard.KeyCode.V
-            && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
+            && Keyboard.isPressed(commandModifier)) {
             consumed = true;
 
             textInput.paste();

@@ -1011,7 +1011,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                     tableView.setSelectedIndex(rowIndex);
                 }
             } else {
-                Keyboard.Modifier multiSelectModifier = Keyboard.getMultiSelectModifier();
+                Keyboard.Modifier commandModifier = Keyboard.getCommandModifier();
 
                 if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
                     && selectMode == TableView.SelectMode.MULTI) {
@@ -1029,7 +1029,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
                         tableView.setSelectedRanges(selectedRanges);
                     }
-                } else if (Keyboard.isPressed(multiSelectModifier)
+                } else if (Keyboard.isPressed(commandModifier)
                     && selectMode == TableView.SelectMode.MULTI) {
                     // Toggle the item's selection state
                     if (tableView.isRowSelected(rowIndex)) {
