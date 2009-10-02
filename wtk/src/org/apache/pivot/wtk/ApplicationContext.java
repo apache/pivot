@@ -76,7 +76,7 @@ public abstract class ApplicationContext {
     public final class DisplayHost extends java.awt.Canvas {
         private static final long serialVersionUID = 0;
 
-        private Point mouseLocation = null;
+        // TODO private Point dragLocation = null;
 
         private Component focusedComponent = null;
 
@@ -105,7 +105,7 @@ public abstract class ApplicationContext {
                 }
 
                 java.awt.Point location = event.getLocation();
-                mouseLocation = new Point(location.x, location.y);
+                dragLocation = new Point(location.x, location.y);
 
                 // Initialize drag state
                 dragManifest = new RemoteManifest(event.getTransferable());
@@ -133,10 +133,8 @@ public abstract class ApplicationContext {
 
             @Override
             public void dragExit(DropTargetEvent event) {
-                // Clear mouse location
-                mouseLocation = null;
-
-                // Clear drag state
+                // Clear drag location and state
+                dragLocation = null;
                 dragManifest = null;
 
                 // Clear drop state
@@ -341,10 +339,6 @@ public abstract class ApplicationContext {
             }
 
             setScale(newScale);
-        }
-
-        public Point getMouseLocation() {
-            return mouseLocation;
         }
 
         @Override
@@ -767,14 +761,12 @@ public abstract class ApplicationContext {
                 try {
                     switch(eventID) {
                         case MouseEvent.MOUSE_ENTERED: {
-                            mouseLocation = new Point(x, y);
                             display.mouseOver();
                             break;
                         }
 
                         case MouseEvent.MOUSE_EXITED: {
                             display.mouseOut();
-                            mouseLocation = null;
                             break;
                         }
                     }
@@ -929,9 +921,6 @@ public abstract class ApplicationContext {
             if (!paintPending) {
                 int x = (int)Math.round(event.getX() / scale);
                 int y = (int)Math.round(event.getY() / scale);
-
-                // Set the mouse location
-                mouseLocation = new Point(x, y);
 
                 // Process the event
                 try {
@@ -1324,8 +1313,13 @@ public abstract class ApplicationContext {
                     if (previousUserDropAction != userDropAction) {
                         DropTarget dropTarget = dropDescendant.getDropTarget();
 
-                        Point dropLocation = dropDescendant.mapPointFromAncestor(display,
-                            mouseLocation.x, mouseLocation.y);
+                        Point dropLocation = dragLocation;
+                        if (dropLocation == null) {
+                            dropLocation = display.getMouseLocation();
+                        }
+
+                        dropLocation = dropDescendant.mapPointFromAncestor(display,
+                            dropLocation.x, dropLocation.y);
                         dropTarget.userDropActionChange(dropDescendant, dragManifest,
                             dragSource.getSupportedDropActions(),
                             dropLocation.x, dropLocation.y, userDropAction);

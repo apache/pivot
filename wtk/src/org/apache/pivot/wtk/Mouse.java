@@ -115,9 +115,7 @@ public final class Mouse {
         }
 
         Display display = capturer.getDisplay();
-        ApplicationContext.DisplayHost displayHost = display.getDisplayHost();
-
-        Point location = displayHost.getMouseLocation();
+        Point location = display.getMouseLocation();
         Component descendant = display.getDescendantAt(location.x, location.y);
 
         while (descendant != null
