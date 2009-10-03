@@ -233,8 +233,7 @@ public class TerraCalendarSkin extends CalendarSkin
                 CalendarDate date = (CalendarDate)dateButton.getButtonData();
 
                 Calendar calendar = (Calendar)TerraCalendarSkin.this.getComponent();
-                int cellIndex = getCellIndex(date.getYear(), date.getMonth(), date.getDay(),
-                    calendar.getLocale());
+                int cellIndex = getCellIndex(date.year, date.month, date.day, calendar.getLocale());
                 int rowIndex = cellIndex / 7;
                 int columnIndex = cellIndex % 7;
 
@@ -333,11 +332,10 @@ public class TerraCalendarSkin extends CalendarSkin
         public void render(Object item, Spinner spinner) {
             Calendar calendar = (Calendar)getComponent();
 
-            CalendarDate date = new CalendarDate();
-            date.set(date.getYear(), (Integer)item, 0);
+            // Since we're only rendering the month, the year and day do not matter here
+            CalendarDate date = new CalendarDate(2000, (Integer)item, 0);
 
-            SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM",
-                calendar.getLocale());
+            SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM", calendar.getLocale());
             item = monthFormat.format(date.toCalendar().getTime());
 
             super.render(item, spinner);
@@ -348,7 +346,7 @@ public class TerraCalendarSkin extends CalendarSkin
         @Override
         public void render(Object data, Button button, boolean highlighted) {
             CalendarDate date = (CalendarDate)data;
-            super.render(date.getDay() + 1, button, highlighted);
+            super.render(date.day + 1, button, highlighted);
 
             if (button.isSelected()) {
                 label.getStyles().put("color", button.getStyles().get("selectionColor"));
@@ -483,8 +481,8 @@ public class TerraCalendarSkin extends CalendarSkin
                     // result of the user toggling the date button (as opposed
                     // to changing the month or year), clear the selection
                     if (selectedDate == null
-                        || (selectedDate.getYear() == yearSpinner.getSelectedIndex()
-                            && selectedDate.getMonth() == monthSpinner.getSelectedIndex())) {
+                        || (selectedDate.year == yearSpinner.getSelectedIndex()
+                            && selectedDate.month == monthSpinner.getSelectedIndex())) {
                         calendar.setSelectedDate((CalendarDate)null);
                     }
                 } else {
@@ -655,12 +653,12 @@ public class TerraCalendarSkin extends CalendarSkin
                 selection.setSelected(false);
             }
         } else {
-            int year = selectedDate.getYear();
-            int month = selectedDate.getMonth();
+            int year = selectedDate.year;
+            int month = selectedDate.month;
 
             if (year == calendar.getYear()
                 && month == calendar.getMonth()) {
-                int day = selectedDate.getDay();
+                int day = selectedDate.day;
 
                 // Update the button group
                 int cellIndex = getCellIndex(year, month, day, calendar.getLocale());

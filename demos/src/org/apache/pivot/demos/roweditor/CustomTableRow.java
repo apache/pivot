@@ -36,7 +36,7 @@ public class CustomTableRow {
     }
 
     public final void setDate(String calendarDate) {
-        setDate(new CalendarDate(calendarDate));
+        setDate(CalendarDate.forString(calendarDate));
     }
 
     public ExpenseType getType() {

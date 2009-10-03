@@ -157,7 +157,7 @@ public class CalendarButton extends Button {
             throw new IllegalArgumentException("selectedDate is null.");
         }
 
-        setSelectedDate(new CalendarDate(selectedDate));
+        setSelectedDate(CalendarDate.forString(selectedDate));
     }
 
     /**

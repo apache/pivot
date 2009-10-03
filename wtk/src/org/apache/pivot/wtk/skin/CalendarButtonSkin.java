@@ -287,8 +287,8 @@ public abstract class CalendarButtonSkin extends ButtonSkin
         calendar.setSelectedDate(date);
 
         if (date != null) {
-            calendar.setYear(date.getYear());
-            calendar.setMonth(date.getMonth());
+            calendar.setYear(date.year);
+            calendar.setMonth(date.month);
         }
     }
 }

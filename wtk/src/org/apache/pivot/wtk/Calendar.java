@@ -110,7 +110,7 @@ public class Calendar extends Container {
     }
 
     private Calendar(CalendarDate calendarDate) {
-        this(calendarDate.getYear(), calendarDate.getMonth());
+        this(calendarDate.year, calendarDate.month);
     }
 
     public Calendar(int year, int month) {
@@ -196,7 +196,7 @@ public class Calendar extends Container {
             throw new IllegalArgumentException("selectedDate is null.");
         }
 
-        setSelectedDate(new CalendarDate(selectedDate));
+        setSelectedDate(CalendarDate.forString(selectedDate));
     }
 
     /**

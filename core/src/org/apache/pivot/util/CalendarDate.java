@@ -31,9 +31,20 @@ import java.util.regex.Pattern;
 public class CalendarDate implements Comparable<CalendarDate>, Serializable {
     private static final long serialVersionUID = 3974393986540543704L;
 
-    private int year;
-    private int month;
-    private int day;
+    /**
+     * The year field. (e.g. <tt>2008</tt>).
+     */
+    public final int year;
+
+    /**
+     * The month field, 0-based. (e.g. <tt>2</tt> for March).
+     */
+    public final int month;
+
+    /**
+     * The day of the month, 0-based. (e.g. <tt>14</tt> for the 15th).
+     */
+    public final int day;
 
     private static final int[] MONTH_LENGTHS = {
         31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
@@ -76,41 +87,6 @@ public class CalendarDate implements Comparable<CalendarDate>, Serializable {
      * The day of the month, 0-based. (e.g. <tt>14</tt> for the 15th)
      */
     public CalendarDate(int year, int month, int day) {
-        set(year, month, day);
-    }
-
-    /**
-     * Creates a new date representing the specified date string. The date
-     * string must be in the <tt>ISO 8601</tt> "calendar date" format,
-     * which is <tt>[YYYY]-[MM]-[DD]</tt>.
-     *
-     * @param date
-     * A string in the form of <tt>[YYYY]-[MM]-[DD]</tt>. (e.g. 2008-07-23)
-     */
-    public CalendarDate(String date) {
-        Pattern pattern = Pattern.compile("^(\\d{4})-(\\d{2})-(\\d{2})$");
-        Matcher matcher = pattern.matcher(date);
-
-        if (!matcher.matches()) {
-            throw new IllegalArgumentException("Invalid date format: " + date);
-        }
-
-        String year = matcher.group(1);
-        String month = matcher.group(2);
-        String day = matcher.group(3);
-
-        set(Integer.parseInt(year), Integer.parseInt(month) - 1,
-            Integer.parseInt(day) - 1);
-    }
-
-    /**
-     * Sets the date.
-     *
-     * @param year
-     * @param month
-     * @param day
-     */
-    public void set(int year, int month, int day) {
         if (year <= GREGORIAN_CUTOVER_YEAR || year > 9999) {
             throw new IllegalArgumentException("Invalid year: " + year);
         }
@@ -133,63 +109,6 @@ public class CalendarDate implements Comparable<CalendarDate>, Serializable {
         this.year = year;
         this.month = month;
         this.day = day;
-    }
-
-    /**
-     * Gets the year field. (e.g. <tt>2008</tt>).
-     *
-     * @return
-     * This calendar date's <tt>year</tt> field
-     */
-    public int getYear() {
-        return year;
-    }
-
-    /**
-     * Sets the year field.
-     *
-     * @param year
-     */
-    public void setYear(int year) {
-        set(year, month, day);
-    }
-
-    /**
-     * Gets the month field, 0-based. (e.g. <tt>2</tt> for March).
-     *
-     * @return
-     * This calendar date's <tt>month</tt> field
-     */
-    public int getMonth() {
-        return month;
-    }
-
-    /**
-     * Sets the month field.
-     *
-     * @param month
-     */
-    public void setMonth(int month) {
-        set(year, month, day);
-    }
-
-    /**
-     * Gets the day of the month, 0-based. (e.g. <tt>14</tt> for the 15th).
-     *
-     * @return
-     * This calendar date's <tt>day</tt> field
-     */
-    public int getDay() {
-        return day;
-    }
-
-    /**
-     * Sets the day field.
-     *
-     * @param day
-     */
-    public void setDay(int day) {
-        set(year, month, day);
     }
 
     /**
@@ -333,5 +252,29 @@ public class CalendarDate implements Comparable<CalendarDate>, Serializable {
         buf.append(format.format(day + 1));
 
         return buf.toString();
+    }
+
+    /**
+     * Creates a new date representing the specified date string. The date
+     * string must be in the <tt>ISO 8601</tt> "calendar date" format,
+     * which is <tt>[YYYY]-[MM]-[DD]</tt>.
+     *
+     * @param date
+     * A string in the form of <tt>[YYYY]-[MM]-[DD]</tt>. (e.g. 2008-07-23)
+     */
+    public static CalendarDate forString(String date) {
+        Pattern pattern = Pattern.compile("^(\\d{4})-(\\d{2})-(\\d{2})$");
+        Matcher matcher = pattern.matcher(date);
+
+        if (!matcher.matches()) {
+            throw new IllegalArgumentException("Invalid date format: " + date);
+        }
+
+        String year = matcher.group(1);
+        String month = matcher.group(2);
+        String day = matcher.group(3);
+
+        return new CalendarDate(Integer.parseInt(year), Integer.parseInt(month) - 1,
+            Integer.parseInt(day) - 1);
     }
 }

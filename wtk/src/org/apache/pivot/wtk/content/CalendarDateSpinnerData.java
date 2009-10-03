@@ -107,15 +107,15 @@ public class CalendarDateSpinnerData implements List<CalendarDate> {
             throw new IllegalArgumentException("lowerBound must be before upperBound.");
         }
 
-        calendar = new GregorianCalendar(lowerBound.getYear(), lowerBound.getMonth(),
-            lowerBound.getDay() + 1);
+        calendar = new GregorianCalendar(lowerBound.year, lowerBound.month,
+            lowerBound.day + 1);
         calendar.setTimeZone(TimeZone.getTimeZone("GMT"));
         calendarIndex = 0;
 
         // Calculate our length and cache it, since it is guaranteed to
         // remain fixed
-        GregorianCalendar upperBoundCalendar = new GregorianCalendar(upperBound.getYear(),
-            upperBound.getMonth(), upperBound.getDay() + 1);
+        GregorianCalendar upperBoundCalendar = new GregorianCalendar(upperBound.year,
+            upperBound.month, upperBound.day + 1);
         upperBoundCalendar.setTimeZone(TimeZone.getTimeZone("GMT"));
         long lowerBoundMilliseconds = calendar.getTimeInMillis();
         long upperBoundMilliseconds = upperBoundCalendar.getTimeInMillis();
@@ -192,11 +192,7 @@ public class CalendarDateSpinnerData implements List<CalendarDate> {
     public int indexOf(CalendarDate item) {
         long currentMilliseconds = calendar.getTimeInMillis();
 
-        int year = item.getYear();
-        int month = item.getMonth();
-        int day = item.getDay() + 1;
-
-        GregorianCalendar tmpCalendar = new GregorianCalendar(year, month, day);
+        GregorianCalendar tmpCalendar = new GregorianCalendar(item.year, item.month, item.day + 1);
         tmpCalendar.setTimeZone(TimeZone.getTimeZone("GMT"));
         long itemMilliseconds = tmpCalendar.getTimeInMillis();
 
