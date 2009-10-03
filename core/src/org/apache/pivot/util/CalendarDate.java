@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
  * gregorian calendar system. This identification has no association with any
  * particular time zone and no notion of the time of day.
  */
-public class CalendarDate implements Comparable<CalendarDate>, Serializable {
+public final class CalendarDate implements Comparable<CalendarDate>, Serializable {
     private static final long serialVersionUID = 3974393986540543704L;
 
     /**
