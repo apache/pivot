@@ -498,6 +498,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                 updatingSelection = true;
 
                 Sequence<File> files = (Sequence<File>)tableView.getSelectedRows();
+                // TODO Revisit this for loop
                 for (int i = 0, n = files.getLength(); i < n; i++) {
                     File file = files.get(i);
                     files.update(i, file);
@@ -734,18 +735,19 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     @Override
     public void selectedFilesChanged(FileBrowser fileBrowser, Sequence<File> previousSelectedFiles) {
         if (!updatingSelection) {
-            fileTableView.clearSelection();
-
             Sequence<File> selectedFiles = fileBrowser.getSelectedFiles();
 
+            ArrayList<Span> selectedRanges = new ArrayList<Span>();
             for (int i = 0, n = selectedFiles.getLength(); i < n; i++) {
                 File selectedFile = selectedFiles.get(i);
 
                 int index = files.indexOf(selectedFile);
                 if (index != -1) {
-                    fileTableView.addSelectedIndex(index);
+                    selectedRanges.add(new Span(index, index));
                 }
             }
+
+            fileTableView.setSelectedRanges(selectedRanges);
         }
     }
 
