@@ -48,7 +48,13 @@ public interface ListViewListener {
         }
 
         @Override
-        public void disabledItemFilterChanged(ListView listView, Filter<?> previousDisabledItemFilter) {
+        public void disabledItemFilterChanged(ListView listView,
+            Filter<?> previousDisabledItemFilter) {
+        }
+
+        @Override
+        public void disabledCheckmarkFilterChanged(ListView listView,
+            Filter<?> previousDisabledCheckmarkFilter) {
         }
 
         @Override
@@ -106,6 +112,15 @@ public interface ListViewListener {
      * @param previousDisabledItemFilter
      */
     public void disabledItemFilterChanged(ListView listView, Filter<?> previousDisabledItemFilter);
+
+    /**
+     * Called when a list view's disabled checkmark filter has changed.
+     *
+     * @param listView
+     * @param previousDisabledCheckmarkFilter
+     */
+    public void disabledCheckmarkFilterChanged(ListView listView,
+        Filter<?> previousDisabledCheckmarkFilter);
 
     /**
      * Called when a list view's selected item key has changed.

@@ -390,9 +390,18 @@ public class ListView extends Component {
         }
 
         @Override
-        public void disabledItemFilterChanged(ListView listView, Filter<?> previousDisabledItemFilter) {
+        public void disabledItemFilterChanged(ListView listView,
+            Filter<?> previousDisabledItemFilter) {
             for (ListViewListener listener : this) {
                 listener.disabledItemFilterChanged(listView, previousDisabledItemFilter);
+            }
+        }
+
+        @Override
+        public void disabledCheckmarkFilterChanged(ListView listView,
+            Filter<?> previousDisabledCheckmarkFilter) {
+            for (ListViewListener listener : this) {
+                listener.disabledCheckmarkFilterChanged(listView, previousDisabledCheckmarkFilter);
             }
         }
 
@@ -587,6 +596,7 @@ public class ListView extends Component {
     private ArrayList<Integer> checkedIndexes = new ArrayList<Integer>();
 
     private Filter<?> disabledItemFilter = null;
+    private Filter<?> disabledCheckmarkFilter = null;
 
     private String selectedItemKey = null;
     private String selectedItemsKey = null;
@@ -1270,6 +1280,70 @@ public class ListView extends Component {
         }
 
         return checkedIndexes;
+    }
+
+    /**
+     * Tells whether or not an item's checkmark is disabled.
+     *
+     * @param index
+     * The index of the item whose disabled checkmark state is to be tested.
+     *
+     * @return
+     * <tt>true</tt> if the item's checkmark is disabled; <tt>false</tt>
+     * otherwise.
+     */
+    @SuppressWarnings("unchecked")
+    public boolean isCheckmarkDisabled(int index) {
+        boolean disabled = false;
+
+        if (disabledCheckmarkFilter != null) {
+            Object item = listData.get(index);
+            disabled = ((Filter<Object>)disabledCheckmarkFilter).include(item);
+        }
+
+        return disabled;
+    }
+
+    /**
+     * Returns the disabled checkmark filter, which determines which checkboxes
+     * are interactive and which are not. Note that this filter only affects
+     * user interaction; items may still be checked programatically despite
+     * their inclusion in this filter. If this filter is set to <tt>null</tt>,
+     * all checkboxes will be interactive.
+     * <p>
+     * <b>Note:</b> this filter is only relavent if
+     * {@link #setCheckmarksEnabled(boolean) checkmarksEnabled} is set to true.
+     *
+     * @return
+     * The disabled checkmark filter, or <tt>null</tt> if no disabled checkmark
+     * filter is set
+     */
+    public Filter<?> getDisabledCheckmarkFilter() {
+        return disabledCheckmarkFilter;
+    }
+
+    /**
+     * Sets the disabled checkmark filter, which determines which checkboxes
+     * are interactive and which are not. Note that this filter only affects
+     * user interaction; items may still be checked programatically despite
+     * their inclusion in this filter. If this filter is set to <tt>null</tt>,
+     * all checkboxes will be interactive.
+     * <p>
+     * <b>Note:</b> this filter is only relavent if
+     * {@link #setCheckmarksEnabled(boolean) checkmarksEnabled} is set to true.
+     * enabled.
+     *
+     * @param disabledCheckmarkFilter
+     * The disabled checkmark filter, or <tt>null</tt> for no disabled
+     * checkmark filter
+     */
+    public void setDisabledCheckmarkFilter(Filter<?> disabledCheckmarkFilter) {
+        Filter<?> previousDisabledCheckmarkFilter = this.disabledCheckmarkFilter;
+
+        if (previousDisabledCheckmarkFilter !=disabledCheckmarkFilter ) {
+            this.disabledCheckmarkFilter = disabledCheckmarkFilter;
+            listViewListeners.disabledCheckmarkFilterChanged(this, previousDisabledCheckmarkFilter);
+        }
     }
 
     /**

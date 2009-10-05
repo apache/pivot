@@ -206,7 +206,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                     itemY + checkboxY, CHECKBOX.getWidth(), CHECKBOX.getHeight());
 
                 CHECKBOX.setSelected(checked);
-                CHECKBOX.setEnabled(!disabled);
+                CHECKBOX.setEnabled(!disabled && !listView.isCheckmarkDisabled(itemIndex));
                 CHECKBOX.paint(checkboxGraphics);
                 checkboxGraphics.dispose();
 
@@ -673,6 +673,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             int itemY = itemIndex * itemHeight;
 
             if (listView.getCheckmarksEnabled()
+                && !listView.isCheckmarkDisabled(itemIndex)
                 && x > checkboxPadding.left
                 && x < checkboxPadding.left + CHECKBOX.getWidth()
                 && y > itemY + checkboxPadding.top
@@ -790,8 +791,12 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                 if (listView.getCheckmarksEnabled()
                     && listView.getSelectMode() == ListView.SelectMode.SINGLE) {
                     int selectedIndex = listView.getSelectedIndex();
-                    listView.setItemChecked(selectedIndex, !listView.isItemChecked(selectedIndex));
-                    consumed = true;
+
+                    if (!listView.isCheckmarkDisabled(selectedIndex)) {
+                        listView.setItemChecked(selectedIndex,
+                            !listView.isItemChecked(selectedIndex));
+                        consumed = true;
+                    }
                 }
 
                 break;
@@ -844,6 +849,12 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
     @Override
     public void disabledItemFilterChanged(ListView listView, Filter<?> previousDisabledItemFilter) {
+        repaintComponent();
+    }
+
+    @Override
+    public void disabledCheckmarkFilterChanged(ListView listView,
+        Filter<?> previousDisabledCheckmarkFilter) {
         repaintComponent();
     }
 
