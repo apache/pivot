@@ -19,6 +19,16 @@ limitations under the License.
 <Window title="Include Test" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
+    <windowStateListeners>
+        <wtkx:script>
+        <![CDATA[
+        function windowOpened(window) {
+            java.lang.System.out.println(label.getText());
+        }
+        ]]>
+        </wtkx:script>
+    </windowStateListeners>
+
     <content>
         <wtkx:include src="include_test.content.wtkx"/>
     </content>

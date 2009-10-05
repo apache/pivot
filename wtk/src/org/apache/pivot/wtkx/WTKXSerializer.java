@@ -210,19 +210,14 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             throws Throwable {
             Object result = null;
 
-            try {
-                String methodName = method.getName();
-                if (methodName.equals(event)) {
-                    try {
-                        scriptEngine.eval(script);
-                    } catch (ScriptException exception) {
-                        System.err.println(exception);
-                        System.err.println(script);
-                    }
+            String methodName = method.getName();
+            if (methodName.equals(event)) {
+                try {
+                    scriptEngine.eval(script);
+                } catch (ScriptException exception) {
+                    System.err.println(exception);
+                    System.err.println(script);
                 }
-            } catch (Throwable throwable) {
-                throwable.printStackTrace();
-                throw throwable;
             }
 
             // If the function didn't return a value, return the default
@@ -251,22 +246,17 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             throws Throwable {
             Object result = null;
 
-            try {
-                String methodName = method.getName();
-                Bindings bindings = scriptEngine.getBindings(ScriptContext.ENGINE_SCOPE);
-                if (bindings.containsKey(methodName)) {
-                    Invocable invocable;
-                    try {
-                        invocable = (Invocable)scriptEngine;
-                    } catch (ClassCastException exception) {
-                        throw new SerializationException(exception);
-                    }
-
-                    result = invocable.invokeFunction(methodName, args);
+            String methodName = method.getName();
+            Bindings bindings = scriptEngine.getBindings(ScriptContext.ENGINE_SCOPE);
+            if (bindings.containsKey(methodName)) {
+                Invocable invocable;
+                try {
+                    invocable = (Invocable)scriptEngine;
+                } catch (ClassCastException exception) {
+                    throw new SerializationException(exception);
                 }
-            } catch (Throwable throwable) {
-                throwable.printStackTrace();
-                throw throwable;
+
+                result = invocable.invokeFunction(methodName, args);
             }
 
             // If the function didn't return a value, return the default
@@ -283,18 +273,18 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         }
     };
 
-    private URL location = null;
-    private Resources resources = null;
-
-    private Object root = null;
-    private HashMap<String, Object> namedObjects = new HashMap<String, Object>();
-    private HashMap<String, WTKXSerializer> includeSerializers = new HashMap<String, WTKXSerializer>();
-
-    private ScriptEngineManager scriptEngineManager = null;
-    private String language = DEFAULT_LANGUAGE;
+    private Resources resources;
+    private HashMap<String, Object> namedObjects;
+    private HashMap<String, WTKXSerializer> namedSerializers;
 
     private XMLInputFactory xmlInputFactory;
+    private ScriptEngineManager scriptEngineManager;
+
+    private URL location = null;
     private Element element = null;
+    private Object root = null;
+
+    private String language = DEFAULT_LANGUAGE;
 
     public static final char URL_PREFIX = '@';
     public static final char RESOURCE_KEY_PREFIX = '%';
@@ -324,7 +314,14 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
     }
 
     public WTKXSerializer(Resources resources) {
+        this(resources, new HashMap<String, Object>(), new HashMap<String, WTKXSerializer>());
+    }
+
+    private WTKXSerializer(Resources resources, HashMap<String, Object> namedObjects,
+        HashMap<String, WTKXSerializer> namedSerializers) {
         this.resources = resources;
+        this.namedObjects = namedObjects;
+        this.namedSerializers = namedSerializers;
 
         xmlInputFactory = XMLInputFactory.newInstance();
         xmlInputFactory.setProperty("javax.xml.stream.isCoalescing", true);
@@ -655,8 +652,8 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                 ArrayList<Attribute> staticPropertyAttributes = new ArrayList<Attribute>();
 
                 if (element.type == Element.Type.INCLUDE) {
-                    // Process attributes looking for wtkx:id, src, resources, asynchronous,
-                    // and static property setters only
+                    // Process attributes looking for src, resources, and static property
+                    // setters only
                     String src = null;
                     Resources resources = this.resources;
 
@@ -683,9 +680,12 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                     }
 
                     // Read the object
-                    WTKXSerializer serializer = new WTKXSerializer(resources);
-                    if (element.id != null) {
-                        includeSerializers.put(element.id, serializer);
+                    WTKXSerializer serializer;
+                    if (element.id == null) {
+                        serializer = new WTKXSerializer(resources, namedObjects, namedSerializers);
+                    } else {
+                        serializer = new WTKXSerializer(resources);
+                        namedSerializers.put(element.id, serializer);
                     }
 
                     if (src.charAt(0) == '/') {
@@ -700,7 +700,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                         System.err.println("Include \"" + src + "\" defines unreachable objects.");
                     }
                 } else {
-                    // Process attributes looking for wtkx:id and all property setters
+                    // Process attributes looking for all property setters
                     for (Attribute attribute : element.attributes) {
                         if (Character.isUpperCase(attribute.localName.charAt(0))) {
                             staticPropertyAttributes.add(attribute);
@@ -1160,14 +1160,14 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
     @Override
     public boolean isEmpty() {
         return namedObjects.isEmpty()
-            && includeSerializers.isEmpty();
+            && namedSerializers.isEmpty();
     }
 
     public void reset() {
         location = null;
 
         namedObjects.clear();
-        includeSerializers.clear();
+        namedSerializers.clear();
 
         root = null;
         language = DEFAULT_LANGUAGE;
@@ -1208,7 +1208,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         int n = path.length;
         while (i < n && serializer != null) {
             String id = path[i++];
-            serializer = serializer.includeSerializers.get(id);
+            serializer = serializer.namedSerializers.get(id);
         }
 
         return serializer;

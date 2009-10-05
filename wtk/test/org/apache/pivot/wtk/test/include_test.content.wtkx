@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Label wtkx:id="helloLabel" text="Hello, World!"
+<Label wtkx:id="label" text="Hello, World!"
     styles="{horizontalAlignment:'center', verticalAlignment:'center'}"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk"/>
