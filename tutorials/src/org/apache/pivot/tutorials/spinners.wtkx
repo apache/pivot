@@ -22,7 +22,7 @@ limitations under the License.
     <Border>
         <content>
             <BoxPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:8, right:4}}">
-                <Label text="Spinners" styles="{fontBold:true}"/>
+                <Label text="Spinners" styles="{font:{bold:true}}"/>
                 <Form>
                     <sections>
                         <Form.Section>
@@ -42,7 +42,7 @@ limitations under the License.
     <Border>
         <content>
             <BoxPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:8, right:4}}">
-                <Label text="Sliders" styles="{fontBold:true}"/>
+                <Label text="Sliders" styles="{font:{bold:true}}"/>
                 <Form>
                     <sections>
                         <Form.Section>

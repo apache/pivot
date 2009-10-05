@@ -23,7 +23,7 @@ limitations under the License.
     <content>
         <BoxPane styles="{padding:4, spacing:10}">
             <BoxPane orientation="vertical">
-                <Label text="Editable" styles="{fontBold:true}"/>
+                <Label text="Editable" styles="{font:{bold:true}}"/>
                 <Border styles="{padding:0, color:10}">
                     <content>
                         <ScrollPane wtkx:id="editableTreeViewScrollPane" preferredWidth="160" preferredHeight="240"
@@ -93,7 +93,7 @@ limitations under the License.
             </BoxPane>
 
             <BoxPane orientation="vertical">
-                <Label text="Multi-Select" styles="{fontBold:true}"/>
+                <Label text="Multi-Select" styles="{font:{bold:true}}"/>
                 <Border styles="{padding:0, color:10}">
                     <content>
                         <ScrollPane preferredWidth="160" preferredHeight="240"
@@ -156,7 +156,7 @@ limitations under the License.
             </BoxPane>
 
             <BoxPane orientation="vertical">
-                <Label text="Checked" styles="{fontBold:true}"/>
+                <Label text="Checked" styles="{font:{bold:true}}"/>
                 <Border styles="{padding:0, color:10}">
                     <content>
                         <ScrollPane preferredWidth="160" preferredHeight="240"

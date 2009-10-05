@@ -19,11 +19,11 @@ limitations under the License.
 <BoxPane orientation="vertical" styles="{fill:true, padding:{bottom:8}}"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <Label text="Boston, MA" styles="{fontBold:true}"/>
+    <Label text="Boston, MA" styles="{font:{bold:true}}"/>
     <BoxPane>
-        <Label text="Current: 88˚" styles="{fontSize:10}"/>
-        <Label text="High: 93˚" styles="{fontSize:10}"/>
-        <Label text="Low: 55˚" styles="{fontSize:10}"/>
+        <Label text="Current: 88˚" styles="{font:{size:10}}"/>
+        <Label text="High: 93˚" styles="{font:{size:10}}"/>
+        <Label text="Low: 55˚" styles="{font:{size:10}}"/>
     </BoxPane>
     <Separator styles="{padding:2}"/>
     <TablePane>

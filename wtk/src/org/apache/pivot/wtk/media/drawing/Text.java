@@ -30,8 +30,10 @@ import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
 
 import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.Bounds;
+import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Platform;
 
@@ -116,46 +118,18 @@ public class Text extends Shape {
 
     public final void setFont(String font) {
         if (font == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("font is null.");
         }
 
-        setFont(Font.decode(font));
+        setFont(GraphicsUtilities.decodeFont(font));
     }
 
-    public int getFontSize() {
-        return font.getSize();
-    }
-
-    public final void setFontSize(int fontSize) {
-        setFont(font.deriveFont((float)fontSize));
-    }
-
-    public boolean isFontBold() {
-        return ((font.getStyle() & Font.BOLD) == Font.BOLD);
-    }
-
-    public final void setFontBold(boolean fontBold) {
-        if (isFontBold() != fontBold) {
-            if (fontBold) {
-                setFont(font.deriveFont(Font.BOLD));
-            } else {
-                setFont(font.deriveFont(font.getStyle() & (~Font.BOLD)));
-            }
+    public final void setFont(Dictionary<String, ?> font) {
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");
         }
-    }
 
-    public boolean isFontItalic() {
-        return ((font.getStyle() & Font.ITALIC) == Font.ITALIC);
-    }
-
-    public final void setFontItalic(boolean fontItalic) {
-        if (isFontItalic() != fontItalic) {
-            if (fontItalic) {
-                setFont(font.deriveFont(Font.ITALIC));
-            } else {
-                setFont(font.deriveFont(font.getStyle() & (~Font.ITALIC)));
-            }
-        }
+        setFont(GraphicsUtilities.decodeFont(font));
     }
 
     public int getWidth() {

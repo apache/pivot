@@ -24,7 +24,7 @@ limitations under the License.
     <rows>
         <TablePane.Row height="1*">
             <BoxPane orientation="vertical" styles="{padding:6, spacing:8}">
-                <Label text="Ship to:" styles="{fontBold:true}"/>
+                <Label text="Ship to:" styles="{font:{bold:true}}"/>
                 <wtkx:include src="address.wtkx"/>
             </BoxPane>
         </TablePane.Row>

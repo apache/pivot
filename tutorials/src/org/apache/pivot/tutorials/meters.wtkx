@@ -21,7 +21,7 @@ limitations under the License.
     <content>
         <BoxPane>
             <BoxPane orientation="vertical" styles="{padding:6, spacing:8}">
-                <Label text="Meters" styles="{fontBold:true}"/>
+                <Label text="Meters" styles="{font:{bold:true}}"/>
                 <BoxPane styles="{spacing:6}">
                     <Meter percentage="0.4"/>
                     <Label text="40%"/>
@@ -45,7 +45,7 @@ limitations under the License.
             </BoxPane>
 
             <BoxPane orientation="vertical" styles="{padding:6, spacing:8}">
-                <Label text="Activity Indicators" styles="{fontBold:true}"/>
+                <Label text="Activity Indicators" styles="{font:{bold:true}}"/>
                 <BoxPane>
                     <ActivityIndicator wtkx:id="activityIndicator1"
                         preferredWidth="24" preferredHeight="24"/>

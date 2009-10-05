@@ -44,16 +44,16 @@ limitations under the License.
                             <ButtonGroup wtkx:id="verticalAlignment"/>
                         </wtkx:define>
 
-                        <Label text="Orientation" styles="{fontBold:true}"/>
+                        <Label text="Orientation" styles="{font:{bold:true}}"/>
                         <RadioButton wtkx:id="horizontalOrientationButton" buttonData="Horizontal" buttonGroup="$orientation" selected="true"/>
                         <RadioButton wtkx:id="verticalOrientationButton" buttonData="Vertical" buttonGroup="$orientation"/>
 
-                        <Label text="Horizontal Alignment" styles="{fontBold:true}"/>
+                        <Label text="Horizontal Alignment" styles="{font:{bold:true}}"/>
                         <RadioButton wtkx:id="horizontalAlignmentLeftButton" buttonData="Left" buttonGroup="$horizontalAlignment" selected="true"/>
                         <RadioButton wtkx:id="horizontalAlignmentRightButton" buttonData="Right" buttonGroup="$horizontalAlignment"/>
                         <RadioButton wtkx:id="horizontalAlignmentCenterButton" buttonData="Center" buttonGroup="$horizontalAlignment"/>
 
-                        <Label text="Vertical Alignment" styles="{fontBold:true}"/>
+                        <Label text="Vertical Alignment" styles="{font:{bold:true}}"/>
                         <RadioButton wtkx:id="verticalAlignmentTopButton" buttonData="Top" buttonGroup="$verticalAlignment" selected="true"/>
                         <RadioButton wtkx:id="verticalAlignmentBottomButton" buttonData="Bottom" buttonGroup="$verticalAlignment"/>
                         <RadioButton wtkx:id="verticalAlignmentCenterButton" buttonData="Center" buttonGroup="$verticalAlignment"/>

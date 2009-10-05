@@ -41,7 +41,7 @@ limitations under the License.
                 <Border styles="{padding:{top:2, left:6}}">
                     <content>
                         <BoxPane orientation="vertical">
-                            <Label text="Alignment" styles="{fontBold:true}"/>
+                            <Label text="Alignment" styles="{font:{bold:true}}"/>
 
                             <wtkx:define>
                                 <ButtonGroup wtkx:id="alignment"/>

@@ -32,67 +32,67 @@ limitations under the License.
                                 <BoxPane orientation="vertical" styles="{padding:6}">
                                     <Rollup wtkx:id="buttonsRollup">
                                         <heading>
-                                            <Label text="Buttons" styles="{fontBold:true, fontSize:12, color:13}"/>
+                                            <Label text="Buttons" styles="{font:{size:12, bold:true}, color:13}"/>
                                         </heading>
                                     </Rollup>
                                     <Rollup wtkx:id="listsRollup">
                                         <heading>
-                                            <Label text="Lists" styles="{fontBold:true, fontSize:12, color:13}"/>
+                                            <Label text="Lists" styles="{font:{size:12, bold:true}, color:13}"/>
                                         </heading>
                                     </Rollup>
                                     <Rollup wtkx:id="textRollup">
                                         <heading>
-                                            <Label text="Text" styles="{fontBold:true, fontSize:12, color:13}"/>
+                                            <Label text="Text" styles="{font:{size:12, bold:true}, color:13}"/>
                                         </heading>
                                     </Rollup>
                                     <Rollup wtkx:id="calendarsRollup">
                                         <heading>
-                                            <Label text="Calendars" styles="{fontBold:true, fontSize:12, color:13}"/>
+                                            <Label text="Calendars" styles="{font:{size:12, bold:true}, color:13}"/>
                                         </heading>
                                     </Rollup>
                                     <Rollup wtkx:id="navigationRollup">
                                         <heading>
-                                            <Label text="Navigation" styles="{fontBold:true, fontSize:12, color:13}"/>
+                                            <Label text="Navigation" styles="{font:{size:12, bold:true}, color:13}"/>
                                         </heading>
                                     </Rollup>
                                     <Rollup wtkx:id="splittersRollup">
                                         <heading>
-                                            <Label text="Splitters" styles="{fontBold:true, fontSize:12, color:13}"/>
+                                            <Label text="Splitters" styles="{font:{size:12, bold:true}, color:13}"/>
                                         </heading>
                                     </Rollup>
                                     <Rollup wtkx:id="menusRollup">
                                         <heading>
-                                            <Label text="Menus" styles="{fontBold:true, fontSize:12, color:13}"/>
+                                            <Label text="Menus" styles="{font:{size:12, bold:true}, color:13}"/>
                                         </heading>
                                     </Rollup>
                                     <Rollup wtkx:id="metersRollup">
                                         <heading>
-                                            <Label text="Meters &amp; Activity Indicators" styles="{fontBold:true, fontSize:12, color:13}"/>
+                                            <Label text="Meters &amp; Activity Indicators" styles="{font:{size:12, bold:true}, color:13}"/>
                                         </heading>
                                     </Rollup>
                                     <Rollup wtkx:id="spinnersRollup">
                                         <heading>
-                                            <Label text="Spinners &amp; Sliders" styles="{fontBold:true, fontSize:12, color:13}"/>
+                                            <Label text="Spinners &amp; Sliders" styles="{font:{size:12, bold:true}, color:13}"/>
                                         </heading>
                                     </Rollup>
                                     <Rollup wtkx:id="tablesRollup">
                                         <heading>
-                                            <Label text="Tables" styles="{fontBold:true, fontSize:12, color:13}"/>
+                                            <Label text="Tables" styles="{font:{size:12, bold:true}, color:13}"/>
                                         </heading>
                                     </Rollup>
                                     <Rollup wtkx:id="treesRollup">
                                         <heading>
-                                            <Label text="Trees" styles="{fontBold:true, fontSize:12, color:13}"/>
+                                            <Label text="Trees" styles="{font:{size:12, bold:true}, color:13}"/>
                                         </heading>
                                     </Rollup>
                                     <Rollup wtkx:id="dragDropRollup">
                                         <heading>
-                                            <Label text="Drag &amp; Drop" styles="{fontBold:true, fontSize:12, color:13}"/>
+                                            <Label text="Drag &amp; Drop" styles="{font:{size:12, bold:true}, color:13}"/>
                                         </heading>
                                     </Rollup>
                                     <Rollup wtkx:id="alertsRollup">
                                         <heading>
-                                            <Label text="Alerts &amp; Prompts" styles="{fontBold:true, fontSize:12, color:13}"/>
+                                            <Label text="Alerts &amp; Prompts" styles="{font:{size:12, bold:true}, color:13}"/>
                                         </heading>
                                     </Rollup>
                                 </BoxPane>

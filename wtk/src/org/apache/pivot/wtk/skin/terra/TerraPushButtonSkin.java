@@ -262,21 +262,15 @@ public class TerraPushButtonSkin extends PushButtonSkin {
             throw new IllegalArgumentException("font is null.");
         }
 
-        setFont(Font.decode(font));
+        setFont(GraphicsUtilities.decodeFont(font));
     }
 
-    public boolean isFontBold() {
-        return ((font.getStyle() & Font.BOLD) == Font.BOLD);
-    }
-
-    public void setFontBold(boolean fontBold) {
-        if (isFontBold() != fontBold) {
-            if (fontBold) {
-                font = font.deriveFont(Font.BOLD);
-            } else {
-                font = font.deriveFont(font.getStyle() & (~Font.BOLD));
-            }
+    public final void setFont(Dictionary<String, ?> font) {
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");
         }
+
+        setFont(GraphicsUtilities.decodeFont(font));
     }
 
     public Color getColor() {

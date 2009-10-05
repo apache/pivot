@@ -23,7 +23,7 @@ limitations under the License.
     <content>
         <BoxPane styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:12}">
             <BoxPane orientation="vertical" styles="{spacing:6}">
-                <Label text="Editable" styles="{fontBold:true}"/>
+                <Label text="Editable" styles="{font:{bold:true}}"/>
                 <Border styles="{padding:0, color:10}">
                     <content>
                         <ScrollPane preferredWidth="62" preferredHeight="80" horizontalScrollBarPolicy="fill">
@@ -50,7 +50,7 @@ limitations under the License.
             </BoxPane>
 
             <BoxPane orientation="vertical" styles="{spacing:6}">
-                <Label text="Multi-Select" styles="{fontBold:true}"/>
+                <Label text="Multi-Select" styles="{font:{bold:true}}"/>
                 <Border styles="{padding:0, color:10}">
                     <content>
                         <ScrollPane preferredHeight="80">
@@ -75,7 +75,7 @@ limitations under the License.
             </BoxPane>
 
             <BoxPane orientation="vertical" styles="{spacing:6}">
-                <Label text="Image" styles="{fontBold:true}"/>
+                <Label text="Image" styles="{font:{bold:true}}"/>
                 <Border styles="{padding:0, color:10}">
                     <content>
                         <ScrollPane preferredHeight="80">
@@ -103,7 +103,7 @@ limitations under the License.
             </BoxPane>
 
             <BoxPane orientation="vertical" styles="{spacing:6}">
-                <Label text="Checked" styles="{fontBold:true}"/>
+                <Label text="Checked" styles="{font:{bold:true}}"/>
                 <Border styles="{padding:0, color:10}">
                     <content>
                         <ScrollPane preferredHeight="80">
@@ -118,7 +118,7 @@ limitations under the License.
             </BoxPane>
 
             <BoxPane orientation="vertical" styles="{spacing:6}">
-                <Label text="List Buttons" styles="{fontBold:true}"/>
+                <Label text="List Buttons" styles="{font:{bold:true}}"/>
                 <Form>
                     <sections>
                         <Form.Section>

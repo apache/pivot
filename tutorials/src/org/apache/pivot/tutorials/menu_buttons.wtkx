@@ -23,7 +23,7 @@ limitations under the License.
         <BoxPane orientation="vertical"
             styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
             <BoxPane orientation="vertical">
-                <Label text="Menu Buttons" styles="{fontBold:true}" />
+                <Label text="Menu Buttons" styles="{font:{bold:true}}" />
                 <BoxPane orientation="vertical">
                     <MenuButton buttonData="File">
                         <menu>

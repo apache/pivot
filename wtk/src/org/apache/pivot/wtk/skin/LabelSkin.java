@@ -344,42 +344,6 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         setFont(GraphicsUtilities.decodeFont(font));
     }
 
-    public int getFontSize() {
-        return font.getSize();
-    }
-
-    public void setFontSize(int fontSize) {
-        font = font.deriveFont((float)fontSize);
-    }
-
-    public boolean isFontBold() {
-        return ((font.getStyle() & Font.BOLD) == Font.BOLD);
-    }
-
-    public void setFontBold(boolean fontBold) {
-        int fontStyle = font.getStyle();
-
-        if (fontBold) {
-            font = font.deriveFont(fontStyle | Font.BOLD);
-        } else {
-            font = font.deriveFont(fontStyle & (~Font.BOLD));
-        }
-    }
-
-    public boolean isFontItalic() {
-        return ((font.getStyle() & Font.ITALIC) == Font.ITALIC);
-    }
-
-    public void setFontItalic(boolean fontItalic) {
-        int fontStyle = font.getStyle();
-
-        if (fontItalic) {
-            font = font.deriveFont(fontStyle | Font.ITALIC);
-        } else {
-            font = font.deriveFont(fontStyle & (~Font.ITALIC));
-        }
-    }
-
     public Color getColor() {
         return color;
     }

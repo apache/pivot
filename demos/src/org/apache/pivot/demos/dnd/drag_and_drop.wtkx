@@ -38,7 +38,7 @@ limitations under the License.
                                 <rows>
                                     <TablePane.Row>
                                         <Label text="Text"
-                                            styles="{fontBold:true, horizontalAlignment:'center'}" />
+                                            styles="{font:{bold:true}, horizontalAlignment:'center'}" />
                                     </TablePane.Row>
                                     <TablePane.Row height="1*">
                                         <Border styles="{color:10}">
@@ -72,7 +72,7 @@ limitations under the License.
                                 <rows>
                                     <TablePane.Row>
                                         <Label text="Images"
-                                            styles="{fontBold:true, horizontalAlignment:'center'}" />
+                                            styles="{font:{bold:true}, horizontalAlignment:'center'}" />
                                     </TablePane.Row>
                                     <TablePane.Row height="1*">
                                         <Border styles="{color:10, padding:0}">
@@ -102,7 +102,7 @@ limitations under the License.
                                 <rows>
                                     <TablePane.Row>
                                         <Label text="File Lists"
-                                            styles="{fontBold:true, horizontalAlignment:'center'}" />
+                                            styles="{font:{bold:true}, horizontalAlignment:'center'}" />
                                     </TablePane.Row>
                                     <TablePane.Row height="1*">
                                         <Border styles="{color:10, padding:0}">

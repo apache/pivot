@@ -186,9 +186,9 @@ public class TerraPaletteSkin extends WindowSkin {
         titleBoxPane.add(titleLabel);
         titleBoxPane.getStyles().put("padding", new Insets(0, 0, 0, 3));
 
-        Font font = theme.getFont();
-        titleLabel.getStyles().put("fontBold", true);
-        titleLabel.getStyles().put("fontSize", Math.round(font.getSize2D() * 0.8f));
+        Font titleFont = theme.getFont();
+        titleFont = titleFont.deriveFont(Math.round(titleFont.getSize2D() * 0.8f), Font.BOLD);
+        titleLabel.getStyles().put("font", titleFont);
         titleLabel.getStyles().put("color", titleBarColor);
 
         // Initialize the button box pane

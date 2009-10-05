@@ -27,7 +27,7 @@ limitations under the License.
         <Border styles="{padding:6}">
             <content>
                 <BoxPane orientation="vertical" styles="{spacing:6}">
-                    <Label text="Mode:" styles="{fontBold:true}"/>
+                    <Label text="Mode:" styles="{font:{bold:true}}"/>
 
                     <RadioButton buttonData="Open" buttonGroup="$fileBrowserSheetModeGroup" selected="true">
                         <userData mode="open"/>

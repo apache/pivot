@@ -36,7 +36,7 @@ limitations under the License.
                         </BoxPane>
                         <BoxPane wtkx:id="messageBoxPane" orientation="vertical"
                             styles="{spacing:10, fill:true}">
-                            <Label wtkx:id="messageLabel" styles="{fontBold:true, wrapText:true}"/>
+                            <Label wtkx:id="messageLabel" styles="{font:{bold:true}, wrapText:true}"/>
                         </BoxPane>
                     </TablePane.Row>
                 </rows>

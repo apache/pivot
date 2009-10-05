@@ -28,7 +28,7 @@ limitations under the License.
                             padding:{left:2, right:2}}">
                             <Rollup expanded="true">
                                 <heading>
-                                    <Label text="Stocks" styles="{fontBold:true, color:13}"/>
+                                    <Label text="Stocks" styles="{font:{bold:true}, color:13}"/>
                                 </heading>
                                 <content>
                                     <wtkx:include src="stocks.wtkx"/>
@@ -36,7 +36,7 @@ limitations under the License.
                             </Rollup>
                             <Rollup>
                                 <heading>
-                                    <Label text="Weather" styles="{fontBold:true, color:13}"/>
+                                    <Label text="Weather" styles="{font:{bold:true}, color:13}"/>
                                 </heading>
                                 <content>
                                     <wtkx:include src="weather.wtkx"/>
@@ -44,7 +44,7 @@ limitations under the License.
                             </Rollup>
                             <Rollup>
                                 <heading>
-                                    <Label text="Calendar" styles="{fontBold:true, color:13}"/>
+                                    <Label text="Calendar" styles="{font:{bold:true}, color:13}"/>
                                 </heading>
                                 <content>
                                     <wtkx:include src="calendar.wtkx"/>
@@ -52,7 +52,7 @@ limitations under the License.
                             </Rollup>
                             <Rollup styles="{fill:true}">
                                 <heading>
-                                    <Label text="Nested" styles="{fontBold:true, color:13}"/>
+                                    <Label text="Nested" styles="{font:{bold:true}, color:13}"/>
                                 </heading>
                                 <content>
                                     <BoxPane orientation="vertical" styles="{fill:true}">

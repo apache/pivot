@@ -42,7 +42,7 @@ limitations under the License.
                     <ActivityIndicator wtkx:id="activityIndicator" styles="{color:16}"
                         preferredWidth="48" preferredHeight="48"/>
                     <Label wtkx:id="processingOrderLabel" text="Pretending to process order..." visible="false"
-                        styles="{fontItalic:true}"/>
+                        styles="{font:{italic:true}}"/>
                 </BoxPane>
             </BoxPane>
         </TablePane.Row>

@@ -70,8 +70,7 @@ public class ResultItemRenderer extends BoxPane implements ListView.ItemRenderer
         }
 
         Font font = (Font)listView.getStyles().get("font");
-        titleLabel.getStyles().put("font", font);
-        titleLabel.getStyles().put("fontBold", true);
+        titleLabel.getStyles().put("font", font.deriveFont(font.getStyle() | Font.BOLD));
         phoneLabel.getStyles().put("font", font);
         addressLabel.getStyles().put("font", font);
 

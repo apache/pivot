@@ -241,7 +241,9 @@ public class TerraExpanderSkin extends ExpanderSkin
         titleRow.add(buttonBoxPane);
 
         titleLabel.getStyles().put("color", theme.getColor(15));
-        titleLabel.getStyles().put("fontBold", true);
+
+        Font titleFont = theme.getFont().deriveFont(Font.BOLD);
+        titleLabel.getStyles().put("font", titleFont);
         titleBoxPane.add(titleLabel);
 
         // Listen for click events on the title bar

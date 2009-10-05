@@ -23,7 +23,7 @@ limitations under the License.
         <content>
             <BoxPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
                 <BoxPane orientation="vertical">
-                    <Label text="Basic Push Buttons" styles="{fontBold:true}"/>
+                    <Label text="Basic Push Buttons" styles="{font:{bold:true}}"/>
                     <BoxPane>
                         <PushButton buttonData="One"/>
                         <PushButton buttonData="Two"/>
@@ -32,7 +32,7 @@ limitations under the License.
                 </BoxPane>
 
                 <BoxPane orientation="vertical">
-                    <Label text="Ungrouped Toggle Buttons" styles="{fontBold:true}"/>
+                    <Label text="Ungrouped Toggle Buttons" styles="{font:{bold:true}}"/>
                     <BoxPane>
                         <PushButton buttonData="One" toggleButton="true"/>
                         <PushButton buttonData="Two" toggleButton="true"/>
@@ -41,7 +41,7 @@ limitations under the License.
                 </BoxPane>
 
                 <BoxPane orientation="vertical">
-                    <Label text="Grouped Toggle Buttons" styles="{fontBold:true}"/>
+                    <Label text="Grouped Toggle Buttons" styles="{font:{bold:true}}"/>
                     <BoxPane>
                         <wtkx:define>
                             <ButtonGroup wtkx:id="toggleButtons"/>
@@ -53,7 +53,7 @@ limitations under the License.
                 </BoxPane>
 
                 <BoxPane orientation="vertical">
-                    <Label text="Image Buttons" styles="{fontBold:true}"/>
+                    <Label text="Image Buttons" styles="{font:{bold:true}}"/>
                     <BoxPane>
                         <PushButton>
                             <buttonData>
@@ -77,7 +77,7 @@ limitations under the License.
                 </BoxPane>
 
                 <BoxPane orientation="vertical">
-                    <Label text="Toolbar Buttons" styles="{fontBold:true}"/>
+                    <Label text="Toolbar Buttons" styles="{font:{bold:true}}"/>
                     <BoxPane>
                         <PushButton styles="{toolbar:true}">
                             <buttonData>
@@ -104,7 +104,7 @@ limitations under the License.
         <content>
             <BoxPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
                 <BoxPane orientation="vertical">
-                    <Label text="Basic Radio Buttons" styles="{fontBold:true}"/>
+                    <Label text="Basic Radio Buttons" styles="{font:{bold:true}}"/>
                     <BoxPane>
                         <wtkx:define>
                             <ButtonGroup wtkx:id="radioButtons"/>
@@ -116,7 +116,7 @@ limitations under the License.
                 </BoxPane>
 
                 <BoxPane orientation="vertical">
-                    <Label text="Image Radio Buttons" styles="{fontBold:true}"/>
+                    <Label text="Image Radio Buttons" styles="{font:{bold:true}}"/>
                     <BoxPane orientation="vertical">
                         <wtkx:define>
                             <ButtonGroup wtkx:id="imageRadioButtons"/>
@@ -146,7 +146,7 @@ limitations under the License.
         <content>
             <BoxPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
                 <BoxPane orientation="vertical">
-                    <Label text="Basic Checkboxes" styles="{fontBold:true}"/>
+                    <Label text="Basic Checkboxes" styles="{font:{bold:true}}"/>
                     <BoxPane>
                         <Checkbox buttonData="One"/>
                         <Checkbox buttonData="Two"/>
@@ -155,7 +155,7 @@ limitations under the License.
                 </BoxPane>
 
                 <BoxPane orientation="vertical">
-                    <Label text="Image Checkboxes" styles="{fontBold:true}"/>
+                    <Label text="Image Checkboxes" styles="{font:{bold:true}}"/>
                     <BoxPane orientation="vertical">
                         <Checkbox>
                             <buttonData>
@@ -176,7 +176,7 @@ limitations under the License.
                 </BoxPane>
 
                 <BoxPane orientation="vertical">
-                    <Label text="Tri-state Checkboxes" styles="{fontBold:true}"/>
+                    <Label text="Tri-state Checkboxes" styles="{font:{bold:true}}"/>
                     <BoxPane orientation="vertical">
                         <Checkbox buttonData="Read" triState="true" state="selected"/>
                         <Checkbox buttonData="Write" triState="true" state="unselected"/>
@@ -191,7 +191,7 @@ limitations under the License.
         <content>
             <BoxPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
                 <BoxPane orientation="vertical">
-                    <Label text="Basic Link Buttons" styles="{fontBold:true}"/>
+                    <Label text="Basic Link Buttons" styles="{font:{bold:true}}"/>
                     <BoxPane>
                         <LinkButton buttonData="One"/>
                         <LinkButton buttonData="Two"/>
@@ -200,7 +200,7 @@ limitations under the License.
                 </BoxPane>
 
                 <BoxPane orientation="vertical">
-                    <Label text="Image Link Buttons" styles="{fontBold:true}"/>
+                    <Label text="Image Link Buttons" styles="{font:{bold:true}}"/>
                     <BoxPane orientation="vertical">
                         <LinkButton>
                             <buttonData>

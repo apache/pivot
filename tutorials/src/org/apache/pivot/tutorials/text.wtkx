@@ -23,7 +23,7 @@ limitations under the License.
         <content>
             <BoxPane orientation="vertical" styles="{fill:true,
                 padding:{top:2, left:4, bottom:12, right:4}}">
-                <Label text="Text Input" styles="{fontBold:true}"/>
+                <Label text="Text Input" styles="{font:{bold:true}}"/>
                 <Form>
                     <sections>
                         <Form.Section>
@@ -57,7 +57,7 @@ limitations under the License.
                         </columns>
                         <rows>
                             <TablePane.Row height="-1">
-                                <Label text="Text Area" styles="{fontBold:true}"/>
+                                <Label text="Text Area" styles="{font:{bold:true}}"/>
                             </TablePane.Row>
                             <TablePane.Row height="1*">
                                 <Border styles="{padding:0, color:10}">
@@ -81,7 +81,7 @@ limitations under the License.
                 <content>
                     <BoxPane orientation="vertical" styles="{fill:true,
                         padding:{top:2, left:4, bottom:8, right:4}}">
-                        <Label text="Label Wrapping" styles="{fontBold:true}"/>
+                        <Label text="Label Wrapping" styles="{font:{bold:true}}"/>
                         <Label text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
                             styles="{wrapText:true}"/>
                     </BoxPane>

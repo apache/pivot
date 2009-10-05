@@ -18,6 +18,7 @@ package org.apache.pivot.wtk.skin.terra;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -273,7 +274,8 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         titleBoxPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
         titleBoxPane.getStyles().put("padding", new Insets(0, 0, 0, 2));
 
-        titleLabel.getStyles().put("fontBold", true);
+        Font titleFont = theme.getFont().deriveFont(Font.BOLD);
+        titleLabel.getStyles().put("font", titleFont);
 
         iconImageView.setPreferredSize(16, 16);
         iconImageView.getStyles().put("fill", true);

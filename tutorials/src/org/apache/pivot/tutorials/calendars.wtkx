@@ -23,7 +23,7 @@ limitations under the License.
         <content>
             <BoxPane styles="{padding:{top:2, left:4, bottom:8, right:4}, spacing:10}">
                 <BoxPane orientation="vertical">
-                    <Label text="English (US)" styles="{fontBold:true}"/>
+                    <Label text="English (US)" styles="{font:{bold:true}}"/>
                     <Border styles="{padding:0}">
                         <content>
                             <Calendar locale="{language:'en', country:'us'}"/>
@@ -32,7 +32,7 @@ limitations under the License.
                 </BoxPane>
 
                 <BoxPane orientation="vertical">
-                    <Label text="Français (FR)" styles="{fontBold:true}"/>
+                    <Label text="Français (FR)" styles="{font:{bold:true}}"/>
                     <Border styles="{padding:0}">
                         <content>
                             <Calendar locale="{language:'fr', country:'fr'}"/>
@@ -41,7 +41,7 @@ limitations under the License.
                 </BoxPane>
 
                 <BoxPane orientation="vertical">
-                    <Label text="Calendar Buttons" styles="{fontBold:true}"/>
+                    <Label text="Calendar Buttons" styles="{font:{bold:true}}"/>
                     <Form>
                         <sections>
                             <Form.Section>

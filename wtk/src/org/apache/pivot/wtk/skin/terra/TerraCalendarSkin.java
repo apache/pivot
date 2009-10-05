@@ -456,9 +456,13 @@ public class TerraCalendarSkin extends CalendarSkin
 
         // Add the day labels
         calendarRow = new TablePane.Row();
+
+        Font labelFont = theme.getFont();
+        labelFont = labelFont.deriveFont(Font.BOLD);
+
         for (int i = 0; i < 7; i++) {
             Label label = new Label();
-            label.getStyles().put("fontBold", true);
+            label.getStyles().put("font", labelFont);
             label.getStyles().put("padding", new Insets(2, 2, 4, 2));
             label.getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
             calendarRow.add(label);
