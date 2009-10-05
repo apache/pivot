@@ -381,7 +381,7 @@ public class TableView extends Component {
         /**
          * Prepares the renderer for layout or paint.
          *
-         * @param item
+         * @param value
          * The cell value to render, or <tt>null</tt> if called to calculate
          * preferred height for skins that assume a fixed renderer height.
          *
