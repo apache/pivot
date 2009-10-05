@@ -240,8 +240,8 @@ public final class GraphicsUtilities {
     }
 
     @SuppressWarnings("unchecked")
-    public static Paint decodePaint(Dictionary<String, ?> value) {
-        String paintType = JSONSerializer.getString(value, PAINT_TYPE_KEY);
+    public static Paint decodePaint(Dictionary<String, ?> dictionary) {
+        String paintType = JSONSerializer.getString(dictionary, PAINT_TYPE_KEY);
         if (paintType == null) {
             throw new IllegalArgumentException(PAINT_TYPE_KEY + " is required.");
         }
@@ -249,30 +249,30 @@ public final class GraphicsUtilities {
         Paint paint;
         switch(PaintType.valueOf(paintType.toUpperCase())) {
             case SOLID_COLOR: {
-                String color = JSONSerializer.getString(value, COLOR_KEY);
+                String color = JSONSerializer.getString(dictionary, COLOR_KEY);
                 paint = decodeColor(color);
                 break;
             }
 
             case GRADIENT: {
-                float startX = JSONSerializer.getFloat(value, START_X_KEY);
-                float startY = JSONSerializer.getFloat(value, START_Y_KEY);
-                float endX = JSONSerializer.getFloat(value, END_X_KEY);
-                float endY = JSONSerializer.getFloat(value, END_Y_KEY);
-                Color startColor = Color.decode(JSONSerializer.getString(value, START_COLOR_KEY));
-                Color endColor = Color.decode(JSONSerializer.getString(value, END_COLOR_KEY));
+                float startX = JSONSerializer.getFloat(dictionary, START_X_KEY);
+                float startY = JSONSerializer.getFloat(dictionary, START_Y_KEY);
+                float endX = JSONSerializer.getFloat(dictionary, END_X_KEY);
+                float endY = JSONSerializer.getFloat(dictionary, END_Y_KEY);
+                Color startColor = Color.decode(JSONSerializer.getString(dictionary, START_COLOR_KEY));
+                Color endColor = Color.decode(JSONSerializer.getString(dictionary, END_COLOR_KEY));
                 paint = new GradientPaint(startX, startY, startColor, endX, endY, endColor);
                 break;
             }
 
             case LINEAR_GRADIENT: {
-                float startX = JSONSerializer.getFloat(value, START_X_KEY);
-                float startY = JSONSerializer.getFloat(value, START_Y_KEY);
-                float endX = JSONSerializer.getFloat(value, END_X_KEY);
-                float endY = JSONSerializer.getFloat(value, END_Y_KEY);
+                float startX = JSONSerializer.getFloat(dictionary, START_X_KEY);
+                float startY = JSONSerializer.getFloat(dictionary, START_Y_KEY);
+                float endX = JSONSerializer.getFloat(dictionary, END_X_KEY);
+                float endY = JSONSerializer.getFloat(dictionary, END_Y_KEY);
 
                 List<Dictionary<String, ?>> stops =
-                    (List<Dictionary<String, ?>>)JSONSerializer.getList(value, STOPS_KEY);
+                    (List<Dictionary<String, ?>>)JSONSerializer.getList(dictionary, STOPS_KEY);
 
                 int n = stops.getLength();
                 float[] fractions = new float[n];
@@ -292,12 +292,12 @@ public final class GraphicsUtilities {
             }
 
             case RADIAL_GRADIENT: {
-                float centerX = JSONSerializer.getFloat(value, CENTER_X_KEY);
-                float centerY = JSONSerializer.getFloat(value, CENTER_Y_KEY);
-                float radius = JSONSerializer.getFloat(value, RADIUS_KEY);
+                float centerX = JSONSerializer.getFloat(dictionary, CENTER_X_KEY);
+                float centerY = JSONSerializer.getFloat(dictionary, CENTER_Y_KEY);
+                float radius = JSONSerializer.getFloat(dictionary, RADIUS_KEY);
 
                 List<Dictionary<String, ?>> stops =
-                    (List<Dictionary<String, ?>>)JSONSerializer.getList(value, STOPS_KEY);
+                    (List<Dictionary<String, ?>>)JSONSerializer.getList(dictionary, STOPS_KEY);
 
                 int n = stops.getLength();
                 float[] fractions = new float[n];
@@ -339,27 +339,40 @@ public final class GraphicsUtilities {
         return font;
     }
 
-    public static Font decodeFont(Dictionary<String, ?> value) {
+    public static Font decodeFont(Dictionary<String, ?> dictionary) {
         Font font = Theme.getTheme().getFont();
 
         String name;
-        if (value.containsKey(NAME_KEY)) {
-            name = (String)value.get(NAME_KEY);
+        if (dictionary.containsKey(NAME_KEY)) {
+            name = (String)dictionary.get(NAME_KEY);
         } else {
             name = font.getName();
         }
 
         int size;
-        if (value.containsKey(SIZE_KEY)) {
-            size = (Integer)value.get(SIZE_KEY);
+        if (dictionary.containsKey(SIZE_KEY)) {
+            Object value = dictionary.get(SIZE_KEY);
+
+            if (value instanceof String) {
+                String string = (String)value;
+
+                if (string.endsWith("%")) {
+                    float percentage = Float.parseFloat(string.substring(0, string.length() - 1)) / 100f;
+                    size = Math.round((float)font.getSize() * percentage);
+                } else {
+                    throw new IllegalArgumentException(value + " is not a valid font size.");
+                }
+            } else {
+                size = (Integer)value;
+            }
         } else {
             size = font.getSize();
         }
 
         int style = font.getStyle();
 
-        if (value.containsKey(BOLD_KEY)) {
-            boolean bold = (Boolean)value.get(BOLD_KEY);
+        if (dictionary.containsKey(BOLD_KEY)) {
+            boolean bold = (Boolean)dictionary.get(BOLD_KEY);
 
             if (bold) {
                 style |= Font.BOLD;
@@ -368,8 +381,8 @@ public final class GraphicsUtilities {
             }
         }
 
-        if (value.containsKey(ITALIC_KEY)) {
-            boolean italic = (Boolean)value.get(ITALIC_KEY);
+        if (dictionary.containsKey(ITALIC_KEY)) {
+            boolean italic = (Boolean)dictionary.get(ITALIC_KEY);
 
             if (italic) {
                 style |= Font.ITALIC;
