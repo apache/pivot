@@ -89,9 +89,37 @@ public class TreeView extends Component {
      * Tree view node renderer interface.
      */
     public interface NodeRenderer extends Renderer {
-        public void render(Object node, TreeView treeView, boolean expanded,
-            boolean selected, NodeCheckState checkState, boolean highlighted,
-            boolean disabled);
+        /**
+         * Prepares the renderer for layout or paint.
+         *
+         * @param node
+         * The node value to render, or <tt>null</tt> if called to calculate
+         * preferred height for skins that assume a fixed renderer height.
+         *
+         * @param path
+         * The path to the node being rendered, or <tt>null</tt> if
+         * <tt>node</tt> is <tt>null</tt>.
+         *
+         * @param treeView
+         * The tree view that contains the node.
+         *
+         * @param expanded
+         * <tt>true</tt> if the node is expanded; <tt>false</tt> otherwise.
+         *
+         * @param selected
+         * <tt>true</tt> if the node is selected; <tt>false</tt> otherwise.
+         *
+         * @param checkState
+         * The node's {@linkplain NodeCheckState check state}.
+         *
+         * @param highlighted
+         * <tt>true</tt> if the node is highlighted; <tt>false</tt> otherwise.
+         *
+         * @param disabled
+         * <tt>true</tt> if the node is disabled; <tt>false</tt> otherwise.
+         */
+        public void render(Object node, Path path, TreeView treeView, boolean expanded,
+            boolean selected, NodeCheckState checkState, boolean highlighted, boolean disabled);
     }
 
     /**

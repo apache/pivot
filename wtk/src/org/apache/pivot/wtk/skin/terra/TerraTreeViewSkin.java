@@ -23,6 +23,8 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Transparency;
 import java.awt.geom.GeneralPath;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.List;
@@ -46,7 +48,6 @@ import org.apache.pivot.wtk.TreeViewNodeStateListener;
 import org.apache.pivot.wtk.TreeViewSelectionListener;
 import org.apache.pivot.wtk.skin.ComponentSkin;
 
-
 /**
  * Tree view skin.
  */
@@ -68,6 +69,107 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     /**
+     * Iterates through the visible nodes. For callers who wish to know the
+     * path of each visible node, using this iterator will be much more
+     * efficient than manually iterating over the visible nodes and calling
+     * <tt>getPath()</tt> on each node.
+     */
+    protected final class VisibleNodeIterator implements Iterator<NodeInfo> {
+        private int index;
+        private int end;
+
+        private Path path = null;
+        private NodeInfo previous = null;
+
+        public VisibleNodeIterator() {
+            this(0, visibleNodes.getLength() - 1);
+        }
+
+        /**
+         * Creates a new visible node iterator that will iterate over a portion
+         * of the visible nodes list (useful during painting).
+         *
+         * @param start
+         * The start index, inclusive
+         *
+         * @param end
+         * The end index, inclusive
+         */
+        public VisibleNodeIterator(int start, int end) {
+            if (start < 0
+                || end >= visibleNodes.getLength()
+                || start > end) {
+                throw new IndexOutOfBoundsException();
+            }
+
+            this.index = start;
+            this.end = end;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean hasNext() {
+            return (index <= end);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public NodeInfo next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+
+            NodeInfo next = visibleNodes.get(index++);
+
+            if (path == null) {
+                // First iteration
+                path = next.getPath();
+            } else if (next.parent == previous) {
+                // Child of previous visible node
+                path.add(0);
+            } else {
+                int n = path.getLength();
+                while (next.parent != previous.parent) {
+                    path.remove(--n, 1);
+                    previous = previous.parent;
+                }
+
+                int tail = path.get(n - 1);
+                path.update(n - 1, tail + 1);
+            }
+
+            previous = next;
+
+            return next;
+        }
+
+        /**
+         * This operation is not supported by this iterator.
+         *
+         * @throws UnsupportedOperationException
+         */
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * Gets the path of the node last returned by a call to {@link #next()}.
+         *
+         * @return
+         * The path to the node, or <tt>null</tt> if <tt>next()</tt> has not
+         * yet been called.
+         */
+        public Path getPath() {
+            return path;
+        }
+    }
+
+    /**
      * An internal data structure that keeps track of skin-related metadata
      * for a tree node. The justification for the existence of this class lies
      * in the <tt>visibleNodes</tt> data structure, which is a flat list of
@@ -83,15 +185,15 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
      */
     protected static class NodeInfo {
         // Core metadata
-        protected final TreeView treeView;
-        protected final BranchInfo parent;
-        protected final Object data;
-        protected final int depth;
+        final TreeView treeView;
+        final BranchInfo parent;
+        final Object data;
+        final int depth;
 
         // Cached fields. Note that this is maintained as a bitmask in favor of
         // separate properties because it allows us to easily clear any cached
         // field for all nodes in one common method. See #clearField(byte)
-        protected byte fields = 0;
+        byte fields = 0;
 
         public static final byte HIGHLIGHTED_MASK = 1 << 0;
         public static final byte SELECTED_MASK = 1 << 1;
@@ -104,7 +206,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             | CHECK_STATE_MIXED_MASK;
 
         @SuppressWarnings("unchecked")
-        public NodeInfo(TreeView treeView, BranchInfo parent, Object data) {
+        private NodeInfo(TreeView treeView, BranchInfo parent, Object data) {
             this.treeView = treeView;
             this.parent = parent;
             this.data = data;
@@ -128,7 +230,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         }
 
         @SuppressWarnings("unchecked")
-        public static NodeInfo createNew(TreeView treeView, BranchInfo parent, Object data) {
+        private static NodeInfo newInstance(TreeView treeView, BranchInfo parent, Object data) {
             NodeInfo nodeInfo = null;
 
             if (data instanceof List<?>) {
@@ -249,13 +351,13 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
      * An internal data structure that keeps track of skin-related metadata
      * for a tree branch.
      */
-    protected static class BranchInfo extends NodeInfo {
+    protected static final class BranchInfo extends NodeInfo {
         // Core skin metadata
-        protected List<NodeInfo> children = null;
+        private List<NodeInfo> children = null;
 
         public static final byte EXPANDED_MASK = 1 << 6;
 
-        public BranchInfo(TreeView treeView, BranchInfo parent, List<Object> data) {
+        private BranchInfo(TreeView treeView, BranchInfo parent, List<Object> data) {
             super(treeView, parent, data);
         }
 
@@ -277,7 +379,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
                 for (int i = 0; i < count; i++) {
                     Object nodeData = data.get(i);
-                    NodeInfo childNodeInfo = NodeInfo.createNew(treeView, this, nodeData);
+                    NodeInfo childNodeInfo = NodeInfo.newInstance(treeView, this, nodeData);
                     children.add(childNodeInfo);
                 }
             }
@@ -382,13 +484,14 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
         int preferredWidth = 0;
 
-        for (int i = 0, n = visibleNodes.getLength(); i < n; i++) {
-            NodeInfo nodeInfo = visibleNodes.get(i);
+        VisibleNodeIterator visibleNodeIterator = new VisibleNodeIterator();
+        while (visibleNodeIterator.hasNext()) {
+            NodeInfo nodeInfo = visibleNodeIterator.next();
 
             int nodeWidth = (nodeInfo.depth - 1) * (indent + spacing);
 
-            nodeRenderer.render(nodeInfo.data, treeView, false, false,
-                TreeView.NodeCheckState.UNCHECKED, false, false);
+            nodeRenderer.render(nodeInfo.data, visibleNodeIterator.getPath(), treeView,
+                false, false, TreeView.NodeCheckState.UNCHECKED, false, false);
             nodeWidth += nodeRenderer.getPreferredWidth(-1);
 
             preferredWidth = Math.max(preferredWidth, nodeWidth);
@@ -455,8 +558,9 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
         int nodeY = nodeStart * (nodeHeight + VERTICAL_SPACING);
 
-        for (int i = nodeStart; i <= nodeEnd; i++) {
-            NodeInfo nodeInfo = visibleNodes.get(i);
+        VisibleNodeIterator visibleNodeIterator = new VisibleNodeIterator(nodeStart, nodeEnd);
+        while (visibleNodeIterator.hasNext()) {
+            NodeInfo nodeInfo = visibleNodeIterator.next();
 
             boolean expanded = false;
             boolean highlighted = nodeInfo.isHighlighted();
@@ -568,8 +672,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             // Paint the node data
             Graphics2D rendererGraphics = (Graphics2D)graphics.create(nodeX, nodeY,
                 nodeWidth, nodeHeight);
-            nodeRenderer.render(nodeInfo.data, treeView, expanded, selected,
-                checkState, highlighted, disabled);
+            nodeRenderer.render(nodeInfo.data, visibleNodeIterator.getPath(), treeView,
+                expanded, selected, checkState, highlighted, disabled);
             nodeRenderer.setSize(nodeWidth, nodeHeight);
             nodeRenderer.paint(rendererGraphics);
             rendererGraphics.dispose();
@@ -1034,7 +1138,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     protected int getNodeHeight() {
         TreeView treeView = (TreeView)getComponent();
         TreeView.NodeRenderer nodeRenderer = treeView.getNodeRenderer();
-        nodeRenderer.render(null, treeView, false, false,
+        nodeRenderer.render(null, null, treeView, false, false,
             TreeView.NodeCheckState.UNCHECKED, false, false);
 
         int nodeHeight = nodeRenderer.getPreferredHeight(-1);
@@ -1049,7 +1153,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
      * Gets the metadata associated with the node found at the specified
      * y-coordinate, or <tt>null</tt> if there is no node at that location.
      */
-    protected NodeInfo getNodeInfoAt(int y) {
+    protected final NodeInfo getNodeInfoAt(int y) {
         NodeInfo nodeInfo = null;
 
         int nodeHeight = getNodeHeight();
@@ -1068,7 +1172,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
      * The path must be valid. The empty path is supported and represents the
      * root node info.
      */
-    protected NodeInfo getNodeInfoAt(Path path) {
+    protected final NodeInfo getNodeInfoAt(Path path) {
         assert(path != null) : "Path is null";
 
         NodeInfo result = null;
@@ -1100,7 +1204,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
      * Gets the bounding box defined by the specified node, or <tt>null</tt>
      * if the node is not currently visible.
      */
-    protected Bounds getNodeBounds(NodeInfo nodeInfo) {
+    protected final Bounds getNodeBounds(NodeInfo nodeInfo) {
         Bounds bounds = null;
 
         int index = visibleNodes.indexOf(nodeInfo);
@@ -1892,7 +1996,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
         // Update our internal branch info
         if (branchInfo.children != null) {
-            NodeInfo nodeInfo = NodeInfo.createNew(treeView, branchInfo, branchData.get(index));
+            NodeInfo nodeInfo = NodeInfo.newInstance(treeView, branchInfo, branchData.get(index));
             branchInfo.children.insert(nodeInfo, index);
         }
 
@@ -1931,7 +2035,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             removeVisibleNodes(branchInfo, index, 1);
 
             // Update our internal branch info
-            nodeInfo = NodeInfo.createNew(treeView, branchInfo, nodeData);
+            nodeInfo = NodeInfo.newInstance(treeView, branchInfo, nodeData);
             branchInfo.children.update(index, nodeInfo);
 
             // Add the new node to the visible nodes list

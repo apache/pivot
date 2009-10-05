@@ -19,6 +19,7 @@ package org.apache.pivot.wtk.content;
 import java.awt.Color;
 import java.awt.Font;
 
+import org.apache.pivot.collections.Sequence.Tree.Path;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.HorizontalAlignment;
@@ -27,7 +28,6 @@ import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.TreeView;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.media.Image;
-
 
 /**
  * Default tree node renderer, which knows how to render instances of
@@ -65,7 +65,7 @@ public class TreeViewNodeRenderer extends BoxPane implements TreeView.NodeRender
     }
 
     @Override
-    public void render(Object node, TreeView treeView, boolean expanded,
+    public void render(Object node, Path path, TreeView treeView, boolean expanded,
         boolean selected, TreeView.NodeCheckState checkState,
         boolean highlighted, boolean disabled) {
         if (node != null) {
