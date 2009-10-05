@@ -18,7 +18,6 @@ limitations under the License.
 
 <Window xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:media="org.apache.pivot.wtk.media"
-    xmlns:drawing="org.apache.pivot.wtk.media.drawing"
     xmlns="org.apache.pivot.wtk">
     <content>
         <ImageView wtkx:id="imageView"
@@ -26,22 +25,31 @@ limitations under the License.
             <image>
                 <media:Drawing>
                     <canvas>
-                        <drawing:Canvas>
-                            <drawing:Rectangle x="0" y="0" width="120" height="60"
+                        <Canvas xmlns="org.apache.pivot.wtk.media.drawing">
+                            <Rectangle x="0" y="0" width="120" height="60"
                                 fill="#ff0000" stroke=""/>
-                            <drawing:Ellipse x="60" y="30" width="120" height="120"
+                            <Ellipse x="60" y="30" width="120" height="120"
                                 fill="#00ff00" stroke="#000000" strokeThickness="20">
                                 <transforms>
-                                    <drawing:Shape.Translate x="40" y="40"/>
-                                    <drawing:Shape.Scale x="0.5" y="0.5"/>
+                                    <Shape.Translate x="40" y="40"/>
+                                    <Shape.Scale x="0.5" y="0.5"/>
                                 </transforms>
-                            </drawing:Ellipse>
-                            <drawing:Line x="50" y="50" x1="0" y1="0" x2="100" y2="0" strokeThickness="10">
+                            </Ellipse>
+                            <Line x="50" y="50" x1="0" y1="0" x2="100" y2="0" strokeThickness="10">
                                 <transforms>
-                                    <drawing:Shape.Rotate angle="90"/>
+                                    <Shape.Rotate angle="90"/>
                                 </transforms>
-                            </drawing:Line>
-                        </drawing:Canvas>
+                            </Line>
+                            <Path x="100" y="0" stroke="#000000" fill="#aaaaff" strokeThickness="4">
+                                <Path.MoveTo x="20" y="70"/>
+                                <Path.LineTo x="30" y="20"/>
+                                <Path.QuadTo x1="40" y1="10" x2="50" y2="20"/>
+                                <Path.LineTo x="60" y="70"/>
+                                <Path.QuadTo x1="70" y1="80" x2="60" y2="80"/>
+                                <Path.LineTo x="20" y="80"/>
+                                <Path.QuadTo x1="10" y1="80" x2="20" y2="70"/>
+                            </Path>
+                        </Canvas>
                     </canvas>
                 </media:Drawing>
             </image>
