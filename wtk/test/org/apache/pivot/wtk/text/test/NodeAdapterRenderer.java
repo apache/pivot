@@ -19,15 +19,16 @@ package org.apache.pivot.wtk.text.test;
 import java.awt.Color;
 import java.awt.Font;
 
+import org.apache.pivot.collections.Sequence.Tree.Path;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.TreeView;
+import org.apache.pivot.wtk.TreeView.NodeCheckState;
 
 
 public class NodeAdapterRenderer extends Label implements TreeView.NodeRenderer {
     @Override
-    public void render(Object node, TreeView treeView, boolean expanded,
-        boolean selected, TreeView.NodeCheckState checkState,
-        boolean highlighted, boolean disabled) {
+    public void render(Object node, Path path, TreeView treeView, boolean expanded,
+        boolean selected, NodeCheckState checkState, boolean highlighted, boolean disabled) {
         Object labelFont = treeView.getStyles().get("font");
         if (labelFont instanceof Font) {
             getStyles().put("font", labelFont);
