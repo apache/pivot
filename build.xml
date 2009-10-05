@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<project name="pivot" default="build">
+<project name="pivot" default="compile">
     <path id="classpath.javalib">
         <fileset dir="${java.home}/lib" includes="**/*.jar"/>
     </path>
@@ -88,6 +88,15 @@ limitations under the License.
                 </condition>
             </fail>
 
+            <!-- JUnit check -->
+            <fail message="JUnit 4 not found. Please see the BUILD file for more information.">
+                <condition>
+                    <not>
+                        <available classname="org.junit.Test"/>
+                    </not>
+                </condition>
+            </fail>
+
             <mkdir dir="@{project}/${folder.bin}"/>
             <javac srcdir="@{project}/@{srcDir}"
                 destDir="@{project}/${folder.bin}"
@@ -111,19 +120,6 @@ limitations under the License.
         <element name="classpath-elements" optional="true" implicit="true"/>
 
         <sequential>
-            <!-- JUnit check -->
-            <fail message="JUnit 4 not found. Please see the BUILD file for more information.">
-                <condition>
-                    <not>
-                        <available classname="org.junit.Test"/>
-                    </not>
-                </condition>
-            </fail>
-
-            <compile project="@{project}" srcDir="test">
-                <classpath-elements/>
-            </compile>
-
             <echo message="@{project}: Executing test cases"/>
 
             <condition property="test.formatter">
@@ -182,17 +178,25 @@ limitations under the License.
     </macrodef>
 
     <!-- Aggregate targets -->
-    <target name="build" description="Compiles all packages"
+    <target name="compile" description="Compiles all projects"
+        depends="compile-main, compile-test"/>
+
+    <target name="compile-main"
         depends="charts, core, web, wtk, tutorials, demos, tools"/>
 
-    <target name="package"
-        depends="charts-package, core-package, web-package, wtk-package, tutorials-package, demos-package, tools-package"/>
-
-    <target name="test"
+    <target name="compile-test"
         depends="core-test, web-test, wtk-test"/>
 
+    <target name="package"
+        depends="clean, charts-package, core-package, web-package, wtk-package,
+                 tutorials-package, demos-package, tools-package"/>
+
+    <target name="test"
+        depends="core-test-run, web-test-run"/>
+
     <target name="clean" description="Removes all build artifacts"
-        depends="charts-clean, core-clean, web-clean, wtk-clean, tutorials-clean, demos-clean, tools-clean">
+        depends="charts-clean, core-clean, web-clean, wtk-clean, tutorials-clean,
+                 demos-clean, tools-clean">
         <delete dir="${folder.dist}"/>
         <delete dir="${folder.doc}"/>
         <delete dir="${folder.install}"/>
@@ -264,6 +268,13 @@ limitations under the License.
     </target>
 
     <target name="core-test" depends="core">
+        <compile project="core" srcDir="test">
+            <pathelement location="core/${folder.bin}"/>
+            <pathelement location="core/test"/>
+        </compile>
+    </target>
+
+    <target name="core-test-run" depends="core-test">
         <test project="core">
             <pathelement location="core/${folder.bin}"/>
             <pathelement location="core/test"/>
@@ -306,6 +317,14 @@ limitations under the License.
     </target>
 
     <target name="web-test" depends="core, web, wtk">
+        <compile project="web" srcDir="test">
+            <pathelement location="core/${folder.bin}"/>
+            <pathelement location="web/${folder.bin}"/>
+            <fileset dir="web/lib" includes="**/*.jar"/>
+        </compile>
+    </target>
+
+    <target name="web-test-run" depends="core, wtk, web-test">
         <test project="web">
             <pathelement location="core/${folder.bin}"/>
             <pathelement location="web/${folder.bin}"/>
@@ -319,7 +338,8 @@ limitations under the License.
         <fail message="LiveConnect not found. Please see the BUILD file for more information.">
             <condition>
                 <not>
-                    <available classname="netscape.javascript.JSObject" classpathref="classpath.javalib"/>
+                    <available classname="netscape.javascript.JSObject"
+                        classpathref="classpath.javalib"/>
                 </not>
             </condition>
         </fail>
@@ -453,7 +473,7 @@ limitations under the License.
 
     <!-- Package source distribution -->
     <target name="dist" description="Generates source release in ${folder.dist}"
-        depends="trim-whitespace">
+        depends="clean, trim-whitespace">
         <mkdir dir="${folder.dist}/${folder.release}-src"/>
 
         <!-- Copy the source files to the release folder -->
@@ -484,7 +504,8 @@ limitations under the License.
         <tar destfile="${folder.dist}/${folder.release}-src.tar" longfile="gnu">
             <fileset dir="${folder.dist}" includes="${folder.release}-src/**"/>
         </tar>
-        <gzip src="${folder.dist}/${folder.release}-src.tar" destfile="${folder.dist}/${folder.release}-src.tar.gz"/>
+        <gzip src="${folder.dist}/${folder.release}-src.tar"
+            destfile="${folder.dist}/${folder.release}-src.tar.gz"/>
         <delete file="${folder.dist}/${folder.release}-src.tar"/>
         <checksum file="${folder.dist}/${folder.release}-src.tar.gz" algorithm="md5"/>
         <checksum file="${folder.dist}/${folder.release}-src.tar.gz" algorithm="sha"/>
