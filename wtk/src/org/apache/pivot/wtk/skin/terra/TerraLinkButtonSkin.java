@@ -105,7 +105,7 @@ public class TerraLinkButtonSkin extends LinkButtonSkin {
             throw new IllegalArgumentException("font is null.");
         }
 
-        setFont(GraphicsUtilities.decodeFont(font));
+        setFont(decodeFont(font));
     }
 
     public final void setFont(Dictionary<String, ?> font) {
@@ -113,7 +113,7 @@ public class TerraLinkButtonSkin extends LinkButtonSkin {
             throw new IllegalArgumentException("font is null.");
         }
 
-        setFont(GraphicsUtilities.decodeFont(font));
+        setFont(Theme.deriveFont(font));
     }
 
     public Color getColor() {

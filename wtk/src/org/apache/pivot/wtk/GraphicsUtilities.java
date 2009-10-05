@@ -17,7 +17,6 @@
 package org.apache.pivot.wtk;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.LinearGradientPaint;
@@ -31,7 +30,6 @@ import org.apache.pivot.collections.List;
 import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.wtk.Orientation;
-
 
 /**
  * Contains utility methods dealing with the Java2D API.
@@ -65,11 +63,6 @@ public final class GraphicsUtilities {
 
     public static final String STOPS_KEY = "stops";
     public static final String OFFSET_KEY = "offset";
-
-    public static final String NAME_KEY = "name";
-    public static final String SIZE_KEY = "size";
-    public static final String BOLD_KEY = "bold";
-    public static final String ITALIC_KEY = "italic";
 
     private GraphicsUtilities() {
     }
@@ -322,75 +315,5 @@ public final class GraphicsUtilities {
         }
 
         return paint;
-    }
-
-    public static Font decodeFont(String value) {
-        Font font;
-        if (value.startsWith("{")) {
-            try {
-                font = decodeFont(JSONSerializer.parseMap(value));
-            } catch (SerializationException exception) {
-                throw new IllegalArgumentException(exception);
-            }
-        } else {
-            font = Font.decode(value);
-        }
-
-        return font;
-    }
-
-    public static Font decodeFont(Dictionary<String, ?> dictionary) {
-        Font font = Theme.getTheme().getFont();
-
-        String name;
-        if (dictionary.containsKey(NAME_KEY)) {
-            name = (String)dictionary.get(NAME_KEY);
-        } else {
-            name = font.getName();
-        }
-
-        int size;
-        if (dictionary.containsKey(SIZE_KEY)) {
-            Object value = dictionary.get(SIZE_KEY);
-
-            if (value instanceof String) {
-                String string = (String)value;
-
-                if (string.endsWith("%")) {
-                    float percentage = Float.parseFloat(string.substring(0, string.length() - 1)) / 100f;
-                    size = Math.round((float)font.getSize() * percentage);
-                } else {
-                    throw new IllegalArgumentException(value + " is not a valid font size.");
-                }
-            } else {
-                size = (Integer)value;
-            }
-        } else {
-            size = font.getSize();
-        }
-
-        int style = font.getStyle();
-
-        if (dictionary.containsKey(BOLD_KEY)) {
-            boolean bold = (Boolean)dictionary.get(BOLD_KEY);
-
-            if (bold) {
-                style |= Font.BOLD;
-            } else {
-                style &= ~Font.BOLD;
-            }
-        }
-
-        if (dictionary.containsKey(ITALIC_KEY)) {
-            boolean italic = (Boolean)dictionary.get(ITALIC_KEY);
-
-            if (italic) {
-                style |= Font.ITALIC;
-            } else {
-                style &= ~Font.ITALIC;
-            }
-        }
-
-        return new Font(name, style, size);
     }
 }

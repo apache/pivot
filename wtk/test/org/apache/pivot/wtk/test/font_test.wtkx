@@ -21,6 +21,6 @@ limitations under the License.
     xmlns="org.apache.pivot.wtk">
     <content>
         <Label text="Hello, World!"
-            styles="{font:{name:'Times New Roman', size:24, bold:true, italic:true}}"/>
+            styles="{size:24, bold:true, italic:true}}"/>
     </content>
 </Window>

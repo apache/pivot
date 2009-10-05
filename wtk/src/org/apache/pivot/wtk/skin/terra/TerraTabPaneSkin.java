@@ -979,7 +979,7 @@ public class TerraTabPaneSkin extends ContainerSkin
             throw new IllegalArgumentException("font is null.");
         }
 
-        setButtonFont(GraphicsUtilities.decodeFont(buttonFont));
+        setButtonFont(decodeFont(buttonFont));
     }
 
     public final void setButtonFont(Dictionary<String, ?> buttonFont) {
@@ -987,7 +987,7 @@ public class TerraTabPaneSkin extends ContainerSkin
             throw new IllegalArgumentException("font is null.");
         }
 
-        setButtonFont(GraphicsUtilities.decodeFont(buttonFont));
+        setButtonFont(Theme.deriveFont(buttonFont));
     }
 
     public Color getButtonColor() {

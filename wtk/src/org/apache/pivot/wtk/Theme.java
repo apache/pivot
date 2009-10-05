@@ -18,6 +18,7 @@ package org.apache.pivot.wtk;
 
 import java.awt.Font;
 
+import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.util.Service;
 import org.apache.pivot.wtk.media.Image;
@@ -54,6 +55,11 @@ public abstract class Theme {
         new HashMap<Class<? extends Component>, Class<? extends Skin>>();
 
     private static Theme theme = null;
+
+    public static final String NAME_KEY = "name";
+    public static final String SIZE_KEY = "size";
+    public static final String BOLD_KEY = "bold";
+    public static final String ITALIC_KEY = "italic";
 
     public static final String PROVIDER_NAME = "org.apache.pivot.wtk.Theme";
 
@@ -97,5 +103,53 @@ public abstract class Theme {
         }
 
         return theme;
+    }
+
+    public static Font deriveFont(Dictionary<String, ?> dictionary) {
+        Font font = theme.getFont();
+
+        int size;
+        if (dictionary.containsKey(SIZE_KEY)) {
+            Object value = dictionary.get(SIZE_KEY);
+
+            if (value instanceof String) {
+                String string = (String)value;
+
+                if (string.endsWith("%")) {
+                    float percentage = Float.parseFloat(string.substring(0, string.length() - 1)) / 100f;
+                    size = Math.round((float)font.getSize() * percentage);
+                } else {
+                    throw new IllegalArgumentException(value + " is not a valid font size.");
+                }
+            } else {
+                size = (Integer)value;
+            }
+        } else {
+            size = font.getSize();
+        }
+
+        int style = font.getStyle();
+
+        if (dictionary.containsKey(BOLD_KEY)) {
+            boolean bold = (Boolean)dictionary.get(BOLD_KEY);
+
+            if (bold) {
+                style |= Font.BOLD;
+            } else {
+                style &= ~Font.BOLD;
+            }
+        }
+
+        if (dictionary.containsKey(ITALIC_KEY)) {
+            boolean italic = (Boolean)dictionary.get(ITALIC_KEY);
+
+            if (italic) {
+                style |= Font.ITALIC;
+            } else {
+                style &= ~Font.ITALIC;
+            }
+        }
+
+        return font.deriveFont(style, size);
     }
 }

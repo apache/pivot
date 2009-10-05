@@ -581,7 +581,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             throw new IllegalArgumentException("font is null.");
         }
 
-        setFont(GraphicsUtilities.decodeFont(font));
+        setFont(decodeFont(font));
     }
 
     public final void setFont(Dictionary<String, ?> font) {
@@ -589,7 +589,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             throw new IllegalArgumentException("font is null.");
         }
 
-        setFont(GraphicsUtilities.decodeFont(font));
+        setFont(Theme.deriveFont(font));
     }
 
     public Color getColor() {

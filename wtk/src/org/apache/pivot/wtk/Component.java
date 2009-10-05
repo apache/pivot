@@ -1090,18 +1090,6 @@ public abstract class Component implements ConstrainedVisual {
 
         if (previousPreferredWidth != preferredWidth
             || previousPreferredHeight != preferredHeight) {
-            if (preferredWidth != -1
-                && (preferredWidth < minimumPreferredWidth
-                || preferredWidth > maximumPreferredWidth)) {
-                throw new IllegalArgumentException("preferredWidth is outside limits");
-            }
-
-            if (preferredHeight != -1
-                && (preferredHeight < minimumPreferredHeight
-                || preferredHeight > maximumPreferredHeight)) {
-                throw new IllegalArgumentException("preferredHeight is outside limits");
-            }
-
             this.preferredWidth = preferredWidth;
             this.preferredHeight = preferredHeight;
 
@@ -1207,12 +1195,6 @@ public abstract class Component implements ConstrainedVisual {
 
             if (minimumPreferredWidth > maximumPreferredWidth) {
                 throw new IllegalArgumentException("minimumPreferredWidth > maximumPreferredWidth");
-            }
-
-            if (preferredWidth != -1
-                && (preferredWidth < minimumPreferredWidth
-                || preferredWidth > maximumPreferredWidth)) {
-                throw new IllegalArgumentException("preferredWidth is outside limits");
             }
 
             this.minimumPreferredWidth = minimumPreferredWidth;
@@ -1321,12 +1303,6 @@ public abstract class Component implements ConstrainedVisual {
 
             if (minimumPreferredHeight > maximumPreferredHeight) {
                 throw new IllegalArgumentException("minimumPreferredHeight > maximumPreferredHeight");
-            }
-
-            if (preferredHeight != -1
-                && (preferredHeight < minimumPreferredHeight
-                || preferredHeight > maximumPreferredHeight)) {
-                throw new IllegalArgumentException("preferredHeight is outside limits");
             }
 
             this.minimumPreferredHeight = minimumPreferredHeight;

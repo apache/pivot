@@ -16,6 +16,10 @@
  */
 package org.apache.pivot.wtk.skin;
 
+import java.awt.Font;
+
+import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
@@ -37,6 +41,7 @@ import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Skin;
+import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Tooltip;
 
 /**
@@ -347,5 +352,20 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
         if (component != null) {
             component.repaint(x, y, width, height, immediate);
         }
+    }
+
+    public static Font decodeFont(String value) {
+        Font font;
+        if (value.startsWith("{")) {
+            try {
+                font = Theme.deriveFont(JSONSerializer.parseMap(value));
+            } catch (SerializationException exception) {
+                throw new IllegalArgumentException(exception);
+            }
+        } else {
+            font = Font.decode(value);
+        }
+
+        return font;
     }
 }

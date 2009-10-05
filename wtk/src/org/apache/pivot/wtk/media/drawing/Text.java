@@ -30,13 +30,10 @@ import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
 
 import org.apache.pivot.collections.ArrayList;
-import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.Bounds;
-import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Platform;
-
 
 /**
  * Shape representing a block of text.
@@ -121,15 +118,7 @@ public class Text extends Shape {
             throw new IllegalArgumentException("font is null.");
         }
 
-        setFont(GraphicsUtilities.decodeFont(font));
-    }
-
-    public final void setFont(Dictionary<String, ?> font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
-        setFont(GraphicsUtilities.decodeFont(font));
+        setFont(Font.decode(font));
     }
 
     public int getWidth() {

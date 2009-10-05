@@ -47,7 +47,6 @@ import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.Cursor;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Direction;
-import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
@@ -69,7 +68,6 @@ import org.apache.pivot.wtk.text.NodeListener;
 import org.apache.pivot.wtk.text.Paragraph;
 import org.apache.pivot.wtk.text.TextNode;
 import org.apache.pivot.wtk.text.TextNodeListener;
-
 
 /**
  * Text area skin.
@@ -1364,7 +1362,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             throw new IllegalArgumentException("font is null.");
         }
 
-        setFont(GraphicsUtilities.decodeFont(font));
+        setFont(decodeFont(font));
     }
 
     public final void setFont(Dictionary<String, ?> font) {
@@ -1372,7 +1370,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             throw new IllegalArgumentException("font is null.");
         }
 
-        setFont(GraphicsUtilities.decodeFont(font));
+        setFont(Theme.deriveFont(font));
     }
 
     public Insets getMargin() {
