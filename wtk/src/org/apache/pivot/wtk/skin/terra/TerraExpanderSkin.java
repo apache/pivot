@@ -436,7 +436,15 @@ public class TerraExpanderSkin extends ExpanderSkin
             throw new IllegalArgumentException("titleBarFont is null.");
         }
 
-        setTitleBarFont(Font.decode(titleBarFont));
+        setTitleBarFont(GraphicsUtilities.decodeFont(titleBarFont));
+    }
+
+    public final void setTitleBarFont(Dictionary<String, ?> titleBarFont) {
+        if (titleBarFont == null) {
+            throw new IllegalArgumentException("titleBarFont is null.");
+        }
+
+        setTitleBarFont(GraphicsUtilities.decodeFont(titleBarFont));
     }
 
     public Color getTitleBarColor() {

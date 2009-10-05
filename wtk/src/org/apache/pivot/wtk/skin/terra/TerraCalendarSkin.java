@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
+import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.util.CalendarDate;
 import org.apache.pivot.util.Filter;
 import org.apache.pivot.wtk.Bounds;
@@ -708,7 +709,15 @@ public class TerraCalendarSkin extends CalendarSkin
             throw new IllegalArgumentException("font is null.");
         }
 
-        setFont(Font.decode(font));
+        setFont(GraphicsUtilities.decodeFont(font));
+    }
+
+    public final void setFont(Dictionary<String, ?> font) {
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");
+        }
+
+        setFont(GraphicsUtilities.decodeFont(font));
     }
 
     public Color getColor() {

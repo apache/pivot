@@ -25,6 +25,7 @@ import java.awt.Paint;
 import java.awt.RenderingHints;
 import java.awt.geom.Rectangle2D;
 
+import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Checkbox;
 import org.apache.pivot.wtk.Dimensions;
@@ -255,7 +256,15 @@ public class TerraCheckboxSkin extends CheckboxSkin {
             throw new IllegalArgumentException("font is null.");
         }
 
-        setFont(Font.decode(font));
+        setFont(GraphicsUtilities.decodeFont(font));
+    }
+
+    public final void setFont(Dictionary<String, ?> font) {
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");
+        }
+
+        setFont(GraphicsUtilities.decodeFont(font));
     }
 
     public Color getColor() {

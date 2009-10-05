@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 
+import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
@@ -104,7 +105,15 @@ public class TerraLinkButtonSkin extends LinkButtonSkin {
             throw new IllegalArgumentException("font is null.");
         }
 
-        setFont(Font.decode(font));
+        setFont(GraphicsUtilities.decodeFont(font));
+    }
+
+    public final void setFont(Dictionary<String, ?> font) {
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");
+        }
+
+        setFont(GraphicsUtilities.decodeFont(font));
     }
 
     public Color getColor() {

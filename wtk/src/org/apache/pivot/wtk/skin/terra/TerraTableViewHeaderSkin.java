@@ -25,6 +25,7 @@ import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
 
 import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
@@ -402,7 +403,15 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
             throw new IllegalArgumentException("font is null.");
         }
 
-        setFont(Font.decode(font));
+        setFont(GraphicsUtilities.decodeFont(font));
+    }
+
+    public final void setFont(Dictionary<String, ?> font) {
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");
+        }
+
+        setFont(GraphicsUtilities.decodeFont(font));
     }
 
     public Color getColor() {
