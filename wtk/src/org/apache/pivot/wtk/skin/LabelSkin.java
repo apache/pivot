@@ -333,7 +333,15 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
             throw new IllegalArgumentException("font is null.");
         }
 
-        setFont(Font.decode(font));
+        setFont(GraphicsUtilities.decodeFont(font));
+    }
+
+    public final void setFont(Dictionary<String, ?> font) {
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");
+        }
+
+        setFont(GraphicsUtilities.decodeFont(font));
     }
 
     public int getFontSize() {

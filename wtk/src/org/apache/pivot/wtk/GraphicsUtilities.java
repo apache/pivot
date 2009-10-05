@@ -17,6 +17,7 @@
 package org.apache.pivot.wtk;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.LinearGradientPaint;
@@ -64,6 +65,11 @@ public final class GraphicsUtilities {
 
     public static final String STOPS_KEY = "stops";
     public static final String OFFSET_KEY = "offset";
+
+    public static final String NAME_KEY = "name";
+    public static final String SIZE_KEY = "size";
+    public static final String BOLD_KEY = "bold";
+    public static final String ITALIC_KEY = "italic";
 
     private GraphicsUtilities() {
     }
@@ -316,5 +322,62 @@ public final class GraphicsUtilities {
         }
 
         return paint;
+    }
+
+    public static Font decodeFont(String value) {
+        Font font;
+        if (value.startsWith("{")) {
+            try {
+                font = decodeFont(JSONSerializer.parseMap(value));
+            } catch (SerializationException exception) {
+                throw new IllegalArgumentException(exception);
+            }
+        } else {
+            font = Font.decode(value);
+        }
+
+        return font;
+    }
+
+    public static Font decodeFont(Dictionary<String, ?> value) {
+        Font font = Theme.getTheme().getFont();
+
+        String name;
+        if (value.containsKey(NAME_KEY)) {
+            name = (String)value.get(NAME_KEY);
+        } else {
+            name = font.getName();
+        }
+
+        int size;
+        if (value.containsKey(SIZE_KEY)) {
+            size = (Integer)value.get(SIZE_KEY);
+        } else {
+            size = font.getSize();
+        }
+
+        int style = font.getStyle();
+
+        if (value.containsKey(BOLD_KEY)) {
+            boolean bold = (Boolean)value.get(BOLD_KEY);
+
+            if (bold) {
+                style |= Font.BOLD;
+            } else {
+                style &= ~Font.BOLD;
+            }
+        }
+
+        if (value.containsKey(ITALIC_KEY)) {
+            boolean italic = (Boolean)value.get(ITALIC_KEY);
+
+            if (italic) {
+                style |= Font.ITALIC;
+            } else {
+                style &= ~Font.ITALIC;
+            }
+        }
+
+        return new Font(name, style, size);
     }
 }

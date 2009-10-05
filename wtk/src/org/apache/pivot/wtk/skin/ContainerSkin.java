@@ -177,6 +177,14 @@ public abstract class ContainerSkin extends ComponentSkin
         repaintComponent();
     }
 
+    public final void setBackgroundPaint(String backgroundPaint) {
+        if (backgroundPaint == null) {
+            throw new IllegalArgumentException("backgroundPaint is null");
+        }
+
+        setBackgroundPaint(GraphicsUtilities.decodePaint(backgroundPaint));
+    }
+
     public final void setBackgroundPaint(Dictionary<String, ?> backgroundPaint) {
         if (backgroundPaint == null) {
             throw new IllegalArgumentException("backgroundPaint is null");
