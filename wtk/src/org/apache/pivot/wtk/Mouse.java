@@ -119,7 +119,7 @@ public final class Mouse {
 
         Component descendant = null;
         if (location != null) {
-            display.getDescendantAt(location.x, location.y);
+            descendant = display.getDescendantAt(location.x, location.y);
         }
 
         while (descendant != null
