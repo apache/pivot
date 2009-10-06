@@ -133,7 +133,9 @@ public final class Mouse {
             Mouse.setCursor(display);
 
             // Allow the mouse to re-enter the display
-            display.mouseMove(location.x, location.y);
+            if (location != null) {
+                display.mouseMove(location.x, location.y);
+            }
         }
 
         capturer = null;
