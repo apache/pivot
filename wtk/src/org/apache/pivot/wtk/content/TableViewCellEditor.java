@@ -18,8 +18,10 @@ package org.apache.pivot.wtk.content;
 
 import org.apache.pivot.beans.BeanDictionary;
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
@@ -193,19 +195,6 @@ public class TableViewCellEditor implements TableView.RowEditor {
     private RowEditorListenerList rowEditorListeners = new RowEditorListenerList();
 
     /**
-     * Gets the text input that serves as the editor component. This component
-     * will only be non-<tt>null</tt> while editing.
-     *
-     * @return
-     * This editor's component, or <tt>null</tt> if an edit is not in progress
-     *
-     * @see #isEditing()
-     */
-    protected final TextInput getEditor() {
-        return textInput;
-    }
-
-    /**
      * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
@@ -214,10 +203,6 @@ public class TableViewCellEditor implements TableView.RowEditor {
         if (isEditing()) {
             throw new IllegalStateException("Currently editing.");
         }
-
-        this.tableView = tableView;
-        this.rowIndex = rowIndex;
-        this.columnIndex = columnIndex;
 
         boolean isReadOnly = false;
         String columnName = tableView.getColumns().get(columnIndex).getName();
@@ -233,26 +218,35 @@ public class TableViewCellEditor implements TableView.RowEditor {
             rowData = beanDictionary;
         }
 
-        if (isReadOnly) {
-            // Don't initiate the edit
-            this.tableView = null;
-        } else {
-            // Get the data being edited
-            Object cellData = rowData.get(columnName);
+        if (!isReadOnly) {
+            Vote vote = rowEditorListeners.previewEditRow(this, tableView, rowIndex, columnIndex);
 
-            // Create the text input
-            textInput = new TextInput();
-            textInput.setText(cellData == null ? "" : cellData.toString());
-            textInput.getComponentKeyListeners().add(textInputKeyHandler);
+            if (vote == Vote.APPROVE) {
+                this.tableView = tableView;
+                this.rowIndex = rowIndex;
+                this.columnIndex = columnIndex;
 
-            // Create and open the popup
-            popup = new Window(textInput);
-            popup.getWindowStateListeners().add(popupWindowStateHandler);
-            popup.open(tableView.getWindow());
-            reposition();
+                // Get the data being edited
+                Object cellData = rowData.get(columnName);
 
-            textInput.selectAll();
-            textInput.requestFocus();
+                // Create the text input
+                textInput = new TextInput();
+                textInput.setText(cellData == null ? "" : cellData.toString());
+                textInput.getComponentKeyListeners().add(textInputKeyHandler);
+
+                // Create and open the popup
+                popup = new Window(textInput);
+                popup.getWindowStateListeners().add(popupWindowStateHandler);
+                popup.open(tableView.getWindow());
+                reposition();
+
+                textInput.selectAll();
+                textInput.requestFocus();
+
+                rowEditorListeners.rowEditing(this, tableView, rowIndex, columnIndex);
+            } else if (vote == Vote.DENY) {
+                rowEditorListeners.editRowVetoed(this, vote);
+            }
         }
     }
 
@@ -289,36 +283,52 @@ public class TableViewCellEditor implements TableView.RowEditor {
             throw new IllegalStateException();
         }
 
-        List<Object> tableData = (List<Object>)tableView.getTableData();
+        // Save local reference to members variables before they get cleared
+        TableView tableView = this.tableView;
+        int rowIndex = this.rowIndex;
+        int columnIndex = this.columnIndex;
 
-        // Get the row data, represented as a Dictionary
-        Object tableRow = tableData.get(rowIndex);
-        Dictionary<String, Object> rowData;
-        if (tableRow instanceof Dictionary<?, ?>) {
-            rowData = (Dictionary<String, Object>)tableRow;
-        } else {
-            rowData = new BeanDictionary(tableRow);
-        }
-
-        // Update the cell data
+        // Get the changes
         String text = textInput.getText();
         String columnName = tableView.getColumns().get(columnIndex).getName();
-        rowData.put(columnName, text);
 
-        // Notifying the parent will close the popup
-        if (tableData.getComparator() == null) {
-            tableData.update(rowIndex, tableRow);
-        } else {
-            // Save local reference to members variables before they get cleared
-            TableView tableView = this.tableView;
+        // Preview the changes
+        HashMap<String, Object> changes = new HashMap<String, Object>();
+        changes.put(columnName, text);
+        Vote vote = rowEditorListeners.previewSaveChanges(this, tableView, rowIndex,
+            columnIndex, changes);
 
-            tableData.remove(rowIndex, 1);
-            tableData.add(tableRow);
+        if (vote == Vote.APPROVE) {
+            List<Object> tableData = (List<Object>)tableView.getTableData();
 
-            // Re-select the row, and make sure it's visible
-            rowIndex = tableData.indexOf(tableRow);
-            tableView.setSelectedIndex(rowIndex);
-            tableView.scrollAreaToVisible(tableView.getRowBounds(rowIndex));
+            // Get the row data, represented as a Dictionary
+            Object tableRow = tableData.get(rowIndex);
+            Dictionary<String, Object> rowData;
+            if (tableRow instanceof Dictionary<?, ?>) {
+                rowData = (Dictionary<String, Object>)tableRow;
+            } else {
+                rowData = new BeanDictionary(tableRow);
+            }
+
+            // Update the cell data
+            rowData.put(columnName, text);
+
+            // Notifying the parent will close the popup
+            if (tableData.getComparator() == null) {
+                tableData.update(rowIndex, tableRow);
+            } else {
+                tableData.remove(rowIndex, 1);
+                tableData.add(tableRow);
+
+                // Re-select the row, and make sure it's visible
+                rowIndex = tableData.indexOf(tableRow);
+                tableView.setSelectedIndex(rowIndex);
+                tableView.scrollAreaToVisible(tableView.getRowBounds(rowIndex));
+            }
+
+            rowEditorListeners.changesSaved(this, tableView, rowIndex, columnIndex);
+        } else if (vote == Vote.DENY) {
+            rowEditorListeners.saveChangesVetoed(this, vote);
         }
     }
 
@@ -331,7 +341,14 @@ public class TableViewCellEditor implements TableView.RowEditor {
             throw new IllegalStateException();
         }
 
+        // Save local reference to members variables before they get cleared
+        TableView tableView = this.tableView;
+        int rowIndex = this.rowIndex;
+        int columnIndex = this.columnIndex;
+
         popup.close();
+
+        rowEditorListeners.editCancelled(this, tableView, rowIndex, columnIndex);
     }
 
     /**

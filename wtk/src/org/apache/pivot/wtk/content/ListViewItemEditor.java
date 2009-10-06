@@ -18,6 +18,7 @@ package org.apache.pivot.wtk.content;
 
 import org.apache.pivot.collections.List;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
@@ -166,19 +167,6 @@ public class ListViewItemEditor implements ListView.ItemEditor {
     };
 
     /**
-     * Gets the text input that serves as the editor component. This component
-     * will only be non-<tt>null</tt> while editing.
-     *
-     * @return
-     * This editor's component, or <tt>null</tt> if an edit is not in progress
-     *
-     * @see #isEditing()
-     */
-    protected final TextInput getEditor() {
-        return textInput;
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
@@ -187,26 +175,34 @@ public class ListViewItemEditor implements ListView.ItemEditor {
             throw new IllegalStateException("Currently editing.");
         }
 
-        this.listView = listView;
-        this.index = index;
+        Vote vote = itemEditorListeners.previewEditItem(this, listView, index);
 
-        // Get the data being edited
-        List<?> listData = listView.getListData();
-        ListItem listItem = (ListItem)listData.get(index);
+        if (vote == Vote.APPROVE) {
+            this.listView = listView;
+            this.index = index;
+
+            // Get the data being edited
+            List<?> listData = listView.getListData();
+            ListItem listItem = (ListItem)listData.get(index);
 
 
-        textInput = new TextInput();
-        textInput.setText(listItem.getText());
-        textInput.getComponentKeyListeners().add(textInputKeyHandler);
+            textInput = new TextInput();
+            textInput.setText(listItem.getText());
+            textInput.getComponentKeyListeners().add(textInputKeyHandler);
 
-        // Create and open the popup
-        popup = new Window(textInput);
-        popup.getWindowStateListeners().add(popupWindowStateHandler);
-        popup.open(listView.getWindow());
-        reposition();
+            // Create and open the popup
+            popup = new Window(textInput);
+            popup.getWindowStateListeners().add(popupWindowStateHandler);
+            popup.open(listView.getWindow());
+            reposition();
 
-        textInput.selectAll();
-        textInput.requestFocus();
+            textInput.selectAll();
+            textInput.requestFocus();
+
+            itemEditorListeners.itemEditing(this, listView, index);
+        } else if (vote == Vote.DENY) {
+            itemEditorListeners.editItemVetoed(this, vote);
+        }
     }
 
     /**
@@ -267,27 +263,37 @@ public class ListViewItemEditor implements ListView.ItemEditor {
             throw new IllegalStateException();
         }
 
-        List<Object> listData = (List<Object>)listView.getListData();
-        ListItem listItem = (ListItem)listData.get(index);
+        // Save local reference to members variables before they get cleared
+        ListView listView = this.listView;
+        int index = this.index;
 
-        // Update the item data
+        // Preview the changes
         String text = textInput.getText();
-        listItem.setText(text);
+        Vote vote = itemEditorListeners.previewSaveChanges(this, listView, index, text);
 
-        // Notifying the parent will close the popup
-        if (listData.getComparator() == null) {
-            listData.update(index, listItem);
-        } else {
-            // Save local reference to members variables before they get cleared
-            ListView listView = this.listView;
+        if (vote == Vote.APPROVE) {
+            List<Object> listData = (List<Object>)listView.getListData();
+            ListItem listItem = (ListItem)listData.get(index);
 
-            listData.remove(index, 1);
-            listData.add(listItem);
+            // Update the item data
+            listItem.setText(text);
 
-            // Re-select the item, and make sure it's visible
-            index = listData.indexOf(listItem);
-            listView.setSelectedIndex(index);
-            listView.scrollAreaToVisible(listView.getItemBounds(index));
+            // Notifying the parent will close the popup
+            if (listData.getComparator() == null) {
+                listData.update(index, listItem);
+            } else {
+                listData.remove(index, 1);
+                listData.add(listItem);
+
+                // Re-select the item, and make sure it's visible
+                index = listData.indexOf(listItem);
+                listView.setSelectedIndex(index);
+                listView.scrollAreaToVisible(listView.getItemBounds(index));
+            }
+
+            itemEditorListeners.changesSaved(this, listView, index);
+        } else if (vote == Vote.DENY) {
+            itemEditorListeners.saveChangesVetoed(this, vote);
         }
     }
 
@@ -300,7 +306,13 @@ public class ListViewItemEditor implements ListView.ItemEditor {
             throw new IllegalStateException();
         }
 
+        // Save local reference to members variables before they get cleared
+        ListView listView = this.listView;
+        int index = this.index;
+
         popup.close();
+
+        itemEditorListeners.editCancelled(this, listView, index);
     }
 
     @Override

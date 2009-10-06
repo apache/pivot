@@ -20,6 +20,7 @@ import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.collections.Sequence.Tree.Path;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
@@ -198,19 +199,6 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
     private NodeEditorListenerList nodeEditorListeners = new NodeEditorListenerList();
 
     /**
-     * Gets the text input that serves as the editor component. This component
-     * will only be non-<tt>null</tt> while editing.
-     *
-     * @return
-     * This editor's component, or <tt>null</tt> if an edit is not in progress
-     *
-     * @see #isEditing()
-     */
-    protected final TextInput getEditor() {
-        return textInput;
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
@@ -219,24 +207,32 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
             throw new IllegalStateException();
         }
 
-        this.treeView = treeView;
-        this.path = path;
+        Vote vote = nodeEditorListeners.previewEditNode(this, treeView, path);
 
-        // Get the data being edited
-        List<?> treeData = treeView.getTreeData();
-        TreeNode nodeData = (TreeNode)Sequence.Tree.get(treeData, path);
+        if (vote == Vote.APPROVE) {
+            this.treeView = treeView;
+            this.path = path;
 
-        textInput = new TextInput();
-        textInput.setText(nodeData.getText());
-        textInput.getComponentKeyListeners().add(textInputKeyHandler);
+            // Get the data being edited
+            List<?> treeData = treeView.getTreeData();
+            TreeNode nodeData = (TreeNode)Sequence.Tree.get(treeData, path);
 
-        popup = new Window(textInput);
-        popup.getWindowStateListeners().add(popupStateHandler);
-        popup.open(treeView.getWindow());
-        reposition();
+            textInput = new TextInput();
+            textInput.setText(nodeData.getText());
+            textInput.getComponentKeyListeners().add(textInputKeyHandler);
 
-        textInput.selectAll();
-        textInput.requestFocus();
+            popup = new Window(textInput);
+            popup.getWindowStateListeners().add(popupStateHandler);
+            popup.open(treeView.getWindow());
+            reposition();
+
+            textInput.selectAll();
+            textInput.requestFocus();
+
+            nodeEditorListeners.nodeEditing(this, treeView, path);
+        } else if (vote == Vote.DENY) {
+            nodeEditorListeners.editNodeVetoed(this, vote);
+        }
     }
 
     /**
@@ -298,40 +294,48 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
             throw new IllegalStateException();
         }
 
-        List<?> treeData = treeView.getTreeData();
-        TreeNode treeNode = (TreeNode)Sequence.Tree.get(treeData, path);
+        // Save local reference to members variables before they get cleared
+        TreeView treeView = this.treeView;
+        Path path = this.path;
 
-        // Update the node data
+        // Preview the changes
         String text = textInput.getText();
-        treeNode.setText(text);
+        Vote vote = nodeEditorListeners.previewSaveChanges(this, treeView, path, text);
 
-        // Get a reference to the parent of the node data
-        int n = path.getLength();
-        List<TreeNode> parentData;
+        if (vote == Vote.APPROVE) {
+            // Update the node data
+            List<?> treeData = treeView.getTreeData();
+            TreeNode treeNode = (TreeNode)Sequence.Tree.get(treeData, path);
+            treeNode.setText(text);
 
-        if (n == 1) {
-            parentData = (List<TreeNode>)treeData;
-        } else {
-            Path parentPath = new Path(path, n - 1);
-            parentData = (List<TreeNode>)Sequence.Tree.get(treeData, parentPath);
-        }
+            // Get a reference to the parent of the node data
+            int n = path.getLength();
+            List<TreeNode> parentData;
 
-        // Notifying the parent will close the popup
-        if (parentData.getComparator() == null) {
-            parentData.update(path.get(n - 1), treeNode);
-        } else {
-            // Save local reference to members variables before they get cleared
-            TreeView treeView = this.treeView;
-            Path path = this.path;
+            if (n == 1) {
+                parentData = (List<TreeNode>)treeData;
+            } else {
+                Path parentPath = new Path(path, n - 1);
+                parentData = (List<TreeNode>)Sequence.Tree.get(treeData, parentPath);
+            }
 
-            parentData.remove(path.get(n - 1), 1);
-            parentData.add(treeNode);
+            // Notifying the parent will close the popup
+            if (parentData.getComparator() == null) {
+                parentData.update(path.get(n - 1), treeNode);
+            } else {
+                parentData.remove(path.get(n - 1), 1);
+                parentData.add(treeNode);
 
-            // Re-select the node, and make sure it's visible
-            Path newPath = new Path(path, n - 1);
-            newPath.add(parentData.indexOf(treeNode));
-            treeView.setSelectedPath(newPath);
-            treeView.scrollAreaToVisible(treeView.getNodeBounds(newPath));
+                // Re-select the node, and make sure it's visible
+                path = new Path(path, n - 1);
+                path.add(parentData.indexOf(treeNode));
+                treeView.setSelectedPath(path);
+                treeView.scrollAreaToVisible(treeView.getNodeBounds(path));
+            }
+
+            nodeEditorListeners.changesSaved(this, treeView, path);
+        } else if (vote == Vote.DENY) {
+            nodeEditorListeners.saveChangesVetoed(this, vote);
         }
     }
 
@@ -344,7 +348,13 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
             throw new IllegalStateException();
         }
 
+        // Save local reference to members variables before they get cleared
+        TreeView treeView = this.treeView;
+        Path path = this.path;
+
         popup.close();
+
+        nodeEditorListeners.editCancelled(this, treeView, path);
     }
 
     /**

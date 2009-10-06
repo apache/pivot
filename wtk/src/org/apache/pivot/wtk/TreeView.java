@@ -243,7 +243,8 @@ public class TreeView extends Component {
             }
 
             @Override
-            public Vote previewSaveChanges(NodeEditor nodeEditor, TreeView treeView, Path path, Object changes) {
+            public Vote previewSaveChanges(NodeEditor nodeEditor, TreeView treeView, Path path,
+                Object changes) {
                 return Vote.APPROVE;
             }
 
