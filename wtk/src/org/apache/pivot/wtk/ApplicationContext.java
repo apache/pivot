@@ -1372,13 +1372,12 @@ public abstract class ApplicationContext {
         private Runnable callback;
         private QueuedCallback queuedCallback = null;
 
-        private ScheduledCallback(final Runnable callback) {
+        private ScheduledCallback(Runnable callback) {
             this.callback = callback;
         }
 
         @Override
         public void run() {
-            // Cancel any outstanding callback
             if (queuedCallback != null) {
                 queuedCallback.cancel();
             }
@@ -1388,7 +1387,6 @@ public abstract class ApplicationContext {
 
         @Override
         public boolean cancel() {
-            // Cancel any outstanding callback
             if (queuedCallback != null) {
                 queuedCallback.cancel();
             }
@@ -1402,7 +1400,7 @@ public abstract class ApplicationContext {
      */
     public static class QueuedCallback implements Runnable {
         private Runnable callback;
-        private boolean executed = false;
+        private volatile boolean executed = false;
         private volatile boolean canceled = false;
 
         private QueuedCallback(Runnable callback) {
@@ -1421,7 +1419,7 @@ public abstract class ApplicationContext {
             }
         }
 
-        public synchronized boolean cancel() {
+        public boolean cancel() {
             canceled = true;
             return (!executed);
         }

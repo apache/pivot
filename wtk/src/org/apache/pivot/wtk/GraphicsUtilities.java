@@ -252,8 +252,8 @@ public final class GraphicsUtilities {
                 float startY = JSONSerializer.getFloat(dictionary, START_Y_KEY);
                 float endX = JSONSerializer.getFloat(dictionary, END_X_KEY);
                 float endY = JSONSerializer.getFloat(dictionary, END_Y_KEY);
-                Color startColor = Color.decode(JSONSerializer.getString(dictionary, START_COLOR_KEY));
-                Color endColor = Color.decode(JSONSerializer.getString(dictionary, END_COLOR_KEY));
+                Color startColor = decodeColor(JSONSerializer.getString(dictionary, START_COLOR_KEY));
+                Color endColor = decodeColor(JSONSerializer.getString(dictionary, END_COLOR_KEY));
                 paint = new GradientPaint(startX, startY, startColor, endX, endY, endColor);
                 break;
             }
@@ -276,7 +276,7 @@ public final class GraphicsUtilities {
                     float offset = JSONSerializer.getFloat(stop, OFFSET_KEY);
                     fractions[i] = offset;
 
-                    Color color = Color.decode(JSONSerializer.getString(stop, COLOR_KEY));
+                    Color color = decodeColor(JSONSerializer.getString(stop, COLOR_KEY));
                     colors[i] = color;
                 }
 
@@ -301,7 +301,7 @@ public final class GraphicsUtilities {
                     float offset = JSONSerializer.getFloat(stop, OFFSET_KEY);
                     fractions[i] = offset;
 
-                    Color color = Color.decode(JSONSerializer.getString(stop, COLOR_KEY));
+                    Color color = decodeColor(JSONSerializer.getString(stop, COLOR_KEY));
                     colors[i] = color;
                 }
 
