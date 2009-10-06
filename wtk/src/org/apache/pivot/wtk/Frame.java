@@ -87,10 +87,7 @@ public class Frame extends Window {
 
     @Override
     protected void descendantGainedFocus(Component descendant, Component previousFocusedComponent) {
-        // If the focus descendant changed, walk down descendant hierarchy and
-        // call configureMenuBar()
-        if (menuBar != null
-            && getFocusDescendant() != descendant) {
+        if (menuBar != null) {
             LinkedList<Component> path = new LinkedList<Component>();
 
             Component ancestor = descendant;
@@ -113,13 +110,7 @@ public class Frame extends Window {
 
     @Override
     protected void descendantLostFocus(Component descendant) {
-        // If the focus changed within this window, walk down descendant
-        // hierarchy and call configureMenuBar()
-        Component focusedComponent = getFocusedComponent();
-
-        if (menuBar != null
-            && focusedComponent != null
-            && focusedComponent.getWindow() == this) {
+        if (menuBar != null) {
             LinkedList<Component> path = new LinkedList<Component>();
 
             Component ancestor = descendant;

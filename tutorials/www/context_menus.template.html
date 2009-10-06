@@ -98,7 +98,9 @@ deployJava.writeAppletTag(attributes, parameters);
 &lt;/Window&gt;
 </pre>
 
-<p>The Java source is shown below. The application class defines an anonymous inner class instance that extends <tt>MenuHandler.Adapter</tt> and overrides the <tt>configureContextMenu()</tt> method to add a menu section containing a single "What is this?" menu item. When the item is pressed, a prompt is displayed containing a description of the selected item:</p>
+<p>The Java source is shown below. The application class defines an anonymous inner class instance that extends <tt>MenuHandler.Adapter</tt> and overrides the <tt>configureContextMenu()</tt> method to add a menu section containing a single "What is this?" menu item. The Pivot platform handles the details of detecting the right click and instantiating and configuring the menu popup. It walks the ancestry of the component over which the mouse click occurred from the top down, calling <tt>configureContextMenu()</tt> for each menu handler it encounters along the way. This allows handlers attached to sub-components to override any menu configuration performed by an ancestor.</p>
+
+<p><tt>Menu.Item</tt> is actually a subclass of <tt>Button</tt>, so it can be assigned an <tt>Action</tt> like any other button. The example code below creates an <tt>Action</tt> that displays a prompt containing a description of the selected item when the item is pressed:</p>
 
 <pre class="brush:java">
 package org.apache.pivot.tutorials.menus;
@@ -173,8 +175,6 @@ public class ContextMenus implements Application {
     }
 }
 </pre>
-
-<p>The Pivot platform handles the details of detecting the right click and instantiating and configuring the menu popup. It walks the ancestry of the component over which the mouse click occurred from the top down, calling <tt>configureContextMenu()</tt> for each menu handler it encounters along the way. This allows handlers attached to sub-components to override any menu configuration performed by an ancestor.</p>
 
 <p>When the menu closes, the platform takes care of cleaning up the menu instance - no further interaction by the handler is required.</p>
 

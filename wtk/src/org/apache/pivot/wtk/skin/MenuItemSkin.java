@@ -134,11 +134,13 @@ public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListen
     }
 
     @Override
-    public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-        boolean consumed = super.mouseClick(component, button, x, y, count);
+    public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+        boolean consumed = super.mouseDown(component, button, x, y);
 
         Menu.Item menuItem = (Menu.Item)getComponent();
-        menuItem.press();
+        if (menuItem.isActive()) {
+            menuItem.press();
+        }
 
         return consumed;
     }
