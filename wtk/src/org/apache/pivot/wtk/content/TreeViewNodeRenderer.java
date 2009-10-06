@@ -65,7 +65,7 @@ public class TreeViewNodeRenderer extends BoxPane implements TreeView.NodeRender
     }
 
     @Override
-    public void render(Object node, Path path, TreeView treeView, boolean expanded,
+    public void render(Object node, Path path, int rowIndex, TreeView treeView, boolean expanded,
         boolean selected, TreeView.NodeCheckState checkState,
         boolean highlighted, boolean disabled) {
         if (node != null) {

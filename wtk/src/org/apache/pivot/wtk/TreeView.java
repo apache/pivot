@@ -100,6 +100,10 @@ public class TreeView extends Component {
          * The path to the node being rendered, or <tt>null</tt> if
          * <tt>node</tt> is <tt>null</tt>.
          *
+         * @param rowIndex
+         * The row index of the node being rendered, as seen in the current
+         * visible nodes list, or <tt>-1</tt> if <tt>node</tt> is <tt>null</tt>.
+         *
          * @param treeView
          * The tree view that contains the node.
          *
@@ -118,8 +122,9 @@ public class TreeView extends Component {
          * @param disabled
          * <tt>true</tt> if the node is disabled; <tt>false</tt> otherwise.
          */
-        public void render(Object node, Path path, TreeView treeView, boolean expanded,
-            boolean selected, NodeCheckState checkState, boolean highlighted, boolean disabled);
+        public void render(Object node, Path path, int rowIndex, TreeView treeView,
+            boolean expanded, boolean selected, NodeCheckState checkState,
+            boolean highlighted, boolean disabled);
     }
 
     /**
@@ -406,9 +411,23 @@ public class TreeView extends Component {
          * of that branch has depth 2, etc.
          *
          * @return
-         * The indent in pixels.
+         * The indent in pixels to the node's content.
          */
         public int getNodeIndent(int depth);
+
+        /**
+         * Gets the row index of the node, as seen in the current visible nodes
+         * list. Note that as branches are expanded and collapsed, the row
+         * index of any given node in the tree will change.
+         *
+         * @param path
+         * The path to the node.
+         *
+         * @return
+         * The row index of the node, or <tt>-1</tt> if the node is not
+         * currently visible.
+         */
+        public int getRowIndex(Path path);
     }
 
     /**
@@ -2007,6 +2026,23 @@ public class TreeView extends Component {
     public int getNodeIndent(int depth) {
         TreeView.Skin treeViewSkin = (TreeView.Skin)getSkin();
         return treeViewSkin.getNodeIndent(depth);
+    }
+
+    /**
+     * Gets the row index of the node, as seen in the current visible nodes
+     * list. Note that as branches are expanded and collapsed, the row
+     * index of any given node in the tree will change.
+     *
+     * @param path
+     * The path to the node.
+     *
+     * @return
+     * The row index of the node, or <tt>-1</tt> if the node is not
+     * currently visible.
+     */
+    public int getRowIndex(Path path) {
+        TreeView.Skin treeViewSkin = (TreeView.Skin)getSkin();
+        return treeViewSkin.getRowIndex(path);
     }
 
     /**

@@ -251,7 +251,7 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
 
         // Render the node data
         TreeViewNodeRenderer nodeRenderer = (TreeViewNodeRenderer)treeView.getNodeRenderer();
-        nodeRenderer.render(nodeData, path, treeView, false, false,
+        nodeRenderer.render(nodeData, path, treeView.getRowIndex(path), treeView, false, false,
             TreeView.NodeCheckState.UNCHECKED, false, false);
         nodeRenderer.setSize(nodeBounds.width, nodeBounds.height);
 

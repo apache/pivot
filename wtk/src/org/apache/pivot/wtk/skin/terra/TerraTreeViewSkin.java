@@ -159,6 +159,20 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         }
 
         /**
+         * Gets the index of the node last returned by a call to
+         * {@link #next()}, as seen in the current visible nodes list. Note
+         * that as branches are expanded and collapsed, the row index of any
+         * given node in the tree will change.
+         *
+         * @return
+         * The row index of the current node, or <tt>-1</tt> if <tt>next()</tt>
+         * has not yet been called.
+         */
+        public int getRowIndex() {
+            return (path == null ? -1 : index - 1);
+        }
+
+        /**
          * Gets the path of the node last returned by a call to {@link #next()}.
          *
          * @return
@@ -491,8 +505,9 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
             int nodeWidth = (nodeInfo.depth - 1) * (indent + spacing);
 
-            nodeRenderer.render(nodeInfo.data, visibleNodeIterator.getPath(), treeView,
-                false, false, TreeView.NodeCheckState.UNCHECKED, false, false);
+            nodeRenderer.render(nodeInfo.data, visibleNodeIterator.getPath(),
+                visibleNodeIterator.getRowIndex(), treeView, false, false,
+                TreeView.NodeCheckState.UNCHECKED, false, false);
             nodeWidth += nodeRenderer.getPreferredWidth(-1);
 
             preferredWidth = Math.max(preferredWidth, nodeWidth);
@@ -673,8 +688,9 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             // Paint the node data
             Graphics2D rendererGraphics = (Graphics2D)graphics.create(nodeX, nodeY,
                 nodeWidth, nodeHeight);
-            nodeRenderer.render(nodeInfo.data, visibleNodeIterator.getPath(), treeView,
-                expanded, selected, checkState, highlighted, disabled);
+            nodeRenderer.render(nodeInfo.data, visibleNodeIterator.getPath(),
+                visibleNodeIterator.getRowIndex(), treeView, expanded, selected,
+                checkState, highlighted, disabled);
             nodeRenderer.setSize(nodeWidth, nodeHeight);
             nodeRenderer.paint(rendererGraphics);
             rendererGraphics.dispose();
@@ -1147,7 +1163,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     protected int getNodeHeight() {
         TreeView treeView = (TreeView)getComponent();
         TreeView.NodeRenderer nodeRenderer = treeView.getNodeRenderer();
-        nodeRenderer.render(null, null, treeView, false, false,
+        nodeRenderer.render(null, null, -1, treeView, false, false,
             TreeView.NodeCheckState.UNCHECKED, false, false);
 
         int nodeHeight = nodeRenderer.getPreferredHeight(-1);
@@ -1834,8 +1850,15 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
     @Override
     public Bounds getNodeBounds(Path path) {
+        Bounds nodeBounds = null;
+
         NodeInfo nodeInfo = getNodeInfoAt(path);
-        return getNodeBounds(nodeInfo);
+
+        if (nodeInfo != null) {
+            nodeBounds = getNodeBounds(nodeInfo);
+        }
+
+        return nodeBounds;
     }
 
     @Override
@@ -1853,6 +1876,19 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         }
 
         return nodeIndent;
+    }
+
+    @Override
+    public int getRowIndex(Path path) {
+        int rowIndex = -1;
+
+        NodeInfo nodeInfo = getNodeInfoAt(path);
+
+        if (nodeInfo != null) {
+            rowIndex = visibleNodes.indexOf(nodeInfo);
+        }
+
+        return rowIndex;
     }
 
     // TreeViewListener methods
