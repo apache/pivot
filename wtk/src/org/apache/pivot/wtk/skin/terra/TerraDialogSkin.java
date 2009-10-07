@@ -51,8 +51,12 @@ public class TerraDialogSkin extends TerraFrameSkin implements DialogStateListen
             int y = Math.max(0, Math.round(ancestor.getY() + GOLDEN_SECTION * deltaHeight));
 
             dialog.setLocation(x, y);
+
+            queuedCallback = null;
         }
     }
+
+    private ApplicationContext.QueuedCallback queuedCallback = null;
 
     private ContainerMouseListener displayMouseListener = new ContainerMouseListener.Adapter() {
         @Override
@@ -184,7 +188,7 @@ public class TerraDialogSkin extends TerraFrameSkin implements DialogStateListen
             Component.clearFocus();
         }
 
-        ApplicationContext.queueCallback(new RepositionCallback());
+        queuedCallback = ApplicationContext.queueCallback(new RepositionCallback());
     }
 
     @Override
@@ -192,6 +196,11 @@ public class TerraDialogSkin extends TerraFrameSkin implements DialogStateListen
         super.windowClosed(window, display, owner);
 
         display.getContainerMouseListeners().remove(displayMouseListener);
+
+        if (queuedCallback != null) {
+            queuedCallback.cancel();
+            queuedCallback = null;
+        }
     }
 
     @Override
