@@ -44,9 +44,10 @@ var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApple
     width:480,
     height:360
 };
-var parameters = {application_class_name:"org.apache.pivot.tutorials.navigation.ScrollPanes",
+var parameters = {application_class_name:"org.apache.pivot.wtk.ScriptApplication",
     codebase_lookup:false,
-    java_arguments:"-Dsun.awt.noerasebackground=true -Dsun.awt.erasebackgroundonresize=true"
+    java_arguments:"-Dsun.awt.noerasebackground=true -Dsun.awt.erasebackgroundonresize=true",
+    startup_properties:"src=org/apache/pivot/tutorials/navigation/scroll_panes.wtkx"
 };
 deployJava.writeAppletTag(attributes, parameters);
 </script>
@@ -83,46 +84,7 @@ deployJava.writeAppletTag(attributes, parameters);
 
 <p>The column header is commonly used to display a <tt>TableViewHeader</tt> component for a <tt>TableView</tt>, discussed in more detail in the <a href="table_views.html">Table Views</a> section. In this example, the header components are set to instances of a custom <tt>Ruler</tt> component that displays a tick mark every 5 pixels.</p>
 
-<p>The Java source for this example is as follows, and simply serves to load the WTKX:</p>
-
-<pre class="brush:java">
-package org.apache.pivot.tutorials.navigation;
-
-import org.apache.pivot.collections.Map;
-import org.apache.pivot.wtk.Application;
-import org.apache.pivot.wtk.DesktopApplicationContext;
-import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKXSerializer;
-
-public class ScrollPanes implements Application {
-    private Window window = null;
-
-    public void startup(Display display, Map&lt;String, String&gt; properties) throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "scroll_panes.wtkx");
-        window.open(display);
-    }
-
-    public boolean shutdown(boolean optional) {
-        if (window != null) {
-            window.close();
-        }
-
-        return false;
-    }
-
-    public void suspend() {
-    }
-
-    public void resume() {
-    }
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(ScrollPanes.class, args);
-    }
-}
-</pre>
+<p>Since this example contains no logic, there is no associated Java source.</p>
 
 <p>Next: <a href="panoramas.html">Panoramas</a></p>
 </body>

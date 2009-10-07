@@ -38,13 +38,13 @@ limitations under the License.
 
 <p>Like all other components, menu bars can actually be placed anywhere in an application's user interface. However, they are most often located at the top of an application's main window. Pivot provides framework-level support for simplifying the task of defining a menu bar positioned in this way. The <tt>Frame</tt> class defines a "menuBar" property that is handled specially by the application using the <tt>configureMenuBar()</tt> and <tt>cleanupMenuBar()</tt> methods of the <tt>MenuHandler</tt> interface. These methods are called by the framework as the focus changes within a window, to allow the application to customize the contents of the menu bar based on the currently focused component.</p>
 
-<p>The example application below shows a menu bar containing two common top-level menu items: "File" and "Edit":</p>
+<p>The example application below shows a menu bar containing two common top-level menu items: "File" and "Edit" (note that the applet is signed since it makes use of the <tt>FileBrowserSheet</tt> component, which requires access to the local file system):</p>
 
 <script>
 var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
-    archive:"lib/@project_name@-core-@version@.jar,lib/@project_name@-wtk-@version@.jar,lib/@project_name@-wtk-@version@.terra.jar,lib/@project_name@-tutorials-@version@.jar",
-    width:480,
-    height:360
+    archive:"lib/@project_name@-core-@version@.signed.jar,lib/@project_name@-wtk-@version@.signed.jar,lib/@project_name@-wtk-@version@.terra.signed.jar,lib/@project_name@-tutorials-@version@.signed.jar",
+    width:640,
+    height:480
 };
 var parameters = {application_class_name:"org.apache.pivot.tutorials.menus.MenuBars",
     codebase_lookup:false,

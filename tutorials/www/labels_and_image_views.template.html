@@ -109,6 +109,10 @@ public class Labels implements Application {
 }
 </pre>
 
+<p>In fact, because this application does not include any special logic, it could actually have been launched using the <tt>org.apache.pivot.wtk.ScriptApplication</tt> class. This class, which is included with the Pivot platform, implements the <tt>Application</tt> interface and takes the name of a WTKX file to launch as a startup property. The WTKX file is expected to contain a root element representing a <tt>Window</tt> subclass.</p>
+
+<p>The class is named <tt>ScriptApplication</tt> because it is often used to launch applications whose logic is defined entirely in script; however, it can actually be used to launch any application whose main window is defined in a single WTKX file. Many of the examples in the following sections are launched using this class.</p>
+
 <p>Next: <a href="buttons.html">Buttons</a></p>
 </body>
 </html>

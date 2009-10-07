@@ -42,9 +42,10 @@ var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApple
     height:80,
     style:"border:solid 1px #999999"
 };
-var parameters = {application_class_name:"org.apache.pivot.tutorials.buttons.ToggleButtons",
+var parameters = {application_class_name:"org.apache.pivot.wtk.ScriptApplication",
     codebase_lookup:false,
-    java_arguments:"-Dsun.awt.noerasebackground=true -Dsun.awt.erasebackgroundonresize=true"
+    java_arguments:"-Dsun.awt.noerasebackground=true -Dsun.awt.erasebackgroundonresize=true",
+    startup_properties:"src=org/apache/pivot/tutorials/buttons/toggle_buttons.wtkx"
 };
 deployJava.writeAppletTag(attributes, parameters);
 </script>
@@ -79,52 +80,13 @@ deployJava.writeAppletTag(attributes, parameters);
 &lt;/Window&gt;
 </pre>
 
-<p>The Java source is as follows. It simply loads the WTKX source and displays the window; there's no additional logic involved:</p>
-
-<pre class="brush:java">
-package org.apache.pivot.tutorials.buttons;
-
-import org.apache.pivot.collections.Map;
-import org.apache.pivot.wtk.Application;
-import org.apache.pivot.wtk.DesktopApplicationContext;
-import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKXSerializer;
-
-public class ToggleButtons implements Application {
-    private Window window = null;
-
-    public void startup(Display display, Map&lt;String, String&gt; properties)
-        throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "toggle_buttons.wtkx");
-        window.open(display);
-    }
-
-    public boolean shutdown(boolean optional) {
-        if (window != null) {
-            window.close();
-        }
-
-        return false;
-    }
-
-    public void suspend() {
-    }
-
-    public void resume() {
-    }
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(ToggleButtons.class, args);
-    }
-}</pre>
-
 <p>Note that the push buttons in the example display both an icon and a text label. The data for each button is specified as an instance of <tt>pivot.wtk.content.ButtonData</tt>, which defines "icon" and "text" properties. In addition to simple string data, the default button data renderer is also capable of displaying button data provided in this manner.</p>
 
 <p>Note also that the values of the "icon" attributes do not begin with an '@' symbol. In WTKX, image URLs are commonly specified with this prefix, to indicate that an image's location is relative to the WTKX source file currently being loaded. An image path without an '@' prefix, such as those in this example, is generally treated as an absolute location relative to the application's classpath.</p>
 
 <p>Finally, note that the buttons' states are all managed independently: clicking one button does not affect the selection state of the others. This is because the buttons are not part of a group. Had the buttons all been assigned to the same group, only a single button would be selected at a time, and clicking one button would automatically deselect the previously selected button.</p>
+
+<p>Because this application doesn't require any special logic, there is no Java source for this example; the example is launched using the <tt>org.apache.pivot.wtk.ScriptApplication</tt> class.</p>
 
 <p>Next: <a href="radio_buttons.html">Radio Buttons</a></p>
 </body>

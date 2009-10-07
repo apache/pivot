@@ -86,7 +86,7 @@ deployJava.writeAppletTag(attributes, parameters);
 &lt;/Window&gt;
 </pre>
 
-<p>The Java source for this is extremely simple. It serves only to load and display the content defined in the WTKX source:</p>
+<p>The Java source for this is extremely simple. It loads the WTKX source, and then simply attaches an expander listener that ensures that the entire expander is visible when it becomes expanded:</p>
 
 <pre class="brush:java">
 package org.apache.pivot.tutorials.navigation;

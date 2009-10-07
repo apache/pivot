@@ -33,7 +33,247 @@ limitations under the License.
 </head>
 <body>
 <h1>Menu Buttons</h1>
-This section is not yet complete.
+
+<p>Menu buttons are similar to <a href="list_buttons.html">list buttons</a>, but provide access to "drop-down" menus rather than list views. They are often used in toolbars, but can be placed anywhere within an application's user interface.</p>
+
+<p>The following sample application demonstrates the use of a menu button. The application's toolbar contains a menu button containing a list of shapes, and a list button containing a list of colors. Selecting an item from the shape menu button adds the selected shape to the drawing shown in the application's content area:</p>
+
+<script>
+var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
+    archive:"lib/@project_name@-core-@version@.jar,lib/@project_name@-wtk-@version@.jar,lib/@project_name@-wtk-@version@.terra.jar,lib/@project_name@-tutorials-@version@.jar",
+    width:640,
+    height:480
+};
+var parameters = {application_class_name:"org.apache.pivot.tutorials.menus.MenuButtons",
+    codebase_lookup:false,
+    java_arguments:"-Dsun.awt.noerasebackground=true -Dsun.awt.erasebackgroundonresize=true"
+};
+deployJava.writeAppletTag(attributes, parameters);
+</script>
+
+<p>The WTKX source for the application is as follows:</p>
+
+<pre class="brush:xml">
+&lt;Window title="Menu Buttons" maximized="true"
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:collections="org.apache.pivot.collections"
+    xmlns:content="org.apache.pivot.wtk.content"
+    xmlns="org.apache.pivot.wtk"&gt;
+    &lt;content&gt;
+        &lt;Border&gt;
+            &lt;content&gt;
+                &lt;TablePane styles="{verticalSpacing:2}"&gt;
+                    &lt;columns&gt;
+                        &lt;TablePane.Column width="1*"/&gt;
+                    &lt;/columns&gt;
+                    &lt;rows&gt;
+                        &lt;TablePane.Row height="-1"&gt;
+                            &lt;BoxPane styles="{fill:true}"&gt;
+                                &lt;MenuButton&gt;
+                                    &lt;buttonData&gt;
+                                        &lt;content:ButtonData icon="@shape_square_add.png" text="New Shape"/&gt;
+                                    &lt;/buttonData&gt;
+                                    &lt;menu&gt;
+                                        &lt;Menu&gt;
+                                            &lt;sections&gt;
+                                                &lt;Menu.Section&gt;
+                                                    &lt;Menu.Item buttonData="Circle" action="newCircle"/&gt;
+                                                    &lt;Menu.Item buttonData="Square" action="newSquare"/&gt;
+                                                    &lt;Menu.Item buttonData="Text" action="newText"/&gt;
+                                                &lt;/Menu.Section&gt;
+                                            &lt;/sections&gt;
+                                        &lt;/Menu&gt;
+                                    &lt;/menu&gt;
+                                &lt;/MenuButton&gt;
+
+                                &lt;ListButton wtkx:id="colorListButton" selectedIndex="0" styles="{listSize:6}"&gt;
+                                    &lt;listData&gt;
+                                        &lt;collections:ArrayList&gt;
+                                            &lt;content:ColorItem color="#000000" name="Black"/&gt;
+                                            &lt;content:ColorItem color="#0000AA" name="Blue"/&gt;
+                                            &lt;content:ColorItem color="#00AA00" name="Green"/&gt;
+                                            &lt;content:ColorItem color="#00AAAA" name="Cyan"/&gt;
+                                            &lt;content:ColorItem color="#AA0000" name="Red"/&gt;
+                                            &lt;content:ColorItem color="#AA00AA" name="Magenta"/&gt;
+                                            &lt;content:ColorItem color="#AA5500" name="Brown"/&gt;
+                                            &lt;content:ColorItem color="#AAAAAA" name="Light Gray"/&gt;
+                                            &lt;content:ColorItem color="#555555" name="Dark Gray"/&gt;
+                                            &lt;content:ColorItem color="#5555FF" name="Bright Blue"/&gt;
+                                            &lt;content:ColorItem color="#55FF55" name="Bright Green"/&gt;
+                                            &lt;content:ColorItem color="#55FFFF" name="Bright Cyan"/&gt;
+                                            &lt;content:ColorItem color="#FF5555" name="Bright Red"/&gt;
+                                            &lt;content:ColorItem color="#FF55FF" name="Bright Magenta"/&gt;
+                                            &lt;content:ColorItem color="#FFFF55" name="Bright Yellow"/&gt;
+                                            &lt;content:ColorItem color="#FFFFFF" name="White"/&gt;
+                                        &lt;/collections:ArrayList&gt;
+                                    &lt;/listData&gt;
+                                    &lt;dataRenderer&gt;
+                                        &lt;content:ListButtonColorRenderer/&gt;
+                                    &lt;/dataRenderer&gt;
+                                    &lt;itemRenderer&gt;
+                                        &lt;content:ListViewColorRenderer/&gt;
+                                    &lt;/itemRenderer&gt;
+                                &lt;/ListButton&gt;
+                            &lt;/BoxPane&gt;
+                        &lt;/TablePane.Row&gt;
+                        &lt;TablePane.Row height="1*"&gt;
+                            &lt;Border&gt;
+                                &lt;content&gt;
+                                    &lt;ScrollPane&gt;
+                                        &lt;view&gt;
+                                            &lt;ImageView wtkx:id="imageView"/&gt;
+                                        &lt;/view&gt;
+                                    &lt;/ScrollPane&gt;
+                                &lt;/content&gt;
+                            &lt;/Border&gt;
+                        &lt;/TablePane.Row&gt;
+                    &lt;/rows&gt;
+                &lt;/TablePane&gt;
+            &lt;/content&gt;
+        &lt;/Border&gt;
+    &lt;/content&gt;
+&lt;/Window&gt;
+</pre>
+
+<p>Like the previous example, it defines a set of menu items that are associated with named actions. The Java source, which defines the actions, is shown below:</p>
+
+<pre class="brush:java">
+package org.apache.pivot.tutorials.menus;
+
+import java.awt.Color;
+import java.awt.Paint;
+
+import org.apache.pivot.collections.Map;
+import org.apache.pivot.wtk.Action;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.Bounds;
+import org.apache.pivot.wtk.DesktopApplicationContext;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.ImageView;
+import org.apache.pivot.wtk.ListButton;
+import org.apache.pivot.wtk.Point;
+import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtk.content.ColorItem;
+import org.apache.pivot.wtk.media.Drawing;
+import org.apache.pivot.wtk.media.drawing.Ellipse;
+import org.apache.pivot.wtk.media.drawing.Rectangle;
+import org.apache.pivot.wtk.media.drawing.Shape;
+import org.apache.pivot.wtk.media.drawing.Text;
+import org.apache.pivot.wtkx.WTKXSerializer;
+
+public class MenuButtons implements Application {
+    private Window window = null;
+    private ListButton colorListButton = null;
+    private ImageView imageView = null;
+
+    private Drawing drawing = null;
+
+    public static final int MAX_X = 480;
+    public static final int MAX_Y = 360;
+
+    public MenuButtons() {
+        Action.getNamedActions().put("newCircle", new Action() {
+            @Override
+            public void perform() {
+                Ellipse ellipse = new Ellipse();
+                ellipse.setSize(50, 50);
+
+                ellipse.setStroke((Paint)null);
+                ellipse.setFill(getSelectedColor());
+                ellipse.setOrigin(getRandomLocation(ellipse));
+
+                drawing.getCanvas().add(ellipse);
+            }
+        });
+
+        Action.getNamedActions().put("newSquare", new Action() {
+            @Override
+            public void perform() {
+                Rectangle rectangle = new Rectangle();
+                rectangle.setSize(50, 50);
+
+                rectangle.setStroke((Paint)null);
+                rectangle.setFill(getSelectedColor());
+                rectangle.setOrigin(getRandomLocation(rectangle));
+
+                drawing.getCanvas().add(rectangle);
+            }
+        });
+
+        Action.getNamedActions().put("newText", new Action() {
+            @Override
+            public void perform() {
+                Text text = new Text();
+                text.setText("ABC");
+                text.setFont("Arial BOLD 24");
+
+                text.setFill(getSelectedColor());
+                text.setOrigin(getRandomLocation(text));
+
+                drawing.getCanvas().add(text);
+            }
+        });
+    }
+
+    @Override
+    public void startup(Display display, Map&lt;String, String&gt; properties) throws Exception {
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        window = (Window)wtkxSerializer.readObject(this, "menu_buttons.wtkx");
+        colorListButton = (ListButton)wtkxSerializer.get("colorListButton");
+        imageView = (ImageView)wtkxSerializer.get("imageView");
+
+        drawing = new Drawing();
+
+        Rectangle borderRectangle = new Rectangle();
+        borderRectangle.setSize(MAX_X, MAX_Y);
+        borderRectangle.setStroke((Paint)null);
+        borderRectangle.setFill("#eeeeee");
+
+        drawing.getCanvas().add(borderRectangle);
+
+        imageView.setImage(drawing);
+
+        window.open(display);
+    }
+
+    @Override
+    public boolean shutdown(boolean optional) {
+        if (window != null) {
+            window.close();
+        }
+
+        return false;
+    }
+
+    @Override
+    public void suspend() {
+    }
+
+    @Override
+    public void resume() {
+    }
+
+    public Color getSelectedColor() {
+        ColorItem colorItem = (ColorItem)colorListButton.getSelectedItem();
+        return colorItem.getColor();
+    }
+
+    public Point getRandomLocation(Shape shape) {
+        Bounds bounds = shape.getBounds();
+
+        int x = (int)(Math.random() * (double)(MAX_X - bounds.width));
+        int y = (int)(Math.random() * (double)(MAX_Y - bounds.height));
+
+        return new Point(x, y);
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(MenuButtons.class, args);
+    }
+}
+</pre>
+
+<p>Each action simply adds a particular shape to the drawing, setting its color based on the current selection in the list button. The shapes are placed at a random location that is adjusted by the shape's size to ensure that the shape remains on-screen.</p>
 
 <p>Next: <a href="table_views.html">Table Views</a></p>
 </body>

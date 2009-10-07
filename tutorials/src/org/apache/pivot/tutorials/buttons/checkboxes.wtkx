@@ -31,21 +31,24 @@ limitations under the License.
             <rows>
                 <TablePane.Row height="24">
                     <BoxPane styles="{verticalAlignment:'center'}">
-                        <Checkbox wtkx:id="bellCheckbox" buttonData="Bell"/>
+                        <Checkbox buttonData="Bell"
+                            ButtonPressListener.buttonPressed="bellImageView.setVisible(!bellImageView.isVisible());"/>
                     </BoxPane>
                     <ImageView wtkx:id="bellImageView" image="org/apache/pivot/tutorials/bell.png" visible="false"/>
                 </TablePane.Row>
 
                 <TablePane.Row height="24">
                     <BoxPane styles="{verticalAlignment:'center'}">
-                        <Checkbox wtkx:id="clockCheckbox" buttonData="Clock"/>
+                        <Checkbox buttonData="Clock"
+                            ButtonPressListener.buttonPressed="clockImageView.setVisible(!clockImageView.isVisible());"/>
                     </BoxPane>
                     <ImageView wtkx:id="clockImageView" image="org/apache/pivot/tutorials/clock.png" visible="false"/>
                 </TablePane.Row>
 
                 <TablePane.Row height="24">
                     <BoxPane styles="{verticalAlignment:'center'}">
-                        <Checkbox wtkx:id="houseCheckbox" buttonData="House"/>
+                        <Checkbox buttonData="House"
+                            ButtonPressListener.buttonPressed="houseImageView.setVisible(!houseImageView.isVisible());"/>
                     </BoxPane>
                     <ImageView wtkx:id="houseImageView" image="org/apache/pivot/tutorials/house.png" visible="false"/>
                 </TablePane.Row>

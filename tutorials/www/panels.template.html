@@ -43,9 +43,10 @@ var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApple
     width:400,
     height:320
 };
-var parameters = {application_class_name:"org.apache.pivot.tutorials.layout.Panels",
+var parameters = {application_class_name:"org.apache.pivot.wtk.ScriptApplication",
     codebase_lookup:false,
-    java_arguments:"-Dsun.awt.noerasebackground=true -Dsun.awt.erasebackgroundonresize=true"
+    java_arguments:"-Dsun.awt.noerasebackground=true -Dsun.awt.erasebackgroundonresize=true",
+    startup_properties:"src=org/apache/pivot/tutorials/layout/panels.wtkx"
 };
 deployJava.writeAppletTag(attributes, parameters);
 </script>
@@ -91,47 +92,7 @@ deployJava.writeAppletTag(attributes, parameters);
 &lt;/Window&gt;
 </pre>
 
-<p>The Java source is below. It simply loads the WTKX and displays it:</p>
-
-<pre class="brush:java">
-package org.apache.pivot.tutorials.layout;
-
-import org.apache.pivot.collections.Map;
-import org.apache.pivot.wtk.Application;
-import org.apache.pivot.wtk.DesktopApplicationContext;
-import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKXSerializer;
-
-public class Panels implements Application {
-    private Window window = null;
-
-    public void startup(Display display, Map&lt;String, String&gt; properties)
-        throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "panels.wtkx");
-        window.open(display);
-    }
-
-    public boolean shutdown(boolean optional) {
-        if (window != null) {
-            window.close();
-        }
-
-        return false;
-    }
-
-    public void suspend() {
-    }
-
-    public void resume() {
-    }
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(Panels.class, args);
-    }
-}
-</pre>
+<p>Since this example contains no logic, there is no associated Java source.</p>
 
 <p>Next: <a href="navigation_containers.html">Navigation Containers</a></p>
 </body>

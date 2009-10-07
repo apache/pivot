@@ -43,9 +43,10 @@ var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApple
     height:100,
     style:"border:solid 1px #999999"
 };
-var parameters = {application_class_name:"org.apache.pivot.tutorials.buttons.Checkboxes",
+var parameters = {application_class_name:"org.apache.pivot.wtk.ScriptApplication",
     codebase_lookup:false,
-    java_arguments:"-Dsun.awt.noerasebackground=true -Dsun.awt.erasebackgroundonresize=true"
+    java_arguments:"-Dsun.awt.noerasebackground=true -Dsun.awt.erasebackgroundonresize=true",
+    startup_properties:"src=org/apache/pivot/tutorials/buttons/checkboxes.wtkx"
 };
 deployJava.writeAppletTag(attributes, parameters);
 </script>
@@ -68,21 +69,24 @@ deployJava.writeAppletTag(attributes, parameters);
             &lt;rows&gt;
                 &lt;TablePane.Row height="24"&gt;
                     &lt;BoxPane styles="{verticalAlignment:'center'}"&gt;
-                        &lt;Checkbox wtkx:id="bellCheckbox" buttonData="Bell"/&gt;
+                        &lt;Checkbox buttonData="Bell"
+                            ButtonPressListener.buttonPressed="bellImageView.setVisible(!bellImageView.isVisible());"/&gt;
                     &lt;/BoxPane&gt;
                     &lt;ImageView wtkx:id="bellImageView" image="org/apache/pivot/tutorials/bell.png" visible="false"/&gt;
                 &lt;/TablePane.Row&gt;
 
                 &lt;TablePane.Row height="24"&gt;
                     &lt;BoxPane styles="{verticalAlignment:'center'}"&gt;
-                        &lt;Checkbox wtkx:id="clockCheckbox" buttonData="Clock"/&gt;
+                        &lt;Checkbox buttonData="Clock"
+                            ButtonPressListener.buttonPressed="clockImageView.setVisible(!clockImageView.isVisible());"/&gt;
                     &lt;/BoxPane&gt;
                     &lt;ImageView wtkx:id="clockImageView" image="org/apache/pivot/tutorials/clock.png" visible="false"/&gt;
                 &lt;/TablePane.Row&gt;
 
                 &lt;TablePane.Row height="24"&gt;
                     &lt;BoxPane styles="{verticalAlignment:'center'}"&gt;
-                        &lt;Checkbox wtkx:id="houseCheckbox" buttonData="House"/&gt;
+                        &lt;Checkbox buttonData="House"
+                            ButtonPressListener.buttonPressed="houseImageView.setVisible(!houseImageView.isVisible());"/&gt;
                     &lt;/BoxPane&gt;
                     &lt;ImageView wtkx:id="houseImageView" image="org/apache/pivot/tutorials/house.png" visible="false"/&gt;
                 &lt;/TablePane.Row&gt;
@@ -94,82 +98,9 @@ deployJava.writeAppletTag(attributes, parameters);
 
 <p>Note that this example uses the <tt>TablePane</tt> layout container. <tt>TablePane</tt> defines a two-dimensional grid structure and is similar to an HTML table. It is discussed in more detail in the <a href="layout_containers.html">Layout Containers</a> section.</p>
 
-<p>The following is the Java source for the example. A button press handler is assigned to each checkbox. When the handler is invoked, it simply toggles the visibility of the corresponding image view, causing the image to appear and disappear based on the checkbox's selection state.</p>
+<p>Note also that this example defines some button handler logic directly within the WTKX file. The "ButtonPressListener.buttonPressed" attribute of each <tt>PushButton</tt> contains JavaScript code that toggles the visibility of the corresponding image view when the handler is invoked, causing the image to appear and disappear based on the checkbox's selection state. It is common in Pivot development to implement simple event handlers in script code this way, since it can often be much less verbose than performing the same logic in Java.</p>
 
-<pre class="brush:java">
-package org.apache.pivot.tutorials.buttons;
-
-import org.apache.pivot.collections.Map;
-import org.apache.pivot.wtk.Application;
-import org.apache.pivot.wtk.Button;
-import org.apache.pivot.wtk.ButtonPressListener;
-import org.apache.pivot.wtk.Checkbox;
-import org.apache.pivot.wtk.DesktopApplicationContext;
-import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.ImageView;
-import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKXSerializer;
-
-public class Checkboxes implements Application {
-    private Window window = null;
-    private Checkbox bellCheckbox = null;
-    private Checkbox clockCheckbox = null;
-    private Checkbox houseCheckbox = null;
-    private ImageView bellImageView = null;
-    private ImageView clockImageView = null;
-    private ImageView houseImageView = null;
-
-    public void startup(Display display, Map&lt;String, String&gt; properties) throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "checkboxes.wtkx");
-        bellCheckbox = (Checkbox)wtkxSerializer.get("bellCheckbox");
-        clockCheckbox = (Checkbox)wtkxSerializer.get("clockCheckbox");
-        houseCheckbox = (Checkbox)wtkxSerializer.get("houseCheckbox");
-        bellImageView = (ImageView)wtkxSerializer.get("bellImageView");
-        clockImageView = (ImageView)wtkxSerializer.get("clockImageView");
-        houseImageView = (ImageView)wtkxSerializer.get("houseImageView");
-
-        // Wire up event listeners
-        bellCheckbox.getButtonPressListeners().add(new ButtonPressListener() {
-            public void buttonPressed(Button button) {
-                bellImageView.setVisible(!bellImageView.isVisible());
-            }
-        });
-
-        clockCheckbox.getButtonPressListeners().add(new ButtonPressListener() {
-            public void buttonPressed(Button button) {
-                clockImageView.setVisible(!clockImageView.isVisible());
-            }
-        });
-
-        houseCheckbox.getButtonPressListeners().add(new ButtonPressListener() {
-            public void buttonPressed(Button button) {
-                houseImageView.setVisible(!houseImageView.isVisible());
-            }
-        });
-
-        window.open(display);
-    }
-
-    public boolean shutdown(boolean optional) {
-        if (window != null) {
-            window.close();
-        }
-
-        return false;
-    }
-
-    public void suspend() {
-    }
-
-    public void resume() {
-    }
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(Checkboxes.class, args);
-    }
-}
-</pre>
+<p>In fact, this application does not implement any logic in Java and is launched using the <tt>ScriptApplication</tt> class.</p>
 
 <p>Next: <a href="link_buttons.html">Link Buttons</a></p>
 </body>
