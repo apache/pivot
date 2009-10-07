@@ -60,8 +60,6 @@ public class Calendars implements Application {
             }
         });
 
-
-
         window.open(display);
     }
 
