@@ -27,12 +27,13 @@ limitations under the License.
                 <Label text="Sortable" styles="{font:{bold:true}}"/>
                 <Border styles="{padding:0, color:10}">
                     <content>
-                        <ScrollPane wtkx:id="sortableScrollPane" horizontalScrollBarPolicy="fill_to_capacity"
-                            tooltipText="Shift-click to sort on multiple columns"
+                        <ScrollPane wtkx:id="sortableScrollPane"
+                            horizontalScrollBarPolicy="fill_to_capacity"
                             preferredWidth="276" preferredHeight="160">
                             <view>
                                 <TableView wtkx:id="sortableTableView" selectMode="multi"
-                                    styles="{alternateRowColor:null, columnSelectionColor:11, showVerticalGridLines:false}">
+                                    styles="{alternateRowColor:null, columnSelectionColor:11,
+                                            showVerticalGridLines:false}">
                                     <columns>
                                         <TableView.Column name="i" width="48"/>
                                         <TableView.Column name="a" width="48"/>
@@ -44,7 +45,9 @@ limitations under the License.
                                 </TableView>
                             </view>
                             <columnHeader>
-                                <TableViewHeader tableView="$sortableTableView" sortMode="multi_column"/>
+                                <TableViewHeader tableView="$sortableTableView"
+                                    sortMode="multi_column"
+                                    tooltipText="Shift-click to sort on multiple columns"/>
                             </columnHeader>
                         </ScrollPane>
                     </content>

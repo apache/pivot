@@ -1645,7 +1645,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             highlightedNode = null;
 
             if (nodeBounds != null) {
-                repaintComponent(nodeBounds.x, nodeBounds.y, nodeBounds.width, nodeBounds.height, true);
+                repaintComponent(nodeBounds.x, nodeBounds.y, nodeBounds.width,
+                    nodeBounds.height, true);
             }
         }
 
