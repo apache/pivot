@@ -202,6 +202,14 @@ public final class TerraTheme extends Theme {
     }
 
     /**
+     * Sets the theme's font.
+     */
+    @Override
+    public void setFont(Font font) {
+        this.font = font;
+    }
+
+    /**
      * Gets the color found at the specified index in the theme's color
      * palette.
      *

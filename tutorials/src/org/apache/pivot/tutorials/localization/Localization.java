@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.tutorials.localization;
 
+import java.awt.Font;
+import java.awt.GraphicsEnvironment;
 import java.util.Locale;
 
 import org.apache.pivot.collections.Map;
@@ -23,6 +25,7 @@ import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
@@ -39,6 +42,23 @@ public class Localization implements Application {
         }
 
         Resources resources = new Resources(getClass().getName(), "UTF-8");
+
+        Theme theme = Theme.getTheme();
+        Font font = theme.getFont();
+
+        String sampleResource = resources.getString("firstName");
+        if (font.canDisplayUpTo(sampleResource) != -1) {
+            // Search for a font that can support the sample string
+            Font[] fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts();
+
+            for (int i = 0; i < fonts.length; i++) {
+                if (fonts[i].canDisplayUpTo(sampleResource) == -1) {
+                    theme.setFont(fonts[i].deriveFont(Font.PLAIN, 12));
+                    break;
+                }
+            }
+        }
+
         WTKXSerializer wtkxSerializer = new WTKXSerializer(resources);
 
         window = (Window)wtkxSerializer.readObject(this, "localization.wtkx");

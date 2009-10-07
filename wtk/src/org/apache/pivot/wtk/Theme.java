@@ -94,6 +94,8 @@ public abstract class Theme {
     }
 
     public abstract Font getFont();
+    public abstract void setFont(Font font);
+
     public abstract Image getMessageIcon(MessageType messageType);
     public abstract Image getSmallMessageIcon(MessageType messageType);
 

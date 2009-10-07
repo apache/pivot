@@ -42,6 +42,11 @@ public final class ObsidianTheme extends Theme {
     }
 
     @Override
+    public void setFont(Font font) {
+        this.font = font;
+    }
+
+    @Override
     public Image getMessageIcon(MessageType messageType) {
         return null;
     }
