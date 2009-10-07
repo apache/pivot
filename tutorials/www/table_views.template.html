@@ -33,6 +33,84 @@ limitations under the License.
 </head>
 <body>
 <h1>Table Views</h1>
-This section is not yet complete.
+
+<p>Table views are used to present tablular data (data that is grouped into rows and columns). Columns are often sortable and resizeable, and rows are generally selectable.</p>
+
+<p>Like <a href="lists.html">list views</a>, table views are driven by model data provided in a <tt>List</tt> object. The values in the list (which represent the rows shown by the table) can be of any type, but are most often instances of <tt>Dictionary&lt;String, Object&gt;</tt>, which the default table view renders are capable of presenting (for example, <tt>Map&lt;String, Object&gt;</tt> values stored in a JSON list or instances of JavaBean classes that can be wrapped in a <tt>BeanDictionary</tt>).</p>
+
+<p>The following simple example populates a <tt>TableView</tt> using an array list containing hash maps of string values for each row. The table data represents the final standings of the top ten medal-winning countries in the 2008 Summer Olympics:</p>
+
+<script>
+var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
+    archive:"lib/@project_name@-core-@version@.jar,lib/@project_name@-wtk-@version@.jar,lib/@project_name@-wtk-@version@.terra.jar,lib/@project_name@-tutorials-@version@.jar",
+    width:480,
+    height:240,
+    style:"border:solid 1px #999999"
+};
+var parameters = {application_class_name:"org.apache.pivot.wtk.ScriptApplication",
+    codebase_lookup:false,
+    java_arguments:"-Dsun.awt.noerasebackground=true -Dsun.awt.erasebackgroundonresize=true",
+    startup_properties:"src=org/apache/pivot/tutorials/tableviews/basic_table_view.wtkx"
+};
+deployJava.writeAppletTag(attributes, parameters);
+</script>
+
+<p>The WTKX source is as follows. Note that the <tt>name</tt> attributes of the <tt>TableView.Column</tt> elements correspond directly to the keys in the hash maps; this is how <tt>TableView</tt> knows which values to display in each column:</p>
+
+<pre class="brush:xml">
+&lt;Window title="Table Views" maximized="true"
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns="org.apache.pivot.wtk"&gt;
+    &lt;content&gt;
+        &lt;Border styles="{padding:0}"&gt;
+            &lt;content&gt;
+                &lt;ScrollPane&gt;
+                    &lt;view&gt;
+                        &lt;TableView wtkx:id="tableView"&gt;
+                            &lt;columns&gt;
+                                &lt;TableView.Column name="nation" width="180" headerData="Nation"/&gt;
+                                &lt;TableView.Column name="gold" width="60" headerData="Gold"/&gt;
+                                &lt;TableView.Column name="silver" width="60" headerData="Silver"/&gt;
+                                &lt;TableView.Column name="bronze" width="60" headerData="Bronze"/&gt;
+                                &lt;TableView.Column name="total" width="60" headerData="Total"/&gt;
+                            &lt;/columns&gt;
+
+                            &lt;!-- Source: http://en.wikipedia.org/wiki/2008_Summer_Olympics_medal_table --&gt;
+                            &lt;tableData xmlns="org.apache.pivot.collections"&gt;
+                                &lt;ArrayList&gt;
+                                    &lt;HashMap nation="China" gold="51" silver="21" bronze="28" total="100"/&gt;
+                                    &lt;HashMap nation="United States" gold="36" silver="38" bronze="36" total="110"/&gt;
+                                    &lt;HashMap nation="Russia" gold="23" silver="21" bronze="28" total="72"/&gt;
+                                    &lt;HashMap nation="Great Britain" gold="19" silver="13" bronze="15" total="47"/&gt;
+                                    &lt;HashMap nation="Germany" gold="16" silver="10" bronze="15" total="41"/&gt;
+                                    &lt;HashMap nation="Australia" gold="14" silver="15" bronze="17" total="46"/&gt;
+                                    &lt;HashMap nation="South Korea" gold="13" silver="10" bronze="8" total="31"/&gt;
+                                    &lt;HashMap nation="Japan" gold="9" silver="6" bronze="11" total="26"/&gt;
+                                    &lt;HashMap nation="Italy" gold="8" silver="10" bronze="10" total="28"/&gt;
+                                    &lt;HashMap nation="France" gold="7" silver="16" bronze="17" total="40"/&gt;
+                                &lt;/ArrayList&gt;
+                            &lt;/tableData&gt;
+                        &lt;/TableView&gt;
+                    &lt;/view&gt;
+
+                    &lt;columnHeader&gt;
+                        &lt;TableViewHeader tableView="$tableView"/&gt;
+                    &lt;/columnHeader&gt;
+                &lt;/ScrollPane&gt;
+            &lt;/content&gt;
+        &lt;/Border&gt;
+    &lt;/content&gt;
+&lt;/Window&gt;
+</pre>
+
+<p>This example doesn't do much. Clicking on the header (an instance of <tt>TableViewHeader</tt> set as the <tt>ScrollPane</tt>'s <tt>columnHeader</tt> property) doesn't sort the data as one might expect. Even if it did, the sort would most likely not produce the expected results: the medal counts are represented as strings, and would be sorted alphabetically rather than numerically.</p>
+
+<p>Also, the <tt>TableView</tt> doesn't fill the available space: the content simply ends at the right edge, which is determined by the width of the columns. Sometimes this is desirable, but many times it is more visually appealing to provide a "filler" that appears when the table is not wide enough to occupy the available space and disappears when it is not needed.</p>
+
+<p>The next example shows how to create such a "filler". It also demonstrates how to populate a <tt>TableView</tt> with JSON data, which represents the medal counts as numbers and allows a user to properly sort on their values.</p>
+
+<p>There is no associated Java source code for this example.</p>
+
+<p>Next: <a href="table_views.json.html">JSON-based TableView</a></p>
 </body>
 </html>

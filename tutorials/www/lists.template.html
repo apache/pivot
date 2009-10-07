@@ -53,7 +53,7 @@ deployJava.writeAppletTag(attributes, parameters);
 
 <p>The WTKX source for the example follows. Note that the list view is itself contained within a <tt>ScrollPane</tt>. List views do not support scrolling internally. This allows a UI designer to place a list view within an application and have the list view simply grow to accommodate its contents, rather than requiring the designer to specify a fixed height for the list in advance. However, if the designer knows that the list will be long and that it is likely to scroll, it can be placed in a scroll pane. <tt>ScrollPane</tt> is discussed in more detail in the <a href="navigation_containers.html">Navigation Containers</a> section.</p>
 
-<p>Also note that the list's contents are specified in the WTKX document itself, as a JSON array of strings in the <tt>listData</tt> attribute. List items can also be defined programmatically using an instance of <tt>pivot.wtk.content.ListItem</tt> in a nested <tt>listData</tt> element.</p>
+<p>Also note that the list's contents are specified in the WTKX document itself, as a JSON array of strings in the <tt>listData</tt> attribute. Any type of object can actually be used as a list item, provided that the list view has been given a renderer that is capable of painting it. However, they are most often specified as strings (as in this example) or as instances of, both of which the default renderer is capable of presenting.</p>
 
 <pre class="brush:xml">
 &lt;Window title="List Views" maximized="true"

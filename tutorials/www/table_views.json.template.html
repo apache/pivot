@@ -1,0 +1,144 @@
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<html>
+<head>
+<title>JSON-based TableView</title>
+<link rel="stylesheet" href="tutorial.css">
+<script src="http://java.com/js/deployJava.js"></script>
+
+<!-- NOTE: Syntax highlighting script is LGPL -->
+<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shCore.js"></script>
+<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushJava.js"></script>
+<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushXml.js"></script>
+<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushJScript.js"></script>
+<link type="text/css" rel="stylesheet" href="http://alexgorbatchev.com/pub/sh/current/styles/shCore.css"/>
+<link type="text/css" rel="stylesheet" href="http://alexgorbatchev.com/pub/sh/current/styles/shThemeDefault.css"/>
+<script type="text/javascript">
+    SyntaxHighlighter.all();
+</script>
+</head>
+<body>
+<h1>JSON-based TableView</h1>
+
+<p>The previous example showed a basic table view that was populated by string-based hash map data and did not support sorting on the Olympic medal count data. This example populates the same table view with JSON values, which represent the medal counts as numbers, rather than strings:</p>
+
+<script>
+var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
+    archive:"lib/@project_name@-core-@version@.jar,lib/@project_name@-wtk-@version@.jar,lib/@project_name@-wtk-@version@.terra.jar,lib/@project_name@-tutorials-@version@.jar",
+    width:480,
+    height:240,
+    style:"border:solid 1px #999999"
+};
+var parameters = {application_class_name:"org.apache.pivot.wtk.ScriptApplication",
+    codebase_lookup:false,
+    java_arguments:"-Dsun.awt.noerasebackground=true -Dsun.awt.erasebackgroundonresize=true",
+    startup_properties:"src=org/apache/pivot/tutorials/tableviews/json_table_view.wtkx"
+};
+deployJava.writeAppletTag(attributes, parameters);
+</script>
+
+<p>The WTKX source is as follows:</p>
+
+<pre class="brush:xml">
+&lt;Window title="Table Views" maximized="true"
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns="org.apache.pivot.wtk"&gt;
+    &lt;content&gt;
+        &lt;Border styles="{padding:0}"&gt;
+            &lt;content&gt;
+                &lt;ScrollPane horizontalScrollBarPolicy="fill_to_capacity"&gt;
+                    &lt;view&gt;
+                        &lt;TableView wtkx:id="tableView" tableData="@standings.json"
+                            styles="{includeTrailingVerticalGridLine:true}"&gt;
+                            &lt;columns&gt;
+                                &lt;TableView.Column name="nation" width="180" headerData="Nation"/&gt;
+                                &lt;TableView.Column name="gold" width="60" headerData="Gold"/&gt;
+                                &lt;TableView.Column name="silver" width="60" headerData="Silver"/&gt;
+                                &lt;TableView.Column name="bronze" width="60" headerData="Bronze"/&gt;
+                                &lt;TableView.Column name="total" width="60" headerData="Total"/&gt;
+                            &lt;/columns&gt;
+
+                            &lt;tableViewSortListeners&gt;
+                                &lt;wtkx:script&gt;
+                                &lt;![CDATA[
+                                function sortChanged(tableView) {
+                                    var tableData = tableView.getTableData();
+                                    tableData.setComparator(new org.apache.pivot.wtk.content.TableViewRowComparator(tableView));
+                                }
+                                ]]&gt;
+                                &lt;/wtkx:script&gt;
+                            &lt;/tableViewSortListeners&gt;
+                        &lt;/TableView&gt;
+                    &lt;/view&gt;
+
+                    &lt;columnHeader&gt;
+                        &lt;TableViewHeader tableView="$tableView" sortMode="single_column"
+                            styles="{includeTrailingVerticalGridLine:true}"/&gt;
+                    &lt;/columnHeader&gt;
+                &lt;/ScrollPane&gt;
+            &lt;/content&gt;
+        &lt;/Border&gt;
+    &lt;/content&gt;
+&lt;/Window&gt;
+</pre>
+
+<p>It is very similar to the previous example, with the following exceptions:</p>
+
+<ul>
+<li><p>The <tt>ScrollPane</tt> is given a <tt>horizontalScrollBarPolicy</tt> value of "fill_to_capacity". This tells the scroll pane to expand the width of its contents to fit the available horizontal space when necessary, but not constrain the content width to that space when the content wants to be larger. This is what allows the table view to display a "filler" column when its total column width is less than the current viewport width in the scroll pane.</p></li>
+
+<li><p>It populates the table with data from the "standings.json" file. The contents of this file are shown below.</p></li>
+
+<li><p>It defines a listener that responds to table view sorts. Table views do not implement sorting internally. This is the responsibility of the application, since the application may want to delegate sorting to another process, such as a JDBC query executed as a background task. When a user presses a column header, the <tt>TableViewHeader</tt> skin responds by modifying the table view's "sort dictionary", which maps column names to sort directions (ascending, descending, or neither). <tt>TableView</tt> fires a "sortChanged" event in response to a sort dictionary change, to which the listener responds by setting a comparator on the table data:</p>
+<pre class="snippet">
+&lt;tableViewSortListeners&gt;
+    &lt;wtkx:script&gt;
+    &lt;![CDATA[
+    function sortChanged(tableView) {
+        var tableData = tableView.getTableData();
+        tableData.setComparator(new org.apache.pivot.wtk.content.TableViewRowComparator(tableView));
+    }
+    ]]&gt;
+    &lt;/wtkx:script&gt;
+&lt;/tableViewSortListeners&gt;
+</pre>
+<p>In this case, the listener assigns an instance of <tt>TableViewRowComparator</tt> to the table data. This class is capable of sorting many types of table data given the sort dictionary of the <tt>TableView</tt> passed to its constructor.</p>
+</li>
+
+<p>The contents of "standings.json" are as follows. Medal counts are represented as actual numeric data rather than strings, allowing <tt>TableViewRowComparator</tt> to sort them properly:</p>
+
+<pre class="brush:javascript">
+// Source: http://en.wikipedia.org/wiki/2008_Summer_Olympics_medal_table
+[   {nation:"China", gold:51, silver:21, bronze:28, total:100},
+    {nation:"United States", gold:36, silver:38, bronze:36, total:110},
+    {nation:"Russia", gold:23, silver:21, bronze:28, total:72},
+    {nation:"Great Britain", gold:19, silver:13, bronze:15, total:47},
+    {nation:"Germany", gold:16, silver:10, bronze:15, total:41},
+    {nation:"Australia", gold:14, silver:15, bronze:17, total:46},
+    {nation:"South Korea", gold:13, silver:10, bronze:8, total:31},
+    {nation:"Japan", gold:9, silver:6, bronze:11, total:26},
+    {nation:"Italy", gold:8, silver:10, bronze:10, total:28},
+    {nation:"France", gold:7, silver:16, bronze:17, total:40}
+]
+</pre>
+
+<p>There is no associated Java source code for this example.</p>
+
+<p>Next: <a href="table_views.custom.html">Custom TableView</a></p>
+</body>
+</html>
