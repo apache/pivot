@@ -65,6 +65,15 @@ public interface TableViewColumnListener {
     public void columnWidthChanged(TableView.Column column, int previousWidth, boolean previousRelative);
 
     /**
+     * Called when a column's minimum width has changed.
+     *
+     * @param column
+     * @param previousMinimumWidth
+     * @param previousMaximumWidth
+     */
+    public void columnWidthLimitsChanged(TableView.Column column, int previousMinimumWidth, int previousMaximumWidth);
+
+    /**
      * Called when a column's filter has changed.
      *
      * @param column

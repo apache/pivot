@@ -146,7 +146,10 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                     }
                 }
 
-                preferredWidth += columnWidth;
+                preferredWidth += Math.min(Math.max(columnWidth, column.getMinimumWidth()), column.getMaximumWidth());
+            }
+            else {
+                preferredWidth += column.getMinimumWidth();
             }
         }
 
@@ -226,6 +229,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                     }
                 }
 
+                columnWidth = Math.min(Math.max(columnWidth, column.getMinimumWidth()), column.getMaximumWidth());
                 columnWidths.add(columnWidth);
                 fixedWidth += columnWidth;
             }
@@ -240,7 +244,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             if (column.isRelative()) {
                 int columnWidth = (int)Math.round((double)(column.getWidth()
                     * variableWidth) / (double)relativeWidth);
-                columnWidths.update(i ,columnWidth);
+                columnWidths.update(i, Math.min(Math.max(columnWidth, column.getMinimumWidth()),
+                    column.getMaximumWidth()));
             }
         }
 
@@ -1244,6 +1249,11 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
     @Override
     public void columnWidthChanged(TableView.Column column, int previousWidth, boolean previousRelative)  {
+        invalidateComponent();
+    }
+
+    @Override
+    public void columnWidthLimitsChanged(TableView.Column column, int previousMinimumWidth, int previousMaximumWidth) {
         invalidateComponent();
     }
 

@@ -826,6 +826,11 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
     }
 
     @Override
+    public void columnWidthLimitsChanged(TableView.Column column, int  previousMinimumWidth, int previousMaximumWidth) {
+        invalidateComponent();
+    }
+
+    @Override
     public void columnFilterChanged(TableView.Column column, Object previousFilter) {
         // No-op
     }
