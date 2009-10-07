@@ -187,7 +187,7 @@ public class TerraPaletteSkin extends WindowSkin {
         titleBoxPane.getStyles().put("padding", new Insets(0, 0, 0, 3));
 
         Font titleFont = theme.getFont();
-        titleFont = titleFont.deriveFont(Math.round(titleFont.getSize2D() * 0.8f), Font.BOLD);
+        titleFont = titleFont.deriveFont(Font.BOLD, Math.round(titleFont.getSize2D() * 0.8f));
         titleLabel.getStyles().put("font", titleFont);
         titleLabel.getStyles().put("color", titleBarColor);
 
