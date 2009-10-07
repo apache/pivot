@@ -98,8 +98,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
          */
         public VisibleNodeIterator(int start, int end) {
             if (start < 0
-                || end >= visibleNodes.getLength()
-                || start > end) {
+                || end >= visibleNodes.getLength()) {
                 throw new IndexOutOfBoundsException();
             }
 
