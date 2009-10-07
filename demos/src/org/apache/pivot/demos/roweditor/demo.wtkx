@@ -43,7 +43,7 @@ limitations under the License.
                                                     <content:TableViewNumberCellRenderer numberFormat="&#164;#,##0.00"/>
                                                 </cellRenderer>
                                             </TableView.Column>
-                                            <TableView.Column name="description" width="1*" headerData="Description"/>
+                                            <TableView.Column name="description" width="1*" headerData="Description" minimumWidth="150"/>
                                         </columns>
                                         <tableData>
                                             <collections:ArrayList>
