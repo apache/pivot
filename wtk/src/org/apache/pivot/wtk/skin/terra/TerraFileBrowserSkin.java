@@ -581,6 +581,8 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             }
         });
 
+        fileTableView.setSort(TableViewFileRenderer.NAME_KEY, SortDirection.ASCENDING);
+
         rootDirectoryChanged(fileBrowser, null);
         selectedFilesChanged(fileBrowser, null);
     }
