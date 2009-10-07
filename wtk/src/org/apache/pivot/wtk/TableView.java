@@ -292,6 +292,9 @@ public class TableView extends Component {
             }
         }
 
+        /**
+         * Gets the minimum and maximum widths to which the column can size.
+         */
         public Limits getWidthLimits() {
             return new Limits(minimumWidth, maximumWidth);
         }
@@ -299,29 +302,42 @@ public class TableView extends Component {
         /**
          * Sets the minimum and maximum widths the column can size to.
          *
-         * @param minimumWidth Column width cannot be smaller than this size.
-         * @param maximumWidth Column width cannot be greater than this size.
+         * @param minimumWidth
+         * Column width cannot be smaller than this size.
+         *
+         * @param maximumWidth
+         * Column width cannot be greater than this size.
          */
         public void setWidthLimits(int minimumWidth, int maximumWidth) {
+            if (minimumWidth < 0) {
+                throw new IllegalArgumentException("Minimum width is negative.");
+            }
 
-            if (maximumWidth < minimumWidth)
-                throw new IllegalArgumentException("Maximum column width is smaller than minimum column width.");
+            if (maximumWidth < minimumWidth) {
+                throw new IllegalArgumentException("Maximum width is smaller than minimum width.");
+            }
 
             int previousMinimumWidth = this.minimumWidth;
             int previousMaximumWidth = this.maximumWidth;
 
-            if (minimumWidth != previousMinimumWidth || maximumWidth != previousMaximumWidth) {
-
+            if (minimumWidth != previousMinimumWidth
+                || maximumWidth != previousMaximumWidth) {
                 this.minimumWidth = minimumWidth;
                 this.maximumWidth = maximumWidth;
 
                 if (tableView != null) {
-                    tableView.tableViewColumnListeners.columnWidthLimitsChanged(this, previousMinimumWidth,
-                        previousMaximumWidth);
+                    tableView.tableViewColumnListeners.columnWidthLimitsChanged(this,
+                        previousMinimumWidth, previousMaximumWidth);
                 }
             }
         }
 
+        /**
+         * Sets the minimum and maximum widths to which the column can size.
+         *
+         * @param widthLimits
+         * The new width limits.
+         */
         public void setWidthLimits(Limits widthLimits) {
             setWidthLimits(widthLimits.min, widthLimits.max);
         }
@@ -329,7 +345,8 @@ public class TableView extends Component {
         /**
          * Gets the minimum width the column is allowed to be.
          *
-         * @return Minimum column width.
+         * @return
+         * Minimum column width.
          */
         public int getMinimumWidth() {
             return minimumWidth;
@@ -338,7 +355,8 @@ public class TableView extends Component {
         /**
          * Sets the minimum width the column is allowed to be.
          *
-         * @param minimumWidth Minimum column width.
+         * @param minimumWidth
+         * Minimum column width.
          */
         public void setMinimumWidth(int minimumWidth) {
             setWidthLimits(minimumWidth, maximumWidth);
@@ -347,7 +365,8 @@ public class TableView extends Component {
         /**
          * Get the maximum width the column is allowed to be.
          *
-         * @return Maximum column width.
+         * @return
+         * Maximum column width.
          */
         public int getMaximumWidth() {
             return maximumWidth;
@@ -356,7 +375,8 @@ public class TableView extends Component {
         /**
          * Set the maximum width the column is allowed to be.
          *
-         * @param maximumWidth Maximum column width.
+         * @param maximumWidth
+         * Maximum column width.
          */
         public void setMaximumWidth(int maximumWidth) {
             setWidthLimits(minimumWidth, maximumWidth);

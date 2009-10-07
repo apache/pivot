@@ -62,16 +62,18 @@ public interface TableViewColumnListener {
      * @param previousWidth
      * @param previousRelative
      */
-    public void columnWidthChanged(TableView.Column column, int previousWidth, boolean previousRelative);
+    public void columnWidthChanged(TableView.Column column, int previousWidth,
+        boolean previousRelative);
 
     /**
-     * Called when a column's minimum width has changed.
+     * Called when a column's width limits have changed.
      *
      * @param column
      * @param previousMinimumWidth
      * @param previousMaximumWidth
      */
-    public void columnWidthLimitsChanged(TableView.Column column, int previousMinimumWidth, int previousMaximumWidth);
+    public void columnWidthLimitsChanged(TableView.Column column, int previousMinimumWidth,
+        int previousMaximumWidth);
 
     /**
      * Called when a column's filter has changed.
@@ -87,5 +89,6 @@ public interface TableViewColumnListener {
      * @param column
      * @param previousCellRenderer
      */
-    public void columnCellRendererChanged(TableView.Column column, TableView.CellRenderer previousCellRenderer);
+    public void columnCellRendererChanged(TableView.Column column,
+        TableView.CellRenderer previousCellRenderer);
 }
