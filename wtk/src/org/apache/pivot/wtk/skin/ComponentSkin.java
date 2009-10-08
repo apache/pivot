@@ -16,7 +16,9 @@
  */
 package org.apache.pivot.wtk.skin;
 
+import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics2D;
 
 import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
@@ -30,15 +32,17 @@ import org.apache.pivot.wtk.ComponentMouseListener;
 import org.apache.pivot.wtk.ComponentMouseWheelListener;
 import org.apache.pivot.wtk.ComponentStateListener;
 import org.apache.pivot.wtk.Container;
-import org.apache.pivot.wtk.MenuHandler;
 import org.apache.pivot.wtk.Cursor;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Direction;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.DragSource;
 import org.apache.pivot.wtk.DropTarget;
+import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Keyboard;
+import org.apache.pivot.wtk.MenuHandler;
 import org.apache.pivot.wtk.Mouse;
+import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Skin;
 import org.apache.pivot.wtk.Theme;
@@ -88,6 +92,16 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
 
     public static final int SHOW_TOOLTIP_TIMEOUT = 1000;
 
+    /** if true, draw red lines over components to indicate where the baselines are */
+    protected static boolean debugBaseline = false; 
+    static {
+        try {
+            debugBaseline = Boolean.parseBoolean(System.getProperty("pivot.wtk.debugBaseline"));
+        } catch (Exception ex) {
+            // ignore exception when running in applet
+        }
+    }
+    
     @Override
     public int getWidth() {
         return width;
@@ -109,6 +123,11 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
         return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
     }
 
+    @Override
+    public int getBaseline(int width) {
+       return -1;
+    }
+    
     @Override
     public void install(Component component) {
         assert(this.component == null) : "Skin is already installed on a component.";
@@ -367,5 +386,14 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
         }
 
         return font;
+    }
+    
+    protected final void drawBaselineDebug(Graphics2D graphics) {
+        int width = getWidth();
+        int baseline = getBaseline(width);
+        if (baseline != -1) {
+            graphics.setPaint(Color.RED);
+            GraphicsUtilities.drawLine(graphics, 0, baseline, width, Orientation.HORIZONTAL);
+        }
     }
 }

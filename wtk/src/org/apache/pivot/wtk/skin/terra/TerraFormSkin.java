@@ -41,11 +41,14 @@ public class TerraFormSkin extends ContainerSkin
     private ArrayList<ArrayList<ImageView>> flagImageViews = new ArrayList<ArrayList<ImageView>>();
 
     private boolean rightAlignLabels = false;
+    /** make the field fill the width of the form */
     private boolean fill = false;
     private int horizontalSpacing = 6;
     private int verticalSpacing = 6;
     private int flagImageOffset = 4;
     private boolean showFirstSectionHeading = false;
+    /** align field and label so that their baselines line up */
+    private boolean alignToBaseline = true;
     private String delimiter = DEFAULT_DELIMITER;
 
     private static final int FLAG_IMAGE_SIZE = 16;
@@ -55,7 +58,7 @@ public class TerraFormSkin extends ContainerSkin
     public void install(Component component) {
         super.install(component);
 
-        Form form = (Form)component;
+        Form form = (Form) component;
         form.getFormListeners().add(this);
         form.getFormAttributeListeners().add(this);
 
@@ -76,7 +79,7 @@ public class TerraFormSkin extends ContainerSkin
         int maximumFieldWidth = 0;
         int maximumSeparatorWidth = 0;
 
-        Form form = (Form)getComponent();
+        Form form = (Form) getComponent();
         Form.SectionSequence sections = form.getSections();
 
         for (int sectionIndex = 0, sectionCount = sections.getLength();
@@ -114,7 +117,7 @@ public class TerraFormSkin extends ContainerSkin
     public int getPreferredHeight(int width) {
         int preferredHeight = 0;
 
-        Form form = (Form)getComponent();
+        Form form = (Form) getComponent();
         Form.SectionSequence sections = form.getSections();
 
         // If justified and constrained, determine field width constraint
@@ -164,9 +167,28 @@ public class TerraFormSkin extends ContainerSkin
 
                 if (field.isVisible()) {
                     Label label = labels.get(sectionIndex).get(fieldIndex);
-
-                    int preferredRowHeight = Math.max(label.getPreferredHeight(-1),
-                        Math.max(field.getPreferredHeight(fieldWidth), FLAG_IMAGE_SIZE));
+                    int preferredRowHeight;
+                    if (alignToBaseline) {
+                        int labelBaseLine = label.getBaseline(-1);
+                        int fieldBaseLine = field.getBaseline(-1);
+                        if (labelBaseLine != -1 && fieldBaseLine != -1) {
+                            int labelPreferredHeight = label.getPreferredHeight(-1);
+                            int fieldPreferredHeight = field.getPreferredHeight(fieldWidth);
+                            int baseline = Math.max(labelBaseLine, fieldBaseLine);
+                            int belowBaseline = Math.max(fieldPreferredHeight - fieldBaseLine,
+                                labelPreferredHeight - labelBaseLine);
+                            preferredRowHeight = baseline + belowBaseline;
+                        } else {
+                            // if they don't both have baselines, default to
+                            // non-baseline behaviour
+                            preferredRowHeight = Math.max(label.getPreferredHeight(-1),
+                                field.getPreferredHeight(fieldWidth));
+                        }
+                    } else {
+                        preferredRowHeight = Math.max(label.getPreferredHeight(-1),
+                            field.getPreferredHeight(fieldWidth));
+                    }
+                    preferredRowHeight = Math.max(preferredRowHeight, FLAG_IMAGE_SIZE);
                     preferredHeight += preferredRowHeight;
 
                     if (fieldIndex > 0) {
@@ -187,7 +209,7 @@ public class TerraFormSkin extends ContainerSkin
 
     @Override
     public void layout() {
-        Form form = (Form)getComponent();
+        Form form = (Form) getComponent();
         Form.SectionSequence sections = form.getSections();
 
         // Determine the maximum label and field widths
@@ -261,18 +283,47 @@ public class TerraFormSkin extends ContainerSkin
                     field.setSize(fieldSize);
                     flagImageView.setSize(flagImageView.getPreferredSize());
 
-                    int rowHeight = Math.max(label.getHeight(),
-                        Math.max(field.getHeight(), FLAG_IMAGE_SIZE));
+                    int rowHeight;
+                    int fieldY;
+                    int labelY;
+                    int flagImageY;
+                    if (alignToBaseline) {
+                        int labelBaseLine = label.getBaseline(label.getWidth());
+                        int fieldBaseLine = field.getBaseline(fieldSize.width);
+                        if (labelBaseLine != -1 && fieldBaseLine != -1) {
+                            int baseline = Math.max(labelBaseLine, fieldBaseLine);
+                            int belowBaseline = Math.max(fieldSize.height - fieldBaseLine,
+                                label.getHeight() - labelBaseLine);
+                            rowHeight = baseline + belowBaseline;
+                            labelY = rowY + (baseline - labelBaseLine);
+                            fieldY = rowY + (baseline - fieldBaseLine);
+                            // make the bottom of the flag line up with baseline
+                            flagImageY = rowY + (flagImageView.getHeight() - baseline);
+                        } else {
+                            // if they don't both have baselines, default to
+                            // non-baseline behaviour
+                            rowHeight = Math.max(label.getHeight(), Math.max(field.getHeight(),
+                                FLAG_IMAGE_SIZE));
+                            fieldY = rowY;
+                            labelY = rowY;
+                            flagImageY = rowY + (rowHeight - flagImageView.getHeight()) / 2;
+                        }
+                    } else {
+                        rowHeight = Math.max(label.getHeight(), Math.max(field.getHeight(),
+                            FLAG_IMAGE_SIZE));
+                        fieldY = rowY;
+                        labelY = rowY;
+                        flagImageY = rowY + (rowHeight - flagImageView.getHeight()) / 2;
+                    }
 
                     // Set the row component locations
                     int labelX = rightAlignLabels ? maximumLabelWidth - label.getWidth() : 0;
-                    label.setLocation(labelX, rowY);
+                    label.setLocation(labelX, labelY);
 
                     int fieldX = maximumLabelWidth + horizontalSpacing;
 
-                    field.setLocation(fieldX, rowY);
-                    flagImageView.setLocation(fieldX + field.getWidth() + flagImageOffset,
-                        rowY + (rowHeight - flagImageView.getHeight()) / 2);
+                    field.setLocation(fieldX, fieldY);
+                    flagImageView.setLocation(fieldX + field.getWidth() + flagImageOffset, flagImageY);
 
                     // Update the row y-coordinate
                     rowY += rowHeight + verticalSpacing;
@@ -374,7 +425,7 @@ public class TerraFormSkin extends ContainerSkin
 
         this.delimiter = delimiter;
 
-        Form form = (Form)getComponent();
+        Form form = (Form) getComponent();
         Form.SectionSequence sections = form.getSections();
 
         for (int i = 0, n = sections.getLength(); i < n; i++) {
@@ -385,6 +436,15 @@ public class TerraFormSkin extends ContainerSkin
             }
         }
 
+        invalidateComponent();
+    }
+
+    public boolean getAlignToBaseline() {
+        return alignToBaseline;
+    }
+
+    public void setAlignToBaseline(boolean alignToBaseline) {
+        this.alignToBaseline = alignToBaseline;
         invalidateComponent();
     }
 
@@ -429,7 +489,7 @@ public class TerraFormSkin extends ContainerSkin
 
     // Implementation methods
     private void insertSection(Form.Section section, int index) {
-        Form form = (Form)getComponent();
+        Form form = (Form) getComponent();
 
         // Insert separator
         Separator separator = new Separator(section.getHeading());
@@ -452,7 +512,7 @@ public class TerraFormSkin extends ContainerSkin
     }
 
     private void removeSections(int index, Sequence<Form.Section> removed) {
-        Form form = (Form)getComponent();
+        Form form = (Form) getComponent();
 
         for (int i = 0, n = removed.getLength(); i < n; i++) {
             // Remove fields
@@ -476,7 +536,7 @@ public class TerraFormSkin extends ContainerSkin
     }
 
     private void insertField(Form.Section section, Component field, int index) {
-        Form form = (Form)getComponent();
+        Form form = (Form) getComponent();
         int sectionIndex = form.getSections().indexOf(section);
 
         // Create the label
@@ -495,7 +555,7 @@ public class TerraFormSkin extends ContainerSkin
     }
 
     private void removeFields(Form.Section section, int index, int count) {
-        Form form = (Form)getComponent();
+        Form form = (Form) getComponent();
         int sectionIndex = form.getSections().indexOf(section);
 
         // Remove the labels
@@ -514,7 +574,7 @@ public class TerraFormSkin extends ContainerSkin
     }
 
     private void updateSectionHeading(Form.Section section) {
-        Form form = (Form)getComponent();
+        Form form = (Form) getComponent();
         int sectionIndex = form.getSections().indexOf(section);
 
         Separator separator = separators.get(sectionIndex);
@@ -522,7 +582,7 @@ public class TerraFormSkin extends ContainerSkin
     }
 
     private void updateFieldLabel(Form.Section section, int fieldIndex) {
-        Form form = (Form)getComponent();
+        Form form = (Form) getComponent();
         Component field = section.get(fieldIndex);
 
         int sectionIndex = form.getSections().indexOf(section);
@@ -532,7 +592,7 @@ public class TerraFormSkin extends ContainerSkin
     }
 
     private void updateFieldFlag(Form.Section section, int fieldIndex) {
-        Form form = (Form)getComponent();
+        Form form = (Form) getComponent();
         Component field = section.get(fieldIndex);
 
         int sectionIndex = form.getSections().indexOf(section);
@@ -543,7 +603,7 @@ public class TerraFormSkin extends ContainerSkin
         String flagMessage = null;
 
         if (flag != null) {
-            TerraTheme theme = (TerraTheme)Theme.getTheme();
+            TerraTheme theme = (TerraTheme) Theme.getTheme();
             MessageType flagMessageType = flag.getMessageType();
             flagImage = theme.getSmallMessageIcon(flagMessageType);
             flagMessage = flag.getMessage();

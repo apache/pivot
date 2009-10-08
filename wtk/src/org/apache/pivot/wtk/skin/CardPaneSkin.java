@@ -409,6 +409,28 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         return new Dimensions(preferredWidth, preferredHeight);
     }
 
+    
+    @Override
+    public int getBaseline(int width) {
+        int baseline = -1;
+
+        CardPane cardPane = (CardPane)getComponent();
+
+        if (sizeToSelection) {
+            Component selectedCard = cardPane.getSelectedCard();
+
+            if (selectedCard != null) {
+                baseline = selectedCard.getBaseline(width);
+            }
+        } else {
+            for (Component card : cardPane) {
+                baseline = Math.max(baseline, card.getBaseline(width));
+            }
+        }
+
+        return baseline;
+    }
+    
     @Override
     public void layout() {
         // Set the size of all components to match the size of the stack pane,

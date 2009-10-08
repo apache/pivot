@@ -48,6 +48,7 @@ import org.apache.pivot.wtk.effects.Transition;
 import org.apache.pivot.wtk.effects.TransitionListener;
 import org.apache.pivot.wtk.skin.ListButtonSkin;
 
+
 /**
  * Terra list button skin.
  */
@@ -89,7 +90,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
         @Override
         public void windowClosed(Window window, Display display, Window owner) {
             closeTransition = null;
-        }
+            }
     };
 
     private Panorama listViewPanorama;
@@ -198,6 +199,19 @@ public class TerraListButtonSkin extends ListButtonSkin {
         return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
     }
 
+    @Override
+    public int getBaseline(int width) {
+        ListButton listButton = (ListButton)getComponent();
+        Button.DataRenderer dataRenderer = listButton.getDataRenderer();
+
+        dataRenderer.render(listButton.getButtonData(), listButton, false);
+
+        int baseline = dataRenderer.getBaseline(width)
+            + padding.top + 1;
+
+        return baseline;
+    }
+    
     @Override
     public void layout() {
         // No-op
@@ -661,7 +675,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
                                 Bounds itemBounds = listView.getItemBounds(selectedIndex);
                                 listView.scrollAreaToVisible(itemBounds);
                             }
-                        }
+                    }
                     });
 
                     listView.requestFocus();

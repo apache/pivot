@@ -136,6 +136,15 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     }
 
     @Override
+    public int getBaseline(int width) {
+        int baseline = -1;
+
+        baseline = getItemBaseline(width);
+
+        return baseline;
+    }
+    
+    @Override
     public void layout() {
         // No-op
     }
@@ -153,8 +162,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
         // Paint the background
         if (backgroundColor != null) {
-            graphics.setPaint(backgroundColor);
-            graphics.fillRect(0, 0, width, height);
+        graphics.setPaint(backgroundColor);
+        graphics.fillRect(0, 0, width, height);
         }
 
         // Paint the list contents
@@ -279,6 +288,20 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         return itemHeight;
     }
 
+    private int getItemBaseline(int width) {
+        ListView listView = (ListView)getComponent();
+        ListView.ItemRenderer renderer = listView.getItemRenderer();
+        renderer.render(null, -1, listView, false, false, false, false);
+
+        int itemBaseline = renderer.getBaseline(width);
+        if (listView.getCheckmarksEnabled()) {
+            itemBaseline = Math.max(CHECKBOX.getBaseline(width) + checkboxPadding.top
+                , itemBaseline);
+        }
+
+        return itemBaseline;
+    }
+    
     @Override
     public boolean isFocusable() {
         ListView listView = (ListView)getComponent();
@@ -806,8 +829,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                     if (!listView.isCheckmarkDisabled(selectedIndex)) {
                         listView.setItemChecked(selectedIndex,
                             !listView.isItemChecked(selectedIndex));
-                        consumed = true;
-                    }
+                    		consumed = true;
+                		}
                 }
 
                 break;

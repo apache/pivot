@@ -304,6 +304,20 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
         return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
     }
 
+    
+    public int getBaseline(int width) {
+        // Our baseline is the maximum of all our possible renderers'
+        // baseline
+        int baseline = defaultRenderer.getBaseline(width);
+
+        for (Class<?> key : cellRenderers) {
+            TableView.CellRenderer renderer = cellRenderers.get(key);
+            baseline = Math.max(baseline,
+                renderer.getBaseline(width));
+        }
+
+        return baseline;
+    }
     @Override
     public Dictionary<String, Object> getStyles() {
         return STYLES;

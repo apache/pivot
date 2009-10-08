@@ -82,6 +82,18 @@ public class StackPaneSkin extends ContainerSkin {
     }
 
     @Override
+    public int getBaseline(int width) {
+        int baseline = 0;
+        StackPane stackPane = (StackPane) getComponent();
+
+        for (Component component : stackPane) {
+            baseline = Math.max(baseline, component.getBaseline(width));
+        }
+
+        return baseline;
+    }
+
+    @Override
     public void layout() {
         // Set the size of all components to match the size of the stack pane,
         // minus padding

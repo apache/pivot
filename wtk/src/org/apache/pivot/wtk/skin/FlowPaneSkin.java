@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.wtk.skin;
 
+import java.awt.Graphics2D;
+
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.wtk.Component;
@@ -36,7 +38,7 @@ public class FlowPaneSkin extends ContainerSkin {
 
     @Override
     public int getPreferredWidth(int height) {
-        FlowPane flowPane = (FlowPane)getComponent();
+        FlowPane flowPane = (FlowPane) getComponent();
 
         int preferredWidth = 0;
 
@@ -65,7 +67,7 @@ public class FlowPaneSkin extends ContainerSkin {
 
     @Override
     public int getPreferredHeight(int width) {
-        FlowPane flowPane = (FlowPane)getComponent();
+        FlowPane flowPane = (FlowPane) getComponent();
 
         int preferredHeight = 0;
 
@@ -129,7 +131,7 @@ public class FlowPaneSkin extends ContainerSkin {
 
     @Override
     public Dimensions getPreferredSize() {
-        FlowPane flowPane = (FlowPane)getComponent();
+        FlowPane flowPane = (FlowPane) getComponent();
 
         int preferredWidth = 0;
         int preferredHeight = 0;
@@ -156,6 +158,49 @@ public class FlowPaneSkin extends ContainerSkin {
         preferredHeight += padding.top + padding.bottom;
 
         return new Dimensions(preferredWidth, preferredHeight);
+    }
+
+    @Override
+    public int getBaseline(int width) {
+        FlowPane flowPane = (FlowPane) getComponent();
+
+        int baseline = -1;
+
+        int contentWidth = Math.max(width - (padding.left + padding.right), 0);
+
+        // Break the components into multiple rows, and calculate the baseline of the
+        // first row
+        int rowWidth = 0;
+        for (int i = 0, n = flowPane.getLength(); i < n; i++) {
+            Component component = flowPane.get(i);
+
+            if (component.isVisible()) {
+                Dimensions componentSize = component.getPreferredSize();
+
+                if (rowWidth + componentSize.width > contentWidth && rowWidth > 0) {
+                    // The component is too big to fit in the remaining space,
+                    // and it is not the only component in this row; wrap
+                    break;
+                } else {
+                    baseline = Math.max(baseline, component.getBaseline(componentSize.width));
+                    rowWidth += componentSize.width + horizontalSpacing;
+                }
+            }
+        }
+        
+        // Include top and bottom padding values
+        if (baseline != -1) {
+            baseline += padding.top;
+        }
+        return baseline;
+    }
+
+    @Override
+    public void paint(Graphics2D graphics) {
+        super.paint(graphics);
+        if (debugBaseline) {
+            drawBaselineDebug(graphics);
+        }
     }
 
     @Override
@@ -206,9 +251,11 @@ public class FlowPaneSkin extends ContainerSkin {
             // Determine the row dimensions
             rowWidth = 0;
             int rowHeight = 0;
+            int baseline = -1;
             for (Component component : row) {
                 rowWidth += component.getWidth();
                 rowHeight = Math.max(rowHeight, component.getHeight());
+                baseline = Math.max(baseline, component.getBaseline(component.getWidth()));
             }
 
             rowWidth += horizontalSpacing * (row.getLength() - 1);
@@ -219,12 +266,10 @@ public class FlowPaneSkin extends ContainerSkin {
                     x = padding.left;
                     break;
                 }
-
                 case CENTER: {
                     x = (width - rowWidth) / 2;
                     break;
                 }
-
                 case RIGHT: {
                     x = width - rowWidth - padding.right;
                     break;
@@ -234,8 +279,8 @@ public class FlowPaneSkin extends ContainerSkin {
             for (Component component : row) {
                 int y;
                 if (alignToBaseline) {
-                    // TODO Align to baseline
-                    y = 0;
+                    // Align to baseline
+                    y = baseline - component.getBaseline(component.getWidth());
                 } else {
                     // Align to bottom
                     y = rowHeight - component.getHeight();
@@ -350,10 +395,6 @@ public class FlowPaneSkin extends ContainerSkin {
     }
 
     public void setAlignToBaseline(boolean alignToBaseline) {
-        if (alignToBaseline) {
-            throw new UnsupportedOperationException("alignToBaseline style is not yet supported.");
-        }
-
         this.alignToBaseline = alignToBaseline;
         invalidateComponent();
     }

@@ -52,4 +52,13 @@ public interface ConstrainedVisual extends Visual {
      * Returns the visual's unconstrained preferred size.
      */
     public Dimensions getPreferredSize();
+    
+    /**
+     * Returns the baseline for a given width.
+     * 
+     * @return The baseline relative to the origin of the parent
+     *         container. -1 indicates that no baseline exists.
+     */
+    public int getBaseline(int width);
+    
 }

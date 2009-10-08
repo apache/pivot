@@ -177,6 +177,19 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         }
 
         @Override
+        public int getBaseline(int width) {
+            int baseline = 0;
+
+            Spinner spinner = (Spinner)TerraSpinnerSkin.this.getComponent();
+            Spinner.ItemRenderer itemRenderer = spinner.getItemRenderer();
+
+            itemRenderer.render(spinner.getSelectedItem(), spinner);
+            baseline = itemRenderer.getBaseline(width);
+
+            return baseline;
+        }
+        
+        @Override
         public Dimensions getPreferredSize() {
             Dimensions preferredSize;
 
@@ -579,6 +592,21 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         return preferredHeight;
     }
 
+    @Override
+    public int getBaseline(int width) {
+        if (width >= 0) {
+            // Subtract the button and border width from width constraint
+            Dimensions upButtonPreferredSize = upButton.getPreferredSize();
+            Dimensions downButtonPreferredSize = downButton.getPreferredSize();
+            int buttonWidth = Math.max(upButtonPreferredSize.width,
+                downButtonPreferredSize.width);
+
+            width = Math.max(width - buttonWidth - 2, 0);
+        }
+        int baseline = spinnerContent.getBaseline(width) + 1;
+        return baseline;
+    }
+    
     @Override
     public void layout() {
         int width = getWidth();

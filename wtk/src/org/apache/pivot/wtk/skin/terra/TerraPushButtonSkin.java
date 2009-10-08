@@ -57,7 +57,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     private Color disabledBevelColor;
 
     public TerraPushButtonSkin() {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
 
         font = theme.getFont();
         color = theme.getColor(1);
@@ -84,7 +84,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         if (height == -1) {
             preferredWidth = getPreferredSize().width;
         } else {
-            PushButton pushButton = (PushButton)getComponent();
+            PushButton pushButton = (PushButton) getComponent();
             Button.DataRenderer dataRenderer = pushButton.getDataRenderer();
 
             dataRenderer.render(pushButton.getButtonData(), pushButton, false);
@@ -100,8 +100,8 @@ public class TerraPushButtonSkin extends PushButtonSkin {
 
             // Adjust for preferred aspect ratio
             if (!Float.isNaN(minumumAspectRatio)
-                && (float)preferredWidth / (float)height < minumumAspectRatio) {
-                preferredWidth = (int)(height * minumumAspectRatio);
+                && (float) preferredWidth / (float) height < minumumAspectRatio) {
+                preferredWidth = (int) (height * minumumAspectRatio);
             }
         }
 
@@ -112,10 +112,10 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     public int getPreferredHeight(int width) {
         int preferredHeight = 0;
 
-        if (width== -1) {
+        if (width == -1) {
             preferredHeight = getPreferredSize().height;
         } else {
-            PushButton pushButton = (PushButton)getComponent();
+            PushButton pushButton = (PushButton) getComponent();
             Button.DataRenderer dataRenderer = pushButton.getDataRenderer();
 
             dataRenderer.render(pushButton.getButtonData(), pushButton, false);
@@ -131,8 +131,8 @@ public class TerraPushButtonSkin extends PushButtonSkin {
 
             // Adjust for preferred aspect ratio
             if (!Float.isNaN(maximumAspectRatio)
-                && (float)width / (float)preferredHeight > maximumAspectRatio) {
-                preferredHeight = (int)(width / maximumAspectRatio);
+                && (float) width / (float) preferredHeight > maximumAspectRatio) {
+                preferredHeight = (int) (width / maximumAspectRatio);
             }
         }
 
@@ -141,7 +141,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
 
     @Override
     public Dimensions getPreferredSize() {
-        PushButton pushButton = (PushButton)getComponent();
+        PushButton pushButton = (PushButton) getComponent();
         Button.DataRenderer dataRenderer = pushButton.getDataRenderer();
 
         dataRenderer.render(pushButton.getButtonData(), pushButton, false);
@@ -155,24 +155,51 @@ public class TerraPushButtonSkin extends PushButtonSkin {
             + padding.top + padding.bottom + 2;
 
         // Adjust for preferred aspect ratio
-        float aspectRatio = (float)preferredWidth / (float)preferredHeight;
+        float aspectRatio = (float) preferredWidth / (float) preferredHeight;
 
         if (!Float.isNaN(minumumAspectRatio)
             && aspectRatio < minumumAspectRatio) {
-            preferredWidth = (int)(preferredHeight * minumumAspectRatio);
+            preferredWidth = (int) (preferredHeight * minumumAspectRatio);
         }
 
         if (!Float.isNaN(maximumAspectRatio)
             && aspectRatio > maximumAspectRatio) {
-            preferredHeight = (int)(preferredWidth / maximumAspectRatio);
+            preferredHeight = (int) (preferredWidth / maximumAspectRatio);
         }
 
         return new Dimensions(preferredWidth, preferredHeight);
     }
 
     @Override
+    public int getBaseline(int width) {
+        PushButton pushButton = (PushButton) getComponent();
+        Button.DataRenderer dataRenderer = pushButton.getDataRenderer();
+
+        dataRenderer.render(pushButton.getButtonData(), pushButton, false);
+
+        // Include padding in constraint
+        int contentWidth = width;
+        if (contentWidth != -1) {
+            contentWidth = Math.max(contentWidth - (padding.left + padding.right + 2), 0);
+        }
+
+        int preferredHeight1 = dataRenderer.getPreferredHeight(contentWidth) + padding.top
+            + padding.bottom + 2;
+        int baseline = dataRenderer.getBaseline(contentWidth) + padding.top + 1;
+
+        // Adjust for preferred aspect ratio
+        if (!Float.isNaN(maximumAspectRatio)
+            && (float) width / (float) preferredHeight1 > maximumAspectRatio) {
+            int preferredHeight2 = (int) (width / maximumAspectRatio);
+            baseline = (int) (preferredHeight1 / (float) preferredHeight2 * baseline);
+        }
+
+        return baseline;
+    }
+    
+    @Override
     public void paint(Graphics2D graphics) {
-        PushButton pushButton = (PushButton)getComponent();
+        PushButton pushButton = (PushButton) getComponent();
 
         int width = getWidth();
         int height = getHeight();
@@ -216,7 +243,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         dataRenderer.setSize(Math.max(width - (padding.left + padding.right + 2), 0),
             Math.max(getHeight() - (padding.top + padding.bottom + 2), 0));
 
-        Graphics2D contentGraphics = (Graphics2D)graphics.create();
+        Graphics2D contentGraphics = (Graphics2D) graphics.create();
         contentGraphics.translate(padding.left + 1, padding.top + 1);
         contentGraphics.clipRect(0, 0, dataRenderer.getWidth(), dataRenderer.getHeight());
         dataRenderer.paint(contentGraphics);
@@ -226,7 +253,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         if (pushButton.isFocused()
             && !toolbar) {
             BasicStroke dashStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND,
-                BasicStroke.JOIN_ROUND, 1.0f, new float[] {0.0f, 2.0f}, 0.0f);
+                BasicStroke.JOIN_ROUND, 1.0f, new float[] { 0.0f, 2.0f }, 0.0f);
 
             graphics.setStroke(dashStroke);
             graphics.setColor(this.borderColor);
@@ -295,7 +322,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public final void setColor(int color) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setColor(theme.getColor(color));
     }
 
@@ -321,7 +348,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public final void setDisabledColor(int disabledColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setDisabledColor(theme.getColor(disabledColor));
     }
 
@@ -349,7 +376,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public final void setBackgroundColor(int backgroundColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setBackgroundColor(theme.getColor(backgroundColor));
     }
 
@@ -376,7 +403,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public final void setDisabledBackgroundColor(int disabledBackgroundColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setDisabledBackgroundColor(theme.getColor(disabledBackgroundColor));
     }
 
@@ -402,7 +429,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public final void setBorderColor(int borderColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setBorderColor(theme.getColor(borderColor));
     }
 
@@ -428,7 +455,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public final void setDisabledBorderColor(int disabledBorderColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setDisabledBorderColor(theme.getColor(disabledBorderColor));
     }
 

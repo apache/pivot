@@ -233,6 +233,30 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         return preferredSize;
     }
 
+    
+    @Override
+    public int getBaseline(int width) {
+        int baseline = -1;
+
+        Sheet sheet = (Sheet)getComponent();
+        Component content = sheet.getContent();
+
+        if (content != null
+            && content.isVisible()) {
+            if (width != -1) {
+                width = Math.max(width - (padding.left + padding.right + 2), 0);
+            }
+
+            baseline = content.getPreferredHeight(width);
+        }
+
+        if (baseline != -1) {
+            baseline += padding.top + 1;
+        }
+
+        return baseline;
+    }
+    
     public int getEasedPreferredHeight(int preferredHeight) {
         if (openTransition != null
             && openTransition.isRunning()) {

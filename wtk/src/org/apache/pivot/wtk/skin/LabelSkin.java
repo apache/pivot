@@ -176,6 +176,53 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         return new Dimensions(preferredWidth, preferredHeight);
     }
 
+    
+    @Override
+    public int getBaseline(int width) {
+      Label label = (Label)getComponent();
+       
+      /* calculate the baseline of the text */
+      int baseline = -1;
+
+      String text = label.getText();
+      if (text == null) {
+          text = "";
+      }
+
+      if (wrapText
+          && text.length() > 0) {
+          int contentWidth = label.getWidth() - (padding.left + padding.right);
+
+          AttributedString attributedText = new AttributedString(text);
+          attributedText.addAttribute(TextAttribute.FONT, font);
+
+          AttributedCharacterIterator aci = attributedText.getIterator();
+          LineBreakMeasurer lbm = new LineBreakMeasurer(aci, fontRenderContext);
+
+          if (lbm.getPosition() < aci.getEndIndex()) {
+              LineMetrics lm = font.getLineMetrics(text, fontRenderContext);
+              baseline = (int)Math.ceil(lm.getAscent()-2);
+          } else {
+              // for multi-line labels, treat the baseline as being the baseline of the first line of text
+              int offset = lbm.nextOffset(contentWidth);
+
+              LineMetrics lm = font.getLineMetrics(aci,
+                  lbm.getPosition(), offset, fontRenderContext);
+
+              baseline = (int) Math.ceil(lm.getAscent()-2);
+          }
+      } else {
+          LineMetrics lm = font.getLineMetrics(text, fontRenderContext);
+          baseline = (int)Math.ceil(lm.getAscent()-2);
+      }
+
+      if (baseline!=-1) {
+       baseline += padding.top;
+      }
+
+      return baseline;
+    }
+    
     @Override
     public void layout() {
         // No-op
@@ -194,6 +241,10 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         Label label = (Label)getComponent();
         String text = label.getText();
 
+        if (debugBaseline) {
+            drawBaselineDebug(graphics);
+        }
+        
         if (text != null
             && text.length() > 0) {
             if (fontRenderContext.isAntiAliased()) {
