@@ -52,33 +52,33 @@ limitations under the License.
                     <Shape.Translate x="50" y="-50"/>
                     <Shape.Scale x="2" y="2"/>
                 </transforms>
-                
-	            <Rectangle x="0" y="0"
-	                width="160" height="120" 
-                    fill="{paintType:'radial_gradient', 
+
+                <Rectangle x="0" y="0"
+                    width="160" height="120"
+                    fill="{paintType:'radial_gradient',
                         centerX:50, centerY:50, radius:50,
                         stops: [{color:'#ffffff', offset:0.0}, {color:'#000000', offset:1.0}]}"
-	                stroke="#00ff00" strokeThickness="4"
-	                cornerRadius="20"/>
-	            <Arc x="-10" y="10" width="50" height="50" start="90.0" extent="90.0"
-	               fill="#ffff00" stroke="#ff0000" strokeThickness="4" type="pie"/>
+                    stroke="#00ff00" strokeThickness="4"
+                    cornerRadius="20"/>
+                <Arc x="-10" y="10" width="50" height="50" start="90.0" extent="90.0"
+                   fill="#ffff00" stroke="#ff0000" strokeThickness="4" type="pie"/>
                 <Arc x="0" y="10" width="50" height="50" start="0.0" extent="90.0"
                    fill="#ffff00" stroke="#ff0000" strokeThickness="4" type="pie"
                    visible="false"/>
-	            <Line x1="-10" y1="130" x2="30" y2="90" stroke="#cc00cc" strokeThickness="20"/>
+                <Line x1="-10" y1="130" x2="30" y2="90" stroke="#cc00cc" strokeThickness="20"/>
             </Group>
-            
+
             <Group x="240" y="240">
                 <QuadCurve x1="0" y1="0" x2="0" y2="50" controlX="50" controlY="25"
                     strokeThickness="4" fill="#ff00ff"/>
             </Group>
 
             <Group x="360" y="240">
-                <CubicCurve x1="0" y1="0" x2="0" y2="50" 
+                <CubicCurve x1="0" y1="0" x2="0" y2="50"
                     controlX1="12" controlY1="12" controlX2="25" controlY2="37"
                     strokeThickness="4" fill="#00ffff"/>
             </Group>
-            
+
             <Group x="120" y="360">
                 <Text text="ABCDEF GHIJK" font="Arial BOLD 24" width="80"
                     alignment="left"/>

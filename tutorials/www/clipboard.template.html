@@ -44,9 +44,10 @@ var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApple
     width:720,
     height:480
 };
-var parameters = {application_class_name:"org.apache.pivot.tutorials.clipboard.Clipboard",
+var parameters = {application_class_name:"org.apache.pivot.wtk.ScriptApplication",
     codebase_lookup:false,
-    java_arguments:"-Dsun.awt.noerasebackground=true -Dsun.awt.erasebackgroundonresize=true"
+    java_arguments:"-Dsun.awt.noerasebackground=true -Dsun.awt.erasebackgroundonresize=true",
+    startup_properties:"org/apache/pivot/tutorials/clipboard/clipboard.wtkx"
 };
 deployJava.writeAppletTag(attributes, parameters);
 </script>

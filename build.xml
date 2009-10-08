@@ -734,10 +734,12 @@ limitations under the License.
             <include name="RELEASE-NOTES"/>
             <include name="**/*.java"/>
             <include name="**/*.html"/>
+            <include name="**/*.jsp"/>
             <include name="**/*.txt"/>
             <include name="**/*.properties"/>
             <include name="**/*.xml"/>
             <include name="**/*.wtkx"/>
+            <include name="**/*.wtkd"/>
             <include name="**/*.json"/>
         </fileset>
         <replaceregexp match="[\t]" replace="    " flags="gm" byline="true">

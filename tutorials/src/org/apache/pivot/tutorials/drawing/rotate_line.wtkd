@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Drawing xmlns:wtkx="http://pivot.apache.org/wtkx" 
+<Drawing xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk.media">
     <canvas>
         <Canvas xmlns="org.apache.pivot.wtk.media.drawing">
