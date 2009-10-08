@@ -17,54 +17,29 @@ limitations under the License.
 
 <html>
 <head>
-<title>Pivot DOM Interaction Demo</title>
+<title>Pivot iTunes Search Demo</title>
 <link rel="stylesheet" href="demo.css">
-
-<script>
-// This function will be called by Pivot
-function sayHello(helloText) {
-    alert(helloText);
-}
-
-// This function will call into Pivot
-function onHelloButtonClick() {
-    var domTestApplet = document.getElementById("domTestApplet");
-    domTestApplet.getApplication().sayHello("Hello from JavaScript!");
-}
-</script>
-
 </head>
 <body>
-<p>Demonstrates Pivot's support for bi-directional communication between a Pivot
-application and the browser DOM.</p>
+<p>Simple application that allows a user to run search queries against the
+iTunes Music Store and presents the results in a table view.</p>
 
-<table>
-<tr>
-<td style="text-align:center; border:solid 1px #999999">
-
+<script src="version.js"></script>
 <script src="http://java.com/js/deployJava.js"></script>
 <script>
 var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
-    archive:"lib/@project_name@-core-@version@.jar,lib/@project_name@-wtk-@version@.jar,lib/@project_name@-wtk-@version@.terra.jar,lib/@project_name@-demos-@version@.jar",
-    width:380,
-    height:240,
-    id:"domTestApplet"
+    archive:"lib/pivot-core-" + version + ".signed.jar"
+        + ",lib/pivot-wtk-" + version + ".signed.jar"
+        + ",lib/pivot-wtk-" + version + ".signed.terra.jar"
+        + ",lib/pivot-demos-" + version + ".signed.jar",
+    width:640,
+    height:480
 };
-var parameters = {application_class_name:"org.apache.pivot.demos.dom.DOMInteractionDemo",
+var parameters = {application_class_name:"org.apache.pivot.demos.itunes.SearchDemo",
     codebase_lookup:false,
     java_arguments:"-Dsun.awt.noerasebackground=true -Dsun.awt.erasebackgroundonresize=true"
 };
-var version = "1.6";
-deployJava.runApplet(attributes, parameters, version);
+deployJava.runApplet(attributes, parameters, "1.6");
 </script>
-</td>
-</tr>
-<tr>
-<td style="text-align:center; border:solid 1px #999999">
-<button onclick="onHelloButtonClick()">Say Hello</button>
-</td>
-</tr>
-</table>
-
 </body>
 </html>

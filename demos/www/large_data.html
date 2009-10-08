@@ -33,10 +33,14 @@ generated from a database query or other back-end data source.</p>
 <p>Note that the 10e3.csv, 10e4.csv, and 10e5.csv files are not included in
 this distribution due to their large size.</p>
 
+<script src="version.js"></script>
 <script src="http://java.com/js/deployJava.js"></script>
 <script>
 var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
-    archive:"lib/@project_name@-core-@version@.jar,lib/@project_name@-wtk-@version@.jar,lib/@project_name@-wtk-@version@.terra.jar,lib/@project_name@-demos-@version@.jar",
+    archive:"lib/pivot-core-" + version + ".jar"
+        + ",lib/pivot-wtk-" + version + ".jar"
+        + ",lib/pivot-wtk-" + version + ".terra.jar"
+        + ",lib/pivot-demos-" + version + ".jar",
     width:600,
     height:480
 };
@@ -45,8 +49,7 @@ var parameters = {application_class_name:"org.apache.pivot.demos.million.LargeDa
     codebase_lookup:false,
     java_arguments:"-Xms512M -Dsun.awt.noerasebackground=true -Dsun.awt.erasebackgroundonresize=true"
 };
-var version = "1.6";
-deployJava.runApplet(attributes, parameters, version);
+deployJava.runApplet(attributes, parameters, "1.6");
 </script>
 </body>
 </html>

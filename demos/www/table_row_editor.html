@@ -17,31 +17,33 @@ limitations under the License.
 
 <html>
 <head>
-<title>Pivot RSS Feed Demo</title>
+<title>Pivot Table Row Editor Demo</title>
 <link rel="stylesheet" href="demo.css">
 </head>
 <body>
-<p>This application demonstrates how to build a simple RSS client in Pivot. It
-uses a custom list view item renderer to present the news data. Double-clicking
-an item in the list will open the article in a new window.</p>
+<p>This sample application demonstrates the use of a flip transition to bring
+up a table view row editor.</p>
 
-<p>Note that this applet requires Java 6 Update 10 or later, since it relies on
-the existence of a crossdomain.xml file on the server in order for an unsigned
-applet to request the news feed.</p>
-
+<script src="version.js"></script>
 <script src="http://java.com/js/deployJava.js"></script>
 <script>
 var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
-    archive:"lib/@project_name@-core-@version@.jar,lib/@project_name@-wtk-@version@.jar,lib/@project_name@-wtk-@version@.terra.jar,lib/@project_name@-demos-@version@.jar",
+    archive:"lib/pivot-core-" + version + ".jar"
+        + ",lib/pivot-wtk-" + version + ".jar"
+        + ",lib/pivot-wtk-" + version + ".terra.jar"
+        + ",lib/pivot-demos-" + version + ".jar",
     width:480,
     height:360
 };
-var parameters = {application_class_name:"org.apache.pivot.demos.rss.RSSFeedDemo",
+var parameters = {application_class_name:"org.apache.pivot.demos.roweditor.RowEditorDemo",
     codebase_lookup:false,
     java_arguments:"-Dsun.awt.noerasebackground=true -Dsun.awt.erasebackgroundonresize=true"
 };
-var version = "1.6";
-deployJava.runApplet(attributes, parameters, version);
+deployJava.runApplet(attributes, parameters, "1.6");
 </script>
+
+<p>Users can double click on any row to bring up the editor. Pressing the Enter
+key or clicking outside the bounds of the editor will save the edits, and
+pressing the Escape key will cancel the edits.</p>
 </body>
 </html>

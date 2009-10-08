@@ -36,6 +36,8 @@ public class DecoratorDemo implements Application {
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         reflectionWindow = (Window)wtkxSerializer.readObject(this, "reflection.wtkx");
+        wtkxSerializer.reset();
+
         translucentFrame = (Frame)wtkxSerializer.readObject(this, "translucent.wtkx");
 
         final FadeDecorator fadeDecorator = new FadeDecorator();

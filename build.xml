@@ -166,15 +166,8 @@ limitations under the License.
 
         <sequential>
             <delete dir="@{project}/www/lib"/>
-            <delete>
-                <fileset dir="@{project}/www">
-                    <include name="*.html"/>
-                    <include name="*.jsp"/>
-                    <include name="*.jnlp"/>
-                    <exclude name="*.template.*"/>
-                    <exclude name="index.html"/>
-                </fileset>
-            </delete>
+            <delete file="@{project}/www/version.jsp"/>
+            <delete file="@{project}/www/version.js"/>
         </sequential>
     </macrodef>
 
@@ -598,7 +591,7 @@ limitations under the License.
 
         <delete dir="${folder.lib}/signed"/>
 
-        <!-- Define filters for processing HTML and JSP files -->
+        <!-- Define filters for processing HTML files -->
         <filter token="project_name" value="${ant.project.name}"/>
         <filter token="version" value="${version}"/>
 
@@ -611,32 +604,26 @@ limitations under the License.
             </fileset>
         </copy>
 
-        <!-- Generate demos HTML, JSP and JNLP files -->
+        <!-- Generate demos version templates -->
         <copy todir="demos/www" filtering="true">
             <fileset dir="demos/www">
-                <include name="*.template.html"/>
+                <include name="version.template.jsp"/>
             </fileset>
-            <mapper type="glob" from="*.template.html" to="*.html"/>
-        </copy>
-
-    	<copy todir="demos/www" filtering="true">
-            <fileset dir="demos/www">
-                <include name="*.template.jsp"/>
-            </fileset>
-            <mapper type="glob" from="*.template.jsp" to="*.jsp"/>
+            <mapper type="glob" from="version.template.jsp" to="version.jsp"/>
         </copy>
 
         <copy todir="demos/www" filtering="true">
             <fileset dir="demos/www">
-                <include name="*.template.jnlp"/>
+                <include name="version.template.js"/>
             </fileset>
-            <mapper type="glob" from="*.template.jnlp" to="*.jnlp"/>
+            <mapper type="glob" from="version.template.js" to="version.js"/>
         </copy>
 
         <!-- Generate demos WAR -->
         <war destfile="${folder.lib}/${ant.project.name}-demos.war" webxml="demos/web.xml">
             <fileset dir="demos/www">
-                <exclude name="*.template.*"/>
+                <exclude name="version.template.js"/>
+                <exclude name="version.template.jsp"/>
             </fileset>
         </war>
 
@@ -650,98 +637,27 @@ limitations under the License.
             </fileset>
         </copy>
 
-        <!-- Generate tutorials HTML, JSP and JNLP files -->
+        <!-- Generate tutorials version templates -->
         <copy todir="tutorials/www" filtering="true">
             <fileset dir="tutorials/www">
-                <include name="*.template.html"/>
+                <include name="version.template.jsp"/>
             </fileset>
-            <mapper type="glob" from="*.template.html" to="*.html"/>
+            <mapper type="glob" from="version.template.jsp" to="version.jsp"/>
         </copy>
 
         <copy todir="tutorials/www" filtering="true">
             <fileset dir="tutorials/www">
-                <include name="*.template.jsp"/>
+                <include name="version.template.js"/>
             </fileset>
-            <mapper type="glob" from="*.template.jsp" to="*.jsp"/>
-        </copy>
-
-        <copy todir="tutorials/www" filtering="true">
-            <fileset dir="tutorials/www">
-                <include name="*.template.jnlp"/>
-            </fileset>
-            <mapper type="glob" from="*.template.jnlp" to="*.jnlp"/>
+            <mapper type="glob" from="version.template.js" to="version.js"/>
         </copy>
 
         <!-- Generate tutorials WAR -->
         <war destfile="${folder.lib}/${ant.project.name}-tutorials.war" webxml="tutorials/web.xml">
             <fileset dir="tutorials/www">
-                <exclude name="*.template.*"/>
+                <exclude name="version.template.js"/>
+                <exclude name="version.template.jsp"/>
             </fileset>
-        </war>
-
-        <!-- Deploy web test -->
-        <mkdir dir="web/www/lib"/>
-
-        <jar destfile="web/www/lib/${ant.project.name}-web-${version}.test.jar" index="${compiler.indexJars}">
-            <fileset dir="web/${folder.bin}"
-                includes="org/apache/pivot/web/test/**"
-                excludes="org/apache/pivot/web/test/server/**"/>
-            <fileset dir="web/test">
-                <exclude name="org/apache/pivot/web/test/server/**"/>
-                <exclude name="**/*.java"/>
-                <exclude name="**/package.html"/>
-            </fileset>
-        </jar>
-
-        <copy todir="web/www/lib">
-            <fileset dir="${folder.lib}">
-                <include name="*.jar"/>
-                <exclude name="*-charts*.jar"/>
-                <exclude name="*-demos*.jar"/>
-                <exclude name="*-tutorials*.jar"/>
-                <exclude name="*.server.jar"/>
-            </fileset>
-        </copy>
-
-        <!-- Generate web test HTML and JNLP files -->
-        <copy todir="web/www" filtering="true">
-            <fileset dir="web/www">
-                <include name="*.template.html"/>
-            </fileset>
-            <mapper type="glob" from="*.template.html" to="*.html"/>
-        </copy>
-
-        <copy todir="web/www" filtering="true">
-            <fileset dir="web/www">
-                <include name="*.template.jsp"/>
-            </fileset>
-            <mapper type="glob" from="*.template.jsp" to="*.jsp"/>
-        </copy>
-
-        <copy todir="web/www" filtering="true">
-            <fileset dir="web/www">
-                <include name="*.template.jnlp"/>
-            </fileset>
-            <mapper type="glob" from="*.template.jnlp" to="*.jnlp"/>
-        </copy>
-
-        <!-- Generate web test WAR -->
-        <war destfile="${folder.lib}/${ant.project.name}_web_test.war" webxml="web/web.xml">
-            <fileset dir="web/www">
-                <exclude name="*.template.*"/>
-            </fileset>
-            <classes dir="web/${folder.bin}">
-                <include name="org/apache/pivot/web/test/server/**"/>
-            </classes>
-            <classes dir="web/test">
-                <include name="org/apache/pivot/web/test/server/**"/>
-                <exclude name="**/*.java"/>
-                <exclude name="**/package.html"/>
-            </classes>
-            <lib dir="${folder.lib}">
-                <include name="${jar.core}"/>
-                <include name="${jar.web.server}"/>
-            </lib>
         </war>
     </target>
 
@@ -757,7 +673,6 @@ limitations under the License.
             <include name="**/*.java"/>
             <include name="**/*.html"/>
             <include name="**/*.jsp"/>
-            <include name="**/*.jnlp"/>
             <include name="**/*.txt"/>
             <include name="**/*.properties"/>
             <include name="**/*.xml"/>
