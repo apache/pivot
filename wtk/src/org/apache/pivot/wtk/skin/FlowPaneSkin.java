@@ -38,7 +38,7 @@ public class FlowPaneSkin extends ContainerSkin {
 
     @Override
     public int getPreferredWidth(int height) {
-        FlowPane flowPane = (FlowPane) getComponent();
+        FlowPane flowPane = (FlowPane)getComponent();
 
         int preferredWidth = 0;
 
@@ -67,7 +67,7 @@ public class FlowPaneSkin extends ContainerSkin {
 
     @Override
     public int getPreferredHeight(int width) {
-        FlowPane flowPane = (FlowPane) getComponent();
+        FlowPane flowPane = (FlowPane)getComponent();
 
         int preferredHeight = 0;
 
@@ -131,7 +131,7 @@ public class FlowPaneSkin extends ContainerSkin {
 
     @Override
     public Dimensions getPreferredSize() {
-        FlowPane flowPane = (FlowPane) getComponent();
+        FlowPane flowPane = (FlowPane)getComponent();
 
         int preferredWidth = 0;
         int preferredHeight = 0;
@@ -162,7 +162,7 @@ public class FlowPaneSkin extends ContainerSkin {
 
     @Override
     public int getBaseline(int width) {
-        FlowPane flowPane = (FlowPane) getComponent();
+        FlowPane flowPane = (FlowPane)getComponent();
 
         int baseline = -1;
 
@@ -187,7 +187,7 @@ public class FlowPaneSkin extends ContainerSkin {
                 }
             }
         }
-        
+
         // Include top and bottom padding values
         if (baseline != -1) {
             baseline += padding.top;

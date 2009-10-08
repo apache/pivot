@@ -93,7 +93,7 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
     public static final int SHOW_TOOLTIP_TIMEOUT = 1000;
 
     /** if true, draw red lines over components to indicate where the baselines are */
-    protected static boolean debugBaseline = false; 
+    protected static boolean debugBaseline = false;
     static {
         try {
             debugBaseline = Boolean.parseBoolean(System.getProperty("pivot.wtk.debugBaseline"));
@@ -101,7 +101,7 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
             // ignore exception when running in applet
         }
     }
-    
+
     @Override
     public int getWidth() {
         return width;
@@ -127,7 +127,7 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
     public int getBaseline(int width) {
        return -1;
     }
-    
+
     @Override
     public void install(Component component) {
         assert(this.component == null) : "Skin is already installed on a component.";
@@ -387,7 +387,7 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
 
         return font;
     }
-    
+
     protected final void drawBaselineDebug(Graphics2D graphics) {
         int width = getWidth();
         int baseline = getBaseline(width);

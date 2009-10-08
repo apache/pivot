@@ -143,7 +143,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
         return baseline;
     }
-    
+
     @Override
     public void layout() {
         // No-op
@@ -301,7 +301,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
         return itemBaseline;
     }
-    
+
     @Override
     public boolean isFocusable() {
         ListView listView = (ListView)getComponent();
@@ -829,8 +829,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                     if (!listView.isCheckmarkDisabled(selectedIndex)) {
                         listView.setItemChecked(selectedIndex,
                             !listView.isItemChecked(selectedIndex));
-                    		consumed = true;
-                		}
+                            consumed = true;
+                        }
                 }
 
                 break;

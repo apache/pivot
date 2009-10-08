@@ -83,7 +83,7 @@ public class TerraLinkButtonSkin extends LinkButtonSkin {
 
         return dataRenderer.getBaseline(width);
     }
-    
+
     @Override
     public void paint(Graphics2D graphics) {
         LinkButton linkButton = (LinkButton)getComponent();

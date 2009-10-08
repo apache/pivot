@@ -134,7 +134,7 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
 
         return baseline;
     }
-    
+
     @Override
     public void paint(Graphics2D graphics) {
         RadioButton radioButton = (RadioButton)getComponent();

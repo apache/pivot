@@ -188,7 +188,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
 
             return baseline;
         }
-        
+
         @Override
         public Dimensions getPreferredSize() {
             Dimensions preferredSize;
@@ -606,7 +606,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         int baseline = spinnerContent.getBaseline(width) + 1;
         return baseline;
     }
-    
+
     @Override
     public void layout() {
         int width = getWidth();

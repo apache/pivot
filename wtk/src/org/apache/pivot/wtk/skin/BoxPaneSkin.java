@@ -174,7 +174,7 @@ public class BoxPaneSkin extends ContainerSkin
 
         return baseline;
     }
-    
+
     @Override
     public Dimensions getPreferredSize() {
         BoxPane boxPane = (BoxPane)getComponent();

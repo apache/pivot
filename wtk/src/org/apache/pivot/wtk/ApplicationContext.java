@@ -127,7 +127,7 @@ public abstract class ApplicationContext {
                 } else {
                     event.acceptDrag(getNativeDropAction(dropAction));
                 }
-                
+
                 display.validate();
             }
 
@@ -146,7 +146,7 @@ public abstract class ApplicationContext {
                 }
 
                 dropDescendant = null;
-                
+
                 display.validate();
             }
 
@@ -193,7 +193,7 @@ public abstract class ApplicationContext {
                 } else {
                     event.acceptDrag(getNativeDropAction(dropAction));
                 }
-                
+
                 display.validate();
             }
 
@@ -219,7 +219,7 @@ public abstract class ApplicationContext {
                 } else {
                     event.acceptDrag(getNativeDropAction(dropAction));
                 }
-                
+
                 display.validate();
             }
 
@@ -264,7 +264,7 @@ public abstract class ApplicationContext {
 
                 // Clear drop state
                 dropDescendant = null;
-                
+
                 display.validate();
             }
         };

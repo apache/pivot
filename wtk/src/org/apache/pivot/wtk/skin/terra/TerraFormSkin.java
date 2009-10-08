@@ -41,13 +41,15 @@ public class TerraFormSkin extends ContainerSkin
     private ArrayList<ArrayList<ImageView>> flagImageViews = new ArrayList<ArrayList<ImageView>>();
 
     private boolean rightAlignLabels = false;
-    /** make the field fill the width of the form */
+
+    // Make the field fill the width of the form
     private boolean fill = false;
     private int horizontalSpacing = 6;
     private int verticalSpacing = 6;
     private int flagImageOffset = 4;
     private boolean showFirstSectionHeading = false;
-    /** align field and label so that their baselines line up */
+
+    // Align field and label so that their baselines line up
     private boolean alignToBaseline = true;
     private String delimiter = DEFAULT_DELIMITER;
 
@@ -79,7 +81,7 @@ public class TerraFormSkin extends ContainerSkin
         int maximumFieldWidth = 0;
         int maximumSeparatorWidth = 0;
 
-        Form form = (Form) getComponent();
+        Form form = (Form)getComponent();
         Form.SectionSequence sections = form.getSections();
 
         for (int sectionIndex = 0, sectionCount = sections.getLength();
@@ -117,7 +119,7 @@ public class TerraFormSkin extends ContainerSkin
     public int getPreferredHeight(int width) {
         int preferredHeight = 0;
 
-        Form form = (Form) getComponent();
+        Form form = (Form)getComponent();
         Form.SectionSequence sections = form.getSections();
 
         // If justified and constrained, determine field width constraint
@@ -209,7 +211,7 @@ public class TerraFormSkin extends ContainerSkin
 
     @Override
     public void layout() {
-        Form form = (Form) getComponent();
+        Form form = (Form)getComponent();
         Form.SectionSequence sections = form.getSections();
 
         // Determine the maximum label and field widths
@@ -425,7 +427,7 @@ public class TerraFormSkin extends ContainerSkin
 
         this.delimiter = delimiter;
 
-        Form form = (Form) getComponent();
+        Form form = (Form)getComponent();
         Form.SectionSequence sections = form.getSections();
 
         for (int i = 0, n = sections.getLength(); i < n; i++) {
@@ -489,7 +491,7 @@ public class TerraFormSkin extends ContainerSkin
 
     // Implementation methods
     private void insertSection(Form.Section section, int index) {
-        Form form = (Form) getComponent();
+        Form form = (Form)getComponent();
 
         // Insert separator
         Separator separator = new Separator(section.getHeading());
@@ -512,7 +514,7 @@ public class TerraFormSkin extends ContainerSkin
     }
 
     private void removeSections(int index, Sequence<Form.Section> removed) {
-        Form form = (Form) getComponent();
+        Form form = (Form)getComponent();
 
         for (int i = 0, n = removed.getLength(); i < n; i++) {
             // Remove fields
@@ -536,7 +538,7 @@ public class TerraFormSkin extends ContainerSkin
     }
 
     private void insertField(Form.Section section, Component field, int index) {
-        Form form = (Form) getComponent();
+        Form form = (Form)getComponent();
         int sectionIndex = form.getSections().indexOf(section);
 
         // Create the label
@@ -555,7 +557,7 @@ public class TerraFormSkin extends ContainerSkin
     }
 
     private void removeFields(Form.Section section, int index, int count) {
-        Form form = (Form) getComponent();
+        Form form = (Form)getComponent();
         int sectionIndex = form.getSections().indexOf(section);
 
         // Remove the labels
@@ -574,7 +576,7 @@ public class TerraFormSkin extends ContainerSkin
     }
 
     private void updateSectionHeading(Form.Section section) {
-        Form form = (Form) getComponent();
+        Form form = (Form)getComponent();
         int sectionIndex = form.getSections().indexOf(section);
 
         Separator separator = separators.get(sectionIndex);
@@ -582,7 +584,7 @@ public class TerraFormSkin extends ContainerSkin
     }
 
     private void updateFieldLabel(Form.Section section, int fieldIndex) {
-        Form form = (Form) getComponent();
+        Form form = (Form)getComponent();
         Component field = section.get(fieldIndex);
 
         int sectionIndex = form.getSections().indexOf(section);
@@ -592,7 +594,7 @@ public class TerraFormSkin extends ContainerSkin
     }
 
     private void updateFieldFlag(Form.Section section, int fieldIndex) {
-        Form form = (Form) getComponent();
+        Form form = (Form)getComponent();
         Component field = section.get(fieldIndex);
 
         int sectionIndex = form.getSections().indexOf(section);

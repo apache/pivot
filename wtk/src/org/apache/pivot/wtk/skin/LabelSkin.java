@@ -176,12 +176,12 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         return new Dimensions(preferredWidth, preferredHeight);
     }
 
-    
+
     @Override
     public int getBaseline(int width) {
       Label label = (Label)getComponent();
-       
-      /* calculate the baseline of the text */
+
+      // Calculate the baseline of the text
       int baseline = -1;
 
       String text = label.getText();
@@ -222,7 +222,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
       return baseline;
     }
-    
+
     @Override
     public void layout() {
         // No-op
@@ -244,7 +244,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         if (debugBaseline) {
             drawBaselineDebug(graphics);
         }
-        
+
         if (text != null
             && text.length() > 0) {
             if (fontRenderContext.isAntiAliased()) {

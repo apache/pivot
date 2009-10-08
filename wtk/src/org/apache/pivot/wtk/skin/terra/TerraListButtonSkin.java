@@ -211,7 +211,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
 
         return baseline;
     }
-    
+
     @Override
     public void layout() {
         // No-op

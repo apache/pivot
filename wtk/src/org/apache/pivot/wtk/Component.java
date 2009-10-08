@@ -39,7 +39,6 @@ import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.ThreadUtilities;
 import org.apache.pivot.wtk.effects.Decorator;
 
-
 /**
  * Top level abstract base class for all components. In MVC terminology, a
  * component represents the "controller". It has no inherent visual
@@ -1444,7 +1443,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the component's baseline for a given width.
-     * 
+     *
      * @return The component's baseline relative to the origin of the parent
      *         container. -1 indicates that no baseline exists.
      */
@@ -2460,7 +2459,7 @@ public abstract class Component implements ConstrainedVisual {
 
         try {
             if (styles.charAt(0) == '{') {
-            setStyles(JSONSerializer.parseMap(styles));
+                setStyles(JSONSerializer.parseMap(styles));
             } else {
                 setStyles(ThreadUtilities.getClassLoader().getResource(styles));
             }

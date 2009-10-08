@@ -329,23 +329,23 @@ public class TerraTextInputSkin extends ComponentSkin
 
     @Override
     public int getBaseline(int width) {
-      /* calculate the baseline of the text */
+      // Calculate the baseline of the text
       int baseline = -1;
-      
+
       // TODO Localize?
       // TODO Recalculate only when font changes
       String testString = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz";
-      
+
       LineMetrics lm = font.getLineMetrics(testString, fontRenderContext);
       baseline = (int)Math.ceil(lm.getAscent()-2);
-      
+
       if (baseline!=-1) {
-       baseline += padding.top + 1;
+          baseline += padding.top + 1;
       }
 
       return baseline;
     }
-    
+
     @Override
     public void layout() {
         // No-op
@@ -387,7 +387,7 @@ public class TerraTextInputSkin extends ComponentSkin
         if (debugBaseline) {
             drawBaselineDebug(graphics);
         }
-        
+
         // Paint the bevel
         graphics.setPaint(bevelColor);
         GraphicsUtilities.drawLine(graphics, 1, 1, width - 2, Orientation.HORIZONTAL);
@@ -1167,10 +1167,10 @@ public class TerraTextInputSkin extends ComponentSkin
                 // character
                 if (selectionLength == 0) {
                     if (selectionStart > 0) {
-                    selectionStart--;
+                        selectionStart--;
                     } else {
                         consumed = false;
-                }
+                    }
                 }
 
                 selectionLength = 0;
@@ -1204,7 +1204,7 @@ public class TerraTextInputSkin extends ComponentSkin
 
                 if (selectionLength == 0) {
                     if (selectionStart < textNode.getCharacterCount()) {
-	                    selectionStart++;
+                        selectionStart++;
                     } else {
                         consumed = false;
                     }

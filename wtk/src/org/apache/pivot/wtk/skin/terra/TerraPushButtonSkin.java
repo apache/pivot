@@ -57,7 +57,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     private Color disabledBevelColor;
 
     public TerraPushButtonSkin() {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
 
         font = theme.getFont();
         color = theme.getColor(1);
@@ -196,7 +196,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
 
         return baseline;
     }
-    
+
     @Override
     public void paint(Graphics2D graphics) {
         PushButton pushButton = (PushButton) getComponent();
@@ -253,7 +253,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         if (pushButton.isFocused()
             && !toolbar) {
             BasicStroke dashStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND,
-                BasicStroke.JOIN_ROUND, 1.0f, new float[] { 0.0f, 2.0f }, 0.0f);
+                BasicStroke.JOIN_ROUND, 1.0f, new float[] {0.0f, 2.0f}, 0.0f);
 
             graphics.setStroke(dashStroke);
             graphics.setColor(this.borderColor);
@@ -322,7 +322,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public final void setColor(int color) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
         setColor(theme.getColor(color));
     }
 
@@ -348,7 +348,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public final void setDisabledColor(int disabledColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
         setDisabledColor(theme.getColor(disabledColor));
     }
 
@@ -376,7 +376,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public final void setBackgroundColor(int backgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
         setBackgroundColor(theme.getColor(backgroundColor));
     }
 
@@ -403,7 +403,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public final void setDisabledBackgroundColor(int disabledBackgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
         setDisabledBackgroundColor(theme.getColor(disabledBackgroundColor));
     }
 
@@ -429,7 +429,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public final void setBorderColor(int borderColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
         setBorderColor(theme.getColor(borderColor));
     }
 
@@ -455,7 +455,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public final void setDisabledBorderColor(int disabledBorderColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
         setDisabledBorderColor(theme.getColor(disabledBorderColor));
     }
 
