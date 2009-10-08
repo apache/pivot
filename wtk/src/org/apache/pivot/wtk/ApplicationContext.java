@@ -76,8 +76,6 @@ public abstract class ApplicationContext {
     public final class DisplayHost extends java.awt.Canvas {
         private static final long serialVersionUID = 0;
 
-        // TODO private Point dragLocation = null;
-
         private Component focusedComponent = null;
 
         private Point dragLocation = null;
@@ -129,6 +127,8 @@ public abstract class ApplicationContext {
                 } else {
                     event.acceptDrag(getNativeDropAction(dropAction));
                 }
+                
+                display.validate();
             }
 
             @Override
@@ -146,6 +146,8 @@ public abstract class ApplicationContext {
                 }
 
                 dropDescendant = null;
+                
+                display.validate();
             }
 
             @Override
@@ -191,6 +193,8 @@ public abstract class ApplicationContext {
                 } else {
                     event.acceptDrag(getNativeDropAction(dropAction));
                 }
+                
+                display.validate();
             }
 
             @Override
@@ -215,6 +219,8 @@ public abstract class ApplicationContext {
                 } else {
                     event.acceptDrag(getNativeDropAction(dropAction));
                 }
+                
+                display.validate();
             }
 
             @Override
@@ -254,9 +260,12 @@ public abstract class ApplicationContext {
 
                 // Clear drag state
                 dragManifest = null;
+                dragLocation = null;
 
                 // Clear drop state
                 dropDescendant = null;
+                
+                display.validate();
             }
         };
 
