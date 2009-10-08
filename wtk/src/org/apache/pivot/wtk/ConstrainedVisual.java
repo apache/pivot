@@ -56,8 +56,9 @@ public interface ConstrainedVisual extends Visual {
     /**
      * Returns the baseline for a given width.
      *
-     * @return The baseline relative to the origin of the parent
-     *         container. -1 indicates that no baseline exists.
+     * @return
+     * The baseline relative to the origin of this visual, or <tt>-1</tt> if
+     * this visual does not have a baseline.
      */
     public int getBaseline(int width);
 
