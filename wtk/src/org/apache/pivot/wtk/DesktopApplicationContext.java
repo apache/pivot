@@ -563,9 +563,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
             } else {
                 // Go to windowed mode
-                // TODO This line should be uncommented, but it can throw
-                // an exception on Win32 platforms. See PIVOT-319 for more info.
-                //graphicsDevice.setFullScreenWindow(null);
+                graphicsDevice.setFullScreenWindow(null);
 
                 fullScreenHostFrame.remove(displayHost);
                 fullScreenHostFrame.setVisible(false);
