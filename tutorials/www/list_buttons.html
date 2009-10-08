@@ -36,9 +36,13 @@ limitations under the License.
 
 <p>The following example demonstrates use of the <tt>ListButton</tt> component. Selecting an image name from the drop-down shows the corresponding image file in the image view on the right.</p>
 
+<script src="version.js"></script>
 <script>
 var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
-    archive:"lib/@project_name@-core-@version@.jar,lib/@project_name@-wtk-@version@.jar,lib/@project_name@-wtk-@version@.terra.jar,lib/@project_name@-tutorials-@version@.jar",
+    archive:"lib/pivot-core-" + version + ".jar"
+        + ",lib/pivot-wtk-" + version + ".jar"
+        + ",lib/pivot-wtk-" + version + ".terra.jar"
+        + ",lib/pivot-tutorials-" + version + ".jar",
     width:480,
     height:340,
     style:"border:solid 1px #999999"

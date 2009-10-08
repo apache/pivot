@@ -17,7 +17,6 @@
 package org.apache.pivot.demos.dom;
 
 import org.apache.pivot.collections.Map;
-import org.apache.pivot.wtk.Alert;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.BrowserApplicationContext;
 import org.apache.pivot.wtk.Button;
@@ -25,6 +24,7 @@ import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.HorizontalAlignment;
+import org.apache.pivot.wtk.Prompt;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Window;
 
@@ -74,7 +74,7 @@ public class DOMInteractionDemo implements Application {
         if (window.isBlocked()) {
             System.out.println("I'm already saying hello!");
         } else {
-            Alert.alert(helloText, window);
+            Prompt.prompt(helloText, window);
         }
     }
 }

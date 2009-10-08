@@ -36,9 +36,14 @@ limitations under the License.
 
 <p>The sample application is shown below. The application retrieves live (delayed by 15 minutes) stock quote data from <a href="http://finance.yahoo.com/">Yahoo! Finance</a> as a CSV file and presents it in a table view component (the applet is signed to allow it to communicate with the Yahoo web service):</p>
 
+<script src="version.js"></script>
 <script>
 var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
-    archive:"lib/@project_name@-core-@version@.signed.jar,lib/@project_name@-web-@version@.signed.jar,lib/@project_name@-wtk-@version@.signed.jar,lib/@project_name@-wtk-@version@.terra.signed.jar,lib/@project_name@-tutorials-@version@.signed.jar",
+    archive:"lib/pivot-core-" + version + ".signed.jar"
+        + ",lib/pivot-wtk-" + version + ".signed.jar"
+        + ",lib/pivot-web-" + version + ".signed.jar"
+        + ",lib/pivot-wtk-" + version + ".terra.signed.jar"
+        + ",lib/pivot-tutorials-" + version + ".signed.jar",
     width:480,
     height:360
 };

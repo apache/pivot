@@ -25,6 +25,7 @@ limitations under the License.
 <script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shCore.js"></script>
 <script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushJava.js"></script>
 <script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushXml.js"></script>
+<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushJScript.js"></script>
 <link type="text/css" rel="stylesheet" href="http://alexgorbatchev.com/pub/sh/current/styles/shCore.css"/>
 <link type="text/css" rel="stylesheet" href="http://alexgorbatchev.com/pub/sh/current/styles/shThemeDefault.css"/>
 <script type="text/javascript">
@@ -47,16 +48,20 @@ td {
 <table>
 <tr>
 <td rowspan="2">
+<script src="version.js"></script>
 <script>
 var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
-    archive:"lib/@project_name@-core-@version@.signed.jar,lib/@project_name@-wtk-@version@.signed.jar,lib/@project_name@-wtk-@version@.terra.signed.jar,lib/@project_name@-tutorials-@version@.signed.jar",
-    width:480,
-    height:480
+    archive:"lib/pivot-core-" + version + ".signed.jar"
+        + ",lib/pivot-wtk-" + version + ".signed.jar"
+        + ",lib/pivot-wtk-" + version + ".terra.signed.jar"
+        + ",lib/pivot-tutorials-" + version + ".signed.jar",
+    width:420,
+    height:420
 };
 var parameters = {application_class_name:"org.apache.pivot.wtk.ScriptApplication",
     codebase_lookup:false,
     java_arguments:"-Dsun.awt.noerasebackground=true -Dsun.awt.erasebackgroundonresize=true",
-    startup_properties:"org/apache/pivot/tutorials/dragdrop/drag_drop.wtkx"
+    startup_properties:"src=org/apache/pivot/tutorials/dragdrop/drag_drop.wtkx"
 };
 deployJava.writeAppletTag(attributes, parameters);
 </script>

@@ -38,9 +38,13 @@ limitations under the License.
 
 <p>Form contents are commonly organized into sections, to make it easier for the user to read. A contact management application might use a form such as the one shown below to collect information about the user's contacts. The form is divided into four sections, one for each aspect of the contact record: name, addresses, phone numbers, and email addresses. Note the use of the <tt>&lt;Form.Section&gt;</tt> elements to define the sections; the <tt>Form</tt>'s skin automatically inserts <a href="separators.html">separators</a> to visually partition the section content and uses the <tt>Form.Section</tt> heading as the <tt>Separator</tt> heading:</p>
 
+<script src="version.js"></script>
 <script>
 var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
-    archive:"lib/@project_name@-core-@version@.jar,lib/@project_name@-wtk-@version@.jar,lib/@project_name@-wtk-@version@.terra.jar,lib/@project_name@-tutorials-@version@.jar",
+    archive:"lib/pivot-core-" + version + ".jar"
+        + ",lib/pivot-wtk-" + version + ".jar"
+        + ",lib/pivot-wtk-" + version + ".terra.jar"
+        + ",lib/pivot-tutorials-" + version + ".jar",
     width:512,
     height:384
 };

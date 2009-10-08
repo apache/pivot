@@ -48,9 +48,13 @@ limitations under the License.
 
 <p>How the alignment values are handled varies depending on the box pane's orientation. Below is a sample application that demonstrates the effect each alignment value has on the box pane's components:</p>
 
+<script src="version.js"></script>
 <script>
 var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
-    archive:"lib/@project_name@-core-@version@.jar,lib/@project_name@-wtk-@version@.jar,lib/@project_name@-wtk-@version@.terra.jar,lib/@project_name@-tutorials-@version@.jar",
+    archive:"lib/pivot-core-" + version + ".jar"
+        + ",lib/pivot-wtk-" + version + ".jar"
+        + ",lib/pivot-wtk-" + version + ".terra.jar"
+        + ",lib/pivot-tutorials-" + version + ".jar",
     width:460,
     height:310,
     style:"border:solid 1px #999999"

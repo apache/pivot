@@ -36,9 +36,13 @@ limitations under the License.
 
 <p>Sliders allow a user to interactively select one of a range of values by dragging the mouse. The following example demonstrates the use of the <tt>Slider</tt> component. It allows the user to select a value from 0 - 255 and displays the value in a <tt>Label</tt> component:</p>
 
+<script src="version.js"></script>
 <script>
 var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
-    archive:"lib/@project_name@-core-@version@.jar,lib/@project_name@-wtk-@version@.jar,lib/@project_name@-wtk-@version@.terra.jar,lib/@project_name@-tutorials-@version@.jar",
+    archive:"lib/pivot-core-" + version + ".jar"
+        + ",lib/pivot-wtk-" + version + ".jar"
+        + ",lib/pivot-wtk-" + version + ".terra.jar"
+        + ",lib/pivot-tutorials-" + version + ".jar",
     width:160,
     height:30
 };

@@ -103,9 +103,14 @@ limitations under the License.
 
 <p>The application loads the resources for the appropriate locale at startup, and the WTKX serializer handles the details of resource substitution so the developer doesn't have to worry about it. The following applet demonstrates the Stock Tracker application run using the "fr" locale. No code changes are required; the same JAR files are used to execute both the English and French versions:</p>
 
+<script src="version.js"></script>
 <script>
 var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
-    archive:"lib/@project_name@-core-@version@.signed.jar,lib/@project_name@-web-@version@.signed.jar,lib/@project_name@-wtk-@version@.signed.jar,lib/@project_name@-wtk-@version@.terra.signed.jar,lib/@project_name@-tutorials-@version@.signed.jar",
+    archive:"lib/pivot-core-" + version + ".signed.jar"
+        + ",lib/pivot-wtk-" + version + ".signed.jar"
+        + ",lib/pivot-web-" + version + ".signed.jar"
+        + ",lib/pivot-wtk-" + version + ".terra.signed.jar"
+        + ",lib/pivot-tutorials-" + version + ".signed.jar",
     width:480,
     height:360
 };

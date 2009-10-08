@@ -36,9 +36,13 @@ limitations under the License.
 
 <p>Meters are used to report progress to the user, generally the completion percentage of a background task such as a file load operation. An example is shown below. Clicking the Start button initiates a background task that simulates a long-running operation. Periodically, the task updates the meter to reflect its progress:</p>
 
+<script src="version.js"></script>
 <script>
 var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
-    archive:"lib/@project_name@-core-@version@.jar,lib/@project_name@-wtk-@version@.jar,lib/@project_name@-wtk-@version@.terra.jar,lib/@project_name@-tutorials-@version@.jar",
+    archive:"lib/pivot-core-" + version + ".jar"
+        + ",lib/pivot-wtk-" + version + ".jar"
+        + ",lib/pivot-wtk-" + version + ".terra.jar"
+        + ",lib/pivot-tutorials-" + version + ".jar",
     width:300,
     height:100
 };

@@ -37,9 +37,13 @@ limitations under the License.
 
 <p>The previous example showed a basic table view that was populated by string-based hash map data and did not support sorting on the Olympic medal count data. This example populates the same table view with JSON values, which represent the medal counts as numbers, rather than strings:</p>
 
+<script src="version.js"></script>
 <script>
 var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
-    archive:"lib/@project_name@-core-@version@.jar,lib/@project_name@-wtk-@version@.jar,lib/@project_name@-wtk-@version@.terra.jar,lib/@project_name@-tutorials-@version@.jar",
+    archive:"lib/pivot-core-" + version + ".jar"
+        + ",lib/pivot-wtk-" + version + ".jar"
+        + ",lib/pivot-wtk-" + version + ".terra.jar"
+        + ",lib/pivot-tutorials-" + version + ".jar",
     width:480,
     height:240
 };

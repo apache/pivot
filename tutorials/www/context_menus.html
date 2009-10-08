@@ -44,9 +44,13 @@ public boolean configureContextMenu(Component component, Menu menu, int x, int y
 
 <p>The first two methods are related to menu bars and are discussed in the next section. The third method can be used to automatically present a context menu when the user right-clicks on a component to which the handler is attached. For example, the following application uses a menu handler to present a simple context-sensitive help menu that describes what the user clicked on:</p>
 
+<script src="version.js"></script>
 <script>
 var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
-    archive:"lib/@project_name@-core-@version@.jar,lib/@project_name@-wtk-@version@.jar,lib/@project_name@-wtk-@version@.terra.jar,lib/@project_name@-tutorials-@version@.jar",
+    archive:"lib/pivot-core-" + version + ".jar"
+        + ",lib/pivot-wtk-" + version + ".jar"
+        + ",lib/pivot-wtk-" + version + ".terra.jar"
+        + ",lib/pivot-tutorials-" + version + ".jar",
     width:420,
     height:240
 };
