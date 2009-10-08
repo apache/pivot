@@ -61,5 +61,4 @@ public interface ConstrainedVisual extends Visual {
      * this visual does not have a baseline.
      */
     public int getBaseline(int width);
-
 }

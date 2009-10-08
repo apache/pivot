@@ -409,7 +409,6 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         return new Dimensions(preferredWidth, preferredHeight);
     }
 
-
     @Override
     public int getBaseline(int width) {
         int baseline = -1;

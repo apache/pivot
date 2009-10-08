@@ -329,21 +329,21 @@ public class TerraTextInputSkin extends ComponentSkin
 
     @Override
     public int getBaseline(int width) {
-      // Calculate the baseline of the text
-      int baseline = -1;
+        // Calculate the baseline of the text
+        int baseline = -1;
 
-      // TODO Localize?
-      // TODO Recalculate only when font changes
-      String testString = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz";
+        // TODO Localize?
+        // TODO Recalculate only when font changes
+        String testString = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz";
 
-      LineMetrics lm = font.getLineMetrics(testString, fontRenderContext);
-      baseline = (int)Math.ceil(lm.getAscent()-2);
+        LineMetrics lm = font.getLineMetrics(testString, fontRenderContext);
+        baseline = (int)Math.ceil(lm.getAscent()-2);
 
-      if (baseline!=-1) {
-          baseline += padding.top + 1;
-      }
+        if (baseline!=-1) {
+            baseline += padding.top + 1;
+        }
 
-      return baseline;
+        return baseline;
     }
 
     @Override

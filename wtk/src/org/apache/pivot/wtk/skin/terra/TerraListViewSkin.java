@@ -162,8 +162,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
         // Paint the background
         if (backgroundColor != null) {
-        graphics.setPaint(backgroundColor);
-        graphics.fillRect(0, 0, width, height);
+            graphics.setPaint(backgroundColor);
+            graphics.fillRect(0, 0, width, height);
         }
 
         // Paint the list contents
@@ -295,8 +295,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
         int itemBaseline = renderer.getBaseline(width);
         if (listView.getCheckmarksEnabled()) {
-            itemBaseline = Math.max(CHECKBOX.getBaseline(width) + checkboxPadding.top
-                , itemBaseline);
+            itemBaseline = Math.max(CHECKBOX.getBaseline(width) + checkboxPadding.top,
+                itemBaseline);
         }
 
         return itemBaseline;
@@ -829,8 +829,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                     if (!listView.isCheckmarkDisabled(selectedIndex)) {
                         listView.setItemChecked(selectedIndex,
                             !listView.isItemChecked(selectedIndex));
-                            consumed = true;
-                        }
+                        consumed = true;
+                    }
                 }
 
                 break;

@@ -304,7 +304,7 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
         return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
     }
 
-
+    @Override
     public int getBaseline(int width) {
         // Our baseline is the maximum of all our possible renderers'
         // baseline

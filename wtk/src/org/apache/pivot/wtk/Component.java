@@ -1447,6 +1447,7 @@ public abstract class Component implements ConstrainedVisual {
      * @return The component's baseline relative to the origin of the parent
      *         container. -1 indicates that no baseline exists.
      */
+    @Override
     public int getBaseline(int width) {
         return skin.getBaseline(width);
     }
