@@ -154,7 +154,7 @@ public class BoxPaneSkin extends ContainerSkin
             for (int i = 0, n = boxPane.getLength(); i < n; i++) {
                 Component component = boxPane.get(i);
                 if (component.isVisible()) {
-                    baseline = component.getPreferredHeight(fill ? width : -1);
+                    baseline = component.getBaseline(fill ? width : -1);
                     break;
                 }
             }
