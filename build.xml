@@ -741,6 +741,7 @@ limitations under the License.
             <include name="**/*.wtkx"/>
             <include name="**/*.wtkd"/>
             <include name="**/*.json"/>
+            <include name="**/*.jnlp"/>
         </fileset>
         <replaceregexp match="[\t]" replace="    " flags="gm" byline="true">
             <fileset refid="trimfiles"/>
