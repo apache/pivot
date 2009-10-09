@@ -929,12 +929,10 @@ public class Window extends Container {
     }
 
     /**
-     * Moves the window to the top of the window stack and restores focus
-     * to the window. All windows owned by this window are subsequently moved
-     * to front, ensuring that this window's owned windows remain on top of
-     * it.
-     * <p>
-     * Finally, if it is not an auxilliary window, the window is made active.
+     * Moves the window to the top of the window stack. All owned windows are
+     * subsequently moved to the front, ensuring that this window's owned windows
+     * remain on top of it. If the window does not have any owned windows,
+     * focus is restored to it.
      */
     public void moveToFront() {
         if (!isOpen()) {
@@ -943,40 +941,43 @@ public class Window extends Container {
 
         // If this window is not currently top-most, move it to the top
         Display display = getDisplay();
-        int n = display.getLength() - 1;
+        int top = display.getLength() - 1;
 
         int i = display.indexOf(this);
-        if (i < n) {
-            display.move(i, n);
+        if (i < top) {
+            display.move(i, top);
         }
 
-        // Restore focus
-        if (isShowing()
-            && isEnabled()
-            && focusDescendant != null) {
-            focusDescendant.requestFocus();
-        }
+        int ownedWindowCount = ownedWindows.getLength();
 
-        // Move all open owned windows to the front of this window, preserving the
-        // current z-order
-        ArrayList<Integer> ownedWindowIndexes =
-            new ArrayList<Integer>(ownedWindows.getLength());
-
-        for (Window ownedWindow : ownedWindows) {
-            if (ownedWindow.isOpen()) {
-                ownedWindowIndexes.add(display.indexOf(ownedWindow));
+        if (ownedWindowCount == 0) {
+            // Restore focus
+            if (isShowing()
+                && isEnabled()
+                && focusDescendant != null) {
+                focusDescendant.requestFocus();
             }
-        }
+        } else {
+            // Move all open owned windows to the front of this window, preserving the
+            // current z-order
+            ArrayList<Integer> ownedWindowIndexes = new ArrayList<Integer>(ownedWindowCount);
 
-        ArrayList.sort(ownedWindowIndexes);
+            for (Window ownedWindow : ownedWindows) {
+                if (ownedWindow.isOpen()) {
+                    ownedWindowIndexes.add(display.indexOf(ownedWindow));
+                }
+            }
 
-        ArrayList<Window> sortedOwnedWindows = new ArrayList<Window>(ownedWindows.getLength());
-        for (Integer index : ownedWindowIndexes) {
-            sortedOwnedWindows.add((Window)display.get(index));
-        }
+            ArrayList.sort(ownedWindowIndexes);
 
-        for (Window ownedWindow : sortedOwnedWindows) {
-            ownedWindow.moveToFront();
+            ArrayList<Window> sortedOwnedWindows = new ArrayList<Window>(ownedWindows.getLength());
+            for (Integer index : ownedWindowIndexes) {
+                sortedOwnedWindows.add((Window)display.get(index));
+            }
+
+            for (Window ownedWindow : sortedOwnedWindows) {
+                ownedWindow.moveToFront();
+            }
         }
     }
 
