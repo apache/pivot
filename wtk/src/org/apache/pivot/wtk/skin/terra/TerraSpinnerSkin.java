@@ -250,13 +250,6 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         }
 
         @Override
-        public void enabledChanged(Component component) {
-            super.enabledChanged(component);
-
-            repaintComponent();
-        }
-
-        @Override
         public void focusedChanged(Component component, Component obverseComponent) {
             super.focusedChanged(component, obverseComponent);
 
@@ -264,7 +257,8 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         }
 
         @Override
-        public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+        public boolean keyPressed(Component component, int keyCode,
+            Keyboard.KeyLocation keyLocation) {
             boolean consumed = false;
 
             Spinner spinner = (Spinner)TerraSpinnerSkin.this.getComponent();
@@ -647,6 +641,12 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
             height, Orientation.VERTICAL);
         GraphicsUtilities.drawLine(graphics, width - buttonWidth - 2, buttonHeight + 1,
             buttonWidth + 1, Orientation.HORIZONTAL);
+    }
+
+    @Override
+    public void enabledChanged(Component component) {
+        super.enabledChanged(component);
+        repaintComponent();
     }
 
     @Override
