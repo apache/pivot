@@ -33,7 +33,129 @@ limitations under the License.
 </head>
 <body>
 <h1>Effects</h1>
-<p>This section is not yet complete.</p>
-<p>Next: <a href="background_tasks.html">Background Tasks</a></p>
+
+<p>The term "effects" refers to Pivot's support for customizing the appearance or behavior of a component, often over a timed interval producing an "animation". Pivot's primary support for effects is provided by two types of classes: decorators and transitions.</p>
+
+<p>Decorators allow an application alter the appearance of a component beyond what is supported by the component's styles or any custom renderers the component might support. For example, a decorator could be used to blur the main window of an application when a modal dialog is open, or render the image shown by an image view in grayscale rather than full color.</p>
+
+<p>The following example demonstrates a number of stock Pivot decorators by attaching the selected decorator to an <tt>ImageView</tt> component:</p>
+
+<script src="version.js"></script>
+<script>
+var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
+    archive:"lib/pivot-core-" + version + ".jar"
+        + ",lib/pivot-wtk-" + version + ".jar"
+        + ",lib/pivot-wtk-" + version + ".terra.jar"
+        + ",lib/pivot-tutorials-" + version + ".jar",
+    width:640,
+    height:490
+};
+var parameters = {application_class_name:"org.apache.pivot.wtk.ScriptApplication",
+    codebase_lookup:false,
+    java_arguments:"-Dsun.awt.noerasebackground=true -Dsun.awt.erasebackgroundonresize=true",
+    startup_properties:"src=org/apache/pivot/tutorials/effects/decorators.wtkx"
+};
+deployJava.writeAppletTag(attributes, parameters);
+</script>
+
+<p>The WTKX source for the example is shown below (there is no associated Java source):</p>
+
+<pre class="brush:xml">
+&lt;Window title="Decorators" maximized="true"
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:effects="org.apache.pivot.wtk.effects"
+    xmlns="org.apache.pivot.wtk"&gt;
+    &lt;wtkx:define&gt;
+        &lt;effects:BlurDecorator wtkx:id="blurDecorator"/&gt;
+        &lt;effects:FadeDecorator wtkx:id="fadeDecorator" opacity="0.33"/&gt;
+        &lt;effects:GrayscaleDecorator wtkx:id="grayscaleDecorator"/&gt;
+        &lt;effects:ReflectionDecorator wtkx:id="reflectionDecorator"/&gt;
+        &lt;effects:SaturationDecorator wtkx:id="saturationDecorator" multiplier="2.5"/&gt;
+        &lt;effects:ShadeDecorator wtkx:id="shadeDecorator" color="#ff0000" opacity="0.33"/&gt;
+        &lt;effects:WatermarkDecorator wtkx:id="watermarkDecorator" text="Watermark"
+            font="Arial BOLD 24" opacity="0.33"/&gt;
+    &lt;/wtkx:define&gt;
+
+    &lt;content&gt;
+        &lt;TablePane&gt;
+            &lt;columns&gt;
+                &lt;TablePane.Column width="1*"/&gt;
+                &lt;TablePane.Column width="-1"/&gt;
+            &lt;/columns&gt;
+            &lt;rows&gt;
+                &lt;TablePane.Row&gt;
+                    &lt;Border&gt;
+                        &lt;content&gt;
+                            &lt;BoxPane preferredWidth="480" preferredHeight="480"
+                                styles="{horizontalAlignment:'center', verticalAlignment:'top', padding:6}"&gt;
+                                &lt;ImageView wtkx:id="imageView" image="org/apache/pivot/tutorials/IMG_0725_2.jpg"/&gt;
+                            &lt;/BoxPane&gt;
+                        &lt;/content&gt;
+                    &lt;/Border&gt;
+
+                    &lt;BoxPane orientation="vertical" styles="{padding:6, spacing:6}"&gt;
+                        &lt;wtkx:define&gt;
+                            &lt;ButtonGroup wtkx:id="decoratorButtonGroup"&gt;
+                                &lt;buttonGroupListeners&gt;
+                                &lt;wtkx:script&gt;
+                                &lt;![CDATA[
+                                function selectionChanged(buttonGroup) {
+                                    var selection = buttonGroup.getSelection();
+
+                                    if (selection != null) {
+                                        var decorator = selection.getUserData().get("decorator");
+                                        imageView.getDecorators().removeAll();
+
+                                        if (decorator != null) {
+                                            imageView.getDecorators().add(decorator);
+                                        }
+                                    }
+                                }
+                                ]]&gt;
+                                &lt;/wtkx:script&gt;
+                                &lt;/buttonGroupListeners&gt;
+                            &lt;/ButtonGroup&gt;
+                        &lt;/wtkx:define&gt;
+
+                        &lt;RadioButton buttonData="None" buttonGroup="$decoratorButtonGroup" selected="true"/&gt;
+
+                        &lt;RadioButton buttonData="Blur" buttonGroup="$decoratorButtonGroup"&gt;
+                            &lt;userData decorator="$blurDecorator"/&gt;
+                        &lt;/RadioButton&gt;
+
+                        &lt;RadioButton buttonData="Fade" buttonGroup="$decoratorButtonGroup"&gt;
+                            &lt;userData decorator="$fadeDecorator"/&gt;
+                        &lt;/RadioButton&gt;
+
+                        &lt;RadioButton buttonData="Grayscale" buttonGroup="$decoratorButtonGroup"&gt;
+                            &lt;userData decorator="$grayscaleDecorator"/&gt;
+                        &lt;/RadioButton&gt;
+
+                        &lt;RadioButton buttonData="Reflection" buttonGroup="$decoratorButtonGroup"&gt;
+                            &lt;userData decorator="$reflectionDecorator"/&gt;
+                        &lt;/RadioButton&gt;
+
+                        &lt;RadioButton buttonData="Saturation" buttonGroup="$decoratorButtonGroup"&gt;
+                            &lt;userData decorator="$saturationDecorator"/&gt;
+                        &lt;/RadioButton&gt;
+
+                        &lt;RadioButton buttonData="Shade" buttonGroup="$decoratorButtonGroup"&gt;
+                            &lt;userData decorator="$shadeDecorator"/&gt;
+                        &lt;/RadioButton&gt;
+
+                        &lt;RadioButton buttonData="Watermark" buttonGroup="$decoratorButtonGroup"&gt;
+                            &lt;userData decorator="$watermarkDecorator"/&gt;
+                        &lt;/RadioButton&gt;
+                    &lt;/BoxPane&gt;
+                &lt;/TablePane.Row&gt;
+            &lt;/rows&gt;
+        &lt;/TablePane&gt;
+    &lt;/content&gt;
+&lt;/Window&gt;
+</pre>
+
+<p>Notice that decorators are allowed to paint outside of a component's bounds (which a component generally is not). This allows decorators to be used to create the reflection effect shown in the example, or to paint a drop shadow (in fact, the drop shadows that appear beneath Pivot windows are produced by the <tt>DropShadowDecorator</tt> class).</p>
+
+<p>Next: <a href="effects.transitions.html">Transitions</a></p>
 </body>
 </html>
