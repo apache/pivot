@@ -30,7 +30,9 @@ limitations under the License.
                 styles="{wrapText:true}"/>
         </Form.Section>
         <Form.Section heading="Test Section">
-            <TextInput Form.label="Text Input Field" text="Some sample text"/>
+            <TextInput Form.label="Text Input Field"
+                Form.Flag="{messageType:'error', message:'Error message'}"
+                text="Some sample text"/>
             <Checkbox Form.label="Checkbox" buttonData="Bell"/>
             <LinkButton Form.label="LinkButton" buttonData="Previous"/>
             <RadioButton Form.label="RadioButton" buttonData="Crossfade" selected="true"/>
@@ -41,7 +43,39 @@ limitations under the License.
                     <content:NumericSpinnerData lowerBound="0" upperBound="9" increment="1"/>
                 </spinnerData>
             </Spinner>
-            <ListView Form.label="ListView" listData="['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5']"/>
+            <Border Form.label="ListView"
+                Form.Flag="{messageType:'error', message:'Error message'}"
+                styles="{padding:0}">
+                <content>
+                    <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
+                        <view>
+                            <ListView listData="['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5']"/>
+                        </view>
+                    </ScrollPane>
+                </content>
+            </Border>
+            <FlowPane Form.label="FlowPane"
+                styles="{padding:0, horizontalSpacing:4, alignToBaseline:true}">
+                <TextInput text=""/>
+                <Label text="(optional)"/>
+            </FlowPane>
+            <TablePane Form.label="TablePane"
+                styles="{padding:{top:8}, horizontalSpacing:12, verticalSpacing:6}">
+                <columns>
+                    <TablePane.Column/>
+                    <TablePane.Column width="1*"/>
+                </columns>
+                <rows>
+                    <TablePane.Row>
+                        <Label text="Left 1"/>
+                        <Label text="Right 1"/>
+                    </TablePane.Row>
+                    <TablePane.Row>
+                        <Label text="Long Left 2"/>
+                        <Label text="Right 2"/>
+                    </TablePane.Row>
+                </rows>
+            </TablePane>
         </Form.Section>
     </sections>
 </Form>

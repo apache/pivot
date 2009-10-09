@@ -38,7 +38,6 @@ import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.Theme;
 
-
 /**
  * Border skin.
  * <p>
@@ -143,6 +142,39 @@ public class BorderSkin extends ContainerSkin
     public Dimensions getPreferredSize() {
         // TODO Optimize
         return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
+    }
+
+    @Override
+    public int getBaseline(int width) {
+        int baseline = -1;
+
+        Border border = (Border)getComponent();
+        int topThickness = thickness;
+
+        // Delegate baseline calculation to the content component
+        Component content = border.getContent();
+        if (content != null) {
+            String title = border.getTitle();
+            if (title != null
+                && title.length() > 0) {
+                LineMetrics lm = font.getLineMetrics(title, fontRenderContext);
+                topThickness = Math.max((int)Math.ceil(lm.getAscent() + lm.getDescent()
+                    + lm.getLeading()), topThickness);
+            }
+
+            if (width != -1) {
+                width = Math.max(width - (thickness * 2) - padding.left - padding.right, 0);
+            }
+
+            baseline = content.getBaseline(width);
+        }
+
+        // Include top padding value and top border thickness
+        if (baseline != -1) {
+            baseline += (padding.top + topThickness);
+        }
+
+        return baseline;
     }
 
     @Override

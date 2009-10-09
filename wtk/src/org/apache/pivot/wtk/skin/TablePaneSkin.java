@@ -452,6 +452,46 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
     }
 
     @Override
+    public int getBaseline(int width) {
+        int baseline = -1;
+
+        TablePane tablePane = (TablePane)getComponent();
+
+        TablePane.RowSequence rows = tablePane.getRows();
+        TablePane.ColumnSequence columns = tablePane.getColumns();
+
+        int columnCount = columns.getLength();
+
+        if (width < 0) {
+            width = getPreferredWidth(-1);
+        }
+
+        int[] columnWidths = getColumnWidths(width);
+
+        // Baseline is the maximum baseline of all components in the first row,
+        // excluding non-visible components and row-spanning components.
+        if (rows.getLength() > 0) {
+            TablePane.Row row = rows.get(0);
+
+            for (int j = 0, n = row.getLength(); j < n && j < columnCount; j++) {
+                Component component = row.get(j);
+
+                if (TablePane.getRowSpan(component) == 1
+                    && component.isVisible()) {
+                    baseline = Math.max(baseline, component.getBaseline(columnWidths[j]));
+                }
+            }
+        }
+
+        // Include top padding value
+        if (baseline != -1) {
+            baseline += padding.top;
+        }
+
+        return baseline;
+    }
+
+    @Override
     public void layout() {
         TablePane tablePane = (TablePane)getComponent();
 

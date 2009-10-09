@@ -38,7 +38,6 @@ import org.apache.pivot.wtk.ViewportListener;
 import org.apache.pivot.wtk.ScrollPane.Corner;
 import org.apache.pivot.wtk.ScrollPane.ScrollBarPolicy;
 
-
 /**
  * Scroll pane skin.
  */
@@ -306,6 +305,21 @@ public class ScrollPaneSkin extends ContainerSkin
         }
 
         return new Dimensions(preferredWidth, preferredHeight);
+    }
+
+    @Override
+    public int getBaseline(int width) {
+        int baseline = -1;
+
+        ScrollPane scrollPane = (ScrollPane)getComponent();
+        Component view = scrollPane.getView();
+
+        // Delegate baseline calculation to the view component
+        if (view != null) {
+            baseline = view.getBaseline(width);
+        }
+
+        return baseline;
     }
 
     @Override

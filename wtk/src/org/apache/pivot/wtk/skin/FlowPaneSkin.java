@@ -188,10 +188,11 @@ public class FlowPaneSkin extends ContainerSkin {
             }
         }
 
-        // Include top and bottom padding values
+        // Include top padding value
         if (baseline != -1) {
             baseline += padding.top;
         }
+
         return baseline;
     }
 
