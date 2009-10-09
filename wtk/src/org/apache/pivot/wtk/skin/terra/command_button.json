@@ -1,9 +1,9 @@
 {
-    color: "#ffffff",
-    backgroundColor: "#3c77b2",
-    borderColor: "#2b5580",
-    disabledBackgroundColor: "#dddcd5",
-    disabledBorderColor: "#999999",
+    color: 4,
+    backgroundColor: 16,
+    borderColor: 13,
+    disabledBackgroundColor: 10,
+    disabledBorderColor: 7,
     padding: {top:3, left:4, bottom:3, right:4},
     minimumAspectRatio: 3
 }
