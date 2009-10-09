@@ -1091,6 +1091,17 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         return value;
     }
 
+    /**
+     * Provides typed access to named objects. Delegates to {@link #get(String)} and casts
+     * the return value to <tt>T</tt>.
+     *
+     * @param name
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T getValue(String name) {
+        return (T)get(name);
+    }
+
     @Override
     public Object put(String name, Object value) {
         if (name == null) {
