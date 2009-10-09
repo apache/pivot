@@ -14,12 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-{   firstName: "中文按钮",
-    lastName: "中文按钮",
-    street: "中文按钮",
-    city: "中文按钮",
-    state: "中文按钮",
-    postalCode: "中文按钮",
-    country: "中文按钮"
+{   firstName: "名字",
+    lastName: "姓氏",
+    street: "街道",
+    city: "城市",
+    state: "省份",
+    postalCode: "邮编",
+    country: "国籍"
 }
-
