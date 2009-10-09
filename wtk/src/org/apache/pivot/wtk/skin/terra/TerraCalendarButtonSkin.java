@@ -45,7 +45,6 @@ import org.apache.pivot.wtk.effects.Transition;
 import org.apache.pivot.wtk.effects.TransitionListener;
 import org.apache.pivot.wtk.skin.CalendarButtonSkin;
 
-
 /**
  * Terra calendar button skin.
  *
@@ -180,6 +179,19 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
     public Dimensions getPreferredSize() {
         // TODO Optimize by performing calcuations locally
         return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
+    }
+
+    @Override
+    public int getBaseline(int width) {
+        CalendarButton calendarButton = (CalendarButton)getComponent();
+        Button.DataRenderer dataRenderer = calendarButton.getDataRenderer();
+
+        dataRenderer.render(calendarButton.getButtonData(), calendarButton, false);
+
+        int baseline = dataRenderer.getBaseline(width)
+            + padding.top + 1;
+
+        return baseline;
     }
 
     @Override
