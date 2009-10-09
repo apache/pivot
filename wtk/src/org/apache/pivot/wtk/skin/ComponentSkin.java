@@ -240,12 +240,7 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
 
     @Override
     public void focusedChanged(Component component, Component obverseComponent) {
-        // Ensure that the component is visible if it is in a viewport
-        if (component.isFocused()
-            && obverseComponent != null
-            && obverseComponent.getWindow() == component.getWindow()) {
-            component.scrollAreaToVisible(0, 0, getWidth(), getHeight());
-        }
+        // No-op
     }
 
     // Component mouse events
@@ -324,7 +319,13 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
 
             Component focusedComponent = Component.getFocusedComponent();
 
-            consumed = (previousFocusedComponent != focusedComponent);
+            if (previousFocusedComponent != focusedComponent) {
+                // Ensure that the focused component is visible if it is in a viewport
+                focusedComponent.scrollAreaToVisible(0, 0, focusedComponent.getWidth(),
+                    focusedComponent.getHeight());
+
+                consumed = true;
+            }
         }
 
         return consumed;
