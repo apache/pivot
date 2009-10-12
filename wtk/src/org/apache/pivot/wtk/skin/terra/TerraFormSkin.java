@@ -292,6 +292,7 @@ public class TerraFormSkin extends ContainerSkin
                     if (alignToBaseline) {
                         int labelBaseLine = label.getBaseline(label.getWidth());
                         int fieldBaseLine = field.getBaseline(fieldSize.width);
+
                         if (labelBaseLine != -1 && fieldBaseLine != -1) {
                             int baseline = Math.max(labelBaseLine, fieldBaseLine);
                             int belowBaseline = Math.max(fieldSize.height - fieldBaseLine,
@@ -299,8 +300,6 @@ public class TerraFormSkin extends ContainerSkin
                             rowHeight = baseline + belowBaseline;
                             labelY = rowY + (baseline - labelBaseLine);
                             fieldY = rowY + (baseline - fieldBaseLine);
-                            // make the bottom of the flag line up with baseline
-                            flagImageY = rowY + (flagImageView.getHeight() - baseline);
                         } else {
                             // if they don't both have baselines, default to
                             // non-baseline behaviour
@@ -308,8 +307,10 @@ public class TerraFormSkin extends ContainerSkin
                                 FLAG_IMAGE_SIZE));
                             fieldY = rowY;
                             labelY = rowY;
-                            flagImageY = rowY + (rowHeight - flagImageView.getHeight()) / 2;
                         }
+
+                        // Vertically center the flag on the row
+                        flagImageY = rowY + (rowHeight - flagImageView.getHeight()) / 2;
                     } else {
                         rowHeight = Math.max(label.getHeight(), Math.max(field.getHeight(),
                             FLAG_IMAGE_SIZE));
