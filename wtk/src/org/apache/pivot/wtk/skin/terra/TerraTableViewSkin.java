@@ -969,6 +969,12 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     @Override
+    protected void invalidateComponent() {
+        super.invalidateComponent();
+        columnWidths = null;
+    }
+
+    @Override
     public boolean mouseMove(Component component, int x, int y) {
         boolean consumed = super.mouseMove(component, x, y);
 
