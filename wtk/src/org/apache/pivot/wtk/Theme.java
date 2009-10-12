@@ -61,6 +61,10 @@ public abstract class Theme {
     public static final String BOLD_KEY = "bold";
     public static final String ITALIC_KEY = "italic";
 
+    /**
+     * The service provider name with which the current theme will be determined
+     * (see {@link Service#getProvider(String) Service.getProvider()}).
+     */
     public static final String PROVIDER_NAME = "org.apache.pivot.wtk.Theme";
 
     static {
@@ -99,6 +103,54 @@ public abstract class Theme {
     public abstract Image getMessageIcon(MessageType messageType);
     public abstract Image getSmallMessageIcon(MessageType messageType);
 
+    /**
+     * Returns the skin class responsible for skinning the specified component
+     * class.
+     *
+     * @param componentClass
+     * The component class.
+     *
+     * @return
+     * The skin class, or <tt>null</tt> if no skin mapping exists for the
+     * component class.
+     */
+    public Class<? extends Skin> get(Class<? extends Component> componentClass) {
+        if (componentClass == null) {
+            throw new IllegalArgumentException("Component class is null.");
+        }
+
+        return componentSkinMap.get(componentClass);
+    }
+
+    /**
+     * Sets the skin class responsible for skinning the specified component
+     * class.
+     *
+     * @param componentClass
+     * The component class.
+     *
+     * @param skinClass
+     * The skin class.
+     */
+    public void set(Class<? extends Component> componentClass, Class<? extends Skin> skinClass) {
+        if (componentClass == null) {
+            throw new IllegalArgumentException("Component class is null.");
+        }
+
+        if (skinClass == null) {
+            throw new IllegalArgumentException("Skin class is null.");
+        }
+
+        componentSkinMap.put(componentClass, skinClass);
+    }
+
+    /**
+     * Gets the current theme, as determined by the {@linkplain #PROVIDER_NAME
+     * theme provider}.
+     *
+     * @throws IllegalStateException
+     * If a theme has not been installed.
+     */
     public static Theme getTheme() {
         if (theme == null) {
             throw new IllegalStateException("No installed theme.");
