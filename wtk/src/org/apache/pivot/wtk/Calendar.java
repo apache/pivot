@@ -316,7 +316,7 @@ public class Calendar extends Container {
     public void load(Dictionary<String, ?> context) {
         if (selectedDateKey != null
             && context.containsKey(selectedDateKey)) {
-            Object value = context.get(selectedDateKey);
+            Object value = JSONSerializer.get(context, selectedDateKey);
 
             if (value instanceof CalendarDate) {
                 setSelectedDate((CalendarDate)value);
@@ -334,11 +334,20 @@ public class Calendar extends Container {
      * picker's bind key, if one is set.
      */
     @Override
-    @SuppressWarnings("unchecked")
     public void store(Dictionary<String, ?> context) {
         if (isEnabled()
             && selectedDateKey != null) {
-            ((Dictionary<String, CalendarDate>)context).put(selectedDateKey, selectedDate);
+            JSONSerializer.put(context, selectedDateKey, selectedDate);
+        }
+    }
+
+    /**
+     * If a bind key is set, clears the selected date.
+     */
+    @Override
+    public void clear() {
+        if (selectedDateKey != null) {
+            setSelectedDate((CalendarDate)null);
         }
     }
 

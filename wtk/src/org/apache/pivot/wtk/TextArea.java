@@ -22,6 +22,7 @@ import java.io.StringWriter;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.media.Image;
@@ -318,7 +319,7 @@ public class TextArea extends Component {
     public void load(Dictionary<String, ?> context) {
         if (textKey != null
             && context.containsKey(textKey)) {
-            Object value = context.get(textKey);
+            Object value = JSONSerializer.get(context, textKey);
             if (value != null) {
                 value = value.toString();
             }
@@ -328,11 +329,17 @@ public class TextArea extends Component {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void store(Dictionary<String, ?> context) {
         if (isEnabled()
             && textKey != null) {
-            ((Dictionary<String, String>)context).put(textKey, getText());
+            JSONSerializer.put(context, textKey, getText());
+        }
+    }
+
+    @Override
+    public void clear() {
+        if (textKey != null) {
+            setText(null);
         }
     }
 

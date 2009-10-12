@@ -333,6 +333,8 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         titleChanged(frame, null);
         activeChanged(frame, null);
         maximizedChanged(frame);
+
+        setShowMinimizeButton(false);
     }
 
     @Override
@@ -633,8 +635,8 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
 
     public boolean getShowWindowControls() {
         return (getShowMinimizeButton()
-            && getShowMaximizeButton()
-            && getShowCloseButton());
+            || getShowMaximizeButton()
+            || getShowCloseButton());
     }
 
     public void setShowWindowControls(boolean showWindowControls) {

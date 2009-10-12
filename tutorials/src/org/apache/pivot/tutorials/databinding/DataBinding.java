@@ -84,7 +84,7 @@ public class DataBinding implements Application {
         clearButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {
-                form.load(new Contact());
+                form.clear();
                 sourceLabel.setText(null);
             }
         });

@@ -24,10 +24,6 @@ public class Contact {
     private String emailAddress;
     private IMAccount imAccount;
 
-    public Contact() {
-        this(null, null, new Address(), null, null, new IMAccount());
-    }
-
     public Contact(String id, String name, Address address, String phoneNumber,
         String emailAddress, IMAccount imAccount) {
         this.id = id;

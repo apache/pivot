@@ -1419,13 +1419,14 @@ public class ListView extends Component {
     public void load(Dictionary<String, ?> context) {
         if (selectedItemKey != null
             && context.containsKey(selectedItemKey)) {
-            Object item = context.get(selectedItemKey);
+            Object item = JSONSerializer.get(context, selectedItemKey);
             setSelectedItem(item);
         }
 
         if (selectedItemsKey != null
             && context.containsKey(selectedItemsKey)) {
-            Sequence<Object> items = (Sequence<Object>)context.get(selectedItemsKey);
+            Sequence<Object> items = (Sequence<Object>)JSONSerializer.get(context,
+                selectedItemsKey);
             setSelectedItems(items);
         }
     }
@@ -1436,13 +1437,21 @@ public class ListView extends Component {
         if (isEnabled()) {
             if (selectedItemKey != null) {
                 Object item = getSelectedItem();
-                ((Dictionary<String, Object>)context).put(selectedItemKey, item);
+                JSONSerializer.put(context, selectedItemKey, item);
             }
 
             if (selectedItemsKey != null) {
                 Sequence<Object> items = (Sequence<Object>)getSelectedItems();
-                ((Dictionary<String, Sequence<Object>>)context).put(selectedItemsKey, items);
+                JSONSerializer.put(context, selectedItemsKey, items);
             }
+        }
+    }
+
+    @Override
+    public void clear() {
+        if (selectedItemKey != null
+            || selectedItemsKey != null) {
+            setSelectedItem(null);
         }
     }
 

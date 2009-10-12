@@ -2348,6 +2348,12 @@ public abstract class Component implements ConstrainedVisual {
         store(new BeanDictionary(context));
     }
 
+    /**
+     * Clears any bound values in the component.
+     */
+    public void clear() {
+    }
+
     public DragSource getDragSource() {
         return dragSource;
     }

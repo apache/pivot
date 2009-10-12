@@ -17,6 +17,7 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.util.ListenerList;
 
 /**
@@ -465,7 +466,7 @@ public abstract class Button extends Component {
     public void load(Dictionary<String, ?> context) {
         if (selectedKey != null
             && context.containsKey(selectedKey)) {
-            Object value = context.get(selectedKey);
+            Object value = JSONSerializer.get(context, selectedKey);
 
             if (!(value instanceof Boolean)) {
                 throw new IllegalArgumentException("value must be an instance of "
@@ -477,7 +478,7 @@ public abstract class Button extends Component {
 
         if (stateKey != null
             && context.containsKey(stateKey)) {
-            Object value = context.get(stateKey);
+            Object value = JSONSerializer.get(context, stateKey);
 
             if (!(value instanceof State)) {
                 throw new IllegalArgumentException("value must be an instance of "
@@ -489,16 +490,23 @@ public abstract class Button extends Component {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void store(Dictionary<String, ?> context) {
         if (isEnabled()) {
             if (selectedKey != null) {
-                ((Dictionary<String, Boolean>)context).put(selectedKey, isSelected());
+                JSONSerializer.put(context, selectedKey, isSelected());
             }
 
             if (stateKey != null) {
-                ((Dictionary<String, State>)context).put(stateKey, state);
+                JSONSerializer.put(context, stateKey, state);
             }
+        }
+    }
+
+    @Override
+    public void clear() {
+        if (selectedKey != null
+            || stateKey != null) {
+            setSelected(false);
         }
     }
 

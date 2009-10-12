@@ -396,18 +396,24 @@ public class Spinner extends Container {
     public void load(Dictionary<String, ?> context) {
         if (selectedItemKey != null
             && context.containsKey(selectedItemKey)) {
-            Object item = context.get(selectedItemKey);
+            Object item = JSONSerializer.get(context, selectedItemKey);
             setSelectedItem(item);
         }
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void store(Dictionary<String, ?> context) {
         if (isEnabled()
             && selectedItemKey != null) {
             Object item = getSelectedItem();
-            ((Dictionary<String, Object>)context).put(selectedItemKey, item);
+            JSONSerializer.put(context, selectedItemKey, item);
+        }
+    }
+
+    @Override
+    public void clear() {
+        if (selectedItemKey != null) {
+            setSelectedItem(null);
         }
     }
 

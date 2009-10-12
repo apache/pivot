@@ -673,6 +673,16 @@ public abstract class Container extends Component
         }
     }
 
+    /**
+     * Propagates clear operation to subcomponents.
+     */
+    @Override
+    public void clear() {
+        for (Component component : components) {
+            component.clear();
+        }
+    }
+
     @Override
     protected boolean mouseMove(int x, int y) {
         boolean consumed = false;

@@ -19,6 +19,7 @@ package org.apache.pivot.wtk;
 import java.io.IOException;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.text.Element;
 import org.apache.pivot.wtk.text.Node;
@@ -635,23 +636,30 @@ public class TextInput extends Component {
     public void load(Dictionary<String, ?> context) {
         if (textKey != null
             && context.containsKey(textKey)) {
-            Object value = context.get(textKey);
+            Object value = JSONSerializer.get(context, textKey);
             if (value != null) {
                value = value.toString();
             }
 
-         setText((String)value);
+            setText((String)value);
         }
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void store(Dictionary<String, ?> context) {
         if (isEnabled()
             && textKey != null) {
-            ((Dictionary<String, String>)context).put(textKey, getText());
+            JSONSerializer.put(context, textKey, getText());
         }
     }
+
+    @Override
+    public void clear() {
+        if (textKey != null) {
+            setText("");
+        }
+    }
+
 
     /**
      * Tells whether or not this text input's text is currently valid as

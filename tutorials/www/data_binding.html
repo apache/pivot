@@ -25,6 +25,7 @@ limitations under the License.
 <script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shCore.js"></script>
 <script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushJava.js"></script>
 <script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushXml.js"></script>
+<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushJScript.js"></script>
 <link type="text/css" rel="stylesheet" href="http://alexgorbatchev.com/pub/sh/current/styles/shCore.css"/>
 <link type="text/css" rel="stylesheet" href="http://alexgorbatchev.com/pub/sh/current/styles/shThemeDefault.css"/>
 <script type="text/javascript">
@@ -33,7 +34,88 @@ limitations under the License.
 </head>
 <body>
 <h1>Data Binding</h1>
-<p>This section is not yet complete.</p>
+<p>Data binding refers to the process of automatically populating or extracting data from a set of user interface elements. In Pivot, data binding is driven entirely by two methods of the <tt>Component</tt> class: <tt>load()</tt> and <tt>store()</tt>. The primary version of each method takes an instance of <tt>Dictionary&lt;String, ?&gt;</tt> called the "context". During a load operation, data is extracted from the context and "loaded" into the component; during a store, data is taken from the component and "stored" back into the context. Overloaded versions of both <tt>load()</tt> and <tt>store()</tt> allow a caller to pass a JavaBean value as a bind context, which will be wrapped in a <tt>BeanDictionary</tt> and passed to the version that takes a dictionary argument.</p>
+
+<p>The <tt>Container</tt> class overrides <tt>load()</tt> and <tt>store()</tt> to facilitate the use of nested contexts. When a container is assigned a context key, if a value with that key exists in the context passed to <tt>Container#load()</tt> or <tt>store()</tt>, that value becomes the context that is propagated to sub-components in further binds. This can significantly simplify the task of binding to complex data structures.</p>
+
+<p>The following application demonstrates data binding. It allows the user to load a form with address data either from a JSON file or from a JavaBean object:</p>
+
+<script src="version.js"></script>
+<script>
+var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
+    archive:"lib/pivot-core-" + version + ".jar"
+        + ",lib/pivot-wtk-" + version + ".jar"
+        + ",lib/pivot-wtk-" + version + ".terra.jar"
+        + ",lib/pivot-tutorials-" + version + ".jar",
+    width:260,
+    height:260
+};
+var parameters = {application_class_name:"org.apache.pivot.tutorials.databinding.DataBinding",
+    codebase_lookup:false,
+    java_arguments:"-Dsun.awt.noerasebackground=true -Dsun.awt.erasebackgroundonresize=true"
+};
+deployJava.writeAppletTag(attributes, parameters);
+</script>
+
+<p>The WTKX simply sets up the form structure and the bind keys:</p>
+
+<pre class="brush:xml">
+&lt;Window title="Data Binding" maximized="true"
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns="org.apache.pivot.wtk"&gt;
+    &lt;content&gt;
+        &lt;Border styles="{thickness:0, padding:8}"&gt;
+            &lt;content&gt;
+                &lt;BoxPane orientation="vertical" styles="{spacing:10, fill:true}"&gt;
+                    &lt;Form wtkx:id="form"&gt;
+                        &lt;sections&gt;
+                            &lt;Form.Section&gt;
+                                &lt;Label Form.label="ID" textKey="id"/&gt;
+                                &lt;Label Form.label="Name" textKey="name"/&gt;
+
+                                &lt;BoxPane Form.label="Address" orientation="vertical" contextKey="address"&gt;
+                                    &lt;Label textKey="street"/&gt;
+                                    &lt;BoxPane&gt;
+                                        &lt;Label textKey="city"/&gt;
+                                        &lt;Label textKey="state"/&gt;
+                                        &lt;Label textKey="zip"/&gt;
+                                    &lt;/BoxPane&gt;
+                                &lt;/BoxPane&gt;
+
+                                &lt;Label Form.label="Phone" textKey="phoneNumber"/&gt;
+                                &lt;Label Form.label="Email" textKey="emailAddress"/&gt;
+
+                                &lt;BoxPane Form.label="IM" contextKey="imAccount"&gt;
+                                    &lt;Label textKey="id"/&gt;
+                                    &lt;Label textKey="type"/&gt;
+                                &lt;/BoxPane&gt;
+
+                                &lt;Label wtkx:id="sourceLabel" Form.label="Source" styles="{font:{italic:true}}"/&gt;
+                            &lt;/Form.Section&gt;
+                        &lt;/sections&gt;
+                    &lt;/Form&gt;
+
+                    &lt;Separator/&gt;
+
+                    &lt;BoxPane styles="{horizontalAlignment:'right'}"&gt;
+                        &lt;PushButton wtkx:id="loadJavaButton" buttonData="Load Java"/&gt;
+                        &lt;PushButton wtkx:id="loadJSONButton" buttonData="Load JSON"/&gt;
+                        &lt;PushButton wtkx:id="clearButton" buttonData="Clear"/&gt;
+                    &lt;/BoxPane&gt;
+                &lt;/BoxPane&gt;
+            &lt;/content&gt;
+        &lt;/Border&gt;
+    &lt;/content&gt;
+&lt;/Window&gt;
+</pre>
+
+<p>The application's <tt>startup()</tt> method attaches button press listeners to each button that load the form from an instance of a <tt>Contact</tt> JavaBean, a JSON file, or an empty map (to clear the form):</p>
+
+TBD - empty map may not be supported?
+
+<pre class="brush:java">
+</pre>
+
 <p>Next: <a href="localization.html">Localization</a></p>
 </body>
 </html>

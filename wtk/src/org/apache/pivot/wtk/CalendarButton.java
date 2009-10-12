@@ -279,7 +279,7 @@ public class CalendarButton extends Button {
 
         if (selectedDateKey != null
             && context.containsKey(selectedDateKey)) {
-            Object value = context.get(selectedDateKey);
+            Object value = JSONSerializer.get(context, selectedDateKey);
 
             if (value instanceof CalendarDate) {
                 setSelectedDate((CalendarDate)value);
@@ -297,14 +297,20 @@ public class CalendarButton extends Button {
      * picker button's bind key, if one is set.
      */
     @Override
-    @SuppressWarnings("unchecked")
     public void store(Dictionary<String, ?> context) {
-        if (isEnabled()) {
-            String selectedDateKey = getSelectedDateKey();
+        if (isEnabled()
+            && selectedDateKey != null) {
+            JSONSerializer.put(context, selectedDateKey, selectedDate);
+        }
+    }
 
-            if (selectedDateKey != null) {
-                ((Dictionary<String, CalendarDate>)context).put(selectedDateKey, getSelectedDate());
-            }
+    /**
+     * If a bind key is set, clears the selected date.
+     */
+    @Override
+    public void clear() {
+        if (selectedDateKey != null) {
+            setSelectedDate((CalendarDate)null);
         }
     }
 
