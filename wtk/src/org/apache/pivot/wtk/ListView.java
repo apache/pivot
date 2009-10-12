@@ -1418,13 +1418,13 @@ public class ListView extends Component {
     @SuppressWarnings("unchecked")
     public void load(Dictionary<String, ?> context) {
         if (selectedItemKey != null
-            && context.containsKey(selectedItemKey)) {
+            && JSONSerializer.containsKey(context, selectedItemKey)) {
             Object item = JSONSerializer.get(context, selectedItemKey);
             setSelectedItem(item);
         }
 
         if (selectedItemsKey != null
-            && context.containsKey(selectedItemsKey)) {
+            && JSONSerializer.containsKey(context, selectedItemsKey)) {
             Sequence<Object> items = (Sequence<Object>)JSONSerializer.get(context,
                 selectedItemsKey);
             setSelectedItems(items);

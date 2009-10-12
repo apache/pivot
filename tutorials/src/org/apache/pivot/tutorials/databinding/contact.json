@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 {   id: 101,
-    name: "Joe Smith",
+    name: "Joe User",
 
     address: {
         street: "123 Main St.",
@@ -25,10 +25,10 @@
     },
 
     phoneNumber: "(617) 555-1234",
-    emailAddress: "joe_smith@foo.com",
+    emailAddress: "joe_user@foo.com",
 
     imAccount: {
-        id: "jsmith1234",
+        id: "juser1234",
         type: "AIM"
     }
 }

@@ -278,7 +278,7 @@ public class CalendarButton extends Button {
         String selectedDateKey = getSelectedDateKey();
 
         if (selectedDateKey != null
-            && context.containsKey(selectedDateKey)) {
+            && JSONSerializer.containsKey(context, selectedDateKey)) {
             Object value = JSONSerializer.get(context, selectedDateKey);
 
             if (value instanceof CalendarDate) {

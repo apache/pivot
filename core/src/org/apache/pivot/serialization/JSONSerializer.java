@@ -30,6 +30,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 
+import org.apache.pivot.beans.BeanDictionary;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
@@ -675,27 +676,6 @@ public class JSONSerializer implements Serializer<Object> {
      *
      * @return
      * The value at the given path.
-     *
-     * @deprecated
-     * This method is deprecated; use {@link #get(Object, String)} instead.
-     */
-    @Deprecated
-    public static Object getValue(Object root, String path) {
-        return get(root, path);
-    }
-
-    /**
-     * Returns the value at the given path.
-     *
-     * @param root
-     * The root object; must be an instance of {@link org.apache.pivot.collections.Map}
-     * or {@link org.apache.pivot.collections.List}.
-     *
-     * @param path
-     * The path to the value, in JavaScript path notation.
-     *
-     * @return
-     * The value at the given path.
      */
     public static Object get(Object root, String path) {
         if (root == null) {
@@ -716,15 +696,24 @@ public class JSONSerializer implements Serializer<Object> {
         for (int i = 0, n = keys.getLength(); i < n; i++) {
             String key = keys.get(i);
 
-            if (value instanceof Dictionary<?, ?>) {
-                Dictionary<String, Object> dictionary = (Dictionary<String, Object>)value;
-                value = dictionary.get(key);
-            } else if (value instanceof Sequence<?>) {
+            if (value instanceof Sequence<?>) {
                 Sequence<Object> sequence = (Sequence<Object>)value;
                 value = sequence.get(Integer.parseInt(key));
             } else {
-                value = null;
-                break;
+                Dictionary<String, Object> dictionary;
+                if (value instanceof Dictionary<?, ?>) {
+                    dictionary = (Dictionary<String, Object>)value;
+                    value = dictionary.get(key);
+                } else {
+                    dictionary = new BeanDictionary(value);
+                }
+
+                if (dictionary.containsKey(key)) {
+                    value = dictionary.get(key);
+                } else {
+                    value = null;
+                    break;
+                }
             }
         }
 
@@ -882,14 +871,18 @@ public class JSONSerializer implements Serializer<Object> {
         String key = keys.remove(keys.getLength() - 1, 1).get(0);
 
         Object parent = get(root, keys);
-        if (parent instanceof Dictionary<?, ?>) {
-            Dictionary<String, Object> dictionary = (Dictionary<String, Object>)parent;
-            previousValue = dictionary.put(key, value);
-        } else if (parent instanceof Sequence<?>) {
-             Sequence<Object> sequence = (Sequence<Object>)parent;
-             previousValue = sequence.update(Integer.parseInt(key), value);
+        if (parent instanceof Sequence<?>) {
+            Sequence<Object> sequence = (Sequence<Object>)parent;
+            previousValue = sequence.update(Integer.parseInt(key), value);
         } else {
-            throw new IllegalArgumentException("Invalid path: " + path + ".");
+            Dictionary<String, Object> dictionary;
+            if (parent instanceof Dictionary<?, ?>) {
+                dictionary = (Dictionary<String, Object>)parent;
+            } else {
+                dictionary = new BeanDictionary(parent);
+            }
+
+            previousValue = dictionary.put(key, value);
         }
 
         return previousValue;
@@ -924,14 +917,18 @@ public class JSONSerializer implements Serializer<Object> {
         String key = keys.remove(keys.getLength() - 1, 1).get(0);
 
         Object parent = get(root, keys);
-        if (parent instanceof Dictionary<?, ?>) {
-            Dictionary<String, Object> dictionary = (Dictionary<String, Object>)parent;
-            previousValue = dictionary.remove(key);
-        } else if (parent instanceof Sequence<?>) {
-             Sequence<Object> sequence = (Sequence<Object>)parent;
-             previousValue = sequence.remove(Integer.parseInt(key), 1).get(0);
+        if (parent instanceof Sequence<?>) {
+            Sequence<Object> sequence = (Sequence<Object>)parent;
+            previousValue = sequence.remove(Integer.parseInt(key), 1).get(0);
         } else {
-            throw new IllegalArgumentException("Invalid path: " + path + ".");
+            Dictionary<String, Object> dictionary;
+            if (parent instanceof Dictionary<?, ?>) {
+                dictionary = (Dictionary<String, Object>)parent;
+            } else {
+                dictionary = new BeanDictionary(parent);
+            }
+
+            previousValue = dictionary.remove(key);
         }
 
         return previousValue;
@@ -966,14 +963,18 @@ public class JSONSerializer implements Serializer<Object> {
         String key = keys.remove(keys.getLength() - 1, 1).get(0);
 
         Object parent = get(root, keys);
-        if (parent instanceof Dictionary<?, ?>) {
-            Dictionary<String, Object> dictionary = (Dictionary<String, Object>)parent;
-            containsKey = dictionary.containsKey(key);
-        } else if (parent instanceof Sequence<?>) {
+        if (parent instanceof Sequence<?>) {
             Sequence<Object> sequence = (Sequence<Object>)parent;
             containsKey = (sequence.getLength() > Integer.parseInt(key));
         } else {
-            containsKey = false;
+            Dictionary<String, Object> dictionary;
+            if (parent instanceof Dictionary<?, ?>) {
+                dictionary = (Dictionary<String, Object>)parent;
+            } else {
+                dictionary = new BeanDictionary(parent);
+            }
+
+            containsKey = dictionary.containsKey(key);
         }
 
         return containsKey;

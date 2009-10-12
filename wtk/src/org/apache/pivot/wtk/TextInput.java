@@ -635,7 +635,7 @@ public class TextInput extends Component {
     @Override
     public void load(Dictionary<String, ?> context) {
         if (textKey != null
-            && context.containsKey(textKey)) {
+            && JSONSerializer.containsKey(context, textKey)) {
             Object value = JSONSerializer.get(context, textKey);
             if (value != null) {
                value = value.toString();

@@ -315,7 +315,7 @@ public class Calendar extends Container {
     @Override
     public void load(Dictionary<String, ?> context) {
         if (selectedDateKey != null
-            && context.containsKey(selectedDateKey)) {
+            && JSONSerializer.containsKey(context, selectedDateKey)) {
             Object value = JSONSerializer.get(context, selectedDateKey);
 
             if (value instanceof CalendarDate) {

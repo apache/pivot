@@ -465,7 +465,7 @@ public abstract class Button extends Component {
     @Override
     public void load(Dictionary<String, ?> context) {
         if (selectedKey != null
-            && context.containsKey(selectedKey)) {
+            && JSONSerializer.containsKey(context, selectedKey)) {
             Object value = JSONSerializer.get(context, selectedKey);
 
             if (!(value instanceof Boolean)) {
@@ -477,7 +477,7 @@ public abstract class Button extends Component {
         }
 
         if (stateKey != null
-            && context.containsKey(stateKey)) {
+            && JSONSerializer.containsKey(context, stateKey)) {
             Object value = JSONSerializer.get(context, stateKey);
 
             if (!(value instanceof State)) {

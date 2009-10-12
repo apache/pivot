@@ -324,7 +324,7 @@ public class ListButton extends Button {
     @Override
     public void load(Dictionary<String, ?> context) {
         if (selectedItemKey != null
-            && context.containsKey(selectedItemKey)) {
+            && JSONSerializer.containsKey(context, selectedItemKey)) {
             Object item = JSONSerializer.get(context, selectedItemKey);
             setSelectedItem(item);
         }

@@ -39,10 +39,10 @@ public class DataBinding implements Application {
     private PushButton clearButton = null;
     private Label sourceLabel = null;
 
-    private static final Contact CONTACT = new Contact("101", "Joe Smith",
+    private static final Contact CONTACT = new Contact("101", "Joe User",
         new Address("123 Main St.", "Cambridge", "MA", "02142"),
-        "(617) 555-1234", "joe_smith@foo.com",
-        new IMAccount("jsmith1234", "AIM"));
+        "(617) 555-1234", "joe_user@foo.com",
+        new IMAccount("juser1234", "AIM"));
 
     @Override
     public void startup(Display display, Map<String, String> properties)

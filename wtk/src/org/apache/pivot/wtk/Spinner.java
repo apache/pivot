@@ -395,7 +395,7 @@ public class Spinner extends Container {
     @Override
     public void load(Dictionary<String, ?> context) {
         if (selectedItemKey != null
-            && context.containsKey(selectedItemKey)) {
+            && JSONSerializer.containsKey(context, selectedItemKey)) {
             Object item = JSONSerializer.get(context, selectedItemKey);
             setSelectedItem(item);
         }

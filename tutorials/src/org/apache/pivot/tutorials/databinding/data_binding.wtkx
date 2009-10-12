@@ -26,6 +26,8 @@ limitations under the License.
                     <Form wtkx:id="form">
                         <sections>
                             <Form.Section>
+                                <Label wtkx:id="sourceLabel" Form.label="Source" styles="{font:{italic:true}}"/>
+
                                 <Label Form.label="ID" textKey="id"/>
                                 <Label Form.label="Name" textKey="name"/>
 
@@ -41,12 +43,10 @@ limitations under the License.
                                 <Label Form.label="Phone" textKey="phoneNumber"/>
                                 <Label Form.label="Email" textKey="emailAddress"/>
 
-                                <BoxPane Form.label="IM" contextKey="imAccount">
-                                    <Label textKey="id"/>
-                                    <Label textKey="type"/>
+                                <BoxPane Form.label="IM">
+                                    <Label textKey="imAccount.id"/>
+                                    <Label textKey="imAccount.type"/>
                                 </BoxPane>
-
-                                <Label wtkx:id="sourceLabel" Form.label="Source" styles="{font:{italic:true}}"/>
                             </Form.Section>
                         </sections>
                     </Form>
@@ -54,8 +54,8 @@ limitations under the License.
                     <Separator/>
 
                     <BoxPane styles="{horizontalAlignment:'right'}">
-                        <PushButton wtkx:id="loadJavaButton" buttonData="Load Java"/>
                         <PushButton wtkx:id="loadJSONButton" buttonData="Load JSON"/>
+                        <PushButton wtkx:id="loadJavaButton" buttonData="Load Java"/>
                         <PushButton wtkx:id="clearButton" buttonData="Clear"/>
                     </BoxPane>
                 </BoxPane>

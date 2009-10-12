@@ -70,6 +70,8 @@ deployJava.writeAppletTag(attributes, parameters);
                     &lt;Form wtkx:id="form"&gt;
                         &lt;sections&gt;
                             &lt;Form.Section&gt;
+                                &lt;Label wtkx:id="sourceLabel" Form.label="Source" styles="{font:{italic:true}}"/&gt;
+
                                 &lt;Label Form.label="ID" textKey="id"/&gt;
                                 &lt;Label Form.label="Name" textKey="name"/&gt;
 
@@ -85,12 +87,10 @@ deployJava.writeAppletTag(attributes, parameters);
                                 &lt;Label Form.label="Phone" textKey="phoneNumber"/&gt;
                                 &lt;Label Form.label="Email" textKey="emailAddress"/&gt;
 
-                                &lt;BoxPane Form.label="IM" contextKey="imAccount"&gt;
-                                    &lt;Label textKey="id"/&gt;
-                                    &lt;Label textKey="type"/&gt;
+                                &lt;BoxPane Form.label="IM"&gt;
+                                    &lt;Label textKey="imAccount.id"/&gt;
+                                    &lt;Label textKey="imAccount.id"/&gt;
                                 &lt;/BoxPane&gt;
-
-                                &lt;Label wtkx:id="sourceLabel" Form.label="Source" styles="{font:{italic:true}}"/&gt;
                             &lt;/Form.Section&gt;
                         &lt;/sections&gt;
                     &lt;/Form&gt;
@@ -98,8 +98,8 @@ deployJava.writeAppletTag(attributes, parameters);
                     &lt;Separator/&gt;
 
                     &lt;BoxPane styles="{horizontalAlignment:'right'}"&gt;
-                        &lt;PushButton wtkx:id="loadJavaButton" buttonData="Load Java"/&gt;
                         &lt;PushButton wtkx:id="loadJSONButton" buttonData="Load JSON"/&gt;
+                        &lt;PushButton wtkx:id="loadJavaButton" buttonData="Load Java"/&gt;
                         &lt;PushButton wtkx:id="clearButton" buttonData="Clear"/&gt;
                     &lt;/BoxPane&gt;
                 &lt;/BoxPane&gt;
@@ -109,12 +109,263 @@ deployJava.writeAppletTag(attributes, parameters);
 &lt;/Window&gt;
 </pre>
 
-<p>The application's <tt>startup()</tt> method attaches button press listeners to each button that load the form from an instance of a <tt>Contact</tt> JavaBean, a JSON file, or an empty map (to clear the form):</p>
+<p>Note that the &lt;BoxPane&gt; for the address section defines a context key. This creates a nested bind context for its sub-elements, allowing the sub-elements to refer to the bound values using a relative key (e.g. "street"). However, since the &lt;BoxPane&gt; for the IM account section does not define a context key, its sub-elements must refer to their bound values using a path that is relative to the root context (e.g. "imAccount.id").</p>
 
-TBD - empty map may not be supported?
+<p>The application's <tt>startup()</tt> method attaches button press listeners to each button that loads the form from a JSON file, loads the form from an instance of a <tt>Contact</tt> JavaBean, or clears the form:</p>
 
 <pre class="brush:java">
+package org.apache.pivot.tutorials.databinding;
+
+import java.io.InputStream;
+
+import org.apache.pivot.collections.Map;
+import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.Button;
+import org.apache.pivot.wtk.ButtonPressListener;
+import org.apache.pivot.wtk.DesktopApplicationContext;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.Form;
+import org.apache.pivot.wtk.Label;
+import org.apache.pivot.wtk.PushButton;
+import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtkx.WTKXSerializer;
+
+public class DataBinding implements Application {
+    private Window window = null;
+    private Form form = null;
+    private PushButton loadJavaButton = null;
+    private PushButton loadJSONButton = null;
+    private PushButton clearButton = null;
+    private Label sourceLabel = null;
+
+    private static final Contact CONTACT = new Contact("101", "Joe User",
+        new Address("123 Main St.", "Cambridge", "MA", "02142"),
+        "(617) 555-1234", "joe_user@foo.com",
+        new IMAccount("juser1234", "AIM"));
+
+    @Override
+    public void startup(Display display, Map&lt;String, String&gt; properties)
+        throws Exception {
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        window = (Window)wtkxSerializer.readObject(this, "data_binding.wtkx");
+        form = (Form)wtkxSerializer.get("form");
+        loadJavaButton = (PushButton)wtkxSerializer.get("loadJavaButton");
+        loadJSONButton = (PushButton)wtkxSerializer.get("loadJSONButton");
+        clearButton = (PushButton)wtkxSerializer.get("clearButton");
+        sourceLabel = (Label)wtkxSerializer.get("sourceLabel");
+
+        loadJavaButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
+            public void buttonPressed(Button button) {
+                form.load(CONTACT);
+                sourceLabel.setText("Java");
+            }
+        });
+
+        loadJSONButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @SuppressWarnings("unchecked")
+            @Override
+            public void buttonPressed(Button button) {
+                JSONSerializer serializer = new JSONSerializer();
+                InputStream inputStream = getClass().getResourceAsStream("contact.json");
+
+                try {
+                    form.load((Map&lt;String, Object&gt;)serializer.readObject(inputStream));
+                    sourceLabel.setText("JSON");
+                } catch(Exception exception) {
+                    System.err.println(exception);
+                }
+
+                button.setEnabled(true);
+            }
+        });
+
+        clearButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
+            public void buttonPressed(Button button) {
+                form.clear();
+                sourceLabel.setText(null);
+            }
+        });
+
+        window.open(display);
+    }
+
+    @Override
+    public boolean shutdown(boolean optional) {
+        if (window != null) {
+            window.close();
+        }
+
+        return false;
+    }
+
+
+    @Override
+    public void suspend() {
+    }
+
+    @Override
+    public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(DataBinding.class, args);
+    }
+}
 </pre>
+
+<p>The JSON representation of the sample contact record is defined as follows:</p>
+
+<pre class="brush:javascript">
+{   id: 101,
+    name: "Joe User",
+
+    address: {
+        street: "123 Main St.",
+        city: "Cambridge",
+        state: "MA",
+        zip: "02142"
+    },
+
+    phoneNumber: "(617) 555-1234",
+    emailAddress: "joe_user@foo.com",
+
+    imAccount: {
+        id: "juser1234",
+        type: "AIM"
+    }
+}
+</pre>
+
+<p>The JavaBean version, which represents the same data, is composed of the following classes:</p>
+
+<pre class="brush:java">
+package org.apache.pivot.tutorials.databinding;
+
+public class Contact {
+    private String id;
+    private String name;
+    private Address address;
+    private String phoneNumber;
+    private String emailAddress;
+    private IMAccount imAccount;
+
+    public Contact(String id, String name, Address address, String phoneNumber,
+        String emailAddress, IMAccount imAccount) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.emailAddress = emailAddress;
+        this.imAccount = imAccount;
+    }
+
+    public String getID() {
+        return id;
+    }
+
+    public String getId() {
+        return getID();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+
+    public IMAccount getIMAccount() {
+        return imAccount;
+    }
+
+    public IMAccount getImAccount() {
+        return getIMAccount();
+    }
+}
+</pre>
+<p class="caption">Contact.java</p>
+
+<pre class="brush:java">
+package org.apache.pivot.tutorials.databinding;
+
+public class Address {
+    private String street;
+    private String city;
+    private String state;
+    private String zip;
+
+    public Address() {
+        this(null, null, null, null);
+    }
+
+    public Address(String street, String city, String state, String zip) {
+        this.street = street;
+        this.city = city;
+        this.state = state;
+        this.zip = zip;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public String getZip() {
+        return zip;
+    }
+}
+</pre>
+<p class="caption">Address.java</p>
+
+<pre class="brush:java">
+package org.apache.pivot.tutorials.databinding;
+
+public class IMAccount {
+    private String id;
+    private String type;
+
+    public IMAccount() {
+        this(null, null);
+    }
+
+    public IMAccount(String id, String type) {
+        this.id = id;
+        this.type = type;
+    }
+
+    public String getID() {
+        return id;
+    }
+
+    public String getId() {
+        return getID();
+    }
+
+    public String getType() {
+        return type;
+    }
+}
+</pre>
+<p class="caption">IMAccount.java</p>
 
 <p>Next: <a href="localization.html">Localization</a></p>
 </body>
