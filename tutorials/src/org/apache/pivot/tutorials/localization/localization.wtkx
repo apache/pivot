@@ -30,19 +30,23 @@ limitations under the License.
     </windowStateListeners>
 
     <content>
-        <Form>
-            <sections>
-                <Form.Section>
-                    <TextInput Form.label="%firstName"/>
-                    <TextInput Form.label="%lastName"/>
-                    <TextInput Form.label="%street"/>
-                    <TextInput Form.label="%city"/>
-                    <TextInput Form.label="%state" textSize="4"/>
-                    <TextInput Form.label="%postalCode"/>
-                    <TextInput Form.label="%country"/>
-                </Form.Section>
-            </sections>
-        </Form>
+        <Border styles="{padding:6}">
+            <content>
+                <Form>
+                    <sections>
+                        <Form.Section>
+                            <TextInput Form.label="%firstName"/>
+                            <TextInput Form.label="%lastName"/>
+                            <TextInput Form.label="%street"/>
+                            <TextInput Form.label="%city"/>
+                            <TextInput Form.label="%state" textSize="4"/>
+                            <TextInput Form.label="%postalCode"/>
+                            <TextInput Form.label="%country"/>
+                        </Form.Section>
+                    </sections>
+                </Form>
+            </content>
+        </Border>
     </content>
 </Window>
 

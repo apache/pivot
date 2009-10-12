@@ -34,11 +34,11 @@ limitations under the License.
 </head>
 <body>
 <h1>Data Binding</h1>
-<p>Data binding refers to the process of automatically populating or extracting data from a set of user interface elements. In Pivot, data binding is driven entirely by two methods of the <tt>Component</tt> class: <tt>load()</tt> and <tt>store()</tt>. The primary version of each method takes an instance of <tt>Dictionary&lt;String, ?&gt;</tt> called the "context". During a load operation, data is extracted from the context and "loaded" into the component; during a store, data is taken from the component and "stored" back into the context. Overloaded versions of both <tt>load()</tt> and <tt>store()</tt> allow a caller to pass a JavaBean value as a bind context, which will be wrapped in a <tt>BeanDictionary</tt> and passed to the version that takes a dictionary argument.</p>
+<p>Data binding refers to the process of automatically populating or extracting data from a set of user interface elements. In Pivot, data binding is driven primarily by two methods of the <tt>Component</tt> class: <tt>load()</tt> and <tt>store()</tt>. Each method takes an instance of <tt>Dictionary&lt;String, ?&gt;</tt> called the "context". Calling <tt>load()</tt> causes data from the context to be "loaded" into the component; calling <tt>store()</tt> performs the reverse operation and "stores" data from the component into the context. Overloaded versions of both methods allow a caller to pass a JavaBean value as a bind context, which will be wrapped in a <tt>BeanDictionary</tt> and passed to the version that takes a dictionary argument. A third method, <tt>clear()</tt> allows a caller to reset any bindings.</p>
 
 <p>The <tt>Container</tt> class overrides <tt>load()</tt> and <tt>store()</tt> to facilitate the use of nested contexts. When a container is assigned a context key, if a value with that key exists in the context passed to <tt>Container#load()</tt> or <tt>store()</tt>, that value becomes the context that is propagated to sub-components in further binds. This can significantly simplify the task of binding to complex data structures.</p>
 
-<p>The following application demonstrates data binding. It allows the user to load a form with address data either from a JSON file or from a JavaBean object:</p>
+<p>The following application demonstrates data binding. It allows the user to load a form with address data either from a JSON file or from a JavaBean object, as well as clear the form:</p>
 
 <script src="version.js"></script>
 <script>
@@ -47,8 +47,8 @@ var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApple
         + ",lib/pivot-wtk-" + version + ".jar"
         + ",lib/pivot-wtk-" + version + ".terra.jar"
         + ",lib/pivot-tutorials-" + version + ".jar",
-    width:260,
-    height:260
+    width:250,
+    height:230
 };
 var parameters = {application_class_name:"org.apache.pivot.tutorials.databinding.DataBinding",
     codebase_lookup:false,
@@ -64,7 +64,7 @@ deployJava.writeAppletTag(attributes, parameters);
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk"&gt;
     &lt;content&gt;
-        &lt;Border styles="{thickness:0, padding:8}"&gt;
+        &lt;Border styles="{padding:6}"&gt;
             &lt;content&gt;
                 &lt;BoxPane orientation="vertical" styles="{spacing:10, fill:true}"&gt;
                     &lt;Form wtkx:id="form"&gt;
@@ -109,9 +109,9 @@ deployJava.writeAppletTag(attributes, parameters);
 &lt;/Window&gt;
 </pre>
 
-<p>Note that the &lt;BoxPane&gt; for the address section defines a context key. This creates a nested bind context for its sub-elements, allowing the sub-elements to refer to the bound values using a relative key (e.g. "street"). However, since the &lt;BoxPane&gt; for the IM account section does not define a context key, its sub-elements must refer to their bound values using a path that is relative to the root context (e.g. "imAccount.id").</p>
+<p>Note that the <tt>&lt;BoxPane&gt;</tt> for the address section defines a context key. This creates a nested bind context for its sub-elements, allowing the sub-elements to refer to the bound values using a relative key (e.g. "street"). However, since the <tt>&lt;BoxPane&gt;</tt> for the IM account section does not define a context key, its sub-elements must refer to their bound values using a path that is relative to the root context (e.g. "imAccount.id").</p>
 
-<p>The application's <tt>startup()</tt> method attaches button press listeners to each button that loads the form from a JSON file, loads the form from an instance of a <tt>Contact</tt> JavaBean, or clears the form:</p>
+<p>The application's <tt>startup()</tt> method defines the button press listeners that load or clear the form:</p>
 
 <pre class="brush:java">
 package org.apache.pivot.tutorials.databinding;
@@ -216,7 +216,7 @@ public class DataBinding implements Application {
 }
 </pre>
 
-<p>The JSON representation of the sample contact record is defined as follows:</p>
+<p>The JSON representation of the sample contact record is defined as follows (note that, while JSON is used to represent the data in this example, any class that implements the <tt>Dictionary</tt> interface, including <tt>HashMap</tt>, can be used):</p>
 
 <pre class="brush:javascript">
 {   id: 101,

@@ -20,7 +20,7 @@ limitations under the License.
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
     <content>
-        <Border styles="{thickness:0, padding:8}">
+        <Border styles="{padding:6}">
             <content>
                 <BoxPane orientation="vertical" styles="{spacing:10, fill:true}">
                     <Form wtkx:id="form">

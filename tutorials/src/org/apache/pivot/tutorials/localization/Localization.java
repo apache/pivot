@@ -46,9 +46,9 @@ public class Localization implements Application {
         Theme theme = Theme.getTheme();
         Font font = theme.getFont();
 
+        // Search for a font that can support the sample string
         String sampleResource = resources.getString("firstName");
         if (font.canDisplayUpTo(sampleResource) != -1) {
-            // Search for a font that can support the sample string
             Font[] fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts();
 
             for (int i = 0; i < fonts.length; i++) {
