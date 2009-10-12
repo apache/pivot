@@ -27,7 +27,7 @@ limitations under the License.
             </columns>
             <rows>
                 <TablePane.Row height="1*">
-                    <Border title="Border 1">
+                    <Border title="Border 1" styles="{padding:2}">
                         <content>
                             <Label text="Default border with title"
                                 styles="{horizontalAlignment:'center', verticalAlignment:'center',
@@ -35,7 +35,7 @@ limitations under the License.
                         </content>
                     </Border>
                     <Border styles="{color:'#ff0000', titleColor:'#000000', thickness:10,
-                        cornerRadii:20}">
+                        cornerRadii:20, padding:2}">
                         <content>
                             <Label text="Custom border with 10-pixel thick red border, rounded corners, and no title"
                                 styles="{horizontalAlignment:'center', verticalAlignment:'center',

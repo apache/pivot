@@ -36,7 +36,7 @@ limitations under the License.
                 <TablePane.Row height="1*">
                     <SplitPane splitRatio="0.4">
                         <left>
-                            <Border styles="{padding:0, color:10}">
+                            <Border styles="{color:10}">
                                 <content>
                                     <ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
                                         verticalScrollBarPolicy="fill_to_capacity">

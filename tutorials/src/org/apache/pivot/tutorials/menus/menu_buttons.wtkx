@@ -22,7 +22,7 @@ limitations under the License.
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
     <content>
-        <Border>
+        <Border styles="{padding:2}">
             <content>
                 <TablePane styles="{verticalSpacing:2}">
                     <columns>
@@ -79,7 +79,7 @@ limitations under the License.
                             </BoxPane>
                         </TablePane.Row>
                         <TablePane.Row height="1*">
-                            <Border>
+                            <Border styles="{padding:2}">
                                 <content>
                                     <ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
                                         verticalScrollBarPolicy="fill_to_capacity">

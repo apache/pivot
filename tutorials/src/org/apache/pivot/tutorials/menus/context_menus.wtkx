@@ -20,7 +20,7 @@ limitations under the License.
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
     <content>
-        <Border styles="{color:10, padding:0}">
+        <Border styles="{color:10}">
             <content>
                 <TablePane styles="{horizontalSpacing:1, verticalSpacing:1,
                     showHorizontalGridLines:true, showVerticalGridLines:true,

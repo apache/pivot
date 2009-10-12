@@ -22,9 +22,9 @@ limitations under the License.
     <content>
         <SplitPane splitRatio="0.75">
             <left>
-                <Border styles="{padding:0}">
+                <Border>
                     <content>
-                        <FlowPane wtkx:id="flowPane">
+                        <FlowPane wtkx:id="flowPane" styles="{padding:2}">
                             <PushButton buttonData="0" styles="{minimumAspectRatio:1.5}"/>
                             <PushButton buttonData="1" styles="{minimumAspectRatio:1.5}"/>
                             <PushButton buttonData="2" styles="{minimumAspectRatio:1.5}"/>

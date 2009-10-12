@@ -31,7 +31,7 @@ import org.apache.pivot.wtk.Insets;
  */
 public class FlowPaneSkin extends ContainerSkin {
     private HorizontalAlignment alignment = HorizontalAlignment.LEFT;
-    private Insets padding = new Insets(2);
+    private Insets padding = Insets.NONE;
     private int horizontalSpacing = 2;
     private int verticalSpacing = 2;
     private boolean alignToBaseline = false;

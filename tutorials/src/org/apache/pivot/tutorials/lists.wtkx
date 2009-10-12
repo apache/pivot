@@ -16,7 +16,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Border xmlns:wtkx="http://pivot.apache.org/wtkx"
+<Border styles="{padding:2}"
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:collections="org.apache.pivot.collections"
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
@@ -24,7 +25,7 @@ limitations under the License.
         <BoxPane styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:12}">
             <BoxPane orientation="vertical" styles="{spacing:6}">
                 <Label text="Editable" styles="{font:{bold:true}}"/>
-                <Border styles="{padding:0, color:10}">
+                <Border styles="{color:10}">
                     <content>
                         <ScrollPane preferredWidth="62" preferredHeight="80" horizontalScrollBarPolicy="fill">
                             <view>
@@ -51,7 +52,7 @@ limitations under the License.
 
             <BoxPane orientation="vertical" styles="{spacing:6}">
                 <Label text="Multi-Select" styles="{font:{bold:true}}"/>
-                <Border styles="{padding:0, color:10}">
+                <Border styles="{color:10}">
                     <content>
                         <ScrollPane preferredHeight="80">
                             <view>
@@ -76,7 +77,7 @@ limitations under the License.
 
             <BoxPane orientation="vertical" styles="{spacing:6}">
                 <Label text="Image" styles="{font:{bold:true}}"/>
-                <Border styles="{padding:0, color:10}">
+                <Border styles="{color:10}">
                     <content>
                         <ScrollPane preferredHeight="80">
                             <view>
@@ -104,7 +105,7 @@ limitations under the License.
 
             <BoxPane orientation="vertical" styles="{spacing:6}">
                 <Label text="Checked" styles="{font:{bold:true}}"/>
-                <Border styles="{padding:0, color:10}">
+                <Border styles="{color:10}">
                     <content>
                         <ScrollPane preferredHeight="80">
                             <view>

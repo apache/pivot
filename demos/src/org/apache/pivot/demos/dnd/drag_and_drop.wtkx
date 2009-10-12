@@ -29,7 +29,7 @@ limitations under the License.
 
             <rows>
                 <TablePane.Row height="1*">
-                    <Border>
+                    <Border styles="{padding:2}">
                         <content>
                             <TablePane>
                                 <columns>
@@ -41,7 +41,7 @@ limitations under the License.
                                             styles="{font:{bold:true}, horizontalAlignment:'center'}" />
                                     </TablePane.Row>
                                     <TablePane.Row height="1*">
-                                        <Border styles="{color:10}">
+                                        <Border styles="{padding:2, color:10}">
                                             <content>
                                                 <ScrollPane horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fill_to_capacity">
                                                     <view>
@@ -63,7 +63,7 @@ limitations under the License.
                         </content>
                     </Border>
 
-                    <Border>
+                    <Border styles="{padding:2}">
                         <content>
                             <TablePane>
                                 <columns>
@@ -75,7 +75,7 @@ limitations under the License.
                                             styles="{font:{bold:true}, horizontalAlignment:'center'}" />
                                     </TablePane.Row>
                                     <TablePane.Row height="1*">
-                                        <Border styles="{color:10, padding:0}">
+                                        <Border styles="{color:10}">
                                             <content>
                                                 <ImageView wtkx:id="imageView"
                                                     styles="{horizontalAlignment:'center', verticalAlignment:'center'}" />
@@ -93,7 +93,7 @@ limitations under the License.
                         </content>
                     </Border>
 
-                    <Border>
+                    <Border styles="{padding:2}">
                         <content>
                             <TablePane>
                                 <columns>
@@ -105,7 +105,7 @@ limitations under the License.
                                             styles="{font:{bold:true}, horizontalAlignment:'center'}" />
                                     </TablePane.Row>
                                     <TablePane.Row height="1*">
-                                        <Border styles="{color:10, padding:0}">
+                                        <Border styles="{color:10}">
                                             <content>
                                                 <ScrollPane horizontalScrollBarPolicy="fill_to_capacity" verticalScrollBarPolicy="fill_to_capacity">
                                                     <view>

@@ -19,12 +19,12 @@ limitations under the License.
 <BoxPane xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
-    <Border>
+    <Border styles="{padding:2}">
         <content>
             <BoxPane styles="{padding:{top:2, left:4, bottom:8, right:4}, spacing:10}">
                 <BoxPane orientation="vertical">
                     <Label text="English (US)" styles="{font:{bold:true}}"/>
-                    <Border styles="{padding:0}">
+                    <Border>
                         <content>
                             <Calendar locale="{language:'en', country:'us'}"/>
                         </content>
@@ -33,7 +33,7 @@ limitations under the License.
 
                 <BoxPane orientation="vertical">
                     <Label text="Français (FR)" styles="{font:{bold:true}}"/>
-                    <Border styles="{padding:0}">
+                    <Border>
                         <content>
                             <Calendar locale="{language:'fr', country:'fr'}"/>
                         </content>

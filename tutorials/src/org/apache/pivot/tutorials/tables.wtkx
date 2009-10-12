@@ -25,7 +25,7 @@ limitations under the License.
         <BoxPane styles="{padding:4, spacing:8}">
             <BoxPane orientation="vertical">
                 <Label text="Sortable" styles="{font:{bold:true}}"/>
-                <Border styles="{padding:0, color:10}">
+                <Border styles="{color:10}">
                     <content>
                         <ScrollPane wtkx:id="sortableScrollPane"
                             horizontalScrollBarPolicy="fill_to_capacity"
@@ -57,7 +57,7 @@ limitations under the License.
 
             <BoxPane orientation="vertical">
                 <Label text="Custom Content" styles="{font:{bold:true}}"/>
-                <Border styles="{padding:0, color:10}">
+                <Border styles="{color:10}">
                     <content>
                         <ScrollPane horizontalScrollBarPolicy="fill_to_capacity" preferredWidth="160">
                             <view>

@@ -26,7 +26,7 @@ limitations under the License.
             </columns>
             <rows>
                 <TablePane.Row height="1*">
-                    <Border>
+                    <Border styles="{padding:2}">
                         <content>
                             <BoxPane styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
                                 <ActivityIndicator wtkx:id="activityIndicator1"

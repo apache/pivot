@@ -62,7 +62,7 @@ limitations under the License.
                         </content>
                     </Border>
 
-                    <Border>
+                    <Border styles="{padding:2}">
                         <content>
                             <BoxPane orientation="vertical" styles="{padding:4, spacing:6}">
                                 <Checkbox wtkx:id="sizeToSelectionCheckbox" buttonData="Size to selection"/>

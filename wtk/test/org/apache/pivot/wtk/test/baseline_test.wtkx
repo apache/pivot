@@ -44,8 +44,7 @@ limitations under the License.
                 </spinnerData>
             </Spinner>
             <Border Form.label="ListView"
-                Form.Flag="{messageType:'error', message:'Error message'}"
-                styles="{padding:0}">
+                Form.Flag="{messageType:'error', message:'Error message'}">
                 <content>
                     <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
                         <view>
@@ -55,7 +54,7 @@ limitations under the License.
                 </content>
             </Border>
             <FlowPane Form.label="FlowPane"
-                styles="{padding:0, horizontalSpacing:4, alignToBaseline:true}">
+                styles="{horizontalSpacing:4, alignToBaseline:true}">
                 <TextInput text=""/>
                 <Label text="(optional)"/>
             </FlowPane>

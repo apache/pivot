@@ -19,7 +19,7 @@ limitations under the License.
 <BoxPane xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
-    <Border>
+    <Border styles="{padding:2}">
         <content>
             <BoxPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:8, right:4}}">
                 <Label text="Spinners" styles="{font:{bold:true}}"/>
@@ -39,7 +39,7 @@ limitations under the License.
         </content>
     </Border>
 
-    <Border>
+    <Border styles="{padding:2}">
         <content>
             <BoxPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:8, right:4}}">
                 <Label text="Sliders" styles="{font:{bold:true}}"/>
@@ -49,7 +49,7 @@ limitations under the License.
                             <Slider wtkx:id="redSlider" Form.label="Red" range="{start:0, end:255}" value="0"/>
                             <Slider wtkx:id="greenSlider" Form.label="Green" range="{start:0, end:255}" value="0"/>
                             <Slider wtkx:id="blueSlider" Form.label="Blue" range="{start:0, end:255}" value="0"/>
-                            <Border wtkx:id="colorBorder" Form.label="Color" preferredWidth="120" preferredHeight="30"/>
+                            <Border wtkx:id="colorBorder" Form.label="Color" preferredWidth="120" preferredHeight="30" styles="{padding:2}"/>
                         </Form.Section>
                     </sections>
                 </Form>

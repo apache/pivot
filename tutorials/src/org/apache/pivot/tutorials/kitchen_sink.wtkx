@@ -23,7 +23,7 @@ limitations under the License.
     <content>
         <Border styles="{backgroundColor:10, thickness:0, padding:8}">
             <content>
-                <Border styles="{padding:0}">
+                <Border>
                     <content>
                         <ScrollPane wtkx:id="scrollPane" styles="{backgroundColor:11}"
                             horizontalScrollBarPolicy="auto"

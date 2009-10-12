@@ -21,7 +21,7 @@ limitations under the License.
     xmlns:navigation="org.apache.pivot.tutorials.navigation"
     xmlns="org.apache.pivot.wtk">
     <content>
-        <Border styles="{padding:0, color:10}">
+        <Border styles="{color:10}">
             <content>
                 <ScrollPane>
                     <view>

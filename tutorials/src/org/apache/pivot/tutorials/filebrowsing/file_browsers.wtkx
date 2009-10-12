@@ -27,7 +27,7 @@ limitations under the License.
                 </columns>
                 <rows>
                     <TablePane.Row height="1*">
-                        <Border>
+                        <Border styles="{padding:2}">
                             <content>
                                 <TabPane wtkx:id="tabPane"/>
                             </content>

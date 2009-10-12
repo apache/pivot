@@ -19,7 +19,7 @@ limitations under the License.
 <BoxPane xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
-    <Border>
+    <Border styles="{padding:2}">
         <content>
             <BoxPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
                 <BoxPane orientation="vertical">
@@ -100,7 +100,7 @@ limitations under the License.
         </content>
     </Border>
 
-    <Border>
+    <Border styles="{padding:2}">
         <content>
             <BoxPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
                 <BoxPane orientation="vertical">
@@ -142,7 +142,7 @@ limitations under the License.
         </content>
     </Border>
 
-    <Border>
+    <Border styles="{padding:2}">
         <content>
             <BoxPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
                 <BoxPane orientation="vertical">
@@ -187,7 +187,7 @@ limitations under the License.
         </content>
     </Border>
 
-    <Border>
+    <Border styles="{padding:2}">
         <content>
             <BoxPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
                 <BoxPane orientation="vertical">

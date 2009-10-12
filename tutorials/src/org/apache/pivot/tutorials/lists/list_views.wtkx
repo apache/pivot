@@ -21,7 +21,7 @@ limitations under the License.
     xmlns="org.apache.pivot.wtk">
     <content>
         <BoxPane styles="{padding:4, spacing:4}">
-            <Border styles="{padding:0, color:10}">
+            <Border styles="{color:10}">
                 <content>
                     <ScrollPane preferredWidth="80" preferredHeight="110"
                         horizontalScrollBarPolicy="fill"

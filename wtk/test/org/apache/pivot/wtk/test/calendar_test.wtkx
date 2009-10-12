@@ -21,7 +21,7 @@ limitations under the License.
     xmlns="org.apache.pivot.wtk">
     <content>
         <BoxPane>
-            <Border styles="{padding:0}">
+            <Border>
                 <content>
                     <Calendar wtkx:id="calendar"
                         month="2" year="2009" locale="{language:'fr', country:'ca'}"/>

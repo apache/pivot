@@ -39,7 +39,7 @@ limitations under the License.
     <content>
         <SplitPane splitRatio="0.6">
             <left>
-                <Border styles="{padding:0}">
+                <Border>
                     <content>
                         <TablePane wtkx:id="tablePane" styles="{verticalSpacing:21, showHorizontalGridLines:true,
                             horizontalSpacing:21, showVerticalGridLines:true, padding:10}">

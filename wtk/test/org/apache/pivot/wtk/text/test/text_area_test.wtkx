@@ -27,7 +27,7 @@ limitations under the License.
             </columns>
             <rows>
                 <TablePane.Row height="1*">
-                    <Border styles="{padding:0}">
+                    <Border>
                         <content>
                             <ScrollPane horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fill_to_capacity">
                                 <view>
@@ -62,7 +62,7 @@ limitations under the License.
             </columns>
             <rows>
                 <TablePane.Row height="1*">
-                    <Border styles="{padding:0}">
+                    <Border>
                         <content>
                             <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
                                 <view>

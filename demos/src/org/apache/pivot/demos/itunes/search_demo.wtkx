@@ -115,7 +115,7 @@ limitations under the License.
                         <rows>
                             <TablePane.Row height="1*">
                                 <StackPane>
-                                    <Border styles="{padding:0}">
+                                    <Border>
                                         <content>
                                             <ScrollPane horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fill_to_capacity">
                                                 <view>
@@ -190,7 +190,7 @@ limitations under the License.
                                 </StackPane>
 
                                 <BoxPane orientation="vertical" styles="{fill:true}">
-                                    <Border styles="{padding:0}">
+                                    <Border>
                                         <content>
                                             <ImageView wtkx:id="artworkImageView"
                                                 preferredWidth="120" preferredHeight="120"/>

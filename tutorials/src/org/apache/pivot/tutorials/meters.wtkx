@@ -16,7 +16,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Border xmlns:wtkx="http://pivot.apache.org/wtkx"
+<Border styles="{padding:2}"
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
     <content>
         <BoxPane>

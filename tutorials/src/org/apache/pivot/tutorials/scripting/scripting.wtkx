@@ -41,7 +41,7 @@ limitations under the License.
     </wtkx:script>
 
     <content>
-        <Border>
+        <Border styles="{padding:2}">
             <content>
                 <BoxPane orientation="vertical" styles="{padding:6}">
                     <PushButton buttonData="Click Me!">
@@ -60,7 +60,7 @@ limitations under the License.
                     <PushButton buttonData="No, Click Me!"
                         ButtonPressListener.buttonPressed="buttonClicked()"/>
 
-                    <Border styles="{padding:0, color:10}">
+                    <Border styles="{color:10}">
                         <content>
                             <ListView listData="$listData" selectedIndex="0"/>
                         </content>

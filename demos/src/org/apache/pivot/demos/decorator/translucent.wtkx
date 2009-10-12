@@ -22,7 +22,7 @@ limitations under the License.
     <content>
         <BoxPane orientation="vertical" styles="{fill:true}">
             <Label text="A Translucent Window"/>
-            <Border styles="{color:13, padding:0}">
+            <Border styles="{color:13}">
                 <content>
                     <ListView listData="['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5']"/>
                 </content>

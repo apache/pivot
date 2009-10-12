@@ -21,7 +21,7 @@ limitations under the License.
     xmlns="org.apache.pivot.wtk">
     <wtkx:script src="dragdrop.js"/>
     <content>
-        <Border>
+        <Border styles="{padding:2}">
             <content>
                 <ImageView wtkx:id="imageView" image="org/apache/pivot/tutorials/IMG_0767_2.jpg"
                     dragSource="$dragSoure" dropTarget="$dropTarget"/>

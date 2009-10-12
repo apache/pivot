@@ -36,17 +36,20 @@ limitations under the License.
                 </TablePane.Row>
                 <TablePane.Row height="1*">
                     <CardPane wtkx:id="cardPane" styles="{sizeToSelection:true, selectionChangeEffect:'crossfade'}">
-                        <Border title="320x240" preferredWidth="320" preferredHeight="240">
+                        <Border title="320x240" preferredWidth="320" preferredHeight="240"
+                            styles="{padding:2}">
                             <content>
                                 <ListView listData="['One', 'Two', 'Three', 'Four', 'Five', 'One', 'Two', 'Three', 'Four', 'Five', 'One', 'Two', 'Three', 'Four', 'Five', 'One', 'Two', 'Three', 'Four', 'Five']"/>
                             </content>
                         </Border>
-                        <Border title="640x480" preferredWidth="640" preferredHeight="480">
+                        <Border title="640x480" preferredWidth="640" preferredHeight="480"
+                            styles="{padding:2}">
                             <content>
                                 <ListView listData="['Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Six', 'Seven', 'Eight', 'Nine', 'Ten']"/>
                             </content>
                         </Border>
-                        <Border title="800x600" preferredWidth="800" preferredHeight="600">
+                        <Border title="800x600" preferredWidth="800" preferredHeight="600"
+                            styles="{padding:2}">
                             <content>
                                 <ListView listData="['Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen']"/>
                             </content>

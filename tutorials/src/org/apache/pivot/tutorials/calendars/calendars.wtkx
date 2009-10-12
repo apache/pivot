@@ -25,7 +25,7 @@ limitations under the License.
                 <Form styles="{rightAlignLabels:true}">
                     <sections>
                         <Form.Section>
-                            <Border Form.label="Calendar" styles="{padding:0, color:10}">
+                            <Border Form.label="Calendar" styles="{color:10}">
                                 <content>
                                     <Calendar wtkx:id="calendar"/>
                                 </content>
