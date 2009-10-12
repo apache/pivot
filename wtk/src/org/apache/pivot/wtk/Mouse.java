@@ -289,15 +289,21 @@ public final class Mouse {
         if (component.isEnabled()) {
             cursor = component.getCursor();
             while (cursor == null
+                && component != null
                 && !(component instanceof Display)) {
                 component = component.getParent();
-                cursor = component.getCursor();
+                if (component != null) {
+                    cursor = component.getCursor();
+                }
             }
         }
 
-        Display display = component.getDisplay();
-        ApplicationContext.DisplayHost displayHost = display.getDisplayHost();
-        displayHost.setCursor((cursor == null) ? java.awt.Cursor.getDefaultCursor() : getCursor(cursor));
+        if (component != null) {
+            Display display = component.getDisplay();
+            ApplicationContext.DisplayHost displayHost = display.getDisplayHost();
+            displayHost.setCursor((cursor == null) ? java.awt.Cursor.getDefaultCursor() :
+                getCursor(cursor));
+        }
     }
 
     private static java.awt.Cursor getCursor(Cursor cursor) {
