@@ -29,23 +29,24 @@ limitations under the License.
                                 <Label wtkx:id="sourceLabel" Form.label="Source" styles="{font:{italic:true}}"/>
 
                                 <Label Form.label="ID" textKey="id"/>
-                                <Label Form.label="Name" textKey="name"/>
+                                <TextInput Form.label="Name" textKey="name"/>
 
                                 <BoxPane Form.label="Address" orientation="vertical" contextKey="address">
-                                    <Label textKey="street"/>
+                                    <TextInput textKey="street" prompt="Street"/>
                                     <BoxPane>
-                                        <Label textKey="city"/>
-                                        <Label textKey="state"/>
-                                        <Label textKey="zip"/>
+                                        <TextInput textKey="city" prompt="City"/>
+                                        <TextInput textKey="state" textSize="6" prompt="State"/>
+                                        <TextInput textKey="zip" textSize="10" prompt="Zip"/>
                                     </BoxPane>
                                 </BoxPane>
 
-                                <Label Form.label="Phone" textKey="phoneNumber"/>
-                                <Label Form.label="Email" textKey="emailAddress"/>
+                                <TextInput Form.label="Phone" textKey="phoneNumber"/>
+                                <TextInput Form.label="Email" textKey="emailAddress"/>
 
                                 <BoxPane Form.label="IM">
-                                    <Label textKey="imAccount.id"/>
-                                    <Label textKey="imAccount.type"/>
+                                    <TextInput textKey="imAccount.id"/>
+                                    <ListButton selectedItemKey="imAccount.type"
+                                        listData="['AIM', 'Jabber', 'Yahoo']"/>
                                 </BoxPane>
                             </Form.Section>
                         </sections>

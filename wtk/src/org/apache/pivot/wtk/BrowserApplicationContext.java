@@ -142,10 +142,6 @@ public final class BrowserApplicationContext extends ApplicationContext {
                     }
                 }
 
-                // Set focus to the display host
-                DisplayHost displayHost = applicationContext.getDisplayHost();
-                displayHost.requestFocus();
-
                 // Start the application
                 if (application != null) {
                     try {

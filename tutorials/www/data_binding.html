@@ -38,6 +38,8 @@ limitations under the License.
 
 <p>The <tt>Container</tt> class overrides <tt>load()</tt> and <tt>store()</tt> to facilitate the use of nested contexts. When a container is assigned a context key, if a value with that key exists in the context passed to <tt>Container#load()</tt> or <tt>store()</tt>, that value becomes the context that is propagated to sub-components in further binds. This can significantly simplify the task of binding to complex data structures.</p>
 
+<p>Note that not all components are bindable. In general, binding is limited to components that support user input. However, the read-only <tt>Label</tt> component is bindable, since it is often used to present non-editable data retrieved from a server (such as a database ID). Also, when a bindable component is disabled (effectively making it read only), its value is not stored during a <tt>store()</tt> operation.</p>
+
 <p>The following application demonstrates data binding. It allows the user to load a form with address data either from a JSON file or from a JavaBean object, as well as clear the form:</p>
 
 <script src="version.js"></script>
@@ -47,8 +49,8 @@ var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApple
         + ",lib/pivot-wtk-" + version + ".jar"
         + ",lib/pivot-wtk-" + version + ".terra.jar"
         + ",lib/pivot-tutorials-" + version + ".jar",
-    width:250,
-    height:230
+    width:360,
+    height:260
 };
 var parameters = {application_class_name:"org.apache.pivot.tutorials.databinding.DataBinding",
     codebase_lookup:false,
@@ -73,23 +75,24 @@ deployJava.writeAppletTag(attributes, parameters);
                                 &lt;Label wtkx:id="sourceLabel" Form.label="Source" styles="{font:{italic:true}}"/&gt;
 
                                 &lt;Label Form.label="ID" textKey="id"/&gt;
-                                &lt;Label Form.label="Name" textKey="name"/&gt;
+                                &lt;TextInput Form.label="Name" textKey="name"/&gt;
 
                                 &lt;BoxPane Form.label="Address" orientation="vertical" contextKey="address"&gt;
-                                    &lt;Label textKey="street"/&gt;
+                                    &lt;TextInput textKey="street" prompt="Street"/&gt;
                                     &lt;BoxPane&gt;
-                                        &lt;Label textKey="city"/&gt;
-                                        &lt;Label textKey="state"/&gt;
-                                        &lt;Label textKey="zip"/&gt;
+                                        &lt;TextInput textKey="city" prompt="City"/&gt;
+                                        &lt;TextInput textKey="state" textSize="6" prompt="State"/&gt;
+                                        &lt;TextInput textKey="zip" textSize="10" prompt="Zip"/&gt;
                                     &lt;/BoxPane&gt;
                                 &lt;/BoxPane&gt;
 
-                                &lt;Label Form.label="Phone" textKey="phoneNumber"/&gt;
-                                &lt;Label Form.label="Email" textKey="emailAddress"/&gt;
+                                &lt;TextInput Form.label="Phone" textKey="phoneNumber"/&gt;
+                                &lt;TextInput Form.label="Email" textKey="emailAddress"/&gt;
 
                                 &lt;BoxPane Form.label="IM"&gt;
-                                    &lt;Label textKey="imAccount.id"/&gt;
-                                    &lt;Label textKey="imAccount.id"/&gt;
+                                    &lt;TextInput textKey="imAccount.id"/&gt;
+                                    &lt;ListButton selectedItemKey="imAccount.type"
+                                        listData="['AIM', 'Jabber', 'Yahoo']"/&gt;
                                 &lt;/BoxPane&gt;
                             &lt;/Form.Section&gt;
                         &lt;/sections&gt;

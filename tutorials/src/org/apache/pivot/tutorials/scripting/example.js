@@ -17,7 +17,7 @@
 importClass(java.lang.System);
 importPackage(org.apache.pivot.collections);
 
-System.out.println("Executing external script block.");
+System.out.println("Executing external script block; x = " + x);
 
 var foo = "ABCDE";
 
