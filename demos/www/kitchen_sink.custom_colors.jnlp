@@ -39,6 +39,10 @@
         </shortcut>
     </information>
 
+    <security>
+        <all-permissions/>
+    </security>
+
     <resources>
 <%@ include file="common_properties_for_jnlp.jsp" %>
 

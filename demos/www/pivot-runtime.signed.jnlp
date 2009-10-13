@@ -33,6 +33,10 @@
         <offline-allowed/>
     </information>
 
+    <security>
+        <all-permissions/>
+    </security>
+
     <resources>
         <property name="jnlp.packEnabled"                     value="true" />
         <property name="sun.awt.noerasebackground"            value="true" />
