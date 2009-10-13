@@ -16,32 +16,24 @@
  * limitations under the License.
  */
 
-    // response.setHeader("Cache-Control", "no-cache");
-    // response.setHeader("Pragma", "no-cache");
-    // response.setDateHeader("Expires", 0);
+// response.setHeader("Cache-Control", "no-cache");
+// response.setHeader("Pragma", "no-cache");
+// response.setDateHeader("Expires", 0);
 
-    String requestURL = request.getRequestURL().toString();
-    int lastSlash = requestURL.lastIndexOf('/');
-    String codebase = "";
-    String href = "";
-    if (requestURL != null) {
-        if (lastSlash < 0) {
-            lastSlash = 0;
-        }
-
-        codebase = requestURL.substring(0, lastSlash + 1);
-        if ((lastSlash + 1) < requestURL.length()) {
-            href = requestURL.substring(lastSlash + 1);
-        }
-
+String requestURL = request.getRequestURL().toString();
+int lastSlash = requestURL.lastIndexOf('/');
+String codebase = "";
+String href = "";
+if (requestURL != null) {
+    if (lastSlash < 0) {
+        lastSlash = 0;
     }
 
-    /*
-    String codebase = request.getScheme() + "://"
-        + request.getServerName() + ":" 
-        + request.getServerPort() + request.getContextPath()
-    ;
-    String href     = request.getServletPath();
-     */
+    codebase = requestURL.substring(0, lastSlash + 1);
+    if ((lastSlash + 1) < requestURL.length()) {
+        href = requestURL.substring(lastSlash + 1);
+    }
+
+}
 
 %>
