@@ -1215,15 +1215,25 @@ public class TerraTextInputSkin extends ComponentSkin
 
             textInput.setSelection(selectionStart, selectionLength);
         } else if (keyCode == Keyboard.KeyCode.HOME) {
-            consumed = true;
-
             // Move the caret to the beginning of the text
-            textInput.setSelection(0, 0);
-        } else if (keyCode == Keyboard.KeyCode.END) {
-            consumed = true;
+            if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                textInput.setSelection(0, textInput.getSelectionStart());
+            } else {
+                textInput.setSelection(0, 0);
+            }
 
+            consumed = true;
+        } else if (keyCode == Keyboard.KeyCode.END) {
             // Move the caret to the end of the text
-            textInput.setSelection(textNode.getCharacterCount(), 0);
+            if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                int selectionStart = textInput.getSelectionStart();
+                textInput.setSelection(selectionStart, textNode.getCharacterCount()
+                    - selectionStart);
+            } else {
+                textInput.setSelection(textNode.getCharacterCount(), 0);
+            }
+
+            consumed = true;
         } else if (keyCode == Keyboard.KeyCode.A
             && Keyboard.isPressed(commandModifier)) {
             consumed = true;
