@@ -38,7 +38,7 @@ import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
-public class FileBrowserSheets implements Application {
+public class FileBrowsing implements Application {
     private Window window = null;
 
     @WTKX private ButtonGroup fileBrowserSheetModeGroup = null;
@@ -49,8 +49,8 @@ public class FileBrowserSheets implements Application {
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
 
-        window = (Window)wtkxSerializer.readObject(getClass().getResource("file_browser_sheets.wtkx"));
-        wtkxSerializer.bind(this, FileBrowserSheets.class);
+        window = (Window)wtkxSerializer.readObject(getClass().getResource("file_browsing.wtkx"));
+        wtkxSerializer.bind(this, FileBrowsing.class);
 
         openSheetButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
@@ -102,6 +102,6 @@ public class FileBrowserSheets implements Application {
     }
 
     public static void main(String[] args) {
-        DesktopApplicationContext.main(FileBrowserSheets.class, args);
+        DesktopApplicationContext.main(FileBrowsing.class, args);
     }
 }
