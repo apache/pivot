@@ -388,8 +388,11 @@ public class Spinner extends Container {
      */
     public void setSelectedItemKey(String selectedItemKey) {
         String previousSelectedItemKey = this.selectedItemKey;
-        this.selectedItemKey = selectedItemKey;
-        spinnerListeners.selectedItemKeyChanged(this, previousSelectedItemKey);
+
+        if (previousSelectedItemKey != selectedItemKey) {
+            this.selectedItemKey = selectedItemKey;
+            spinnerListeners.selectedItemKeyChanged(this, previousSelectedItemKey);
+        }
     }
 
     @Override

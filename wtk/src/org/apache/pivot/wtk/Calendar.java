@@ -301,8 +301,7 @@ public class Calendar extends Container {
     public void setSelectedDateKey(String selectedDateKey) {
         String previousSelectedDateKey = this.selectedDateKey;
 
-        if ((selectedDateKey == null ^ previousSelectedDateKey == null)
-            || (selectedDateKey != null && !selectedDateKey.equals(previousSelectedDateKey))) {
+        if (selectedDateKey != previousSelectedDateKey) {
             this.selectedDateKey = selectedDateKey;
             calendarListeners.selectedDateKeyChanged(this, previousSelectedDateKey);
         }

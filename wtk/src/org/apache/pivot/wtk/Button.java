@@ -448,8 +448,11 @@ public abstract class Button extends Component {
 
     public void setSelectedKey(String selectedKey) {
         String previousSelectedKey = this.selectedKey;
-        this.selectedKey = selectedKey;
-        buttonListeners.selectedKeyChanged(this, previousSelectedKey);
+
+        if (previousSelectedKey != selectedKey) {
+            this.selectedKey = selectedKey;
+            buttonListeners.selectedKeyChanged(this, previousSelectedKey);
+        }
     }
 
     public String getStateKey() {
@@ -458,8 +461,11 @@ public abstract class Button extends Component {
 
     public void setStateKey(String stateKey) {
         String previousStateKey = this.stateKey;
-        this.stateKey = stateKey;
-        buttonListeners.stateKeyChanged(this, previousStateKey);
+
+        if (previousStateKey != stateKey) {
+            this.stateKey = stateKey;
+            buttonListeners.stateKeyChanged(this, previousStateKey);
+        }
     }
 
     @Override
@@ -468,24 +474,24 @@ public abstract class Button extends Component {
             && JSONSerializer.containsKey(context, selectedKey)) {
             Object value = JSONSerializer.get(context, selectedKey);
 
-            if (!(value instanceof Boolean)) {
-                throw new IllegalArgumentException("value must be an instance of "
-                    + Boolean.class.getName());
+            if (value instanceof Boolean) {
+                setSelected((Boolean)value);
+            } else {
+                throw new IllegalArgumentException(getClass().getName() + " can't bind to "
+                    + value + ".");
             }
-
-            setSelected((Boolean)value);
         }
 
         if (stateKey != null
             && JSONSerializer.containsKey(context, stateKey)) {
             Object value = JSONSerializer.get(context, stateKey);
 
-            if (!(value instanceof State)) {
-                throw new IllegalArgumentException("value must be an instance of "
-                    + State.class.getName());
+            if (value instanceof State) {
+                setState((State)value);
+            } else {
+                throw new IllegalArgumentException(getClass().getName() + " can't bind to "
+                    + value + ".");
             }
-
-            setState((State)value);
         }
     }
 

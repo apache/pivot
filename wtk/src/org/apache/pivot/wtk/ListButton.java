@@ -317,8 +317,11 @@ public class ListButton extends Button {
 
     public void setSelectedItemKey(String selectedItemKey) {
         String previousSelectedItemKey = this.selectedItemKey;
-        this.selectedItemKey = selectedItemKey;
-        listButtonListeners.selectedItemKeyChanged(this, previousSelectedItemKey);
+
+        if (previousSelectedItemKey != selectedItemKey) {
+            this.selectedItemKey = selectedItemKey;
+            listButtonListeners.selectedItemKeyChanged(this, previousSelectedItemKey);
+        }
     }
 
     @Override

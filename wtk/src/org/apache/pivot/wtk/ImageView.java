@@ -18,6 +18,8 @@ package org.apache.pivot.wtk;
 
 import java.net.URL;
 
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.ThreadUtilities;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
@@ -36,9 +38,17 @@ public class ImageView extends Component {
                 listener.imageChanged(imageView, previousImage);
             }
         }
+
+        @Override
+        public void imageKeyChanged(ImageView imageView, String previousImageKey) {
+            for (ImageViewListener listener : this) {
+                listener.imageKeyChanged(imageView, previousImageKey);
+            }
+        }
     }
 
     private Image image = null;
+    private String imageKey = null;
 
     private ImageViewListenerList imageViewListeners = new ImageViewListenerList();
 
@@ -134,6 +144,57 @@ public class ImageView extends Component {
 
         ClassLoader classLoader = ThreadUtilities.getClassLoader();
         setImage(classLoader.getResource(image));
+    }
+
+    /**
+     * Returns the image view's image key.
+     *
+     * @return
+     * The image key, or <tt>null</tt> if no key is set.
+     */
+    public String getImageKey() {
+        return imageKey;
+    }
+
+    /**
+     * Sets the image view's image key.
+     *
+     * @param imageKey
+     * The image key, or <tt>null</tt> to clear the binding.
+     */
+    public void setImageKey(String imageKey) {
+        String previousImageKey = this.imageKey;
+
+        if (previousImageKey != imageKey) {
+            this.imageKey = imageKey;
+            imageViewListeners.imageKeyChanged(this, previousImageKey);
+        }
+    }
+
+    @Override
+    public void load(Dictionary<String, ?> context) {
+        if (imageKey != null
+            && JSONSerializer.containsKey(context, imageKey)) {
+            Object value = JSONSerializer.get(context, imageKey);
+            if (value instanceof Image) {
+                setImage((Image)value);
+            } else if (value instanceof URL) {
+                setImage((URL)value);
+            } else if (value instanceof String) {
+                setImage((String)value);
+            } else {
+                throw new IllegalArgumentException(getClass().getName() + " can't bind to "
+                    + value + ".");
+            }
+        }
+    }
+
+    @Override
+    public void store(Dictionary<String, ?> context) {
+        if (isEnabled()
+            && imageKey != null) {
+            JSONSerializer.put(context, imageKey, getImage());
+        }
     }
 
     /**

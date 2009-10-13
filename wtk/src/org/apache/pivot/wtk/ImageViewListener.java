@@ -23,10 +23,31 @@ import org.apache.pivot.wtk.media.Image;
  */
 public interface ImageViewListener {
     /**
+     * Image view listener adapter.
+     */
+    public static class Adapter implements ImageViewListener {
+        @Override
+        public void imageChanged(ImageView imageView, Image previousImage) {
+        }
+
+        @Override
+        public void imageKeyChanged(ImageView imageView, String previousImageKey) {
+        }
+    }
+
+    /**
      * Called when an image view's image has changed.
      *
      * @param imageView
      * @param previousImage
      */
     public void imageChanged(ImageView imageView, Image previousImage);
+
+    /**
+     * Called when an image view's image key has changed.
+     *
+     * @param imageView
+     * @param previousImageKey
+     */
+    public void imageKeyChanged(ImageView imageView, String previousImageKey);
 }

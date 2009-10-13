@@ -87,10 +87,7 @@ public class Label extends Component {
     public void setTextKey(String textKey) {
         String previousTextKey = this.textKey;
 
-        if ((previousTextKey != null
-            && textKey != null
-            && !previousTextKey.equals(textKey))
-            || previousTextKey != textKey) {
+        if (previousTextKey != textKey) {
             this.textKey = textKey;
             labelListeners.textKeyChanged(this, previousTextKey);
         }

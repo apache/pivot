@@ -1400,8 +1400,11 @@ public class ListView extends Component {
 
     public void setSelectedItemKey(String selectedItemKey) {
         String previousSelectedItemKey = this.selectedItemKey;
-        this.selectedItemKey = selectedItemKey;
-        listViewListeners.selectedItemKeyChanged(this, previousSelectedItemKey);
+
+        if (previousSelectedItemKey != selectedItemKey) {
+            this.selectedItemKey = selectedItemKey;
+            listViewListeners.selectedItemKeyChanged(this, previousSelectedItemKey);
+        }
     }
 
     public String getSelectedItemsKey() {
@@ -1410,8 +1413,11 @@ public class ListView extends Component {
 
     public void setSelectedItemsKey(String selectedItemsKey) {
         String previousSelectedItemsKey = this.selectedItemsKey;
-        this.selectedItemsKey = selectedItemsKey;
-        listViewListeners.selectedItemsKeyChanged(this, previousSelectedItemsKey);
+
+        if (previousSelectedItemsKey != selectedItemsKey) {
+            this.selectedItemsKey = selectedItemsKey;
+            listViewListeners.selectedItemsKeyChanged(this, previousSelectedItemsKey);
+        }
     }
 
     @Override

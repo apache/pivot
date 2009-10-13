@@ -334,4 +334,9 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
 
         invalidateComponent();
     }
+
+    @Override
+    public void imageKeyChanged(ImageView imageView, String previousImageKey) {
+        // No-op
+    }
 }

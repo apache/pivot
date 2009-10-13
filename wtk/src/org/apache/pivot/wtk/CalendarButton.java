@@ -264,8 +264,7 @@ public class CalendarButton extends Button {
 
         if (previousSelectedDateKey != selectedDateKey) {
             this.selectedDateKey = selectedDateKey;
-            calendarButtonListeners.selectedDateKeyChanged(this,
-                previousSelectedDateKey);
+            calendarButtonListeners.selectedDateKeyChanged(this, previousSelectedDateKey);
         }
     }
 
