@@ -22,7 +22,7 @@
 <%@ page language="java" contentType="application/x-java-jnlp-file" pageEncoding="UTF-8" %>
 
 <%@ include file="version.jsp" %>
-<%@ include file="url_utilities.jsp" %>
+<%@ include file="jnlp_common.jsp" %>
 
 <jnlp spec="1.6+" codebase="<%= codebase %>" href="<%= href %>">
     <information>
@@ -39,7 +39,7 @@
     </information>
 
     <resources>
-<%@ include file="common_properties_for_jnlp.jsp" %>
+<%@ include file="jnlp_properties.jsp" %>
 
         <java version="1.6+" href="http://java.sun.com/products/autodl/j2se" />
 
