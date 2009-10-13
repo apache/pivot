@@ -26,24 +26,37 @@
 
 <jnlp spec="1.6+" codebase="<%= codebase %>" href="<%= href %>">
     <information>
-        <title>Apache Pivot - Runtime</title>
+        <title>Pivot "Kitchen Sink" Demo with Custom Colors - Signed</title>
         <vendor>Apache Pivot</vendor>
         <homepage href="http://incubator.apache.org/pivot/"/>
-        <description>Pivot Runtime - Standard Libraries - Signed</description>
+        <description>
+            Similar to Sun's "Swing Set" demo, this application demonstrates a number of commonly used Pivot components.
+            Note that here are used Pivot signed jars.
+        </description>
         <offline-allowed/>
+        <shortcut online="false">
+            <desktop/>
+        </shortcut>
     </information>
 
     <resources>
-        <property name="jnlp.packEnabled"                     value="true" />
-        <property name="sun.awt.noerasebackground"            value="true" />
-        <property name="sun.awt.erasebackgroundonresize=true" value="true" />
+<%@ include file="common_properties_for_jnlp.jsp" %>
+
+        <property name="org.apache.pivot.wtk.skin.terra.location" value="org/apache/pivot/tutorials/TerraTheme_dark.json" />
 
         <java version="1.6+" href="http://java.sun.com/products/autodl/j2se" />
 
-        <jar href="lib/pivot-core-<%= version %>.signed.jar" />
-        <jar href="lib/pivot-wtk-<%= version %>.signed.jar" />
-        <jar href="lib/pivot-wtk-<%= version %>.terra.signed.jar" />
+        <extension name="pivot-runtime" href="<%= codebase %>pivot-runtime.signed.jnlp" />
+
+        <jar href="lib/pivot-tutorials-<%= version %>.signed.jar" main="true" />
     </resources>
 
-  <component-desc />
+    <application-desc main-class="org.apache.pivot.wtk.DesktopApplicationContext">
+        <argument>org.apache.pivot.tutorials.KitchenSink</argument>
+        <argument>--width:800</argument>
+        <argument>--height:600</argument>
+        <argument>--center:true</argument>
+    </application-desc>
+    
+    <update check="background" />
 </jnlp>

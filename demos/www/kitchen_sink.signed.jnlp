@@ -26,7 +26,7 @@
 
 <jnlp spec="1.6+" codebase="<%= codebase %>" href="<%= href %>">
     <information>
-        <title>Pivot "Kitchen Sink" Demo with Custom Colors - Signed</title>
+        <title>Pivot "Kitchen Sink" Demo - Signed</title>
         <vendor>Apache Pivot</vendor>
         <homepage href="http://incubator.apache.org/pivot/"/>
         <description>
@@ -40,13 +40,11 @@
     </information>
 
     <resources>
-<%@ include file="common_properties.jsp" %>
-
-        <property name="org.apache.pivot.wtk.skin.terra.location" value="org/apache/pivot/tutorials/TerraTheme_dark.json" />
+<%@ include file="common_properties_for_jnlp.jsp" %>
 
         <java version="1.6+" href="http://java.sun.com/products/autodl/j2se" />
 
-        <extension name="pivot-runtime" href="<%= codebase %>pivot-runtime-signed.jnlp" />
+        <extension name="pivot-runtime" href="<%= codebase %>pivot-runtime.signed.jnlp" />
 
         <jar href="lib/pivot-tutorials-<%= version %>.signed.jar" main="true" />
     </resources>

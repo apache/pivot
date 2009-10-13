@@ -39,7 +39,7 @@
     </information>
 
     <resources>
-<%@ include file="common_properties.jsp" %>
+<%@ include file="common_properties_for_jnlp.jsp" %>
 
         <java version="1.6+" href="http://java.sun.com/products/autodl/j2se" />
 
