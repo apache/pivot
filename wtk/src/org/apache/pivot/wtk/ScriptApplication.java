@@ -16,8 +16,11 @@
  */
 package org.apache.pivot.wtk;
 
+import java.net.URL;
+
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
+import org.apache.pivot.util.ThreadUtilities;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 /**
@@ -43,7 +46,12 @@ public class ScriptApplication implements Application {
         }
 
         WTKXSerializer wtkxSerializer = new WTKXSerializer(resources);
-        window = (Window)wtkxSerializer.readObject(src);
+
+        ClassLoader classLoader = ThreadUtilities.getClassLoader();
+        URL location = classLoader.getResource(src);
+
+        wtkxSerializer.put("location", location);
+        window = (Window)wtkxSerializer.readObject(location);
         window.open(display);
     }
 

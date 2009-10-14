@@ -41,6 +41,7 @@ import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.Theme;
+import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.content.ButtonDataRenderer;
 import org.apache.pivot.wtk.effects.Transition;
 import org.apache.pivot.wtk.effects.TransitionListener;
@@ -236,6 +237,7 @@ public class TerraExpanderSkin extends ExpanderSkin
 
         buttonBoxPane = new BoxPane(Orientation.HORIZONTAL);
         buttonBoxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
+        buttonBoxPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
 
         titleRow.add(titleBoxPane);
         titleRow.add(buttonBoxPane);

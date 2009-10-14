@@ -23,6 +23,7 @@ import java.util.Date;
 
 import org.apache.pivot.beans.BeanDictionary;
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.util.CalendarDate;
 import org.apache.pivot.wtk.TableView;
 
 
@@ -78,10 +79,11 @@ public class TableViewDateCellRenderer extends TableViewCellRenderer {
                     } else if (cellData instanceof Long) {
                         formattedDate = dateFormat.format(new Date((Long)cellData));
                     } else if (cellData instanceof Calendar) {
-                        formattedDate = dateFormat.format( ((Calendar)cellData).getTime() );
+                        formattedDate = dateFormat.format(((Calendar)cellData).getTime());
+                    } else if (cellData instanceof CalendarDate) {
+                        formattedDate = dateFormat.format(new Date(((CalendarDate)cellData).getTime()));
                     } else {
-                        System.err.println("Data for \"" + columnName + "\" is not an instance of "
-                            + Date.class.getName());
+                        System.err.println(getClass().getName() + " cannot render " + cellData);
                     }
                 }
             }

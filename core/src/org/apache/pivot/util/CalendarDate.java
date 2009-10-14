@@ -46,6 +46,8 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      */
     public final int day;
 
+    private long time = -1;
+
     private static final int[] MONTH_LENGTHS = {
         31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
     };
@@ -115,7 +117,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      * Compares this calendar date with another calendar date.
      *
      * @param calendarDate
-     * The calendar date against which to compare
+     * The calendar date against which to compare.
      *
      * @return
      * A negative number, zero, or a positive number if the specified calendar
@@ -150,10 +152,10 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      *
      * @param days
      * The number of days to add to (or subtract from if negative) this
-     * calendar date
+     * calendar date.
      *
      * @return
-     * The resulting calendar date
+     * The resulting calendar date.
      */
     public CalendarDate add(int days) {
         GregorianCalendar calendar = toCalendar();
@@ -165,7 +167,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      * Gets the number of days in between this calendar date and the specified
      * calendar date. If this calendar date represents a day after the
      * specified calendar date, the difference will be positive. If this
-     * calendardate represents a day before the specified calendar date, the
+     * calendar date represents a day before the specified calendar date, the
      * difference will be negative. If the two calendar dates represent the
      * same day, the difference will be zero.
      * <p>
@@ -176,20 +178,32 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      * </pre>
      *
      * @param calendarDate
-     * The calendar date to subtract from this calendar date
+     * The calendar date to subtract from this calendar date.
      *
      * @return
      * The number of days in between this calendar date and
-     * <tt>calendarDate</tt>
+     * <tt>calendarDate</tt>.
      */
     public int subtract(CalendarDate calendarDate) {
-        GregorianCalendar c1 = toCalendar();
-        GregorianCalendar c2 = calendarDate.toCalendar();
-
-        long t1 = c1.getTimeInMillis();
-        long t2 = c2.getTimeInMillis();
+        long t1 = getTime();
+        long t2 = calendarDate.getTime();
 
         return (int)((t1 - t2) / (1000l * 60 * 60 * 24));
+    }
+
+    /**
+     * Returns this calendar date as a millisecond value. The value is the
+     * number of milliseconds since midnight GMT on January 1, 1970.
+     *
+     * @return
+     * The number of milliseconds since midnight GMT on January 1, 1970.
+     */
+    public long getTime() {
+        if (time == -1) {
+            time = toCalendar().getTimeInMillis();
+        }
+
+        return time;
     }
 
     /**
@@ -199,7 +213,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      * locale.
      *
      * @return
-     * This calendar date as a <tt>GregorianCalendar</tt>
+     * This calendar date as a <tt>GregorianCalendar</tt>.
      */
     public GregorianCalendar toCalendar() {
         return new GregorianCalendar(year, month, day + 1);
@@ -211,7 +225,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      * same day as this one.
      *
      * @param o
-     * Reference to the object against which to compare
+     * Reference to the object against which to compare.
      */
     @Override
     public boolean equals(Object o) {
@@ -260,7 +274,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      * which is <tt>[YYYY]-[MM]-[DD]</tt>.
      *
      * @param date
-     * A string in the form of <tt>[YYYY]-[MM]-[DD]</tt>. (e.g. 2008-07-23)
+     * A string in the form of <tt>[YYYY]-[MM]-[DD]</tt> (e.g. 2008-07-23).
      */
     public static CalendarDate forString(String date) {
         Pattern pattern = Pattern.compile("^(\\d{4})-(\\d{2})-(\\d{2})$");
