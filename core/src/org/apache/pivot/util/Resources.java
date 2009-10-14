@@ -204,6 +204,45 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
         return s;
     }
 
+    /**
+     * Gets a resource string with positional token substitution. Tokens of the
+     * form <tt>{<i>N</i>}</tt> (where <tt>N</tt> is the variable argument
+     * index) will be substituted with their corresponding String in the
+     * variable arguments array.
+     * <p>
+     * For example, if resource string <tt>foo</tt> were defined to be
+     * <tt>"{0} knows {1}, and {1} knows {0}."</tt>, then calling
+     * <tt>getString("foo", "Jane", "John")</tt> would yield the string
+     * "Jane knows John, and John knows Jane."
+     *
+     * @param key
+     * The resource key
+     *
+     * @param args
+     * Arguments referenced within the value of the resource string
+     *
+     * @return
+     * The resource string after positional substitution has been performed
+     */
+    public String getString(String key, String... args) {
+        StringBuilder buf = new StringBuilder(getString(key));
+
+        for (int i = 0; i < args.length; i++) {
+            String token = '{' + String.valueOf(i) + '}';
+            String substitution = args[i];
+
+            int tokenLength = token.length();
+            int substituionLength = substitution.length();
+
+            for (int j = buf.indexOf(token, 0); j != -1; j = buf.indexOf(token, j)) {
+                buf.replace(j, j + tokenLength, substitution);
+                j += substituionLength;
+            }
+        }
+
+        return buf.toString();
+    }
+
     public Number getNumber(String key) {
         Number n = JSONSerializer.getNumber(resourceMap, key);
         if (n == null && parent != null) {
