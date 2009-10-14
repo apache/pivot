@@ -18,7 +18,9 @@ package org.apache.pivot.wtk;
 
 import java.net.URL;
 
+import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.ThreadUtilities;
@@ -61,6 +63,11 @@ public class ImageView extends Component {
     private String imageKey = null;
 
     private ImageViewListenerList imageViewListeners = new ImageViewListenerList();
+
+    // Maintains a mapping of image URL to image views that should be notified when
+    // an asynchronously loaded image is available
+    private static HashMap<URL, ArrayList<ImageView>> loadMap =
+        new HashMap<URL, ArrayList<ImageView>>();
 
     /**
      * Creates an empty image view.
@@ -125,20 +132,36 @@ public class ImageView extends Component {
 
         if (image == null) {
             if (asynchronous) {
-                Image.load(imageURL, new TaskAdapter<Image>(new TaskListener<Image>() {
-                    @Override
-                    public void taskExecuted(Task<Image> task) {
-                        Image image = task.getResult();
+                if (loadMap.containsKey(imageURL)) {
+                    // Add this to the list of image views that are interested in
+                    // the image at this URL
+                    loadMap.get(imageURL).add(this);
+                } else {
+                    Image.load(imageURL, new TaskAdapter<Image>(new TaskListener<Image>() {
+                        @Override
+                        public void taskExecuted(Task<Image> task) {
+                            Image image = task.getResult();
 
-                        setImage(image);
-                        ApplicationContext.getResourceCache().put(imageURL, image);
-                    }
+                            // Update the contents of all image views that requested this
+                            // image
+                            for (ImageView imageView : loadMap.get(imageURL)) {
+                                imageView.setImage(image);
+                            }
 
-                    @Override
-                    public void executeFailed(Task<Image> task) {
-                        // No-op
-                    }
-                }));
+                            loadMap.remove(imageURL);
+
+                            // Add the image to the cache
+                            ApplicationContext.getResourceCache().put(imageURL, image);
+                        }
+
+                        @Override
+                        public void executeFailed(Task<Image> task) {
+                            // No-op
+                        }
+                    }));
+
+                    loadMap.put(imageURL, new ArrayList<ImageView>(this));
+                }
             } else {
                 try {
                     image = Image.load(imageURL);
