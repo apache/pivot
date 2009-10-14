@@ -721,11 +721,14 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
             TableView tableView = tableViewHeader.getTableView();
 
             if (resizeHeaderIndex != -1) {
-                if (count == 2) {
-                    // Calculate the maximum cell width
+                TableView.Column column = tableView.getColumns().get(resizeHeaderIndex);
+
+                if (count == 2
+                    && !column.isRelative()
+                    && column.getWidth() != -1) {
+                    // Size the column to fit its contents
                     int columnWidth = 0;
 
-                    TableView.Column column = tableView.getColumns().get(resizeHeaderIndex);
                     TableView.CellRenderer cellRenderer = column.getCellRenderer();
                     List<?> tableData = tableView.getTableData();
 
