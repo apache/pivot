@@ -22,7 +22,9 @@ import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.ThreadUtilities;
+import org.apache.pivot.util.concurrent.Task;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
+import org.apache.pivot.util.concurrent.TaskListener;
 import org.apache.pivot.wtk.media.Image;
 
 
@@ -40,6 +42,13 @@ public class ImageView extends Component {
         }
 
         @Override
+        public void asynchronousChanged(ImageView imageView) {
+            for (ImageViewListener listener : this) {
+                listener.asynchronousChanged(imageView);
+            }
+        }
+
+        @Override
         public void imageKeyChanged(ImageView imageView, String previousImageKey) {
             for (ImageViewListener listener : this) {
                 listener.imageKeyChanged(imageView, previousImageKey);
@@ -48,6 +57,7 @@ public class ImageView extends Component {
     }
 
     private Image image = null;
+    private boolean asynchronous = false;
     private String imageKey = null;
 
     private ImageViewListenerList imageViewListeners = new ImageViewListenerList();
@@ -106,7 +116,7 @@ public class ImageView extends Component {
      * @param imageURL
      * The location of the image to set.
      */
-    public final void setImage(URL imageURL) {
+    public final void setImage(final URL imageURL) {
         if (imageURL == null) {
             throw new IllegalArgumentException("imageURL is null.");
         }
@@ -114,13 +124,30 @@ public class ImageView extends Component {
         Image image = (Image)ApplicationContext.getResourceCache().get(imageURL);
 
         if (image == null) {
-            try {
-                image = Image.load(imageURL);
-            } catch (TaskExecutionException exception) {
-                throw new IllegalArgumentException(exception);
-            }
+            if (asynchronous) {
+                Image.load(imageURL, new TaskAdapter<Image>(new TaskListener<Image>() {
+                    @Override
+                    public void taskExecuted(Task<Image> task) {
+                        Image image = task.getResult();
 
-            ApplicationContext.getResourceCache().put(imageURL, image);
+                        setImage(image);
+                        ApplicationContext.getResourceCache().put(imageURL, image);
+                    }
+
+                    @Override
+                    public void executeFailed(Task<Image> task) {
+                        // No-op
+                    }
+                }));
+            } else {
+                try {
+                    image = Image.load(imageURL);
+                } catch (TaskExecutionException exception) {
+                    throw new IllegalArgumentException(exception);
+                }
+
+                ApplicationContext.getResourceCache().put(imageURL, image);
+            }
         }
 
         setImage(image);
@@ -144,6 +171,31 @@ public class ImageView extends Component {
 
         ClassLoader classLoader = ThreadUtilities.getClassLoader();
         setImage(classLoader.getResource(image));
+    }
+
+    /**
+     * Returns the image view's asynchronous flag.
+     *
+     * @return
+     * <tt>true</tt> if images specified via URL will be loaded in the background;
+     * <tt>false</tt> if they will be loaded synchronously.
+     */
+    public boolean isAsynchronous() {
+        return asynchronous;
+    }
+
+    /**
+     * Sets the image view's asynchronous flag.
+     *
+     * @param asynchronous
+     * <tt>true</tt> if images specified via URL will be loaded in the background;
+     * <tt>false</tt> if they will be loaded synchronously.
+     */
+    public void setAsynchronous(boolean asynchronous) {
+        if (this.asynchronous != asynchronous) {
+            this.asynchronous = asynchronous;
+            imageViewListeners.asynchronousChanged(this);
+        }
     }
 
     /**

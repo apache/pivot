@@ -25,17 +25,20 @@ limitations under the License.
             <top>
                 <SplitPane orientation="horizontal" splitRatio="0.5">
                     <left>
-                        <ImageView image="org/apache/pivot/tutorials/IMG_0735_2.jpg"
+                        <ImageView asynchronous="true"
+                            image="org/apache/pivot/tutorials/IMG_0735_2.jpg"
                             styles="{backgroundColor:'#404040'}"/>
                     </left>
                     <right>
-                        <ImageView image="org/apache/pivot/tutorials/IMG_0767_2.jpg"
+                        <ImageView asynchronous="true"
+                            image="org/apache/pivot/tutorials/IMG_0767_2.jpg"
                             styles="{backgroundColor:'#404040'}"/>
                     </right>
                 </SplitPane>
             </top>
             <bottom>
-                <ImageView image="org/apache/pivot/tutorials/IMG_0725_2.jpg"
+                <ImageView asynchronous="true"
+                    image="org/apache/pivot/tutorials/IMG_0725_2.jpg"
                     styles="{backgroundColor:'#404040'}"/>
             </bottom>
         </SplitPane>

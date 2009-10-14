@@ -31,6 +31,10 @@ public interface ImageViewListener {
         }
 
         @Override
+        public void asynchronousChanged(ImageView imageView) {
+        }
+
+        @Override
         public void imageKeyChanged(ImageView imageView, String previousImageKey) {
         }
     }
@@ -42,6 +46,13 @@ public interface ImageViewListener {
      * @param previousImage
      */
     public void imageChanged(ImageView imageView, Image previousImage);
+
+    /**
+     * Called when an image view's asynchronous flag has changed.
+     *
+     * @param imageView
+     */
+    public void asynchronousChanged(ImageView imageView);
 
     /**
      * Called when an image view's image key has changed.
