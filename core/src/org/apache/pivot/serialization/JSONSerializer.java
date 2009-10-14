@@ -726,7 +726,7 @@ public class JSONSerializer implements Serializer<Object> {
      * @param root
      * @param path
      *
-     * @see #getValue(Object, String)
+     * @see #get(Object, String)
      */
     public static String getString(Object root, String path) {
         return (String)get(root, path);
@@ -738,7 +738,7 @@ public class JSONSerializer implements Serializer<Object> {
      * @param root
      * @param path
      *
-     * @see #getValue(Object, String)
+     * @see #get(Object, String)
      */
     public static Number getNumber(Object root, String path) {
         return (Number)get(root, path);
@@ -750,7 +750,7 @@ public class JSONSerializer implements Serializer<Object> {
      * @param root
      * @param path
      *
-     * @see #getValue(Object, String)
+     * @see #get(Object, String)
      */
     public static Short getShort(Object root, String path) {
         return getNumber(root, path).shortValue();
@@ -762,7 +762,7 @@ public class JSONSerializer implements Serializer<Object> {
      * @param root
      * @param path
      *
-     * @see #getValue(Object, String)
+     * @see #get(Object, String)
      */
     public static Integer getInteger(Object root, String path) {
         return getNumber(root, path).intValue();
@@ -774,7 +774,7 @@ public class JSONSerializer implements Serializer<Object> {
      * @param root
      * @param path
      *
-     * @see #getValue(Object, String)
+     * @see #get(Object, String)
      */
     public static Long getLong(Object root, String path) {
         return getNumber(root, path).longValue();
@@ -786,7 +786,7 @@ public class JSONSerializer implements Serializer<Object> {
      * @param root
      * @param path
      *
-     * @see #getValue(Object, String)
+     * @see #get(Object, String)
      */
     public static Float getFloat(Object root, String path) {
         return getNumber(root, path).floatValue();
@@ -798,7 +798,7 @@ public class JSONSerializer implements Serializer<Object> {
      * @param root
      * @param path
      *
-     * @see #getValue(Object, String)
+     * @see #get(Object, String)
      */
     public static Double getDouble(Object root, String path) {
         return getNumber(root, path).doubleValue();
@@ -810,7 +810,7 @@ public class JSONSerializer implements Serializer<Object> {
      * @param root
      * @param path
      *
-     * @see #getValue(Object, String)
+     * @see #get(Object, String)
      */
     public static Boolean getBoolean(Object root, String path) {
         return (Boolean)get(root, path);
@@ -822,7 +822,7 @@ public class JSONSerializer implements Serializer<Object> {
      * @param root
      * @param path
      *
-     * @see #getValue(Object, String)
+     * @see #get(Object, String)
      */
     public static List<?> getList(Object root, String path) {
         return (List<?>)get(root, path);
@@ -834,7 +834,7 @@ public class JSONSerializer implements Serializer<Object> {
      * @param root
      * @param path
      *
-     * @see #getValue(Object, String)
+     * @see #get(Object, String)
      */
     @SuppressWarnings("unchecked")
     public static Map<String, ?> getMap(Object root, String path) {
