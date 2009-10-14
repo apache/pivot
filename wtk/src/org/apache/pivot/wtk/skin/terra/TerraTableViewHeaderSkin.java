@@ -26,6 +26,7 @@ import java.awt.geom.GeneralPath;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
@@ -617,6 +618,11 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         TableView tableView = tableViewHeader.getTableView();
 
         if (tableView != null) {
+            if (resizeHeaderIndex != -1
+                && Mouse.getCapturer() != tableViewHeader) {
+                Mouse.capture(tableViewHeader);
+            }
+
             if (Mouse.getCapturer() == tableViewHeader) {
                 TableView.Column column = tableView.getColumns().get(resizeHeaderIndex);
                 Bounds headerBounds = getHeaderBounds(resizeHeaderIndex);
@@ -677,7 +683,6 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
                         && column.getWidth() != -1
                         && x > headerBounds.x + headerBounds.width - RESIZE_HANDLE_SIZE) {
                         resizeHeaderIndex = headerIndex;
-                        Mouse.capture(tableViewHeader);
                     } else if (headersPressable) {
                         pressedHeaderIndex = headerIndex;
                         repaintComponent(getHeaderBounds(pressedHeaderIndex));
@@ -694,12 +699,13 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         boolean consumed = super.mouseUp(component, button, x, y);
 
         if (button == Mouse.Button.LEFT) {
-            if (Mouse.getCapturer() == component) {
-                Mouse.release();
-            } else {
-                if (pressedHeaderIndex != -1) {
-                    repaintComponent(getHeaderBounds(pressedHeaderIndex));
+            if (resizeHeaderIndex != -1) {
+                if (Mouse.getCapturer() == component) {
+                    Mouse.release();
+                    resizeHeaderIndex = -1;
                 }
+            } else if (pressedHeaderIndex != -1) {
+                repaintComponent(getHeaderBounds(pressedHeaderIndex));
             }
         }
 
@@ -714,9 +720,25 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
             TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
             TableView tableView = tableViewHeader.getTableView();
 
-            if (count == 1
-                && pressedHeaderIndex != -1
-                && headersPressable) {
+            if (resizeHeaderIndex != -1) {
+                if (count == 2) {
+                    // Calculate the maximum cell width
+                    int columnWidth = 0;
+
+                    TableView.Column column = tableView.getColumns().get(resizeHeaderIndex);
+                    TableView.CellRenderer cellRenderer = column.getCellRenderer();
+                    List<?> tableData = tableView.getTableData();
+
+                    int rowIndex = 0;
+                    for (Object rowData : tableData) {
+                        cellRenderer.render(rowData, rowIndex++, resizeHeaderIndex, tableView,
+                            column.getName(), false, false, false);
+                        columnWidth = Math.max(cellRenderer.getPreferredWidth(-1), columnWidth);
+                    }
+
+                    column.setWidth(columnWidth);
+                }
+            } else if (pressedHeaderIndex != -1) {
                 // Press the header
                 tableViewHeader.pressHeader(pressedHeaderIndex);
 
@@ -745,25 +767,9 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
 
                     consumed = true;
                 }
-            } else if (count == 2
-                && columnsResizable) {
-                if (tableView != null) {
-                    int headerIndex = getHeaderAt(x);
-
-                    if (headerIndex != -1) {
-                        Bounds headerBounds = getHeaderBounds(headerIndex);
-                        TableView.Column column = tableView.getColumns().get(headerIndex);
-
-                        if (!column.isRelative()
-                            && column.getWidth() != -1
-                            && x > headerBounds.x + headerBounds.width - RESIZE_HANDLE_SIZE) {
-                            // TODO PIVOT-248
-                            consumed = true;
-                        }
-                    }
-                }
             }
 
+            resizeHeaderIndex = -1;
             pressedHeaderIndex = -1;
         }
 
