@@ -252,6 +252,9 @@ public class ObsidianRadioButtonSkin extends RadioButtonSkin {
     }
 
     public void setSpacing(int spacing) {
+        if (spacing < 0) {
+            throw new IllegalArgumentException("spacing is negative.");
+        }
         this.spacing = spacing;
         invalidateComponent();
     }

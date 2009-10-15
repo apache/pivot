@@ -154,6 +154,9 @@ public class TerraMeterSkin extends ComponentSkin
     }
 
     public void setGridFrequency(float gridFrequency) {
+        if (gridFrequency <= 0 || gridFrequency > 1) {
+            throw new IllegalArgumentException("gridFrequency must be > 0 and <= 1");
+        }
         this.gridFrequency = gridFrequency;
         repaintComponent();
     }

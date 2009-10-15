@@ -59,6 +59,14 @@ public final class CornerRadii implements Serializable {
     }
 
     public CornerRadii(int topLeft, int topRight, int bottomLeft, int bottomRight) {
+        if (topLeft < 0)
+            throw new IllegalStateException("corner radii negative, topLeft=" + topLeft);
+        if (topRight < 0)
+            throw new IllegalStateException("corner radii negative, topRight=" + topRight);
+        if (bottomLeft < 0)
+            throw new IllegalStateException("corner radii negative, bottom=" + bottomLeft);
+        if (bottomRight < 0)
+            throw new IllegalStateException("corner radii negative, bottomRight=" + bottomRight);
         this.topLeft = topLeft;
         this.topRight = topRight;
         this.bottomLeft = bottomLeft;
@@ -93,6 +101,14 @@ public final class CornerRadii implements Serializable {
         } else {
             bottomRight = 0;
         }
+        if (topLeft < 0)
+            throw new IllegalStateException("corner radii negative, topLeft=" + topLeft);
+        if (topRight < 0)
+            throw new IllegalStateException("corner radii negative, topRight=" + topRight);
+        if (bottomLeft < 0)
+            throw new IllegalStateException("corner radii negative, bottom=" + bottomLeft);
+        if (bottomRight < 0)
+            throw new IllegalStateException("corner radii negative, bottomRight=" + bottomRight);
     }
 
     @Override

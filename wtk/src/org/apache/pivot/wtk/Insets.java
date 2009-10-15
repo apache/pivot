@@ -44,13 +44,24 @@ public final class Insets implements Serializable {
     public static final Insets NONE = new Insets(0);
 
     public Insets(int inset) {
-        top = inset;
-        left = inset;
-        bottom = inset;
-        right = inset;
+        if (inset < 0)
+            throw new IllegalStateException("an inset can never be < 0, inset=" + inset);
+        this.top = inset;
+        this.left = inset;
+        this.bottom = inset;
+        this.right = inset;
     }
 
     public Insets(int top, int left, int bottom, int right) {
+        if (top < 0)
+            throw new IllegalStateException("an inset can never be < 0, top=" + top);
+        if (left < 0)
+            throw new IllegalStateException("an inset can never be < 0, left=" + left);
+        if (bottom < 0)
+            throw new IllegalStateException("an inset can never be < 0, bottom=" + bottom);
+        if (right < 0)
+            throw new IllegalStateException("an inset can never be < 0, right=" + right);
+
         this.top = top;
         this.left = left;
         this.bottom = bottom;
@@ -74,28 +85,37 @@ public final class Insets implements Serializable {
         }
 
         if (insets.containsKey(TOP_KEY)) {
-            top = ((Number)insets.get(TOP_KEY)).intValue();
+            top = ((Number) insets.get(TOP_KEY)).intValue();
         } else {
             top = 0;
         }
 
         if (insets.containsKey(LEFT_KEY)) {
-            left = ((Number)insets.get(LEFT_KEY)).intValue();
+            left = ((Number) insets.get(LEFT_KEY)).intValue();
         } else {
             left = 0;
         }
 
         if (insets.containsKey(BOTTOM_KEY)) {
-            bottom = ((Number)insets.get(BOTTOM_KEY)).intValue();
+            bottom = ((Number) insets.get(BOTTOM_KEY)).intValue();
         } else {
             bottom = 0;
         }
 
         if (insets.containsKey(RIGHT_KEY)) {
-            right = ((Number)insets.get(RIGHT_KEY)).intValue();
+            right = ((Number) insets.get(RIGHT_KEY)).intValue();
         } else {
             right = 0;
         }
+        
+        if (top < 0)
+            throw new IllegalStateException("an inset can never be < 0, top=" + top);
+        if (left < 0)
+            throw new IllegalStateException("an inset can never be < 0, left=" + left);
+        if (bottom < 0)
+            throw new IllegalStateException("an inset can never be < 0, bottom=" + bottom);
+        if (right < 0)
+            throw new IllegalStateException("an inset can never be < 0, right=" + right);
     }
 
     @Override
@@ -103,11 +123,8 @@ public final class Insets implements Serializable {
         boolean equals = false;
 
         if (object instanceof Insets) {
-            Insets insets = (Insets)object;
-            equals = (top == insets.top
-                && left == insets.left
-                && bottom == insets.bottom
-                && right == insets.right);
+            Insets insets = (Insets) object;
+            equals = (top == insets.top && left == insets.left && bottom == insets.bottom && right == insets.right);
         }
 
         return equals;
@@ -121,8 +138,7 @@ public final class Insets implements Serializable {
 
     @Override
     public String toString() {
-        return getClass().getName() + " [" + top + ", " + left + ", "
-            + bottom + ", " + right + "]";
+        return getClass().getName() + " [" + top + ", " + left + ", " + bottom + ", " + right + "]";
     }
 
     public static Insets decode(String value) {

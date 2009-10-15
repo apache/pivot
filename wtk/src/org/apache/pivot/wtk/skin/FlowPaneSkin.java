@@ -362,6 +362,9 @@ public class FlowPaneSkin extends ContainerSkin {
     }
 
     public void setHorizontalSpacing(int horizontalSpacing) {
+        if (horizontalSpacing < 0) {
+            throw new IllegalArgumentException("horizontalSpacing is negative.");
+        }
         this.horizontalSpacing = horizontalSpacing;
         invalidateComponent();
     }
@@ -379,6 +382,9 @@ public class FlowPaneSkin extends ContainerSkin {
     }
 
     public void setVerticalSpacing(int verticalSpacing) {
+        if (verticalSpacing < 0) {
+            throw new IllegalArgumentException("verticalSpacing is negative.");
+        }
         this.verticalSpacing = verticalSpacing;
         invalidateComponent();
     }

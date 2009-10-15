@@ -970,6 +970,9 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     public void setSpacing(int spacing) {
+        if (spacing < 0) {
+            throw new IllegalArgumentException("spacing is negative.");
+        }
         this.spacing = spacing;
         invalidateComponent();
     }
@@ -987,6 +990,9 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     public void setIndent(int indent) {
+        if (indent < 0) {
+            throw new IllegalArgumentException("indent is negative.");
+        }
         this.indent = indent;
         invalidateComponent();
     }

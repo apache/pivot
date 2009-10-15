@@ -240,6 +240,9 @@ public class SeparatorSkin extends ComponentSkin
     }
 
     public void setThickness(int thickness) {
+        if (thickness < 0) {
+            throw new IllegalArgumentException("thickness is negative.");
+        }
         this.thickness = thickness;
         invalidateComponent();
     }

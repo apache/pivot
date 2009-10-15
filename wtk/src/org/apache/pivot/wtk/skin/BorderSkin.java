@@ -370,6 +370,9 @@ public class BorderSkin extends ContainerSkin
     }
 
     public void setThickness(int thickness) {
+        if (thickness < 0) {
+            throw new IllegalArgumentException("thickness is negative.");
+        }
         this.thickness = thickness;
         repaintComponent();
     }

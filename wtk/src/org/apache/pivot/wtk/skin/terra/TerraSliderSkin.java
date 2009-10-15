@@ -341,6 +341,9 @@ public class TerraSliderSkin extends SliderSkin {
     }
 
     public void setTrackWidth(int trackWidth) {
+        if (trackWidth < 0) {
+            throw new IllegalArgumentException("trackWidth is negative.");
+        }
         this.trackWidth = trackWidth;
         repaintComponent();
     }

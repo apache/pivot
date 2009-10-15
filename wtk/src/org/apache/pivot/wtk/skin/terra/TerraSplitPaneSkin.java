@@ -415,6 +415,9 @@ public class TerraSplitPaneSkin extends ContainerSkin implements SplitPaneListen
     }
 
     public void setSplitterThickness(int splitterThickness) {
+        if (splitterThickness < 0) {
+            throw new IllegalArgumentException("splitterThickness is negative.");
+        }
         this.splitterThickness = splitterThickness;
         invalidateComponent();
     }
