@@ -94,8 +94,18 @@ public final class Span {
             throw new IllegalArgumentException("span is null.");
         }
 
-        return (start <= span.start
-            && end >= span.end);
+        Span normalizedSpan = span.normalize();
+
+        boolean contains;
+        if (start < end) {
+            contains = (start <= normalizedSpan.start
+                && end >= normalizedSpan.end);
+        } else {
+            contains = (end <= normalizedSpan.start
+                && start >= normalizedSpan.end);
+        }
+
+        return contains;
     }
 
     /**
@@ -113,8 +123,18 @@ public final class Span {
             throw new IllegalArgumentException("span is null.");
         }
 
-        return (start >= span.end
-            || end <= span.start);
+        Span normalizedSpan = span.normalize();
+
+        boolean intersects;
+        if (start < end) {
+            intersects = (start <= normalizedSpan.end
+                && end >= normalizedSpan.start);
+        } else {
+            intersects = (end <= normalizedSpan.end
+                && start >= normalizedSpan.start);
+        }
+
+        return intersects;
     }
 
     /**
@@ -159,6 +179,14 @@ public final class Span {
 
         return new Span(Math.min(start, span.start),
             Math.max(end, span.end));
+    }
+
+    /**
+     * Returns a normalized equivalent of the span in which
+     * <tt>start</tt> is guaranteed to be less than end.
+     */
+    public Span normalize() {
+        return new Span(Math.min(start, end), Math.max(start, end));
     }
 
     @Override
