@@ -116,32 +116,15 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
         @Override
         public int getWidth() {
-            validate();
             return width;
         }
 
         @Override
         public int getHeight() {
-            return getHeight(true);
-        }
-
-        public int getHeight(boolean validate) {
-            if (validate) {
-                validate();
-            }
-
             return height;
         }
 
         public Dimensions getSize() {
-            return getSize(true);
-        }
-
-        public Dimensions getSize(boolean validate) {
-            if (validate) {
-                validate();
-            }
-
             return new Dimensions(width, height);
         }
 
@@ -561,25 +544,20 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
             @Override
             public void run() {
-                if (index != -1) {
-                    NodeView nodeView = get(index++);
-                    nodeView.validate();
+                NodeView nodeView = get(index++);
+                nodeView.validate();
 
-                    if (index < getLength()) {
-                        ApplicationContext.queueCallback(this);
-                    } else {
-                        validateCallback = null;
-                        invalidateComponent();
-                    }
+                if (index < getLength()) {
+                    // TODO Invalidate here so the caller can see the scrollbar thumb grow
+                    queuedValidateCallback = ApplicationContext.queueCallback(this);
+                } else {
+                    queuedValidateCallback = null;
+                    invalidateComponent();
                 }
-            }
-
-            public void abort() {
-                index = -1;
             }
         }
 
-        private ValidateCallback validateCallback = null;
+        private ApplicationContext.QueuedCallback queuedValidateCallback = null;
 
         public DocumentView(Document document) {
             super(document);
@@ -617,8 +595,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
             // TODO Why do we need to abort it in multiple places?
 
-            // TODO Move setBreakWidth() to layout()? Then we'd just queue the callbacks here?
-
             // TODO Use QueuedCallback#cancel() instead of abort()
 
             if (!isValid()) {
@@ -645,7 +621,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                     // TODO Make this configurable (e.g. validateVisibleContentOnly
                     // = false); this will allow the text area to report an actual
                     // preferred size
-                    int height = nodeView.getHeight(false);
+                    int height = nodeView.getHeight();
                     if (y + height >= top) {
                         if (y < bottom) {
                             nodeView.validate();
@@ -675,9 +651,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 } else {
                     if (start != -1) {
                         abortValidateCallback();
-
-                        validateCallback = new ValidateCallback(start);
-                        ApplicationContext.queueCallback(validateCallback);
+                        queuedValidateCallback = ApplicationContext.queueCallback(new ValidateCallback(start));
                     }
                 }
             }
@@ -704,9 +678,9 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
 
         protected void abortValidateCallback() {
-            if (validateCallback != null) {
-                validateCallback.abort();
-                validateCallback = null;
+            if (queuedValidateCallback != null) {
+                queuedValidateCallback.cancel();
+                queuedValidateCallback = null;
             }
         }
     }
@@ -1253,6 +1227,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             preferredWidth = 0;
         } else {
             documentView.setBreakWidth(Integer.MAX_VALUE);
+            documentView.validate();
             preferredWidth = documentView.getWidth() + margin.left + margin.right;
         }
 
@@ -1267,6 +1242,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         } else {
             documentView.setBreakWidth((width == -1) ?
                 Integer.MAX_VALUE : Math.max(width - (margin.left + margin.right), 0));
+            documentView.validate();
             preferredHeight = documentView.getHeight() + margin.top + margin.bottom;
         }
 
@@ -1283,6 +1259,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             preferredHeight = 0;
         } else {
             documentView.setBreakWidth(Integer.MAX_VALUE);
+            documentView.validate();
             Dimensions preferredSize = documentView.getSize();
             preferredWidth = preferredSize.width + (margin.left + margin.right);
             preferredHeight = preferredSize.height + (margin.top + margin.bottom);
