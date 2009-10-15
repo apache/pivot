@@ -673,7 +673,8 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
             }
 
             if (showHorizontalGridLines
-                && verticalSpacing > 0) {
+                && verticalSpacing > 0
+                && rowCount > 1) {
                 gridGraphics.setPaint(horizontalGridColor);
 
                 int rowY = padding.top + (rowHeights[0] + verticalSpacing);
@@ -688,7 +689,8 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
             }
 
             if (showVerticalGridLines
-                && horizontalSpacing > 0) {
+                && horizontalSpacing > 0
+                && columnCount > 1) {
                 gridGraphics.setPaint(verticalGridColor);
 
                 int columnX = padding.left + (columnWidths[0] + horizontalSpacing);
