@@ -31,6 +31,8 @@ import org.apache.pivot.util.ListenerList;
  * hash table.
  */
 public class HashMap<K, V> implements Map<K, V>, Serializable {
+    private static final long serialVersionUID = -7079717428744528670L;
+
     private class KeyIterator implements Iterator<K> {
         private int bucketIndex;
         private Iterator<Pair<K, V>> entryIterator;
@@ -81,8 +83,6 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
             return (bucket == null) ? new EmptyIterator<Pair<K,V>>() : bucket.iterator();
         }
     }
-
-    private static final long serialVersionUID = 0;
 
     private ArrayList<LinkedList<Pair<K, V>>> buckets;
     private float loadFactor;

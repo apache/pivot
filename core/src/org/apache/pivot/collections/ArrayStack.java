@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.collections;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Iterator;
 
@@ -27,9 +28,9 @@ import org.apache.pivot.util.ListenerList;
  * Implementation of the {@link Stack} interface that is backed by an
  * array.
  */
-public class ArrayStack<T> implements Stack<T> {
-    private static final long serialVersionUID = 0;
-
+public class ArrayStack<T> implements Stack<T>, Serializable {
+    private static final long serialVersionUID = 3175064065273930731L;
+    
     private ArrayList<T> arrayList = new ArrayList<T>();
     private transient StackListenerList<T> stackListeners = new StackListenerList<T>();
 

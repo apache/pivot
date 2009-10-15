@@ -20,7 +20,7 @@ package org.apache.pivot.util.concurrent;
  * Thrown when an error occurs during task execution.
  */
 public class TaskExecutionException extends Exception {
-    private static final long serialVersionUID = 0;
+    private static final long serialVersionUID = 4700946878791209144L;
 
     public TaskExecutionException() {
         super();

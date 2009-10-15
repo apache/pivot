@@ -22,8 +22,8 @@ import org.apache.pivot.collections.HashMap;
  * Represents series data for category chart views.
  */
 public class CategorySeries extends HashMap<String, Object> {
-    private static final long serialVersionUID = 0;
-
+    private static final long serialVersionUID = -4844271294542231973L;
+    
     public static final String NAME_KEY = "name";
 
     public CategorySeries() {

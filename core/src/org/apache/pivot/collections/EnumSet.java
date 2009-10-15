@@ -29,6 +29,8 @@ import org.apache.pivot.util.ListenerList;
  * enum values.
  */
 public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
+    private static final long serialVersionUID = 3544488357505145448L;
+
     private class ElementIterator implements Iterator<E> {
         private int i = 0;
         private E next = null;
@@ -68,9 +70,7 @@ public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
         public void remove() {
             throw new UnsupportedOperationException();
         }
-    };
-
-    private static final long serialVersionUID = 0;
+    }
 
     private Class<E> enumClass;
     private E[] elements;

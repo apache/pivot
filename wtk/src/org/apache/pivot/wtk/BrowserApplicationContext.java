@@ -38,6 +38,8 @@ public final class BrowserApplicationContext extends ApplicationContext {
      * Applet used to host applications in a web browser.
      */
     public static final class HostApplet extends Applet {
+        private static final long serialVersionUID = -7710026348576806673L;
+
         private class InitCallback implements Runnable {
             @Override
             public void run() {
@@ -188,8 +190,6 @@ public final class BrowserApplicationContext extends ApplicationContext {
 
         public static final String APPLICATION_CLASS_NAME_PARAMETER = "application_class_name";
         public static final String STARTUP_PROPERTIES_PARAMETER = "startup_properties";
-
-        private static final long serialVersionUID = 0;
 
         public Application getApplication() {
             return applicationContext.getApplication();

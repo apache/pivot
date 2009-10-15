@@ -22,8 +22,8 @@ import org.apache.pivot.util.concurrent.TaskExecutionException;
  * Thrown when an error occurs while executing a web query.
  */
 public class QueryException extends TaskExecutionException {
-    private static final long serialVersionUID = 0;
-
+    private static final long serialVersionUID = -4949157889229298652L;
+    
     private int status;
 
     public QueryException(int status) {

@@ -74,7 +74,7 @@ public abstract class ApplicationContext {
      * Native display host.
      */
     public final class DisplayHost extends java.awt.Canvas {
-        private static final long serialVersionUID = 0;
+        private static final long serialVersionUID = -815713849595314026L;
 
         private Component focusedComponent = null;
 
@@ -576,7 +576,7 @@ public abstract class ApplicationContext {
 
             DragGestureRecognizer dragGestureRecognizer =
                 new DragGestureRecognizer(java.awt.dnd.DragSource.getDefaultDragSource(), displayHost) {
-                private static final long serialVersionUID = 0;
+                    private static final long serialVersionUID = -3204487375572082596L;
 
                 {   appendEvent(mouseEvent);
                 }

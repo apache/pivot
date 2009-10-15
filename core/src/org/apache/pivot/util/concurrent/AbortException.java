@@ -20,7 +20,7 @@ package org.apache.pivot.util.concurrent;
  * Thrown when a task is aborted.
  */
 public class AbortException extends RuntimeException {
-    private static final long serialVersionUID = 0;
+    private static final long serialVersionUID = 2277853074796672662L;
 
     public AbortException() {
         super();

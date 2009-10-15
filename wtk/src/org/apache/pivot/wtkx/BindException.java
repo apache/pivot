@@ -20,7 +20,7 @@ package org.apache.pivot.wtkx;
  * Thrown when an error is encountered during binding.
  */
 public class BindException extends RuntimeException {
-    private static final long serialVersionUID = 0;
+    private static final long serialVersionUID = 7245531555497832713L;
 
     public BindException() {
         super();

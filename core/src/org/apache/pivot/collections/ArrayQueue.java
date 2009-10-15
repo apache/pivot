@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.collections;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Iterator;
 
@@ -27,9 +28,9 @@ import org.apache.pivot.util.ListenerList;
  * Implementation of the {@link Queue} interface that is backed by an
  * array.
  */
-public class ArrayQueue<T> implements Queue<T> {
-    private static final long serialVersionUID = 0;
-
+public class ArrayQueue<T> implements Queue<T>, Serializable {
+    private static final long serialVersionUID = -3856732506886968324L;
+    
     private ArrayList<T> arrayList = new ArrayList<T>();
     private transient QueueListenerList<T> queueListeners = new QueueListenerList<T>();
 

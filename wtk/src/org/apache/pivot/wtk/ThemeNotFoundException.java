@@ -20,7 +20,7 @@ package org.apache.pivot.wtk;
  * Thrown when a suitable theme cannot be located.
  */
 public class ThemeNotFoundException extends RuntimeException {
-    private static final long serialVersionUID = 0;
+    private static final long serialVersionUID = -6357989164720725377L;
 
     public ThemeNotFoundException() {
         super("A theme could not be located.");

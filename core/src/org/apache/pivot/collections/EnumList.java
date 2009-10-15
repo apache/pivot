@@ -32,6 +32,8 @@ import org.apache.pivot.util.ListenerList;
  * Implementation of the {@link List} interface that is backed by an enum.
  */
 public class EnumList<E extends Enum<E>> implements List<E>, Serializable {
+    private static final long serialVersionUID = 5104856822133576300L;
+
     private class ItemIterator implements Iterator<E> {
         private int i = 0;
 
@@ -53,9 +55,7 @@ public class EnumList<E extends Enum<E>> implements List<E>, Serializable {
         public void remove() {
             throw new UnsupportedOperationException();
         }
-    };
-
-    private static final long serialVersionUID = 0;
+    }
 
     private Class<E> enumClass;
     private E[] items;

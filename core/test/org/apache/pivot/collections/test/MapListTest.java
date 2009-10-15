@@ -159,7 +159,7 @@ public class MapListTest {
     }
 
     private static class TestComparator implements Comparator<Pair<String, Integer>>, Serializable {
-        private static final long serialVersionUID = 0;
+        private static final long serialVersionUID = -4271607514375297485L;
 
         @Override
         public int compare(Pair<String, Integer> o1, Pair<String, Integer> o2) {

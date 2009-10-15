@@ -26,8 +26,8 @@ import org.apache.pivot.serialization.SerializationException;
  * Class representing the bounds of an object.
  */
 public final class Bounds implements Serializable {
-    private static final long serialVersionUID = 0;
-
+    private static final long serialVersionUID = -2473226417628417475L;
+    
     public final int x;
     public final int y;
     public final int width;

@@ -26,8 +26,8 @@ import org.apache.pivot.serialization.SerializationException;
  * Class representing the location of an object.
  */
 public final class Point implements Serializable {
-    private static final long serialVersionUID = 0;
-
+    private static final long serialVersionUID = 5193175754909343769L;
+    
     public final int x;
     public final int y;
 

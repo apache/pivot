@@ -28,8 +28,10 @@ import org.apache.pivot.collections.adapter.ListAdapter;
  * i.e. a single file can't be added to the list more than once.
  */
 public class FileList extends ListAdapter<File> {
+    private static final long serialVersionUID = -6741822480264805279L;
+
     private static class FilePathComparator implements Comparator<File>, Serializable {
-        private static final long serialVersionUID = 0;
+        private static final long serialVersionUID = 6341769187574031281L;
 
         @Override
         public int compare(File file1, File file2) {
@@ -40,7 +42,6 @@ public class FileList extends ListAdapter<File> {
         }
     }
 
-    private static final long serialVersionUID = 0;
     private static final FilePathComparator filePathComparator = new FilePathComparator();
 
     public FileList() {

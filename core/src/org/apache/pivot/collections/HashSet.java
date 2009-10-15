@@ -27,7 +27,7 @@ import org.apache.pivot.util.ListenerList;
  * hash table.
  */
 public class HashSet<E> implements Set<E>, Serializable {
-    private static final long serialVersionUID = 0;
+    private static final long serialVersionUID = 4095129319373194969L;
 
     protected HashMap<E, Void> hashMap = new HashMap<E, Void>();
 

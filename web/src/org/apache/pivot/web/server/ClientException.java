@@ -20,7 +20,7 @@ package org.apache.pivot.web.server;
  * Thrown when a client request is invalid.
  */
 public class ClientException extends Exception {
-    private static final long serialVersionUID = 0;
+    private static final long serialVersionUID = 2752894436639488221L;
 
     public ClientException() {
         super();

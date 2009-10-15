@@ -33,6 +33,8 @@ import org.apache.pivot.util.ListenerList;
  * {@link org.apache.pivot.collections.concurrent.SynchronizedList}.
  */
 public class ArrayList<T> implements List<T>, Serializable {
+    private static final long serialVersionUID = 2123086211369612675L;
+
     private class ArrayListItemIterator implements ItemIterator<T> {
         private int index = 0;
         private int modificationCount;
@@ -121,7 +123,6 @@ public class ArrayList<T> implements List<T>, Serializable {
         }
     }
 
-    private static final long serialVersionUID = 0;
 
     private Object[] items;
     private int length = 0;

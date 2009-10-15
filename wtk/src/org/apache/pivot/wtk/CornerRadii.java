@@ -26,8 +26,8 @@ import org.apache.pivot.serialization.SerializationException;
  * Class representing the corner radii of a rectangular object.
  */
 public final class CornerRadii implements Serializable {
-    private static final long serialVersionUID = 0;
-
+    private static final long serialVersionUID = -433469769555042467L;
+    
     public final int topLeft;
     public final int topRight;
     public final int bottomLeft;

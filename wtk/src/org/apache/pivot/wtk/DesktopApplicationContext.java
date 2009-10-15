@@ -44,7 +44,7 @@ import org.apache.pivot.wtk.media.Picture;
  */
 public final class DesktopApplicationContext extends ApplicationContext {
     private static class HostFrame extends java.awt.Frame {
-        private static final long serialVersionUID = 0;
+        private static final long serialVersionUID = 5340356674429280196L;
 
         private HostFrame() {
             enableEvents(AWTEvent.WINDOW_EVENT_MASK

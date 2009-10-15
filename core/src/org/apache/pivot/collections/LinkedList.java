@@ -33,8 +33,11 @@ import org.apache.pivot.util.ListenerList;
  * {@link org.apache.pivot.collections.concurrent.SynchronizedList}.
  */
 public class LinkedList<T> implements List<T>, Serializable {
+    private static final long serialVersionUID = 2100691224732602812L;
+
     private static class Node<T> implements Serializable {
-        private static final long serialVersionUID = 0;
+        private static final long serialVersionUID = -848937850230412572L;
+        
         private Node<T> previous;
         private Node<T> next;
         private T item;
@@ -230,8 +233,6 @@ public class LinkedList<T> implements List<T>, Serializable {
             }
         }
     }
-
-    private static final long serialVersionUID = 0;
 
     private Node<T> first = null;
     private Node<T> last = null;

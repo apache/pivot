@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.collections;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Iterator;
 
@@ -27,9 +28,9 @@ import org.apache.pivot.util.ListenerList;
  * Implementation of the {@link Queue} interface that is backed by a linked
  * list.
  */
-public class LinkedQueue<T> implements Queue<T> {
-    private static final long serialVersionUID = 0;
-
+public class LinkedQueue<T> implements Queue<T>, Serializable {
+    private static final long serialVersionUID = 1598074020226109253L;
+    
     private LinkedList<T> linkedList = new LinkedList<T>();
     private transient QueueListenerList<T> queueListeners = new QueueListenerList<T>();
 

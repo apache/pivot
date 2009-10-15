@@ -21,7 +21,7 @@ package org.apache.pivot.beans;
  * property.
  */
 public class PropertyNotFoundException extends RuntimeException {
-    private static final long serialVersionUID = 0;
+    private static final long serialVersionUID = 8697234216065066368L;
 
     public PropertyNotFoundException() {
         super();

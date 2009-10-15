@@ -33,8 +33,8 @@ import org.apache.pivot.util.ListenerList;
  * <tt>java.util.Map</tt>.
  */
 public class MapAdapter<K, V> implements Map<K, V>, Serializable {
-    private static final long serialVersionUID = 0;
-
+    private static final long serialVersionUID = 4005649560306864969L;
+    
     private java.util.Map<K, V> map = null;
     private transient MapListenerList<K, V> mapListeners = new MapListenerList<K, V>();
 
