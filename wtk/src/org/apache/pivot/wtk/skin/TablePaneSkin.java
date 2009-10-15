@@ -1482,6 +1482,11 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
             return new Bounds(0, 0, 0, 0);
         }
 
+        if (row < 0
+            || row >= rowHeights.length) {
+            throw new IndexOutOfBoundsException(String.valueOf(row));
+        }
+
         int rowY = padding.top;
 
         for (int i = 0; i < row; i++) {
@@ -1517,6 +1522,11 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
     public Bounds getColumnBounds(int column) {
         if (columnWidths == null) {
             return new Bounds(0, 0, 0, 0);
+        }
+
+        if (column < 0
+            || column >= columnWidths.length) {
+            throw new IndexOutOfBoundsException(String.valueOf(column));
         }
 
         int columnX = padding.left;
