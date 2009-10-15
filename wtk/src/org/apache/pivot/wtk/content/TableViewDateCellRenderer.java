@@ -81,7 +81,7 @@ public class TableViewDateCellRenderer extends TableViewCellRenderer {
                     } else if (cellData instanceof Calendar) {
                         formattedDate = dateFormat.format(((Calendar)cellData).getTime());
                     } else if (cellData instanceof CalendarDate) {
-                        formattedDate = dateFormat.format(new Date(((CalendarDate)cellData).getTime()));
+                        formattedDate = dateFormat.format(((CalendarDate)cellData).toCalendar().getTime());
                     } else {
                         System.err.println(getClass().getName() + " cannot render " + cellData);
                     }

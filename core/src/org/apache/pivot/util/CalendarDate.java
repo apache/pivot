@@ -46,8 +46,6 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      */
     public final int day;
 
-    private long time = -1;
-
     private static final int[] MONTH_LENGTHS = {
         31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
     };
@@ -185,25 +183,13 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      * <tt>calendarDate</tt>.
      */
     public int subtract(CalendarDate calendarDate) {
-        long t1 = getTime();
-        long t2 = calendarDate.getTime();
+        GregorianCalendar c1 = toCalendar();
+        GregorianCalendar c2 = calendarDate.toCalendar();
+
+        long t1 = c1.getTimeInMillis();
+        long t2 = c2.getTimeInMillis();
 
         return (int)((t1 - t2) / (1000l * 60 * 60 * 24));
-    }
-
-    /**
-     * Returns this calendar date as a millisecond value. The value is the
-     * number of milliseconds since midnight GMT on January 1, 1970.
-     *
-     * @return
-     * The number of milliseconds since midnight GMT on January 1, 1970.
-     */
-    public long getTime() {
-        if (time == -1) {
-            time = toCalendar().getTimeInMillis();
-        }
-
-        return time;
     }
 
     /**
