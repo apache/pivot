@@ -34,6 +34,7 @@ import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Orientation;
+import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.SortDirection;
 import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.TableView;
@@ -1031,7 +1032,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                     tableView.setSelectedIndex(rowIndex);
                 }
             } else {
-                Keyboard.Modifier commandModifier = Keyboard.getCommandModifier();
+                Keyboard.Modifier commandModifier = Platform.getCommandModifier();
 
                 if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
                     && selectMode == TableView.SelectMode.MULTI) {

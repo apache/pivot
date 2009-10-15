@@ -1103,7 +1103,7 @@ public class TerraTextInputSkin extends ComponentSkin
         TextInput textInput = (TextInput)getComponent();
         TextNode textNode = textInput.getTextNode();
 
-        Keyboard.Modifier commandModifier = Keyboard.getCommandModifier();
+        Keyboard.Modifier commandModifier = Platform.getCommandModifier();
         if (keyCode == Keyboard.KeyCode.DELETE
             || keyCode == Keyboard.KeyCode.BACKSPACE) {
             consumed = true;

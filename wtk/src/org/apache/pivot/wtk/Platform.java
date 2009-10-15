@@ -21,6 +21,8 @@ import java.awt.Toolkit;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import org.apache.pivot.wtk.Keyboard.Modifier;
+
 /**
  * Provides platform-specific information.
  */
@@ -29,6 +31,21 @@ public class Platform {
 
     private static final int DEFAULT_MULTI_CLICK_INTERVAL = 400;
     private static final int DEFAULT_CURSOR_BLINK_RATE = 600;
+
+    private static final Modifier COMMAND_MODIFIER;
+    private static final String KEYSTROKE_MODIFIER_SEPARATOR;
+
+    static {
+        String osName = System.getProperty("os.name").toLowerCase();
+
+        if (osName.startsWith("mac os x")) {
+            COMMAND_MODIFIER = Modifier.META;
+            KEYSTROKE_MODIFIER_SEPARATOR = "";
+        } else {
+            COMMAND_MODIFIER = Modifier.CTRL;
+            KEYSTROKE_MODIFIER_SEPARATOR = "-";
+        }
+    }
 
     /**
      * Returns the system text anti-aliasing hint.
@@ -95,4 +112,11 @@ public class Platform {
         return java.awt.dnd.DragSource.getDragThreshold();
     }
 
+    public static Modifier getCommandModifier() {
+        return COMMAND_MODIFIER;
+    }
+
+    public static String getKeyStrokeModifierSeparator() {
+        return KEYSTROKE_MODIFIER_SEPARATOR;
+    }
 }

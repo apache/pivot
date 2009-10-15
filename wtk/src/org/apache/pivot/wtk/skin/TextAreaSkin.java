@@ -481,7 +481,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 i = -(i + 1) - 1;
             }
 
-            // TODO i should never be less than 0 here?
+            // TODO i should never be less than 0 here? What about in getCharacterBounds()?
             int offset;
             if (i < 0) {
                 offset = -1;
@@ -614,6 +614,12 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         public void validate() {
             // TODO Don't queue the validate callback until layout()? Then we
             // wouldn't have to abort it in multiple locations...
+
+            // TODO Why do we need to abort it in multiple places?
+
+            // TODO Move setBreakWidth() to layout()? Then we'd just queue the callbacks here?
+
+            // TODO Use QueuedCallback#cancel() instead of abort()
 
             if (!isValid()) {
                 TextArea textArea = (TextArea)getComponent();
@@ -1057,6 +1063,9 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             // TODO Can we use a glyph vector for this? We could create the
             // vector when the view is created so we don't need to rebuild it
             // every time
+
+            // TODO This also may help solve the problem of identifying the wrong
+            // character
             int offset;
             if (text.length() > 0) {
                 TextLayout textLayout = new TextLayout(text, font, fontRenderContext);
@@ -1223,6 +1232,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
         Document document = textArea.getDocument();
         if (document != null) {
+            // TODO Pass document to attach() instead of constructor
             documentView = new DocumentView(document);
             documentView.attach();
         }
@@ -1427,6 +1437,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     public void locationChanged(Component component, int previousX, int previousY) {
         super.locationChanged(component, previousX, previousY);
 
+        // TODO Is there a better way to do this? We are trying to ensure that the newly
+        // visible area of the document is now valid.
         if (documentView != null
             && !documentView.isValid()
             && component.getY() > previousY) {
@@ -1490,7 +1502,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         if (textArea.isEditable()) {
             Document document = textArea.getDocument();
 
-            Keyboard.Modifier commandModifier = Keyboard.getCommandModifier();
+            Keyboard.Modifier commandModifier = Platform.getCommandModifier();
             if (document != null) {
                 if (keyCode == Keyboard.KeyCode.ENTER) {
                     textArea.insertParagraph();

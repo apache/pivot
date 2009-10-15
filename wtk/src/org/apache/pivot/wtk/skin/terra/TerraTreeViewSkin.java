@@ -40,6 +40,7 @@ import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Orientation;
+import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.TreeView;
 import org.apache.pivot.wtk.TreeViewBranchListener;
@@ -1569,7 +1570,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                                     treeView.setSelectedPath(path);
                                 }
                             } else if (selectMode == TreeView.SelectMode.MULTI) {
-                                Keyboard.Modifier commandModifier = Keyboard.getCommandModifier();
+                                Keyboard.Modifier commandModifier = Platform.getCommandModifier();
                                 if (Keyboard.isPressed(commandModifier)) {
                                     if (nodeInfo.isSelected()) {
                                         treeView.removeSelectedPath(path);

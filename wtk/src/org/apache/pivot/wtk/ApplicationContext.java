@@ -1277,7 +1277,7 @@ public abstract class ApplicationContext {
                         boolean consumed = false;
 
                         // Don't fire key typed if a command key was pressed
-                        Keyboard.Modifier commandModifier = Keyboard.getCommandModifier();
+                        Keyboard.Modifier commandModifier = Platform.getCommandModifier();
                         if (!Keyboard.isPressed(commandModifier)) {
                             char keyChar = event.getKeyChar();
 

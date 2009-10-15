@@ -56,6 +56,7 @@ import org.apache.pivot.wtk.ListButton;
 import org.apache.pivot.wtk.ListButtonSelectionListener;
 import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.Mouse;
+import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.ScrollPane;
@@ -674,7 +675,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = super.keyReleased(component, keyCode, keyLocation);
 
-        Keyboard.Modifier commandModifier = Keyboard.getCommandModifier();
+        Keyboard.Modifier commandModifier = Platform.getCommandModifier();
         if (keyCode == Keyboard.KeyCode.F
             && Keyboard.isPressed(commandModifier)) {
             searchTextInput.requestFocus();

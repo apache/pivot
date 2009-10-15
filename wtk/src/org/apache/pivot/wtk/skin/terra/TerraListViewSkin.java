@@ -39,6 +39,7 @@ import org.apache.pivot.wtk.ListViewItemStateListener;
 import org.apache.pivot.wtk.ListViewListener;
 import org.apache.pivot.wtk.ListViewSelectionListener;
 import org.apache.pivot.wtk.Mouse;
+import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.skin.ComponentSkin;
@@ -640,7 +641,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                         listView.setSelectedIndex(itemIndex);
                     }
                 } else {
-                    Keyboard.Modifier commandModifier = Keyboard.getCommandModifier();
+                    Keyboard.Modifier commandModifier = Platform.getCommandModifier();
 
                     if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
                         && selectMode == ListView.SelectMode.MULTI) {

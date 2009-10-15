@@ -40,6 +40,7 @@ import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Panorama;
+import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.TabPane;
 import org.apache.pivot.wtk.TabPaneAttributeListener;
 import org.apache.pivot.wtk.TabPaneListener;
@@ -1092,7 +1093,7 @@ public class TerraTabPaneSkin extends ContainerSkin
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = super.keyPressed(component, keyCode, keyLocation);
 
-        Keyboard.Modifier commandModifier = Keyboard.getCommandModifier();
+        Keyboard.Modifier commandModifier = Platform.getCommandModifier();
         if (!consumed
             && Keyboard.isPressed(commandModifier)) {
             TabPane tabPane = (TabPane)getComponent();

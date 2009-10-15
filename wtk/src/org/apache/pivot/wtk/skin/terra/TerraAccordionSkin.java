@@ -40,6 +40,7 @@ import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
+import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.content.ButtonData;
 import org.apache.pivot.wtk.content.ButtonDataRenderer;
@@ -650,7 +651,7 @@ public class TerraAccordionSkin extends ContainerSkin
             Accordion accordion = (Accordion)getComponent();
             Accordion.PanelSequence panels = accordion.getPanels();
 
-            Keyboard.Modifier commandModifier = Keyboard.getCommandModifier();
+            Keyboard.Modifier commandModifier = Platform.getCommandModifier();
             if (Keyboard.isPressed(commandModifier)) {
                 int selectedIndex = -1;
 
