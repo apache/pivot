@@ -23,7 +23,7 @@ import org.apache.pivot.util.concurrent.TaskExecutionException;
  */
 public class QueryException extends TaskExecutionException {
     private static final long serialVersionUID = -4949157889229298652L;
-    
+
     private int status;
 
     public QueryException(int status) {

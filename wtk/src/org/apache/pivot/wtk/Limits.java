@@ -27,7 +27,7 @@ import org.apache.pivot.serialization.SerializationException;
  */
 public final class Limits implements Serializable {
     private static final long serialVersionUID = -1420266625812552298L;
-    
+
     public final int min;
     public final int max;
 

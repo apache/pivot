@@ -33,7 +33,7 @@ import org.apache.pivot.util.ListenerList;
  */
 public class SetAdapter<E> implements Set<E>, Serializable {
     private static final long serialVersionUID = -816891924416727900L;
-    
+
     private java.util.Set<E> set = null;
     private transient SetListenerList<E> setListeners = new SetListenerList<E>();
 

@@ -37,7 +37,7 @@ public class LinkedList<T> implements List<T>, Serializable {
 
     private static class Node<T> implements Serializable {
         private static final long serialVersionUID = -848937850230412572L;
-        
+
         private Node<T> previous;
         private Node<T> next;
         private T item;

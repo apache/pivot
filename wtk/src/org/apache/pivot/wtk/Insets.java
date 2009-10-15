@@ -27,7 +27,7 @@ import org.apache.pivot.serialization.SerializationException;
  */
 public final class Insets implements Serializable {
     private static final long serialVersionUID = -8528862892185591370L;
-    
+
     public final int top;
     public final int left;
     public final int bottom;
@@ -44,9 +44,6 @@ public final class Insets implements Serializable {
     public static final Insets NONE = new Insets(0);
 
     public Insets(int inset) {
-        if (inset < 0) {
-            throw new IllegalArgumentException("an inset can never be < 0, inset=" + inset);
-        }
         this.top = inset;
         this.left = inset;
         this.bottom = inset;
@@ -54,19 +51,6 @@ public final class Insets implements Serializable {
     }
 
     public Insets(int top, int left, int bottom, int right) {
-        if (top < 0) {
-            throw new IllegalArgumentException("an inset can never be < 0, top=" + top);
-        }
-        if (left < 0) {
-            throw new IllegalArgumentException("an inset can never be < 0, left=" + left);
-        }
-        if (bottom < 0) {
-            throw new IllegalArgumentException("an inset can never be < 0, bottom=" + bottom);
-        }
-        if (right < 0) {
-            throw new IllegalArgumentException("an inset can never be < 0, right=" + right);
-        }
-
         this.top = top;
         this.left = left;
         this.bottom = bottom;
@@ -111,19 +95,6 @@ public final class Insets implements Serializable {
             right = ((Number) insets.get(RIGHT_KEY)).intValue();
         } else {
             right = 0;
-        }
-        
-        if (top < 0) {
-            throw new IllegalArgumentException("an inset can never be < 0, top=" + top);
-        }
-        if (left < 0) {
-            throw new IllegalArgumentException("an inset can never be < 0, left=" + left);
-        }
-        if (bottom < 0) {
-            throw new IllegalArgumentException("an inset can never be < 0, bottom=" + bottom);
-        }
-        if (right < 0) {
-            throw new IllegalArgumentException("an inset can never be < 0, right=" + right);
         }
     }
 

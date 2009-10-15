@@ -27,7 +27,7 @@ import java.text.ParsePosition;
  */
 public class FileSizeFormat extends Format {
     private static final long serialVersionUID = 9126510513247641698L;
-    
+
     public static final int KILOBYTE = 1024;
     public static final String[] ABBREVIATIONS = {"K", "M", "G", "T", "P", "E", "Z", "Y"};
 

@@ -27,7 +27,7 @@ import org.apache.pivot.serialization.SerializationException;
  */
 public final class CornerRadii implements Serializable {
     private static final long serialVersionUID = -433469769555042467L;
-    
+
     public final int topLeft;
     public final int topRight;
     public final int bottomLeft;
@@ -52,6 +52,22 @@ public final class CornerRadii implements Serializable {
             throw new IllegalArgumentException("cornerRadii is null.");
         }
 
+        if (cornerRadii.topLeft < 0) {
+            throw new IllegalArgumentException("cornerRadii.topLeft is negative.");
+        }
+
+        if (cornerRadii.topRight < 0) {
+            throw new IllegalArgumentException("cornerRadii.topRight is negative.");
+        }
+
+        if (cornerRadii.bottomLeft < 0) {
+            throw new IllegalArgumentException("cornerRadii.bottomLeft is negative.");
+        }
+
+        if (cornerRadii.bottomRight < 0) {
+            throw new IllegalArgumentException("cornerRadii.bottomRight is negative.");
+        }
+
         this.topLeft = cornerRadii.topLeft;
         this.topRight = cornerRadii.topRight;
         this.bottomLeft = cornerRadii.bottomLeft;
@@ -60,17 +76,21 @@ public final class CornerRadii implements Serializable {
 
     public CornerRadii(int topLeft, int topRight, int bottomLeft, int bottomRight) {
         if (topLeft < 0) {
-            throw new IllegalArgumentException("corner radii negative, topLeft=" + topLeft);
+            throw new IllegalArgumentException("topLeft is negative.");
         }
+
         if (topRight < 0) {
-            throw new IllegalArgumentException("corner radii negative, topRight=" + topRight);
+            throw new IllegalArgumentException("topRight is negative.");
         }
+
         if (bottomLeft < 0) {
-            throw new IllegalArgumentException("corner radii negative, bottom=" + bottomLeft);
+            throw new IllegalArgumentException("bottomLeft is negative.");
         }
+
         if (bottomRight < 0) {
-            throw new IllegalArgumentException("corner radii negative, bottomRight=" + bottomRight);
+            throw new IllegalArgumentException("bottomRight is negative.");
         }
+
         this.topLeft = topLeft;
         this.topRight = topRight;
         this.bottomLeft = bottomLeft;
@@ -84,38 +104,42 @@ public final class CornerRadii implements Serializable {
 
         if (cornerRadii.containsKey(TOP_LEFT_KEY)) {
             topLeft = (Integer)cornerRadii.get(TOP_LEFT_KEY);
+
+            if (topLeft < 0) {
+                throw new IllegalArgumentException("\"topLeft\" is negative.");
+            }
         } else {
             topLeft = 0;
         }
 
         if (cornerRadii.containsKey(TOP_RIGHT_KEY)) {
             topRight = (Integer)cornerRadii.get(TOP_RIGHT_KEY);
+
+            if (topRight < 0) {
+                throw new IllegalArgumentException("\"topRight\" is negative.");
+            }
         } else {
             topRight = 0;
         }
 
         if (cornerRadii.containsKey(BOTTOM_LEFT_KEY)) {
             bottomLeft = (Integer)cornerRadii.get(BOTTOM_LEFT_KEY);
+
+            if (bottomLeft < 0) {
+                throw new IllegalArgumentException("\"bottomLeft\" is negative.");
+            }
         } else {
             bottomLeft = 0;
         }
 
         if (cornerRadii.containsKey(BOTTOM_RIGHT_KEY)) {
             bottomRight = (Integer)cornerRadii.get(BOTTOM_RIGHT_KEY);
+
+            if (bottomRight < 0) {
+                throw new IllegalArgumentException("\"bottomRight\" is negative.");
+            }
         } else {
             bottomRight = 0;
-        }
-        if (topLeft < 0) {
-            throw new IllegalArgumentException("corner radii negative, topLeft=" + topLeft);
-        }
-        if (topRight < 0) {
-            throw new IllegalArgumentException("corner radii negative, topRight=" + topRight);
-        }
-        if (bottomLeft < 0) {
-            throw new IllegalArgumentException("corner radii negative, bottom=" + bottomLeft);
-        }
-        if (bottomRight < 0) {
-            throw new IllegalArgumentException("corner radii negative, bottomRight=" + bottomRight);
         }
     }
 

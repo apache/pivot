@@ -35,7 +35,7 @@ import org.apache.pivot.util.ListenerList;
  */
 public class ListAdapter<T> implements List<T>, Serializable {
     private static final long serialVersionUID = 1649736907064653706L;
-    
+
     private java.util.List<T> list = null;
     private Comparator<T> comparator = null;
 

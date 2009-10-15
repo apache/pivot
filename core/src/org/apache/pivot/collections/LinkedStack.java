@@ -29,7 +29,7 @@ import org.apache.pivot.util.ListenerList;
  */
 public class LinkedStack<T> implements Stack<T>, Serializable {
     private static final long serialVersionUID = -6276454328308188689L;
-    
+
     private LinkedList<T> linkedList = new LinkedList<T>();
     private transient StackListenerList<T> stackListeners = new StackListenerList<T>();
 

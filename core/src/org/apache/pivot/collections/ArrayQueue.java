@@ -30,7 +30,7 @@ import org.apache.pivot.util.ListenerList;
  */
 public class ArrayQueue<T> implements Queue<T>, Serializable {
     private static final long serialVersionUID = -3856732506886968324L;
-    
+
     private ArrayList<T> arrayList = new ArrayList<T>();
     private transient QueueListenerList<T> queueListeners = new QueueListenerList<T>();
 

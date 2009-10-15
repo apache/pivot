@@ -23,7 +23,7 @@ import org.apache.pivot.collections.ArrayList;
  */
 public class ValueSeries<T> extends ArrayList<T> {
     private static final long serialVersionUID = 301207354854079022L;
-    
+
     private String name = null;
 
     public ValueSeries() {

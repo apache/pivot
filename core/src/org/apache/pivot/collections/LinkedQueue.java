@@ -30,7 +30,7 @@ import org.apache.pivot.util.ListenerList;
  */
 public class LinkedQueue<T> implements Queue<T>, Serializable {
     private static final long serialVersionUID = 1598074020226109253L;
-    
+
     private LinkedList<T> linkedList = new LinkedList<T>();
     private transient QueueListenerList<T> queueListeners = new QueueListenerList<T>();
 

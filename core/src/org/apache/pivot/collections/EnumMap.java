@@ -29,7 +29,7 @@ import org.apache.pivot.util.ListenerList;
  */
 public class EnumMap<E extends Enum<E>, V> implements Map<E, V>, Serializable {
     private static final long serialVersionUID = -8446839779287452516L;
-    
+
     private EnumSet<E> keySet;
     private Object[] values;
 
