@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.wtk;
 
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import org.apache.pivot.collections.ArrayList;
@@ -66,8 +67,8 @@ public class ImageView extends Component {
 
     // Maintains a mapping of image URL to image views that should be notified when
     // an asynchronously loaded image is available
-    private static HashMap<URL, ArrayList<ImageView>> loadMap =
-        new HashMap<URL, ArrayList<ImageView>>();
+    private static HashMap<java.net.URI, ArrayList<ImageView>> loadMap =
+        new HashMap<java.net.URI, ArrayList<ImageView>>();
 
     /**
      * Creates an empty image view.
@@ -131,11 +132,19 @@ public class ImageView extends Component {
         Image image = (Image)ApplicationContext.getResourceCache().get(imageURL);
 
         if (image == null) {
+            // convert to URI because using URL in a hashmap is a no-no - URL does bad stuff in equals() and hashCode()
+            final java.net.URI imageURI;
+            try {
+                imageURI = imageURL.toURI();
+            } catch (URISyntaxException ex) {
+                // should never happen
+                throw new RuntimeException(ex);
+            }
             if (asynchronous) {
-                if (loadMap.containsKey(imageURL)) {
+                if (loadMap.containsKey(imageURI)) {
                     // Add this to the list of image views that are interested in
                     // the image at this URL
-                    loadMap.get(imageURL).add(this);
+                    loadMap.get(imageURI).add(this);
                 } else {
                     Image.load(imageURL, new TaskAdapter<Image>(new TaskListener<Image>() {
                         @Override
@@ -144,11 +153,11 @@ public class ImageView extends Component {
 
                             // Update the contents of all image views that requested this
                             // image
-                            for (ImageView imageView : loadMap.get(imageURL)) {
+                            for (ImageView imageView : loadMap.get(imageURI)) {
                                 imageView.setImage(image);
                             }
 
-                            loadMap.remove(imageURL);
+                            loadMap.remove(imageURI);
 
                             // Add the image to the cache
                             ApplicationContext.getResourceCache().put(imageURL, image);
@@ -160,7 +169,7 @@ public class ImageView extends Component {
                         }
                     }));
 
-                    loadMap.put(imageURL, new ArrayList<ImageView>(this));
+                    loadMap.put(imageURI, new ArrayList<ImageView>(this));
                 }
             } else {
                 try {
