@@ -23,6 +23,10 @@ import java.util.GregorianCalendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.serialization.SerializationException;
+
 /**
  * <tt>CalendarDate</tt> allows a specific day to be identified within the
  * gregorian calendar system. This identification has no association with any
@@ -30,6 +34,151 @@ import java.util.regex.Pattern;
  */
 public final class CalendarDate implements Comparable<CalendarDate>, Serializable {
     private static final long serialVersionUID = 3974393986540543704L;
+
+    public static final class Range {
+        public static final String START_KEY = "start";
+        public static final String END_KEY = "end";
+
+        public final CalendarDate start;
+        public final CalendarDate end;
+
+        public Range(CalendarDate calendarDate) {
+            start = calendarDate;
+            end = calendarDate;
+        }
+
+        public Range(CalendarDate start, CalendarDate end) {
+            this.start = start;
+            this.end = end;
+        }
+
+        public Range(String start, String end) {
+            this.start = forString(start);
+            this.end = forString(end);
+        }
+
+        public Range(Range range) {
+            if (range == null) {
+                throw new IllegalArgumentException("range is null.");
+            }
+
+            start = range.start;
+            end = range.end;
+        }
+
+        public Range(Dictionary<String, ?> range) {
+            if (range == null) {
+                throw new IllegalArgumentException("range is null.");
+            }
+
+            Object start = range.get(START_KEY);
+            Object end = range.get(END_KEY);
+
+            if (start == null) {
+                throw new IllegalArgumentException(START_KEY + " is required.");
+            }
+
+            if (end == null) {
+                throw new IllegalArgumentException(END_KEY + " is required.");
+            }
+
+            if (start instanceof String) {
+                this.start = forString((String)start);
+            } else {
+                this.start = (CalendarDate)start;
+            }
+
+            if (end instanceof String) {
+                this.end = forString((String)end);
+            } else {
+                this.end = (CalendarDate)end;
+            }
+        }
+
+        public int getLength() {
+            return Math.abs(start.subtract(end)) + 1;
+        }
+
+        public boolean contains(Range range) {
+            if (range == null) {
+                throw new IllegalArgumentException("range is null.");
+            }
+
+            Range normalizedRange = range.normalize();
+
+            boolean contains;
+            if (start.compareTo(end) < 0) {
+                contains = (start.compareTo(normalizedRange.start) <= 0
+                    && end.compareTo(normalizedRange.end) >= 0);
+            } else {
+                contains = (end.compareTo(normalizedRange.start) <= 0
+                    && start.compareTo(normalizedRange.end) >= 0);
+            }
+
+            return contains;
+        }
+
+        public boolean contains(CalendarDate calendarDate) {
+            if (calendarDate == null) {
+                throw new IllegalArgumentException("calendarDate is null.");
+            }
+
+            boolean contains;
+            if (start.compareTo(end) < 0) {
+                contains = (start.compareTo(calendarDate) <= 0
+                    && end.compareTo(calendarDate) >= 0);
+            } else {
+                contains = (end.compareTo(calendarDate) <= 0
+                    && start.compareTo(calendarDate) >= 0);
+            }
+
+            return contains;
+        }
+
+        public boolean intersects(Range range) {
+            if (range == null) {
+                throw new IllegalArgumentException("range is null.");
+            }
+
+            Range normalizedRange = range.normalize();
+
+            boolean intersects;
+            if (start.compareTo(end) < 0) {
+                intersects = (start.compareTo(normalizedRange.end) <= 0
+                    && end.compareTo(normalizedRange.start) >= 0);
+            } else {
+                intersects = (end.compareTo(normalizedRange.end) <= 0
+                    && start.compareTo(normalizedRange.start) >= 0);
+            }
+
+            return intersects;
+        }
+
+        public Range normalize() {
+            CalendarDate earlier = (start.compareTo(end) < 0 ? start : end);
+            CalendarDate later = (earlier == start ? end : start);
+            return new Range(earlier, later);
+        }
+
+        public static Range decode(String value) {
+            if (value == null) {
+                throw new IllegalArgumentException();
+            }
+
+            Range range;
+            if (value.startsWith("{")) {
+                try {
+                    range = new Range(JSONSerializer.parseMap(value));
+                } catch (SerializationException exception) {
+                    throw new IllegalArgumentException(exception);
+                }
+            } else {
+                range = new Range(forString(value));
+            }
+
+            return range;
+        }
+    }
 
     /**
      * The year field. (e.g. <tt>2008</tt>).
