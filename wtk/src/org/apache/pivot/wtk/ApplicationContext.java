@@ -45,6 +45,7 @@ import java.awt.event.MouseWheelEvent;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Iterator;
@@ -55,11 +56,9 @@ import java.util.TimerTask;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
-import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.Version;
 import org.apache.pivot.wtk.Component.DecoratorSequence;
 import org.apache.pivot.wtk.effects.Decorator;
-
 
 /**
  * Base class for application contexts.
@@ -1345,22 +1344,38 @@ public abstract class ApplicationContext {
         implements Dictionary<URL, Object>, Iterable<URL> {
         @Override
         public Object get(URL key) {
-            return resourceCache.get(key);
+            try {
+                return resourceCache.get(key.toURI());
+            } catch (URISyntaxException exception) {
+                throw new RuntimeException(exception);
+            }
         }
 
         @Override
         public Object put(URL key, Object value) {
-            return resourceCache.put(key, value);
+            try {
+                return resourceCache.put(key.toURI(), value);
+            } catch (URISyntaxException exception) {
+                throw new RuntimeException(exception);
+            }
         }
 
         @Override
         public Object remove(URL key) {
-            return resourceCache.remove(key);
+            try {
+                return resourceCache.remove(key.toURI());
+            } catch (URISyntaxException exception) {
+                throw new RuntimeException(exception);
+            }
         }
 
         @Override
         public boolean containsKey(URL key) {
-            return resourceCache.containsKey(key);
+            try {
+                return resourceCache.containsKey(key.toURI());
+            } catch (URISyntaxException exception) {
+                throw new RuntimeException(exception);
+            }
         }
 
         @Override
@@ -1370,7 +1385,28 @@ public abstract class ApplicationContext {
 
         @Override
         public Iterator<URL> iterator() {
-            return new ImmutableIterator<URL>(resourceCache.iterator());
+            return new Iterator<URL>() {
+                private Iterator<URI> iterator = resourceCache.iterator();
+
+                @Override
+                public boolean hasNext() {
+                    return iterator.hasNext();
+                }
+
+                @Override
+                public URL next() {
+                    try {
+                        return iterator.next().toURL();
+                    } catch (MalformedURLException exception) {
+                        throw new RuntimeException(exception);
+                    }
+                }
+
+                @Override
+                public void remove() {
+                    throw new UnsupportedOperationException();
+                }
+            };
         }
     }
 
@@ -1441,7 +1477,7 @@ public abstract class ApplicationContext {
 
     protected static URL origin = null;
 
-    private static HashMap<URL, Object> resourceCache = new HashMap<URL, Object>();
+    private static HashMap<URI, Object> resourceCache = new HashMap<URI, Object>();
     private static ResourceCacheDictionary resourceCacheDictionary = new ResourceCacheDictionary();
 
     private static Timer timer = null;

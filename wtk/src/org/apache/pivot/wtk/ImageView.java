@@ -132,14 +132,14 @@ public class ImageView extends Component {
         Image image = (Image)ApplicationContext.getResourceCache().get(imageURL);
 
         if (image == null) {
-            // convert to URI because using URL in a hashmap is a no-no - URL does bad stuff in equals() and hashCode()
+            // Convert to URI because using a URL as a key causes performance problems
             final java.net.URI imageURI;
             try {
                 imageURI = imageURL.toURI();
-            } catch (URISyntaxException ex) {
-                // should never happen
-                throw new RuntimeException(ex);
+            } catch (URISyntaxException exception) {
+                throw new RuntimeException(exception);
             }
+
             if (asynchronous) {
                 if (loadMap.containsKey(imageURI)) {
                     // Add this to the list of image views that are interested in
