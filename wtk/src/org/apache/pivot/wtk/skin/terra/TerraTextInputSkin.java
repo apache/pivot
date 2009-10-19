@@ -49,125 +49,12 @@ import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.skin.ComponentSkin;
 import org.apache.pivot.wtk.text.TextNode;
 import org.apache.pivot.wtk.text.validation.Validator;
-// import java.text.AttributedCharacterIterator;
-
 
 /**
  * Text input skin.
  */
 public class TerraTextInputSkin extends ComponentSkin
     implements TextInputListener, TextInputCharacterListener, TextInputSelectionListener {
-    /**
-     * TODO This class will be used to optimize rendering of text, so we don't
-     * need to get a copy of the string via {@link TextInput#getText()}.
-     *
-     * NOTE We'll want to use this everywhere we are currently calling
-     * getText(), if possible. This means that the character iterator will need
-     * to return "*" characters when in password mode.
-     */
-    /*
-    private static class TextInputCharacterIterator implements AttributedCharacterIterator {
-        public TextInputCharacterIterator(TextInput textInput) {
-            // TODO Need index arguments
-        }
-
-        public int getBeginIndex() {
-            // TODO Auto-generated method stub
-            return 0;
-        }
-
-        public int getEndIndex() {
-            // TODO Auto-generated method stub
-            return 0;
-        }
-
-        public char setIndex(int position) {
-            // TODO Auto-generated method stub
-            return 0;
-        }
-
-        public int getIndex() {
-            // TODO Auto-generated method stub
-            return 0;
-        }
-
-        public char current() {
-            // TODO Auto-generated method stub
-            return 0;
-        }
-
-        public char first() {
-            // TODO Auto-generated method stub
-            return 0;
-        }
-
-        public char last() {
-            // TODO Auto-generated method stub
-            return 0;
-        }
-
-        public char next() {
-            // TODO Auto-generated method stub
-            return 0;
-        }
-
-        public char previous() {
-            // TODO Auto-generated method stub
-            return 0;
-        }
-
-        public int getRunLimit() {
-            // TODO Auto-generated method stub
-            return 0;
-        }
-
-        public int getRunLimit(Attribute arg0) {
-            // TODO Auto-generated method stub
-            return 0;
-        }
-
-        public int getRunLimit(java.util.Set<? extends Attribute> arg0) {
-            // TODO Auto-generated method stub
-            return 0;
-        }
-
-        public int getRunStart() {
-            // TODO Auto-generated method stub
-            return 0;
-        }
-
-        public int getRunStart(Attribute arg0) {
-            // TODO Auto-generated method stub
-            return 0;
-        }
-
-        public int getRunStart(java.util.Set<? extends Attribute> arg0) {
-            // TODO Auto-generated method stub
-            return 0;
-        }
-
-        public Object getAttribute(Attribute arg0) {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        public java.util.Map<Attribute, Object> getAttributes() {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        public java.util.Set<Attribute> getAllAttributeKeys() {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        public Object clone() {
-            // TODO
-            return null;
-        }
-    }
-    */
-
     private class BlinkCursorCallback implements Runnable {
         @Override
         public void run() {
@@ -303,8 +190,8 @@ public class TerraTextInputSkin extends ComponentSkin
         TextInput textInput = (TextInput)getComponent();
         int textSize = textInput.getTextSize();
 
-        // TODO Localize?
-        // TODO Recalculate only when font changes
+        // TODO Use the missing character glyph bounds (see Font#getMissingGlyphCode())
+        // rather than calculating an average width
         String testString = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz";
 
         Rectangle2D testStringBounds = font.getStringBounds(testString, fontRenderContext);
@@ -315,7 +202,6 @@ public class TerraTextInputSkin extends ComponentSkin
 
     @Override
     public int getPreferredHeight(int width) {
-        // TODO Recalculate only when font changes
         Rectangle2D maxCharBounds = font.getMaxCharBounds(fontRenderContext);
         int maxCharHeight = (int)Math.ceil(maxCharBounds.getHeight());
 
@@ -330,20 +216,12 @@ public class TerraTextInputSkin extends ComponentSkin
     @Override
     public int getBaseline(int width) {
         // Calculate the baseline of the text
-        int baseline = -1;
+        TextInput textInput = (TextInput)getComponent();
+        String text = textInput.getText();
 
-        // TODO Localize?
-        // TODO Recalculate only when font changes
-        String testString = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz";
-
-        LineMetrics lm = font.getLineMetrics(testString, fontRenderContext);
-        baseline = (int)Math.ceil(lm.getAscent()-2);
-
-        if (baseline!=-1) {
-            baseline += padding.top + 1;
-        }
-
-        return baseline;
+        // TODO Use a character iterator
+        LineMetrics lm = font.getLineMetrics(text, fontRenderContext);
+        return (int)Math.ceil(lm.getAscent() - 2) + (padding.top + 1);
     }
 
     @Override

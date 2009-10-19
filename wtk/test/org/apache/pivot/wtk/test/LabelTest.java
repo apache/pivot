@@ -60,7 +60,7 @@ public class LabelTest implements Application {
         Label label2 = new Label(line2);
         label2.getStyles().put("wrapText", true);
         label2.getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
-        label2.getStyles().put("textDecoration", TextDecoration.UNDERLINE);
+        label2.getStyles().put("textDecoration", TextDecoration.STRIKETHROUGH);
         boxPane.add(label2);
 
         boxPane.getStyles().put("fill", true);

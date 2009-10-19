@@ -23,15 +23,12 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Transparency;
 import java.awt.font.FontRenderContext;
-import java.awt.font.LineBreakMeasurer;
+import java.awt.font.GlyphVector;
 import java.awt.font.LineMetrics;
-import java.awt.font.TextAttribute;
-import java.awt.font.TextLayout;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
-import java.text.AttributedCharacterIterator;
-import java.text.AttributedString;
 
+import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
@@ -48,13 +45,9 @@ import org.apache.pivot.wtk.VerticalAlignment;
 /**
  * Label skin.
  * <p>
- * TODO showEllipsis style
- * <p>
- * TODO breakOnWhitespaceOnly style
+ * TODO Add a showEllipsis style.
  */
 public class LabelSkin extends ComponentSkin implements LabelListener {
-    private FontRenderContext fontRenderContext = new FontRenderContext(null, true, true);
-
     private Font font;
     private Color color;
     private Color backgroundColor;
@@ -63,6 +56,12 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     private VerticalAlignment verticalAlignment;
     private Insets padding;
     private boolean wrapText;
+
+    private ArrayList<GlyphVector> glyphVectors = null;
+    private float textHeight = -1;
+
+    private static final FontRenderContext FONT_RENDER_CONTEXT =
+        new FontRenderContext(null, true, true);
 
     public LabelSkin() {
         Theme theme = Theme.getTheme();
@@ -86,15 +85,16 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
     @Override
     public int getPreferredWidth(int height) {
-        int preferredWidth = 0;
-
         Label label = (Label)getComponent();
         String text = label.getText();
 
+        int preferredWidth;
         if (text != null
             && text.length() > 0) {
-            Rectangle2D stringBounds = font.getStringBounds(text, fontRenderContext);
+            Rectangle2D stringBounds = font.getStringBounds(text, FONT_RENDER_CONTEXT);
             preferredWidth = (int)Math.ceil(stringBounds.getWidth());
+        } else {
+            preferredWidth = 0;
         }
 
         preferredWidth += (padding.left + padding.right);
@@ -104,127 +104,156 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
     @Override
     public int getPreferredHeight(int width) {
-        int preferredHeight = 0;
-
         Label label = (Label)getComponent();
         String text = label.getText();
 
-        if (text == null) {
-            text = "";
-        }
+        LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
+        float lineHeight = lm.getHeight();
 
-        if (wrapText
-            && width != -1
-            && text.length() > 0) {
-            int contentWidth = width - (padding.left + padding.right);
+        float preferredHeight = lineHeight;
 
-            AttributedString attributedText = new AttributedString(text);
-            attributedText.addAttribute(TextAttribute.FONT, font);
+        if (text != null
+            && wrapText
+            && width != -1) {
+            int n = text.length();
 
-            AttributedCharacterIterator aci = attributedText.getIterator();
-            LineBreakMeasurer lbm = new LineBreakMeasurer(aci, fontRenderContext);
+            if (n > 0) {
+                // Adjust width for padding
+                width -= (padding.left + padding.right);
 
-            float lineHeights = 0;
-            while (lbm.getPosition() < aci.getEndIndex()) {
-                int offset = lbm.nextOffset(contentWidth);
+                float lineWidth = 0;
+                int lastWhitespaceIndex = -1;
 
-                LineMetrics lm = font.getLineMetrics(aci,
-                    lbm.getPosition(), offset, fontRenderContext);
+                int i = 0;
+                while (i < n) {
+                    char c = text.charAt(i);
+                    if (Character.isWhitespace(c)) {
+                        lastWhitespaceIndex = i;
+                    }
 
-                float lineHeight = lm.getAscent() + lm.getDescent()
-                    + lm.getLeading();
-                lineHeights += lineHeight;
+                    Rectangle2D characterBounds = font.getStringBounds(text, i, i + 1,
+                        FONT_RENDER_CONTEXT);
+                    lineWidth += characterBounds.getWidth();
 
-                lbm.setPosition(offset);
+                    if (lineWidth > width
+                        && lastWhitespaceIndex != -1) {
+                        i = lastWhitespaceIndex;
+
+                        lineWidth = 0;
+                        lastWhitespaceIndex = -1;
+
+                        preferredHeight += lineHeight;
+                    }
+
+                    i++;
+                }
             }
-
-            preferredHeight = (int)Math.ceil(lineHeights);
-        } else {
-            LineMetrics lm = font.getLineMetrics(text, fontRenderContext);
-            preferredHeight = (int)Math.ceil(lm.getAscent() + lm.getDescent()
-                + lm.getLeading());
         }
 
         preferredHeight += (padding.top + padding.bottom);
 
-        return preferredHeight;
+        return (int)Math.ceil(preferredHeight);
     }
 
     @Override
     public Dimensions getPreferredSize() {
-        int preferredWidth = 0;
-        int preferredHeight = 0;
-
         Label label = (Label)getComponent();
         String text = label.getText();
 
+        int preferredWidth;
         if (text != null
             && text.length() > 0) {
-            Rectangle2D stringBounds = font.getStringBounds(text, fontRenderContext);
+            Rectangle2D stringBounds = font.getStringBounds(text, FONT_RENDER_CONTEXT);
             preferredWidth = (int)Math.ceil(stringBounds.getWidth());
-            preferredHeight = (int)Math.ceil(stringBounds.getHeight());
         } else {
-            LineMetrics lm = font.getLineMetrics("", fontRenderContext);
-            preferredHeight = (int)Math.ceil(lm.getAscent() + lm.getDescent()
-                + lm.getLeading());
+            preferredWidth = 0;
         }
 
         preferredWidth += (padding.left + padding.right);
-        preferredHeight += (padding.top + padding.bottom);
+
+        LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
+        int preferredHeight = (int)Math.ceil(lm.getHeight()) + (padding.top + padding.bottom);
 
         return new Dimensions(preferredWidth, preferredHeight);
     }
 
     @Override
     public int getBaseline(int width) {
-        Label label = (Label)getComponent();
-
-        // Calculate the baseline of the text
-        int baseline = -1;
-
-        String text = label.getText();
-        if (text == null) {
-            text = "";
-        }
-
-        if (wrapText
-            && text.length() > 0) {
-            int contentWidth = label.getWidth() - (padding.left + padding.right);
-
-            AttributedString attributedText = new AttributedString(text);
-            attributedText.addAttribute(TextAttribute.FONT, font);
-
-            AttributedCharacterIterator aci = attributedText.getIterator();
-            LineBreakMeasurer lbm = new LineBreakMeasurer(aci, fontRenderContext);
-
-            if (lbm.getPosition() < aci.getEndIndex()) {
-                LineMetrics lm = font.getLineMetrics(text, fontRenderContext);
-                baseline = (int)Math.ceil(lm.getAscent()-2);
-            } else {
-                // for multi-line labels, treat the baseline as being the
-                // baseline of the first line of text
-                int offset = lbm.nextOffset(contentWidth);
-
-                LineMetrics lm = font.getLineMetrics(aci,
-                    lbm.getPosition(), offset, fontRenderContext);
-
-                baseline = (int) Math.ceil(lm.getAscent()-2);
-            }
-        } else {
-            LineMetrics lm = font.getLineMetrics(text, fontRenderContext);
-            baseline = (int)Math.ceil(lm.getAscent()-2);
-        }
-
-        if (baseline!=-1) {
-            baseline += padding.top;
-        }
-
-        return baseline;
+        LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
+        return (int)Math.ceil(lm.getAscent() - 2);
     }
 
     @Override
     public void layout() {
-        // No-op
+        Label label = (Label)getComponent();
+        String text = label.getText();
+
+        glyphVectors = new ArrayList<GlyphVector>();
+        textHeight = 0;
+
+        if (text != null) {
+            int n = text.length();
+
+            if (n > 0) {
+                if (wrapText) {
+                    int width = getWidth() - (padding.left + padding.right);
+
+                    float lineWidth = 0;
+                    int lastWhitespaceIndex = -1;
+
+                    int start = 0;
+                    int i = 0;
+                    while (i < n) {
+                        char c = text.charAt(i);
+                        if (Character.isWhitespace(c)) {
+                            lastWhitespaceIndex = i;
+                        }
+
+                        Rectangle2D characterBounds = font.getStringBounds(text, i, i + 1,
+                            FONT_RENDER_CONTEXT);
+                        lineWidth += characterBounds.getWidth();
+
+                        if (lineWidth > width
+                            && lastWhitespaceIndex != -1) {
+                            i = lastWhitespaceIndex;
+
+                            lineWidth = 0;
+                            lastWhitespaceIndex = -1;
+
+                            // Append the current line
+                            String line = text.substring(start, i);
+                            if (line.length() > 0) {
+                                GlyphVector glyphVector = font.createGlyphVector(FONT_RENDER_CONTEXT, line);
+                                glyphVectors.add(glyphVector);
+
+                                Rectangle2D logicalBounds = glyphVector.getLogicalBounds();
+                                textHeight += logicalBounds.getHeight();
+                            }
+
+                            start = i + 1;
+                        }
+
+                        i++;
+                    }
+
+                    // Append the final line
+                    String line = text.substring(start, i);
+                    if (line.length() > 0) {
+                        GlyphVector glyphVector = font.createGlyphVector(FONT_RENDER_CONTEXT, line);
+                        glyphVectors.add(glyphVector);
+
+                        Rectangle2D logicalBounds = glyphVector.getLogicalBounds();
+                        textHeight += logicalBounds.getHeight();
+                    }
+                } else {
+                    GlyphVector glyphVector = font.createGlyphVector(FONT_RENDER_CONTEXT, text);
+                    glyphVectors.add(glyphVector);
+
+                    Rectangle2D logicalBounds = glyphVector.getLogicalBounds();
+                    textHeight += logicalBounds.getHeight();
+                }
+            }
+        }
     }
 
     @Override
@@ -232,34 +261,37 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         int width = getWidth();
         int height = getHeight();
 
+        // Draw the background
         if (backgroundColor != null) {
             graphics.setPaint(backgroundColor);
             graphics.fillRect(0, 0, width, height);
         }
 
-        Label label = (Label)getComponent();
-        String text = label.getText();
-
         if (debugBaseline) {
             drawBaselineDebug(graphics);
         }
 
-        if (text != null
-            && text.length() > 0) {
-            if (fontRenderContext.isAntiAliased()) {
+        // Draw the text
+        if (glyphVectors.getLength() > 0) {
+            graphics.setFont(font);
+            graphics.setPaint(color);
+
+            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+
+            if (FONT_RENDER_CONTEXT.isAntiAliased()) {
                 graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
                     Platform.getTextAntialiasingHint());
             }
 
-            if (fontRenderContext.usesFractionalMetrics()) {
+            if (FONT_RENDER_CONTEXT.usesFractionalMetrics()) {
                 graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
                     RenderingHints.VALUE_FRACTIONALMETRICS_ON);
             }
 
-            graphics.setFont(font);
-            graphics.setPaint(color);
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
+            LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
+            float ascent = lm.getAscent();
+            float lineHeight = lm.getHeight();
 
             float y = 0;
             switch (verticalAlignment) {
@@ -269,84 +301,66 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
                 }
 
                 case BOTTOM: {
-                    y = height - getPreferredHeight(wrapText ? width : -1) + padding.top;
+                    y = (height - textHeight) + padding.top;
                     break;
                 }
 
                 case CENTER: {
-                    y = (height - getPreferredHeight(wrapText ? width : -1)) / 2 + padding.top;
+                    y = (height - textHeight) / 2 + padding.top;
                     break;
                 }
             }
 
-            if (wrapText) {
-                AttributedString attributedText = new AttributedString(text);
-                attributedText.addAttribute(TextAttribute.FONT, font);
+            for (int i = 0, n = glyphVectors.getLength(); i < n; i++) {
+                GlyphVector glyphVector = glyphVectors.get(i);
 
-                AttributedCharacterIterator aci = attributedText.getIterator();
-                LineBreakMeasurer lbm = new LineBreakMeasurer(aci, fontRenderContext);
+                Rectangle2D logicalBounds = glyphVector.getLogicalBounds();
+                float lineWidth = (float)logicalBounds.getWidth();
 
-                int contentWidth = width - (padding.left + padding.right);
+                float x = 0;
+                switch(horizontalAlignment) {
+                    case LEFT: {
+                        x = padding.left;
+                        break;
+                    }
 
-                while (lbm.getPosition() < aci.getEndIndex()) {
-                    TextLayout textLayout = lbm.nextLayout(contentWidth);
-                    y += textLayout.getAscent();
-                    drawText(graphics, textLayout, y);
-                    y += textLayout.getDescent() + textLayout.getLeading();
-                }
-            } else {
-                TextLayout textLayout = new TextLayout(text, font, fontRenderContext);
-                drawText(graphics, textLayout, y + textLayout.getAscent());
-            }
-        }
-    }
+                    case RIGHT: {
+                        x = (width - lineWidth) + padding.left;
+                        break;
+                    }
 
-    private void drawText(Graphics2D graphics, TextLayout textLayout, float y) {
-        float width = getWidth();
-        Rectangle2D textBounds = textLayout.getBounds();
-
-        float x = 0;
-        switch (horizontalAlignment) {
-            case LEFT: {
-                x = padding.left;
-                break;
-            }
-
-            case RIGHT: {
-                x = width - (float)(textBounds.getX() + textBounds.getWidth()) -
-                    padding.right;
-                break;
-            }
-
-            case CENTER: {
-                x = (width - (padding.left + padding.right) -
-                    (float)(textBounds.getX() + textBounds.getWidth())) / 2f +
-                    padding.left;
-                break;
-            }
-        }
-
-        textLayout.draw(graphics, x, y);
-
-        if (textDecoration != null) {
-            graphics.setStroke(new BasicStroke());
-
-            float offset = 0;
-
-            switch (textDecoration) {
-                case UNDERLINE: {
-                    offset = y + 2;
-                    break;
+                    case CENTER: {
+                        x = (width - lineWidth) / 2 + padding.left;
+                        break;
+                    }
                 }
 
-                case STRIKETHROUGH: {
-                    offset = y - textLayout.getAscent() / 3f + 1;
-                    break;
-                }
-            }
+                graphics.drawGlyphVector(glyphVector, x, y + ascent);
 
-            Line2D line = new Line2D.Float(x, offset, x + (float)textBounds.getWidth(), offset);
-            graphics.draw(line);
+                // Draw the text decoration
+                if (textDecoration != null) {
+                    graphics.setStroke(new BasicStroke());
+
+                    float offset = 0;
+
+                    switch (textDecoration) {
+                        case UNDERLINE: {
+                            offset = y + ascent + 2;
+                            break;
+                        }
+
+                        case STRIKETHROUGH: {
+                            offset = y + lineHeight / 2 + 1;
+                            break;
+                        }
+                    }
+
+                    Line2D line = new Line2D.Float(x, offset, x + lineWidth, offset);
+                    graphics.draw(line);
+                }
+
+                y += logicalBounds.getHeight();
+            }
         }
     }
 
