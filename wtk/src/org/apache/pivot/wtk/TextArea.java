@@ -34,7 +34,6 @@ import org.apache.pivot.wtk.text.Paragraph;
 import org.apache.pivot.wtk.text.PlainTextSerializer;
 import org.apache.pivot.wtk.text.TextNode;
 
-
 /**
  * Component that allows a user to enter and edit multiple lines of (optionally
  * formatted) text.
@@ -180,18 +179,6 @@ public class TextArea extends Component {
         }
 
         super.setSkin(skin);
-    }
-
-    @Override
-    protected void setParent(Container parent) {
-        if (parent != null
-            && !(parent instanceof Viewport)) {
-            throw new IllegalArgumentException(getClass().getName()
-                + " parent must be an instance of "
-                + Viewport.class.getName());
-        }
-
-        super.setParent(parent);
     }
 
     public Document getDocument() {

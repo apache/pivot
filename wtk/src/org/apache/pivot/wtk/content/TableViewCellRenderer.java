@@ -38,6 +38,15 @@ public class TableViewCellRenderer extends Label
         getStyles().put("padding", new Insets(2));
     }
 
+    @Override
+    public void setSize(int width, int height) {
+        super.setSize(width, height);
+
+        // Since this component doesn't have a parent, it won't be validated
+        // via layout; ensure that it is valid here
+        validate();
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public void render(Object value, int rowIndex, int columnIndex,

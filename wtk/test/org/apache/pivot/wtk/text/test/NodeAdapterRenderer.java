@@ -26,6 +26,15 @@ import org.apache.pivot.wtk.TreeView.NodeCheckState;
 
 public class NodeAdapterRenderer extends Label implements TreeView.NodeRenderer {
     @Override
+    public void setSize(int width, int height) {
+        super.setSize(width, height);
+
+        // Since this component doesn't have a parent, it won't be validated
+        // via layout; ensure that it is valid here
+        validate();
+    }
+
+    @Override
     public void render(Object node, Path path, int rowIndex, TreeView treeView, boolean expanded,
         boolean selected, NodeCheckState checkState, boolean highlighted, boolean disabled) {
         Object labelFont = treeView.getStyles().get("font");

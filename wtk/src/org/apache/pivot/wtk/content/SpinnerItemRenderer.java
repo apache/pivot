@@ -36,6 +36,15 @@ public class SpinnerItemRenderer extends Label implements Spinner.ItemRenderer {
     }
 
     @Override
+    public void setSize(int width, int height) {
+        super.setSize(width, height);
+
+        // Since this component doesn't have a parent, it won't be validated
+        // via layout; ensure that it is valid here
+        validate();
+    }
+
+    @Override
     public void render(Object item, Spinner spinner) {
         setText(item == null ? null : item.toString());
 
