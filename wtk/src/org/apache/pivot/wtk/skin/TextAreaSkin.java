@@ -43,7 +43,6 @@ import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
-import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.Cursor;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Direction;
@@ -86,6 +85,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         private int x = 0;
         private int y = 0;
 
+        // TODO Should this default to Integer.MAX_VALUE?
         private int breakWidth = 0;
 
         private boolean valid = false;
@@ -339,6 +339,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
         @Override
         protected void attach() {
+            super.attach();
+
             Element element = (Element)getNode();
             element.getElementListeners().add(this);
 
@@ -354,6 +356,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
             // Detach child node views
             remove(0, getLength());
+
+            super.detach();
         }
 
         @Override
@@ -535,30 +539,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
      * Document view.
      */
     public class DocumentView extends ElementView {
-        private class ValidateCallback implements Runnable {
-            private int index;
-
-            public ValidateCallback(int index) {
-                this.index = index;
-            }
-
-            @Override
-            public void run() {
-                NodeView nodeView = get(index++);
-                nodeView.validate();
-
-                if (index < getLength()) {
-                    // TODO Invalidate here so the caller can see the scrollbar thumb grow
-                    queuedValidateCallback = ApplicationContext.queueCallback(this);
-                } else {
-                    queuedValidateCallback = null;
-                    invalidateComponent();
-                }
-            }
-        }
-
-        private ApplicationContext.QueuedCallback queuedValidateCallback = null;
-
         public DocumentView(Document document) {
             super(document);
         }
@@ -590,70 +570,30 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
         @Override
         public void validate() {
-            // TODO Don't queue the validate callback until layout()? Then we
-            // wouldn't have to abort it in multiple locations...
-
-            // TODO Why do we need to abort it in multiple places?
-
-            // TODO Use QueuedCallback#cancel() instead of abort()
-
             if (!isValid()) {
-                TextArea textArea = (TextArea)getComponent();
-                Container parent = textArea.getParent();
-
                 int breakWidth = getBreakWidth();
 
                 int width = 0;
-                int y = 0;
-
-                int top = -textArea.getY();
-                int bottom = top + parent.getHeight();
+                int height = 0;
 
                 int i = 0;
-                int j = 0;
                 int n = getLength();
-                int start = -1;
 
                 while (i < n) {
                     NodeView nodeView = get(i++);
                     nodeView.setBreakWidth(breakWidth);
+                    nodeView.validate();
 
-                    // TODO Make this configurable (e.g. validateVisibleContentOnly
-                    // = false); this will allow the text area to report an actual
-                    // preferred size
-                    int height = nodeView.getHeight();
-                    if (y + height >= top) {
-                        if (y < bottom) {
-                            nodeView.validate();
-                        } else {
-                            if (start == -1) {
-                                start = i - 1;
-                            }
-                        }
-                    }
+                    nodeView.setLocation(0, height);
 
-                    nodeView.setLocation(0, y);
-
-                    if (nodeView.isValid()) {
-                        width = Math.max(width, nodeView.getWidth());
-                        height = nodeView.getHeight();
-                        j++;
-                    }
-
-                    y += height;
+                    width = Math.max(width, nodeView.getWidth());
+                    height += nodeView.getHeight();
                 }
 
-                setSize(width, y);
+                setSize(width, height);
 
-                if (i == j) {
-                    super.validate();
-                    updateSelectionBounds();
-                } else {
-                    if (start != -1) {
-                        abortValidateCallback();
-                        queuedValidateCallback = ApplicationContext.queueCallback(new ValidateCallback(start));
-                    }
-                }
+                super.validate();
+                invalidateComponent();
             }
         }
 
@@ -675,13 +615,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             remove(index, nodes.getLength());
 
             super.nodesRemoved(element, index, nodes);
-        }
-
-        protected void abortValidateCallback() {
-            if (queuedValidateCallback != null) {
-                queuedValidateCallback.cancel();
-                queuedValidateCallback = null;
-            }
         }
     }
 
@@ -1206,8 +1139,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
         Document document = textArea.getDocument();
         if (document != null) {
-            // TODO Pass document to attach() instead of constructor
-            documentView = new DocumentView(document);
+            documentView = (DocumentView)createNodeView(document);
             documentView.attach();
         }
 
@@ -1226,8 +1158,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         if (documentView == null) {
             preferredWidth = 0;
         } else {
-            documentView.setBreakWidth(Integer.MAX_VALUE);
-            documentView.validate();
             preferredWidth = documentView.getWidth() + margin.left + margin.right;
         }
 
@@ -1240,9 +1170,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         if (documentView == null) {
             preferredHeight = 0;
         } else {
-            documentView.setBreakWidth((width == -1) ?
-                Integer.MAX_VALUE : Math.max(width - (margin.left + margin.right), 0));
-            documentView.validate();
             preferredHeight = documentView.getHeight() + margin.top + margin.bottom;
         }
 
@@ -1258,8 +1185,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             preferredWidth = 0;
             preferredHeight = 0;
         } else {
-            documentView.setBreakWidth(Integer.MAX_VALUE);
-            documentView.validate();
             Dimensions preferredSize = documentView.getSize();
             preferredWidth = preferredSize.width + (margin.left + margin.right);
             preferredHeight = preferredSize.height + (margin.top + margin.bottom);
@@ -1276,12 +1201,12 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     @Override
     public void layout() {
         if (documentView != null) {
-            documentView.abortValidateCallback();
+            int width = getWidth();
+            documentView.setBreakWidth(Math.max(width - (margin.left + margin.right), 0));
+            documentView.validate();
 
-            // TODO Here is where we would resize/reposition form components
-            // (i.e. components attached to ComponentNodeViews); we'd probably
-            // want a top-level list of ComponentNodeViews so we wouldn't have
-            // to search the tree for them.
+            // TODO Why does this cause an exception?
+            // updateSelectionBounds();
         }
     }
 
@@ -1289,6 +1214,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     public void paint(Graphics2D graphics) {
         if (documentView != null) {
             TextArea textArea = (TextArea)getComponent();
+
+            // TODO Paint selection state here, or in view classes?
 
             graphics.translate(margin.left, margin.top);
             documentView.paint(graphics);
@@ -1310,7 +1237,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
     @Override
     public Bounds getCharacterBounds(int offset) {
-        return (documentView == null) ? null : documentView.getCharacterBounds(offset);
+        return (documentView == null) ?
+            null : documentView.getCharacterBounds(offset);
     }
 
     private void showCaret(boolean show) {
@@ -1614,7 +1542,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
         Document document = textArea.getDocument();
         if (document != null) {
-            documentView = new DocumentView(document);
+            documentView = (DocumentView)createNodeView(document);
             documentView.attach();
         }
 
