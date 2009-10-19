@@ -25,12 +25,10 @@
 
 <jnlp spec="1.6+" codebase="<%= codebase %>" href="<%= href %>">
     <information>
-        <title>Pivot "JSON Viewer" Demo - Signed</title>
+        <title>Pivot JSON Viewer Demo - Signed</title>
         <vendor>Apache Pivot</vendor>
         <homepage href="http://incubator.apache.org/pivot/"/>
-        <description>
-            Allows users to visually browse a JSON structure using a TreeView component.
-        </description>
+        <description>Allows users to visually browse a JSON structure using a TreeView component.</description>
         <icon href="logo.png"/>
         <offline-allowed/>
         <shortcut online="false">

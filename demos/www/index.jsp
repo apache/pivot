@@ -17,7 +17,7 @@ limitations under the License.
 
 <html>
 <head>
-<title>Index of Pivot Demos</title>
+<title>Pivot Demos - Index</title>
 <link rel="stylesheet" href="demo.css"/>
 <link rel="shortcut icon" href="favicon.ico"/>
 <style>

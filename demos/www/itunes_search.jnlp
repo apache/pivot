@@ -25,13 +25,10 @@
 
 <jnlp spec="1.6+" codebase="<%= codebase %>" href="<%= href %>">
     <information>
-        <title>Pivot "iTunes Search" Demo - Signed</title>
+        <title>Pivot iTunes Search Demo - Signed</title>
         <vendor>Apache Pivot</vendor>
         <homepage href="http://incubator.apache.org/pivot/"/>
-        <description>
-            Simple application that allows a user to run search queries against the
-            iTunes Music Store and presents the results in a table view.
-        </description>
+        <description>Simple application that allows a user to run search queries against the iTunes Music Store and presents the results in a table view.</description>
         <icon href="logo.png"/>
         <shortcut online="false">
             <desktop/>

@@ -25,14 +25,10 @@
 
 <jnlp spec="1.6+" codebase="<%= codebase %>" href="<%= href %>">
     <information>
-        <title>Pivot "Stock Tracker" Demo - Signed</title>
+        <title>Pivot Stock Tracker Demo - Signed</title>
         <vendor>Apache Pivot</vendor>
         <homepage href="http://incubator.apache.org/pivot/"/>
-        <description>
-            This sample application retrieves live (delayed by 15 minutes) stock quote
-            data from Yahoo! Finance as a CSV file and presents it in a table view component
-            (libraries are signed to allow it to communicate with the Yahoo web service).
-        </description>
+        <description>This sample application retrieves live (delayed by 15 minutes) stock quote data from Yahoo! Finance as a CSV file and presents it in a table view component (libraries are signed to allow it to communicate with the Yahoo web service).</description>
         <icon href="logo.png"/>
         <shortcut online="false">
             <desktop/>

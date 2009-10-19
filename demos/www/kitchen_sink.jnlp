@@ -26,20 +26,23 @@
 
 <jnlp spec="1.6+" codebase="<%= codebase %>" href="<%= href %>">
     <information>
-        <title>Pivot "Kitchen Sink" Demo</title>
+        <title>Pivot Kitchen Sink Demo</title>
         <vendor>Apache Pivot</vendor>
         <homepage href="http://incubator.apache.org/pivot/"/>
-        <description>
-            Similar to Sun's "Swing Set" demo, this application demonstrates a number of commonly used Pivot components.
-        </description>
+        <description>Similar to Sun's "Swing Set" demo, this application demonstrates a number of commonly used Pivot components.</description>
+        <icon kind="shortcut" href="<%= codebase %>logo.png" width="32" height="32" />
         <offline-allowed/>
-        <shortcut online="false">
+        <shortcut online="true">
             <desktop/>
         </shortcut>
     </information>
 
     <resources>
 <%@ include file="jnlp_properties.jsp" %>
+
+        <property name="width"  value="800" />
+        <property name="height" value="600" />
+        <property name="center" value="true" />
 
         <java version="1.6+" href="http://java.sun.com/products/autodl/j2se" />
 
