@@ -32,7 +32,7 @@
             Simple application that allows a user to run search queries against the
             iTunes Music Store and presents the results in a table view.
         </description>
-        <offline-allowed/>
+        <icon href="logo.png"/>
         <shortcut online="false">
             <desktop/>
         </shortcut>

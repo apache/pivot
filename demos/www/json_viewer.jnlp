@@ -31,6 +31,7 @@
         <description>
             Allows users to visually browse a JSON structure using a TreeView component.
         </description>
+        <icon href="logo.png"/>
         <offline-allowed/>
         <shortcut online="false">
             <desktop/>
