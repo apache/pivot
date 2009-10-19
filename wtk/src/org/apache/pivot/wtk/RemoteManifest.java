@@ -26,7 +26,6 @@ import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 
 import org.apache.pivot.io.FileList;
 import org.apache.pivot.wtk.media.Image;
@@ -43,7 +42,6 @@ public class RemoteManifest implements Manifest {
     private DataFlavor imageDataFlavor = null;
     private DataFlavor fileListDataFlavor = null;
     private DataFlavor uriListDataFlavor = null;
-    private DataFlavor urlDataFlavor = null;
 
     private static final String URI_LIST_MIME_TYPE = "text/uri-list";
     private static final String FILE_URI_SCHEME = "file";
@@ -66,14 +64,6 @@ public class RemoteManifest implements Manifest {
                 } else if (dataFlavor.getMimeType().startsWith(URI_LIST_MIME_TYPE)
                     && dataFlavor.getRepresentationClass() == String.class) {
                     uriListDataFlavor = dataFlavor;
-                } else if (dataFlavor.getRepresentationClass() == URL.class) {
-                    urlDataFlavor = dataFlavor;
-                } else if (dataFlavor.isRepresentationClassByteBuffer()) {
-                    // TODO If we have a serializer for the type, deserialize it
-
-                    // TODO Do we still need a workaround for Sun bug #4147507
-                    // (http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4147507)
-                    // if we are using ByteBuffers?
                 }
             }
         }
@@ -157,23 +147,6 @@ public class RemoteManifest implements Manifest {
     public boolean containsFileList() {
         return (fileListDataFlavor != null
             || uriListDataFlavor != null);
-    }
-
-    @Override
-    public URL getURL() throws IOException {
-        URL url = null;
-        try {
-            url = (URL)transferable.getTransferData(urlDataFlavor);
-        } catch (UnsupportedFlavorException exception) {
-            // No-op
-        }
-
-        return url;
-    }
-
-    @Override
-    public boolean containsURL() {
-        return (urlDataFlavor != null);
     }
 
     @Override

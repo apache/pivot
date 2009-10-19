@@ -17,7 +17,6 @@
 package org.apache.pivot.wtk;
 
 import java.io.IOException;
-import java.net.URL;
 
 import org.apache.pivot.io.FileList;
 import org.apache.pivot.wtk.media.Image;
@@ -43,9 +42,6 @@ public interface Manifest {
 
     public FileList getFileList() throws IOException;
     public boolean containsFileList();
-
-    public URL getURL() throws IOException;
-    public boolean containsURL();
 
     public Object getValue(String key) throws IOException;
     public boolean containsValue(String key);

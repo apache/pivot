@@ -20,7 +20,6 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.File;
-import java.net.URL;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
@@ -36,7 +35,6 @@ public class LocalManifest implements Manifest {
     private String text = null;
     private Image image = null;
     private FileList fileList = null;
-    private URL url = null;
     private HashMap<String, Object> values = new HashMap<String, Object>();
 
     @Override
@@ -94,24 +92,6 @@ public class LocalManifest implements Manifest {
     }
 
     @Override
-    public URL getURL() {
-        return url;
-    }
-
-    public void putURL(URL url) {
-        if (url == null) {
-            throw new IllegalArgumentException("url is null.");
-        }
-
-        this.url = url;
-    }
-
-    @Override
-    public boolean containsURL() {
-        return url != null;
-    }
-
-    @Override
     public Object getValue(String key) {
         return values.get(key);
     }
@@ -152,10 +132,6 @@ class LocalManifestAdapter implements Transferable {
                 // No-op
             }
         }
-
-        if (localManifest.containsURL()) {
-            transferDataFlavors.add(new DataFlavor(URL.class, URL.class.getName()));
-        }
     }
 
     @Override
@@ -185,24 +161,6 @@ class LocalManifestAdapter implements Transferable {
             }
 
             transferData = buf.toString();
-        } else if (dataFlavor.getRepresentationClass() == URL.class) {
-            transferData = localManifest.getURL();
-        } else if (dataFlavor.isRepresentationClassByteBuffer()) {
-            // TODO
-            /*
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-
-                Object value = localManifest.getValue(key);
-
-                try {
-                    serializer.writeObject(value, byteArrayOutputStream);
-                    byteArrayOutputStream.close();
-                    ByteBuffer byteBuffer = ByteBuffer.wrap(byteArrayOutputStream.toByteArray());
-
-                } catch(Exception exception) {
-                    System.err.println(exception);
-                }
-             */
         }
 
         return transferData;
