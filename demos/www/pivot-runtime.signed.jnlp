@@ -39,8 +39,6 @@
     <resources>
 <%@ include file="jnlp_properties.jsp" %>
 
-        <java version="1.6+" href="http://java.sun.com/products/autodl/j2se" />
-
         <jar href="lib/pivot-core-<%= version %>.signed.jar" />
         <jar href="lib/pivot-web-<%= version %>.signed.jar" />
         <jar href="lib/pivot-wtk-<%= version %>.signed.jar" />
