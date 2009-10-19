@@ -18,8 +18,6 @@ package org.apache.pivot.wtk.test;
 
 import java.awt.Font;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
@@ -55,17 +53,7 @@ public class NativeDragDropTest implements Application {
             @Override
             public boolean beginDrag(Component component, int x, int y) {
                 content = new LocalManifest();
-
-                URL url = null;
-                try {
-                    url = new URL(label.getText());
-                } catch(MalformedURLException exception) {
-                }
-
-                if (url != null) {
-                    content.putURL(url);
-                }
-
+                content.putText(label.getText());
                 return true;
             }
 
@@ -106,7 +94,7 @@ public class NativeDragDropTest implements Application {
                 int supportedDropActions, DropAction userDropAction) {
                 DropAction dropAction = null;
 
-                if (dragContent.containsURL()) {
+                if (dragContent.containsText()) {
                     frame.getStyles().put("backgroundColor", "#ffcccc");
                     dropAction = DropAction.COPY;
                 }
@@ -122,13 +110,13 @@ public class NativeDragDropTest implements Application {
             @Override
             public DropAction dragMove(Component component, Manifest dragContent,
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
-                return (dragContent.containsURL() ? DropAction.COPY : null);
+                return (dragContent.containsText() ? DropAction.COPY : null);
             }
 
             @Override
             public DropAction userDropActionChange(Component component, Manifest dragContent,
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
-                return (dragContent.containsURL() ? DropAction.COPY : null);
+                return (dragContent.containsText() ? DropAction.COPY : null);
             }
 
             @Override
@@ -136,10 +124,10 @@ public class NativeDragDropTest implements Application {
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
                 DropAction dropAction = null;
 
-                if (dragContent.containsURL()) {
+                if (dragContent.containsText()) {
                     Label label = (Label)component;
                     try {
-                        label.setText(dragContent.getURL().toString());
+                        label.setText(dragContent.getText());
                     } catch(IOException exception) {
                         System.err.println(exception);
                     }
