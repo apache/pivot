@@ -301,12 +301,12 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
                 }
 
                 case BOTTOM: {
-                    y = (height - textHeight) + padding.top;
+                    y = height - (textHeight + padding.bottom);
                     break;
                 }
 
                 case CENTER: {
-                    y = (height - textHeight) / 2 + padding.top;
+                    y = (height - textHeight) / 2;
                     break;
                 }
             }
@@ -325,12 +325,12 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
                     }
 
                     case RIGHT: {
-                        x = (width - lineWidth) + padding.left;
+                        x = width - (lineWidth + padding.right);
                         break;
                     }
 
                     case CENTER: {
-                        x = (width - lineWidth) / 2 + padding.left;
+                        x = (width - lineWidth) / 2;
                         break;
                     }
                 }
