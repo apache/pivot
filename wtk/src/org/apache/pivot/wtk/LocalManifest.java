@@ -19,6 +19,7 @@ package org.apache.pivot.wtk;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.File;
 import java.net.URL;
 
 import org.apache.pivot.collections.ArrayList;
@@ -26,7 +27,6 @@ import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.io.FileList;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.media.Picture;
-
 
 /**
  * Manifest class that serves as data source for a clipboard or drag/drop
@@ -130,6 +130,8 @@ class LocalManifestAdapter implements Transferable {
     private LocalManifest localManifest;
     private ArrayList<DataFlavor> transferDataFlavors = new ArrayList<DataFlavor>();
 
+    private static final String URI_LIST_MIME_TYPE = "text/uri-list; class=java.lang.String";
+
     public LocalManifestAdapter(LocalManifest localManifest) {
         this.localManifest = localManifest;
 
@@ -143,6 +145,12 @@ class LocalManifestAdapter implements Transferable {
 
         if (localManifest.containsFileList()) {
             transferDataFlavors.add(DataFlavor.javaFileListFlavor);
+
+            try {
+                transferDataFlavors.add(new DataFlavor(URI_LIST_MIME_TYPE));
+            } catch (ClassNotFoundException exception) {
+                // No-op
+            }
         }
 
         if (localManifest.containsURL()) {
@@ -168,6 +176,15 @@ class LocalManifestAdapter implements Transferable {
         } else if (dataFlavor.equals(DataFlavor.javaFileListFlavor)) {
             FileList fileList = localManifest.getFileList();
             transferData = fileList.getList();
+        } else if (dataFlavor.getMimeType().equals(URI_LIST_MIME_TYPE)) {
+            FileList fileList = localManifest.getFileList();
+
+            StringBuilder buf = new StringBuilder();
+            for (File file : fileList) {
+                buf.append(file.toURI().toString()).append("\r\n");
+            }
+
+            transferData = buf.toString();
         } else if (dataFlavor.getRepresentationClass() == URL.class) {
             transferData = localManifest.getURL();
         } else if (dataFlavor.isRepresentationClassByteBuffer()) {

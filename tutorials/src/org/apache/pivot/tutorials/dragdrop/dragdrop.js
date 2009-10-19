@@ -19,42 +19,42 @@ importPackage(org.apache.pivot.wtk);
 var dragSoure = new DragSource() {
     beginDrag: function(component, x, y) {
         return true;
-    }, 
-    
+    },
+
     endDrag: function(component, dropAction) {
         // No-op
     },
-    
+
     getContent: function() {
         var content = new LocalManifest();
         content.putImage(imageView.getImage());
-        
+
         return content;
     },
-    
+
     getOffset: function() {
         // No-op; not used for native drags
         return null;
-    }, 
-      
+    },
+
     getRepresentation: function() {
         // No-op; not used for native drags
         return null;
     },
-            
+
     getSupportedDropActions: function() {
         return DropAction.COPY.getMask();
     },
-     
+
     isNative: function() {
         return true;
-    } 
+    }
 };
 
 var dropTarget = new DropTarget() {
     dragEnter: function(component, dragContent, supportedDropActions, userDropAction) {
         return (dragContent.containsImage()) ? DropAction.COPY : null;
-    },        
+    },
 
     dragExit: function(component) {
         // No-op
@@ -64,7 +64,7 @@ var dropTarget = new DropTarget() {
         return (dragContent.containsImage()) ? DropAction.COPY : null;
     },
 
-    userDropActionChange: function(component, dragContent, supportedDropActions, 
+    userDropActionChange: function(component, dragContent, supportedDropActions,
         x, y, userDropAction) {
         return (dragContent.containsImage()) ? DropAction.COPY : null;
     },
@@ -76,7 +76,7 @@ var dropTarget = new DropTarget() {
             imageView.setImage(dragContent.getImage());
             dropAction = DropAction.COPY;
         }
-        
+
         return dropAction;
     }
-};    
+};

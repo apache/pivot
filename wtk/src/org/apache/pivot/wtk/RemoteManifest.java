@@ -22,6 +22,10 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.LineNumberReader;
+import java.io.StringReader;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import org.apache.pivot.io.FileList;
@@ -38,7 +42,11 @@ public class RemoteManifest implements Manifest {
     private DataFlavor textDataFlavor = null;
     private DataFlavor imageDataFlavor = null;
     private DataFlavor fileListDataFlavor = null;
+    private DataFlavor uriListDataFlavor = null;
     private DataFlavor urlDataFlavor = null;
+
+    private static final String URI_LIST_MIME_TYPE = "text/uri-list";
+    private static final String FILE_URI_SCHEME = "file";
 
     RemoteManifest(Transferable transferable) {
         assert(transferable != null);
@@ -55,6 +63,9 @@ public class RemoteManifest implements Manifest {
                     imageDataFlavor = dataFlavor;
                 } else if (dataFlavor.equals(DataFlavor.javaFileListFlavor)) {
                     fileListDataFlavor = dataFlavor;
+                } else if (dataFlavor.getMimeType().startsWith(URI_LIST_MIME_TYPE)
+                    && dataFlavor.getRepresentationClass() == String.class) {
+                    uriListDataFlavor = dataFlavor;
                 } else if (dataFlavor.getRepresentationClass() == URL.class) {
                     urlDataFlavor = dataFlavor;
                 } else if (dataFlavor.isRepresentationClassByteBuffer()) {
@@ -73,7 +84,7 @@ public class RemoteManifest implements Manifest {
         String text = null;
         try {
             text = (String)transferable.getTransferData(textDataFlavor);
-        } catch(UnsupportedFlavorException exception) {
+        } catch (UnsupportedFlavorException exception) {
             // No-op
         }
 
@@ -90,7 +101,7 @@ public class RemoteManifest implements Manifest {
         Image image = null;
         try {
             image = new Picture((BufferedImage)transferable.getTransferData(imageDataFlavor));
-        } catch(UnsupportedFlavorException exception) {
+        } catch (UnsupportedFlavorException exception) {
             // No-op
         }
 
@@ -106,9 +117,36 @@ public class RemoteManifest implements Manifest {
     @SuppressWarnings("unchecked")
     public FileList getFileList() throws IOException {
         FileList fileList = null;
+
         try {
-            fileList = new FileList((java.util.List<File>)transferable.getTransferData(fileListDataFlavor));
-        } catch(UnsupportedFlavorException exception) {
+            if (fileListDataFlavor != null) {
+                fileList = new FileList((java.util.List<File>)
+                    transferable.getTransferData(fileListDataFlavor));
+            } else if (uriListDataFlavor != null) {
+                fileList = new FileList();
+
+                String uriList = (String)transferable.getTransferData(uriListDataFlavor);
+                LineNumberReader reader = new LineNumberReader(new StringReader(uriList));
+
+                try {
+                    String line = reader.readLine();
+                    while (line != null) {
+                        URI uri = new URI(line);
+                        String scheme = uri.getScheme();
+
+                        if (scheme != null
+                            && scheme.equalsIgnoreCase(FILE_URI_SCHEME)) {
+                            File file = new File(uri);
+                            fileList.add(file);
+                        }
+
+                        line = reader.readLine();
+                    }
+                } catch (URISyntaxException exception) {
+                    // No-op
+                }
+            }
+        } catch (UnsupportedFlavorException exception) {
             // No-op
         }
 
@@ -117,7 +155,8 @@ public class RemoteManifest implements Manifest {
 
     @Override
     public boolean containsFileList() {
-        return (fileListDataFlavor != null);
+        return (fileListDataFlavor != null
+            || uriListDataFlavor != null);
     }
 
     @Override
@@ -125,7 +164,7 @@ public class RemoteManifest implements Manifest {
         URL url = null;
         try {
             url = (URL)transferable.getTransferData(urlDataFlavor);
-        } catch(UnsupportedFlavorException exception) {
+        } catch (UnsupportedFlavorException exception) {
             // No-op
         }
 
