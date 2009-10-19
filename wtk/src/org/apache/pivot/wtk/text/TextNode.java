@@ -16,12 +16,83 @@
  */
 package org.apache.pivot.wtk.text;
 
+import java.text.CharacterIterator;
+
 import org.apache.pivot.util.ListenerList;
 
 /**
  * Node representing a sequence of characters.
  */
 public final class TextNode extends Node {
+    private class TextNodeCharacterIterator implements CharacterIterator {
+        private int index;
+
+        public TextNodeCharacterIterator() {
+            index = 0;
+        }
+
+        public TextNodeCharacterIterator(TextNodeCharacterIterator textNodeCharacterIterator) {
+            index = textNodeCharacterIterator.index;
+        }
+
+        @Override
+        public char first() {
+            return setIndex(getBeginIndex());
+        }
+
+        @Override
+        public char last() {
+            return setIndex(getCharacterCount() == 0 ? getEndIndex() : getEndIndex() - 1);
+        }
+
+        @Override
+        public char next() {
+            return setIndex(index < getCharacterCount() ? index + 1 : DONE);
+        }
+
+        @Override
+        public char previous() {
+            return setIndex(index > getBeginIndex() ? index - 1 : DONE);
+        }
+
+        @Override
+        public char current() {
+            return (index < getCharacterCount()) ? getCharacter(index) : DONE;
+        }
+
+        @Override
+        public int getBeginIndex() {
+            return 0;
+        }
+
+        @Override
+        public int getEndIndex() {
+            return getCharacterCount();
+        }
+
+        @Override
+        public int getIndex() {
+            return index;
+        }
+
+        @Override
+        public char setIndex(int index) {
+            if (index < 0
+                || index > getCharacterCount()) {
+                throw new IndexOutOfBoundsException();
+            }
+
+            this.index = index;
+
+            return current();
+        }
+
+        @Override
+        public Object clone() {
+            return new TextNodeCharacterIterator(this);
+        }
+    }
+
     private static class TextNodeListenerList extends ListenerList<TextNodeListener>
         implements TextNodeListener {
         @Override
@@ -95,7 +166,6 @@ public final class TextNode extends Node {
 
             text = textBuilder.substring(start, end);
             textBuilder.delete(start, end);
-
             textNodeListeners.charactersRemoved(this, index, text);
 
             rangeRemoved(index, count);
@@ -116,6 +186,10 @@ public final class TextNode extends Node {
     @Override
     public int getCharacterCount() {
         return textBuilder.length();
+    }
+
+    public CharacterIterator getCharacterIterator() {
+        return new TextNodeCharacterIterator();
     }
 
     public String getText() {

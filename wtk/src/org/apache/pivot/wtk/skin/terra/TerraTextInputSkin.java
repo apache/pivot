@@ -61,7 +61,7 @@ public class TerraTextInputSkin extends ComponentSkin
             caretOn = !caretOn;
 
             java.awt.Rectangle caretBounds = caretShapes[0].getBounds();
-            LineMetrics lm = font.getLineMetrics("", fontRenderContext);
+            LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
 
             int ascent = Math.round(lm.getAscent());
             caretBounds.x += (padding.left - scrollLeft + 1);
@@ -106,8 +106,6 @@ public class TerraTextInputSkin extends ComponentSkin
     }
 
 
-    protected FontRenderContext fontRenderContext = new FontRenderContext(null, true, false);
-
     private boolean caretOn = true;
     private Shape[] caretShapes = null;
     private Shape logicalHighlightShape = null;
@@ -144,6 +142,9 @@ public class TerraTextInputSkin extends ComponentSkin
     private Color invalidBevelColor;
 
     private static final int SCROLL_RATE = 50;
+
+    private static final FontRenderContext FONT_RENDER_CONTEXT =
+        new FontRenderContext(null, true, false);
 
     public TerraTextInputSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
@@ -194,7 +195,7 @@ public class TerraTextInputSkin extends ComponentSkin
         // rather than calculating an average width
         String testString = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz";
 
-        Rectangle2D testStringBounds = font.getStringBounds(testString, fontRenderContext);
+        Rectangle2D testStringBounds = font.getStringBounds(testString, FONT_RENDER_CONTEXT);
         int averageCharWidth = (int)Math.round((testStringBounds.getWidth() / testString.length()));
 
         return textSize * averageCharWidth + (padding.left + padding.right) + 2;
@@ -202,7 +203,7 @@ public class TerraTextInputSkin extends ComponentSkin
 
     @Override
     public int getPreferredHeight(int width) {
-        Rectangle2D maxCharBounds = font.getMaxCharBounds(fontRenderContext);
+        Rectangle2D maxCharBounds = font.getMaxCharBounds(FONT_RENDER_CONTEXT);
         int maxCharHeight = (int)Math.ceil(maxCharBounds.getHeight());
 
         return maxCharHeight + (padding.top + padding.bottom) + 2;
@@ -215,12 +216,7 @@ public class TerraTextInputSkin extends ComponentSkin
 
     @Override
     public int getBaseline(int width) {
-        // Calculate the baseline of the text
-        TextInput textInput = (TextInput)getComponent();
-        String text = textInput.getText();
-
-        // TODO Use a character iterator
-        LineMetrics lm = font.getLineMetrics(text, fontRenderContext);
+        LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
         return (int)Math.ceil(lm.getAscent() - 2) + (padding.top + 1);
     }
 
@@ -291,19 +287,19 @@ public class TerraTextInputSkin extends ComponentSkin
 
         boolean textValid = textInput.isTextValid();
 
-        LineMetrics lm = font.getLineMetrics("", fontRenderContext);
+        LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
         int ascent = Math.round(lm.getAscent());
 
         graphics.translate(padding.left - scrollLeft + 1, padding.top + ascent + 1);
 
         if (text.length() > 0) {
             // Paint the text
-            if (fontRenderContext.isAntiAliased()) {
+            if (FONT_RENDER_CONTEXT.isAntiAliased()) {
                 graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
                     Platform.getTextAntialiasingHint());
             }
 
-            if (fontRenderContext.usesFractionalMetrics()) {
+            if (FONT_RENDER_CONTEXT.usesFractionalMetrics()) {
                 graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
                     RenderingHints.VALUE_FRACTIONALMETRICS_ON);
             }
@@ -387,7 +383,7 @@ public class TerraTextInputSkin extends ComponentSkin
     }
 
     protected int getInsertionIndex(String text, int x) {
-        TextLayout textLayout = new TextLayout(text, font, fontRenderContext);
+        TextLayout textLayout = new TextLayout(text, font, FONT_RENDER_CONTEXT);
         TextHitInfo textHitInfo = textLayout.hitTestChar(x + scrollLeft - padding.left - 1, 0);
         int index = textHitInfo.getInsertionIndex();
 
@@ -1238,7 +1234,7 @@ public class TerraTextInputSkin extends ComponentSkin
     @Override
     public void charactersRemoved(TextInput textInput, int index, int count) {
         String text = getText();
-        Rectangle2D textBounds = font.getStringBounds(text, fontRenderContext);
+        Rectangle2D textBounds = font.getStringBounds(text, FONT_RENDER_CONTEXT);
 
         int textWidth = (int)textBounds.getWidth();
         int width = getWidth();
@@ -1289,7 +1285,7 @@ public class TerraTextInputSkin extends ComponentSkin
         int selectionStart = textInput.getSelectionStart();
         int selectionLength = textInput.getSelectionLength();
 
-        TextLayout textLayout = new TextLayout(text, font, fontRenderContext);
+        TextLayout textLayout = new TextLayout(text, font, FONT_RENDER_CONTEXT);
 
         caretShapes = textLayout.getCaretShapes(selectionStart);
         logicalHighlightShape = textLayout.getLogicalHighlightShape(selectionStart,
