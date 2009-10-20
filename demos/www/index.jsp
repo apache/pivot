@@ -174,7 +174,7 @@ deployJava.createWebStartLaunchButton(url, '1.6');
 <div>
 Signed:&nbsp;
 <script>
-var url = "<%= codebase %>file_drag_drop.signed.jnlp";
+var url = "<%= codebase %>file_drag_drop.jnlp";
 deployJava.createWebStartLaunchButton(url, '1.6');
 </script>
 &nbsp;&nbsp;&nbsp;
