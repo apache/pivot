@@ -21,18 +21,12 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.awt.Shape;
 import java.awt.font.FontRenderContext;
+import java.awt.font.GlyphMetrics;
 import java.awt.font.GlyphVector;
 import java.awt.font.LineMetrics;
-import java.awt.font.TextAttribute;
-import java.awt.font.TextHitInfo;
-import java.awt.font.TextLayout;
-import java.awt.font.TextMeasurer;
 import java.awt.geom.Rectangle2D;
-import java.text.AttributedCharacterIterator;
-import java.text.AttributedString;
-import java.text.BreakIterator;
+import java.text.CharacterIterator;
 import java.util.Comparator;
 import java.util.Iterator;
 
@@ -85,8 +79,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         private int x = 0;
         private int y = 0;
 
-        // TODO Should this default to Integer.MAX_VALUE?
-        private int breakWidth = 0;
+        private int breakWidth = -1;
 
         private boolean valid = false;
 
@@ -720,10 +713,9 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 }
 
                 // Recalculate terminator bounds
-                LineMetrics lm = font.getLineMetrics("", 0, 0, fontRenderContext);
+                LineMetrics lm = font.getLineMetrics("", 0, 0, FONT_RENDER_CONTEXT);
                 terminatorBounds = new Bounds(0, 0, PARAGRAPH_TERMINATOR_WIDTH,
-                    (int)Math.ceil(lm.getAscent() + lm.getDescent()
-                        + lm.getLeading()));
+                    (int)Math.ceil(lm.getHeight()));
 
                 int n = getLength();
                 if (n > 0) {
@@ -800,8 +792,9 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
      */
     public class TextNodeView extends NodeView implements TextNodeListener {
         private int start;
-        private int length = 0;
 
+        private int length = 0;
+        private GlyphVector glyphVector = null;
         private TextNodeView next = null;
 
         public TextNodeView(TextNode textNode) {
@@ -833,6 +826,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         public void invalidate() {
             length = 0;
             next = null;
+            glyphVector = null;
+
             super.invalidate();
         }
 
@@ -840,83 +835,58 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         public void validate() {
             if (!isValid()) {
                 TextNode textNode = (TextNode)getNode();
-                String text = textNode.getText();
 
-                // Update the length value
-                length = text.length() - start;
+                int breakWidth = getBreakWidth();
+                CharacterIterator ci = textNode.getCharacterIterator(start);
 
-                // Calculate the size of the text
-                int width;
-                int height;
-
-                if (length == 0) {
-                    // TODO Should we even support this case?
-                    width = PARAGRAPH_TERMINATOR_WIDTH;
-
-                    LineMetrics lm = font.getLineMetrics("", start, start + length,
-                        fontRenderContext);
-                    height = (int)Math.ceil(lm.getAscent() + lm.getDescent()
-                        + lm.getLeading());
+                if (breakWidth == 0) {
+                    glyphVector = font.createGlyphVector(FONT_RENDER_CONTEXT,
+                        textNode.getCharacterIterator(start));
+                    length = ci.getEndIndex() - start;
                 } else {
-                    // TODO Use a custom iterator so we don't have to copy the string
-                    AttributedString attributedText = new AttributedString(text);
-                    attributedText.addAttribute(TextAttribute.FONT, font);
+                    float lineWidth = 0;
+                    int lastWhitespaceIndex = -1;
 
-                    AttributedCharacterIterator aci = attributedText.getIterator();
-
-                    int breakWidth = getBreakWidth();
-
-                    // Attempt to break the text
-                    TextMeasurer textMeasurer = new TextMeasurer(aci, fontRenderContext);
-
-                    // Get the break index
-                    int lineBreakIndex = textMeasurer.getLineBreakIndex(start, breakWidth);
-
-                    int end;
-                    if (lineBreakIndex < text.length()) {
-                        BreakIterator breakIterator = BreakIterator.getLineInstance();
-                        breakIterator.setText(aci);
-
-                        char c = text.charAt(lineBreakIndex);
+                    char c = ci.first();
+                    while (lineWidth < breakWidth
+                        && c != CharacterIterator.DONE) {
                         if (Character.isWhitespace(c)) {
-                            end = breakIterator.following(lineBreakIndex);
-                        } else {
-                            // Move back to the previous break
-                            end = breakIterator.preceding(lineBreakIndex);
-
-                            if (end <= start) {
-                                // The whole word doesn't fit in the given space
-                                if (breakOnWhitespaceOnly) {
-                                    // Move forward to the next break
-                                    end = breakIterator.following(start);
-                                } else {
-                                    // Force a break at this index
-                                    end = lineBreakIndex;
-                                }
-                            }
+                            lastWhitespaceIndex = ci.getIndex();
                         }
 
-                        if (end == BreakIterator.DONE) {
-                            end = text.length();
-                        }
-                    } else {
-                        end = text.length();
+                        int i = ci.getIndex();
+                        Rectangle2D characterBounds = font.getStringBounds(ci, i, i + 1,
+                            FONT_RENDER_CONTEXT);
+                        lineWidth += characterBounds.getWidth();
+
+                        c = ci.setIndex(i + 1);
                     }
 
-                    // Calculate the string bounds
-                    Rectangle2D stringBounds = font.getStringBounds(aci,
-                        start, end, fontRenderContext);
-                    width = (int)Math.ceil(stringBounds.getWidth());
-                    height = (int)Math.ceil(stringBounds.getHeight());
+                    int end;
+                    if (lineWidth < breakWidth) {
+                        end = ci.getEndIndex();
+                    } else {
+                        if (lastWhitespaceIndex == -1) {
+                            end = ci.getIndex();
+                        } else {
+                            end = lastWhitespaceIndex + 1;
+                        }
+                    }
 
-                    // Create a new node containing the remainder of the text
-                    if (end < text.length()) {
+                    glyphVector = font.createGlyphVector(FONT_RENDER_CONTEXT,
+                        textNode.getCharacterIterator(start, end));
+
+                    if (end < ci.getEndIndex()) {
                         length = end - start;
                         next = new TextNodeView(textNode, end);
+                    } else {
+                        length = ci.getEndIndex() - start;
                     }
                 }
 
-                setSize(width, height);
+                Rectangle2D logicalBounds = glyphVector.getLogicalBounds();
+                setSize((int)Math.ceil(logicalBounds.getWidth()),
+                    (int)Math.ceil(logicalBounds.getHeight()));
             }
 
             super.validate();
@@ -924,28 +894,22 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
         @Override
         public void paint(Graphics2D graphics) {
-            TextNode textNode = (TextNode)getNode();
-            String text = textNode.getText();
-
-            // TODO Use a custom iterator so we don't have to copy the string
-            text = text.substring(start, start + length);
-
-            if (text.length() > 0) {
-                LineMetrics lm = font.getLineMetrics(text, fontRenderContext);
-
-                if (fontRenderContext.isAntiAliased()) {
+            if (glyphVector != null) {
+                if (FONT_RENDER_CONTEXT.isAntiAliased()) {
                     graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
                         Platform.getTextAntialiasingHint());
                 }
 
-                if (fontRenderContext.usesFractionalMetrics()) {
+                if (FONT_RENDER_CONTEXT.usesFractionalMetrics()) {
                     graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
                         RenderingHints.VALUE_FRACTIONALMETRICS_ON);
                 }
 
                 graphics.setFont(font);
                 graphics.setPaint(color);
-                graphics.drawString(text, 0, lm.getAscent());
+
+                LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
+                graphics.drawGlyphVector(glyphVector, 0, lm.getAscent());
             }
         }
 
@@ -961,44 +925,37 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
         @Override
         public int getCharacterAt(int x, int y) {
-            TextNode textNode = (TextNode)getNode();
+            validate();
 
-            // TODO This isn't terribly efficient - either use a character
-            // iterator or cache the generated string in TextNode#getText()
-            String text = textNode.getText();
+            int n = glyphVector.getNumGlyphs();
+            int i = 0;
 
-            // TODO Can we use a glyph vector for this? We could create the
-            // vector when the view is created so we don't need to rebuild it
-            // every time
+            while (i < n) {
+                GlyphMetrics glyphMetrics = glyphVector.getGlyphMetrics(i++);
+                Rectangle2D bounds2D = glyphMetrics.getBounds2D();
+                if (bounds2D.contains(x, bounds2D.getY())) {
+                    break;
+                }
+            }
 
-            // TODO This also may help solve the problem of identifying the wrong
-            // character
             int offset;
-            if (text.length() > 0) {
-                TextLayout textLayout = new TextLayout(text, font, fontRenderContext);
-                TextHitInfo textHitInfo = textLayout.hitTestChar(x, y);
-                offset = textHitInfo.getInsertionIndex();
+            if (i < n) {
+                offset = i + start;
             } else {
                 offset = -1;
             }
 
-            return offset + start;
+            return offset;
         }
 
         @Override
         public Bounds getCharacterBounds(int offset) {
-            TextNode textNode = (TextNode)getNode();
+            validate();
 
-            // TODO This isn't terribly efficient - either use a character
-            // iterator or cache the generated string in TextNode#getText()
-            String text = textNode.getText();
-            GlyphVector glyphVector = font.createGlyphVector(fontRenderContext, text);
+            GlyphMetrics glyphMetrics = glyphVector.getGlyphMetrics(offset);
+            Rectangle2D bounds2D = glyphMetrics.getBounds2D();
 
-            Shape glyphVisualBounds = glyphVector.getGlyphVisualBounds(offset);
-            Rectangle glyphBounds = glyphVisualBounds.getBounds();
-            Bounds bounds = new Bounds(glyphBounds.x, 0, glyphBounds.width, getHeight());
-
-            return bounds;
+            return new Bounds(0, 0, (int)Math.ceil(bounds2D.getWidth()), getHeight());
         }
 
         @Override
@@ -1030,6 +987,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
             ImageNode imageNode = (ImageNode)getNode();
             imageNode.getImageNodeListeners().add(this);
+
+            // TODO Add image listener so we can invalidate as needed
         }
 
         @Override
@@ -1089,6 +1048,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         @Override
         public void imageChanged(ImageNode imageNode, Image previousImage) {
             invalidate();
+
+            // TODO Attach/detach image listener
         }
     }
 
@@ -1106,7 +1067,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
     private DocumentView documentView = null;
 
-    private FontRenderContext fontRenderContext = new FontRenderContext(null, true, true);
+    private static final FontRenderContext FONT_RENDER_CONTEXT = new FontRenderContext(null, true, true);
 
     private int caretX = 0;
     private Rectangle caret = new Rectangle();
@@ -1117,7 +1078,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     private Font font;
     private Color color;
     private Insets margin = new Insets(4);
-    private boolean breakOnWhitespaceOnly = false;
 
     public static final int PARAGRAPH_TERMINATOR_WIDTH = 2;
 
@@ -1327,15 +1287,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
 
         setMargin(Insets.decode(margin));
-    }
-
-    public boolean isBreakOnWhitespaceOnly() {
-        return breakOnWhitespaceOnly;
-    }
-
-    public void setBreakOnWhitespaceOnly(boolean breakOnWhitespaceOnly) {
-        this.breakOnWhitespaceOnly = breakOnWhitespaceOnly;
-        invalidateComponent();
     }
 
     @Override

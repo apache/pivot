@@ -32,10 +32,9 @@ public class Span extends Element {
 
     @Override
     public void insert(Node node, int index) {
-        if (node instanceof Element
-            && !(node instanceof Span)) {
-            throw new IllegalArgumentException("Child node must be an instance of "
-                + TextNode.class.getName() + " or " + Span.class.getName());
+        if (node instanceof Block) {
+            throw new IllegalArgumentException("Child node must not be an instance of "
+                + Block.class.getName());
         }
 
         super.insert(node, index);

@@ -25,49 +25,57 @@ import org.apache.pivot.util.ListenerList;
  */
 public final class TextNode extends Node {
     private class TextNodeCharacterIterator implements CharacterIterator {
+        private final int beginIndex;
+        private final int endIndex;
+
         private int index;
 
-        public TextNodeCharacterIterator() {
+        public TextNodeCharacterIterator(int beginIndex, int endIndex) {
+            this.beginIndex = beginIndex;
+            this.endIndex = endIndex;
+
             index = 0;
         }
 
         public TextNodeCharacterIterator(TextNodeCharacterIterator textNodeCharacterIterator) {
+            beginIndex = textNodeCharacterIterator.beginIndex;
+            endIndex = textNodeCharacterIterator.endIndex;
             index = textNodeCharacterIterator.index;
         }
 
         @Override
         public char first() {
-            return setIndex(getBeginIndex());
+            return setIndex(beginIndex);
         }
 
         @Override
         public char last() {
-            return setIndex(getCharacterCount() == 0 ? getEndIndex() : getEndIndex() - 1);
+            return setIndex(getCharacterCount() == 0 ? endIndex : endIndex - 1);
         }
 
         @Override
         public char next() {
-            return setIndex(index < getCharacterCount() ? index + 1 : DONE);
+            return setIndex(index < endIndex ? index + 1 : DONE);
         }
 
         @Override
         public char previous() {
-            return setIndex(index > getBeginIndex() ? index - 1 : DONE);
+            return setIndex(index > beginIndex ? index - 1 : DONE);
         }
 
         @Override
         public char current() {
-            return (index < getCharacterCount()) ? getCharacter(index) : DONE;
+            return (index < endIndex) ? getCharacter(index) : DONE;
         }
 
         @Override
         public int getBeginIndex() {
-            return 0;
+            return beginIndex;
         }
 
         @Override
         public int getEndIndex() {
-            return getCharacterCount();
+            return endIndex;
         }
 
         @Override
@@ -77,8 +85,8 @@ public final class TextNode extends Node {
 
         @Override
         public char setIndex(int index) {
-            if (index < 0
-                || index > getCharacterCount()) {
+            if (index < beginIndex
+                || index > endIndex) {
                 throw new IndexOutOfBoundsException();
             }
 
@@ -189,7 +197,15 @@ public final class TextNode extends Node {
     }
 
     public CharacterIterator getCharacterIterator() {
-        return new TextNodeCharacterIterator();
+        return getCharacterIterator(0, getCharacterCount());
+    }
+
+    public CharacterIterator getCharacterIterator(int beginIndex) {
+        return getCharacterIterator(beginIndex, getCharacterCount());
+    }
+
+    public CharacterIterator getCharacterIterator(int beginIndex, int endIndex) {
+        return new TextNodeCharacterIterator(beginIndex, endIndex);
     }
 
     public String getText() {

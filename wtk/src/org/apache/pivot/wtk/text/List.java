@@ -21,7 +21,7 @@ package org.apache.pivot.wtk.text;
  * <p>
  * TODO Add indent and item spacing properties.
  */
-public abstract class List extends Element {
+public abstract class List extends Block {
     /**
      * Element representing a list item.
      */
