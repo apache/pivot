@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<Window title="Split Panes" maximized="true"
+    WindowStateListener.windowOpened="init();"
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:collections="org.apache.pivot.collections"
+    xmlns:content="org.apache.pivot.wtk.content"
+    xmlns="org.apache.pivot.wtk">
+    <wtkx:script>
+    <![CDATA[
+    function init() {
+        spinner.setSelectedIndex(3);
+        primaryColorListButton.setSelectedIndex(0);
+        secondaryColorListButton.setSelectedIndex(1);
+        orientationListButton.setSelectedIndex(0);
+    }
+    ]]>
+    </wtkx:script>
+
+    <content>
+        <SplitPane wtkx:id="splitPane" orientation="horizontal" splitRatio="0.6">
+            <splitPaneListeners>
+                <wtkx:script>
+                <![CDATA[
+                function splitRatioChanged(splitPane, previousSplitRatio) {
+                    var value = Math.floor(splitPane.getSplitRatio() * 100);
+                    label.setText(value + "%");
+                }
+                ]]>
+                </wtkx:script>
+            </splitPaneListeners>
+            <left>
+                <Border>
+                    <content>
+                        <Panel styles="{backgroundColor:'#f7f5ed'}"/>
+                    </content>
+                </Border>
+            </left>
+            <right>
+                <Border styles="{padding:{top:10}}">
+                    <content>
+                        <BoxPane orientation="vertical" styles="{fill:true,
+                            horizontalAlignment:'right'}">
+                            <Label text="Properties" styles="{padding:{left:10}, font:{bold:true}}"/>
+                            <BoxPane orientation="vertical" styles="{horizontalAlignment:'right'}">
+                                <Form styles="{horizontalSpacing:18, rightAlignLabels:true}">
+                                    <sections>
+                                        <Form.Section>
+                                            <Label wtkx:id="label" Form.label="Split Ratio"
+                                                minimumPreferredWidth="100"/>
+                                            <ListButton wtkx:id="orientationListButton"
+                                                Form.label="Orientation"
+                                                listData="['Horizontal', 'Vertical']">
+                                                <listButtonSelectionListeners>
+                                                    <wtkx:script>
+                                                    <![CDATA[
+                                                    function selectedIndexChanged(listButton,
+                                                        previousSelectedIndex) {
+                                                        var orientation = listButton.getSelectedItem();
+                                                        splitPane.setOrientation(orientation);
+                                                    }
+                                                    ]]>
+                                                    </wtkx:script>
+                                                </listButtonSelectionListeners>
+                                            </ListButton>
+                                            <BoxPane Form.label="Flags" orientation="vertical"
+                                                styles="{spacing:10}">
+                                                <Checkbox buttonData="Locked">
+                                                    <buttonStateListeners>
+                                                        <wtkx:script>
+                                                        <![CDATA[
+                                                        function stateChanged(button, previousState) {
+                                                            splitPane.setLocked(button.isSelected());
+                                                        }
+                                                        ]]>
+                                                        </wtkx:script>
+                                                    </buttonStateListeners>
+                                                </Checkbox>
+                                            </BoxPane>
+                                        </Form.Section>
+                                    </sections>
+                                </Form>
+                            </BoxPane>
+                            <Separator/>
+                            <Label text="Styles" styles="{padding:{left:10}, font:{bold:true}}"/>
+                            <BoxPane orientation="vertical" styles="{horizontalAlignment:'right'}">
+                                <Form styles="{horizontalSpacing:18, rightAlignLabels:true}">
+                                    <sections>
+                                        <Form.Section>
+                                            <Spinner wtkx:id="spinner"
+                                                Form.label="Splitter Thickness"
+                                                styles="{sizeToContent:true}">
+                                                <spinnerSelectionListeners>
+                                                    <wtkx:script>
+                                                    <![CDATA[
+                                                    function selectedIndexChanged(spinner,
+                                                        previousSelectedIndex) {
+                                                        var value = spinner.getSelectedItem();
+                                                        splitPane.getStyles().put
+                                                            ("splitterThickness", value);
+                                                    }
+                                                    ]]>
+                                                    </wtkx:script>
+                                                </spinnerSelectionListeners>
+                                                <spinnerData>
+                                                    <content:NumericSpinnerData lowerBound="3"
+                                                        upperBound="20" />
+                                                </spinnerData>
+                                            </Spinner>
+                                            <ListButton wtkx:id="primaryColorListButton"
+                                                Form.label="Splitter Handle Primary Color"
+                                                styles="{listSize:6}">
+                                                <listData>
+                                                    <collections:ArrayList>
+                                                        <content:ColorItem color="#000000"
+                                                            name="Black"/>
+                                                        <content:ColorItem color="#dddcd5"
+                                                            name="Tan"/>
+                                                        <content:ColorItem color="#14538b"
+                                                            name="Blue"/>
+                                                        <content:ColorItem color="#b0000f"
+                                                            name="Red"/>
+                                                    </collections:ArrayList>
+                                                </listData>
+                                                <dataRenderer>
+                                                    <content:ListButtonColorRenderer/>
+                                                </dataRenderer>
+                                                <itemRenderer>
+                                                    <content:ListViewColorRenderer/>
+                                                </itemRenderer>
+                                                <listButtonSelectionListeners>
+                                                    <wtkx:script>
+                                                    <![CDATA[
+                                                    function selectedIndexChanged(listButton,
+                                                        previousSelectedIndex) {
+                                                        var colorItem = listButton.getSelectedItem();
+                                                        splitPane.getStyles().put
+                                                            ("splitterHandlePrimaryColor",
+                                                             colorItem.getColor());
+                                                    }
+                                                    ]]>
+                                                    </wtkx:script>
+                                                </listButtonSelectionListeners>
+                                            </ListButton>
+                                            <ListButton wtkx:id="secondaryColorListButton"
+                                                Form.label="Splitter Handle Secondary Color"
+                                                styles="{listSize:6}">
+                                                <listData>
+                                                    <collections:ArrayList>
+                                                        <content:ColorItem color="#000000"
+                                                            name="Black"/>
+                                                        <content:ColorItem color="#dddcd5"
+                                                            name="Tan"/>
+                                                        <content:ColorItem color="#14538b"
+                                                            name="Blue"/>
+                                                        <content:ColorItem color="#b0000f"
+                                                            name="Red"/>
+                                                    </collections:ArrayList>
+                                                </listData>
+                                                <dataRenderer>
+                                                    <content:ListButtonColorRenderer/>
+                                                </dataRenderer>
+                                                <itemRenderer>
+                                                    <content:ListViewColorRenderer/>
+                                                </itemRenderer>
+                                                <listButtonSelectionListeners>
+                                                    <wtkx:script>
+                                                    <![CDATA[
+                                                    function selectedIndexChanged(listButton,
+                                                        previousSelectedIndex) {
+                                                        var colorItem = listButton.getSelectedItem();
+                                                        splitPane.getStyles().put
+                                                            ("splitterHandleSecondaryColor",
+                                                             colorItem.getColor());
+                                                    }
+                                                    ]]>
+                                                    </wtkx:script>
+                                                </listButtonSelectionListeners>
+                                            </ListButton>
+                                            <BoxPane Form.label="Flags" orientation="vertical"
+                                                minimumPreferredWidth="100"
+                                                styles="{spacing:10}">
+                                                <Checkbox buttonData="Use Shadow">
+                                                    <buttonStateListeners>
+                                                        <wtkx:script>
+                                                        <![CDATA[
+                                                        function stateChanged(button, previousState) {
+                                                            splitPane.getStyles().put("useShadow",
+                                                                button.isSelected());
+                                                        }
+                                                        ]]>
+                                                        </wtkx:script>
+                                                    </buttonStateListeners>
+                                                </Checkbox>
+                                            </BoxPane>
+                                        </Form.Section>
+                                    </sections>
+                                </Form>
+                            </BoxPane>
+                        </BoxPane>
+                    </content>
+                </Border>
+            </right>
+        </SplitPane>
+    </content>
+</Window>
