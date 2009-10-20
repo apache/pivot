@@ -242,7 +242,6 @@ deployJava.createWebStartLaunchButton(url, '1.6');
 <p>Demonstrates Pivot's support for bi-directional communication between a Pivot
 application and the browser DOM.</p>
 <br/>
-TODO: verify is execute the applet here via JNLP
 <hr/>
 
 <h3><a href="decorators.html">Decorators</a></h3>
