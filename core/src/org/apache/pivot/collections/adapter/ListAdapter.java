@@ -59,8 +59,7 @@ public class ListAdapter<T> implements List<T>, Serializable {
 
         if (comparator == null) {
             index = getLength();
-        }
-        else {
+        } else {
             // Perform a binary search to find the insertion point
             index = Collections.binarySearch(list, item, comparator);
             if (index < 0) {
@@ -90,41 +89,41 @@ public class ListAdapter<T> implements List<T>, Serializable {
         if (comparator != null) {
             // Ensure that the new item is greater or equal to its
             // predecessor and less than or equal to its successor
-            T predecessorItem = null;
-            T successorItem = null;
+            T predecessor = null;
+            T successor = null;
 
             if (list instanceof RandomAccess) {
                 if (index > 0) {
-                    predecessorItem = list.get(index - 1);
+                    predecessor = list.get(index - 1);
                 }
 
                 if (index < getLength() - 1) {
-                    successorItem = list.get(index + 1);
+                    successor = list.get(index + 1);
                 }
             } else {
                 if (index == 0) {
                     // We're at the head of the list; successor is at index 1
-                    successorItem = list.get(1);
+                    successor = list.get(1);
                 } else {
                     ListIterator<T> listIterator = list.listIterator(index - 1);
 
                     // Get the predecessor
-                    predecessorItem = listIterator.next();
+                    predecessor = listIterator.next();
 
                     // Advance to the item being updated
                     listIterator.next();
 
                     // Get the successor if one exists
                     if (listIterator.hasNext()) {
-                        successorItem = listIterator.next();
+                        successor = listIterator.next();
                     }
                 }
             }
 
-            if ((predecessorItem != null
-                && comparator.compare(item, predecessorItem) == -1)
-                || (successorItem != null
-                && comparator.compare(item, successorItem) == 1)) {
+            if ((predecessor != null
+                    && comparator.compare(item, predecessor) == -1)
+                || (successor != null
+                        && comparator.compare(item, successor) == 1)) {
                 throw new IllegalArgumentException("Illegal item modification.");
             }
         }
@@ -136,8 +135,9 @@ public class ListAdapter<T> implements List<T>, Serializable {
 
             if (previousItem != item) {
                 list.set(index, item);
-                listListeners.itemUpdated(this, index, previousItem);
             }
+
+            listListeners.itemUpdated(this, index, previousItem);
         } else {
             ListIterator<T> listIterator = list.listIterator(index);
             previousItem = listIterator.next();
@@ -148,9 +148,9 @@ public class ListAdapter<T> implements List<T>, Serializable {
                 } catch (UnsupportedOperationException exception) {
                     list.set(index, item);
                 }
-
-                listListeners.itemUpdated(this, index, previousItem);
             }
+
+            listListeners.itemUpdated(this, index, previousItem);
         }
 
         return previousItem;
