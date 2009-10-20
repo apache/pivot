@@ -586,7 +586,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 setSize(width, height);
 
                 super.validate();
-                invalidateComponent();
             }
         }
 
@@ -1111,14 +1110,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
     @Override
     public int getPreferredWidth(int height) {
-        int preferredWidth;
-        if (documentView == null) {
-            preferredWidth = 0;
-        } else {
-            preferredWidth = documentView.getWidth() + margin.left + margin.right;
-        }
-
-        return preferredWidth;
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -1127,6 +1119,9 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         if (documentView == null) {
             preferredHeight = 0;
         } else {
+            documentView.setBreakWidth(Math.max(width - (margin.left + margin.right), 0));
+            documentView.validate();
+
             preferredHeight = documentView.getHeight() + margin.top + margin.bottom;
         }
 
@@ -1135,19 +1130,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
     @Override
     public Dimensions getPreferredSize() {
-        int preferredWidth;
-        int preferredHeight;
-
-        if (documentView == null) {
-            preferredWidth = 0;
-            preferredHeight = 0;
-        } else {
-            Dimensions preferredSize = documentView.getSize();
-            preferredWidth = preferredSize.width + (margin.left + margin.right);
-            preferredHeight = preferredSize.height + (margin.top + margin.bottom);
-        }
-
-        return new Dimensions(preferredWidth, preferredHeight);
+        throw new UnsupportedOperationException();
     }
 
     @Override
