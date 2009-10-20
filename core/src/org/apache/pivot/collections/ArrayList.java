@@ -571,8 +571,7 @@ public class ArrayList<T> implements List<T>, Serializable {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> int binarySearch(ArrayList<T> arrayList, T item,
-        final Comparator<T> comparator) {
+    public static <T> int binarySearch(ArrayList<T> arrayList, T item, Comparator<T> comparator) {
         if (arrayList == null
             || item == null
             || comparator == null) {

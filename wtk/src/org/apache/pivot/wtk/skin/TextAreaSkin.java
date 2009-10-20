@@ -21,13 +21,12 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.Shape;
 import java.awt.font.FontRenderContext;
-import java.awt.font.GlyphMetrics;
 import java.awt.font.GlyphVector;
 import java.awt.font.LineMetrics;
 import java.awt.geom.Rectangle2D;
 import java.text.CharacterIterator;
-import java.util.Comparator;
 import java.util.Iterator;
 
 import org.apache.pivot.collections.ArrayList;
@@ -248,86 +247,10 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
      */
     public abstract class ElementView extends NodeView
         implements Sequence<NodeView>, Iterable<NodeView>, ElementListener {
-        /**
-         * Null node view, used for binary searches.
-         */
-        private class NullNodeView extends NodeView {
-            private int offset;
-
-            public NullNodeView() {
-                super(null);
-            }
-
-            @Override
-            public int getOffset() {
-                return offset;
-            }
-
-            protected void setOffset(int offset) {
-                this.offset = offset;
-            }
-
-            @Override
-            public NodeView getNext() {
-                return null;
-            }
-
-            @Override
-            public int getCharacterAt(int x, int y) {
-                return -1;
-            }
-
-            @Override
-            public Bounds getCharacterBounds(int offset) {
-                return null;
-            }
-
-            @Override
-            public void paint(Graphics2D graphics) {
-                // No-op
-            }
-        }
-
-        /**
-         * Comparator used to perform binary searches on node views by location.
-         */
-        private class NodeViewLocationComparator implements Comparator<NodeView> {
-            @Override
-            public int compare(NodeView nodeView1, NodeView nodeView2) {
-                int x1 = nodeView1.getX();
-                int y1 = nodeView1.getY();
-
-                int x2 = nodeView2.getX();
-                int y2 = nodeView2.getY();
-
-                int width = (x2 - x1);
-
-                return (y1 * width + x1) - (y2 * width + x2);
-            }
-        }
-
-        /**
-         * Comparator used to perform binary searches on node views by offset.
-         */
-        private class NodeViewOffsetComparator implements Comparator<NodeView> {
-            @Override
-            public int compare(NodeView nodeView1, NodeView nodeView2) {
-                int offset1 = nodeView1.getOffset();
-                int offset2 = nodeView2.getOffset();
-
-                return (offset1 - offset2);
-            }
-        }
-
         private ArrayList<NodeView> nodeViews = new ArrayList<NodeView>();
-
-        private NullNodeView nullNodeView = new NullNodeView();
-        private NodeViewLocationComparator nodeViewLocationComparator = new NodeViewLocationComparator();
-        private NodeViewOffsetComparator nodeViewOffsetComparator = new NodeViewOffsetComparator();
 
         public ElementView(Element element) {
             super(element);
-
         }
 
         @Override
@@ -453,65 +376,48 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
         @Override
         public int getCharacterAt(int x, int y) {
-            // Get the index of the node view at x, y
-            nullNodeView.setLocation(x, y);
+            int offset = -1;
 
-            int i = ArrayList.binarySearch(nodeViews, nullNodeView,
-                nodeViewLocationComparator);
+            for (int i = 0, n = nodeViews.getLength(); i < n; i++) {
+                NodeView nodeView = nodeViews.get(i);
+                Bounds nodeViewBounds = nodeView.getBounds();
 
-            if (i < 0) {
-                i = -(i + 1) - 1;
-            }
-
-            // TODO i should never be less than 0 here? What about in getCharacterBounds()?
-            int offset;
-            if (i < 0) {
-                offset = -1;
-            } else {
-                if (i < nodeViews.getLength()) {
-                    NodeView nodeView = nodeViews.get(i);
-
-                    // Adjust the x and y values
-                    x -= nodeView.getX();
-                    y -= nodeView.getY();
-
-                    offset = nodeView.getCharacterAt(x, y);
-
-                    // Adjust the offset
+                if (nodeViewBounds.contains(x, y)) {
                     Node node = nodeView.getNode();
-                    offset += node.getOffset();
-                } else {
-                    // Return the character count of this node
-                    Node node = getNode();
-                    offset = node.getCharacterCount();
+                    offset = nodeView.getCharacterAt(x - nodeView.getX(), y - nodeView.getY())
+                        + node.getOffset();
+                    break;
                 }
             }
+
+            // TODO Return the node view length (not node character count), so we can
+            // append to the node?
 
             return offset;
         }
 
         @Override
         public Bounds getCharacterBounds(int offset) {
-            // Get the index of the node view at offset
-            nullNodeView.setOffset(offset);
+            Bounds characterBounds = null;
 
-            int i = ArrayList.binarySearch(nodeViews, nullNodeView,
-                nodeViewOffsetComparator);
-
-            if (i < 0) {
-                i = -(i + 1) - 1;
-            }
-
-            Bounds bounds = null;
-            if (i < nodeViews.getLength()) {
+            for (int i = 0, n = nodeViews.getLength(); i < n; i++) {
                 NodeView nodeView = nodeViews.get(i);
+                int nodeViewOffset = nodeView.getOffset();
 
-                offset -= nodeView.getOffset();
-                bounds = nodeView.getCharacterBounds(offset);
-                bounds = bounds.translate(nodeView.getX(), nodeView.getY());
+                // TODO This is wrong; we need to know the number of characters this view
+                // represents, not the length of its node
+                Node node = nodeView.getNode();
+                int characterCount = node.getCharacterCount();
+
+                if (offset >= nodeViewOffset
+                    && offset < nodeViewOffset + characterCount) {
+                    characterBounds = nodeView.getCharacterBounds(offset - nodeViewOffset);
+                    characterBounds = characterBounds.translate(nodeView.getX(), nodeView.getY());
+                    break;
+                }
             }
 
-            return bounds;
+            return characterBounds;
         }
 
         @Override
@@ -925,13 +831,15 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         public int getCharacterAt(int x, int y) {
             validate();
 
+            LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
+            float ascent = lm.getAscent();
+
             int n = glyphVector.getNumGlyphs();
             int i = 0;
 
             while (i < n) {
-                GlyphMetrics glyphMetrics = glyphVector.getGlyphMetrics(i++);
-                Rectangle2D bounds2D = glyphMetrics.getBounds2D();
-                if (bounds2D.contains(x, bounds2D.getY())) {
+                Shape glyphLogicalBounds = glyphVector.getGlyphLogicalBounds(i++);
+                if (glyphLogicalBounds.contains(x, y - ascent)) {
                     break;
                 }
             }
@@ -950,8 +858,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         public Bounds getCharacterBounds(int offset) {
             validate();
 
-            GlyphMetrics glyphMetrics = glyphVector.getGlyphMetrics(offset);
-            Rectangle2D bounds2D = glyphMetrics.getBounds2D();
+            Shape glyphLogicalBounds = glyphVector.getGlyphLogicalBounds(offset);
+            Rectangle2D bounds2D = glyphLogicalBounds.getBounds2D();
 
             return new Bounds(0, 0, (int)Math.ceil(bounds2D.getWidth()), getHeight());
         }
@@ -1065,8 +973,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
     private DocumentView documentView = null;
 
-    private static final FontRenderContext FONT_RENDER_CONTEXT = new FontRenderContext(null, true, true);
-
     private int caretX = 0;
     private Rectangle caret = new Rectangle();
     private boolean caretOn = false;
@@ -1078,6 +984,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     private Insets margin = new Insets(4);
 
     public static final int PARAGRAPH_TERMINATOR_WIDTH = 2;
+    private static final FontRenderContext FONT_RENDER_CONTEXT = new FontRenderContext(null, true, true);
 
     public TextAreaSkin() {
         Theme theme = Theme.getTheme();
