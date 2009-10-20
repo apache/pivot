@@ -348,7 +348,9 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             element.getElementListeners().remove(this);
 
             // Detach child node views
-            remove(0, getLength());
+            for (NodeView nodeView : this) {
+                nodeView.detach();
+            }
 
             super.detach();
         }
@@ -1145,7 +1147,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             documentView.setBreakWidth(Math.max(width - (margin.left + margin.right), 0));
             documentView.validate();
 
-            // TODO Why does this cause an exception?
             // updateSelectionBounds();
         }
     }
@@ -1267,19 +1268,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
 
         setMargin(Insets.decode(margin));
-    }
-
-    @Override
-    public void locationChanged(Component component, int previousX, int previousY) {
-        super.locationChanged(component, previousX, previousY);
-
-        // TODO Is there a better way to do this? We are trying to ensure that the newly
-        // visible area of the document is now valid.
-        if (documentView != null
-            && !documentView.isValid()
-            && component.getY() > previousY) {
-            invalidateComponent();
-        }
     }
 
     @Override
@@ -1407,7 +1395,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                     // TODO Modify selection based on SHIFT key
                     textArea.setSelection(offset, 0);
 
-                    // TODO Make sure we scroll the next view to visible
+                    // TODO Make sure we scroll the previous view to visible
 
                     consumed = true;
                 } else if (keyCode == Keyboard.KeyCode.DOWN) {
