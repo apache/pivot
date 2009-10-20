@@ -839,49 +839,46 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 int breakWidth = getBreakWidth();
                 CharacterIterator ci = textNode.getCharacterIterator(start);
 
-                if (breakWidth == 0) {
-                    glyphVector = font.createGlyphVector(FONT_RENDER_CONTEXT,
-                        textNode.getCharacterIterator(start));
-                    length = ci.getEndIndex() - start;
+                float lineWidth = 0;
+                int lastWhitespaceIndex = -1;
+
+                char c = ci.first();
+                while (c != CharacterIterator.DONE
+                    && lineWidth < breakWidth) {
+                    if (Character.isWhitespace(c)) {
+                        lastWhitespaceIndex = ci.getIndex();
+                    }
+
+                    int i = ci.getIndex();
+                    Rectangle2D characterBounds = font.getStringBounds(ci, i, i + 1,
+                        FONT_RENDER_CONTEXT);
+                    lineWidth += characterBounds.getWidth();
+
+                    c = ci.current();
+                }
+
+                int end;
+                if (lineWidth < breakWidth) {
+                    end = ci.getEndIndex();
                 } else {
-                    float lineWidth = 0;
-                    int lastWhitespaceIndex = -1;
-
-                    char c = ci.first();
-                    while (c != CharacterIterator.DONE
-                        && lineWidth < breakWidth) {
-                        if (Character.isWhitespace(c)) {
-                            lastWhitespaceIndex = ci.getIndex();
+                    if (lastWhitespaceIndex == -1) {
+                        end = ci.getIndex() - 1;
+                        if (end <= start) {
+                            end = start + 1;
                         }
-
-                        int i = ci.getIndex();
-                        Rectangle2D characterBounds = font.getStringBounds(ci, i, i + 1,
-                            FONT_RENDER_CONTEXT);
-                        lineWidth += characterBounds.getWidth();
-
-                        c = ci.current();
-                    }
-
-                    int end;
-                    if (lineWidth < breakWidth) {
-                        end = ci.getEndIndex();
                     } else {
-                        if (lastWhitespaceIndex == -1) {
-                            end = ci.getIndex();
-                        } else {
-                            end = lastWhitespaceIndex + 1;
-                        }
+                        end = lastWhitespaceIndex + 1;
                     }
+                }
 
-                    glyphVector = font.createGlyphVector(FONT_RENDER_CONTEXT,
-                        textNode.getCharacterIterator(start, end));
+                glyphVector = font.createGlyphVector(FONT_RENDER_CONTEXT,
+                    textNode.getCharacterIterator(start, end));
 
-                    if (end < ci.getEndIndex()) {
-                        length = end - start;
-                        next = new TextNodeView(textNode, end);
-                    } else {
-                        length = ci.getEndIndex() - start;
-                    }
+                if (end < ci.getEndIndex()) {
+                    length = end - start;
+                    next = new TextNodeView(textNode, end);
+                } else {
+                    length = ci.getEndIndex() - start;
                 }
 
                 Rectangle2D logicalBounds = glyphVector.getLogicalBounds();
