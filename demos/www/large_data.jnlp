@@ -18,7 +18,6 @@
  */
 %>
 
-<%-- @ page language="java" contentType="application/xml; charset=UTF-8" pageEncoding="UTF-8" --%> <%-- Enable this for Page Debugging purposes --%>
 <%@ page language="java" contentType="application/x-java-jnlp-file" pageEncoding="UTF-8" %>
 
 <%@ include file="version.jsp" %>
@@ -26,13 +25,13 @@
 
 <jnlp spec="1.6+" codebase="<%= codebase %>" href="<%= href %>">
     <information>
-        <title>Pivot Kitchen Sink Demo</title>
+        <title>Pivot Large Data Sets Demo</title>
         <vendor>Apache Pivot</vendor>
         <homepage href="http://incubator.apache.org/pivot/"/>
-        <description>Similar to Sun's "Swing Set" demo, this application demonstrates a number of commonly used Pivot components.</description>
-        <icon kind="shortcut" href="logo.png" width="32" height="32" />
+        <description>This application demonstrates Pivot's ability to handle large data sets. The application reads CSV files containing from 10 to 1,000,000 rows and reports the amount of time it takes to load each file. It loads the rows on a background thread using a streaming API such that rows can be presented to the user as they are read.</description>
+        <icon kind="shortcut" href="logo.png" />
         <offline-allowed/>
-        <shortcut online="true">
+        <shortcut online="false">
             <desktop/>
         </shortcut>
     </information>
@@ -41,16 +40,14 @@
 <%@ include file="jnlp_properties.jsp" %>
         <java version="1.6+" href="http://java.sun.com/products/autodl/j2se" />
 
-        <extension name="pivot-runtime" href="<%= codebase %>pivot-runtime.jnlp" />
+        <extension name="pivot-runtime" href="<%= codebase %>pivot-runtime.signed.jnlp" />
 
-        <jar href="lib/pivot-tutorials-<%= version %>.jar" main="true" />
+        <jar href="lib/pivot-demos-<%= version %>.jar" main="true" />
     </resources>
 
     <application-desc main-class="org.apache.pivot.wtk.DesktopApplicationContext">
-        <argument>org.apache.pivot.tutorials.KitchenSink</argument>
-        <argument>--width=800</argument>
-        <argument>--height=600</argument>
-        <argument>--center=true</argument>
+        <argument>org.apache.pivot.demos.million.LargeData</argument>
+        <argument>--basePath=<%= request.getContextPath()%>/assets</argument>
     </application-desc>
     
     <update check="background" />

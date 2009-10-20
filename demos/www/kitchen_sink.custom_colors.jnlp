@@ -42,11 +42,6 @@
 
     <resources>
 <%@ include file="jnlp_properties.jsp" %>
-
-        <property name="width"  value="800" />
-        <property name="height" value="600" />
-        <property name="center" value="true" />
-
         <property name="org.apache.pivot.wtk.skin.terra.location" value="org/apache/pivot/tutorials/TerraTheme_dark.json" />
 
         <java version="1.6+" href="http://java.sun.com/products/autodl/j2se" />
@@ -58,6 +53,9 @@
 
     <application-desc main-class="org.apache.pivot.wtk.DesktopApplicationContext">
         <argument>org.apache.pivot.tutorials.KitchenSink</argument>
+        <argument>--width=800</argument>
+        <argument>--height=600</argument>
+        <argument>--center=true</argument>
     </application-desc>
     
     <update check="background" />
