@@ -848,8 +848,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                     int lastWhitespaceIndex = -1;
 
                     char c = ci.first();
-                    while (lineWidth < breakWidth
-                        && c != CharacterIterator.DONE) {
+                    while (c != CharacterIterator.DONE
+                        && lineWidth < breakWidth) {
                         if (Character.isWhitespace(c)) {
                             lastWhitespaceIndex = ci.getIndex();
                         }
@@ -859,7 +859,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                             FONT_RENDER_CONTEXT);
                         lineWidth += characterBounds.getWidth();
 
-                        c = ci.setIndex(i + 1);
+                        c = ci.current();
                     }
 
                     int end;

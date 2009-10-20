@@ -27,6 +27,7 @@ import java.awt.font.GlyphVector;
 import java.awt.font.LineMetrics;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
+import java.text.StringCharacterIterator;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
@@ -221,8 +222,8 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
                             lastWhitespaceIndex = -1;
 
                             // Append the current line
-                            String line = text.substring(start, i);
-                            if (line.length() > 0) {
+                            if ((i - 1) - start > 0) {
+                                StringCharacterIterator line = new StringCharacterIterator(text, start, i, start);
                                 GlyphVector glyphVector = font.createGlyphVector(FONT_RENDER_CONTEXT, line);
                                 glyphVectors.add(glyphVector);
 
@@ -237,8 +238,8 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
                     }
 
                     // Append the final line
-                    String line = text.substring(start, i);
-                    if (line.length() > 0) {
+                    if ((i - 1) - start > 0) {
+                        StringCharacterIterator line = new StringCharacterIterator(text, start, i, start);
                         GlyphVector glyphVector = font.createGlyphVector(FONT_RENDER_CONTEXT, line);
                         glyphVectors.add(glyphVector);
 
