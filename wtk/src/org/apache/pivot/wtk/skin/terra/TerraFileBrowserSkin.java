@@ -305,7 +305,16 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             int result;
 
             if (columnName.equals("name")) {
-                result = file1.getName().compareToIgnoreCase(file2.getName());
+                boolean file1IsDirectory = file1.isDirectory();
+                boolean file2IsDirectory = file2.isDirectory();
+
+                if (file1IsDirectory && !file2IsDirectory) {
+                    result = -1;
+                } else if (!file1IsDirectory && file2IsDirectory) {
+                    result = 1;
+                } else {
+                    result = file1.getName().compareToIgnoreCase(file2.getName());
+                }
             } else if (columnName.equals("size")) {
                 result = Long.signum(file1.length() - file2.length());
             } else if (columnName.equals("lastModified")) {
