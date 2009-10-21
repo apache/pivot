@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.wtk;
 
+import java.awt.Toolkit;
 import java.io.IOException;
 
 import org.apache.pivot.collections.Dictionary;
@@ -370,7 +371,7 @@ public class TextInput extends Component {
 
             if (text != null) {
                 if ((text.length() + textNode.getCharacterCount()) > maximumLength) {
-                    ApplicationContext.beep();
+                    Toolkit.getDefaultToolkit().beep();
                 } else {
                     // Remove any existing selection
                     if (selectionLength > 0) {

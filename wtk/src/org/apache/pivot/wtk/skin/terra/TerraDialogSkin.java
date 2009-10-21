@@ -15,6 +15,8 @@
  */
 package org.apache.pivot.wtk.skin.terra;
 
+import java.awt.Toolkit;
+
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.ApplicationContext;
@@ -75,7 +77,7 @@ public class TerraDialogSkin extends TerraFrameSkin implements DialogStateListen
                 dialog.requestActive();
                 consumed = true;
 
-                ApplicationContext.beep();
+                Toolkit.getDefaultToolkit().beep();
             }
 
             return consumed;

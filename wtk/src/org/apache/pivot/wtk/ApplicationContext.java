@@ -17,12 +17,10 @@
 package org.apache.pivot.wtk;
 
 import java.awt.AWTEvent;
-import java.awt.Desktop;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.RenderingHints;
-import java.awt.Toolkit;
 import java.awt.Transparency;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DragGestureEvent;
@@ -42,7 +40,6 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -1525,39 +1522,6 @@ public abstract class ApplicationContext {
      */
     public static ResourceCacheDictionary getResourceCache() {
         return resourceCacheDictionary;
-    }
-
-    /**
-     * Opens the resource at the given location.
-     *
-     * @param location
-     */
-    public static void open(String location) throws MalformedURLException {
-        open(new URL(location));
-    }
-
-    /**
-     * Opens the resource at the given location.
-     *
-     * @param location
-     */
-    public static void open(URL location) {
-        Desktop desktop = Desktop.getDesktop();
-
-        try {
-            desktop.browse(location.toURI());
-        } catch(IOException exception) {
-            System.err.println("Unable to open URL in default browser: " + exception.getMessage());
-        } catch(URISyntaxException exception) {
-            System.err.println("Unable to open URL in default browser: " + exception.getMessage());
-        }
-    }
-
-    /**
-     * Issues a system alert sound.
-     */
-    public static void beep() {
-        Toolkit.getDefaultToolkit().beep();
     }
 
     /**

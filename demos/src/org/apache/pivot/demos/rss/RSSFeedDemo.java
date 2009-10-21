@@ -16,9 +16,11 @@
 package org.apache.pivot.demos.rss;
 
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Font;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Iterator;
 
@@ -38,7 +40,6 @@ import org.apache.pivot.util.concurrent.Task;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.util.concurrent.TaskListener;
 import org.apache.pivot.wtk.Application;
-import org.apache.pivot.wtk.BrowserApplicationContext;
 import org.apache.pivot.wtk.CardPane;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentMouseButtonListener;
@@ -208,10 +209,18 @@ public class RSSFeedDemo implements Application {
 
                 try {
                     String link = (String)xpath.evaluate("link", itemElement, XPathConstants.STRING);
-                    BrowserApplicationContext.open(new URL(link));
+                    Desktop desktop = Desktop.getDesktop();
+
+                    try {
+                        desktop.browse(new URL(link).toURI());
+                    } catch(MalformedURLException exception) {
+                        throw new RuntimeException(exception);
+                    } catch(URISyntaxException exception) {
+                        throw new RuntimeException(exception);
+                    } catch(IOException exception) {
+                        System.out.println("Unable to open " + link + " in default browser.");
+                    }
                 } catch(XPathExpressionException exception) {
-                    System.err.print(exception);
-                } catch(MalformedURLException exception) {
                     System.err.print(exception);
                 }
             }

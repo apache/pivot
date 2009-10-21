@@ -216,7 +216,14 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             }
         }
 
-        public abstract int getOffset();
+        public int getOffset() {
+            return node.getOffset();
+        }
+
+        public int getCharacterCount() {
+            return node.getCharacterCount();
+        }
+
         public abstract NodeView getNext();
         public abstract int getCharacterAt(int x, int y);
         public abstract Bounds getCharacterBounds(int offset);
@@ -370,11 +377,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
 
         @Override
-        public int getOffset() {
-            return getNode().getOffset();
-        }
-
-        @Override
         public int getCharacterAt(int x, int y) {
             int offset = -1;
 
@@ -390,9 +392,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 }
             }
 
-            // TODO Return the node view length (not node character count), so we can
-            // append to the node?
-
             return offset;
         }
 
@@ -403,11 +402,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             for (int i = 0, n = nodeViews.getLength(); i < n; i++) {
                 NodeView nodeView = nodeViews.get(i);
                 int nodeViewOffset = nodeView.getOffset();
-
-                // TODO This is wrong; we need to know the number of characters this view
-                // represents, not the length of its node
-                Node node = nodeView.getNode();
-                int characterCount = node.getCharacterCount();
+                int characterCount = nodeView.getCharacterCount();
 
                 if (offset >= nodeViewOffset
                     && offset < nodeViewOffset + characterCount) {
@@ -819,7 +814,12 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
         @Override
         public int getOffset() {
-            return getNode().getOffset() + start;
+            return super.getOffset() + start;
+        }
+
+        @Override
+        public int getCharacterCount() {
+            return length;
         }
 
         @Override
@@ -932,11 +932,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
 
         @Override
-        public int getOffset() {
-            return getNode().getOffset();
-        }
-
-        @Override
         public NodeView getNext() {
             return null;
         }
@@ -1019,13 +1014,15 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
     @Override
     public int getPreferredWidth(int height) {
-        throw new UnsupportedOperationException();
+        return 0;
     }
 
     @Override
     public int getPreferredHeight(int width) {
         int preferredHeight;
-        if (documentView == null) {
+
+        if (documentView == null
+            || width == -1) {
             preferredHeight = 0;
         } else {
             documentView.setBreakWidth(Math.max(width - (margin.left + margin.right), 0));
@@ -1039,7 +1036,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
     @Override
     public Dimensions getPreferredSize() {
-        throw new UnsupportedOperationException();
+        return new Dimensions(0, 0);
     }
 
     @Override

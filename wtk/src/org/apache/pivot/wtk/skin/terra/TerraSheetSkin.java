@@ -18,10 +18,10 @@ package org.apache.pivot.wtk.skin.terra;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Toolkit;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.util.Vote;
-import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentListener;
@@ -98,7 +98,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
                 owner.moveToFront();
                 consumed = true;
 
-                ApplicationContext.beep();
+                Toolkit.getDefaultToolkit().beep();
             }
 
             return consumed;

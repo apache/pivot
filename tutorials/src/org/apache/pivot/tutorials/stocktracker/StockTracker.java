@@ -16,7 +16,10 @@
  */
 package org.apache.pivot.tutorials.stocktracker;
 
+import java.awt.Desktop;
+import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.util.Comparator;
@@ -188,9 +191,17 @@ public class StockTracker implements Application {
         yahooFinanceButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {
+                Desktop desktop = Desktop.getDesktop();
+
                 try {
-                    ApplicationContext.open(new URL(YAHOO_FINANCE_HOME));
+                    desktop.browse(new URL(YAHOO_FINANCE_HOME).toURI());
                 } catch(MalformedURLException exception) {
+                    throw new RuntimeException(exception);
+                } catch(URISyntaxException exception) {
+                    throw new RuntimeException(exception);
+                } catch(IOException exception) {
+                    System.out.println("Unable to open "
+                        + YAHOO_FINANCE_HOME + " in default browser.");
                 }
             }
         });

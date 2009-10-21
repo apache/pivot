@@ -22,6 +22,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Shape;
+import java.awt.Toolkit;
 import java.awt.font.FontRenderContext;
 import java.awt.font.LineMetrics;
 import java.awt.font.TextHitInfo;
@@ -957,13 +958,13 @@ public class TerraTextInputSkin extends ComponentSkin
                     if (validator.isValid(buf.toString())) {
                         textInput.insertText(character, index);
                     } else {
-                        ApplicationContext.beep();
+                        Toolkit.getDefaultToolkit().beep();
                     }
                 } else {
                     textInput.insertText(character, index);
                 }
             } else {
-                ApplicationContext.beep();
+                Toolkit.getDefaultToolkit().beep();
             }
         }
 
@@ -1009,7 +1010,7 @@ public class TerraTextInputSkin extends ComponentSkin
                 if (validator.isValid(buf.toString())) {
                     textInput.delete(direction);
                 } else {
-                    ApplicationContext.beep();
+                    Toolkit.getDefaultToolkit().beep();
                 }
             } else {
                 textInput.delete(direction);
@@ -1119,7 +1120,7 @@ public class TerraTextInputSkin extends ComponentSkin
             consumed = true;
 
             if (textInput.isPassword()) {
-                ApplicationContext.beep();
+                Toolkit.getDefaultToolkit().beep();
             } else {
                 textInput.cut();
             }
@@ -1128,7 +1129,7 @@ public class TerraTextInputSkin extends ComponentSkin
             consumed = true;
 
             if (textInput.isPassword()) {
-                ApplicationContext.beep();
+                Toolkit.getDefaultToolkit().beep();
             } else {
                 textInput.copy();
             }
