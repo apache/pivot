@@ -385,9 +385,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 Bounds nodeViewBounds = nodeView.getBounds();
 
                 if (nodeViewBounds.contains(x, y)) {
-                    Node node = nodeView.getNode();
                     offset = nodeView.getCharacterAt(x - nodeView.getX(), y - nodeView.getY())
-                        + node.getOffset();
+                        + nodeView.getOffset();
                     break;
                 }
             }
@@ -527,7 +526,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         @Override
         public void invalidate() {
             super.invalidate();
-
             terminatorBounds = null;
         }
 
@@ -590,10 +588,9 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 // Clear all existing views
                 remove(0, getLength());
 
-                // Add the row views to this view, lay out, and calculate size
-                int width = 0;
+                // Add the row views to this view, lay out, and calculate height
+                int x = 0;
                 int height = 0;
-
                 for (int i = 0, n = rows.getLength(); i < n; i++) {
                     row = rows.get(i);
 
@@ -603,7 +600,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                         rowHeight = Math.max(rowHeight, nodeView.getHeight());
                     }
 
-                    int x = 0;
+                    x = 0;
                     for (NodeView nodeView : row) {
                         // TODO Align to baseline
                         int y = rowHeight - nodeView.getHeight();
@@ -614,30 +611,19 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                         add(nodeView);
                     }
 
-                    width = Math.max(width, x);
                     height += rowHeight;
                 }
 
                 // Recalculate terminator bounds
                 LineMetrics lm = font.getLineMetrics("", 0, 0, FONT_RENDER_CONTEXT);
-                terminatorBounds = new Bounds(0, 0, PARAGRAPH_TERMINATOR_WIDTH,
-                    (int)Math.ceil(lm.getHeight()));
+                terminatorBounds = new Bounds(x, 0, 0, (int)Math.ceil(lm.getHeight()));
 
-                int n = getLength();
-                if (n > 0) {
-                    NodeView lastNodeView = get(n - 1);
-                    terminatorBounds = new Bounds(lastNodeView.getX() + lastNodeView.getWidth(),
-                        lastNodeView.getY(), terminatorBounds.width, terminatorBounds.height);
-                }
-
-                // Ensure that the paragraph is at least as large as the
-                // terminator, so it still has space even when empty
-                width = Math.max(width, terminatorBounds.width);
+                // Ensure that the paragraph is visible even when empty
                 height = Math.max(height, terminatorBounds.height);
 
                 // TODO Don't hard-code padding; use the value specified
                 // by the Paragraph
-                setSize(width, height + 2);
+                setSize(breakWidth, height + 2);
             }
 
             super.validate();
@@ -647,14 +633,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         public void paint(Graphics2D graphics) {
             super.paint(graphics);
 
-            // TODO Make this styleable
-            /*
-            Paragraph paragraph = (Paragraph)getNode();
-            Bounds terminatorBounds = getCharacterBounds(paragraph.getCharacterCount() - 1);
-            graphics.setColor(Color.RED);
-            graphics.fillRect(terminatorBounds.x, terminatorBounds.y,
-                terminatorBounds.width, terminatorBounds.height);
-            */
+            // TODO Paint the terminator character (make this styleable)
         }
 
         @Override
@@ -664,15 +643,10 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
         @Override
         public int getCharacterAt(int x, int y) {
-            Paragraph paragraph = (Paragraph)getNode();
-            int terminatorOffset = paragraph.getCharacterCount() - 1;
-            Bounds terminatorBounds = getCharacterBounds(terminatorOffset);
+            int offset = super.getCharacterAt(x, y);
 
-            int offset;
-            if (terminatorBounds.contains(x, y)) {
-                offset = terminatorOffset;
-            } else {
-                offset = super.getCharacterAt(x, y);
+            if (offset == -1) {
+                offset = getCharacterCount() - 1;
             }
 
             return offset;
@@ -684,7 +658,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
             Paragraph paragraph = (Paragraph)getNode();
             if (offset == paragraph.getCharacterCount() - 1) {
-                bounds = new Bounds(terminatorBounds);
+                bounds = terminatorBounds;
             } else {
                 bounds = super.getCharacterBounds(offset);
             }
@@ -842,15 +816,17 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             int i = 0;
 
             while (i < n) {
-                Shape glyphLogicalBounds = glyphVector.getGlyphLogicalBounds(i++);
+                Shape glyphLogicalBounds = glyphVector.getGlyphLogicalBounds(i);
                 if (glyphLogicalBounds.contains(x, y - ascent)) {
                     break;
                 }
+
+                i++;
             }
 
             int offset;
             if (i < n) {
-                offset = i + start;
+                offset = i;
             } else {
                 offset = -1;
             }
@@ -865,7 +841,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             Shape glyphLogicalBounds = glyphVector.getGlyphLogicalBounds(offset);
             Rectangle2D bounds2D = glyphLogicalBounds.getBounds2D();
 
-            return new Bounds((int)bounds2D.getX(), 0,
+            return new Bounds((int)Math.floor(bounds2D.getX()), 0,
                 (int)Math.ceil(bounds2D.getWidth()), getHeight());
         }
 
@@ -1062,8 +1038,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             int selectionStart = textArea.getSelectionStart();
             Bounds startCharacterBounds = getCharacterBounds(selectionStart);
 
-            caret.x = startCharacterBounds.x;
-            caret.y = startCharacterBounds.y;
+            caret.x = startCharacterBounds.x - margin.left;
+            caret.y = startCharacterBounds.y - margin.top;
             caret.width = 1;
             caret.height = startCharacterBounds.height;
         }
@@ -1090,14 +1066,32 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
     @Override
     public int getCharacterAt(int x, int y) {
-        return (documentView == null) ?
-            -1 : documentView.getCharacterAt(x - margin.left, y - margin.top);
+        int offset;
+
+        if (documentView == null) {
+            offset = -1;
+        } else {
+            offset = documentView.getCharacterAt(x - margin.left, y - margin.top);
+        }
+
+        return offset;
     }
 
     @Override
     public Bounds getCharacterBounds(int offset) {
-        return (documentView == null) ?
-            null : documentView.getCharacterBounds(offset);
+        Bounds characterBounds;
+
+        if (documentView == null) {
+            characterBounds = null;
+        } else {
+            characterBounds = documentView.getCharacterBounds(offset);
+
+            if (characterBounds != null) {
+                characterBounds = characterBounds.translate(margin.left, margin.top);
+            }
+        }
+
+        return characterBounds;
     }
 
     public Font getFont() {
@@ -1177,7 +1171,15 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         if (button == Mouse.Button.LEFT) {
             // Move the caret to the insertion point
             int offset = getCharacterAt(x, y);
+
             if (offset != -1) {
+                Bounds characterBounds = getCharacterBounds(offset);
+                if (!characterBounds.isEmpty()
+                    && x - characterBounds.x > characterBounds.width / 2) {
+                    // The user clicked on the right half of the character; select offset + 1
+                    offset++;
+                }
+
                 textArea.setSelection(offset, 0);
             }
 
@@ -1395,8 +1397,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 // Determine the new caret bounds
                 Bounds startCharacterBounds = getCharacterBounds(selectionStart);
 
-                caret.x = startCharacterBounds.x;
-                caret.y = startCharacterBounds.y;
+                caret.x = startCharacterBounds.x - margin.left;
+                caret.y = startCharacterBounds.y - margin.top;
                 caret.width = 1;
                 caret.height = startCharacterBounds.height;
 

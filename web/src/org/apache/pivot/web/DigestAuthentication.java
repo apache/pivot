@@ -192,6 +192,7 @@ public class DigestAuthentication implements Authentication {
      *
      * @return main data in a formed string
      */
+    @Override
     public String toString() {
         StringBuffer result = new StringBuffer();
 
