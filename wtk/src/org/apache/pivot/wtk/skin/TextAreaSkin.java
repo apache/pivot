@@ -941,8 +941,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             caretOn = !caretOn;
 
             TextArea textArea = (TextArea)getComponent();
-            textArea.repaint(caret.x + margin.left, caret.y + margin.top,
-                caret.width, caret.height, true);
+            textArea.repaint(caret.x, caret.y, caret.width, caret.height, true);
         }
     }
 
@@ -983,7 +982,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             documentView = (DocumentView)createNodeView(document);
             documentView.attach();
 
-            // TODO Initialize selection state
+            // TODO Initialize caret/selection state
         }
     }
 
@@ -1028,20 +1027,11 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     @Override
     public void layout() {
         if (documentView != null) {
-            TextArea textArea = (TextArea)getComponent();
-
             int width = getWidth();
             documentView.setBreakWidth(Math.max(width - (margin.left + margin.right), 0));
             documentView.validate();
 
-            // TODO There is some code duplication here with selectionChanged()
-            int selectionStart = textArea.getSelectionStart();
-            Bounds startCharacterBounds = getCharacterBounds(selectionStart);
-
-            caret.x = startCharacterBounds.x - margin.left;
-            caret.y = startCharacterBounds.y - margin.top;
-            caret.width = 1;
-            caret.height = startCharacterBounds.height;
+            updateCaretBounds();
         }
     }
 
@@ -1052,6 +1042,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
             graphics.translate(margin.left, margin.top);
             documentView.paint(graphics);
+            graphics.translate(-margin.left, -margin.top);
 
             // TODO Paint selection state
 
@@ -1291,22 +1282,26 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
                     consumed = true;
                 } else if (keyCode == Keyboard.KeyCode.UP) {
-                    // TODO We shouldn't need a "magic" number like 2 here
-                    int offset = documentView.getCharacterAt(caretX, caret.y - 2);
+                    // TODO We shouldn't need a "magic" number like 5 here; don't use the caret
+                    // bounds, but instead use the current selection bounds?
+                    int offset = documentView.getCharacterAt(caretX, caret.y - 5);
 
                     // TODO Modify selection based on SHIFT key
                     textArea.setSelection(offset, 0);
 
-                    // TODO Make sure we scroll the previous view to visible
+                    Bounds characterBounds = getCharacterBounds(offset);
+                    component.scrollAreaToVisible(0, characterBounds.y, getWidth(), characterBounds.height);
 
                     consumed = true;
                 } else if (keyCode == Keyboard.KeyCode.DOWN) {
+                    // TODO Don't use the caret bounds, but instead use the current selection bounds?
                     int offset = documentView.getCharacterAt(caretX, caret.y + caret.height + 1);
 
                     // TODO Modify selection based on SHIFT key
                     textArea.setSelection(offset, 0);
 
-                    // TODO Make sure we scroll the next view to visible
+                    Bounds characterBounds = getCharacterBounds(offset);
+                    component.scrollAreaToVisible(0, characterBounds.y, getWidth(), characterBounds.height);
 
                     consumed = true;
                 } else if (Keyboard.isPressed(commandModifier)) {
@@ -1386,22 +1381,11 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         int previousSelectionLength) {
         if (documentView != null
             && documentView.isValid()) {
-            int selectionStart = textArea.getSelectionStart();
-            int selectionLength = textArea.getSelectionLength();
-
-            if (selectionLength == 0) {
+            if (textArea.getSelectionLength() == 0) {
                 // Repaint the previous caret bounds
-                textArea.repaint(caret.x + margin.left, caret.y + margin.top,
-                    caret.width, caret.height);
+                textArea.repaint(caret.x, caret.y, caret.width, caret.height);
 
-                // Determine the new caret bounds
-                Bounds startCharacterBounds = getCharacterBounds(selectionStart);
-
-                caret.x = startCharacterBounds.x - margin.left;
-                caret.y = startCharacterBounds.y - margin.top;
-                caret.width = 1;
-                caret.height = startCharacterBounds.height;
-
+                updateCaretBounds();
                 showCaret(textArea.isFocused());
             } else {
                 // TODO
@@ -1428,6 +1412,18 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
 
         return nodeView;
+    }
+
+    private void updateCaretBounds() {
+        TextArea textArea = (TextArea)getComponent();
+
+        int selectionStart = textArea.getSelectionStart();
+        Bounds startCharacterBounds = getCharacterBounds(selectionStart);
+
+        caret.x = startCharacterBounds.x;
+        caret.y = startCharacterBounds.y;
+        caret.width = 1;
+        caret.height = startCharacterBounds.height;
     }
 
     private void showCaret(boolean show) {
