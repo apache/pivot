@@ -407,7 +407,11 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 if (offset >= nodeViewOffset
                     && offset < nodeViewOffset + characterCount) {
                     characterBounds = nodeView.getCharacterBounds(offset - nodeViewOffset);
-                    characterBounds = characterBounds.translate(nodeView.getX(), nodeView.getY());
+
+                    if (characterBounds != null) {
+                        characterBounds = characterBounds.translate(nodeView.getX(), nodeView.getY());
+                    }
+
                     break;
                 }
             }
@@ -861,7 +865,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             Shape glyphLogicalBounds = glyphVector.getGlyphLogicalBounds(offset);
             Rectangle2D bounds2D = glyphLogicalBounds.getBounds2D();
 
-            return new Bounds(0, 0, (int)Math.ceil(bounds2D.getWidth()), getHeight());
+            return new Bounds((int)bounds2D.getX(), 0,
+                (int)Math.ceil(bounds2D.getWidth()), getHeight());
         }
 
         @Override
@@ -1001,9 +1006,9 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         if (document != null) {
             documentView = (DocumentView)createNodeView(document);
             documentView.attach();
-        }
 
-        selectionChanged(textArea, 0, 0);
+            // TODO Initialize selection state
+        }
     }
 
     @Override
@@ -1047,11 +1052,20 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     @Override
     public void layout() {
         if (documentView != null) {
+            TextArea textArea = (TextArea)getComponent();
+
             int width = getWidth();
             documentView.setBreakWidth(Math.max(width - (margin.left + margin.right), 0));
             documentView.validate();
 
-            // updateSelectionBounds();
+            // TODO There is some code duplication here with selectionChanged()
+            int selectionStart = textArea.getSelectionStart();
+            Bounds startCharacterBounds = getCharacterBounds(selectionStart);
+
+            caret.x = startCharacterBounds.x;
+            caret.y = startCharacterBounds.y;
+            caret.width = 1;
+            caret.height = startCharacterBounds.height;
         }
     }
 
@@ -1060,10 +1074,10 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         if (documentView != null) {
             TextArea textArea = (TextArea)getComponent();
 
-            // TODO Paint selection state here, or in view classes?
-
             graphics.translate(margin.left, margin.top);
             documentView.paint(graphics);
+
+            // TODO Paint selection state
 
             if (textArea.getSelectionLength() == 0
                 && textArea.isFocused()
@@ -1084,24 +1098,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     public Bounds getCharacterBounds(int offset) {
         return (documentView == null) ?
             null : documentView.getCharacterBounds(offset);
-    }
-
-    private void showCaret(boolean show) {
-        if (show) {
-            if (scheduledBlinkCursorCallback == null) {
-                scheduledBlinkCursorCallback =
-                    ApplicationContext.scheduleRecurringCallback(blinkCursorCallback,
-                        Platform.getCursorBlinkRate());
-
-                // Run the callback once now to show the cursor immediately
-                blinkCursorCallback.run();
-            }
-        } else {
-            if (scheduledBlinkCursorCallback != null) {
-                scheduledBlinkCursorCallback.cancel();
-                scheduledBlinkCursorCallback = null;
-            }
-        }
     }
 
     public Font getFont() {
@@ -1386,28 +1382,30 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     @Override
     public void selectionChanged(TextArea textArea, int previousSelectionStart,
         int previousSelectionLength) {
-        if (textArea.getDocument() != null) {
-            updateSelectionBounds();
-
-            showCaret(textArea.isFocused()
-                && textArea.getSelectionLength() == 0);
-
-            repaintComponent();
-        }
-    }
-
-    private void updateSelectionBounds() {
-        if (documentView.isValid()) {
-            TextArea textArea = (TextArea)getComponent();
-
+        if (documentView != null
+            && documentView.isValid()) {
             int selectionStart = textArea.getSelectionStart();
+            int selectionLength = textArea.getSelectionLength();
 
-            Bounds startCharacterBounds = getCharacterBounds(selectionStart);
+            if (selectionLength == 0) {
+                // Repaint the previous caret bounds
+                textArea.repaint(caret.x + margin.left, caret.y + margin.top,
+                    caret.width, caret.height);
 
-            caret.x = startCharacterBounds.x;
-            caret.y = startCharacterBounds.y;
-            caret.width = 1;
-            caret.height = startCharacterBounds.height;
+                // Determine the new caret bounds
+                Bounds startCharacterBounds = getCharacterBounds(selectionStart);
+
+                caret.x = startCharacterBounds.x;
+                caret.y = startCharacterBounds.y;
+                caret.width = 1;
+                caret.height = startCharacterBounds.height;
+
+                showCaret(textArea.isFocused());
+            } else {
+                // TODO
+
+                showCaret(false);
+            }
         }
     }
 
@@ -1428,5 +1426,23 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
 
         return nodeView;
+    }
+
+    private void showCaret(boolean show) {
+        if (show) {
+            if (scheduledBlinkCursorCallback == null) {
+                scheduledBlinkCursorCallback =
+                    ApplicationContext.scheduleRecurringCallback(blinkCursorCallback,
+                        Platform.getCursorBlinkRate());
+
+                // Run the callback once now to show the cursor immediately
+                blinkCursorCallback.run();
+            }
+        } else {
+            if (scheduledBlinkCursorCallback != null) {
+                scheduledBlinkCursorCallback.cancel();
+                scheduledBlinkCursorCallback = null;
+            }
+        }
     }
 }
