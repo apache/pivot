@@ -30,31 +30,31 @@ import org.apache.pivot.util.concurrent.TaskExecutionException;
  * Implementation of the {@link Authentication} interface supporting the
  * HTTP <a href="http://tools.ietf.org/rfc/rfc2617.txt">Digest Authentication</a> scheme.
  * <br/>
- * Portions of code here are taken from Apache Tomcat, and from Apache Commons HTTP Client. 
+ * Portions of code here are taken from Apache Tomcat, and from Apache Commons HTTP Client.
  *
  * TODO:
- *   
- *   - important: 
+ *
+ *   - important:
  *     -- make first query call from here ...
- *     
+ *
  *     -- verify if/how to cache the right authorization, one time done ...
  *     -- verify if/how to reuse MessageDigest ...
  *     -- see what FindBugs say ...
  *
  *   - verify at URL change if/how to recalculate values ...
- *   
+ *
  *   - verify how to reuse the authorization data (if already authenticated) ...
  *   - verify if/how to handle the nonce count, for queries after the first ...
  *   - verify if this works also with proxy ... and the same also for Basic Authentication
- *   
+ *
  *   - in the future:
  *     -- verify if this works with redirects, proxy, etc ...
  *     -- verify if implement also the algorithm "MD5-sess"
  *     -- verify if implement also the algorithm for SHA1
  *     -- verify in case of Single-Sign-On (SSO) if this is working ...
- *     -- verify if make also an implementation (in other classes) 
+ *     -- verify if make also an implementation (in other classes)
  *        of SSLAuthentication and JAASAuthentication ...
- * 
+ *
  * @see DigestAuthenticator and related classes from Tomcat 6 sources
  * @see DigestScheme and related classes from HTTPCommons 3.1 sources
  */
@@ -96,7 +96,7 @@ public class DigestAuthentication implements Authentication {
     protected static final String PRIVATE_KEY = "Pivot";
 
     private static final String EMPTY_STRING = "";
-    
+
     /** The username */
     private String username;
 
@@ -115,7 +115,7 @@ public class DigestAuthentication implements Authentication {
 
     /**
      * Default constructor.
-     * 
+     *
      * @deprecated Do not use. Null user name or Null Password are no longer
      * allowed.
      */
@@ -125,7 +125,7 @@ public class DigestAuthentication implements Authentication {
 
     /**
      * The constructor with the username and password arguments.
-     * 
+     *
      * @param username the user name
      * @param password the password
      */
@@ -136,7 +136,7 @@ public class DigestAuthentication implements Authentication {
     /**
      * The constructor with the username, password, and other invariant
      * arguments.
-     * 
+     *
      * @param username the user name
      * @param password the password
      * @param algorithm the algorithm to use (if null, the default will be used)
@@ -162,7 +162,7 @@ public class DigestAuthentication implements Authentication {
 
     /**
      * Return the User Name property.
-     * 
+     *
      * @return the username
      */
     public String getUsername() {
@@ -171,7 +171,7 @@ public class DigestAuthentication implements Authentication {
 
     /**
      * Return the Password property.
-     * 
+     *
      * @return the password
      */
     public String getPassword() {
@@ -180,7 +180,7 @@ public class DigestAuthentication implements Authentication {
 
     /**
      * Return the message digest algorithm for this Manager.
-     * 
+     *
      * @return the algorithm
      */
     public String getAlgorithm() {
@@ -189,7 +189,7 @@ public class DigestAuthentication implements Authentication {
 
     /**
      * Get this object string.
-     * 
+     *
      * @return main data in a formed string
      */
     public String toString() {
@@ -210,7 +210,7 @@ public class DigestAuthentication implements Authentication {
 
     /**
      * Returns the (digest) encoding charset.
-     * 
+     *
      * @return The charset (may be null) for platform default
      */
     public String getDigestEncoding() {
@@ -219,7 +219,7 @@ public class DigestAuthentication implements Authentication {
 
     /**
      * Set the (digest) encoding to use.
-     * 
+     *
      * @param encoding The encoding to use, or if null a default will be used
      */
     private void setDigestEncoding(String encoding) {
@@ -238,7 +238,7 @@ public class DigestAuthentication implements Authentication {
 
     /**
      * Returns the IP Address of the given Host.
-     * 
+     *
      * @param hostName the host name, or if null the local host will be used
      * @return the ID Address, as a String
      */
@@ -268,7 +268,7 @@ public class DigestAuthentication implements Authentication {
 
     /**
      * Authenticate
-     * 
+     *
      * @param query The Query
      */
     public void authenticate(Query<?> query) {
@@ -350,7 +350,7 @@ public class DigestAuthentication implements Authentication {
             }
 
             String opaque = responseAuthenticateHeaderMap.get("opaque");
-            String response = calculateResponse(username, realmName, 
+            String response = calculateResponse(username, realmName,
                 nOnce, nonce_count, cnonce, qop, method, uri);
 
             StringBuffer authenticateHeader = new StringBuffer(512);
@@ -406,7 +406,7 @@ public class DigestAuthentication implements Authentication {
      * Return the digested response (only this field) value to put in the reply
      * authentication header, as described in RFC 2069; otherwise return
      * <code>null</code>.
-     * 
+     *
      * @param username Username of the Principal to look up
      * @param realm Realm name
      * @param nOnce Unique (or supposedly unique) token which has been used for
@@ -466,7 +466,7 @@ public class DigestAuthentication implements Authentication {
     /**
      * Removes the quotes on a string. RFC2617 states quotes are optional for
      * all parameters except realm.
-     * 
+     *
      * @param quotedString The string with enclosing quotes
      * @param quotesRequired If quotes are required on the previous parameter
      */
@@ -483,7 +483,7 @@ public class DigestAuthentication implements Authentication {
 
     /**
      * Removes the quotes on a string.
-     * 
+     *
      * @param quotedString The string with enclosing quotes
      */
     protected static String removeQuotes(String quotedString) {
@@ -496,7 +496,7 @@ public class DigestAuthentication implements Authentication {
      * without authentication or without successful authentication). Note that
      * some of these info are required to construct other fields for the
      * following reply.
-     * 
+     *
      * @param authorizationHeader the authorization info returned from the
      * Server.
      * @return a Map of key / value, both Strings
@@ -592,7 +592,7 @@ public class DigestAuthentication implements Authentication {
      * Generate a unique token. The token is generated according to the
      * following pattern: uniqueToken = Base64 ( MD5 ( client-IP ":" time-stamp
      * ":" private-key ) ).
-     * 
+     *
      * @param clientIP the IP address of the Client, as a String
      * @param privateKey the private key, as a String
      * @param digest the MessageDigest to use
@@ -629,7 +629,7 @@ public class DigestAuthentication implements Authentication {
 
     /**
      * Creates a random value based on the current time.
-     * 
+     *
      * @return The calculated value as aString, or null if an error occurs
      */
     public String generateRandomValue() {
@@ -641,7 +641,7 @@ public class DigestAuthentication implements Authentication {
 
     /**
      * Return the digest associated with given user name and realm.
-     * 
+     *
      * @param algorithm The algorithm to use
      * @param username Username of the Principal to look up
      * @param realm Realm name
@@ -669,7 +669,7 @@ public class DigestAuthentication implements Authentication {
 
     /**
      * Return the digest associated with given method and uri.
-     * 
+     *
      * @param method The HTTP method
      * @param uri The URI of the query
      */
@@ -696,7 +696,7 @@ public class DigestAuthentication implements Authentication {
      * Digest the given string using the algorithm specified and convert the
      * result to a corresponding hex string. If exception, the plain credentials
      * string is returned
-     * 
+     *
      * @param value the (input) value to digest
      * @param algorithm Algorithm used to do the digest
      * @param encoding Character encoding of the string to digest

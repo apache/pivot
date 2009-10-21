@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,8 +23,8 @@ import java.io.UnsupportedEncodingException;
  * Library of utility methods useful in dealing with converting byte arrays
  * to and from strings of hexadecimal digits.
  * <br/>
- * Portions of code here are taken from Apache Tomcat. 
- *  
+ * Portions of code here are taken from Apache Tomcat.
+ *
  * @see org.apache.catalina.util.HexUtils;
  */
 public final class HexUtils {
@@ -54,7 +54,7 @@ public final class HexUtils {
     /**
      * Convert a String of hexadecimal digits into the corresponding byte array
      * by encoding each two hexadecimal digits as a byte.
-     * 
+     *
      * @param digits Hexadecimal digits representation
      * @exception IllegalArgumentException if an invalid hexadecimal digit is
      * found, or the input string contains an odd number of hexadecimal digits
@@ -105,7 +105,7 @@ public final class HexUtils {
     /**
      * Convert a byte array into a printable format containing a String of
      * hexadecimal digit characters (two per byte).
-     * 
+     *
      * @param bytes Byte array representation
      */
     public static String convert(byte bytes[]) {
@@ -120,7 +120,7 @@ public final class HexUtils {
 
     /**
      * Convert 4 hex digits to an int, and return the number of converted bytes.
-     * 
+     *
      * @param hex Byte array containing exactly four hexadecimal digits
      * @exception IllegalArgumentException if an invalid hexadecimal digit is
      * included
@@ -158,7 +158,7 @@ public final class HexUtils {
     /**
      * [Private] Convert the specified value (0 .. 15) to the corresponding
      * hexadecimal digit.
-     * 
+     *
      * @param value Value to be converted
      */
     private static char convertDigit(int value) {
@@ -175,7 +175,7 @@ public final class HexUtils {
 
     /**
      * Given a String and the encoding, returns it as a byte array.
-     * 
+     *
      * @param string the string
      * @param encoding the encoding, or if null a default will be used
      * @return the string transformed to byte array

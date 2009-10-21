@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,7 +27,7 @@ import java.security.NoSuchAlgorithmException;
  * Each character of the String is the hexadecimal representation of 4 bits
  * of the digest.
  * <br/>
- * Portions of code here are taken from Apache Tomcat. 
+ * Portions of code here are taken from Apache Tomcat.
  *
  * @see org.apache.catalina.util.MD5Encoder
  */
@@ -45,7 +45,7 @@ public final class MD5 {
     /**
      * Retrieves a byte sequence representing the MD5 digest of the specified
      * byte sequence. Note that any Exception is handled inside.
-     * 
+     *
      * @param data the data to digest.
      * @return the MD5 digest as an array of 16 bytes.
      */
@@ -78,7 +78,7 @@ public final class MD5 {
     /**
      * Transform the given string in a byte array, using the given encoding.
      * Note that any Exception is handled inside.
-     * 
+     *
      * @param string the string
      * @param encoding the encoding, or if null a default will be used
      * @return the string transformed to byte array
@@ -98,7 +98,7 @@ public final class MD5 {
     public static boolean isEqual(byte[] digesta, byte[] digestb) {
         // Two arrays are equal if they have the same length and each element
         // is equal to the corresponding element in the other array;
-        // otherwise, they’re not.
+        // otherwise, theyï¿½re not.
 
         if (digesta == null || digestb == null) {
             return false;
@@ -119,7 +119,7 @@ public final class MD5 {
 
     /**
      * Encodes the 128 bit (16 bytes) MD5 into a 32 character String.
-     * 
+     *
      * @param binaryData The Array containing the digest
      * @return Encoded MD5, or null if encoding failed
      */
@@ -143,7 +143,7 @@ public final class MD5 {
 
     /**
      * Decodes the specified base64 string back into its raw data.
-     * 
+     *
      * @param encodedData The MD5 encoded string.
      */
     public static final byte[] decode(String encodedData) {

@@ -37,13 +37,13 @@ import org.junit.Test;
  * <br/>
  * To Run these tests, a local instance of Apache must be started and
  * configured with the required resources (dir /public , and dir /protected
- * protected with basic authentication) and files. 
- * Then, before to run these tests, ensure basic authentication has been 
- * successfully setup asking the same URLs from a Web Browser. 
- * 
- * TODO: 
+ * protected with basic authentication) and files.
+ * Then, before to run these tests, ensure basic authentication has been
+ * successfully setup asking the same URLs from a Web Browser.
+ *
+ * TODO:
  *   - test other HTTP methods ...
- * 
+ *
  */
 public class WebQueryTestClientBasic {
     final static String HOSTNAME = "localhost";

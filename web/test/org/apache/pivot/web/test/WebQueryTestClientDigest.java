@@ -37,17 +37,17 @@ import org.junit.Test;
  * <br/>
  * To Run these tests, a local instance of Apache must be started and configured with
  * the required resources ( dir /public , and dir /protected_digest protected with digest authentication) and files.
- * Before to run these tests, ensure digest authentication has been successfully setup 
+ * Before to run these tests, ensure digest authentication has been successfully setup
  * asking the same URLs from a Web Browser.
  * See the file WebQueryTestClientDigest.README for further info.
  *
  * TODO:
  *   - test other HTTP methods ...
- * 
+ *
  *   - in the future, verify if make a new Demo for accessing (digest etc) protected data,
- *     as a Pivot Application, giving all the parameters 
+ *     as a Pivot Application, giving all the parameters
  *     (username, password, url, auth method, http method, etc) from the GUI ...
- *   
+ *
  */
 public class WebQueryTestClientDigest {
     final static String HOSTNAME = "localhost";
