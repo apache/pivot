@@ -119,6 +119,7 @@ public class DigestAuthentication implements Authentication {
      * @deprecated Do not use. Null user name or Null Password are no longer
      * allowed.
      */
+    @Deprecated
     public DigestAuthentication() {
         this(null, null, null, null);
     }
