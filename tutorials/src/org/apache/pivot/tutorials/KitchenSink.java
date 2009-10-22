@@ -17,7 +17,6 @@
 package org.apache.pivot.tutorials;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -81,7 +80,6 @@ import org.apache.pivot.wtk.content.TableViewRowComparator;
 import org.apache.pivot.wtk.content.TreeBranch;
 import org.apache.pivot.wtk.content.TreeNode;
 import org.apache.pivot.wtk.effects.ReflectionDecorator;
-import org.apache.pivot.wtk.effects.WatermarkDecorator;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.text.Document;
 import org.apache.pivot.wtk.text.PlainTextSerializer;
@@ -210,12 +208,6 @@ public class KitchenSink implements Application, Application.AboutHandler {
                 }
 
                 textArea.setDocument(document);
-
-                final WatermarkDecorator watermarkDecorator = new WatermarkDecorator("Preview");
-                watermarkDecorator.setOpacity(0.1f);
-                watermarkDecorator.setFont(watermarkDecorator.getFont().deriveFont(Font.BOLD, 24));
-
-                textArea.getDecorators().add(watermarkDecorator);
             }
 
             return Vote.APPROVE;

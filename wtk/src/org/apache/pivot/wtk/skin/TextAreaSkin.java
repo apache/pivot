@@ -1203,6 +1203,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 if (character > 0x1F
                     && character != 0x7F) {
                     textArea.insertText(character);
+                    showCaret(true);
                 }
             }
         }
@@ -1282,8 +1283,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
                     consumed = true;
                 } else if (keyCode == Keyboard.KeyCode.UP) {
-                    // TODO We shouldn't need a "magic" number like 5 here; don't use the caret
-                    // bounds, but instead use the current selection bounds?
+                    // TODO We shouldn't need a "magic" number like 5 here; what is a more
+                    // reliable way to do this?
                     int offset = documentView.getCharacterAt(caretX, caret.y - 5);
 
                     // TODO Modify selection based on SHIFT key
@@ -1294,7 +1295,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
                     consumed = true;
                 } else if (keyCode == Keyboard.KeyCode.DOWN) {
-                    // TODO Don't use the caret bounds, but instead use the current selection bounds?
+                    // TODO What is a more reliable way to do this?
                     int offset = documentView.getCharacterAt(caretX, caret.y + caret.height + 1);
 
                     // TODO Modify selection based on SHIFT key
@@ -1388,7 +1389,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 updateCaretBounds();
                 showCaret(textArea.isFocused());
             } else {
-                // TODO
+                // TODO Call updateCaretBounds() (renamed to updateSelectionBounds()?)
 
                 showCaret(false);
             }
@@ -1432,10 +1433,10 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 scheduledBlinkCursorCallback =
                     ApplicationContext.scheduleRecurringCallback(blinkCursorCallback,
                         Platform.getCursorBlinkRate());
-
-                // Run the callback once now to show the cursor immediately
-                blinkCursorCallback.run();
             }
+
+            // Run the callback once now to show the cursor immediately
+            blinkCursorCallback.run();
         } else {
             if (scheduledBlinkCursorCallback != null) {
                 scheduledBlinkCursorCallback.cancel();
