@@ -18,9 +18,9 @@ limitations under the License.
 <html>
 <head>
 <title>Pivot Demos - Web Start</title>
-<link rel="stylesheet" href="demo.css"/>
-<link rel="icon" href="favicon.ico"/>
-<link rel="shortcut icon" href="favicon.ico"/>
+<link rel="stylesheet" href="demo.css" />
+<link rel="icon" href="favicon.png" type="image/png" />
+<link rel="shortcut icon" href="favicon.png" type="image/png" />
 <style>
 body {
     font-family:Verdana;
