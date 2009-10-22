@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<TablePane styles="{horizontalSpacing:6}"
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:content="org.apache.pivot.wtk.content"
+    xmlns="org.apache.pivot.wtk">
+    <componentListeners>
+        <wtkx:script>
+        <![CDATA[
+        function parentChanged(component, previousParent) {
+            selectModeListButton.setSelectedIndex(1);
+        }
+        ]]>
+        </wtkx:script>
+    </componentListeners>
+
+    <columns>
+        <TablePane.Column width="1*"/>
+        <TablePane.Column/>
+    </columns>
+    <rows>
+      <TablePane.Row height="1*">
+          <Border>
+              <content>
+                  <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
+                      <view>
+                          <TreeView wtkx:id="treeView">
+                              <nodeRenderer>
+                                  <content:TreeViewNodeRenderer showIcon="true"/>
+                              </nodeRenderer>
+                              <treeData>
+                                  <content:TreeBranch>
+                                      <content:TreeBranch text="Activity" icon="@folder.png">
+                                          <content:TreeBranch text="Games" icon="@folder.png">
+                                              <content:TreeNode text="Foosball" icon="@page_white.png"/>
+                                          </content:TreeBranch>
+                                      </content:TreeBranch>
+                                  </content:TreeBranch>
+                              </treeData>
+                          </TreeView>
+                      </view>
+                  </ScrollPane>
+              </content>
+          </Border>
+          <Border>
+              <content>
+                  <BoxPane orientation="vertical" styles="{fill:true,
+                      horizontalAlignment:'right'}">
+                      <Label text="Properties"
+                          styles="{padding:{left:10, top:5}, font:{bold:true}}"/>
+                      <BoxPane orientation="vertical"
+                          styles="{horizontalAlignment:'right', padding:{left:10}}">
+                          <Form styles="{horizontalSpacing:18, rightAlignLabels:true}">
+                              <sections>
+                                  <Form.Section>
+                                      <ListButton wtkx:id="selectModeListButton"
+                                          Form.label="Select Mode"
+                                          listData="['None', 'Single', 'Multi']">
+                                          <listButtonSelectionListeners>
+                                              <wtkx:script>
+                                              <![CDATA[
+                                              function selectedIndexChanged(listButton, previousSelectedIndex) {
+                                                  treeView.setSelectMode(listButton.getSelectedItem());
+                                              }
+                                              ]]>
+                                              </wtkx:script>
+                                          </listButtonSelectionListeners>
+                                      </ListButton>
+                                      <BoxPane Form.label="Flags" orientation="vertical"
+                                          styles="{spacing:10}">
+                                          <Checkbox buttonData="Checkmarks Enabled">
+                                              <buttonStateListeners>
+                                                  <wtkx:script>
+                                                  <![CDATA[
+                                                  function stateChanged(button, previousState) {
+                                                      treeView.setCheckmarksEnabled(button.isSelected());
+                                                  }
+                                                  ]]>
+                                                  </wtkx:script>
+                                              </buttonStateListeners>
+                                          </Checkbox>
+                                          <Checkbox buttonData="Show Mixed Checkmark State">
+                                              <buttonStateListeners>
+                                                  <wtkx:script>
+                                                  <![CDATA[
+                                                  function stateChanged(button, previousState) {
+                                                      treeView.setShowMixedCheckmarkState(button.isSelected());
+                                                  }
+                                                  ]]>
+                                                  </wtkx:script>
+                                              </buttonStateListeners>
+                                          </Checkbox>
+                                      </BoxPane>
+                                  </Form.Section>
+                              </sections>
+                          </Form>
+                      </BoxPane>
+                      <Separator/>
+                      <Label text="Styles" styles="{padding:{left:10}, font:{bold:true}}"/>
+                      <BoxPane orientation="vertical"
+                          styles="{horizontalAlignment:'right'}">
+                          <Form styles="{horizontalSpacing:18, rightAlignLabels:true}">
+                              <sections>
+                                  <Form.Section>
+                                  </Form.Section>
+                              </sections>
+                          </Form>
+                      </BoxPane>
+                  </BoxPane>
+              </content>
+          </Border>
+      </TablePane.Row>
+    </rows>
+</TablePane>
