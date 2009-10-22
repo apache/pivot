@@ -565,7 +565,8 @@ public abstract class ApplicationContext {
             return dropDescendant;
         }
 
-        private void startNativeDrag(final DragSource dragSource, final MouseEvent mouseEvent) {
+        private void startNativeDrag(final DragSource dragSource, final Component dragDescendant,
+            final MouseEvent mouseEvent) {
             java.awt.dnd.DragSource awtDragSource = java.awt.dnd.DragSource.getDefaultDragSource();
 
             final int supportedDropActions = dragSource.getSupportedDropActions();
@@ -649,6 +650,7 @@ public abstract class ApplicationContext {
                 public void dragDropEnd(DragSourceDropEvent event) {
                     DragSourceContext context = event.getDragSourceContext();
                     context.setCursor(java.awt.Cursor.getDefaultCursor());
+                    dragSource.endDrag(dragDescendant, getDropAction(event.getDropAction()));
                 }
             });
         }
@@ -968,15 +970,17 @@ public abstract class ApplicationContext {
                                             DragSource dragSource = dragDescendant.getDragSource();
                                             dragLocation = dragDescendant.mapPointFromAncestor(display, x, y);
 
-                                            if (dragSource.beginDrag(dragDescendant, dragLocation.x, dragLocation.y)) {
+                                            if (dragSource.beginDrag(dragDescendant,
+                                                dragLocation.x, dragLocation.y)) {
                                                 // A drag has started
                                                 if (dragSource.isNative()) {
+                                                    startNativeDrag(dragSource, dragDescendant,
+                                                        event);
+
                                                     // Clear the drag state since it is not used for
                                                     // native drags
                                                     dragDescendant = null;
                                                     dragLocation = null;
-
-                                                    startNativeDrag(dragSource, event);
                                                 } else {
                                                     if (dragSource.getRepresentation() != null
                                                         && dragSource.getOffset() == null) {
