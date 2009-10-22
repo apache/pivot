@@ -139,10 +139,10 @@ limitations under the License.
                                                     </collections:ArrayList>
                                                 </listData>
                                                 <dataRenderer>
-                                                    <content:ListButtonColorRenderer/>
+                                                    <content:ListButtonColorItemRenderer/>
                                                 </dataRenderer>
                                                 <itemRenderer>
-                                                    <content:ListViewColorRenderer/>
+                                                    <content:ListViewColorItemRenderer/>
                                                 </itemRenderer>
                                                 <listButtonSelectionListeners>
                                                     <wtkx:script>
@@ -174,10 +174,10 @@ limitations under the License.
                                                     </collections:ArrayList>
                                                 </listData>
                                                 <dataRenderer>
-                                                    <content:ListButtonColorRenderer/>
+                                                    <content:ListButtonColorItemRenderer/>
                                                 </dataRenderer>
                                                 <itemRenderer>
-                                                    <content:ListViewColorRenderer/>
+                                                    <content:ListViewColorItemRenderer/>
                                                 </itemRenderer>
                                                 <listButtonSelectionListeners>
                                                     <wtkx:script>

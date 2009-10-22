@@ -25,12 +25,12 @@ import org.apache.pivot.wtk.ImageView;
 /**
  * List button renderer for displaying color swatches.
  */
-public class ListButtonColorRenderer extends ImageView
+public class ListButtonColorItemRenderer extends ImageView
     implements Button.DataRenderer {
-    private ListViewColorRenderer.ColorBadge colorBadge =
-        new ListViewColorRenderer.ColorBadge();
+    private ListViewColorItemRenderer.ColorBadge colorBadge =
+        new ListViewColorItemRenderer.ColorBadge();
 
-    public ListButtonColorRenderer() {
+    public ListButtonColorItemRenderer() {
         setImage(colorBadge);
     }
 

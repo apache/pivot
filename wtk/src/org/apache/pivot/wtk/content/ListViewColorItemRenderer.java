@@ -23,11 +23,10 @@ import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.media.Image;
 
-
 /**
  * List view renderer for displaying color swatches.
  */
-public class ListViewColorRenderer extends ListViewItemRenderer {
+public class ListViewColorItemRenderer extends ListViewItemRenderer {
     /**
      * Internal image class for rendering color swatches.
      */
@@ -67,7 +66,7 @@ public class ListViewColorRenderer extends ListViewItemRenderer {
     private ColorBadge colorBadge = new ColorBadge();
     private ListItem listItem = new ListItem(colorBadge);
 
-    public ListViewColorRenderer() {
+    public ListViewColorItemRenderer() {
         setShowIcon(true);
     }
 
