@@ -53,7 +53,7 @@ public class TextArea extends Component {
          * @return
          * The character offset at the given location.
          */
-        public int getCharacterAt(int x, int y);
+        public int getInsertionPoint(int x, int y);
 
         /**
          * Returns the bounds of the character at a given offset within the
@@ -574,9 +574,9 @@ public class TextArea extends Component {
         // TODO
     }
 
-    public int getCharacterAt(int x, int y) {
+    public int getInsertionPoint(int x, int y) {
         TextArea.Skin textAreaSkin = (TextArea.Skin)getSkin();
-        return textAreaSkin.getCharacterAt(x, y);
+        return textAreaSkin.getInsertionPoint(x, y);
     }
 
     public Bounds getCharacterBounds(int offset) {

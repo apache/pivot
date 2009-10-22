@@ -225,7 +225,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
 
         public abstract NodeView getNext();
-        public abstract int getCharacterAt(int x, int y);
+        public abstract int getInsertionPoint(int x, int y);
         public abstract Bounds getCharacterBounds(int offset);
 
         @Override
@@ -377,24 +377,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
 
         @Override
-        public int getCharacterAt(int x, int y) {
-            int offset = -1;
-
-            for (int i = 0, n = nodeViews.getLength(); i < n; i++) {
-                NodeView nodeView = nodeViews.get(i);
-                Bounds nodeViewBounds = nodeView.getBounds();
-
-                if (nodeViewBounds.contains(x, y)) {
-                    offset = nodeView.getCharacterAt(x - nodeView.getX(), y - nodeView.getY())
-                        + nodeView.getOffset();
-                    break;
-                }
-            }
-
-            return offset;
-        }
-
-        @Override
         public Bounds getCharacterBounds(int offset) {
             Bounds characterBounds = null;
 
@@ -493,6 +475,24 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
                 super.validate();
             }
+        }
+
+        @Override
+        public int getInsertionPoint(int x, int y) {
+            int offset = -1;
+
+            for (int i = 0, n = getLength(); i < n; i++) {
+                NodeView nodeView = get(i);
+                Bounds nodeViewBounds = nodeView.getBounds();
+
+                if (nodeViewBounds.contains(x, y)) {
+                    offset = nodeView.getInsertionPoint(x - nodeView.getX(), y - nodeView.getY())
+                        + nodeView.getOffset();
+                    break;
+                }
+            }
+
+            return offset;
         }
 
         @Override
@@ -630,20 +630,25 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
 
         @Override
-        public void paint(Graphics2D graphics) {
-            super.paint(graphics);
-
-            // TODO Paint the terminator character (make this styleable)
-        }
-
-        @Override
         public NodeView getNext() {
             return null;
         }
 
         @Override
-        public int getCharacterAt(int x, int y) {
-            int offset = super.getCharacterAt(x, y);
+        public int getInsertionPoint(int x, int y) {
+            // TODO Use row bounds to determine insertion point
+            int offset = -1;
+
+            for (int i = 0, n = getLength(); i < n; i++) {
+                NodeView nodeView = get(i);
+                Bounds nodeViewBounds = nodeView.getBounds();
+
+                if (nodeViewBounds.contains(x, y)) {
+                    offset = nodeView.getInsertionPoint(x - nodeView.getX(), y - nodeView.getY())
+                        + nodeView.getOffset();
+                    break;
+                }
+            }
 
             if (offset == -1) {
                 offset = getCharacterCount() - 1;
@@ -806,7 +811,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
 
         @Override
-        public int getCharacterAt(int x, int y) {
+        public int getInsertionPoint(int x, int y) {
             validate();
 
             LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
@@ -817,21 +822,23 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
             while (i < n) {
                 Shape glyphLogicalBounds = glyphVector.getGlyphLogicalBounds(i);
+
                 if (glyphLogicalBounds.contains(x, y - ascent)) {
+                    Rectangle2D glyphLogicalBounds2D = glyphLogicalBounds.getBounds2D();
+
+                    if (x - glyphLogicalBounds2D.getX() > glyphLogicalBounds2D.getWidth() / 2) {
+                        // The user clicked on the right half of the character; select
+                        // the next character
+                        i++;
+                    }
+
                     break;
                 }
 
                 i++;
             }
 
-            int offset;
-            if (i < n) {
-                offset = i;
-            } else {
-                offset = -1;
-            }
-
-            return offset;
+            return i;
         }
 
         @Override
@@ -918,7 +925,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
 
         @Override
-        public int getCharacterAt(int x, int y) {
+        public int getInsertionPoint(int x, int y) {
             return 0;
         }
 
@@ -1056,13 +1063,13 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     }
 
     @Override
-    public int getCharacterAt(int x, int y) {
+    public int getInsertionPoint(int x, int y) {
         int offset;
 
         if (documentView == null) {
             offset = -1;
         } else {
-            offset = documentView.getCharacterAt(x - margin.left, y - margin.top);
+            offset = documentView.getInsertionPoint(x - margin.left, y - margin.top);
         }
 
         return offset;
@@ -1161,16 +1168,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
         if (button == Mouse.Button.LEFT) {
             // Move the caret to the insertion point
-            int offset = getCharacterAt(x, y);
-
+            int offset = getInsertionPoint(x, y);
             if (offset != -1) {
-                Bounds characterBounds = getCharacterBounds(offset);
-                if (!characterBounds.isEmpty()
-                    && x - characterBounds.x > characterBounds.width / 2) {
-                    // The user clicked on the right half of the character; select offset + 1
-                    offset++;
-                }
-
                 textArea.setSelection(offset, 0);
             }
 
@@ -1283,9 +1282,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
                     consumed = true;
                 } else if (keyCode == Keyboard.KeyCode.UP) {
-                    // TODO We shouldn't need a "magic" number like 5 here; what is a more
-                    // reliable way to do this?
-                    int offset = documentView.getCharacterAt(caretX, caret.y - 5);
+                    // TODO Use getInsertionPoint(int, int, Direction) to determine the next index
+                    int offset = documentView.getInsertionPoint(caretX, caret.y - 5);
 
                     // TODO Modify selection based on SHIFT key
                     textArea.setSelection(offset, 0);
@@ -1295,8 +1293,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
                     consumed = true;
                 } else if (keyCode == Keyboard.KeyCode.DOWN) {
-                    // TODO What is a more reliable way to do this?
-                    int offset = documentView.getCharacterAt(caretX, caret.y + caret.height + 1);
+                    // TODO Use getInsertionPoint(int, int, Direction) to determine the next index
+                    int offset = documentView.getInsertionPoint(caretX, caret.y + caret.height + 1);
 
                     // TODO Modify selection based on SHIFT key
                     textArea.setSelection(offset, 0);

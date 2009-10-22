@@ -131,8 +131,8 @@ public final class MD5 {
         char[] buffer = new char[MD5_DIGEST_LENTGH_IN_BYTES * 2];
 
         for (int i = 0; i < MD5_DIGEST_LENTGH_IN_BYTES; i++) {
-            int low = (int) (binaryData[i] & 0x0f);
-            int high = (int) ((binaryData[i] & 0xf0) >> 4);
+            int low = binaryData[i] & 0x0f;
+            int high = (binaryData[i] & 0xf0) >> 4;
 
             buffer[i * 2] = HexUtils.hexadecimal[high];
             buffer[i * 2 + 1] = HexUtils.hexadecimal[low];
