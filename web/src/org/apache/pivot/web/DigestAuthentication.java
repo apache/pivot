@@ -33,27 +33,12 @@ import org.apache.pivot.util.concurrent.TaskExecutionException;
  * Portions of code here are taken from Apache Tomcat, and from Apache Commons HTTP Client.
  *
  * TODO:
- *
- *   - important:
- *     -- make first query call from here ...
- *
- *     -- verify if/how to cache the right authorization, one time done ...
- *     -- verify if/how to reuse MessageDigest ...
- *     -- see what FindBugs say ...
- *
- *   - verify at URL change if/how to recalculate values ...
- *
  *   - verify how to reuse the authorization data (if already authenticated) ...
  *   - verify if/how to handle the nonce count, for queries after the first ...
- *   - verify if this works also with proxy ... and the same also for Basic Authentication
  *
- *   - in the future:
+ *   - future work:
  *     -- verify if this works with redirects, proxy, etc ...
  *     -- verify if implement also the algorithm "MD5-sess"
- *     -- verify if implement also the algorithm for SHA1
- *     -- verify in case of Single-Sign-On (SSO) if this is working ...
- *     -- verify if make also an implementation (in other classes)
- *        of SSLAuthentication and JAASAuthentication ...
  *
  * @see DigestAuthenticator and related classes from Tomcat 6 sources
  * @see DigestScheme and related classes from HTTPCommons 3.1 sources
@@ -235,7 +220,7 @@ public class DigestAuthentication implements Authentication {
         // charset = "ISO-8859-1";
 
         this.encoding = charset;
-        // log("charset = \"" + charset + "\"");
+        // System.out.println("charset = \"" + charset + "\"");
     }
 
     /**
@@ -278,7 +263,7 @@ public class DigestAuthentication implements Authentication {
         try {
             String responseAuthenticateHeader = query.getResponseHeaders().get(
                 HTTP_RESPONSE_AUTHENTICATE_HEADER_KEY);
-// log("responseAuthenticateHeader " +
+// System.out.println("responseAuthenticateHeader " +
 // HTTP_RESPONSE_AUTHENTICATE_HEADER_KEY + " = \n" +
 // responseAuthenticateHeader + "\n");
             if (responseAuthenticateHeader == null) {
@@ -294,7 +279,7 @@ public class DigestAuthentication implements Authentication {
 
                 responseAuthenticateHeader = query.getResponseHeaders().get(
                     HTTP_RESPONSE_AUTHENTICATE_HEADER_KEY);
-// log("responseAuthenticateHeader " +
+// System.out.println("responseAuthenticateHeader " +
 // HTTP_RESPONSE_AUTHENTICATE_HEADER_KEY + " = \n" +
 // responseAuthenticateHeader + "\n");
                 if (responseAuthenticateHeader == null) {
@@ -393,7 +378,7 @@ public class DigestAuthentication implements Authentication {
                 authenticateHeader.append("\"");
             }
 
-// log("authenticateHeader " + HTTP_REPLY_AUTHENTICATE_HEADER_KEY +
+// System.out.println("authenticateHeader " + HTTP_REPLY_AUTHENTICATE_HEADER_KEY +
 // " = \n" + authenticateHeader.toString() + "\n");
 
             query.getRequestHeaders().put(HTTP_REPLY_AUTHENTICATE_HEADER_KEY,
@@ -426,13 +411,13 @@ public class DigestAuthentication implements Authentication {
         String response = null;
 
         String md5a1 = getDigestUsernameAndRealm(getAlgorithm(), username, realm);
-        // log("md5a1 = \"" + md5a1 + "\"");
+        // System.out.println("md5a1 = \"" + md5a1 + "\"");
         if (md5a1 == null) {
             return null;
         }
 
         String md5a2 = getDigestMethodAndUri(qop, method, uri);
-        // log("md5a2 = \"" + md5a2 + "\"");
+        // System.out.println("md5a2 = \"" + md5a2 + "\"");
         if (md5a2 == null) {
             return null;
         }
@@ -456,10 +441,10 @@ public class DigestAuthentication implements Authentication {
         sbCompleteValue.append(md5a2);
 
         String a3 = sbCompleteValue.toString();
-// log("a3 = \"" + a3 + "\"");
+// System.out.println("a3 = \"" + a3 + "\"");
         byte[] digestBytes = MD5.digest(a3, getDigestEncoding());
         String md5a3 = MD5.encode(digestBytes);
-// log("md5a3 = \"" + md5a3 + "\"");
+// System.out.println("md5a3 = \"" + md5a3 + "\"");
 
         response = md5a3;
         return response;
@@ -504,7 +489,7 @@ public class DigestAuthentication implements Authentication {
      * @return a Map of key / value, both Strings
      */
     protected static Map<String, String> splitAuthenticationHeader(String authorizationHeader) {
-// log("Authorization header: " + authorizationHeader);
+// System.out.println("Authorization header: " + authorizationHeader);
         Map<String, String> map = new HashMap<String, String>();
 
         // Validate the authorization credentials format
@@ -542,7 +527,7 @@ public class DigestAuthentication implements Authentication {
 
             String currentTokenName = currentToken.substring(0, equalSign).trim();
             String currentTokenValue = currentToken.substring(equalSign + 1).trim();
-// log("tokens[" + i + "]: currentTokenName = \"" + currentTokenName
+// System.out.println("tokens[" + i + "]: currentTokenName = \"" + currentTokenName
 // + "\", currentTokenValue = \"" + currentTokenValue + "\"");
 
             if (AUTH_FIELD_KEY_USERNAME.equals(currentTokenName)) {
@@ -575,19 +560,18 @@ public class DigestAuthentication implements Authentication {
                 response = removeQuotes(currentTokenValue);
                 map.put(AUTH_FIELD_KEY_RESPONSE, response);
             } else {
-// log("Unknown token name: \"" + currentTokenName + "\"");
+// System.out.println("Unknown token name: \"" + currentTokenName + "\"");
                 map.put(currentTokenName, currentTokenValue);
             }
 
         }
 
         if ((realmName == null) || (nOnce == null)) {
-// log("One of the mandatory fields is null , returning an empty map");
+// System.out.println("One of the mandatory fields is null , returning an empty map");
             return new HashMap<String, String>();
-        } else {
-            return map;
         }
 
+        return map;
     }
 
     /**
@@ -663,7 +647,7 @@ public class DigestAuthentication implements Authentication {
         } else {
             a1 = "";
         }
-// log("a1 = \"" + a1 + "\"");
+// System.out.println("a1 = \"" + a1 + "\"");
 
         byte[] digestBytes = MD5.digest(a1, getDigestEncoding());
         return MD5.encode(digestBytes);
@@ -688,7 +672,7 @@ public class DigestAuthentication implements Authentication {
             a2 = ""; // dummy, to avoid NPE ...
             throw new RuntimeException("not supported qop value: \"" + qop + "\"");
         }
-// log("a2 = \"" + a2 + "\"");
+// System.out.println("a2 = \"" + a2 + "\"");
 
         byte[] digestBytes = MD5.digest(a2, getDigestEncoding());
         return MD5.encode(digestBytes);
@@ -725,11 +709,5 @@ public class DigestAuthentication implements Authentication {
         }
 
     }
-
-// /** Utility method, mainly for debugging purposes */
-// protected void log(String msg)
-// {
-// System.out.println(msg);
-// }
 
 }

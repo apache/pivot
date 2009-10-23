@@ -98,7 +98,7 @@ public final class MD5 {
     public static boolean isEqual(byte[] digesta, byte[] digestb) {
         // Two arrays are equal if they have the same length and each element
         // is equal to the corresponding element in the other array;
-        // otherwise, they�re not.
+        // otherwise, they aren't.
 
         if (digesta == null || digestb == null) {
             return false;

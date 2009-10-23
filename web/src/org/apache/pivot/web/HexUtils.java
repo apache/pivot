@@ -167,10 +167,8 @@ public final class HexUtils {
         if (value >= 10) {
             return ((char) (value - 10 + 'a'));
         }
-        else {
-            return ((char) (value + '0'));
-        }
 
+        return ((char) (value + '0'));
     }
 
     /**
