@@ -50,6 +50,7 @@ import org.apache.pivot.wtk.TextAreaSelectionListener;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Visual;
 import org.apache.pivot.wtk.media.Image;
+import org.apache.pivot.wtk.media.ImageListener;
 import org.apache.pivot.wtk.text.Document;
 import org.apache.pivot.wtk.text.Element;
 import org.apache.pivot.wtk.text.ElementListener;
@@ -750,55 +751,60 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             int offset = -1;
 
             int n = rows.getLength();
-            int i;
-            if (from == -1) {
-                i = (direction == Direction.FORWARD) ? -1 : rows.getLength();
+            if (n == 0
+                && from == -1) {
+                offset = 0;
             } else {
-                // Find the row that contains offset
-                if (from == getCharacterCount() - 1) {
-                    i = rows.getLength() - 1;
+                int i;
+                if (from == -1) {
+                    i = (direction == Direction.FORWARD) ? -1 : rows.getLength();
                 } else {
-                    i = 0;
-                    while (i < n) {
-                        Row row = rows.get(i);
-                        NodeView firstNodeView = row.nodeViews.get(0);
-                        NodeView lastNodeView = row.nodeViews.get(row.nodeViews.getLength() - 1);
-                        if (from >= firstNodeView.getOffset()
-                            && from < lastNodeView.getOffset() + lastNodeView.getCharacterCount()) {
+                    // Find the row that contains offset
+                    if (from == getCharacterCount() - 1) {
+                        i = rows.getLength() - 1;
+                    } else {
+                        i = 0;
+                        while (i < n) {
+                            Row row = rows.get(i);
+                            NodeView firstNodeView = row.nodeViews.get(0);
+                            NodeView lastNodeView = row.nodeViews.get(row.nodeViews.getLength() - 1);
+                            if (from >= firstNodeView.getOffset()
+                                && from < lastNodeView.getOffset() + lastNodeView.getCharacterCount()) {
+                                break;
+                            }
+
+                            i++;
+                        }
+                    }
+                }
+
+                // Move to the next or previous row
+                if (direction == Direction.FORWARD) {
+                    i++;
+                } else {
+                    i--;
+                }
+
+                if (i >= 0
+                    && i < n) {
+                    // Find the node view that contains x and get the insertion point from it
+                    Row row = rows.get(i);
+
+                    for (NodeView nodeView : row.nodeViews) {
+                        Bounds bounds = nodeView.getBounds();
+                        if (x >= bounds.x
+                            && x < bounds.x + bounds.width) {
+                            offset = nodeView.getNextInsertionPoint(x - nodeView.getX(), -1, direction)
+                                + nodeView.getOffset();
                             break;
                         }
-
-                        i++;
                     }
-                }
-            }
 
-            // Move to the next or previous row
-            if (direction == Direction.FORWARD) {
-                i++;
-            } else {
-                i--;
-            }
-
-            if (i >= 0
-                && i < n) {
-                // Find the node view that contains x and get the insertion point from it
-                Row row = rows.get(i);
-
-                for (NodeView nodeView : row.nodeViews) {
-                    Bounds bounds = nodeView.getBounds();
-                    if (x >= bounds.x
-                        && x < bounds.x + bounds.width) {
-                        offset = nodeView.getNextInsertionPoint(x - nodeView.getX(), -1, direction)
-                            + nodeView.getOffset();
-                        break;
+                    if (offset == -1) {
+                        // No node view contained the x position; move to the end of the row
+                        NodeView lastNodeView = row.nodeViews.get(row.nodeViews.getLength() - 1);
+                        offset = lastNodeView.getOffset() + lastNodeView.getCharacterCount();
                     }
-                }
-
-                if (offset == -1) {
-                    // No node view contained the x position; move to the end of the row
-                    NodeView lastNodeView = row.nodeViews.get(row.nodeViews.getLength() - 1);
-                    offset = lastNodeView.getOffset() + lastNodeView.getCharacterCount();
                 }
             }
 
@@ -1046,7 +1052,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
     }
 
-    public class ImageNodeView extends NodeView implements ImageNodeListener {
+    public class ImageNodeView extends NodeView implements ImageNodeListener, ImageListener {
         public ImageNodeView(ImageNode imageNode) {
             super(imageNode);
         }
@@ -1058,7 +1064,10 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             ImageNode imageNode = (ImageNode)getNode();
             imageNode.getImageNodeListeners().add(this);
 
-            // TODO Add image listener so we can invalidate as needed
+            Image image = imageNode.getImage();
+            if (image != null) {
+                image.getImageListeners().add(this);
+            }
         }
 
         @Override
@@ -1119,7 +1128,22 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         public void imageChanged(ImageNode imageNode, Image previousImage) {
             invalidate();
 
-            // TODO Attach/detach image listener
+            Image image = imageNode.getImage();
+            if (image != null) {
+                image.getImageListeners().add(this);
+            }
+
+            if (previousImage != null) {
+                previousImage.getImageListeners().remove(this);
+            }
+        }
+
+        public void sizeChanged(Image image, int previousWidth, int previousHeight) {
+            invalidate();
+        }
+
+        public void regionUpdated(Image image, int x, int y, int width, int height) {
+            // TODO Repaint the corresponding area of the component
         }
     }
 
@@ -1420,7 +1444,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             if (document != null) {
                 if (keyCode == Keyboard.KeyCode.ENTER) {
                     textArea.insertParagraph();
-                    caretX = 0;
+                    caretX = margin.left;
                 } else if (keyCode == Keyboard.KeyCode.DELETE) {
                     textArea.delete(Direction.FORWARD);
                 } else if (keyCode == Keyboard.KeyCode.BACKSPACE) {
