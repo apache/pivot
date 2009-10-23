@@ -1109,7 +1109,11 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         if (documentView == null) {
             offset = -1;
         } else {
-            offset = documentView.getInsertionPoint(x - margin.left, y - margin.top);
+            if (documentView.getBounds().contains(x, y)) {
+                offset = documentView.getInsertionPoint(x - margin.left, y - margin.top);
+            } else {
+                offset = documentView.getCharacterCount() - 1;
+            }
         }
 
         return offset;
@@ -1427,7 +1431,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 updateCaretBounds();
                 showCaret(textArea.isFocused());
             } else {
-                // TODO Call updateCaretBounds() (renamed to updateSelectionBounds()?)
+                // TODO Call updateCaretBounds() (rename to updateSelectionBounds())
 
                 showCaret(false);
             }
@@ -1466,20 +1470,19 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     }
 
     private void showCaret(boolean show) {
+        if (scheduledBlinkCursorCallback != null) {
+            scheduledBlinkCursorCallback.cancel();
+        }
+
         if (show) {
-            if (scheduledBlinkCursorCallback == null) {
-                scheduledBlinkCursorCallback =
-                    ApplicationContext.scheduleRecurringCallback(blinkCursorCallback,
-                        Platform.getCursorBlinkRate());
-            }
+            scheduledBlinkCursorCallback =
+                ApplicationContext.scheduleRecurringCallback(blinkCursorCallback,
+                    Platform.getCursorBlinkRate());
 
             // Run the callback once now to show the cursor immediately
             blinkCursorCallback.run();
         } else {
-            if (scheduledBlinkCursorCallback != null) {
-                scheduledBlinkCursorCallback.cancel();
-                scheduledBlinkCursorCallback = null;
-            }
+            scheduledBlinkCursorCallback = null;
         }
     }
 }
