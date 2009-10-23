@@ -676,7 +676,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                 }
 
                 CHECKBOX.setState(state);
-                CHECKBOX.setEnabled(!disabled && !nodeInfo.isCheckmarkDisabled());
+                CHECKBOX.setEnabled(treeView.isEnabled() && !disabled
+                    && !nodeInfo.isCheckmarkDisabled());
                 CHECKBOX.paint(checkboxGraphics);
                 checkboxGraphics.dispose();
 
