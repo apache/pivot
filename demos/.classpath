@@ -6,5 +6,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/web"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/wtk"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/charts"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/tools"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

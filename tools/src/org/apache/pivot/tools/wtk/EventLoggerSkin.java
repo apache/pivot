@@ -14,9 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.pivot.demos.explorer;
+package org.apache.pivot.tools.wtk;
 
-import java.awt.Graphics2D;
 import java.lang.reflect.Method;
 import java.io.IOException;
 import java.util.Arrays;

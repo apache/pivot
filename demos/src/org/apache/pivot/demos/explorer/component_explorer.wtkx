@@ -18,7 +18,7 @@ limitations under the License.
 
 <Window title="Apache Pivot Component Explorer" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
-    xmlns:explorer="org.apache.pivot.demos.explorer"
+    xmlns:tools="org.apache.pivot.tools.wtk"
     xmlns="org.apache.pivot.wtk">
     <content>
         <SplitPane orientation="vertical" splitRatio="0.6">
@@ -28,7 +28,7 @@ limitations under the License.
             <bottom>
                 <Border>
                     <content>
-                        <explorer:EventLogger wtkx:id="eventLogger" source="$treeView"/>
+                        <tools:EventLogger wtkx:id="eventLogger" source="$treeView"/>
                     </content>
                 </Border>
             </bottom>

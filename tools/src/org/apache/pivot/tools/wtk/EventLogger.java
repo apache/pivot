@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.pivot.demos.explorer;
+package org.apache.pivot.tools.wtk;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
@@ -29,7 +29,6 @@ import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Group;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.HashSet;
-import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.collections.immutable.ImmutableList;
 import org.apache.pivot.collections.immutable.ImmutableSet;
