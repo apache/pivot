@@ -158,14 +158,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
 
         public Bounds getBounds() {
-            return getBounds(true);
-        }
-
-        public Bounds getBounds(boolean validate) {
-            if (validate) {
-                validate();
-            }
-
             return new Bounds(x, y, width, height);
         }
 
@@ -226,7 +218,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
         public abstract NodeView getNext();
         public abstract int getInsertionPoint(int x, int y);
-        // public abstract int getInsertionPoint(int x, int offset, int direction);
+        public abstract int getNextInsertionPoint(int x, int from, Direction direction);
         public abstract Bounds getCharacterBounds(int offset);
 
         @Override
@@ -355,7 +347,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             }
 
             for (NodeView nodeView : nodeViews) {
-                Bounds nodeViewBounds = nodeView.getBounds(false);
+                Bounds nodeViewBounds = nodeView.getBounds();
 
                 // Only paint node views that intersect the current clip rectangle
                 if (nodeViewBounds.intersects(paintBounds)) {
@@ -490,6 +482,59 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                     offset = nodeView.getInsertionPoint(x - nodeView.getX(), y - nodeView.getY())
                         + nodeView.getOffset();
                     break;
+                }
+            }
+
+            return offset;
+        }
+
+        @Override
+        public int getNextInsertionPoint(int x, int from, Direction direction) {
+            int offset = -1;
+
+            if (getLength() > 0) {
+                if (from == -1) {
+                    int i = (direction == Direction.FORWARD) ? 0 : getLength() - 1;
+                    NodeView nodeView = get(i);
+                    offset = nodeView.getInsertionPoint(x - nodeView.getX(), -1);
+                } else {
+                    // Find the node view that contains the offset
+                    int n = getLength();
+                    int i = 0;
+
+                    while (i < n) {
+                        NodeView nodeView = get(i);
+                        int nodeViewOffset = nodeView.getOffset();
+                        int characterCount = nodeView.getCharacterCount();
+
+                        if (from >= nodeViewOffset
+                            && from < nodeViewOffset + characterCount) {
+                            break;
+                        }
+
+                        i++;
+                    }
+
+                    NodeView nodeView = get(i);
+                    offset = nodeView.getNextInsertionPoint(x - nodeView.getX(),
+                        from - nodeView.getOffset(), direction);
+
+                    if (offset == -1) {
+                        // Move to the next or previous node view
+                        if (direction == Direction.FORWARD) {
+                            nodeView = (i < n - 1) ? get(i + 1) : null;
+                        } else {
+                            nodeView = (i > 0) ? get(i - 1) : null;
+                        }
+
+                        if (nodeView != null) {
+                            offset = nodeView.getNextInsertionPoint(x - nodeView.getX(), -1, direction);
+                        }
+                    }
+
+                    if (offset != -1) {
+                        offset += nodeView.getOffset();
+                    }
                 }
             }
 
@@ -701,6 +746,62 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
 
         @Override
+        public int getNextInsertionPoint(int x, int from, Direction direction) {
+            int offset = -1;
+
+            int n = rows.getLength();
+            int i;
+            if (from == -1) {
+                i = (direction == Direction.FORWARD) ? -1 : rows.getLength();
+            } else {
+                // Find the row that contains offset
+                i = 0;
+                while (i < n) {
+                    Row row = rows.get(i);
+                    NodeView firstNodeView = row.nodeViews.get(0);
+                    NodeView lastNodeView = row.nodeViews.get(row.nodeViews.getLength() - 1);
+                    if (from >= firstNodeView.getOffset()
+                        && from < lastNodeView.getOffset() + lastNodeView.getCharacterCount()) {
+                        break;
+                    }
+
+                    i++;
+                }
+            }
+
+            // Move to the next or previous row
+            if (direction == Direction.FORWARD) {
+                i++;
+            } else {
+                i--;
+            }
+
+            if (i >= 0
+                && i < n) {
+                // Find the node view that contains x and get the insertion point from it
+                Row row = rows.get(i);
+
+                for (NodeView nodeView : row.nodeViews) {
+                    Bounds bounds = nodeView.getBounds();
+                    if (x >= bounds.x
+                        && x < bounds.x + bounds.width) {
+                        offset = nodeView.getNextInsertionPoint(x - nodeView.getX(), -1, direction)
+                            + nodeView.getOffset();
+                        break;
+                    }
+                }
+
+                if (offset == -1) {
+                    // No node view contained the x position; move to the end of the row
+                    NodeView lastNodeView = row.nodeViews.get(row.nodeViews.getLength() - 1);
+                    offset = lastNodeView.getOffset() + lastNodeView.getCharacterCount() - 1;
+                }
+            }
+
+            return offset;
+        }
+
+        @Override
         public Bounds getCharacterBounds(int offset) {
             Bounds bounds;
 
@@ -854,8 +955,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
         @Override
         public int getInsertionPoint(int x, int y) {
-            validate();
-
             LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
             float ascent = lm.getAscent();
 
@@ -866,9 +965,9 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 Shape glyphLogicalBounds = glyphVector.getGlyphLogicalBounds(i);
 
                 if (glyphLogicalBounds.contains(x, y - ascent)) {
-                    Rectangle2D glyphLogicalBounds2D = glyphLogicalBounds.getBounds2D();
+                    Rectangle2D glyphBounds2D = glyphLogicalBounds.getBounds2D();
 
-                    if (x - glyphLogicalBounds2D.getX() > glyphLogicalBounds2D.getWidth() / 2) {
+                    if (x - glyphBounds2D.getX() > glyphBounds2D.getWidth() / 2) {
                         // The user clicked on the right half of the character; select
                         // the next character
                         i++;
@@ -884,9 +983,40 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
 
         @Override
-        public Bounds getCharacterBounds(int offset) {
-            validate();
+        public int getNextInsertionPoint(int x, int from, Direction direction) {
+            int offset = -1;
 
+            if (from == -1) {
+                int n = glyphVector.getNumGlyphs();
+                int i = 0;
+
+                while (i < n) {
+                    Shape glyphLogicalBounds = glyphVector.getGlyphLogicalBounds(i);
+                    Rectangle2D glyphBounds2D = glyphLogicalBounds.getBounds2D();
+
+                    float glyphX = (float)glyphBounds2D.getX();
+                    float glyphWidth = (float)glyphBounds2D.getWidth();
+
+                    if (x >= glyphX && x < glyphX + glyphWidth) {
+                        if (x - glyphX > glyphWidth / 2) {
+                            // The x position falls withing the right half of the character;
+                            // select the next character
+                            i++;
+                        }
+
+                        offset = i;
+                        break;
+                    }
+
+                    i++;
+                }
+            }
+
+            return offset;
+        }
+
+        @Override
+        public Bounds getCharacterBounds(int offset) {
             Shape glyphLogicalBounds = glyphVector.getGlyphLogicalBounds(offset);
             Rectangle2D bounds2D = glyphLogicalBounds.getBounds2D();
 
@@ -969,6 +1099,11 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         @Override
         public int getInsertionPoint(int x, int y) {
             return 0;
+        }
+
+        @Override
+        public int getNextInsertionPoint(int x, int from, Direction direction) {
+            return (from == -1) ? 0 : -1;
         }
 
         @Override
@@ -1327,28 +1462,32 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
                     consumed = true;
                 } else if (keyCode == Keyboard.KeyCode.UP) {
-                    // TODO Use getInsertionPoint(int, int, Direction) to determine the next index
-                    int offset = documentView.getInsertionPoint(caretX, caret.y - 5);
+                    // TODO Call skin method; don't adjust caretX
+                    int offset = documentView.getNextInsertionPoint(caretX - margin.left,
+                        textArea.getSelectionStart(), Direction.BACKWARD);
 
                     if (offset != -1) {
                         // TODO Modify selection based on SHIFT key
                         textArea.setSelection(offset, 0);
 
                         Bounds characterBounds = getCharacterBounds(offset);
-                        component.scrollAreaToVisible(0, characterBounds.y, getWidth(), characterBounds.height);
+                        component.scrollAreaToVisible(0, characterBounds.y, getWidth(),
+                            characterBounds.height);
 
                         consumed = true;
                     }
                 } else if (keyCode == Keyboard.KeyCode.DOWN) {
-                    // TODO Use getInsertionPoint(int, int, Direction) to determine the next index
-                    int offset = documentView.getInsertionPoint(caretX, caret.y + caret.height + 1);
+                    // TODO Call skin method; don't adjust caretX
+                    int offset = documentView.getNextInsertionPoint(caretX - margin.left,
+                        textArea.getSelectionStart(), Direction.FORWARD);
 
                     if (offset != -1) {
                         // TODO Modify selection based on SHIFT key
                         textArea.setSelection(offset, 0);
 
                         Bounds characterBounds = getCharacterBounds(offset);
-                        component.scrollAreaToVisible(0, characterBounds.y, getWidth(), characterBounds.height);
+                        component.scrollAreaToVisible(0, characterBounds.y, getWidth(),
+                            characterBounds.height);
 
                         consumed = true;
                     }
