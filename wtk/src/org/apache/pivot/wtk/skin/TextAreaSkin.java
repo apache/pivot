@@ -784,7 +784,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 }
 
                 int end;
-                if (lineWidth < breakWidth) {
+                if (lineWidth <= breakWidth) {
                     end = ci.getEndIndex();
                 } else {
                     if (lastWhitespaceIndex == -1) {
