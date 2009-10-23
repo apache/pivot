@@ -59,7 +59,8 @@ limitations under the License.
                                         <columns>
                                             <TableView.Column name="interface" width="175" />
                                             <TableView.Column name="method" width="200" />
-                                            <TableView.Column name="arguments" width="1*" />
+                                            <TableView.Column name="arguments" width="1*"
+                                                minimumWidth="200"/>
                                         </columns>
                                     </TableView>
                                 </view>

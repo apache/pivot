@@ -23,12 +23,32 @@ limitations under the License.
     <content>
         <SplitPane orientation="vertical" splitRatio="0.6">
             <top>
-                <wtkx:include src="treeview/tree_view.wtkx"/>
+                <SplitPane orientation="horizontal" splitRatio="0.6">
+                    <left>
+                        <Border>
+                            <content>
+                                <ScrollPane wtkx:id="scrollPane"
+                                    horizontalScrollBarPolicy="fill_to_capacity">
+                                    <view>
+                                        <wtkx:include src="treeview/tree_view.wtkx"/>
+                                    </view>
+                                </ScrollPane>
+                            </content>
+                        </Border>
+                    </left>
+                    <right>
+                        <Border>
+                            <content>
+                                <tools:ComponentInspector source="$treeView"/>
+                            </content>
+                        </Border>
+                    </right>
+                </SplitPane>
             </top>
             <bottom>
                 <Border>
                     <content>
-                        <tools:EventLogger wtkx:id="eventLogger" source="$treeView"/>
+                        <tools:EventLogger source="$treeView"/>
                     </content>
                 </Border>
             </bottom>

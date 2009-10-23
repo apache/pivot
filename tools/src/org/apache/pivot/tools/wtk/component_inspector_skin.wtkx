@@ -16,20 +16,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<TreeView wtkx:id="treeView"
+<ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
-    xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
-    <nodeRenderer>
-        <content:TreeViewNodeRenderer showIcon="true"/>
-    </nodeRenderer>
-    <treeData>
-        <content:TreeBranch>
-            <content:TreeBranch text="Activity" icon="@folder.png">
-                <content:TreeBranch text="Games" icon="@folder.png">
-                    <content:TreeNode text="Foosball" icon="@page_white.png"/>
-                </content:TreeBranch>
-            </content:TreeBranch>
-        </content:TreeBranch>
-    </treeData>
-</TreeView>
+    <view>
+        <BoxPane orientation="vertical" styles="{fill:true, horizontalAlignment:'right'}">
+            <Label text="%properties" styles="{padding:{left:10, top:5}, font:{bold:true}}"/>
+            <BoxPane wtkx:id="propertiesPane" orientation="vertical" styles="{padding:{left:10}}"/>
+            <Separator/>
+            <Label text="%styles" styles="{padding:{left:10}, font:{bold:true}}"/>
+            <BoxPane wtkx:id="stylesPane" orientation="vertical" styles="{padding:{left:10}}"/>
+        </BoxPane>
+    </view>
+</ScrollPane>
