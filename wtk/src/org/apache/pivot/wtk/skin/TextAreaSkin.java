@@ -517,6 +517,15 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     }
 
     public class ParagraphView extends ElementView {
+        private class Row {
+            public int x = 0;
+            public int y = 0;
+            public int width = 0;
+            public int height = 0;
+            public ArrayList<NodeView> nodeViews = new ArrayList<NodeView>();
+        }
+
+        private ArrayList<Row> rows = null;
         private Bounds terminatorBounds = null;
 
         public ParagraphView(Paragraph paragraph) {
@@ -534,54 +543,53 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             if (!isValid()) {
                 // Build the row list
                 Paragraph paragraph = (Paragraph)getNode();
-                ArrayList<ArrayList<NodeView>> rows = new ArrayList<ArrayList<NodeView>>();
+                rows = new ArrayList<Row>();
 
                 // Break the views into multiple rows
                 int breakWidth = Math.max(getBreakWidth() - PARAGRAPH_TERMINATOR_WIDTH, 0);
 
-                ArrayList<NodeView> row = new ArrayList<NodeView>();
-                int rowWidth = 0;
+                Row row = new Row();
 
                 for (Node node : paragraph) {
                     NodeView nodeView = createNodeView(node);
 
-                    nodeView.setBreakWidth(Math.max(breakWidth - rowWidth, 0));
+                    nodeView.setBreakWidth(Math.max(breakWidth - row.width, 0));
                     nodeView.validate();
 
                     int nodeViewWidth = nodeView.getWidth();
 
-                    if (rowWidth + nodeViewWidth > breakWidth
-                        && rowWidth > 0) {
+                    if (row.width + nodeViewWidth > breakWidth
+                        && row.width > 0) {
                         // The view is too big to fit in the remaining space,
                         // and it is not the only view in this row
                         rows.add(row);
-                        row = new ArrayList<NodeView>();
-                        rowWidth = 0;
+                        row = new Row();
+                        row.width = 0;
                     }
 
                     // Add the view to the row
-                    row.add(nodeView);
-                    rowWidth += nodeViewWidth;
+                    row.nodeViews.add(nodeView);
+                    row.width += nodeViewWidth;
 
                     // If the view was split into multiple views, add them to
                     // their own rows
                     nodeView = nodeView.getNext();
                     while (nodeView != null) {
                         rows.add(row);
-                        row = new ArrayList<NodeView>();
+                        row = new Row();
 
                         nodeView.setBreakWidth(breakWidth);
                         nodeView.validate();
 
-                        row.add(nodeView);
-                        rowWidth = nodeView.getWidth();
+                        row.nodeViews.add(nodeView);
+                        row.width = nodeView.getWidth();
 
                         nodeView = nodeView.getNext();
                     }
                 }
 
                 // Add the last row
-                if (row.getLength() > 0) {
+                if (row.nodeViews.getLength() > 0) {
                     rows.add(row);
                 }
 
@@ -593,17 +601,19 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 int height = 0;
                 for (int i = 0, n = rows.getLength(); i < n; i++) {
                     row = rows.get(i);
+                    row.y = height;
 
                     // Determine the row height
-                    int rowHeight = 0;
-                    for (NodeView nodeView : row) {
-                        rowHeight = Math.max(rowHeight, nodeView.getHeight());
+                    for (NodeView nodeView : row.nodeViews) {
+                        row.height = Math.max(row.height, nodeView.getHeight());
                     }
 
+                    // TODO Align horizontally when Elements support a horizontal
+                    // alignment property
                     x = 0;
-                    for (NodeView nodeView : row) {
+                    for (NodeView nodeView : row.nodeViews) {
                         // TODO Align to baseline
-                        int y = rowHeight - nodeView.getHeight();
+                        int y = row.height - nodeView.getHeight();
 
                         nodeView.setLocation(x, y + height);
                         x += nodeView.getWidth();
@@ -611,12 +621,22 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                         add(nodeView);
                     }
 
-                    height += rowHeight;
+                    height += row.height;
                 }
 
                 // Recalculate terminator bounds
                 LineMetrics lm = font.getLineMetrics("", 0, 0, FONT_RENDER_CONTEXT);
-                terminatorBounds = new Bounds(x, 0, 0, (int)Math.ceil(lm.getHeight()));
+                int terminatorHeight = (int)Math.ceil(lm.getHeight());
+
+                int terminatorY;
+                if (getCharacterCount() == 1) {
+                    // The terminator is the only character in this paragraph
+                    terminatorY = 0;
+                } else {
+                    terminatorY = height - terminatorHeight;
+                }
+
+                terminatorBounds = new Bounds(x, terminatorY, 0, terminatorHeight);
 
                 // Ensure that the paragraph is visible even when empty
                 height = Math.max(height, terminatorBounds.height);
@@ -636,16 +656,38 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
         @Override
         public int getInsertionPoint(int x, int y) {
-            // TODO Use row bounds to determine insertion point
             int offset = -1;
 
-            for (int i = 0, n = getLength(); i < n; i++) {
-                NodeView nodeView = get(i);
-                Bounds nodeViewBounds = nodeView.getBounds();
+            for (int i = 0, n = rows.getLength(); i < n; i++) {
+                Row row = rows.get(i);
 
-                if (nodeViewBounds.contains(x, y)) {
-                    offset = nodeView.getInsertionPoint(x - nodeView.getX(), y - nodeView.getY())
-                        + nodeView.getOffset();
+                if (y > row.y
+                    && y < row.y + row.height) {
+                    if (x < row.x) {
+                        NodeView firstNodeView = row.nodeViews.get(0);
+                        offset = firstNodeView.getOffset();
+                    } else if (x > row.x + row.width) {
+                        NodeView lastNodeView = row.nodeViews.get(row.nodeViews.getLength() - 1);
+
+                        // If this is not the last row, the insertion index is the last
+                        // character in the row
+                        if (i < rows.getLength() - 1) {
+                            offset = lastNodeView.getOffset() + lastNodeView.getCharacterCount() - 1;
+                        }
+                    } else {
+                        for (NodeView nodeView : row.nodeViews) {
+                            Bounds nodeViewBounds = nodeView.getBounds();
+
+                            if (nodeViewBounds.contains(x, y)) {
+                                offset = nodeView.getInsertionPoint(x - nodeView.getX(), y - nodeView.getY())
+                                    + nodeView.getOffset();
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if (offset != -1) {
                     break;
                 }
             }
@@ -661,8 +703,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         public Bounds getCharacterBounds(int offset) {
             Bounds bounds;
 
-            Paragraph paragraph = (Paragraph)getNode();
-            if (offset == paragraph.getCharacterCount() - 1) {
+            if (offset == getCharacterCount() - 1) {
                 bounds = terminatorBounds;
             } else {
                 bounds = super.getCharacterBounds(offset);
@@ -866,7 +907,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         public String toString() {
             TextNode textNode = (TextNode)getNode();
             String text = textNode.getText();
-            return text.substring(start, start + length);
+            return "[" + text.substring(start, start + length) + "]";
         }
     }
 
@@ -988,8 +1029,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         if (document != null) {
             documentView = (DocumentView)createNodeView(document);
             documentView.attach();
-
-            // TODO Initialize caret/selection state
+            updateCaretBounds();
         }
     }
 
