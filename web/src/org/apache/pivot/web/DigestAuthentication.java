@@ -22,8 +22,8 @@ import java.security.MessageDigest;
 
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.Map;
-import org.apache.pivot.web.HexUtils;
-import org.apache.pivot.web.MD5;
+import org.apache.pivot.util.HexUtils;
+import org.apache.pivot.util.MD5;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
 
 /**
@@ -326,9 +326,6 @@ public class DigestAuthentication implements Authentication {
                 cnonce = ""; // safer empty value
                 nonce_count = ""; // = AUTH_FIELD_VALUE_NC_FIRST;
             } else {
-                // String clientIP = DigestAuthentication.getIPAddress(null);
-                // cnonce = DigestAuthentication.generateUniqueToken(clientIP,
-                // key, digest);
                 cnonce = generateRandomValue();
                 nonce_count = AUTH_FIELD_VALUE_NC_FIRST;
                 // increment the (hex) value by 1
@@ -442,8 +439,9 @@ public class DigestAuthentication implements Authentication {
 
         String a3 = sbCompleteValue.toString();
 // System.out.println("a3 = \"" + a3 + "\"");
-        byte[] digestBytes = MD5.digest(a3, getDigestEncoding());
-        String md5a3 = MD5.encode(digestBytes);
+        // byte[] digestBytes = MD5.digest(a3, getDigestEncoding());
+        // String md5a3 = MD5.encode(digestBytes);
+        String md5a3 = MD5.digestAsString(a3, encoding);
 // System.out.println("md5a3 = \"" + md5a3 + "\"");
 
         response = md5a3;
@@ -575,54 +573,13 @@ public class DigestAuthentication implements Authentication {
     }
 
     /**
-     * Generate a unique token. The token is generated according to the
-     * following pattern: uniqueToken = Base64 ( MD5 ( client-IP ":" time-stamp
-     * ":" private-key ) ).
-     *
-     * @param clientIP the IP address of the Client, as a String
-     * @param privateKey the private key, as a String
-     * @param digest the MessageDigest to use
-     */
-    protected static String generateUniqueToken(final String clientIP, final String privateKey,
-        final MessageDigest digest) {
-        if (clientIP == null || clientIP.length() < 7 || clientIP.length() > 15) {
-            throw new IllegalArgumentException(
-                "clientIP must be a valid IP address, or at least 127.0.0.1");
-        }
-        if (privateKey == null || privateKey.length() < 1) {
-            throw new IllegalArgumentException("privateKey must be a valid (not empty) String");
-        }
-
-        long currentTime = System.currentTimeMillis();
-
-        StringBuffer onceValue = new StringBuffer();
-        onceValue.append(clientIP);
-        onceValue.append(HTTP_REPLY_FIELD_SEPARATOR);
-        onceValue.append(currentTime);
-        onceValue.append(HTTP_REPLY_FIELD_SEPARATOR);
-        onceValue.append(privateKey);
-
-        String onceValueString = onceValue.toString();
-
-        byte[] buffer = null;
-        synchronized (digest) {
-            buffer = digest.digest(onceValueString.getBytes());
-        }
-        onceValueString = MD5.encode(buffer);
-
-        return onceValueString;
-    }
-
-    /**
      * Creates a random value based on the current time.
      *
      * @return The calculated value as aString, or null if an error occurs
      */
     public String generateRandomValue() {
         String randomValue = Long.toString(System.currentTimeMillis());
-        byte[] digestBytes = MD5.digest(randomValue, getDigestEncoding());
-
-        return MD5.encode(digestBytes);
+        return MD5.digestAsString(randomValue, encoding);
     }
 
     /**
@@ -648,9 +605,7 @@ public class DigestAuthentication implements Authentication {
             a1 = "";
         }
 // System.out.println("a1 = \"" + a1 + "\"");
-
-        byte[] digestBytes = MD5.digest(a1, getDigestEncoding());
-        return MD5.encode(digestBytes);
+        return MD5.digestAsString(a1, encoding);
     }
 
     /**
@@ -674,8 +629,7 @@ public class DigestAuthentication implements Authentication {
         }
 // System.out.println("a2 = \"" + a2 + "\"");
 
-        byte[] digestBytes = MD5.digest(a2, getDigestEncoding());
-        return MD5.encode(digestBytes);
+        return MD5.digestAsString(a2, encoding);
     }
 
     /**
