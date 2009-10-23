@@ -38,12 +38,12 @@ import org.junit.Test;
  * Before Run these tests with local instance of Tomcat, some steps are required:
  *   - configure role and users in Tomcat users file, under its conf folder,
  *     but note that for the digest authentication, passwords have to be encoded
- *     (see Tomcat docs for this) 
- *   - start the web application pivot-test, containing the 
- *     required resources (dir /public , dir /protected protected with 
+ *     (see Tomcat docs for this)
+ *   - start the web application pivot-test, containing the
+ *     required resources (dir /public , dir /protected protected with
  *     basic authentication) and files.
- * 
- * Then, before to run these tests, ensure that all has been successfully setup 
+ *
+ * Then, before to run these tests, ensure that all has been successfully setup
  * (the webapp has started), trying to ask the same URLs from a Web Browser.
  *
  * TODO:

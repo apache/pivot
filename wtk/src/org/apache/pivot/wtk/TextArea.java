@@ -45,15 +45,27 @@ public class TextArea extends Component {
      */
     public interface Skin {
         /**
-         * Returns the offset of the character at a given location.
+         * Returns the insertion point for a given location.
          *
          * @param x
          * @param y
          *
          * @return
-         * The character offset at the given location.
+         * The insertion point for the given location.
          */
         public int getInsertionPoint(int x, int y);
+
+        /**
+         * Returns the next insertion point given an x coordinate and a character offset.
+         *
+         * @param x
+         * @param from
+         * @param direction
+         *
+         * @return
+         * The next insertion point.
+         */
+        public int getNextInsertionPoint(int x, int from, Direction direction);
 
         /**
          * Returns the bounds of the character at a given offset within the
@@ -577,6 +589,11 @@ public class TextArea extends Component {
     public int getInsertionPoint(int x, int y) {
         TextArea.Skin textAreaSkin = (TextArea.Skin)getSkin();
         return textAreaSkin.getInsertionPoint(x, y);
+    }
+
+    public int getNextInsertionPoint(int x, int from, Direction direction) {
+        TextArea.Skin textAreaSkin = (TextArea.Skin)getSkin();
+        return textAreaSkin.getNextInsertionPoint(x, from, direction);
     }
 
     public Bounds getCharacterBounds(int offset) {

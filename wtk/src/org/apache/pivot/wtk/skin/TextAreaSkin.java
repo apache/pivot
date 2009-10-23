@@ -755,17 +755,21 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 i = (direction == Direction.FORWARD) ? -1 : rows.getLength();
             } else {
                 // Find the row that contains offset
-                i = 0;
-                while (i < n) {
-                    Row row = rows.get(i);
-                    NodeView firstNodeView = row.nodeViews.get(0);
-                    NodeView lastNodeView = row.nodeViews.get(row.nodeViews.getLength() - 1);
-                    if (from >= firstNodeView.getOffset()
-                        && from < lastNodeView.getOffset() + lastNodeView.getCharacterCount()) {
-                        break;
-                    }
+                if (from == getCharacterCount() - 1) {
+                    i = rows.getLength() - 1;
+                } else {
+                    i = 0;
+                    while (i < n) {
+                        Row row = rows.get(i);
+                        NodeView firstNodeView = row.nodeViews.get(0);
+                        NodeView lastNodeView = row.nodeViews.get(row.nodeViews.getLength() - 1);
+                        if (from >= firstNodeView.getOffset()
+                            && from < lastNodeView.getOffset() + lastNodeView.getCharacterCount()) {
+                            break;
+                        }
 
-                    i++;
+                        i++;
+                    }
                 }
             }
 
@@ -794,7 +798,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 if (offset == -1) {
                     // No node view contained the x position; move to the end of the row
                     NodeView lastNodeView = row.nodeViews.get(row.nodeViews.getLength() - 1);
-                    offset = lastNodeView.getOffset() + lastNodeView.getCharacterCount() - 1;
+                    offset = lastNodeView.getOffset() + lastNodeView.getCharacterCount();
                 }
             }
 
@@ -1256,6 +1260,19 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     }
 
     @Override
+    public int getNextInsertionPoint(int x, int from, Direction direction) {
+        int offset;
+
+        if (documentView == null) {
+            offset = -1;
+        } else {
+            offset = documentView.getNextInsertionPoint(x - margin.left, from, direction);
+        }
+
+        return offset;
+    }
+
+    @Override
     public Bounds getCharacterBounds(int offset) {
         Bounds characterBounds;
 
@@ -1462,9 +1479,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
                     consumed = true;
                 } else if (keyCode == Keyboard.KeyCode.UP) {
-                    // TODO Call skin method; don't adjust caretX
-                    int offset = documentView.getNextInsertionPoint(caretX - margin.left,
-                        textArea.getSelectionStart(), Direction.BACKWARD);
+                    int offset = getNextInsertionPoint(caretX, textArea.getSelectionStart(),
+                        Direction.BACKWARD);
 
                     if (offset != -1) {
                         // TODO Modify selection based on SHIFT key
@@ -1477,9 +1493,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                         consumed = true;
                     }
                 } else if (keyCode == Keyboard.KeyCode.DOWN) {
-                    // TODO Call skin method; don't adjust caretX
-                    int offset = documentView.getNextInsertionPoint(caretX - margin.left,
-                        textArea.getSelectionStart(), Direction.FORWARD);
+                    int offset = getNextInsertionPoint(caretX, textArea.getSelectionStart(),
+                        Direction.FORWARD);
 
                     if (offset != -1) {
                         // TODO Modify selection based on SHIFT key

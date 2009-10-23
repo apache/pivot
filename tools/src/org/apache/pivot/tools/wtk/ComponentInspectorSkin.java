@@ -33,11 +33,9 @@ import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonStateListener;
 import org.apache.pivot.wtk.Checkbox;
 import org.apache.pivot.wtk.Component;
-import org.apache.pivot.wtk.ComponentStateListener;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.FlowPane;
 import org.apache.pivot.wtk.Form;
-import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.Limits;
 import org.apache.pivot.wtk.ListButton;
@@ -157,7 +155,8 @@ class ComponentInspectorSkin extends ContainerSkin implements ComponentInspector
                 boolean readOnly = beanDictionary.isReadOnly(propertyName);
 
                 if (!readOnly) {
-                    Class<?> propertyType = beanDictionary.getType(propertyName);
+                    // TODO?
+                    // Class<?> propertyType = beanDictionary.getType(propertyName);
 
                     Method method = BeanDictionary.getGetterMethod(sourceType, propertyName);
                     Class<?> declaringClass = method.getDeclaringClass();
