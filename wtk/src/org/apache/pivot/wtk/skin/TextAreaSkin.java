@@ -226,6 +226,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
         public abstract NodeView getNext();
         public abstract int getInsertionPoint(int x, int y);
+        // public abstract int getInsertionPoint(int x, int offset, int direction);
         public abstract Bounds getCharacterBounds(int offset);
 
         @Override
@@ -1313,7 +1314,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                         selectionStart += selectionLength;
 
                         if (selectionLength == 0
-                            && selectionStart < document.getCharacterCount()) {
+                            && selectionStart < document.getCharacterCount() - 1) {
                             selectionStart++;
                         }
 
@@ -1329,24 +1330,28 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                     // TODO Use getInsertionPoint(int, int, Direction) to determine the next index
                     int offset = documentView.getInsertionPoint(caretX, caret.y - 5);
 
-                    // TODO Modify selection based on SHIFT key
-                    textArea.setSelection(offset, 0);
+                    if (offset != -1) {
+                        // TODO Modify selection based on SHIFT key
+                        textArea.setSelection(offset, 0);
 
-                    Bounds characterBounds = getCharacterBounds(offset);
-                    component.scrollAreaToVisible(0, characterBounds.y, getWidth(), characterBounds.height);
+                        Bounds characterBounds = getCharacterBounds(offset);
+                        component.scrollAreaToVisible(0, characterBounds.y, getWidth(), characterBounds.height);
 
-                    consumed = true;
+                        consumed = true;
+                    }
                 } else if (keyCode == Keyboard.KeyCode.DOWN) {
                     // TODO Use getInsertionPoint(int, int, Direction) to determine the next index
                     int offset = documentView.getInsertionPoint(caretX, caret.y + caret.height + 1);
 
-                    // TODO Modify selection based on SHIFT key
-                    textArea.setSelection(offset, 0);
+                    if (offset != -1) {
+                        // TODO Modify selection based on SHIFT key
+                        textArea.setSelection(offset, 0);
 
-                    Bounds characterBounds = getCharacterBounds(offset);
-                    component.scrollAreaToVisible(0, characterBounds.y, getWidth(), characterBounds.height);
+                        Bounds characterBounds = getCharacterBounds(offset);
+                        component.scrollAreaToVisible(0, characterBounds.y, getWidth(), characterBounds.height);
 
-                    consumed = true;
+                        consumed = true;
+                    }
                 } else if (Keyboard.isPressed(commandModifier)) {
                     if (keyCode == Keyboard.KeyCode.A) {
                         textArea.setSelection(0, document.getCharacterCount());
