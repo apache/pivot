@@ -29,6 +29,9 @@ import java.security.NoSuchAlgorithmException;
  * <br/>
  * Portions of code here are taken from Apache Tomcat.
  *
+ * TODO:
+ *   - verify if it's safe also without the synchronization statement ...
+ *
  * @see org.apache.catalina.util.MD5Encoder
  */
 public final class MD5 {
@@ -36,7 +39,7 @@ public final class MD5 {
     public static final String MD5_ALGORITHM_NAME = "MD5";
 
     /** The MD5 message digest generator. */
-    private static MessageDigest md5;
+    private static MessageDigest md5 = null;
 
     /** Constructor for private usage */
     private MD5() {
@@ -56,12 +59,11 @@ public final class MD5 {
 
         byte[] dataDigested = null;
 
-        synchronized (MD5.class) {
+        // synchronized (MD5.class) {
             if (md5 == null) {
                 try {
                     md5 = MessageDigest.getInstance(MD5_ALGORITHM_NAME);
                 } catch (NoSuchAlgorithmException e) {
-                    // e.printStackTrace();
                     md5 = null;
                 }
             }
@@ -70,7 +72,7 @@ public final class MD5 {
                 dataDigested = md5.digest(data);
             }
 
-        }
+        // }
 
         return dataDigested;
     }
@@ -88,7 +90,6 @@ public final class MD5 {
         try {
             data = HexUtils.toByteArray(string, encoding);
         } catch (UnsupportedEncodingException e) {
-            // e.printStackTrace();
         }
 
         byte[] dataDigested = digest(data);
@@ -142,16 +143,17 @@ public final class MD5 {
     }
 
     /**
-     * Decodes the specified base64 string back into its raw data.
+     * Transform the given string in a digested version, using the given encoding.
      *
-     * @param encodedData The MD5 encoded string.
+     * @param string the string
+     * @param encoding the encoding, or if null a default will be used
+     * @return the string digested, and transformed as s String
      */
-    public static final byte[] decode(String encodedData) {
-        if (encodedData.length() != 32) {
-            throw new IllegalArgumentException("encodedData must be a String of length 32 chars");
-        }
+    public static final String digestAsString(final String string, final String encoding) {
+        byte[] digestBytes = MD5.digest(string, encoding);
+        String dataDigested = MD5.encode(digestBytes);
 
-        throw new UnsupportedOperationException("Decoding from an MD5 Hash is not supported");
+        return dataDigested;
     }
 
 }
