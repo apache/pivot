@@ -47,6 +47,7 @@ import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.skin.ContainerSkin;
 import org.apache.pivot.wtk.text.validation.IntValidator;
+import org.apache.pivot.wtk.text.validation.FloatValidator;
 import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
@@ -99,6 +100,8 @@ class ComponentInspectorSkin extends ContainerSkin implements ComponentInspector
                     updateBooleanControl(propertyName);
                 } else if (propertyType == Integer.TYPE) {
                     updateIntControl(propertyName);
+                } else if (propertyType == Float.TYPE) {
+                    updateFloatControl(propertyName);
                 } else if (propertyType.isEnum()) {
                     updateEnumControl(propertyName);
                 } else if (propertyType == Point.class) {
@@ -222,6 +225,8 @@ class ComponentInspectorSkin extends ContainerSkin implements ComponentInspector
             inspectorComponent = addBooleanControl(propertyName, section);
         } else if (propertyType == Integer.TYPE) {
             inspectorComponent = addIntControl(propertyName, section);
+        } else if (propertyType == Float.TYPE) {
+            inspectorComponent = addFloatControl(propertyName, section);
         } else if (propertyType.isEnum()) {
             inspectorComponent = addEnumControl(propertyName, section);
         } else if (propertyType == Point.class) {
@@ -299,6 +304,44 @@ class ComponentInspectorSkin extends ContainerSkin implements ComponentInspector
 
         if (textInput != null) {
             int propertyValue = (Integer)beanDictionary.get(propertyName);
+            textInput.setText(String.valueOf(propertyValue));
+        }
+    }
+
+    private Component addFloatControl(final String propertyName, Form.Section section) {
+        float propertyValue = (Float)beanDictionary.get(propertyName);
+
+        TextInput textInput = new TextInput();
+        textInput.setTextSize(10);
+        textInput.setValidator(new FloatValidator());
+        textInput.setText(String.valueOf(propertyValue));
+        section.add(textInput);
+        Form.setLabel(textInput, propertyName);
+
+        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+            @Override
+            public void focusedChanged(Component component, Component obverseComponent) {
+                if (!component.isFocused()) {
+                    TextInput textInput = (TextInput)component;
+
+                    try {
+                        beanDictionary.put(propertyName, Float.parseFloat(textInput.getText()));
+                    } catch (Exception exception) {
+                        Object propertyValue = beanDictionary.get(propertyName);
+                        textInput.setText(String.valueOf(propertyValue));
+                    }
+                }
+            }
+        });
+
+        return textInput;
+    }
+
+    private void updateFloatControl(String propertyName) {
+        TextInput textInput = (TextInput)inspectorComponents.get(propertyName);
+
+        if (textInput != null) {
+            float propertyValue = (Float)beanDictionary.get(propertyName);
             textInput.setText(String.valueOf(propertyValue));
         }
     }
