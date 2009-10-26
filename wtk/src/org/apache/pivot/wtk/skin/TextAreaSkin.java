@@ -46,6 +46,7 @@ import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.Point;
+import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.TextArea;
 import org.apache.pivot.wtk.TextAreaListener;
 import org.apache.pivot.wtk.TextAreaSelectionListener;
@@ -861,8 +862,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                     rowIndex = i;
                     break;
                 }
-
-                i++;
             }
 
             return rowIndex;
@@ -992,6 +991,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         @Override
         public void paint(Graphics2D graphics) {
             if (glyphVector != null) {
+                TextArea textArea = (TextArea)getComponent();
+
                 if (FONT_RENDER_CONTEXT.isAntiAliased()) {
                     graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
                         Platform.getTextAntialiasingHint());
@@ -1002,11 +1003,52 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                         RenderingHints.VALUE_FRACTIONALMETRICS_ON);
                 }
 
+                // Draw text
                 graphics.setFont(font);
                 graphics.setPaint(color);
 
                 LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
                 graphics.drawGlyphVector(glyphVector, 0, lm.getAscent());
+
+                // Draw selected characters using the selection color
+                int selectionLength = textArea.getSelectionLength();
+                if (selectionLength > 0) {
+                    int selectionStart = textArea.getSelectionStart();
+                    Span selectionRange = new Span(selectionStart, selectionStart + selectionLength - 1);
+
+                    int absoluteOffset = getOffset();
+                    ElementView parent = getParent();
+                    while (parent != null) {
+                        absoluteOffset += parent.getOffset();
+                        parent = parent.getParent();
+                    }
+
+                    Span characterRange = new Span(absoluteOffset, absoluteOffset + getCharacterCount() - 1);
+                    if (characterRange.intersects(selectionRange)) {
+                        int width = getWidth();
+                        int height = getHeight();
+
+                        int x0;
+                        if (selectionRange.start > characterRange.start) {
+                            Bounds leadingSelectionBounds = getCharacterBounds(selectionRange.start - absoluteOffset);
+                            x0 = leadingSelectionBounds.x;
+                        } else {
+                            x0 = 0;
+                        }
+
+                        int x1;
+                        if (selectionRange.end < characterRange.end) {
+                            Bounds trailingSelectionBounds = getCharacterBounds(selectionRange.end - absoluteOffset);
+                            x1 = trailingSelectionBounds.x + trailingSelectionBounds.width;
+                        } else {
+                            x1 = width;
+                        }
+
+                        graphics.clipRect(x0, 0, x1 - x0, height);
+                        graphics.setColor(textArea.isFocused() ? selectionColor : inactiveSelectionColor);
+                        graphics.drawGlyphVector(glyphVector, 0, lm.getAscent());
+                    }
+                }
             }
         }
 
@@ -1949,7 +1991,24 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                     trailingSelectionBounds.x + trailingSelectionBounds.width - leadingSelectionBounds.x,
                     trailingSelectionBounds.y + trailingSelectionBounds.height - leadingSelectionBounds.y)));
             } else {
-                // TODO Create two rectangles that cover the entire selection
+                int width = getWidth();
+
+                selection.add(new Area(new Rectangle(leadingSelectionBounds.x,
+                    leadingSelectionBounds.y,
+                    width - margin.right - leadingSelectionBounds.x,
+                    leadingSelectionBounds.height)));
+
+                if (lastRowIndex - firstRowIndex > 0) {
+                    selection.add(new Area(new Rectangle(margin.left,
+                        leadingSelectionBounds.y + leadingSelectionBounds.height,
+                        width - (margin.left + margin.right),
+                        trailingSelectionBounds.y - (leadingSelectionBounds.y
+                            + leadingSelectionBounds.height))));
+                }
+
+                selection.add(new Area(new Rectangle(margin.left, trailingSelectionBounds.y,
+                    trailingSelectionBounds.x + trailingSelectionBounds.width - margin.left,
+                    trailingSelectionBounds.height)));
             }
         }
     }

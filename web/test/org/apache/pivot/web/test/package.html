@@ -22,14 +22,14 @@ limitations under the License.
 <p>Provides classes for Testing HTTP communication classes.</p>
 
 <p>
-Note that the classes <b>WebQueryTestClientBasic</b> and <b>WebQueryTestClientDigest</b> works under JUnit 4, 
+Note that the classes <b>WebQueryTestClientBasic</b> and <b>WebQueryTestClientDigest</b> works under JUnit 4,
 but more than Unit Tests they are <u>Integration Tests</u>, because they require a working HTTP Server
 setup in the right way for their test to be successfully run.<br/>
 So they should be <u>excluded</u> from usual (Unit) Test Suite (run for example during Release builds).
 </p>
 
 <p>
-The following instructions explains the setup required for the right execution of 
+The following instructions explains the setup required for the right execution of
 WebQueryTestClientBasic and WebQueryTestClientDigest Integration Tests with JUnit 4.
 </p>
 <br/>
@@ -58,7 +58,7 @@ Then, enable the usage of .htaccess files on the root folder (by default htdocs)
 #     AllowOverride None
     AllowOverride All
 or
-    AllowOverride AuthConfig    
+    AllowOverride AuthConfig
 </pre>
 Note that this is only a convenience setting, targeted at these tests.
 <br/>
@@ -66,7 +66,7 @@ Note that this is only a convenience setting, targeted at these tests.
 <li>test that Apache works, starting/restarting it, to ensure the configuration is right
 <br/>
 </li>
-<li>go into the published directory (htdocs, or public_html, depending on the environment) and create the following empty directories: 
+<li>go into the published directory (htdocs, or public_html, depending on the environment) and create the following empty directories:
 public (optional), protected (for testing basic authentication), protected_digest (for testing digest authentication), dir (for testing digest authentication, using the same values from the RFC)
 <br/>
 Copy some files (for example one binary like test.jpg, and one of text like test.txt) inside any of the previously-created directories.
@@ -80,7 +80,7 @@ AuthType Digest
 # Note that with Digest Authentication, the value of AuthName must be the same as the realm
 AuthName "testrealm@host.com"
 
-AuthDigestDomain /dir/ 
+AuthDigestDomain /dir/
 AuthUserFile  "htdocs/dir/.htpasswd"
 Require valid-user
 
@@ -106,7 +106,7 @@ AuthType Digest
 # Note that with Digest Authentication, the value of AuthName must be the same as the realm
 AuthName "Password Required (Digest)"
 
-AuthDigestDomain /protected_digest/ 
+AuthDigestDomain /protected_digest/
 AuthUserFile  "htdocs/protected_digest/.htpasswd"
 Require valid-user
 
@@ -116,8 +116,8 @@ BrowserMatch "MSIE" AuthDigestEnableQueryStringHack=On
 <br/>
 </li>
 <li>from the prompt, use some standard Apache commands to create the digested passwords.
-If Apache commands are available in PATH, go directly in the target directory, 
-otherwise for example you'll have to go to the main apache directory and launch them using for example bin\ht*.exe (for Windows), 
+If Apache commands are available in PATH, go directly in the target directory,
+otherwise for example you'll have to go to the main apache directory and launch them using for example bin\ht*.exe (for Windows),
 and then move the generated file into the right directory.
 <pre>
 Optional, for the "protected" (Basic Authentication) for example use:
@@ -134,7 +134,7 @@ htdigest will ask you for the password (in this case "Circle Of Life", but witho
 </pre>
 <br/>
 </li>
-<li>manual test using a browser (to ensure the directories has been protected in the right way): 
+<li>manual test using a browser (to ensure the directories has been protected in the right way):
 point to the URL http://localhost/ , and then add (by hand) the subdirectory names, and try to access.
 Note that all protected directories are not visible from here.
 Any time required, the browser will open an Authentication popup, where to put username/password data (always without quotes).
@@ -159,32 +159,32 @@ Any time required, the browser will open an Authentication popup, where to put u
 <li>under Tomcat things are different: first is needed a webapp, for example pivot-test
 </li>
 <li>
-then, configure the security (but of the full webapp) as BASIC or DIGEST, so it will be possible only one type of Integration Tests per run 
+then, configure the security (but of the full webapp) as BASIC or DIGEST, so it will be possible only one type of Integration Tests per run
 (or two different webapps could be used, like pivot-test-basic and pivot-test-digest)
 </li>
 <li>
 under the Tomcat Users file define the following (in the right XML format, inside the file):
 <pre>
-role rolename="test" 
-user username="test" password="test0" roles="test"  
-user username="Mufasa" password="Circle Of Life" roles="test"  
+role rolename="test"
+user username="test" password="test0" roles="test"
+user username="Mufasa" password="Circle Of Life" roles="test"
 </pre>
 and then Restart Tomcat (important)
 <br/>
-Note that this is enough for BASIC authentication, while for DIGEST passwords must be written here in encoded format (digest), 
+Note that this is enough for BASIC authentication, while for DIGEST passwords must be written here in encoded format (digest),
 see the Tomcat docs for more detail on this.
 <br/>
 </li>
 <li>
-as with Apache, do a 
-manual test using a browser (to ensure the directories has been protected in the right way and are accessible): 
-point to the URL http://localhost:8080/pivot-test/ , and then add (by hand) the subdirectory names, and try to access. 
-Note that all protected directories are not visible from here. 
-Any time required, the browser will open an Authentication popup, where to put username/password data (always without quotes). 
+as with Apache, do a
+manual test using a browser (to ensure the directories has been protected in the right way and are accessible):
+point to the URL http://localhost:8080/pivot-test/ , and then add (by hand) the subdirectory names, and try to access.
+Note that all protected directories are not visible from here.
+Any time required, the browser will open an Authentication popup, where to put username/password data (always without quotes).
 </li>
 <li>
 change json data inside config files for Tests (any test has its own config) file that by default here works with Apache,
-so to make it work with Tomcat at least you'll have to comment the two lines defining the port and the webapp, 
+so to make it work with Tomcat at least you'll have to comment the two lines defining the port and the webapp,
 and uncomment the two for Tomcat.
 </li>
 <li>
