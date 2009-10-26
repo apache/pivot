@@ -25,6 +25,7 @@ import java.awt.Shape;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
 import java.awt.font.LineMetrics;
+import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.text.CharacterIterator;
 import java.util.Iterator;
@@ -39,6 +40,7 @@ import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Cursor;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Direction;
+import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
@@ -220,6 +222,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         public abstract NodeView getNext();
         public abstract int getInsertionPoint(int x, int y);
         public abstract int getNextInsertionPoint(int x, int from, Direction direction);
+        public abstract int getRowIndex(int offset);
+        public abstract int getRowCount();
         public abstract Bounds getCharacterBounds(int offset);
 
         @Override
@@ -543,6 +547,37 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
 
         @Override
+        public int getRowIndex(int offset) {
+            int rowIndex = 0;
+
+            for (NodeView nodeView : this) {
+                int nodeViewOffset = nodeView.getOffset();
+                int characterCount = nodeView.getCharacterCount();
+
+                if (offset >= nodeViewOffset
+                    && offset < nodeViewOffset + characterCount) {
+                    rowIndex += nodeView.getRowIndex(offset - nodeView.getOffset());
+                    break;
+                }
+
+                rowIndex += nodeView.getRowCount();
+            }
+
+            return rowIndex;
+        }
+
+        @Override
+        public int getRowCount() {
+            int rowCount = 0;
+
+            for (NodeView nodeView : this) {
+                rowCount += nodeView.getRowCount();
+            }
+
+            return rowCount;
+        }
+
+        @Override
         public NodeView getNext() {
             return null;
         }
@@ -573,7 +608,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
 
         private ArrayList<Row> rows = null;
-        private Bounds terminatorBounds = null;
+        private Bounds terminatorBounds = new Bounds(0, 0, 0, 0);
 
         public ParagraphView(Paragraph paragraph) {
             super(paragraph);
@@ -813,6 +848,32 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
 
         @Override
+        public int getRowIndex(int offset) {
+            int rowIndex = -1;
+
+            for (int i = 0, n = rows.getLength(); i < n; i++) {
+                Row row = rows.get(i);
+                NodeView firstNodeView = row.nodeViews.get(0);
+                NodeView lastNodeView = row.nodeViews.get(row.nodeViews.getLength() - 1);
+
+                if (offset >= firstNodeView.getOffset()
+                    && offset < lastNodeView.getOffset() + lastNodeView.getCharacterCount()) {
+                    rowIndex = i;
+                    break;
+                }
+
+                i++;
+            }
+
+            return rowIndex;
+        }
+
+        @Override
+        public int getRowCount() {
+            return rows.getLength();
+        }
+
+        @Override
         public Bounds getCharacterBounds(int offset) {
             Bounds bounds;
 
@@ -1027,6 +1088,16 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
 
         @Override
+        public int getRowIndex(int offset) {
+            return -1;
+        }
+
+        @Override
+        public int getRowCount() {
+            return 0;
+        }
+
+        @Override
         public Bounds getCharacterBounds(int offset) {
             Shape glyphLogicalBounds = glyphVector.getGlyphLogicalBounds(offset);
             Rectangle2D bounds2D = glyphLogicalBounds.getBounds2D();
@@ -1121,6 +1192,16 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
 
         @Override
+        public int getRowIndex(int offset) {
+            return -1;
+        }
+
+        @Override
+        public int getRowCount() {
+            return 0;
+        }
+
+        @Override
         public Bounds getCharacterBounds(int offset) {
             return new Bounds(0, 0, getWidth(), getHeight());
         }
@@ -1144,17 +1225,21 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
 
         public void regionUpdated(Image image, int x, int y, int width, int height) {
-            // TODO Repaint the corresponding area of the component
+            // TODO Repaint the corresponding area of the component (add a repaint()
+            // method to NodeView to facilitate this as well as paint-only updates
+            // such as color changes)
         }
     }
 
-    private class BlinkCursorCallback implements Runnable {
+    private class BlinkCaretCallback implements Runnable {
         @Override
         public void run() {
             caretOn = !caretOn;
 
-            TextArea textArea = (TextArea)getComponent();
-            textArea.repaint(caret.x, caret.y, caret.width, caret.height, true);
+            if (caret != null) {
+                TextArea textArea = (TextArea)getComponent();
+                textArea.repaint(caret.x, caret.y, caret.width, caret.height, true);
+            }
         }
     }
 
@@ -1163,12 +1248,20 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
     private int caretX = 0;
     private Rectangle caret = new Rectangle();
+    private Area selection = null;
+
     private boolean caretOn = false;
-    private BlinkCursorCallback blinkCursorCallback = new BlinkCursorCallback();
+    private BlinkCaretCallback blinkCursorCallback = new BlinkCaretCallback();
     private ApplicationContext.ScheduledCallback scheduledBlinkCursorCallback = null;
 
     private Font font;
     private Color color;
+    private Color backgroundColor;
+    private Color selectionColor;
+    private Color selectionBackgroundColor;
+    private Color inactiveSelectionColor;
+    private Color inactiveSelectionBackgroundColor;
+
     private Insets margin = new Insets(4);
 
     public static final int PARAGRAPH_TERMINATOR_WIDTH = 2;
@@ -1178,6 +1271,10 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         Theme theme = Theme.getTheme();
         font = theme.getFont();
         color = Color.BLACK;
+        selectionColor = Color.LIGHT_GRAY;
+        selectionBackgroundColor = Color.BLACK;
+        inactiveSelectionColor = Color.LIGHT_GRAY;
+        inactiveSelectionBackgroundColor = Color.BLACK;
     }
 
     @Override
@@ -1194,7 +1291,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         if (document != null) {
             documentView = (DocumentView)createNodeView(document);
             documentView.attach();
-            updateCaretBounds();
+            updateSelection();
         }
     }
 
@@ -1243,24 +1340,38 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             documentView.setBreakWidth(Math.max(width - (margin.left + margin.right), 0));
             documentView.validate();
 
-            updateCaretBounds();
+            updateSelection();
         }
     }
 
     @Override
     public void paint(Graphics2D graphics) {
-        if (documentView != null) {
-            TextArea textArea = (TextArea)getComponent();
+        TextArea textArea = (TextArea)getComponent();
+        int width = getWidth();
+        int height = getHeight();
 
+        if (backgroundColor != null) {
+            graphics.setColor(backgroundColor);
+            graphics.fillRect(0, 0, width, height);
+        }
+
+        if (documentView != null) {
+            // Draw the selection highlight
+            if (selection != null) {
+                graphics.setColor(textArea.isFocused() ?
+                    selectionBackgroundColor : inactiveSelectionBackgroundColor);
+                graphics.fill(selection);
+            }
+
+            // Draw the document content
             graphics.translate(margin.left, margin.top);
             documentView.paint(graphics);
             graphics.translate(-margin.left, -margin.top);
 
-            // TODO Paint selection state
-
-            if (textArea.getSelectionLength() == 0
-                && textArea.isFocused()
-                && caretOn) {
+            // Draw the caret
+            if (caret != null
+                && caretOn
+                && textArea.isFocused()) {
                 graphics.setPaint(Color.BLACK);
                 graphics.fill(caret);
             }
@@ -1298,6 +1409,32 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     }
 
     @Override
+    public int getRowIndex(int offset) {
+        int rowIndex;
+
+        if (documentView == null) {
+            rowIndex = -1;
+        } else {
+            rowIndex = documentView.getRowIndex(offset);
+        }
+
+        return rowIndex;
+    }
+
+    @Override
+    public int getRowCount() {
+        int rowCount;
+
+        if (documentView == null) {
+            rowCount = 0;
+        } else {
+            rowCount = documentView.getRowCount();
+        }
+
+        return rowCount;
+    }
+
+    @Override
     public Bounds getCharacterBounds(int offset) {
         Bounds characterBounds;
 
@@ -1312,6 +1449,44 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
 
         return characterBounds;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        if (color == null) {
+            throw new IllegalArgumentException("color is null.");
+        }
+
+        this.color = color;
+        repaintComponent();
+    }
+
+    public final void setColor(String color) {
+        if (color == null) {
+            throw new IllegalArgumentException("color is null.");
+        }
+
+        setColor(GraphicsUtilities.decodeColor(color));
+    }
+
+    public Color getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public void setBackgroundColor(Color backgroundColor) {
+        this.backgroundColor = backgroundColor;
+        repaintComponent();
+    }
+
+    public final void setBackgroundColor(String backgroundColor) {
+        if (backgroundColor == null) {
+            throw new IllegalArgumentException("backgroundColor is null");
+        }
+
+        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
     }
 
     public Font getFont() {
@@ -1341,6 +1516,90 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
 
         setFont(Theme.deriveFont(font));
+    }
+
+    public Color getSelectionColor() {
+        return selectionColor;
+    }
+
+    public void setSelectionColor(Color selectionColor) {
+        if (selectionColor == null) {
+            throw new IllegalArgumentException("selectionColor is null.");
+        }
+
+        this.selectionColor = selectionColor;
+        repaintComponent();
+    }
+
+    public final void setSelectionColor(String selectionColor) {
+        if (selectionColor == null) {
+            throw new IllegalArgumentException("selectionColor is null.");
+        }
+
+        setSelectionColor(GraphicsUtilities.decodeColor(selectionColor));
+    }
+
+    public Color getSelectionBackgroundColor() {
+        return selectionBackgroundColor;
+    }
+
+    public void setSelectionBackgroundColor(Color selectionBackgroundColor) {
+        if (selectionBackgroundColor == null) {
+            throw new IllegalArgumentException("selectionBackgroundColor is null.");
+        }
+
+        this.selectionBackgroundColor = selectionBackgroundColor;
+        repaintComponent();
+    }
+
+    public final void setSelectionBackgroundColor(String selectionBackgroundColor) {
+        if (selectionBackgroundColor == null) {
+            throw new IllegalArgumentException("selectionBackgroundColor is null.");
+        }
+
+        setSelectionBackgroundColor(GraphicsUtilities.decodeColor(selectionBackgroundColor));
+    }
+
+    public Color getInactiveSelectionColor() {
+        return inactiveSelectionColor;
+    }
+
+    public void setInactiveSelectionColor(Color inactiveSelectionColor) {
+        if (inactiveSelectionColor == null) {
+            throw new IllegalArgumentException("inactiveSelectionColor is null.");
+        }
+
+        this.inactiveSelectionColor = inactiveSelectionColor;
+        repaintComponent();
+    }
+
+    public final void setInactiveSelectionColor(String inactiveSelectionColor) {
+        if (inactiveSelectionColor == null) {
+            throw new IllegalArgumentException("inactiveSelectionColor is null.");
+        }
+
+        setInactiveSelectionColor(GraphicsUtilities.decodeColor(inactiveSelectionColor));
+    }
+
+    public Color getInactiveSelectionBackgroundColor() {
+        return inactiveSelectionBackgroundColor;
+    }
+
+    public void setInactiveSelectionBackgroundColor(Color inactiveSelectionBackgroundColor) {
+        if (inactiveSelectionBackgroundColor == null) {
+            throw new IllegalArgumentException("inactiveSelectionBackgroundColor is null.");
+        }
+
+        this.inactiveSelectionBackgroundColor = inactiveSelectionBackgroundColor;
+        repaintComponent();
+    }
+
+    public final void setInactiveSelectionBackgroundColor(String inactiveSelectionBackgroundColor) {
+        if (inactiveSelectionBackgroundColor == null) {
+            throw new IllegalArgumentException("inactiveSelectionBackgroundColor is null.");
+        }
+
+        setInactiveSelectionBackgroundColor(GraphicsUtilities.decodeColor(inactiveSelectionBackgroundColor));
     }
 
     public Insets getMargin() {
@@ -1473,7 +1732,12 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
                     textArea.setSelection(selectionStart, selectionLength);
 
-                    caretX = caret.x;
+                    if (caret != null) {
+                        caretX = caret.x;
+                    } else if (selection != null) {
+                        Rectangle bounds = selection.getBounds();
+                        caretX = bounds.x;
+                    }
 
                     consumed = true;
                 } else if (keyCode == Keyboard.KeyCode.RIGHT) {
@@ -1500,7 +1764,12 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
                     textArea.setSelection(selectionStart, selectionLength);
 
-                    caretX = caret.x;
+                    if (caret != null) {
+                        caretX = caret.x;
+                    } else if (selection != null) {
+                        Rectangle bounds = selection.getBounds();
+                        caretX = bounds.x + bounds.width;
+                    }
 
                     consumed = true;
                 } else if (keyCode == Keyboard.KeyCode.UP) {
@@ -1606,17 +1875,30 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     @Override
     public void selectionChanged(TextArea textArea, int previousSelectionStart,
         int previousSelectionLength) {
-        if (documentView != null) {
-            if (textArea.getSelectionLength() == 0) {
-                // Repaint the previous caret bounds
+        // If the document view is valid, repaint the selection state; otherwise,
+        // the selection will be updated in layout()
+        if (documentView != null
+            && documentView.isValid()) {
+            // Repaint any previous caret bounds
+            if (caret != null) {
                 textArea.repaint(caret.x, caret.y, caret.width, caret.height);
+            }
 
-                updateCaretBounds();
+            // Repaint any previous selection bounds
+            if (selection != null) {
+                Rectangle bounds = selection.getBounds();
+                textArea.repaint(bounds.x, bounds.y, bounds.width, bounds.height);
+            }
+
+            if (textArea.getSelectionLength() == 0) {
+                updateSelection();
                 showCaret(textArea.isFocused());
             } else {
-                // TODO Call updateCaretBounds() (rename to updateSelectionBounds())
-
+                updateSelection();
                 showCaret(false);
+
+                Rectangle bounds = selection.getBounds();
+                textArea.repaint(bounds.x, bounds.y, bounds.width, bounds.height);
             }
         }
     }
@@ -1640,19 +1922,35 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         return nodeView;
     }
 
-    private void updateCaretBounds() {
+    private void updateSelection() {
         TextArea textArea = (TextArea)getComponent();
-
         int selectionStart = textArea.getSelectionStart();
-        Bounds startCharacterBounds = getCharacterBounds(selectionStart);
+        int selectionLength = textArea.getSelectionLength();
 
-        if (startCharacterBounds != null) {
-            caret.x = startCharacterBounds.x;
-            caret.y = startCharacterBounds.y;
+        Bounds leadingSelectionBounds = getCharacterBounds(selectionStart);
+
+        if (selectionLength == 0) {
+            caret = leadingSelectionBounds.toRectangle();
             caret.width = 1;
-            caret.height = startCharacterBounds.height;
+
+            selection = null;
         } else {
-            System.err.println("Selection bounds are null.");
+            caret = null;
+
+            Bounds trailingSelectionBounds = getCharacterBounds(selectionStart
+                + selectionLength - 1);
+            selection = new Area();
+
+            int firstRowIndex = getRowIndex(selectionStart);
+            int lastRowIndex = getRowIndex(selectionStart + selectionLength - 1);
+
+            if (firstRowIndex == lastRowIndex) {
+                selection.add(new Area(new Rectangle(leadingSelectionBounds.x, leadingSelectionBounds.y,
+                    trailingSelectionBounds.x + trailingSelectionBounds.width - leadingSelectionBounds.x,
+                    trailingSelectionBounds.y + trailingSelectionBounds.height - leadingSelectionBounds.y)));
+            } else {
+                // TODO Create two rectangles that cover the entire selection
+            }
         }
     }
 

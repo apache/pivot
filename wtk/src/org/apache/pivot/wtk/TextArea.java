@@ -68,6 +68,24 @@ public class TextArea extends Component {
         public int getNextInsertionPoint(int x, int from, Direction direction);
 
         /**
+         * Returns the row index of the character at a given offset within the document.
+         *
+         * @param offset
+         *
+         * @return
+         * The row index of the character at the given offset.
+         */
+        public int getRowIndex(int offset);
+
+        /**
+         * Returns the total number of rows in the document.
+         *
+         * @return
+         * The number of rows in the document.
+         */
+        public int getRowCount();
+
+        /**
          * Returns the bounds of the character at a given offset within the
          * document.
          *
@@ -594,6 +612,16 @@ public class TextArea extends Component {
     public int getNextInsertionPoint(int x, int from, Direction direction) {
         TextArea.Skin textAreaSkin = (TextArea.Skin)getSkin();
         return textAreaSkin.getNextInsertionPoint(x, from, direction);
+    }
+
+    public int getRowIndex(int offset) {
+        TextArea.Skin textAreaSkin = (TextArea.Skin)getSkin();
+        return textAreaSkin.getRowIndex(offset);
+    }
+
+    public int getRowCount() {
+        TextArea.Skin textAreaSkin = (TextArea.Skin)getSkin();
+        return textAreaSkin.getRowCount();
     }
 
     public Bounds getCharacterBounds(int offset) {
