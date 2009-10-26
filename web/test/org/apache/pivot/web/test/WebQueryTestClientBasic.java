@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.web.test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
@@ -215,8 +216,11 @@ public class WebQueryTestClientBasic {
 
         result = query.execute();
         log("Query result: \n" + result);
-
         assertNull(result);
+
+        int status = query.getStatus();
+        log("Query: status = " + status + ", result: \n" + result);
+        assertEquals(401, status);
     }
 
     @Test(timeout = 10000, expected = QueryException.class)
@@ -237,8 +241,11 @@ public class WebQueryTestClientBasic {
 
         result = query.execute();
         log("Query result: \n" + result);
-
         assertNull(result);
+
+        int status = query.getStatus();
+        log("Query: status = " + status + ", result: \n" + result);
+        assertEquals(401, status);
     }
 
     @Test(timeout = 10000)
@@ -266,9 +273,9 @@ public class WebQueryTestClientBasic {
         result = query.execute();
         assertNotNull(result);
 
-        // int status = query.getStatus(); // method missing at the moment ...
-        // log("Query: status = " + status + ", result: \n" + result);
-        // assertEquals(401, status);
+        int status = query.getStatus();
+        log("Query: status = " + status + ", result: \n" + result);
+        assertEquals(200, status);
 
         // dump content, but useful only for text resources ...
         String dump = // result.toString()
