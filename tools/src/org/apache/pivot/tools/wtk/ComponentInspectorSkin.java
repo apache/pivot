@@ -21,11 +21,12 @@ import java.lang.reflect.Method;
 import java.util.Comparator;
 
 import org.apache.pivot.beans.BeanDictionary;
+import org.apache.pivot.beans.BeanMonitor;
+import org.apache.pivot.beans.BeanMonitorListener;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.EnumList;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
-import org.apache.pivot.collections.Map;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.BoxPane;
@@ -33,6 +34,7 @@ import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonStateListener;
 import org.apache.pivot.wtk.Checkbox;
 import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.ComponentStateListener;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.FlowPane;
 import org.apache.pivot.wtk.Form;
@@ -42,7 +44,6 @@ import org.apache.pivot.wtk.ListButton;
 import org.apache.pivot.wtk.ListButtonSelectionListener;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Point;
-import org.apache.pivot.wtk.Rollup;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.skin.ContainerSkin;
 import org.apache.pivot.wtk.text.validation.IntValidator;
@@ -76,12 +77,40 @@ class ComponentInspectorSkin extends ContainerSkin implements ComponentInspector
 
     private Component content = null;
 
-    @WTKX private BoxPane propertiesPane = null;
+    @WTKX private Form propertiesForm = null;
     @WTKX private BoxPane stylesPane = null;
+
+    private BeanDictionary beanDictionary = null;
+    private BeanMonitor beanMonitor = new BeanMonitor();
+
+    private HashMap<String, Component> inspectorComponents = new HashMap<String, Component>();
 
     private static PropertyNameComparator propertyNameComparator = new PropertyNameComparator();
     private static PropertySourceTypeComparator propertySourceTypeComparator =
         new PropertySourceTypeComparator();
+
+    public ComponentInspectorSkin() {
+        beanMonitor.getBeanMonitorListeners().add(new BeanMonitorListener.Adapter() {
+            @Override
+            public void propertyChanged(BeanMonitor beanMonitor, String propertyName) {
+                Class<?> propertyType = beanDictionary.getType(propertyName);
+
+                if (propertyType == Boolean.TYPE) {
+                    updateBooleanControl(propertyName);
+                } else if (propertyType == Integer.TYPE) {
+                    updateIntControl(propertyName);
+                } else if (propertyType.isEnum()) {
+                    updateEnumControl(propertyName);
+                } else if (propertyType == Point.class) {
+                    updatePointControl(propertyName);
+                } else if (propertyType == Dimensions.class) {
+                    updateDimensionsControl(propertyName);
+                } else if (propertyType == Limits.class) {
+                    updateLimitsControl(propertyName);
+                }
+            }
+        });
+    }
 
     @Override
     public void install(Component component) {
@@ -139,25 +168,26 @@ class ComponentInspectorSkin extends ContainerSkin implements ComponentInspector
 
     @Override
     public void sourceChanged(ComponentInspector componentInspector, Component previousSource) {
-        propertiesPane.remove(0, propertiesPane.getLength());
+        Form.SectionSequence propertiesSections = propertiesForm.getSections();
+        propertiesSections.remove(0, propertiesSections.getLength());
+
         stylesPane.remove(0, stylesPane.getLength());
 
         Component source = componentInspector.getSource();
 
-        if (source != null) {
-            Class<?> sourceType = source.getClass();
-            BeanDictionary beanDictionary = new BeanDictionary(source);
+        beanDictionary = null;
+        beanMonitor.setSource(source);
 
-            Map<Class<?>, List<String>> propertyBuckets =
+        if (source != null) {
+            beanDictionary = new BeanDictionary(source);
+
+            Class<?> sourceType = source.getClass();
+            HashMap<Class<?>, List<String>> propertyBuckets =
                 new HashMap<Class<?>, List<String>>(propertySourceTypeComparator);
 
             for (String propertyName : beanDictionary) {
-                boolean readOnly = beanDictionary.isReadOnly(propertyName);
-
-                if (!readOnly) {
-                    // TODO?
-                    // Class<?> propertyType = beanDictionary.getType(propertyName);
-
+                if (beanMonitor.isNotifyingProperty(propertyName)
+                    && !beanDictionary.isReadOnly(propertyName)) {
                     Method method = BeanDictionary.getGetterMethod(sourceType, propertyName);
                     Class<?> declaringClass = method.getDeclaringClass();
 
@@ -172,47 +202,42 @@ class ComponentInspectorSkin extends ContainerSkin implements ComponentInspector
             }
 
             for (Class<?> declaringClass : propertyBuckets) {
-                Rollup rollup = new Rollup();
-                propertiesPane.add(rollup);
-                Label label = new Label(declaringClass.getSimpleName());
-                label.getStyles().put("color", 16);
-                label.getStyles().put("font", "{bold:true}");
-                rollup.setHeading(label);
-
-                Form form = new Form();
-                form.getStyles().put("rightAlignLabels", true);
                 Form.Section section = new Form.Section();
-                form.getSections().add(section);
-                rollup.setContent(form);
+                section.setHeading(declaringClass.getSimpleName());
+                propertiesSections.add(section);
 
                 for (String propertyName : propertyBuckets.get(declaringClass)) {
-                    addPropertyControl(propertyName, section, beanDictionary);
+                    addPropertyControl(propertyName, section);
                 }
             }
         }
     }
 
-    private void addPropertyControl(String propertyName, Form.Section section,
-        BeanDictionary beanDictionary) {
+    private void addPropertyControl(String propertyName, Form.Section section) {
         Class<?> propertyType = beanDictionary.getType(propertyName);
 
+        Component inspectorComponent = null;
+
         if (propertyType == Boolean.TYPE) {
-            addBooleanControl(propertyName, section, beanDictionary);
+            inspectorComponent = addBooleanControl(propertyName, section);
         } else if (propertyType == Integer.TYPE) {
-            addIntControl(propertyName, section, beanDictionary);
+            inspectorComponent = addIntControl(propertyName, section);
         } else if (propertyType.isEnum()) {
-            addEnumControl(propertyName, section, beanDictionary);
+            inspectorComponent = addEnumControl(propertyName, section);
         } else if (propertyType == Point.class) {
-            addPointControl(propertyName, section, beanDictionary);
+            inspectorComponent = addPointControl(propertyName, section);
         } else if (propertyType == Dimensions.class) {
-            addDimensionsControl(propertyName, section, beanDictionary);
+            inspectorComponent = addDimensionsControl(propertyName, section);
         } else if (propertyType == Limits.class) {
-            addLimitsControl(propertyName, section, beanDictionary);
+            inspectorComponent = addLimitsControl(propertyName, section);
+        }
+
+        if (inspectorComponent != null) {
+            inspectorComponents.put(propertyName, inspectorComponent);
         }
     }
 
-    private void addBooleanControl(final String propertyName, Form.Section section,
-        final BeanDictionary beanDictionary) {
+    private Component addBooleanControl(final String propertyName, Form.Section section) {
         boolean propertyValue = (Boolean)beanDictionary.get(propertyName);
 
         Checkbox checkbox = new Checkbox();
@@ -226,11 +251,20 @@ class ComponentInspectorSkin extends ContainerSkin implements ComponentInspector
                 beanDictionary.put(propertyName, button.isSelected());
             }
         });
+
+        return checkbox;
     }
 
-    private void addIntControl(final String propertyName, Form.Section section,
-        final BeanDictionary beanDictionary) {
-        /*
+    private void updateBooleanControl(String propertyName) {
+        Checkbox checkbox = (Checkbox)inspectorComponents.get(propertyName);
+
+        if (checkbox != null) {
+            boolean propertyValue = (Boolean)beanDictionary.get(propertyName);
+            checkbox.setSelected(propertyValue);
+        }
+    }
+
+    private Component addIntControl(final String propertyName, Form.Section section) {
         int propertyValue = (Integer)beanDictionary.get(propertyName);
 
         TextInput textInput = new TextInput();
@@ -244,21 +278,33 @@ class ComponentInspectorSkin extends ContainerSkin implements ComponentInspector
         textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
-                TextInput textInput = (TextInput)component;
-                try {
-                    beanDictionary.put(propertyName, Integer.parseInt(textInput.getText()));
-                } catch (Exception exception) {
-                    Object propertyValue = beanDictionary.get(propertyName);
-                    textInput.setText(String.valueOf(propertyValue));
+                if (!component.isFocused()) {
+                    TextInput textInput = (TextInput)component;
+
+                    try {
+                        beanDictionary.put(propertyName, Integer.parseInt(textInput.getText()));
+                    } catch (Exception exception) {
+                        Object propertyValue = beanDictionary.get(propertyName);
+                        textInput.setText(String.valueOf(propertyValue));
+                    }
                 }
             }
         });
-        */
+
+        return textInput;
+    }
+
+    private void updateIntControl(String propertyName) {
+        TextInput textInput = (TextInput)inspectorComponents.get(propertyName);
+
+        if (textInput != null) {
+            int propertyValue = (Integer)beanDictionary.get(propertyName);
+            textInput.setText(String.valueOf(propertyValue));
+        }
     }
 
     @SuppressWarnings("unchecked")
-    private void addEnumControl(final String propertyName, Form.Section section,
-        final BeanDictionary beanDictionary) {
+    private Component addEnumControl(final String propertyName, Form.Section section) {
         Class<?> propertyType = beanDictionary.getType(propertyName);
         Enum<?> propertyValue = (Enum<?>)beanDictionary.get(propertyName);
 
@@ -274,10 +320,20 @@ class ComponentInspectorSkin extends ContainerSkin implements ComponentInspector
                 beanDictionary.put(propertyName, listButton.getSelectedItem());
             }
         });
+
+        return listButton;
     }
 
-    private void addPointControl(final String propertyName, Form.Section section,
-        final BeanDictionary beanDictionary) {
+    private void updateEnumControl(String propertyName) {
+        ListButton listButton = (ListButton)inspectorComponents.get(propertyName);
+
+        if (listButton != null) {
+            Enum<?> propertyValue = (Enum<?>)beanDictionary.get(propertyName);
+            listButton.setSelectedItem(propertyValue);
+        }
+    }
+
+    private Component addPointControl(final String propertyName, Form.Section section) {
         Point point = (Point)beanDictionary.get(propertyName);
 
         BoxPane boxPane = new BoxPane(Orientation.VERTICAL);
@@ -296,6 +352,23 @@ class ComponentInspectorSkin extends ContainerSkin implements ComponentInspector
         textInput.setText(String.valueOf(point.x));
         flowPane.add(textInput);
 
+        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+            @Override
+            public void focusedChanged(Component component, Component obverseComponent) {
+                if (!component.isFocused()) {
+                    TextInput textInput = (TextInput)component;
+                    Point point = (Point)beanDictionary.get(propertyName);
+
+                    try {
+                        int x = Integer.parseInt(textInput.getText());
+                        beanDictionary.put(propertyName, new Point(x, point.y));
+                    } catch (Exception exception) {
+                        textInput.setText(String.valueOf(point.x));
+                    }
+                }
+            }
+        });
+
         Label label = new Label("x");
         label.getStyles().put("font", "{italic:true}");
         flowPane.add(label);
@@ -312,13 +385,45 @@ class ComponentInspectorSkin extends ContainerSkin implements ComponentInspector
         textInput.setText(String.valueOf(point.y));
         flowPane.add(textInput);
 
+        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+            @Override
+            public void focusedChanged(Component component, Component obverseComponent) {
+                if (!component.isFocused()) {
+                    TextInput textInput = (TextInput)component;
+                    Point point = (Point)beanDictionary.get(propertyName);
+
+                    try {
+                        int y = Integer.parseInt(textInput.getText());
+                        beanDictionary.put(propertyName, new Point(point.x, y));
+                    } catch (Exception exception) {
+                        textInput.setText(String.valueOf(point.y));
+                    }
+                }
+            }
+        });
+
         label = new Label("y");
         label.getStyles().put("font", "{italic:true}");
         flowPane.add(label);
+
+        return boxPane;
     }
 
-    private void addDimensionsControl(final String propertyName, Form.Section section,
-        final BeanDictionary beanDictionary) {
+    private void updatePointControl(String propertyName) {
+        BoxPane boxPane = (BoxPane)inspectorComponents.get(propertyName);
+
+        if (boxPane != null) {
+            Point point = (Point)beanDictionary.get(propertyName);
+
+            TextInput xTextInput = (TextInput)((FlowPane)boxPane.get(0)).get(0);
+            TextInput yTextInput = (TextInput)((FlowPane)boxPane.get(1)).get(0);
+
+            xTextInput.setText(String.valueOf(point.x));
+            yTextInput.setText(String.valueOf(point.y));
+        }
+    }
+
+    private Component addDimensionsControl(final String propertyName, Form.Section section) {
         Dimensions dimensions = (Dimensions)beanDictionary.get(propertyName);
 
         BoxPane boxPane = new BoxPane(Orientation.VERTICAL);
@@ -337,6 +442,23 @@ class ComponentInspectorSkin extends ContainerSkin implements ComponentInspector
         textInput.setText(String.valueOf(dimensions.width));
         flowPane.add(textInput);
 
+        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+            @Override
+            public void focusedChanged(Component component, Component obverseComponent) {
+                if (!component.isFocused()) {
+                    TextInput textInput = (TextInput)component;
+                    Dimensions dimensions = (Dimensions)beanDictionary.get(propertyName);
+
+                    try {
+                        int width = Integer.parseInt(textInput.getText());
+                        beanDictionary.put(propertyName, new Dimensions(width, dimensions.height));
+                    } catch (Exception exception) {
+                        textInput.setText(String.valueOf(dimensions.width));
+                    }
+                }
+            }
+        });
+
         Label label = new Label("width");
         label.getStyles().put("font", "{italic:true}");
         flowPane.add(label);
@@ -353,13 +475,45 @@ class ComponentInspectorSkin extends ContainerSkin implements ComponentInspector
         textInput.setText(String.valueOf(dimensions.height));
         flowPane.add(textInput);
 
+        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+            @Override
+            public void focusedChanged(Component component, Component obverseComponent) {
+                if (!component.isFocused()) {
+                    TextInput textInput = (TextInput)component;
+                    Dimensions dimensions = (Dimensions)beanDictionary.get(propertyName);
+
+                    try {
+                        int height = Integer.parseInt(textInput.getText());
+                        beanDictionary.put(propertyName, new Dimensions(dimensions.width, height));
+                    } catch (Exception exception) {
+                        textInput.setText(String.valueOf(dimensions.height));
+                    }
+                }
+            }
+        });
+
         label = new Label("height");
         label.getStyles().put("font", "{italic:true}");
         flowPane.add(label);
+
+        return boxPane;
     }
 
-    private void addLimitsControl(final String propertyName, Form.Section section,
-        final BeanDictionary beanDictionary) {
+    private void updateDimensionsControl(String propertyName) {
+        BoxPane boxPane = (BoxPane)inspectorComponents.get(propertyName);
+
+        if (boxPane != null) {
+            Dimensions dimensions = (Dimensions)beanDictionary.get(propertyName);
+
+            TextInput widthTextInput = (TextInput)((FlowPane)boxPane.get(0)).get(0);
+            TextInput heightTextInput = (TextInput)((FlowPane)boxPane.get(1)).get(0);
+
+            widthTextInput.setText(String.valueOf(dimensions.width));
+            heightTextInput.setText(String.valueOf(dimensions.height));
+        }
+    }
+
+    private Component addLimitsControl(final String propertyName, Form.Section section) {
         Limits limits = (Limits)beanDictionary.get(propertyName);
 
         BoxPane boxPane = new BoxPane(Orientation.VERTICAL);
@@ -378,6 +532,23 @@ class ComponentInspectorSkin extends ContainerSkin implements ComponentInspector
         textInput.setText(String.valueOf(limits.min));
         flowPane.add(textInput);
 
+        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+            @Override
+            public void focusedChanged(Component component, Component obverseComponent) {
+                if (!component.isFocused()) {
+                    TextInput textInput = (TextInput)component;
+                    Limits limits = (Limits)beanDictionary.get(propertyName);
+
+                    try {
+                        int min = Integer.parseInt(textInput.getText());
+                        beanDictionary.put(propertyName, new Limits(min, limits.max));
+                    } catch (Exception exception) {
+                        textInput.setText(String.valueOf(limits.min));
+                    }
+                }
+            }
+        });
+
         Label label = new Label("min");
         label.getStyles().put("font", "{italic:true}");
         flowPane.add(label);
@@ -394,8 +565,41 @@ class ComponentInspectorSkin extends ContainerSkin implements ComponentInspector
         textInput.setText(String.valueOf(limits.max));
         flowPane.add(textInput);
 
+        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+            @Override
+            public void focusedChanged(Component component, Component obverseComponent) {
+                if (!component.isFocused()) {
+                    TextInput textInput = (TextInput)component;
+                    Limits limits = (Limits)beanDictionary.get(propertyName);
+
+                    try {
+                        int max = Integer.parseInt(textInput.getText());
+                        beanDictionary.put(propertyName, new Limits(limits.min, max));
+                    } catch (Exception exception) {
+                        textInput.setText(String.valueOf(limits.max));
+                    }
+                }
+            }
+        });
+
         label = new Label("max");
         label.getStyles().put("font", "{italic:true}");
         flowPane.add(label);
+
+        return boxPane;
+    }
+
+    private void updateLimitsControl(String propertyName) {
+        BoxPane boxPane = (BoxPane)inspectorComponents.get(propertyName);
+
+        if (boxPane != null) {
+            Limits limits = (Limits)beanDictionary.get(propertyName);
+
+            TextInput minTextInput = (TextInput)((FlowPane)boxPane.get(0)).get(0);
+            TextInput maxTextInput = (TextInput)((FlowPane)boxPane.get(1)).get(0);
+
+            minTextInput.setText(String.valueOf(limits.min));
+            maxTextInput.setText(String.valueOf(limits.max));
+        }
     }
 }

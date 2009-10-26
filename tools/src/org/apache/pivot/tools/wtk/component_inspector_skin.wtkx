@@ -22,7 +22,10 @@ limitations under the License.
     <view>
         <BoxPane orientation="vertical" styles="{fill:true, horizontalAlignment:'right'}">
             <Label text="%properties" styles="{padding:{left:10, top:5}, font:{bold:true}}"/>
-            <BoxPane wtkx:id="propertiesPane" orientation="vertical" styles="{padding:{left:10}}"/>
+            <BoxPane orientation="vertical" styles="{padding:{left:10}}">
+                <Form wtkx:id="propertiesForm"
+                    styles="{rightAlignLabels:true, showFirstSectionHeading:true}"/>
+            </BoxPane>
             <Separator/>
             <Label text="%styles" styles="{padding:{left:10}, font:{bold:true}}"/>
             <BoxPane wtkx:id="stylesPane" orientation="vertical" styles="{padding:{left:10}}"/>
