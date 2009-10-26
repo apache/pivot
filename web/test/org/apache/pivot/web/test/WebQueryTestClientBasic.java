@@ -19,7 +19,11 @@ package org.apache.pivot.web.test;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import java.io.IOException;
+
 import org.apache.pivot.serialization.ByteArraySerializer;
+import org.apache.pivot.serialization.SerializationException;
+import org.apache.pivot.util.Resources;
 import org.apache.pivot.web.Authentication;
 import org.apache.pivot.web.BasicAuthentication;
 import org.apache.pivot.web.GetQuery;
@@ -31,53 +35,53 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * Integration test of Client-side Authentication with the Basic method.
- * <br/>
+ * Integration test of Client-side Authentication with the Basic method. <br/>
  * This is a JUnit 4 Test, but should be excluded from usual (Unit) Test Suite.
  * <br/>
  * To Run these tests, a local instance of Apache must be started and
- * configured with the required resources (dir /public , and dir /protected
- * protected with basic authentication) and files.
- * Then, before to run these tests, ensure basic authentication has been
- * successfully setup asking the same URLs from a Web Browser.
- *
- * TODO:
+ * configured with the required resources (by default folders /public , and /protected
+ * protected with basic authentication) and files. 
+ * Then, before to run these tests, ensure basic authentication has been successfully setup 
+ * asking the same URLs from a Web Browser. <br/>
+ * Note that now this class loads (in a standard Pivot way) some test parameters 
+ * from a json file that must be in the same folder of this class. 
+ * For example, to run this Class on another Server (for example on a local Tomcat instance), 
+ * some parameters have to be changed  inside the json file, then rerun the test. 
+ * 
+ * TODO: 
  *   - test other HTTP methods ...
- *
+ * 
  */
 public class WebQueryTestClientBasic {
-    final static String HOSTNAME = "localhost";
-    final static String PATH = null;
-    final static int PORT = 80;
-    final static boolean SECURE = false;
-
-    final static String PATH_PUBLIC = "/public/";
-    final static String PATH_PROTECTED_BASIC = "/protected/";
-
-    final static String SAMPLE_FILE_BINARY = "test.jpg";
-    final static String SAMPLE_FILE_TEXT = "test.txt";
-
-    final static String USER_NAME = "test";
-    final static String USER_PASSWORD = "test0";
-
-    final static long TIMEOUT = 5000l; // default timeout for WebQuery tests
-                                       // here: 5 sec
+    static Resources resources = null;  // parametric resources, using the Pivot-way
 
     String host = null;
     int port = 0;
     String path = null;
+    boolean secure = false;
 
     Authentication authentication = null;
 
     Object result = null;
 
-    public void log(String msg) {
+    public static final void log(String msg) {
         System.out.println(msg);
     }
 
     @BeforeClass
     public static void runBeforeClass() {
         // run for one time before all test cases
+
+        // load Test Case parametric values
+        try {
+            resources = new Resources(WebQueryTestClientBasic.class.getName());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SerializationException e) {
+            e.printStackTrace();
+        }
+
+        log("Loaded " + resources + " resources");
     }
 
     @AfterClass
@@ -103,15 +107,15 @@ public class WebQueryTestClientBasic {
     }
 
     @Test(timeout = 10000, expected = QueryException.class)
-    public void publicOnApache_noauth_NotExistingHost() throws QueryException {
-        log("publicOnApache_noauth_NotExistingHost()");
+    public void public_noauth_NotExistingHost() throws QueryException {
+        log("public_noauth_NotExistingHost()");
 
         host = "non_existing_host";
-        port = PORT;
-        path = PATH_PUBLIC;
+        port = resources.getInteger("port");
+        path = resources.getString("folder_public");
 
-        GetQuery query = new GetQuery(host, port, path, SECURE);
-        query.setTimeout(TIMEOUT);
+        GetQuery query = new GetQuery(host, port, path, secure);
+        query.setTimeout(resources.getLong("timeout"));
         log("GET Query to " + query.getLocation());
 
         result = query.execute();
@@ -121,15 +125,15 @@ public class WebQueryTestClientBasic {
     }
 
     @Test(timeout = 10000, expected = QueryException.class)
-    public void publicOnApache_noauth_localhost_NotExistingResource() throws QueryException {
-        log("publicOnApache_noauth_localhost_NotExistingResource()");
+    public void public_noauth_localhost_NotExistingResource() throws QueryException {
+        log("public_noauth_localhost_NotExistingResource()");
 
-        host = HOSTNAME;
-        port = PORT;
-        path = PATH_PUBLIC + "non_existing_resource";
+        host = resources.getString("hostname");
+        port = resources.getInteger("port");
+        path = resources.getString("folder_public") + "non_existing_resource";
 
-        GetQuery query = new GetQuery(host, port, path, SECURE);
-        query.setTimeout(TIMEOUT);
+        GetQuery query = new GetQuery(host, port, path, secure);
+        query.setTimeout(resources.getLong("timeout"));
         log("GET Query to " + query.getLocation());
 
         result = query.execute();
@@ -139,19 +143,19 @@ public class WebQueryTestClientBasic {
     }
 
     @Test(timeout = 10000)
-    public void publicOnApache_noauth_localhost_testFile() throws QueryException {
-        log("publicOnApache_noauth_localhost_testFile()");
+    public void public_noauth_localhost_testFile() throws QueryException {
+        log("public_noauth_localhost_testFile()");
 
-        host = HOSTNAME;
-        port = PORT;
-        path = PATH_PUBLIC + SAMPLE_FILE_TEXT;
+        host = resources.getString("hostname");
+        port = resources.getInteger("port");
+        path = resources.getString("folder_public") + resources.getString("file_text");
 
-        GetQuery query = new GetQuery(host, port, path, SECURE);
+        GetQuery query = new GetQuery(host, port, path, secure);
 
         // attention, don't use BinarySerializer here, but instead use the
         // generic ByteArraySerializer
         query.setSerializer(new ByteArraySerializer());
-        query.setTimeout(TIMEOUT);
+        query.setTimeout(resources.getLong("timeout"));
         log("GET Query to " + query.getLocation());
 
         result = query.execute();
@@ -165,23 +169,24 @@ public class WebQueryTestClientBasic {
     }
 
     @Test(timeout = 10000)
-    public void publicOnApache_basic_localhost_forceUnnecessaryAuthentication()
+    public void public_basic_localhost_forceUnnecessaryAuthentication()
         throws QueryException {
-        log("publicOnApache_basic_localhost_forceUnnecessaryAuthentication()");
+        log("public_basic_localhost_forceUnnecessaryAuthentication()");
 
-        host = HOSTNAME;
-        port = PORT;
-        path = PATH_PUBLIC + SAMPLE_FILE_TEXT;
+        host = resources.getString("hostname");
+        port = resources.getInteger("port");
+        path = resources.getString("folder_public") + resources.getString("file_text");
 
-        GetQuery query = new GetQuery(host, port, path, SECURE);
+        GetQuery query = new GetQuery(host, port, path, secure);
 
         // attention, don't use BinarySerializer here, but instead use the
         // generic ByteArraySerializer
         query.setSerializer(new ByteArraySerializer());
-        query.setTimeout(TIMEOUT);
+        query.setTimeout(resources.getLong("timeout"));
         log("GET Query to " + query.getLocation());
 
-        authentication = new BasicAuthentication(USER_NAME, USER_PASSWORD);
+        authentication = new BasicAuthentication(resources.getString("user_name"),
+            resources.getString("user_pass"));
         authentication.authenticate(query);
 
         result = query.execute();
@@ -195,18 +200,17 @@ public class WebQueryTestClientBasic {
     }
 
     // @Test(timeout = 10000, expected = QueryException.class)
-    @Test(timeout = 1000000, expected = QueryException.class)
-    // for debugging the execution
-    public void protectedOnApache_basic_localhostWithoutAuthenticate() throws QueryException {
-        log("protectedOnApache_basic_localhostWithoutAuthenticate()");
+    @Test(timeout = 1000000, expected = QueryException.class)  // for debugging the execution
+    public void protected_basic_localhostWithoutAuthenticate() throws QueryException {
+        log("protected_basic_localhostWithoutAuthenticate()");
 
-        host = HOSTNAME;
-        port = PORT;
-        path = PATH_PROTECTED_BASIC + SAMPLE_FILE_TEXT;
+        host = resources.getString("hostname");
+        port = resources.getInteger("port");
+        path = resources.getString("folder_protected") + resources.getString("file_text");
 
-        GetQuery query = new GetQuery(host, port, path, SECURE);
+        GetQuery query = new GetQuery(host, port, path, secure);
         query.setSerializer(new ByteArraySerializer());
-        query.setTimeout(TIMEOUT);
+        query.setTimeout(resources.getLong("timeout"));
         log("GET Query to " + query.getLocation());
 
         result = query.execute();
@@ -216,16 +220,16 @@ public class WebQueryTestClientBasic {
     }
 
     @Test(timeout = 10000, expected = QueryException.class)
-    public void protectedOnApache_basic_localhostWithWrongCredentials() throws QueryException {
-        log("protectedOnApache_basic_localhostWithWrongCredentials()");
+    public void protected_basic_localhostWithWrongCredentials() throws QueryException {
+        log("protected_basic_localhostWithWrongCredentials()");
 
-        host = HOSTNAME;
-        port = PORT;
-        path = PATH_PROTECTED_BASIC + SAMPLE_FILE_TEXT;
+        host = resources.getString("hostname");
+        port = resources.getInteger("port");
+        path = resources.getString("folder_protected") + resources.getString("file_text");
 
-        GetQuery query = new GetQuery(host, port, path, SECURE);
+        GetQuery query = new GetQuery(host, port, path, secure);
         query.setSerializer(new ByteArraySerializer());
-        query.setTimeout(TIMEOUT);
+        query.setTimeout(resources.getLong("timeout"));
         log("GET Query to " + query.getLocation());
 
         authentication = new BasicAuthentication("wrongUsername", "wrongPassword");
@@ -238,24 +242,25 @@ public class WebQueryTestClientBasic {
     }
 
     @Test(timeout = 10000)
-    public void protectedOnApache_basic_localhost() throws QueryException {
-        log("protectedOnApache_basic_localhost()");
+    public void protected_basic_localhost() throws QueryException {
+        log("protected_basic_localhost()");
 
-        host = HOSTNAME;
-        port = PORT;
-        // path = PATH_PROTECTED_BASIC + SAMPLE_FILE_TEXT;
-        // path = PATH_PROTECTED_BASIC + SAMPLE_FILE_BINARY;
-        path = PATH_PROTECTED_BASIC + SAMPLE_FILE_TEXT;
+        host = resources.getString("hostname");
+        port = resources.getInteger("port");
+        // path = resources.getString("folder_protected") + resources.getString("file_text");
+        // path = resources.getString("folder_protected") + resources.getString("file_binary");
+        path = resources.getString("folder_protected") + resources.getString("file_text");
 
-        GetQuery query = new GetQuery(host, port, path, SECURE);
+        GetQuery query = new GetQuery(host, port, path, secure);
 
         // attention, don't use BinarySerializer here, but instead use the
         // generic ByteArraySerializer
         query.setSerializer(new ByteArraySerializer());
-        query.setTimeout(TIMEOUT);
+        query.setTimeout(resources.getLong("timeout"));
         log("GET Query to " + query.getLocation());
 
-        authentication = new BasicAuthentication(USER_NAME, USER_PASSWORD);
+        authentication = new BasicAuthentication(resources.getString("user_name"),
+            resources.getString("user_pass"));
         authentication.authenticate(query);
 
         result = query.execute();
