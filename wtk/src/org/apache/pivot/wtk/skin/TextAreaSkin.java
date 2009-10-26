@@ -753,6 +753,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             int n = rows.getLength();
             if (n == 0
                 && from == -1) {
+                // There are no rows; select the terminator character
                 offset = 0;
             } else {
                 int i;
@@ -1511,7 +1512,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                         textArea.setSelection(offset, 0);
 
                         Bounds characterBounds = getCharacterBounds(offset);
-                        component.scrollAreaToVisible(0, characterBounds.y, getWidth(),
+                        component.scrollAreaToVisible(0, characterBounds.y, characterBounds.width,
                             characterBounds.height);
 
                         consumed = true;
@@ -1525,7 +1526,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                         textArea.setSelection(offset, 0);
 
                         Bounds characterBounds = getCharacterBounds(offset);
-                        component.scrollAreaToVisible(0, characterBounds.y, getWidth(),
+                        component.scrollAreaToVisible(0, characterBounds.y, characterBounds.width,
                             characterBounds.height);
 
                         consumed = true;
@@ -1605,8 +1606,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     @Override
     public void selectionChanged(TextArea textArea, int previousSelectionStart,
         int previousSelectionLength) {
-        if (documentView != null
-            && documentView.isValid()) {
+        if (documentView != null) {
             if (textArea.getSelectionLength() == 0) {
                 // Repaint the previous caret bounds
                 textArea.repaint(caret.x, caret.y, caret.width, caret.height);
@@ -1646,10 +1646,14 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         int selectionStart = textArea.getSelectionStart();
         Bounds startCharacterBounds = getCharacterBounds(selectionStart);
 
-        caret.x = startCharacterBounds.x;
-        caret.y = startCharacterBounds.y;
-        caret.width = 1;
-        caret.height = startCharacterBounds.height;
+        if (startCharacterBounds != null) {
+            caret.x = startCharacterBounds.x;
+            caret.y = startCharacterBounds.y;
+            caret.width = 1;
+            caret.height = startCharacterBounds.height;
+        } else {
+            System.err.println("Selection bounds are null.");
+        }
     }
 
     private void showCaret(boolean show) {
