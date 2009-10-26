@@ -36,12 +36,10 @@ public class FloatValidator extends DecimalValidator {
          * resulting number is withing range for a float.
          */
         Number number = parseNumber(text);
-        if (number.floatValue() > 0
-                && number.floatValue() < number.doubleValue()) {
+        if (number.doubleValue() > Float.MAX_VALUE) {
             return false;
         }
-        if (number.floatValue() < 0
-                && number.floatValue() > number.doubleValue()) {
+        if (number.doubleValue() < -Float.MAX_VALUE) {
             return false;
         }
         return true;
