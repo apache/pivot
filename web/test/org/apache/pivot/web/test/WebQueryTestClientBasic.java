@@ -40,17 +40,17 @@ import org.junit.Test;
  * <br/>
  * To Run these tests, a local instance of Apache must be started and
  * configured with the required resources (by default folders /public , and /protected
- * protected with basic authentication) and files. 
- * Then, before to run these tests, ensure basic authentication has been successfully setup 
+ * protected with basic authentication) and files.
+ * Then, before to run these tests, ensure basic authentication has been successfully setup
  * asking the same URLs from a Web Browser. <br/>
- * Note that now this class loads (in a standard Pivot way) some test parameters 
- * from a json file that must be in the same folder of this class. 
- * For example, to run this Class on another Server (for example on a local Tomcat instance), 
- * some parameters have to be changed  inside the json file, then rerun the test. 
- * 
- * TODO: 
+ * Note that now this class loads (in a standard Pivot way) some test parameters
+ * from a json file that must be in the same folder of this class.
+ * For example, to run this Class on another Server (for example on a local Tomcat instance),
+ * some parameters have to be changed  inside the json file, then rerun the test.
+ *
+ * TODO:
  *   - test other HTTP methods ...
- * 
+ *
  */
 public class WebQueryTestClientBasic {
     static Resources resources = null;  // parametric resources, using the Pivot-way
