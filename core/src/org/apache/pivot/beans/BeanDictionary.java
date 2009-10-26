@@ -17,14 +17,23 @@
 package org.apache.pivot.beans;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Proxy;
+import java.lang.reflect.Type;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import org.apache.pivot.collections.Dictionary;
-
+import org.apache.pivot.collections.HashMap;
+import org.apache.pivot.collections.HashSet;
+import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.ThreadUtilities;
+import org.apache.pivot.util.Vote;
 
 /**
  * Exposes Java bean properties of an object via the {@link Dictionary}
@@ -131,14 +140,70 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
         }
     }
 
+    private class BeanInvocationHandler implements InvocationHandler {
+        @Override
+        public Object invoke(Object proxy, Method event, Object[] arguments) throws Throwable {
+            String eventName = event.getName();
+            if (eventName.endsWith(PROPERTY_CHANGE_SUFFIX)) {
+                String propertyName = eventName.substring(0, eventName.length()
+                    - PROPERTY_CHANGE_SUFFIX.length());
+
+                if (notifyingProperties.contains(propertyName)) {
+                    beanDictionaryListeners.propertyChanged(BeanDictionary.this, propertyName);
+                }
+            }
+
+            Object result = null;
+            Class<?> returnType = event.getReturnType();
+            if (returnType == Vote.class) {
+                result = Vote.APPROVE;
+            } else if (returnType == Boolean.TYPE) {
+                result = false;
+            }
+
+            return result;
+        }
+    }
+
+    private static class BeanDictionaryListenerList extends ListenerList<BeanDictionaryListener>
+        implements BeanDictionaryListener {
+        @Override
+        public void beanChanged(BeanDictionary beanDictionary, Object previousBean) {
+            for (BeanDictionaryListener listener : this) {
+                listener.beanChanged(beanDictionary, previousBean);
+            }
+        }
+
+        @Override
+        public void propertyChanged(BeanDictionary beanDictionary, String propertyName) {
+            for (BeanDictionaryListener listener : this) {
+                listener.propertyChanged(beanDictionary, propertyName);
+            }
+        }
+    }
+
     private Object bean;
     private boolean ignoreReadOnlyProperties;
+
+    private HashMap<Class<?>, Object> beanListenerProxies = null;
+    private BeanInvocationHandler invocationHandler = null;
+    private HashSet<String> notifyingProperties = null;
+
+    private BeanDictionaryListenerList beanDictionaryListeners = null;
 
     public static final String GET_PREFIX = "get";
     public static final String IS_PREFIX = "is";
     public static final String SET_PREFIX = "set";
     public static final String FIELD_PREFIX = "~";
     public static final String LISTENERS_SUFFIX = "Listeners";
+    public static final String PROPERTY_CHANGE_SUFFIX = "Changed";
+
+    /**
+     * Creates a new bean dictionary that is not associated with a bean.
+     */
+    public BeanDictionary() {
+        this(null);
+    }
 
     /**
      * Creates a new bean dictionary.
@@ -157,19 +222,49 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
      * The bean object to wrap.
      */
     public BeanDictionary(Object bean, boolean ignoreReadOnlyProperties) {
-        if (bean == null) {
-            throw new IllegalArgumentException("bean is null.");
-        }
-
-        this.bean = bean;
         this.ignoreReadOnlyProperties = ignoreReadOnlyProperties;
+        setBean(bean);
     }
 
     /**
      * Returns the bean object this dictionary wraps.
+     *
+     * @return
+     * The bean object, or <tt>null</tt> if no bean has been set.
      */
     public Object getBean() {
         return bean;
+    }
+
+    /**
+     * Sets the bean object that this dictionary will wrap.
+     * <p>
+     * <b>NOTE</b>: failing to clear the bean of a bean dictionary may result in
+     * memory leaks, as the bean object may maintain references to the bean
+     * dictionary as long as it is set.
+     *
+     * @param bean
+     * The bean object, or <tt>null</tt> to clear the bean.
+     */
+    public void setBean(Object bean) {
+        Object previousBean = this.bean;
+
+        if (bean != previousBean) {
+            if (beanDictionaryListeners != null
+                && previousBean != null) {
+                unregisterBeanListeners();
+            }
+
+            this.bean = bean;
+
+            if (beanDictionaryListeners != null) {
+                if (bean != null) {
+                    registerBeanListeners();
+                }
+
+                beanDictionaryListeners.beanChanged(this, previousBean);
+            }
+        }
     }
 
     /**
@@ -184,6 +279,10 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
      */
     @Override
     public Object get(String key) {
+        if (bean == null) {
+            throw new IllegalStateException("bean is null.");
+        }
+
         if (key == null) {
             throw new IllegalArgumentException("key is null.");
         }
@@ -237,6 +336,10 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
      */
     @Override
     public Object put(String key, Object value) {
+        if (bean == null) {
+            throw new IllegalStateException("bean is null.");
+        }
+
         if (key == null) {
             throw new IllegalArgumentException("key is null.");
         }
@@ -324,6 +427,10 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
      */
     @Override
     public boolean containsKey(String key) {
+        if (bean == null) {
+            throw new IllegalStateException("bean is null.");
+        }
+
         if (key == null) {
             throw new IllegalArgumentException("key is null.");
         }
@@ -344,6 +451,10 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
      */
     @Override
     public boolean isEmpty() {
+        if (bean == null) {
+            throw new IllegalStateException("bean is null.");
+        }
+
         return !iterator().hasNext();
     }
 
@@ -357,7 +468,38 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
      * <tt>true</tt> if the property is read-only; <tt>false</tt>, otherwise.
      */
     public boolean isReadOnly(String key) {
+        if (bean == null) {
+            throw new IllegalStateException("bean is null.");
+        }
+
         return isReadOnly(bean.getClass(), key);
+    }
+
+    /**
+     * Tells whether or not the specified property fires change events.
+     *
+     * @param key
+     * The property name.
+     *
+     * @return
+     * <tt>true</tt> if the property fires change events; <tt>false</tt>
+     * otherwise.
+     */
+    public boolean isNotifying(String key) {
+        if (bean == null) {
+            throw new IllegalStateException("bean is null.");
+        }
+
+        if (beanDictionaryListeners == null) {
+            beanDictionaryListeners = new BeanDictionaryListenerList();
+            beanListenerProxies = new HashMap<Class<?>, Object>();
+            invocationHandler = new BeanInvocationHandler();
+            notifyingProperties = new HashSet<String>();
+
+            registerBeanListeners();
+        }
+
+        return notifyingProperties.contains(key);
     }
 
     /**
@@ -370,6 +512,10 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
      * The type of the property.
      */
     public Class<?> getType(String key) {
+        if (bean == null) {
+            throw new IllegalStateException("bean is null.");
+        }
+
         return getType(bean.getClass(), key);
     }
 
@@ -381,6 +527,10 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
      */
     @Override
     public Iterator<String> iterator() {
+        if (bean == null) {
+            throw new IllegalStateException("bean is null.");
+        }
+
         return new PropertyIterator();
     }
 
@@ -423,6 +573,142 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
      */
     private Method getSetterMethod(String key, Class<?> valueType) {
         return getSetterMethod(bean.getClass(), key, valueType);
+    }
+
+    /**
+     * Registers event listeners on the bean so that the dictionary can fire
+     * property change events and report which properties can fire change
+     * events.
+     */
+    private void registerBeanListeners() {
+        Method[] methods = bean.getClass().getMethods();
+
+        for (int i = 0; i < methods.length; i++) {
+            Method method = methods[i];
+
+            if (ListenerList.class.isAssignableFrom(method.getReturnType())
+                && (method.getModifiers() & Modifier.STATIC) == 0) {
+                ParameterizedType genericType = (ParameterizedType)method.getGenericReturnType();
+                Type[] typeArguments = genericType.getActualTypeArguments();
+
+                if (typeArguments.length == 1) {
+                    Class<?> listenerInterface = (Class<?>)typeArguments[0];
+
+                    if (!listenerInterface.isInterface()) {
+                        throw new RuntimeException(listenerInterface.getName()
+                            + " is not an interface.");
+                    }
+
+                    Method[] interfaceMethods = listenerInterface.getMethods();
+                    for (int j = 0; j < interfaceMethods.length; j++) {
+                        Method interfaceMethod = interfaceMethods[j];
+                        String interfaceMethodName = interfaceMethod.getName();
+
+                        if (interfaceMethodName.endsWith(PROPERTY_CHANGE_SUFFIX)) {
+                            String propertyName = interfaceMethodName.substring(0,
+                                interfaceMethodName.length() - PROPERTY_CHANGE_SUFFIX.length());
+
+                            if (containsKey(propertyName)) {
+                                notifyingProperties.add(propertyName);
+                            }
+                        }
+                    }
+
+                    // Get the listener list
+                    Object listenerList;
+                    try {
+                        listenerList = method.invoke(bean);
+                    } catch (InvocationTargetException exception) {
+                        throw new RuntimeException(exception);
+                    } catch (IllegalAccessException exception) {
+                        throw new RuntimeException(exception);
+                    }
+
+                    // Get the listener for this interface
+                    Object listener = beanListenerProxies.get(listenerInterface);
+                    if (listener == null) {
+                        listener = Proxy.newProxyInstance(ThreadUtilities.getClassLoader(),
+                            new Class[]{listenerInterface}, invocationHandler);
+                        beanListenerProxies.put(listenerInterface, listener);
+                    }
+
+                    // Add the listener
+                    Class<?> listenerListClass = listenerList.getClass();
+                    Method addMethod;
+                    try {
+                        addMethod = listenerListClass.getMethod("add",
+                            new Class<?>[] {Object.class});
+                    } catch (NoSuchMethodException exception) {
+                        throw new RuntimeException(exception);
+                    }
+
+                    try {
+                        addMethod.invoke(listenerList, new Object[] {listener});
+                    } catch (IllegalAccessException exception) {
+                        throw new RuntimeException(exception);
+                    } catch (InvocationTargetException exception) {
+                        throw new RuntimeException(exception);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Un-registers event listeners on the bean.
+     */
+    private void unregisterBeanListeners() {
+        Method[] methods = bean.getClass().getMethods();
+
+        for (int i = 0; i < methods.length; i++) {
+            Method method = methods[i];
+
+            if (ListenerList.class.isAssignableFrom(method.getReturnType())
+                && (method.getModifiers() & Modifier.STATIC) == 0) {
+                ParameterizedType genericType = (ParameterizedType)method.getGenericReturnType();
+                Type[] typeArguments = genericType.getActualTypeArguments();
+
+                if (typeArguments.length == 1) {
+                    Class<?> listenerInterface = (Class<?>)typeArguments[0];
+
+                    // Get the listener list
+                    Object listenerList;
+                    try {
+                        listenerList = method.invoke(bean);
+                    } catch (InvocationTargetException exception) {
+                        throw new RuntimeException(exception);
+                    } catch (IllegalAccessException exception) {
+                        throw new RuntimeException(exception);
+                    }
+
+                    // Get the listener for this interface
+                    Object listener = beanListenerProxies.get(listenerInterface);
+                    if (listener == null) {
+                        throw new IllegalStateException("Listener proxy is null.");
+                    }
+
+                    // Remove the listener
+                    Class<?> listenerListClass = listenerList.getClass();
+                    Method removeMethod;
+                    try {
+                        removeMethod = listenerListClass.getMethod("remove",
+                            new Class<?>[] {Object.class});
+                    } catch (NoSuchMethodException exception) {
+                        throw new RuntimeException(exception);
+                    }
+
+                    try {
+                        removeMethod.invoke(listenerList, new Object[] {listener});
+                    } catch (IllegalAccessException exception) {
+                        throw new RuntimeException(exception);
+                    } catch (InvocationTargetException exception) {
+                        throw new RuntimeException(exception);
+                    }
+                }
+            }
+        }
+
+        notifyingProperties.clear();
     }
 
     /**
@@ -677,5 +963,20 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
         }
 
         return coercedValue;
+    }
+
+    public ListenerList<BeanDictionaryListener> getBeanDictionaryListeners() {
+        if (beanDictionaryListeners == null) {
+            beanDictionaryListeners = new BeanDictionaryListenerList();
+            beanListenerProxies = new HashMap<Class<?>, Object>();
+            invocationHandler = new BeanInvocationHandler();
+            notifyingProperties = new HashSet<String>();
+
+            if (bean != null) {
+                registerBeanListeners();
+            }
+        }
+
+        return beanDictionaryListeners;
     }
 }

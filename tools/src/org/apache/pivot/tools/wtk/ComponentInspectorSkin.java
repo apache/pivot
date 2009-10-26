@@ -21,8 +21,7 @@ import java.lang.reflect.Method;
 import java.util.Comparator;
 
 import org.apache.pivot.beans.BeanDictionary;
-import org.apache.pivot.beans.BeanMonitor;
-import org.apache.pivot.beans.BeanMonitorListener;
+import org.apache.pivot.beans.BeanDictionaryListener;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.EnumList;
 import org.apache.pivot.collections.HashMap;
@@ -81,8 +80,7 @@ class ComponentInspectorSkin extends ContainerSkin implements ComponentInspector
     @WTKX private Form propertiesForm = null;
     @WTKX private BoxPane stylesPane = null;
 
-    private BeanDictionary beanDictionary = null;
-    private BeanMonitor beanMonitor = new BeanMonitor();
+    private BeanDictionary beanDictionary = new BeanDictionary();
 
     private HashMap<String, Component> inspectorComponents = new HashMap<String, Component>();
 
@@ -91,9 +89,9 @@ class ComponentInspectorSkin extends ContainerSkin implements ComponentInspector
         new PropertySourceTypeComparator();
 
     public ComponentInspectorSkin() {
-        beanMonitor.getBeanMonitorListeners().add(new BeanMonitorListener.Adapter() {
+        beanDictionary.getBeanDictionaryListeners().add(new BeanDictionaryListener.Adapter() {
             @Override
-            public void propertyChanged(BeanMonitor beanMonitor, String propertyName) {
+            public void propertyChanged(BeanDictionary beanDictionary, String propertyName) {
                 Class<?> propertyType = beanDictionary.getType(propertyName);
 
                 if (propertyType == Boolean.TYPE) {
@@ -178,18 +176,15 @@ class ComponentInspectorSkin extends ContainerSkin implements ComponentInspector
 
         Component source = componentInspector.getSource();
 
-        beanDictionary = null;
-        beanMonitor.setSource(source);
+        beanDictionary.setBean(source);
 
         if (source != null) {
-            beanDictionary = new BeanDictionary(source);
-
             Class<?> sourceType = source.getClass();
             HashMap<Class<?>, List<String>> propertyBuckets =
                 new HashMap<Class<?>, List<String>>(propertySourceTypeComparator);
 
             for (String propertyName : beanDictionary) {
-                if (beanMonitor.isNotifyingProperty(propertyName)
+                if (beanDictionary.isNotifying(propertyName)
                     && !beanDictionary.isReadOnly(propertyName)) {
                     Method method = BeanDictionary.getGetterMethod(sourceType, propertyName);
                     Class<?> declaringClass = method.getDeclaringClass();
