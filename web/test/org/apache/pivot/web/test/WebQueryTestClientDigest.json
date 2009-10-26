@@ -18,7 +18,7 @@
     user_name: "test",
     user_pass: "test0",
 
-    rfc_uri_protected: "/dir/index.html", 
+    rfc_uri_protected: "/dir/index.html",
     rfc_user_name: "Mufasa",
     rfc_user_pass: "Circle Of Life",
 

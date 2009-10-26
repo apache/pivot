@@ -41,7 +41,7 @@ import org.junit.Test;
  * This is a JUnit 4 Test, but should be excluded from usual (Unit) Test Suite.
  * <br/>
  * To Run these tests, a local instance of Apache must be started and configured with
- * the required resources (by default folders /public , and /dir and /protected_digest 
+ * the required resources (by default folders /public , and /dir and /protected_digest
  * protected with digest authentication) and files.
  * Before to run these tests, ensure digest authentication has been successfully setup
  * asking the same URLs from a Web Browser.
@@ -58,7 +58,7 @@ import org.junit.Test;
  *     -- test the timeout (of query, and not of the test method)
  *     -- test the cancel (of query) , like downloading an iso file
  *   - test also with Tomcat ...
- *   
+ *
  */
 public class WebQueryTestClientDigest {
     static Resources resources = null; // parametric resources, using the
