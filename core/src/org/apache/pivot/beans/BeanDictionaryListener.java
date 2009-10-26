@@ -16,8 +16,6 @@
  */
 package org.apache.pivot.beans;
 
-import java.lang.reflect.Method;
-
 /**
  * Bean dictionary listener interface.
  */
