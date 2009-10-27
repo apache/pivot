@@ -1203,13 +1203,13 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
                             if (columnWidths[j + k] < 0) {
                                 adjustCells = false;
                                 break;
-                            } else {
-                                if (defaultWidthColumns[j + k]) {
-                                    spannedDefaultWidthCellCount++;
-                                }
-
-                                spannedWidth += columnWidths[j + k];
                             }
+
+                            if (defaultWidthColumns[j + k]) {
+                                spannedDefaultWidthCellCount++;
+                            }
+
+                            spannedWidth += columnWidths[j + k];
                         }
 
                         // If we span any relative-width columns, we assume
@@ -1375,13 +1375,13 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
                             if (rowHeights[i + k] < 0) {
                                 adjustCells = false;
                                 break;
-                            } else {
-                                if (defaultHeightRows[i + k]) {
-                                    spannedDefaultHeightCellCount++;
-                                }
-
-                                spannedHeight += rowHeights[i + k];
                             }
+
+                            if (defaultHeightRows[i + k]) {
+                                spannedDefaultHeightCellCount++;
+                            }
+
+                            spannedHeight += rowHeights[i + k];
                         }
 
                         // If we span any relative-height rows, we assume

@@ -487,11 +487,7 @@ public class TerraPaletteSkin extends WindowSkin {
                     cursor = Cursor.RESIZE_EAST;
                 } else if (preferredHeightSet) {
                     cursor = Cursor.RESIZE_SOUTH;
-                } else {
-                    cursor = null;
                 }
-            } else {
-                cursor = null;
             }
 
             component.setCursor(cursor);

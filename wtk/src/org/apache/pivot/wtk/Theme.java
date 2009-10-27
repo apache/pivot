@@ -171,7 +171,7 @@ public abstract class Theme {
 
                 if (string.endsWith("%")) {
                     float percentage = Float.parseFloat(string.substring(0, string.length() - 1)) / 100f;
-                    size = Math.round((float)font.getSize() * percentage);
+                    size = Math.round(font.getSize() * percentage);
                 } else {
                     throw new IllegalArgumentException(value + " is not a valid font size.");
                 }

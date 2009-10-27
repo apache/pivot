@@ -1440,13 +1440,13 @@ public class TableView extends Component {
 
             if (n > 1) {
                 throw new IllegalArgumentException("Selection length is greater than 1.");
-            } else {
-                if (n > 0) {
-                    Span selectedRange = selectedRanges.get(0);
+            }
 
-                    if (selectedRange.getLength() > 1) {
-                        throw new IllegalArgumentException("Selected range length is greater than 1.");
-                    }
+            if (n > 0) {
+                Span selectedRange = selectedRanges.get(0);
+
+                if (selectedRange.getLength() > 1) {
+                    throw new IllegalArgumentException("Selected range length is greater than 1.");
                 }
             }
         }

@@ -687,17 +687,17 @@ public class Menu extends Container {
                 if (item.isEnabled()) {
                     item.setActive(true);
                     break;
-                } else {
-                    itemIndex++;
                 }
+
+                itemIndex++;
             }
 
             if (itemIndex < sectionLength) {
                 break;
-            } else {
-                sectionIndex++;
-                itemIndex = 0;
             }
+
+            sectionIndex++;
+            itemIndex = 0;
         }
     }
 
@@ -732,16 +732,16 @@ public class Menu extends Container {
                 if (item.isEnabled()) {
                     item.setActive(true);
                     break;
-                } else {
-                    itemIndex--;
                 }
+
+                itemIndex--;
             }
 
             if (itemIndex >= 0) {
                 break;
-            } else {
-                sectionIndex--;
             }
+
+            sectionIndex--;
         }
     }
 

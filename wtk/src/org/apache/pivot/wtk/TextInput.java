@@ -226,9 +226,7 @@ public class TextInput extends Component {
                 previousTextNode.getNodeListeners().remove(textNodeListener);
             }
 
-            if (textNode != null) {
                 textNode.getNodeListeners().add(textNodeListener);
-            }
 
             // Clear the selection
             this.textNode = textNode;

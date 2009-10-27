@@ -31,8 +31,8 @@ public class Circular implements Easing {
     public float easeInOut(float time, float begin, float change, float duration) {
         if ((time /= duration / 2f) < 1f) {
             return -change / 2f * ((float)Math.sqrt(1f - time * time) - 1f) + begin;
-        } else {
-            return change / 2f * ((float)Math.sqrt(1f - (time -= 2f) * time) + 1f) + begin;
         }
+
+        return change / 2f * ((float)Math.sqrt(1f - (time -= 2f) * time) + 1f) + begin;
     }
 }

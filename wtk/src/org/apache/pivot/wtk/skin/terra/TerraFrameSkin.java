@@ -750,11 +750,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
                     cursor = Cursor.RESIZE_EAST;
                 } else if (preferredHeightSet) {
                     cursor = Cursor.RESIZE_SOUTH;
-                } else {
-                    cursor = null;
                 }
-            } else {
-                cursor = null;
             }
 
             component.setCursor(cursor);

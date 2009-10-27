@@ -31,8 +31,8 @@ public class Quartic implements Easing {
     public float easeInOut(float time, float begin, float change, float duration) {
         if ((time /= duration / 2f) < 1) {
             return change / 2f * time * time * time * time + begin;
-        } else {
-            return -change / 2f * ((time -= 2) * time * time * time - 2) + begin;
         }
+
+        return -change / 2f * ((time -= 2) * time * time * time - 2) + begin;
     }
 }

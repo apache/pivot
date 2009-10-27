@@ -91,9 +91,7 @@ public class TreeViewNodeRenderer extends BoxPane implements TreeView.NodeRender
             } else if (node instanceof Image) {
                 icon = (Image)node;
             } else {
-                if (node != null) {
                     text = node.toString();
-                }
             }
 
             // Update the image view

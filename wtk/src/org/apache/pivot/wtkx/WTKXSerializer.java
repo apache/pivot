@@ -221,13 +221,11 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             }
 
             // If the function didn't return a value, return the default
-            if (result == null) {
-                Class<?> returnType = method.getReturnType();
-                if (returnType == Vote.class) {
-                    result = Vote.APPROVE;
-                } else if (returnType == Boolean.TYPE) {
-                    result = false;
-                }
+            Class<?> returnType = method.getReturnType();
+            if (returnType == Vote.class) {
+                result = Vote.APPROVE;
+            } else if (returnType == Boolean.TYPE) {
+                result = false;
             }
 
             return result;

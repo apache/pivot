@@ -181,10 +181,10 @@ public class FlowPaneSkin extends ContainerSkin {
                     // The component is too big to fit in the remaining space,
                     // and it is not the only component in this row; wrap
                     break;
-                } else {
-                    baseline = Math.max(baseline, component.getBaseline(componentSize.width));
-                    rowWidth += componentSize.width + horizontalSpacing;
                 }
+
+                baseline = Math.max(baseline, component.getBaseline(componentSize.width));
+                rowWidth += componentSize.width + horizontalSpacing;
             }
         }
 

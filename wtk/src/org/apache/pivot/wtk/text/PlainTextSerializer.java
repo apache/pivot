@@ -66,6 +66,7 @@ public class PlainTextSerializer implements Serializer<Document> {
         return document;
     }
 
+    @SuppressWarnings("unused")
     public Document readObject(Reader reader)
         throws IOException, SerializationException {
         Document document = new Document();

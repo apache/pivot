@@ -31,8 +31,8 @@ public class Cubic implements Easing {
     public float easeInOut(float time, float begin, float change, float duration) {
         if ((time /= duration / 2f) < 1f) {
             return change / 2f * time * time * time + begin;
-        } else {
-            return change / 2f * ((time -= 2f) * time * time + 2f) + begin;
         }
+
+        return change / 2f * ((time -= 2f) * time * time + 2f) + begin;
     }
 }

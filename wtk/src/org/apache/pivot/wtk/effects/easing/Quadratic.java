@@ -31,8 +31,8 @@ public class Quadratic implements Easing {
     public float easeInOut(float time, float begin, float change, float duration) {
         if ((time /= duration / 2) < 1) {
             return change / 2 * time * time + begin;
-        } else {
-            return -change / 2 * ((--time) * (time - 2) - 1) + begin;
         }
+
+        return -change / 2 * ((--time) * (time - 2) - 1) + begin;
     }
 }

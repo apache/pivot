@@ -42,6 +42,7 @@ public class WindowSkin extends ContainerSkin implements Window.Skin,
      * ensures that focus does not traverse out of the window.
      */
     public static class WindowFocusTraversalPolicy implements FocusTraversalPolicy {
+        @SuppressWarnings("null")
         @Override
         public Component getNextComponent(Container container, Component component, Direction direction) {
             assert (container instanceof Window) : "container is not a Window";
