@@ -420,8 +420,9 @@ public abstract class Container extends Component
     /**
      * Unsupported for containers. Only leaf components can have tooltips.
      */
-    public void setTooltip(String tooltip) {
-        throw new UnsupportedOperationException("A container cannot have a toolip.");
+    @Override
+    public void setTooltipText(String tooltip) {
+        throw new UnsupportedOperationException("A container cannot have a tooltip.");
     }
 
     /**
