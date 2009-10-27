@@ -78,7 +78,7 @@ public class ListViewItemRenderer extends BoxPane implements ListView.ItemRender
             } else if (item instanceof Image) {
                 icon = (Image)item;
             } else {
-                    text = item.toString();
+                text = item.toString();
             }
 
             // Update the image view

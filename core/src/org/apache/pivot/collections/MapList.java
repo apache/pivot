@@ -161,7 +161,7 @@ public class MapList<K, V> implements List<Pair<K, V>> {
                 previousSource.getMapListeners().remove(mapHandler);
             }
 
-                source.getMapListeners().add(mapHandler);
+            source.getMapListeners().add(mapHandler);
 
             // Update source
             this.source = source;
