@@ -27,73 +27,87 @@ limitations under the License.
             <left>
                 <Border>
                     <content>
-                        <TreeView wtkx:id="treeView">
-                            <nodeRenderer>
-                                <content:TreeViewNodeRenderer styles="{padding:1}"/>
-                            </nodeRenderer>
-                            <treeData>
-                                <content:TreeBranch>
-                                    <content:TreeBranch text="Buttons" icon="@folder.png">
-                                    </content:TreeBranch>
-                                    <content:TreeBranch text="Lists" icon="@folder.png">
-                                    </content:TreeBranch>
-                                    <content:TreeBranch text="Text" icon="@folder.png">
-                                    </content:TreeBranch>
-                                    <content:TreeBranch text="Layout Containers" icon="@folder.png">
-                                        <explorer:ComponentNode text="FlowPane"
-                                            icon="@magnifier.png"
-                                            src="@flowpane/flow_pane.wtkx"
-                                            horizontalScrollBarPolicy="fill"
-                                            verticalScrollBarPolicy="fill"/>
-                                        <explorer:ComponentNode text="BoxPane"
-                                            icon="@magnifier.png"
-                                            src="@boxpane/box_pane.wtkx"
-                                            horizontalScrollBarPolicy="fill"
-                                            verticalScrollBarPolicy="fill"/>
-                                        <explorer:ComponentNode text="TablePane"
-                                            icon="@magnifier.png"
-                                            src="@tablepane/table_pane.wtkx"
-                                            horizontalScrollBarPolicy="fill"
-                                            verticalScrollBarPolicy="fill"/>
-                                        <explorer:ComponentNode text="Border"
-                                            icon="@magnifier.png"
-                                            src="@border/border.wtkx"
-                                            horizontalScrollBarPolicy="fill"
-                                            verticalScrollBarPolicy="fill"/>
-                                        <explorer:ComponentNode text="SplitPane"
-                                            icon="@magnifier.png"
-                                            src="@splitpane/split_pane.wtkx"
-                                            horizontalScrollBarPolicy="fill"
-                                            verticalScrollBarPolicy="fill"/>
-                                    </content:TreeBranch>
-                                    <content:TreeBranch text="Navigation Containers" icon="@folder.png">
-                                    </content:TreeBranch>
-                                    <content:TreeBranch text="Progress Indicators" icon="@folder.png">
-                                    </content:TreeBranch>
-                                    <content:TreeBranch text="Bounded Range Components"
-                                        icon="@folder.png">
-                                        <explorer:ComponentNode text="ScrollBar"
-                                            icon="@magnifier.png"
-                                            src="@scrollbar/scroll_bar.wtkx"
-                                            horizontalScrollBarPolicy="auto"
-                                            verticalScrollBarPolicy="auto"/>
-                                    </content:TreeBranch>
-                                    <content:TreeBranch text="Calendars" icon="@folder.png">
-                                    </content:TreeBranch>
-                                    <content:TreeBranch text="Menus" icon="@folder.png">
-                                    </content:TreeBranch>
-                                    <content:TreeBranch text="Table Views" icon="@folder.png">
-                                    </content:TreeBranch>
-                                    <content:TreeBranch text="Tree Views" icon="@folder.png">
-                                        <explorer:ComponentNode text="TreeView"
-                                            icon="@magnifier.png"
-                                            src="@treeview/tree_view.wtkx"
-                                            horizontalScrollBarPolicy="fill_to_capacity"
-                                            verticalScrollBarPolicy="auto"/>
-                                    </content:TreeBranch>
-                                </content:TreeBranch>
-                            </treeData>
-                        </TreeView>
+                        <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
+                            <view>
+                                <TreeView wtkx:id="treeView">
+                                    <nodeRenderer>
+                                        <content:TreeViewNodeRenderer styles="{padding:1}"/>
+                                    </nodeRenderer>
+                                    <treeData>
+                                        <content:TreeBranch>
+                                            <content:TreeBranch text="Buttons"
+                                                icon="@folder.png">
+                                            </content:TreeBranch>
+                                            <content:TreeBranch text="Lists"
+                                                icon="@folder.png">
+                                            </content:TreeBranch>
+                                            <content:TreeBranch text="Text"
+                                                icon="@folder.png">
+                                            </content:TreeBranch>
+                                            <content:TreeBranch text="Layout Containers"
+                                                icon="@folder.png">
+                                                <explorer:ComponentNode text="FlowPane"
+                                                    icon="@magnifier.png"
+                                                    src="@flowpane/flow_pane.wtkx"
+                                                    horizontalScrollBarPolicy="fill"
+                                                    verticalScrollBarPolicy="fill"/>
+                                                <explorer:ComponentNode text="BoxPane"
+                                                    icon="@magnifier.png"
+                                                    src="@boxpane/box_pane.wtkx"
+                                                    horizontalScrollBarPolicy="fill"
+                                                    verticalScrollBarPolicy="fill"/>
+                                                <explorer:ComponentNode text="TablePane"
+                                                    icon="@magnifier.png"
+                                                    src="@tablepane/table_pane.wtkx"
+                                                    horizontalScrollBarPolicy="fill"
+                                                    verticalScrollBarPolicy="fill"/>
+                                                <explorer:ComponentNode text="Border"
+                                                    icon="@magnifier.png"
+                                                    src="@border/border.wtkx"
+                                                    horizontalScrollBarPolicy="fill"
+                                                    verticalScrollBarPolicy="fill"/>
+                                                <explorer:ComponentNode text="SplitPane"
+                                                    icon="@magnifier.png"
+                                                    src="@splitpane/split_pane.wtkx"
+                                                    horizontalScrollBarPolicy="fill"
+                                                    verticalScrollBarPolicy="fill"/>
+                                            </content:TreeBranch>
+                                            <content:TreeBranch text="Navigation Containers"
+                                                icon="@folder.png">
+                                            </content:TreeBranch>
+                                            <content:TreeBranch text="Progress Indicators"
+                                                icon="@folder.png">
+                                            </content:TreeBranch>
+                                            <content:TreeBranch text="Bounded Range Components"
+                                                icon="@folder.png">
+                                                <explorer:ComponentNode text="ScrollBar"
+                                                    icon="@magnifier.png"
+                                                    src="@scrollbar/scroll_bar.wtkx"
+                                                    horizontalScrollBarPolicy="auto"
+                                                    verticalScrollBarPolicy="auto"/>
+                                            </content:TreeBranch>
+                                            <content:TreeBranch text="Calendars"
+                                                icon="@folder.png">
+                                            </content:TreeBranch>
+                                            <content:TreeBranch text="Menus"
+                                                icon="@folder.png">
+                                            </content:TreeBranch>
+                                            <content:TreeBranch text="Table Views"
+                                                icon="@folder.png">
+                                            </content:TreeBranch>
+                                            <content:TreeBranch text="Tree Views"
+                                                icon="@folder.png">
+                                                <explorer:ComponentNode text="TreeView"
+                                                    icon="@magnifier.png"
+                                                    src="@treeview/tree_view.wtkx"
+                                                    horizontalScrollBarPolicy="fill_to_capacity"
+                                                    verticalScrollBarPolicy="auto"/>
+                                            </content:TreeBranch>
+                                        </content:TreeBranch>
+                                    </treeData>
+                                </TreeView>
+                            </view>
+                        </ScrollPane>
                     </content>
                 </Border>
             </left>

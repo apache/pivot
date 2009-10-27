@@ -120,7 +120,7 @@ class EventLoggerSkin extends ContainerSkin implements EventLoggerListener {
 
                     boolean checked = (checkState == TreeView.NodeCheckState.CHECKED);
 
-                    List<?> treeData = (List<?>)treeView.getTreeData();
+                    List<?> treeData = treeView.getTreeData();
                     TreeNode treeNode = (TreeNode)Sequence.Tree.get(treeData, path);
 
                     if (treeNode instanceof List<?>) {

@@ -100,6 +100,8 @@ class ComponentInspectorSkin extends ContainerSkin implements ComponentInspector
                     updateIntControl(propertyName);
                 } else if (propertyType == Float.TYPE) {
                     updateFloatControl(propertyName);
+                } else if (propertyType == String.class) {
+                    updateStringControl(propertyName);
                 } else if (propertyType.isEnum()) {
                     updateEnumControl(propertyName);
                 } else if (propertyType == Point.class) {
@@ -222,6 +224,8 @@ class ComponentInspectorSkin extends ContainerSkin implements ComponentInspector
             inspectorComponent = addIntControl(propertyName, section);
         } else if (propertyType == Float.TYPE) {
             inspectorComponent = addFloatControl(propertyName, section);
+        } else if (propertyType == String.class) {
+            inspectorComponent = addStringControl(propertyName, section);
         } else if (propertyType.isEnum()) {
             inspectorComponent = addEnumControl(propertyName, section);
         } else if (propertyType == Point.class) {
@@ -338,6 +342,43 @@ class ComponentInspectorSkin extends ContainerSkin implements ComponentInspector
         if (textInput != null) {
             float propertyValue = (Float)beanDictionary.get(propertyName);
             textInput.setText(String.valueOf(propertyValue));
+        }
+    }
+
+    private Component addStringControl(final String propertyName, Form.Section section) {
+        String propertyValue = (String)beanDictionary.get(propertyName);
+
+        TextInput textInput = new TextInput();
+        textInput.setText(propertyValue == null ? "" : propertyValue);
+        section.add(textInput);
+        Form.setLabel(textInput, propertyName);
+
+        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+            @Override
+            public void focusedChanged(Component component, Component obverseComponent) {
+                if (!component.isFocused()) {
+                    TextInput textInput = (TextInput)component;
+
+                    try {
+                        beanDictionary.put(propertyName, textInput.getText());
+                    } catch (Exception exception) {
+                        exception.printStackTrace();
+                        String propertyValue = (String)beanDictionary.get(propertyName);
+                        textInput.setText(propertyValue == null ? "" : propertyValue);
+                    }
+                }
+            }
+        });
+
+        return textInput;
+    }
+
+    private void updateStringControl(String propertyName) {
+        TextInput textInput = (TextInput)inspectorComponents.get(propertyName);
+
+        if (textInput != null) {
+            String propertyValue = (String)beanDictionary.get(propertyName);
+            textInput.setText(propertyValue == null ? "" : propertyValue);
         }
     }
 
