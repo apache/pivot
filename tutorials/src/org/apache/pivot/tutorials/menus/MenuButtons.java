@@ -137,8 +137,8 @@ public class MenuButtons implements Application {
     public Point getRandomLocation(Shape shape) {
         Bounds bounds = shape.getBounds();
 
-        int x = (int)(Math.random() * (double)(MAX_X - bounds.width));
-        int y = (int)(Math.random() * (double)(MAX_Y - bounds.height));
+        int x = (int)(Math.random() * (MAX_X - bounds.width));
+        int y = (int)(Math.random() * (MAX_Y - bounds.height));
 
         return new Point(x, y);
     }
