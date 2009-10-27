@@ -233,6 +233,7 @@ public class CSVSerializerTest {
         assertEquals("a,\"\nb\n\",c\r\n", writer.toString());
     }
 
+    @SuppressWarnings("unused")
     @Test
     public void testStreamReader() throws IOException, SerializationException {
         // TODO

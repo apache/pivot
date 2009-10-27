@@ -110,7 +110,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
     }
 
     public HashMap(Pair<K, V>... entries) {
-        this(Math.max((int)((float)entries.length / DEFAULT_LOAD_FACTOR) + 1, DEFAULT_CAPACITY));
+        this(Math.max((int)(entries.length / DEFAULT_LOAD_FACTOR) + 1, DEFAULT_CAPACITY));
 
         for (int i = 0; i < entries.length; i++) {
             Pair<K, V> entry = entries[i];
@@ -119,7 +119,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
     }
 
     public HashMap(Map<K, V> map) {
-        this(Math.max((int)((float)map.getCount() / DEFAULT_LOAD_FACTOR) + 1, DEFAULT_CAPACITY));
+        this(Math.max((int)(map.getCount() / DEFAULT_LOAD_FACTOR) + 1, DEFAULT_CAPACITY));
 
         for (K key : map) {
             put(key, map.get(key));
@@ -191,7 +191,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
             count++;
 
             int capacity = getCapacity();
-            if (count > (int)((float)capacity * loadFactor)) {
+            if (count > (int)(capacity * loadFactor)) {
                 rehash(capacity * 2);
             }
 
@@ -340,7 +340,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         } else {
             if (keys == null) {
                 // Populate key list
-                ArrayList<K> keys = new ArrayList<K>((int)((float)getCapacity() * loadFactor));
+                ArrayList<K> keys = new ArrayList<K>((int)(getCapacity() * loadFactor));
                 for (K key : this) {
                     keys.add(key);
                 }

@@ -396,9 +396,9 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
 
                 if (cause instanceof RuntimeException) {
                     throw (RuntimeException)cause;
-                } else {
-                    throw new RuntimeException(cause);
                 }
+
+                throw new RuntimeException(cause);
             }
         }
 

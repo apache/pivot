@@ -313,6 +313,7 @@ public class JSONSerializer implements Serializer<Object> {
         return stringBuilder.toString();
     }
 
+    @SuppressWarnings("unused")
     private Number readNumber(Reader reader)
         throws IOException, SerializationException {
         Number number = null;

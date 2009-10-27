@@ -442,7 +442,7 @@ public class CSVSerializer implements Serializer<List<?>> {
      * @param writer
      * The writer to which data will be written.
      */
-    @SuppressWarnings({"unchecked"})
+    @SuppressWarnings({"unchecked", "unused"})
     public void writeObject(List<?> items, Writer writer)
         throws IOException, SerializationException {
         if (items == null) {

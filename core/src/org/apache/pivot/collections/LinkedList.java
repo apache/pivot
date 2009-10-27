@@ -137,7 +137,7 @@ public class LinkedList<T> implements List<T>, Serializable {
                 if (index == 0) {
                     // Insert at head
                     next = first;
-                    previous = null;
+                    // previous = null;  // previous has already this value
                 } else if (index < length) {
                     if (forward) {
                         // Insert after current
@@ -150,7 +150,7 @@ public class LinkedList<T> implements List<T>, Serializable {
                     }
                 } else {
                     // Insert at tail
-                    next = null;
+                    // next = null;  // next has already this value
                     previous = last;
                 }
 
@@ -395,9 +395,9 @@ public class LinkedList<T> implements List<T>, Serializable {
             if (nodeIterator.next() == item) {
                 nodeIterator.remove();
                 break;
-            } else {
-                index++;
             }
+
+            index++;
         }
 
         if (!nodeIterator.hasNext()) {
