@@ -120,13 +120,17 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
      * If there is a problem deserializing the resource from its JSON format.
      *
      * @throws IllegalArgumentException
-     * If baseName or locale is null.
+     * If baseName or locale or charset is null.
      *
      * @throws MissingResourceException
      * If no resource for the specified base name can be found.
      */
     public Resources(Resources parent, String baseName, Locale locale, Charset charset)
         throws IOException, SerializationException {
+        if (baseName == null) {
+            throw new IllegalArgumentException("baseName is null");
+        }
+
         if (locale == null) {
             throw new IllegalArgumentException("locale is null");
         }
