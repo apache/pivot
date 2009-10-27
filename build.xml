@@ -418,11 +418,12 @@ limitations under the License.
     </target>
 
     <!-- Demos -->
-    <target name="demos" depends="core, wtk, web">
+    <target name="demos" depends="core, wtk, web, tools">
         <compile project="demos">
             <pathelement location="core/${folder.bin}"/>
             <pathelement location="web/${folder.bin}"/>
             <pathelement location="wtk/${folder.bin}"/>
+            <pathelement location="tools/${folder.bin}"/>
         </compile>
     </target>
 
