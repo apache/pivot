@@ -265,8 +265,6 @@ public class TextArea extends Component {
                 PlainTextSerializer serializer = new PlainTextSerializer();
                 StringReader reader = new StringReader(text);
                 document = serializer.readObject(reader);
-            } catch(SerializationException exception) {
-                throw new RuntimeException(exception);
             } catch(IOException exception) {
                 throw new RuntimeException(exception);
             }

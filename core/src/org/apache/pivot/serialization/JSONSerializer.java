@@ -313,9 +313,7 @@ public class JSONSerializer implements Serializer<Object> {
         return stringBuilder.toString();
     }
 
-    @SuppressWarnings("unused")
-    private Number readNumber(Reader reader)
-        throws IOException, SerializationException {
+    private Number readNumber(Reader reader) throws IOException {
         Number number = null;
 
         StringBuilder stringBuilder = new StringBuilder();

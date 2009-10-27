@@ -142,7 +142,7 @@ public class CSVSerializerTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testBasicWriteObject() throws IOException, SerializationException {
+    public void testBasicWriteObject() throws IOException {
         List<Object> items = new ArrayList<Object>();
         items.add(new HashMap<String, Object>(
             new Dictionary.Pair<String, Object>("A", "a1"),
@@ -169,7 +169,7 @@ public class CSVSerializerTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testQuotedCommaWriteObject() throws IOException, SerializationException {
+    public void testQuotedCommaWriteObject() throws IOException {
         List<Object> items = new ArrayList<Object>();
         items.add(new HashMap<String, Object>(
             new Dictionary.Pair<String, Object>("A", "a"),
@@ -191,7 +191,7 @@ public class CSVSerializerTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testQuotedQuoteWriteObject() throws IOException, SerializationException {
+    public void testQuotedQuoteWriteObject() throws IOException {
         List<Object> items = new ArrayList<Object>();
         items.add(new HashMap<String, Object>(
             new Dictionary.Pair<String, Object>("A", "a"),
@@ -213,7 +213,7 @@ public class CSVSerializerTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testQuotedNewlineWriteObject() throws IOException, SerializationException {
+    public void testQuotedNewlineWriteObject() throws IOException {
         List<Object> items = new ArrayList<Object>();
         items.add(new HashMap<String, Object>(
             new Dictionary.Pair<String, Object>("A", "a"),
@@ -233,9 +233,8 @@ public class CSVSerializerTest {
         assertEquals("a,\"\nb\n\",c\r\n", writer.toString());
     }
 
-    @SuppressWarnings("unused")
     @Test
-    public void testStreamReader() throws IOException, SerializationException {
+    public void testStreamReader() {
         // TODO
     }
 }

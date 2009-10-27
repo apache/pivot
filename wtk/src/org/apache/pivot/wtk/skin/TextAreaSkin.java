@@ -719,7 +719,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                     terminatorY = height - terminatorHeight;
                 }
 
-                terminatorBounds = new Bounds(x, terminatorY, 0, terminatorHeight);
+                terminatorBounds = new Bounds(x, terminatorY,
+                    PARAGRAPH_TERMINATOR_WIDTH, terminatorHeight);
 
                 // Ensure that the paragraph is visible even when empty
                 height = Math.max(height, terminatorBounds.height);
@@ -852,17 +853,19 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         public int getRowIndex(int offset) {
             int rowIndex = -1;
 
-            for (int i = 0, n = rows.getLength(); i < n; i++) {
-                Row row = rows.get(i);
-                NodeView firstNodeView = row.nodeViews.get(0);
-                NodeView lastNodeView = row.nodeViews.get(row.nodeViews.getLength() - 1);
+            if (offset == getCharacterCount() - 1) {
+                rowIndex = (rows.getLength() == 0) ? 0 : rows.getLength() - 1;
+            } else {
+                for (int i = 0, n = rows.getLength(); i < n; i++) {
+                    Row row = rows.get(i);
+                    NodeView firstNodeView = row.nodeViews.get(0);
+                    NodeView lastNodeView = row.nodeViews.get(row.nodeViews.getLength() - 1);
 
-                if (offset == getCharacterCount() - 1) {
-                    rowIndex = n - 1;
-                } else if (offset >= firstNodeView.getOffset()
-                    && offset < lastNodeView.getOffset() + lastNodeView.getCharacterCount()) {
-                    rowIndex = i;
-                    break;
+                    if (offset >= firstNodeView.getOffset()
+                        && offset < lastNodeView.getOffset() + lastNodeView.getCharacterCount()) {
+                        rowIndex = i;
+                        break;
+                    }
                 }
             }
 
@@ -871,7 +874,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
         @Override
         public int getRowCount() {
-            return rows.getLength();
+            return Math.max(rows.getLength(), 1);
         }
 
         @Override
@@ -1298,6 +1301,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     private DocumentView documentView = null;
 
     private int caretX = 0;
+    private int anchor = -1;
     private Rectangle caret = new Rectangle();
     private Area selection = null;
 
@@ -1319,7 +1323,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
     private Insets margin = new Insets(4);
 
-    public static final int PARAGRAPH_TERMINATOR_WIDTH = 2;
+    private static final int PARAGRAPH_TERMINATOR_WIDTH = 4;
     private static final FontRenderContext FONT_RENDER_CONTEXT = new FontRenderContext(null, true, true);
     private static final int SCROLL_RATE = 50;
 
@@ -1724,12 +1728,10 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
                 if (offset != -1) {
                     // Select the range
-                    int selectionStart = textArea.getSelectionStart();
-
-                    if (offset > selectionStart) {
-                        textArea.setSelection(selectionStart, offset - selectionStart);
+                    if (offset > anchor) {
+                        textArea.setSelection(anchor, offset - anchor);
                     } else {
-                        textArea.setSelection(offset, selectionStart - offset);
+                        textArea.setSelection(offset, anchor - offset);
                     }
                 }
             } else {
@@ -1762,21 +1764,21 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         TextArea textArea = (TextArea)component;
 
         if (button == Mouse.Button.LEFT) {
-            int offset = getInsertionPoint(x, y);
+            anchor = getInsertionPoint(x, y);
 
-            if (offset != -1) {
+            if (anchor != -1) {
                 if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
                     // Select the range
                     int selectionStart = textArea.getSelectionStart();
 
-                    if (offset > selectionStart) {
-                        textArea.setSelection(selectionStart, offset - selectionStart);
+                    if (anchor > selectionStart) {
+                        textArea.setSelection(selectionStart, anchor - selectionStart);
                     } else {
-                        textArea.setSelection(offset, selectionStart - offset);
+                        textArea.setSelection(anchor, selectionStart - anchor);
                     }
                 } else {
                     // Move the caret to the insertion point
-                    textArea.setSelection(offset, 0);
+                    textArea.setSelection(anchor, 0);
                     consumed = true;
                 }
             }
@@ -1805,6 +1807,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
             Mouse.release();
         }
+
+        anchor = -1;
 
         return consumed;
     }

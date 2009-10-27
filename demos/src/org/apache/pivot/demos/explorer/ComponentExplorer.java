@@ -45,7 +45,6 @@ public class ComponentExplorer implements Application {
     private EventLogger eventLogger = null;
 
     @Override
-    @SuppressWarnings({"unchecked"})
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();

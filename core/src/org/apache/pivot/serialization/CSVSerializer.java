@@ -310,7 +310,7 @@ public class CSVSerializer implements Serializer<List<?>> {
         return new StreamIterator(reader);
     }
 
-    @SuppressWarnings({"unchecked"})
+    @SuppressWarnings("unchecked")
     private Object readItem(Reader reader)
         throws IOException, SerializationException {
         Object item = null;
@@ -442,9 +442,8 @@ public class CSVSerializer implements Serializer<List<?>> {
      * @param writer
      * The writer to which data will be written.
      */
-    @SuppressWarnings({"unchecked", "unused"})
-    public void writeObject(List<?> items, Writer writer)
-        throws IOException, SerializationException {
+    @SuppressWarnings("unchecked")
+    public void writeObject(List<?> items, Writer writer) throws IOException {
         if (items == null) {
             throw new IllegalArgumentException("items is null.");
         }

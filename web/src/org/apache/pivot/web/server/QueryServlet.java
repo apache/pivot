@@ -386,10 +386,12 @@ public abstract class QueryServlet extends HttpServlet {
      * This method is guaranteed to be called after the arguments and request
      * properties have been made available.
      *
+     * @throws ServletException
+     * If a servlet exception is thrown.
+     *
      * @throws LoginException
-     * Thrown if the request is not authorized
+     * If the request is not authorized.
      */
-    @SuppressWarnings("unused")
     protected void authorize() throws ServletException, LoginException {
         // No-op
     }
