@@ -480,7 +480,8 @@ public class TerraFormSkin extends ContainerSkin
 
     @Override
     public void fieldsRemoved(Form.Section section, int index, Sequence<Component> fields) {
-        removeFields(section, index, fields.getLength());
+        Form form = (Form)getComponent();
+        removeFields(form.getSections().indexOf(section), index, fields);
     }
 
     // Form attribute events
@@ -522,23 +523,21 @@ public class TerraFormSkin extends ContainerSkin
 
     private void removeSections(int index, Sequence<Form.Section> removed) {
         Form form = (Form)getComponent();
+        int count = removed.getLength();
 
-        for (int i = 0, n = removed.getLength(); i < n; i++) {
-            // Remove fields
-            Form.Section section = removed.get(i);
-            for (int j = 0; j < n; j++) {
-                removeFields(section, 0, section.getLength());
-            }
+        // Remove fields
+        for (int i = 0; i < count; i++) {
+            removeFields(index + i, 0, removed.get(i));
+        }
 
-            // Remove field label and flag image view lists
-            labels.remove(index, n);
-            flagImageViews.remove(index, n);
+        // Remove field label and flag image view lists
+        labels.remove(index, count);
+        flagImageViews.remove(index, count);
 
-            // Remove separators
-            Sequence<Separator> removedSeparators = separators.remove(index, n);
-            for (int j = 0; j < n; j++) {
-                form.remove(removedSeparators.get(j));
-            }
+        // Remove separators
+        Sequence<Separator> removedSeparators = separators.remove(index, count);
+        for (int i = 0; i < count; i++) {
+            form.remove(removedSeparators.get(i));
         }
 
         invalidateComponent();
@@ -563,9 +562,9 @@ public class TerraFormSkin extends ContainerSkin
         invalidateComponent();
     }
 
-    private void removeFields(Form.Section section, int index, int count) {
+    private void removeFields(int sectionIndex, int index, Sequence<Component> removed) {
         Form form = (Form)getComponent();
-        int sectionIndex = form.getSections().indexOf(section);
+        int count = removed.getLength();
 
         // Remove the labels
         Sequence<Label> removedLabels = labels.get(sectionIndex).remove(index, count);
