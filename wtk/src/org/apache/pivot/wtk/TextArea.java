@@ -482,7 +482,7 @@ public class TextArea extends Component {
         }
 
         // Set the selection start to the character following the insertion
-        setSelection(selectionStart + text.length(), selectionLength);
+        setSelection(selectionStart + text.length(), 0);
     }
 
     public void insertImage(Image image) {

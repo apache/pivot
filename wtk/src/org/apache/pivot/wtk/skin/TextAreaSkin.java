@@ -857,7 +857,9 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 NodeView firstNodeView = row.nodeViews.get(0);
                 NodeView lastNodeView = row.nodeViews.get(row.nodeViews.getLength() - 1);
 
-                if (offset >= firstNodeView.getOffset()
+                if (offset == getCharacterCount() - 1) {
+                    rowIndex = n - 1;
+                } else if (offset >= firstNodeView.getOffset()
                     && offset < lastNodeView.getOffset() + lastNodeView.getCharacterCount()) {
                     rowIndex = i;
                     break;
@@ -1691,6 +1693,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
         if (button == Mouse.Button.LEFT) {
             // Move the caret to the insertion point
+            // TODO If SHIFT is pressed, select the range
             int offset = getInsertionPoint(x, y);
             if (offset != -1) {
                 textArea.setSelection(offset, 0);
@@ -1815,12 +1818,19 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
                     consumed = true;
                 } else if (keyCode == Keyboard.KeyCode.UP) {
-                    int offset = getNextInsertionPoint(caretX, textArea.getSelectionStart(),
-                        Direction.BACKWARD);
+                    int selectionStart = textArea.getSelectionStart();
+                    int offset = getNextInsertionPoint(caretX, selectionStart, Direction.BACKWARD);
 
                     if (offset != -1) {
-                        // TODO Modify selection based on SHIFT key
-                        textArea.setSelection(offset, 0);
+                        int selectionLength;
+                        if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                            int selectionEnd = selectionStart + textArea.getSelectionLength() - 1;
+                            selectionLength = selectionEnd - offset + 1;
+                        } else {
+                            selectionLength = 0;
+                        }
+
+                        textArea.setSelection(offset, selectionLength);
 
                         Bounds characterBounds = getCharacterBounds(offset);
                         component.scrollAreaToVisible(0, characterBounds.y, characterBounds.width,
@@ -1829,12 +1839,20 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                         consumed = true;
                     }
                 } else if (keyCode == Keyboard.KeyCode.DOWN) {
-                    int offset = getNextInsertionPoint(caretX, textArea.getSelectionStart(),
-                        Direction.FORWARD);
+                    int selectionStart = textArea.getSelectionStart();
+                    int offset = getNextInsertionPoint(caretX, selectionStart
+                        + textArea.getSelectionLength(), Direction.FORWARD);
 
                     if (offset != -1) {
-                        // TODO Modify selection based on SHIFT key
-                        textArea.setSelection(offset, 0);
+                        int selectionLength;
+                        if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                            selectionLength = offset - selectionStart;
+                        } else {
+                            selectionStart = offset;
+                            selectionLength = 0;
+                        }
+
+                        textArea.setSelection(selectionStart, selectionLength);
 
                         Bounds characterBounds = getCharacterBounds(offset);
                         component.scrollAreaToVisible(0, characterBounds.y, characterBounds.width,
