@@ -220,7 +220,7 @@ public class DropShadowDecorator implements Decorator {
      * height = imageHeight + 2 * blurRadius
      * </pre>
      *
-     * @param image
+     * @param src
      * The image from which the shadow will be cast.
      *
      * @return

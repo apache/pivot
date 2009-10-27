@@ -590,7 +590,7 @@ public class ScrollPaneSkin extends ContainerSkin
      * @param horizontalPolicy
      * The assumed horizontal scroll policy; musn't be <tt>FILL_TO_CAPACITY</tt>
      *
-     * @param vertical policy
+     * @param verticalPolicy
      * The assumed vertical scroll policy; musn't be <tt>FILL_TO_CAPACITY</tt>
      */
     private void layoutHelper(ScrollBarPolicy horizontalPolicy,

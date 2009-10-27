@@ -586,7 +586,7 @@ public class DigestAuthentication implements Authentication {
      *
      * @param algorithm The algorithm to use
      * @param username Username of the Principal to look up
-     * @param realm Realm name
+     * @param realmName Realm name
      */
     protected String getDigestUsernameAndRealm(final String algorithm, final String username,
         final String realmName) {

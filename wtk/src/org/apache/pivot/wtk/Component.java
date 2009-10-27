@@ -2278,10 +2278,6 @@ public abstract class Component implements ConstrainedVisual {
      *
      * @param focusedComponent
      * The component to focus, or <tt>null</tt> to clear the focus.
-     *
-     * @param temporary
-     * <tt>true</tt> if this focus change is or was temporary; <tt>false</tt>,
-     * if it is permanent.
      */
     private static void setFocusedComponent(Component focusedComponent) {
         Component previousFocusedComponent = Component.focusedComponent;
