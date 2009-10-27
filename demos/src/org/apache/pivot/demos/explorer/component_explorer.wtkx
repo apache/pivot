@@ -37,6 +37,26 @@ limitations under the License.
                                         <content:TreeBranch>
                                             <content:TreeBranch text="Buttons"
                                                 icon="@folder.png">
+                                                <explorer:ComponentNode text="PushButton"
+                                                    icon="@magnifier.png"
+                                                    src="@buttons/push_button.wtkx"
+                                                    horizontalScrollBarPolicy="auto"
+                                                    verticalScrollBarPolicy="auto"/>
+                                                <explorer:ComponentNode text="RadioButton"
+                                                    icon="@magnifier.png"
+                                                    src="@buttons/radio_button.wtkx"
+                                                    horizontalScrollBarPolicy="auto"
+                                                    verticalScrollBarPolicy="auto"/>
+                                                <explorer:ComponentNode text="Checkbox"
+                                                    icon="@magnifier.png"
+                                                    src="@buttons/checkbox.wtkx"
+                                                    horizontalScrollBarPolicy="auto"
+                                                    verticalScrollBarPolicy="auto"/>
+                                                <explorer:ComponentNode text="LinkButton"
+                                                    icon="@magnifier.png"
+                                                    src="@buttons/link_button.wtkx"
+                                                    horizontalScrollBarPolicy="auto"
+                                                    verticalScrollBarPolicy="auto"/>
                                             </content:TreeBranch>
                                             <content:TreeBranch text="Lists"
                                                 icon="@folder.png">
@@ -74,6 +94,11 @@ limitations under the License.
                                             </content:TreeBranch>
                                             <content:TreeBranch text="Navigation Containers"
                                                 icon="@folder.png">
+                                                <explorer:ComponentNode text="CardPane"
+                                                    icon="@magnifier.png"
+                                                    src="@cardpane/card_pane.wtkx"
+                                                    horizontalScrollBarPolicy="fill"
+                                                    verticalScrollBarPolicy="fill"/>
                                             </content:TreeBranch>
                                             <content:TreeBranch text="Progress Indicators"
                                                 icon="@folder.png">

@@ -250,9 +250,20 @@ class ComponentInspectorSkin extends ContainerSkin implements ComponentInspector
         Form.setLabel(checkbox, propertyName);
 
         checkbox.getButtonStateListeners().add(new ButtonStateListener() {
+            private boolean updating = false;
+
             @Override
             public void stateChanged(Button button, Button.State previousState) {
-                beanDictionary.put(propertyName, button.isSelected());
+                if (!updating) {
+                    updating = true;
+                    try {
+                        beanDictionary.put(propertyName, button.isSelected());
+                    } catch (Exception exception) {
+                        button.setState(previousState);
+                    } finally {
+                        updating = false;
+                    }
+                }
             }
         });
 
@@ -362,7 +373,6 @@ class ComponentInspectorSkin extends ContainerSkin implements ComponentInspector
                     try {
                         beanDictionary.put(propertyName, textInput.getText());
                     } catch (Exception exception) {
-                        exception.printStackTrace();
                         String propertyValue = (String)beanDictionary.get(propertyName);
                         textInput.setText(propertyValue == null ? "" : propertyValue);
                     }
@@ -394,9 +404,20 @@ class ComponentInspectorSkin extends ContainerSkin implements ComponentInspector
         Form.setLabel(listButton, propertyName);
 
         listButton.getListButtonSelectionListeners().add(new ListButtonSelectionListener() {
+            private boolean updating = false;
+
             @Override
             public void selectedIndexChanged(ListButton listButton, int previousSelectedIndex) {
-                beanDictionary.put(propertyName, listButton.getSelectedItem());
+                if (!updating) {
+                    updating = true;
+                    try {
+                        beanDictionary.put(propertyName, listButton.getSelectedItem());
+                    } catch (Exception exception) {
+                        listButton.setSelectedIndex(previousSelectedIndex);
+                    } finally {
+                        updating = false;
+                    }
+                }
             }
         });
 
