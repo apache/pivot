@@ -60,7 +60,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
                 || (sourceFilter != null
                     && sourceFilter.include(file)));
         }
-    };
+    }
 
     @WTKX private BoxPane saveAsBoxPane = null;
     @WTKX private TextInput saveAsTextInput = null;

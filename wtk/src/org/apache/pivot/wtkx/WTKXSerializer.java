@@ -269,7 +269,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
 
             return result;
         }
-    };
+    }
 
     private Resources resources;
     private HashMap<String, Object> namedObjects;

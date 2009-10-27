@@ -227,7 +227,7 @@ public class RSSFeedDemo implements Application {
 
             return false;
         }
-    };
+    }
 
     private XPath xpath;
 
