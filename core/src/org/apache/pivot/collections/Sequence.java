@@ -484,7 +484,7 @@ public interface Sequence<T> {
          * Returns an iterator that will perform a depth-first traversal of the
          * nested sequence.
          */
-        public static <T> ItemIterator<T> taverseDepthFirst(Sequence<T> sequence) {
+        public static <T> ItemIterator<T> depthFirstIterator(Sequence<T> sequence) {
             return new DepthFirstItemIterator<T>(sequence);
         }
 

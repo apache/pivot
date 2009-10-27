@@ -1922,7 +1922,7 @@ public class TreeView extends Component {
     @SuppressWarnings("unchecked")
     public final void expandAll() {
         Sequence.Tree.ItemIterator<Object> itemIterator =
-            Sequence.Tree.taverseDepthFirst((List<Object>)treeData);
+            Sequence.Tree.depthFirstIterator((List<Object>)treeData);
 
         while (itemIterator.hasNext()) {
             Object node = itemIterator.next();
@@ -1954,7 +1954,7 @@ public class TreeView extends Component {
     @SuppressWarnings("unchecked")
     public final void collapseAll() {
         Sequence.Tree.ItemIterator<Object> itemIterator =
-            Sequence.Tree.taverseDepthFirst((List<Object>)treeData);
+            Sequence.Tree.depthFirstIterator((List<Object>)treeData);
 
         while (itemIterator.hasNext()) {
             Object node = itemIterator.next();
