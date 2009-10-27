@@ -544,6 +544,8 @@ public class TextArea extends Component {
         }
 
         if (selectionLength > 0) {
+            // TODO Need to merge paragraphs here if we delete the terminator character;
+            // see below
             document.removeRange(selectionStart, selectionLength);
         } else {
             int offset = selectionStart;
@@ -580,6 +582,14 @@ public class TextArea extends Component {
                 }
             }
         }
+
+        // Ensure that the document remains editable
+        if (document.getCharacterCount() == 0) {
+            document.add(new Paragraph(""));
+        }
+
+        // Clear the selection length
+        selectionLength = 0;
     }
 
     public void cut() {

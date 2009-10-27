@@ -2093,6 +2093,9 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
     private void updateSelection() {
         TextArea textArea = (TextArea)getComponent();
+
+        // TODO If the document is empty, clear both the caret and the selection
+
         int selectionStart = textArea.getSelectionStart();
         int selectionLength = textArea.getSelectionLength();
 

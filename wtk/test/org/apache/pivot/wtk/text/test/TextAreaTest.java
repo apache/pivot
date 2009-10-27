@@ -26,6 +26,7 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.TextArea;
+import org.apache.pivot.wtk.TextAreaCharacterListener;
 import org.apache.pivot.wtk.TextAreaSelectionListener;
 import org.apache.pivot.wtk.TreeView;
 import org.apache.pivot.wtk.TreeViewSelectionListener;
@@ -84,8 +85,19 @@ public class TextAreaTest implements Application {
             @Override
             public void selectionChanged(TextArea textArea,
                 int previousSelectionStart, int previousSelectionLength) {
-                selectionStartLabel.setText(Integer.toString(textArea.getSelectionStart()));
-                selectionLengthLabel.setText(Integer.toString(textArea.getSelectionLength()));
+                updateSelection();
+            }
+        });
+
+        textArea.getTextAreaCharacterListeners().add(new TextAreaCharacterListener() {
+            @Override
+            public void charactersRemoved(TextArea textArea, int index, int count) {
+                updateSelection();
+            }
+
+            @Override
+            public void charactersInserted(TextArea textArea, int index, int count) {
+                updateSelection();
             }
         });
 
@@ -150,6 +162,11 @@ public class TextAreaTest implements Application {
 
     @Override
     public void resume() {
+    }
+
+    private void updateSelection() {
+        selectionStartLabel.setText(Integer.toString(textArea.getSelectionStart()));
+        selectionLengthLabel.setText(Integer.toString(textArea.getSelectionLength()));
     }
 
     private void updateSelectedNodeData() {

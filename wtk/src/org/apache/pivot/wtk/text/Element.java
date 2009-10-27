@@ -24,7 +24,6 @@ import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 
-
 /**
  * Abstract base class for elements.
  * <p>
@@ -190,13 +189,21 @@ public abstract class Element extends Node
             if (start == end) {
                 // The range is entirely contained by one child node
                 Node node = get(start);
-                Node segment = node.removeRange(offset - node.getOffset(), characterCount);
-                element.add(segment);
+                int nodeOffset = node.getOffset();
+                int nodeCharacterCount = node.getCharacterCount();
 
-                // If the node's character count is now zero, remove it
-                if (node.getCharacterCount() == 0) {
+                Node segment;
+                if (offset == nodeOffset
+                    && characterCount == nodeCharacterCount) {
+                    // Remove the entire node
+                    segment = node;
                     remove(start, 1);
+                } else {
+                    // Remove a segment of the node
+                    segment = node.removeRange(offset - node.getOffset(), characterCount);
                 }
+
+                element.add(segment);
             } else {
                 // The range spans multiple child nodes
                 Node startNode = get(start);
