@@ -108,7 +108,7 @@ public class ProxyServlet extends HttpServlet {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "null" })
     protected void service(HttpServletRequest request, HttpServletResponse response)
         throws IOException, ServletException {
         // Construct the URL
