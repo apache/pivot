@@ -1287,6 +1287,13 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
     }
 
+    private class ScrollSelectionCallback implements Runnable {
+        @Override
+        public void run() {
+            // TODO Add the next or previous row to the selection based on the
+            // current location of the mouse
+        }
+    }
 
     private DocumentView documentView = null;
 
@@ -1295,8 +1302,12 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     private Area selection = null;
 
     private boolean caretOn = false;
-    private BlinkCaretCallback blinkCursorCallback = new BlinkCaretCallback();
-    private ApplicationContext.ScheduledCallback scheduledBlinkCursorCallback = null;
+
+    private BlinkCaretCallback blinkCaretCallback = new BlinkCaretCallback();
+    private ApplicationContext.ScheduledCallback scheduledBlinkCaretCallback = null;
+
+    private ScrollSelectionCallback scrollSelectionCallback = new ScrollSelectionCallback();
+    private ApplicationContext.ScheduledCallback scheduledScrollSelectionCallback = null;
 
     private Font font;
     private Color color;
@@ -1310,6 +1321,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
     public static final int PARAGRAPH_TERMINATOR_WIDTH = 2;
     private static final FontRenderContext FONT_RENDER_CONTEXT = new FontRenderContext(null, true, true);
+    private static final int SCROLL_RATE = 50;
 
     public TextAreaSkin() {
         Theme theme = Theme.getTheme();
@@ -1380,11 +1392,13 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     @Override
     public void layout() {
         if (documentView != null) {
+            TextArea textArea = (TextArea)getComponent();
             int width = getWidth();
             documentView.setBreakWidth(Math.max(width - (margin.left + margin.right), 0));
             documentView.validate();
 
             updateSelection();
+            showCaret(textArea.getSelectionLength() == 0);
         }
     }
 
@@ -1688,21 +1702,86 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     }
 
     @Override
+    public boolean mouseMove(Component component, int x, int y) {
+        boolean consumed = super.mouseMove(component, x, y);
+
+        if (Mouse.getCapturer() == component) {
+            TextArea textArea = (TextArea)getComponent();
+            Bounds visibleArea = textArea.getVisibleArea();
+            Point viewportOrigin = textArea.mapPointFromAncestor(textArea.getDisplay(),
+                visibleArea.x, visibleArea.y);
+            visibleArea = new Bounds(viewportOrigin.x, viewportOrigin.y,
+                visibleArea.width, visibleArea.height);
+
+            if (visibleArea.contains(x, y)) {
+                // Stop the scroll selection timer
+                if (scheduledScrollSelectionCallback != null) {
+                    scheduledScrollSelectionCallback.cancel();
+                    scheduledScrollSelectionCallback = null;
+                }
+
+                int offset = getInsertionPoint(x, y);
+
+                if (offset != -1) {
+                    // Select the range
+                    int selectionStart = textArea.getSelectionStart();
+
+                    if (offset > selectionStart) {
+                        textArea.setSelection(selectionStart, offset - selectionStart);
+                    } else {
+                        textArea.setSelection(offset, selectionStart - offset);
+                    }
+                }
+            } else {
+                // TODO Initialize the scroll callback state?
+
+                if (scheduledScrollSelectionCallback == null) {
+                    scheduledScrollSelectionCallback =
+                        ApplicationContext.scheduleRecurringCallback(scrollSelectionCallback,
+                            SCROLL_RATE);
+
+                    // Run the callback once now to scroll the selection immediately
+                    scrollSelectionCallback.run();
+                }
+            }
+        } else {
+            if (Mouse.isPressed(Mouse.Button.LEFT)
+                && Mouse.getCapturer() == null) {
+                // Capture the mouse so we can select text
+                Mouse.capture(component);
+            }
+        }
+
+        return consumed;
+    }
+
+    @Override
     public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+        boolean consumed = super.mouseDown(component, button, x, y);
+
         TextArea textArea = (TextArea)component;
 
         if (button == Mouse.Button.LEFT) {
-            // Move the caret to the insertion point
-            // TODO If SHIFT is pressed, select the range
             int offset = getInsertionPoint(x, y);
+
             if (offset != -1) {
-                textArea.setSelection(offset, 0);
+                if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                    // Select the range
+                    int selectionStart = textArea.getSelectionStart();
+
+                    if (offset > selectionStart) {
+                        textArea.setSelection(selectionStart, offset - selectionStart);
+                    } else {
+                        textArea.setSelection(offset, selectionStart - offset);
+                    }
+                } else {
+                    // Move the caret to the insertion point
+                    textArea.setSelection(offset, 0);
+                    consumed = true;
+                }
             }
 
             caretX = x;
-
-            // TODO Register mouse listener to begin selecting text; also handle
-            // auto-scrolling when the mouse moves outside the component
 
             // Set focus to the text input
             if (textArea.isEditable()) {
@@ -1710,8 +1789,26 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             }
         }
 
-        return super.mouseDown(component, button, x, y);
+        return consumed;
     }
+
+    @Override
+    public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+        boolean consumed = super.mouseUp(component, button, x, y);
+
+        if (Mouse.getCapturer() == component) {
+            // Stop the scroll selection timer
+            if (scheduledScrollSelectionCallback != null) {
+                scheduledScrollSelectionCallback.cancel();
+                scheduledScrollSelectionCallback = null;
+            }
+
+            Mouse.release();
+        }
+
+        return consumed;
+    }
+
 
     @Override
     public boolean keyTyped(Component component, char character) {
@@ -1750,10 +1847,13 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 if (keyCode == Keyboard.KeyCode.ENTER) {
                     textArea.insertParagraph();
                     caretX = margin.left;
+                    consumed = true;
                 } else if (keyCode == Keyboard.KeyCode.DELETE) {
                     textArea.delete(Direction.FORWARD);
+                    consumed = true;
                 } else if (keyCode == Keyboard.KeyCode.BACKSPACE) {
                     textArea.delete(Direction.BACKWARD);
+                    consumed = true;
                 } else if (keyCode == Keyboard.KeyCode.LEFT) {
                     int selectionStart = textArea.getSelectionStart();
                     int selectionLength = textArea.getSelectionLength();
@@ -1863,18 +1963,24 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 } else if (Keyboard.isPressed(commandModifier)) {
                     if (keyCode == Keyboard.KeyCode.A) {
                         textArea.setSelection(0, document.getCharacterCount());
+                        consumed = true;
                     } else if (keyCode == Keyboard.KeyCode.X) {
                         textArea.cut();
+                        consumed = true;
                     } else if (keyCode == Keyboard.KeyCode.C) {
                         textArea.copy();
+                        consumed = true;
                     } else if (keyCode == Keyboard.KeyCode.V) {
                         textArea.paste();
+                        consumed = true;
                     } else if (keyCode == Keyboard.KeyCode.Z) {
                         if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
                             textArea.undo();
                         } else {
                             textArea.redo();
                         }
+
+                        consumed = true;
                     }
                 } else {
                     consumed = super.keyPressed(component, keyCode, keyLocation);
@@ -2032,19 +2138,20 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     }
 
     private void showCaret(boolean show) {
-        if (scheduledBlinkCursorCallback != null) {
-            scheduledBlinkCursorCallback.cancel();
+        if (scheduledBlinkCaretCallback != null) {
+            scheduledBlinkCaretCallback.cancel();
         }
 
         if (show) {
-            scheduledBlinkCursorCallback =
-                ApplicationContext.scheduleRecurringCallback(blinkCursorCallback,
+            caretOn = true;
+            scheduledBlinkCaretCallback =
+                ApplicationContext.scheduleRecurringCallback(blinkCaretCallback,
                     Platform.getCursorBlinkRate());
 
             // Run the callback once now to show the cursor immediately
-            blinkCursorCallback.run();
+            blinkCaretCallback.run();
         } else {
-            scheduledBlinkCursorCallback = null;
+            scheduledBlinkCaretCallback = null;
         }
     }
 }

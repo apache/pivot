@@ -56,7 +56,7 @@ import org.apache.pivot.wtk.text.validation.Validator;
  */
 public class TerraTextInputSkin extends ComponentSkin
     implements TextInputListener, TextInputCharacterListener, TextInputSelectionListener {
-    private class BlinkCursorCallback implements Runnable {
+    private class BlinkCaretCallback implements Runnable {
         @Override
         public void run() {
             caretOn = !caretOn;
@@ -106,15 +106,14 @@ public class TerraTextInputSkin extends ComponentSkin
         }
     }
 
-
     private boolean caretOn = true;
     private Shape[] caretShapes = null;
     private Shape logicalHighlightShape = null;
 
     private int scrollLeft = 0;
 
-    private BlinkCursorCallback blinkCursorCallback = new BlinkCursorCallback();
-    private ApplicationContext.ScheduledCallback scheduledBlinkCursorCallback = null;
+    private BlinkCaretCallback blinkCaretCallback = new BlinkCaretCallback();
+    private ApplicationContext.ScheduledCallback scheduledBlinkCaretCallback = null;
 
     private ScrollSelectionCallback scrollSelectionCallback = new ScrollSelectionCallback();
     private ApplicationContext.ScheduledCallback scheduledScrollSelectionCallback = null;
@@ -137,15 +136,12 @@ public class TerraTextInputSkin extends ComponentSkin
     private Color inactiveSelectionColor;
     private Color inactiveSelectionBackgroundColor;
 
-    // Derived colors
     private Color bevelColor;
     private Color disabledBevelColor;
     private Color invalidBevelColor;
 
+    private static final FontRenderContext FONT_RENDER_CONTEXT = new FontRenderContext(null, true, false);
     private static final int SCROLL_RATE = 50;
-
-    private static final FontRenderContext FONT_RENDER_CONTEXT =
-        new FontRenderContext(null, true, false);
 
     public TerraTextInputSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
@@ -383,7 +379,9 @@ public class TerraTextInputSkin extends ComponentSkin
         return text;
     }
 
-    protected int getInsertionIndex(String text, int x) {
+    protected int getInsertionPoint(String text, int x) {
+        // TODO Rename to getInsertionPoint() and implement for consistency with
+        // TextArea (including skin pass-through method)
         TextLayout textLayout = new TextLayout(text, font, FONT_RENDER_CONTEXT);
         TextHitInfo textHitInfo = textLayout.hitTestChar(x + scrollLeft - padding.left - 1, 0);
         int index = textHitInfo.getInsertionIndex();
@@ -392,20 +390,20 @@ public class TerraTextInputSkin extends ComponentSkin
     }
 
     public void showCaret(boolean show) {
-        if (show) {
-            if (scheduledBlinkCursorCallback == null) {
-                scheduledBlinkCursorCallback =
-                    ApplicationContext.scheduleRecurringCallback(blinkCursorCallback,
-                        Platform.getCursorBlinkRate());
+        if (scheduledBlinkCaretCallback != null) {
+            scheduledBlinkCaretCallback.cancel();
+        }
 
-                // Run the callback once now to show the cursor immediately
-                blinkCursorCallback.run();
-            }
+        if (show) {
+            caretOn = true;
+            scheduledBlinkCaretCallback =
+                ApplicationContext.scheduleRecurringCallback(blinkCaretCallback,
+                    Platform.getCursorBlinkRate());
+
+            // Run the callback once now to show the cursor immediately
+            blinkCaretCallback.run();
         } else {
-            if (scheduledBlinkCursorCallback != null) {
-                scheduledBlinkCursorCallback.cancel();
-                scheduledBlinkCursorCallback = null;
-            }
+            scheduledBlinkCaretCallback = null;
         }
     }
 
@@ -851,7 +849,7 @@ public class TerraTextInputSkin extends ComponentSkin
                     int selectionLength = textInput.getSelectionLength();
 
                     // Get the insertion index
-                    int index = getInsertionIndex(text, x);
+                    int index = getInsertionPoint(text, x);
 
                     if (index < selectionStart) {
                         selectionLength += (selectionStart - index);
@@ -895,7 +893,7 @@ public class TerraTextInputSkin extends ComponentSkin
             String text = getText();
 
             if (text.length() > 0) {
-                int index = getInsertionIndex(text, x);
+                int index = getInsertionPoint(text, x);
                 textInput.setSelection(index, 0);
             }
 
