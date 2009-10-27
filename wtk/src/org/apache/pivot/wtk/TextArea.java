@@ -399,7 +399,7 @@ public class TextArea extends Component {
      */
     public void setSelection(int selectionStart, int selectionLength) {
         if (document == null) {
-            throw new IllegalStateException("No document.");
+            throw new IllegalStateException();
         }
 
         if (selectionLength < 0) {
@@ -436,7 +436,7 @@ public class TextArea extends Component {
         }
 
         if (document == null) {
-            throw new IllegalStateException("No document.");
+            throw new IllegalStateException();
         }
 
         if (selectionLength > 0) {
@@ -489,7 +489,7 @@ public class TextArea extends Component {
         }
 
         if (document == null) {
-            throw new IllegalStateException("No document.");
+            throw new IllegalStateException();
         }
 
         if (selectionLength > 0) {
@@ -506,7 +506,7 @@ public class TextArea extends Component {
 
     public void insertParagraph() {
         if (document == null) {
-            throw new IllegalStateException("No document.");
+            throw new IllegalStateException();
         }
 
         if (selectionLength > 0) {
@@ -540,7 +540,7 @@ public class TextArea extends Component {
         }
 
         if (document == null) {
-            throw new IllegalStateException("No document.");
+            throw new IllegalStateException();
         }
 
         if (selectionLength > 0) {

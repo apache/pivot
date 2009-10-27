@@ -725,9 +725,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 // Ensure that the paragraph is visible even when empty
                 height = Math.max(height, terminatorBounds.height);
 
-                // TODO Don't hard-code padding; use the value specified
-                // by the Paragraph
-                setSize(breakWidth, height + 2);
+                setSize(breakWidth, height);
             }
 
             super.validate();
@@ -1901,10 +1899,11 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                     } else {
                         // Clear the selection and move the caret forward by one
                         // character
-                        selectionStart += selectionLength;
+                        if (selectionLength > 0) {
+                            selectionStart += selectionLength - 1;
+                        }
 
-                        if (selectionLength == 0
-                            && selectionStart < document.getCharacterCount() - 1) {
+                        if (selectionStart < document.getCharacterCount() - 1) {
                             selectionStart++;
                         }
 
