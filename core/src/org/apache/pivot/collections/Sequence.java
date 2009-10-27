@@ -17,6 +17,7 @@
 package org.apache.pivot.collections;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import org.apache.pivot.util.ImmutableIterator;
 
@@ -162,6 +163,119 @@ public interface Sequence<T> {
             @Override
             public Sequence<Integer> remove(int index, int count) {
                 throw new UnsupportedOperationException();
+            }
+        }
+
+        /**
+         * Nested sequence item iterator iterface.
+         */
+        public interface ItemIterator<T> extends Iterator<T> {
+            /**
+             * Gets the path within the nested sequence to the item nost
+             * recently returned by a call to <tt>next()</tt>.
+             *
+             * @return
+             * The path (from the root sequence) to the current item.
+             *
+             * @throws IllegalStateException
+             * If <tt>next()</tt> has not yet been called on this iterator.
+             */
+            public Path getPath();
+        }
+
+        private static class DepthFirstItemIterator<T> implements ItemIterator<T> {
+            private ArrayStack<Sequence<T>> stack = new ArrayStack<Sequence<T>>();
+            private Path previousPath = null;
+            private Path nextPath = new Path();
+
+            public DepthFirstItemIterator(Sequence<T> sequence) {
+                stack.push(sequence);
+                nextPath.add(0);
+                normalize();
+            }
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public boolean hasNext() {
+                return (stack.peek() != null);
+            }
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            @SuppressWarnings("unchecked")
+            public T next() {
+                Sequence<T> sequence = stack.peek();
+
+                if (sequence == null) {
+                    throw new NoSuchElementException();
+                }
+
+                previousPath = new Path(nextPath);
+
+                int n = nextPath.getLength();
+                int index = nextPath.get(n - 1);
+
+                T item = sequence.get(index);
+
+                if (item instanceof Sequence<?>) {
+                    stack.push((Sequence<T>)item);
+                    nextPath.add(0);
+                } else {
+                    nextPath.update(n - 1, index + 1);
+                }
+
+                normalize();
+
+                return item;
+            }
+
+            /**
+             * Normalizes <tt>stack</tt> and <tt>nextPath</tt> such that the
+             * iterator is pointing to a valid item or the end of the nested
+             * sequence.
+             */
+            private void normalize() {
+                Sequence<T> sequence = stack.peek();
+
+                int n = nextPath.getLength();
+                int index = nextPath.get(n - 1);
+
+                while (sequence != null
+                    && index >= sequence.getLength()) {
+                    stack.pop();
+                    sequence = stack.peek();
+
+                    nextPath.remove(--n, 1);
+
+                    if (n > 0) {
+                        index = nextPath.get(n - 1);
+                        nextPath.update(n - 1, ++index);
+                    }
+                }
+            }
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public Path getPath() {
+                if (previousPath == null) {
+                    throw new IllegalStateException();
+                }
+
+                return previousPath;
             }
         }
 
@@ -364,6 +478,14 @@ public interface Sequence<T> {
             }
 
             return path;
+        }
+
+        /**
+         * Returns an iterator that will perform a depth-first traversal of the
+         * nested sequence.
+         */
+        public static <T> ItemIterator<T> taverseDepthFirst(Sequence<T> sequence) {
+            return new DepthFirstItemIterator<T>(sequence);
         }
 
         /**

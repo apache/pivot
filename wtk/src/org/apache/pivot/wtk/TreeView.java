@@ -1917,6 +1917,27 @@ public class TreeView extends Component {
     }
 
     /**
+     * Expands all branches in the tree view.
+     */
+    @SuppressWarnings("unchecked")
+    public final void expandAll() {
+        Sequence.Tree.ItemIterator<Object> itemIterator =
+            Sequence.Tree.taverseDepthFirst((List<Object>)treeData);
+
+        while (itemIterator.hasNext()) {
+            Object node = itemIterator.next();
+
+            if (node instanceof List<?>) {
+                Path path = itemIterator.getPath();
+
+                if (path.getLength() > 0) {
+                    expandBranch(path);
+                }
+            }
+        }
+    }
+
+    /**
      * Collapses the branch at the specified path. If the branch is already
      * collapsed, nothing happens.
      *
@@ -1925,6 +1946,27 @@ public class TreeView extends Component {
      */
     public final void collapseBranch(Path path) {
         setBranchExpanded(path, false);
+    }
+
+    /**
+     * Collapses all branches in the tree view.
+     */
+    @SuppressWarnings("unchecked")
+    public final void collapseAll() {
+        Sequence.Tree.ItemIterator<Object> itemIterator =
+            Sequence.Tree.taverseDepthFirst((List<Object>)treeData);
+
+        while (itemIterator.hasNext()) {
+            Object node = itemIterator.next();
+
+            if (node instanceof List<?>) {
+                Path path = itemIterator.getPath();
+
+                if (path.getLength() > 0) {
+                    collapseBranch(path);
+                }
+            }
+        }
     }
 
     /**
