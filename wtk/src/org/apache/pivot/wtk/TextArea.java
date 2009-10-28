@@ -591,15 +591,90 @@ public class TextArea extends Component {
     }
 
     public void cut() {
-        // TODO
+        if (document == null) {
+            throw new IllegalStateException();
+        }
+
+        if (selectionLength > 0) {
+            // Copy selection to clipboard
+            Document selection = (Document)document.removeRange(selectionStart, selectionLength);
+
+            String selectedText = null;
+            try {
+                PlainTextSerializer serializer = new PlainTextSerializer();
+                StringWriter writer = new StringWriter();
+                serializer.writeObject(selection, writer);
+                selectedText = writer.toString();
+            } catch(SerializationException exception) {
+                throw new RuntimeException(exception);
+            } catch(IOException exception) {
+                throw new RuntimeException(exception);
+            }
+
+            if (selectedText != null) {
+                LocalManifest clipboardContent = new LocalManifest();
+                clipboardContent.putText(selectedText);
+                Clipboard.setContent(clipboardContent);
+            }
+        }
+
+        setSelection(selectionStart, 0);
     }
 
     public void copy() {
-        // TODO
+        if (document == null) {
+            throw new IllegalStateException();
+        }
+
+        if (selectionLength > 0) {
+            // Copy selection to clipboard
+            Document selection = (Document)document.getRange(selectionStart, selectionLength);
+
+            String selectedText = null;
+            try {
+                PlainTextSerializer serializer = new PlainTextSerializer();
+                StringWriter writer = new StringWriter();
+                serializer.writeObject(selection, writer);
+                selectedText = writer.toString();
+            } catch(SerializationException exception) {
+                throw new RuntimeException(exception);
+            } catch(IOException exception) {
+                throw new RuntimeException(exception);
+            }
+
+            if (selectedText != null) {
+                LocalManifest clipboardContent = new LocalManifest();
+                clipboardContent.putText(selectedText);
+                Clipboard.setContent(clipboardContent);
+            }
+        }
     }
 
     public void paste() {
-        // TODO
+        Manifest clipboardContent = Clipboard.getContent();
+
+        if (clipboardContent != null
+            && clipboardContent.containsText()) {
+            // Paste the string representation of the content
+            String text = null;
+            try {
+                text = clipboardContent.getText();
+            } catch(IOException exception) {
+                // No-op
+            }
+
+            if (text != null) {
+                // Remove any existing selection
+                if (selectionLength > 0) {
+                    // TODO Make this part of the undoable action (for all such
+                    // actions)
+                    delete(Direction.BACKWARD);
+                }
+
+                // Insert the clipboard contents
+                insertText(text);
+            }
+        }
     }
 
     public void undo() {

@@ -216,6 +216,10 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             return node.getOffset();
         }
 
+        public int getDocumentOffset() {
+            return (parent == null) ? 0 : parent.getDocumentOffset() + getOffset();
+        }
+
         public int getCharacterCount() {
             return node.getCharacterCount();
         }
@@ -1019,15 +1023,9 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                     int selectionStart = textArea.getSelectionStart();
                     Span selectionRange = new Span(selectionStart, selectionStart + selectionLength - 1);
 
-                    // TODO Move this to a method?
-                    int documentOffset = getOffset();
-                    ElementView parent = getParent();
-                    while (parent != null) {
-                        documentOffset += parent.getOffset();
-                        parent = parent.getParent();
-                    }
-
+                    int documentOffset = getDocumentOffset();
                     Span characterRange = new Span(documentOffset, documentOffset + getCharacterCount() - 1);
+
                     if (characterRange.intersects(selectionRange)) {
                         int width = getWidth();
                         int height = getHeight();
