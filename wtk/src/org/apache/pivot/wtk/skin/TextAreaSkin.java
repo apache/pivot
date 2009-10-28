@@ -747,7 +747,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             for (int i = 0, n = rows.getLength(); i < n; i++) {
                 Row row = rows.get(i);
 
-                if (y > row.y
+                if (y >= row.y
                     && y < row.y + row.height) {
                     if (x < row.x) {
                         NodeView firstNodeView = row.nodeViews.get(0);
@@ -1290,8 +1290,40 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     private class ScrollSelectionCallback implements Runnable {
         @Override
         public void run() {
-            // TODO Add the next or previous row to the selection based on the
-            // current location of the mouse
+            TextArea textArea = (TextArea)getComponent();
+            int selectionStart = textArea.getSelectionStart();
+            int selectionLength = textArea.getSelectionLength();
+            int selectionEnd = selectionStart + selectionLength - 1;
+
+            switch (scrollDirection) {
+                case FORWARD: {
+                    // Get next offset
+                    int offset = getNextInsertionPoint(caretX, selectionEnd, scrollDirection);
+                    if (offset != -1) {
+                        textArea.setSelection(selectionStart, offset - selectionStart + 1);
+                        Bounds characterBounds = getCharacterBounds(offset);
+                        textArea.scrollAreaToVisible(characterBounds);
+                    }
+
+                    break;
+                }
+
+                case BACKWARD: {
+                    // Get previous offset
+                    int offset = getNextInsertionPoint(caretX, selectionStart, scrollDirection);
+                    if (offset != -1) {
+                        textArea.setSelection(offset, selectionEnd - offset + 1);
+                        Bounds characterBounds = getCharacterBounds(offset);
+                        textArea.scrollAreaToVisible(characterBounds);
+                    }
+
+                    break;
+                }
+
+                default: {
+                    throw new RuntimeException();
+                }
+            }
         }
     }
 
@@ -1303,6 +1335,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     private Area selection = null;
 
     private boolean caretOn = false;
+
+    private Direction scrollDirection = null;
 
     private BlinkCaretCallback blinkCaretCallback = new BlinkCaretCallback();
     private ApplicationContext.ScheduledCallback scheduledBlinkCaretCallback = null;
@@ -1322,7 +1356,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
     private static final int PARAGRAPH_TERMINATOR_WIDTH = 4;
     private static final FontRenderContext FONT_RENDER_CONTEXT = new FontRenderContext(null, true, true);
-    private static final int SCROLL_RATE = 50;
+    private static final int SCROLL_RATE = 30;
 
     public TextAreaSkin() {
         Theme theme = Theme.getTheme();
@@ -1722,6 +1756,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                     scheduledScrollSelectionCallback = null;
                 }
 
+                scrollDirection = null;
+
                 int offset = getInsertionPoint(x, y);
 
                 if (offset != -1) {
@@ -1733,9 +1769,9 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                     }
                 }
             } else {
-                // TODO Initialize the scroll callback state?
-
                 if (scheduledScrollSelectionCallback == null) {
+                    scrollDirection = (y < visibleArea.y) ? Direction.BACKWARD : Direction.FORWARD;
+
                     scheduledScrollSelectionCallback =
                         ApplicationContext.scheduleRecurringCallback(scrollSelectionCallback,
                             SCROLL_RATE);

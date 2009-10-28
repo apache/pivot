@@ -79,8 +79,6 @@ public class TerraTextInputSkin extends ComponentSkin
     }
 
     private class ScrollSelectionCallback implements Runnable {
-        private int x = 0;
-
         @Override
         public void run() {
             TextInput textInput = (TextInput)getComponent();
@@ -89,7 +87,7 @@ public class TerraTextInputSkin extends ComponentSkin
             int selectionStart = textInput.getSelectionStart();
             int selectionLength = textInput.getSelectionLength();
 
-            if (x < 0) {
+            if (scrollX < 0) {
                 // Add the previous character to the selection
                 if (selectionStart > 0) {
                     selectionStart--;
@@ -111,6 +109,7 @@ public class TerraTextInputSkin extends ComponentSkin
     private Shape logicalHighlightShape = null;
 
     private int scrollLeft = 0;
+    private int scrollX = 0;
 
     private BlinkCaretCallback blinkCaretCallback = new BlinkCaretCallback();
     private ApplicationContext.ScheduledCallback scheduledBlinkCaretCallback = null;
@@ -862,7 +861,7 @@ public class TerraTextInputSkin extends ComponentSkin
 
                     textInput.setSelection(selectionStart, selectionLength);
                 } else {
-                    scrollSelectionCallback.x = x;
+                    scrollX = x;
 
                     if (scheduledScrollSelectionCallback == null) {
                         scheduledScrollSelectionCallback =
