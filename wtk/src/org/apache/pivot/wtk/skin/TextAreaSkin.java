@@ -1019,21 +1019,22 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                     int selectionStart = textArea.getSelectionStart();
                     Span selectionRange = new Span(selectionStart, selectionStart + selectionLength - 1);
 
-                    int absoluteOffset = getOffset();
+                    // TODO Move this to a method?
+                    int documentOffset = getOffset();
                     ElementView parent = getParent();
                     while (parent != null) {
-                        absoluteOffset += parent.getOffset();
+                        documentOffset += parent.getOffset();
                         parent = parent.getParent();
                     }
 
-                    Span characterRange = new Span(absoluteOffset, absoluteOffset + getCharacterCount() - 1);
+                    Span characterRange = new Span(documentOffset, documentOffset + getCharacterCount() - 1);
                     if (characterRange.intersects(selectionRange)) {
                         int width = getWidth();
                         int height = getHeight();
 
                         int x0;
                         if (selectionRange.start > characterRange.start) {
-                            Bounds leadingSelectionBounds = getCharacterBounds(selectionRange.start - absoluteOffset);
+                            Bounds leadingSelectionBounds = getCharacterBounds(selectionRange.start - documentOffset);
                             x0 = leadingSelectionBounds.x;
                         } else {
                             x0 = 0;
@@ -1041,7 +1042,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
                         int x1;
                         if (selectionRange.end < characterRange.end) {
-                            Bounds trailingSelectionBounds = getCharacterBounds(selectionRange.end - absoluteOffset);
+                            Bounds trailingSelectionBounds = getCharacterBounds(selectionRange.end - documentOffset);
                             x1 = trailingSelectionBounds.x + trailingSelectionBounds.width;
                         } else {
                             x1 = width;
@@ -1400,7 +1401,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             documentView.validate();
 
             updateSelection();
-            showCaret(textArea.getSelectionLength() == 0);
+            showCaret(textArea.isFocused()
+                && textArea.getSelectionLength() == 0);
         }
     }
 

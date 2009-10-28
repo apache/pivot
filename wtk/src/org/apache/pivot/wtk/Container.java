@@ -688,32 +688,35 @@ public abstract class Container extends Component
     protected boolean mouseMove(int x, int y) {
         boolean consumed = false;
 
+        // Clear the mouse over component if its mouse-over state has
+        // changed (e.g. if its enabled or visible properties have
+        // changed)
+        if (mouseOverComponent != null
+            && !mouseOverComponent.isMouseOver()) {
+            mouseOverComponent = null;
+        }
+
         if (isEnabled()) {
+            // Synthesize mouse over/out events
+            Component component = getComponentAt(x, y);
+
+            if (mouseOverComponent != component) {
+                if (mouseOverComponent != null) {
+                    mouseOverComponent.mouseOut();
+                }
+
+                mouseOverComponent = null;
+                Mouse.setCursor(this);
+            }
+
             // Notify container listeners
             consumed = containerMouseListeners.mouseMove(this, x, y);
 
             if (!consumed) {
-                // Clear the mouse over component if its mouse-over state has
-                // changed (e.g. if its enabled or visible properties have
-                // changed)
-                if (mouseOverComponent != null
-                    && !mouseOverComponent.isMouseOver()) {
-                    mouseOverComponent = null;
-                }
-
-                // Synthesize mouse over/out events
-                Component component = getComponentAt(x, y);
-
                 if (mouseOverComponent != component) {
-                    if (mouseOverComponent != null) {
-                        mouseOverComponent.mouseOut();
-                    }
-
                     mouseOverComponent = component;
 
-                    if (mouseOverComponent == null) {
-                        Mouse.setCursor(this);
-                    } else {
+                    if (mouseOverComponent != null) {
                         mouseOverComponent.mouseOver();
                         Mouse.setCursor(mouseOverComponent);
                     }

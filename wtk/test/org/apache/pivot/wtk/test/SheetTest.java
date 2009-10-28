@@ -22,6 +22,8 @@ import org.apache.pivot.wtk.Alert;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
+import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.ComponentMouseListener;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.BoxPane;
@@ -78,6 +80,18 @@ public class SheetTest implements Application {
 
         final Prompt prompt = new Prompt(MessageType.INFO, "Prompt", new ArrayList<String>("OK"), promptBody);
         prompt.setTitle("Prompt");
+
+        prompt.getComponentMouseListeners().add(new ComponentMouseListener.Adapter() {
+            @Override
+            public void mouseOver(Component component) {
+                System.out.println("Mouse Over");
+            }
+
+            @Override
+            public void mouseOut(Component component) {
+                System.out.println("Mouse out");
+            }
+        });
 
         Label alertBody = new Label("Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an AS IS BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.");
         alertBody.getStyles().put("wrapText", true);

@@ -462,7 +462,7 @@ public class TextArea extends Component {
                 if (node instanceof TextNode) {
                     // Insert the text into the existing node
                     TextNode textNode = (TextNode)node;
-                    textNode.insertText(text, offset);
+                    textNode.insertText(text, offset - textNode.getOffset());
                 } else {
                     // Append a new text node
                     paragraph.add(new TextNode(text));
@@ -543,43 +543,44 @@ public class TextArea extends Component {
             throw new IllegalStateException();
         }
 
-        if (selectionLength > 0) {
-            // TODO Need to merge paragraphs here if we delete the terminator character;
-            // see below
-            document.removeRange(selectionStart, selectionLength);
-        } else {
-            int offset = selectionStart;
+        int offset = selectionStart;
 
+        int characterCount;
+        if (selectionLength > 0) {
+            characterCount = selectionLength;
+        } else {
             if (direction == Direction.BACKWARD) {
                 offset--;
             }
 
-            if (offset >= 0
-                && offset < document.getCharacterCount()) {
-                Node descendant = document.getDescendantAt(offset);
+            characterCount = 1;
+        }
 
-                if (descendant instanceof Paragraph) {
-                    // We are deleting a paragraph terminator
-                    Paragraph paragraph = (Paragraph)descendant;
+        if (offset >= 0
+            && offset < document.getCharacterCount()) {
+            Node descendant = document.getDescendantAt(offset);
 
-                    Element parent = paragraph.getParent();
-                    int index = parent.indexOf(paragraph);
+            if (descendant instanceof Paragraph) {
+                // We are deleting a paragraph terminator
+                Paragraph paragraph = (Paragraph)descendant;
 
-                    // Attempt to merge any successive content into the paragraph
-                    if (index < parent.getLength() - 1) {
-                        // TODO This won't always be a paragraph - we'll need to
-                        // find the next paragraph by walking the tree, then
-                        // remove any empty nodes
-                        Sequence<Node> removed = parent.remove(index + 1, 1);
-                        Paragraph nextParagraph = (Paragraph)removed.get(0);
-                        paragraph.insertRange(nextParagraph, paragraph.getCharacterCount() - 1);
+                Element parent = paragraph.getParent();
+                int index = parent.indexOf(paragraph);
 
-                        // Move the caret to the merge point
-                        setSelection(offset, 0);
-                    }
-                } else {
-                    document.removeRange(offset, 1);
+                // Attempt to merge any successive content into the paragraph
+                if (index < parent.getLength() - 1) {
+                    // TODO This won't always be a paragraph - we'll need to
+                    // find the next paragraph by walking the tree, then
+                    // remove any empty nodes
+                    Sequence<Node> removed = parent.remove(index + 1, 1);
+                    Paragraph nextParagraph = (Paragraph)removed.get(0);
+                    paragraph.insertRange(nextParagraph, paragraph.getCharacterCount() - 1);
                 }
+
+                // Move the caret to the merge point
+                setSelection(offset, 0);
+            } else {
+                document.removeRange(offset, characterCount);
             }
         }
 
@@ -587,9 +588,6 @@ public class TextArea extends Component {
         if (document.getCharacterCount() == 0) {
             document.add(new Paragraph(""));
         }
-
-        // Clear the selection length
-        selectionLength = 0;
     }
 
     public void cut() {
