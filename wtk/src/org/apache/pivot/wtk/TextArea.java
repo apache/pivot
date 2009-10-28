@@ -398,7 +398,8 @@ public class TextArea extends Component {
      * The length of the selection.
      */
     public void setSelection(int selectionStart, int selectionLength) {
-        if (document == null) {
+        if (document == null
+            || document.getCharacterCount() == 0) {
             throw new IllegalStateException();
         }
 
@@ -435,7 +436,8 @@ public class TextArea extends Component {
             throw new IllegalArgumentException("text is null.");
         }
 
-        if (document == null) {
+        if (document == null
+            || document.getCharacterCount() == 0) {
             throw new IllegalStateException();
         }
 
@@ -488,7 +490,8 @@ public class TextArea extends Component {
             throw new IllegalArgumentException("image is null.");
         }
 
-        if (document == null) {
+        if (document == null
+            || document.getCharacterCount() == 0) {
             throw new IllegalStateException();
         }
 
@@ -505,7 +508,8 @@ public class TextArea extends Component {
     }
 
     public void insertParagraph() {
-        if (document == null) {
+        if (document == null
+            || document.getCharacterCount() == 0) {
             throw new IllegalStateException();
         }
 
@@ -539,7 +543,8 @@ public class TextArea extends Component {
             throw new IllegalArgumentException("direction is null.");
         }
 
-        if (document == null) {
+        if (document == null
+            || document.getCharacterCount() == 0) {
             throw new IllegalStateException();
         }
 
@@ -591,7 +596,8 @@ public class TextArea extends Component {
     }
 
     public void cut() {
-        if (document == null) {
+        if (document == null
+            || document.getCharacterCount() == 0) {
             throw new IllegalStateException();
         }
 
@@ -622,7 +628,8 @@ public class TextArea extends Component {
     }
 
     public void copy() {
-        if (document == null) {
+        if (document == null
+            || document.getCharacterCount() == 0) {
             throw new IllegalStateException();
         }
 

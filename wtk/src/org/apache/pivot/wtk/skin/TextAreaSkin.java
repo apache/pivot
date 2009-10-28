@@ -454,6 +454,18 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
         @Override
         public void validate() {
+            // TODO At some point, we may want to optimize this method by deferring layout of
+            // non-visible views. If so, we should not recycle views but rather recreate them
+            // (as is done in ParagraphView). This way, we avoid thread contention over the
+            // existing views (e.g. trying to paint one while modifying its size/location, etc.).
+            // Any invalid node views are simply replaced (in the queued callback, when the
+            // thread has finished processing the new ones). This allows the definition of
+            // validate() to remain as-is. Of course, if we redefine NodeView to implement
+            // ConstrainedVisual, this may no longer be an issue.
+            // Note that, if anything happens to invalidate the existence of the new views before
+            // they are added to the document view, we need to make sure they are disposed (i.e.
+            // detached).
+
             if (!isValid()) {
                 int breakWidth = getBreakWidth();
 
@@ -2128,54 +2140,58 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     }
 
     private void updateSelection() {
-        TextArea textArea = (TextArea)getComponent();
+        if (documentView.getCharacterCount() > 0) {
+            TextArea textArea = (TextArea)getComponent();
 
-        // TODO If the document is empty, clear both the caret and the selection
+            int selectionStart = textArea.getSelectionStart();
+            int selectionLength = textArea.getSelectionLength();
 
-        int selectionStart = textArea.getSelectionStart();
-        int selectionLength = textArea.getSelectionLength();
+            Bounds leadingSelectionBounds = getCharacterBounds(selectionStart);
 
-        Bounds leadingSelectionBounds = getCharacterBounds(selectionStart);
+            if (selectionLength == 0) {
+                caret = leadingSelectionBounds.toRectangle();
+                caret.width = 1;
 
-        if (selectionLength == 0) {
-            caret = leadingSelectionBounds.toRectangle();
-            caret.width = 1;
-
-            selection = null;
-        } else {
-            caret = null;
-
-            Bounds trailingSelectionBounds = getCharacterBounds(selectionStart
-                + selectionLength - 1);
-            selection = new Area();
-
-            int firstRowIndex = getRowIndex(selectionStart);
-            int lastRowIndex = getRowIndex(selectionStart + selectionLength - 1);
-
-            if (firstRowIndex == lastRowIndex) {
-                selection.add(new Area(new Rectangle(leadingSelectionBounds.x, leadingSelectionBounds.y,
-                    trailingSelectionBounds.x + trailingSelectionBounds.width - leadingSelectionBounds.x,
-                    trailingSelectionBounds.y + trailingSelectionBounds.height - leadingSelectionBounds.y)));
+                selection = null;
             } else {
-                int width = getWidth();
+                caret = null;
 
-                selection.add(new Area(new Rectangle(leadingSelectionBounds.x,
-                    leadingSelectionBounds.y,
-                    width - margin.right - leadingSelectionBounds.x,
-                    leadingSelectionBounds.height)));
+                Bounds trailingSelectionBounds = getCharacterBounds(selectionStart
+                    + selectionLength - 1);
+                selection = new Area();
 
-                if (lastRowIndex - firstRowIndex > 0) {
-                    selection.add(new Area(new Rectangle(margin.left,
-                        leadingSelectionBounds.y + leadingSelectionBounds.height,
-                        width - (margin.left + margin.right),
-                        trailingSelectionBounds.y - (leadingSelectionBounds.y
-                            + leadingSelectionBounds.height))));
+                int firstRowIndex = getRowIndex(selectionStart);
+                int lastRowIndex = getRowIndex(selectionStart + selectionLength - 1);
+
+                if (firstRowIndex == lastRowIndex) {
+                    selection.add(new Area(new Rectangle(leadingSelectionBounds.x, leadingSelectionBounds.y,
+                        trailingSelectionBounds.x + trailingSelectionBounds.width - leadingSelectionBounds.x,
+                        trailingSelectionBounds.y + trailingSelectionBounds.height - leadingSelectionBounds.y)));
+                } else {
+                    int width = getWidth();
+
+                    selection.add(new Area(new Rectangle(leadingSelectionBounds.x,
+                        leadingSelectionBounds.y,
+                        width - margin.right - leadingSelectionBounds.x,
+                        leadingSelectionBounds.height)));
+
+                    if (lastRowIndex - firstRowIndex > 0) {
+                        selection.add(new Area(new Rectangle(margin.left,
+                            leadingSelectionBounds.y + leadingSelectionBounds.height,
+                            width - (margin.left + margin.right),
+                            trailingSelectionBounds.y - (leadingSelectionBounds.y
+                                + leadingSelectionBounds.height))));
+                    }
+
+                    selection.add(new Area(new Rectangle(margin.left, trailingSelectionBounds.y,
+                        trailingSelectionBounds.x + trailingSelectionBounds.width - margin.left,
+                        trailingSelectionBounds.height)));
                 }
-
-                selection.add(new Area(new Rectangle(margin.left, trailingSelectionBounds.y,
-                    trailingSelectionBounds.x + trailingSelectionBounds.width - margin.left,
-                    trailingSelectionBounds.height)));
             }
+        } else {
+            // Clear both the caret and the selection
+            caret = null;
+            selection = null;
         }
     }
 
