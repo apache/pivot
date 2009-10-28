@@ -95,6 +95,14 @@ public abstract class Component implements ConstrainedVisual {
             return styles.isEmpty();
         }
 
+        public boolean isReadOnly(String key) {
+            return styles.isReadOnly(key);
+        }
+
+        public Class<?> getType(String key) {
+            return styles.getType(key);
+        }
+
         @Override
         public Iterator<String> iterator() {
             return new ImmutableIterator<String>(styles.iterator());
