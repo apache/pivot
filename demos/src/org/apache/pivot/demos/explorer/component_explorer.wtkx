@@ -68,27 +68,27 @@ limitations under the License.
                                                 icon="@folder.png">
                                                 <explorer:ComponentNode text="FlowPane"
                                                     icon="@magnifier.png"
-                                                    src="@flowpane/flow_pane.wtkx"
+                                                    src="@layout/flow_pane.wtkx"
                                                     horizontalScrollBarPolicy="fill"
                                                     verticalScrollBarPolicy="fill"/>
                                                 <explorer:ComponentNode text="BoxPane"
                                                     icon="@magnifier.png"
-                                                    src="@boxpane/box_pane.wtkx"
+                                                    src="@layout/box_pane.wtkx"
                                                     horizontalScrollBarPolicy="fill"
                                                     verticalScrollBarPolicy="fill"/>
                                                 <explorer:ComponentNode text="TablePane"
                                                     icon="@magnifier.png"
-                                                    src="@tablepane/table_pane.wtkx"
+                                                    src="@layout/table_pane.wtkx"
                                                     horizontalScrollBarPolicy="fill"
                                                     verticalScrollBarPolicy="fill"/>
                                                 <explorer:ComponentNode text="Border"
                                                     icon="@magnifier.png"
-                                                    src="@border/border.wtkx"
+                                                    src="@layout/border.wtkx"
                                                     horizontalScrollBarPolicy="fill"
                                                     verticalScrollBarPolicy="fill"/>
                                                 <explorer:ComponentNode text="SplitPane"
                                                     icon="@magnifier.png"
-                                                    src="@splitpane/split_pane.wtkx"
+                                                    src="@layout/split_pane.wtkx"
                                                     horizontalScrollBarPolicy="fill"
                                                     verticalScrollBarPolicy="fill"/>
                                             </content:TreeBranch>
@@ -96,7 +96,7 @@ limitations under the License.
                                                 icon="@folder.png">
                                                 <explorer:ComponentNode text="CardPane"
                                                     icon="@magnifier.png"
-                                                    src="@cardpane/card_pane.wtkx"
+                                                    src="@navigation/card_pane.wtkx"
                                                     horizontalScrollBarPolicy="fill"
                                                     verticalScrollBarPolicy="fill"/>
                                             </content:TreeBranch>
@@ -107,7 +107,7 @@ limitations under the License.
                                                 icon="@folder.png">
                                                 <explorer:ComponentNode text="ScrollBar"
                                                     icon="@magnifier.png"
-                                                    src="@scrollbar/scroll_bar.wtkx"
+                                                    src="@boundedrange/scroll_bar.wtkx"
                                                     horizontalScrollBarPolicy="auto"
                                                     verticalScrollBarPolicy="auto"/>
                                             </content:TreeBranch>

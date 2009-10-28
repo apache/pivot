@@ -16,9 +16,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<CardPane xmlns:wtkx="http://pivot.apache.org/wtkx"
+<Border title="Border Title" styles="{padding:2}"
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <ImageView image="@IMG_0725_2.jpg"/>
-    <ImageView image="@IMG_0735_2.jpg"/>
-    <ImageView image="@IMG_0767_2.jpg"/>
-</CardPane>
+    <content>
+        <Label text="Border Content" styles="{horizontalAlignment:'center',
+            verticalAlignment:'center', wrapText:true}"/>
+    </content>
+</Border>
