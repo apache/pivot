@@ -1439,7 +1439,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     @Override
     public void layout() {
         if (documentView != null) {
-            TextArea textArea = (TextArea)getComponent();
+            final TextArea textArea = (TextArea)getComponent();
             int width = getWidth();
             documentView.setBreakWidth(Math.max(width - (margin.left + margin.right), 0));
             documentView.validate();
@@ -1447,6 +1447,15 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             updateSelection();
             showCaret(textArea.isFocused()
                 && textArea.getSelectionLength() == 0);
+
+            ApplicationContext.queueCallback(new Runnable() {
+                @Override
+                public void run() {
+                    Bounds characterBounds = getCharacterBounds(textArea.getSelectionStart());
+                    textArea.scrollAreaToVisible(0, characterBounds.y, characterBounds.width,
+                        characterBounds.height);
+                }
+            });
         }
     }
 
@@ -1861,10 +1870,10 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
 
     @Override
-    public boolean keyTyped(Component component, char character) {
+    public boolean keyTyped(final Component component, char character) {
         boolean consumed = super.keyTyped(component, character);
 
-        TextArea textArea = (TextArea)getComponent();
+        final TextArea textArea = (TextArea)getComponent();
 
         if (textArea.isEditable()) {
             Document document = textArea.getDocument();
@@ -1884,10 +1893,10 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     }
 
     @Override
-    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyPressed(final Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 
-        TextArea textArea = (TextArea)getComponent();
+        final TextArea textArea = (TextArea)getComponent();
 
         if (textArea.isEditable()) {
             Document document = textArea.getDocument();

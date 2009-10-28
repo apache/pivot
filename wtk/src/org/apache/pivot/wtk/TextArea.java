@@ -581,12 +581,12 @@ public class TextArea extends Component {
                     Paragraph nextParagraph = (Paragraph)removed.get(0);
                     paragraph.insertRange(nextParagraph, paragraph.getCharacterCount() - 1);
                 }
-
-                // Move the caret to the merge point
-                setSelection(offset, 0);
             } else {
                 document.removeRange(offset, characterCount);
             }
+
+            // Move the caret to the merge point
+            setSelection(offset, 0);
         }
 
         // Ensure that the document remains editable
