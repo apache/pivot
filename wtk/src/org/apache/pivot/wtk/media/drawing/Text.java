@@ -19,15 +19,12 @@ package org.apache.pivot.wtk.media.drawing;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.Paint;
 import java.awt.RenderingHints;
 import java.awt.font.FontRenderContext;
-import java.awt.font.LineBreakMeasurer;
-import java.awt.font.TextAttribute;
-import java.awt.font.TextLayout;
+import java.awt.font.GlyphVector;
+import java.awt.font.LineMetrics;
 import java.awt.geom.Rectangle2D;
-import java.text.AttributedCharacterIterator;
-import java.text.AttributedString;
+import java.text.StringCharacterIterator;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.util.ListenerList;
@@ -71,16 +68,16 @@ public class Text extends Shape {
     private int width = -1;
     private HorizontalAlignment alignment = HorizontalAlignment.CENTER;
 
-    private ArrayList<TextLayout> lines = new ArrayList<TextLayout>();
-    private FontRenderContext fontRenderContext = new FontRenderContext(null, true, true);
+    private ArrayList<GlyphVector> glyphVectors = null;
 
     private TextListenerList textListeners = new TextListenerList();
 
     public static final Font DEFAULT_FONT = new Font("Verdana", Font.PLAIN, 11);
+    private static final FontRenderContext FONT_RENDER_CONTEXT = new FontRenderContext(null, true, true);
 
     public Text() {
-        super.setFill(Color.BLACK);
-        super.setStroke((Paint)null);
+        setFill(Color.BLACK);
+        setStrokeThickness(0);
     }
 
     public String getText() {
@@ -164,23 +161,9 @@ public class Text extends Shape {
     }
 
     @Override
-    public void setFill(Paint fill) {
-        if (fill == null) {
-            // Text must have a fill
-            throw new IllegalArgumentException();
-        }
-
-        super.setFill(fill);
-    }
-
-    @Override
-    public void setStroke(Paint stroke) {
-        // Text cannot have a stroke
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public boolean contains(int x, int y) {
+        // TODO Perform hit testing on the glyph vectors?
+
         Bounds bounds = getBounds();
 
         return (x >= 0
@@ -191,57 +174,68 @@ public class Text extends Shape {
 
     @Override
     public void draw(Graphics2D graphics) {
-        if (fontRenderContext.isAntiAliased()) {
-            graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-                Platform.getTextAntialiasingHint());
-        }
+        int width = getWidth();
 
-        if (fontRenderContext.usesFractionalMetrics()) {
-            graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
-                RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-        }
+        // TODO Draw the outlines
 
-        graphics.setFont(font);
-        graphics.setPaint(getFill());
+        // Draw the text
+        if (glyphVectors.getLength() > 0) {
+            graphics.setFont(font);
+            graphics.setPaint(getFill());
 
-        Bounds bounds = getBounds();
+            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
 
-        float y = 0;
-        for (TextLayout line : lines) {
-            Rectangle2D lineBounds = line.getBounds();
-
-            float x;
-            switch (alignment) {
-                case LEFT: {
-                    x = 0;
-                    break;
-                }
-
-                case RIGHT: {
-                    x = bounds.width - (float)(lineBounds.getX() + lineBounds.getWidth());
-                    break;
-                }
-
-                case CENTER: {
-                    x = (bounds.width - (float)(lineBounds.getX() + lineBounds.getWidth())) / 2f;
-                    break;
-                }
-
-                default: {
-                    throw new UnsupportedOperationException();
-                }
+            if (FONT_RENDER_CONTEXT.isAntiAliased()) {
+                graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+                    Platform.getTextAntialiasingHint());
             }
 
-            y += line.getAscent();
-            line.draw(graphics, x, y);
-            y += line.getDescent() + line.getLeading();
+            if (FONT_RENDER_CONTEXT.usesFractionalMetrics()) {
+                graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
+                    RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+            }
+
+            LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
+            float ascent = lm.getAscent();
+
+            float y = 0;
+
+            for (int i = 0, n = glyphVectors.getLength(); i < n; i++) {
+                GlyphVector glyphVector = glyphVectors.get(i);
+
+                Rectangle2D logicalBounds = glyphVector.getLogicalBounds();
+                float lineWidth = (float)logicalBounds.getWidth();
+
+                float x = 0;
+                switch(alignment) {
+                    case LEFT: {
+                        x = 0;
+                        break;
+                    }
+
+                    case RIGHT: {
+                        x = width - lineWidth;
+                        break;
+                    }
+
+                    case CENTER: {
+                        x = (width - lineWidth) / 2;
+                        break;
+                    }
+                }
+
+                graphics.drawGlyphVector(glyphVector, x, y + ascent);
+
+                y += logicalBounds.getHeight();
+            }
         }
     }
 
     @Override
     protected void validate() {
         if (!isValid()) {
-            lines = new ArrayList<TextLayout>();
+            glyphVectors = new ArrayList<GlyphVector>();
 
             int width, height;
             if (this.width == -1) {
@@ -250,31 +244,72 @@ public class Text extends Shape {
                     width = 0;
                     height = 0;
                 } else {
-                    TextLayout line = new TextLayout(text, font, fontRenderContext);
-                    lines.add(line);
-                    Rectangle2D lineBounds = line.getBounds();
-                    width = (int)Math.ceil(lineBounds.getWidth());
-                    height = (int)Math.ceil(line.getAscent() + line.getDescent()
-                        + line.getLeading());
+                    // Create a single glyph vector representing the entire string
+                    GlyphVector glyphVector = font.createGlyphVector(FONT_RENDER_CONTEXT, text);
+                    glyphVectors.add(glyphVector);
+
+                    Rectangle2D logicalBounds = glyphVector.getLogicalBounds();
+                    width = (int)Math.ceil(logicalBounds.getWidth());
+                    height = (int)Math.ceil(logicalBounds.getHeight());
                 }
             } else {
                 width = this.width;
+                float textHeight = 0;
 
-                AttributedString attributedText = new AttributedString(text);
-                attributedText.addAttribute(TextAttribute.FONT, font);
+                int n = text.length();
+                if (n > 0) {
+                    float lineWidth = 0;
+                    int lastWhitespaceIndex = -1;
 
-                AttributedCharacterIterator aci = attributedText.getIterator();
-                LineBreakMeasurer lbm = new LineBreakMeasurer(aci, fontRenderContext);
+                    int start = 0;
+                    int i = 0;
+                    while (i < n) {
+                        char c = text.charAt(i);
+                        if (Character.isWhitespace(c)) {
+                            lastWhitespaceIndex = i;
+                        }
 
-                float lineHeights = 0;
-                while (lbm.getPosition() < aci.getEndIndex()) {
-                    TextLayout line = lbm.nextLayout(width);
-                    lines.add(line);
-                    lineHeights += line.getAscent() + line.getDescent()
-                        + line.getLeading();
+                        Rectangle2D characterBounds = font.getStringBounds(text, i, i + 1,
+                            FONT_RENDER_CONTEXT);
+                        lineWidth += characterBounds.getWidth();
+
+                        if (lineWidth > width
+                            && lastWhitespaceIndex != -1) {
+                            i = lastWhitespaceIndex;
+
+                            lineWidth = 0;
+                            lastWhitespaceIndex = -1;
+
+                            // Append the current line
+                            if ((i - 1) - start > 0) {
+                                StringCharacterIterator line = new StringCharacterIterator(text, start, i, start);
+                                GlyphVector glyphVector = font.createGlyphVector(FONT_RENDER_CONTEXT, line);
+                                glyphVectors.add(glyphVector);
+
+                                Rectangle2D logicalBounds = glyphVector.getLogicalBounds();
+                                textHeight += logicalBounds.getHeight();
+                            }
+
+                            start = i + 1;
+                        }
+
+                        i++;
+                    }
+
+                    // Append the final line
+                    if ((i - 1) - start > 0) {
+                        StringCharacterIterator line = new StringCharacterIterator(text, start, i, start);
+                        GlyphVector glyphVector = font.createGlyphVector(FONT_RENDER_CONTEXT, line);
+                        glyphVectors.add(glyphVector);
+
+                        Rectangle2D logicalBounds = glyphVector.getLogicalBounds();
+                        textHeight += logicalBounds.getHeight();
+                    }
+
+                    height = (int)Math.ceil(textHeight);
+                } else {
+                    height = 0;
                 }
-
-                height = (int)Math.ceil(lineHeights);
             }
 
             setBounds(0, 0, width, height);

@@ -61,8 +61,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     private ArrayList<GlyphVector> glyphVectors = null;
     private float textHeight = -1;
 
-    private static final FontRenderContext FONT_RENDER_CONTEXT =
-        new FontRenderContext(null, true, true);
+    private static final FontRenderContext FONT_RENDER_CONTEXT = new FontRenderContext(null, true, true);
 
     public LabelSkin() {
         Theme theme = Theme.getTheme();

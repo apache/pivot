@@ -80,7 +80,7 @@ limitations under the License.
             </Group>
 
             <Group x="120" y="360">
-                <Text text="ABCDEF GHIJK" font="Arial BOLD 24" width="80"
+                <Text text="ABCDEF GHIJK LMN OPQRSTU VW X Y Z" font="Arial BOLD 24" width="80"
                     alignment="left"/>
             </Group>
         </Canvas>
