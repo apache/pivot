@@ -148,11 +148,54 @@ limitations under the License.
                                 </Border>
                             </left>
                             <right>
-                                <Border>
-                                    <content>
-                                        <tools:ComponentInspector wtkx:id="componentInspector"/>
-                                    </content>
-                                </Border>
+                                <SplitPane orientation="vertical" splitRatio="0.5">
+                                    <top>
+                                        <Border>
+                                            <content>
+                                                <ScrollPane
+                                                    horizontalScrollBarPolicy="fill_to_capacity">
+                                                    <view>
+                                                        <BoxPane orientation="vertical"
+                                                            styles="{fill:true,
+                                                            horizontalAlignment:'right'}">
+                                                            <Label text="%properties"
+                                                                styles="{padding:{left:10, top:5},
+                                                                font:{bold:true}}"/>
+                                                            <BoxPane orientation="vertical"
+                                                                styles="{padding:{left:10}}">
+                                                                <tools:ComponentPropertyInspector
+                                                                    wtkx:id="componentPropertyInspector"/>
+                                                            </BoxPane>
+                                                        </BoxPane>
+                                                    </view>
+                                                </ScrollPane>
+                                            </content>
+                                        </Border>
+                                    </top>
+                                    <bottom>
+                                        <Border>
+                                            <content>
+                                                <ScrollPane
+                                                    horizontalScrollBarPolicy="fill_to_capacity">
+                                                    <view>
+                                                        <BoxPane orientation="vertical"
+                                                            styles="{fill:true,
+                                                            horizontalAlignment:'right'}">
+                                                            <Label text="%styles"
+                                                                styles="{padding:{left:10, top:5},
+                                                                font:{bold:true}}"/>
+                                                            <BoxPane orientation="vertical"
+                                                                styles="{padding:{left:10}}">
+                                                                <tools:ComponentStyleInspector
+                                                                    wtkx:id="componentStyleInspector"/>
+                                                            </BoxPane>
+                                                        </BoxPane>
+                                                    </view>
+                                                </ScrollPane>
+                                            </content>
+                                        </Border>
+                                    </bottom>
+                                </SplitPane>
                             </right>
                         </SplitPane>
                     </top>

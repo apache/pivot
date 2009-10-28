@@ -20,7 +20,7 @@ import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Container;
 
-public class ComponentInspector extends Container {
+public abstract class ComponentInspector extends Container {
     private static class ComponentInspectorListenerList
         extends ListenerList<ComponentInspectorListener> implements ComponentInspectorListener {
         @Override
@@ -35,15 +35,6 @@ public class ComponentInspector extends Container {
 
     private ComponentInspectorListenerList componentInspectorListeners =
         new ComponentInspectorListenerList();
-
-    public ComponentInspector() {
-        this(null);
-    }
-
-    public ComponentInspector(Component source) {
-        setSource(source);
-        setSkin(new ComponentInspectorSkin());
-    }
 
     public Component getSource() {
         return source;

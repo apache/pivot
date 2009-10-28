@@ -23,8 +23,10 @@ import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.collections.Sequence.Tree.Path;
 import org.apache.pivot.serialization.SerializationException;
-import org.apache.pivot.tools.wtk.ComponentInspector;
+import org.apache.pivot.tools.wtk.ComponentPropertyInspector;
+import org.apache.pivot.tools.wtk.ComponentStyleInspector;
 import org.apache.pivot.tools.wtk.EventLogger;
+import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentMouseButtonListener;
@@ -41,18 +43,21 @@ public class ComponentExplorer implements Application {
     private Window window = null;
     private TreeView treeView = null;
     private ScrollPane scrollPane = null;
-    private ComponentInspector componentInspector = null;
+    private ComponentPropertyInspector componentPropertyInspector = null;
+    private ComponentStyleInspector componentStyleInspector = null;
     private EventLogger eventLogger = null;
 
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        Resources resources = new Resources(getClass().getName());
+        WTKXSerializer wtkxSerializer = new WTKXSerializer(resources);
         window = (Window)wtkxSerializer.readObject(this, "component_explorer.wtkx");
 
         treeView = wtkxSerializer.getValue("treeView");
         scrollPane = wtkxSerializer.getValue("scrollPane");
-        componentInspector = wtkxSerializer.getValue("componentInspector");
+        componentPropertyInspector = wtkxSerializer.getValue("componentPropertyInspector");
+        componentStyleInspector = wtkxSerializer.getValue("componentStyleInspector");
         eventLogger = wtkxSerializer.getValue("eventLogger");
 
         treeView.getTreeViewSelectionListeners().add(new TreeViewSelectionListener.Adapter() {
@@ -81,7 +86,8 @@ public class ComponentExplorer implements Application {
                 }
 
                 scrollPane.setView(component);
-                componentInspector.setSource(component);
+                componentPropertyInspector.setSource(component);
+                componentStyleInspector.setSource(component);
                 eventLogger.setSource(component);
             }
         });

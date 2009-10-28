@@ -18,24 +18,13 @@ package org.apache.pivot.tools.wtk;
 
 import org.apache.pivot.wtk.Component;
 
-/**
- * component inspector listener interface.
- */
-public interface ComponentInspectorListener {
-    /**
-     * component inspector listener adapter.
-     */
-    public static class Adapter implements ComponentInspectorListener {
-        @Override
-        public void sourceChanged(ComponentInspector componentInspector, Component previousSource) {
-        }
+public class ComponentPropertyInspector extends ComponentInspector {
+    public ComponentPropertyInspector() {
+        this(null);
     }
 
-    /**
-     * Called when an component inspector's source component has changed.
-     *
-     * @param componentInspector
-     * @param previousSource
-     */
-    public void sourceChanged(ComponentInspector componentInspector, Component previousSource);
+    public ComponentPropertyInspector(Component source) {
+        setSource(source);
+        setSkin(new ComponentPropertyInspectorSkin());
+    }
 }
