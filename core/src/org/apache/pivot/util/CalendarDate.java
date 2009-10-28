@@ -29,7 +29,7 @@ import org.apache.pivot.serialization.SerializationException;
 
 /**
  * <tt>CalendarDate</tt> allows a specific day to be identified within the
- * gregorian calendar system. This identification has no association with any
+ * Gregorian calendar system. This identification has no association with any
  * particular time zone and no notion of the time of day.
  */
 public final class CalendarDate implements Comparable<CalendarDate>, Serializable {
@@ -211,7 +211,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
 
     /**
      * Creates a new <tt>CalendarDate</tt> representing the day contained in
-     * the specified gregorian calendar (assuming the default locale and the
+     * the specified Gregorian calendar (assuming the default locale and the
      * default timezone).
      *
      * @param calendar
