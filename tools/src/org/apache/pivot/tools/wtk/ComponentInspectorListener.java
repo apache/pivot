@@ -23,15 +23,6 @@ import org.apache.pivot.wtk.Component;
  */
 public interface ComponentInspectorListener {
     /**
-     * component inspector listener adapter.
-     */
-    public static class Adapter implements ComponentInspectorListener {
-        @Override
-        public void sourceChanged(ComponentInspector componentInspector, Component previousSource) {
-        }
-    }
-
-    /**
      * Called when an component inspector's source component has changed.
      *
      * @param componentInspector

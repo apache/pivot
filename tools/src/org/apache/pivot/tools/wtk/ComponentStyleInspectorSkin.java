@@ -28,9 +28,11 @@ import org.apache.pivot.wtk.Checkbox;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentListener;
 import org.apache.pivot.wtk.ComponentStateListener;
+import org.apache.pivot.wtk.CornerRadii;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.FlowPane;
 import org.apache.pivot.wtk.Form;
+import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.Limits;
 import org.apache.pivot.wtk.ListButton;
@@ -172,6 +174,10 @@ class ComponentStyleInspectorSkin extends ContainerSkin implements ComponentInsp
             inspectorComponent = addDimensionsControl(styleKey);
         } else if (styleType == Limits.class) {
             inspectorComponent = addLimitsControl(styleKey);
+        } else if (styleType == Insets.class) {
+            inspectorComponent = addInsetsControl(styleKey);
+        } else if (styleType == CornerRadii.class) {
+            inspectorComponent = addCornerRadiiControl(styleKey);
         }
 
         if (inspectorComponent != null) {
@@ -639,5 +645,297 @@ class ComponentStyleInspectorSkin extends ContainerSkin implements ComponentInsp
             minTextInput.setText(String.valueOf(limits.min));
             maxTextInput.setText(String.valueOf(limits.max));
         }
+    }
+
+    private Component addInsetsControl(final String styleKey) {
+        Insets insets = (Insets)styles.get(styleKey);
+
+        BoxPane boxPane = new BoxPane(Orientation.VERTICAL);
+        formSection.add(boxPane);
+        Form.setLabel(boxPane, styleKey);
+
+        FlowPane flowPane = new FlowPane();
+        flowPane.getStyles().put("alignToBaseline", true);
+        flowPane.getStyles().put("horizontalSpacing", 5);
+        boxPane.add(flowPane);
+
+        TextInput textInput = new TextInput();
+        textInput.setTextSize(4);
+        textInput.setMaximumLength(4);
+        textInput.setValidator(new IntValidator());
+        textInput.setText(String.valueOf(insets.top));
+        flowPane.add(textInput);
+
+        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+            @Override
+            public void focusedChanged(Component component, Component obverseComponent) {
+                if (!component.isFocused()) {
+                    TextInput textInput = (TextInput)component;
+                    Insets insets = (Insets)styles.get(styleKey);
+
+                    try {
+                        int top = Integer.parseInt(textInput.getText());
+                        styles.put(styleKey, new Insets(top, insets.left, insets.bottom,
+                            insets.right));
+                    } catch (Exception exception) {
+                        textInput.setText(String.valueOf(insets.top));
+                    }
+                }
+            }
+        });
+
+        Label label = new Label("top");
+        label.getStyles().put("font", "{italic:true}");
+        flowPane.add(label);
+
+        flowPane = new FlowPane();
+        flowPane.getStyles().put("alignToBaseline", true);
+        flowPane.getStyles().put("horizontalSpacing", 5);
+        boxPane.add(flowPane);
+
+        textInput = new TextInput();
+        textInput.setTextSize(4);
+        textInput.setMaximumLength(4);
+        textInput.setValidator(new IntValidator());
+        textInput.setText(String.valueOf(insets.left));
+        flowPane.add(textInput);
+
+        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+            @Override
+            public void focusedChanged(Component component, Component obverseComponent) {
+                if (!component.isFocused()) {
+                    TextInput textInput = (TextInput)component;
+                    Insets insets = (Insets)styles.get(styleKey);
+
+                    try {
+                        int left = Integer.parseInt(textInput.getText());
+                        styles.put(styleKey, new Insets(insets.top, left, insets.bottom,
+                            insets.right));
+                    } catch (Exception exception) {
+                        textInput.setText(String.valueOf(insets.left));
+                    }
+                }
+            }
+        });
+
+        label = new Label("left");
+        label.getStyles().put("font", "{italic:true}");
+        flowPane.add(label);
+
+        flowPane = new FlowPane();
+        flowPane.getStyles().put("alignToBaseline", true);
+        flowPane.getStyles().put("horizontalSpacing", 5);
+        boxPane.add(flowPane);
+
+        textInput = new TextInput();
+        textInput.setTextSize(4);
+        textInput.setMaximumLength(4);
+        textInput.setValidator(new IntValidator());
+        textInput.setText(String.valueOf(insets.bottom));
+        flowPane.add(textInput);
+
+        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+            @Override
+            public void focusedChanged(Component component, Component obverseComponent) {
+                if (!component.isFocused()) {
+                    TextInput textInput = (TextInput)component;
+                    Insets insets = (Insets)styles.get(styleKey);
+
+                    try {
+                        int bottom = Integer.parseInt(textInput.getText());
+                        styles.put(styleKey, new Insets(insets.top, insets.left, bottom,
+                            insets.right));
+                    } catch (Exception exception) {
+                        textInput.setText(String.valueOf(insets.bottom));
+                    }
+                }
+            }
+        });
+
+        label = new Label("bottom");
+        label.getStyles().put("font", "{italic:true}");
+        flowPane.add(label);
+
+        flowPane = new FlowPane();
+        flowPane.getStyles().put("alignToBaseline", true);
+        flowPane.getStyles().put("horizontalSpacing", 5);
+        boxPane.add(flowPane);
+
+        textInput = new TextInput();
+        textInput.setTextSize(4);
+        textInput.setMaximumLength(4);
+        textInput.setValidator(new IntValidator());
+        textInput.setText(String.valueOf(insets.right));
+        flowPane.add(textInput);
+
+        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+            @Override
+            public void focusedChanged(Component component, Component obverseComponent) {
+                if (!component.isFocused()) {
+                    TextInput textInput = (TextInput)component;
+                    Insets insets = (Insets)styles.get(styleKey);
+
+                    try {
+                        int right = Integer.parseInt(textInput.getText());
+                        styles.put(styleKey, new Insets(insets.top, insets.left, insets.bottom,
+                            right));
+                    } catch (Exception exception) {
+                        textInput.setText(String.valueOf(insets.right));
+                    }
+                }
+            }
+        });
+
+        label = new Label("right");
+        label.getStyles().put("font", "{italic:true}");
+        flowPane.add(label);
+
+        return boxPane;
+    }
+
+    private Component addCornerRadiiControl(final String styleKey) {
+        CornerRadii cornerRadii = (CornerRadii)styles.get(styleKey);
+
+        BoxPane boxPane = new BoxPane(Orientation.VERTICAL);
+        formSection.add(boxPane);
+        Form.setLabel(boxPane, styleKey);
+
+        FlowPane flowPane = new FlowPane();
+        flowPane.getStyles().put("alignToBaseline", true);
+        flowPane.getStyles().put("horizontalSpacing", 5);
+        boxPane.add(flowPane);
+
+        TextInput textInput = new TextInput();
+        textInput.setTextSize(4);
+        textInput.setMaximumLength(4);
+        textInput.setValidator(new IntValidator());
+        textInput.setText(String.valueOf(cornerRadii.topLeft));
+        flowPane.add(textInput);
+
+        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+            @Override
+            public void focusedChanged(Component component, Component obverseComponent) {
+                if (!component.isFocused()) {
+                    TextInput textInput = (TextInput)component;
+                    CornerRadii cornerRadii = (CornerRadii)styles.get(styleKey);
+
+                    try {
+                        int topLeft = Integer.parseInt(textInput.getText());
+                        styles.put(styleKey, new CornerRadii(topLeft, cornerRadii.topRight,
+                            cornerRadii.bottomLeft, cornerRadii.bottomRight));
+                    } catch (Exception exception) {
+                        textInput.setText(String.valueOf(cornerRadii.topLeft));
+                    }
+                }
+            }
+        });
+
+        Label label = new Label("topLeft");
+        label.getStyles().put("font", "{italic:true}");
+        flowPane.add(label);
+
+        flowPane = new FlowPane();
+        flowPane.getStyles().put("alignToBaseline", true);
+        flowPane.getStyles().put("horizontalSpacing", 5);
+        boxPane.add(flowPane);
+
+        textInput = new TextInput();
+        textInput.setTextSize(4);
+        textInput.setMaximumLength(4);
+        textInput.setValidator(new IntValidator());
+        textInput.setText(String.valueOf(cornerRadii.topRight));
+        flowPane.add(textInput);
+
+        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+            @Override
+            public void focusedChanged(Component component, Component obverseComponent) {
+                if (!component.isFocused()) {
+                    TextInput textInput = (TextInput)component;
+                    CornerRadii cornerRadii = (CornerRadii)styles.get(styleKey);
+
+                    try {
+                        int topRight = Integer.parseInt(textInput.getText());
+                        styles.put(styleKey, new CornerRadii(cornerRadii.topLeft, topRight,
+                            cornerRadii.bottomLeft, cornerRadii.bottomRight));
+                    } catch (Exception exception) {
+                        textInput.setText(String.valueOf(cornerRadii.topRight));
+                    }
+                }
+            }
+        });
+
+        label = new Label("topRight");
+        label.getStyles().put("font", "{italic:true}");
+        flowPane.add(label);
+
+        flowPane = new FlowPane();
+        flowPane.getStyles().put("alignToBaseline", true);
+        flowPane.getStyles().put("horizontalSpacing", 5);
+        boxPane.add(flowPane);
+
+        textInput = new TextInput();
+        textInput.setTextSize(4);
+        textInput.setMaximumLength(4);
+        textInput.setValidator(new IntValidator());
+        textInput.setText(String.valueOf(cornerRadii.bottomLeft));
+        flowPane.add(textInput);
+
+        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+            @Override
+            public void focusedChanged(Component component, Component obverseComponent) {
+                if (!component.isFocused()) {
+                    TextInput textInput = (TextInput)component;
+                    CornerRadii cornerRadii = (CornerRadii)styles.get(styleKey);
+
+                    try {
+                        int bottomLeft = Integer.parseInt(textInput.getText());
+                        styles.put(styleKey, new CornerRadii(cornerRadii.topLeft,
+                            cornerRadii.topRight, bottomLeft, cornerRadii.bottomRight));
+                    } catch (Exception exception) {
+                        textInput.setText(String.valueOf(cornerRadii.bottomLeft));
+                    }
+                }
+            }
+        });
+
+        label = new Label("bottomLeft");
+        label.getStyles().put("font", "{italic:true}");
+        flowPane.add(label);
+
+        flowPane = new FlowPane();
+        flowPane.getStyles().put("alignToBaseline", true);
+        flowPane.getStyles().put("horizontalSpacing", 5);
+        boxPane.add(flowPane);
+
+        textInput = new TextInput();
+        textInput.setTextSize(4);
+        textInput.setMaximumLength(4);
+        textInput.setValidator(new IntValidator());
+        textInput.setText(String.valueOf(cornerRadii.bottomRight));
+        flowPane.add(textInput);
+
+        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+            @Override
+            public void focusedChanged(Component component, Component obverseComponent) {
+                if (!component.isFocused()) {
+                    TextInput textInput = (TextInput)component;
+                    CornerRadii cornerRadii = (CornerRadii)styles.get(styleKey);
+
+                    try {
+                        int bottomRight = Integer.parseInt(textInput.getText());
+                        styles.put(styleKey, new CornerRadii(cornerRadii.topLeft,
+                            cornerRadii.topRight, cornerRadii.bottomLeft, bottomRight));
+                    } catch (Exception exception) {
+                        textInput.setText(String.valueOf(cornerRadii.bottomRight));
+                    }
+                }
+            }
+        });
+
+        label = new Label("bottomRight");
+        label.getStyles().put("font", "{italic:true}");
+        flowPane.add(label);
+
+        return boxPane;
     }
 }
