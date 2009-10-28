@@ -435,8 +435,8 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         // Set the size of all components to match the size of the stack pane,
         // minus padding
         CardPane cardPane = (CardPane)getComponent();
-        int width = getWidth() - (padding.left + padding.right);
-        int height = getHeight() - (padding.top + padding.bottom);
+        int width = Math.max(getWidth() - (padding.left + padding.right), 0);
+        int height = Math.max(getHeight() - (padding.top + padding.bottom), 0);
 
         for (Component card : cardPane) {
             card.setLocation(padding.left, padding.top);
