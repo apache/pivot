@@ -16,9 +16,11 @@
  */
 package org.apache.pivot.wtk.media.drawing;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Paint;
 import java.awt.RenderingHints;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
@@ -162,7 +164,7 @@ public class Text extends Shape {
 
     @Override
     public boolean contains(int x, int y) {
-        // TODO Perform hit testing on the glyph vectors?
+        // TODO Perform hit testing on the glyph vectors themselves
 
         Bounds bounds = getBounds();
 
@@ -176,13 +178,8 @@ public class Text extends Shape {
     public void draw(Graphics2D graphics) {
         int width = getWidth();
 
-        // TODO Draw the outlines
-
         // Draw the text
         if (glyphVectors.getLength() > 0) {
-            graphics.setFont(font);
-            graphics.setPaint(getFill());
-
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -195,6 +192,10 @@ public class Text extends Shape {
                 graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
                     RenderingHints.VALUE_FRACTIONALMETRICS_ON);
             }
+
+            Paint fill = getFill();
+            Paint stroke = getStroke();
+            int strokeThickness = getStrokeThickness();
 
             LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
             float ascent = lm.getAscent();
@@ -225,7 +226,25 @@ public class Text extends Shape {
                     }
                 }
 
-                graphics.drawGlyphVector(glyphVector, x, y + ascent);
+                if (fill != null) {
+                    graphics.setFont(font);
+                    graphics.setPaint(fill);
+                    graphics.drawGlyphVector(glyphVector, x, y + ascent);
+                }
+
+                // TODO Would caching the outlines help optimize this method, or are they
+                // already cached by the glyph vector itself?
+                if (stroke != null
+                    && strokeThickness > 0) {
+                    java.awt.Shape outline = glyphVector.getOutline();
+
+                    graphics.setPaint(stroke);
+                    graphics.setStroke(new BasicStroke(strokeThickness));
+
+                    graphics.translate(x, y + ascent);
+                    graphics.draw(outline);
+                    graphics.translate(-x, -(y + ascent));
+                }
 
                 y += logicalBounds.getHeight();
             }
@@ -253,7 +272,7 @@ public class Text extends Shape {
                     height = (int)Math.ceil(logicalBounds.getHeight());
                 }
             } else {
-                width = this.width;
+                float textWidth = 0;
                 float textHeight = 0;
 
                 int n = text.length();
@@ -273,7 +292,7 @@ public class Text extends Shape {
                             FONT_RENDER_CONTEXT);
                         lineWidth += characterBounds.getWidth();
 
-                        if (lineWidth > width
+                        if (lineWidth > this.width
                             && lastWhitespaceIndex != -1) {
                             i = lastWhitespaceIndex;
 
@@ -287,6 +306,7 @@ public class Text extends Shape {
                                 glyphVectors.add(glyphVector);
 
                                 Rectangle2D logicalBounds = glyphVector.getLogicalBounds();
+                                textWidth = (float)Math.max(logicalBounds.getWidth(), textWidth);
                                 textHeight += logicalBounds.getHeight();
                             }
 
@@ -303,11 +323,14 @@ public class Text extends Shape {
                         glyphVectors.add(glyphVector);
 
                         Rectangle2D logicalBounds = glyphVector.getLogicalBounds();
+                        textWidth = (float)Math.max(logicalBounds.getWidth(), textWidth);
                         textHeight += logicalBounds.getHeight();
                     }
 
+                    width = (int)Math.ceil(textWidth);
                     height = (int)Math.ceil(textHeight);
                 } else {
+                    width = this.width;
                     height = 0;
                 }
             }

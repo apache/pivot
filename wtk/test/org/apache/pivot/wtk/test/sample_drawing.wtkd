@@ -79,8 +79,9 @@ limitations under the License.
                     strokeThickness="4" fill="#00ffff"/>
             </Group>
 
-            <Group x="120" y="360">
-                <Text text="ABCDEF GHIJK LMN OPQRSTU VW X Y Z" font="Arial BOLD 24" width="80"
+            <Group x="120" y="240">
+                <Text text="ABCDEF GHIJK LMN OPQRSTU VW X Y Z" font="Arial BOLD 48" width="80"
+                    fill="#cccccc" stroke="#ff0000" strokeThickness="2"
                     alignment="left"/>
             </Group>
         </Canvas>
