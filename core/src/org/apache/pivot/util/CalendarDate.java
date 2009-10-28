@@ -53,8 +53,8 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
         }
 
         public Range(String start, String end) {
-            this.start = forString(start);
-            this.end = forString(end);
+            this.start = CalendarDate.decode(start);
+            this.end = CalendarDate.decode(end);
         }
 
         public Range(Range range) {
@@ -83,13 +83,13 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
             }
 
             if (start instanceof String) {
-                this.start = forString((String)start);
+                this.start = CalendarDate.decode((String)start);
             } else {
                 this.start = (CalendarDate)start;
             }
 
             if (end instanceof String) {
-                this.end = forString((String)end);
+                this.end = CalendarDate.decode((String)end);
             } else {
                 this.end = (CalendarDate)end;
             }
@@ -173,7 +173,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
                     throw new IllegalArgumentException(exception);
                 }
             } else {
-                range = new Range(forString(value));
+                range = new Range(CalendarDate.decode(value));
             }
 
             return range;
@@ -411,7 +411,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      * @param date
      * A string in the form of <tt>[YYYY]-[MM]-[DD]</tt> (e.g. 2008-07-23).
      */
-    public static CalendarDate forString(String date) {
+    public static CalendarDate decode(String date) {
         Pattern pattern = Pattern.compile("^(\\d{4})-(\\d{2})-(\\d{2})$");
         Matcher matcher = pattern.matcher(date);
 
