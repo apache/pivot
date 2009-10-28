@@ -185,76 +185,67 @@ limitations under the License.
                 </Border>
             </left>
             <right>
-                <SplitPane orientation="vertical" splitRatio="0.6">
-                    <top>
-                        <SplitPane orientation="horizontal" splitRatio="0.5">
-                            <left>
-                                <Border>
-                                    <content>
-                                        <ScrollPane wtkx:id="scrollPane"/>
-                                    </content>
-                                </Border>
-                            </left>
-                            <right>
-                                <SplitPane orientation="vertical" splitRatio="0.5">
-                                    <top>
-                                        <Border>
-                                            <content>
-                                                <ScrollPane
-                                                    horizontalScrollBarPolicy="fill_to_capacity">
-                                                    <view>
-                                                        <BoxPane orientation="vertical"
-                                                            styles="{fill:true,
-                                                            horizontalAlignment:'right'}">
-                                                            <Label text="%properties"
-                                                                styles="{padding:{left:10, top:5},
-                                                                font:{bold:true}}"/>
-                                                            <BoxPane orientation="vertical"
-                                                                styles="{padding:{left:10}}">
-                                                                <tools:ComponentPropertyInspector
-                                                                    wtkx:id="componentPropertyInspector"/>
-                                                            </BoxPane>
-                                                        </BoxPane>
-                                                    </view>
-                                                </ScrollPane>
-                                            </content>
-                                        </Border>
-                                    </top>
-                                    <bottom>
-                                        <Border>
-                                            <content>
-                                                <ScrollPane
-                                                    horizontalScrollBarPolicy="fill_to_capacity">
-                                                    <view>
-                                                        <BoxPane orientation="vertical"
-                                                            styles="{fill:true,
-                                                            horizontalAlignment:'right'}">
-                                                            <Label text="%styles"
-                                                                styles="{padding:{left:10, top:5},
-                                                                font:{bold:true}}"/>
-                                                            <BoxPane orientation="vertical"
-                                                                styles="{padding:{left:10}}">
-                                                                <tools:ComponentStyleInspector
-                                                                    wtkx:id="componentStyleInspector"/>
-                                                            </BoxPane>
-                                                        </BoxPane>
-                                                    </view>
-                                                </ScrollPane>
-                                            </content>
-                                        </Border>
-                                    </bottom>
-                                </SplitPane>
-                            </right>
-                        </SplitPane>
-                    </top>
-                    <bottom>
-                        <Border>
-                            <content>
-                                <tools:EventLogger wtkx:id="eventLogger"/>
-                            </content>
-                        </Border>
-                    </bottom>
-                </SplitPane>
+                <TablePane styles="{verticalSpacing:6}">
+                    <columns>
+                        <TablePane.Column width="1*"/>
+                    </columns>
+                    <rows>
+                        <TablePane.Row height="1*">
+                            <Border>
+                                <content>
+                                    <ScrollPane wtkx:id="scrollPane">
+                                        <view>
+                                            <Border wtkx:id="contentPane"
+                                                styles="{thickness:0, padding:6}"/>
+                                        </view>
+                                    </ScrollPane>
+                                </content>
+                            </Border>
+                        </TablePane.Row>
+                        <TablePane.Row>
+                            <TabPane styles="{collapsible:true}">
+                                <tabs>
+                                    <Border TabPane.label="%properties" preferredHeight="250">
+                                        <content>
+                                            <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
+                                                <view>
+                                                    <CardPane styles="{padding:10}">
+                                                        <tools:ComponentPropertyInspector
+                                                            wtkx:id="componentPropertyInspector"/>
+                                                    </CardPane>
+                                                </view>
+                                            </ScrollPane>
+                                        </content>
+                                    </Border>
+                                    <Border TabPane.label="%styles" preferredHeight="250">
+                                        <content>
+                                            <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
+                                                <view>
+                                                    <CardPane styles="{padding:10}">
+                                                        <tools:ComponentStyleInspector
+                                                            wtkx:id="componentStyleInspector"/>
+                                                    </CardPane>
+                                                </view>
+                                            </ScrollPane>
+                                        </content>
+                                    </Border>
+                                    <Border TabPane.label="%events" preferredHeight="250">
+                                        <content>
+                                            <ScrollPane horizontalScrollBarPolicy="fill"
+                                                verticalScrollBarPolicy="fill">
+                                                <view>
+                                                    <CardPane styles="{padding:10}">
+                                                        <tools:EventLogger wtkx:id="eventLogger"/>
+                                                    </CardPane>
+                                                </view>
+                                            </ScrollPane>
+                                        </content>
+                                    </Border>
+                                </tabs>
+                            </TabPane>
+                        </TablePane.Row>
+                    </rows>
+                </TablePane>
             </right>
         </SplitPane>
     </content>

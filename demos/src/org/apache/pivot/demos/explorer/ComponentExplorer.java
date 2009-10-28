@@ -28,6 +28,7 @@ import org.apache.pivot.tools.wtk.ComponentStyleInspector;
 import org.apache.pivot.tools.wtk.EventLogger;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.Border;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentMouseButtonListener;
 import org.apache.pivot.wtk.DesktopApplicationContext;
@@ -43,6 +44,7 @@ public class ComponentExplorer implements Application {
     private Window window = null;
     private TreeView treeView = null;
     private ScrollPane scrollPane = null;
+    private Border contentPane = null;
     private ComponentPropertyInspector componentPropertyInspector = null;
     private ComponentStyleInspector componentStyleInspector = null;
     private EventLogger eventLogger = null;
@@ -56,6 +58,7 @@ public class ComponentExplorer implements Application {
 
         treeView = wtkxSerializer.getValue("treeView");
         scrollPane = wtkxSerializer.getValue("scrollPane");
+        contentPane = wtkxSerializer.getValue("contentPane");
         componentPropertyInspector = wtkxSerializer.getValue("componentPropertyInspector");
         componentStyleInspector = wtkxSerializer.getValue("componentStyleInspector");
         eventLogger = wtkxSerializer.getValue("eventLogger");
@@ -85,7 +88,7 @@ public class ComponentExplorer implements Application {
                         (componentNode.getVerticalScrollBarPolicy());
                 }
 
-                scrollPane.setView(component);
+                contentPane.setContent(component);
                 componentPropertyInspector.setSource(component);
                 componentStyleInspector.setSource(component);
                 eventLogger.setSource(component);

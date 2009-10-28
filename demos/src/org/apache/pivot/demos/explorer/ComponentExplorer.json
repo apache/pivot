@@ -1,4 +1,5 @@
 {
     properties: "Properties",
-    styles: "Styles"
+    styles: "Styles",
+    events: "Events"
 }
