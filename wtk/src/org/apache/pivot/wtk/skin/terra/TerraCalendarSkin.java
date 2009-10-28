@@ -32,8 +32,6 @@ import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonGroup;
 import org.apache.pivot.wtk.ButtonGroupListener;
 import org.apache.pivot.wtk.Calendar;
-import org.apache.pivot.wtk.CalendarListener;
-import org.apache.pivot.wtk.CalendarSelectionListener;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentMouseButtonListener;
 import org.apache.pivot.wtk.Cursor;
@@ -58,8 +56,7 @@ import org.apache.pivot.wtk.skin.CalendarSkin;
 /**
  * Terra calendar skin.
  */
-public class TerraCalendarSkin extends CalendarSkin
-    implements CalendarListener, CalendarSelectionListener {
+public class TerraCalendarSkin extends CalendarSkin {
     public class DateButton extends Button {
         public DateButton() {
             super(null);
