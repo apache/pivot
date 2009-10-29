@@ -59,9 +59,9 @@ public class TerraMeterSkin extends ComponentSkin
         fillColor = theme.getColor(16);
         gridColor = theme.getColor(10);
         gridFrequency = 0.25f;
-        font = theme.getFont();
-        textColor = theme.getColor(16);
-        textFillColor = theme.getColor(1);
+        font = theme.getFont().deriveFont(Font.BOLD);
+        textColor = theme.getColor(1);
+        textFillColor = theme.getColor(4);
     }
 
     @Override
@@ -102,17 +102,18 @@ public class TerraMeterSkin extends ComponentSkin
     public int getPreferredHeight(int width) {
         Meter meter = (Meter)getComponent();
         String text = meter.getText();
-        
+
         int preferredHeight = 0;
-        if (text!=null && text.length()>0) {
+        if (text != null
+            && text.length() > 0) {
             LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
             preferredHeight = (int)Math.ceil(lm.getHeight()) + 2;
         }
-        
+
         // If Meter has no content, its preferred height is hard coded in the
         // class and is not affected by the width constraint.
         preferredHeight = Math.max(preferredHeight, DEFAULT_HEIGHT);
-        
+
         return preferredHeight;
     }
 
@@ -120,35 +121,39 @@ public class TerraMeterSkin extends ComponentSkin
     public Dimensions getPreferredSize() {
         Meter meter = (Meter)getComponent();
         String text = meter.getText();
-        
+
         int preferredWidth = 0;
         int preferredHeight = 0;
-        if (text!=null && text.length()>0) {
+        if (text != null
+            && text.length() > 0) {
             Rectangle2D stringBounds = font.getStringBounds(text, FONT_RENDER_CONTEXT);
             preferredWidth = (int)Math.ceil(stringBounds.getWidth()) + 2;
             LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
             preferredHeight = (int)Math.ceil(lm.getHeight()) + 2;
         }
-        
+
         // If Meter has no content, its preferred size is hard coded in the class.
         preferredWidth = Math.max(preferredWidth, DEFAULT_WIDTH);
         preferredHeight = Math.max(preferredHeight, DEFAULT_HEIGHT);
-        
+
         return new Dimensions(preferredWidth, preferredHeight);
     }
 
     @Override
     public int getBaseline(int width) {
+        int baseline = -1;
+
         Meter meter = (Meter)getComponent();
         String text = meter.getText();
-        if (text!=null && text.length()>0) {
+        if (text != null
+            && text.length() > 0) {
             LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
-            return (int)Math.ceil(lm.getAscent() - 2);
-        } else {
-            return -1;
+            baseline = (int)Math.ceil(lm.getAscent() - 2);
         }
+
+        return baseline;
     }
-    
+
     @Override
     public void layout() {
         // No-op
@@ -172,7 +177,7 @@ public class TerraMeterSkin extends ComponentSkin
             graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
                 RenderingHints.VALUE_FRACTIONALMETRICS_ON);
         }
-        
+
         // Paint the interior fill
         graphics.setPaint(new GradientPaint(0, 0, TerraTheme.brighten(fillColor),
             0, height, TerraTheme.darken(fillColor)));
@@ -195,7 +200,7 @@ public class TerraMeterSkin extends ComponentSkin
             Rectangle2D stringBounds = font.getStringBounds(text, FONT_RENDER_CONTEXT);
             int textWidth = (int)Math.ceil(stringBounds.getWidth());
             int textX = (width - textWidth - 2) / 2 + 1;
-            
+
             // Paint the text
             Shape previousClip = graphics.getClip();
             graphics.clipRect(0, 0, meterStop, height);
@@ -261,7 +266,7 @@ public class TerraMeterSkin extends ComponentSkin
 
         setTextColor(GraphicsUtilities.decodeColor(color));
     }
-    
+
     public Color getTextFillColor() {
         return textFillColor;
     }
@@ -278,7 +283,7 @@ public class TerraMeterSkin extends ComponentSkin
 
         setTextFillColor(GraphicsUtilities.decodeColor(color));
     }
-    
+
     public float getGridFrequency() {
         return gridFrequency;
     }
@@ -327,7 +332,7 @@ public class TerraMeterSkin extends ComponentSkin
 
         setFont(Theme.deriveFont(font));
     }
-    
+
     /**
      * Listener for meter percentage changes.
      *

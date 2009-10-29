@@ -20,17 +20,20 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.Toolkit;
 import java.awt.font.FontRenderContext;
+import java.awt.font.GlyphVector;
 import java.awt.font.LineMetrics;
-import java.awt.font.TextHitInfo;
-import java.awt.font.TextLayout;
 import java.awt.geom.Rectangle2D;
+import java.text.CharacterIterator;
+import java.text.StringCharacterIterator;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.wtk.ApplicationContext;
+import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Cursor;
 import org.apache.pivot.wtk.Dimensions;
@@ -54,27 +57,17 @@ import org.apache.pivot.wtk.text.validation.Validator;
 /**
  * Text input skin.
  */
-public class TerraTextInputSkin extends ComponentSkin
-    implements TextInputListener, TextInputCharacterListener, TextInputSelectionListener {
+public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
+    TextInputListener, TextInputCharacterListener, TextInputSelectionListener {
     private class BlinkCaretCallback implements Runnable {
         @Override
         public void run() {
             caretOn = !caretOn;
 
-            java.awt.Rectangle caretBounds = caretShapes[0].getBounds();
-            LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
-
-            int ascent = Math.round(lm.getAscent());
-            caretBounds.x += (padding.left - scrollLeft + 1);
-            caretBounds.y += (padding.top + ascent + 1);
-
-            if (caretBounds.width == 0) {
-                caretBounds.width++;
+            if (caret != null) {
+                TextInput textInput = (TextInput)getComponent();
+                textInput.repaint(caret.x, caret.y, caret.width, caret.height, true);
             }
-
-            TextInput textInput = (TextInput)getComponent();
-            textInput.repaint(caretBounds.x, caretBounds.y,
-                caretBounds.width, caretBounds.height, true);
         }
     }
 
@@ -104,11 +97,16 @@ public class TerraTextInputSkin extends ComponentSkin
         }
     }
 
+    private GlyphVector glyphVector = null;
+    private boolean showPrompt = false;
+
     private boolean caretOn = true;
-    private Shape[] caretShapes = null;
-    private Shape logicalHighlightShape = null;
+    private Rectangle caret = new Rectangle();
+    private Rectangle selection = null;
 
     private int scrollLeft = 0;
+
+    // TODO Use an anchor and a scroll direction like TextArea
     private int scrollX = 0;
 
     private BlinkCaretCallback blinkCaretCallback = new BlinkCaretCallback();
@@ -139,12 +137,16 @@ public class TerraTextInputSkin extends ComponentSkin
     private Color disabledBevelColor;
     private Color invalidBevelColor;
 
+    private Dimensions averageCharacterSize;
+
     private static final FontRenderContext FONT_RENDER_CONTEXT = new FontRenderContext(null, true, false);
     private static final int SCROLL_RATE = 50;
+    private static final char BULLET = 0x2022;
 
     public TerraTextInputSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
-        font = theme.getFont();
+        setFont(theme.getFont());
+
         color = theme.getColor(1);
         promptColor = theme.getColor(7);
         disabledColor = theme.getColor(7);
@@ -162,7 +164,6 @@ public class TerraTextInputSkin extends ComponentSkin
         inactiveSelectionColor = theme.getColor(1);
         inactiveSelectionBackgroundColor = theme.getColor(9);
 
-        // Set the derived colors
         bevelColor = TerraTheme.darken(backgroundColor);
         disabledBevelColor = disabledBackgroundColor;
         invalidBevelColor = TerraTheme.darken(invalidBackgroundColor);
@@ -179,7 +180,10 @@ public class TerraTextInputSkin extends ComponentSkin
 
         textInput.setCursor(Cursor.TEXT);
 
-        selectionChanged(textInput, 0, 0);
+        TextNode textNode = textInput.getTextNode();
+        if (textNode != null) {
+            updateSelection();
+        }
     }
 
     @Override
@@ -187,22 +191,13 @@ public class TerraTextInputSkin extends ComponentSkin
         TextInput textInput = (TextInput)getComponent();
         int textSize = textInput.getTextSize();
 
-        // TODO Use the missing character glyph bounds (see Font#getMissingGlyphCode())
-        // rather than calculating an average width
-        String testString = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz";
-
-        Rectangle2D testStringBounds = font.getStringBounds(testString, FONT_RENDER_CONTEXT);
-        int averageCharWidth = (int)Math.round((testStringBounds.getWidth() / testString.length()));
-
-        return textSize * averageCharWidth + (padding.left + padding.right) + 2;
+        return (int)Math.ceil(averageCharacterSize.width * textSize)
+            + (padding.left + padding.right) + 2;
     }
 
     @Override
     public int getPreferredHeight(int width) {
-        Rectangle2D maxCharBounds = font.getMaxCharBounds(FONT_RENDER_CONTEXT);
-        int maxCharHeight = (int)Math.ceil(maxCharBounds.getHeight());
-
-        return maxCharHeight + (padding.top + padding.bottom) + 2;
+        return averageCharacterSize.height + (padding.top + padding.bottom) + 2;
     }
 
     @Override
@@ -218,7 +213,44 @@ public class TerraTextInputSkin extends ComponentSkin
 
     @Override
     public void layout() {
-        // No-op
+        TextInput textInput = (TextInput)getComponent();
+        TextNode textNode = textInput.getTextNode();
+
+        glyphVector = null;
+        showPrompt = false;
+
+        if (textNode != null) {
+            // Construct the glyph vector (using password characters or prompt text as
+            // appropriate)
+            int n = textNode.getCharacterCount();
+
+            CharacterIterator ci = null;
+            if (textInput.isPassword()) {
+                StringBuilder buf = new StringBuilder(n);
+                for (int i = 0; i < n; i++) {
+                    buf.append(BULLET);
+                }
+
+                ci = new StringCharacterIterator(buf.toString());
+            } else {
+                if (n > 0) {
+                    ci= textNode.getCharacterIterator();
+                } else {
+                    String prompt = textInput.getPrompt();
+
+                    if (prompt != null) {
+                        ci = new StringCharacterIterator(prompt);
+                        showPrompt = true;
+                    }
+                }
+            }
+
+            if (ci != null) {
+                glyphVector = font.createGlyphVector(FONT_RENDER_CONTEXT, ci);
+            }
+        }
+
+        updateSelection();
     }
 
     @Override
@@ -267,29 +299,9 @@ public class TerraTextInputSkin extends ComponentSkin
         GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
 
         // Paint the content
-        String text = getText();
-
-        boolean prompt = false;
-        if (text.length() == 0
-            && !textInput.isFocused()) {
-            text = textInput.getPrompt();
-
-            if (text == null) {
-                text = "";
-            } else {
-                prompt = true;
-            }
-        }
-
         boolean textValid = textInput.isTextValid();
 
-        LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
-        int ascent = Math.round(lm.getAscent());
-
-        graphics.translate(padding.left - scrollLeft + 1, padding.top + ascent + 1);
-
-        if (text.length() > 0) {
-            // Paint the text
+        if (glyphVector != null) {
             if (FONT_RENDER_CONTEXT.isAntiAliased()) {
                 graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
                     Platform.getTextAntialiasingHint());
@@ -300,9 +312,12 @@ public class TerraTextInputSkin extends ComponentSkin
                     RenderingHints.VALUE_FRACTIONALMETRICS_ON);
             }
 
+            LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
+            int ascent = Math.round(lm.getAscent());
+
             Color color;
             if (textInput.isEnabled()) {
-                if (prompt) {
+                if (showPrompt) {
                     color = promptColor;
                 } else if (!textValid) {
                     color = invalidColor;
@@ -313,14 +328,15 @@ public class TerraTextInputSkin extends ComponentSkin
                color = disabledColor;
             }
 
+            // TODO If all of the text is selected, don't bother doing this
             graphics.setFont(font);
             graphics.setPaint(color);
-            graphics.drawString(text, 0, 0);
+            graphics.drawGlyphVector(glyphVector, padding.left - scrollLeft + 1, padding.top + ascent + 1);
 
             if (textInput.getSelectionLength() > 0) {
                 // Paint the selection
                 Graphics2D selectionGraphics = (Graphics2D)graphics.create();
-                selectionGraphics.clip(logicalHighlightShape.getBounds());
+                selectionGraphics.clip(selection.getBounds());
 
                 Color selectionColor;
                 Color selectionBackgroundColor;
@@ -334,10 +350,10 @@ public class TerraTextInputSkin extends ComponentSkin
                 }
 
                 selectionGraphics.setPaint(selectionBackgroundColor);
-                selectionGraphics.fill(logicalHighlightShape);
+                selectionGraphics.fill(selection);
 
                 selectionGraphics.setPaint(selectionColor);
-                selectionGraphics.drawString(text, 0, 0);
+                selectionGraphics.drawGlyphVector(glyphVector, padding.left - scrollLeft + 1, padding.top + ascent + 1);
 
                 selectionGraphics.dispose();
             }
@@ -350,60 +366,60 @@ public class TerraTextInputSkin extends ComponentSkin
             if (!textValid) {
                 color = invalidColor;
             } else {
-                color = this.color;
+                color = Color.BLACK;
             }
 
             graphics.setPaint(color);
-            graphics.draw(caretShapes[0]);
+            graphics.fill(caret);
         }
     }
 
-    protected String getText() {
-        TextInput textInput = (TextInput)getComponent();
+    public int getInsertionPoint(int x, int y) {
+        LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
+        float ascent = lm.getAscent();
 
-        // TODO Use the internal character iterator instead of getting a copy
-        // of the string
-        String text = textInput.getText();
+        // Translate to glyph coordinates
+        x -= (padding.left - scrollLeft + 1);
+        y -= (padding.top + 1);
 
-        if (textInput.isPassword()) {
-            int n = text.length();
-            StringBuilder passwordTextBuilder = new StringBuilder(n);
-            for (int i = 0; i < n; i++) {
-                passwordTextBuilder.append("*");
+        int n = glyphVector.getNumGlyphs();
+        int i = 0;
+
+        while (i < n) {
+            Shape glyphLogicalBounds = glyphVector.getGlyphLogicalBounds(i);
+
+            if (glyphLogicalBounds.contains(x, y - ascent)) {
+                Rectangle2D glyphBounds2D = glyphLogicalBounds.getBounds2D();
+
+                if (x - glyphBounds2D.getX() > glyphBounds2D.getWidth() / 2) {
+                    // The user clicked on the right half of the character; select
+                    // the next character
+                    i++;
+                }
+
+                break;
             }
 
-            text = passwordTextBuilder.toString();
+            i++;
         }
 
-        return text;
+        if (i == n) {
+            i = -1;
+        }
+
+        return i;
     }
 
-    protected int getInsertionPoint(String text, int x) {
-        // TODO Rename to getInsertionPoint() and implement for consistency with
-        // TextArea (including skin pass-through method)
-        TextLayout textLayout = new TextLayout(text, font, FONT_RENDER_CONTEXT);
-        TextHitInfo textHitInfo = textLayout.hitTestChar(x + scrollLeft - padding.left - 1, 0);
-        int index = textHitInfo.getInsertionIndex();
+    public Bounds getCharacterBounds(int offset) {
+        Shape glyphLogicalBounds = glyphVector.getGlyphLogicalBounds(offset);
+        Rectangle2D bounds2D = glyphLogicalBounds.getBounds2D();
 
-        return index;
-    }
+        int x = (int)Math.floor(bounds2D.getX()) + padding.left - scrollLeft + 1;
+        int y = padding.top + 1;
+        int width = (int)Math.ceil(bounds2D.getWidth());
+        int height = getHeight() - (padding.top + padding.bottom + 2);
 
-    public void showCaret(boolean show) {
-        if (scheduledBlinkCaretCallback != null) {
-            scheduledBlinkCaretCallback.cancel();
-        }
-
-        if (show) {
-            caretOn = true;
-            scheduledBlinkCaretCallback =
-                ApplicationContext.scheduleRecurringCallback(blinkCaretCallback,
-                    Platform.getCursorBlinkRate());
-
-            // Run the callback once now to show the cursor immediately
-            blinkCaretCallback.run();
-        } else {
-            scheduledBlinkCaretCallback = null;
-        }
+        return new Bounds(x, y, width, height);
     }
 
     public Font getFont() {
@@ -416,6 +432,16 @@ public class TerraTextInputSkin extends ComponentSkin
         }
 
         this.font = font;
+
+        int missingGlyphCode = font.getMissingGlyphCode();
+        GlyphVector missingGlyphVector = font.createGlyphVector(FONT_RENDER_CONTEXT,
+            new int[] {missingGlyphCode});
+        Rectangle2D logicalBounds = missingGlyphVector.getLogicalBounds();
+
+        Rectangle2D maxCharBounds = font.getMaxCharBounds(FONT_RENDER_CONTEXT);
+        averageCharacterSize = new Dimensions((int)Math.ceil(logicalBounds.getWidth()),
+            (int)Math.ceil(maxCharBounds.getHeight()));
+
         invalidateComponent();
     }
 
@@ -830,11 +856,11 @@ public class TerraTextInputSkin extends ComponentSkin
         boolean consumed = super.mouseMove(component, x, y);
 
         if (Mouse.getCapturer() == component) {
-            String text = getText();
+            TextInput textInput = (TextInput)getComponent();
+            TextNode textNode = textInput.getTextNode();
 
-            if (text.length() > 0) {
-                TextInput textInput = (TextInput)getComponent();
-
+            if (textNode != null
+                && textNode.getCharacterCount() > 0) {
                 if (x >= 0
                     && x < textInput.getWidth()) {
                     // Stop the scroll selection timer
@@ -848,7 +874,7 @@ public class TerraTextInputSkin extends ComponentSkin
                     int selectionLength = textInput.getSelectionLength();
 
                     // Get the insertion index
-                    int index = getInsertionPoint(text, x);
+                    int index = getInsertionPoint(x, y);
 
                     if (index < selectionStart) {
                         selectionLength += (selectionStart - index);
@@ -889,11 +915,11 @@ public class TerraTextInputSkin extends ComponentSkin
         if (button == Mouse.Button.LEFT) {
             // Move the caret to the insertion point
             TextInput textInput = (TextInput)getComponent();
-            String text = getText();
 
-            if (text.length() > 0) {
-                int index = getInsertionPoint(text, x);
-                textInput.setSelection(index, 0);
+            // TODO Use anchor here
+            int offset = getInsertionPoint(x, y);
+            if (offset != -1) {
+                textInput.setSelection(offset, 0);
             }
 
             // Set focus to the text input
@@ -926,7 +952,10 @@ public class TerraTextInputSkin extends ComponentSkin
             && count > 1) {
             TextInput textInput = (TextInput)getComponent();
             TextNode textNode = textInput.getTextNode();
-            textInput.setSelection(0, textNode.getCharacterCount());
+
+            if (textNode != null) {
+                textInput.setSelection(0, textNode.getCharacterCount());
+            }
         }
 
         return super.mouseClick(component, button, x, y, count);
@@ -943,25 +972,27 @@ public class TerraTextInputSkin extends ComponentSkin
             TextInput textInput = (TextInput)getComponent();
             TextNode textNode = textInput.getTextNode();
 
-            if (textNode.getCharacterCount() < textInput.getMaximumLength()) {
-                int index = textInput.getSelectionStart();
-                Validator validator = textInput.getValidator();
+            if (textNode != null) {
+                if (textNode.getCharacterCount() < textInput.getMaximumLength()) {
+                    int index = textInput.getSelectionStart();
+                    Validator validator = textInput.getValidator();
 
-                if (validator != null
-                    && strictValidation) {
-                    StringBuilder buf = new StringBuilder(textNode.getText());
-                    buf.insert(index, character);
+                    if (validator != null
+                        && strictValidation) {
+                        StringBuilder buf = new StringBuilder(textNode.getText());
+                        buf.insert(index, character);
 
-                    if (validator.isValid(buf.toString())) {
-                        textInput.insertText(character, index);
+                        if (validator.isValid(buf.toString())) {
+                            textInput.insertText(character, index);
+                        } else {
+                            Toolkit.getDefaultToolkit().beep();
+                        }
                     } else {
-                        Toolkit.getDefaultToolkit().beep();
+                        textInput.insertText(character, index);
                     }
                 } else {
-                    textInput.insertText(character, index);
+                    Toolkit.getDefaultToolkit().beep();
                 }
-            } else {
-                Toolkit.getDefaultToolkit().beep();
             }
         }
 
@@ -975,168 +1006,170 @@ public class TerraTextInputSkin extends ComponentSkin
         TextInput textInput = (TextInput)getComponent();
         TextNode textNode = textInput.getTextNode();
 
-        Keyboard.Modifier commandModifier = Platform.getCommandModifier();
-        if (keyCode == Keyboard.KeyCode.DELETE
-            || keyCode == Keyboard.KeyCode.BACKSPACE) {
-            consumed = true;
+        if (textNode != null) {
+            Keyboard.Modifier commandModifier = Platform.getCommandModifier();
+            if (keyCode == Keyboard.KeyCode.DELETE
+                || keyCode == Keyboard.KeyCode.BACKSPACE) {
+                consumed = true;
 
-            Direction direction = (keyCode == Keyboard.KeyCode.DELETE ?
-                Direction.FORWARD : Direction.BACKWARD);
+                Direction direction = (keyCode == Keyboard.KeyCode.DELETE ?
+                    Direction.FORWARD : Direction.BACKWARD);
 
-            Validator validator = textInput.getValidator();
+                Validator validator = textInput.getValidator();
 
-            if (validator != null
-                && strictValidation) {
-                StringBuilder buf = new StringBuilder(textNode.getText());
-                int index = textInput.getSelectionStart();
-                int count = textInput.getSelectionLength();
+                if (validator != null
+                    && strictValidation) {
+                    StringBuilder buf = new StringBuilder(textNode.getText());
+                    int index = textInput.getSelectionStart();
+                    int count = textInput.getSelectionLength();
 
-                if (count > 0) {
-                    buf.delete(index, index + count);
+                    if (count > 0) {
+                        buf.delete(index, index + count);
+                    } else {
+                        if (direction == Direction.BACKWARD) {
+                            index--;
+                        }
+
+                        if (index >= 0
+                            && index < textNode.getCharacterCount()) {
+                            buf.deleteCharAt(index);
+                        }
+                    }
+
+                    if (validator.isValid(buf.toString())) {
+                        textInput.delete(direction);
+                    } else {
+                        Toolkit.getDefaultToolkit().beep();
+                    }
                 } else {
-                    if (direction == Direction.BACKWARD) {
-                        index--;
-                    }
-
-                    if (index >= 0
-                        && index < textNode.getCharacterCount()) {
-                        buf.deleteCharAt(index);
-                    }
-                }
-
-                if (validator.isValid(buf.toString())) {
                     textInput.delete(direction);
-                } else {
-                    Toolkit.getDefaultToolkit().beep();
                 }
-            } else {
-                textInput.delete(direction);
-            }
-        } else if (keyCode == Keyboard.KeyCode.LEFT) {
-            consumed = true;
+            } else if (keyCode == Keyboard.KeyCode.LEFT) {
+                consumed = true;
 
-            int selectionStart = textInput.getSelectionStart();
-            int selectionLength = textInput.getSelectionLength();
+                int selectionStart = textInput.getSelectionStart();
+                int selectionLength = textInput.getSelectionLength();
 
-            if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
-                && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
-                // Add all preceding text to the selection
-                selectionLength = selectionStart + selectionLength;
-                selectionStart = 0;
-            } else if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
-                // Add the previous character to the selection
-                if (selectionStart > 0) {
-                    selectionStart--;
-                    selectionLength++;
-                }
-            } else if (Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
-                // Clear the selection and move the caret to the beginning of
-                // the text
-                selectionStart = 0;
-                selectionLength = 0;
-            } else {
-                // Clear the selection and move the caret back by one
-                // character
-                if (selectionLength == 0) {
+                if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
+                    && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
+                    // Add all preceding text to the selection
+                    selectionLength = selectionStart + selectionLength;
+                    selectionStart = 0;
+                } else if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                    // Add the previous character to the selection
                     if (selectionStart > 0) {
                         selectionStart--;
-                    } else {
-                        consumed = false;
+                        selectionLength++;
                     }
-                }
-
-                selectionLength = 0;
-            }
-
-            textInput.setSelection(selectionStart, selectionLength);
-        } else if (keyCode == Keyboard.KeyCode.RIGHT) {
-            consumed = true;
-
-            int selectionStart = textInput.getSelectionStart();
-            int selectionLength = textInput.getSelectionLength();
-
-            if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
-                && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
-                // Add all subsequent text to the selection
-                selectionLength = textNode.getCharacterCount() - selectionStart;
-            } else if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
-                // Add the next character to the selection
-                if (selectionStart + selectionLength < textNode.getCharacterCount()) {
-                    selectionLength++;
-                }
-            } else if (Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
-                // Clear the selection and move the caret to the end of
-                // the text
-                selectionStart = textNode.getCharacterCount();
-                selectionLength = 0;
-            } else {
-                // Clear the selection and move the caret forward by one
-                // character
-                selectionStart += selectionLength;
-
-                if (selectionLength == 0) {
-                    if (selectionStart < textNode.getCharacterCount()) {
-                        selectionStart++;
-                    } else {
-                        consumed = false;
+                } else if (Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
+                    // Clear the selection and move the caret to the beginning of
+                    // the text
+                    selectionStart = 0;
+                    selectionLength = 0;
+                } else {
+                    // Clear the selection and move the caret back by one
+                    // character
+                    if (selectionLength == 0) {
+                        if (selectionStart > 0) {
+                            selectionStart--;
+                        } else {
+                            consumed = false;
+                        }
                     }
+
+                    selectionLength = 0;
                 }
 
-                selectionLength = 0;
-            }
+                textInput.setSelection(selectionStart, selectionLength);
+            } else if (keyCode == Keyboard.KeyCode.RIGHT) {
+                consumed = true;
 
-            textInput.setSelection(selectionStart, selectionLength);
-        } else if (keyCode == Keyboard.KeyCode.HOME) {
-            // Move the caret to the beginning of the text
-            if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
-                textInput.setSelection(0, textInput.getSelectionStart());
-            } else {
-                textInput.setSelection(0, 0);
-            }
-
-            consumed = true;
-        } else if (keyCode == Keyboard.KeyCode.END) {
-            // Move the caret to the end of the text
-            if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
                 int selectionStart = textInput.getSelectionStart();
-                textInput.setSelection(selectionStart, textNode.getCharacterCount()
-                    - selectionStart);
+                int selectionLength = textInput.getSelectionLength();
+
+                if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
+                    && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
+                    // Add all subsequent text to the selection
+                    selectionLength = textNode.getCharacterCount() - selectionStart;
+                } else if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                    // Add the next character to the selection
+                    if (selectionStart + selectionLength < textNode.getCharacterCount()) {
+                        selectionLength++;
+                    }
+                } else if (Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
+                    // Clear the selection and move the caret to the end of
+                    // the text
+                    selectionStart = textNode.getCharacterCount();
+                    selectionLength = 0;
+                } else {
+                    // Clear the selection and move the caret forward by one
+                    // character
+                    selectionStart += selectionLength;
+
+                    if (selectionLength == 0) {
+                        if (selectionStart < textNode.getCharacterCount()) {
+                            selectionStart++;
+                        } else {
+                            consumed = false;
+                        }
+                    }
+
+                    selectionLength = 0;
+                }
+
+                textInput.setSelection(selectionStart, selectionLength);
+            } else if (keyCode == Keyboard.KeyCode.HOME) {
+                // Move the caret to the beginning of the text
+                if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                    textInput.setSelection(0, textInput.getSelectionStart());
+                } else {
+                    textInput.setSelection(0, 0);
+                }
+
+                consumed = true;
+            } else if (keyCode == Keyboard.KeyCode.END) {
+                // Move the caret to the end of the text
+                if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                    int selectionStart = textInput.getSelectionStart();
+                    textInput.setSelection(selectionStart, textNode.getCharacterCount()
+                        - selectionStart);
+                } else {
+                    textInput.setSelection(textNode.getCharacterCount(), 0);
+                }
+
+                consumed = true;
+            } else if (keyCode == Keyboard.KeyCode.A
+                && Keyboard.isPressed(commandModifier)) {
+                consumed = true;
+
+                // Select all
+                textInput.setSelection(0, textNode.getCharacterCount());
+            } else if (keyCode == Keyboard.KeyCode.X
+                && Keyboard.isPressed(commandModifier)) {
+                consumed = true;
+
+                if (textInput.isPassword()) {
+                    Toolkit.getDefaultToolkit().beep();
+                } else {
+                    textInput.cut();
+                }
+            } else if (keyCode == Keyboard.KeyCode.C
+                && Keyboard.isPressed(commandModifier)) {
+                consumed = true;
+
+                if (textInput.isPassword()) {
+                    Toolkit.getDefaultToolkit().beep();
+                } else {
+                    textInput.copy();
+                }
+            } else if (keyCode == Keyboard.KeyCode.V
+                && Keyboard.isPressed(commandModifier)) {
+                consumed = true;
+
+                textInput.paste();
             } else {
-                textInput.setSelection(textNode.getCharacterCount(), 0);
+                consumed = super.keyPressed(component, keyCode, keyLocation);
             }
-
-            consumed = true;
-        } else if (keyCode == Keyboard.KeyCode.A
-            && Keyboard.isPressed(commandModifier)) {
-            consumed = true;
-
-            // Select all
-            textInput.setSelection(0, textNode.getCharacterCount());
-        } else if (keyCode == Keyboard.KeyCode.X
-            && Keyboard.isPressed(commandModifier)) {
-            consumed = true;
-
-            if (textInput.isPassword()) {
-                Toolkit.getDefaultToolkit().beep();
-            } else {
-                textInput.cut();
-            }
-        } else if (keyCode == Keyboard.KeyCode.C
-            && Keyboard.isPressed(commandModifier)) {
-            consumed = true;
-
-            if (textInput.isPassword()) {
-                Toolkit.getDefaultToolkit().beep();
-            } else {
-                textInput.copy();
-            }
-        } else if (keyCode == Keyboard.KeyCode.V
-            && Keyboard.isPressed(commandModifier)) {
-            consumed = true;
-
-            textInput.paste();
-        } else {
-            consumed = super.keyPressed(component, keyCode, keyLocation);
         }
 
         return consumed;
@@ -1185,7 +1218,7 @@ public class TerraTextInputSkin extends ComponentSkin
     // Text input events
     @Override
     public void textNodeChanged(TextInput textInput, TextNode previousTextNode) {
-        updateSelection(0);
+        invalidateComponent();
     }
 
     @Override
@@ -1200,12 +1233,12 @@ public class TerraTextInputSkin extends ComponentSkin
 
     @Override
     public void passwordChanged(TextInput textInput) {
-        repaintComponent();
+        invalidateComponent();
     }
 
     @Override
     public void promptChanged(TextInput textInput, String previousPrompt) {
-      repaintComponent();
+        invalidateComponent();
     }
 
     @Override
@@ -1220,120 +1253,97 @@ public class TerraTextInputSkin extends ComponentSkin
 
     @Override
     public void textValidatorChanged(TextInput textInput, Validator previousValidator) {
-        // No-op
+        repaintComponent();
     }
 
     // Text input character events
     @Override
     public void charactersInserted(TextInput textInput, int index, int count) {
-        updateSelection(0);
+        invalidateComponent();
     }
 
     @Override
     public void charactersRemoved(TextInput textInput, int index, int count) {
-        String text = getText();
-        Rectangle2D textBounds = font.getStringBounds(text, FONT_RENDER_CONTEXT);
-
-        int textWidth = (int)textBounds.getWidth();
-        int width = getWidth();
-
-        // If the right edge of the text is less than the right inset, align
-        // the text's right edge with the inset
-        if (textWidth - scrollLeft + padding.left + 1 < width - padding.right - 1) {
-            scrollLeft = Math.max(textWidth + (padding.left + padding.right + 2) - width, 0);
-        }
-
-        updateSelection(0);
+        invalidateComponent();
     }
 
     // Text input selection events
     @Override
     public void selectionChanged(TextInput textInput, int previousSelectionStart,
         int previousSelectionLength) {
-        int selectionStart = textInput.getSelectionStart();
-        int selectionLength = textInput.getSelectionLength();
+        // If the text input is valid, repaint the selection state; otherwise,
+        // the selection will be updated in layout()
+        if (textInput.isValid()) {
+            // Repaint any previous caret bounds
+            if (caret != null) {
+                textInput.repaint(caret.x, caret.y, caret.width, caret.height);
+            }
 
-        int bias;
-        if (selectionStart < previousSelectionStart) {
-            bias = -1;
-        } else if (selectionLength > previousSelectionLength) {
-            bias = 1;
-        } else {
-            bias = 0;
-        }
+            // Repaint any previous selection bounds
+            if (selection != null) {
+                Rectangle bounds = selection.getBounds();
+                textInput.repaint(bounds.x, bounds.y, bounds.width, bounds.height);
+            }
 
-        updateSelection(bias);
-    }
-
-    private void updateSelection(int bias) {
-        // Update the selection bounding box
-        String text = getText();
-
-        // NOTE For some reason, TextLayout does not accept zero-length
-        // strings. This may be a bug in AWT, since an empty string should be
-        // valid, and is necessary to determine the caret shape for an empty
-        // text input.
-        // TODO Report this issue to Sun?
-        if (text.length() == 0) {
-            text = " ";
-        }
-
-        TextInput textInput = (TextInput)getComponent();
-
-        int selectionStart = textInput.getSelectionStart();
-        int selectionLength = textInput.getSelectionLength();
-
-        TextLayout textLayout = new TextLayout(text, font, FONT_RENDER_CONTEXT);
-
-        caretShapes = textLayout.getCaretShapes(selectionStart);
-        logicalHighlightShape = textLayout.getLogicalHighlightShape(selectionStart,
-            selectionStart + selectionLength);
-
-        int width = getWidth();
-
-        if (width <= padding.left + padding.right + 2) {
-            scrollLeft = 0;
-        } else {
             if (textInput.getSelectionLength() == 0) {
-                Rectangle2D caretBounds = caretShapes[0].getBounds();
-                int caretLeft = (int)caretBounds.getX();
-
-                if (caretLeft - scrollLeft < 0
-                    && bias <= 0) {
-                    // Ensure that the left edge of caret is visible
-                    scrollLeft = caretLeft;
-                } else {
-                    // Ensure that the right edge of the caret is visible
-                    int caretRight = (int)caretBounds.getMaxX();
-
-                    if (caretRight - scrollLeft + padding.left + 1 > width - padding.right - 1) {
-                        scrollLeft = Math.max(caretRight
-                            - (width - (padding.left + padding.right + 2)), 0);
-                    }
-                }
+                updateSelection();
+                showCaret(textInput.isFocused());
             } else {
-                Rectangle2D logicalHighlightBounds = logicalHighlightShape.getBounds();
-                int logicalHighlightLeft = (int)logicalHighlightBounds.getX();
+                updateSelection();
+                showCaret(false);
 
-                if (logicalHighlightLeft - scrollLeft < 0
-                    && bias <= 0) {
-                    // Ensure that the left edge of the highlight is visible
-                    scrollLeft = logicalHighlightLeft;
-                } else {
-                    // Ensure that the right edge of the highlight is visible
-                    int logicalHighlightRight = (int)logicalHighlightBounds.getMaxX();
-
-                    if (logicalHighlightRight - scrollLeft + padding.left + 1 > width - padding.right - 1) {
-                        scrollLeft = Math.max(logicalHighlightRight
-                            - (width - (padding.left + padding.right + 2)), 0);
-                    }
-                }
+                Rectangle bounds = selection.getBounds();
+                textInput.repaint(bounds.x, bounds.y, bounds.width, bounds.height);
             }
         }
+    }
 
-        showCaret(textInput.isFocused()
-            && textInput.getSelectionLength() == 0);
+    private void updateSelection() {
+        TextInput textInput = (TextInput)getComponent();
+        TextNode textNode = textInput.getTextNode();
 
-        repaintComponent();
+        if (textNode.getCharacterCount() > 0) {
+            int selectionStart = textInput.getSelectionStart();
+            int selectionLength = textInput.getSelectionLength();
+
+            Bounds leadingSelectionBounds = getCharacterBounds(selectionStart);
+
+            if (selectionLength == 0) {
+                caret = leadingSelectionBounds.toRectangle();
+                caret.width = 1;
+
+                selection = null;
+            } else {
+                caret = null;
+
+                Bounds trailingSelectionBounds = getCharacterBounds(selectionStart
+                    + selectionLength - 1);
+                selection = new Rectangle(leadingSelectionBounds.x, leadingSelectionBounds.y,
+                    trailingSelectionBounds.x + trailingSelectionBounds.width - leadingSelectionBounds.x,
+                    trailingSelectionBounds.y + trailingSelectionBounds.height - leadingSelectionBounds.y);
+            }
+        } else {
+            // Clear both the caret and the selection
+            caret = null;
+            selection = null;
+        }
+    }
+
+    public void showCaret(boolean show) {
+        if (scheduledBlinkCaretCallback != null) {
+            scheduledBlinkCaretCallback.cancel();
+        }
+
+        if (show) {
+            caretOn = true;
+            scheduledBlinkCaretCallback =
+                ApplicationContext.scheduleRecurringCallback(blinkCaretCallback,
+                    Platform.getCursorBlinkRate());
+
+            // Run the callback once now to show the cursor immediately
+            blinkCaretCallback.run();
+        } else {
+            scheduledBlinkCaretCallback = null;
+        }
     }
 }

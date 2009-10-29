@@ -149,12 +149,13 @@ public class TextArea extends Component {
         }
     }
 
-    private Document document = null;
-    private boolean editable = true;
-    private String textKey = null;
+    private Document document;
 
     private int selectionStart = 0;
     private int selectionLength = 0;
+
+    private boolean editable = true;
+    private String textKey = null;
 
     private NodeListener documentListener = new NodeListener() {
         @Override
@@ -274,155 +275,6 @@ public class TextArea extends Component {
         }
 
         setDocument(document);
-    }
-
-    /**
-     * Returns the text area's editable flag.
-     */
-    public boolean isEditable() {
-        return editable;
-    }
-
-    /**
-     * Sets the text area's editable flag.
-     *
-     * @param editable
-     */
-    public void setEditable(boolean editable) {
-        if (this.editable != editable) {
-            if (!editable) {
-                if (isFocused()) {
-                    clearFocus();
-                }
-            }
-
-            this.editable = editable;
-
-            textAreaListeners.editableChanged(this);
-        }
-    }
-
-    /**
-     * Returns the text area's text key.
-     *
-     * @return
-     * The text key, or <tt>null</tt> if no text key is set.
-     */
-    public String getTextKey() {
-        return textKey;
-    }
-
-    /**
-     * Sets the text area's text key.
-     *
-     * @param textKey
-     * The text key, or <tt>null</tt> to clear the binding.
-     */
-    public void setTextKey(String textKey) {
-        String previousTextKey = this.textKey;
-
-        if (previousTextKey != textKey) {
-            this.textKey = textKey;
-            textAreaListeners.textKeyChanged(this, previousTextKey);
-        }
-    }
-
-    @Override
-    public void load(Dictionary<String, ?> context) {
-        if (textKey != null
-            && JSONSerializer.containsKey(context, textKey)) {
-            Object value = JSONSerializer.get(context, textKey);
-            if (value != null) {
-                value = value.toString();
-            }
-
-            setText((String)value);
-        }
-    }
-
-    @Override
-    public void store(Dictionary<String, ?> context) {
-        if (isEnabled()
-            && textKey != null) {
-            JSONSerializer.put(context, textKey, getText());
-        }
-    }
-
-    @Override
-    public void clear() {
-        if (textKey != null) {
-            setText(null);
-        }
-    }
-
-    /**
-     * Returns the starting index of the selection.
-     *
-     * @return
-     * The starting index of the selection.
-     */
-    public int getSelectionStart() {
-        return selectionStart;
-    }
-
-    /**
-     * Returns the length of the selection.
-     *
-     * @return
-     * The length of the selection; may be <tt>0</tt>.
-     */
-    public int getSelectionLength() {
-        return selectionLength;
-    }
-
-    /**
-     * Returns a span representing the current selection.
-     *
-     * @return
-     * A span containing the current selection. Both start and end points are
-     * inclusive. Returns <tt>null</tt> if the selection is empty.
-     */
-    public Span getSelection() {
-        return (selectionLength == 0) ? null : new Span(selectionStart,
-            selectionStart + selectionLength - 1);
-    }
-
-    /**
-     * Sets the selection. The sum of the selection start and length must be
-     * less than the length of the text input's content.
-     *
-     * @param selectionStart
-     * The starting index of the selection.
-     *
-     * @param selectionLength
-     * The length of the selection.
-     */
-    public void setSelection(int selectionStart, int selectionLength) {
-        if (document == null
-            || document.getCharacterCount() == 0) {
-            throw new IllegalStateException();
-        }
-
-        if (selectionLength < 0) {
-            throw new IllegalArgumentException("selectionLength is negative.");
-        }
-
-        if (selectionStart < 0
-            || selectionStart + selectionLength > document.getCharacterCount()) {
-            throw new IndexOutOfBoundsException();
-        }
-
-        int previousSelectionStart = this.selectionStart;
-        int previousSelectionLength = this.selectionLength;
-
-        if (previousSelectionStart != selectionStart
-            || previousSelectionLength != selectionLength) {
-            this.selectionStart = selectionStart;
-            this.selectionLength = selectionLength;
-
-            textAreaSelectionListeners.selectionChanged(this,
-                previousSelectionStart, previousSelectionLength);
-        }
     }
 
     public void insertText(char character) {
@@ -633,31 +485,21 @@ public class TextArea extends Component {
             throw new IllegalStateException();
         }
 
-        if (selectionLength > 0) {
-            // Copy selection to clipboard
-            Document selection = (Document)document.getRange(selectionStart, selectionLength);
+        String selectedText = getSelectedText();
 
-            String selectedText = null;
-            try {
-                PlainTextSerializer serializer = new PlainTextSerializer();
-                StringWriter writer = new StringWriter();
-                serializer.writeObject(selection, writer);
-                selectedText = writer.toString();
-            } catch(SerializationException exception) {
-                throw new RuntimeException(exception);
-            } catch(IOException exception) {
-                throw new RuntimeException(exception);
-            }
-
-            if (selectedText != null) {
-                LocalManifest clipboardContent = new LocalManifest();
-                clipboardContent.putText(selectedText);
-                Clipboard.setContent(clipboardContent);
-            }
+        if (selectedText != null) {
+            LocalManifest clipboardContent = new LocalManifest();
+            clipboardContent.putText(selectedText);
+            Clipboard.setContent(clipboardContent);
         }
     }
 
     public void paste() {
+        if (document == null
+            || document.getCharacterCount() == 0) {
+            throw new IllegalStateException();
+        }
+
         Manifest clipboardContent = Clipboard.getContent();
 
         if (clipboardContent != null
@@ -690,6 +532,201 @@ public class TextArea extends Component {
 
     public void redo() {
         // TODO
+    }
+
+    /**
+     * Returns the starting index of the selection.
+     *
+     * @return
+     * The starting index of the selection.
+     */
+    public int getSelectionStart() {
+        return selectionStart;
+    }
+
+    /**
+     * Returns the length of the selection.
+     *
+     * @return
+     * The length of the selection; may be <tt>0</tt>.
+     */
+    public int getSelectionLength() {
+        return selectionLength;
+    }
+
+    /**
+     * Returns a span representing the current selection.
+     *
+     * @return
+     * A span containing the current selection. Both start and end points are
+     * inclusive. Returns <tt>null</tt> if the selection is empty.
+     */
+    public Span getSelection() {
+        return (selectionLength == 0) ? null : new Span(selectionStart,
+            selectionStart + selectionLength - 1);
+    }
+
+    /**
+     * Sets the selection. The sum of the selection start and length must be
+     * less than the length of the text input's content.
+     *
+     * @param selectionStart
+     * The starting index of the selection.
+     *
+     * @param selectionLength
+     * The length of the selection.
+     */
+    public void setSelection(int selectionStart, int selectionLength) {
+        if (document == null
+            || document.getCharacterCount() == 0) {
+            throw new IllegalStateException();
+        }
+
+        if (selectionLength < 0) {
+            throw new IllegalArgumentException("selectionLength is negative.");
+        }
+
+        if (selectionStart < 0
+            || selectionStart + selectionLength > document.getCharacterCount()) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        int previousSelectionStart = this.selectionStart;
+        int previousSelectionLength = this.selectionLength;
+
+        if (previousSelectionStart != selectionStart
+            || previousSelectionLength != selectionLength) {
+            this.selectionStart = selectionStart;
+            this.selectionLength = selectionLength;
+
+            textAreaSelectionListeners.selectionChanged(this,
+                previousSelectionStart, previousSelectionLength);
+        }
+    }
+
+    /**
+     * Selects all text.
+     */
+    public void selectAll() {
+        if (document == null) {
+            throw new IllegalStateException();
+        }
+
+        setSelection(0, document.getCharacterCount());
+    }
+
+    /**
+     * Clears the selection.
+     */
+    public void clearSelection() {
+        setSelection(0, 0);
+    }
+
+    /**
+     * Returns the currently selected text.
+     *
+     * @return
+     * A new string containing a copy of the text in the selected range, or
+     * <tt>null</tt> if nothing is selected.
+     */
+    public String getSelectedText() {
+        String selectedText = null;
+
+        if (selectionLength > 0) {
+            Document selection = (Document)document.getRange(selectionStart, selectionLength);
+
+            try {
+                PlainTextSerializer serializer = new PlainTextSerializer();
+                StringWriter writer = new StringWriter();
+                serializer.writeObject(selection, writer);
+                selectedText = writer.toString();
+            } catch(SerializationException exception) {
+                throw new RuntimeException(exception);
+            } catch(IOException exception) {
+                throw new RuntimeException(exception);
+            }
+        }
+
+        return selectedText;
+    }
+
+    /**
+     * Returns the text area's editable flag.
+     */
+    public boolean isEditable() {
+        return editable;
+    }
+
+    /**
+     * Sets the text area's editable flag.
+     *
+     * @param editable
+     */
+    public void setEditable(boolean editable) {
+        if (this.editable != editable) {
+            if (!editable) {
+                if (isFocused()) {
+                    clearFocus();
+                }
+            }
+
+            this.editable = editable;
+
+            textAreaListeners.editableChanged(this);
+        }
+    }
+
+    /**
+     * Returns the text area's text key.
+     *
+     * @return
+     * The text key, or <tt>null</tt> if no text key is set.
+     */
+    public String getTextKey() {
+        return textKey;
+    }
+
+    /**
+     * Sets the text area's text key.
+     *
+     * @param textKey
+     * The text key, or <tt>null</tt> to clear the binding.
+     */
+    public void setTextKey(String textKey) {
+        String previousTextKey = this.textKey;
+
+        if (previousTextKey != textKey) {
+            this.textKey = textKey;
+            textAreaListeners.textKeyChanged(this, previousTextKey);
+        }
+    }
+
+    @Override
+    public void load(Dictionary<String, ?> context) {
+        if (textKey != null
+            && JSONSerializer.containsKey(context, textKey)) {
+            Object value = JSONSerializer.get(context, textKey);
+            if (value != null) {
+                value = value.toString();
+            }
+
+            setText((String)value);
+        }
+    }
+
+    @Override
+    public void store(Dictionary<String, ?> context) {
+        if (isEnabled()
+            && textKey != null) {
+            JSONSerializer.put(context, textKey, getText());
+        }
+    }
+
+    @Override
+    public void clear() {
+        if (textKey != null) {
+            setText(null);
+        }
     }
 
     public int getInsertionPoint(int x, int y) {

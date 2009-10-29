@@ -33,8 +33,33 @@ import org.apache.pivot.wtk.text.validation.Validator;
  */
 public class TextInput extends Component {
     /**
-     * Text input listener list.
+     * Text input skin interface. Text input skins are required to implement
+     * this.
      */
+    public interface Skin {
+        /**
+         * Returns the insertion point for a given location.
+         *
+         * @param x
+         * @param y
+         *
+         * @return
+         * The insertion point for the given location.
+         */
+        public int getInsertionPoint(int x, int y);
+
+        /**
+         * Returns the bounds of the character at a given offset within the
+         * document.
+         *
+         * @param offset
+         *
+         * @return
+         * The bounds of the character at the given offset.
+         */
+        public Bounds getCharacterBounds(int offset);
+    }
+
     private static class TextInputListenerList extends ListenerList<TextInputListener>
         implements TextInputListener {
         @Override
@@ -94,9 +119,6 @@ public class TextInput extends Component {
         }
     }
 
-    /**
-     * Text input text listener list.
-     */
     private static class TextInputTextListenerList extends ListenerList<TextInputTextListener>
         implements TextInputTextListener {
         @Override
@@ -107,9 +129,6 @@ public class TextInput extends Component {
         }
     }
 
-    /**
-     * Text input character listener list.
-     */
     private static class TextInputCharacterListenerList extends ListenerList<TextInputCharacterListener>
         implements TextInputCharacterListener {
         @Override
@@ -127,9 +146,6 @@ public class TextInput extends Component {
         }
     }
 
-    /**
-     * Text input selection listener list.
-     */
     private static class TextInputSelectionListenerList extends ListenerList<TextInputSelectionListener>
         implements TextInputSelectionListener {
         @Override
@@ -142,15 +158,19 @@ public class TextInput extends Component {
         }
     }
 
-    private TextNode textNode = null;
+    private TextNode textNode;
 
     private int selectionStart = 0;
     private int selectionLength = 0;
+
     private int textSize = DEFAULT_TEXT_SIZE;
     private int maximumLength = Integer.MAX_VALUE;
+
     private boolean password = false;
     private String prompt = null;
+
     private String textKey = null;
+
     private Validator validator = null;
     private boolean textValid = true;
 
@@ -175,7 +195,7 @@ public class TextInput extends Component {
 
             textInputCharacterListeners.charactersInserted(TextInput.this, offset, characterCount);
             textInputTextListeners.textChanged(TextInput.this);
-            updateTextValid();
+            validateText();
         }
 
         @Override
@@ -190,7 +210,7 @@ public class TextInput extends Component {
 
             textInputCharacterListeners.charactersRemoved(TextInput.this, offset, characterCount);
             textInputTextListeners.textChanged(TextInput.this);
-            updateTextValid();
+            validateText();
         }
     };
 
@@ -199,11 +219,21 @@ public class TextInput extends Component {
     private TextInputCharacterListenerList textInputCharacterListeners = new TextInputCharacterListenerList();
     private TextInputSelectionListenerList textInputSelectionListeners = new TextInputSelectionListenerList();
 
-    private static final int DEFAULT_TEXT_SIZE = 20;
+    public static final int DEFAULT_TEXT_SIZE = 20;
 
     public TextInput() {
-        setTextNode(new TextNode());
         installThemeSkin(TextInput.class);
+        setText("");
+    }
+
+    @Override
+    protected void setSkin(org.apache.pivot.wtk.Skin skin) {
+        if (!(skin instanceof TextInput.Skin)) {
+            throw new IllegalArgumentException("Skin class must implement "
+                + TextInput.Skin.class.getName());
+        }
+
+        super.setSkin(skin);
     }
 
     public TextNode getTextNode() {
@@ -211,11 +241,8 @@ public class TextInput extends Component {
     }
 
     public void setTextNode(TextNode textNode) {
-        if (textNode == null) {
-            throw new IllegalArgumentException("textNode is null.");
-        }
-
-        if (textNode.getCharacterCount() > maximumLength) {
+        if (textNode != null
+            && textNode.getCharacterCount() > maximumLength) {
             throw new IllegalArgumentException("Text length is greater than maximum length.");
         }
 
@@ -226,9 +253,10 @@ public class TextInput extends Component {
                 previousTextNode.getNodeListeners().remove(textNodeListener);
             }
 
-            textNode.getNodeListeners().add(textNodeListener);
+            if (textNode != null) {
+                textNode.getNodeListeners().add(textNodeListener);
+            }
 
-            // Clear the selection
             this.textNode = textNode;
 
             selectionStart = 0;
@@ -236,20 +264,17 @@ public class TextInput extends Component {
 
             textInputListeners.textNodeChanged(this, previousTextNode);
             textInputTextListeners.textChanged(this);
-            updateTextValid();
+
+            validateText();
         }
     }
 
     public String getText() {
-        return textNode.getText();
+        return (textNode == null) ? null : textNode.getText();
     }
 
     public void setText(String text) {
-        if (text == null) {
-            throw new IllegalArgumentException("text is null.");
-        }
-
-        setTextNode(new TextNode(text));
+        setTextNode((text == null) ? null : new TextNode(text));
     }
 
     /**
@@ -279,6 +304,14 @@ public class TextInput extends Component {
      * content.
      */
     public void insertText(String text, int index) {
+        if (textNode == null) {
+            throw new IllegalStateException();
+        }
+
+        if (text == null) {
+            throw new IllegalArgumentException("text is null.");
+        }
+
         if (index < 0
             || index > textNode.getCharacterCount()) {
             throw new IndexOutOfBoundsException();
@@ -305,10 +338,14 @@ public class TextInput extends Component {
     }
 
     public int getTextLength() {
-        return textNode.getCharacterCount();
+        return (textNode == null) ? -1 : textNode.getCharacterCount();
     }
 
     public void delete(Direction direction) {
+        if (textNode == null) {
+            throw new IllegalStateException();
+        }
+
         if (direction == null) {
             throw new IllegalArgumentException("direction is null.");
         }
@@ -332,6 +369,10 @@ public class TextInput extends Component {
     }
 
     public void cut() {
+        if (textNode == null) {
+            throw new IllegalStateException();
+        }
+
         // Delete any selected text and put it on the clipboard
         if (selectionLength > 0) {
             TextNode removedRange =
@@ -344,6 +385,10 @@ public class TextInput extends Component {
     }
 
     public void copy() {
+        if (textNode == null) {
+            throw new IllegalStateException();
+        }
+
         // Copy selection to clipboard
         String selectedText = getSelectedText();
 
@@ -355,6 +400,10 @@ public class TextInput extends Component {
     }
 
     public void paste() {
+        if (textNode == null) {
+            throw new IllegalStateException();
+        }
+
         Manifest clipboardContent = Clipboard.getContent();
 
         if (clipboardContent != null
@@ -545,9 +594,11 @@ public class TextInput extends Component {
 
         if (previousMaximumLength != maximumLength) {
             // Truncate the text, if necessary
-            int characterCount = textNode.getCharacterCount();
-            if (characterCount > maximumLength) {
-                textNode.removeText(maximumLength, characterCount - maximumLength);
+            if (textNode != null) {
+                int characterCount = textNode.getCharacterCount();
+                if (characterCount > maximumLength) {
+                    textNode.removeText(maximumLength, characterCount - maximumLength);
+                }
             }
 
             this.maximumLength = maximumLength;
@@ -656,6 +707,15 @@ public class TextInput extends Component {
         }
     }
 
+    public int getInsertionPoint(int x, int y) {
+        TextInput.Skin textInputSkin = (TextInput.Skin)getSkin();
+        return textInputSkin.getInsertionPoint(x, y);
+    }
+
+    public Bounds getCharacterBounds(int offset) {
+        TextInput.Skin textInputSkin = (TextInput.Skin)getSkin();
+        return textInputSkin.getCharacterBounds(offset);
+    }
 
     /**
      * Tells whether or not this text input's text is currently valid as
@@ -664,20 +724,6 @@ public class TextInput extends Component {
      */
     public boolean isTextValid() {
         return textValid;
-    }
-
-    /**
-     * Updates the <tt>textValid</tt> flag and notifies listeners if the flag's
-     * value has changed. It is the responsibility of methods to call this
-     * method when the validity of the text may have changed.
-     */
-    private void updateTextValid() {
-        boolean textValid = (validator == null ? true : validator.isValid(getText()));
-
-        if (textValid != this.textValid) {
-            this.textValid = textValid;
-            textInputListeners.textValidChanged(this);
-        }
     }
 
     /**
@@ -699,7 +745,21 @@ public class TextInput extends Component {
         if (validator != previousValidator) {
             this.validator = validator;
             textInputListeners.textValidatorChanged(this, previousValidator);
-            updateTextValid();
+            validateText();
+        }
+    }
+
+    /**
+     * Updates the valid state after the text or the validator has changed.
+     */
+    private void validateText() {
+        String text = getText();
+        boolean textValid = (validator == null
+            || text == null) ? true : validator.isValid(text);
+
+        if (textValid != this.textValid) {
+            this.textValid = textValid;
+            textInputListeners.textValidChanged(this);
         }
     }
 

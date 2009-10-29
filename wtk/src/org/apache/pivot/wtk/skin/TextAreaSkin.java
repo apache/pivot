@@ -1023,6 +1023,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 }
 
                 // Draw text
+                // TODO If all of the text is selected, don't bother doing this
                 graphics.setFont(font);
                 graphics.setPaint(color);
 
