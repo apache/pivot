@@ -80,7 +80,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             int selectionStart = textInput.getSelectionStart();
             int selectionLength = textInput.getSelectionLength();
 
-            if (scrollX < 0) {
+            if (anchorX < 0) {
                 // Add the previous character to the selection
                 if (selectionStart > 0) {
                     selectionStart--;
@@ -107,7 +107,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     private int scrollLeft = 0;
 
     // TODO Use an anchor and a scroll direction like TextArea
-    private int scrollX = 0;
+    private int anchorX = 0;
 
     private BlinkCaretCallback blinkCaretCallback = new BlinkCaretCallback();
     private ApplicationContext.ScheduledCallback scheduledBlinkCaretCallback = null;
@@ -251,6 +251,8 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         }
 
         updateSelection();
+        showCaret(textInput.isFocused()
+            && textInput.getSelectionLength() == 0);
     }
 
     @Override
@@ -375,39 +377,45 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     public int getInsertionPoint(int x, int y) {
-        LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
-        float ascent = lm.getAscent();
-
-        // Translate to glyph coordinates
-        x -= (padding.left - scrollLeft + 1);
-        y -= (padding.top + 1);
+        int offset = -1;
 
         int n = glyphVector.getNumGlyphs();
-        int i = 0;
+        if (n > 0) {
+            LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
+            float ascent = lm.getAscent();
 
-        while (i < n) {
-            Shape glyphLogicalBounds = glyphVector.getGlyphLogicalBounds(i);
+            // Translate to glyph coordinates
+            x -= (padding.left - scrollLeft + 1);
+            y -= (padding.top + 1);
 
-            if (glyphLogicalBounds.contains(x, y - ascent)) {
-                Rectangle2D glyphBounds2D = glyphLogicalBounds.getBounds2D();
+            if (x < 0) {
+                offset = 0;
+            } else if (x > glyphVector.getLogicalBounds().getWidth()) {
+                offset = n;
+            } else {
+                int i = 0;
+                while (i < n) {
+                    Shape glyphLogicalBounds = glyphVector.getGlyphLogicalBounds(i);
 
-                if (x - glyphBounds2D.getX() > glyphBounds2D.getWidth() / 2) {
-                    // The user clicked on the right half of the character; select
-                    // the next character
+                    if (glyphLogicalBounds.contains(x, y - ascent)) {
+                        Rectangle2D glyphBounds2D = glyphLogicalBounds.getBounds2D();
+
+                        if (x - glyphBounds2D.getX() > glyphBounds2D.getWidth() / 2) {
+                            // The user clicked on the right half of the character; select
+                            // the next character
+                            i++;
+                        }
+
+                        offset = i;
+                        break;
+                    }
+
                     i++;
                 }
-
-                break;
             }
-
-            i++;
         }
 
-        if (i == n) {
-            i = -1;
-        }
-
-        return i;
+        return offset;
     }
 
     public Bounds getCharacterBounds(int offset) {
@@ -887,7 +895,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
                     textInput.setSelection(selectionStart, selectionLength);
                 } else {
-                    scrollX = x;
+                    anchorX = x;
 
                     if (scheduledScrollSelectionCallback == null) {
                         scheduledScrollSelectionCallback =
@@ -1301,12 +1309,22 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     private void updateSelection() {
         TextInput textInput = (TextInput)getComponent();
         TextNode textNode = textInput.getTextNode();
+        int n = textNode.getCharacterCount();
 
-        if (textNode.getCharacterCount() > 0) {
+        if (n > 0) {
             int selectionStart = textInput.getSelectionStart();
             int selectionLength = textInput.getSelectionLength();
 
-            Bounds leadingSelectionBounds = getCharacterBounds(selectionStart);
+            Bounds leadingSelectionBounds;
+            if (selectionStart < n) {
+                leadingSelectionBounds = getCharacterBounds(selectionStart);
+            } else {
+                // The insertion point is after the last character
+                Rectangle2D glyphVectorBounds = glyphVector.getLogicalBounds();
+                int x = (int)Math.ceil(glyphVectorBounds.getWidth()) + (padding.left - scrollLeft + 1);
+                int y = padding.top + 1;
+                leadingSelectionBounds = new Bounds(x, y, 0, averageCharacterSize.height);
+            }
 
             if (selectionLength == 0) {
                 caret = leadingSelectionBounds.toRectangle();
