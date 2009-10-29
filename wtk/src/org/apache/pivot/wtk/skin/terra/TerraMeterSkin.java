@@ -197,11 +197,12 @@ public class TerraMeterSkin extends ComponentSkin
             int textX = (width - textWidth - 2) / 2 + 1;
             
             // Paint the text
-            graphics.setPaint(Color.LIGHT_GRAY);
+            Shape previousClip = graphics.getClip();
+            graphics.clipRect(0, 0, meterStop, height);
             graphics.setPaint(textFillColor);
             graphics.setFont(font);
             graphics.drawString(meter.getText(), textX, ascent+1);
-            Shape previousClip = graphics.getClip();
+            graphics.setClip(previousClip);
             graphics.clipRect(meterStop, 0, width, height);
             graphics.setPaint(textColor);
             graphics.setFont(font);
