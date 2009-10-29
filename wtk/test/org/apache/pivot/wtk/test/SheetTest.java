@@ -56,9 +56,9 @@ public class SheetTest implements Application {
         button.getStyles().put("toolbar", true);
 
         windowContent.add(button);
-        windowContent.setPreferredSize(480, 360);
 
         frame = new Frame(windowContent);
+        frame.setPreferredSize(480, 360);
         frame.getStyles().put("padding", 0);
         frame.open(display);
 
@@ -80,6 +80,7 @@ public class SheetTest implements Application {
 
         final Prompt prompt = new Prompt(MessageType.INFO, "Prompt", new ArrayList<String>("OK"), promptBody);
         prompt.setTitle("Prompt");
+        prompt.getStyles().put("resizable", true);
 
         prompt.getComponentMouseListeners().add(new ComponentMouseListener.Adapter() {
             @Override

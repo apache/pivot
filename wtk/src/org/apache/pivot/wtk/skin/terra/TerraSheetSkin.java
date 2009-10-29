@@ -206,7 +206,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         // Attach the drop-shadow decorator
         dropShadowDecorator = new DropShadowDecorator(3, 3, 3);
         sheet.getDecorators().add(dropShadowDecorator);
-        
+
         sheet.add(resizeHandle);
     }
 
@@ -321,13 +321,13 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         int height = getHeight();
 
         Sheet sheet = (Sheet)getComponent();
-        
+
         // Size/position resize handle
         resizeHandle.setSize(resizeHandle.getPreferredSize());
-        resizeHandle.setLocation(width - resizeHandle.getWidth(),
-            height - resizeHandle.getHeight());
+        resizeHandle.setLocation(width - resizeHandle.getWidth() - 2,
+            height - resizeHandle.getHeight() - 2);
         resizeHandle.setVisible(resizable);
-        
+
         Component content = sheet.getContent();
 
         if (content != null) {
@@ -364,7 +364,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     @Override
     public boolean mouseMove(Component component, int x, int y) {
         boolean consumed = super.mouseMove(component, x, y);
-        
+
         if (Mouse.getCapturer() == component) {
             Sheet sheet = (Sheet)getComponent();
             Display display = sheet.getDisplay();
@@ -382,7 +382,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
                 boolean preferredWidthSet = component.isPreferredWidthSet();
                 boolean preferredHeightSet = component.isPreferredHeightSet();
                 boolean noPreferredSet = !(preferredWidthSet || preferredHeightSet);
-                
+
                 if (preferredWidthSet || noPreferredSet) {
                     preferredWidth = Math.max(location.x - sheet.getX() + resizeOffset.x, 2);
                     preferredWidth = Math.min(preferredWidth, sheet.getMaximumPreferredWidth());
@@ -423,7 +423,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
 
         return consumed;
     }
-    
+
     @Override
     public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
         Sheet sheet = (Sheet)component;
@@ -447,7 +447,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     @Override
     public boolean mouseUp(Component component, Button button, int x, int y) {
         boolean consumed = super.mouseUp(component, button, x, y);
-        
+
         if (Mouse.getCapturer() == component) {
             resizeOffset = null;
             Mouse.release();
@@ -455,7 +455,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
 
         return consumed;
     }
-    
+
     @Override
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
