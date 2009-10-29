@@ -27,9 +27,11 @@ import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentListener;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.ContainerMouseListener;
+import org.apache.pivot.wtk.Cursor;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.GraphicsUtilities;
+import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
@@ -39,10 +41,12 @@ import org.apache.pivot.wtk.Sheet;
 import org.apache.pivot.wtk.SheetStateListener;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtk.Mouse.Button;
 import org.apache.pivot.wtk.effects.DropShadowDecorator;
 import org.apache.pivot.wtk.effects.Transition;
 import org.apache.pivot.wtk.effects.TransitionListener;
 import org.apache.pivot.wtk.effects.easing.Quadratic;
+import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.skin.WindowSkin;
 
 /**
@@ -60,6 +64,41 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         }
     }
 
+    /**
+     * Resize button image.
+     */
+    protected class ResizeImage extends Image {
+        public static final int ALPHA = 64;
+
+        @Override
+        public int getWidth() {
+            return 5;
+        }
+
+        @Override
+        public int getHeight() {
+            return 5;
+        }
+
+        @Override
+        public void paint(Graphics2D graphics) {
+            graphics.setPaint(new Color(0, 0, 0, ALPHA));
+            graphics.fillRect(3, 0, 2, 1);
+            graphics.fillRect(0, 3, 2, 1);
+            graphics.fillRect(3, 3, 2, 1);
+
+            graphics.setPaint(new Color(borderColor.getRed(),
+                borderColor.getGreen(), borderColor.getBlue(),
+                ALPHA));
+            graphics.fillRect(3, 1, 2, 1);
+            graphics.fillRect(0, 4, 2, 1);
+            graphics.fillRect(3, 4, 2, 1);
+        }
+    }
+
+    private Image resizeImage = new ResizeImage();
+    private ImageView resizeHandle = new ImageView(resizeImage);
+    private Point resizeOffset = null;
     private Color borderColor;
     private Insets padding;
     private boolean resizable;
@@ -167,6 +206,8 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         // Attach the drop-shadow decorator
         dropShadowDecorator = new DropShadowDecorator(3, 3, 3);
         sheet.getDecorators().add(dropShadowDecorator);
+        
+        sheet.add(resizeHandle);
     }
 
     @Override
@@ -280,6 +321,13 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         int height = getHeight();
 
         Sheet sheet = (Sheet)getComponent();
+        
+        // Size/position resize handle
+        resizeHandle.setSize(resizeHandle.getPreferredSize());
+        resizeHandle.setLocation(width - resizeHandle.getWidth(),
+            height - resizeHandle.getHeight());
+        resizeHandle.setVisible(resizable);
+        
         Component content = sheet.getContent();
 
         if (content != null) {
@@ -314,14 +362,100 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     }
 
     @Override
+    public boolean mouseMove(Component component, int x, int y) {
+        boolean consumed = super.mouseMove(component, x, y);
+        
+        if (Mouse.getCapturer() == component) {
+            Sheet sheet = (Sheet)getComponent();
+            Display display = sheet.getDisplay();
+
+            Point location = sheet.mapPointToAncestor(display, x, y);
+
+            // Pretend that the mouse can't move off screen (off the display)
+            location = new Point(Math.min(Math.max(location.x, 0), display.getWidth() - 1),
+                Math.min(Math.max(location.y, 0), display.getHeight() - 1));
+
+            if (resizeOffset != null) {
+                // Resize the frame
+                int preferredWidth = -1;
+                int preferredHeight = -1;
+                boolean preferredWidthSet = component.isPreferredWidthSet();
+                boolean preferredHeightSet = component.isPreferredHeightSet();
+                boolean noPreferredSet = !(preferredWidthSet || preferredHeightSet);
+                
+                if (preferredWidthSet || noPreferredSet) {
+                    preferredWidth = Math.max(location.x - sheet.getX() + resizeOffset.x, 2);
+                    preferredWidth = Math.min(preferredWidth, sheet.getMaximumPreferredWidth());
+                    preferredWidth = Math.max(preferredWidth, sheet.getMinimumPreferredWidth());
+                }
+
+                if (preferredHeightSet || noPreferredSet) {
+                    preferredHeight = Math.max(location.y - sheet.getY() + resizeOffset.y,
+                        resizeHandle.getHeight() + 7);
+                    preferredHeight = Math.min(preferredHeight, sheet.getMaximumPreferredHeight());
+                    preferredHeight = Math.max(preferredHeight, sheet.getMinimumPreferredHeight());
+                }
+
+                sheet.setPreferredSize(preferredWidth, preferredHeight);
+            }
+        } else {
+            Cursor cursor = null;
+            Bounds resizeHandleBounds = resizeHandle.getBounds();
+
+            if (resizeHandleBounds.contains(x, y)) {
+                boolean preferredWidthSet = component.isPreferredWidthSet();
+                boolean preferredHeightSet = component.isPreferredHeightSet();
+
+                if (preferredWidthSet
+                    && preferredHeightSet) {
+                    cursor = Cursor.RESIZE_SOUTH_EAST;
+                } else if (preferredWidthSet) {
+                    cursor = Cursor.RESIZE_EAST;
+                } else if (preferredHeightSet) {
+                    cursor = Cursor.RESIZE_SOUTH;
+                } else {
+                    cursor = Cursor.RESIZE_SOUTH_EAST;
+                }
+            }
+
+            component.setCursor(cursor);
+        }
+
+        return consumed;
+    }
+    
+    @Override
     public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
         Sheet sheet = (Sheet)component;
         Window owner = sheet.getOwner();
         owner.moveToFront();
 
-        return super.mouseDown(component, button, x, y);
+        boolean consumed = super.mouseDown(component, button, x, y);
+
+        if (button == Mouse.Button.LEFT) {
+            Bounds resizeHandleBounds = resizeHandle.getBounds();
+
+            if (resizeHandleBounds.contains(x, y)) {
+                resizeOffset = new Point(getWidth() - x, getHeight() - y);
+                Mouse.capture(component);
+            }
+        }
+
+        return consumed;
     }
 
+    @Override
+    public boolean mouseUp(Component component, Button button, int x, int y) {
+        boolean consumed = super.mouseUp(component, button, x, y);
+        
+        if (Mouse.getCapturer() == component) {
+            resizeOffset = null;
+            Mouse.release();
+        }
+
+        return consumed;
+    }
+    
     @Override
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
