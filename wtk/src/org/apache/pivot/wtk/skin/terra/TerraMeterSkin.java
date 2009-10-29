@@ -48,6 +48,7 @@ public class TerraMeterSkin extends ComponentSkin
     private float gridFrequency;
     private Font font;
     private Color textColor;
+    private Color textFillColor;
 
     private static final FontRenderContext FONT_RENDER_CONTEXT = new FontRenderContext(null, true, false);
     private static final int DEFAULT_WIDTH = 100;
@@ -59,7 +60,8 @@ public class TerraMeterSkin extends ComponentSkin
         gridColor = theme.getColor(10);
         gridFrequency = 0.25f;
         font = theme.getFont();
-        textColor = theme.getColor(1);
+        textColor = theme.getColor(16);
+        textFillColor = theme.getColor(1);
     }
 
     @Override
@@ -195,12 +197,11 @@ public class TerraMeterSkin extends ComponentSkin
             int textX = (width - textWidth - 2) / 2 + 1;
             
             // Paint the text
-            Shape previousClip = graphics.getClip();
-            graphics.clipRect(0, 0, meterStop, height);
             graphics.setPaint(Color.LIGHT_GRAY);
+            graphics.setPaint(textFillColor);
             graphics.setFont(font);
             graphics.drawString(meter.getText(), textX, ascent+1);
-            graphics.setClip(previousClip);
+            Shape previousClip = graphics.getClip();
             graphics.clipRect(meterStop, 0, width, height);
             graphics.setPaint(textColor);
             graphics.setFont(font);
@@ -243,6 +244,40 @@ public class TerraMeterSkin extends ComponentSkin
         setGridColor(GraphicsUtilities.decodeColor(gridColor));
     }
 
+    public Color getTextColor() {
+        return textColor;
+    }
+
+    public void setTextColor(Color color) {
+        this.textColor = color;
+        repaintComponent();
+    }
+
+    public final void setTextColor(String color) {
+        if (color == null) {
+            throw new IllegalArgumentException("color is null.");
+        }
+
+        setTextColor(GraphicsUtilities.decodeColor(color));
+    }
+    
+    public Color getTextFillColor() {
+        return textFillColor;
+    }
+
+    public void setTextFillColor(Color color) {
+        this.textFillColor = color;
+        repaintComponent();
+    }
+
+    public final void setTextFillColor(String color) {
+        if (color == null) {
+            throw new IllegalArgumentException("color is null.");
+        }
+
+        setTextFillColor(GraphicsUtilities.decodeColor(color));
+    }
+    
     public float getGridFrequency() {
         return gridFrequency;
     }
