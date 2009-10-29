@@ -402,7 +402,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
             Cursor cursor = null;
             Bounds resizeHandleBounds = resizeHandle.getBounds();
 
-            if (resizeHandleBounds.contains(x, y)) {
+            if (resizable && resizeHandleBounds.contains(x, y)) {
                 boolean preferredWidthSet = component.isPreferredWidthSet();
                 boolean preferredHeightSet = component.isPreferredHeightSet();
 
@@ -432,7 +432,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
 
         boolean consumed = super.mouseDown(component, button, x, y);
 
-        if (button == Mouse.Button.LEFT) {
+        if (resizable && button == Mouse.Button.LEFT) {
             Bounds resizeHandleBounds = resizeHandle.getBounds();
 
             if (resizeHandleBounds.contains(x, y)) {
