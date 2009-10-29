@@ -23,6 +23,8 @@ limitations under the License.
         <BoxPane orientation="vertical" styles="{padding:4}">
             <TextInput text="ABCD 1234"/>
             <TextInput text="abcd 5678"/>
+            <TextInput prompt="Type something!"/>
+            <TextInput/>
         </BoxPane>
     </content>
 </Window>
