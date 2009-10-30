@@ -21,7 +21,7 @@ limitations under the License.
     xmlns="org.apache.pivot.wtk">
     <content>
         <BoxPane orientation="vertical" styles="{padding:10}">
-            <ColorChooser selectedColor="#cc0000"/>
+            <ColorChooser selectedColor="#915200"/>
         </BoxPane>
     </content>
 </Window>
