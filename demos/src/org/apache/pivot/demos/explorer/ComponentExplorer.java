@@ -21,6 +21,7 @@ import java.io.IOException;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.collections.Sequence.Tree;
 import org.apache.pivot.collections.Sequence.Tree.Path;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.tools.wtk.ComponentPropertyInspector;
@@ -104,7 +105,7 @@ public class ComponentExplorer implements Application {
 
                     if (path != null) {
                         List<?> treeData = treeView.getTreeData();
-                        Object treeNode = Sequence.Tree.get(treeData, path);
+                        Object treeNode = Tree.get(treeData, path);
 
                         if (treeNode instanceof List<?>) {
                             treeView.setBranchExpanded(path, !treeView.isBranchExpanded(path));
@@ -118,7 +119,18 @@ public class ComponentExplorer implements Application {
 
         treeView.expandAll();
 
+        Tree.ItemIterator<?> itemIterator = Tree.depthFirstIterator(treeView.getTreeData());
+        while (itemIterator.hasNext()) {
+            Object node = itemIterator.next();
+            if (node instanceof ComponentNode) {
+                treeView.setSelectedPath(itemIterator.getPath());
+                break;
+            }
+        }
+
         window.open(display);
+
+        treeView.requestFocus();
     }
 
     @Override
