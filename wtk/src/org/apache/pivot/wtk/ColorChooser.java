@@ -63,6 +63,10 @@ public class ColorChooser extends Container {
     private ColorChooserSelectionListenerList colorChooserSelectionListeners =
         new ColorChooserSelectionListenerList();
 
+    public ColorChooser() {
+        installThemeSkin(ColorChooser.class);
+    }
+
     /**
      * Gets the currently selected color, or <tt>null</tt> if no color is
      * selected.
