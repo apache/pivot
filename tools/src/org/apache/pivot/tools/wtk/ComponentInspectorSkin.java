@@ -25,8 +25,8 @@ import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonStateListener;
 import org.apache.pivot.wtk.Checkbox;
-import org.apache.pivot.wtk.ColorChooser;
-import org.apache.pivot.wtk.ColorChooserSelectionListener;
+import org.apache.pivot.wtk.ColorChooserButton;
+import org.apache.pivot.wtk.ColorChooserButtonSelectionListener;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentStateListener;
 import org.apache.pivot.wtk.CornerRadii;
@@ -962,23 +962,24 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         final String key, Form.Section section) {
         Color color = (Color)dictionary.get(key);
 
-        ColorChooser colorChooser = new ColorChooser();
-        colorChooser.setSelectedColor(color);
-        section.add(colorChooser);
-        Form.setLabel(colorChooser, key);
+        ColorChooserButton colorChooserButton = new ColorChooserButton();
+        colorChooserButton.setSelectedColor(color);
+        section.add(colorChooserButton);
+        Form.setLabel(colorChooserButton, key);
 
-        colorChooser.getColorChooserSelectionListeners().add(new ColorChooserSelectionListener() {
+        colorChooserButton.getColorChooserButtonSelectionListeners().add
+            (new ColorChooserButtonSelectionListener() {
             @Override
-            public void selectedColorChanged(ColorChooser colorChooser,
+            public void selectedColorChanged(ColorChooserButton colorChooserButton,
                 Color previousSelectedColor) {
                 try {
-                    dictionary.put(key, colorChooser.getSelectedColor());
+                    dictionary.put(key, colorChooserButton.getSelectedColor());
                 } catch (Exception exception) {
                     dictionary.put(key, previousSelectedColor);
                 }
             }
         });
 
-        return colorChooser;
+        return colorChooserButton;
     }
 }

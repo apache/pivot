@@ -45,14 +45,15 @@ public class ListButtonColorItemRenderer extends ImageView
 
     @Override
     public void render(Object data, Button button, boolean highlighted) {
-        Color color;
+        Color color = Color.WHITE;
+
         if (data instanceof ColorItem) {
             ColorItem colorItem = (ColorItem)data;
             color = colorItem.getColor();
         } else {
             if (data instanceof Color) {
                 color = (Color)data;
-            } else {
+            } else if (data != null) {
                 color = GraphicsUtilities.decodeColor(data.toString());
             }
         }

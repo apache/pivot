@@ -19,13 +19,11 @@ package org.apache.pivot.wtk.skin.terra;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import org.apache.pivot.wtk.Border;
 import org.apache.pivot.wtk.ColorChooser;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.TablePane;
-import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.skin.ColorChooserSkin;
 import org.apache.pivot.wtk.skin.ComponentSkin;
 
@@ -134,7 +132,14 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
             float saturation = saturationValueChooser.getSaturation();
             float value = saturationValueChooser.getValue();
 
-            colorChooser.setSelectedColor(Color.getHSBColor(hue, saturation, value));
+            hueChooser.setHue(hue);
+
+            updating = true;
+            try {
+                colorChooser.setSelectedColor(Color.getHSBColor(hue, saturation, value));
+            } finally {
+                updating = false;
+            }
         }
     }
 
@@ -255,35 +260,34 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
             float saturation = 1f - (Math.min(Math.max(y, 0), height - 1) / (float)height);
             float value = Math.min(Math.max(x, 0), width - 1) / (float)width;
 
-            colorChooser.setSelectedColor(Color.getHSBColor(hue, saturation, value));
+            saturationValueChooser.setSaturation(saturation);
+            saturationValueChooser.setValue(value);
+
+            updating = true;
+            try {
+                colorChooser.setSelectedColor(Color.getHSBColor(hue, saturation, value));
+            } finally {
+                updating = false;
+            }
         }
     }
 
     private TablePane tablePane = new TablePane();
-    private Border hueBorder = new Border();
-    private Border saturationValueBorder = new Border();
-
     private SaturationValueChooser saturationValueChooser = new SaturationValueChooser();
     private HueChooser hueChooser = new HueChooser();
 
-    public TerraColorChooserSkin() {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+    private boolean updating = false;
 
-        tablePane.getStyles().put("horizontalSpacing", 4);
+    public TerraColorChooserSkin() {
+        tablePane.getStyles().put("horizontalSpacing", 6);
         tablePane.getColumns().add(new TablePane.Column(31, true));
         tablePane.getColumns().add(new TablePane.Column(4, true));
 
         TablePane.Row row = new TablePane.Row(1, true);
         tablePane.getRows().add(row);
 
-        row.add(saturationValueBorder);
-        row.add(hueBorder);
-
-        hueBorder.getStyles().put("color", theme.getColor(9));
-        saturationValueBorder.getStyles().put("color", theme.getColor(9));
-
-        hueBorder.setContent(hueChooser);
-        saturationValueBorder.setContent(saturationValueChooser);
+        row.add(saturationValueChooser);
+        row.add(hueChooser);
     }
 
     @Override
@@ -317,28 +321,6 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
         tablePane.setLocation(0, 0);
     }
 
-    public Color getBorderColor() {
-        return (Color)hueBorder.getStyles().get("color");
-    }
-
-    public void setBorderColor(Color borderColor) {
-        if (borderColor == null) {
-            throw new IllegalArgumentException("borderColor is null.");
-        }
-
-        hueBorder.getStyles().put("color", borderColor);
-        saturationValueBorder.getStyles().put("color", borderColor);
-    }
-
-    public final void setBorderColor(String borderColor) {
-        if (borderColor == null) {
-            throw new IllegalArgumentException("borderColor is null.");
-        }
-
-        hueBorder.getStyles().put("color", borderColor);
-        saturationValueBorder.getStyles().put("color", borderColor);
-    }
-
     public int getSpacing() {
         return (Integer)tablePane.getStyles().get("horizontalSpacing");
     }
@@ -361,22 +343,25 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
 
     @Override
     public void selectedColorChanged(ColorChooser colorChooser, Color previousSelectedColor) {
-        Color color = colorChooser.getSelectedColor();
+        if (!updating) {
+            Color color = colorChooser.getSelectedColor();
 
-        float hue = 0f;
-        float saturation = 0f;
-        float value = 0f;
+            float hue = 0f;
+            float saturation = 0f;
+            float value = 0f;
 
-        if (color != null) {
-            float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
-            hue = hsb[0];
-            saturation = hsb[1];
-            value = hsb[2];
+            if (color != null) {
+                float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(),
+                    color.getBlue(), null);
+                hue = hsb[0];
+                saturation = hsb[1];
+                value = hsb[2];
+            }
+
+            hueChooser.setHue(hue);
+            saturationValueChooser.setSaturation(saturation);
+            saturationValueChooser.setValue(value);
         }
-
-        hueChooser.setHue(hue);
-        saturationValueChooser.setSaturation(saturation);
-        saturationValueChooser.setValue(value);
 
         repaintComponent();
     }

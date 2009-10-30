@@ -24,6 +24,7 @@ import org.apache.pivot.util.Service;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.skin.BorderSkin;
 import org.apache.pivot.wtk.skin.CardPaneSkin;
+import org.apache.pivot.wtk.skin.ColorChooserButtonSkin;
 import org.apache.pivot.wtk.skin.BoxPaneSkin;
 import org.apache.pivot.wtk.skin.FlowPaneSkin;
 import org.apache.pivot.wtk.skin.ImageViewSkin;
@@ -79,6 +80,8 @@ public abstract class Theme {
         componentSkinMap.put(Border.class, BorderSkin.class);
         componentSkinMap.put(BoxPane.class, BoxPaneSkin.class);
         componentSkinMap.put(CardPane.class, CardPaneSkin.class);
+        componentSkinMap.put(ColorChooserButtonSkin.ColorChooserPopup.class,
+            ColorChooserButtonSkin.ColorChooserPopupSkin.class);
         componentSkinMap.put(FlowPane.class, FlowPaneSkin.class);
         componentSkinMap.put(ImageView.class, ImageViewSkin.class);
         componentSkinMap.put(Label.class, LabelSkin.class);

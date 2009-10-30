@@ -37,6 +37,7 @@ import org.apache.pivot.wtk.Calendar;
 import org.apache.pivot.wtk.CalendarButton;
 import org.apache.pivot.wtk.Checkbox;
 import org.apache.pivot.wtk.ColorChooser;
+import org.apache.pivot.wtk.ColorChooserButton;
 import org.apache.pivot.wtk.Dialog;
 import org.apache.pivot.wtk.Expander;
 import org.apache.pivot.wtk.BoxPane;
@@ -96,6 +97,7 @@ public final class TerraTheme extends Theme {
         componentSkinMap.put(Calendar.class, TerraCalendarSkin.class);
         componentSkinMap.put(CalendarButton.class, TerraCalendarButtonSkin.class);
         componentSkinMap.put(ColorChooser.class, TerraColorChooserSkin.class);
+        componentSkinMap.put(ColorChooserButton.class, TerraColorChooserButtonSkin.class);
         componentSkinMap.put(Dialog.class, TerraDialogSkin.class);
         componentSkinMap.put(Expander.class, TerraExpanderSkin.class);
         componentSkinMap.put(FileBrowser.class, TerraFileBrowserSkin.class);
