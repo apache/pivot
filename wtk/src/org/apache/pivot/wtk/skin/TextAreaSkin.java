@@ -1934,6 +1934,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                     }
 
                     textArea.setSelection(selectionStart, selectionLength);
+                    scrollCharacterToVisible(selectionStart);
 
                     if (caret != null) {
                         caretX = caret.x;
@@ -1967,6 +1968,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                     }
 
                     textArea.setSelection(selectionStart, selectionLength);
+                    scrollCharacterToVisible(selectionStart + selectionLength);
 
                     if (caret != null) {
                         caretX = caret.x;

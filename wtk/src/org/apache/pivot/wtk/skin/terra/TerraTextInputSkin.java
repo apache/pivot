@@ -86,11 +86,14 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
     private GlyphVector glyphVector = null;
 
-    private boolean caretOn = true;
+    // TODO
+    // private int anchor = -1;
     private Rectangle caret = new Rectangle();
     private Rectangle selection = null;
 
     private int scrollLeft = 0;
+
+    private boolean caretOn = true;
 
     private BlinkCaretCallback blinkCaretCallback = new BlinkCaretCallback();
     private ApplicationContext.ScheduledCallback scheduledBlinkCaretCallback = null;
@@ -224,6 +227,12 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         updateSelection();
         showCaret(textInput.isFocused()
             && textInput.getSelectionLength() == 0);
+
+        if (textNode.getCharacterCount() > 0) {
+            scrollCharacterToVisible(textInput.getSelectionStart());
+        } else {
+            scrollLeft = 0;
+        }
     }
 
     @Override
@@ -270,6 +279,15 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         // Paint the border
         graphics.setColor(borderColor);
         GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
+
+        // TODO Remove
+        /*
+        // Paint the padding border
+        graphics.setColor(Color.RED);
+        graphics.drawRect(padding.left + 1, padding.top + 1,
+            width - (padding.left + padding.right + 2),
+            height - (padding.top + padding.bottom + 2));
+        */
 
         // Paint the content
         if (FONT_RENDER_CONTEXT.isAntiAliased()) {
@@ -406,6 +424,20 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         int height = getHeight() - (padding.top + padding.bottom + 2);
 
         return new Bounds(x, y, width, height);
+    }
+
+    private void scrollCharacterToVisible(int offset) {
+        int width = getWidth();
+        Bounds characterBounds = getCharacterBounds(offset);
+        int glyphX = characterBounds.x - (padding.left + 1) + scrollLeft;
+
+        if (characterBounds.x < padding.left + 1) {
+            scrollLeft = glyphX;
+        } else if (characterBounds.x + characterBounds.width > width - (padding.right + 1)) {
+            scrollLeft = glyphX + (padding.left + padding.right + 2) + characterBounds.width - width;
+        }
+
+        repaintComponent();
     }
 
     public Font getFont() {
@@ -996,8 +1028,6 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             Keyboard.Modifier commandModifier = Platform.getCommandModifier();
             if (keyCode == Keyboard.KeyCode.DELETE
                 || keyCode == Keyboard.KeyCode.BACKSPACE) {
-                consumed = true;
-
                 Direction direction = (keyCode == Keyboard.KeyCode.DELETE ?
                     Direction.FORWARD : Direction.BACKWARD);
 
@@ -1030,9 +1060,9 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 } else {
                     textInput.delete(direction);
                 }
-            } else if (keyCode == Keyboard.KeyCode.LEFT) {
-                consumed = true;
 
+                consumed = true;
+            } else if (keyCode == Keyboard.KeyCode.LEFT) {
                 int selectionStart = textInput.getSelectionStart();
                 int selectionLength = textInput.getSelectionLength();
 
@@ -1067,9 +1097,15 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 }
 
                 textInput.setSelection(selectionStart, selectionLength);
-            } else if (keyCode == Keyboard.KeyCode.RIGHT) {
-                consumed = true;
 
+                if (textNode.getCharacterCount() > 0) {
+                    scrollCharacterToVisible(selectionStart);
+                } else {
+                    scrollLeft = 0;
+                }
+
+                consumed = true;
+            } else if (keyCode == Keyboard.KeyCode.RIGHT) {
                 int selectionStart = textInput.getSelectionStart();
                 int selectionLength = textInput.getSelectionLength();
 
@@ -1104,6 +1140,14 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 }
 
                 textInput.setSelection(selectionStart, selectionLength);
+
+                if (textNode.getCharacterCount() > 0) {
+                    scrollCharacterToVisible(selectionStart + selectionLength - 1);
+                } else {
+                    scrollLeft = 0;
+                }
+
+                consumed = true;
             } else if (keyCode == Keyboard.KeyCode.HOME) {
                 // Move the caret to the beginning of the text
                 if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
@@ -1126,33 +1170,31 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 consumed = true;
             } else if (keyCode == Keyboard.KeyCode.A
                 && Keyboard.isPressed(commandModifier)) {
-                consumed = true;
-
                 // Select all
                 textInput.setSelection(0, textNode.getCharacterCount());
+                consumed = true;
             } else if (keyCode == Keyboard.KeyCode.X
                 && Keyboard.isPressed(commandModifier)) {
-                consumed = true;
-
                 if (textInput.isPassword()) {
                     Toolkit.getDefaultToolkit().beep();
                 } else {
                     textInput.cut();
                 }
+
+                consumed = true;
             } else if (keyCode == Keyboard.KeyCode.C
                 && Keyboard.isPressed(commandModifier)) {
-                consumed = true;
-
                 if (textInput.isPassword()) {
                     Toolkit.getDefaultToolkit().beep();
                 } else {
                     textInput.copy();
                 }
+
+                consumed = true;
             } else if (keyCode == Keyboard.KeyCode.V
                 && Keyboard.isPressed(commandModifier)) {
-                consumed = true;
-
                 textInput.paste();
+                consumed = true;
             } else {
                 consumed = super.keyPressed(component, keyCode, keyLocation);
             }
