@@ -185,13 +185,17 @@ public class TerraPushButtonSkin extends PushButtonSkin {
 
         int preferredHeight1 = dataRenderer.getPreferredHeight(contentWidth) + padding.top
             + padding.bottom + 2;
-        int baseline = dataRenderer.getBaseline(contentWidth) + padding.top + 1;
+        int baseline = dataRenderer.getBaseline(contentWidth);
 
-        // Adjust for preferred aspect ratio
-        if (!Float.isNaN(maximumAspectRatio)
-            && (float) width / (float) preferredHeight1 > maximumAspectRatio) {
-            int preferredHeight2 = (int) (width / maximumAspectRatio);
-            baseline = (int) (preferredHeight1 / (float) preferredHeight2 * baseline);
+        if (baseline != -1) {
+            baseline += padding.top + 1;
+
+            // Adjust for preferred aspect ratio
+            if (!Float.isNaN(maximumAspectRatio)
+                && (float) width / (float) preferredHeight1 > maximumAspectRatio) {
+                int preferredHeight2 = (int) (width / maximumAspectRatio);
+                baseline = (int) (preferredHeight1 / (float) preferredHeight2 * baseline);
+            }
         }
 
         return baseline;

@@ -125,7 +125,11 @@ public class TerraColorChooserButtonSkin extends ColorChooserButtonSkin {
 
         dataRenderer.render(colorChooserButton.getButtonData(), colorChooserButton, false);
 
-        int baseline = dataRenderer.getBaseline(width) + padding.top + 1;
+        int baseline = dataRenderer.getBaseline(width);
+
+        if (baseline != -1) {
+            baseline += padding.top + 1;
+        }
 
         return baseline;
     }
