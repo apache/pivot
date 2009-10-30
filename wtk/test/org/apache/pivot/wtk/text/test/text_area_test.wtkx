@@ -31,7 +31,7 @@ limitations under the License.
                         <content>
                             <ScrollPane horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fill_to_capacity">
                                 <view>
-                                    <TextArea wtkx:id="textArea">
+                                    <TextArea wtkx:id="textArea" styles="{margin:10}">
                                        <document>
                                            <wtkx:include src="document.wtkx"/>
                                        </document>

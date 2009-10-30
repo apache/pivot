@@ -219,7 +219,7 @@ public class TextInput extends Component {
     private TextInputCharacterListenerList textInputCharacterListeners = new TextInputCharacterListenerList();
     private TextInputSelectionListenerList textInputSelectionListeners = new TextInputSelectionListenerList();
 
-    public static final int DEFAULT_TEXT_SIZE = 20;
+    public static final int DEFAULT_TEXT_SIZE = 12;
 
     public TextInput() {
         installThemeSkin(TextInput.class);

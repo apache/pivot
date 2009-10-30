@@ -75,39 +75,22 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         @Override
         public void run() {
             TextInput textInput = (TextInput)getComponent();
-            TextNode textNode = textInput.getTextNode();
-
             int selectionStart = textInput.getSelectionStart();
             int selectionLength = textInput.getSelectionLength();
 
-            if (anchorX < 0) {
-                // Add the previous character to the selection
-                if (selectionStart > 0) {
-                    selectionStart--;
-                    selectionLength++;
-                }
-            } else {
-                // Add the next character to the selection
-                if (selectionStart + selectionLength < textNode.getCharacterCount()) {
-                    selectionLength++;
-                }
-            }
+            // TODO
 
             textInput.setSelection(selectionStart, selectionLength);
         }
     }
 
     private GlyphVector glyphVector = null;
-    private boolean showPrompt = false;
 
     private boolean caretOn = true;
     private Rectangle caret = new Rectangle();
     private Rectangle selection = null;
 
     private int scrollLeft = 0;
-
-    // TODO Use an anchor and a scroll direction like TextArea
-    private int anchorX = 0;
 
     private BlinkCaretCallback blinkCaretCallback = new BlinkCaretCallback();
     private ApplicationContext.ScheduledCallback scheduledBlinkCaretCallback = null;
@@ -217,35 +200,23 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         TextNode textNode = textInput.getTextNode();
 
         glyphVector = null;
-        showPrompt = false;
 
         if (textNode != null) {
-            // Construct the glyph vector (using password characters or prompt text as
-            // appropriate)
             int n = textNode.getCharacterCount();
 
-            CharacterIterator ci = null;
-            if (textInput.isPassword()) {
-                StringBuilder buf = new StringBuilder(n);
-                for (int i = 0; i < n; i++) {
-                    buf.append(BULLET);
-                }
-
-                ci = new StringCharacterIterator(buf.toString());
-            } else {
-                if (n > 0) {
-                    ci= textNode.getCharacterIterator();
-                } else {
-                    String prompt = textInput.getPrompt();
-
-                    if (prompt != null) {
-                        ci = new StringCharacterIterator(prompt);
-                        showPrompt = true;
+            if (n > 0) {
+                CharacterIterator ci = null;
+                if (textInput.isPassword()) {
+                    StringBuilder buf = new StringBuilder(n);
+                    for (int i = 0; i < n; i++) {
+                        buf.append(BULLET);
                     }
-                }
-            }
 
-            if (ci != null) {
+                    ci = new StringCharacterIterator(buf.toString());
+                } else {
+                    ci= textNode.getCharacterIterator();
+                }
+
                 glyphVector = font.createGlyphVector(FONT_RENDER_CONTEXT, ci);
             }
         }
@@ -285,7 +256,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         graphics.setStroke(new BasicStroke());
 
         // Paint the background
-        graphics.setPaint(backgroundColor);
+        graphics.setColor(backgroundColor);
         graphics.fillRect(0, 0, width, height);
 
         if (debugBaseline) {
@@ -293,35 +264,41 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         }
 
         // Paint the bevel
-        graphics.setPaint(bevelColor);
+        graphics.setColor(bevelColor);
         GraphicsUtilities.drawLine(graphics, 1, 1, width - 2, Orientation.HORIZONTAL);
 
         // Paint the border
-        graphics.setPaint(borderColor);
+        graphics.setColor(borderColor);
         GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
 
         // Paint the content
-        boolean textValid = textInput.isTextValid();
+        if (FONT_RENDER_CONTEXT.isAntiAliased()) {
+            graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+                Platform.getTextAntialiasingHint());
+        }
 
-        if (glyphVector != null) {
-            if (FONT_RENDER_CONTEXT.isAntiAliased()) {
-                graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-                    Platform.getTextAntialiasingHint());
-            }
+        if (FONT_RENDER_CONTEXT.usesFractionalMetrics()) {
+            graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
+                RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+        }
 
-            if (FONT_RENDER_CONTEXT.usesFractionalMetrics()) {
-                graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
-                    RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-            }
+        LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
+        int ascent = Math.round(lm.getAscent());
 
-            LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
-            int ascent = Math.round(lm.getAscent());
+        String prompt = textInput.getPrompt();
+
+        if (glyphVector == null
+            && prompt != null
+            && !textInput.isFocused()) {
+            graphics.setFont(font);
+            graphics.setColor(promptColor);
+            graphics.drawString(prompt, padding.left - scrollLeft + 1, padding.top + ascent + 1);
+        } else {
+            boolean textValid = textInput.isTextValid();
 
             Color color;
             if (textInput.isEnabled()) {
-                if (showPrompt) {
-                    color = textInput.isFocused() ? null : promptColor;
-                } else if (!textValid) {
+                if (!textValid) {
                     color = invalidColor;
                 } else {
                     color = this.color;
@@ -330,59 +307,54 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                color = disabledColor;
             }
 
-            // TODO If all of the text is selected, don't bother doing this
-            if (color != null) {
-                graphics.setFont(font);
-                graphics.setPaint(color);
-                graphics.drawGlyphVector(glyphVector, padding.left - scrollLeft + 1, padding.top + ascent + 1);
-            }
+            // TODO Paint the selection text using multiple, non-overlapping clip rects
 
-            if (textInput.getSelectionLength() > 0) {
-                // Paint the selection
-                Graphics2D selectionGraphics = (Graphics2D)graphics.create();
-                selectionGraphics.clip(selection.getBounds());
-
-                Color selectionColor;
-                Color selectionBackgroundColor;
-
-                if (textInput.isFocused()) {
-                    selectionColor = this.selectionColor;
-                    selectionBackgroundColor = this.selectionBackgroundColor;
-                } else {
-                    selectionColor = inactiveSelectionColor;
-                    selectionBackgroundColor = inactiveSelectionBackgroundColor;
+            if (glyphVector != null) {
+                if (color != null) {
+                    graphics.setFont(font);
+                    graphics.setColor(color);
+                    graphics.drawGlyphVector(glyphVector, padding.left - scrollLeft + 1, padding.top + ascent + 1);
                 }
 
-                selectionGraphics.setPaint(selectionBackgroundColor);
-                selectionGraphics.fill(selection);
+                if (textInput.getSelectionLength() > 0) {
+                    // Paint the selection
+                    Graphics2D selectionGraphics = (Graphics2D)graphics.create();
+                    selectionGraphics.clip(selection.getBounds());
 
-                selectionGraphics.setPaint(selectionColor);
-                selectionGraphics.drawGlyphVector(glyphVector, padding.left - scrollLeft + 1, padding.top + ascent + 1);
+                    Color selectionColor;
+                    Color selectionBackgroundColor;
 
-                selectionGraphics.dispose();
+                    if (textInput.isFocused()) {
+                        selectionColor = this.selectionColor;
+                        selectionBackgroundColor = this.selectionBackgroundColor;
+                    } else {
+                        selectionColor = inactiveSelectionColor;
+                        selectionBackgroundColor = inactiveSelectionBackgroundColor;
+                    }
+
+                    selectionGraphics.setColor(selectionBackgroundColor);
+                    selectionGraphics.fill(selection);
+
+                    selectionGraphics.setColor(selectionColor);
+                    selectionGraphics.drawGlyphVector(glyphVector, padding.left - scrollLeft + 1, padding.top + ascent + 1);
+
+                    selectionGraphics.dispose();
+                }
             }
-        }
 
-        if (caret != null
-            && caretOn
-            && textInput.isFocused()) {
-            Color color;
-            if (!textValid) {
-                color = invalidColor;
-            } else {
-                color = Color.BLACK;
+            if (caret != null
+                && caretOn
+                && textInput.isFocused()) {
+                graphics.setColor(color);
+                graphics.fill(caret);
             }
-
-            graphics.setPaint(color);
-            graphics.fill(caret);
         }
     }
 
     public int getInsertionPoint(int x, int y) {
         int offset = -1;
 
-        if (glyphVector == null
-            || showPrompt) {
+        if (glyphVector == null) {
             offset = 0;
         } else {
             LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
@@ -901,7 +873,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
                     textInput.setSelection(selectionStart, selectionLength);
                 } else {
-                    anchorX = x;
+                    // TODO Set anchor offset
 
                     if (scheduledScrollSelectionCallback == null) {
                         scheduledScrollSelectionCallback =
@@ -1232,7 +1204,8 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     // Text input events
     @Override
     public void textNodeChanged(TextInput textInput, TextNode previousTextNode) {
-        invalidateComponent();
+        layout();
+        repaintComponent();
     }
 
     @Override
@@ -1247,12 +1220,13 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
     @Override
     public void passwordChanged(TextInput textInput) {
-        invalidateComponent();
+        layout();
+        repaintComponent();
     }
 
     @Override
     public void promptChanged(TextInput textInput, String previousPrompt) {
-        invalidateComponent();
+        repaintComponent();
     }
 
     @Override
@@ -1273,12 +1247,14 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     // Text input character events
     @Override
     public void charactersInserted(TextInput textInput, int index, int count) {
-        invalidateComponent();
+        layout();
+        repaintComponent();
     }
 
     @Override
     public void charactersRemoved(TextInput textInput, int index, int count) {
-        invalidateComponent();
+        layout();
+        repaintComponent();
     }
 
     // Text input selection events

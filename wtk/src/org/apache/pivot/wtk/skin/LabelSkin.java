@@ -452,7 +452,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
     public void setTextDecoration(TextDecoration textDecoration) {
         this.textDecoration = textDecoration;
-        invalidateComponent();
+        repaintComponent();
     }
 
     public final void setTextDecoration(String textDecoration) {

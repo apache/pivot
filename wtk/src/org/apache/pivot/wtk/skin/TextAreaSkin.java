@@ -1314,8 +1314,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                     int offset = getNextInsertionPoint(caretX, selectionEnd, scrollDirection);
                     if (offset != -1) {
                         textArea.setSelection(selectionStart, offset - selectionStart + 1);
-                        Bounds characterBounds = getCharacterBounds(offset);
-                        textArea.scrollAreaToVisible(characterBounds);
+                        scrollCharacterToVisible(offset);
                     }
 
                     break;
@@ -1326,8 +1325,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                     int offset = getNextInsertionPoint(caretX, selectionStart, scrollDirection);
                     if (offset != -1) {
                         textArea.setSelection(offset, selectionEnd - offset + 1);
-                        Bounds characterBounds = getCharacterBounds(offset);
-                        textArea.scrollAreaToVisible(characterBounds);
+                        scrollCharacterToVisible(offset);
                     }
 
                     break;
@@ -1449,14 +1447,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             showCaret(textArea.isFocused()
                 && textArea.getSelectionLength() == 0);
 
-            ApplicationContext.queueCallback(new Runnable() {
-                @Override
-                public void run() {
-                    Bounds characterBounds = getCharacterBounds(textArea.getSelectionStart());
-                    textArea.scrollAreaToVisible(0, characterBounds.y, characterBounds.width,
-                        characterBounds.height);
-                }
-            });
+            scrollCharacterToVisible(textArea.getSelectionStart());
         }
     }
 
@@ -1565,6 +1556,13 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
 
         return characterBounds;
+    }
+
+    private void scrollCharacterToVisible(int offset) {
+        TextArea textArea = (TextArea)getComponent();
+        Bounds characterBounds = getCharacterBounds(offset);
+        textArea.scrollAreaToVisible(0, characterBounds.y, characterBounds.width,
+            characterBounds.height);
     }
 
     public Color getColor() {
@@ -1992,10 +1990,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                         }
 
                         textArea.setSelection(offset, selectionLength);
-
-                        Bounds characterBounds = getCharacterBounds(offset);
-                        component.scrollAreaToVisible(0, characterBounds.y, characterBounds.width,
-                            characterBounds.height);
+                        scrollCharacterToVisible(offset);
 
                         consumed = true;
                     }
@@ -2014,10 +2009,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                         }
 
                         textArea.setSelection(selectionStart, selectionLength);
-
-                        Bounds characterBounds = getCharacterBounds(offset);
-                        component.scrollAreaToVisible(0, characterBounds.y, characterBounds.width,
-                            characterBounds.height);
+                        scrollCharacterToVisible(offset);
 
                         consumed = true;
                     }
