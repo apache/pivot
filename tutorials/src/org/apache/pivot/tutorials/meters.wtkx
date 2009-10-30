@@ -24,8 +24,8 @@ limitations under the License.
             <BoxPane orientation="vertical" styles="{padding:6, spacing:8}">
                 <Label text="Meters" styles="{font:{bold:true}}"/>
                 <BoxPane styles="{spacing:6}">
-                    <Meter percentage="0.4"/>
-                    <Label text="40%"/>
+                    <Meter percentage="0.5" text="50%" styles="{gridFrequency:1}"/>
+                    <Label text="50%"/>
                 </BoxPane>
                 <BoxPane styles="{spacing:6}">
                     <Meter percentage="0.4" styles="{gridFrequency:0.1}"/>
@@ -36,7 +36,7 @@ limitations under the License.
                     <Label text="75%"/>
                 </BoxPane>
                 <BoxPane styles="{spacing:6}">
-                    <Meter percentage="0.75" styles="{gridFrequency:0.1}"/>
+                    <Meter percentage="0.75" text="75%" styles="{gridFrequency:1}"/>
                     <Label text="75%"/>
                 </BoxPane>
                 <BoxPane styles="{spacing:6}">
