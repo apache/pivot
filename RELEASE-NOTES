@@ -18,10 +18,3 @@
 Release notes for Pivot 1.4:
 
 TBD
-
-Additional Notes
-----------------
-
-- Although the TextArea component is included in this release, it is not
-  completely functional. It works reliably in read-only mode, but editing
-  support is incomplete.
