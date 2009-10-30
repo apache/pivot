@@ -38,9 +38,14 @@ import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.Limits;
 import org.apache.pivot.wtk.ListButton;
 import org.apache.pivot.wtk.ListButtonSelectionListener;
+import org.apache.pivot.wtk.MessageType;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Point;
+import org.apache.pivot.wtk.Prompt;
+import org.apache.pivot.wtk.ScrollBar.Scope;
+import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.TextInput;
+import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.skin.ContainerSkin;
 import org.apache.pivot.wtk.text.validation.DoubleValidator;
 import org.apache.pivot.wtk.text.validation.IntValidator;
@@ -143,8 +148,12 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             control = addLimitsControl(dictionary, key, section);
         } else if (type == Insets.class) {
             control = addInsetsControl(dictionary, key, section);
+        } else if (type == Span.class) {
+            control = addSpanControl(dictionary, key, section);
         } else if (type == CornerRadii.class) {
             control = addCornerRadiiControl(dictionary, key, section);
+        } else if (type == Scope.class) {
+            control = addScopeControl(dictionary, key, section);
         } else if (type == Color.class) {
             control = addColorControl(dictionary, key, section);
         }
@@ -197,6 +206,10 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             updateDimensionsControl(dictionary, key);
         } else if (type == Limits.class) {
             updateLimitsControl(dictionary, key);
+        } else if (type == Span.class) {
+            updateSpanControl(dictionary, key);
+        } else if (type == Scope.class) {
+            updateScopeControl(dictionary, key);
         }
     }
 
@@ -219,6 +232,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
                     try {
                         dictionary.put(key, button.isSelected());
                     } catch (Exception exception) {
+                        displayErrorMessage(exception, button.getWindow());
                         button.setState(previousState);
                     } finally {
                         updating = false;
@@ -260,6 +274,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
                     try {
                         dictionary.put(key, Integer.parseInt(textInput.getText()));
                     } catch (Exception exception) {
+                        displayErrorMessage(exception, component.getWindow());
                         int value = (Integer)dictionary.get(key);
                         textInput.setText(String.valueOf(value));
                     }
@@ -299,6 +314,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
                     try {
                         dictionary.put(key, Float.parseFloat(textInput.getText()));
                     } catch (Exception exception) {
+                        displayErrorMessage(exception, component.getWindow());
                         float value = (Float)dictionary.get(key);
                         textInput.setText(String.valueOf(value));
                     }
@@ -338,6 +354,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
                     try {
                         dictionary.put(key, Double.parseDouble(textInput.getText()));
                     } catch (Exception exception) {
+                        displayErrorMessage(exception, component.getWindow());
                         double value = (Double)dictionary.get(key);
                         textInput.setText(String.valueOf(value));
                     }
@@ -375,6 +392,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
                     try {
                         dictionary.put(key, textInput.getText());
                     } catch (Exception exception) {
+                        displayErrorMessage(exception, component.getWindow());
                         String value = (String)dictionary.get(key);
                         textInput.setText(value == null ? "" : value);
                     }
@@ -415,6 +433,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
                     try {
                         dictionary.put(key, listButton.getSelectedItem());
                     } catch (Exception exception) {
+                        displayErrorMessage(exception, listButton.getWindow());
                         listButton.setSelectedIndex(previousSelectedIndex);
                     } finally {
                         updating = false;
@@ -466,6 +485,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
                         int x = Integer.parseInt(textInput.getText());
                         dictionary.put(key, new Point(x, point.y));
                     } catch (Exception exception) {
+                        displayErrorMessage(exception, component.getWindow());
                         textInput.setText(String.valueOf(point.x));
                     }
                 }
@@ -499,6 +519,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
                         int y = Integer.parseInt(textInput.getText());
                         dictionary.put(key, new Point(point.x, y));
                     } catch (Exception exception) {
+                        displayErrorMessage(exception, component.getWindow());
                         textInput.setText(String.valueOf(point.y));
                     }
                 }
@@ -557,6 +578,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
                         int width = Integer.parseInt(textInput.getText());
                         dictionary.put(key, new Dimensions(width, dimensions.height));
                     } catch (Exception exception) {
+                        displayErrorMessage(exception, component.getWindow());
                         textInput.setText(String.valueOf(dimensions.width));
                     }
                 }
@@ -590,6 +612,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
                         int height = Integer.parseInt(textInput.getText());
                         dictionary.put(key, new Dimensions(dimensions.width, height));
                     } catch (Exception exception) {
+                        displayErrorMessage(exception, component.getWindow());
                         textInput.setText(String.valueOf(dimensions.height));
                     }
                 }
@@ -648,6 +671,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
                         int min = Integer.parseInt(textInput.getText());
                         dictionary.put(key, new Limits(min, limits.max));
                     } catch (Exception exception) {
+                        displayErrorMessage(exception, component.getWindow());
                         textInput.setText(String.valueOf(limits.min));
                     }
                 }
@@ -681,6 +705,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
                         int max = Integer.parseInt(textInput.getText());
                         dictionary.put(key, new Limits(limits.min, max));
                     } catch (Exception exception) {
+                        displayErrorMessage(exception, component.getWindow());
                         textInput.setText(String.valueOf(limits.max));
                     }
                 }
@@ -740,6 +765,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
                         dictionary.put(key, new Insets(top, insets.left, insets.bottom,
                             insets.right));
                     } catch (Exception exception) {
+                        displayErrorMessage(exception, component.getWindow());
                         textInput.setText(String.valueOf(insets.top));
                     }
                 }
@@ -774,6 +800,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
                         dictionary.put(key, new Insets(insets.top, left, insets.bottom,
                             insets.right));
                     } catch (Exception exception) {
+                        displayErrorMessage(exception, component.getWindow());
                         textInput.setText(String.valueOf(insets.left));
                     }
                 }
@@ -808,6 +835,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
                         dictionary.put(key, new Insets(insets.top, insets.left, bottom,
                             insets.right));
                     } catch (Exception exception) {
+                        displayErrorMessage(exception, component.getWindow());
                         textInput.setText(String.valueOf(insets.bottom));
                     }
                 }
@@ -842,6 +870,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
                         dictionary.put(key, new Insets(insets.top, insets.left, insets.bottom,
                             right));
                     } catch (Exception exception) {
+                        displayErrorMessage(exception, component.getWindow());
                         textInput.setText(String.valueOf(insets.right));
                     }
                 }
@@ -853,6 +882,99 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         flowPane.add(label);
 
         return boxPane;
+    }
+
+    private Component addSpanControl(final Dictionary<String, Object> dictionary,
+        final String key, Form.Section section) {
+        Span span = (Span)dictionary.get(key);
+
+        BoxPane boxPane = new BoxPane(Orientation.VERTICAL);
+        section.add(boxPane);
+        Form.setLabel(boxPane, key);
+
+        FlowPane flowPane = new FlowPane();
+        flowPane.getStyles().put("alignToBaseline", true);
+        flowPane.getStyles().put("horizontalSpacing", 5);
+        boxPane.add(flowPane);
+
+        TextInput textInput = new TextInput();
+        textInput.setTextSize(10);
+        textInput.setMaximumLength(10);
+        textInput.setValidator(new IntValidator());
+        textInput.setText(span == null ? "" : String.valueOf(span.start));
+        flowPane.add(textInput);
+
+        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+            @Override
+            public void focusedChanged(Component component, Component obverseComponent) {
+                if (!component.isFocused()) {
+                    TextInput textInput = (TextInput)component;
+                    Span span = (Span)dictionary.get(key);
+
+                    try {
+                        int start = Integer.parseInt(textInput.getText());
+                        dictionary.put(key, new Span(start, span == null ? start : span.end));
+                    } catch (Exception exception) {
+                        displayErrorMessage(exception, component.getWindow());
+                        textInput.setText(span == null ? "" : String.valueOf(span.start));
+                    }
+                }
+            }
+        });
+
+        Label label = new Label("start");
+        label.getStyles().put("font", "{italic:true}");
+        flowPane.add(label);
+
+        flowPane = new FlowPane();
+        flowPane.getStyles().put("alignToBaseline", true);
+        flowPane.getStyles().put("horizontalSpacing", 5);
+        boxPane.add(flowPane);
+
+        textInput = new TextInput();
+        textInput.setTextSize(10);
+        textInput.setMaximumLength(10);
+        textInput.setValidator(new IntValidator());
+        textInput.setText(span == null ? "" : String.valueOf(span.end));
+        flowPane.add(textInput);
+
+        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+            @Override
+            public void focusedChanged(Component component, Component obverseComponent) {
+                if (!component.isFocused()) {
+                    TextInput textInput = (TextInput)component;
+                    Span span = (Span)dictionary.get(key);
+
+                    try {
+                        int end = Integer.parseInt(textInput.getText());
+                        dictionary.put(key, new Span(span == null ? end : span.start, end));
+                    } catch (Exception exception) {
+                        displayErrorMessage(exception, component.getWindow());
+                        textInput.setText(span == null ? "" : String.valueOf(span.end));
+                    }
+                }
+            }
+        });
+
+        label = new Label("end");
+        label.getStyles().put("font", "{italic:true}");
+        flowPane.add(label);
+
+        return boxPane;
+    }
+
+    private void updateSpanControl(Dictionary<String, Object> dictionary, String key) {
+        BoxPane boxPane = (BoxPane)controls.get(key);
+
+        if (boxPane != null) {
+            Span span = (Span)dictionary.get(key);
+
+            TextInput startTextInput = (TextInput)((FlowPane)boxPane.get(0)).get(0);
+            TextInput endTextInput = (TextInput)((FlowPane)boxPane.get(1)).get(0);
+
+            startTextInput.setText(span == null ? "" : String.valueOf(span.start));
+            endTextInput.setText(span == null ? "" : String.valueOf(span.end));
+        }
     }
 
     private Component addCornerRadiiControl(final Dictionary<String, Object> dictionary,
@@ -887,6 +1009,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
                         dictionary.put(key, new CornerRadii(topLeft, cornerRadii.topRight,
                             cornerRadii.bottomLeft, cornerRadii.bottomRight));
                     } catch (Exception exception) {
+                        displayErrorMessage(exception, component.getWindow());
                         textInput.setText(String.valueOf(cornerRadii.topLeft));
                     }
                 }
@@ -921,6 +1044,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
                         dictionary.put(key, new CornerRadii(cornerRadii.topLeft, topRight,
                             cornerRadii.bottomLeft, cornerRadii.bottomRight));
                     } catch (Exception exception) {
+                        displayErrorMessage(exception, component.getWindow());
                         textInput.setText(String.valueOf(cornerRadii.topRight));
                     }
                 }
@@ -955,6 +1079,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
                         dictionary.put(key, new CornerRadii(cornerRadii.topLeft,
                             cornerRadii.topRight, bottomLeft, cornerRadii.bottomRight));
                     } catch (Exception exception) {
+                        displayErrorMessage(exception, component.getWindow());
                         textInput.setText(String.valueOf(cornerRadii.bottomLeft));
                     }
                 }
@@ -989,6 +1114,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
                         dictionary.put(key, new CornerRadii(cornerRadii.topLeft,
                             cornerRadii.topRight, cornerRadii.bottomLeft, bottomRight));
                     } catch (Exception exception) {
+                        displayErrorMessage(exception, component.getWindow());
                         textInput.setText(String.valueOf(cornerRadii.bottomRight));
                     }
                 }
@@ -1000,6 +1126,138 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         flowPane.add(label);
 
         return boxPane;
+    }
+
+    private Component addScopeControl(final Dictionary<String, Object> dictionary,
+        final String key, Form.Section section) {
+        Scope scope = (Scope)dictionary.get(key);
+
+        BoxPane boxPane = new BoxPane(Orientation.VERTICAL);
+        section.add(boxPane);
+        Form.setLabel(boxPane, key);
+
+        FlowPane flowPane = new FlowPane();
+        flowPane.getStyles().put("alignToBaseline", true);
+        flowPane.getStyles().put("horizontalSpacing", 5);
+        boxPane.add(flowPane);
+
+        TextInput textInput = new TextInput();
+        textInput.setTextSize(10);
+        textInput.setMaximumLength(10);
+        textInput.setValidator(new IntValidator());
+        textInput.setText(scope == null ? "" : String.valueOf(scope.start));
+        flowPane.add(textInput);
+
+        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+            @Override
+            public void focusedChanged(Component component, Component obverseComponent) {
+                if (!component.isFocused()) {
+                    TextInput textInput = (TextInput)component;
+                    Scope scope = (Scope)dictionary.get(key);
+
+                    try {
+                        int start = Integer.parseInt(textInput.getText());
+                        dictionary.put(key, new Scope(start, scope == null ? start : scope.end,
+                            scope == null ? start : scope.extent));
+                    } catch (Exception exception) {
+                        displayErrorMessage(exception, component.getWindow());
+                        textInput.setText(scope == null ? "" : String.valueOf(scope.start));
+                    }
+                }
+            }
+        });
+
+        Label label = new Label("start");
+        label.getStyles().put("font", "{italic:true}");
+        flowPane.add(label);
+
+        flowPane = new FlowPane();
+        flowPane.getStyles().put("alignToBaseline", true);
+        flowPane.getStyles().put("horizontalSpacing", 5);
+        boxPane.add(flowPane);
+
+        textInput = new TextInput();
+        textInput.setTextSize(10);
+        textInput.setMaximumLength(10);
+        textInput.setValidator(new IntValidator());
+        textInput.setText(scope == null ? "" : String.valueOf(scope.end));
+        flowPane.add(textInput);
+
+        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+            @Override
+            public void focusedChanged(Component component, Component obverseComponent) {
+                if (!component.isFocused()) {
+                    TextInput textInput = (TextInput)component;
+                    Scope scope = (Scope)dictionary.get(key);
+
+                    try {
+                        int end = Integer.parseInt(textInput.getText());
+                        dictionary.put(key, new Scope(scope == null ? end : scope.start, end,
+                            scope == null ? end : scope.extent));
+                    } catch (Exception exception) {
+                        displayErrorMessage(exception, component.getWindow());
+                        textInput.setText(scope == null ? "" : String.valueOf(scope.end));
+                    }
+                }
+            }
+        });
+
+        label = new Label("end");
+        label.getStyles().put("font", "{italic:true}");
+        flowPane.add(label);
+
+        flowPane = new FlowPane();
+        flowPane.getStyles().put("alignToBaseline", true);
+        flowPane.getStyles().put("horizontalSpacing", 5);
+        boxPane.add(flowPane);
+
+        textInput = new TextInput();
+        textInput.setTextSize(10);
+        textInput.setMaximumLength(10);
+        textInput.setValidator(new IntValidator());
+        textInput.setText(scope == null ? "" : String.valueOf(scope.extent));
+        flowPane.add(textInput);
+
+        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+            @Override
+            public void focusedChanged(Component component, Component obverseComponent) {
+                if (!component.isFocused()) {
+                    TextInput textInput = (TextInput)component;
+                    Scope scope = (Scope)dictionary.get(key);
+
+                    try {
+                        int extent = Integer.parseInt(textInput.getText());
+                        dictionary.put(key, new Scope(scope == null ? extent : scope.start,
+                            scope == null ? extent : scope.end, extent));
+                    } catch (Exception exception) {
+                        displayErrorMessage(exception, component.getWindow());
+                        textInput.setText(scope == null ? "" : String.valueOf(scope.extent));
+                    }
+                }
+            }
+        });
+
+        label = new Label("extent");
+        label.getStyles().put("font", "{italic:true}");
+        flowPane.add(label);
+
+        return boxPane;
+    }
+
+    private void updateScopeControl(Dictionary<String, Object> dictionary, String key) {
+        BoxPane boxPane = (BoxPane)controls.get(key);
+
+        if (boxPane != null) {
+            Scope scope = (Scope)dictionary.get(key);
+
+            TextInput startTextInput = (TextInput)((FlowPane)boxPane.get(0)).get(0);
+            TextInput endTextInput = (TextInput)((FlowPane)boxPane.get(1)).get(0);
+            TextInput extentTextInput = (TextInput)((FlowPane)boxPane.get(2)).get(0);
+
+            startTextInput.setText(scope == null ? "" : String.valueOf(scope.start));
+            endTextInput.setText(scope == null ? "" : String.valueOf(scope.end));
+            extentTextInput.setText(scope == null ? "" : String.valueOf(scope.extent));
+        }
     }
 
     private Component addColorControl(final Dictionary<String, Object> dictionary,
@@ -1019,11 +1277,22 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
                 try {
                     dictionary.put(key, colorChooserButton.getSelectedColor());
                 } catch (Exception exception) {
+                    displayErrorMessage(exception, colorChooserButton.getWindow());
                     dictionary.put(key, previousSelectedColor);
                 }
             }
         });
 
         return colorChooserButton;
+    }
+
+    private void displayErrorMessage(Exception exception, Window window) {
+        String message = exception.getLocalizedMessage();
+
+        if (message == null) {
+            message = exception.getClass().getSimpleName();
+        }
+
+        Prompt.prompt(MessageType.ERROR, message, window);
     }
 }

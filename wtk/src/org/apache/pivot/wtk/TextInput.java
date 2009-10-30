@@ -507,6 +507,14 @@ public class TextInput extends Component {
         }
     }
 
+    public final void setSelection(Span selection) {
+        if (selection == null) {
+            throw new IllegalArgumentException("selection is null.");
+        }
+
+        setSelection(Math.min(selection.start, selection.end), (int)selection.getLength());
+    }
+
     /**
      * Selects all text.
      */

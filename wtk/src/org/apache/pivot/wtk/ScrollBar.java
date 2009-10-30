@@ -24,6 +24,21 @@ import org.apache.pivot.util.ListenerList;
  * used by scroll panes.
  */
 public class ScrollBar extends Container {
+    /**
+     * Class representing a scroll bar's scope.
+     */
+    public static final class Scope {
+        public final int start;
+        public final int end;
+        public final int extent;
+
+        public Scope(int start, int end, int extent) {
+            this.start = start;
+            this.end = end;
+            this.extent = extent;
+        }
+    }
+
     private static class ScrollBarListenerList extends ListenerList<ScrollBarListener>
         implements ScrollBarListener {
         @Override
@@ -168,6 +183,10 @@ public class ScrollBar extends Container {
         setScope(start, end, extent);
     }
 
+    public Scope getScope() {
+        return new Scope(start, end, extent);
+    }
+
     public void setScope(int start, int end, int extent) {
         int previousStart = this.start;
         int previousEnd = this.end;
@@ -195,6 +214,14 @@ public class ScrollBar extends Container {
             scrollBarListeners.scopeChanged(this, previousStart, previousEnd,
                 previousExtent);
         }
+    }
+
+    public final void setScope(Scope scope) {
+        if (scope == null) {
+            throw new IllegalArgumentException("scope is null.");
+        }
+
+        setScope(scope.start, scope.end, scope.extent);
     }
 
     public int getValue() {

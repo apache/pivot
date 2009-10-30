@@ -242,6 +242,10 @@ public class ListButton extends Button {
         int previousSelectedIndex = this.selectedIndex;
 
         if (previousSelectedIndex != selectedIndex) {
+            if (selectedIndex < -1 || selectedIndex >= listData.getLength()) {
+                throw new IndexOutOfBoundsException();
+            }
+
             this.selectedIndex = selectedIndex;
             listButtonSelectionListeners.selectedIndexChanged(this, previousSelectedIndex);
         }

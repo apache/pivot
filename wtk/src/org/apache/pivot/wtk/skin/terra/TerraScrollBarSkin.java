@@ -819,7 +819,7 @@ public class TerraScrollBarSkin extends ContainerSkin
     public void setMinimumHandleLength(int minimumHandleLength) {
         if (minimumHandleLength != this.minimumHandleLength) {
             this.minimumHandleLength = minimumHandleLength;
-            repaintComponent();
+            invalidateComponent();
         }
     }
 
