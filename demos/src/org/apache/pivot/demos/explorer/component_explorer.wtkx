@@ -188,21 +188,64 @@ limitations under the License.
                                                     src="@boundedrange/scroll_bar.wtkx"
                                                     horizontalScrollBarPolicy="auto"
                                                     verticalScrollBarPolicy="auto"/>
+                                                <explorer:ComponentNode text="Slider"
+                                                    icon="@page_white.png"
+                                                    src="@boundedrange/slider.wtkx"
+                                                    horizontalScrollBarPolicy="auto"
+                                                    verticalScrollBarPolicy="auto"/>
+                                                <explorer:ComponentNode text="Spinner"
+                                                    icon="@page_white.png"
+                                                    src="@boundedrange/spinner.wtkx"
+                                                    horizontalScrollBarPolicy="auto"
+                                                    verticalScrollBarPolicy="auto"/>
                                             </content:TreeBranch>
                                             <content:TreeBranch text="Calendars"
                                                 icon="@folder.png">
+                                                <explorer:ComponentNode text="Calendar"
+                                                    icon="@page_white.png"
+                                                    src="@calendars/calendar.wtkx"
+                                                    horizontalScrollBarPolicy="auto"
+                                                    verticalScrollBarPolicy="auto"/>
+                                                <explorer:ComponentNode text="CalendarButton"
+                                                    icon="@page_white.png"
+                                                    src="@calendars/calendar_button.wtkx"
+                                                    horizontalScrollBarPolicy="auto"
+                                                    verticalScrollBarPolicy="auto"/>
+                                            </content:TreeBranch>
+                                            <content:TreeBranch text="Color Choosers"
+                                                icon="@folder.png">
+                                                <explorer:ComponentNode text="ColorChooser"
+                                                    icon="@page_white.png"
+                                                    src="@colorchoosers/color_chooser.wtkx"
+                                                    horizontalScrollBarPolicy="auto"
+                                                    verticalScrollBarPolicy="auto"/>
+                                                <explorer:ComponentNode text="ColorChooserButton"
+                                                    icon="@page_white.png"
+                                                    src="@colorchoosers/color_chooser_button.wtkx"
+                                                    horizontalScrollBarPolicy="auto"
+                                                    verticalScrollBarPolicy="auto"/>
                                             </content:TreeBranch>
                                             <content:TreeBranch text="Menus"
                                                 icon="@folder.png">
+                                                <explorer:ComponentNode text="MenuBar"
+                                                    icon="@page_white.png"
+                                                    src="@menus/menu_bar.wtkx"
+                                                    horizontalScrollBarPolicy="auto"
+                                                    verticalScrollBarPolicy="auto"/>
+                                                <explorer:ComponentNode text="MenuButton"
+                                                    icon="@page_white.png"
+                                                    src="@menus/menu_button.wtkx"
+                                                    horizontalScrollBarPolicy="auto"
+                                                    verticalScrollBarPolicy="auto"/>
                                             </content:TreeBranch>
-                                            <content:TreeBranch text="Table Views"
+                                            <content:TreeBranch text="Tables"
                                                 icon="@folder.png">
                                             </content:TreeBranch>
-                                            <content:TreeBranch text="Tree Views"
+                                            <content:TreeBranch text="Trees"
                                                 icon="@folder.png">
                                                 <explorer:ComponentNode text="TreeView"
                                                     icon="@page_white.png"
-                                                    src="@treeview/tree_view.wtkx"
+                                                    src="@trees/tree_view.wtkx"
                                                     horizontalScrollBarPolicy="fill_to_capacity"
                                                     verticalScrollBarPolicy="auto"/>
                                             </content:TreeBranch>

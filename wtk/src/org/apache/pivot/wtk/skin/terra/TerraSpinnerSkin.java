@@ -796,7 +796,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
 
     public void setSizeToContent(boolean sizeToContent) {
         this.sizeToContent = sizeToContent;
-        invalidateComponent();
+        invalidateContent();
     }
 
     // Spinner.Skin methods

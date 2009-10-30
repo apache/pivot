@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.wtk.skin.terra;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -435,7 +436,6 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     private boolean showHighlight;
     private boolean showBranchControls;
     private Color branchControlColor;
-    private Color branchControlDisabledColor;
     private Color branchControlSelectionColor;
     private Color branchControlInactiveSelectionColor;
     private Color gridColor;
@@ -471,7 +471,6 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         showHighlight = true;
         showBranchControls = true;
         branchControlColor = theme.getColor(18);
-        branchControlDisabledColor = theme.getColor(19);
         branchControlSelectionColor = theme.getColor(4);
         branchControlInactiveSelectionColor = theme.getColor(19);
         gridColor = theme.getColor(11);
@@ -607,19 +606,14 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
                     Color branchControlColor;
 
-                    if (treeView.isEnabled()
-                        && !disabled) {
-                        if (selected) {
-                            if (treeView.isFocused()) {
-                                branchControlColor = branchControlSelectionColor;
-                            } else {
-                                branchControlColor = branchControlInactiveSelectionColor;
-                            }
+                    if (selected) {
+                        if (treeView.isFocused()) {
+                            branchControlColor = branchControlSelectionColor;
                         } else {
-                            branchControlColor = this.branchControlColor;
+                            branchControlColor = branchControlInactiveSelectionColor;
                         }
                     } else {
-                        branchControlColor = branchControlDisabledColor;
+                        branchControlColor = this.branchControlColor;
                     }
 
                     GeneralPath shape = new GeneralPath();
@@ -639,11 +633,17 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
                     shape.closePath();
 
-                    graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                    Graphics2D branchControlGraphics = (Graphics2D)graphics.create();
+                    branchControlGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                         RenderingHints.VALUE_ANTIALIAS_ON);
-                    graphics.setPaint(branchControlColor);
-
-                    graphics.fill(shape);
+                    if (!treeView.isEnabled()
+                        || disabled) {
+                        branchControlGraphics.setComposite
+                            (AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+                    }
+                    branchControlGraphics.setPaint(branchControlColor);
+                    branchControlGraphics.fill(shape);
+                    branchControlGraphics.dispose();
                 }
 
                 nodeX += indent + spacing;
@@ -1049,32 +1049,6 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     public final void setBranchControlColor(int branchControlColor) {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
         setBranchControlColor(theme.getColor(branchControlColor));
-    }
-
-    public Color getBranchControlDisabledColor() {
-        return branchControlDisabledColor;
-    }
-
-    public void setBranchControlDisabledColor(Color branchControlDisabledColor) {
-        if (branchControlDisabledColor == null) {
-            throw new IllegalArgumentException("branchControlDisabledColor is null.");
-        }
-
-        this.branchControlDisabledColor = branchControlDisabledColor;
-        repaintComponent();
-    }
-
-    public void setBranchControlDisabledColor(String branchControlDisabledColor) {
-        if (branchControlDisabledColor == null) {
-            throw new IllegalArgumentException("branchControlDisabledColor is null.");
-        }
-
-        setBranchControlDisabledColor(GraphicsUtilities.decodeColor(branchControlDisabledColor));
-    }
-
-    public final void setBranchControlDisabledColor(int branchControlDisabledColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
-        setBranchControlDisabledColor(theme.getColor(branchControlDisabledColor));
     }
 
     public Color getBranchControlSelectionColor() {

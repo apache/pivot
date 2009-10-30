@@ -21,9 +21,12 @@ import java.awt.Color;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.EnumList;
 import org.apache.pivot.collections.HashMap;
+import org.apache.pivot.util.CalendarDate;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonStateListener;
+import org.apache.pivot.wtk.CalendarButton;
+import org.apache.pivot.wtk.CalendarButtonSelectionListener;
 import org.apache.pivot.wtk.Checkbox;
 import org.apache.pivot.wtk.ColorChooserButton;
 import org.apache.pivot.wtk.ColorChooserButtonSelectionListener;
@@ -156,6 +159,8 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             control = addScopeControl(dictionary, key, section);
         } else if (type == Color.class) {
             control = addColorControl(dictionary, key, section);
+        } else if (type == CalendarDate.class) {
+            control = addCalendarDateControl(dictionary, key, section);
         }
 
         if (control != null) {
@@ -210,6 +215,10 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             updateSpanControl(dictionary, key);
         } else if (type == Scope.class) {
             updateScopeControl(dictionary, key);
+        } else if (type == Color.class) {
+            updateColorControl(dictionary, key);
+        } else if (type == CalendarDate.class) {
+            updateCalendarDateControl(dictionary, key);
         }
     }
 
@@ -1284,6 +1293,51 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         });
 
         return colorChooserButton;
+    }
+
+    private void updateColorControl(Dictionary<String, Object> dictionary, String key) {
+        ColorChooserButton colorChooserButton = (ColorChooserButton)controls.get(key);
+
+        if (colorChooserButton != null) {
+            Color value = (Color)dictionary.get(key);
+            colorChooserButton.setSelectedColor(value);
+        }
+    }
+
+    private Component addCalendarDateControl(final Dictionary<String, Object> dictionary,
+        final String key, Form.Section section) {
+        CalendarDate calendarDate = (CalendarDate)dictionary.get(key);
+
+        CalendarButton calendarButton = new CalendarButton();
+        calendarButton.setMinimumPreferredWidth(75);
+        calendarButton.setSelectedDate(calendarDate);
+        section.add(calendarButton);
+        Form.setLabel(calendarButton, key);
+
+        calendarButton.getCalendarButtonSelectionListeners().add
+            (new CalendarButtonSelectionListener() {
+            @Override
+            public void selectedDateChanged(CalendarButton calendarButton,
+                CalendarDate previousSelectedDate) {
+                try {
+                    dictionary.put(key, calendarButton.getSelectedDate());
+                } catch (Exception exception) {
+                    displayErrorMessage(exception, calendarButton.getWindow());
+                    dictionary.put(key, previousSelectedDate);
+                }
+            }
+        });
+
+        return calendarButton;
+    }
+
+    private void updateCalendarDateControl(Dictionary<String, Object> dictionary, String key) {
+        CalendarButton calendarButton = (CalendarButton)controls.get(key);
+
+        if (calendarButton != null) {
+            CalendarDate value = (CalendarDate)dictionary.get(key);
+            calendarButton.setSelectedDate(value);
+        }
     }
 
     private void displayErrorMessage(Exception exception, Window window) {
