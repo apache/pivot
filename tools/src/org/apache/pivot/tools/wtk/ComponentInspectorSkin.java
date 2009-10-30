@@ -42,6 +42,7 @@ import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.skin.ContainerSkin;
+import org.apache.pivot.wtk.text.validation.DoubleValidator;
 import org.apache.pivot.wtk.text.validation.IntValidator;
 import org.apache.pivot.wtk.text.validation.FloatValidator;
 
@@ -128,6 +129,8 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             control = addIntControl(dictionary, key, section);
         } else if (type == Float.TYPE) {
             control = addFloatControl(dictionary, key, section);
+        } else if (type == Double.TYPE) {
+            control = addDoubleControl(dictionary, key, section);
         } else if (type == String.class) {
             control = addStringControl(dictionary, key, section);
         } else if (type.isEnum()) {
@@ -182,6 +185,8 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             updateIntControl(dictionary, key);
         } else if (type == Float.TYPE) {
             updateFloatControl(dictionary, key);
+        } else if (type == Double.TYPE) {
+            updateDoubleControl(dictionary, key);
         } else if (type == String.class) {
             updateStringControl(dictionary, key);
         } else if (type.isEnum()) {
@@ -309,6 +314,45 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
 
         if (textInput != null) {
             float value = (Float)dictionary.get(key);
+            textInput.setText(String.valueOf(value));
+        }
+    }
+
+    private Component addDoubleControl(final Dictionary<String, Object> dictionary,
+        final String key, Form.Section section) {
+        double value = (Double)dictionary.get(key);
+
+        TextInput textInput = new TextInput();
+        textInput.setTextSize(14);
+        textInput.setValidator(new DoubleValidator());
+        textInput.setText(String.valueOf(value));
+        section.add(textInput);
+        Form.setLabel(textInput, key);
+
+        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+            @Override
+            public void focusedChanged(Component component, Component obverseComponent) {
+                if (!component.isFocused()) {
+                    TextInput textInput = (TextInput)component;
+
+                    try {
+                        dictionary.put(key, Double.parseDouble(textInput.getText()));
+                    } catch (Exception exception) {
+                        double value = (Double)dictionary.get(key);
+                        textInput.setText(String.valueOf(value));
+                    }
+                }
+            }
+        });
+
+        return textInput;
+    }
+
+    private void updateDoubleControl(Dictionary<String, Object> dictionary, String key) {
+        TextInput textInput = (TextInput)controls.get(key);
+
+        if (textInput != null) {
+            double value = (Double)dictionary.get(key);
             textInput.setText(String.valueOf(value));
         }
     }

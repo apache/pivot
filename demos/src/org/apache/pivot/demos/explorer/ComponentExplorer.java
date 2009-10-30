@@ -29,6 +29,7 @@ import org.apache.pivot.tools.wtk.ComponentStyleInspector;
 import org.apache.pivot.tools.wtk.EventLogger;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Border;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentMouseButtonListener;
@@ -36,6 +37,7 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.ScrollPane;
+import org.apache.pivot.wtk.TabPane;
 import org.apache.pivot.wtk.TreeView;
 import org.apache.pivot.wtk.TreeViewSelectionListener;
 import org.apache.pivot.wtk.Window;
@@ -46,9 +48,12 @@ public class ComponentExplorer implements Application {
     private TreeView treeView = null;
     private ScrollPane scrollPane = null;
     private Border contentPane = null;
+    private TabPane inspectorTabPane = null;
     private ComponentPropertyInspector componentPropertyInspector = null;
     private ComponentStyleInspector componentStyleInspector = null;
     private EventLogger eventLogger = null;
+
+    public static final String CLASS_PROPERTY = "class";
 
     @Override
     public void startup(Display display, Map<String, String> properties)
@@ -60,6 +65,7 @@ public class ComponentExplorer implements Application {
         treeView = wtkxSerializer.getValue("treeView");
         scrollPane = wtkxSerializer.getValue("scrollPane");
         contentPane = wtkxSerializer.getValue("contentPane");
+        inspectorTabPane = wtkxSerializer.getValue("inspectorTabPane");
         componentPropertyInspector = wtkxSerializer.getValue("componentPropertyInspector");
         componentStyleInspector = wtkxSerializer.getValue("componentStyleInspector");
         eventLogger = wtkxSerializer.getValue("eventLogger");
@@ -74,6 +80,8 @@ public class ComponentExplorer implements Application {
                 if (node instanceof ComponentNode) {
                     ComponentNode componentNode = (ComponentNode)node;
 
+                    inspectorTabPane.setVisible(true);
+
                     WTKXSerializer wtkxSerializer = new WTKXSerializer();
                     try {
                         component = (Component)wtkxSerializer.readObject(componentNode.getSrc());
@@ -87,6 +95,8 @@ public class ComponentExplorer implements Application {
                         (componentNode.getHorizontalScrollBarPolicy());
                     scrollPane.setVerticalScrollBarPolicy
                         (componentNode.getVerticalScrollBarPolicy());
+                } else {
+                    inspectorTabPane.setVisible(false);
                 }
 
                 contentPane.setContent(component);
@@ -117,15 +127,41 @@ public class ComponentExplorer implements Application {
             }
         });
 
-        treeView.expandAll();
+        Path initialSelectedPath = null;
 
+        String classProperty = properties.get(CLASS_PROPERTY);
         Tree.ItemIterator<?> itemIterator = Tree.depthFirstIterator(treeView.getTreeData());
         while (itemIterator.hasNext()) {
             Object node = itemIterator.next();
+
             if (node instanceof ComponentNode) {
-                treeView.setSelectedPath(itemIterator.getPath());
-                break;
+                ComponentNode componentNode = (ComponentNode)node;
+
+                if (classProperty != null) {
+                    if (componentNode.getText().equals(classProperty)) {
+                        initialSelectedPath = itemIterator.getPath();
+                        break;
+                    }
+                } else {
+                    initialSelectedPath = itemIterator.getPath();
+                    break;
+                }
             }
+        }
+
+        if (initialSelectedPath != null) {
+            treeView.setSelectedPath(initialSelectedPath);
+
+            Path branchPath = new Path(initialSelectedPath, initialSelectedPath.getLength() - 1);
+            treeView.expandBranch(branchPath);
+
+            final Path path = initialSelectedPath;
+            ApplicationContext.queueCallback(new Runnable() {
+                @Override
+                public void run() {
+                    treeView.scrollAreaToVisible(treeView.getNodeBounds(path));
+                }
+            });
         }
 
         window.open(display);
