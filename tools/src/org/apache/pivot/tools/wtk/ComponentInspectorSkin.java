@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.tools.wtk;
 
+import java.awt.Color;
+
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.EnumList;
 import org.apache.pivot.collections.HashMap;
@@ -23,6 +25,8 @@ import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonStateListener;
 import org.apache.pivot.wtk.Checkbox;
+import org.apache.pivot.wtk.ColorChooser;
+import org.apache.pivot.wtk.ColorChooserSelectionListener;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentStateListener;
 import org.apache.pivot.wtk.CornerRadii;
@@ -138,6 +142,8 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             control = addInsetsControl(dictionary, key, section);
         } else if (type == CornerRadii.class) {
             control = addCornerRadiiControl(dictionary, key, section);
+        } else if (type == Color.class) {
+            control = addColorControl(dictionary, key, section);
         }
 
         if (control != null) {
@@ -950,5 +956,29 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         flowPane.add(label);
 
         return boxPane;
+    }
+
+    private Component addColorControl(final Dictionary<String, Object> dictionary,
+        final String key, Form.Section section) {
+        Color color = (Color)dictionary.get(key);
+
+        ColorChooser colorChooser = new ColorChooser();
+        colorChooser.setSelectedColor(color);
+        section.add(colorChooser);
+        Form.setLabel(colorChooser, key);
+
+        colorChooser.getColorChooserSelectionListeners().add(new ColorChooserSelectionListener() {
+            @Override
+            public void selectedColorChanged(ColorChooser colorChooser,
+                Color previousSelectedColor) {
+                try {
+                    dictionary.put(key, colorChooser.getSelectedColor());
+                } catch (Exception exception) {
+                    dictionary.put(key, previousSelectedColor);
+                }
+            }
+        });
+
+        return colorChooser;
     }
 }

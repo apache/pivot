@@ -178,7 +178,6 @@ public class TerraExpanderSkin extends ExpanderSkin
     private Color titleBarBackgroundColor;
     private Color titleBarBorderColor;
     private Color shadeButtonColor;
-    private Color shadeButtonBackgroundColor;
     private Color borderColor;
     private Insets padding;
 
@@ -214,7 +213,6 @@ public class TerraExpanderSkin extends ExpanderSkin
         titleBarBackgroundColor = theme.getColor(10);
         titleBarBorderColor = theme.getColor(7);
         shadeButtonColor = theme.getColor(7);
-        shadeButtonBackgroundColor = theme.getColor(4);
         borderColor = theme.getColor(7);
         padding = new Insets(4);
 
@@ -515,24 +513,6 @@ public class TerraExpanderSkin extends ExpanderSkin
         }
 
         setShadeButtonColor(GraphicsUtilities.decodeColor(shadeButtonColor));
-    }
-
-    public Color getShadeButtonBackgroundColor() {
-        return shadeButtonBackgroundColor;
-    }
-
-    public void setShadeButtonBackgroundColor(Color shadeButtonBackgroundColor) {
-        this.shadeButtonBackgroundColor = shadeButtonBackgroundColor;
-        shadeButton.getStyles().put("shadeButtonBackgroundColor", shadeButtonBackgroundColor);
-        repaintComponent();
-    }
-
-    public final void setShadeButtonBackgroundColor(String shadeButtonBackgroundColor) {
-        if (shadeButtonBackgroundColor == null) {
-            throw new IllegalArgumentException("shadeButtonBackgroundColor is null.");
-        }
-
-        setShadeButtonBackgroundColor(GraphicsUtilities.decodeColor(shadeButtonBackgroundColor));
     }
 
     public Color getBorderColor() {

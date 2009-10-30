@@ -117,7 +117,8 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
         public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
             boolean consumed = super.mouseUp(component, button, x, y);
 
-            if (button == Mouse.Button.LEFT) {
+            if (button == Mouse.Button.LEFT
+                && Mouse.getCapturer() == component) {
                 Mouse.release();
             }
 
@@ -236,7 +237,8 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
         public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
             boolean consumed = super.mouseUp(component, button, x, y);
 
-            if (button == Mouse.Button.LEFT) {
+            if (button == Mouse.Button.LEFT
+                && Mouse.getCapturer() == component) {
                 Mouse.release();
             }
 
