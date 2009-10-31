@@ -66,6 +66,8 @@ class EventLoggerSkin extends ContainerSkin implements EventLoggerListener {
     @WTKX private TreeView declaredEventsTreeView = null;
     @WTKX private TableView firedEventsTableView = null;
 
+    private boolean updating = false;
+
     private static TreeNodeComparator treeNodeComparator = new TreeNodeComparator();
 
     @Override
@@ -99,8 +101,6 @@ class EventLoggerSkin extends ContainerSkin implements EventLoggerListener {
         wtkxSerializer.bind(this, EventLoggerSkin.class);
 
         declaredEventsTreeView.getTreeViewNodeStateListeners().add(new TreeViewNodeStateListener() {
-            private boolean updating = false;
-
             @Override
             public void nodeCheckStateChanged(TreeView treeView, Path path,
                 TreeView.NodeCheckState previousCheckState) {
@@ -231,17 +231,29 @@ class EventLoggerSkin extends ContainerSkin implements EventLoggerListener {
 
         ArrayList<TreeNode> treeData = new ArrayList<TreeNode>(treeNodeComparator);
 
-        for (Class<?> listenerInterface : buckets) {
-            TreeBranch treeBranch = new TreeBranch(listenerInterface.getSimpleName());
-            treeBranch.setComparator(treeNodeComparator);
-            treeData.add(treeBranch);
+        updating = true;
+        try {
+            for (Class<?> listenerInterface : buckets) {
+                TreeBranch treeBranch = new TreeBranch(listenerInterface.getSimpleName());
+                treeBranch.setComparator(treeNodeComparator);
+                treeData.add(treeBranch);
 
-            for (Method event : buckets.get(listenerInterface)) {
-                treeBranch.add(new EventNode(event));
+                for (Method event : buckets.get(listenerInterface)) {
+                    treeBranch.add(new EventNode(event));
+                    eventLogger.includeEvent(event);
+                }
             }
-        }
 
-        declaredEventsTreeView.setTreeData(treeData);
+            declaredEventsTreeView.setTreeData(treeData);
+
+            Sequence.Tree.ItemIterator<TreeNode> iter = Sequence.Tree.depthFirstIterator(treeData);
+            while (iter.hasNext()) {
+                iter.next();
+                declaredEventsTreeView.setNodeChecked(iter.getPath(), true);
+            }
+        } finally {
+            updating = false;
+        }
     }
 
     @Override

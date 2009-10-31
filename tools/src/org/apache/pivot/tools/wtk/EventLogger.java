@@ -137,14 +137,17 @@ public class EventLogger extends Container {
         Component previousSource = this.source;
 
         if (source != previousSource) {
-            this.source = source;
-
             if (previousSource != null) {
-                unregisterEventListeners(previousSource);
+                unregisterEventListeners();
             }
 
+            this.source = source;
+
+            declaredEvents.clear();
+            includeEvents.clear();
+
             if (source != null) {
-                registerEventListeners(source);
+                registerEventListeners();
             }
 
             eventLoggerListeners.sourceChanged(this, previousSource);
@@ -177,9 +180,7 @@ public class EventLogger extends Container {
         return includeEvents.contains(event);
     }
 
-    private void registerEventListeners(Component source) {
-        declaredEvents.clear();
-
+    private void registerEventListeners() {
         Method[] methods = source.getClass().getMethods();
 
         for (int i = 0; i < methods.length; i++) {
@@ -244,10 +245,53 @@ public class EventLogger extends Container {
         }
     }
 
-    private void unregisterEventListeners(Component source) {
-        declaredEvents.clear();
+    private void unregisterEventListeners() {
+        Method[] methods = source.getClass().getMethods();
 
-        // TODO
+        for (int i = 0; i < methods.length; i++) {
+            Method method = methods[i];
+
+            if (ListenerList.class.isAssignableFrom(method.getReturnType())
+                && (method.getModifiers() & Modifier.STATIC) == 0) {
+                ParameterizedType genericType = (ParameterizedType)method.getGenericReturnType();
+                Type[] typeArguments = genericType.getActualTypeArguments();
+
+                if (typeArguments.length == 1) {
+                    Class<?> listenerInterface = (Class<?>)typeArguments[0];
+
+                    // Get the listener list
+                    Object listenerList;
+                    try {
+                        listenerList = method.invoke(source);
+                    } catch (InvocationTargetException exception) {
+                        throw new RuntimeException(exception);
+                    } catch (IllegalAccessException exception) {
+                        throw new RuntimeException(exception);
+                    }
+
+                    // Get the listener for this interface
+                    Object listener = eventListenerProxies.get(listenerInterface);
+
+                    // Remove the listener
+                    Class<?> listenerListClass = listenerList.getClass();
+                    Method removeMethod;
+                    try {
+                        removeMethod = listenerListClass.getMethod("remove",
+                            new Class<?>[] {Object.class});
+                    } catch (NoSuchMethodException exception) {
+                        throw new RuntimeException(exception);
+                    }
+
+                    try {
+                        removeMethod.invoke(listenerList, new Object[] {listener});
+                    } catch (IllegalAccessException exception) {
+                        throw new RuntimeException(exception);
+                    } catch (InvocationTargetException exception) {
+                        throw new RuntimeException(exception);
+                    }
+                }
+            }
+        }
     }
 
     public ListenerList<EventLoggerListener> getEventLoggerListeners() {
