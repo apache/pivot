@@ -141,9 +141,9 @@ class EventLoggerSkin extends ContainerSkin implements EventLoggerListener {
                                 Method event = eventNode.getEvent();
 
                                 if (checked) {
-                                    eventLogger.includeEvent(event);
+                                    eventLogger.getIncludeEvents().add(event);
                                 } else {
-                                    eventLogger.excludeEvent(event);
+                                    eventLogger.getIncludeEvents().remove(event);
                                 }
                             }
                         }
@@ -175,12 +175,12 @@ class EventLoggerSkin extends ContainerSkin implements EventLoggerListener {
                                 treeView.setNodeChecked(parentPath, checked);
                             }
 
-                            eventLogger.includeEvent(event);
+                            eventLogger.getIncludeEvents().add(event);
                         } else {
                             // Propagate upward
                             treeView.setNodeChecked(parentPath, checked);
 
-                            eventLogger.excludeEvent(event);
+                            eventLogger.getIncludeEvents().remove(event);
                         }
                     }
                 }
@@ -240,7 +240,7 @@ class EventLoggerSkin extends ContainerSkin implements EventLoggerListener {
 
                 for (Method event : buckets.get(listenerInterface)) {
                     treeBranch.add(new EventNode(event));
-                    eventLogger.includeEvent(event);
+                    eventLogger.getIncludeEvents().add(event);
                 }
             }
 

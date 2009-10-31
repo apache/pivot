@@ -24,6 +24,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.util.Comparator;
+import java.util.Iterator;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Group;
@@ -32,13 +33,119 @@ import org.apache.pivot.collections.HashSet;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.collections.immutable.ImmutableList;
 import org.apache.pivot.collections.immutable.ImmutableSet;
+import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.ThreadUtilities;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Container;
 
+/**
+ *
+ */
 public class EventLogger extends Container {
+    /**
+     * Declared event sequence.
+     */
+    public final class DeclaredEventSequence implements Sequence<Method>, Iterable<Method> {
+        private DeclaredEventSequence() {
+        }
+
+        @Override
+        public int add(Method event) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void insert(Method event, int index) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public Method update(int index, Method event) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public int remove(Method event) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public Sequence<Method> remove(int index, int count) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public Method get(int index) {
+            return declaredEvents.get(index);
+        }
+
+        @Override
+        public int indexOf(Method event) {
+            return declaredEvents.indexOf(event);
+        }
+
+        @Override
+        public int getLength() {
+            return declaredEvents.getLength();
+        }
+
+        @Override
+        public Iterator<Method> iterator() {
+            return new ImmutableIterator<Method>(declaredEvents.iterator());
+        }
+    }
+
+    /**
+     * Include events group.
+     */
+    public final class IncludeEventGroup implements Group<Method>, Iterable<Method> {
+        private IncludeEventGroup() {
+        }
+
+        @Override
+        public boolean add(Method event) {
+            boolean added = false;
+
+            if (!includeEvents.contains(event)) {
+                includeEvents.add(event);
+                eventLoggerListeners.eventIncluded(EventLogger.this, event);
+                added = true;
+            }
+
+            return added;
+        }
+
+        @Override
+        public boolean remove(Method event) {
+            boolean removed = false;
+
+            if (includeEvents.contains(event)) {
+                includeEvents.remove(event);
+                eventLoggerListeners.eventExcluded(EventLogger.this, event);
+                removed = true;
+            }
+
+            return removed;
+        }
+
+        @Override
+        public boolean contains(Method event) {
+            return includeEvents.contains(event);
+        }
+
+        @Override
+        public boolean isEmpty() {
+            return includeEvents.isEmpty();
+        }
+
+        @Override
+        public Iterator<Method> iterator() {
+            return new ImmutableIterator<Method>(includeEvents.iterator());
+        }
+    }
+
     private static class EventComparator implements Comparator<Method> {
         @Override
         public int compare(Method event1, Method event2) {
@@ -115,24 +222,44 @@ public class EventLogger extends Container {
     private LoggerInvocationHandler loggerInvocationHandler = new LoggerInvocationHandler();
 
     private ArrayList<Method> declaredEvents = new ArrayList<Method>(new EventComparator());
+    private DeclaredEventSequence declaredEventSequence = new DeclaredEventSequence();
 
     private HashSet<Method> includeEvents = new HashSet<Method>();
+    private IncludeEventGroup includeEventGroup = new IncludeEventGroup();
 
     private EventLoggerListenerList eventLoggerListeners = new EventLoggerListenerList();
 
+    /**
+     * Creates a new event logger that is not tied to any source component.
+     */
     public EventLogger() {
         this(null);
     }
 
+    /**
+     * Creates a new event logger that will log events on the specified source.
+     */
     public EventLogger(Component source) {
         setSource(source);
         setSkin(new EventLoggerSkin());
     }
 
+    /**
+     * Gets this event logger's source component.
+     *
+     * @return
+     * The source component, or <tt>null</tt> if no source has been set.
+     */
     public Component getSource() {
         return source;
     }
 
+    /**
+     * Sets this event logger's source component.
+     *
+     * @param source
+     * The source component, or <tt>null</tt> to clear the source.
+     */
     public void setSource(Component source) {
         Component previousSource = this.source;
 
@@ -154,30 +281,26 @@ public class EventLogger extends Container {
         }
     }
 
-    public Sequence<Method> getDeclaredEvents() {
-        return new ImmutableList<Method>(declaredEvents);
+    /**
+     * Gets the declared events sequence, a read-only sequence that includes
+     * the complete list of events that this event logger's source declares.
+     *
+     * @return
+     * the declared events sequence.
+     */
+    public DeclaredEventSequence getDeclaredEvents() {
+        return declaredEventSequence;
     }
 
-    public Group<Method> getIncludeEvents() {
-        return new ImmutableSet<Method>(includeEvents);
-    }
-
-    public void includeEvent(Method event) {
-        if (!includeEvents.contains(event)) {
-            includeEvents.add(event);
-            eventLoggerListeners.eventIncluded(this, event);
-        }
-    }
-
-    public void excludeEvent(Method event) {
-        if (includeEvents.contains(event)) {
-            includeEvents.remove(event);
-            eventLoggerListeners.eventExcluded(this, event);
-        }
-    }
-
-    public boolean isEventIncluded(Method event) {
-        return includeEvents.contains(event);
+    /**
+     * Gets the include events group, which callers can use to include or
+     * exclude declared events from those that get fired by this logger.
+     *
+     * @return
+     * The include events group.
+     */
+    public IncludeEventGroup getIncludeEvents() {
+        return includeEventGroup;
     }
 
     private void registerEventListeners() {
@@ -294,6 +417,9 @@ public class EventLogger extends Container {
         }
     }
 
+    /**
+     * Gets the event logger listener list.
+     */
     public ListenerList<EventLoggerListener> getEventLoggerListeners() {
         return eventLoggerListeners;
     }
