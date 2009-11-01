@@ -226,8 +226,8 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
                                 GlyphVector glyphVector = font.createGlyphVector(FONT_RENDER_CONTEXT, line);
                                 glyphVectors.add(glyphVector);
 
-                                Rectangle2D logicalBounds = glyphVector.getLogicalBounds();
-                                textHeight += logicalBounds.getHeight();
+                                Rectangle2D textBounds = glyphVector.getLogicalBounds();
+                                textHeight += textBounds.getHeight();
                             }
 
                             start = i + 1;
@@ -242,15 +242,15 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
                         GlyphVector glyphVector = font.createGlyphVector(FONT_RENDER_CONTEXT, line);
                         glyphVectors.add(glyphVector);
 
-                        Rectangle2D logicalBounds = glyphVector.getLogicalBounds();
-                        textHeight += logicalBounds.getHeight();
+                        Rectangle2D textBounds = glyphVector.getLogicalBounds();
+                        textHeight += textBounds.getHeight();
                     }
                 } else {
                     GlyphVector glyphVector = font.createGlyphVector(FONT_RENDER_CONTEXT, text);
                     glyphVectors.add(glyphVector);
 
-                    Rectangle2D logicalBounds = glyphVector.getLogicalBounds();
-                    textHeight += logicalBounds.getHeight();
+                    Rectangle2D textBounds = glyphVector.getLogicalBounds();
+                    textHeight += textBounds.getHeight();
                 }
             }
         }
@@ -314,8 +314,8 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
             for (int i = 0, n = glyphVectors.getLength(); i < n; i++) {
                 GlyphVector glyphVector = glyphVectors.get(i);
 
-                Rectangle2D logicalBounds = glyphVector.getLogicalBounds();
-                float lineWidth = (float)logicalBounds.getWidth();
+                Rectangle2D textBounds = glyphVector.getLogicalBounds();
+                float lineWidth = (float)textBounds.getWidth();
 
                 float x = 0;
                 switch(horizontalAlignment) {
@@ -359,7 +359,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
                     graphics.draw(line);
                 }
 
-                y += logicalBounds.getHeight();
+                y += textBounds.getHeight();
             }
         }
     }

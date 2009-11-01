@@ -205,8 +205,8 @@ public class Text extends Shape {
             for (int i = 0, n = glyphVectors.getLength(); i < n; i++) {
                 GlyphVector glyphVector = glyphVectors.get(i);
 
-                Rectangle2D logicalBounds = glyphVector.getLogicalBounds();
-                float lineWidth = (float)logicalBounds.getWidth();
+                Rectangle2D textBounds = glyphVector.getLogicalBounds();
+                float lineWidth = (float)textBounds.getWidth();
 
                 float x = 0;
                 switch(alignment) {
@@ -246,7 +246,7 @@ public class Text extends Shape {
                     graphics.translate(-x, -(y + ascent));
                 }
 
-                y += logicalBounds.getHeight();
+                y += textBounds.getHeight();
             }
         }
     }
@@ -267,9 +267,9 @@ public class Text extends Shape {
                     GlyphVector glyphVector = font.createGlyphVector(FONT_RENDER_CONTEXT, text);
                     glyphVectors.add(glyphVector);
 
-                    Rectangle2D logicalBounds = glyphVector.getLogicalBounds();
-                    width = (int)Math.ceil(logicalBounds.getWidth());
-                    height = (int)Math.ceil(logicalBounds.getHeight());
+                    Rectangle2D textBounds = glyphVector.getLogicalBounds();
+                    width = (int)Math.ceil(textBounds.getWidth());
+                    height = (int)Math.ceil(textBounds.getHeight());
                 }
             } else {
                 float textWidth = 0;
@@ -305,9 +305,9 @@ public class Text extends Shape {
                                 GlyphVector glyphVector = font.createGlyphVector(FONT_RENDER_CONTEXT, line);
                                 glyphVectors.add(glyphVector);
 
-                                Rectangle2D logicalBounds = glyphVector.getLogicalBounds();
-                                textWidth = (float)Math.max(logicalBounds.getWidth(), textWidth);
-                                textHeight += logicalBounds.getHeight();
+                                Rectangle2D textBounds = glyphVector.getLogicalBounds();
+                                textWidth = (float)Math.max(textBounds.getWidth(), textWidth);
+                                textHeight += textBounds.getHeight();
                             }
 
                             start = i + 1;
@@ -322,9 +322,9 @@ public class Text extends Shape {
                         GlyphVector glyphVector = font.createGlyphVector(FONT_RENDER_CONTEXT, line);
                         glyphVectors.add(glyphVector);
 
-                        Rectangle2D logicalBounds = glyphVector.getLogicalBounds();
-                        textWidth = (float)Math.max(logicalBounds.getWidth(), textWidth);
-                        textHeight += logicalBounds.getHeight();
+                        Rectangle2D textBounds = glyphVector.getLogicalBounds();
+                        textWidth = (float)Math.max(textBounds.getWidth(), textWidth);
+                        textHeight += textBounds.getHeight();
                     }
 
                     width = (int)Math.ceil(textWidth);

@@ -999,9 +999,9 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                     length = ci.getEndIndex() - start;
                 }
 
-                Rectangle2D logicalBounds = glyphVector.getLogicalBounds();
-                setSize((int)Math.ceil(logicalBounds.getWidth()),
-                    (int)Math.ceil(logicalBounds.getHeight()));
+                Rectangle2D textBounds = glyphVector.getLogicalBounds();
+                setSize((int)Math.ceil(textBounds.getWidth()),
+                    (int)Math.ceil(textBounds.getHeight()));
             }
 
             super.validate();
@@ -1091,10 +1091,10 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             int i = 0;
 
             while (i < n) {
-                Shape glyphLogicalBounds = glyphVector.getGlyphLogicalBounds(i);
+                Shape glyphBounds = glyphVector.getGlyphLogicalBounds(i);
 
-                if (glyphLogicalBounds.contains(x, y - ascent)) {
-                    Rectangle2D glyphBounds2D = glyphLogicalBounds.getBounds2D();
+                if (glyphBounds.contains(x, y - ascent)) {
+                    Rectangle2D glyphBounds2D = glyphBounds.getBounds2D();
 
                     if (x - glyphBounds2D.getX() > glyphBounds2D.getWidth() / 2) {
                         // The user clicked on the right half of the character; select
@@ -1120,8 +1120,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 int i = 0;
 
                 while (i < n) {
-                    Shape glyphLogicalBounds = glyphVector.getGlyphLogicalBounds(i);
-                    Rectangle2D glyphBounds2D = glyphLogicalBounds.getBounds2D();
+                    Shape glyphBounds = glyphVector.getGlyphLogicalBounds(i);
+                    Rectangle2D glyphBounds2D = glyphBounds.getBounds2D();
 
                     float glyphX = (float)glyphBounds2D.getX();
                     float glyphWidth = (float)glyphBounds2D.getWidth();
@@ -1156,11 +1156,11 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
         @Override
         public Bounds getCharacterBounds(int offset) {
-            Shape glyphLogicalBounds = glyphVector.getGlyphLogicalBounds(offset);
-            Rectangle2D bounds2D = glyphLogicalBounds.getBounds2D();
+            Shape glyphBounds = glyphVector.getGlyphLogicalBounds(offset);
+            Rectangle2D glyphBounds2D = glyphBounds.getBounds2D();
 
-            return new Bounds((int)Math.floor(bounds2D.getX()), 0,
-                (int)Math.ceil(bounds2D.getWidth()), getHeight());
+            return new Bounds((int)Math.floor(glyphBounds2D.getX()), 0,
+                (int)Math.ceil(glyphBounds2D.getWidth()), getHeight());
         }
 
         @Override

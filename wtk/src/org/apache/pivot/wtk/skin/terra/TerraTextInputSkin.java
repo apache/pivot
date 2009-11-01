@@ -221,18 +221,32 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 }
 
                 glyphVector = font.createGlyphVector(FONT_RENDER_CONTEXT, ci);
+
+                Rectangle2D textBounds = glyphVector.getLogicalBounds();
+                int textWidth = (int)textBounds.getWidth();
+                int width = getWidth();
+
+                if (textWidth - scrollLeft + padding.left + 1 < width - padding.right - 1) {
+                    // The right edge of the text is less than the right inset; align
+                    // the text's right edge with the inset
+                    scrollLeft = Math.max(textWidth + (padding.left + padding.right + 2) - width, 0);
+                } else {
+                    // Scroll lead selection to visible
+                    int selectionStart = textInput.getSelectionStart();
+                    if (selectionStart < n) {
+                        scrollCharacterToVisible(selectionStart);
+                    }
+                }
             }
+        } else {
+            // Set scrollLeft to 0
+            scrollLeft = 0;
+            updateSelection();
         }
 
         updateSelection();
         showCaret(textInput.isFocused()
             && textInput.getSelectionLength() == 0);
-
-        if (textNode.getCharacterCount() > 0) {
-            scrollCharacterToVisible(textInput.getSelectionStart());
-        } else {
-            scrollLeft = 0;
-        }
     }
 
     @Override
@@ -279,15 +293,6 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         // Paint the border
         graphics.setColor(borderColor);
         GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
-
-        // TODO Remove
-        /*
-        // Paint the padding border
-        graphics.setColor(Color.RED);
-        graphics.drawRect(padding.left + 1, padding.top + 1,
-            width - (padding.left + padding.right + 2),
-            height - (padding.top + padding.bottom + 2));
-        */
 
         // Paint the content
         if (FONT_RENDER_CONTEXT.isAntiAliased()) {
@@ -382,19 +387,21 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             x -= (padding.left - scrollLeft + 1);
             y -= (padding.top + 1);
 
-            int n = glyphVector.getNumGlyphs();
+
+            Rectangle2D textBounds = glyphVector.getLogicalBounds();
 
             if (x < 0) {
                 offset = 0;
-            } else if (x > glyphVector.getLogicalBounds().getWidth()) {
-                offset = n;
+            } else if (x > textBounds.getWidth()) {
+                offset = glyphVector.getNumGlyphs();
             } else {
+                int n = glyphVector.getNumGlyphs();
                 int i = 0;
                 while (i < n) {
-                    Shape glyphLogicalBounds = glyphVector.getGlyphLogicalBounds(i);
+                    Shape glyphBounds = glyphVector.getGlyphLogicalBounds(i);
 
-                    if (glyphLogicalBounds.contains(x, y - ascent)) {
-                        Rectangle2D glyphBounds2D = glyphLogicalBounds.getBounds2D();
+                    if (glyphBounds.contains(x, y - ascent)) {
+                        Rectangle2D glyphBounds2D = glyphBounds.getBounds2D();
 
                         if (x - glyphBounds2D.getX() > glyphBounds2D.getWidth() / 2) {
                             // The user clicked on the right half of the character; select
@@ -415,15 +422,21 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     public Bounds getCharacterBounds(int offset) {
-        Shape glyphLogicalBounds = glyphVector.getGlyphLogicalBounds(offset);
-        Rectangle2D bounds2D = glyphLogicalBounds.getBounds2D();
+        Shape glyphBounds = glyphVector.getGlyphLogicalBounds(offset);
+        Rectangle2D glyphBounds2D = glyphBounds.getBounds2D();
 
-        int x = (int)Math.floor(bounds2D.getX()) + padding.left - scrollLeft + 1;
+        int x = (int)Math.floor(glyphBounds2D.getX()) + padding.left - scrollLeft + 1;
         int y = padding.top + 1;
-        int width = (int)Math.ceil(bounds2D.getWidth());
+        int width = (int)Math.ceil(glyphBounds2D.getWidth());
         int height = getHeight() - (padding.top + padding.bottom + 2);
 
         return new Bounds(x, y, width, height);
+    }
+
+    private void setScrollLeft(int scrollLeft) {
+        this.scrollLeft = scrollLeft;
+        updateSelection();
+        repaintComponent();
     }
 
     private void scrollCharacterToVisible(int offset) {
@@ -432,12 +445,10 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         int glyphX = characterBounds.x - (padding.left + 1) + scrollLeft;
 
         if (characterBounds.x < padding.left + 1) {
-            scrollLeft = glyphX;
+            setScrollLeft(glyphX);
         } else if (characterBounds.x + characterBounds.width > width - (padding.right + 1)) {
-            scrollLeft = glyphX + (padding.left + padding.right + 2) + characterBounds.width - width;
+            setScrollLeft(glyphX + (padding.left + padding.right + 2) + characterBounds.width - width);
         }
-
-        repaintComponent();
     }
 
     public Font getFont() {
@@ -454,10 +465,10 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         int missingGlyphCode = font.getMissingGlyphCode();
         GlyphVector missingGlyphVector = font.createGlyphVector(FONT_RENDER_CONTEXT,
             new int[] {missingGlyphCode});
-        Rectangle2D logicalBounds = missingGlyphVector.getLogicalBounds();
+        Rectangle2D textBounds = missingGlyphVector.getLogicalBounds();
 
         Rectangle2D maxCharBounds = font.getMaxCharBounds(FONT_RENDER_CONTEXT);
-        averageCharacterSize = new Dimensions((int)Math.ceil(logicalBounds.getWidth()),
+        averageCharacterSize = new Dimensions((int)Math.ceil(textBounds.getWidth()),
             (int)Math.ceil(maxCharBounds.getHeight()));
 
         invalidateComponent();
@@ -1101,7 +1112,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 if (textNode.getCharacterCount() > 0) {
                     scrollCharacterToVisible(selectionStart);
                 } else {
-                    scrollLeft = 0;
+                    setScrollLeft(0);
                 }
 
                 consumed = true;
@@ -1145,6 +1156,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                     scrollCharacterToVisible(selectionStart + selectionLength - 1);
                 } else {
                     scrollLeft = 0;
+                    updateSelection();
                 }
 
                 consumed = true;
@@ -1348,8 +1360,8 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             leadingSelectionBounds = getCharacterBounds(selectionStart);
         } else {
             // The insertion point is after the last character
-            Rectangle2D glyphVectorBounds = glyphVector.getLogicalBounds();
-            int x = (int)Math.ceil(glyphVectorBounds.getWidth()) + (padding.left - scrollLeft + 1);
+            Rectangle2D textBounds = glyphVector.getLogicalBounds();
+            int x = (int)Math.ceil(textBounds.getWidth()) + (padding.left - scrollLeft + 1);
             int y = padding.top + 1;
             leadingSelectionBounds = new Bounds(x, y, 0, averageCharacterSize.height);
         }
