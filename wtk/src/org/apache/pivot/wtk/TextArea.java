@@ -605,6 +605,21 @@ public class TextArea extends Component {
     }
 
     /**
+     * Sets the selection.
+     *
+     * @param selection
+     *
+     * @see #setSelection(int, int)
+     */
+    public final void setSelection(Span selection) {
+        if (selection == null) {
+            throw new IllegalArgumentException("selection is null.");
+        }
+
+        setSelection(Math.min(selection.start, selection.end), (int)selection.getLength());
+    }
+
+    /**
      * Selects all text.
      */
     public void selectAll() {

@@ -77,23 +77,48 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             TextInput textInput = (TextInput)getComponent();
             int selectionStart = textInput.getSelectionStart();
             int selectionLength = textInput.getSelectionLength();
+            int selectionEnd = selectionStart + selectionLength - 1;
 
-            // TODO
+            switch (scrollDirection) {
+                case FORWARD: {
+                    TextNode textNode = textInput.getTextNode();
+                    if (selectionEnd < textNode.getCharacterCount() - 1) {
+                        selectionEnd++;
+                        textInput.setSelection(selectionStart, selectionEnd - selectionStart + 1);
+                        scrollCharacterToVisible(selectionEnd);
+                    }
 
-            textInput.setSelection(selectionStart, selectionLength);
+                    break;
+                }
+
+                case BACKWARD: {
+                    if (selectionStart > 0) {
+                        selectionStart--;
+                        textInput.setSelection(selectionStart, selectionEnd - selectionStart + 1);
+                        scrollCharacterToVisible(selectionStart);
+                    }
+
+                    break;
+                }
+
+                default: {
+                    throw new RuntimeException();
+                }
+            }
         }
     }
 
     private GlyphVector glyphVector = null;
 
-    // TODO
-    // private int anchor = -1;
+    private int anchor = -1;
     private Rectangle caret = new Rectangle();
     private Rectangle selection = null;
 
     private int scrollLeft = 0;
 
     private boolean caretOn = true;
+
+    private Direction scrollDirection = null;
 
     private BlinkCaretCallback blinkCaretCallback = new BlinkCaretCallback();
     private ApplicationContext.ScheduledCallback scheduledBlinkCaretCallback = null;
@@ -288,11 +313,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
         // Paint the bevel
         graphics.setColor(bevelColor);
-        GraphicsUtilities.drawLine(graphics, 1, 1, width - 2, Orientation.HORIZONTAL);
-
-        // Paint the border
-        graphics.setColor(borderColor);
-        GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
+        GraphicsUtilities.drawLine(graphics, 0, 0, width, Orientation.HORIZONTAL);
 
         // Paint the content
         if (FONT_RENDER_CONTEXT.isAntiAliased()) {
@@ -372,21 +393,20 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 graphics.fill(caret);
             }
         }
+
+        // Paint the border
+        graphics.setColor(borderColor);
+        GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
     }
 
-    public int getInsertionPoint(int x, int y) {
+    public int getInsertionPoint(int x) {
         int offset = -1;
 
         if (glyphVector == null) {
             offset = 0;
         } else {
-            LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
-            float ascent = lm.getAscent();
-
             // Translate to glyph coordinates
             x -= (padding.left - scrollLeft + 1);
-            y -= (padding.top + 1);
-
 
             Rectangle2D textBounds = glyphVector.getLogicalBounds();
 
@@ -399,11 +419,14 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 int i = 0;
                 while (i < n) {
                     Shape glyphBounds = glyphVector.getGlyphLogicalBounds(i);
+                    Rectangle2D glyphBounds2D = glyphBounds.getBounds2D();
 
-                    if (glyphBounds.contains(x, y - ascent)) {
-                        Rectangle2D glyphBounds2D = glyphBounds.getBounds2D();
+                    float glyphX = (float)glyphBounds2D.getX();
+                    float glyphWidth = (float)glyphBounds2D.getWidth();
+                    if (x >= glyphX
+                        && x < glyphX + glyphWidth) {
 
-                        if (x - glyphBounds2D.getX() > glyphBounds2D.getWidth() / 2) {
+                        if (x - glyphX > glyphWidth / 2) {
                             // The user clicked on the right half of the character; select
                             // the next character
                             i++;
@@ -886,46 +909,38 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
         if (Mouse.getCapturer() == component) {
             TextInput textInput = (TextInput)getComponent();
-            TextNode textNode = textInput.getTextNode();
+            int width = getWidth();
 
-            if (textNode != null
-                && textNode.getCharacterCount() > 0) {
-                if (x >= 0
-                    && x < textInput.getWidth()) {
-                    // Stop the scroll selection timer
-                    if (scheduledScrollSelectionCallback != null) {
-                        scheduledScrollSelectionCallback.cancel();
-                        scheduledScrollSelectionCallback = null;
-                    }
+            if (x >= 0
+                && x < width) {
+                // Stop the scroll selection timer
+                if (scheduledScrollSelectionCallback != null) {
+                    scheduledScrollSelectionCallback.cancel();
+                    scheduledScrollSelectionCallback = null;
+                }
 
-                    // Get the current selection
-                    int selectionStart = textInput.getSelectionStart();
-                    int selectionLength = textInput.getSelectionLength();
+                scrollDirection = null;
 
-                    // Get the insertion index
-                    int index = getInsertionPoint(x, y);
+                int offset = getInsertionPoint(x);
 
-                    if (index < selectionStart) {
-                        selectionLength += (selectionStart - index);
-                        selectionStart = index;
+                if (offset != -1) {
+                    // Select the range
+                    if (offset > anchor) {
+                        textInput.setSelection(anchor, offset - anchor);
                     } else {
-                        if (index > selectionStart + selectionLength) {
-                            selectionLength = index - selectionStart;
-                        }
+                        textInput.setSelection(offset, anchor - offset);
                     }
+                }
+            } else {
+                if (scheduledScrollSelectionCallback == null) {
+                    scrollDirection = (x < 0) ? Direction.BACKWARD : Direction.FORWARD;
 
-                    textInput.setSelection(selectionStart, selectionLength);
-                } else {
-                    // TODO Set anchor offset
+                    scheduledScrollSelectionCallback =
+                        ApplicationContext.scheduleRecurringCallback(scrollSelectionCallback,
+                            SCROLL_RATE);
 
-                    if (scheduledScrollSelectionCallback == null) {
-                        scheduledScrollSelectionCallback =
-                            ApplicationContext.scheduleRecurringCallback(scrollSelectionCallback,
-                                SCROLL_RATE);
-
-                        // Run the callback once now to scroll the selection immediately
-                        scrollSelectionCallback.run();
-                    }
+                    // Run the callback once now to scroll the selection immediately
+                    scrollSelectionCallback.run();
                 }
             }
         } else {
@@ -941,21 +956,36 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
     @Override
     public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+        boolean consumed = super.mouseDown(component, button, x, y);
+
         if (button == Mouse.Button.LEFT) {
-            // Move the caret to the insertion point
             TextInput textInput = (TextInput)getComponent();
 
-            // TODO Use anchor here
-            int offset = getInsertionPoint(x, y);
-            if (offset != -1) {
-                textInput.setSelection(offset, 0);
+            anchor = getInsertionPoint(x);
+
+            if (anchor != -1) {
+                if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                    // Select the range
+                    int selectionStart = textInput.getSelectionStart();
+
+                    if (anchor > selectionStart) {
+                        textInput.setSelection(selectionStart, anchor - selectionStart);
+                    } else {
+                        textInput.setSelection(anchor, selectionStart - anchor);
+                    }
+                } else {
+                    // Move the caret to the insertion point
+                    textInput.setSelection(anchor, 0);
+                    consumed = true;
+                }
             }
+
 
             // Set focus to the text input
             textInput.requestFocus();
         }
 
-        return super.mouseDown(component, button, x, y);
+        return consumed;
     }
 
     @Override
@@ -971,6 +1001,8 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
             Mouse.release();
         }
+
+        anchor = -1;
 
         return consumed;
     }

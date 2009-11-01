@@ -1341,12 +1341,12 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     private DocumentView documentView = null;
 
     private int caretX = 0;
-    private int anchor = -1;
     private Rectangle caret = new Rectangle();
     private Area selection = null;
 
     private boolean caretOn = false;
 
+    private int anchor = -1;
     private Direction scrollDirection = null;
 
     private BlinkCaretCallback blinkCaretCallback = new BlinkCaretCallback();
@@ -1815,9 +1815,9 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
         boolean consumed = super.mouseDown(component, button, x, y);
 
-        TextArea textArea = (TextArea)component;
-
         if (button == Mouse.Button.LEFT) {
+            TextArea textArea = (TextArea)component;
+
             anchor = getInsertionPoint(x, y);
 
             if (anchor != -1) {
@@ -1863,6 +1863,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
 
         anchor = -1;
+        scrollDirection = null;
 
         return consumed;
     }

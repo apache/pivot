@@ -41,12 +41,11 @@ public class TextInput extends Component {
          * Returns the insertion point for a given location.
          *
          * @param x
-         * @param y
          *
          * @return
          * The insertion point for the given location.
          */
-        public int getInsertionPoint(int x, int y);
+        public int getInsertionPoint(int x);
 
         /**
          * Returns the bounds of the character at a given offset within the
@@ -507,6 +506,13 @@ public class TextInput extends Component {
         }
     }
 
+    /**
+     * Sets the selection.
+     *
+     * @param selection
+     *
+     * @see #setSelection(int, int)
+     */
     public final void setSelection(Span selection) {
         if (selection == null) {
             throw new IllegalArgumentException("selection is null.");
@@ -715,9 +721,9 @@ public class TextInput extends Component {
         }
     }
 
-    public int getInsertionPoint(int x, int y) {
+    public int getInsertionPoint(int x) {
         TextInput.Skin textInputSkin = (TextInput.Skin)getSkin();
-        return textInputSkin.getInsertionPoint(x, y);
+        return textInputSkin.getInsertionPoint(x);
     }
 
     public Bounds getCharacterBounds(int offset) {

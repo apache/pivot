@@ -239,13 +239,14 @@ public class ListButton extends Button {
      * selection.
      */
     public void setSelectedIndex(int selectedIndex) {
+        if (selectedIndex < -1
+            || selectedIndex >= listData.getLength()) {
+            throw new IndexOutOfBoundsException();
+        }
+
         int previousSelectedIndex = this.selectedIndex;
 
         if (previousSelectedIndex != selectedIndex) {
-            if (selectedIndex < -1 || selectedIndex >= listData.getLength()) {
-                throw new IndexOutOfBoundsException();
-            }
-
             this.selectedIndex = selectedIndex;
             listButtonSelectionListeners.selectedIndexChanged(this, previousSelectedIndex);
         }
