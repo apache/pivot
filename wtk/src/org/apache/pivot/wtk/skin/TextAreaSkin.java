@@ -1880,9 +1880,10 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
             if (document != null) {
                 // Ignore characters in the control range and the ASCII delete
-                // character
+                // character as well as meta key presses
                 if (character > 0x1F
-                    && character != 0x7F) {
+                    && character != 0x7F
+                    && !Keyboard.isPressed(Keyboard.Modifier.META)) {
                     textArea.insertText(character);
                     showCaret(true);
                 }

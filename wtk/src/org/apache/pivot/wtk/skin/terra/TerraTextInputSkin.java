@@ -1027,14 +1027,18 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         boolean consumed = super.keyTyped(component, character);
 
         // Ignore characters in the control range and the ASCII delete
-        // character
+        // character as well as meta key presses
         if (character > 0x1F
-            && character != 0x7F) {
+            && character != 0x7F
+            && !Keyboard.isPressed(Keyboard.Modifier.META)) {
             TextInput textInput = (TextInput)getComponent();
             TextNode textNode = textInput.getTextNode();
 
             if (textNode != null) {
-                if (textNode.getCharacterCount() < textInput.getMaximumLength()) {
+                if (textInput.getSelectionLength() == 0
+                    && textNode.getCharacterCount() == textInput.getMaximumLength()) {
+                    Toolkit.getDefaultToolkit().beep();
+                } else {
                     int index = textInput.getSelectionStart();
                     Validator validator = textInput.getValidator();
 
@@ -1051,8 +1055,6 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                     } else {
                         textInput.insertText(character, index);
                     }
-                } else {
-                    Toolkit.getDefaultToolkit().beep();
                 }
             }
         }

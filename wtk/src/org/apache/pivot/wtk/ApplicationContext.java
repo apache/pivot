@@ -1276,31 +1276,27 @@ public abstract class ApplicationContext {
                     case KeyEvent.KEY_TYPED: {
                         boolean consumed = false;
 
-                        // Don't fire key typed if a command key was pressed
-                        Keyboard.Modifier commandModifier = Platform.getCommandModifier();
-                        if (!Keyboard.isPressed(commandModifier)) {
-                            char keyChar = event.getKeyChar();
+                        char keyChar = event.getKeyChar();
 
-                            try {
-                                if (focusedComponent == null) {
-                                    if (application instanceof Application.UnprocessedKeyHandler) {
-                                        Application.UnprocessedKeyHandler unprocessedKeyHandler =
-                                            (Application.UnprocessedKeyHandler)application;
-                                        unprocessedKeyHandler.keyTyped(keyChar);
-                                    }
-                                } else {
-                                    if (!focusedComponent.isBlocked()) {
-                                        consumed = focusedComponent.keyTyped(keyChar);
-                                    }
+                        try {
+                            if (focusedComponent == null) {
+                                if (application instanceof Application.UnprocessedKeyHandler) {
+                                    Application.UnprocessedKeyHandler unprocessedKeyHandler =
+                                        (Application.UnprocessedKeyHandler)application;
+                                    unprocessedKeyHandler.keyTyped(keyChar);
                                 }
-                            } catch (Exception exception) {
-                                if (application instanceof Application.UncaughtExceptionHandler) {
-                                    Application.UncaughtExceptionHandler uncaughtExceptionHandler =
-                                        (Application.UncaughtExceptionHandler)application;
-                                    uncaughtExceptionHandler.uncaughtExceptionThrown(exception);
-                                } else {
-                                    exception.printStackTrace();
+                            } else {
+                                if (!focusedComponent.isBlocked()) {
+                                    consumed = focusedComponent.keyTyped(keyChar);
                                 }
+                            }
+                        } catch (Exception exception) {
+                            if (application instanceof Application.UncaughtExceptionHandler) {
+                                Application.UncaughtExceptionHandler uncaughtExceptionHandler =
+                                    (Application.UncaughtExceptionHandler)application;
+                                uncaughtExceptionHandler.uncaughtExceptionThrown(exception);
+                            } else {
+                                exception.printStackTrace();
                             }
                         }
 

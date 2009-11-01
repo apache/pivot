@@ -316,10 +316,6 @@ public class TextInput extends Component {
             throw new IndexOutOfBoundsException();
         }
 
-        if (textNode.getCharacterCount() + text.length() > maximumLength) {
-            throw new IllegalArgumentException("Insertion of text would exceed maximum length.");
-        }
-
         if (selectionLength > 0) {
             // TODO Make this part of the undoable action (for all such
             // actions)
@@ -327,6 +323,10 @@ public class TextInput extends Component {
         }
 
         // Insert the text
+        if (textNode.getCharacterCount() + text.length() > maximumLength) {
+            throw new IllegalArgumentException("Insertion of text would exceed maximum length.");
+        }
+
         int length = textNode.getCharacterCount();
         textNode.insertText(text, index);
 
