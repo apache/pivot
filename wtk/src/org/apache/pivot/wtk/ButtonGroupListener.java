@@ -24,12 +24,15 @@ public interface ButtonGroupListener {
      * Button group listener adapter.
      */
     public class Adapter implements ButtonGroupListener {
+        @Override
         public void buttonAdded(ButtonGroup buttonGroup, Button button) {
         }
 
+        @Override
         public void buttonRemoved(ButtonGroup buttonGroup, Button button) {
         }
 
+        @Override
         public void selectionChanged(ButtonGroup buttonGroup, Button previousSelection) {
         }
     }

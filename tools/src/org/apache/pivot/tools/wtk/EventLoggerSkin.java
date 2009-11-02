@@ -38,7 +38,6 @@ import org.apache.pivot.wtk.TreeViewNodeStateListener;
 import org.apache.pivot.wtk.content.TreeBranch;
 import org.apache.pivot.wtk.content.TreeNode;
 import org.apache.pivot.wtk.skin.ContainerSkin;
-import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLoggerListener {
@@ -63,8 +62,8 @@ class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLo
 
     private Component content = null;
 
-    @WTKX private TreeView declaredEventsTreeView = null;
-    @WTKX private TableView firedEventsTableView = null;
+    private TreeView declaredEventsTreeView = null;
+    private TableView firedEventsTableView = null;
 
     private boolean updating = false;
 
@@ -98,7 +97,8 @@ class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLo
 
         eventLogger.add(content);
 
-        wtkxSerializer.bind(this, EventLoggerSkin.class);
+        declaredEventsTreeView = wtkxSerializer.getValue("declaredEventsTreeView");
+        firedEventsTableView = wtkxSerializer.getValue("firedEventsTableView");
 
         declaredEventsTreeView.getTreeViewNodeStateListeners().add(new TreeViewNodeStateListener() {
             @Override

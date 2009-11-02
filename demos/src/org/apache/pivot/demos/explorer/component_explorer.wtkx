@@ -312,7 +312,19 @@ limitations under the License.
                         <top>
                             <SplitPane orientation="horizontal" splitRatio="0.6">
                                 <left>
-                                    <TabPane wtkx:id="contentTabPane">
+                                    <TabPane>
+                                        <tabs>
+                                            <Border wtkx:id="contentTab">
+                                                <content>
+                                                    <ScrollPane wtkx:id="contentScrollPane">
+                                                        <view>
+                                                            <Border wtkx:id="contentPane"
+                                                                styles="{thickness:0, padding:6}"/>
+                                                        </view>
+                                                    </ScrollPane>
+                                                </content>
+                                            </Border>
+                                        </tabs>
                                         <corner>
                                             <BoxPane styles="{padding:{right:6},
                                                 horizontalAlignment:'right', fill:true}">
@@ -321,6 +333,9 @@ limitations under the License.
                                                         <ButtonGroup wtkx:id="horizontalScrollBarPolicyGroup"/>
                                                         <ButtonGroup wtkx:id="verticalScrollBarPolicyGroup"/>
                                                     </wtkx:define>
+                                                    <buttonData>
+                                                        <content:ButtonData icon="@preferences-system.png"/>
+                                                    </buttonData>
                                                     <menu>
                                                         <Menu>
                                                             <sections>
@@ -428,6 +443,9 @@ limitations under the License.
                                     <BoxPane styles="{padding:{right:6},
                                         horizontalAlignment:'right', fill:true}">
                                         <MenuButton styles="{toolbar:true}">
+                                            <buttonData>
+                                                <content:ButtonData icon="@preferences-system.png"/>
+                                            </buttonData>
                                             <menu>
                                                 <Menu>
                                                     <sections>

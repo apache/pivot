@@ -17,10 +17,10 @@
 package org.apache.pivot.demos.explorer;
 
 import java.io.IOException;
-import java.net.URL;
 
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
+import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.collections.Sequence.Tree;
 import org.apache.pivot.collections.Sequence.Tree.Path;
 import org.apache.pivot.serialization.SerializationException;
@@ -42,15 +42,17 @@ import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.ScrollPane;
 import org.apache.pivot.wtk.ScrollPane.ScrollBarPolicy;
 import org.apache.pivot.wtk.TabPane;
-import org.apache.pivot.wtk.TabPaneSelectionListener;
 import org.apache.pivot.wtk.TreeView;
+import org.apache.pivot.wtk.TreeViewSelectionListener;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class ComponentExplorer implements Application {
     private Window window = null;
     private TreeView treeView = null;
-    private TabPane contentTabPane = null;
+    private Border contentTab = null;
+    private ScrollPane contentScrollPane = null;
+    private Border contentPane = null;
     private ComponentPropertyInspector componentPropertyInspector = null;
     private ComponentStyleInspector componentStyleInspector = null;
     private EventLogger eventLogger = null;
@@ -68,12 +70,6 @@ public class ComponentExplorer implements Application {
 
     public static final String CLASS_PROPERTY = "class";
 
-    private static final String SRC_KEY = "src";
-    private static final String HORIZONTAL_SCROLL_BAR_POLICY_KEY = "horizontalScrollBarPolicy";
-    private static final String VERTICAL_SCROLL_BAR_POLICY_KEY = "verticalScrollBarPolicy";
-    private static final String COMPONENT_KEY = "component";
-    private static final String SCROLL_PANE_KEY = "scrollPane";
-
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
@@ -82,7 +78,9 @@ public class ComponentExplorer implements Application {
         window = (Window)wtkxSerializer.readObject(this, "component_explorer.wtkx");
 
         treeView = wtkxSerializer.getValue("treeView");
-        contentTabPane = wtkxSerializer.getValue("contentTabPane");
+        contentTab = wtkxSerializer.getValue("contentTab");
+        contentScrollPane = wtkxSerializer.getValue("contentScrollPane");
+        contentPane = wtkxSerializer.getValue("contentPane");
         componentPropertyInspector = wtkxSerializer.getValue("componentPropertyInspector");
         componentStyleInspector = wtkxSerializer.getValue("componentStyleInspector");
         eventLogger = wtkxSerializer.getValue("eventLogger");
@@ -98,43 +96,28 @@ public class ComponentExplorer implements Application {
         verticalFillToCapacityButton = wtkxSerializer.getValue("verticalFillToCapacityButton");
         verticalNeverButton = wtkxSerializer.getValue("verticalNeverButton");
 
-        treeView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
+        treeView.getTreeViewSelectionListeners().add(new TreeViewSelectionListener.Adapter() {
             @Override
-            public boolean mouseClick(Component component, Mouse.Button button, int x, int y,
-                int count) {
-                if (button == Mouse.Button.LEFT && count == 2) {
-                    Path path = treeView.getNodeAt(y);
+            public void selectedPathsChanged(TreeView treeView,
+                Sequence<Path> previousSelectedPaths) {
+                Component component = null;
+                String tabLabel = null;
 
-                    if (path != null) {
-                        List<?> treeData = treeView.getTreeData();
-                        Object node = Tree.get(treeData, path);
+                Object node = treeView.getSelectedNode();
+                if (node instanceof ComponentNode) {
+                    ComponentNode componentNode = (ComponentNode)node;
+                    tabLabel = componentNode.getText();
 
-                        if (node instanceof ComponentNode) {
-                            open((ComponentNode)node);
-                        } else if (node instanceof List<?>) {
-                            treeView.setBranchExpanded(path, !treeView.isBranchExpanded(path));
-                        }
+                    WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                    try {
+                        component = (Component)wtkxSerializer.readObject(componentNode.getSrc());
+                    } catch (IOException exception) {
+                        throw new RuntimeException(exception);
+                    } catch (SerializationException exception) {
+                        throw new RuntimeException(exception);
                     }
-                }
 
-                return false;
-            }
-        });
-
-        contentTabPane.getTabPaneSelectionListeners().add(new TabPaneSelectionListener.Adapter() {
-            @Override
-            public void selectedIndexChanged(TabPane tabPane, int previousSelectedIndex) {
-                Component selectedTab = tabPane.getSelectedTab();
-
-                if (selectedTab != null) {
-                    Component component = (Component)selectedTab.getUserData().get(COMPONENT_KEY);
-                    componentPropertyInspector.setSource(component);
-                    componentStyleInspector.setSource(component);
-                    eventLogger.setSource(component);
-
-                    ScrollBarPolicy horizontalScrollBarPolicy = (ScrollBarPolicy)
-                        selectedTab.getUserData().get(HORIZONTAL_SCROLL_BAR_POLICY_KEY);
-                    switch (horizontalScrollBarPolicy) {
+                    switch (componentNode.getHorizontalScrollBarPolicy()) {
                     case AUTO:
                         horizontalScrollBarPolicyGroup.setSelection(horizontalAutoButton);
                         break;
@@ -149,9 +132,7 @@ public class ComponentExplorer implements Application {
                         break;
                     }
 
-                    ScrollBarPolicy verticalScrollBarPolicy = (ScrollBarPolicy)
-                        selectedTab.getUserData().get(VERTICAL_SCROLL_BAR_POLICY_KEY);
-                    switch (verticalScrollBarPolicy) {
+                    switch (componentNode.getVerticalScrollBarPolicy()) {
                     case AUTO:
                         verticalScrollBarPolicyGroup.setSelection(verticalAutoButton);
                         break;
@@ -166,6 +147,33 @@ public class ComponentExplorer implements Application {
                         break;
                     }
                 }
+
+                TabPane.setLabel(contentTab, tabLabel);
+                contentPane.setContent(component);
+                componentPropertyInspector.setSource(component);
+                componentStyleInspector.setSource(component);
+                eventLogger.setSource(component);
+            }
+        });
+
+        treeView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
+            @Override
+            public boolean mouseClick(Component component, Mouse.Button button, int x, int y,
+                int count) {
+                if (button == Mouse.Button.LEFT && count == 2) {
+                    Path path = treeView.getNodeAt(y);
+
+                    if (path != null) {
+                        List<?> treeData = treeView.getTreeData();
+                        Object node = Tree.get(treeData, path);
+
+                        if (node instanceof List<?>) {
+                            treeView.setBranchExpanded(path, !treeView.isBranchExpanded(path));
+                        }
+                    }
+                }
+
+                return false;
             }
         });
 
@@ -173,31 +181,22 @@ public class ComponentExplorer implements Application {
             (new ButtonGroupListener.Adapter() {
             @Override
             public void selectionChanged(ButtonGroup buttonGroup, Button previousSelection) {
-                Component selectedTab = contentTabPane.getSelectedTab();
+                Button button = buttonGroup.getSelection();
 
-                if (selectedTab != null) {
-                    Button button = buttonGroup.getSelection();
+                ScrollBarPolicy horizontalScrollBarPolicy = null;
 
-                    ScrollBarPolicy horizontalScrollBarPolicy = null;
+                if (button == horizontalAutoButton) {
+                    horizontalScrollBarPolicy = ScrollBarPolicy.AUTO;
+                } else if (button == horizontalFillButton) {
+                    horizontalScrollBarPolicy = ScrollBarPolicy.FILL;
+                } else if (button == horizontalFillToCapacityButton) {
+                    horizontalScrollBarPolicy = ScrollBarPolicy.FILL_TO_CAPACITY;
+                } else if (button == horizontalNeverButton) {
+                    horizontalScrollBarPolicy = ScrollBarPolicy.NEVER;
+                }
 
-                    if (button == horizontalAutoButton) {
-                        horizontalScrollBarPolicy = ScrollBarPolicy.AUTO;
-                    } else if (button == horizontalFillButton) {
-                        horizontalScrollBarPolicy = ScrollBarPolicy.FILL;
-                    } else if (button == horizontalFillToCapacityButton) {
-                        horizontalScrollBarPolicy = ScrollBarPolicy.FILL_TO_CAPACITY;
-                    } else if (button == horizontalNeverButton) {
-                        horizontalScrollBarPolicy = ScrollBarPolicy.NEVER;
-                    }
-
-                    if (horizontalScrollBarPolicy != null) {
-                        selectedTab.getUserData().put(HORIZONTAL_SCROLL_BAR_POLICY_KEY,
-                            horizontalScrollBarPolicy);
-
-                        ScrollPane scrollPane = (ScrollPane)selectedTab.getUserData().get
-                            (SCROLL_PANE_KEY);
-                        scrollPane.setHorizontalScrollBarPolicy(horizontalScrollBarPolicy);
-                    }
+                if (horizontalScrollBarPolicy != null) {
+                    contentScrollPane.setHorizontalScrollBarPolicy(horizontalScrollBarPolicy);
                 }
             }
         });
@@ -206,67 +205,69 @@ public class ComponentExplorer implements Application {
             (new ButtonGroupListener.Adapter() {
             @Override
             public void selectionChanged(ButtonGroup buttonGroup, Button previousSelection) {
-                Component selectedTab = contentTabPane.getSelectedTab();
+                Button button = buttonGroup.getSelection();
 
-                if (selectedTab != null) {
-                    Button button = buttonGroup.getSelection();
+                ScrollBarPolicy verticalScrollBarPolicy = null;
 
-                    ScrollBarPolicy verticalScrollBarPolicy = null;
+                if (button == verticalAutoButton) {
+                    verticalScrollBarPolicy = ScrollBarPolicy.AUTO;
+                } else if (button == verticalFillButton) {
+                    verticalScrollBarPolicy = ScrollBarPolicy.FILL;
+                } else if (button == verticalFillToCapacityButton) {
+                    verticalScrollBarPolicy = ScrollBarPolicy.FILL_TO_CAPACITY;
+                } else if (button == verticalNeverButton) {
+                    verticalScrollBarPolicy = ScrollBarPolicy.NEVER;
+                }
 
-                    if (button == verticalAutoButton) {
-                        verticalScrollBarPolicy = ScrollBarPolicy.AUTO;
-                    } else if (button == verticalFillButton) {
-                        verticalScrollBarPolicy = ScrollBarPolicy.FILL;
-                    } else if (button == verticalFillToCapacityButton) {
-                        verticalScrollBarPolicy = ScrollBarPolicy.FILL_TO_CAPACITY;
-                    } else if (button == verticalNeverButton) {
-                        verticalScrollBarPolicy = ScrollBarPolicy.NEVER;
-                    }
-
-                    if (verticalScrollBarPolicy != null) {
-                        selectedTab.getUserData().put(VERTICAL_SCROLL_BAR_POLICY_KEY,
-                            verticalScrollBarPolicy);
-
-                        ScrollPane scrollPane = (ScrollPane)selectedTab.getUserData().get
-                            (SCROLL_PANE_KEY);
-                        scrollPane.setVerticalScrollBarPolicy(verticalScrollBarPolicy);
-                    }
+                if (verticalScrollBarPolicy != null) {
+                    contentScrollPane.setVerticalScrollBarPolicy(verticalScrollBarPolicy);
                 }
             }
         });
 
         Path initialSelectedPath = null;
+        Path firstComponentPath = null;
 
         String classProperty = properties.get(CLASS_PROPERTY);
+
         Tree.ItemIterator<?> itemIterator = Tree.depthFirstIterator(treeView.getTreeData());
         while (itemIterator.hasNext()) {
             Object node = itemIterator.next();
 
             if (node instanceof ComponentNode) {
                 ComponentNode componentNode = (ComponentNode)node;
+                Path path = itemIterator.getPath();
+
+                if (firstComponentPath == null) {
+                    firstComponentPath = path;
+                }
 
                 if (classProperty != null) {
                     // class property was set; open the corresponding
                     // component node
                     if (componentNode.getText().equals(classProperty)) {
-                        open(componentNode);
-                        initialSelectedPath = itemIterator.getPath();
+                        initialSelectedPath = path;
                         break;
                     }
                 } else {
                     // class property was *not* set; open the first component
                     // node we find
-                    open(componentNode);
-                    initialSelectedPath = itemIterator.getPath();
+                    initialSelectedPath = path;
                     break;
                 }
             }
         }
 
-        // If we've selected a path, ensure that it's visible to the user
+        // Default the initial selected path to the first component
+        if (initialSelectedPath == null) {
+            initialSelectedPath = firstComponentPath;
+        }
+
         if (initialSelectedPath != null) {
+            // Select the path
             treeView.setSelectedPath(initialSelectedPath);
 
+            // Ensure that it's visible to the user
             Path branchPath = new Path(initialSelectedPath, initialSelectedPath.getLength() - 1);
             treeView.expandBranch(branchPath);
 
@@ -282,60 +283,6 @@ public class ComponentExplorer implements Application {
         window.open(display);
 
         treeView.requestFocus();
-    }
-
-    private void open(ComponentNode componentNode) {
-        URL src = componentNode.getSrc();
-        String srcPath = src.getPath();
-        ScrollBarPolicy horizontalScrollBarPolicy = componentNode.getHorizontalScrollBarPolicy();
-        ScrollBarPolicy verticalScrollBarPolicy = componentNode.getVerticalScrollBarPolicy();
-
-        int tabIndex = -1;
-        TabPane.TabSequence tabs = contentTabPane.getTabs();
-        for (int i = 0, n = tabs.getLength(); i < n; i++) {
-            Component tab = tabs.get(i);
-
-            if (srcPath.equals((String)tab.getUserData().get(SRC_KEY))) {
-                tabIndex = i;
-                break;
-            }
-        }
-
-        if (tabIndex == -1) {
-            Component component = null;
-
-            WTKXSerializer wtkxSerializer = new WTKXSerializer();
-            try {
-                component = (Component)wtkxSerializer.readObject(src);
-            } catch (IOException exception) {
-                throw new RuntimeException(exception);
-            } catch (SerializationException exception) {
-                throw new RuntimeException(exception);
-            }
-
-            Border contentPane = new Border();
-            contentPane.getStyles().put("thickness", 0);
-            contentPane.getStyles().put("padding", 6);
-            contentPane.setContent(component);
-
-            ScrollPane scrollPane = new ScrollPane();
-            scrollPane.setHorizontalScrollBarPolicy(horizontalScrollBarPolicy);
-            scrollPane.setVerticalScrollBarPolicy(verticalScrollBarPolicy);
-            scrollPane.setView(contentPane);
-
-            Border border = new Border();
-            border.getUserData().put(SRC_KEY, srcPath);
-            border.getUserData().put(HORIZONTAL_SCROLL_BAR_POLICY_KEY, horizontalScrollBarPolicy);
-            border.getUserData().put(VERTICAL_SCROLL_BAR_POLICY_KEY, verticalScrollBarPolicy);
-            border.getUserData().put(COMPONENT_KEY, component);
-            border.getUserData().put(SCROLL_PANE_KEY, scrollPane);
-            border.setContent(scrollPane);
-
-            tabIndex = contentTabPane.getTabs().add(border);
-            TabPane.setLabel(border, srcPath.substring(srcPath.lastIndexOf('/') + 1));
-        }
-
-        contentTabPane.setSelectedIndex(tabIndex);
     }
 
     @Override
