@@ -20,7 +20,7 @@ limitations under the License.
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
     <content>
-        <BoxPane orientation="vertical" styles="{fill:true}">
+        <BoxPane orientation="vertical" styles="{padding:8, fill:true}">
             <Label text="A Translucent Window"/>
             <Border styles="{color:13}">
                 <content>

@@ -75,8 +75,6 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
     public void install(Component component) {
         super.install(component);
 
-        setPadding(0);
-
         final FileBrowserSheet fileBrowserSheet = (FileBrowserSheet)component;
         final FileBrowserSheet.Mode mode = fileBrowserSheet.getMode();
 

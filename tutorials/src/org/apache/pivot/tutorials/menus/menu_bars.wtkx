@@ -17,7 +17,7 @@ limitations under the License.
 -->
 
 <Frame title="Menu Bars" maximized="true"
-    styles="{padding:{top:0, left:4, bottom:4, right:4}, showWindowControls:false}"
+    styles="{showWindowControls:false}"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
@@ -84,7 +84,8 @@ limitations under the License.
     </menuBar>
 
     <content>
-        <Border styles="{backgroundColor:null, padding:2}">
+        <Border styles="{thickness:0, backgroundColor:null,
+            padding:{top:0, left:4, bottom:4, right:4}}">
             <content>
                 <TabPane wtkx:id="tabPane"/>
             </content>
