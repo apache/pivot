@@ -16,33 +16,41 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<BoxPane orientation="vertical" styles="{padding:8, spacing:8, fill:true,
-    verticalAlignment:'bottom'}"
+<TablePane styles="{verticalSpacing:8}"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:collections="org.apache.pivot.collections"
     xmlns="org.apache.pivot.wtk">
-    <Border styles="{padding:12, backgroundColor:4, color:7}">
-        <content>
-            <TablePane preferredWidth="280"
-                styles="{horizontalSpacing:12, verticalSpacing:12}">
-                <columns>
-                    <TablePane.Column width="-1"/>
-                    <TablePane.Column width="1*"/>
-                </columns>
-                <rows>
-                    <TablePane.Row height="-1">
-                        <BoxPane styles="{verticalAlignment:'top'}">
-                            <ImageView wtkx:id="typeImageView"/>
-                        </BoxPane>
-                        <BoxPane wtkx:id="messageBoxPane" orientation="vertical"
-                            styles="{spacing:10, fill:true}">
-                            <Label wtkx:id="messageLabel" styles="{font:{bold:true}, wrapText:true}"/>
-                        </BoxPane>
-                    </TablePane.Row>
-                </rows>
-            </TablePane>
-        </content>
-    </Border>
-    <BoxPane wtkx:id="buttonBoxPane"
-        styles="{horizontalAlignment:'right', fill:true}"/>
-</BoxPane>
+    <columns>
+        <TablePane.Column width="1*"/>
+    </columns>
+    <rows>
+        <TablePane.Row height="1*">
+            <Border styles="{padding:12, backgroundColor:4, color:7}">
+                <content>
+                    <TablePane preferredWidth="280"
+                        styles="{horizontalSpacing:12, verticalSpacing:12}">
+                        <columns>
+                            <TablePane.Column width="-1"/>
+                            <TablePane.Column width="1*"/>
+                        </columns>
+                        <rows>
+                            <TablePane.Row height="-1">
+                                <BoxPane styles="{verticalAlignment:'top'}">
+                                    <ImageView wtkx:id="typeImageView"/>
+                                </BoxPane>
+                                <BoxPane wtkx:id="messageBoxPane" orientation="vertical"
+                                    styles="{spacing:10, fill:true}">
+                                    <Label wtkx:id="messageLabel" styles="{font:{bold:true}, wrapText:true}"/>
+                                </BoxPane>
+                            </TablePane.Row>
+                        </rows>
+                    </TablePane>
+                </content>
+            </Border>
+        </TablePane.Row>
+        <TablePane.Row height="-1">
+            <BoxPane wtkx:id="buttonBoxPane"
+                styles="{horizontalAlignment:'right', fill:true}"/>
+        </TablePane.Row>
+    </rows>
+</TablePane>
