@@ -22,6 +22,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
+import java.awt.Transparency;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
 import java.awt.font.LineMetrics;
@@ -1023,7 +1024,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 }
 
                 // Draw text
-                // TODO If all of the text is selected, don't bother doing this
+                // TODO Draw selection using multiple clip rects
                 graphics.setFont(font);
                 graphics.setPaint(color);
 
@@ -1060,7 +1061,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                         }
 
                         graphics.clipRect(x0, 0, x1 - x0, height);
-                        graphics.setColor(textArea.isFocused() ? selectionColor : inactiveSelectionColor);
+                        graphics.setColor(textArea.isFocused() &&
+                            textArea.isEditable() ? selectionColor : inactiveSelectionColor);
                         graphics.drawGlyphVector(glyphVector, 0, lm.getAscent());
                     }
                 }
@@ -1357,6 +1359,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
     private Font font;
     private Color color;
+    private Color inactiveColor;
     private Color backgroundColor;
     private Color selectionColor;
     private Color selectionBackgroundColor;
@@ -1373,6 +1376,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         Theme theme = Theme.getTheme();
         font = theme.getFont();
         color = Color.BLACK;
+        inactiveColor = Color.GRAY;
         selectionColor = Color.LIGHT_GRAY;
         selectionBackgroundColor = Color.BLACK;
         inactiveSelectionColor = Color.LIGHT_GRAY;
@@ -1399,8 +1403,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
     @Override
     public boolean isFocusable() {
-        TextArea textArea = (TextArea)getComponent();
-        return textArea.isEditable();
+        return true;
     }
 
     @Override
@@ -1432,7 +1435,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
     @Override
     public boolean isOpaque() {
-        return false;
+        return (backgroundColor != null
+            && backgroundColor.getTransparency() == Transparency.OPAQUE);
     }
 
     @Override
@@ -1465,7 +1469,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         if (documentView != null) {
             // Draw the selection highlight
             if (selection != null) {
-                graphics.setColor(textArea.isFocused() ?
+                graphics.setColor(textArea.isFocused()
+                    && textArea.isEditable() ?
                     selectionBackgroundColor : inactiveSelectionBackgroundColor);
                 graphics.fill(selection);
             }
@@ -1479,7 +1484,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             if (caret != null
                 && caretOn
                 && textArea.isFocused()) {
-                graphics.setPaint(Color.BLACK);
+                graphics.setPaint(textArea.isEditable() ? color : inactiveColor);
                 graphics.fill(caret);
             }
         }
@@ -1584,6 +1589,27 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
 
         setColor(GraphicsUtilities.decodeColor(color));
+    }
+
+    public Color getInactiveColor() {
+        return inactiveColor;
+    }
+
+    public void setInactiveColor(Color inactiveColor) {
+        if (inactiveColor == null) {
+            throw new IllegalArgumentException("inactiveColor is null.");
+        }
+
+        this.inactiveColor = inactiveColor;
+        repaintComponent();
+    }
+
+    public final void setInactiveColor(String inactiveColor) {
+        if (inactiveColor == null) {
+            throw new IllegalArgumentException("inactiveColor is null.");
+        }
+
+        setColor(GraphicsUtilities.decodeColor(inactiveColor));
     }
 
     public Color getBackgroundColor() {
@@ -1840,9 +1866,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             caretX = x;
 
             // Set focus to the text input
-            if (textArea.isEditable()) {
-                textArea.requestFocus();
-            }
+            textArea.requestFocus();
         }
 
         return consumed;
@@ -1898,150 +1922,153 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         boolean consumed = false;
 
         final TextArea textArea = (TextArea)getComponent();
+        Document document = textArea.getDocument();
 
-        if (textArea.isEditable()) {
-            Document document = textArea.getDocument();
+        Keyboard.Modifier commandModifier = Platform.getCommandModifier();
+        if (document != null) {
+            if (keyCode == Keyboard.KeyCode.ENTER
+                && textArea.isEditable()) {
+                textArea.insertParagraph();
+                caretX = margin.left;
+                consumed = true;
+            } else if (keyCode == Keyboard.KeyCode.DELETE
+                && textArea.isEditable()) {
+                textArea.delete(Direction.FORWARD);
+                consumed = true;
+            } else if (keyCode == Keyboard.KeyCode.BACKSPACE
+                && textArea.isEditable()) {
+                textArea.delete(Direction.BACKWARD);
+                consumed = true;
+            } else if (keyCode == Keyboard.KeyCode.LEFT) {
+                int selectionStart = textArea.getSelectionStart();
+                int selectionLength = textArea.getSelectionLength();
 
-            Keyboard.Modifier commandModifier = Platform.getCommandModifier();
-            if (document != null) {
-                if (keyCode == Keyboard.KeyCode.ENTER) {
-                    textArea.insertParagraph();
-                    caretX = margin.left;
-                    consumed = true;
-                } else if (keyCode == Keyboard.KeyCode.DELETE) {
-                    textArea.delete(Direction.FORWARD);
-                    consumed = true;
-                } else if (keyCode == Keyboard.KeyCode.BACKSPACE) {
-                    textArea.delete(Direction.BACKWARD);
-                    consumed = true;
-                } else if (keyCode == Keyboard.KeyCode.LEFT) {
-                    int selectionStart = textArea.getSelectionStart();
-                    int selectionLength = textArea.getSelectionLength();
-
-                    if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
-                        // Add the previous character to the selection
-                        if (selectionStart > 0) {
-                            selectionStart--;
-                            selectionLength++;
-                        }
-                    } else {
-                        // Clear the selection and move the caret back by one
-                        // character
-                        if (selectionLength == 0
-                            && selectionStart > 0) {
-                            selectionStart--;
-                        }
-
-                        selectionLength = 0;
-                    }
-
-                    textArea.setSelection(selectionStart, selectionLength);
-                    scrollCharacterToVisible(selectionStart);
-
-                    if (caret != null) {
-                        caretX = caret.x;
-                    } else if (selection != null) {
-                        Rectangle bounds = selection.getBounds();
-                        caretX = bounds.x;
-                    }
-
-                    consumed = true;
-                } else if (keyCode == Keyboard.KeyCode.RIGHT) {
-                    int selectionStart = textArea.getSelectionStart();
-                    int selectionLength = textArea.getSelectionLength();
-
-                    if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
-                        // Add the next character to the selection
-                        if (selectionStart + selectionLength < document.getCharacterCount()) {
-                            selectionLength++;
-                        }
-                    } else {
-                        // Clear the selection and move the caret forward by one
-                        // character
-                        if (selectionLength > 0) {
-                            selectionStart += selectionLength - 1;
-                        }
-
-                        if (selectionStart < document.getCharacterCount() - 1) {
-                            selectionStart++;
-                        }
-
-                        selectionLength = 0;
-                    }
-
-                    textArea.setSelection(selectionStart, selectionLength);
-                    scrollCharacterToVisible(selectionStart + selectionLength);
-
-                    if (caret != null) {
-                        caretX = caret.x;
-                    } else if (selection != null) {
-                        Rectangle bounds = selection.getBounds();
-                        caretX = bounds.x + bounds.width;
-                    }
-
-                    consumed = true;
-                } else if (keyCode == Keyboard.KeyCode.UP) {
-                    int selectionStart = textArea.getSelectionStart();
-                    int offset = getNextInsertionPoint(caretX, selectionStart, Direction.BACKWARD);
-
-                    if (offset != -1) {
-                        int selectionLength;
-                        if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
-                            int selectionEnd = selectionStart + textArea.getSelectionLength() - 1;
-                            selectionLength = selectionEnd - offset + 1;
-                        } else {
-                            selectionLength = 0;
-                        }
-
-                        textArea.setSelection(offset, selectionLength);
-                        scrollCharacterToVisible(offset);
-
-                        consumed = true;
-                    }
-                } else if (keyCode == Keyboard.KeyCode.DOWN) {
-                    int selectionStart = textArea.getSelectionStart();
-                    int offset = getNextInsertionPoint(caretX, selectionStart
-                        + textArea.getSelectionLength(), Direction.FORWARD);
-
-                    if (offset != -1) {
-                        int selectionLength;
-                        if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
-                            selectionLength = offset - selectionStart;
-                        } else {
-                            selectionStart = offset;
-                            selectionLength = 0;
-                        }
-
-                        textArea.setSelection(selectionStart, selectionLength);
-                        scrollCharacterToVisible(offset);
-
-                        consumed = true;
-                    }
-                } else if (Keyboard.isPressed(commandModifier)) {
-                    if (keyCode == Keyboard.KeyCode.A) {
-                        textArea.setSelection(0, document.getCharacterCount());
-                        consumed = true;
-                    } else if (keyCode == Keyboard.KeyCode.X) {
-                        textArea.cut();
-                        consumed = true;
-                    } else if (keyCode == Keyboard.KeyCode.C) {
-                        textArea.copy();
-                        consumed = true;
-                    } else if (keyCode == Keyboard.KeyCode.V) {
-                        textArea.paste();
-                        consumed = true;
-                    } else if (keyCode == Keyboard.KeyCode.Z) {
-                        if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
-                            textArea.undo();
-                        } else {
-                            textArea.redo();
-                        }
-
-                        consumed = true;
+                if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                    // Add the previous character to the selection
+                    if (selectionStart > 0) {
+                        selectionStart--;
+                        selectionLength++;
                     }
                 } else {
-                    consumed = super.keyPressed(component, keyCode, keyLocation);
+                    // Clear the selection and move the caret back by one
+                    // character
+                    if (selectionLength == 0
+                        && selectionStart > 0) {
+                        selectionStart--;
+                    }
+
+                    selectionLength = 0;
                 }
+
+                textArea.setSelection(selectionStart, selectionLength);
+                scrollCharacterToVisible(selectionStart);
+
+                if (caret != null) {
+                    caretX = caret.x;
+                } else if (selection != null) {
+                    Rectangle bounds = selection.getBounds();
+                    caretX = bounds.x;
+                }
+
+                consumed = true;
+            } else if (keyCode == Keyboard.KeyCode.RIGHT) {
+                int selectionStart = textArea.getSelectionStart();
+                int selectionLength = textArea.getSelectionLength();
+
+                if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                    // Add the next character to the selection
+                    if (selectionStart + selectionLength < document.getCharacterCount()) {
+                        selectionLength++;
+                    }
+                } else {
+                    // Clear the selection and move the caret forward by one
+                    // character
+                    if (selectionLength > 0) {
+                        selectionStart += selectionLength - 1;
+                    }
+
+                    if (selectionStart < document.getCharacterCount() - 1) {
+                        selectionStart++;
+                    }
+
+                    selectionLength = 0;
+                }
+
+                textArea.setSelection(selectionStart, selectionLength);
+                scrollCharacterToVisible(selectionStart + selectionLength);
+
+                if (caret != null) {
+                    caretX = caret.x;
+                } else if (selection != null) {
+                    Rectangle bounds = selection.getBounds();
+                    caretX = bounds.x + bounds.width;
+                }
+
+                consumed = true;
+            } else if (keyCode == Keyboard.KeyCode.UP) {
+                int selectionStart = textArea.getSelectionStart();
+                int offset = getNextInsertionPoint(caretX, selectionStart, Direction.BACKWARD);
+
+                if (offset != -1) {
+                    int selectionLength;
+                    if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                        int selectionEnd = selectionStart + textArea.getSelectionLength() - 1;
+                        selectionLength = selectionEnd - offset + 1;
+                    } else {
+                        selectionLength = 0;
+                    }
+
+                    textArea.setSelection(offset, selectionLength);
+                    scrollCharacterToVisible(offset);
+
+                    consumed = true;
+                }
+            } else if (keyCode == Keyboard.KeyCode.DOWN) {
+                int selectionStart = textArea.getSelectionStart();
+                int offset = getNextInsertionPoint(caretX, selectionStart
+                    + textArea.getSelectionLength(), Direction.FORWARD);
+
+                if (offset != -1) {
+                    int selectionLength;
+                    if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                        selectionLength = offset - selectionStart;
+                    } else {
+                        selectionStart = offset;
+                        selectionLength = 0;
+                    }
+
+                    textArea.setSelection(selectionStart, selectionLength);
+                    scrollCharacterToVisible(offset);
+
+                    consumed = true;
+                }
+            } else if (Keyboard.isPressed(commandModifier)) {
+                if (keyCode == Keyboard.KeyCode.A) {
+                    textArea.setSelection(0, document.getCharacterCount());
+                    consumed = true;
+                } else if (keyCode == Keyboard.KeyCode.X
+                    && textArea.isEditable()) {
+                    textArea.cut();
+                    consumed = true;
+                } else if (keyCode == Keyboard.KeyCode.C) {
+                    textArea.copy();
+                    consumed = true;
+                } else if (keyCode == Keyboard.KeyCode.V
+                    && textArea.isEditable()) {
+                    textArea.paste();
+                    consumed = true;
+                } else if (keyCode == Keyboard.KeyCode.Z
+                    && textArea.isEditable()) {
+                    if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                        textArea.undo();
+                    } else {
+                        textArea.redo();
+                    }
+
+                    consumed = true;
+                }
+            } else {
+                consumed = super.keyPressed(component, keyCode, keyLocation);
             }
         }
 

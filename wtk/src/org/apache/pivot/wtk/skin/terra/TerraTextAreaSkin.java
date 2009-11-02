@@ -24,6 +24,8 @@ import org.apache.pivot.wtk.skin.TextAreaSkin;
  */
 public class TerraTextAreaSkin extends TextAreaSkin {
     public TerraTextAreaSkin() {
+        setColor(1);
+        setInactiveColor(7);
         setSelectionColor(4);
         setSelectionBackgroundColor(19);
         setInactiveSelectionColor(1);
@@ -33,6 +35,11 @@ public class TerraTextAreaSkin extends TextAreaSkin {
     public final void setColor(int color) {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
         setColor(theme.getColor(color));
+    }
+
+    public final void setInactiveColor(int inactiveColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setInactiveColor(theme.getColor(inactiveColor));
     }
 
     public final void setBackgroundColor(int backgroundColor) {
