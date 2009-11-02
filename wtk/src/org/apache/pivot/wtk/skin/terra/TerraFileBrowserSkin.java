@@ -825,9 +825,17 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             ancestorDirectory = ancestorDirectory.getParentFile();
         }
 
-        ArrayList<File> rootFolders = new ArrayList<File>(File.listRoots());
-        driveListButton.setListData(rootFolders);
-        driveListButton.setVisible(rootFolders.getLength() > 1);
+        File[] roots = File.listRoots();
+        ArrayList<File> drives = new ArrayList<File>();
+        for (int i = 0; i < roots.length; i++) {
+            File root = roots[i];
+            if (root.isDirectory()) {
+                drives.add(root);
+            }
+        }
+
+        driveListButton.setListData(drives);
+        driveListButton.setVisible(drives.getLength() > 1);
 
         File drive;
         if (path.getLength() == 0) {

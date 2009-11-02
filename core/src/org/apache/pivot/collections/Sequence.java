@@ -30,7 +30,7 @@ public interface Sequence<T> {
      * Collection of static utility methods providing path access to nested
      * sequence data.
      */
-    public static class Tree {
+    public static class Tree<T> {
         /**
          * An object representing a path to a nested node in nested sequence
          * data.
