@@ -31,7 +31,7 @@ limitations under the License.
     </wtkx:script>
 
     <content>
-        <BoxPane orientation="vertical" styles="{padding:8}">
+        <BoxPane orientation="vertical">
             <PushButton buttonData="Show Alert">
                 <buttonPressListeners>
                     <wtkx:script>

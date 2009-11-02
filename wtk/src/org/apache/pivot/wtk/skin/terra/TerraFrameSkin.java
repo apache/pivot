@@ -24,6 +24,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.Line2D;
 
+import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
@@ -226,6 +227,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
     private Color inactiveTitleBarBackgroundColor;
     private Color inactiveTitleBarBorderColor;
     private Color contentBorderColor;
+    private Insets padding;
     private boolean resizable;
 
     // Derived colors
@@ -246,6 +248,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         inactiveTitleBarBackgroundColor = theme.getColor(9);
         inactiveTitleBarBorderColor = theme.getColor(7);
         contentBorderColor = theme.getColor(7);
+        padding = new Insets(8);
         resizable = true;
 
         // Set the derived colors
@@ -367,7 +370,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
             if (height != -1) {
                 // Subtract padding, top/bottom content borders, and content bevel
                 // from height constraint
-                height -= 3;
+                height -= (padding.top + padding.bottom) + 3;
 
                 height = Math.max(height, 0);
             }
@@ -376,7 +379,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         }
 
         // Add padding and left/right content borders
-        preferredWidth += 2;
+        preferredWidth += (padding.left + padding.right) + 2;
 
         return preferredWidth;
     }
@@ -399,14 +402,17 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         Component content = frame.getContent();
         if (content != null) {
             if (width != -1) {
-                width = Math.max(width - 2, 0);
+                // Subtract padding and left/right content borders from constraint
+                width -= (padding.left + padding.right) + 2;
+
+                width = Math.max(width, 0);
             }
 
             preferredHeight += content.getPreferredHeight(width);
         }
 
-        // Add top/bottom content borders and content bevel
-        preferredHeight += 3;
+        // Add padding, top/bottom content borders, and content bevel
+        preferredHeight += (padding.top + padding.bottom) + 3;
 
         return preferredHeight;
     }
@@ -443,8 +449,8 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         }
 
         // Add padding, borders, and content bevel
-        preferredWidth += 2;
-        preferredHeight += 3;
+        preferredWidth += (padding.left + padding.right) + 2;
+        preferredHeight += (padding.top + padding.bottom) + 3;
 
         return new Dimensions(preferredWidth, preferredHeight);
     }
@@ -495,8 +501,13 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
             // Size/position content
             Component content = frame.getContent();
             if (content != null) {
-                content.setLocation(clientX, clientY);
-                content.setSize(clientWidth, Math.max(clientHeight - clientY + 1, 0));
+                int contentX = clientX + padding.left;
+                int contentY = clientY + padding.top;
+                int contentWidth = Math.max(clientWidth - (padding.left + padding.right), 0);
+                int contentHeight = Math.max(clientHeight - (clientY + padding.top + padding.bottom) + 1, 0);
+
+                content.setLocation(contentX, contentY);
+                content.setSize(contentWidth, contentHeight);
             }
         } else {
             titleBarTablePane.setVisible(false);
@@ -515,8 +526,9 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
 
             Component content = frame.getContent();
             if (content != null) {
-                content.setLocation(0, clientY);
-                content.setSize(width, Math.max(height - clientY, 0));
+                content.setLocation(padding.left, clientY + padding.top);
+                content.setSize(Math.max(width - (padding.left + padding.right), 0),
+                    Math.max(height - (clientY + padding.top + padding.bottom), 0));
             }
         }
     }
@@ -631,6 +643,47 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         setShowMinimizeButton(showWindowControls);
         setShowMaximizeButton(showWindowControls);
         setShowCloseButton(showWindowControls);
+    }
+
+    public Insets getPadding() {
+        return padding;
+    }
+
+    public void setPadding(Insets padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        this.padding = padding;
+        invalidateComponent();
+    }
+
+    public final void setPadding(Dictionary<String, ?> padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setPadding(new Insets(padding));
+    }
+
+    public final void setPadding(int padding) {
+        setPadding(new Insets(padding));
+    }
+
+    public final void setPadding(Number padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setPadding(padding.intValue());
+    }
+
+    public final void setPadding(String padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setPadding(Insets.decode(padding));
     }
 
     public boolean isResizable() {

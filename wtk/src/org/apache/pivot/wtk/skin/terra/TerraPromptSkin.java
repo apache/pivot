@@ -66,6 +66,11 @@ public class TerraPromptSkin extends TerraSheetSkin
         }
     }
 
+    public TerraPromptSkin() {
+        setResizable(false);
+        setPadding(0);
+    }
+
     @Override
     public void install(Component component) {
         super.install(component);
