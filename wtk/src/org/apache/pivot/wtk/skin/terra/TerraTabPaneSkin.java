@@ -1327,16 +1327,25 @@ public class TerraTabPaneSkin extends ContainerSkin
     // Tab pane attribute events
     @Override
     public void labelChanged(TabPane tabPane, Component component, String previousLabel) {
+        int i = tabPane.getTabs().indexOf(component);
+        buttonBoxPane.get(i).invalidate();
+
         invalidateComponent();
     }
 
     @Override
     public void iconChanged(TabPane tabPane, Component component, Image previousIcon) {
+        int i = tabPane.getTabs().indexOf(component);
+        buttonBoxPane.get(i).invalidate();
+
         invalidateComponent();
     }
 
     @Override
     public void closeableChanged(TabPane tabPane, Component component) {
+        int i = tabPane.getTabs().indexOf(component);
+        buttonBoxPane.get(i).invalidate();
+
         invalidateComponent();
     }
 }

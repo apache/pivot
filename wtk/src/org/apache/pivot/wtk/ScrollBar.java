@@ -196,15 +196,18 @@ public class ScrollBar extends Container {
             || end != previousEnd
             || extent != previousExtent) {
             if (start > value) {
-                throw new IllegalArgumentException("start is greater than value");
+                throw new IllegalArgumentException(String.format
+                    ("start (%d) is greater than value (%d)", start, value));
             }
 
             if (extent < 0) {
-                throw new IllegalArgumentException("extent is negative");
+                throw new IllegalArgumentException(String.format
+                    ("extent (%d) is negative", extent));
             }
 
             if (end < value + extent) {
-                throw new IllegalArgumentException("end is less than value+extent");
+                throw new IllegalArgumentException(String.format
+                    ("end (%d) is less than value (%d) + extent (%d)", end, value, extent));
             }
 
             this.start = start;
@@ -233,11 +236,13 @@ public class ScrollBar extends Container {
 
         if (value != previousValue) {
             if (value < start) {
-                throw new IllegalArgumentException("value is less than start");
+                throw new IllegalArgumentException(String.format
+                    ("value (%d) is less than start (%d)", value, start));
             }
 
             if (value + extent > end) {
-                throw new IllegalArgumentException("value+extent is greater than end");
+                throw new IllegalArgumentException(String.format
+                    ("value (%d) + extent (%d) is greater than end (%d)", value, extent, end));
             }
 
             this.value = value;
