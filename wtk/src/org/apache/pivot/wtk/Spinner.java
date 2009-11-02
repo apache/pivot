@@ -259,7 +259,7 @@ public class Spinner extends Container {
         if (previousSpinnerData != spinnerData) {
             if (previousSpinnerData != null) {
                 // Clear any existing selection
-                setSelectedIndex(-1);
+                selectedIndex = -1;
 
                 ((List<Object>)previousSpinnerData).getListListeners().remove(spinnerDataHandler);
             }
@@ -272,7 +272,7 @@ public class Spinner extends Container {
         }
     }
 
-    public void setSpinnerData(String spinnerData) {
+    public final void setSpinnerData(String spinnerData) {
         if (spinnerData == null) {
             throw new IllegalArgumentException("spinnerData is null.");
         }

@@ -165,7 +165,7 @@ public class ListButton extends Button {
 
         if (previousListData != listData) {
             if (previousListData != null) {
-                setSelectedIndex(-1);
+                selectedIndex = -1;
             }
 
             // Update the list data and fire change event
@@ -180,7 +180,7 @@ public class ListButton extends Button {
      * @param listData
      * The list data to be presented by the list button as a JSON array.
      */
-    public void setListData(String listData) {
+    public final void setListData(String listData) {
         if (listData == null) {
             throw new IllegalArgumentException("listData is null.");
         }

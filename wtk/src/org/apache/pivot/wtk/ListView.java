@@ -677,7 +677,7 @@ public class ListView extends Component {
      * A JSON string (must begin with <tt>[</tt> and end with <tt>]</tt>)
      * denoting the data to be presented by the list view.
      */
-    public void setListData(String listData) {
+    public final void setListData(String listData) {
         if (listData == null) {
             throw new IllegalArgumentException("listData is null.");
         }

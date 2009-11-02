@@ -288,6 +288,115 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         }
     }
 
+
+    /**
+     * Abstract base class for drive renderers.
+     */
+    public static abstract class DriveRenderer extends BoxPane {
+        protected ImageView imageView = new ImageView();
+        protected Label label = new Label();
+
+        public static final int ICON_WIDTH = 16;
+        public static final int ICON_HEIGHT = 16;
+
+        public static final Image DRIVE_IMAGE;
+
+        static {
+            try {
+                DRIVE_IMAGE = Image.load(FileRenderer.class.getResource("drive.png"));
+            } catch (TaskExecutionException exception) {
+                throw new RuntimeException(exception);
+            }
+        }
+
+        public DriveRenderer() {
+            getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
+
+            add(imageView);
+            add(label);
+
+            imageView.setPreferredSize(ICON_WIDTH, ICON_HEIGHT);
+            imageView.getStyles().put("backgroundColor", null);
+        }
+
+        @Override
+        public void setSize(int width, int height) {
+            super.setSize(width, height);
+
+            // Since this component doesn't have a parent, it won't be validated
+            // via layout; ensure that it is valid here
+            validate();
+        }
+    }
+
+    /**
+     * List button drive renderer.
+     */
+    public static class ListButtonDriveRenderer extends DriveRenderer implements Button.DataRenderer {
+        public ListButtonDriveRenderer() {
+            getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
+        }
+
+        @Override
+        public void render(Object data, Button button, boolean highlight) {
+            if (data != null) {
+                File file = (File)data;
+
+                // Update the image view
+                imageView.setImage(DRIVE_IMAGE);
+                imageView.getStyles().put("opacity", button.isEnabled() ? 1.0f : 0.5f);
+
+                // Update the label
+                label.setText(file.toString());
+            }
+        }
+    }
+
+    /**
+     * List view drive renderer.
+     */
+    public static class ListViewDriveRenderer extends DriveRenderer implements ListView.ItemRenderer {
+        public ListViewDriveRenderer() {
+            getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
+            getStyles().put("padding", new Insets(2, 3, 2, 3));
+        }
+
+        @Override
+        public void render(Object item, int index, ListView listView, boolean selected,
+            boolean checked, boolean highlighted, boolean disabled) {
+            label.getStyles().put("font", listView.getStyles().get("font"));
+
+            Object color = null;
+            if (listView.isEnabled() && !disabled) {
+                if (selected) {
+                    if (listView.isFocused()) {
+                        color = listView.getStyles().get("selectionColor");
+                    } else {
+                        color = listView.getStyles().get("inactiveSelectionColor");
+                    }
+                } else {
+                    color = listView.getStyles().get("color");
+                }
+            } else {
+                color = listView.getStyles().get("disabledColor");
+            }
+
+            label.getStyles().put("color", color);
+
+            if (item != null) {
+                File file = (File)item;
+
+                // Update the image view
+                imageView.setImage(DRIVE_IMAGE);
+                imageView.getStyles().put("opacity",
+                    (listView.isEnabled() && !disabled) ? 1.0f : 0.5f);
+
+                // Update the label
+                label.setText(file.toString());
+            }
+        }
+    }
+
     /**
      * File comparator.
      */
@@ -361,6 +470,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
     private Component content = null;
 
+    @WTKX private ListButton driveListButton = null;
     @WTKX private ListButton pathListButton = null;
     @WTKX private PushButton goUpButton = null;
     @WTKX private PushButton newFolderButton = null;
@@ -410,6 +520,16 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         fileBrowser.add(content);
 
         wtkxSerializer.bind(this, TerraFileBrowserSkin.class);
+
+        driveListButton.getListButtonSelectionListeners().add(new ListButtonSelectionListener() {
+            @Override
+            public void selectedIndexChanged(ListButton listButton, int previousSelectedIndex) {
+                if (previousSelectedIndex != -1) {
+                    File drive = (File)listButton.getSelectedItem();
+                    fileBrowser.setRootDirectory(drive);
+                }
+            }
+        });
 
         pathListButton.getListButtonSelectionListeners().add(new ListButtonSelectionListener() {
             @Override
@@ -508,7 +628,6 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                 updatingSelection = true;
 
                 Sequence<File> files = (Sequence<File>)tableView.getSelectedRows();
-                // TODO Revisit this for loop
                 for (int i = 0, n = files.getLength(); i < n; i++) {
                     File file = files.get(i);
                     files.update(i, file);
@@ -706,10 +825,24 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             ancestorDirectory = ancestorDirectory.getParentFile();
         }
 
+        ArrayList<File> rootFolders = new ArrayList<File>(File.listRoots());
+        driveListButton.setListData(rootFolders);
+        driveListButton.setVisible(rootFolders.getLength() > 1);
+
+        File drive;
+        if (path.getLength() == 0) {
+            drive = rootDirectory;
+        } else {
+            drive = path.get(path.getLength() - 1);
+        }
+
+        driveListButton.setSelectedItem(drive);
+
         pathListButton.setListData(path);
         pathListButton.setButtonData(rootDirectory);
+        pathListButton.setEnabled(rootDirectory.getParentFile() != null);
 
-        goUpButton.setEnabled(rootDirectory.getParentFile() != null);
+        goUpButton.setEnabled(pathListButton.isEnabled());
 
         File homeDirectory = new File(System.getProperty("user.home"));
         goHomeButton.setEnabled(!rootDirectory.equals(homeDirectory));

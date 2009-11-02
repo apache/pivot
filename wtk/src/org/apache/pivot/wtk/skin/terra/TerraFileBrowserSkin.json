@@ -14,7 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-{   goTo: "Go to a folder",
+{   selectDrive: "Select drive",
+    goTo: "Go to a folder",
     goUp: "Go up a folder",
     newFolder: "Create new folder",
     goHome: "Go to home folder",

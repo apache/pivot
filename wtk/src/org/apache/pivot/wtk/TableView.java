@@ -1275,7 +1275,7 @@ public class TableView extends Component {
         if (previousTableData != tableData) {
             if (previousTableData != null) {
                 // Clear any existing selection
-                clearSelection();
+                selectedRanges.clear();
 
                 ((List<Object>)previousTableData).getListListeners().remove(tableDataListener);
             }
@@ -1295,7 +1295,7 @@ public class TableView extends Component {
      * A JSON string (must begin with <tt>[</tt> and end with <tt>]</tt>)
      * denoting the data to be presented by the table view.
      */
-    public void setTableData(String tableData) {
+    public final void setTableData(String tableData) {
         if (tableData == null) {
             throw new IllegalArgumentException("tableData is null.");
         }
