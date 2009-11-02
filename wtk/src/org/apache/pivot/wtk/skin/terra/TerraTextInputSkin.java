@@ -27,6 +27,7 @@ import java.awt.Toolkit;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
 import java.awt.font.LineMetrics;
+import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
@@ -351,20 +352,26 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                color = disabledColor;
             }
 
-            // TODO Paint the selection text using multiple, non-overlapping clip rects
-
             if (glyphVector != null) {
-                if (color != null) {
-                    graphics.setFont(font);
+                graphics.setFont(font);
+
+                if (selection == null) {
+                    // Paint the text
                     graphics.setColor(color);
                     graphics.drawGlyphVector(glyphVector, padding.left - scrollLeft + 1, padding.top + ascent + 1);
-                }
+                } else {
+                    // Paint the unselected text
+                    Area unselectedArea = new Area();
+                    unselectedArea.add(new Area(new Rectangle(0, 0, width, height)));
+                    unselectedArea.subtract(new Area(selection));
 
-                if (textInput.getSelectionLength() > 0) {
+                    Graphics2D textGraphics = (Graphics2D)graphics.create();
+                    textGraphics.setColor(color);
+                    textGraphics.clip(unselectedArea);
+                    textGraphics.drawGlyphVector(glyphVector, padding.left - scrollLeft + 1, padding.top + ascent + 1);
+                    textGraphics.dispose();
+
                     // Paint the selection
-                    Graphics2D selectionGraphics = (Graphics2D)graphics.create();
-                    selectionGraphics.clip(selection.getBounds());
-
                     Color selectionColor;
                     Color selectionBackgroundColor;
 
@@ -376,13 +383,14 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                         selectionBackgroundColor = inactiveSelectionBackgroundColor;
                     }
 
-                    selectionGraphics.setColor(selectionBackgroundColor);
-                    selectionGraphics.fill(selection);
+                    graphics.setColor(selectionBackgroundColor);
+                    graphics.fill(selection);
 
-                    selectionGraphics.setColor(selectionColor);
-                    selectionGraphics.drawGlyphVector(glyphVector, padding.left - scrollLeft + 1, padding.top + ascent + 1);
-
-                    selectionGraphics.dispose();
+                    Graphics2D selectedTextGraphics = (Graphics2D)graphics.create();
+                    selectedTextGraphics.setColor(selectionColor);
+                    selectedTextGraphics.clip(selection.getBounds());
+                    selectedTextGraphics.drawGlyphVector(glyphVector, padding.left - scrollLeft + 1, padding.top + ascent + 1);
+                    selectedTextGraphics.dispose();
                 }
             }
 

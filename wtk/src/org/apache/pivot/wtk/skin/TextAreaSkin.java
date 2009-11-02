@@ -1023,48 +1023,73 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                         RenderingHints.VALUE_FRACTIONALMETRICS_ON);
                 }
 
-                // Draw text
-                // TODO Draw selection using multiple clip rects
-                graphics.setFont(font);
-                graphics.setPaint(color);
-
                 LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
-                graphics.drawGlyphVector(glyphVector, 0, lm.getAscent());
+                float ascent = lm.getAscent();
 
-                // Draw selected characters using the selection color
+                graphics.setFont(font);
+
+                int selectionStart = textArea.getSelectionStart();
                 int selectionLength = textArea.getSelectionLength();
-                if (selectionLength > 0) {
-                    int selectionStart = textArea.getSelectionStart();
-                    Span selectionRange = new Span(selectionStart, selectionStart + selectionLength - 1);
+                Span selectionRange = new Span(selectionStart, selectionStart + selectionLength - 1);
 
-                    int documentOffset = getDocumentOffset();
-                    Span characterRange = new Span(documentOffset, documentOffset + getCharacterCount() - 1);
+                int documentOffset = getDocumentOffset();
+                Span characterRange = new Span(documentOffset, documentOffset + getCharacterCount() - 1);
 
-                    if (characterRange.intersects(selectionRange)) {
-                        int width = getWidth();
-                        int height = getHeight();
+                if (selectionLength > 0
+                    && characterRange.intersects(selectionRange)) {
+                    // Determine the selection bounds
+                    int width = getWidth();
+                    int height = getHeight();
 
-                        int x0;
-                        if (selectionRange.start > characterRange.start) {
-                            Bounds leadingSelectionBounds = getCharacterBounds(selectionRange.start - documentOffset);
-                            x0 = leadingSelectionBounds.x;
-                        } else {
-                            x0 = 0;
-                        }
-
-                        int x1;
-                        if (selectionRange.end < characterRange.end) {
-                            Bounds trailingSelectionBounds = getCharacterBounds(selectionRange.end - documentOffset);
-                            x1 = trailingSelectionBounds.x + trailingSelectionBounds.width;
-                        } else {
-                            x1 = width;
-                        }
-
-                        graphics.clipRect(x0, 0, x1 - x0, height);
-                        graphics.setColor(textArea.isFocused() &&
-                            textArea.isEditable() ? selectionColor : inactiveSelectionColor);
-                        graphics.drawGlyphVector(glyphVector, 0, lm.getAscent());
+                    int x0;
+                    if (selectionRange.start > characterRange.start) {
+                        Bounds leadingSelectionBounds = getCharacterBounds(selectionRange.start - documentOffset);
+                        x0 = leadingSelectionBounds.x;
+                    } else {
+                        x0 = 0;
                     }
+
+                    int x1;
+                    if (selectionRange.end < characterRange.end) {
+                        Bounds trailingSelectionBounds = getCharacterBounds(selectionRange.end - documentOffset);
+                        x1 = trailingSelectionBounds.x + trailingSelectionBounds.width;
+                    } else {
+                        x1 = width;
+                    }
+
+                    Rectangle selection = new Rectangle(x0, 0, x1 - x0, height);
+
+                    // Paint the unselected text
+                    Area unselectedArea = new Area();
+                    unselectedArea.add(new Area(new Rectangle(0, 0, width, height)));
+                    unselectedArea.subtract(new Area(selection));
+
+                    Graphics2D textGraphics = (Graphics2D)graphics.create();
+                    textGraphics.setColor(color);
+                    textGraphics.clip(unselectedArea);
+                    textGraphics.drawGlyphVector(glyphVector, 0, ascent);
+                    textGraphics.dispose();
+
+                    // Paint the selection
+                    Color selectionColor;
+                    if (textArea.isFocused()) {
+                        selectionColor = TextAreaSkin.this.selectionColor;
+                        selectionBackgroundColor = TextAreaSkin.this.selectionBackgroundColor;
+                    } else {
+                        selectionColor = inactiveSelectionColor;
+                        selectionBackgroundColor = inactiveSelectionBackgroundColor;
+                    }
+
+                    Graphics2D selectedTextGraphics = (Graphics2D)graphics.create();
+                    selectedTextGraphics.setColor(textArea.isFocused() &&
+                        textArea.isEditable() ? selectionColor : inactiveSelectionColor);
+                    selectedTextGraphics.clip(selection.getBounds());
+                    selectedTextGraphics.drawGlyphVector(glyphVector, 0, ascent);
+                    selectedTextGraphics.dispose();
+                } else {
+                    // Draw the text
+                    graphics.setColor(color);
+                    graphics.drawGlyphVector(glyphVector, 0, ascent);
                 }
             }
         }
@@ -1484,7 +1509,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             if (caret != null
                 && caretOn
                 && textArea.isFocused()) {
-                graphics.setPaint(textArea.isEditable() ? color : inactiveColor);
+                graphics.setColor(textArea.isEditable() ? color : inactiveColor);
                 graphics.fill(caret);
             }
         }
