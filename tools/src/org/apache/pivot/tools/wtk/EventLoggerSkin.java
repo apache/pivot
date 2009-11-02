@@ -41,7 +41,7 @@ import org.apache.pivot.wtk.skin.ContainerSkin;
 import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
-class EventLoggerSkin extends ContainerSkin implements EventLoggerListener {
+class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLoggerListener {
     private static class TreeNodeComparator implements Comparator<TreeNode> {
         public int compare(TreeNode treeNode1, TreeNode treeNode2) {
             return treeNode1.getText().compareTo(treeNode2.getText());
@@ -211,13 +211,22 @@ class EventLoggerSkin extends ContainerSkin implements EventLoggerListener {
         content.setSize(getWidth(), getHeight());
     }
 
+    // EventLogger.Skin methods
+
+    @Override
+    public void clearLog() {
+        firedEventsTableView.getTableData().clear();
+    }
+
+    // EventLoggerListener methods
+
     @Override
     public void sourceChanged(EventLogger eventLogger, Component previousSource) {
+        clearLog();
+
         HashMap<Class<?>, ArrayList<Method>> buckets = new HashMap<Class<?>, ArrayList<Method>>();
 
-        Sequence<Method> declaredEvents = eventLogger.getDeclaredEvents();
-        for (int i = 0, n = declaredEvents.getLength(); i < n; i++) {
-            Method event = declaredEvents.get(i);
+        for (Method event : eventLogger.getDeclaredEvents()) {
             Class<?> listenerInterface = event.getDeclaringClass();
 
             ArrayList<Method> bucket = buckets.get(listenerInterface);

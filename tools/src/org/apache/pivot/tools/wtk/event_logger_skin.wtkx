@@ -16,59 +16,50 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<TablePane
+<SplitPane orientation="horizontal" splitRatio="0.25"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
-    <columns>
-        <TablePane.Column width="1*"/>
-    </columns>
-    <rows>
-        <TablePane.Row>
-            <FlowPane TablePane.columnSpan="2" styles="{padding:6, alignToBaseline:true}">
-                <PushButton buttonData="%clearEvents"
-                    ButtonPressListener.buttonPressed="firedEventsTableView.getTableData().clear()"/>
-            </FlowPane>
-        </TablePane.Row>
-        <TablePane.Row height="1*">
-            <SplitPane orientation="horizontal" splitRatio="0.25">
-                <left>
-                    <Border>
-                        <content>
-                            <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
-                                <view>
-                                    <TreeView wtkx:id="declaredEventsTreeView"
-                                        checkmarksEnabled="true"
-                                        showMixedCheckmarkState="true"
-                                        selectMode="none">
-                                        <nodeRenderer>
-                                            <content:TreeViewNodeRenderer showIcon="false"/>
-                                        </nodeRenderer>
-                                    </TreeView>
-                                </view>
-                            </ScrollPane>
-                        </content>
-                    </Border>
-                </left>
-                <right>
-                    <Border>
-                        <content>
-                            <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
-                                <view>
-                                    <TableView wtkx:id="firedEventsTableView" selectMode="none">
-                                        <columns>
-                                            <TableView.Column name="interface" width="175" />
-                                            <TableView.Column name="method" width="200" />
-                                            <TableView.Column name="arguments" width="1*"
-                                                minimumWidth="200"/>
-                                        </columns>
-                                    </TableView>
-                                </view>
-                            </ScrollPane>
-                        </content>
-                    </Border>
-                </right>
-            </SplitPane>
-        </TablePane.Row>
-    </rows>
-</TablePane>
+    <left>
+        <Border>
+            <content>
+                <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
+                    <view>
+                        <TreeView wtkx:id="declaredEventsTreeView"
+                            checkmarksEnabled="true"
+                            showMixedCheckmarkState="true"
+                            selectMode="none">
+                            <nodeRenderer>
+                                <content:TreeViewNodeRenderer showIcon="false"/>
+                            </nodeRenderer>
+                        </TreeView>
+                    </view>
+                </ScrollPane>
+            </content>
+        </Border>
+    </left>
+    <right>
+        <Border>
+            <content>
+                <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
+                    <view>
+                        <TableView wtkx:id="firedEventsTableView" selectMode="none">
+                            <columns>
+                                <TableView.Column name="interface" width="175"
+                                    headerData="Declaring Class"/>
+                                <TableView.Column name="method" width="200"
+                                    headerData="Event"/>
+                                <TableView.Column name="arguments" width="1*"
+                                    headerData="Arguments" minimumWidth="200"/>
+                            </columns>
+                        </TableView>
+                    </view>
+                    <columnHeader>
+                        <TableViewHeader tableView="$firedEventsTableView"
+                            sortMode="none" styles="{headersPressable:false}"/>
+                    </columnHeader>
+                </ScrollPane>
+            </content>
+        </Border>
+    </right>
+</SplitPane>

@@ -43,6 +43,16 @@ import org.apache.pivot.wtk.Container;
  */
 public class EventLogger extends Container {
     /**
+     * Event logger skin interface. Event logger skins must implement this.
+     */
+    public interface Skin {
+        /**
+         * Clears the event log.
+         */
+        public void clearLog();
+    }
+
+    /**
      * Declared event sequence.
      */
     public final class DeclaredEventSequence implements Sequence<Method>, Iterable<Method> {
@@ -299,6 +309,14 @@ public class EventLogger extends Container {
      */
     public IncludeEventGroup getIncludeEvents() {
         return includeEventGroup;
+    }
+
+    /**
+     * Clears the event log.
+     */
+    public void clearLog() {
+        EventLogger.Skin eventLoggerSkin = (EventLogger.Skin)getSkin();
+        eventLoggerSkin.clearLog();
     }
 
     private void registerEventListeners() {
