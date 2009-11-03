@@ -39,6 +39,22 @@ limitations under the License.
                                                 </nodeRenderer>
                                                 <treeData>
                                                     <content:TreeBranch>
+                                                        <content:TreeBranch
+                                                            text="Labels &amp; Image Views"
+                                                            icon="@folder.png">
+                                                            <explorer:ComponentNode
+                                                                text="Label"
+                                                                icon="@page_white.png"
+                                                                src="@basic/label.wtkx"
+                                                                horizontalScrollBarPolicy="fill"
+                                                                verticalScrollBarPolicy="fill"/>
+                                                            <explorer:ComponentNode
+                                                                text="ImageView"
+                                                                icon="@page_white.png"
+                                                                src="@basic/image_view.wtkx"
+                                                                horizontalScrollBarPolicy="fill"
+                                                                verticalScrollBarPolicy="fill"/>
+                                                        </content:TreeBranch>
                                                         <content:TreeBranch text="Buttons"
                                                             icon="@folder.png">
                                                             <explorer:ComponentNode
@@ -95,6 +111,15 @@ limitations under the License.
                                                                 src="@text/text_area.wtkx"
                                                                 horizontalScrollBarPolicy="fill"
                                                                 verticalScrollBarPolicy="fill_to_capacity"/>
+                                                        </content:TreeBranch>
+                                                        <content:TreeBranch text="Separators"
+                                                            icon="@folder.png">
+                                                            <explorer:ComponentNode
+                                                                text="Separator"
+                                                                icon="@page_white.png"
+                                                                src="@separators/separator.wtkx"
+                                                                horizontalScrollBarPolicy="fill"
+                                                                verticalScrollBarPolicy="auto"/>
                                                         </content:TreeBranch>
                                                         <content:TreeBranch text="Layout Containers"
                                                             icon="@folder.png">
@@ -286,6 +311,12 @@ limitations under the License.
                                                         <content:TreeBranch
                                                             text="Tables"
                                                             icon="@folder.png">
+                                                            <explorer:ComponentNode
+                                                                text="TableView"
+                                                                icon="@page_white.png"
+                                                                src="@tables/table_view.wtkx"
+                                                                horizontalScrollBarPolicy="fill_to_capacity"
+                                                                verticalScrollBarPolicy="auto"/>
                                                         </content:TreeBranch>
                                                         <content:TreeBranch
                                                             text="Trees"
@@ -295,6 +326,16 @@ limitations under the License.
                                                                 icon="@page_white.png"
                                                                 src="@trees/tree_view.wtkx"
                                                                 horizontalScrollBarPolicy="fill_to_capacity"
+                                                                verticalScrollBarPolicy="auto"/>
+                                                        </content:TreeBranch>
+                                                        <content:TreeBranch
+                                                            text="File Browsing"
+                                                            icon="@folder.png">
+                                                            <explorer:ComponentNode
+                                                                text="FileBrowser"
+                                                                icon="@page_white.png"
+                                                                src="@filebrowsing/file_browser.wtkx"
+                                                                horizontalScrollBarPolicy="fill"
                                                                 verticalScrollBarPolicy="auto"/>
                                                         </content:TreeBranch>
                                                     </content:TreeBranch>

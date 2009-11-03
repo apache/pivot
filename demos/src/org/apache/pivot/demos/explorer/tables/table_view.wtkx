@@ -16,27 +16,38 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<TextArea xmlns:wtkx="http://pivot.apache.org/wtkx"
+<TableView xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
+    <columns>
+        <TableView.Column name="i" width="75"/>
+        <TableView.Column name="a" width="75"/>
+        <TableView.Column name="b" width="75"/>
+        <TableView.Column name="c" width="75"/>
+        <TableView.Column name="d" width="1*"/>
+    </columns>
     <componentListeners>
         <wtkx:script>
         <![CDATA[
+        importClass(org.apache.pivot.collections.ArrayList);
+        importClass(org.apache.pivot.collections.HashMap);
+
         function parentChanged(component, previousParent) {
             if (component.getParent() != null) {
-                component.setText("Lorem ipsum dolor sit amet, consetetur\n" +
-                    "sadipscing elitr, sed diam nonumy eirmod\n" +
-                    "tempor invidunt ut labore et dolore magna\n" +
-                    "aliquyam erat, sed diam voluptua. At vero\n" +
-                    "eos et accusam et justo duo dolores et ea\n" +
-                    "rebum. Stet clita kasd gubergren, no sea\n" +
-                    "takimata sanctus est Lorem ipsum dolor sit\n" +
-                    "amet.\n" +
-                    "\n" +
-                    "Stet clita kasd gubergren, no sea takimata\n" +
-                    "sanctus est Lorem ipsum dolor sit amet.");
+                var tableData = new ArrayList();
+
+                for (var i = 0; i < 500; i++) {
+                    var row = new HashMap();
+                    row.put("i", new String(i));
+                    row.put("a", new String(Math.floor(Math.random() * 100)));
+                    row.put("b", new String(Math.floor(Math.random() * 1000)));
+                    row.put("c", new String(Math.floor(Math.random() * 10000)));
+                    tableData.add(row);
+                }
+
+                component.setTableData(tableData);
             }
         }
         ]]>
         </wtkx:script>
     </componentListeners>
-</TextArea>
+</TableView>

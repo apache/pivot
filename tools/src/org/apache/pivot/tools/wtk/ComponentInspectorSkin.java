@@ -570,8 +570,8 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         boxPane.add(flowPane);
 
         TextInput textInput = new TextInput();
-        textInput.setTextSize(3);
-        textInput.setMaximumLength(4);
+        textInput.setTextSize(4);
+        textInput.setMaximumLength(5);
         textInput.setValidator(new IntValidator());
         textInput.setText(String.valueOf(dimensions.width));
         flowPane.add(textInput);
@@ -604,8 +604,8 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         boxPane.add(flowPane);
 
         textInput = new TextInput();
-        textInput.setTextSize(3);
-        textInput.setMaximumLength(4);
+        textInput.setTextSize(4);
+        textInput.setMaximumLength(5);
         textInput.setValidator(new IntValidator());
         textInput.setText(String.valueOf(dimensions.height));
         flowPane.add(textInput);

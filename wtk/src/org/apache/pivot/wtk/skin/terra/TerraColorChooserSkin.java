@@ -106,6 +106,15 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
         }
 
         @Override
+        public void mouseOut(Component component) {
+            super.mouseOut(component);
+
+            if (Mouse.getCapturer() != component) {
+                capture = false;
+            }
+        }
+
+        @Override
         public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
             boolean consumed = super.mouseDown(component, button, x, y);
 
@@ -240,6 +249,15 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
             }
 
             return consumed;
+        }
+
+        @Override
+        public void mouseOut(Component component) {
+            super.mouseOut(component);
+
+            if (Mouse.getCapturer() != component) {
+                capture = false;
+            }
         }
 
         @Override
