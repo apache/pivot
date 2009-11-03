@@ -421,7 +421,6 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         }
     }
 
-    @SuppressWarnings("unchecked")
     private Component addEnumControl(final Dictionary<String, Object> dictionary,
         final String key, Class<? extends Enum<?>> type, Form.Section section) {
         Enum<?> value = (Enum<?>)dictionary.get(key);

@@ -515,7 +515,8 @@ public class TextArea extends Component {
                 // No-op
             }
 
-            if (text != null) {
+            if (text != null
+                && text.length() > 0) {
                 // Remove any existing selection
                 if (selectionLength > 0) {
                     // TODO Make this part of the undoable action (for all such
@@ -524,7 +525,20 @@ public class TextArea extends Component {
                 }
 
                 // Insert the clipboard contents
-                insertText(text);
+                Document document;
+                int n;
+                try {
+                    PlainTextSerializer serializer = new PlainTextSerializer();
+                    StringReader reader = new StringReader(text);
+                    document = serializer.readObject(reader);
+                    n = document.getCharacterCount();
+
+                    this.document.insertRange(document, selectionStart);
+                } catch(IOException exception) {
+                    throw new RuntimeException(exception);
+                }
+
+                setSelection(selectionStart + n, 0);
             }
         }
     }
