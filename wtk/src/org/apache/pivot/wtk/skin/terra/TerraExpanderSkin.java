@@ -43,6 +43,7 @@ import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.content.ButtonDataRenderer;
+import org.apache.pivot.wtk.effects.ClipDecorator;
 import org.apache.pivot.wtk.effects.Transition;
 import org.apache.pivot.wtk.effects.TransitionListener;
 import org.apache.pivot.wtk.effects.easing.Easing;
@@ -81,13 +82,23 @@ public class TerraExpanderSkin extends ExpanderSkin
 
         @Override
         public void start(TransitionListener transitionListener) {
-            getComponent().setEnabled(false);
+            Expander expander = (Expander)getComponent();
+            Component content = expander.getContent();
+            content.getDecorators().add(clipDecorator);
+
+            expander.setEnabled(false);
+
             super.start(transitionListener);
         }
 
         @Override
         public void stop() {
-            getComponent().setEnabled(true);
+            Expander expander = (Expander)getComponent();
+            Component content = expander.getContent();
+            content.getDecorators().remove(clipDecorator);
+
+            expander.setEnabled(true);
+
             super.stop();
         }
 
@@ -184,6 +195,7 @@ public class TerraExpanderSkin extends ExpanderSkin
     private Color titleBarBevelColor;
 
     private ExpandTransition expandTransition = null;
+    private ClipDecorator clipDecorator = new ClipDecorator();
 
     private ComponentMouseButtonListener titleBarMouseListener = new ComponentMouseButtonListener.Adapter() {
         @Override
@@ -383,20 +395,15 @@ public class TerraExpanderSkin extends ExpanderSkin
         titleBarTablePane.setLocation(1, 1);
 
         if (content != null) {
-            if (expander.isExpanded()
-                || expandTransition != null) {
-                int contentWidth = Math.max(width - (2 + padding.left + padding.right), 0);
-                int contentHeight = Math.max(height - (3 + padding.top + padding.bottom + titleBarHeight), 0);
-                content.setSize(contentWidth, contentHeight);
+            int contentWidth = Math.max(width - (2 + padding.left + padding.right), 0);
+            int contentHeight = Math.max(height - (3 + padding.top + padding.bottom + titleBarHeight), 0);
 
-                int contentX = 1 + padding.left;
-                int contentY = 2 + padding.top + titleBarHeight;
-                content.setLocation(contentX, contentY);
+            clipDecorator.setSize(contentWidth, contentHeight);
+            content.setSize(content.getPreferredSize());
 
-                content.setVisible(true);
-            } else {
-                content.setVisible(false);
-            }
+            int contentX = 1 + padding.left;
+            int contentY = 2 + padding.top + titleBarHeight;
+            content.setLocation(contentX, contentY);
         }
     }
 
