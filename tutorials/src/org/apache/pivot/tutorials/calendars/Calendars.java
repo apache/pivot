@@ -85,7 +85,11 @@ public class Calendars implements Application {
             updatingSelectedDate = true;
 
             calendar.setSelectedDate(selectedDate);
+            calendar.setYear(selectedDate.year);
+            calendar.setMonth(selectedDate.month);
+
             calendarButton.setSelectedDate(selectedDate);
+
             selectedDateLabel.setText(selectedDate.toString());
 
             updatingSelectedDate = false;

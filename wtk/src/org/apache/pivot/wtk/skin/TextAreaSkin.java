@@ -538,25 +538,27 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                         i++;
                     }
 
-                    NodeView nodeView = get(i);
-                    offset = nodeView.getNextInsertionPoint(x - nodeView.getX(),
-                        from - nodeView.getOffset(), direction);
+                    if (i < n) {
+                        NodeView nodeView = get(i);
+                        offset = nodeView.getNextInsertionPoint(x - nodeView.getX(),
+                            from - nodeView.getOffset(), direction);
 
-                    if (offset == -1) {
-                        // Move to the next or previous node view
-                        if (direction == Direction.FORWARD) {
-                            nodeView = (i < n - 1) ? get(i + 1) : null;
-                        } else {
-                            nodeView = (i > 0) ? get(i - 1) : null;
+                        if (offset == -1) {
+                            // Move to the next or previous node view
+                            if (direction == Direction.FORWARD) {
+                                nodeView = (i < n - 1) ? get(i + 1) : null;
+                            } else {
+                                nodeView = (i > 0) ? get(i - 1) : null;
+                            }
+
+                            if (nodeView != null) {
+                                offset = nodeView.getNextInsertionPoint(x - nodeView.getX(), -1, direction);
+                            }
                         }
 
-                        if (nodeView != null) {
-                            offset = nodeView.getNextInsertionPoint(x - nodeView.getX(), -1, direction);
+                        if (offset != -1) {
+                            offset += nodeView.getOffset();
                         }
-                    }
-
-                    if (offset != -1) {
-                        offset += nodeView.getOffset();
                     }
                 }
             }

@@ -135,9 +135,7 @@ public class CalendarButton extends Button {
     public void setSelectedDate(CalendarDate selectedDate) {
         CalendarDate previousSelectedDate = this.selectedDate;
 
-        if (((previousSelectedDate == null) ^ (selectedDate == null))
-            || (previousSelectedDate != null
-                && !previousSelectedDate.equals(selectedDate))) {
+        if (previousSelectedDate != selectedDate) {
             this.selectedDate = selectedDate;
             calendarButtonSelectionListeners.selectedDateChanged(this,
                 previousSelectedDate);

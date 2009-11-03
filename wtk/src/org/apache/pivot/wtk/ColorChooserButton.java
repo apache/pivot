@@ -109,9 +109,7 @@ public class ColorChooserButton extends Button {
     public void setSelectedColor(Color selectedColor) {
         Color previousSelectedColor = this.selectedColor;
 
-        if (((previousSelectedColor == null) ^ (selectedColor == null))
-            || (previousSelectedColor != null
-                && !previousSelectedColor.equals(selectedColor))) {
+        if (previousSelectedColor != selectedColor) {
             this.selectedColor = selectedColor;
             colorChooserButtonSelectionListeners.selectedColorChanged(this,
                 previousSelectedColor);
