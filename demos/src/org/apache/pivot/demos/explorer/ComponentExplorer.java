@@ -269,7 +269,10 @@ public class ComponentExplorer implements Application {
 
             // Ensure that it's visible to the user
             Path branchPath = new Path(initialSelectedPath, initialSelectedPath.getLength() - 1);
-            treeView.expandBranch(branchPath);
+            while (branchPath.getLength() > 0) {
+                treeView.expandBranch(branchPath);
+                branchPath.remove(branchPath.getLength() - 1, 1);
+            }
 
             final Path path = initialSelectedPath;
             ApplicationContext.queueCallback(new Runnable() {

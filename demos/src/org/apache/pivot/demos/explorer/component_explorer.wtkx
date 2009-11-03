@@ -369,7 +369,8 @@ limitations under the License.
                                         <corner>
                                             <BoxPane styles="{padding:{right:6},
                                                 horizontalAlignment:'right', fill:true}">
-                                                <MenuButton styles="{toolbar:true}">
+                                                <MenuButton styles="{toolbar:true,
+                                                    padding:{top:1, left:2, bottom:1, right:2}}">
                                                     <wtkx:define>
                                                         <ButtonGroup wtkx:id="horizontalScrollBarPolicyGroup"/>
                                                         <ButtonGroup wtkx:id="verticalScrollBarPolicyGroup"/>
@@ -483,7 +484,8 @@ limitations under the License.
                                 <corner>
                                     <BoxPane styles="{padding:{right:6},
                                         horizontalAlignment:'right', fill:true}">
-                                        <MenuButton styles="{toolbar:true}">
+                                        <MenuButton styles="{toolbar:true,
+                                            padding:{top:1, left:2, bottom:1, right:2}}">
                                             <buttonData>
                                                 <content:ButtonData icon="@preferences-system.png"/>
                                             </buttonData>
