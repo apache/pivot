@@ -70,14 +70,14 @@ public class ListViewItemRenderer extends BoxPane implements ListView.ItemRender
         Image icon = null;
         String text = null;
 
-        if (item != null) {
-            if (item instanceof ListItem) {
-                ListItem listItem = (ListItem)item;
-                icon = listItem.getIcon();
-                text = listItem.getText();
-            } else if (item instanceof Image) {
-                icon = (Image)item;
-            } else {
+        if (item instanceof ListItem) {
+            ListItem listItem = (ListItem)item;
+            icon = listItem.getIcon();
+            text = listItem.getText();
+        } else if (item instanceof Image) {
+            icon = (Image)item;
+        } else {
+            if (item != null) {
                 text = item.toString();
             }
         }
