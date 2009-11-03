@@ -22,7 +22,7 @@ limitations under the License.
     <content>
         <BoxPane styles="{padding:4, verticalAlignment:'center'}">
             <Label text="State:"/>
-            <TextInput wtkx:id="stateTextInput" textSize="20"/>
+            <TextInput wtkx:id="stateTextInput"/>
         </BoxPane>
     </content>
 </Window>

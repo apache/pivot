@@ -35,7 +35,7 @@ limitations under the License.
                         <rows>
                             <TablePane.Row height="-1">
                                 <BoxPane styles="{verticalAlignment:'center'}">
-                                    <TextInput textSize="32" wtkx:id="termTextInput">
+                                    <TextInput textSize="18" wtkx:id="termTextInput">
                                         <componentKeyListeners>
                                             <wtkx:script>
                                             <![CDATA[

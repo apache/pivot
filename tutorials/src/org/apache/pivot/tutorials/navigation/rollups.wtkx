@@ -47,7 +47,7 @@ limitations under the License.
                                     <Label text="Calendar" styles="{font:{bold:true}, color:13}"/>
                                 </heading>
                                 <content>
-                                    <wtkx:include src="calendar.wtkx"/>
+                                    <Calendar/>
                                 </content>
                             </Rollup>
                             <Rollup styles="{fill:true}">

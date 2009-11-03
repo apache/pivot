@@ -399,7 +399,7 @@ public class TerraExpanderSkin extends ExpanderSkin
             int contentHeight = Math.max(height - (3 + padding.top + padding.bottom + titleBarHeight), 0);
 
             clipDecorator.setSize(contentWidth, contentHeight);
-            content.setSize(content.getPreferredSize());
+            content.setSize(contentWidth, content.getPreferredHeight(contentWidth));
 
             int contentX = 1 + padding.left;
             int contentY = 2 + padding.top + titleBarHeight;

@@ -38,7 +38,7 @@ limitations under the License.
                             </Expander>
                             <Expander wtkx:id="calendarExpander" title="Calendar" expanded="false">
                                 <content>
-                                    <wtkx:include src="calendar.wtkx"/>
+                                    <Calendar/>
                                 </content>
                             </Expander>
                         </BoxPane>

@@ -56,6 +56,10 @@ table {
     font-size:11px;
 }
 
+td {
+    vertical-align:middle;
+}
+
 img {
     vertical-align: middle;
 }
@@ -64,186 +68,219 @@ img {
 <%@ include file="jnlp_common.jsp" %>
 </head>
 <body>
-<h2>Demos</h2>
-<p>This page contains a collection of Pivot demos, running with Java Web Start. All demos require Java 6 or greater.</p>
-<br/>
-
-<h3 align="center"><a href="index.html">Return to Pivot Demos Home Page</a></h3>
-<br/>
+<h2>Web Start Demos</h2>
+<p>This page contains a collection of Pivot demos. All demos require Java 6 or greater.</p>
+<p>The demos listed on this page are all executed via Java Web Start. To launch the demos within the browser as applets, click <a href="index.html">here</a>.
 
 <h3>"Kitchen Sink"</h3>
 <p>Demonstrates a number of commonly used Pivot components.</p>
 <p><img src="kitchen_sink.png"></p>
-<br/>
-<div>
-Unsigned:&nbsp;
+
+<table>
+<tr>
+<td>
+Unsigned:
 <script>
 var url = "<%= codebase %>kitchen_sink.jnlp";
 deployJava.createWebStartLaunchButton(url, '1.6');
 </script>
-&nbsp;,&nbsp;
-Signed:&nbsp;
+</td>
+<td>
+Signed:
 <script>
 var url = "<%= codebase %>kitchen_sink.signed.jnlp";
 deployJava.createWebStartLaunchButton(url, '1.6');
 </script>
-&nbsp;,&nbsp;
-Signed with Custom Colors:&nbsp;
+</td>
+<td>
+Signed, with custom color scheme:
 <script>
 var url = "<%= codebase %>kitchen_sink.custom_colors.jnlp";
 deployJava.createWebStartLaunchButton(url, '1.6');
 </script>
-&nbsp;&nbsp;&nbsp;
-</div>
-<hr/>
+</td>
+</tr>
+</table>
+<hr>
 
 <h3>Component Explorer</h3>
-<p>An application that allows interaction with the properties, styles, and
-events offered by each stock Pivot component.</p>
+<p>Allows a user to browse the properties, styles, and events provided by each standard
+Pivot component.</p>
 <p><img src="component_explorer.png"></p>
-<br/>
-<div>
-Unsigned:&nbsp;
+
+<table>
+<tr>
+<td>
+Unsigned:
 <script>
 var url = "<%= codebase %>component_explorer.jnlp";
 deployJava.createWebStartLaunchButton(url, '1.6');
 </script>
-&nbsp;&nbsp;&nbsp;
-</div>
-<hr/>
+</td>
+</tr>
+</table>
+<hr>
 
 <h3>Stock Tracker</h3>
 <p>An example of a simple but practical "real world" application built using
 Pivot. Monitors stock quotes provided by <a href="http://finance.yahoo.com/">Yahoo!
 Finance</a>.</p>
 <p><img src="stock_tracker.png"></p>
-<br/>
-<div>
-Signed:&nbsp;
+
+<table>
+<tr>
+<td>
+Signed:
 <script>
 var url = "<%= codebase %>stock_tracker.jnlp";
 deployJava.createWebStartLaunchButton(url, '1.6');
 </script>
-&nbsp;,&nbsp;
-Signed with French Locale (fr):&nbsp;
+</td>
+<td>
+Signed, in French locale (fr):
 <script>
 var url = "<%= codebase %>stock_tracker_fr.jnlp";
 deployJava.createWebStartLaunchButton(url, '1.6');
 </script>
-&nbsp;&nbsp;&nbsp;
-</div>
-<hr/>
+</td>
+</tr>
+</table>
+<hr>
 
 <h3>iTunes Search</h3>
 <p>Simple application that allows a user to run search queries against the
 iTunes Music Store and presents the results in a table view.</p>
 <p><img src="itunes_search.png"></p>
-<br/>
-<div>
-Signed:&nbsp;
+
+<table>
+<tr>
+<td>
+Signed:
 <script>
 var url = "<%= codebase %>itunes_search.jnlp";
 deployJava.createWebStartLaunchButton(url, '1.6');
 </script>
-&nbsp;&nbsp;&nbsp;
-</div>
-<hr/>
+</td>
+</tr>
+</table>
+<hr>
 
 <h3>JSON Viewer</h3>
 <p>Allows users to visually browse a JSON structure using a TreeView component.</p>
 <p><img src="json_viewer.png"></p>
-<br/>
-<div>
-Signed:&nbsp;
+
+<table>
+<tr>
+<td>
+Signed:
 <script>
 var url = "<%= codebase %>json_viewer.jnlp";
 deployJava.createWebStartLaunchButton(url, '1.6');
 </script>
-&nbsp;&nbsp;&nbsp;
-</div>
-<hr/>
+</td>
+</tr>
+</table>
+<hr>
 
 <h3>Scripting</h3>
 <p>Simple example of a Pivot application written using JavaScript.</p>
-<br/>
-<div>
-Unsigned:&nbsp;
+
+<table>
+<tr>
+<td>
+Unsigned:
 <script>
 var url = "<%= codebase %>scripting.jnlp";
 deployJava.createWebStartLaunchButton(url, '1.6');
 </script>
-&nbsp;&nbsp;&nbsp;
-</div>
-<hr/>
+</td>
+</tr>
+</table>
+<hr>
 
 <h3>File Drag &amp; Drop</h3>
 <p>Demonstrates Pivot's support for drag and drop.</p>
-<br/>
-<div>
-Signed:&nbsp;
+
+<table>
+<tr>
+<td>
+Signed:
 <script>
 var url = "<%= codebase %>file_drag_drop.jnlp";
 deployJava.createWebStartLaunchButton(url, '1.6');
 </script>
-&nbsp;&nbsp;&nbsp;
-</div>
-<hr/>
+</td>
+</tr>
+</table>
+<hr>
 
 <h3>Table Row Editor</h3>
 <p>Example of a table row editor that uses a "Family Feud"-like flip effect to
 edit rows.</p>
-<br/>
-<div>
-Unsigned:&nbsp;
+
+<table>
+<tr>
+<td>
+Unsigned:
 <script>
 var url = "<%= codebase %>table_row_editor.jnlp";
 deployJava.createWebStartLaunchButton(url, '1.6');
 </script>
-&nbsp;&nbsp;&nbsp;
-</div>
-<hr/>
+</td>
+</tr>
+</table>
+<hr>
 
 <h3>Animated Clock</h3>
 <p>Demonstrates Pivot's MovieView component, which is used to present a clock
 constructed using Pivot's drawing API.</p>
 <p><img src="clock.png"></p>
-<br/>
-<div>
-Unsigned:&nbsp;
+
+<table>
+<tr>
+<td>
+Unsigned:
 <script>
 var url = "<%= codebase %>animated_clock.jnlp";
 deployJava.createWebStartLaunchButton(url, '1.6');
 </script>
-&nbsp;&nbsp;&nbsp;
-</div>
-<hr/>
+</td>
+</tr>
+</table>
+<hr>
 
 <h3>Large Data Sets</h3>
 <p>Demonstrates Pivot's ability to handle large data sets of up to 1,000,000
 rows.</p>
-<br/>
-<div>
-Unsigned:&nbsp;
+
+<table>
+<tr>
+<td>
+Unsigned:
 <script>
 var url = "<%= codebase %>large_data.jnlp";
 deployJava.createWebStartLaunchButton(url, '1.6');
 </script>
-&nbsp;&nbsp;&nbsp;
-</div>
-<hr/>
+</td>
+</tr>
+</table>
+<hr>
 
 <h3>RSS Feed</h3>
 <p>Demonstrates how to build a simple RSS client in Pivot.</p>
-<br/>
-<div>
-Unsigned:&nbsp;
+
+<table>
+<tr>
+<td>
+Unsigned:
 <script>
 var url = "<%= codebase %>rss_feed.jnlp";
 deployJava.createWebStartLaunchButton(url, '1.6');
 </script>
-&nbsp;&nbsp;&nbsp;
-</div>
-<hr/>
+</td>
+</tr>
+</table>
+<hr>
 
 <h3>Decorators</h3>
 <p>Demonstrates the use of "decorators" in Pivot. Decorators allow a developer to
@@ -251,50 +288,54 @@ attach additional presentation to components, such as drop shadows, reflections,
 image effects, etc. This example shows a window with a reflection decorator and
 a frame with a fade decorator.</p>
 <p><img src="decorators.png"></p>
-<br/>
-<div>
-Unsigned:&nbsp;
+
+<table>
+<tr>
+<td>
+Unsigned:
 <script>
 var url = "<%= codebase %>decorators.jnlp";
 deployJava.createWebStartLaunchButton(url, '1.6');
 </script>
-&nbsp;&nbsp;&nbsp;
-</div>
-<hr/>
+</td>
+</tr>
+</table>
+<hr>
 
 <h3>Fixed Column Table</h3>
 <p>Explains how to create a table with fixed columns in Pivot. Fixed columns are
 handy when displaying tables with many columns.</p>
-<br/>
-<div>
-Unsigned:&nbsp;
+
+<table>
+<tr>
+<td>
+Unsigned:
 <script>
 var url = "<%= codebase %>fixed_column_table.jnlp";
 deployJava.createWebStartLaunchButton(url, '1.6');
 </script>
-&nbsp;&nbsp;&nbsp;
-</div>
-<hr/>
+</td>
+</tr>
+</table>
+<hr>
 
 <h3>Multiple Selection</h3>
 <p>Demonstrates Pivot's use of ranges to maintain selection state in a ListView
 component. This is more efficient than maintaining a list of individual
 selected indexes.</p>
-<br/>
-<div>
-Unsigned:&nbsp;
+
+<table>
+<tr>
+<td>
+Unsigned:
 <script>
 var url = "<%= codebase %>multiselect.jnlp";
 deployJava.createWebStartLaunchButton(url, '1.6');
 </script>
-&nbsp;&nbsp;&nbsp;
-</div>
-<hr/>
-
-<br/>
-
-<h3 align="center"><a href="index.html">Return to Pivot Demos Home Page</a></h3>
-<br/>
+</td>
+</tr>
+</table>
+<hr>
 
 </body>
 </html>
