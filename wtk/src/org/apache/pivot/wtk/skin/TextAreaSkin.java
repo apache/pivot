@@ -1839,6 +1839,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                         textArea.setSelection(offset, anchor - offset);
                     }
                 }
+
+                caretX = x;
             } else {
                 if (scheduledScrollSelectionCallback == null) {
                     scrollDirection = (y < visibleArea.y) ? Direction.BACKWARD : Direction.FORWARD;
@@ -1853,7 +1855,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             }
         } else {
             if (Mouse.isPressed(Mouse.Button.LEFT)
-                && Mouse.getCapturer() == null) {
+                && Mouse.getCapturer() == null
+                && anchor != -1) {
                 // Capture the mouse so we can select text
                 Mouse.capture(component);
             }
@@ -2034,7 +2037,16 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 int selectionStart = textArea.getSelectionStart();
                 int offset = getNextInsertionPoint(caretX, selectionStart, Direction.BACKWARD);
 
-                if (offset != -1) {
+                if (offset == -1) {
+                    int selectionLength = textArea.getSelectionLength();
+                    if (selectionLength > 0
+                        && !Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                        textArea.setSelection(selectionStart, 0);
+                        scrollCharacterToVisible(selectionStart);
+
+                        consumed = true;
+                    }
+                } else {
                     int selectionLength;
                     if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
                         int selectionEnd = selectionStart + textArea.getSelectionLength() - 1;
@@ -2053,7 +2065,17 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 int offset = getNextInsertionPoint(caretX, selectionStart
                     + textArea.getSelectionLength(), Direction.FORWARD);
 
-                if (offset != -1) {
+                if (offset == -1) {
+                    int selectionLength = textArea.getSelectionLength();
+                    if (selectionLength > 0
+                        && !Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                        selectionStart += selectionLength;
+                        textArea.setSelection(selectionStart, 0);
+                        scrollCharacterToVisible(selectionStart);
+
+                        consumed = true;
+                    }
+                } else {
                     int selectionLength;
                     if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
                         selectionLength = offset - selectionStart;

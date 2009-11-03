@@ -953,7 +953,8 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             }
         } else {
             if (Mouse.isPressed(Mouse.Button.LEFT)
-                && Mouse.getCapturer() == null) {
+                && Mouse.getCapturer() == null
+                && anchor != -1) {
                 // Capture the mouse so we can select text
                 Mouse.capture(component);
             }
