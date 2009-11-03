@@ -21,6 +21,8 @@ import java.awt.geom.AffineTransform;
 
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.Dimensions;
+import org.apache.pivot.wtk.Point;
 
 
 /**
@@ -37,7 +39,7 @@ public class ClipDecorator implements Decorator {
     }
 
     public void setX(int x) {
-        this.x = x;
+        setOrigin(x, y);
     }
 
     public int getY() {
@@ -45,7 +47,16 @@ public class ClipDecorator implements Decorator {
     }
 
     public void setY(int y) {
+        setOrigin(x, y);
+    }
+
+    public void setOrigin(int x, int y) {
+        this.x = x;
         this.y = y;
+    }
+
+    public Point getOrigin() {
+        return new Point(x, y);
     }
 
     public int getWidth() {
@@ -53,7 +64,7 @@ public class ClipDecorator implements Decorator {
     }
 
     public void setWidth(int width) {
-        this.width = width;
+        setSize(width, height);
     }
 
     public int getHeight() {
@@ -61,7 +72,16 @@ public class ClipDecorator implements Decorator {
     }
 
     public void setHeight(int height) {
+        setSize(width, height);
+    }
+
+    public void setSize(int width, int height) {
+        this.width = width;
         this.height = height;
+    }
+
+    public Dimensions getSize() {
+        return new Dimensions(width, height);
     }
 
     @Override

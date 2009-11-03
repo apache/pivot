@@ -49,6 +49,7 @@ import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.content.ButtonData;
 import org.apache.pivot.wtk.content.ButtonDataRenderer;
+import org.apache.pivot.wtk.effects.ClipDecorator;
 import org.apache.pivot.wtk.effects.Transition;
 import org.apache.pivot.wtk.effects.TransitionListener;
 import org.apache.pivot.wtk.effects.easing.Easing;
@@ -307,6 +308,7 @@ public class TerraTabPaneSkin extends ContainerSkin
                 tab.setVisible(true);
             }
 
+            tab.getDecorators().add(clipDecorator);
             tabPane.setEnabled(false);
 
             super.start(transitionListener);
@@ -320,6 +322,7 @@ public class TerraTabPaneSkin extends ContainerSkin
                 tab.setVisible(false);
             }
 
+            tab.getDecorators().remove(clipDecorator);
             tabPane.setEnabled(true);
 
             super.stop();
@@ -350,6 +353,7 @@ public class TerraTabPaneSkin extends ContainerSkin
     private Orientation tabOrientation = Orientation.HORIZONTAL;
 
     private SelectionChangeTransition selectionChangeTransition = null;
+    private ClipDecorator clipDecorator = new ClipDecorator();
 
     private ComponentStateListener tabStateListener = new ComponentStateListener.Adapter() {
         @Override
@@ -736,6 +740,7 @@ public class TerraTabPaneSkin extends ContainerSkin
 
                 tabX = padding.left + 1;
                 tabY = padding.top + buttonPanoramaY + buttonPanoramaHeight;
+
                 tabWidth = Math.max(width - (padding.left + padding.right + 2), 0);
                 tabHeight = Math.max(height - (padding.top + padding.bottom
                     + buttonPanoramaY + buttonPanoramaHeight + 1), 0);
@@ -778,7 +783,25 @@ public class TerraTabPaneSkin extends ContainerSkin
         // Lay out the tabs
         for (Component tab : tabPane.getTabs()) {
             tab.setLocation(tabX, tabY);
-            tab.setSize(tabWidth, tabHeight);
+
+            if (selectionChangeTransition != null
+                && selectionChangeTransition.isRunning()) {
+                clipDecorator.setSize(tabWidth, tabHeight);
+
+                switch (tabOrientation) {
+                    case HORIZONTAL: {
+                        tab.setSize(tabWidth, getPreferredTabHeight(tabWidth));
+                        break;
+                    }
+
+                    case VERTICAL: {
+                        tab.setSize(getPreferredTabWidth(tabHeight), tabHeight);
+                        break;
+                    }
+                }
+            } else {
+                tab.setSize(tabWidth, tabHeight);
+            }
         }
     }
 

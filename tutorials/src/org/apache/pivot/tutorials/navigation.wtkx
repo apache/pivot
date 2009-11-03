@@ -57,7 +57,7 @@ limitations under the License.
                                         tooltipText="Click a tab to expand/collapse">
                                         <tabs>
                                             <BoxPane TabPane.icon="@anchor.png" TabPane.label="Anchor"
-                                                styles="{horizontalAlignment:'center', verticalAlignment:'top'}">
+                                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
                                                 <Label text="Collapsible"/>
                                             </BoxPane>
 
@@ -67,7 +67,7 @@ limitations under the License.
                                             </BoxPane>
 
                                             <BoxPane TabPane.icon="@star.png" TabPane.label="Star"
-                                                styles="{horizontalAlignment:'center', verticalAlignment:'bottom'}">
+                                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
                                                 <Label text="Collapsible"/>
                                             </BoxPane>
                                         </tabs>
@@ -98,7 +98,7 @@ limitations under the License.
                                         tooltipText="Click a tab to expand/collapse">
                                         <tabs>
                                             <BoxPane TabPane.icon="@anchor.png" TabPane.label="Anchor"
-                                                styles="{horizontalAlignment:'left', verticalAlignment:'center'}">
+                                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
                                                 <Label text="Collapsible"/>
                                             </BoxPane>
 
@@ -108,7 +108,7 @@ limitations under the License.
                                             </BoxPane>
 
                                             <BoxPane TabPane.icon="@star.png" TabPane.label="Star"
-                                                styles="{horizontalAlignment:'right', verticalAlignment:'center'}">
+                                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
                                                 <Label text="Collapsible"/>
                                             </BoxPane>
                                         </tabs>
@@ -130,7 +130,7 @@ limitations under the License.
                     <Expander title="One" expanded="false">
                         <content>
                             <Label preferredWidth="100" preferredHeight="20" text="Un"
-                                styles="{horizontalAlignment:'center', verticalAlignment:'center', font:{italic:true}}"/>
+                                styles="{horizontalAlignment:'center', verticalAlignment:'top', font:{italic:true}}"/>
                         </content>
                     </Expander>
 
@@ -144,7 +144,7 @@ limitations under the License.
                     <Expander title="Three">
                         <content>
                             <Label preferredWidth="100" preferredHeight="50" text="Trois"
-                                styles="{horizontalAlignment:'center', verticalAlignment:'center', font:{italic:true}}"/>
+                                styles="{horizontalAlignment:'center', verticalAlignment:'bottom', font:{italic:true}}"/>
                         </content>
                     </Expander>
                 </BoxPane>
@@ -159,11 +159,11 @@ limitations under the License.
                 <Accordion selectedIndex="1" preferredWidth="110" preferredHeight="180">
                     <panels>
                         <Label Accordion.label="One" text="Un"
-                          styles="{horizontalAlignment:'center', verticalAlignment:'center', font:{italic:true}}"/>
+                          styles="{horizontalAlignment:'center', verticalAlignment:'top', font:{italic:true}}"/>
                         <Label Accordion.label="Two" text="Deux"
                           styles="{horizontalAlignment:'center', verticalAlignment:'center', font:{italic:true}}"/>
                         <Label Accordion.label="Three" text="Trois"
-                          styles="{horizontalAlignment:'center', verticalAlignment:'center', font:{italic:true}}"/>
+                          styles="{horizontalAlignment:'center', verticalAlignment:'bottom', font:{italic:true}}"/>
                     </panels>
                 </Accordion>
             </BoxPane>

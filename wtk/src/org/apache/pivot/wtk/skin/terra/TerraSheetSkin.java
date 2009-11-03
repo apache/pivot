@@ -130,8 +130,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
 
     private OpenTransition openTransition = null;
     private Quadratic easing = new Quadratic();
-
-    private TranslationDecorator translationDecorator = new TranslationDecorator(true);
+    private TranslationDecorator translationDecorator = new TranslationDecorator();
 
     private ComponentListener ownerListener = new ComponentListener.Adapter() {
         @Override

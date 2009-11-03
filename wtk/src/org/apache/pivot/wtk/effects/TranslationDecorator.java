@@ -28,15 +28,16 @@ import org.apache.pivot.wtk.Point;
  * Decorator that translates the paint origin of its component.
  */
 public class TranslationDecorator implements Decorator {
-    private int x = 0;
-    private int y = 0;
-    private boolean clip = false;
+    private int x;
+    private int y;
+    private boolean clip;
 
     public TranslationDecorator() {
+        this(0, 0, false);
     }
 
     public TranslationDecorator(boolean clip) {
-        setClip(clip);
+        this(0, 0, clip);
     }
 
     public TranslationDecorator(int x, int y, boolean clip) {
@@ -87,6 +88,10 @@ public class TranslationDecorator implements Decorator {
 
     @Override
     public Graphics2D prepare(Component component, Graphics2D graphics) {
+        if (clip) {
+            graphics.clipRect(0, 0, component.getWidth(), component.getHeight());
+        }
+
         graphics.translate(x, y);
         return graphics;
     }
