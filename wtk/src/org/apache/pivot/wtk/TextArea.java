@@ -417,7 +417,8 @@ public class TextArea extends Component {
             && offset < document.getCharacterCount()) {
             Node descendant = document.getDescendantAt(offset);
 
-            if (descendant instanceof Paragraph) {
+            if (selectionLength == 0
+                && descendant instanceof Paragraph) {
                 // We are deleting a paragraph terminator
                 Paragraph paragraph = (Paragraph)descendant;
 
@@ -436,14 +437,16 @@ public class TextArea extends Component {
             } else {
                 document.removeRange(offset, characterCount);
             }
-
-            // Move the caret to the merge point
-            setSelection(offset, 0);
         }
 
         // Ensure that the document remains editable
         if (document.getCharacterCount() == 0) {
             document.add(new Paragraph(""));
+        }
+
+        // Move the caret to the merge point
+        if (offset >= 0) {
+            setSelection(offset, 0);
         }
     }
 

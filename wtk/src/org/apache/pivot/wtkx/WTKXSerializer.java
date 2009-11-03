@@ -468,6 +468,34 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             String text = reader.getText();
 
             if (text.length() > 0) {
+                // Strip any whitespace characters
+                StringBuilder buf = new StringBuilder();
+
+                int count = 0;
+                for (int i = 0, n = text.length(); i < n; i++) {
+                    char c = text.charAt(i);
+
+                    if (Character.isWhitespace(c)) {
+                        if (count == 0
+                            && i > 0) {
+                            buf.append(' ');
+                        }
+
+                        count++;
+                    } else {
+                        buf.append(c);
+                        count = 0;
+                    }
+                }
+
+                int n = buf.length();
+                if (Character.isWhitespace(buf.charAt(n - 1))) {
+                    buf.deleteCharAt(n - 1);
+                }
+
+                text = buf.toString();
+
+                // Process the text
                 switch (element.type) {
                     case INSTANCE: {
                         if (element.value instanceof Sequence<?>) {

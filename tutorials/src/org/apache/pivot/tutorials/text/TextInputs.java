@@ -26,7 +26,7 @@ import org.apache.pivot.wtk.TextInputCharacterListener;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
-public class Text implements Application {
+public class TextInputs implements Application {
     private Window window = null;
     private TextInput stateTextInput = null;
 
@@ -63,7 +63,7 @@ public class Text implements Application {
         }
     };
 
-    public Text() {
+    public TextInputs() {
         // Populate the lookup values, ensuring that they are sorted
         states = new ArrayList<String>();
         states.setComparator(String.CASE_INSENSITIVE_ORDER);
@@ -125,7 +125,7 @@ public class Text implements Application {
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "text.wtkx");
+        window = (Window)wtkxSerializer.readObject(this, "text_inputs.wtkx");
         stateTextInput = (TextInput)wtkxSerializer.get("stateTextInput");
 
         stateTextInput.getTextInputCharacterListeners().add(textInputCharacterListener);
@@ -152,6 +152,6 @@ public class Text implements Application {
     }
 
     public static void main(String[] args) {
-        DesktopApplicationContext.main(Text.class, args);
+        DesktopApplicationContext.main(TextInputs.class, args);
     }
 }

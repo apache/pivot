@@ -1074,10 +1074,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                     Color selectionColor;
                     if (textArea.isFocused()) {
                         selectionColor = TextAreaSkin.this.selectionColor;
-                        selectionBackgroundColor = TextAreaSkin.this.selectionBackgroundColor;
                     } else {
                         selectionColor = inactiveSelectionColor;
-                        selectionBackgroundColor = inactiveSelectionBackgroundColor;
                     }
 
                     Graphics2D selectedTextGraphics = (Graphics2D)graphics.create();
