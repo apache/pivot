@@ -48,6 +48,9 @@
 
     <application-desc main-class="org.apache.pivot.wtk.DesktopApplicationContext">
         <argument>org.apache.pivot.demos.explorer.ComponentExplorer</argument>
+        <argument>--width=1000</argument>
+        <argument>--height=700</argument>
+        <argument>--center=true</argument>
     </application-desc>
 
     <update check="background" />
