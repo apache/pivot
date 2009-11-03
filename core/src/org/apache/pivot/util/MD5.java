@@ -21,24 +21,24 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * Encode / Decode an MD5 digest into / from a String.
+ * Encode/decode an MD5 digest to/from a string.
  * <p>
- * The 128 bit MD5 hash is converted into a 32 character long String.
- * Each character of the String is the hexadecimal representation of 4 bits
+ * The 128 bit MD5 hash is converted into a 32-character string. Each
+ * character of the String is the hexadecimal representation of 4 bits
  * of the digest.
- * <br/>
- * Portions of code here are taken from Apache Tomcat,
- * see org.apache.catalina.util.MD5Encoder
- *
+ * <p>
+ * Portions of code here are taken from Apache Tomcat; see
+ * <tt>org.apache.catalina.util.MD5Encoder</tt>.
  */
 public final class MD5 {
     public static final int MD5_DIGEST_LENTGH_IN_BYTES = 16;
     public static final String MD5_ALGORITHM_NAME = "MD5";
 
-    /** The MD5 message digest generator. */
     private static MessageDigest md5 = null;
 
-    /** Constructor for private usage */
+    private static final char[] hexadecimal = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+        'a', 'b', 'c', 'd', 'e', 'f' };
+
     private MD5() {
     }
 
@@ -56,6 +56,7 @@ public final class MD5 {
 
         byte[] dataDigested = null;
 
+        // TODO Why is this commented out?
         // synchronized (MD5.class) {
             if (md5 == null) {
                 try {
@@ -78,14 +79,23 @@ public final class MD5 {
      * Transform the given string in a byte array, using the given encoding.
      * Note that any Exception is handled inside.
      *
-     * @param string the string
-     * @param encoding the encoding, or if null a default will be used
-     * @return the string transformed to byte array
+     * @param string
+     * The string to transform.
+     *
+     * @param encoding
+     * The encoding to use, or <tt>null</tt> to use the default encoding.
+     *
+     * @return
+     * The string transformed into a byte array.
      */
     public static final byte[] digest(final String string, final String encoding) {
         byte[] data = null;
         try {
-            data = HexUtils.toByteArray(string, encoding);
+            if (encoding == null) {
+                data = string.getBytes();
+            } else {
+                data = string.getBytes(encoding);
+            }
         } catch (UnsupportedEncodingException e) {
         }
 
@@ -93,33 +103,14 @@ public final class MD5 {
         return dataDigested;
     }
 
-    public static boolean isEqual(byte[] digesta, byte[] digestb) {
-        // Two arrays are equal if they have the same length and each element
-        // is equal to the corresponding element in the other array;
-        // otherwise, they aren't.
-
-        if (digesta == null || digestb == null) {
-            return false;
-        }
-        else if (digesta.length == MD5_DIGEST_LENTGH_IN_BYTES
-            && digestb.length == MD5_DIGEST_LENTGH_IN_BYTES) {
-            for (int i = 0; i < MD5_DIGEST_LENTGH_IN_BYTES; i++) {
-                if (digesta[i] != digestb[i])
-                    return false;
-            }
-
-            return true;
-        } else {
-            return false;
-        }
-
-    }
-
     /**
      * Encodes the 128 bit (16 bytes) MD5 into a 32 character String.
      *
-     * @param binaryData The Array containing the digest
-     * @return Encoded MD5, or null if encoding failed
+     * @param binaryData
+     * The byte array containing the digest.
+     *
+     * @return
+     * The encoded MD5 string.
      */
     public static final String encode(byte[] binaryData) {
         if (binaryData.length != MD5_DIGEST_LENTGH_IN_BYTES) {
@@ -132,8 +123,8 @@ public final class MD5 {
             int low = binaryData[i] & 0x0f;
             int high = (binaryData[i] & 0xf0) >> 4;
 
-            buffer[i * 2] = HexUtils.hexadecimal[high];
-            buffer[i * 2 + 1] = HexUtils.hexadecimal[low];
+            buffer[i * 2] = hexadecimal[high];
+            buffer[i * 2 + 1] = hexadecimal[low];
         }
 
         return new String(buffer);
@@ -142,9 +133,14 @@ public final class MD5 {
     /**
      * Transform the given string in a digested version, using the given encoding.
      *
-     * @param string the string
-     * @param encoding the encoding, or if null a default will be used
-     * @return the string digested, and transformed as s String
+     * @param string
+     * The string to digest.
+     *
+     * @param encoding
+     * The encoding to use, or <tt>null to use the default encoding.</tt>
+     *
+     * @return
+     * The digested string.
      */
     public static final String digestAsString(final String string, final String encoding) {
         byte[] digestBytes = MD5.digest(string, encoding);
@@ -153,4 +149,30 @@ public final class MD5 {
         return dataDigested;
     }
 
+    /**
+     * Convert a byte array into a printable format containing a string of
+     * hexadecimal digit characters (two per byte).
+     *
+     * @param bytes
+     * Byte array representation.
+     */
+    public static String toHexString(byte bytes[]) {
+        StringBuffer sb = new StringBuffer(bytes.length * 2);
+        for (int i = 0; i < bytes.length; i++) {
+            sb.append(convertDigit(bytes[i] >> 4));
+            sb.append(convertDigit(bytes[i] & 0x0f));
+        }
+
+        return (sb.toString());
+    }
+
+    private static char convertDigit(int value) {
+        value &= 0x0f;
+
+        if (value >= 10) {
+            return ((char) (value - 10 + 'a'));
+        }
+
+        return ((char) (value + '0'));
+    }
 }

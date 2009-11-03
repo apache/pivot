@@ -22,7 +22,6 @@ import java.security.MessageDigest;
 
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.Map;
-import org.apache.pivot.util.HexUtils;
 import org.apache.pivot.util.MD5;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
 
@@ -30,24 +29,20 @@ import org.apache.pivot.util.concurrent.TaskExecutionException;
  * Implementation of the {@link Authentication} interface supporting the
  * HTTP <a href="http://tools.ietf.org/rfc/rfc2617.txt">Digest Authentication</a> scheme.
  * <br/>
- * Portions of code here are taken from Apache Tomcat, and from Apache Commons HTTP Client,
- * see DigestScheme and related classes from HTTPCommons 3.1 sources
- * See DigestAuthenticator and related classes from Tomcat 6 sources
- *
+ * Portions of code here are taken from Apache Tomcat, and from Apache Commons HTTP Client.
+ * See <tt>DigestScheme</tt> and related classes from HTTPCommons 3.1 sources; see
+ * <tt>DigestAuthenticator</tt> and related classes from Tomcat 6 sources.
+ * <p>
  * TODO:
- *   - verify how to reuse the authorization data (if already authenticated) ...
- *   - verify if/how to handle the nonce count, for queries after the first ...
- *
- *   - future work:
- *     -- verify if this works with redirects, proxy, etc ...
- *     -- verify if implement also the algorithm "MD5-sess"
+ * - Verify how to reuse the authorization data (if already authenticated).
+ * - Verify if/how to handle the nonce count, for queries after the first.
+ * - Verify that this works with redirects, proxy, etc.
+ * - Also implement the "MD5-sess" algorithm?
  *
  */
 public class DigestAuthentication implements Authentication {
     private static final String HTTP_RESPONSE_AUTHENTICATE_HEADER_KEY = "WWW-Authenticate";
     private static final String HTTP_REPLY_AUTHENTICATE_HEADER_KEY = "Authorization";
-    // private static final String HTTP_RESPONSE_AUTHENTICATED_HEADER_KEY = "Authentication-Info";
-    // private static final String HTTP_RESPONSE_MIME_TYPE_HEADER_KEY = "Content-Type";
 
     private static final String HTTP_REPLY_FIELD_SEPARATOR = ":";
 
@@ -64,7 +59,6 @@ public class DigestAuthentication implements Authentication {
 
     private static final String AUTH_FIELD_VALUE_QOP_AUTH = "auth";
     private static final String AUTH_FIELD_VALUE_ALGORITHM_AUTH_MD5 = "MD5";
-    // private static final String AUTH_FIELD_VALUE_ALGORITHM_AUTH_MD5_SESSION = "MD5-sess";
 
     private static final String AUTH_FIELD_VALUE_NC_FIRST = "00000001";
 
@@ -99,33 +93,32 @@ public class DigestAuthentication implements Authentication {
     private String encoding;
 
     /**
-     * Default constructor.
+     * Constructor.
      *
-     * Do not use. Null user name or Null Password are no longer
-     * allowed.
-     */
-    public DigestAuthentication() {
-        this(null, null, null, null);
-    }
-
-    /**
-     * The constructor with the username and password arguments.
+     * @param username
+     * The user name.
      *
-     * @param username the user name
-     * @param password the password
+     * @param password
+     * The password.
      */
     public DigestAuthentication(String username, String password) {
         this(username, password, DEFAULT_ALGORITHM, null);
     }
 
     /**
-     * The constructor with the username, password, and other invariant
-     * arguments.
+     * Constructor.
      *
-     * @param username the user name
-     * @param password the password
-     * @param algorithm the algorithm to use (if null, the default will be used)
-     * @param encoding the encoding for Strings (for digesting strings)
+     * @param username
+     * The user name.
+     *
+     * @param password
+     * The password.
+     *
+     * @param algorithm
+     * The algorithm to use, or <tt>null</tt> to use the default algorithm.
+     *
+     * @param encoding
+     * The encoding to use for digesting strings.
      */
     public DigestAuthentication(String username, String password, String algorithm, String encoding) {
         super();
@@ -146,87 +139,51 @@ public class DigestAuthentication implements Authentication {
     }
 
     /**
-     * Return the User Name property.
-     *
-     * @return the username
+     * Returns the user name.
      */
     public String getUsername() {
         return username;
     }
 
     /**
-     * Return the Password property.
-     *
-     * @return the password
+     * Returns the password.
      */
     public String getPassword() {
         return password;
     }
 
     /**
-     * Return the message digest algorithm for this Manager.
-     *
-     * @return the algorithm
+     * Returns the message digest algorithm.
      */
     public String getAlgorithm() {
         return algorithm;
     }
 
     /**
-     * Get this object string.
-     *
-     * @return main data in a formed string
-     */
-    @Override
-    public String toString() {
-        StringBuffer result = new StringBuffer();
-
-        result.append(this.getClass().getName());
-        result.append(HTTP_REPLY_FIELD_SEPARATOR);
-        result.append(username);
-        result.append(HTTP_REPLY_FIELD_SEPARATOR);
-        result.append(password);
-        result.append(HTTP_REPLY_FIELD_SEPARATOR);
-        result.append(algorithm);
-        result.append(HTTP_REPLY_FIELD_SEPARATOR);
-        result.append(encoding);
-
-        return result.toString();
-    }
-
-    /**
-     * Returns the (digest) encoding charset.
-     *
-     * @return The charset (may be null) for platform default
+     * Returns the digest encoding.
      */
     public String getDigestEncoding() {
         return encoding;
     }
 
     /**
-     * Set the (digest) encoding to use.
+     * Set the digest encoding.
      *
-     * @param encoding The encoding to use, or if null a default will be used
+     * @param encoding
+     * The encoding to use, or <tt>null</tt> to use the default encoding.
      */
     private void setDigestEncoding(String encoding) {
-        // this.encoding = encoding;
-
-        // String charset = getParameter("charset"); // future: read the charset from the response header
-        String charset = encoding;
-
-        // if a charset is not specified, default to ISO-8859-1
-        // if (charset == null)
-        // charset = "ISO-8859-1";
-
-        this.encoding = charset;
-        // System.out.println("charset = \"" + charset + "\"");
+        this.encoding = encoding;
     }
 
     /**
      * Returns the IP Address of the given Host.
      *
-     * @param hostName the host name, or if null the local host will be used
-     * @return the ID Address, as a String
+     * @param hostName
+     * The host name, or <tt>null</tt> to use the local host.
+     *
+     * @return
+     * The IP address, as a string.
      */
     protected static String getIPAddress(String hostName) throws UnknownHostException {
         InetAddress inetAddr = null;
@@ -253,18 +210,16 @@ public class DigestAuthentication implements Authentication {
     }
 
     /**
-     * Authenticate
+     * Authenticate the query.
      *
-     * @param query The Query
+     * @param query
+     * The query to authenticate.
      */
     public void authenticate(Query<?> query) {
-
         try {
-            String responseAuthenticateHeader = query.getResponseHeaders().get(
-                HTTP_RESPONSE_AUTHENTICATE_HEADER_KEY);
-// System.out.println("responseAuthenticateHeader " +
-// HTTP_RESPONSE_AUTHENTICATE_HEADER_KEY + " = \n" +
-// responseAuthenticateHeader + "\n");
+            String responseAuthenticateHeader =
+                query.getResponseHeaders().get(HTTP_RESPONSE_AUTHENTICATE_HEADER_KEY);
+
             if (responseAuthenticateHeader == null) {
                 // Digest authentication needs a first query to retrieve
                 // authentication hints from the server,
@@ -272,15 +227,12 @@ public class DigestAuthentication implements Authentication {
                 // first query call here ...
                 try {
                     query.execute();
-                } catch (TaskExecutionException tee) {
-                    // tee.printStackTrace(); // expected, so ignore it
+                } catch (TaskExecutionException exception) {
+                    // No-op
                 }
 
                 responseAuthenticateHeader = query.getResponseHeaders().get(
                     HTTP_RESPONSE_AUTHENTICATE_HEADER_KEY);
-// System.out.println("responseAuthenticateHeader " +
-// HTTP_RESPONSE_AUTHENTICATE_HEADER_KEY + " = \n" +
-// responseAuthenticateHeader + "\n");
                 if (responseAuthenticateHeader == null) {
                     return;
                 }
@@ -293,7 +245,6 @@ public class DigestAuthentication implements Authentication {
                 // try to reuse it, reading hints from
                 // HTTP_RESPONSE_AUTHENTICATED_HEADER_KEY
                 // -- for example, the nonce_count value to use should be read from there ...
-                ;
             }
 
             String uri = query.getPath();
@@ -374,9 +325,6 @@ public class DigestAuthentication implements Authentication {
                 authenticateHeader.append("\"");
             }
 
-// System.out.println("authenticateHeader " + HTTP_REPLY_AUTHENTICATE_HEADER_KEY +
-// " = \n" + authenticateHeader.toString() + "\n");
-
             query.getRequestHeaders().put(HTTP_REPLY_AUTHENTICATE_HEADER_KEY,
                 authenticateHeader.toString());
         } catch (Exception e) {
@@ -390,16 +338,32 @@ public class DigestAuthentication implements Authentication {
      * authentication header, as described in RFC 2069; otherwise return
      * <code>null</code>.
      *
-     * @param username Username of the Principal to look up
-     * @param realm Realm name
-     * @param nOnce Unique (or supposedly unique) token which has been used for
-     * this request
-     * @param nc Number of query (starting from 1) with this authentication info
-     * @param cnonce Value (usually random) chosen by the client
-     * @param qop Quality Of Protection flag
-     * @param method The HTTP method
-     * @param uri The URI of the query
-     * @return the digested value for the response field
+     * @param username
+     * Username of the principal to look up.
+     *
+     * @param realm
+     * Realm name.
+     *
+     * @param nOnce
+     * Unique (or supposedly unique) token which has been used for this request.
+     *
+     * @param nc
+     * Number of query (starting from 1) with this authentication info.
+     *
+     * @param cnonce
+     * Value (usually random) chosen by the client.
+     *
+     * @param qop
+     * Quality Of Protection flag.
+     *
+     * @param method
+     * The HTTP method.
+     *
+     * @param uri
+     * The URI of the query.
+     *
+     * @return
+     * The digested value for the response field.
      */
     private String calculateResponse(final String username, final String realm, final String nOnce,
         final String nc, final String cnonce, final String qop, final String method,
@@ -407,13 +371,11 @@ public class DigestAuthentication implements Authentication {
         String response = null;
 
         String md5a1 = getDigestUsernameAndRealm(getAlgorithm(), username, realm);
-        // System.out.println("md5a1 = \"" + md5a1 + "\"");
         if (md5a1 == null) {
             return null;
         }
 
         String md5a2 = getDigestMethodAndUri(qop, method, uri);
-        // System.out.println("md5a2 = \"" + md5a2 + "\"");
         if (md5a2 == null) {
             return null;
         }
@@ -437,11 +399,7 @@ public class DigestAuthentication implements Authentication {
         sbCompleteValue.append(md5a2);
 
         String a3 = sbCompleteValue.toString();
-// System.out.println("a3 = \"" + a3 + "\"");
-        // byte[] digestBytes = MD5.digest(a3, getDigestEncoding());
-        // String md5a3 = MD5.encode(digestBytes);
         String md5a3 = MD5.digestAsString(a3, encoding);
-// System.out.println("md5a3 = \"" + md5a3 + "\"");
 
         response = md5a3;
         return response;
@@ -451,8 +409,11 @@ public class DigestAuthentication implements Authentication {
      * Removes the quotes on a string. RFC2617 states quotes are optional for
      * all parameters except realm.
      *
-     * @param quotedString The string with enclosing quotes
-     * @param quotesRequired If quotes are required on the previous parameter
+     * @param quotedString
+     * The string with enclosing quotes.
+     *
+     * @param quotesRequired
+     * If quotes are required on the previous parameter.
      */
     protected static String removeQuotes(final String quotedString, boolean quotesRequired) {
         // support both quoted and non-quoted
@@ -468,7 +429,8 @@ public class DigestAuthentication implements Authentication {
     /**
      * Removes the quotes on a string.
      *
-     * @param quotedString The string with enclosing quotes
+     * @param quotedString
+     * The string with enclosing quotes.
      */
     protected static String removeQuotes(String quotedString) {
         return removeQuotes(quotedString, false);
@@ -481,12 +443,13 @@ public class DigestAuthentication implements Authentication {
      * some of these info are required to construct other fields for the
      * following reply.
      *
-     * @param authorizationHeader the authorization info returned from the
-     * Server.
-     * @return a Map of key / value, both Strings
+     * @param authorizationHeader
+     * The authorization info returned from the server.
+     *
+     * @return
+     * The key/value map.
      */
     protected static Map<String, String> splitAuthenticationHeader(String authorizationHeader) {
-// System.out.println("Authorization header: " + authorizationHeader);
         Map<String, String> map = new HashMap<String, String>();
 
         // Validate the authorization credentials format
@@ -524,8 +487,6 @@ public class DigestAuthentication implements Authentication {
 
             String currentTokenName = currentToken.substring(0, equalSign).trim();
             String currentTokenValue = currentToken.substring(equalSign + 1).trim();
-// System.out.println("tokens[" + i + "]: currentTokenName = \"" + currentTokenName
-// + "\", currentTokenValue = \"" + currentTokenValue + "\"");
 
             if (AUTH_FIELD_KEY_USERNAME.equals(currentTokenName)) {
                 userName = removeQuotes(currentTokenValue);
@@ -557,14 +518,11 @@ public class DigestAuthentication implements Authentication {
                 response = removeQuotes(currentTokenValue);
                 map.put(AUTH_FIELD_KEY_RESPONSE, response);
             } else {
-// System.out.println("Unknown token name: \"" + currentTokenName + "\"");
                 map.put(currentTokenName, currentTokenValue);
             }
-
         }
 
         if ((realmName == null) || (nOnce == null)) {
-// System.out.println("One of the mandatory fields is null , returning an empty map");
             return new HashMap<String, String>();
         }
 
@@ -603,7 +561,7 @@ public class DigestAuthentication implements Authentication {
         } else {
             a1 = "";
         }
-// System.out.println("a1 = \"" + a1 + "\"");
+
         return MD5.digestAsString(a1, encoding);
     }
 
@@ -626,9 +584,30 @@ public class DigestAuthentication implements Authentication {
             a2 = ""; // dummy, to avoid NPE ...
             throw new RuntimeException("not supported qop value: \"" + qop + "\"");
         }
-// System.out.println("a2 = \"" + a2 + "\"");
 
         return MD5.digestAsString(a2, encoding);
+    }
+
+    /**
+     * Get this object string.
+     *
+     * @return main data in a formed string
+     */
+    @Override
+    public String toString() {
+        StringBuffer result = new StringBuffer();
+
+        result.append(this.getClass().getName());
+        result.append(HTTP_REPLY_FIELD_SEPARATOR);
+        result.append(username);
+        result.append(HTTP_REPLY_FIELD_SEPARATOR);
+        result.append(password);
+        result.append(HTTP_REPLY_FIELD_SEPARATOR);
+        result.append(algorithm);
+        result.append(HTTP_REPLY_FIELD_SEPARATOR);
+        result.append(encoding);
+
+        return result.toString();
     }
 
     /**
@@ -640,9 +619,8 @@ public class DigestAuthentication implements Authentication {
      * @param algorithm Algorithm used to do the digest
      * @param encoding Character encoding of the string to digest
      */
-    public final static String digestString(final String value, final String algorithm,
+    public static String digestString(final String value, final String algorithm,
         final String encoding) {
-
         try {
             // Obtain a new message digest with "digest" encryption
             MessageDigest md = (MessageDigest) MessageDigest.getInstance(algorithm).clone();
@@ -656,11 +634,9 @@ public class DigestAuthentication implements Authentication {
             }
 
             // Digest the credentials and return as hexadecimal
-            return (HexUtils.convert(md.digest()));
+            return (MD5.toHexString(md.digest()));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
     }
-
 }
