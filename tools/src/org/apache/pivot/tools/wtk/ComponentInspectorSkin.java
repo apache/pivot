@@ -18,8 +18,8 @@ package org.apache.pivot.tools.wtk;
 
 import java.awt.Color;
 
+import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
-import org.apache.pivot.collections.EnumList;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.util.CalendarDate;
 import org.apache.pivot.wtk.BoxPane;
@@ -426,8 +426,16 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         final String key, Class<? extends Enum<?>> type, Form.Section section) {
         Enum<?> value = (Enum<?>)dictionary.get(key);
 
+        ArrayList<Object> listData = new ArrayList<Object>();
+        listData.add(null);
+
+        Enum<?>[] enumConstants = type.getEnumConstants();
+        for (int i = 0; i < enumConstants.length; i++) {
+            listData.add(enumConstants[i]);
+        }
+
         ListButton listButton = new ListButton();
-        listButton.setListData(new EnumList(type));
+        listButton.setListData(listData);
         listButton.setSelectedItem(value);
         section.add(listButton);
         Form.setLabel(listButton, key);

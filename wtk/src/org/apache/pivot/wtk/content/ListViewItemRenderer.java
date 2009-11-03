@@ -67,10 +67,10 @@ public class ListViewItemRenderer extends BoxPane implements ListView.ItemRender
         boolean checked, boolean highlighted, boolean disabled) {
         renderStyles(listView, selected, highlighted, disabled);
 
-        if (item != null) {
-            Image icon = null;
-            String text = null;
+        Image icon = null;
+        String text = null;
 
+        if (item != null) {
             if (item instanceof ListItem) {
                 ListItem listItem = (ListItem)item;
                 icon = listItem.getIcon();
@@ -80,13 +80,10 @@ public class ListViewItemRenderer extends BoxPane implements ListView.ItemRender
             } else {
                 text = item.toString();
             }
-
-            // Update the image view
-            imageView.setImage(icon);
-
-            // Show/hide the label
-            label.setText(text);
         }
+
+        imageView.setImage(icon);
+        label.setText(text);
     }
 
     protected void renderStyles(ListView listView, boolean selected,
