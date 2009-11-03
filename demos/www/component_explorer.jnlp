@@ -18,7 +18,6 @@
  */
 %>
 
-<%-- @ page language="java" contentType="application/xml; charset=UTF-8" pageEncoding="UTF-8" --%> <%-- Enable this for Page Debugging purposes --%>
 <%@ page language="java" contentType="application/x-java-jnlp-file" pageEncoding="UTF-8" %>
 
 <%@ include file="version.jsp" %>
