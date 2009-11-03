@@ -89,7 +89,10 @@ public class TranslationDecorator implements Decorator {
     @Override
     public Graphics2D prepare(Component component, Graphics2D graphics) {
         if (clip) {
-            graphics.clipRect(0, 0, component.getWidth(), component.getHeight());
+            Bounds decoratedBounds = component.getDecoratedBounds();
+            graphics.clipRect(decoratedBounds.x - component.getX(),
+                decoratedBounds.y - component.getY(),
+                decoratedBounds.width, decoratedBounds.height);
         }
 
         graphics.translate(x, y);

@@ -55,6 +55,8 @@ import org.apache.pivot.wtk.skin.WindowSkin;
  */
 public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     public class OpenTransition extends Transition {
+        private int dy = 0;
+
         public OpenTransition(boolean reversed) {
             super(TRANSITION_DURATION, TRANSITION_RATE, false, reversed);
         }
@@ -62,10 +64,9 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         @Override
         public void start(TransitionListener transitionListener) {
             Sheet sheet = (Sheet)getComponent();
-            Component content = sheet.getContent();
-            if (content != null) {
-                content.getDecorators().add(translationDecorator);
-            }
+            sheet.getDecorators().add(translationDecorator);
+
+            dy = 0;
 
             super.start(transitionListener);
         }
@@ -73,17 +74,35 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         @Override
         public void stop() {
             Sheet sheet = (Sheet)getComponent();
-            Component content = sheet.getContent();
-            if (content != null) {
-                content.getDecorators().remove(translationDecorator);
-            }
+            sheet.getDecorators().remove(translationDecorator);
 
             super.stop();
         }
 
         @Override
         public void update() {
-            invalidateComponent();
+            Sheet sheet = (Sheet)getComponent();
+
+            float scale;
+            if (isReversed()) {
+                scale = easing.easeIn(getElapsedTime(), 1, -1, getDuration());
+            } else {
+                scale = easing.easeOut(getElapsedTime(), 1, -1, getDuration());
+            }
+
+            Display display = sheet.getDisplay();
+            if (display != null) {
+                Bounds decoratedBounds = sheet.getDecoratedBounds();
+                display.repaint(decoratedBounds.x, decoratedBounds.y,
+                    decoratedBounds.width, decoratedBounds.height + dy);
+
+                Dimensions size = sheet.getPreferredSize();
+                dy = -(int)(size.height * scale);
+                translationDecorator.setY(dy);
+
+                display.repaint(decoratedBounds.x, decoratedBounds.y,
+                    decoratedBounds.width, decoratedBounds.height + dy);
+            }
         }
     }
 
@@ -130,7 +149,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
 
     private OpenTransition openTransition = null;
     private Quadratic easing = new Quadratic();
-    private TranslationDecorator translationDecorator = new TranslationDecorator();
+    private TranslationDecorator translationDecorator = new TranslationDecorator(true);
 
     private ComponentListener ownerListener = new ComponentListener.Adapter() {
         @Override
@@ -269,7 +288,6 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         }
 
         preferredHeight += (padding.top + padding.bottom + 2);
-        preferredHeight = getEasedPreferredHeight(preferredHeight);
 
         return preferredHeight;
     }
@@ -290,29 +308,10 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
 
         preferredWidth += (padding.left + padding.right + 2);
         preferredHeight += (padding.top + padding.bottom + 2);
-        preferredHeight = getEasedPreferredHeight(preferredHeight);
 
         Dimensions preferredSize = new Dimensions(preferredWidth, preferredHeight);
 
         return preferredSize;
-    }
-
-    public int getEasedPreferredHeight(int preferredHeight) {
-        if (openTransition != null
-            && openTransition.isRunning()) {
-            float scale;
-            if (openTransition.isReversed()) {
-                scale = easing.easeIn(openTransition.getElapsedTime(), 0, 1,
-                    openTransition.getDuration());
-            } else {
-                scale = easing.easeOut(openTransition.getElapsedTime(), 0, 1,
-                    openTransition.getDuration());
-            }
-
-            preferredHeight = (int)(scale * preferredHeight);
-        }
-
-        return preferredHeight;
     }
 
     @Override
@@ -329,21 +328,12 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         resizeHandle.setVisible(resizable);
 
         Component content = sheet.getContent();
-
         if (content != null) {
             content.setLocation(padding.left + 1, padding.top + 1);
 
-            if (openTransition != null
-                && openTransition.isRunning()) {
-                content.setSize(Math.max(width - (padding.left + padding.right + 2), 0),
-                    content.getPreferredHeight());
-                translationDecorator.setY(height - (padding.bottom + padding.top + 2
-                    + content.getHeight()));
-            } else {
-                int contentWidth = Math.max(width - (padding.left + padding.right + 2), 0);
-                int contentHeight = Math.max(height - (padding.top + padding.bottom + 2), 0);
-                content.setSize(contentWidth, contentHeight);
-            }
+            int contentWidth = Math.max(width - (padding.left + padding.right + 2), 0);
+            int contentHeight = Math.max(height - (padding.top + padding.bottom + 2), 0);
+            content.setSize(contentWidth, contentHeight);
         }
     }
 
@@ -569,6 +559,8 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         display.reenterMouse();
 
         dropShadowDecorator.setShadowOpacity(DropShadowDecorator.DEFAULT_SHADOW_OPACITY);
+
+        alignToOwner();
 
         Window owner = window.getOwner();
         owner.getComponentListeners().add(ownerListener);
