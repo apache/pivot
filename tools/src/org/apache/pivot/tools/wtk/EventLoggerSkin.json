@@ -1,3 +1,5 @@
 {
-    clearEvents: "Clear"
+    interface: "Declaring Class",
+    method: "Event",
+    arguments: "Arguments"
 }

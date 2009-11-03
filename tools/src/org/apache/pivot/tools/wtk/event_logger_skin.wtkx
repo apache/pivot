@@ -46,11 +46,11 @@ limitations under the License.
                         <TableView wtkx:id="firedEventsTableView" selectMode="none">
                             <columns>
                                 <TableView.Column name="interface" width="175"
-                                    headerData="Declaring Class"/>
+                                    headerData="%interface"/>
                                 <TableView.Column name="method" width="200"
-                                    headerData="Event"/>
+                                    headerData="%method"/>
                                 <TableView.Column name="arguments" width="1*"
-                                    headerData="Arguments" minimumWidth="200"/>
+                                    headerData="%arguments" minimumWidth="200"/>
                             </columns>
                         </TableView>
                     </view>

@@ -310,7 +310,7 @@ limitations under the License.
                 <right>
                     <SplitPane orientation="vertical" splitRatio="0.6">
                         <top>
-                            <SplitPane orientation="horizontal" splitRatio="0.6">
+                            <SplitPane orientation="horizontal" splitRatio="0.5">
                                 <left>
                                     <TabPane>
                                         <tabs>

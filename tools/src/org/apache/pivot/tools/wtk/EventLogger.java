@@ -23,14 +23,11 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
-import java.util.Comparator;
 import java.util.Iterator;
 
-import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Group;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.HashSet;
-import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.ThreadUtilities;
@@ -39,7 +36,7 @@ import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Container;
 
 /**
- *
+ * A component that monitors a source component for events.
  */
 public class EventLogger extends Container {
     /**
@@ -53,50 +50,32 @@ public class EventLogger extends Container {
     }
 
     /**
-     * Declared event sequence.
+     * A read-only group of events that an event logger is capable of firing.
+     * To make an event logger actually fire declared events, callers add them
+     * to the event logger's include event group.
      */
-    public final class DeclaredEventSequence implements Sequence<Method>, Iterable<Method> {
-        private DeclaredEventSequence() {
+    public final class DeclaredEventGroup implements Group<Method>, Iterable<Method> {
+        private DeclaredEventGroup() {
         }
 
         @Override
-        public int add(Method event) {
+        public boolean add(Method event) {
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public void insert(Method event, int index) {
+        public boolean remove(Method event) {
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public Method update(int index, Method event) {
-            throw new UnsupportedOperationException();
+        public boolean contains(Method event) {
+            return declaredEvents.contains(event);
         }
 
         @Override
-        public int remove(Method event) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public Sequence<Method> remove(int index, int count) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public Method get(int index) {
-            return declaredEvents.get(index);
-        }
-
-        @Override
-        public int indexOf(Method event) {
-            return declaredEvents.indexOf(event);
-        }
-
-        @Override
-        public int getLength() {
-            return declaredEvents.getLength();
+        public boolean isEmpty() {
+            return declaredEvents.isEmpty();
         }
 
         @Override
@@ -106,7 +85,8 @@ public class EventLogger extends Container {
     }
 
     /**
-     * Include events group.
+     * A read/write group of events that an event logger will actually fire.
+     * This group is guaranteed to be a subset of the declared event group.
      */
     public final class IncludeEventGroup implements Group<Method>, Iterable<Method> {
         private IncludeEventGroup() {
@@ -115,6 +95,10 @@ public class EventLogger extends Container {
         @Override
         public boolean add(Method event) {
             boolean added = false;
+
+            if (!declaredEvents.contains(event)) {
+                throw new IllegalArgumentException("Event has not been declared.");
+            }
 
             if (!includeEvents.contains(event)) {
                 includeEvents.add(event);
@@ -154,26 +138,9 @@ public class EventLogger extends Container {
         }
     }
 
-    private static class EventComparator implements Comparator<Method> {
-        @Override
-        public int compare(Method event1, Method event2) {
-            int result = 0;
-
-            Class<?> listenerInterface1 = event1.getDeclaringClass();
-            Class<?> listenerInterface2 = event2.getDeclaringClass();
-
-            if (listenerInterface1 != listenerInterface2) {
-                result = listenerInterface1.getName().compareTo(listenerInterface2.getName());
-            }
-
-            if (result == 0) {
-                result = event1.getName().compareTo(event2.getName());
-            }
-
-            return result;
-        }
-    }
-
+    /**
+     * Event logger invocation handler.
+     */
     private class LoggerInvocationHandler implements InvocationHandler {
         @Override
         public Object invoke(Object proxy, Method event, Object[] arguments) throws Throwable {
@@ -193,6 +160,9 @@ public class EventLogger extends Container {
         }
     }
 
+    /**
+     * Event logger listener list.
+     */
     private static class EventLoggerListenerList extends ListenerList<EventLoggerListener>
         implements EventLoggerListener {
         @Override
@@ -229,8 +199,8 @@ public class EventLogger extends Container {
     private HashMap<Class<?>, Object> eventListenerProxies = new HashMap<Class<?>, Object>();
     private LoggerInvocationHandler loggerInvocationHandler = new LoggerInvocationHandler();
 
-    private ArrayList<Method> declaredEvents = new ArrayList<Method>(new EventComparator());
-    private DeclaredEventSequence declaredEventSequence = new DeclaredEventSequence();
+    private HashSet<Method> declaredEvents = new HashSet<Method>();
+    private DeclaredEventGroup declaredEventGroup = new DeclaredEventGroup();
 
     private HashSet<Method> includeEvents = new HashSet<Method>();
     private IncludeEventGroup includeEventGroup = new IncludeEventGroup();
@@ -290,19 +260,22 @@ public class EventLogger extends Container {
     }
 
     /**
-     * Gets the declared events sequence, a read-only sequence that includes
-     * the complete list of events that this event logger's source declares.
+     * Gets the declared event group, a read-only group that includes the
+     * complete list of events that this event logger's source declares.
      *
      * @return
-     * the declared events sequence.
+     * the declared events group.
      */
-    public DeclaredEventSequence getDeclaredEvents() {
-        return declaredEventSequence;
+    public DeclaredEventGroup getDeclaredEvents() {
+        return declaredEventGroup;
     }
 
     /**
      * Gets the include events group, which callers can use to include or
      * exclude declared events from those that get fired by this logger.
+     * This group is guaranteed to be a subset of the declared event group
+     * (attempts to add events to this group that are not included in the
+     * declared event group will fail).
      *
      * @return
      * The include events group.
@@ -319,6 +292,9 @@ public class EventLogger extends Container {
         eventLoggerSkin.clearLog();
     }
 
+    /**
+     * Registers event listeners on this event logger's source.
+     */
     private void registerEventListeners() {
         Method[] methods = source.getClass().getMethods();
 
@@ -384,6 +360,9 @@ public class EventLogger extends Container {
         }
     }
 
+    /**
+     * Unregisters event listeners on this event logger's source.
+     */
     private void unregisterEventListeners() {
         Method[] methods = source.getClass().getMethods();
 

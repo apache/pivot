@@ -100,6 +100,7 @@ class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLo
         declaredEventsTreeView = wtkxSerializer.getValue("declaredEventsTreeView");
         firedEventsTableView = wtkxSerializer.getValue("firedEventsTableView");
 
+        // Propagate check state upwards or downwards as necessary
         declaredEventsTreeView.getTreeViewNodeStateListeners().add(new TreeViewNodeStateListener() {
             @Override
             public void nodeCheckStateChanged(TreeView treeView, Path path,
