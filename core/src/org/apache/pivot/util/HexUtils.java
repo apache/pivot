@@ -23,9 +23,8 @@ import java.io.UnsupportedEncodingException;
  * Library of utility methods useful in dealing with converting byte arrays
  * to and from strings of hexadecimal digits.
  * <br/>
- * Portions of code here are taken from Apache Tomcat.
- *
- * @see org.apache.catalina.util.HexUtils;
+ * Portions of code here are taken from Apache Tomcat,
+ * see org.apache.catalina.util.HexUtils;
  */
 public final class HexUtils {
 

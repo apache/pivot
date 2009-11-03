@@ -27,12 +27,9 @@ import java.security.NoSuchAlgorithmException;
  * Each character of the String is the hexadecimal representation of 4 bits
  * of the digest.
  * <br/>
- * Portions of code here are taken from Apache Tomcat.
+ * Portions of code here are taken from Apache Tomcat,
+ * see org.apache.catalina.util.MD5Encoder
  *
- * TODO:
- *   - verify if it's safe also without the synchronization statement ...
- *
- * @see org.apache.catalina.util.MD5Encoder
  */
 public final class MD5 {
     public static final int MD5_DIGEST_LENTGH_IN_BYTES = 16;

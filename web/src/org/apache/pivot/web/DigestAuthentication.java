@@ -30,7 +30,9 @@ import org.apache.pivot.util.concurrent.TaskExecutionException;
  * Implementation of the {@link Authentication} interface supporting the
  * HTTP <a href="http://tools.ietf.org/rfc/rfc2617.txt">Digest Authentication</a> scheme.
  * <br/>
- * Portions of code here are taken from Apache Tomcat, and from Apache Commons HTTP Client.
+ * Portions of code here are taken from Apache Tomcat, and from Apache Commons HTTP Client,
+ * see DigestScheme and related classes from HTTPCommons 3.1 sources
+ * See DigestAuthenticator and related classes from Tomcat 6 sources
  *
  * TODO:
  *   - verify how to reuse the authorization data (if already authenticated) ...
@@ -40,8 +42,6 @@ import org.apache.pivot.util.concurrent.TaskExecutionException;
  *     -- verify if this works with redirects, proxy, etc ...
  *     -- verify if implement also the algorithm "MD5-sess"
  *
- * @see DigestAuthenticator and related classes from Tomcat 6 sources
- * @see DigestScheme and related classes from HTTPCommons 3.1 sources
  */
 public class DigestAuthentication implements Authentication {
     private static final String HTTP_RESPONSE_AUTHENTICATE_HEADER_KEY = "WWW-Authenticate";
