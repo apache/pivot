@@ -48,6 +48,8 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
     }
 
     private class HueChooserSkin extends ComponentSkin {
+        private boolean capture = false;
+
         @Override
         public int getPreferredWidth(int height) {
             return 18;
@@ -77,7 +79,7 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
 
             // Mark the selected hue
             float hue = hueChooser.getHue();
-            graphics.setXORMode(Color.getHSBColor(hue, 1f, 1f));
+            graphics.setXORMode(Color.getHSBColor(1 - hue, 1f, 1f));
             graphics.fillRect(0, Math.min((int)(height * (1f - hue)), height - 1), width, 1);
             graphics.setPaintMode();
         }
@@ -90,6 +92,11 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
         @Override
         public boolean mouseMove(Component component, int x, int y) {
             boolean consumed = super.mouseMove(component, x, y);
+
+            if (capture
+                && Mouse.getCapturer() != component) {
+                Mouse.capture(component);
+            }
 
             if (Mouse.getCapturer() == component) {
                 setSelectedColor(y);
@@ -104,7 +111,7 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
 
             if (button == Mouse.Button.LEFT) {
                 setSelectedColor(y);
-                Mouse.capture(component);
+                capture = true;
                 consumed = true;
             }
 
@@ -115,9 +122,12 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
         public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
             boolean consumed = super.mouseUp(component, button, x, y);
 
-            if (button == Mouse.Button.LEFT
-                && Mouse.getCapturer() == component) {
-                Mouse.release();
+            if (button == Mouse.Button.LEFT) {
+                capture = false;
+
+                if (Mouse.getCapturer() == component) {
+                    Mouse.release();
+                }
             }
 
             return consumed;
@@ -169,6 +179,8 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
     }
 
     private class SaturationValueChooserSkin extends ComponentSkin {
+        private boolean capture = false;
+
         @Override
         public int getPreferredWidth(int height) {
             return 140;
@@ -218,6 +230,11 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
         public boolean mouseMove(Component component, int x, int y) {
             boolean consumed = super.mouseMove(component, x, y);
 
+            if (capture
+                && Mouse.getCapturer() != component) {
+                Mouse.capture(component);
+            }
+
             if (Mouse.getCapturer() == component) {
                 setSelectedColor(x, y);
             }
@@ -231,7 +248,7 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
 
             if (button == Mouse.Button.LEFT) {
                 setSelectedColor(x, y);
-                Mouse.capture(component);
+                capture = true;
                 consumed = true;
             }
 
@@ -242,9 +259,12 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
         public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
             boolean consumed = super.mouseUp(component, button, x, y);
 
-            if (button == Mouse.Button.LEFT
-                && Mouse.getCapturer() == component) {
-                Mouse.release();
+            if (button == Mouse.Button.LEFT) {
+                capture = false;
+
+                if (Mouse.getCapturer() == component) {
+                    Mouse.release();
+                }
             }
 
             return consumed;

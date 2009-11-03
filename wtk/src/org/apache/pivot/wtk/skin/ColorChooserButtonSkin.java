@@ -20,6 +20,7 @@ import java.awt.Color;
 
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentKeyListener;
+import org.apache.pivot.wtk.ComponentMouseButtonListener;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.ContainerMouseListener;
 import org.apache.pivot.wtk.Direction;
@@ -38,12 +39,18 @@ import org.apache.pivot.wtk.WindowStateListener;
  */
 public abstract class ColorChooserButtonSkin extends ButtonSkin
     implements ColorChooserButtonListener, ColorChooserButtonSelectionListener {
+    /**
+     * A focusable window class used by color chooser button skins.
+     */
     public final class ColorChooserPopup extends Window {
         private ColorChooserPopup() {
             setSkin(new ColorChooserPopupSkin());
         }
     }
 
+    /**
+     * The color chooser popup skin.
+     */
     public final class ColorChooserPopupSkin extends WindowSkin {
         private ColorChooserPopupSkin() {
         }
@@ -115,6 +122,25 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin
         }
     };
 
+    private ComponentMouseButtonListener colorChooserMouseButtonListener =
+        new ComponentMouseButtonListener.Adapter() {
+        @Override
+        public boolean mouseClick(Component component, Mouse.Button button, int x, int y,
+            int count) {
+            ColorChooserButton colorChooserButton = (ColorChooserButton)getComponent();
+
+            if (button == Mouse.Button.LEFT
+                && count == 2) {
+                colorChooserPopup.close();
+
+                Color color = colorChooser.getSelectedColor();
+                colorChooserButton.setSelectedColor(color);
+            }
+
+            return false;
+        }
+    };
+
     private ContainerMouseListener displayMouseListener = new ContainerMouseListener.Adapter() {
         @Override
         public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
@@ -147,6 +173,7 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin
 
     public ColorChooserButtonSkin() {
         colorChooser = new ColorChooser();
+        colorChooser.getComponentMouseButtonListeners().add(colorChooserMouseButtonListener);
 
         colorChooserPopup = new ColorChooserPopup();
         colorChooserPopup.getComponentKeyListeners().add(colorChooserPopupKeyListener);
