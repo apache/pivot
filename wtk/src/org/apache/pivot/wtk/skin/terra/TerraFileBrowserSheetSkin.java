@@ -71,11 +71,18 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
     private boolean updatingSelection = false;
     private int selectedDirectoryCount = 0;
 
+    public TerraFileBrowserSheetSkin() {
+        setResizable(true);
+    }
+
     @Override
     public void install(Component component) {
         super.install(component);
 
         final FileBrowserSheet fileBrowserSheet = (FileBrowserSheet)component;
+        fileBrowserSheet.setMinimumPreferredWidth(360);
+        fileBrowserSheet.setMinimumPreferredHeight(180);
+
         final FileBrowserSheet.Mode mode = fileBrowserSheet.getMode();
 
         // Load the sheet content
@@ -162,9 +169,8 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
                 if (!fileBrowser.isMultiSelect()) {
                     File selectedFile = fileBrowser.getSelectedFile();
 
-                    if (selectedFile == null) {
-                        saveAsTextInput.setText("");
-                    } else if (!selectedFile.isDirectory()) {
+                    if (selectedFile != null
+                        && !selectedFile.isDirectory()) {
                         saveAsTextInput.setText(selectedFile.getName());
                     }
                 }
