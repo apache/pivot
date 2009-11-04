@@ -1,5 +1,50 @@
 {
-    properties: "Properties",
-    styles: "Styles",
-    events: "Events"
+    title: "Apache Pivot Component Explorer",
+
+    explorerPane: {
+        label: "Component Explorer",
+
+        branches: {
+            basic: "Labels & Image Views",
+            buttons: "Buttons",
+            lists: "Lists",
+            text: "Text",
+            separators: "Separators",
+            layout: "Layout Containers",
+            navigation: "Navigation Containers",
+            viewports: "Viewports",
+            progress: "Progress Indicators",
+            boundedRange: "Bounded Range Components",
+            calendars: "Calendars",
+            colorChoosers: "Color Choosers",
+            menus: "Menus",
+            tables: "Tables",
+            trees: "Trees",
+            fileBrowsing: " File Browsing"
+        }
+    },
+
+    contentPane: {
+        visualizationLabel: "Visualization",
+        wtkxSourceLabel: "WTKX Source",
+
+        scrollBarPolicy: {
+            horizontal: "Horizontal Scroll Bar Policy",
+            vertical: "Vertical Scroll Bar Policy",
+            auto: "Auto",
+            fill: "Fill",
+            fillToCapacity: "Fill To Capacity",
+            never: "Never"
+        }
+    },
+
+    inspectorPane: {
+        propertiesLabel: "Properties",
+        stylesLabel: "Styles"
+    },
+
+    eventLoggerPane: {
+        label: "Event Log",
+        clear: "Clear Event Log"
+    }
 }

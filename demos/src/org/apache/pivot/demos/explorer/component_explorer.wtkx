@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="Apache Pivot Component Explorer" maximized="true"
+<Window title="%title" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns:tools="org.apache.pivot.tools.wtk"
@@ -28,7 +28,7 @@ limitations under the License.
                 <left>
                     <TabPane>
                         <tabs>
-                            <Border TabPane.label="Component Explorer">
+                            <Border TabPane.label="%explorerPane.label">
                                 <content>
                                     <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
                                         <view>
@@ -40,7 +40,7 @@ limitations under the License.
                                                 <treeData>
                                                     <content:TreeBranch>
                                                         <content:TreeBranch
-                                                            text="Labels &amp; Image Views"
+                                                            text="%explorerPane.branches.basic"
                                                             icon="@folder.png">
                                                             <explorer:ComponentNode
                                                                 text="Label"
@@ -55,7 +55,8 @@ limitations under the License.
                                                                 horizontalScrollBarPolicy="fill"
                                                                 verticalScrollBarPolicy="fill"/>
                                                         </content:TreeBranch>
-                                                        <content:TreeBranch text="Buttons"
+                                                        <content:TreeBranch
+                                                            text="%explorerPane.branches.buttons"
                                                             icon="@folder.png">
                                                             <explorer:ComponentNode
                                                                 text="PushButton"
@@ -82,7 +83,8 @@ limitations under the License.
                                                                 horizontalScrollBarPolicy="auto"
                                                                 verticalScrollBarPolicy="auto"/>
                                                         </content:TreeBranch>
-                                                        <content:TreeBranch text="Lists"
+                                                        <content:TreeBranch
+                                                            text="%explorerPane.branches.lists"
                                                             icon="@folder.png">
                                                             <explorer:ComponentNode
                                                                 text="ListView"
@@ -97,7 +99,8 @@ limitations under the License.
                                                                 horizontalScrollBarPolicy="auto"
                                                                 verticalScrollBarPolicy="auto"/>
                                                         </content:TreeBranch>
-                                                        <content:TreeBranch text="Text"
+                                                        <content:TreeBranch
+                                                            text="%explorerPane.branches.text"
                                                             icon="@folder.png">
                                                             <explorer:ComponentNode
                                                                 text="TextInput"
@@ -112,7 +115,8 @@ limitations under the License.
                                                                 horizontalScrollBarPolicy="fill"
                                                                 verticalScrollBarPolicy="fill_to_capacity"/>
                                                         </content:TreeBranch>
-                                                        <content:TreeBranch text="Separators"
+                                                        <content:TreeBranch
+                                                            text="%explorerPane.branches.separators"
                                                             icon="@folder.png">
                                                             <explorer:ComponentNode
                                                                 text="Separator"
@@ -121,7 +125,8 @@ limitations under the License.
                                                                 horizontalScrollBarPolicy="fill"
                                                                 verticalScrollBarPolicy="auto"/>
                                                         </content:TreeBranch>
-                                                        <content:TreeBranch text="Layout Containers"
+                                                        <content:TreeBranch
+                                                            text="%explorerPane.branches.layout"
                                                             icon="@folder.png">
                                                             <explorer:ComponentNode
                                                                 text="FlowPane"
@@ -173,7 +178,7 @@ limitations under the License.
                                                                 verticalScrollBarPolicy="fill"/>
                                                         </content:TreeBranch>
                                                         <content:TreeBranch
-                                                            text="Navigation Containers"
+                                                            text="%explorerPane.branches.navigation"
                                                             icon="@folder.png">
                                                             <explorer:ComponentNode
                                                                 text="CardPane"
@@ -206,7 +211,7 @@ limitations under the License.
                                                                 horizontalScrollBarPolicy="auto"
                                                                 verticalScrollBarPolicy="auto"/>
                                                             <content:TreeBranch
-                                                                text="Viewports"
+                                                                text="%explorerPane.branches.viewports"
                                                                 icon="@folder.png">
                                                                 <explorer:ComponentNode
                                                                     text="ScrollPane"
@@ -223,7 +228,7 @@ limitations under the License.
                                                             </content:TreeBranch>
                                                         </content:TreeBranch>
                                                         <content:TreeBranch
-                                                            text="Progress Indicators"
+                                                            text="%explorerPane.branches.progress"
                                                             icon="@folder.png">
                                                             <explorer:ComponentNode
                                                                 text="Meter"
@@ -239,7 +244,7 @@ limitations under the License.
                                                                 verticalScrollBarPolicy="auto"/>
                                                         </content:TreeBranch>
                                                         <content:TreeBranch
-                                                            text="Bounded Range Components"
+                                                            text="%explorerPane.branches.boundedRange"
                                                             icon="@folder.png">
                                                             <explorer:ComponentNode
                                                                 text="ScrollBar"
@@ -261,7 +266,7 @@ limitations under the License.
                                                                 verticalScrollBarPolicy="auto"/>
                                                         </content:TreeBranch>
                                                         <content:TreeBranch
-                                                            text="Calendars"
+                                                            text="%explorerPane.branches.calendars"
                                                             icon="@folder.png">
                                                             <explorer:ComponentNode
                                                                 text="Calendar"
@@ -277,7 +282,7 @@ limitations under the License.
                                                                 verticalScrollBarPolicy="auto"/>
                                                         </content:TreeBranch>
                                                         <content:TreeBranch
-                                                            text="Color Choosers"
+                                                            text="%explorerPane.branches.colorChoosers"
                                                             icon="@folder.png">
                                                             <explorer:ComponentNode
                                                                 text="ColorChooser"
@@ -293,7 +298,7 @@ limitations under the License.
                                                                 verticalScrollBarPolicy="auto"/>
                                                         </content:TreeBranch>
                                                         <content:TreeBranch
-                                                            text="Menus"
+                                                            text="%explorerPane.branches.menus"
                                                             icon="@folder.png">
                                                             <explorer:ComponentNode
                                                                 text="MenuBar"
@@ -309,7 +314,7 @@ limitations under the License.
                                                                 verticalScrollBarPolicy="auto"/>
                                                         </content:TreeBranch>
                                                         <content:TreeBranch
-                                                            text="Tables"
+                                                            text="%explorerPane.branches.tables"
                                                             icon="@folder.png">
                                                             <explorer:ComponentNode
                                                                 text="TableView"
@@ -319,7 +324,7 @@ limitations under the License.
                                                                 verticalScrollBarPolicy="auto"/>
                                                         </content:TreeBranch>
                                                         <content:TreeBranch
-                                                            text="Trees"
+                                                            text="%explorerPane.branches.trees"
                                                             icon="@folder.png">
                                                             <explorer:ComponentNode
                                                                 text="TreeView"
@@ -329,7 +334,7 @@ limitations under the License.
                                                                 verticalScrollBarPolicy="auto"/>
                                                         </content:TreeBranch>
                                                         <content:TreeBranch
-                                                            text="File Browsing"
+                                                            text="%explorerPane.branches.fileBrowsing"
                                                             icon="@folder.png">
                                                             <explorer:ComponentNode
                                                                 text="FileBrowser"
@@ -355,12 +360,23 @@ limitations under the License.
                                 <left>
                                     <TabPane>
                                         <tabs>
-                                            <Border wtkx:id="contentTab">
+                                            <Border TabPane.label="%contentPane.visualizationLabel">
                                                 <content>
                                                     <ScrollPane wtkx:id="contentScrollPane">
                                                         <view>
                                                             <Border wtkx:id="contentPane"
                                                                 styles="{thickness:0, padding:6}"/>
+                                                        </view>
+                                                    </ScrollPane>
+                                                </content>
+                                            </Border>
+                                            <Border TabPane.label="%contentPane.wtkxSourceLabel">
+                                                <content>
+                                                    <ScrollPane horizontalScrollBarPolicy="fill">
+                                                        <view>
+                                                            <TextArea wtkx:id="sourceTextArea"
+                                                                editable="false"
+                                                                styles="{font:'Courier 10'}"/>
                                                         </view>
                                                     </ScrollPane>
                                                 </content>
@@ -382,7 +398,7 @@ limitations under the License.
                                                         <Menu>
                                                             <sections>
                                                                 <Menu.Section>
-                                                                    <Menu.Item buttonData="Horizontal Scroll Bar Policy">
+                                                                    <Menu.Item buttonData="%contentPane.scrollBarPolicy.horizontal">
                                                                         <menu>
                                                                             <Menu>
                                                                                 <sections>
@@ -390,25 +406,25 @@ limitations under the License.
                                                                                         <Menu.Item wtkx:id="horizontalAutoButton"
                                                                                             toggleButton="true"
                                                                                             buttonGroup="$horizontalScrollBarPolicyGroup"
-                                                                                            buttonData="Auto"/>
+                                                                                            buttonData="%contentPane.scrollBarPolicy.auto"/>
                                                                                         <Menu.Item wtkx:id="horizontalFillButton"
                                                                                             toggleButton="true"
                                                                                             buttonGroup="$horizontalScrollBarPolicyGroup"
-                                                                                            buttonData="Fill"/>
+                                                                                            buttonData="%contentPane.scrollBarPolicy.fill"/>
                                                                                         <Menu.Item wtkx:id="horizontalFillToCapacityButton"
                                                                                             toggleButton="true"
                                                                                             buttonGroup="$horizontalScrollBarPolicyGroup"
-                                                                                            buttonData="Fill To Capacity"/>
+                                                                                            buttonData="%contentPane.scrollBarPolicy.fillToCapacity"/>
                                                                                         <Menu.Item wtkx:id="horizontalNeverButton"
                                                                                             toggleButton="true"
                                                                                             buttonGroup="$horizontalScrollBarPolicyGroup"
-                                                                                            buttonData="Never"/>
+                                                                                            buttonData="%contentPane.scrollBarPolicy.never"/>
                                                                                     </Menu.Section>
                                                                                 </sections>
                                                                             </Menu>
                                                                         </menu>
                                                                     </Menu.Item>
-                                                                    <Menu.Item buttonData="Vertical Scroll Bar Policy">
+                                                                    <Menu.Item buttonData="%contentPane.scrollBarPolicy.vertical">
                                                                         <menu>
                                                                             <Menu>
                                                                                 <sections>
@@ -416,19 +432,19 @@ limitations under the License.
                                                                                         <Menu.Item wtkx:id="verticalAutoButton"
                                                                                             toggleButton="true"
                                                                                             buttonGroup="$verticalScrollBarPolicyGroup"
-                                                                                            buttonData="Auto"/>
+                                                                                            buttonData="%contentPane.scrollBarPolicy.auto"/>
                                                                                         <Menu.Item wtkx:id="verticalFillButton"
                                                                                             toggleButton="true"
                                                                                             buttonGroup="$verticalScrollBarPolicyGroup"
-                                                                                            buttonData="Fill"/>
+                                                                                            buttonData="%contentPane.scrollBarPolicy.fill"/>
                                                                                         <Menu.Item wtkx:id="verticalFillToCapacityButton"
                                                                                             toggleButton="true"
                                                                                             buttonGroup="$verticalScrollBarPolicyGroup"
-                                                                                            buttonData="Fill To Capacity"/>
+                                                                                            buttonData="%contentPane.scrollBarPolicy.fillToCapacity"/>
                                                                                         <Menu.Item wtkx:id="verticalNeverButton"
                                                                                             toggleButton="true"
                                                                                             buttonGroup="$verticalScrollBarPolicyGroup"
-                                                                                            buttonData="Never"/>
+                                                                                            buttonData="%contentPane.scrollBarPolicy.never"/>
                                                                                     </Menu.Section>
                                                                                 </sections>
                                                                             </Menu>
@@ -446,7 +462,7 @@ limitations under the License.
                                 <right>
                                     <TabPane wtkx:id="inspectorTabPane">
                                         <tabs>
-                                            <Border TabPane.label="%properties">
+                                            <Border TabPane.label="%inspectorPane.propertiesLabel">
                                                 <content>
                                                     <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
                                                         <view>
@@ -458,7 +474,7 @@ limitations under the License.
                                                     </ScrollPane>
                                                 </content>
                                             </Border>
-                                            <Border TabPane.label="%styles">
+                                            <Border TabPane.label="%inspectorPane.stylesLabel">
                                                 <content>
                                                     <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
                                                         <view>
@@ -479,7 +495,7 @@ limitations under the License.
                             <TabPane>
                                 <tabs>
                                     <tools:EventLogger wtkx:id="eventLogger"
-                                        TabPane.label="Event Log"/>
+                                        TabPane.label="%eventLoggerPane.label"/>
                                 </tabs>
                                 <corner>
                                     <BoxPane styles="{padding:{right:6},
@@ -493,7 +509,7 @@ limitations under the License.
                                                 <Menu>
                                                     <sections>
                                                         <Menu.Section>
-                                                            <Menu.Item buttonData="Clear Event Log"
+                                                            <Menu.Item buttonData="%eventLoggerPane.clear"
                                                                 ButtonPressListener.buttonPressed="eventLogger.clearLog();"/>
                                                         </Menu.Section>
                                                     </sections>

@@ -16,7 +16,10 @@
  */
 package org.apache.pivot.demos.explorer;
 
+import java.io.BufferedInputStream;
+import java.io.InputStream;
 import java.io.IOException;
+import java.net.URL;
 
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
@@ -41,18 +44,20 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.ScrollPane;
 import org.apache.pivot.wtk.ScrollPane.ScrollBarPolicy;
-import org.apache.pivot.wtk.TabPane;
+import org.apache.pivot.wtk.TextArea;
 import org.apache.pivot.wtk.TreeView;
 import org.apache.pivot.wtk.TreeViewSelectionListener;
 import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtk.text.Document;
+import org.apache.pivot.wtk.text.PlainTextSerializer;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class ComponentExplorer implements Application {
     private Window window = null;
     private TreeView treeView = null;
-    private Border contentTab = null;
     private ScrollPane contentScrollPane = null;
     private Border contentPane = null;
+    private TextArea sourceTextArea = null;
     private ComponentPropertyInspector componentPropertyInspector = null;
     private ComponentStyleInspector componentStyleInspector = null;
     private EventLogger eventLogger = null;
@@ -78,9 +83,9 @@ public class ComponentExplorer implements Application {
         window = (Window)wtkxSerializer.readObject(this, "component_explorer.wtkx");
 
         treeView = wtkxSerializer.getValue("treeView");
-        contentTab = wtkxSerializer.getValue("contentTab");
         contentScrollPane = wtkxSerializer.getValue("contentScrollPane");
         contentPane = wtkxSerializer.getValue("contentPane");
+        sourceTextArea = wtkxSerializer.getValue("sourceTextArea");
         componentPropertyInspector = wtkxSerializer.getValue("componentPropertyInspector");
         componentStyleInspector = wtkxSerializer.getValue("componentStyleInspector");
         eventLogger = wtkxSerializer.getValue("eventLogger");
@@ -101,16 +106,34 @@ public class ComponentExplorer implements Application {
             public void selectedPathsChanged(TreeView treeView,
                 Sequence<Path> previousSelectedPaths) {
                 Component component = null;
-                String tabLabel = null;
 
                 Object node = treeView.getSelectedNode();
                 if (node instanceof ComponentNode) {
                     ComponentNode componentNode = (ComponentNode)node;
-                    tabLabel = componentNode.getText();
+                    URL url = componentNode.getSrc();
+
+                    Document document = null;
+
+                    try {
+                        PlainTextSerializer plainTextSerializer = new PlainTextSerializer("UTF-8");
+                        InputStream inputStream = new BufferedInputStream(url.openStream());
+
+                        try {
+                            document = plainTextSerializer.readObject(inputStream);
+                        } finally {
+                            inputStream.close();
+                        }
+                    } catch (IOException exception) {
+                        throw new RuntimeException(exception);
+                    } catch (SerializationException exception) {
+                        throw new RuntimeException(exception);
+                    }
+
+                    sourceTextArea.setDocument(document);
 
                     WTKXSerializer wtkxSerializer = new WTKXSerializer();
                     try {
-                        component = (Component)wtkxSerializer.readObject(componentNode.getSrc());
+                        component = (Component)wtkxSerializer.readObject(url);
                     } catch (IOException exception) {
                         throw new RuntimeException(exception);
                     } catch (SerializationException exception) {
@@ -148,7 +171,6 @@ public class ComponentExplorer implements Application {
                     }
                 }
 
-                TabPane.setLabel(contentTab, tabLabel);
                 contentPane.setContent(component);
                 componentPropertyInspector.setSource(component);
                 componentStyleInspector.setSource(component);
