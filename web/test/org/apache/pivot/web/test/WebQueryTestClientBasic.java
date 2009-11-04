@@ -50,7 +50,7 @@ import org.junit.Test;
  * some parameters have to be changed  inside the json file, then rerun the test.
  * <br/>
  * Note that at the end of some tests, the downloaded content is written (dump) to the console,
- * but it's useful only for text resources, so don't do it for binary resources. 
+ * but it's useful only for text resources, so don't do it for binary resources.
  * Here a sample (including commented code for other ways to do this):
  * <pre>
         String dump = // result.toString()
@@ -123,7 +123,7 @@ public class WebQueryTestClientBasic {
         query.setTimeout(resources.getLong("timeout"));
         log("GET Query to " + query.getLocation());
 
-        // to download generic content don't use BinarySerializer, 
+        // to download generic content don't use BinarySerializer,
         // but instead use the ByteArraySerializer
         query.setSerializer(new ByteArraySerializer());
 
@@ -134,7 +134,7 @@ public class WebQueryTestClientBasic {
         String dump = new String((byte[]) result);
         log("Query result: " + (dump.getBytes().length) + " bytes \n" + dump);
     }
-    
+
     @Test(timeout = 10000, expected = QueryException.class)
     public void public_noauth_NotExistingHost() throws QueryException {
         log("public_noauth_NotExistingHost()");

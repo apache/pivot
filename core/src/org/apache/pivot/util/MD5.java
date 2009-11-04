@@ -42,7 +42,7 @@ public final class MD5 {
     /**
      * Retrieves a byte sequence representing the MD5 digest of the specified
      * byte sequence. Note that any Exception is handled inside.
-     * 
+     *
      * @param data the data to digest.
      * @return the MD5 digest as an array of 16 bytes.
      */
@@ -71,7 +71,7 @@ public final class MD5 {
     /**
      * Transform the given string in a byte array, using the given encoding.
      * Note that any Exception is handled inside.
-     * 
+     *
      * @param string The string to transform.
      * @param encoding The encoding to use, or <tt>null</tt> to use the default
      * encoding.
@@ -94,7 +94,7 @@ public final class MD5 {
 
     /**
      * Encodes the 128 bit (16 bytes) MD5 into a 32 character String.
-     * 
+     *
      * @param binaryData The byte array containing the digest.
      * @return The encoded MD5 string.
      */
@@ -119,7 +119,7 @@ public final class MD5 {
     /**
      * Transform the given string in a digested version, using the given
      * encoding.
-     * 
+     *
      * @param string The string to digest.
      * @param encoding The encoding to use, or <tt>null to use the default
      * encoding.</tt>
@@ -135,7 +135,7 @@ public final class MD5 {
     /**
      * Convert a byte array into a printable format containing a string of
      * hexadecimal digit characters (two per byte).
-     * 
+     *
      * @param bytes Byte array representation.
      */
     public static String toHexString(byte bytes[]) {
