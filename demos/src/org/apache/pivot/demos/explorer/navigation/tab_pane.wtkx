@@ -19,7 +19,8 @@ limitations under the License.
 <TabPane xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
     <tabs>
-        <BoxPane TabPane.icon="org/apache/pivot/tutorials/bell.png" TabPane.label="Bell"
+        <BoxPane TabPane.icon="@bell.png"
+            TabPane.label="Bell"
             styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
             <Border styles="{padding:2}">
                 <content>
@@ -29,7 +30,8 @@ limitations under the License.
             </Border>
         </BoxPane>
 
-        <BoxPane TabPane.icon="org/apache/pivot/tutorials/clock.png" TabPane.label="Clock"
+        <BoxPane TabPane.icon="@clock.png"
+            TabPane.label="Clock"
             styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
             <Border styles="{padding:2}">
                 <content>
@@ -39,7 +41,8 @@ limitations under the License.
             </Border>
         </BoxPane>
 
-        <BoxPane TabPane.icon="org/apache/pivot/tutorials/house.png" TabPane.label="House"
+        <BoxPane TabPane.icon="@house.png"
+            TabPane.label="House"
             styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
             <Border styles="{padding:2}">
                 <content>
@@ -49,6 +52,7 @@ limitations under the License.
             </Border>
         </BoxPane>
 
-        <BoxPane TabPane.icon="org/apache/pivot/tutorials/star.png" TabPane.label="Star" enabled="false"/>
+        <BoxPane TabPane.icon="@star.png"
+            TabPane.label="Star" enabled="false"/>
     </tabs>
 </TabPane>
