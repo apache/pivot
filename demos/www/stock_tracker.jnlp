@@ -46,12 +46,12 @@
 
         <extension name="pivot-runtime" href="<%= codebase %>pivot-runtime.signed.jnlp" />
 
-        <jar href="lib/pivot-tutorials-<%= version %>.signed.jar" main="true" />
+        <jar href="lib/pivot-tutorials-<%= version %>.signed.jar" />
     </resources>
 
     <application-desc main-class="org.apache.pivot.wtk.DesktopApplicationContext">
         <argument>org.apache.pivot.tutorials.stocktracker.StockTracker</argument>
     </application-desc>
-    
+
     <update check="background" />
 </jnlp>

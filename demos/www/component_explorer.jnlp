@@ -40,10 +40,10 @@
 <%@ include file="jnlp_properties.jsp" %>
         <java version="1.6+" href="http://java.sun.com/products/autodl/j2se" />
 
-        <extension name="pivot-runtime" href="<%= codebase %>pivot-runtime.jnlp" />
+        <extension name="pivot-runtime" href="<%= codebase %>pivot-runtime.signed.jnlp" />
 
-        <jar href="lib/pivot-tools-<%= version %>.jar" main="true" />
-        <jar href="lib/pivot-demos-<%= version %>.jar" main="true" />
+        <jar href="lib/pivot-tools-<%= version %>.signed.jar" />
+        <jar href="lib/pivot-demos-<%= version %>.signed.jar" />
     </resources>
 
     <application-desc main-class="org.apache.pivot.wtk.DesktopApplicationContext">

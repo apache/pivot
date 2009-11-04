@@ -38,7 +38,7 @@
 
         <jar href="lib/pivot-core-<%= version %>.jar" />
         <jar href="lib/pivot-web-<%= version %>.jar" />
-        <jar href="lib/pivot-wtk-<%= version %>.jar" />
+        <jar href="lib/pivot-wtk-<%= version %>.jar" main="true" />
         <jar href="lib/pivot-wtk-<%= version %>.terra.jar" />
     </resources>
 
