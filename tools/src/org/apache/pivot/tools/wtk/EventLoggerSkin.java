@@ -223,8 +223,6 @@ class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLo
 
     @Override
     public void sourceChanged(EventLogger eventLogger, Component previousSource) {
-        clearLog();
-
         HashMap<Class<?>, ArrayList<Method>> buckets = new HashMap<Class<?>, ArrayList<Method>>();
 
         for (Method event : eventLogger.getDeclaredEvents()) {

@@ -169,12 +169,15 @@ public class ComponentExplorer implements Application {
                         verticalScrollBarPolicyGroup.setSelection(verticalNeverButton);
                         break;
                     }
+                } else {
+                    sourceTextArea.setText(null);
                 }
 
                 contentPane.setContent(component);
                 componentPropertyInspector.setSource(component);
                 componentStyleInspector.setSource(component);
                 eventLogger.setSource(component);
+                eventLogger.clearLog();
             }
         });
 
