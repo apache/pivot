@@ -48,6 +48,15 @@ import org.junit.Test;
  * from a json file that must be in the same folder of this class.
  * For example, to run this Class on another Server (for example on a local Tomcat instance),
  * some parameters have to be changed  inside the json file, then rerun the test.
+ * <br/>
+ * Note that at the end of some tests, the downloaded content is written (dump) to the console,
+ * but it's useful only for text resources, so don't do it for binary resources. 
+ * Here a sample (including commented code for other ways to do this):
+ * <pre>
+        String dump = // result.toString()
+            // Arrays.toString((byte []) result);
+            new String((byte[]) result);
+ * <pre/>
  *
  * TODO:
  *   - test other HTTP methods ...
@@ -93,6 +102,8 @@ public class WebQueryTestClientBasic {
     @Before
     public void runBeforeEveryTest() {
         // run before any single test case
+        host = resources.getString("hostname");
+        port = resources.getInteger("port");
     }
 
     @After
@@ -107,18 +118,31 @@ public class WebQueryTestClientBasic {
         result = null;
     }
 
+    protected GetQuery createGetQuery(final String host, final int port, final String path, final boolean secure) {
+        GetQuery query = new GetQuery(host, port, path, secure);
+        query.setTimeout(resources.getLong("timeout"));
+        log("GET Query to " + query.getLocation());
+
+        // to download generic content don't use BinarySerializer, 
+        // but instead use the ByteArraySerializer
+        query.setSerializer(new ByteArraySerializer());
+
+        return query;
+    }
+
+    protected void dumpResource(Object result) {
+        String dump = new String((byte[]) result);
+        log("Query result: " + (dump.getBytes().length) + " bytes \n" + dump);
+    }
+    
     @Test(timeout = 10000, expected = QueryException.class)
     public void public_noauth_NotExistingHost() throws QueryException {
         log("public_noauth_NotExistingHost()");
 
         host = "non_existing_host";
-        port = resources.getInteger("port");
         path = resources.getString("folder_public");
 
-        GetQuery query = new GetQuery(host, port, path, secure);
-        query.setTimeout(resources.getLong("timeout"));
-        log("GET Query to " + query.getLocation());
-
+        GetQuery query = createGetQuery(host, port, path, secure);
         result = query.execute();
         assertNull(result);
 
@@ -129,14 +153,9 @@ public class WebQueryTestClientBasic {
     public void public_noauth_localhost_NotExistingResource() throws QueryException {
         log("public_noauth_localhost_NotExistingResource()");
 
-        host = resources.getString("hostname");
-        port = resources.getInteger("port");
         path = resources.getString("folder_public") + "non_existing_resource";
 
-        GetQuery query = new GetQuery(host, port, path, secure);
-        query.setTimeout(resources.getLong("timeout"));
-        log("GET Query to " + query.getLocation());
-
+        GetQuery query = createGetQuery(host, port, path, secure);
         result = query.execute();
         assertNull(result);
 
@@ -147,26 +166,13 @@ public class WebQueryTestClientBasic {
     public void public_noauth_localhost_testFile() throws QueryException {
         log("public_noauth_localhost_testFile()");
 
-        host = resources.getString("hostname");
-        port = resources.getInteger("port");
         path = resources.getString("folder_public") + resources.getString("file_text");
 
-        GetQuery query = new GetQuery(host, port, path, secure);
-
-        // attention, don't use BinarySerializer here, but instead use the
-        // generic ByteArraySerializer
-        query.setSerializer(new ByteArraySerializer());
-        query.setTimeout(resources.getLong("timeout"));
-        log("GET Query to " + query.getLocation());
-
+        GetQuery query = createGetQuery(host, port, path, secure);
         result = query.execute();
         assertNotNull(result);
 
-        // dump content, but useful only for text resources ...
-        String dump = // result.toString()
-        // Arrays.toString((byte []) result);
-        new String((byte[]) result);
-        log("Query result: " + (dump.getBytes().length) + " bytes \n" + dump);
+        dumpResource(result);
     }
 
     @Test(timeout = 10000)
@@ -174,17 +180,9 @@ public class WebQueryTestClientBasic {
         throws QueryException {
         log("public_basic_localhost_forceUnnecessaryAuthentication()");
 
-        host = resources.getString("hostname");
-        port = resources.getInteger("port");
         path = resources.getString("folder_public") + resources.getString("file_text");
 
-        GetQuery query = new GetQuery(host, port, path, secure);
-
-        // attention, don't use BinarySerializer here, but instead use the
-        // generic ByteArraySerializer
-        query.setSerializer(new ByteArraySerializer());
-        query.setTimeout(resources.getLong("timeout"));
-        log("GET Query to " + query.getLocation());
+        GetQuery query = createGetQuery(host, port, path, secure);
 
         authentication = new BasicAuthentication(resources.getString("user_name"),
             resources.getString("user_pass"));
@@ -193,11 +191,7 @@ public class WebQueryTestClientBasic {
         result = query.execute();
         assertNotNull(result);
 
-        // dump content, but useful only for text resources ...
-        String dump = // result.toString()
-        // Arrays.toString((byte []) result);
-        new String((byte[]) result);
-        log("Query result: " + (dump.getBytes().length) + " bytes \n" + dump);
+        dumpResource(result);
     }
 
     // @Test(timeout = 10000, expected = QueryException.class)
@@ -205,15 +199,9 @@ public class WebQueryTestClientBasic {
     public void protected_basic_localhostWithoutAuthenticate() throws QueryException {
         log("protected_basic_localhostWithoutAuthenticate()");
 
-        host = resources.getString("hostname");
-        port = resources.getInteger("port");
         path = resources.getString("folder_protected") + resources.getString("file_text");
 
-        GetQuery query = new GetQuery(host, port, path, secure);
-        query.setSerializer(new ByteArraySerializer());
-        query.setTimeout(resources.getLong("timeout"));
-        log("GET Query to " + query.getLocation());
-
+        GetQuery query = createGetQuery(host, port, path, secure);
         result = query.execute();
         log("Query result: \n" + result);
         assertNull(result);
@@ -227,14 +215,9 @@ public class WebQueryTestClientBasic {
     public void protected_basic_localhostWithWrongCredentials() throws QueryException {
         log("protected_basic_localhostWithWrongCredentials()");
 
-        host = resources.getString("hostname");
-        port = resources.getInteger("port");
         path = resources.getString("folder_protected") + resources.getString("file_text");
 
-        GetQuery query = new GetQuery(host, port, path, secure);
-        query.setSerializer(new ByteArraySerializer());
-        query.setTimeout(resources.getLong("timeout"));
-        log("GET Query to " + query.getLocation());
+        GetQuery query = createGetQuery(host, port, path, secure);
 
         authentication = new BasicAuthentication("wrongUsername", "wrongPassword");
         authentication.authenticate(query);
@@ -252,19 +235,10 @@ public class WebQueryTestClientBasic {
     public void protected_basic_localhost() throws QueryException {
         log("protected_basic_localhost()");
 
-        host = resources.getString("hostname");
-        port = resources.getInteger("port");
-        // path = resources.getString("folder_protected") + resources.getString("file_text");
-        // path = resources.getString("folder_protected") + resources.getString("file_binary");
         path = resources.getString("folder_protected") + resources.getString("file_text");
+        // path = resources.getString("folder_protected") + resources.getString("file_binary");
 
-        GetQuery query = new GetQuery(host, port, path, secure);
-
-        // attention, don't use BinarySerializer here, but instead use the
-        // generic ByteArraySerializer
-        query.setSerializer(new ByteArraySerializer());
-        query.setTimeout(resources.getLong("timeout"));
-        log("GET Query to " + query.getLocation());
+        GetQuery query = createGetQuery(host, port, path, secure);
 
         authentication = new BasicAuthentication(resources.getString("user_name"),
             resources.getString("user_pass"));
@@ -277,11 +251,7 @@ public class WebQueryTestClientBasic {
         log("Query: status = " + status + ", result: \n" + result);
         assertEquals(200, status);
 
-        // dump content, but useful only for text resources ...
-        String dump = // result.toString()
-        // Arrays.toString((byte []) result);
-        new String((byte[]) result);
-        log("Query result: " + (dump.getBytes().length) + " bytes \n" + dump);
+        dumpResource(result);
     }
 
 }
