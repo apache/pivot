@@ -54,6 +54,11 @@ public abstract class Element extends Node
         }
 
         @Override
+        public char getCharacter(int offset) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
         public int getCharacterCount() {
             return 0;
         }
@@ -324,6 +329,12 @@ public abstract class Element extends Node
         }
 
         return range;
+    }
+
+    @Override
+    public char getCharacter(int offset) {
+        // TODO Find the node that contains offset, translate, and call getCharacter() on it
+        return 0;
     }
 
     @Override

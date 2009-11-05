@@ -182,6 +182,7 @@ public final class TextNode extends Node {
         return text;
     }
 
+    @Override
     public char getCharacter(int index) {
         if (index < 0
             || index >= textBuilder.length()) {

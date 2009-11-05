@@ -156,6 +156,13 @@ public abstract class Node {
     public abstract Node getRange(int offset, int characterCount);
 
     /**
+     * Returns the character at the given offset.
+     *
+     * @param offset
+     */
+    public abstract char getCharacter(int offset);
+
+    /**
      * Returns the number of characters in this node.
      */
     public abstract int getCharacterCount();

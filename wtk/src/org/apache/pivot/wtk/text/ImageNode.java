@@ -128,6 +128,11 @@ public class ImageNode extends Node {
     }
 
     @Override
+    public char getCharacter(int offset) {
+        return 0x00;
+    }
+
+    @Override
     public int getCharacterCount() {
         return 1;
     }

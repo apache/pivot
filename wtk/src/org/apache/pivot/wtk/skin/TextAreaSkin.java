@@ -750,21 +750,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
 
         @Override
-        public void paint(Graphics2D graphics) {
-            // TODO DEBUG
-            /*
-            graphics.setColor(Color.LIGHT_GRAY);
-            graphics.fillRect(0, 0, getWidth(), getHeight());
-
-            graphics.setColor(Color.RED);
-            graphics.fillRect(terminatorBounds.x, terminatorBounds.y,
-                terminatorBounds.width, terminatorBounds.height);
-            */
-
-            super.paint(graphics);
-        }
-
-        @Override
         public NodeView getNext() {
             return null;
         }
@@ -787,6 +772,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                             NodeView lastNodeView = row.nodeViews.get(row.nodeViews.getLength() - 1);
                             offset = lastNodeView.getOffset() + lastNodeView.getCharacterCount();
 
+                            // TODO Check for whitespace character here
                             if (offset < getCharacterCount() - 1) {
                                 offset--;
                             }
@@ -874,6 +860,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                         NodeView lastNodeView = row.nodeViews.get(row.nodeViews.getLength() - 1);
                         offset = lastNodeView.getOffset() + lastNodeView.getCharacterCount();
 
+                        // TODO Check for whitespace character here
                         if (offset < getCharacterCount() - 1) {
                             offset--;
                         }
@@ -1373,7 +1360,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
                     if (offset != -1) {
                         textArea.setSelection(offset, selectionEnd - offset + 1);
-                        scrollCharacterToVisible(offset);
+                        scrollCharacterToVisible(offset + 1);
                     }
 
                     break;
@@ -1422,8 +1409,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     public TextAreaSkin() {
         Theme theme = Theme.getTheme();
         font = theme.getFont();
-        // TODO DEBUG
-        // font = new Font("Monaco", Font.PLAIN, 11);
         color = Color.BLACK;
         inactiveColor = Color.GRAY;
         backgroundColor = null;
@@ -1853,9 +1838,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 visibleArea.x, visibleArea.y);
             visibleArea = new Bounds(viewportOrigin.x, viewportOrigin.y,
                 visibleArea.width, visibleArea.height);
-
-            int width = getWidth();
-            x = Math.max(margin.left, Math.min(width - margin.right - 1, x));
 
             if (y >= visibleArea.y
                 && y < visibleArea.y + visibleArea.height) {
