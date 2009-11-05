@@ -16,7 +16,6 @@
  */
 package org.apache.pivot.wtk.text;
 
-import java.util.Comparator;
 import java.util.Iterator;
 
 import org.apache.pivot.collections.ArrayList;
@@ -33,55 +32,6 @@ import org.apache.pivot.util.ListenerList;
  */
 public abstract class Element extends Node
     implements Sequence<Node>, Iterable<Node> {
-    /**
-     * Private node class that simply represents an offset value. Used to
-     * perform binary searches.
-     */
-    private static class NullNode extends Node {
-        @Override
-        public void insertRange(Node range, int offset) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public Node removeRange(int offset, int characterCount) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public Node getRange(int offset, int characterCount) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public char getCharacter(int offset) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public int getCharacterCount() {
-            return 0;
-        }
-
-        @Override
-        public Node duplicate(boolean recursive) {
-            throw new UnsupportedOperationException();
-        }
-    }
-
-    /**
-     * Comparator used to perform binary searches on child nodes.
-     */
-    private static class NodeOffsetComparator implements Comparator<Node> {
-        @Override
-        public int compare(Node node1, Node node2) {
-            int offset1 = node1.getOffset();
-            int offset2 = node2.getOffset();
-
-            return (offset1 - offset2);
-        }
-    }
-
     private static class ElementListenerList extends ListenerList<ElementListener>
         implements ElementListener {
         @Override
@@ -104,10 +54,6 @@ public abstract class Element extends Node
     private ArrayList<Node> nodes = new ArrayList<Node>();
 
     private ElementListenerList elementListeners = new ElementListenerList();
-
-    private static final NullNode nullNode = new NullNode();
-    private static final NodeOffsetComparator nodeOffsetComparator =
-        new NodeOffsetComparator();
 
     public Element() {
     }
@@ -333,8 +279,8 @@ public abstract class Element extends Node
 
     @Override
     public char getCharacter(int offset) {
-        // TODO Find the node that contains offset, translate, and call getCharacter() on it
-        return 0;
+        Node node = getNodeAt(offset);
+        return node.getCharacter(offset - node.getOffset());
     }
 
     @Override
@@ -477,18 +423,7 @@ public abstract class Element extends Node
             throw new IllegalArgumentException("node is null.");
         }
 
-        int index = -1;
-        if (node.getParent() == this) {
-            index = ArrayList.binarySearch(nodes, node, nodeOffsetComparator);
-
-            if (index < 0) {
-                // Decrement the index by one, since we only get exact
-                // matches when the offset values are identical
-                index = -(index + 1) - 1;
-            }
-        }
-
-        return index;
+        return nodes.indexOf(node);
     }
 
     @Override
@@ -510,10 +445,21 @@ public abstract class Element extends Node
             throw new IndexOutOfBoundsException();
         }
 
-        nullNode.setParent(this);
-        nullNode.setOffset(offset);
+        int index = -1;
 
-        return indexOf(nullNode);
+        for (int i = 0, n = nodes.getLength(); i < n; i++) {
+            Node node = nodes.get(i);
+            int nodeOffset = node.getOffset();
+            int characterCount = node.getCharacterCount();
+
+            if (offset >= nodeOffset
+                && offset < nodeOffset + characterCount) {
+                index = i;
+                break;
+            }
+        }
+
+        return index;
     }
 
     /**

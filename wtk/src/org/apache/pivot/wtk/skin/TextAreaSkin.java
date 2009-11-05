@@ -401,7 +401,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 }
             }
 
-            return characterBounds;
+            return characterBounds.intersect(0, 0, getWidth(), getHeight());
         }
 
         @Override
@@ -519,7 +519,11 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 if (from == -1) {
                     int i = (direction == Direction.FORWARD) ? 0 : getLength() - 1;
                     NodeView nodeView = get(i);
-                    offset = nodeView.getInsertionPoint(x - nodeView.getX(), -1);
+                    offset = nodeView.getNextInsertionPoint(x - nodeView.getX(), -1, direction);
+
+                    if (offset != -1) {
+                        offset += nodeView.getOffset();
+                    }
                 } else {
                     // Find the node view that contains the offset
                     int n = getLength();
@@ -768,11 +772,10 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                         if (x < row.x) {
                             NodeView firstNodeView = row.nodeViews.get(0);
                             offset = firstNodeView.getOffset();
-                        } else if (x > row.x + row.width) {
+                        } else if (x > row.x + row.width - 1) {
                             NodeView lastNodeView = row.nodeViews.get(row.nodeViews.getLength() - 1);
                             offset = lastNodeView.getOffset() + lastNodeView.getCharacterCount();
 
-                            // TODO Check for whitespace character here
                             if (offset < getCharacterCount() - 1) {
                                 offset--;
                             }
@@ -860,7 +863,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                         NodeView lastNodeView = row.nodeViews.get(row.nodeViews.getLength() - 1);
                         offset = lastNodeView.getOffset() + lastNodeView.getCharacterCount();
 
-                        // TODO Check for whitespace character here
                         if (offset < getCharacterCount() - 1) {
                             offset--;
                         }
@@ -2260,12 +2262,12 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             int selectionLength = textArea.getSelectionLength();
 
             if (selectionLength > 0) {
-                Bounds trailingSelectionBounds = getCharacterBounds(selectionStart
-                    + selectionLength - 1);
+                int selectionEnd = selectionStart + selectionLength - 1;
+                Bounds trailingSelectionBounds = getCharacterBounds(selectionEnd);
                 selection = new Area();
 
                 int firstRowIndex = getRowIndex(selectionStart);
-                int lastRowIndex = getRowIndex(selectionStart + selectionLength - 1);
+                int lastRowIndex = getRowIndex(selectionEnd);
 
                 if (firstRowIndex == lastRowIndex) {
                     selection.add(new Area(new Rectangle(leadingSelectionBounds.x, leadingSelectionBounds.y,
