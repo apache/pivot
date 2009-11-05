@@ -78,6 +78,7 @@ public class TextAreaTest implements Application {
         frame = new Frame((Component)wtkxSerializer.readObject(getClass().getResource("text_area_test.wtkx")));
         frame.setTitle("TextArea Test");
         frame.setPreferredSize(640, 480);
+        frame.setLocation(160, 120);
         frame.open(display);
 
         textArea = (TextArea)wtkxSerializer.get("textArea");

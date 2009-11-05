@@ -19,6 +19,7 @@ limitations under the License.
 <Document xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk.text">
     <Paragraph>ABCD</Paragraph>
+    <Paragraph></Paragraph>
     <Paragraph>1234</Paragraph>
     <Paragraph>abcd</Paragraph>
     <Paragraph>Pivot is an open-source platform for building rich internet applications in Java. It combines the enhanced productivity and usability features of a modern RIA toolkit with the robustness of the industry-standard Java platform.</Paragraph>

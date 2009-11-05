@@ -294,9 +294,7 @@ public class TextArea extends Component {
         }
 
         if (selectionLength > 0) {
-            // TODO Make this part of the undoable action (for all such
-            // actions)
-            document.removeRange(selectionStart, selectionLength);
+            delete(Direction.FORWARD);
         }
 
         Node descendant = document.getDescendantAt(selectionStart);
