@@ -643,19 +643,18 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         @Override
         public void validate() {
             if (!isValid()) {
-                // Build the row list
+                // Break the views into multiple rows
+                int breakWidth = getBreakWidth();
+
                 Paragraph paragraph = (Paragraph)getNode();
                 rows = new ArrayList<Row>();
 
-                // Break the views into multiple rows
-                int breakWidth = Math.max(getBreakWidth() - PARAGRAPH_TERMINATOR_WIDTH, 0);
-
                 Row row = new Row();
-
                 for (Node node : paragraph) {
                     NodeView nodeView = createNodeView(node);
 
-                    nodeView.setBreakWidth(Math.max(breakWidth - row.width, 0));
+                    nodeView.setBreakWidth(Math.max(breakWidth - (row.width
+                        + PARAGRAPH_TERMINATOR_WIDTH), 0));
                     nodeView.validate();
 
                     int nodeViewWidth = nodeView.getWidth();
@@ -748,6 +747,21 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             }
 
             super.validate();
+        }
+
+        @Override
+        public void paint(Graphics2D graphics) {
+            // TODO DEBUG
+            /*
+            graphics.setColor(Color.LIGHT_GRAY);
+            graphics.fillRect(0, 0, getWidth(), getHeight());
+
+            graphics.setColor(Color.RED);
+            graphics.fillRect(terminatorBounds.x, terminatorBounds.y,
+                terminatorBounds.width, terminatorBounds.height);
+            */
+
+            super.paint(graphics);
         }
 
         @Override
@@ -1350,6 +1364,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 case BACKWARD: {
                     // Get previous offset
                     int offset = getNextInsertionPoint(caretX, selectionStart, scrollDirection);
+
                     if (offset != -1) {
                         textArea.setSelection(offset, selectionEnd - offset + 1);
                         scrollCharacterToVisible(offset);
@@ -1400,8 +1415,11 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     public TextAreaSkin() {
         Theme theme = Theme.getTheme();
         font = theme.getFont();
+        // TODO DEBUG
+        // font = new Font("Monaco", Font.PLAIN, 11);
         color = Color.BLACK;
         inactiveColor = Color.GRAY;
+        backgroundColor = null;
         selectionColor = Color.LIGHT_GRAY;
         selectionBackgroundColor = Color.BLACK;
         inactiveSelectionColor = Color.LIGHT_GRAY;
@@ -1473,6 +1491,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             documentView.validate();
 
             updateSelection();
+            updateCaretX();
             showCaret(textArea.isFocused()
                 && textArea.getSelectionLength() == 0);
 
@@ -1522,10 +1541,17 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         if (documentView == null) {
             offset = -1;
         } else {
-            if (documentView.getBounds().contains(x, y)) {
-                offset = documentView.getInsertionPoint(x - margin.left, y - margin.top);
+            int width = getWidth();
+            int height = getHeight();
+
+            x = Math.max(margin.left, Math.min(width - margin.right - 1, x));
+
+            if (y < margin.top) {
+                offset = documentView.getNextInsertionPoint(x, -1, Direction.FORWARD);
+            } else if (y > height - margin.bottom - 1) {
+                offset = documentView.getNextInsertionPoint(x, -1, Direction.BACKWARD);
             } else {
-                offset = documentView.getCharacterCount() - 1;
+                offset = documentView.getInsertionPoint(x - margin.left, y - margin.top);
             }
         }
 
@@ -1814,13 +1840,18 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
         if (Mouse.getCapturer() == component) {
             TextArea textArea = (TextArea)getComponent();
+
             Bounds visibleArea = textArea.getVisibleArea();
             Point viewportOrigin = textArea.mapPointFromAncestor(textArea.getDisplay(),
                 visibleArea.x, visibleArea.y);
             visibleArea = new Bounds(viewportOrigin.x, viewportOrigin.y,
                 visibleArea.width, visibleArea.height);
 
-            if (visibleArea.contains(x, y)) {
+            int width = getWidth();
+            x = Math.max(margin.left, Math.min(width - margin.right - 1, x));
+
+            if (y >= visibleArea.y
+                && y < visibleArea.y + visibleArea.height) {
                 // Stop the scroll selection timer
                 if (scheduledScrollSelectionCallback != null) {
                     scheduledScrollSelectionCallback.cancel();
@@ -1828,7 +1859,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 }
 
                 scrollDirection = null;
-
                 int offset = getInsertionPoint(x, y);
 
                 if (offset != -1) {
@@ -1839,8 +1869,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                         textArea.setSelection(offset, anchor - offset);
                     }
                 }
-
-                caretX = x;
             } else {
                 if (scheduledScrollSelectionCallback == null) {
                     scrollDirection = (y < visibleArea.y) ? Direction.BACKWARD : Direction.FORWARD;
@@ -1853,6 +1881,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                     scrollSelectionCallback.run();
                 }
             }
+
+            caretX = x;
         } else {
             if (Mouse.isPressed(Mouse.Button.LEFT)
                 && Mouse.getCapturer() == null
@@ -1957,15 +1987,17 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             if (keyCode == Keyboard.KeyCode.ENTER
                 && textArea.isEditable()) {
                 textArea.insertParagraph();
-                caretX = margin.left;
+
                 consumed = true;
             } else if (keyCode == Keyboard.KeyCode.DELETE
                 && textArea.isEditable()) {
                 textArea.delete(Direction.FORWARD);
+
                 consumed = true;
             } else if (keyCode == Keyboard.KeyCode.BACKSPACE
                 && textArea.isEditable()) {
                 textArea.delete(Direction.BACKWARD);
+
                 consumed = true;
             } else if (keyCode == Keyboard.KeyCode.LEFT) {
                 int selectionStart = textArea.getSelectionStart();
@@ -1990,13 +2022,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
                 textArea.setSelection(selectionStart, selectionLength);
                 scrollCharacterToVisible(selectionStart);
-
-                if (caret != null) {
-                    caretX = caret.x;
-                } else if (selection != null) {
-                    Rectangle bounds = selection.getBounds();
-                    caretX = bounds.x;
-                }
+                updateCaretX();
 
                 consumed = true;
             } else if (keyCode == Keyboard.KeyCode.RIGHT) {
@@ -2024,13 +2050,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
                 textArea.setSelection(selectionStart, selectionLength);
                 scrollCharacterToVisible(selectionStart + selectionLength);
-
-                if (caret != null) {
-                    caretX = caret.x;
-                } else if (selection != null) {
-                    Rectangle bounds = selection.getBounds();
-                    caretX = bounds.x + bounds.width;
-                }
+                updateCaretX();
 
                 consumed = true;
             } else if (keyCode == Keyboard.KeyCode.UP) {
@@ -2062,21 +2082,20 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 }
             } else if (keyCode == Keyboard.KeyCode.DOWN) {
                 int selectionStart = textArea.getSelectionStart();
-                int offset = getNextInsertionPoint(caretX, selectionStart
-                    + textArea.getSelectionLength(), Direction.FORWARD);
+                int selectionLength = textArea.getSelectionLength();
+                int selectionEnd = selectionStart + selectionLength - 1;
+
+                int offset = getNextInsertionPoint(caretX, selectionEnd + 1, Direction.FORWARD);
 
                 if (offset == -1) {
-                    int selectionLength = textArea.getSelectionLength();
                     if (selectionLength > 0
                         && !Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
-                        selectionStart += selectionLength;
-                        textArea.setSelection(selectionStart, 0);
-                        scrollCharacterToVisible(selectionStart);
+                        textArea.setSelection(selectionEnd, 0);
+                        scrollCharacterToVisible(selectionEnd);
 
                         consumed = true;
                     }
                 } else {
-                    int selectionLength;
                     if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
                         selectionLength = offset - selectionStart;
                     } else {
@@ -2272,6 +2291,15 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             // Clear both the caret and the selection
             caret = null;
             selection = null;
+        }
+    }
+
+    private void updateCaretX() {
+        if (caret != null) {
+            caretX = caret.x;
+        } else if (selection != null) {
+            Rectangle bounds = selection.getBounds();
+            caretX = bounds.x;
         }
     }
 

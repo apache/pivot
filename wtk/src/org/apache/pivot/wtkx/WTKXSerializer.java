@@ -1265,17 +1265,40 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
 
     /**
      * Applies WTKX binding annotations to an object.
+     *
+     * @param object
+     *
+     * @see #bind(Object, Class)
+     */
+    public void bind(Object object) {
+        if (object == null) {
+            throw new IllegalArgumentException();
+        }
+
+        bind(object, object.getClass());
+    }
+
+    /**
+     * Applies WTKX binding annotations to an object.
      * <p>
      * NOTE This method uses reflection to set internal member variables. As
      * a result, it may only be called from trusted code.
      *
-     * @param t
+     * @param object
      * @param type
      *
      * @throws BindException
      * If an error occurs during binding
      */
-    public <T> void bind(T t, Class<? super T> type) throws BindException {
+    public void bind(Object object, Class<?> type) throws BindException {
+        if (object == null) {
+            throw new IllegalArgumentException();
+        }
+
+        if (!type.isAssignableFrom(object.getClass())) {
+            throw new IllegalArgumentException();
+        }
+
         Field[] fields = type.getDeclaredFields();
 
         // Process bind annotations
@@ -1308,7 +1331,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                     // Set the value into the field
                     Object value = get(id);
                     try {
-                        field.set(t, value);
+                        field.set(object, value);
                     } catch (IllegalAccessException exception) {
                         throw new BindException(exception);
                     }
