@@ -752,12 +752,14 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         @Override
         public void paint(Graphics2D graphics) {
             // TODO DEBUG
+            /*
             graphics.setColor(Color.LIGHT_GRAY);
             graphics.fillRect(0, 0, getWidth(), getHeight());
 
             graphics.setColor(Color.RED);
             graphics.fillRect(terminatorBounds.x, terminatorBounds.y,
                 terminatorBounds.width, terminatorBounds.height);
+            */
 
             super.paint(graphics);
         }
@@ -1421,7 +1423,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         Theme theme = Theme.getTheme();
         font = theme.getFont();
         // TODO DEBUG
-        font = new Font("Monaco", Font.PLAIN, 11);
+        // font = new Font("Monaco", Font.PLAIN, 11);
         color = Color.BLACK;
         inactiveColor = Color.GRAY;
         backgroundColor = null;
