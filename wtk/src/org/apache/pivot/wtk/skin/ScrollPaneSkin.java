@@ -840,6 +840,31 @@ public class ScrollPaneSkin extends ContainerSkin
         this.verticalReveal = verticalReveal;
     }
 
+    @SuppressWarnings("deprecation")
+    private boolean isOptimizeScrolling() {
+        boolean optimizeScrolling = this.optimizeScrolling;
+
+        if (optimizeScrolling) {
+            // Due to Sun bug #6293145, we cannot call copyArea if scaling is
+            // applied to the graphics context.
+
+            // Due to Sun bug #4033851, we cannot call copyArea if the display
+            // host is obscured. For a full description of why this is the case,
+            // see http://people.apache.org/~tvolkert/tests/scrolling/
+
+            ScrollPane scrollPane = (ScrollPane)getComponent();
+            ApplicationContext.DisplayHost displayHost = scrollPane.getDisplay().getDisplayHost();
+            ApplicationContext applicationContext = displayHost.getApplicationContext();
+
+            optimizeScrolling = (displayHost.getScale() == 1
+                && (applicationContext instanceof DesktopApplicationContext
+                || (displayHost.getPeer().canDetermineObscurity()
+                && !displayHost.getPeer().isObscured())));
+        }
+
+        return optimizeScrolling;
+    }
+
     // Viewport.Skin methods
 
     @Override
@@ -909,81 +934,68 @@ public class ScrollPaneSkin extends ContainerSkin
 
     // ViewportListener methods
 
-    @SuppressWarnings("deprecation")
     @Override
     public void scrollTopChanged(Viewport viewport, int previousScrollTop) {
         // NOTE we don't invalidate the component here because we need only
         // reposition the view and row header. Invalidating would yield
         // the correct positioning, but it would do much more work than needed.
-        int width = getWidth();
-        int height = getHeight();
-
         ScrollPane scrollPane = (ScrollPane)viewport;
-        Graphics2D graphics = scrollPane.getGraphics();
 
         Component view = scrollPane.getView();
         Component rowHeader = scrollPane.getRowHeader();
         Component columnHeader = scrollPane.getColumnHeader();
 
-        int scrollTop = scrollPane.getScrollTop();
-        int deltaScrollTop = scrollTop - previousScrollTop;
-
         int columnHeaderHeight = 0;
-        int horizontalScrollBarHeight = horizontalScrollBar.isVisible() ?
-            horizontalScrollBar.getHeight() : 0;
-
         if (columnHeader != null) {
             columnHeaderHeight = columnHeader.getHeight();
         }
 
-        int blitX = 0;
-        int blitY = columnHeaderHeight + Math.max(deltaScrollTop, 0);
-        int blitWidth = width - verticalScrollBar.getWidth();
-        int blitHeight = height - horizontalScrollBarHeight -
-            columnHeaderHeight - Math.abs(deltaScrollTop);
+        int scrollTop = scrollPane.getScrollTop();
 
-        boolean optimizeScrolling = this.optimizeScrolling;
+        if (view != null
+            && isOptimizeScrolling()) {
+            Bounds blitArea = view.getVisibleArea();
 
-        // TODO Remove this check when we can. Sun bug 4033851 causes paint
-        // artifacts while scrolling. For a full description of why this is
-        // needed, see http://people.apache.org/~tvolkert/tests/scrolling/
-        // There seems to be no workaround, so we have to turn the optimization
-        // completely off if we're not sure that we're unobscured.
-        if (optimizeScrolling) {
-            ApplicationContext.DisplayHost displayHost = viewport.getDisplay().getDisplayHost();
-            ApplicationContext applicationContext = displayHost.getApplicationContext();
+            int blitX = blitArea.x + view.getX();
+            int blitY = blitArea.y + view.getY();
+            int blitWidth = blitArea.width;
+            int blitHeight = blitArea.height;
 
-            optimizeScrolling = (applicationContext instanceof DesktopApplicationContext
-                || (displayHost.getPeer().canDetermineObscurity()
-                    && !displayHost.getPeer().isObscured()));
-        }
-
-        if (optimizeScrolling) {
-            try {
-                graphics.copyArea(blitX, blitY, blitWidth, blitHeight, 0, -deltaScrollTop);
-            } catch (Throwable throwable) {
-                // Due to Sun bug #6293145, we cannot call copyArea if scaling is
-                // applied to the graphics context, so we fall back gracefully here
-                optimizeScrolling = false;
+            if (rowHeader != null) {
+                // Blit the row header as well
+                int rowHeaderWidth = rowHeader.getWidth();
+                blitX -= rowHeaderWidth;
+                blitWidth += rowHeaderWidth;
             }
-        }
 
-        if (optimizeScrolling) {
+            int deltaScrollTop = scrollTop - previousScrollTop;
+            blitY += Math.max(deltaScrollTop, 0);
+            blitHeight -= Math.abs(deltaScrollTop);
+
+            Graphics2D graphics = scrollPane.getGraphics();
+            graphics.copyArea(blitX, blitY, blitWidth, blitHeight, 0, -deltaScrollTop);
+
             scrollPane.setConsumeRepaint(true);
-        }
+            try {
+                view.setLocation(view.getX(), columnHeaderHeight - scrollTop);
 
-        if (view != null) {
-            view.setLocation(view.getX(), columnHeaderHeight - scrollTop);
-        }
+                if (rowHeader != null) {
+                    rowHeader.setLocation(0, columnHeaderHeight - scrollTop);
+                }
+            } finally {
+                scrollPane.setConsumeRepaint(false);
+            }
 
-        if (rowHeader != null) {
-            rowHeader.setLocation(0, columnHeaderHeight - scrollTop);
-        }
-
-        if (optimizeScrolling) {
-            scrollPane.setConsumeRepaint(false);
             scrollPane.repaint(blitX, columnHeaderHeight + (deltaScrollTop > 0 ? blitHeight : 0),
                 blitWidth, Math.abs(deltaScrollTop), true);
+        } else {
+            if (view != null) {
+                view.setLocation(view.getX(), columnHeaderHeight - scrollTop);
+            }
+
+            if (rowHeader != null) {
+                rowHeader.setLocation(0, columnHeaderHeight - scrollTop);
+            }
         }
 
         if (scrollTop >= 0 && scrollTop <= getMaxScrollTop()) {
@@ -991,81 +1003,68 @@ public class ScrollPaneSkin extends ContainerSkin
         }
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public void scrollLeftChanged(Viewport viewport, int previousScrollLeft) {
         // NOTE we don't invalidate the component here because we need only
         // reposition the view and column header. Invalidating would yield
         // the correct positioning, but it would do much more work than needed.
-        int width = getWidth();
-        int height = getHeight();
-
         ScrollPane scrollPane = (ScrollPane)viewport;
-        Graphics2D graphics = scrollPane.getGraphics();
 
         Component view = scrollPane.getView();
         Component rowHeader = scrollPane.getRowHeader();
         Component columnHeader = scrollPane.getColumnHeader();
 
-        int scrollLeft = scrollPane.getScrollLeft();
-        int deltaScrollLeft = scrollLeft - previousScrollLeft;
-
         int rowHeaderWidth = 0;
-        int verticalScrollBarWidth = verticalScrollBar.isVisible() ?
-            verticalScrollBar.getWidth() : 0;
-
         if (rowHeader != null) {
             rowHeaderWidth = rowHeader.getWidth();
         }
 
-        int blitX = rowHeaderWidth + Math.max(deltaScrollLeft, 0);
-        int blitY = 0;
-        int blitWidth = width - verticalScrollBarWidth -
-            rowHeaderWidth - Math.abs(deltaScrollLeft);
-        int blitHeight = height - horizontalScrollBar.getHeight();
+        int scrollLeft = scrollPane.getScrollLeft();
 
-        boolean optimizeScrolling = this.optimizeScrolling;
+        if (view != null
+            && isOptimizeScrolling()) {
+            Bounds blitArea = view.getVisibleArea();
 
-        // TODO Remove this check when we can. Sun bug 4033851 causes paint
-        // artifacts while scrolling. For a full description of why this is   s
-        // needed, see http://people.apache.org/~tvolkert/tests/scrolling/.
-        // There seems to be no workaround, so we have to turn the optimization
-        // completely off if we're not sure that we're unobscured.
-        if (optimizeScrolling) {
-            ApplicationContext.DisplayHost displayHost = viewport.getDisplay().getDisplayHost();
-            ApplicationContext applicationContext = displayHost.getApplicationContext();
+            int blitX = blitArea.x + view.getX();
+            int blitY = blitArea.y + view.getY();
+            int blitWidth = blitArea.width;
+            int blitHeight = blitArea.height;
 
-            optimizeScrolling = (applicationContext instanceof DesktopApplicationContext
-                || (displayHost.getPeer().canDetermineObscurity()
-                    && !displayHost.getPeer().isObscured()));
-        }
-
-        if (optimizeScrolling) {
-            try {
-                graphics.copyArea(blitX, blitY, blitWidth, blitHeight, -deltaScrollLeft, 0);
-            } catch (Throwable throwable) {
-                // Due to Sun bug #6293145, we cannot call copyArea if scaling is
-                // applied to the graphics context, so we fall back gracefully here
-                optimizeScrolling = false;
+            if (columnHeader != null) {
+                // Blit the column header as well
+                int columnHeaderHeight = columnHeader.getHeight();
+                blitY -= columnHeaderHeight;
+                blitHeight += columnHeaderHeight;
             }
-        }
 
-        if (optimizeScrolling) {
+            int deltaScrollLeft = scrollLeft - previousScrollLeft;
+            blitX += Math.max(deltaScrollLeft, 0);
+            blitWidth -= Math.abs(deltaScrollLeft);
+
+            Graphics2D graphics = scrollPane.getGraphics();
+            graphics.copyArea(blitX, blitY, blitWidth, blitHeight, -deltaScrollLeft, 0);
+
             scrollPane.setConsumeRepaint(true);
-        }
+            try {
+                view.setLocation(rowHeaderWidth - scrollLeft, view.getY());
 
-        if (view != null) {
-            view.setLocation(rowHeaderWidth - scrollLeft, view.getY());
-        }
+                if (columnHeader != null) {
+                    columnHeader.setLocation(rowHeaderWidth - scrollLeft, 0);
+                }
+            } finally {
+                scrollPane.setConsumeRepaint(false);
+            }
 
-        if (columnHeader != null) {
-            columnHeader.setLocation(rowHeaderWidth - scrollLeft, 0);
-        }
-
-        if (optimizeScrolling) {
-            scrollPane.setConsumeRepaint(false);
             scrollPane.repaint(rowHeaderWidth + (deltaScrollLeft > 0 ? blitWidth : 0), blitY,
                 Math.abs(deltaScrollLeft), blitHeight, true);
+        } else {
+            if (view != null) {
+                view.setLocation(rowHeaderWidth - scrollLeft, view.getY());
+            }
+
+            if (columnHeader != null) {
+                columnHeader.setLocation(rowHeaderWidth - scrollLeft, 0);
+            }
         }
 
         if (scrollLeft >= 0 && scrollLeft <= getMaxScrollLeft()) {

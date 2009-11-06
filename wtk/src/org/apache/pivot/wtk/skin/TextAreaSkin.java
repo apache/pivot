@@ -1845,9 +1845,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             TextArea textArea = (TextArea)getComponent();
 
             Bounds visibleArea = textArea.getVisibleArea();
-            Point viewportOrigin = textArea.mapPointFromAncestor(textArea.getDisplay(),
-                visibleArea.x, visibleArea.y);
-            visibleArea = new Bounds(viewportOrigin.x, viewportOrigin.y,
+            visibleArea = new Bounds(visibleArea.x, visibleArea.y,
                 visibleArea.width, visibleArea.height);
 
             if (y >= visibleArea.y

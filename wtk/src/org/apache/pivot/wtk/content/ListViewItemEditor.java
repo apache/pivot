@@ -33,6 +33,7 @@ import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.ListViewItemListener;
 import org.apache.pivot.wtk.ListViewListener;
 import org.apache.pivot.wtk.Mouse;
+import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.WindowStateListener;
@@ -239,9 +240,11 @@ public class ListViewItemEditor implements ListView.ItemEditor {
 
         // Constrain the bounds by what is visible through Viewport ancestors
         editBounds = listView.getVisibleArea(editBounds);
+        Point displayCoordinates = listView.mapPointToAncestor(listView.getDisplay(),
+            editBounds.x, editBounds.y);
 
         textInput.setPreferredWidth(editBounds.width);
-        popup.setLocation(editBounds.x, editBounds.y
+        popup.setLocation(displayCoordinates.x, displayCoordinates.y
             + (editBounds.height - textInput.getPreferredHeight(-1)) / 2);
     }
 

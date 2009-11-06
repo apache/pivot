@@ -32,6 +32,7 @@ import org.apache.pivot.wtk.ContainerMouseListener;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
+import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TableViewListener;
 import org.apache.pivot.wtk.TableViewRowListener;
@@ -258,10 +259,12 @@ public class TableViewCellEditor implements TableView.RowEditor {
         Bounds cellBounds = tableView.getCellBounds(rowIndex, columnIndex);
         tableView.scrollAreaToVisible(cellBounds);
         cellBounds = tableView.getVisibleArea(cellBounds);
+        Point displayCoordinates = tableView.mapPointToAncestor(tableView.getDisplay(),
+            cellBounds.x, cellBounds.y);
 
         // Position the popup/editor to fit over the cell bounds
         textInput.setPreferredWidth(cellBounds.width);
-        popup.setLocation(cellBounds.x, cellBounds.y
+        popup.setLocation(displayCoordinates.x, displayCoordinates.y
             + (cellBounds.height - textInput.getPreferredHeight(-1)) / 2);
     }
 

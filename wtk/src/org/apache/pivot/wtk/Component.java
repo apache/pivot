@@ -1665,7 +1665,7 @@ public abstract class Component implements ConstrainedVisual {
      * ancestors, or, in the case of a Viewport, the viewport bounds.
      *
      * @return
-     * The visible area of the component in display coordinates, or
+     * The visible area of the component in the component's coordinate space, or
      * <tt>null</tt> if the component is either not showing or not part of the
      * component hierarchy.
      */
@@ -1681,7 +1681,7 @@ public abstract class Component implements ConstrainedVisual {
      * @param area
      *
      * @return
-     * The visible area of the component in display coordinates, or
+     * The visible area of the component in the component's coordinate space, or
      * <tt>null</tt> if the component is either not showing or not part of the
      * component hierarchy.
      */
@@ -1704,7 +1704,7 @@ public abstract class Component implements ConstrainedVisual {
      * @param height
      *
      * @return
-     * The visible area of the component in display coordinates, or
+     * The visible area of the component in the component's coordinate space, or
      * <tt>null</tt> if the component is either not showing or not part of the
      * component hierarchy.
      */
@@ -1717,6 +1717,9 @@ public abstract class Component implements ConstrainedVisual {
         int left = x;
         int bottom = y + height - 1;
         int right = x + width - 1;
+
+        int xOffset = 0;
+        int yOffset = 0;
 
         while (component != null
             && component.isVisible()) {
@@ -1739,8 +1742,12 @@ public abstract class Component implements ConstrainedVisual {
             bottom = component.y + Math.max(Math.min(bottom, maxBottom), -1);
             right = component.x + Math.max(Math.min(right, maxRight), -1);
 
+            xOffset += component.x;
+            yOffset += component.y;
+
             if (component instanceof Display) {
-                visibleArea = new Bounds(left, top, right - left + 1, bottom - top + 1);
+                visibleArea = new Bounds(left - xOffset, top - yOffset, right - left + 1,
+                    bottom - top + 1);
             }
 
             component = component.getParent();

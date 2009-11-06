@@ -32,6 +32,7 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
+import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TreeView;
 import org.apache.pivot.wtk.TreeViewListener;
@@ -270,9 +271,11 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
 
         // Constrain the bounds by what is visible through Viewport ancestors
         editBounds = treeView.getVisibleArea(editBounds);
+        Point displayCoordinates = treeView.mapPointToAncestor(treeView.getDisplay(),
+            editBounds.x, editBounds.y);
 
         textInput.setPreferredWidth(editBounds.width);
-        popup.setLocation(editBounds.x, editBounds.y
+        popup.setLocation(displayCoordinates.x, displayCoordinates.y
             + (editBounds.height - textInput.getPreferredHeight(-1)) / 2);
     }
 

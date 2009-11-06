@@ -41,6 +41,7 @@ import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.MenuHandler;
 import org.apache.pivot.wtk.Mouse;
+import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.ScrollPane;
 import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.TableView;
@@ -381,9 +382,11 @@ public class TableViewRowEditor implements TableView.RowEditor {
             Bounds bounds = tableView.getRowBounds(rowIndex);
             tableView.scrollAreaToVisible(bounds);
             bounds = tableView.getVisibleArea(bounds);
+            Point displayCoordinates = tableView.mapPointToAncestor(tableView.getDisplay(),
+                bounds.x, bounds.y);
 
             // Open this popup over the row
-            setLocation(bounds.x, bounds.y);
+            setLocation(displayCoordinates.x, displayCoordinates.y);
             setPreferredSize(bounds.width, bounds.height + 1);
 
             // Match the table pane's columns to the table view's
