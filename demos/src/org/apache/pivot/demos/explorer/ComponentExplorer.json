@@ -34,7 +34,8 @@
             auto: "Auto",
             fill: "Fill",
             fillToCapacity: "Fill To Capacity",
-            never: "Never"
+            never: "Never",
+            always: "Always"
         }
     },
 

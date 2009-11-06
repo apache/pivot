@@ -419,6 +419,10 @@ limitations under the License.
                                                                                             toggleButton="true"
                                                                                             buttonGroup="$horizontalScrollBarPolicyGroup"
                                                                                             buttonData="%contentPane.scrollBarPolicy.never"/>
+                                                                                        <Menu.Item wtkx:id="horizontalAlwaysButton"
+                                                                                            toggleButton="true"
+                                                                                            buttonGroup="$horizontalScrollBarPolicyGroup"
+                                                                                            buttonData="%contentPane.scrollBarPolicy.always"/>
                                                                                     </Menu.Section>
                                                                                 </sections>
                                                                             </Menu>
@@ -445,6 +449,10 @@ limitations under the License.
                                                                                             toggleButton="true"
                                                                                             buttonGroup="$verticalScrollBarPolicyGroup"
                                                                                             buttonData="%contentPane.scrollBarPolicy.never"/>
+                                                                                        <Menu.Item wtkx:id="verticalAlwaysButton"
+                                                                                            toggleButton="true"
+                                                                                            buttonGroup="$verticalScrollBarPolicyGroup"
+                                                                                            buttonData="%contentPane.scrollBarPolicy.always"/>
                                                                                     </Menu.Section>
                                                                                 </sections>
                                                                             </Menu>

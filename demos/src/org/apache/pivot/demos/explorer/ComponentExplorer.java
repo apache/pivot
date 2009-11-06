@@ -68,10 +68,12 @@ public class ComponentExplorer implements Application {
     private Button horizontalFillButton = null;
     private Button horizontalFillToCapacityButton = null;
     private Button horizontalNeverButton = null;
+    private Button horizontalAlwaysButton = null;
     private Button verticalAutoButton = null;
     private Button verticalFillButton = null;
     private Button verticalFillToCapacityButton = null;
     private Button verticalNeverButton = null;
+    private Button verticalAlwaysButton = null;
 
     public static final String CLASS_PROPERTY = "class";
 
@@ -96,10 +98,12 @@ public class ComponentExplorer implements Application {
         horizontalFillButton = wtkxSerializer.getValue("horizontalFillButton");
         horizontalFillToCapacityButton = wtkxSerializer.getValue("horizontalFillToCapacityButton");
         horizontalNeverButton = wtkxSerializer.getValue("horizontalNeverButton");
+        horizontalAlwaysButton = wtkxSerializer.getValue("horizontalAlwaysButton");
         verticalAutoButton = wtkxSerializer.getValue("verticalAutoButton");
         verticalFillButton = wtkxSerializer.getValue("verticalFillButton");
         verticalFillToCapacityButton = wtkxSerializer.getValue("verticalFillToCapacityButton");
         verticalNeverButton = wtkxSerializer.getValue("verticalNeverButton");
+        verticalAlwaysButton = wtkxSerializer.getValue("verticalAlwaysButton");
 
         treeView.getTreeViewSelectionListeners().add(new TreeViewSelectionListener.Adapter() {
             @Override
@@ -153,6 +157,9 @@ public class ComponentExplorer implements Application {
                     case NEVER:
                         horizontalScrollBarPolicyGroup.setSelection(horizontalNeverButton);
                         break;
+                    case ALWAYS:
+                        horizontalScrollBarPolicyGroup.setSelection(horizontalAlwaysButton);
+                        break;
                     }
 
                     switch (componentNode.getVerticalScrollBarPolicy()) {
@@ -167,6 +174,9 @@ public class ComponentExplorer implements Application {
                         break;
                     case NEVER:
                         verticalScrollBarPolicyGroup.setSelection(verticalNeverButton);
+                        break;
+                    case ALWAYS:
+                        verticalScrollBarPolicyGroup.setSelection(verticalAlwaysButton);
                         break;
                     }
                 } else {
@@ -218,6 +228,8 @@ public class ComponentExplorer implements Application {
                     horizontalScrollBarPolicy = ScrollBarPolicy.FILL_TO_CAPACITY;
                 } else if (button == horizontalNeverButton) {
                     horizontalScrollBarPolicy = ScrollBarPolicy.NEVER;
+                } else if (button == horizontalAlwaysButton) {
+                    horizontalScrollBarPolicy = ScrollBarPolicy.ALWAYS;
                 }
 
                 if (horizontalScrollBarPolicy != null) {
@@ -242,6 +254,8 @@ public class ComponentExplorer implements Application {
                     verticalScrollBarPolicy = ScrollBarPolicy.FILL_TO_CAPACITY;
                 } else if (button == verticalNeverButton) {
                     verticalScrollBarPolicy = ScrollBarPolicy.NEVER;
+                } else if (button == verticalAlwaysButton) {
+                    verticalScrollBarPolicy = ScrollBarPolicy.ALWAYS;
                 }
 
                 if (verticalScrollBarPolicy != null) {
