@@ -16,13 +16,14 @@
  */
 package org.apache.pivot.web;
 
+import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.Map;
-import org.apache.pivot.util.MD5;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
 
 /**
@@ -38,7 +39,6 @@ import org.apache.pivot.util.concurrent.TaskExecutionException;
  * - Verify if/how to handle the nonce count, for queries after the first.
  * - Verify that this works with redirects, proxy, etc.
  * - Also implement the "MD5-sess" algorithm?
- *
  */
 public class DigestAuthentication implements Authentication {
     private static final String HTTP_RESPONSE_AUTHENTICATE_HEADER_KEY = "WWW-Authenticate";
@@ -61,6 +61,14 @@ public class DigestAuthentication implements Authentication {
     private static final String AUTH_FIELD_VALUE_ALGORITHM_AUTH_MD5 = "MD5";
 
     private static final String AUTH_FIELD_VALUE_NC_FIRST = "00000001";
+
+    public static final int MD5_DIGEST_LENTGH_IN_BYTES = 16;
+    public static final String MD5_ALGORITHM_NAME = "MD5";
+
+    private static MessageDigest md5 = null;
+
+    private static final char[] hexadecimal = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+        'a', 'b', 'c', 'd', 'e', 'f' };
 
     /** The Digest String constant, used in many places (from the standard). */
     protected static final String DIGEST_KEY = "Digest ";
@@ -399,7 +407,7 @@ public class DigestAuthentication implements Authentication {
         sbCompleteValue.append(md5a2);
 
         String a3 = sbCompleteValue.toString();
-        String md5a3 = MD5.digestAsString(a3, encoding);
+        String md5a3 = digestAsString(a3, encoding);
 
         response = md5a3;
         return response;
@@ -536,7 +544,7 @@ public class DigestAuthentication implements Authentication {
      */
     public String generateRandomValue() {
         String randomValue = Long.toString(System.currentTimeMillis());
-        return MD5.digestAsString(randomValue, encoding);
+        return digestAsString(randomValue, encoding);
     }
 
     /**
@@ -562,7 +570,7 @@ public class DigestAuthentication implements Authentication {
             a1 = "";
         }
 
-        return MD5.digestAsString(a1, encoding);
+        return digestAsString(a1, encoding);
     }
 
     /**
@@ -585,7 +593,7 @@ public class DigestAuthentication implements Authentication {
             throw new RuntimeException("not supported qop value: \"" + qop + "\"");
         }
 
-        return MD5.digestAsString(a2, encoding);
+        return digestAsString(a2, encoding);
     }
 
     /**
@@ -611,32 +619,95 @@ public class DigestAuthentication implements Authentication {
     }
 
     /**
-     * Digest the given string using the algorithm specified and convert the
-     * result to a corresponding hex string. If exception, the plain credentials
-     * string is returned
+     * Transform the given string in a digested version, using the given
+     * encoding.
      *
-     * @param value the (input) value to digest
-     * @param algorithm Algorithm used to do the digest
-     * @param encoding Character encoding of the string to digest
+     * @param string The string to digest.
+     * @param encoding The encoding to use, or <tt>null to use the default
+     * encoding.</tt>
+     * @return The digested string.
      */
-    public static String digestString(final String value, final String algorithm,
-        final String encoding) {
-        try {
-            // Obtain a new message digest with "digest" encryption
-            MessageDigest md = (MessageDigest) MessageDigest.getInstance(algorithm).clone();
+    private static String digestAsString(final String string, final String encoding) {
+        byte[] digestBytes = digest(string, encoding);
+        String dataDigested = encode(digestBytes);
 
-            // encode the credentials
-            // Should use the digestEncoding, but that's not a static field
-            if (encoding == null) {
-                md.update(value.getBytes());
-            } else {
-                md.update(value.getBytes(encoding));
-            }
+        return dataDigested;
+    }
 
-            // Digest the credentials and return as hexadecimal
-            return (MD5.toHexString(md.digest()));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+    /**
+     * Retrieves a byte sequence representing the MD5 digest of the specified
+     * byte sequence. Note that any Exception is handled inside.
+     *
+     * @param data the data to digest.
+     * @return the MD5 digest as an array of 16 bytes.
+     */
+    private static byte[] digest(byte[] data) {
+        if (data == null) {
+            throw new IllegalArgumentException("null data");
         }
+
+        byte[] dataDigested = null;
+
+        if (md5 == null) {
+            try {
+                md5 = MessageDigest.getInstance(MD5_ALGORITHM_NAME);
+            } catch (NoSuchAlgorithmException e) {
+                md5 = null;
+            }
+        }
+
+        if (md5 != null) {
+            dataDigested = md5.digest(data);
+        }
+
+        return dataDigested;
+    }
+
+    /**
+     * Transform the given string in a byte array, using the given encoding.
+     * Note that any Exception is handled inside.
+     *
+     * @param string The string to transform.
+     * @param encoding The encoding to use, or <tt>null</tt> to use the default
+     * encoding.
+     * @return The string transformed into a byte array.
+     */
+    private static byte[] digest(final String string, final String encoding) {
+        byte[] data = null;
+        try {
+            if (encoding == null) {
+                data = string.getBytes();
+            } else {
+                data = string.getBytes(encoding);
+            }
+        } catch (UnsupportedEncodingException e) {
+        }
+
+        byte[] dataDigested = digest(data);
+        return dataDigested;
+    }
+
+    /**
+     * Encodes the 128 bit (16 bytes) MD5 into a 32 character String.
+     *
+     * @param binaryData The byte array containing the digest.
+     * @return The encoded MD5 string.
+     */
+    private static String encode(byte[] binaryData) {
+        if (binaryData.length != MD5_DIGEST_LENTGH_IN_BYTES) {
+            throw new IllegalArgumentException("binaryData must be an array of 16 bytes");
+        }
+
+        char[] buffer = new char[MD5_DIGEST_LENTGH_IN_BYTES * 2];
+
+        for (int i = 0; i < MD5_DIGEST_LENTGH_IN_BYTES; i++) {
+            int low = binaryData[i] & 0x0f;
+            int high = (binaryData[i] & 0xf0) >> 4;
+
+            buffer[i * 2] = hexadecimal[high];
+            buffer[i * 2 + 1] = hexadecimal[low];
+        }
+
+        return new String(buffer);
     }
 }
