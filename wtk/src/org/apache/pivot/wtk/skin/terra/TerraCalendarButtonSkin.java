@@ -47,7 +47,7 @@ import org.apache.pivot.wtk.skin.CalendarButtonSkin;
 
 /**
  * Terra calendar button skin.
- *
+ * 
  * TODO Calendar pass-through styles
  */
 public class TerraCalendarButtonSkin extends CalendarButtonSkin {
@@ -116,7 +116,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
     private static final int CLOSE_TRANSITION_RATE = 30;
 
     public TerraCalendarButtonSkin() {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
 
         font = theme.getFont();
         color = theme.getColor(1);
@@ -149,7 +149,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
 
     @Override
     public int getPreferredWidth(int height) {
-        CalendarButton calendarButton = (CalendarButton)getComponent();
+        CalendarButton calendarButton = (CalendarButton) getComponent();
 
         Object buttonData = calendarButton.getButtonData();
         Button.DataRenderer dataRenderer = calendarButton.getDataRenderer();
@@ -163,7 +163,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
 
     @Override
     public int getPreferredHeight(int width) {
-        CalendarButton calendarButton = (CalendarButton)getComponent();
+        CalendarButton calendarButton = (CalendarButton) getComponent();
 
         Object buttonData = calendarButton.getButtonData();
         Button.DataRenderer dataRenderer = calendarButton.getDataRenderer();
@@ -183,13 +183,15 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
 
     @Override
     public int getBaseline(int width) {
-        CalendarButton calendarButton = (CalendarButton)getComponent();
+        CalendarButton calendarButton = (CalendarButton) getComponent();
         Button.DataRenderer dataRenderer = calendarButton.getDataRenderer();
 
         dataRenderer.render(calendarButton.getButtonData(), calendarButton, false);
 
-        int baseline = dataRenderer.getBaseline(width)
-            + padding.top + 1;
+        int baseline = dataRenderer.getBaseline(width);
+        if (baseline != -1) {
+            baseline += padding.top + 1;
+        }
 
         return baseline;
     }
@@ -201,7 +203,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
 
     @Override
     public void paint(Graphics2D graphics) {
-        CalendarButton calendarButton = (CalendarButton)getComponent();
+        CalendarButton calendarButton = (CalendarButton) getComponent();
 
         int width = getWidth();
         int height = getHeight();
@@ -236,8 +238,8 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
         GraphicsUtilities.drawRect(graphics, contentBounds.x, contentBounds.y,
             contentBounds.width + 1, contentBounds.height + 1);
 
-        Bounds triggerBounds = new Bounds(Math.max(width - TRIGGER_WIDTH - 1, 0), 0,
-            TRIGGER_WIDTH, Math.max(height - 1, 0));
+        Bounds triggerBounds = new Bounds(Math.max(width - TRIGGER_WIDTH - 1, 0), 0, TRIGGER_WIDTH,
+            Math.max(height - 1, 0));
         GraphicsUtilities.drawRect(graphics, triggerBounds.x, triggerBounds.y,
             triggerBounds.width + 1, triggerBounds.height + 1);
 
@@ -247,7 +249,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
         dataRenderer.setSize(Math.max(contentBounds.width - (padding.left + padding.right + 2) + 1, 0),
             Math.max(contentBounds.height - (padding.top + padding.bottom + 2) + 1, 0));
 
-        Graphics2D contentGraphics = (Graphics2D)graphics.create();
+        Graphics2D contentGraphics = (Graphics2D) graphics.create();
         contentGraphics.translate(padding.left + 1, padding.top + 1);
         contentGraphics.clipRect(0, 0, dataRenderer.getWidth(), dataRenderer.getHeight());
         dataRenderer.paint(contentGraphics);
@@ -256,7 +258,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
         // Paint the focus state
         if (calendarButton.isFocused()) {
             BasicStroke dashStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND,
-                BasicStroke.JOIN_ROUND, 1.0f, new float[] {0.0f, 2.0f}, 0.0f);
+                BasicStroke.JOIN_ROUND, 1.0f, new float[] { 0.0f, 2.0f }, 0.0f);
 
             graphics.setStroke(dashStroke);
             graphics.setColor(borderColor);
@@ -275,7 +277,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
         triggerIconShape.lineTo(6, 0);
         triggerIconShape.closePath();
 
-        Graphics2D triggerGraphics = (Graphics2D)graphics.create();
+        Graphics2D triggerGraphics = (Graphics2D) graphics.create();
         triggerGraphics.setStroke(new BasicStroke(0));
         triggerGraphics.setPaint(color);
 
@@ -497,7 +499,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
         if (calendarPopup.isOpen()) {
             calendarPopup.close();
         } else {
-            CalendarButton calendarButton = (CalendarButton)button;
+            CalendarButton calendarButton = (CalendarButton) button;
 
             // Determine the popup's location and preferred size, relative
             // to the button

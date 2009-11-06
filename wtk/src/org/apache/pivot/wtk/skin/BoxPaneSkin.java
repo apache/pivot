@@ -170,7 +170,9 @@ public class BoxPaneSkin extends ContainerSkin
         }
 
         // Include top and bottom padding values
-        baseline += padding.top;
+        if (baseline != -1) {
+            baseline += padding.top;
+        }
 
         return baseline;
     }

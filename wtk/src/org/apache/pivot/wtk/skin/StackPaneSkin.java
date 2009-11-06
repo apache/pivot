@@ -83,7 +83,7 @@ public class StackPaneSkin extends ContainerSkin {
 
     @Override
     public int getBaseline(int width) {
-        int baseline = 0;
+        int baseline = -1;
         StackPane stackPane = (StackPane) getComponent();
 
         for (Component component : stackPane) {
