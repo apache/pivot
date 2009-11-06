@@ -259,7 +259,8 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 } else {
                     // Scroll lead selection to visible
                     int selectionStart = textInput.getSelectionStart();
-                    if (selectionStart < n) {
+                    if (selectionStart < n
+                        && textInput.isFocused()) {
                         scrollCharacterToVisible(selectionStart);
                     }
                 }
@@ -1283,7 +1284,17 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 }
             }
 
-            showCaret(textInput.getSelectionLength() == 0);
+            if (textInput.getSelectionLength() == 0) {
+                TextNode textNode = textInput.getTextNode();
+                int selectionStart = textInput.getSelectionStart();
+                if (selectionStart < textNode.getCharacterCount()) {
+                    scrollCharacterToVisible(selectionStart);
+                }
+
+                showCaret(true);
+            } else {
+                showCaret(false);
+            }
         } else {
             // If focus was permanently transferred within this window,
             // clear the selection

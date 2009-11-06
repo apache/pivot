@@ -160,7 +160,7 @@ public abstract class Node {
      *
      * @param offset
      */
-    public abstract char getCharacter(int offset);
+    public abstract char getCharacterAt(int offset);
 
     /**
      * Returns the number of characters in this node.

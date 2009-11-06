@@ -57,6 +57,18 @@ public class Paragraph extends Block {
     }
 
     @Override
+    public char getCharacterAt(int offset) {
+        char c;
+        if (offset == getCharacterCount() - 1) {
+            c = '\n';
+        } else {
+            c = super.getCharacterAt(offset);
+        }
+
+        return c;
+    }
+
+    @Override
     public int getCharacterCount() {
         return super.getCharacterCount() + 1;
     }

@@ -1479,7 +1479,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     @Override
     public void layout() {
         if (documentView != null) {
-            final TextArea textArea = (TextArea)getComponent();
+            TextArea textArea = (TextArea)getComponent();
             int width = getWidth();
             documentView.setBreakWidth(Math.max(width - (margin.left + margin.right), 0));
             documentView.validate();
@@ -1487,7 +1487,9 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             updateSelection();
             caretX = caret.x;
 
-            scrollCharacterToVisible(textArea.getSelectionStart());
+            if (textArea.isFocused()) {
+                scrollCharacterToVisible(textArea.getSelectionStart());
+            }
 
             showCaret(textArea.isFocused()
                 && textArea.getSelectionLength() == 0);
@@ -1536,13 +1538,11 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         if (documentView == null) {
             offset = -1;
         } else {
-            int height = getHeight();
-
             x = Math.min(documentView.getWidth() - 1, Math.max(x - margin.left, 0));
 
             if (y < margin.top) {
                 offset = documentView.getNextInsertionPoint(x, -1, Direction.FORWARD);
-            } else if (y > height - margin.bottom - 1) {
+            } else if (y > documentView.getHeight() + margin.top) {
                 offset = documentView.getNextInsertionPoint(x, -1, Direction.BACKWARD);
             } else {
                 offset = documentView.getInsertionPoint(x, y - margin.top);
@@ -2095,6 +2095,12 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                         offset = documentView.getCharacterCount() - 1;
                     }
 
+                    // TODO This works, but it doesn't produce the "right" UE
+                    char c = document.getCharacterAt(offset);
+                    if (c == '\n') {
+                        offset++;
+                    }
+
                     textArea.setSelection(selectionStart, offset - selectionStart);
                     scrollCharacterToVisible(offset);
                 } else {
@@ -2164,8 +2170,13 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         super.focusedChanged(component, obverseComponent);
 
         TextArea textArea = (TextArea)getComponent();
-        showCaret(textArea.isFocused()
-            && textArea.getSelectionLength() == 0);
+        if (textArea.isFocused()
+            && textArea.getSelectionLength() == 0) {
+            scrollCharacterToVisible(textArea.getSelectionStart());
+            showCaret(true);
+        } else {
+            showCaret(false);
+        }
 
         repaintComponent();
     }

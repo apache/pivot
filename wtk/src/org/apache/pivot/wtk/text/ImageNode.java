@@ -128,7 +128,7 @@ public class ImageNode extends Node {
     }
 
     @Override
-    public char getCharacter(int offset) {
+    public char getCharacterAt(int offset) {
         return 0x00;
     }
 

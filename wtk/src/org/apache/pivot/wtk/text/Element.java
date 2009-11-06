@@ -278,9 +278,9 @@ public abstract class Element extends Node
     }
 
     @Override
-    public char getCharacter(int offset) {
+    public char getCharacterAt(int offset) {
         Node node = getNodeAt(offset);
-        return node.getCharacter(offset - node.getOffset());
+        return node.getCharacterAt(offset - node.getOffset());
     }
 
     @Override

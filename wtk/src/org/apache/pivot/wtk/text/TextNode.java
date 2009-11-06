@@ -65,7 +65,7 @@ public final class TextNode extends Node {
 
         @Override
         public char current() {
-            return (index < endIndex) ? getCharacter(index) : DONE;
+            return (index < endIndex) ? getCharacterAt(index) : DONE;
         }
 
         @Override
@@ -183,7 +183,7 @@ public final class TextNode extends Node {
     }
 
     @Override
-    public char getCharacter(int index) {
+    public char getCharacterAt(int index) {
         if (index < 0
             || index >= textBuilder.length()) {
             throw new IndexOutOfBoundsException();
