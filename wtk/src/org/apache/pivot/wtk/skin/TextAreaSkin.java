@@ -1348,7 +1348,16 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 case FORWARD: {
                     // Get next offset
                     int offset = getNextInsertionPoint(mouseX, selectionEnd, scrollDirection);
+
                     if (offset != -1) {
+                        // If the next character is a paragraph terminator and is not the
+                        // final terminator character, increment the selection
+                        Document document = textArea.getDocument();
+                        if (document.getCharacterAt(offset) == '\n'
+                            && offset < documentView.getCharacterCount() - 1) {
+                            offset++;
+                        }
+
                         textArea.setSelection(selectionStart, offset - selectionStart);
                         scrollCharacterToVisible(offset - 1);
                     }
@@ -2093,12 +2102,13 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
                     if (offset == -1) {
                         offset = documentView.getCharacterCount() - 1;
-                    }
-
-                    // TODO This works, but it doesn't produce the "right" UE
-                    char c = document.getCharacterAt(offset);
-                    if (c == '\n') {
-                        offset++;
+                    } else {
+                        // If the next character is a paragraph terminator and is not the
+                        // final terminator character, increment the selection
+                        if (document.getCharacterAt(offset) == '\n'
+                            && offset < documentView.getCharacterCount() - 1) {
+                            offset++;
+                        }
                     }
 
                     textArea.setSelection(selectionStart, offset - selectionStart);
