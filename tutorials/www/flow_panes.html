@@ -33,7 +33,9 @@ limitations under the License.
 </head>
 <body>
 <h1>Flow Panes</h1>
-<p>Flow panes arrange components in a horizontal line, wrapping when the contents don't fit on a single line. Components may be aligned to left, right, or center when there is space left over within a given line. The following example demonstrates the use of the <tt>FlowPane</tt> container:</p>
+<p>Flow panes arrange components in a horizontal line, wrapping when the contents don't fit on a single line. Components may be horizontally aligned to left, right, or center when there is space left over within a given line, and may optionally be vertically aligned by to their baselines.</p>
+
+<p>The following example demonstrates the use of the <tt>FlowPane</tt> container. The buttons on the right can be used to modify the alignment properties:</p>
 
 <script src="version.js"></script>
 <script>
@@ -61,7 +63,7 @@ deployJava.writeAppletTag(attributes, parameters);
     &lt;content&gt;
         &lt;SplitPane splitRatio="0.75"&gt;
             &lt;left&gt;
-                &lt;Border styles="{padding:0}"&gt;
+                &lt;Border&gt;
                     &lt;content&gt;
                         &lt;FlowPane wtkx:id="flowPane" styles="{padding:2}"&gt;
                             &lt;PushButton buttonData="0" styles="{minimumAspectRatio:1.5}"/&gt;
@@ -80,7 +82,7 @@ deployJava.writeAppletTag(attributes, parameters);
                 &lt;Border styles="{padding:{top:2, left:6}}"&gt;
                     &lt;content&gt;
                         &lt;BoxPane orientation="vertical"&gt;
-                            &lt;Label text="Alignment" styles="{fontBold:true}"/&gt;
+                            &lt;Label text="Alignment" styles="{font:{bold:true}}"/&gt;
 
                             &lt;wtkx:define&gt;
                                 &lt;ButtonGroup wtkx:id="alignment"/&gt;
@@ -88,6 +90,10 @@ deployJava.writeAppletTag(attributes, parameters);
                             &lt;RadioButton wtkx:id="leftRadioButton" buttonData="Left" buttonGroup="$alignment" selected="true"/&gt;
                             &lt;RadioButton wtkx:id="rightRadioButton" buttonData="Right" buttonGroup="$alignment"/&gt;
                             &lt;RadioButton wtkx:id="centerRadioButton" buttonData="Center" buttonGroup="$alignment"/&gt;
+
+                            &lt;BoxPane styles="{padding:{top:6}}"&gt;
+                                &lt;Checkbox wtkx:id="alignToBaselineCheckbox" buttonData="Align to baseline"/&gt;
+                            &lt;/BoxPane&gt;
                         &lt;/BoxPane&gt;
                     &lt;/content&gt;
                 &lt;/Border&gt;
@@ -106,6 +112,7 @@ import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonStateListener;
+import org.apache.pivot.wtk.Checkbox;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.FlowPane;
@@ -120,7 +127,9 @@ public class FlowPanes implements Application {
     private RadioButton leftRadioButton = null;
     private RadioButton rightRadioButton = null;
     private RadioButton centerRadioButton = null;
+    private Checkbox alignToBaselineCheckbox = null;
 
+    @Override
     public void startup(Display display, Map&lt;String, String&gt; properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "flow_panes.wtkx");
@@ -128,8 +137,10 @@ public class FlowPanes implements Application {
         leftRadioButton = (RadioButton)wtkxSerializer.get("leftRadioButton");
         rightRadioButton = (RadioButton)wtkxSerializer.get("rightRadioButton");
         centerRadioButton = (RadioButton)wtkxSerializer.get("centerRadioButton");
+        alignToBaselineCheckbox = (Checkbox)wtkxSerializer.get("alignToBaselineCheckbox");
 
         ButtonStateListener buttonStateListener = new ButtonStateListener() {
+            @Override
             public void stateChanged(Button button, Button.State previousState) {
                 updateFlowPaneState();
             }
@@ -138,12 +149,14 @@ public class FlowPanes implements Application {
         leftRadioButton.getButtonStateListeners().add(buttonStateListener);
         rightRadioButton.getButtonStateListeners().add(buttonStateListener);
         centerRadioButton.getButtonStateListeners().add(buttonStateListener);
+        alignToBaselineCheckbox.getButtonStateListeners().add(buttonStateListener);
 
         updateFlowPaneState();
 
         window.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         if (window != null) {
             window.close();
@@ -152,9 +165,11 @@ public class FlowPanes implements Application {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 
@@ -172,6 +187,8 @@ public class FlowPanes implements Application {
         if (alignment != null) {
             flowPane.getStyles().put("alignment", alignment);
         }
+
+        flowPane.getStyles().put("alignToBaseline", alignToBaselineCheckbox.isSelected());
     }
 
     public static void main(String[] args) {

@@ -20,6 +20,7 @@ import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonStateListener;
+import org.apache.pivot.wtk.Checkbox;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.FlowPane;
@@ -34,6 +35,7 @@ public class FlowPanes implements Application {
     private RadioButton leftRadioButton = null;
     private RadioButton rightRadioButton = null;
     private RadioButton centerRadioButton = null;
+    private Checkbox alignToBaselineCheckbox = null;
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
@@ -43,6 +45,7 @@ public class FlowPanes implements Application {
         leftRadioButton = (RadioButton)wtkxSerializer.get("leftRadioButton");
         rightRadioButton = (RadioButton)wtkxSerializer.get("rightRadioButton");
         centerRadioButton = (RadioButton)wtkxSerializer.get("centerRadioButton");
+        alignToBaselineCheckbox = (Checkbox)wtkxSerializer.get("alignToBaselineCheckbox");
 
         ButtonStateListener buttonStateListener = new ButtonStateListener() {
             @Override
@@ -54,6 +57,7 @@ public class FlowPanes implements Application {
         leftRadioButton.getButtonStateListeners().add(buttonStateListener);
         rightRadioButton.getButtonStateListeners().add(buttonStateListener);
         centerRadioButton.getButtonStateListeners().add(buttonStateListener);
+        alignToBaselineCheckbox.getButtonStateListeners().add(buttonStateListener);
 
         updateFlowPaneState();
 
@@ -91,6 +95,8 @@ public class FlowPanes implements Application {
         if (alignment != null) {
             flowPane.getStyles().put("alignment", alignment);
         }
+
+        flowPane.getStyles().put("alignToBaseline", alignToBaselineCheckbox.isSelected());
     }
 
     public static void main(String[] args) {

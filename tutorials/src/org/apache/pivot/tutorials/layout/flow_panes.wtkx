@@ -49,6 +49,10 @@ limitations under the License.
                             <RadioButton wtkx:id="leftRadioButton" buttonData="Left" buttonGroup="$alignment" selected="true"/>
                             <RadioButton wtkx:id="rightRadioButton" buttonData="Right" buttonGroup="$alignment"/>
                             <RadioButton wtkx:id="centerRadioButton" buttonData="Center" buttonGroup="$alignment"/>
+
+                            <BoxPane styles="{padding:{top:6}}">
+                                <Checkbox wtkx:id="alignToBaselineCheckbox" buttonData="Align to baseline"/>
+                            </BoxPane>
                         </BoxPane>
                     </content>
                 </Border>
