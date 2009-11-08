@@ -563,7 +563,12 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
             } else {
                 // Go to windowed mode
-                graphicsDevice.setFullScreenWindow(null);
+                try {
+                    graphicsDevice.setFullScreenWindow(null);
+                } catch (Exception exception) {
+                    // TODO remove this catch. On Win32 platforms, the
+                    // preceding call can throw.
+                }
 
                 fullScreenHostFrame.remove(displayHost);
                 fullScreenHostFrame.setVisible(false);
