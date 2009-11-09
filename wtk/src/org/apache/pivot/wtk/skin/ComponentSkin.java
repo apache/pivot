@@ -92,15 +92,7 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
 
     public static final int SHOW_TOOLTIP_TIMEOUT = 1000;
 
-    /** if true, draw red lines over components to indicate where the baselines are */
-    protected static boolean debugBaseline = false;
-    static {
-        try {
-            debugBaseline = Boolean.parseBoolean(System.getProperty("pivot.wtk.debugBaseline"));
-        } catch (Exception ex) {
-            // ignore exception when running in applet
-        }
-    }
+    protected static boolean debugBaseline = true;
 
     @Override
     public int getWidth() {

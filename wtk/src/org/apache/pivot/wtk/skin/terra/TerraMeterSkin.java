@@ -91,8 +91,8 @@ public class TerraMeterSkin extends ComponentSkin
             preferredWidth = 0;
         }
 
-        // If Meter has no content, its preferred width is hard coded in the
-        // class and is not affected by the height constraint.
+        // If the meter has no content, its preferred width is hard-coded by the
+        // class and is not affected by the height constraint
         preferredWidth = Math.max(preferredWidth, DEFAULT_WIDTH);
 
         return preferredWidth;
@@ -110,8 +110,8 @@ public class TerraMeterSkin extends ComponentSkin
             preferredHeight = (int)Math.ceil(lm.getHeight()) + 2;
         }
 
-        // If Meter has no content, its preferred height is hard coded in the
-        // class and is not affected by the width constraint.
+        // If the meter has no content, its preferred height is hard-coded by the
+        // class and is not affected by the width constraint
         preferredHeight = Math.max(preferredHeight, DEFAULT_HEIGHT);
 
         return preferredHeight;
@@ -128,11 +128,12 @@ public class TerraMeterSkin extends ComponentSkin
             && text.length() > 0) {
             Rectangle2D stringBounds = font.getStringBounds(text, FONT_RENDER_CONTEXT);
             preferredWidth = (int)Math.ceil(stringBounds.getWidth()) + 2;
+
             LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
             preferredHeight = (int)Math.ceil(lm.getHeight()) + 2;
         }
 
-        // If Meter has no content, its preferred size is hard coded in the class.
+        // If meter has no content, its preferred size is hard coded by the class
         preferredWidth = Math.max(preferredWidth, DEFAULT_WIDTH);
         preferredHeight = Math.max(preferredHeight, DEFAULT_HEIGHT);
 
@@ -149,9 +150,10 @@ public class TerraMeterSkin extends ComponentSkin
         if (text != null
             && text.length() > 0) {
             LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
+            float ascent = lm.getAscent();
+            float textHeight = lm.getHeight();
 
-            // TODO Adjust for height
-            baseline = (int)Math.ceil(lm.getAscent() - 2);
+            baseline = Math.round((height - textHeight) / 2 + ascent);
         }
 
         return baseline;
@@ -172,10 +174,12 @@ public class TerraMeterSkin extends ComponentSkin
 
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
+
         if (FONT_RENDER_CONTEXT.isAntiAliased()) {
             graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
                 Platform.getTextAntialiasingHint());
         }
+
         if (FONT_RENDER_CONTEXT.usesFractionalMetrics()) {
             graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
                 RenderingHints.VALUE_FRACTIONALMETRICS_ON);
@@ -197,25 +201,36 @@ public class TerraMeterSkin extends ComponentSkin
         }
 
         String text = meter.getText();
-        if (text!=null && text.length()>0) {
+        if (text != null
+            && text.length() > 0) {
             LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
-            int ascent = Math.round(lm.getAscent());
+            float ascent = lm.getAscent();
+
             Rectangle2D stringBounds = font.getStringBounds(text, FONT_RENDER_CONTEXT);
-            int textWidth = (int)Math.ceil(stringBounds.getWidth());
-            int textX = (width - textWidth - 2) / 2 + 1;
+            float textWidth = (float)stringBounds.getWidth();
+            float textHeight = (float)stringBounds.getHeight();
+
+            float textX = (width - textWidth) / 2;
+            float textY = (height - textHeight) / 2;
 
             // Paint the text
-            Shape previousClip = graphics.getClip();
+            Shape clip = graphics.getClip();
             graphics.clipRect(0, 0, meterStop, height);
             graphics.setPaint(textFillColor);
             graphics.setFont(font);
-            graphics.drawString(meter.getText(), textX, ascent+1);
-            graphics.setClip(previousClip);
+            graphics.drawString(meter.getText(), textX, textY + ascent);
+
+            graphics.setClip(clip);
             graphics.clipRect(meterStop, 0, width, height);
             graphics.setPaint(textColor);
             graphics.setFont(font);
-            graphics.drawString(meter.getText(), textX, ascent+1);
-            graphics.setClip(previousClip);
+            graphics.drawString(meter.getText(), textX, textY + ascent);
+
+            graphics.setClip(clip);
+        }
+
+        if (debugBaseline) {
+            drawBaselineDebug(graphics);
         }
     }
 

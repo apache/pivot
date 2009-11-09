@@ -158,17 +158,15 @@ public class TerraListButtonSkin extends ListButtonSkin {
     @Override
     public int getPreferredWidth(int height) {
         ListButton listButton = (ListButton)getComponent();
-        List<?> listData = listButton.getListData();
-
         Button.DataRenderer dataRenderer = listButton.getDataRenderer();
 
         // Determine the preferred width of the current button data
-        dataRenderer.render(listButton.getButtonData(),
-            listButton, false);
+        dataRenderer.render(listButton.getButtonData(), listButton, false);
         int preferredWidth = dataRenderer.getPreferredWidth(-1);
 
         // The preferred width of the button is the max. width of the rendered
         // content plus padding and the trigger width
+        List<?> listData = listButton.getListData();
         for (Object item : listData) {
             dataRenderer.render(item, listButton, false);
             preferredWidth = Math.max(preferredWidth, dataRenderer.getPreferredWidth(-1));
@@ -182,8 +180,8 @@ public class TerraListButtonSkin extends ListButtonSkin {
     @Override
     public int getPreferredHeight(int width) {
         ListButton listButton = (ListButton)getComponent();
-        Button.DataRenderer dataRenderer = listButton.getDataRenderer();
 
+        Button.DataRenderer dataRenderer = listButton.getDataRenderer();
         dataRenderer.render(listButton.getButtonData(), listButton, false);
 
         int preferredHeight = dataRenderer.getPreferredHeight(-1)
@@ -194,18 +192,38 @@ public class TerraListButtonSkin extends ListButtonSkin {
 
     @Override
     public Dimensions getPreferredSize() {
-        // TODO Optimize by performing calcuations locally
-        return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
+        ListButton listButton = (ListButton)getComponent();
+        Button.DataRenderer dataRenderer = listButton.getDataRenderer();
+
+        // Determine the preferred width and height of the current button data
+        dataRenderer.render(listButton.getButtonData(), listButton, false);
+        Dimensions contentSize = dataRenderer.getPreferredSize();
+        int preferredWidth = contentSize.width;
+        int preferredHeight = contentSize.height + padding.top + padding.bottom + 2;
+
+        // The preferred width of the button is the max. width of the rendered
+        // content plus padding and the trigger width
+        List<?> listData = listButton.getListData();
+        for (Object item : listData) {
+            dataRenderer.render(item, listButton, false);
+            preferredWidth = Math.max(preferredWidth, dataRenderer.getPreferredWidth(-1));
+        }
+
+        preferredWidth += TRIGGER_WIDTH + padding.left + padding.right + 2;
+
+        return new Dimensions(preferredWidth, preferredHeight);
     }
 
     @Override
     public int getBaseline(int width, int height) {
         ListButton listButton = (ListButton)getComponent();
 
-        // TODO Adjust width and height for padding/border/trigger
-
         Button.DataRenderer dataRenderer = listButton.getDataRenderer();
         dataRenderer.render(listButton.getButtonData(), listButton, false);
+
+        width = Math.max(width - (TRIGGER_WIDTH + padding.left + padding.right + 2), 0);
+        height = Math.max(height - (padding.top + padding.bottom + 2), 0);
+
         int baseline = dataRenderer.getBaseline(width, height);
 
         if (baseline != -1) {

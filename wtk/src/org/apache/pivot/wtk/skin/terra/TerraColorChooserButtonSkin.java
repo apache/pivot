@@ -99,8 +99,8 @@ public class TerraColorChooserButtonSkin extends ColorChooserButtonSkin {
 
         dataRenderer.render(colorChooserButton.getButtonData(), colorChooserButton, false);
 
-        int preferredWidth = dataRenderer.getPreferredWidth(-1) + TRIGGER_WIDTH + padding.left
-            + padding.right + 2;
+        int preferredWidth = dataRenderer.getPreferredWidth(-1) + TRIGGER_WIDTH
+            + padding.left + padding.right + 2;
 
         return preferredWidth;
     }
@@ -119,13 +119,29 @@ public class TerraColorChooserButtonSkin extends ColorChooserButtonSkin {
     }
 
     @Override
-    public int getBaseline(int width, int height) {
+    public Dimensions getPreferredSize() {
         ColorChooserButton colorChooserButton = (ColorChooserButton)getComponent();
-
-        // TODO Adjust width and height for padding/border/trigger
 
         Button.DataRenderer dataRenderer = colorChooserButton.getDataRenderer();
         dataRenderer.render(colorChooserButton.getButtonData(), colorChooserButton, false);
+
+        Dimensions contentSize = dataRenderer.getPreferredSize();
+        int preferredWidth = contentSize.width + TRIGGER_WIDTH + padding.left + padding.right + 2;
+        int preferredHeight = contentSize.height + padding.top + padding.bottom + 2;
+
+        return new Dimensions(preferredWidth, preferredHeight);
+    }
+
+    @Override
+    public int getBaseline(int width, int height) {
+        ColorChooserButton colorChooserButton = (ColorChooserButton)getComponent();
+
+        Button.DataRenderer dataRenderer = colorChooserButton.getDataRenderer();
+        dataRenderer.render(colorChooserButton.getButtonData(), colorChooserButton, false);
+
+        width = Math.max(width - (TRIGGER_WIDTH + padding.left + padding.right + 2), 0);
+        height = Math.max(height - (padding.top + padding.bottom + 2), 0);
+
         int baseline = dataRenderer.getBaseline(width, height);
 
         if (baseline != -1) {

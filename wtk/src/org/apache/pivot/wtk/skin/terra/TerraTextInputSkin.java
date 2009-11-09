@@ -219,9 +219,13 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
     @Override
     public int getBaseline(int width, int height) {
-        // TODO
         LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
-        return (int)Math.ceil(lm.getAscent()) + (padding.top + 1) - 2;
+        float ascent = lm.getAscent();
+        float textHeight = lm.getHeight();
+
+        int baseline = Math.round((height - textHeight) / 2 + ascent);
+
+        return baseline;
     }
 
     @Override
@@ -330,7 +334,8 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         }
 
         LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
-        int ascent = Math.round(lm.getAscent());
+        float ascent = lm.getAscent();
+        float textHeight = lm.getHeight();
 
         String prompt = textInput.getPrompt();
 
@@ -339,7 +344,8 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             && !textInput.isFocused()) {
             graphics.setFont(font);
             graphics.setColor(promptColor);
-            graphics.drawString(prompt, padding.left - scrollLeft + 1, padding.top + ascent + 1);
+            graphics.drawString(prompt, padding.left - scrollLeft + 1,
+                (height - textHeight) / 2 + ascent);
         } else {
             boolean textValid = textInput.isTextValid();
 
@@ -360,7 +366,8 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 if (selection == null) {
                     // Paint the text
                     graphics.setColor(color);
-                    graphics.drawGlyphVector(glyphVector, padding.left - scrollLeft + 1, padding.top + ascent + 1);
+                    graphics.drawGlyphVector(glyphVector, padding.left - scrollLeft + 1,
+                        (height - textHeight) / 2 + ascent);
                 } else {
                     // Paint the unselected text
                     Area unselectedArea = new Area();
@@ -370,7 +377,8 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                     Graphics2D textGraphics = (Graphics2D)graphics.create();
                     textGraphics.setColor(color);
                     textGraphics.clip(unselectedArea);
-                    textGraphics.drawGlyphVector(glyphVector, padding.left - scrollLeft + 1, padding.top + ascent + 1);
+                    textGraphics.drawGlyphVector(glyphVector, padding.left - scrollLeft + 1,
+                        (height - textHeight) / 2 + ascent);
                     textGraphics.dispose();
 
                     // Paint the selection
@@ -391,12 +399,13 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                     Graphics2D selectedTextGraphics = (Graphics2D)graphics.create();
                     selectedTextGraphics.setColor(selectionColor);
                     selectedTextGraphics.clip(selection.getBounds());
-                    selectedTextGraphics.drawGlyphVector(glyphVector, padding.left - scrollLeft + 1, padding.top + ascent + 1);
+                    selectedTextGraphics.drawGlyphVector(glyphVector, padding.left - scrollLeft + 1,
+                        (height - textHeight) / 2 + ascent);
                     selectedTextGraphics.dispose();
                 }
             }
 
-            if (caret != null
+            if (selection == null
                 && caretOn
                 && textInput.isFocused()) {
                 graphics.setColor(color);
@@ -1400,6 +1409,8 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     private void updateSelection() {
         TextInput textInput = (TextInput)getComponent();
 
+        int height = getHeight();
+
         int selectionStart = textInput.getSelectionStart();
         int selectionLength = textInput.getSelectionLength();
 
@@ -1407,33 +1418,34 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         int n = textNode.getCharacterCount();
 
         Bounds leadingSelectionBounds;
-        if (n == 0) {
-            int x = padding.left - scrollLeft + 1;
-            int y = padding.top + 1;
-            leadingSelectionBounds = new Bounds(x, y, 0, averageCharacterSize.height);
-        } else if (selectionStart < n) {
+        if (selectionStart < n) {
             leadingSelectionBounds = getCharacterBounds(selectionStart);
         } else {
             // The insertion point is after the last character
-            Rectangle2D textBounds = glyphVector.getLogicalBounds();
-            int x = (int)Math.ceil(textBounds.getWidth()) + (padding.left - scrollLeft + 1);
+            int x;
+            if (n == 0) {
+                x = padding.left - scrollLeft + 1;
+            } else {
+                Rectangle2D textBounds = glyphVector.getLogicalBounds();
+                x = (int)Math.ceil(textBounds.getWidth()) + (padding.left - scrollLeft + 1);
+            }
+
             int y = padding.top + 1;
-            leadingSelectionBounds = new Bounds(x, y, 0, averageCharacterSize.height);
+
+            leadingSelectionBounds = new Bounds(x, y, 0, height - (padding.top + padding.bottom + 2));
         }
 
-        if (selectionLength == 0) {
-            caret = leadingSelectionBounds.toRectangle();
-            caret.width = 1;
+        caret = leadingSelectionBounds.toRectangle();
+        caret.width = 1;
 
-            selection = null;
-        } else {
-            caret = null;
-
+        if (selectionLength > 0) {
             Bounds trailingSelectionBounds = getCharacterBounds(selectionStart
                 + selectionLength - 1);
             selection = new Rectangle(leadingSelectionBounds.x, leadingSelectionBounds.y,
                 trailingSelectionBounds.x + trailingSelectionBounds.width - leadingSelectionBounds.x,
                 trailingSelectionBounds.y + trailingSelectionBounds.height - leadingSelectionBounds.y);
+        } else {
+            selection = null;
         }
     }
 

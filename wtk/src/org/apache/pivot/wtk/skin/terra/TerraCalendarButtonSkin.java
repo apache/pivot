@@ -151,9 +151,8 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
     public int getPreferredWidth(int height) {
         CalendarButton calendarButton = (CalendarButton) getComponent();
 
-        Object buttonData = calendarButton.getButtonData();
         Button.DataRenderer dataRenderer = calendarButton.getDataRenderer();
-        dataRenderer.render(buttonData, calendarButton, false);
+        dataRenderer.render(calendarButton.getButtonData(), calendarButton, false);
 
         int preferredWidth = dataRenderer.getPreferredWidth(-1) + TRIGGER_WIDTH
             + padding.left + padding.right + 2;
@@ -165,9 +164,8 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
     public int getPreferredHeight(int width) {
         CalendarButton calendarButton = (CalendarButton) getComponent();
 
-        Object buttonData = calendarButton.getButtonData();
         Button.DataRenderer dataRenderer = calendarButton.getDataRenderer();
-        dataRenderer.render(buttonData, calendarButton, false);
+        dataRenderer.render(calendarButton.getButtonData(), calendarButton, false);
 
         int preferredHeight = dataRenderer.getPreferredHeight(-1)
             + padding.top + padding.bottom + 2;
@@ -177,18 +175,28 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
 
     @Override
     public Dimensions getPreferredSize() {
-        // TODO Optimize by performing calcuations locally
-        return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
+        CalendarButton calendarButton = (CalendarButton) getComponent();
+
+        Button.DataRenderer dataRenderer = calendarButton.getDataRenderer();
+        dataRenderer.render(calendarButton.getButtonData(), calendarButton, false);
+
+        Dimensions contentSize = dataRenderer.getPreferredSize();
+        int preferredWidth = contentSize.width + TRIGGER_WIDTH + padding.left + padding.right + 2;
+        int preferredHeight = contentSize.height + padding.top + padding.bottom + 2;
+
+        return new Dimensions(preferredWidth, preferredHeight);
     }
 
     @Override
     public int getBaseline(int width, int height) {
         CalendarButton calendarButton = (CalendarButton) getComponent();
 
-        // TODO Adjust width and height for padding/border/trigger
-
         Button.DataRenderer dataRenderer = calendarButton.getDataRenderer();
         dataRenderer.render(calendarButton.getButtonData(), calendarButton, false);
+
+        width = Math.max(width - (TRIGGER_WIDTH + padding.left + padding.right + 2), 0);
+        height = Math.max(height - (padding.top + padding.bottom + 2), 0);
+
         int baseline = dataRenderer.getBaseline(width, height);
 
         if (baseline != -1) {

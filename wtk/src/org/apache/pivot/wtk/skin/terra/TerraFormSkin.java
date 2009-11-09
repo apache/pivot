@@ -305,8 +305,7 @@ public class TerraFormSkin extends ContainerSkin
                             labelY = rowY + (baseline - labelBaseLine);
                             fieldY = rowY + (baseline - fieldBaseLine);
                         } else {
-                            // if they don't both have baselines, default to
-                            // non-baseline behaviour
+                            // If they don't both have baselines, default to non-baseline behaviour
                             rowHeight = Math.max(label.getHeight(), Math.max(field.getHeight(),
                                 FLAG_IMAGE_SIZE));
                             fieldY = rowY;

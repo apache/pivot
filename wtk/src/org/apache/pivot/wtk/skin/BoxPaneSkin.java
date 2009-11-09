@@ -138,24 +138,6 @@ public class BoxPaneSkin extends ContainerSkin
     }
 
     @Override
-    public int getBaseline(int width, int height) {
-        BoxPane boxPane = (BoxPane)getComponent();
-
-        int baseline = -1;
-
-        // TODO Return the baseline of the first component that has a valid baseline
-        // NOTE For vertical box panes, be sure to constrain width appropriately when fill
-        // is set to true
-
-        // Include top and bottom padding values
-        if (baseline != -1) {
-            baseline += padding.top;
-        }
-
-        return baseline;
-    }
-
-    @Override
     public Dimensions getPreferredSize() {
         BoxPane boxPane = (BoxPane)getComponent();
 
@@ -213,6 +195,86 @@ public class BoxPaneSkin extends ContainerSkin
         preferredHeight += padding.top + padding.bottom;
 
         return new Dimensions(preferredWidth, preferredHeight);
+    }
+
+    @Override
+    public int getBaseline(int width, int height) {
+        BoxPane boxPane = (BoxPane)getComponent();
+
+        int baseline = -1;
+
+        width = Math.max(width - (padding.left + padding.right), 0);
+        height = Math.max(height - (padding.top + padding.bottom), 0);
+
+        int contentHeight = 0;
+
+        switch (boxPane.getOrientation()) {
+            case HORIZONTAL: {
+                for (Component component : boxPane) {
+                    if (component.isVisible()) {
+                        Dimensions size;
+                        if (fill) {
+                            size = new Dimensions(component.getPreferredHeight(height), height);
+                        } else {
+                            size = component.getPreferredSize();
+                        }
+
+                        contentHeight = Math.max(contentHeight, size.height);
+                        baseline = Math.max(baseline, component.getBaseline(size.width, size.height));
+                    }
+                }
+
+                break;
+            }
+
+            case VERTICAL: {
+                for (Component component : boxPane) {
+                    if (component.isVisible()) {
+                        Dimensions size;
+                        if (fill) {
+                            size = new Dimensions(component.getPreferredHeight(height), height);
+                        } else {
+                            size = component.getPreferredSize();
+                        }
+
+                        if (baseline == -1) {
+                            baseline = component.getBaseline(size.width, size.height) + contentHeight;
+                        }
+
+                        contentHeight += size.height + spacing;
+                    }
+                }
+
+                contentHeight -= spacing;
+
+                break;
+            }
+        }
+
+        if (baseline != -1) {
+            if (fill) {
+                baseline += padding.top;
+            } else {
+                switch (verticalAlignment) {
+                    case TOP: {
+                        baseline += padding.top;
+                        break;
+                    }
+
+                    case CENTER: {
+                        baseline += (height - contentHeight) / 2;
+                        break;
+                    }
+
+                    case BOTTOM: {
+                        baseline += height - (contentHeight + padding.bottom);
+                        break;
+                    }
+                }
+            }
+        }
+
+        return baseline;
     }
 
     @Override

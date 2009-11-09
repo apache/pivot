@@ -179,9 +179,35 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
     @Override
     public int getBaseline(int width, int height) {
-        // TODO
         LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
-        return (int)Math.ceil(lm.getAscent() - 2);
+        float ascent = lm.getAscent();
+        float textHeight = lm.getHeight();
+
+        if (wrapText) {
+            textHeight = Math.max(getPreferredHeight(width) - (padding.top + padding.bottom), 0);
+        } else {
+            textHeight = (int)Math.ceil(lm.getHeight());
+        }
+
+        int baseline = -1;
+        switch (verticalAlignment) {
+            case TOP: {
+                baseline = Math.round(padding.top + ascent);
+                break;
+            }
+
+            case CENTER: {
+                baseline = Math.round((height - textHeight) / 2 + ascent);
+                break;
+            }
+
+            case BOTTOM: {
+                baseline = Math.round(height - (textHeight + padding.bottom) + ascent);
+                break;
+            }
+        }
+
+        return baseline;
     }
 
     @Override
