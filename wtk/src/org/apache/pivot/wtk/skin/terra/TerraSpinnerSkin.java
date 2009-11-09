@@ -177,14 +177,14 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         }
 
         @Override
-        public int getBaseline(int width) {
-            int baseline = 0;
-
+        public int getBaseline(int width, int height) {
             Spinner spinner = (Spinner)TerraSpinnerSkin.this.getComponent();
-            Spinner.ItemRenderer itemRenderer = spinner.getItemRenderer();
 
+            int baseline = -1;
+
+            Spinner.ItemRenderer itemRenderer = spinner.getItemRenderer();
             itemRenderer.render(spinner.getSelectedItem(), spinner);
-            baseline = itemRenderer.getBaseline(width);
+            baseline = itemRenderer.getBaseline(width, height);
 
             return baseline;
         }
@@ -587,20 +587,20 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
     }
 
     @Override
-    public int getBaseline(int width) {
-        if (width >= 0) {
-            // Subtract the button and border width from width constraint
-            Dimensions upButtonPreferredSize = upButton.getPreferredSize();
-            Dimensions downButtonPreferredSize = downButton.getPreferredSize();
-            int buttonWidth = Math.max(upButtonPreferredSize.width,
-                downButtonPreferredSize.width);
+    public int getBaseline(int width, int height) {
+        Dimensions upButtonPreferredSize = upButton.getPreferredSize();
+        Dimensions downButtonPreferredSize = downButton.getPreferredSize();
+        int buttonWidth = Math.max(upButtonPreferredSize.width,
+            downButtonPreferredSize.width);
 
-            width = Math.max(width - buttonWidth - 2, 0);
-        }
-        int baseline = spinnerContent.getBaseline(width);
+        width = Math.max(width - buttonWidth - 2, 0);
+        height = Math.max(height - 2, 0);
+
+        int baseline = spinnerContent.getBaseline(width, height);
         if (baseline != -1) {
             baseline += 1;
         }
+
         return baseline;
     }
 

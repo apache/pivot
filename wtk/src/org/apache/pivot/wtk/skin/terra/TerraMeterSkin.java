@@ -140,14 +140,17 @@ public class TerraMeterSkin extends ComponentSkin
     }
 
     @Override
-    public int getBaseline(int width) {
+    public int getBaseline(int width, int height) {
         int baseline = -1;
 
         Meter meter = (Meter)getComponent();
         String text = meter.getText();
+
         if (text != null
             && text.length() > 0) {
             LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
+
+            // TODO Adjust for height
             baseline = (int)Math.ceil(lm.getAscent() - 2);
         }
 

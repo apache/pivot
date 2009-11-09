@@ -124,7 +124,7 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
     }
 
     @Override
-    public int getBaseline(int width) {
+    public int getBaseline(int width, int height) {
        return -1;
     }
 
@@ -391,7 +391,7 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
 
     protected final void drawBaselineDebug(Graphics2D graphics) {
         int width = getWidth();
-        int baseline = getBaseline(width);
+        int baseline = getBaseline(width, getHeight());
         if (baseline != -1) {
             graphics.setPaint(Color.RED);
             GraphicsUtilities.drawLine(graphics, 0, baseline, width, Orientation.HORIZONTAL);

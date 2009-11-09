@@ -119,13 +119,14 @@ public class TerraColorChooserButtonSkin extends ColorChooserButtonSkin {
     }
 
     @Override
-    public int getBaseline(int width) {
+    public int getBaseline(int width, int height) {
         ColorChooserButton colorChooserButton = (ColorChooserButton)getComponent();
+
+        // TODO Adjust width and height for padding/border/trigger
+
         Button.DataRenderer dataRenderer = colorChooserButton.getDataRenderer();
-
         dataRenderer.render(colorChooserButton.getButtonData(), colorChooserButton, false);
-
-        int baseline = dataRenderer.getBaseline(width);
+        int baseline = dataRenderer.getBaseline(width, height);
 
         if (baseline != -1) {
             baseline += padding.top + 1;

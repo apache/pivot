@@ -308,15 +308,17 @@ public class ScrollPaneSkin extends ContainerSkin
     }
 
     @Override
-    public int getBaseline(int width) {
+    public int getBaseline(int width, int height) {
         int baseline = -1;
 
         ScrollPane scrollPane = (ScrollPane)getComponent();
         Component view = scrollPane.getView();
 
+        // TODO Look for baseline in column header, then row header, then view
+
         // Delegate baseline calculation to the view component
         if (view != null) {
-            baseline = view.getBaseline(width);
+            baseline = view.getBaseline(width, height);
         }
 
         return baseline;

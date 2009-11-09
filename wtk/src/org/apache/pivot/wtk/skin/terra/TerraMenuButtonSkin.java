@@ -41,7 +41,6 @@ import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.WindowStateListener;
 import org.apache.pivot.wtk.skin.MenuButtonSkin;
 
-
 /**
  * Terra menu button skin.
  */
@@ -123,6 +122,23 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     public Dimensions getPreferredSize() {
         // TODO Optimize by performing calcuations locally
         return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
+    }
+
+    @Override
+    public int getBaseline(int width, int height) {
+        MenuButton menuButton = (MenuButton) getComponent();
+
+        // TODO Adjust width and height for padding/border/trigger
+
+        Button.DataRenderer dataRenderer = menuButton.getDataRenderer();
+        dataRenderer.render(menuButton.getButtonData(), menuButton, false);
+        int baseline = dataRenderer.getBaseline(width, height);
+
+        if (baseline != -1) {
+            baseline += padding.top + 1;
+        }
+
+        return baseline;
     }
 
     @Override

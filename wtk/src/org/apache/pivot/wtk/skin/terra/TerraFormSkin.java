@@ -169,25 +169,29 @@ public class TerraFormSkin extends ContainerSkin
 
                 if (field.isVisible()) {
                     Label label = labels.get(sectionIndex).get(fieldIndex);
+                    Dimensions labelSize = label.getPreferredSize();
+
                     int preferredRowHeight;
                     if (alignToBaseline) {
-                        int labelBaseLine = label.getBaseline(-1);
-                        int fieldBaseLine = field.getBaseline(-1);
-                        if (labelBaseLine != -1 && fieldBaseLine != -1) {
-                            int labelPreferredHeight = label.getPreferredHeight(-1);
+                        int labelBaseLine = label.getBaseline(labelSize.width, labelSize.height);
+                        int fieldBaseLine = field.getBaseline(fieldWidth,
+                            field.getPreferredHeight(fieldWidth));
+
+                        if (labelBaseLine != -1
+                            && fieldBaseLine != -1) {
                             int fieldPreferredHeight = field.getPreferredHeight(fieldWidth);
                             int baseline = Math.max(labelBaseLine, fieldBaseLine);
                             int belowBaseline = Math.max(fieldPreferredHeight - fieldBaseLine,
-                                labelPreferredHeight - labelBaseLine);
+                                labelSize.height - labelBaseLine);
                             preferredRowHeight = baseline + belowBaseline;
                         } else {
                             // if they don't both have baselines, default to
                             // non-baseline behaviour
-                            preferredRowHeight = Math.max(label.getPreferredHeight(-1),
+                            preferredRowHeight = Math.max(labelSize.height,
                                 field.getPreferredHeight(fieldWidth));
                         }
                     } else {
-                        preferredRowHeight = Math.max(label.getPreferredHeight(-1),
+                        preferredRowHeight = Math.max(labelSize.height,
                             field.getPreferredHeight(fieldWidth));
                     }
                     preferredRowHeight = Math.max(preferredRowHeight, FLAG_IMAGE_SIZE);
@@ -290,8 +294,8 @@ public class TerraFormSkin extends ContainerSkin
                     int labelY;
                     int flagImageY;
                     if (alignToBaseline) {
-                        int labelBaseLine = label.getBaseline(label.getWidth());
-                        int fieldBaseLine = field.getBaseline(fieldSize.width);
+                        int labelBaseLine = label.getBaseline(label.getWidth(), label.getHeight());
+                        int fieldBaseLine = field.getBaseline(fieldSize.width, fieldSize.height);
 
                         if (labelBaseLine != -1 && fieldBaseLine != -1) {
                             int baseline = Math.max(labelBaseLine, fieldBaseLine);

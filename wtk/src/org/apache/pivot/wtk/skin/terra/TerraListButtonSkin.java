@@ -199,13 +199,14 @@ public class TerraListButtonSkin extends ListButtonSkin {
     }
 
     @Override
-    public int getBaseline(int width) {
+    public int getBaseline(int width, int height) {
         ListButton listButton = (ListButton)getComponent();
+
+        // TODO Adjust width and height for padding/border/trigger
+
         Button.DataRenderer dataRenderer = listButton.getDataRenderer();
-
         dataRenderer.render(listButton.getButtonData(), listButton, false);
-
-        int baseline = dataRenderer.getBaseline(width);
+        int baseline = dataRenderer.getBaseline(width, height);
 
         if (baseline != -1) {
             baseline += padding.top + 1;

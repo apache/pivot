@@ -89,8 +89,7 @@ public class BorderSkin extends ContainerSkin
             preferredWidth = (int)Math.ceil(headingBounds.getWidth());
 
             LineMetrics lm = font.getLineMetrics(title, fontRenderContext);
-            topThickness = Math.max((int)Math.ceil(lm.getAscent() + lm.getDescent()
-                + lm.getLeading()), topThickness);
+            topThickness = Math.max((int)Math.ceil(lm.getHeight()), topThickness);
         }
 
         Component content = border.getContent();
@@ -119,8 +118,7 @@ public class BorderSkin extends ContainerSkin
         if (title != null
             && title.length() > 0) {
             LineMetrics lm = font.getLineMetrics(title, fontRenderContext);
-            topThickness = Math.max((int)Math.ceil(lm.getAscent() + lm.getDescent()
-                + lm.getLeading()), topThickness);
+            topThickness = Math.max((int)Math.ceil(lm.getHeight()), topThickness);
         }
 
         Component content = border.getContent();
@@ -145,7 +143,7 @@ public class BorderSkin extends ContainerSkin
     }
 
     @Override
-    public int getBaseline(int width) {
+    public int getBaseline(int width, int height) {
         int baseline = -1;
 
         Border border = (Border)getComponent();
@@ -158,15 +156,14 @@ public class BorderSkin extends ContainerSkin
             if (title != null
                 && title.length() > 0) {
                 LineMetrics lm = font.getLineMetrics(title, fontRenderContext);
-                topThickness = Math.max((int)Math.ceil(lm.getAscent() + lm.getDescent()
-                    + lm.getLeading()), topThickness);
+                topThickness = Math.max((int)Math.ceil(lm.getHeight()), topThickness);
             }
 
-            if (width != -1) {
-                width = Math.max(width - (thickness * 2) - padding.left - padding.right, 0);
-            }
+            width = Math.max(width - (thickness * 2) - padding.left - padding.right, 0);
+            height = Math.max(height - (topThickness + thickness) -
+                padding.top - padding.bottom, 0);
 
-            baseline = content.getBaseline(width);
+            baseline = content.getBaseline(width, height);
         }
 
         // Include top padding value and top border thickness
@@ -189,8 +186,7 @@ public class BorderSkin extends ContainerSkin
         if (title != null
             && title.length() > 0) {
             LineMetrics lm = font.getLineMetrics(title, fontRenderContext);
-            topThickness = Math.max((int)Math.ceil(lm.getAscent() + lm.getDescent()
-                + lm.getLeading()), topThickness);
+            topThickness = Math.max((int)Math.ceil(lm.getHeight()), topThickness);
         }
 
         Component content = border.getContent();
@@ -218,8 +214,7 @@ public class BorderSkin extends ContainerSkin
             && title.length() > 0) {
             LineMetrics lm = font.getLineMetrics(title, fontRenderContext);
             titleAscent = lm.getAscent();
-            topThickness = Math.max((int)Math.ceil(titleAscent
-                + lm.getDescent() + lm.getLeading()), topThickness);
+            topThickness = Math.max((int)Math.ceil(lm.getHeight()), topThickness);
         }
 
         // TODO Java2D doesn't support variable corner radii; we'll need to

@@ -410,24 +410,8 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     }
 
     @Override
-    public int getBaseline(int width) {
-        int baseline = -1;
-
-        CardPane cardPane = (CardPane)getComponent();
-
-        if (sizeToSelection) {
-            Component selectedCard = cardPane.getSelectedCard();
-
-            if (selectedCard != null) {
-                baseline = selectedCard.getBaseline(width);
-            }
-        } else {
-            for (Component card : cardPane) {
-                baseline = Math.max(baseline, card.getBaseline(width));
-            }
-        }
-
-        return baseline;
+    public int getBaseline(int width, int height) {
+        return -1;
     }
 
     @Override

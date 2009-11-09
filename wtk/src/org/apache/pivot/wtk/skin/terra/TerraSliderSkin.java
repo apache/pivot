@@ -21,7 +21,6 @@ import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.geom.Rectangle2D;
 
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
@@ -284,22 +283,28 @@ public class TerraSliderSkin extends SliderSkin {
     public int getPreferredWidth(int height) {
         Slider slider = (Slider) getComponent();
 
+        int preferredWidth;
         if (slider.getOrientation() == Orientation.HORIZONTAL) {
-            return DEFAULT_WIDTH;
+            preferredWidth = DEFAULT_WIDTH;
         } else {
-            return thumbHeight;
+            preferredWidth = thumbHeight;
         }
+
+        return preferredWidth;
     }
 
     @Override
     public int getPreferredHeight(int width) {
         Slider slider = (Slider) getComponent();
 
+        int preferredHeight;
         if (slider.getOrientation() == Orientation.HORIZONTAL) {
-            return thumbHeight;
+            preferredHeight = thumbHeight;
         } else {
-            return DEFAULT_WIDTH;
+            preferredHeight = DEFAULT_WIDTH;
         }
+
+        return preferredHeight;
     }
 
     @Override

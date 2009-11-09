@@ -171,31 +171,21 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     @Override
-    public int getBaseline(int width) {
+    public int getBaseline(int width, int height) {
         PushButton pushButton = (PushButton) getComponent();
-        Button.DataRenderer dataRenderer = pushButton.getDataRenderer();
 
+        int baseline = -1;
+
+        Button.DataRenderer dataRenderer = pushButton.getDataRenderer();
         dataRenderer.render(pushButton.getButtonData(), pushButton, false);
 
-        // Include padding in constraint
-        int contentWidth = width;
-        if (contentWidth != -1) {
-            contentWidth = Math.max(contentWidth - (padding.left + padding.right + 2), 0);
-        }
+        width = Math.max(width - (padding.left + padding.right + 2), 0);
+        height = Math.max(height - (padding.top + padding.bottom + 2), 0);
 
-        int preferredHeight1 = dataRenderer.getPreferredHeight(contentWidth) + padding.top
-            + padding.bottom + 2;
-        int baseline = dataRenderer.getBaseline(contentWidth);
+        baseline = dataRenderer.getBaseline(width, height);
 
         if (baseline != -1) {
             baseline += padding.top + 1;
-
-            // Adjust for preferred aspect ratio
-            if (!Float.isNaN(maximumAspectRatio)
-                && (float) width / (float) preferredHeight1 > maximumAspectRatio) {
-                int preferredHeight2 = (int) (width / maximumAspectRatio);
-                baseline = (int) (preferredHeight1 / (float) preferredHeight2 * baseline);
-            }
         }
 
         return baseline;

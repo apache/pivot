@@ -178,7 +178,8 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     }
 
     @Override
-    public int getBaseline(int width) {
+    public int getBaseline(int width, int height) {
+        // TODO
         LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
         return (int)Math.ceil(lm.getAscent() - 2);
     }

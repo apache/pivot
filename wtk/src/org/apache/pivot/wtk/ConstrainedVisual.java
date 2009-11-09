@@ -54,11 +54,14 @@ public interface ConstrainedVisual extends Visual {
     public Dimensions getPreferredSize();
 
     /**
-     * Returns the baseline for a given width.
+     * Returns the baseline for a given width and height.
+     *
+     * @param width
+     * @param height
      *
      * @return
      * The baseline relative to the origin of this visual, or <tt>-1</tt> if
      * this visual does not have a baseline.
      */
-    public int getBaseline(int width);
+    public int getBaseline(int width, int height);
 }

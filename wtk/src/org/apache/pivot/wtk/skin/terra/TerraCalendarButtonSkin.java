@@ -182,13 +182,15 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
     }
 
     @Override
-    public int getBaseline(int width) {
+    public int getBaseline(int width, int height) {
         CalendarButton calendarButton = (CalendarButton) getComponent();
+
+        // TODO Adjust width and height for padding/border/trigger
+
         Button.DataRenderer dataRenderer = calendarButton.getDataRenderer();
-
         dataRenderer.render(calendarButton.getButtonData(), calendarButton, false);
+        int baseline = dataRenderer.getBaseline(width, height);
 
-        int baseline = dataRenderer.getBaseline(width);
         if (baseline != -1) {
             baseline += padding.top + 1;
         }

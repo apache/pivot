@@ -68,10 +68,10 @@ public class Slider extends Container {
 
     public Slider(Orientation orientation) {
         this.orientation = orientation;
-        
+
         installThemeSkin(Slider.class);
     }
-    
+
     public int getStart() {
         return start;
     }

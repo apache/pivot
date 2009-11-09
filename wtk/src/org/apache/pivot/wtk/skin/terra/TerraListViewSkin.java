@@ -137,10 +137,16 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     }
 
     @Override
-    public int getBaseline(int width) {
+    public int getBaseline(int width, int height) {
+        ListView listView = (ListView)getComponent();
+
         int baseline = -1;
 
-        baseline = getItemBaseline(width);
+        // TODO Adjust width for checkbox width and checkbox padding
+
+        ListView.ItemRenderer renderer = listView.getItemRenderer();
+        renderer.render(null, -1, listView, false, false, false, false);
+        baseline = renderer.getBaseline(width, getItemHeight());
 
         return baseline;
     }
@@ -287,20 +293,6 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         }
 
         return itemHeight;
-    }
-
-    private int getItemBaseline(int width) {
-        ListView listView = (ListView)getComponent();
-        ListView.ItemRenderer renderer = listView.getItemRenderer();
-        renderer.render(null, -1, listView, false, false, false, false);
-
-        int itemBaseline = renderer.getBaseline(width);
-        if (listView.getCheckmarksEnabled()) {
-            itemBaseline = Math.max(CHECKBOX.getBaseline(width) + checkboxPadding.top,
-                itemBaseline);
-        }
-
-        return itemBaseline;
     }
 
     @Override

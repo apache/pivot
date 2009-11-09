@@ -218,9 +218,10 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     @Override
-    public int getBaseline(int width) {
+    public int getBaseline(int width, int height) {
+        // TODO
         LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
-        return (int)Math.ceil(lm.getAscent() - 2) + (padding.top + 1);
+        return (int)Math.ceil(lm.getAscent()) + (padding.top + 1) - 2;
     }
 
     @Override

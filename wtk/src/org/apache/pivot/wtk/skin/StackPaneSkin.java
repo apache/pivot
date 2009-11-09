@@ -82,15 +82,8 @@ public class StackPaneSkin extends ContainerSkin {
     }
 
     @Override
-    public int getBaseline(int width) {
-        int baseline = -1;
-        StackPane stackPane = (StackPane) getComponent();
-
-        for (Component component : stackPane) {
-            baseline = Math.max(baseline, component.getBaseline(width));
-        }
-
-        return baseline;
+    public int getBaseline(int width, int height) {
+        return -1;
     }
 
     @Override

@@ -75,13 +75,13 @@ public class TerraLinkButtonSkin extends LinkButtonSkin {
     }
 
     @Override
-    public int getBaseline(int width) {
+    public int getBaseline(int width, int height) {
         LinkButton linkButton = (LinkButton)getComponent();
 
         Button.DataRenderer dataRenderer = linkButton.getDataRenderer();
         dataRenderer.render(linkButton.getButtonData(), linkButton, false);
 
-        return dataRenderer.getBaseline(width);
+        return dataRenderer.getBaseline(width, height);
     }
 
     @Override

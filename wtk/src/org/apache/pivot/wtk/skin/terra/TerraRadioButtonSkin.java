@@ -120,17 +120,16 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
     }
 
     @Override
-    public int getBaseline(int width) {
+    public int getBaseline(int width, int height) {
         RadioButton radioButton = (RadioButton)getComponent();
-        Button.DataRenderer dataRenderer = radioButton.getDataRenderer();
 
+        int baseline = -1;
+
+        Button.DataRenderer dataRenderer = radioButton.getDataRenderer();
         dataRenderer.render(radioButton.getButtonData(), radioButton, false);
 
-        if (width != -1) {
-            width = Math.max(width - (BUTTON_DIAMETER + spacing), 0);
-        }
-
-        int baseline = dataRenderer.getBaseline(width);
+        width = Math.max(width - (BUTTON_DIAMETER + spacing), 0);
+        baseline = dataRenderer.getBaseline(width, height);
 
         return baseline;
     }

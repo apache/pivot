@@ -138,36 +138,14 @@ public class BoxPaneSkin extends ContainerSkin
     }
 
     @Override
-    public int getBaseline(int width) {
+    public int getBaseline(int width, int height) {
         BoxPane boxPane = (BoxPane)getComponent();
 
         int baseline = -1;
 
-        Orientation orientation = boxPane.getOrientation();
-        if (orientation == Orientation.VERTICAL) {
-            // Include padding in constraint
-            if (width != -1) {
-                width = Math.max(width - (padding.left + padding.right), 0);
-            }
-
-            // find the first visible component
-            for (int i = 0, n = boxPane.getLength(); i < n; i++) {
-                Component component = boxPane.get(i);
-                if (component.isVisible()) {
-                    baseline = component.getBaseline(fill ? width : -1);
-                    break;
-                }
-            }
-        } else {
-            // Baseline is the maximum baseline of all components
-            for (int i = 0, n = boxPane.getLength(); i < n; i++) {
-                Component component = boxPane.get(i);
-
-                if (component.isVisible()) {
-                    baseline = Math.max(baseline, component.getBaseline(-1));
-                }
-            }
-        }
+        // TODO Return the baseline of the first component that has a valid baseline
+        // NOTE For vertical box panes, be sure to constrain width appropriately when fill
+        // is set to true
 
         // Include top and bottom padding values
         if (baseline != -1) {

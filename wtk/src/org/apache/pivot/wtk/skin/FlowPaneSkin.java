@@ -67,6 +67,8 @@ public class FlowPaneSkin extends ContainerSkin {
 
     @Override
     public int getPreferredHeight(int width) {
+        // TODO Account for baseline in these calculations
+
         FlowPane flowPane = (FlowPane)getComponent();
 
         int preferredHeight = 0;
@@ -131,6 +133,8 @@ public class FlowPaneSkin extends ContainerSkin {
 
     @Override
     public Dimensions getPreferredSize() {
+        // TODO Account for baseline in these calculations
+
         FlowPane flowPane = (FlowPane)getComponent();
 
         int preferredWidth = 0;
@@ -161,7 +165,7 @@ public class FlowPaneSkin extends ContainerSkin {
     }
 
     @Override
-    public int getBaseline(int width) {
+    public int getBaseline(int width, int height) {
         FlowPane flowPane = (FlowPane)getComponent();
 
         int baseline = -1;
@@ -177,13 +181,15 @@ public class FlowPaneSkin extends ContainerSkin {
             if (component.isVisible()) {
                 Dimensions componentSize = component.getPreferredSize();
 
-                if (rowWidth + componentSize.width > contentWidth && rowWidth > 0) {
+                if (rowWidth + componentSize.width > contentWidth
+                    && rowWidth > 0) {
                     // The component is too big to fit in the remaining space,
                     // and it is not the only component in this row; wrap
                     break;
                 }
 
-                baseline = Math.max(baseline, component.getBaseline(componentSize.width));
+                baseline = Math.max(baseline, component.getBaseline(componentSize.width,
+                    componentSize.height));
                 rowWidth += componentSize.width + horizontalSpacing;
             }
         }
@@ -256,7 +262,8 @@ public class FlowPaneSkin extends ContainerSkin {
             for (Component component : row) {
                 rowWidth += component.getWidth();
                 rowHeight = Math.max(rowHeight, component.getHeight());
-                baseline = Math.max(baseline, component.getBaseline(component.getWidth()));
+                baseline = Math.max(baseline, component.getBaseline(component.getWidth(),
+                    component.getHeight()));
             }
 
             rowWidth += horizontalSpacing * (row.getLength() - 1);
@@ -281,7 +288,8 @@ public class FlowPaneSkin extends ContainerSkin {
                 int y;
                 if (alignToBaseline && baseline != -1) {
                     // Align to baseline
-                    y = baseline - component.getBaseline(component.getWidth());
+                    y = baseline - component.getBaseline(component.getWidth(),
+                        component.getHeight());
                 } else {
                     // Align to bottom
                     y = rowHeight - component.getHeight();
