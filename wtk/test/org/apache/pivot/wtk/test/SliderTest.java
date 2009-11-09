@@ -29,23 +29,33 @@ import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class SliderTest implements Application {
     private Window window = null;
-    private Slider slider = null;
-    private Label valueLabel = null;
+    private Slider slider1 = null;
+    private Slider slider2 = null;
+    private Label valueLabel1 = null;
+    private Label valueLabel2 = null;
 
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = new Window((Component)wtkxSerializer.readObject(getClass().getResource("slider_test.wtkx")));
-        slider = (Slider)wtkxSerializer.get("slider");
-        slider.getSliderValueListeners().add(new SliderValueListener() {
+        slider1 = (Slider)wtkxSerializer.get("slider1");
+        slider1.getSliderValueListeners().add(new SliderValueListener() {
             @Override
             public void valueChanged(Slider slider, int previousValue) {
-                valueLabel.setText(Integer.toString(slider.getValue()));
+                valueLabel1.setText(Integer.toString(slider.getValue()));
+            }
+        });
+        slider2 = (Slider)wtkxSerializer.get("slider2");
+        slider2.getSliderValueListeners().add(new SliderValueListener() {
+            @Override
+            public void valueChanged(Slider slider, int previousValue) {
+                valueLabel2.setText(Integer.toString(slider.getValue()));
             }
         });
 
-        valueLabel = (Label)wtkxSerializer.get("valueLabel");
+        valueLabel1 = (Label)wtkxSerializer.get("valueLabel1");
+        valueLabel2 = (Label)wtkxSerializer.get("valueLabel2");
 
         window.setTitle("Slider Test");
         window.setMaximized(true);

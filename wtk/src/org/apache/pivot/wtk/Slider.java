@@ -26,6 +26,13 @@ public class Slider extends Container {
     private static class SliderListenerList extends ListenerList<SliderListener>
         implements SliderListener {
         @Override
+        public void orientationChanged(Slider slider) {
+            for (SliderListener listener : this) {
+                listener.orientationChanged(slider);
+            }
+        }
+
+        @Override
         public void rangeChanged(Slider slider, int previousStart, int previousEnd) {
             for (SliderListener listener : this) {
                 listener.rangeChanged(slider, previousStart, previousEnd);
@@ -46,6 +53,7 @@ public class Slider extends Container {
     private int start = DEFAULT_START;
     private int end = DEFAULT_END;
     private int value = DEFAULT_VALUE;
+    private Orientation orientation = null;
 
     private SliderListenerList sliderListeners = new SliderListenerList();
     private SliderValueListenerList sliderValueListeners = new SliderValueListenerList();
@@ -55,9 +63,15 @@ public class Slider extends Container {
     public static final int DEFAULT_VALUE = 0;
 
     public Slider() {
-        installThemeSkin(Slider.class);
+        this(Orientation.HORIZONTAL);
     }
 
+    public Slider(Orientation orientation) {
+        this.orientation = orientation;
+        
+        installThemeSkin(Slider.class);
+    }
+    
     public int getStart() {
         return start;
     }
@@ -147,6 +161,29 @@ public class Slider extends Container {
             this.value = value;
             sliderValueListeners.valueChanged(this, previousValue);
         }
+    }
+
+    public Orientation getOrientation() {
+        return orientation;
+    }
+
+    public void setOrientation(Orientation orientation) {
+        if (orientation == null) {
+            throw new IllegalArgumentException("orientation is null.");
+        }
+
+        if (this.orientation != orientation) {
+            this.orientation = orientation;
+            sliderListeners.orientationChanged(this);
+        }
+    }
+
+    public void setOrientation(String orientation) {
+        if (orientation == null) {
+            throw new IllegalArgumentException("orientation is null.");
+        }
+
+        setOrientation(Orientation.valueOf(orientation.toUpperCase()));
     }
 
     public ListenerList<SliderListener> getSliderListeners() {

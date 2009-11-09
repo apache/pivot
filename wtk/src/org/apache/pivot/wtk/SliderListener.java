@@ -28,4 +28,13 @@ public interface SliderListener {
      * @param previousEnd
      */
     public void rangeChanged(Slider slider, int previousStart, int previousEnd);
+    
+    /**
+     * Called when a sliders's orientation has changed.
+     *
+     * @param slider
+     * The source of the event.
+     */
+    public void orientationChanged(Slider slider);
+
 }

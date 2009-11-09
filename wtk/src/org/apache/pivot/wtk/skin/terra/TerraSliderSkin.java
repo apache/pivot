@@ -35,7 +35,6 @@ import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.skin.ComponentSkin;
 import org.apache.pivot.wtk.skin.SliderSkin;
 
-
 /**
  * Terra slider skin.
  */
@@ -113,30 +112,56 @@ public class TerraSliderSkin extends SliderSkin {
             boolean consumed = super.mouseMove(component, x, y);
 
             if (Mouse.getCapturer() == component) {
-                Slider slider = (Slider)TerraSliderSkin.this.getComponent();
-                int sliderWidth = slider.getWidth();
-                int thumbWidth = thumb.getWidth();
+                Slider slider = (Slider) TerraSliderSkin.this.getComponent();
+                if (slider.getOrientation() == Orientation.HORIZONTAL) {
+                    int sliderWidth = slider.getWidth();
+                    int thumbWidth = thumb.getWidth();
 
-                Point sliderLocation = thumb.mapPointToAncestor(slider, x, y);
-                int sliderX = sliderLocation.x;
+                    Point sliderLocation = thumb.mapPointToAncestor(slider, x, y);
+                    int sliderX = sliderLocation.x;
 
-                int minX = dragOffset.x;
-                if (sliderX < minX) {
-                    sliderX = minX;
+                    int minX = dragOffset.x;
+                    if (sliderX < minX) {
+                        sliderX = minX;
+                    }
+
+                    int maxX = (sliderWidth - thumbWidth) + dragOffset.x;
+                    if (sliderX > maxX) {
+                        sliderX = maxX;
+                    }
+
+                    float ratio = (float) (sliderX - dragOffset.x) / (sliderWidth - thumbWidth);
+
+                    int start = slider.getStart();
+                    int end = slider.getEnd();
+
+                    int value = (int) (start + (end - start) * ratio);
+                    slider.setValue(value);
+                } else {
+                    int sliderHeight = slider.getHeight();
+                    int thumbHeight = thumb.getHeight();
+
+                    Point sliderLocation = thumb.mapPointToAncestor(slider, x, y);
+                    int sliderY = sliderLocation.y;
+
+                    int minY = dragOffset.y;
+                    if (sliderY < minY) {
+                        sliderY = minY;
+                    }
+
+                    int maxY = (sliderHeight - thumbHeight) + dragOffset.y;
+                    if (sliderY > maxY) {
+                        sliderY = maxY;
+                    }
+
+                    float ratio = (float) (sliderY - dragOffset.y) / (sliderHeight - thumbHeight);
+
+                    int start = slider.getStart();
+                    int end = slider.getEnd();
+
+                    int value = (int) (start + (end - start) * ratio);
+                    slider.setValue(value);
                 }
-
-                int maxX = (sliderWidth - thumbWidth) + dragOffset.x;
-                if (sliderX > maxX) {
-                    sliderX = maxX;
-                }
-
-                float ratio = (float)(sliderX - dragOffset.x) / (sliderWidth - thumbWidth);
-
-                int start = slider.getStart();
-                int end = slider.getEnd();
-
-                int value = (int)(start + (end - start) * ratio);
-                slider.setValue(value);
             }
 
             return consumed;
@@ -196,7 +221,7 @@ public class TerraSliderSkin extends SliderSkin {
         public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
             boolean consumed = super.keyPressed(component, keyCode, keyLocation);
 
-            Slider slider = (Slider)TerraSliderSkin.this.getComponent();
+            Slider slider = (Slider) TerraSliderSkin.this.getComponent();
             int start = slider.getStart();
             int end = slider.getEnd();
             int length = end - start;
@@ -234,7 +259,7 @@ public class TerraSliderSkin extends SliderSkin {
     public static final int MINIMUM_THUMB_HEIGHT = 4;
 
     public TerraSliderSkin() {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
 
         trackColor = theme.getColor(6);
         trackWidth = 2;
@@ -251,18 +276,30 @@ public class TerraSliderSkin extends SliderSkin {
     public void install(Component component) {
         super.install(component);
 
-        Slider slider = (Slider)component;
+        Slider slider = (Slider) component;
         slider.add(thumb);
     }
 
     @Override
     public int getPreferredWidth(int height) {
-        return DEFAULT_WIDTH;
+        Slider slider = (Slider) getComponent();
+
+        if (slider.getOrientation() == Orientation.HORIZONTAL) {
+            return DEFAULT_WIDTH;
+        } else {
+            return thumbHeight;
+        }
     }
 
     @Override
     public int getPreferredHeight(int width) {
-        return thumbHeight;
+        Slider slider = (Slider) getComponent();
+
+        if (slider.getOrientation() == Orientation.HORIZONTAL) {
+            return thumbHeight;
+        } else {
+            return DEFAULT_WIDTH;
+        }
     }
 
     @Override
@@ -272,7 +309,7 @@ public class TerraSliderSkin extends SliderSkin {
 
     @Override
     public void layout() {
-        Slider slider = (Slider)getComponent();
+        Slider slider = (Slider) getComponent();
 
         int width = getWidth();
         int height = getHeight();
@@ -281,16 +318,25 @@ public class TerraSliderSkin extends SliderSkin {
         int end = slider.getEnd();
         int value = slider.getValue();
 
-        float ratio = (float)(value - start) / (end - start);
+        float ratio = (float) (value - start) / (end - start);
 
-        thumb.setSize(thumbWidth, thumbHeight);
-        thumb.setLocation((int)((width - thumbWidth) * ratio),
-            (height - thumbHeight) / 2);
+        if (slider.getOrientation() == Orientation.HORIZONTAL) {
+            thumb.setSize(thumbWidth, thumbHeight);
+            thumb.setLocation((int) ((width - thumbWidth) * ratio), (height - thumbHeight) / 2);
+        } else {
+            thumb.setSize(thumbHeight, thumbWidth);
+            thumb.setLocation((width - thumbHeight) / 2, (int) ((height - thumbWidth) * ratio));
+        }
     }
+
+    private static final BasicStroke dashStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND,
+        BasicStroke.JOIN_ROUND, 1.0f, new float[] { 0.0f, 2.0f }, 0.0f);
 
     @Override
     public void paint(Graphics2D graphics) {
         super.paint(graphics);
+
+        Slider slider = (Slider) getComponent();
 
         int width = getWidth();
         int height = getHeight();
@@ -298,20 +344,20 @@ public class TerraSliderSkin extends SliderSkin {
         graphics.setColor(trackColor);
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
-        GraphicsUtilities.drawLine(graphics, 0, (height - trackWidth) / 2,
-            width, Orientation.HORIZONTAL, trackWidth);
+        if (slider.getOrientation() == Orientation.HORIZONTAL) {
+            graphics.fillRect(0, (height - trackWidth) / 2, width, trackWidth);
+        } else {
+            graphics.fillRect((width - trackWidth) / 2, 0, trackWidth, height);
+        }
 
         if (thumb.isFocused()) {
-            BasicStroke dashStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND,
-                BasicStroke.JOIN_ROUND, 1.0f, new float[] {0.0f, 2.0f}, 0.0f);
-
             graphics.setStroke(dashStroke);
             graphics.setColor(buttonBorderColor);
 
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
-            graphics.draw(new Rectangle2D.Double(0, 0, width - 1, height - 1));
+            graphics.drawRect(0, 0, width - 1, height - 1);
         }
     }
 
@@ -451,6 +497,11 @@ public class TerraSliderSkin extends SliderSkin {
 
     @Override
     public void rangeChanged(Slider slider, int previousStart, int previousEnd) {
+        invalidateComponent();
+    }
+
+    @Override
+    public void orientationChanged(Slider slider) {
         invalidateComponent();
     }
 
