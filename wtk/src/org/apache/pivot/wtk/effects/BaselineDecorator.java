@@ -16,52 +16,41 @@
  */
 package org.apache.pivot.wtk.effects;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
 
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
-
+import org.apache.pivot.wtk.GraphicsUtilities;
+import org.apache.pivot.wtk.Orientation;
 
 /**
- * Decorator that applies a grayscale conversion to a component.
+ * Displays a component's baseline.
  */
-public class GrayscaleDecorator implements Decorator {
+public class BaselineDecorator implements Decorator {
+    private Component component = null;
     private Graphics2D graphics = null;
-
-    private BufferedImage bufferedImage = null;
-    private Graphics2D bufferedImageGraphics = null;
 
     @Override
     public Graphics2D prepare(Component component, Graphics2D graphics) {
+        this.component = component;
         this.graphics = graphics;
 
-        int width = component.getWidth();
-        int height = component.getHeight();
-
-        if (bufferedImage == null
-            || bufferedImage.getWidth() < width
-            || bufferedImage.getHeight() < height) {
-            bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_GRAY);
-        }
-
-        bufferedImageGraphics = bufferedImage.createGraphics();
-        bufferedImageGraphics.setClip(graphics.getClip());
-
-        return bufferedImageGraphics;
+        return graphics;
     }
 
     @Override
     public void update() {
-        bufferedImageGraphics.dispose();
-        bufferedImageGraphics = null;
+        int width = component.getWidth();
+        int baseline = component.getBaseline(width, component.getHeight());
 
-        bufferedImage.flush();
+        if (baseline != -1) {
+            graphics.setPaint(Color.RED);
+            GraphicsUtilities.drawLine(graphics, 0, baseline, width, Orientation.HORIZONTAL);
+        }
 
-        graphics.drawImage(bufferedImage, 0, 0, null);
-
-        bufferedImage = null;
+        component = null;
         graphics = null;
     }
 

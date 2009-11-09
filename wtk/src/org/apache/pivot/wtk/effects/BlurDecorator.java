@@ -94,6 +94,8 @@ public class BlurDecorator implements Decorator {
     @Override
     public void update() {
         bufferedImageGraphics.dispose();
+        bufferedImageGraphics = null;
+
         bufferedImage.flush();
 
         float[] kernel = new float[blurMagnitude * blurMagnitude];
@@ -105,7 +107,10 @@ public class BlurDecorator implements Decorator {
             kernel), ConvolveOp.EDGE_NO_OP, null);
         bufferedImage = blur.filter(bufferedImage, null);
 
-        this.graphics.drawImage(bufferedImage, 0, 0, null);
+        graphics.drawImage(bufferedImage, 0, 0, null);
+
+        bufferedImage = null;
+        graphics = null;
     }
 
     @Override

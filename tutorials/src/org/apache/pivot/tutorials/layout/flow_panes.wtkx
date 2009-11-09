@@ -18,22 +18,33 @@ limitations under the License.
 
 <Window title="Flow Panes" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:effects="org.apache.pivot.wtk.effects"
     xmlns="org.apache.pivot.wtk">
     <content>
         <SplitPane splitRatio="0.75">
             <left>
-                <Border>
+                <Border styles="{padding:4}">
                     <content>
-                        <FlowPane wtkx:id="flowPane" styles="{padding:2}">
-                            <PushButton buttonData="0" styles="{minimumAspectRatio:1.5}"/>
-                            <PushButton buttonData="1" styles="{minimumAspectRatio:1.5}"/>
-                            <PushButton buttonData="2" styles="{minimumAspectRatio:1.5}"/>
-                            <PushButton buttonData="3" preferredWidth="20" preferredHeight="20"/>
-                            <PushButton buttonData="4" preferredWidth="30" preferredHeight="30"/>
-                            <PushButton buttonData="5" preferredWidth="40" preferredHeight="40"/>
-                            <PushButton buttonData="6" styles="{minimumAspectRatio:1.5}"/>
-                            <PushButton buttonData="7" styles="{minimumAspectRatio:1.5}"/>
-                        </FlowPane>
+                        <BoxPane orientation="vertical" styles="{verticalAlignment:'center', fill:true}">
+                            <Border>
+                                <content>
+                                    <FlowPane wtkx:id="flowPane" styles="{padding:2}">
+                                        <decorators>
+                                            <effects:BaselineDecorator/>
+                                        </decorators>
+
+                                        <PushButton buttonData="0" styles="{minimumAspectRatio:1.5}"/>
+                                        <PushButton buttonData="1" styles="{minimumAspectRatio:1.5}"/>
+                                        <PushButton buttonData="2" styles="{minimumAspectRatio:1.5}"/>
+                                        <PushButton buttonData="3" preferredWidth="20" preferredHeight="20"/>
+                                        <PushButton buttonData="4" preferredWidth="30" preferredHeight="30"/>
+                                        <PushButton buttonData="5" preferredWidth="40" preferredHeight="40"/>
+                                        <PushButton buttonData="6" styles="{minimumAspectRatio:1.5}"/>
+                                        <PushButton buttonData="7" styles="{minimumAspectRatio:1.5}"/>
+                                    </FlowPane>
+                                </content>
+                            </Border>
+                        </BoxPane>
                     </content>
                 </Border>
             </left>

@@ -328,6 +328,9 @@ public class WatermarkDecorator implements Decorator {
         }
 
         watermarkGraphics.dispose();
+
+        component = null;
+        graphics = null;
     }
 
     @Override

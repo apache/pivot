@@ -135,7 +135,12 @@ public class SaturationDecorator implements Decorator {
         }
 
         componentGraphics.dispose();
+        componentGraphics = null;
+
         graphics.drawImage(componentImage, x, y, null);
+
+        componentImage = null;
+        graphics = null;
     }
 
     @Override

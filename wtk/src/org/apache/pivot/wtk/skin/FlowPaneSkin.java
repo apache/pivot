@@ -28,11 +28,19 @@ import org.apache.pivot.wtk.Insets;
  * Flow pane skin.
  */
 public class FlowPaneSkin extends ContainerSkin {
-    private HorizontalAlignment alignment = HorizontalAlignment.LEFT;
-    private Insets padding = Insets.NONE;
-    private int horizontalSpacing = 2;
-    private int verticalSpacing = 2;
-    private boolean alignToBaseline = false;
+    private HorizontalAlignment alignment;
+    private Insets padding;
+    private int horizontalSpacing;
+    private int verticalSpacing;
+    private boolean alignToBaseline;
+
+    public FlowPaneSkin() {
+        alignment = HorizontalAlignment.LEFT;
+        padding = Insets.NONE;
+        horizontalSpacing = 2;
+        verticalSpacing = 2;
+        alignToBaseline = true;
+    }
 
     @Override
     public int getPreferredWidth(int height) {
@@ -65,55 +73,73 @@ public class FlowPaneSkin extends ContainerSkin {
 
     @Override
     public int getPreferredHeight(int width) {
-        // TODO Account for baseline in these calculations
-
         FlowPane flowPane = (FlowPane)getComponent();
 
-        int preferredHeight = 0;
+        int preferredHeight;
 
         if (width == -1) {
-            // Preferred height is the maximum preferred height of all components
-            for (int i = 0, n = flowPane.getLength(); i < n; i++) {
-                Component component = flowPane.get(i);
+            if (alignToBaseline) {
+                // Delegate to preferred size calculations
+                Dimensions preferredSize = getPreferredSize();
+                preferredHeight = preferredSize.height;
+            } else {
+                // Preferred height is the maximum preferred height of all components
+                preferredHeight = 0;
 
-                if (component.isVisible()) {
-                    preferredHeight = Math.max(preferredHeight,
-                        component.getPreferredHeight());
+                for (int i = 0, n = flowPane.getLength(); i < n; i++) {
+                    Component component = flowPane.get(i);
+
+                    if (component.isVisible()) {
+                        preferredHeight = Math.max(preferredHeight, component.getPreferredHeight());
+                    }
                 }
             }
         } else {
+            // Break the components into multiple rows
+            preferredHeight = 0;
+
             int contentWidth = Math.max(width - (padding.left + padding.right), 0);
 
-            // Break the components into multiple rows
             int rowCount = 0;
 
             int rowWidth = 0;
-            int rowHeight = 0;
+            int rowAscent = 0;
+            int rowDescent = 0;
+
             for (int i = 0, n = flowPane.getLength(); i < n; i++) {
                 Component component = flowPane.get(i);
 
                 if (component.isVisible()) {
-                    Dimensions componentSize = component.getPreferredSize();
+                    Dimensions size = component.getPreferredSize();
 
-                    if (rowWidth + componentSize.width > contentWidth
+                    if (rowWidth + size.width > contentWidth
                         && rowWidth > 0) {
                         // The component is too big to fit in the remaining space,
                         // and it is not the only component in this row; wrap
-                        preferredHeight += rowHeight;
+                        preferredHeight += rowAscent + rowDescent;
 
                         rowCount++;
                         rowWidth = 0;
-                        rowHeight = 0;
+                        rowAscent = 0;
+                        rowDescent = 0;
                     }
 
-                    rowWidth += componentSize.width + horizontalSpacing;
-                    rowHeight = Math.max(rowHeight, componentSize.height);
+                    rowWidth += size.width + horizontalSpacing;
+
+                    if (alignToBaseline) {
+                        int baseline = component.getBaseline(size.width, size.height);
+                        rowAscent = Math.max(rowAscent, baseline);
+                        rowDescent = Math.max(rowDescent, size.height - baseline);
+                    } else {
+                        rowAscent = Math.max(rowAscent, size.height);
+                    }
                 }
             }
 
             // Add the last row
-            if (rowHeight > 0) {
-                preferredHeight += rowHeight;
+            int lastRowHeight = rowAscent + rowDescent;
+            if (lastRowHeight > 0) {
+                preferredHeight += lastRowHeight;
                 rowCount++;
             }
 
@@ -131,21 +157,29 @@ public class FlowPaneSkin extends ContainerSkin {
 
     @Override
     public Dimensions getPreferredSize() {
-        // TODO Account for baseline in these calculations
-
         FlowPane flowPane = (FlowPane)getComponent();
 
         int preferredWidth = 0;
-        int preferredHeight = 0;
+
+        int ascent = 0;
+        int descent = 0;
 
         int j = 0;
         for (int i = 0, n = flowPane.getLength(); i < n; i++) {
             Component component = flowPane.get(i);
 
             if (component.isVisible()) {
-                Dimensions componentSize = component.getPreferredSize();
-                preferredWidth += componentSize.width;
-                preferredHeight = Math.max(preferredHeight, componentSize.height);
+                Dimensions size = component.getPreferredSize();
+                preferredWidth += size.width;
+
+                if (alignToBaseline) {
+                    int baseline = component.getBaseline(size.width, size.height);
+                    ascent = Math.max(ascent, baseline);
+                    descent = Math.max(descent, size.height - baseline);
+                } else {
+                    ascent = Math.max(ascent, size.height);
+                }
+
                 j++;
             }
         }
@@ -157,9 +191,9 @@ public class FlowPaneSkin extends ContainerSkin {
 
         // Include padding
         preferredWidth += padding.left + padding.right;
-        preferredHeight += padding.top + padding.bottom;
 
-        return new Dimensions(preferredWidth, preferredHeight);
+        return new Dimensions(preferredWidth, ascent + descent
+            + padding.top + padding.bottom);
     }
 
     @Override
@@ -168,32 +202,31 @@ public class FlowPaneSkin extends ContainerSkin {
 
         int baseline = -1;
 
-        int contentWidth = Math.max(width - (padding.left + padding.right), 0);
+        if (alignToBaseline) {
+            int contentWidth = Math.max(width - (padding.left + padding.right), 0);
 
-        // Break the components into multiple rows, and calculate the baseline of the
-        // first row
-        int rowWidth = 0;
-        for (int i = 0, n = flowPane.getLength(); i < n; i++) {
-            Component component = flowPane.get(i);
+            // Break the components into multiple rows, and calculate the baseline of the
+            // first row
+            int rowWidth = 0;
+            for (int i = 0, n = flowPane.getLength(); i < n; i++) {
+                Component component = flowPane.get(i);
 
-            if (component.isVisible()) {
-                Dimensions componentSize = component.getPreferredSize();
+                if (component.isVisible()) {
+                    Dimensions size = component.getPreferredSize();
 
-                if (rowWidth + componentSize.width > contentWidth
-                    && rowWidth > 0) {
-                    // The component is too big to fit in the remaining space,
-                    // and it is not the only component in this row; wrap
-                    break;
+                    if (rowWidth + size.width > contentWidth
+                        && rowWidth > 0) {
+                        // The component is too big to fit in the remaining space,
+                        // and it is not the only component in this row; wrap
+                        break;
+                    }
+
+                    baseline = Math.max(baseline, component.getBaseline(size.width, size.height));
+                    rowWidth += size.width + horizontalSpacing;
                 }
-
-                baseline = Math.max(baseline, component.getBaseline(componentSize.width,
-                    componentSize.height));
-                rowWidth += componentSize.width + horizontalSpacing;
             }
-        }
 
-        // Include top padding value
-        if (baseline != -1) {
+            // Include top padding value
             baseline += padding.top;
         }
 
@@ -276,7 +309,8 @@ public class FlowPaneSkin extends ContainerSkin {
 
             for (Component component : row) {
                 int y;
-                if (alignToBaseline && baseline != -1) {
+                if (alignToBaseline
+                    && baseline != -1) {
                     // Align to baseline
                     y = baseline - component.getBaseline(component.getWidth(),
                         component.getHeight());

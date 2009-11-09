@@ -33,16 +33,16 @@ import org.apache.pivot.wtk.Component;
  * TODO Make gradient properties configurable.
  */
 public class ReflectionDecorator implements Decorator {
-    private Graphics2D graphics = null;
     private Component component = null;
+    private Graphics2D graphics = null;
 
     private BufferedImage componentImage = null;
     private Graphics2D componentImageGraphics = null;
 
     @Override
     public Graphics2D prepare(Component component, Graphics2D graphics) {
-        this.graphics = graphics;
         this.component = component;
+        this.graphics = graphics;
 
         int width = component.getWidth();
         int height = component.getHeight();
@@ -76,11 +76,17 @@ public class ReflectionDecorator implements Decorator {
         componentImageGraphics.fillRect(0, 0, width, height);
 
         componentImageGraphics.dispose();
+        componentImageGraphics = null;
+
         componentImage.flush();
 
         graphics.transform(getTransform(component));
 
         graphics.drawImage(componentImage, 0, 0, null);
+
+        componentImage = null;
+        component = null;
+        graphics = null;
     }
 
     @Override

@@ -145,6 +145,8 @@ public class TagDecorator implements Decorator {
             graphics.translate(bounds.x, bounds.y);
             tag.paint(graphics);
         }
+
+        graphics = null;
     }
 
     @Override

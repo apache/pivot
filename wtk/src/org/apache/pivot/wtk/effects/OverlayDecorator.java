@@ -59,6 +59,8 @@ public class OverlayDecorator implements Decorator {
     @Override
     public void update() {
         overlay.paint(graphics);
+
+        graphics = null;
     }
 
     @Override

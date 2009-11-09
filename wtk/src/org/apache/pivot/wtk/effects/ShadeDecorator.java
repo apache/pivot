@@ -34,8 +34,8 @@ public class ShadeDecorator implements Decorator {
     private float opacity;
     private Color color;
 
-    private Graphics2D graphics;
     private Component component;
+    private Graphics2D graphics;
 
     /**
      * Creates a new <tt>ShadeDecorator</tt> with the default opacity and
@@ -56,7 +56,8 @@ public class ShadeDecorator implements Decorator {
      * The color of the shade.
      */
     public ShadeDecorator(float opacity, Color color) {
-        if (opacity <= 0 || opacity >= 1) {
+        if (opacity <= 0
+            || opacity >= 1) {
             throw new IllegalArgumentException("opacity must be between 0 and 1, exclusive.");
         }
 
@@ -108,8 +109,8 @@ public class ShadeDecorator implements Decorator {
 
     @Override
     public Graphics2D prepare(Component component, Graphics2D graphics) {
-        this.graphics = graphics;
         this.component = component;
+        this.graphics = graphics;
 
         return graphics;
     }
@@ -119,6 +120,9 @@ public class ShadeDecorator implements Decorator {
         graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
         graphics.setColor(color);
         graphics.fillRect(0, 0, component.getWidth(), component.getHeight());
+
+        component = null;
+        graphics = null;
     }
 
     @Override
