@@ -33,7 +33,7 @@ public class FormTest implements Application {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         frame = new Frame((Component)wtkxSerializer.readObject(getClass().getResource("form_test.wtkx")));
         frame.setTitle("Form Test");
-        // frame.setPreferredSize(480, 360);
+        frame.setPreferredSize(480, 360);
         frame.open(display);
     }
 

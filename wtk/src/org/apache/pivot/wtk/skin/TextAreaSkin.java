@@ -1480,9 +1480,10 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     }
 
     @Override
-    public boolean isOpaque() {
-        return (backgroundColor != null
-            && backgroundColor.getTransparency() == Transparency.OPAQUE);
+    public int getBaseline(int width, int height) {
+        LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
+        float ascent = lm.getAscent();
+        return margin.top + Math.round(ascent);
     }
 
     @Override
@@ -1538,6 +1539,12 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 graphics.fill(caret);
             }
         }
+    }
+
+    @Override
+    public boolean isOpaque() {
+        return (backgroundColor != null
+            && backgroundColor.getTransparency() == Transparency.OPAQUE);
     }
 
     @Override

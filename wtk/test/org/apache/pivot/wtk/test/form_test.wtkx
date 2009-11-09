@@ -18,17 +18,42 @@ limitations under the License.
 
 <Form styles="{rightAlignLabels:true, fill:true}"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:effects="org.apache.pivot.wtk.effects"
     xmlns="org.apache.pivot.wtk">
     <sections>
-        <Form.Section heading="Test Section">
-            <Label Form.label="ABCD" text="Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an AS IS BASIS..."
-                styles="{wrapText:true}"/>
+        <Form.Section heading="Test Section 1">
+            <TextArea Form.label="Text Area" styles="{margin:0}"
+                text="Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an AS IS BASIS...">
+                <decorators>
+                    <effects:BaselineDecorator/>
+                </decorators>
+            </TextArea>
         </Form.Section>
-        <Form.Section heading="Test Section">
-            <Label Form.label="ABCD" text="Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an AS IS BASIS..."
-                styles="{wrapText:true}"/>
+        <Form.Section heading="Test Section 2">
+            <BoxPane orientation="vertical" Form.label="Table View" styles="{fill:true}">
+                <TableViewHeader wtkx:id="tableViewHeader">
+                    <decorators>
+                        <effects:BaselineDecorator/>
+                    </decorators>
+                </TableViewHeader>
+                <TableView wtkx:id="tableView"
+                    tableData="[{a:1, b:2, c:3}, {a:4, b:5, c:6}, {a:7, b:8, c:9}]">
+                    <columns>
+                        <TableView.Column name="a" width="100" headerData="A"/>
+                        <TableView.Column name="b" width="100" headerData="B"/>
+                        <TableView.Column name="c" width="100" headerData="C"/>
+                    </columns>
+                    <decorators>
+                        <effects:BaselineDecorator/>
+                    </decorators>
+                </TableView>
+
+                <wtkx:script>
+                tableViewHeader.setTableView(tableView);
+                </wtkx:script>
+            </BoxPane>
         </Form.Section>
-        <Form.Section heading="Test Section">
+        <Form.Section heading="Test Section 3">
             <Label Form.label="ABCD" text="Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an AS IS BASIS..."
                 styles="{wrapText:true}"/>
         </Form.Section>

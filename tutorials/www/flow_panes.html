@@ -59,22 +59,33 @@ deployJava.writeAppletTag(attributes, parameters);
 <pre class="brush:xml">
 &lt;Window title="Flow Panes" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:effects="org.apache.pivot.wtk.effects"
     xmlns="org.apache.pivot.wtk"&gt;
     &lt;content&gt;
         &lt;SplitPane splitRatio="0.75"&gt;
             &lt;left&gt;
-                &lt;Border&gt;
+                &lt;Border styles="{padding:4}"&gt;
                     &lt;content&gt;
-                        &lt;FlowPane wtkx:id="flowPane" styles="{padding:2}"&gt;
-                            &lt;PushButton buttonData="0" styles="{minimumAspectRatio:1.5}"/&gt;
-                            &lt;PushButton buttonData="1" styles="{minimumAspectRatio:1.5}"/&gt;
-                            &lt;PushButton buttonData="2" styles="{minimumAspectRatio:1.5}"/&gt;
-                            &lt;PushButton buttonData="3" preferredWidth="20" preferredHeight="20"/&gt;
-                            &lt;PushButton buttonData="4" preferredWidth="30" preferredHeight="30"/&gt;
-                            &lt;PushButton buttonData="5" preferredWidth="40" preferredHeight="40"/&gt;
-                            &lt;PushButton buttonData="6" styles="{minimumAspectRatio:1.5}"/&gt;
-                            &lt;PushButton buttonData="7" styles="{minimumAspectRatio:1.5}"/&gt;
-                        &lt;/FlowPane&gt;
+                        &lt;BoxPane orientation="vertical" styles="{verticalAlignment:'center', fill:true}"&gt;
+                            &lt;Border&gt;
+                                &lt;content&gt;
+                                    &lt;FlowPane wtkx:id="flowPane" styles="{padding:2}"&gt;
+                                        &lt;decorators&gt;
+                                            &lt;effects:BaselineDecorator/&gt;
+                                        &lt;/decorators&gt;
+
+                                        &lt;PushButton buttonData="0" styles="{minimumAspectRatio:1.5}"/&gt;
+                                        &lt;PushButton buttonData="1" styles="{minimumAspectRatio:1.5}"/&gt;
+                                        &lt;PushButton buttonData="2" styles="{minimumAspectRatio:1.5}"/&gt;
+                                        &lt;PushButton buttonData="3" preferredWidth="20" preferredHeight="20"/&gt;
+                                        &lt;PushButton buttonData="4" preferredWidth="30" preferredHeight="30"/&gt;
+                                        &lt;PushButton buttonData="5" preferredWidth="40" preferredHeight="40"/&gt;
+                                        &lt;PushButton buttonData="6" styles="{minimumAspectRatio:1.5}"/&gt;
+                                        &lt;PushButton buttonData="7" styles="{minimumAspectRatio:1.5}"/&gt;
+                                    &lt;/FlowPane&gt;
+                                &lt;/content&gt;
+                            &lt;/Border&gt;
+                        &lt;/BoxPane&gt;
                     &lt;/content&gt;
                 &lt;/Border&gt;
             &lt;/left&gt;

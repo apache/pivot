@@ -78,7 +78,6 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     private boolean includeTrailingHorizontalGridLine;
 
     private ArrayList<Integer> columnWidths = null;
-    private int rowHeight = -1;
 
     private int highlightedIndex = -1;
     private int editIndex = -1;
@@ -192,6 +191,26 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     @Override
+    public int getBaseline(int width, int height) {
+        TableView tableView = (TableView)getComponent();
+
+        int baseline = -1;
+
+        TableView.ColumnSequence columns = tableView.getColumns();
+
+        for (int i = 0, n = columns.getLength(); i < n; i++) {
+            TableView.Column column = columns.get(i);
+            TableView.CellRenderer cellRenderer = column.getCellRenderer();
+            cellRenderer.render(null, -1, i, tableView, column.getName(), false, false, false);
+
+            Dimensions size = cellRenderer.getPreferredSize();
+            baseline = Math.max(baseline, cellRenderer.getBaseline(size.width, size.height));
+        }
+
+        return baseline;
+    }
+
+    @Override
     public void layout() {
         // Recalculate column widths
         TableView tableView = (TableView)getComponent();
@@ -248,16 +267,6 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                 columnWidths.update(i, Math.min(Math.max(columnWidth, column.getMinimumWidth()),
                     column.getMaximumWidth()));
             }
-        }
-
-        // Recalculate row height
-        rowHeight = 0;
-        for (int i = 0; i < n; i++) {
-            TableView.Column column = columns.get(i);
-            TableView.CellRenderer cellRenderer = column.getCellRenderer();
-            cellRenderer.render(null, -1, i, tableView, column.getName(), false, false, false);
-
-            rowHeight = Math.max(rowHeight, cellRenderer.getPreferredHeight(-1));
         }
     }
 
@@ -452,8 +461,17 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
      * The height of one table row.
      */
     public int getRowHeight() {
-        if (rowHeight == -1) {
-            layout();
+        TableView tableView = (TableView)getComponent();
+
+        TableView.ColumnSequence columns = tableView.getColumns();
+        int rowHeight = 0;
+
+        for (int i = 0, n = columns.getLength(); i < n; i++) {
+            TableView.Column column = columns.get(i);
+            TableView.CellRenderer cellRenderer = column.getCellRenderer();
+            cellRenderer.render(null, -1, i, tableView, column.getName(), false, false, false);
+
+            rowHeight = Math.max(rowHeight, cellRenderer.getPreferredHeight(-1));
         }
 
         return rowHeight;
@@ -967,12 +985,6 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     public void setIncludeTrailingHorizontalGridLine(boolean includeTrailingHorizontalGridLine) {
         this.includeTrailingHorizontalGridLine = includeTrailingHorizontalGridLine;
         invalidateComponent();
-    }
-
-    @Override
-    protected void invalidateComponent() {
-        super.invalidateComponent();
-        columnWidths = null;
     }
 
     @Override

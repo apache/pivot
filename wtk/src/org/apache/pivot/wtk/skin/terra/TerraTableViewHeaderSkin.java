@@ -208,18 +208,45 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
     }
 
     @Override
+    public int getBaseline(int width, int height) {
+        int baseline = -1;
+
+        TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
+        TableView tableView = tableViewHeader.getTableView();
+
+        if (tableView != null) {
+            TableView.ColumnSequence columns = tableView.getColumns();
+            TableViewHeader.DataRenderer dataRenderer = tableViewHeader.getDataRenderer();
+
+            for (int i = 0, n = columns.getLength(); i < n; i++) {
+                TableView.Column column = columns.get(i);
+                dataRenderer.render(column.getHeaderData(), tableViewHeader, false);
+
+                Dimensions size = dataRenderer.getPreferredSize();
+                baseline = Math.max(baseline, dataRenderer.getBaseline(size.width, size.height));
+            }
+
+            baseline += 1;
+        }
+
+        return baseline;
+    }
+
+    @Override
     public void layout() {
         TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
         TableView tableView = tableViewHeader.getTableView();
 
-        TableView.ColumnSequence columns = tableView.getColumns();
-        int n = columns.getLength();
+        if (tableView != null) {
+            TableView.ColumnSequence columns = tableView.getColumns();
+            int n = columns.getLength();
 
-        columnWidths = new ArrayList<Integer>(n);
+            columnWidths = new ArrayList<Integer>(n);
 
-        for (int i = 0; i < n; i++) {
-            Bounds columnBounds = tableView.getColumnBounds(i);
-            columnWidths.add(columnBounds.width);
+            for (int i = 0; i < n; i++) {
+                Bounds columnBounds = tableView.getColumnBounds(i);
+                columnWidths.add(columnBounds.width);
+            }
         }
     }
 

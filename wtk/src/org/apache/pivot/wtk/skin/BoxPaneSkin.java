@@ -214,7 +214,7 @@ public class BoxPaneSkin extends ContainerSkin
                     if (component.isVisible()) {
                         Dimensions size;
                         if (fill) {
-                            size = new Dimensions(component.getPreferredHeight(height), height);
+                            size = new Dimensions(component.getPreferredWidth(height), height);
                         } else {
                             size = component.getPreferredSize();
                         }
@@ -232,7 +232,7 @@ public class BoxPaneSkin extends ContainerSkin
                     if (component.isVisible()) {
                         Dimensions size;
                         if (fill) {
-                            size = new Dimensions(component.getPreferredHeight(height), height);
+                            size = new Dimensions(width, component.getPreferredHeight(width));
                         } else {
                             size = component.getPreferredSize();
                         }
