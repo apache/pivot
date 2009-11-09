@@ -294,10 +294,6 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
             graphics.fillRect(0, 0, width, height);
         }
 
-        if (debugBaseline) {
-            drawBaselineDebug(graphics);
-        }
-
         // Draw the text
         if (glyphVectors.getLength() > 0) {
             graphics.setFont(font);

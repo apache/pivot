@@ -16,8 +16,6 @@
  */
 package org.apache.pivot.wtk.skin;
 
-import java.awt.Graphics2D;
-
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.wtk.Component;
@@ -200,14 +198,6 @@ public class FlowPaneSkin extends ContainerSkin {
         }
 
         return baseline;
-    }
-
-    @Override
-    public void paint(Graphics2D graphics) {
-        super.paint(graphics);
-        if (debugBaseline) {
-            drawBaselineDebug(graphics);
-        }
     }
 
     @Override

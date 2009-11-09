@@ -92,8 +92,6 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
 
     public static final int SHOW_TOOLTIP_TIMEOUT = 1000;
 
-    protected static boolean debugBaseline = true;
-
     @Override
     public int getWidth() {
         return width;
@@ -366,6 +364,16 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
         }
     }
 
+    protected void drawBaselineDebug(Graphics2D graphics) {
+        int width = getWidth();
+        int baseline = getBaseline(width, getHeight());
+
+        if (baseline != -1) {
+            graphics.setPaint(Color.RED);
+            GraphicsUtilities.drawLine(graphics, 0, baseline, width, Orientation.HORIZONTAL);
+        }
+    }
+
     public static Font decodeFont(String value) {
         Font font;
         if (value.startsWith("{")) {
@@ -379,14 +387,5 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
         }
 
         return font;
-    }
-
-    protected final void drawBaselineDebug(Graphics2D graphics) {
-        int width = getWidth();
-        int baseline = getBaseline(width, getHeight());
-        if (baseline != -1) {
-            graphics.setPaint(Color.RED);
-            GraphicsUtilities.drawLine(graphics, 0, baseline, width, Orientation.HORIZONTAL);
-        }
     }
 }

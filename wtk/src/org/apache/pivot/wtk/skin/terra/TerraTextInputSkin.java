@@ -314,10 +314,6 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         graphics.setColor(backgroundColor);
         graphics.fillRect(0, 0, width, height);
 
-        if (debugBaseline) {
-            drawBaselineDebug(graphics);
-        }
-
         // Paint the bevel
         graphics.setColor(bevelColor);
         GraphicsUtilities.drawLine(graphics, 0, 0, width, Orientation.HORIZONTAL);

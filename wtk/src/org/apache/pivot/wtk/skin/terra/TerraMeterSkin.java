@@ -225,12 +225,6 @@ public class TerraMeterSkin extends ComponentSkin
             graphics.setPaint(textColor);
             graphics.setFont(font);
             graphics.drawString(meter.getText(), textX, textY + ascent);
-
-            graphics.setClip(clip);
-        }
-
-        if (debugBaseline) {
-            drawBaselineDebug(graphics);
         }
     }
 
