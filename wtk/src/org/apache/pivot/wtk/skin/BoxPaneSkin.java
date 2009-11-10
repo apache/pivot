@@ -251,6 +251,8 @@ public class BoxPaneSkin extends ContainerSkin
             }
         }
 
+        height += (padding.top + padding.bottom);
+
         if (baseline != -1) {
             if (fill) {
                 baseline += padding.top;

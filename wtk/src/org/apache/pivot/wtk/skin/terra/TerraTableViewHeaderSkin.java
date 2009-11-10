@@ -118,7 +118,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
     private Color pressedBevelColor;
     private Color disabledBevelColor;
 
-    private ArrayList<Integer> columnWidths = null;
+    private ArrayList<Integer> headerWidths = null;
 
     private int pressedHeaderIndex = -1;
     private int resizeHeaderIndex = -1;
@@ -172,7 +172,8 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         TableView tableView = tableViewHeader.getTableView();
 
         if (tableView != null) {
-            preferredWidth = tableView.getPreferredWidth(height);
+            preferredWidth = TerraTableViewSkin.getPreferredWidth(tableView,
+                includeTrailingVerticalGridLine);
         }
 
         return preferredWidth;
@@ -215,18 +216,17 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         TableView tableView = tableViewHeader.getTableView();
 
         if (tableView != null) {
+            ArrayList<Integer> headerWidths = TerraTableViewSkin.getColumnWidths(tableView, width);
+            int rowHeight = getPreferredHeight(width) - 1;
+
             TableView.ColumnSequence columns = tableView.getColumns();
             TableViewHeader.DataRenderer dataRenderer = tableViewHeader.getDataRenderer();
 
             for (int i = 0, n = columns.getLength(); i < n; i++) {
                 TableView.Column column = columns.get(i);
                 dataRenderer.render(column.getHeaderData(), tableViewHeader, false);
-
-                Dimensions size = dataRenderer.getPreferredSize();
-                baseline = Math.max(baseline, dataRenderer.getBaseline(size.width, size.height));
+                baseline = Math.max(baseline, dataRenderer.getBaseline(headerWidths.get(i), rowHeight));
             }
-
-            baseline += 1;
         }
 
         return baseline;
@@ -238,15 +238,9 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         TableView tableView = tableViewHeader.getTableView();
 
         if (tableView != null) {
-            TableView.ColumnSequence columns = tableView.getColumns();
-            int n = columns.getLength();
-
-            columnWidths = new ArrayList<Integer>(n);
-
-            for (int i = 0; i < n; i++) {
-                Bounds columnBounds = tableView.getColumnBounds(i);
-                columnWidths.add(columnBounds.width);
-            }
+            headerWidths = TerraTableViewSkin.getColumnWidths(tableView, getWidth());
+        } else {
+            headerWidths = null;
         }
     }
 
@@ -286,11 +280,11 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
             TableView.ColumnSequence columns = tableView.getColumns();
             TableViewHeader.DataRenderer dataRenderer = tableViewHeader.getDataRenderer();
 
-            int cellX = 0;
+            int headerX = 0;
             for (int columnIndex = 0, columnCount = columns.getLength();
                 columnIndex < columnCount; columnIndex++) {
                 TableView.Column column = columns.get(columnIndex);
-                int columnWidth = columnWidths.get(columnIndex);
+                int headerWidth = headerWidths.get(columnIndex);
 
                 // Paint the pressed bevel
                 if (columnIndex == pressedHeaderIndex) {
@@ -302,10 +296,10 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
                 // Paint the header data
                 Object headerData = column.getHeaderData();
                 dataRenderer.render(headerData, tableViewHeader, false);
-                dataRenderer.setSize(columnWidth, height - 1);
+                dataRenderer.setSize(headerWidth, height - 1);
 
-                Graphics2D rendererGraphics = (Graphics2D)graphics.create(cellX, 0,
-                    columnWidth, height - 1);
+                Graphics2D rendererGraphics = (Graphics2D)graphics.create(headerX, 0,
+                    headerWidth, height - 1);
                 dataRenderer.paint(rendererGraphics);
                 rendererGraphics.dispose();
 
@@ -329,12 +323,11 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
                 }
 
                 if (sortImage != null) {
-                    int sortImageMargin = sortImage.getWidth()
-                    + SORT_INDICATOR_PADDING * 2;
+                    int sortImageMargin = sortImage.getWidth() + SORT_INDICATOR_PADDING * 2;
 
-                    if (columnWidth >= dataRenderer.getPreferredWidth(-1) + sortImageMargin) {
+                    if (headerWidth >= dataRenderer.getPreferredWidth(-1) + sortImageMargin) {
                         Graphics2D sortImageGraphics = (Graphics2D)graphics.create();
-                        sortImageGraphics.translate(cellX + columnWidth - sortImageMargin,
+                        sortImageGraphics.translate(headerX + headerWidth - sortImageMargin,
                             (height - sortImage.getHeight()) / 2);
                         sortImage.paint(sortImageGraphics);
                         sortImageGraphics.dispose();
@@ -342,15 +335,15 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
                 }
 
                 // Draw the divider
-                cellX += columnWidth;
+                headerX += headerWidth;
 
                 if (columnIndex < columnCount - 1
                     || includeTrailingVerticalGridLine) {
                     graphics.setPaint(borderColor);
-                    GraphicsUtilities.drawLine(graphics, cellX, 0, height, Orientation.VERTICAL);
+                    GraphicsUtilities.drawLine(graphics, headerX, 0, height, Orientation.VERTICAL);
                 }
 
-                cellX++;
+                headerX++;
             }
         }
     }
@@ -361,48 +354,48 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
             throw new IllegalArgumentException("x is negative");
         }
 
-        int index = -1;
+        int headerIndex = -1;
 
         TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
         TableView tableView = tableViewHeader.getTableView();
 
         if (tableView != null) {
             int i = 0;
-            int n = columnWidths.getLength();
-            int columnX = 0;
+            int n = tableView.getColumns().getLength();
+            int headerX = 0;
             while (i < n
-                && x > columnX) {
-                columnX += (columnWidths.get(i) + 1);
+                && x > headerX) {
+                headerX += (headerWidths.get(i) + 1);
                 i++;
             }
 
-            if (x <= columnX) {
-                index = i - 1;
+            if (x <= headerX) {
+                headerIndex = i - 1;
             }
         }
 
-        return index;
+        return headerIndex;
     }
 
     @Override
-    public Bounds getHeaderBounds(int index) {
+    public Bounds getHeaderBounds(int headerIndex) {
         Bounds headerBounds = null;
 
         TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
         TableView tableView = tableViewHeader.getTableView();
 
         if (tableView != null) {
-            if (index < 0
-                || index >= columnWidths.getLength()) {
+            if (headerIndex < 0
+                || headerIndex >= headerWidths.getLength()) {
                 throw new IndexOutOfBoundsException();
             }
 
             int cellX = 0;
-            for (int i = 0; i < index; i++) {
-                cellX += (columnWidths.get(i) + 1);
+            for (int i = 0; i < headerIndex; i++) {
+                cellX += (headerWidths.get(i) + 1);
             }
 
-            headerBounds = new Bounds(cellX, 0, columnWidths.get(index), getHeight() - 1);
+            headerBounds = new Bounds(cellX, 0, headerWidths.get(headerIndex), getHeight() - 1);
         }
 
         return headerBounds;

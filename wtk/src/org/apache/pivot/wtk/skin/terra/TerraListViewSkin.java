@@ -108,12 +108,12 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         ListView listView = (ListView)getComponent();
         List<Object> listData = (List<Object>)listView.getListData();
 
-        ListView.ItemRenderer renderer = listView.getItemRenderer();
+        ListView.ItemRenderer itemRenderer = listView.getItemRenderer();
 
         int index = 0;
         for (Object item : listData) {
-            renderer.render(item, index++, listView, false, false, false, false);
-            preferredWidth = Math.max(preferredWidth, renderer.getPreferredWidth(-1));
+            itemRenderer.render(item, index++, listView, false, false, false, false);
+            preferredWidth = Math.max(preferredWidth, itemRenderer.getPreferredWidth(-1));
         }
 
         if (listView.getCheckmarksEnabled()) {
@@ -147,9 +147,9 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                 + checkboxPadding.right)), 0);
         }
 
-        ListView.ItemRenderer renderer = listView.getItemRenderer();
-        renderer.render(null, -1, listView, false, false, false, false);
-        baseline = renderer.getBaseline(width, getItemHeight());
+        ListView.ItemRenderer itemRenderer = listView.getItemRenderer();
+        itemRenderer.render(null, -1, listView, false, false, false, false);
+        baseline = itemRenderer.getBaseline(width, getItemHeight());
 
         return baseline;
     }
@@ -164,7 +164,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     public void paint(Graphics2D graphics) {
         ListView listView = (ListView)getComponent();
         List<Object> listData = (List<Object>)listView.getListData();
-        ListView.ItemRenderer renderer = listView.getItemRenderer();
+        ListView.ItemRenderer itemRenderer = listView.getItemRenderer();
 
         int width = getWidth();
         int height = getHeight();
@@ -239,9 +239,9 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             Graphics2D rendererGraphics = (Graphics2D)graphics.create(itemX, itemY,
                 itemWidth, itemHeight);
 
-            renderer.render(item, itemIndex, listView, selected, checked, highlighted, disabled);
-            renderer.setSize(itemWidth, itemHeight);
-            renderer.paint(rendererGraphics);
+            itemRenderer.render(item, itemIndex, listView, selected, checked, highlighted, disabled);
+            itemRenderer.setSize(itemWidth, itemHeight);
+            itemRenderer.paint(rendererGraphics);
             rendererGraphics.dispose();
         }
     }
@@ -286,10 +286,10 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
     public int getItemHeight() {
         ListView listView = (ListView)getComponent();
-        ListView.ItemRenderer renderer = listView.getItemRenderer();
-        renderer.render(null, -1, listView, false, false, false, false);
+        ListView.ItemRenderer itemRenderer = listView.getItemRenderer();
+        itemRenderer.render(null, -1, listView, false, false, false, false);
 
-        int itemHeight = renderer.getPreferredHeight(-1);
+        int itemHeight = itemRenderer.getPreferredHeight(-1);
         if (listView.getCheckmarksEnabled()) {
             itemHeight = Math.max(CHECKBOX.getHeight() + (checkboxPadding.top
                 + checkboxPadding.bottom), itemHeight);

@@ -119,9 +119,12 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
     @Override
     public int getPreferredWidth(int height) {
+        return getPreferredWidth((TableView)getComponent(), includeTrailingVerticalGridLine);
+    }
+
+    public static int getPreferredWidth(TableView tableView, boolean includeTrailingVerticalGridLine) {
         int preferredWidth = 0;
 
-        TableView tableView = (TableView)getComponent();
         TableView.ColumnSequence columns = tableView.getColumns();
 
         int n = columns.getLength();
@@ -197,14 +200,14 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         int baseline = -1;
 
         TableView.ColumnSequence columns = tableView.getColumns();
+        ArrayList<Integer> columnWidths = getColumnWidths(tableView, width);
+        int rowHeight = getRowHeight();
 
         for (int i = 0, n = columns.getLength(); i < n; i++) {
             TableView.Column column = columns.get(i);
             TableView.CellRenderer cellRenderer = column.getCellRenderer();
             cellRenderer.render(null, -1, i, tableView, column.getName(), false, false, false);
-
-            Dimensions size = cellRenderer.getPreferredSize();
-            baseline = Math.max(baseline, cellRenderer.getBaseline(size.width, size.height));
+            baseline = Math.max(baseline, cellRenderer.getBaseline(columnWidths.get(i), rowHeight));
         }
 
         return baseline;
@@ -212,62 +215,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
     @Override
     public void layout() {
-        // Recalculate column widths
-        TableView tableView = (TableView)getComponent();
-
-        int width = getWidth();
-
-        int fixedWidth = 0;
-        int relativeWidth = 0;
-
-        TableView.ColumnSequence columns = tableView.getColumns();
-        int n = columns.getLength();
-
-        columnWidths = new ArrayList<Integer>(n);
-
-        for (int i = 0; i < n; i++) {
-            TableView.Column column = columns.get(i);
-
-            if (column.isRelative()) {
-                columnWidths.add(0);
-                relativeWidth += column.getWidth();
-            } else {
-                int columnWidth = column.getWidth();
-
-                if (columnWidth == -1) {
-                    // Calculate the maximum cell width
-                    columnWidth = 0;
-
-                    TableView.CellRenderer cellRenderer = column.getCellRenderer();
-                    List<?> tableData = tableView.getTableData();
-
-                    int rowIndex = 0;
-                    for (Object rowData : tableData) {
-                        cellRenderer.render(rowData, rowIndex++, i, tableView, column.getName(),
-                            false, false, false);
-                        columnWidth = Math.max(cellRenderer.getPreferredWidth(-1), columnWidth);
-                    }
-                }
-
-                columnWidth = Math.min(Math.max(columnWidth, column.getMinimumWidth()), column.getMaximumWidth());
-                columnWidths.add(columnWidth);
-                fixedWidth += columnWidth;
-            }
-        }
-
-        fixedWidth += n - 1;
-        int variableWidth = Math.max(width - fixedWidth, 0);
-
-        for (int i = 0; i < n; i++) {
-            TableView.Column column = columns.get(i);
-
-            if (column.isRelative()) {
-                int columnWidth = (int)Math.round((double)(column.getWidth()
-                    * variableWidth) / (double)relativeWidth);
-                columnWidths.update(i, Math.min(Math.max(columnWidth, column.getMinimumWidth()),
-                    column.getMaximumWidth()));
-            }
-        }
+        columnWidths = getColumnWidths((TableView)getComponent(), getWidth());
     }
 
     @Override
@@ -324,7 +272,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             for (int columnIndex = 0, columnCount = columns.getLength();
                 columnIndex < columnCount; columnIndex++) {
                 TableView.Column column = columns.get(columnIndex);
-                int columnWidth = getColumnWidth(columnIndex);
+                int columnWidth = columnWidths.get(columnIndex);
 
                 String columnName = column.getName();
                 SortDirection sortDirection = tableView.getSort().get(columnName);
@@ -371,7 +319,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
                 TableView.CellRenderer cellRenderer = column.getCellRenderer();
 
-                int columnWidth = getColumnWidth(columnIndex);
+                int columnWidth = columnWidths.get(columnIndex);
 
                 Graphics2D rendererGraphics = (Graphics2D)graphics.create(columnX, rowY,
                     columnWidth, rowHeight);
@@ -397,7 +345,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
             for (int columnIndex = 0, columnCount = columns.getLength();
                 columnIndex < columnCount; columnIndex++) {
-                columnX += getColumnWidth(columnIndex);
+                columnX += columnWidths.get(columnIndex);
 
                 if (columnIndex < columnCount - 1
                     || includeTrailingVerticalGridLine) {
@@ -431,7 +379,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                 for (int columnIndex = 0, columnCount = columns.getLength();
                     columnIndex < columnCount; columnIndex++) {
                     TableView.Column column = columns.get(columnIndex);
-                    int columnWidth = getColumnWidth(columnIndex);
+                    int columnWidth = columnWidths.get(columnIndex);
 
                     String columnName = column.getName();
                     SortDirection sortDirection = tableView.getSort().get(columnName);
@@ -506,16 +454,16 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
         TableView tableView = (TableView)getComponent();
 
+        int columnIndex = -1;
+
         int i = 0;
         int n = tableView.getColumns().getLength();
         int columnX = 0;
         while (i < n
             && x > columnX) {
-            columnX += (getColumnWidth(i) + 1);
+            columnX += (columnWidths.get(i) + 1);
             i++;
         }
-
-        int columnIndex = -1;
 
         if (x <= columnX) {
             columnIndex = i - 1;
@@ -530,28 +478,14 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         return new Bounds(0, rowIndex * (rowHeight + 1), getWidth(), rowHeight);
     }
 
-    public int getColumnWidth(int columnIndex) {
-        if (columnWidths == null) {
-            layout();
-        }
-
-        if (columnIndex < 0
-            || columnIndex >= columnWidths.getLength()) {
-            throw new IndexOutOfBoundsException("Column index out of bounds: " +
-                columnIndex);
-        }
-
-        return columnWidths.get(columnIndex);
-    }
-
     @Override
     public Bounds getColumnBounds(int columnIndex) {
         int columnX = 0;
         for (int i = 0; i < columnIndex; i++) {
-            columnX += (getColumnWidth(i) + 1);
+            columnX += (columnWidths.get(i) + 1);
         }
 
-        return new Bounds(columnX, 0, getColumnWidth(columnIndex), getHeight());
+        return new Bounds(columnX, 0, columnWidths.get(columnIndex), getHeight());
     }
 
     @Override
@@ -567,12 +501,68 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
         int cellX = 0;
         for (int i = 0; i < columnIndex; i++) {
-            cellX += (getColumnWidth(i) + 1);
+            cellX += (columnWidths.get(i) + 1);
         }
 
         int rowHeight = getRowHeight();
 
-        return new Bounds(cellX, rowIndex * (rowHeight + 1), getColumnWidth(columnIndex), rowHeight);
+        return new Bounds(cellX, rowIndex * (rowHeight + 1), columnWidths.get(columnIndex), rowHeight);
+    }
+
+    public static ArrayList<Integer> getColumnWidths(TableView tableView, int width) {
+        int fixedWidth = 0;
+        int relativeWidth = 0;
+
+        TableView.ColumnSequence columns = tableView.getColumns();
+        int n = columns.getLength();
+
+        ArrayList<Integer> columnWidths = new ArrayList<Integer>(n);
+
+        for (int i = 0; i < n; i++) {
+            TableView.Column column = columns.get(i);
+
+            if (column.isRelative()) {
+                columnWidths.add(0);
+                relativeWidth += column.getWidth();
+            } else {
+                int columnWidth = column.getWidth();
+
+                if (columnWidth == -1) {
+                    // Calculate the maximum cell width
+                    columnWidth = 0;
+
+                    TableView.CellRenderer cellRenderer = column.getCellRenderer();
+                    List<?> tableData = tableView.getTableData();
+
+                    int rowIndex = 0;
+                    for (Object rowData : tableData) {
+                        cellRenderer.render(rowData, rowIndex++, i, tableView, column.getName(),
+                            false, false, false);
+                        columnWidth = Math.max(cellRenderer.getPreferredWidth(-1), columnWidth);
+                    }
+                }
+
+                columnWidth = Math.min(Math.max(columnWidth, column.getMinimumWidth()), column.getMaximumWidth());
+                columnWidths.add(columnWidth);
+                fixedWidth += columnWidth;
+            }
+        }
+
+        fixedWidth += n - 1;
+        int variableWidth = Math.max(width - fixedWidth, 0);
+
+        for (int i = 0; i < n; i++) {
+            TableView.Column column = columns.get(i);
+
+            if (column.isRelative()) {
+                int columnWidth = (int)Math.round((double)(column.getWidth()
+                    * variableWidth) / (double)relativeWidth);
+                columnWidths.update(i, Math.min(Math.max(columnWidth, column.getMinimumWidth()),
+                    column.getMaximumWidth()));
+            }
+        }
+
+        return columnWidths;
     }
 
     @Override
