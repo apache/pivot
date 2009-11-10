@@ -97,6 +97,9 @@ public final class DesktopApplicationContext extends ApplicationContext {
                                 displayException(exception);
                             }
 
+                            // Add the application to the application list
+                            addApplication(application);
+
                             // Hook into OS X application menu
                             String osName = System.getProperty("os.name");
                             if (osName.toLowerCase().startsWith("mac os x")) {
@@ -262,6 +265,11 @@ public final class DesktopApplicationContext extends ApplicationContext {
                 cancelShutdown = application.shutdown(true);
             } catch(Exception exception) {
                 displayException(exception);
+            }
+
+            if (!cancelShutdown) {
+                // Remove the application from the application list
+                removeApplication(application);
             }
         }
 

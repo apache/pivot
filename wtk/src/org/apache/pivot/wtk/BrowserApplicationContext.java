@@ -152,6 +152,9 @@ public final class BrowserApplicationContext extends ApplicationContext {
                     } catch (Exception exception) {
                         displayException(exception);
                     }
+
+                    // Add the application to the application list
+                    addApplication(application);
                 }
             }
         }
@@ -166,6 +169,9 @@ public final class BrowserApplicationContext extends ApplicationContext {
                     } catch (Exception exception) {
                         displayException(exception);
                     }
+
+                    // Remove the application from the application list
+                    removeApplication(application);
                 }
             }
         }

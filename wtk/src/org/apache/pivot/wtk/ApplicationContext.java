@@ -1451,7 +1451,19 @@ public abstract class ApplicationContext {
 
         public void run() {
             if (!canceled) {
-                callback.run();
+                try {
+                    callback.run();
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+
+                    for (Application application : applications) {
+                        if (application instanceof Application.UncaughtExceptionHandler) {
+                            Application.UncaughtExceptionHandler uncaughtExceptionHandler =
+                                (Application.UncaughtExceptionHandler)application;
+                            uncaughtExceptionHandler.uncaughtExceptionThrown(exception);
+                        }
+                    }
+                }
 
                 for (Display display : displays) {
                     display.validate();
@@ -1479,6 +1491,7 @@ public abstract class ApplicationContext {
 
     private static Timer timer = null;
     private static ArrayList<Display> displays = new ArrayList<Display>();
+    private static ArrayList<Application> applications = new ArrayList<Application>();
 
     private static Version jvmVersion = null;
     static {
@@ -1668,6 +1681,14 @@ public abstract class ApplicationContext {
 
     protected static void removeDisplay(Display display) {
         displays.remove(display);
+    }
+
+    protected static void addApplication(Application application) {
+        applications.add(application);
+    }
+
+    protected static void removeApplication(Application application) {
+        applications.remove(application);
     }
 
     private static DropAction getUserDropAction(InputEvent event) {
