@@ -138,6 +138,25 @@ public class TerraAccordionSkin extends ContainerSkin
         }
 
         @Override
+        public int getBaseline(int width, int height) {
+            PanelHeader panelHeader = (PanelHeader)getComponent();
+
+            Button.DataRenderer dataRenderer = panelHeader.getDataRenderer();
+            dataRenderer.render(panelHeader.getButtonData(), panelHeader, false);
+
+            int clientWidth = Math.max(width - (buttonPadding.left + buttonPadding.right + 2), 0);
+            int clientHeight = Math.max(height - (buttonPadding.top + buttonPadding.bottom + 2), 0);
+
+            int baseline = dataRenderer.getBaseline(clientWidth, clientHeight);
+
+            if (baseline != -1) {
+                baseline += buttonPadding.top + 1;
+            }
+
+            return baseline;
+        }
+
+        @Override
         public void paint(Graphics2D graphics) {
             PanelHeader panelHeader = (PanelHeader)getComponent();
 
@@ -417,6 +436,18 @@ public class TerraAccordionSkin extends ContainerSkin
         preferredHeight += (maxPanelHeight + padding.top + padding.bottom + 2);
 
         return new Dimensions(preferredWidth, preferredHeight);
+    }
+
+    @Override
+    public int getBaseline(int width, int height) {
+        int baseline = -1;
+
+        if (panelHeaders.getLength() > 0) {
+            PanelHeader firstPanelHeader = panelHeaders.get(0);
+            baseline = firstPanelHeader.getBaseline(width, firstPanelHeader.getPreferredHeight(width));
+        }
+
+        return baseline;
     }
 
     @Override

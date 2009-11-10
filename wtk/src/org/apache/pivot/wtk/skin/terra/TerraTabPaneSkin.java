@@ -152,6 +152,25 @@ public class TerraTabPaneSkin extends ContainerSkin
         }
 
         @Override
+        public int getBaseline(int width, int height) {
+            TabButton tabButton = (TabButton)getComponent();
+
+            Button.DataRenderer dataRenderer = tabButton.getDataRenderer();
+            dataRenderer.render(tabButton.getButtonData(), tabButton, false);
+
+            int clientWidth = Math.max(width - (buttonPadding.left + buttonPadding.right + 2), 0);
+            int clientHeight = Math.max(height - (buttonPadding.top + buttonPadding.bottom + 2), 0);
+
+            int baseline = dataRenderer.getBaseline(clientWidth, clientHeight);
+
+            if (baseline != -1) {
+                baseline += buttonPadding.top + 1;
+            }
+
+            return baseline;
+        }
+
+        @Override
         public void paint(Graphics2D graphics) {
             TabButton tabButton = (TabButton)getComponent();
 
@@ -665,6 +684,22 @@ public class TerraTabPaneSkin extends ContainerSkin
         return new Dimensions(preferredWidth, preferredHeight);
     }
 
+    @Override
+    public int getBaseline(int width, int height) {
+        int baseline = -1;
+
+        if (tabOrientation == Orientation.HORIZONTAL
+            && buttonBoxPane.getLength() > 0) {
+            TabButton firstTabButton = (TabButton)buttonBoxPane.get(0);
+
+            int buttonHeight = buttonBoxPane.getPreferredHeight();
+            baseline = firstTabButton.getBaseline(firstTabButton.getPreferredWidth(buttonHeight),
+                buttonHeight);
+        }
+
+        return baseline;
+    }
+
     private int getPreferredTabWidth(int height) {
         int preferredTabWidth = 0;
 
@@ -720,7 +755,6 @@ public class TerraTabPaneSkin extends ContainerSkin
             case HORIZONTAL: {
                 int buttonPanoramaWidth = Math.min(width, buttonPanoramaSize.width);
                 int buttonPanoramaHeight = buttonPanoramaSize.height;
-                int buttonPanoramaX = 0;
                 int buttonPanoramaY = 0;
 
                 if (corner != null) {
@@ -735,7 +769,7 @@ public class TerraTabPaneSkin extends ContainerSkin
                     corner.setSize(cornerWidth, cornerHeight);
                 }
 
-                buttonPanorama.setLocation(buttonPanoramaX, buttonPanoramaY);
+                buttonPanorama.setLocation(0, buttonPanoramaY);
                 buttonPanorama.setSize(buttonPanoramaWidth, buttonPanoramaHeight);
 
                 tabX = padding.left + 1;
@@ -753,7 +787,6 @@ public class TerraTabPaneSkin extends ContainerSkin
                 int buttonPanoramaHeight = Math.min(height,
                     buttonPanoramaSize.height);
                 int buttonPanoramaX = 0;
-                int buttonPanoramaY = 0;
 
                 if (corner != null) {
                     int cornerWidth = corner.getPreferredWidth(-1);
@@ -767,7 +800,7 @@ public class TerraTabPaneSkin extends ContainerSkin
                     corner.setSize(cornerWidth, cornerHeight);
                 }
 
-                buttonPanorama.setLocation(buttonPanoramaX, buttonPanoramaY);
+                buttonPanorama.setLocation(buttonPanoramaX, 0);
                 buttonPanorama.setSize(buttonPanoramaWidth, buttonPanoramaHeight);
 
                 tabX = padding.left + buttonPanoramaX + buttonPanoramaWidth;
