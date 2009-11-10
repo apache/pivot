@@ -460,15 +460,21 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     public Bounds getCharacterBounds(int offset) {
-        Shape glyphBounds = glyphVector.getGlyphLogicalBounds(offset);
-        Rectangle2D glyphBounds2D = glyphBounds.getBounds2D();
+        Bounds characterBounds = null;
 
-        int x = (int)Math.floor(glyphBounds2D.getX()) + padding.left - scrollLeft + 1;
-        int y = padding.top + 1;
-        int width = (int)Math.ceil(glyphBounds2D.getWidth());
-        int height = getHeight() - (padding.top + padding.bottom + 2);
+        if (glyphVector != null) {
+            Shape glyphBounds = glyphVector.getGlyphLogicalBounds(offset);
+            Rectangle2D glyphBounds2D = glyphBounds.getBounds2D();
 
-        return new Bounds(x, y, width, height);
+            int x = (int)Math.floor(glyphBounds2D.getX()) + padding.left - scrollLeft + 1;
+            int y = padding.top + 1;
+            int width = (int)Math.ceil(glyphBounds2D.getWidth());
+            int height = getHeight() - (padding.top + padding.bottom + 2);
+
+            characterBounds = new Bounds(x, y, width, height);
+        }
+
+        return characterBounds;
     }
 
     private void setScrollLeft(int scrollLeft) {
@@ -480,12 +486,15 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     private void scrollCharacterToVisible(int offset) {
         int width = getWidth();
         Bounds characterBounds = getCharacterBounds(offset);
-        int glyphX = characterBounds.x - (padding.left + 1) + scrollLeft;
 
-        if (characterBounds.x < padding.left + 1) {
-            setScrollLeft(glyphX);
-        } else if (characterBounds.x + characterBounds.width > width - (padding.right + 1)) {
-            setScrollLeft(glyphX + (padding.left + padding.right + 2) + characterBounds.width - width);
+        if (characterBounds != null) {
+            int glyphX = characterBounds.x - (padding.left + 1) + scrollLeft;
+
+            if (characterBounds.x < padding.left + 1) {
+                setScrollLeft(glyphX);
+            } else if (characterBounds.x + characterBounds.width > width - (padding.right + 1)) {
+                setScrollLeft(glyphX + (padding.left + padding.right + 2) + characterBounds.width - width);
+            }
         }
     }
 

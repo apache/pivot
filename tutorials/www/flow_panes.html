@@ -35,7 +35,7 @@ limitations under the License.
 <h1>Flow Panes</h1>
 <p>Flow panes arrange components in a horizontal line, wrapping when the contents don't fit on a single line. Components may be horizontally aligned to left, right, or center when there is space left over within a given line, and may optionally be vertically aligned by to their baselines.</p>
 
-<p>The following example demonstrates the use of the <tt>FlowPane</tt> container. The buttons on the right can be used to modify the alignment properties:</p>
+<p>The following example demonstrates the use of the <tt>FlowPane</tt> container. The buttons on the right can be used to modify the alignment properties. A <tt>BaselineDecorator</tt> is used to highlight the flow pane's baseline. This decorator draws a red line across a component's baseline. If the component does not have a baseline, it draws a blue line across the component's vertical midpoint:</p>
 
 <script src="version.js"></script>
 <script>
@@ -66,25 +66,21 @@ deployJava.writeAppletTag(attributes, parameters);
             &lt;left&gt;
                 &lt;Border styles="{padding:4}"&gt;
                     &lt;content&gt;
-                        &lt;BoxPane orientation="vertical" styles="{verticalAlignment:'center', fill:true}"&gt;
-                            &lt;Border&gt;
-                                &lt;content&gt;
-                                    &lt;FlowPane wtkx:id="flowPane" styles="{padding:2}"&gt;
-                                        &lt;decorators&gt;
-                                            &lt;effects:BaselineDecorator/&gt;
-                                        &lt;/decorators&gt;
+                        &lt;BoxPane orientation="vertical" styles="{fill:true}"&gt;
+                            &lt;FlowPane wtkx:id="flowPane" styles="{padding:2}"&gt;
+                                &lt;decorators&gt;
+                                    &lt;effects:BaselineDecorator/&gt;
+                                &lt;/decorators&gt;
 
-                                        &lt;PushButton buttonData="0" styles="{minimumAspectRatio:1.5}"/&gt;
-                                        &lt;PushButton buttonData="1" styles="{minimumAspectRatio:1.5}"/&gt;
-                                        &lt;PushButton buttonData="2" styles="{minimumAspectRatio:1.5}"/&gt;
-                                        &lt;PushButton buttonData="3" preferredWidth="20" preferredHeight="20"/&gt;
-                                        &lt;PushButton buttonData="4" preferredWidth="30" preferredHeight="30"/&gt;
-                                        &lt;PushButton buttonData="5" preferredWidth="40" preferredHeight="40"/&gt;
-                                        &lt;PushButton buttonData="6" styles="{minimumAspectRatio:1.5}"/&gt;
-                                        &lt;PushButton buttonData="7" styles="{minimumAspectRatio:1.5}"/&gt;
-                                    &lt;/FlowPane&gt;
-                                &lt;/content&gt;
-                            &lt;/Border&gt;
+                                &lt;PushButton buttonData="0" styles="{minimumAspectRatio:1.5}"/&gt;
+                                &lt;PushButton buttonData="1" styles="{minimumAspectRatio:1.5}"/&gt;
+                                &lt;PushButton buttonData="2" styles="{minimumAspectRatio:1.5}"/&gt;
+                                &lt;PushButton buttonData="3" preferredWidth="20" preferredHeight="20"/&gt;
+                                &lt;PushButton buttonData="4" preferredWidth="30" preferredHeight="30"/&gt;
+                                &lt;PushButton buttonData="5" preferredWidth="40" preferredHeight="40"/&gt;
+                                &lt;PushButton buttonData="6" styles="{minimumAspectRatio:1.5}"/&gt;
+                                &lt;PushButton buttonData="7" styles="{minimumAspectRatio:1.5}"/&gt;
+                            &lt;/FlowPane&gt;
                         &lt;/BoxPane&gt;
                     &lt;/content&gt;
                 &lt;/Border&gt;

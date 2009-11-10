@@ -25,25 +25,21 @@ limitations under the License.
             <left>
                 <Border styles="{padding:4}">
                     <content>
-                        <BoxPane orientation="vertical" styles="{verticalAlignment:'center', fill:true}">
-                            <Border>
-                                <content>
-                                    <FlowPane wtkx:id="flowPane" styles="{padding:2}">
-                                        <decorators>
-                                            <effects:BaselineDecorator/>
-                                        </decorators>
+                        <BoxPane orientation="vertical" styles="{fill:true}">
+                            <FlowPane wtkx:id="flowPane" styles="{padding:2}">
+                                <decorators>
+                                    <effects:BaselineDecorator/>
+                                </decorators>
 
-                                        <PushButton buttonData="0" styles="{minimumAspectRatio:1.5}"/>
-                                        <PushButton buttonData="1" styles="{minimumAspectRatio:1.5}"/>
-                                        <PushButton buttonData="2" styles="{minimumAspectRatio:1.5}"/>
-                                        <PushButton buttonData="3" preferredWidth="20" preferredHeight="20"/>
-                                        <PushButton buttonData="4" preferredWidth="30" preferredHeight="30"/>
-                                        <PushButton buttonData="5" preferredWidth="40" preferredHeight="40"/>
-                                        <PushButton buttonData="6" styles="{minimumAspectRatio:1.5}"/>
-                                        <PushButton buttonData="7" styles="{minimumAspectRatio:1.5}"/>
-                                    </FlowPane>
-                                </content>
-                            </Border>
+                                <PushButton buttonData="0" styles="{minimumAspectRatio:1.5}"/>
+                                <PushButton buttonData="1" styles="{minimumAspectRatio:1.5}"/>
+                                <PushButton buttonData="2" styles="{minimumAspectRatio:1.5}"/>
+                                <PushButton buttonData="3" preferredWidth="20" preferredHeight="20"/>
+                                <PushButton buttonData="4" preferredWidth="30" preferredHeight="30"/>
+                                <PushButton buttonData="5" preferredWidth="40" preferredHeight="40"/>
+                                <PushButton buttonData="6" styles="{minimumAspectRatio:1.5}"/>
+                                <PushButton buttonData="7" styles="{minimumAspectRatio:1.5}"/>
+                            </FlowPane>
                         </BoxPane>
                     </content>
                 </Border>

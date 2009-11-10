@@ -401,7 +401,11 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 }
             }
 
-            return characterBounds.intersect(0, 0, getWidth(), getHeight());
+            if (characterBounds != null) {
+                characterBounds = characterBounds.intersect(0, 0, getWidth(), getHeight());
+            }
+
+            return characterBounds;
         }
 
         @Override
@@ -1627,8 +1631,11 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     private void scrollCharacterToVisible(int offset) {
         TextArea textArea = (TextArea)getComponent();
         Bounds characterBounds = getCharacterBounds(offset);
-        textArea.scrollAreaToVisible(0, characterBounds.y, characterBounds.width,
-            characterBounds.height);
+
+        if (characterBounds != null) {
+            textArea.scrollAreaToVisible(0, characterBounds.y, characterBounds.width,
+                characterBounds.height);
+        }
     }
 
     public Color getColor() {

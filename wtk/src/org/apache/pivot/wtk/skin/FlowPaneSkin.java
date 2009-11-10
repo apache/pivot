@@ -309,18 +309,13 @@ public class FlowPaneSkin extends ContainerSkin {
 
             for (Component component : row) {
                 int y;
+                int componentBaseline = component.getBaseline(component.getWidth(),
+                    component.getHeight());
                 if (alignToBaseline
-                    && baseline != -1) {
-                    int componentBaseline = component.getBaseline(component.getWidth(),
-                        component.getHeight());
-
-                    if (componentBaseline != -1) {
-                        // Align to baseline
-                        y = baseline - componentBaseline;
-                    } else {
-                        // Align to bottom
-                        y = rowHeight - component.getHeight();
-                    }
+                    && baseline != -1
+                    && componentBaseline != -1) {
+                    // Align to baseline
+                    y = baseline - componentBaseline;
                 } else {
                     // Align to bottom
                     y = rowHeight - component.getHeight();

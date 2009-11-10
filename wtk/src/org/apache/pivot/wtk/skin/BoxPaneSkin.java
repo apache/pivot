@@ -98,7 +98,17 @@ public class BoxPaneSkin extends ContainerSkin
         int preferredHeight = 0;
 
         Orientation orientation = boxPane.getOrientation();
-        if (orientation == Orientation.VERTICAL) {
+        if (orientation == Orientation.HORIZONTAL) {
+            // Preferred height is the maximum preferred height of all components
+            for (int i = 0, n = boxPane.getLength(); i < n; i++) {
+                Component component = boxPane.get(i);
+
+                if (component.isVisible()) {
+                    preferredHeight = Math.max(preferredHeight,
+                        component.getPreferredHeight());
+                }
+            }
+        } else {
             // Include padding in constraint
             if (width != -1) {
                 width = Math.max(width - (padding.left + padding.right), 0);
@@ -118,16 +128,6 @@ public class BoxPaneSkin extends ContainerSkin
             // Include spacing
             if (j > 1) {
                 preferredHeight += spacing * (j - 1);
-            }
-        } else {
-            // Preferred height is the maximum preferred height of all components
-            for (int i = 0, n = boxPane.getLength(); i < n; i++) {
-                Component component = boxPane.get(i);
-
-                if (component.isVisible()) {
-                    preferredHeight = Math.max(preferredHeight,
-                        component.getPreferredHeight());
-                }
             }
         }
 
@@ -206,36 +206,45 @@ public class BoxPaneSkin extends ContainerSkin
 
         switch (boxPane.getOrientation()) {
             case HORIZONTAL: {
-                int clientHeight = Math.max(height - (padding.top + padding.bottom), 0);
+                if (fill) {
+                    int clientHeight = Math.max(height - (padding.top + padding.bottom), 0);
 
-                for (Component component : boxPane) {
-                    if (component.isVisible()) {
-                        Dimensions size;
-                        if (fill) {
-                            size = new Dimensions(component.getPreferredWidth(clientHeight), clientHeight);
-                        } else {
-                            size = component.getPreferredSize();
+                    for (Component component : boxPane) {
+                        if (component.isVisible()) {
+                            int componentWidth = component.getPreferredWidth(clientHeight);
+                            baseline = Math.max(baseline, component.getBaseline(componentWidth, clientHeight));
                         }
+                    }
+                } else {
+                    contentHeight = 0;
+                    for (Component component : boxPane) {
+                        if (component.isVisible()) {
+                            contentHeight = Math.max(contentHeight, component.getPreferredHeight());
+                        }
+                    }
 
-                        contentHeight = Math.max(contentHeight, size.height);
+                    for (Component component : boxPane) {
+                        if (component.isVisible()) {
+                            Dimensions size = component.getPreferredSize();
 
-                        int componentBaseline = component.getBaseline(size.width, size.height);
+                            int componentBaseline = component.getBaseline(size.width, size.height);
 
-                        if (!fill) {
-                            switch (verticalAlignment) {
-                                case CENTER: {
-                                    componentBaseline += (clientHeight - size.height) / 2;
-                                    break;
-                                }
+                            if (componentBaseline != -1) {
+                                switch (verticalAlignment) {
+                                    case CENTER: {
+                                        componentBaseline += (contentHeight - size.height) / 2;
+                                        break;
+                                    }
 
-                                case BOTTOM: {
-                                    componentBaseline += clientHeight - size.height;
-                                    break;
+                                    case BOTTOM: {
+                                        componentBaseline += contentHeight - size.height;
+                                        break;
+                                    }
                                 }
                             }
-                        }
 
-                        baseline = Math.max(baseline, componentBaseline);
+                            baseline = Math.max(baseline, componentBaseline);
+                        }
                     }
                 }
 
