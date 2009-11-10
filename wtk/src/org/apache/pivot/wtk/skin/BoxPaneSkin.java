@@ -202,25 +202,40 @@ public class BoxPaneSkin extends ContainerSkin
         BoxPane boxPane = (BoxPane)getComponent();
 
         int baseline = -1;
-
-        width = Math.max(width - (padding.left + padding.right), 0);
-        height = Math.max(height - (padding.top + padding.bottom), 0);
-
         int contentHeight = 0;
 
         switch (boxPane.getOrientation()) {
             case HORIZONTAL: {
+                int clientHeight = Math.max(height - (padding.top + padding.bottom), 0);
+
                 for (Component component : boxPane) {
                     if (component.isVisible()) {
                         Dimensions size;
                         if (fill) {
-                            size = new Dimensions(component.getPreferredWidth(height), height);
+                            size = new Dimensions(component.getPreferredWidth(clientHeight), clientHeight);
                         } else {
                             size = component.getPreferredSize();
                         }
 
                         contentHeight = Math.max(contentHeight, size.height);
-                        baseline = Math.max(baseline, component.getBaseline(size.width, size.height));
+
+                        int componentBaseline = component.getBaseline(size.width, size.height);
+
+                        if (!fill) {
+                            switch (verticalAlignment) {
+                                case CENTER: {
+                                    componentBaseline += (clientHeight - size.height) / 2;
+                                    break;
+                                }
+
+                                case BOTTOM: {
+                                    componentBaseline += clientHeight - size.height;
+                                    break;
+                                }
+                            }
+                        }
+
+                        baseline = Math.max(baseline, componentBaseline);
                     }
                 }
 
@@ -228,11 +243,13 @@ public class BoxPaneSkin extends ContainerSkin
             }
 
             case VERTICAL: {
+                int clientWidth = Math.max(width - (padding.left + padding.right), 0);
+
                 for (Component component : boxPane) {
                     if (component.isVisible()) {
                         Dimensions size;
                         if (fill) {
-                            size = new Dimensions(width, component.getPreferredHeight(width));
+                            size = new Dimensions(clientWidth, component.getPreferredHeight(clientWidth));
                         } else {
                             size = component.getPreferredSize();
                         }
@@ -250,8 +267,6 @@ public class BoxPaneSkin extends ContainerSkin
                 break;
             }
         }
-
-        height += (padding.top + padding.bottom);
 
         if (baseline != -1) {
             if (fill) {

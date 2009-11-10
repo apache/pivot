@@ -142,8 +142,8 @@ public class TerraCheckboxSkin extends CheckboxSkin {
         Button.DataRenderer dataRenderer = checkbox.getDataRenderer();
         dataRenderer.render(checkbox.getButtonData(), checkbox, false);
 
-        width = Math.max(width - (CHECKBOX_SIZE + spacing), 0);
-        baseline = dataRenderer.getBaseline(width, height);
+        int clientWidth = Math.max(width - (CHECKBOX_SIZE + spacing), 0);
+        baseline = dataRenderer.getBaseline(clientWidth, height);
 
         return baseline;
     }

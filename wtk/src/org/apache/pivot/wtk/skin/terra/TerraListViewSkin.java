@@ -142,14 +142,15 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
         int baseline = -1;
 
+        int clientWidth = width;
         if (listView.getCheckmarksEnabled()) {
-            width = Math.max(width - (CHECKBOX.getWidth() + (checkboxPadding.left
+            clientWidth = Math.max(clientWidth - (CHECKBOX.getWidth() + (checkboxPadding.left
                 + checkboxPadding.right)), 0);
         }
 
         ListView.ItemRenderer itemRenderer = listView.getItemRenderer();
         itemRenderer.render(null, -1, listView, false, false, false, false);
-        baseline = itemRenderer.getBaseline(width, getItemHeight());
+        baseline = itemRenderer.getBaseline(clientWidth, getItemHeight());
 
         return baseline;
     }

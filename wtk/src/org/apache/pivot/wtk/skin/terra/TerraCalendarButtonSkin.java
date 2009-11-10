@@ -194,10 +194,10 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
         Button.DataRenderer dataRenderer = calendarButton.getDataRenderer();
         dataRenderer.render(calendarButton.getButtonData(), calendarButton, false);
 
-        width = Math.max(width - (TRIGGER_WIDTH + padding.left + padding.right + 2), 0);
-        height = Math.max(height - (padding.top + padding.bottom + 2), 0);
+        int clientWidth = Math.max(width - (TRIGGER_WIDTH + padding.left + padding.right + 2), 0);
+        int clientHeight = Math.max(height - (padding.top + padding.bottom + 2), 0);
 
-        int baseline = dataRenderer.getBaseline(width, height);
+        int baseline = dataRenderer.getBaseline(clientWidth, clientHeight);
 
         if (baseline != -1) {
             baseline += padding.top + 1;

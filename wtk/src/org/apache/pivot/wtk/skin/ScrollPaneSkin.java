@@ -318,6 +318,7 @@ public class ScrollPaneSkin extends ContainerSkin
 
         // Delegate baseline calculation to the view component
         if (view != null) {
+            // TODO Offset baseline by the expected view y-coordinate given width and height
             baseline = view.getBaseline(width, height);
         }
 

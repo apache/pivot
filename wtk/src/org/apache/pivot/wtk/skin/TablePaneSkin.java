@@ -455,14 +455,6 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
     public int getBaseline(int width, int height) {
         int baseline = -1;
 
-        TablePane tablePane = (TablePane)getComponent();
-
-        TablePane.RowSequence rows = tablePane.getRows();
-        TablePane.ColumnSequence columns = tablePane.getColumns();
-
-        int[] columnWidths = getColumnWidths(width);
-        int[] rowHeights = getRowHeights(height, columnWidths);
-
         // TODO Return the first available baseline by traversing cells top left to bottom right
 
         // Include top padding value

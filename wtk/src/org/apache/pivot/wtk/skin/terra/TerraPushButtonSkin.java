@@ -174,15 +174,13 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     public int getBaseline(int width, int height) {
         PushButton pushButton = (PushButton) getComponent();
 
-        int baseline = -1;
-
         Button.DataRenderer dataRenderer = pushButton.getDataRenderer();
         dataRenderer.render(pushButton.getButtonData(), pushButton, false);
 
-        width = Math.max(width - (padding.left + padding.right + 2), 0);
-        height = Math.max(height - (padding.top + padding.bottom + 2), 0);
+        int clientWidth = Math.max(width - (padding.left + padding.right + 2), 0);
+        int clientHeight = Math.max(height - (padding.top + padding.bottom + 2), 0);
 
-        baseline = dataRenderer.getBaseline(width, height);
+        int baseline = dataRenderer.getBaseline(clientWidth, clientHeight);
 
         if (baseline != -1) {
             baseline += padding.top + 1;

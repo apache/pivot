@@ -593,10 +593,11 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         int buttonWidth = Math.max(upButtonPreferredSize.width,
             downButtonPreferredSize.width);
 
-        width = Math.max(width - buttonWidth - 2, 0);
-        height = Math.max(height - 2, 0);
+        int clientWidth = Math.max(width - buttonWidth - 2, 0);
+        int clientHeight = Math.max(height - 2, 0);
 
-        int baseline = spinnerContent.getBaseline(width, height);
+        int baseline = spinnerContent.getBaseline(clientWidth, clientHeight);
+
         if (baseline != -1) {
             baseline += 1;
         }

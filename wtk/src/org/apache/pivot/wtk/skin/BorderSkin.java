@@ -159,11 +159,12 @@ public class BorderSkin extends ContainerSkin
                 topThickness = Math.max((int)Math.ceil(lm.getHeight()), topThickness);
             }
 
-            width = Math.max(width - (thickness * 2) - padding.left - padding.right, 0);
-            height = Math.max(height - (topThickness + thickness) -
-                padding.top - padding.bottom, 0);
+            int clientWidth = Math.max(width - (thickness * 2)
+                - (padding.left + padding.right), 0);
+            int clientHeight = Math.max(height - (topThickness + thickness) -
+                (padding.top + padding.bottom), 0);
 
-            baseline = content.getBaseline(width, height);
+            baseline = content.getBaseline(clientWidth, clientHeight);
         }
 
         // Include top padding value and top border thickness

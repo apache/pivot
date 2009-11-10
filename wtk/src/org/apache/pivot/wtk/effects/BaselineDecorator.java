@@ -43,12 +43,21 @@ public class BaselineDecorator implements Decorator {
     @Override
     public void update() {
         int width = component.getWidth();
-        int baseline = component.getBaseline(width, component.getHeight());
+        int height = component.getHeight();
+        int baseline = component.getBaseline(width, height);
 
-        if (baseline != -1) {
-            graphics.setPaint(Color.RED);
-            GraphicsUtilities.drawLine(graphics, 0, baseline, width, Orientation.HORIZONTAL);
+        int y;
+        Color color;
+        if (baseline == -1) {
+            y = height / 2;
+            color = Color.BLUE;
+        } else {
+            y = baseline;
+            color = Color.RED;
         }
+
+        graphics.setPaint(color);
+        GraphicsUtilities.drawLine(graphics, 0, y, width, Orientation.HORIZONTAL);
 
         component = null;
         graphics = null;
