@@ -49,8 +49,6 @@ public class TerraFormSkin extends ContainerSkin
     private int flagImageOffset = 4;
     private boolean showFirstSectionHeading = false;
 
-    // Align field and label so that their baselines line up
-    private boolean alignToBaseline = true;
     private String delimiter = DEFAULT_DELIMITER;
 
     private static final int FLAG_IMAGE_SIZE = 16;
@@ -169,33 +167,40 @@ public class TerraFormSkin extends ContainerSkin
 
                 if (field.isVisible()) {
                     Label label = labels.get(sectionIndex).get(fieldIndex);
+
+                    // Determine the label size and baseline
                     Dimensions labelSize = label.getPreferredSize();
-
-                    int preferredRowHeight;
-                    if (alignToBaseline) {
-                        int labelBaseLine = label.getBaseline(labelSize.width, labelSize.height);
-                        int fieldBaseLine = field.getBaseline(fieldWidth,
-                            field.getPreferredHeight(fieldWidth));
-
-                        if (labelBaseLine != -1
-                            && fieldBaseLine != -1) {
-                            int fieldPreferredHeight = field.getPreferredHeight(fieldWidth);
-                            int baseline = Math.max(labelBaseLine, fieldBaseLine);
-                            int belowBaseline = Math.max(fieldPreferredHeight - fieldBaseLine,
-                                labelSize.height - labelBaseLine);
-                            preferredRowHeight = baseline + belowBaseline;
-                        } else {
-                            // if they don't both have baselines, default to
-                            // non-baseline behaviour
-                            preferredRowHeight = Math.max(labelSize.height,
-                                field.getPreferredHeight(fieldWidth));
-                        }
-                    } else {
-                        preferredRowHeight = Math.max(labelSize.height,
-                            field.getPreferredHeight(fieldWidth));
+                    label.setSize(labelSize);
+                    int labelAscent = label.getBaseline(labelSize.width, labelSize.height);
+                    if (labelAscent == -1) {
+                        labelAscent = labelSize.height;
                     }
-                    preferredRowHeight = Math.max(preferredRowHeight, FLAG_IMAGE_SIZE);
-                    preferredHeight += preferredRowHeight;
+
+                    int labelDescent = labelSize.height - labelAscent;
+
+                    // Determine the field size and baseline
+                    Dimensions fieldSize;
+                    if (fill
+                        && fieldWidth != -1) {
+                        fieldSize = new Dimensions(fieldWidth, field.getPreferredHeight(fieldWidth));
+                    } else {
+                        fieldSize = field.getPreferredSize();
+                    }
+
+                    field.setSize(fieldSize);
+
+                    int fieldAscent = field.getBaseline(fieldSize.width, fieldSize.height);
+                    if (fieldAscent == -1) {
+                        fieldAscent = fieldSize.height;
+                    }
+
+                    int fieldDescent = fieldSize.height - fieldAscent;
+
+                    // Determine the baseline and row height
+                    int baseline = Math.max(labelAscent, fieldAscent);
+                    int rowHeight = Math.max(baseline + Math.max(labelDescent, fieldDescent), FLAG_IMAGE_SIZE);
+
+                    preferredHeight += rowHeight;
 
                     if (fieldIndex > 0) {
                         preferredHeight += verticalSpacing;
@@ -214,13 +219,106 @@ public class TerraFormSkin extends ContainerSkin
     }
 
     @Override
+    public int getBaseline(int width, int height) {
+        Form form = (Form)getComponent();
+        Form.SectionSequence sections = form.getSections();
+
+        // Determine the field width
+        int fieldWidth = -1;
+
+        if (fill) {
+            int maximumLabelWidth = 0;
+            for (int sectionIndex = 0, sectionCount = sections.getLength();
+                sectionIndex < sectionCount; sectionIndex++) {
+                Form.Section section = sections.get(sectionIndex);
+
+                for (int fieldIndex = 0, fieldCount = section.getLength();
+                    fieldIndex < fieldCount; fieldIndex++) {
+                    Component field = section.get(fieldIndex);
+
+                    if (field.isVisible()) {
+                        Label label = labels.get(sectionIndex).get(fieldIndex);
+                        maximumLabelWidth = Math.max(maximumLabelWidth,
+                            label.getPreferredWidth(-1));
+                    }
+                }
+            }
+
+            fieldWidth = Math.max(0, width - (maximumLabelWidth
+                + horizontalSpacing + flagImageOffset + FLAG_IMAGE_SIZE));
+        }
+
+        int baseline = -1;
+
+        int sectionCount = sections.getLength();
+        int sectionIndex = 0;
+
+        int rowY = 0;
+        while (sectionIndex < sectionCount
+            && baseline == -1) {
+            Form.Section section = sections.get(sectionIndex);
+
+            if (showFirstSectionHeading
+                || sectionIndex > 0) {
+                Separator separator = separators.get(sectionIndex);
+                rowY += separator.getPreferredHeight(width);
+                rowY += verticalSpacing;
+            }
+
+            int fieldCount = section.getLength();
+            int fieldIndex = 0;
+
+            while (fieldIndex < fieldCount
+                && baseline == -1) {
+                Component field = section.get(fieldIndex);
+
+                if (field.isVisible()) {
+                    Label label = labels.get(sectionIndex).get(fieldIndex);
+
+                    // Determine the label size and baseline
+                    Dimensions labelSize = label.getPreferredSize();
+                    label.setSize(labelSize);
+                    int labelAscent = label.getBaseline(labelSize.width, labelSize.height);
+                    if (labelAscent == -1) {
+                        labelAscent = labelSize.height;
+                    }
+
+                    // Determine the field size and baseline
+                    Dimensions fieldSize;
+                    if (fill
+                        && fieldWidth != -1) {
+                        fieldSize = new Dimensions(fieldWidth, field.getPreferredHeight(fieldWidth));
+                    } else {
+                        fieldSize = field.getPreferredSize();
+                    }
+
+                    field.setSize(fieldSize);
+
+                    int fieldAscent = field.getBaseline(fieldSize.width, fieldSize.height);
+                    if (fieldAscent == -1) {
+                        fieldAscent = fieldSize.height;
+                    }
+
+                    // Determine the baseline
+                    baseline = rowY + Math.max(labelAscent, fieldAscent);
+                }
+
+                fieldIndex++;
+            }
+
+            sectionIndex++;
+        }
+
+        return baseline;
+    }
+
+    @Override
     public void layout() {
         Form form = (Form)getComponent();
         Form.SectionSequence sections = form.getSections();
 
-        // Determine the maximum label and field widths
+        // Determine the maximum label width
         int maximumLabelWidth = 0;
-        int maximumFieldWidth = 0;
 
         for (int sectionIndex = 0, sectionCount = sections.getLength();
             sectionIndex < sectionCount; sectionIndex++) {
@@ -234,16 +332,14 @@ public class TerraFormSkin extends ContainerSkin
                     Label label = labels.get(sectionIndex).get(fieldIndex);
                     maximumLabelWidth = Math.max(maximumLabelWidth,
                         label.getPreferredWidth(-1));
-                    maximumFieldWidth = Math.max(maximumFieldWidth,
-                        field.getPreferredWidth(-1));
                 }
             }
         }
 
-        // Determine the maximum field width
+        // Determine the field width
         int width = getWidth();
-        int availableFieldWidth = Math.max(0, width - (maximumLabelWidth
-            + horizontalSpacing + flagImageOffset + FLAG_IMAGE_SIZE));
+        int fieldWidth = Math.max(0, width - (maximumLabelWidth + horizontalSpacing
+            + flagImageOffset + FLAG_IMAGE_SIZE));
 
         // Lay out the components
         int rowY = 0;
@@ -275,60 +371,49 @@ public class TerraFormSkin extends ContainerSkin
                     label.setVisible(true);
                     flagImageView.setVisible(true);
 
-                    // Set the row component sizes
-                    label.setSize(label.getPreferredSize());
+                    // Determine the label size and baseline
+                    Dimensions labelSize = label.getPreferredSize();
+                    label.setSize(labelSize);
+                    int labelAscent = label.getBaseline(labelSize.width, labelSize.height);
+                    if (labelAscent == -1) {
+                        labelAscent = labelSize.height;
+                    }
 
-                    Dimensions fieldSize = null;
+                    int labelDescent = labelSize.height - labelAscent;
+
+                    // Determine the field size and baseline
+                    Dimensions fieldSize;
                     if (fill) {
-                        fieldSize = new Dimensions(availableFieldWidth,
-                            field.getPreferredHeight(availableFieldWidth));
+                        fieldSize = new Dimensions(fieldWidth, field.getPreferredHeight(fieldWidth));
                     } else {
                         fieldSize = field.getPreferredSize();
                     }
 
                     field.setSize(fieldSize);
-                    flagImageView.setSize(flagImageView.getPreferredSize());
 
-                    int rowHeight;
-                    int fieldY;
-                    int labelY;
-                    int flagImageY;
-                    if (alignToBaseline) {
-                        int labelBaseLine = label.getBaseline(label.getWidth(), label.getHeight());
-                        int fieldBaseLine = field.getBaseline(fieldSize.width, fieldSize.height);
-
-                        if (labelBaseLine != -1 && fieldBaseLine != -1) {
-                            int baseline = Math.max(labelBaseLine, fieldBaseLine);
-                            int belowBaseline = Math.max(fieldSize.height - fieldBaseLine,
-                                label.getHeight() - labelBaseLine);
-                            rowHeight = baseline + belowBaseline;
-                            labelY = rowY + (baseline - labelBaseLine);
-                            fieldY = rowY + (baseline - fieldBaseLine);
-                        } else {
-                            // If they don't both have baselines, default to non-baseline behaviour
-                            rowHeight = Math.max(label.getHeight(), Math.max(field.getHeight(),
-                                FLAG_IMAGE_SIZE));
-                            fieldY = rowY;
-                            labelY = rowY;
-                        }
-
-                        // Vertically center the flag on the row
-                        flagImageY = rowY + (rowHeight - flagImageView.getHeight()) / 2;
-                    } else {
-                        rowHeight = Math.max(label.getHeight(), Math.max(field.getHeight(),
-                            FLAG_IMAGE_SIZE));
-                        fieldY = rowY;
-                        labelY = rowY;
-                        flagImageY = rowY + (rowHeight - flagImageView.getHeight()) / 2;
+                    int fieldAscent = field.getBaseline(fieldSize.width, fieldSize.height);
+                    if (fieldAscent == -1) {
+                        fieldAscent = fieldSize.height;
                     }
 
-                    // Set the row component locations
+                    int fieldDescent = fieldSize.height - fieldAscent;
+
+                    // Determine the baseline and row height
+                    int baseline = Math.max(labelAscent, fieldAscent);
+                    int rowHeight = Math.max(baseline + Math.max(labelDescent, fieldDescent), FLAG_IMAGE_SIZE);
+
+                    // Align the label and field to baseline
                     int labelX = rightAlignLabels ? maximumLabelWidth - label.getWidth() : 0;
+                    int labelY = rowY + (baseline - labelAscent);
                     label.setLocation(labelX, labelY);
 
                     int fieldX = maximumLabelWidth + horizontalSpacing;
-
+                    int fieldY = rowY + (baseline - fieldAscent);
                     field.setLocation(fieldX, fieldY);
+
+                    // Vertically center the flag on the label
+                    flagImageView.setSize(flagImageView.getPreferredSize());
+                    int flagImageY = labelY + (labelSize.height - flagImageView.getHeight()) / 2;
                     flagImageView.setLocation(fieldX + field.getWidth() + flagImageOffset, flagImageY);
 
                     // Update the row y-coordinate
@@ -448,15 +533,6 @@ public class TerraFormSkin extends ContainerSkin
             }
         }
 
-        invalidateComponent();
-    }
-
-    public boolean getAlignToBaseline() {
-        return alignToBaseline;
-    }
-
-    public void setAlignToBaseline(boolean alignToBaseline) {
-        this.alignToBaseline = alignToBaseline;
         invalidateComponent();
     }
 
