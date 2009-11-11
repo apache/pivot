@@ -25,6 +25,13 @@ public class Meter extends Component {
     private static class MeterListenerList extends ListenerList<MeterListener>
     implements MeterListener {
         @Override
+        public void orientationChanged(Meter meter) {
+            for (MeterListener listener : this) {
+                listener.orientationChanged(meter);
+            }
+        }
+        
+        @Override
         public void percentageChanged(Meter meter, double oldPercentage) {
             for (MeterListener listener : this) {
                 listener.percentageChanged(meter, oldPercentage);
@@ -41,9 +48,15 @@ public class Meter extends Component {
 
     private double percentage = 0.0;
     private String text = null;
+    private Orientation orientation = null;
     private MeterListenerList meterListeners = new MeterListenerList();
 
     public Meter() {
+        this(Orientation.HORIZONTAL);
+    }
+    
+    public Meter(Orientation orientation) {
+        this.orientation = orientation;
         installThemeSkin(Meter.class);
     }
 
@@ -75,6 +88,29 @@ public class Meter extends Component {
         meterListeners.textChanged(this, previousText);
     }
 
+    public Orientation getOrientation() {
+        return orientation;
+    }
+
+    public void setOrientation(Orientation orientation) {
+        if (orientation == null) {
+            throw new IllegalArgumentException("orientation is null.");
+        }
+
+        if (this.orientation != orientation) {
+            this.orientation = orientation;
+            meterListeners.orientationChanged(this);
+        }
+    }
+
+    public void setOrientation(String orientation) {
+        if (orientation == null) {
+            throw new IllegalArgumentException("orientation is null.");
+        }
+
+        setOrientation(Orientation.valueOf(orientation.toUpperCase()));
+    }
+    
     public ListenerList<MeterListener> getMeterListeners() {
         return meterListeners;
     }

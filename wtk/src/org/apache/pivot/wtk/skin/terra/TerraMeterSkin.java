@@ -24,6 +24,7 @@ import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.font.FontRenderContext;
 import java.awt.font.LineMetrics;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 
 import org.apache.pivot.collections.Dictionary;
@@ -80,6 +81,25 @@ public class TerraMeterSkin extends ComponentSkin
     @Override
     public int getPreferredWidth(int height) {
         Meter meter = (Meter)getComponent();
+        if (meter.getOrientation()==Orientation.HORIZONTAL) {
+            return internalGetPreferredWidth();
+        } else {
+            return internalGetPreferredHeight();
+        }
+    }
+    
+    @Override
+    public int getPreferredHeight(int width) {
+        Meter meter = (Meter)getComponent();
+        if (meter.getOrientation()==Orientation.HORIZONTAL) {
+            return internalGetPreferredHeight();
+        } else {
+            return internalGetPreferredWidth();
+        }
+    }
+    
+    private int internalGetPreferredWidth() {
+        Meter meter = (Meter)getComponent();
         String text = meter.getText();
 
         int preferredWidth;
@@ -98,8 +118,7 @@ public class TerraMeterSkin extends ComponentSkin
         return preferredWidth;
     }
 
-    @Override
-    public int getPreferredHeight(int width) {
+    private int internalGetPreferredHeight() {
         Meter meter = (Meter)getComponent();
         String text = meter.getText();
 
@@ -137,7 +156,11 @@ public class TerraMeterSkin extends ComponentSkin
         preferredWidth = Math.max(preferredWidth, DEFAULT_WIDTH);
         preferredHeight = Math.max(preferredHeight, DEFAULT_HEIGHT);
 
-        return new Dimensions(preferredWidth, preferredHeight);
+        if (meter.getOrientation()==Orientation.HORIZONTAL) {
+            return new Dimensions(preferredWidth, preferredHeight);
+        } else {
+            return new Dimensions(preferredHeight, preferredWidth);
+        }
     }
 
     @Override
@@ -145,6 +168,11 @@ public class TerraMeterSkin extends ComponentSkin
         int baseline = -1;
 
         Meter meter = (Meter)getComponent();
+        
+        if (meter.getOrientation()==Orientation.VERTICAL) {
+            return -1;
+        }
+        
         String text = meter.getText();
 
         if (text != null
@@ -170,7 +198,6 @@ public class TerraMeterSkin extends ComponentSkin
 
         int width = getWidth();
         int height = getHeight();
-        int meterStop = (int)(meter.getPercentage() * width);
 
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
@@ -185,6 +212,19 @@ public class TerraMeterSkin extends ComponentSkin
                 RenderingHints.VALUE_FRACTIONALMETRICS_ON);
         }
 
+        if (meter.getOrientation() == Orientation.HORIZONTAL) {
+            drawMeter(meter, graphics, width, height);
+        } else {
+            AffineTransform oldTransform = graphics.getTransform();
+            graphics.rotate(Math.PI / 2d);
+            graphics.translate(0, -width);
+            drawMeter(meter, graphics, height, width);
+            graphics.setTransform(oldTransform);
+        }
+    }
+    
+    private void drawMeter(Meter meter, Graphics2D graphics, int width, int height) {
+        int meterStop = (int)(meter.getPercentage() * width);
         // Paint the interior fill
         graphics.setPaint(new GradientPaint(0, 0, TerraTheme.brighten(fillColor),
             0, height, TerraTheme.darken(fillColor)));
@@ -370,6 +410,17 @@ public class TerraMeterSkin extends ComponentSkin
      */
     @Override
     public void textChanged(Meter meter, String previousText) {
+        invalidateComponent();
+    }
+    
+    /**
+     * Listener for meter orientation changes.
+     *
+     * @param meter
+     *     The source of the event.
+     */
+    @Override
+    public void orientationChanged(Meter meter) {
         invalidateComponent();
     }
 }
