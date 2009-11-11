@@ -31,7 +31,7 @@ public class SplitPaneTest implements Application {
     public void startup(Display display, Map<String, String> properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = new Window((Component)wtkxSerializer.readObject(getClass().getResource("splitpane_test.wtkx")));
-        
+
         window.setTitle("SplitPane Test");
         window.setMaximized(true);
         window.open(display);

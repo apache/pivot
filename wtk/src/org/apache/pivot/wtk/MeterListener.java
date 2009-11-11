@@ -20,7 +20,7 @@ package org.apache.pivot.wtk;
  * Meter listener interface.
  */
 public interface MeterListener {
-    
+
     public static class Adapter implements MeterListener {
         @Override
         public void percentageChanged(Meter meter, double previousPercentage) {
@@ -32,7 +32,7 @@ public interface MeterListener {
         public void orientationChanged(Meter meter) {
         }
     }
-    
+
     /**
      * Called when a meter's percentage value has changed.
      *
@@ -48,7 +48,7 @@ public interface MeterListener {
      * @param previousText
      */
     public void textChanged(Meter meter, String previousText);
-    
+
     /**
      * Called when a sliders's orientation has changed.
      *

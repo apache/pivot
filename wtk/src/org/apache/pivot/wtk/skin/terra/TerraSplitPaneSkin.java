@@ -487,7 +487,7 @@ public class TerraSplitPaneSkin extends ContainerSkin implements SplitPaneListen
     public void lockedChanged(SplitPane splitPane) {
         updateSplitterCursor();
     }
-    
+
     @Override
     public void resizeModeChanged(SplitPane splitPane, ResizeMode previousResizeMode) {
     }

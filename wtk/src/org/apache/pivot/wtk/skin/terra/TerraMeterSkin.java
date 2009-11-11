@@ -81,57 +81,54 @@ public class TerraMeterSkin extends ComponentSkin
     @Override
     public int getPreferredWidth(int height) {
         Meter meter = (Meter)getComponent();
-        if (meter.getOrientation()==Orientation.HORIZONTAL) {
-            return internalGetPreferredWidth();
-        } else {
-            return internalGetPreferredHeight();
-        }
-    }
-    
-    @Override
-    public int getPreferredHeight(int width) {
-        Meter meter = (Meter)getComponent();
-        if (meter.getOrientation()==Orientation.HORIZONTAL) {
-            return internalGetPreferredHeight();
-        } else {
-            return internalGetPreferredWidth();
-        }
-    }
-    
-    private int internalGetPreferredWidth() {
-        Meter meter = (Meter)getComponent();
-        String text = meter.getText();
 
         int preferredWidth;
-        if (text != null
-            && text.length() > 0) {
-            Rectangle2D stringBounds = font.getStringBounds(text, FONT_RENDER_CONTEXT);
-            preferredWidth = (int)Math.ceil(stringBounds.getWidth()) + 2;
-        } else {
-            preferredWidth = 0;
-        }
 
-        // If the meter has no content, its preferred width is hard-coded by the
-        // class and is not affected by the height constraint
-        preferredWidth = Math.max(preferredWidth, DEFAULT_WIDTH);
+        if (meter.getOrientation()==Orientation.HORIZONTAL) {
+            String text = meter.getText();
+
+            if (text != null
+                && text.length() > 0) {
+                Rectangle2D stringBounds = font.getStringBounds(text, FONT_RENDER_CONTEXT);
+                preferredWidth = (int)Math.ceil(stringBounds.getWidth()) + 2;
+            } else {
+                preferredWidth = 0;
+            }
+
+            // If the meter has no content, its preferred width is hard-coded by the
+            // class and is not affected by the height constraint
+            preferredWidth = Math.max(preferredWidth, DEFAULT_WIDTH);
+
+        } else {
+            preferredWidth = getPreferredHeight(-1);
+        }
 
         return preferredWidth;
     }
 
-    private int internalGetPreferredHeight() {
+    @Override
+    public int getPreferredHeight(int width) {
         Meter meter = (Meter)getComponent();
-        String text = meter.getText();
 
-        int preferredHeight = 0;
-        if (text != null
-            && text.length() > 0) {
-            LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
-            preferredHeight = (int)Math.ceil(lm.getHeight()) + 2;
+        int preferredHeight;
+
+        if (meter.getOrientation()==Orientation.HORIZONTAL) {
+            preferredHeight = getPreferredWidth(width);
+        } else {
+            String text = meter.getText();
+
+            if (text != null
+                && text.length() > 0) {
+                LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
+                preferredHeight = (int)Math.ceil(lm.getHeight()) + 2;
+            } else {
+                preferredHeight = 0;
+            }
+
+            // If the meter has no content, its preferred height is hard-coded by the
+            // class and is not affected by the width constraint
+            preferredHeight = Math.max(preferredHeight, DEFAULT_HEIGHT);
         }
-
-        // If the meter has no content, its preferred height is hard-coded by the
-        // class and is not affected by the width constraint
-        preferredHeight = Math.max(preferredHeight, DEFAULT_HEIGHT);
 
         return preferredHeight;
     }
@@ -156,11 +153,14 @@ public class TerraMeterSkin extends ComponentSkin
         preferredWidth = Math.max(preferredWidth, DEFAULT_WIDTH);
         preferredHeight = Math.max(preferredHeight, DEFAULT_HEIGHT);
 
+        Dimensions preferredSize;
         if (meter.getOrientation()==Orientation.HORIZONTAL) {
-            return new Dimensions(preferredWidth, preferredHeight);
+            preferredSize = new Dimensions(preferredWidth, preferredHeight);
         } else {
-            return new Dimensions(preferredHeight, preferredWidth);
+            preferredSize = new Dimensions(preferredHeight, preferredWidth);
         }
+
+        return preferredSize;
     }
 
     @Override
@@ -168,20 +168,18 @@ public class TerraMeterSkin extends ComponentSkin
         int baseline = -1;
 
         Meter meter = (Meter)getComponent();
-        
-        if (meter.getOrientation()==Orientation.VERTICAL) {
-            return -1;
-        }
-        
-        String text = meter.getText();
 
-        if (text != null
-            && text.length() > 0) {
-            LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
-            float ascent = lm.getAscent();
-            float textHeight = lm.getHeight();
+        if (meter.getOrientation() == Orientation.HORIZONTAL) {
+            String text = meter.getText();
 
-            baseline = Math.round((height - textHeight) / 2 + ascent);
+            if (text != null
+                && text.length() > 0) {
+                LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
+                float ascent = lm.getAscent();
+                float textHeight = lm.getHeight();
+
+                baseline = Math.round((height - textHeight) / 2 + ascent);
+            }
         }
 
         return baseline;
@@ -222,7 +220,7 @@ public class TerraMeterSkin extends ComponentSkin
             graphics.setTransform(oldTransform);
         }
     }
-    
+
     private void drawMeter(Meter meter, Graphics2D graphics, int width, int height) {
         int meterStop = (int)(meter.getPercentage() * width);
         // Paint the interior fill
@@ -412,7 +410,7 @@ public class TerraMeterSkin extends ComponentSkin
     public void textChanged(Meter meter, String previousText) {
         invalidateComponent();
     }
-    
+
     /**
      * Listener for meter orientation changes.
      *

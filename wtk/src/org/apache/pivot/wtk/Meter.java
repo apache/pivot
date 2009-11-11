@@ -30,7 +30,7 @@ public class Meter extends Component {
                 listener.orientationChanged(meter);
             }
         }
-        
+
         @Override
         public void percentageChanged(Meter meter, double oldPercentage) {
             for (MeterListener listener : this) {
@@ -54,7 +54,7 @@ public class Meter extends Component {
     public Meter() {
         this(Orientation.HORIZONTAL);
     }
-    
+
     public Meter(Orientation orientation) {
         this.orientation = orientation;
         installThemeSkin(Meter.class);
@@ -110,7 +110,7 @@ public class Meter extends Component {
 
         setOrientation(Orientation.valueOf(orientation.toUpperCase()));
     }
-    
+
     public ListenerList<MeterListener> getMeterListeners() {
         return meterListeners;
     }

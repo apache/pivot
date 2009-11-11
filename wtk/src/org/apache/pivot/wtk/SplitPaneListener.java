@@ -76,7 +76,7 @@ public interface SplitPaneListener {
      * The source of the event.
      */
     public void lockedChanged(SplitPane splitPane);
-    
+
     /**
      * Called when a split pane's split location has changed.
      *

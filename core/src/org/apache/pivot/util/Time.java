@@ -203,7 +203,13 @@ public final class Time implements Comparable<Time>, Serializable {
     public static final int MILLISECONDS_PER_DAY = 24 * MILLISECONDS_PER_HOUR;
 
     public Time() {
-        GregorianCalendar calendar = new GregorianCalendar();
+        this(new GregorianCalendar());
+    }
+
+    public Time(Calendar calendar) {
+        if (calendar == null) {
+            throw new IllegalArgumentException();
+        }
 
         this.hour = calendar.get(Calendar.HOUR_OF_DAY);
         this.minute = calendar.get(Calendar.MINUTE);
@@ -267,9 +273,9 @@ public final class Time implements Comparable<Time>, Serializable {
      * The resulting time.
      */
     public Time add(int milliseconds) {
-        milliseconds %= MILLISECONDS_PER_DAY;
-
         milliseconds += toMilliseconds();
+
+        milliseconds %= MILLISECONDS_PER_DAY;
 
         if (milliseconds < 0) {
             milliseconds += MILLISECONDS_PER_DAY;

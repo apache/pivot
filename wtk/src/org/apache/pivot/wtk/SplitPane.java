@@ -46,12 +46,13 @@ public class SplitPane extends Container {
      * Enumeration defining split pane resizing modes.
      */
     public enum ResizeMode {
-        /** when resizing, maintain the ratio between the regions */
+        /** When resizing, maintains the ratio between the regions. */
         SPLIT_RATIO,
-        /** when resizing, preserve the size of the primary region */
+
+        /** When resizing, preserves the size of the primary region. */
         PRIMARY_REGION
     }
-    
+
     private static class SplitPaneListenerList extends ListenerList<SplitPaneListener>
         implements SplitPaneListener {
         @Override
@@ -95,7 +96,7 @@ public class SplitPane extends Container {
                 listener.lockedChanged(splitPane);
             }
         }
-        
+
         @Override
         public void resizeModeChanged(SplitPane splitPane, ResizeMode previousResizeMode) {
             for (SplitPaneListener listener : this) {
@@ -306,7 +307,7 @@ public class SplitPane extends Container {
         }
 
         ResizeMode previousResizeMode = this.resizeMode;
-        
+
         if (this.resizeMode != resizeMode) {
             this.resizeMode = resizeMode;
             splitPaneListeners.resizeModeChanged(this, previousResizeMode);
@@ -320,7 +321,7 @@ public class SplitPane extends Container {
 
         setResizeMode(ResizeMode.valueOf(resizeMode.toUpperCase()));
     }
-    
+
     @Override
     public Sequence<Component> remove(int index, int count) {
         for (int i = index, n = index + count; i < n; i++) {
