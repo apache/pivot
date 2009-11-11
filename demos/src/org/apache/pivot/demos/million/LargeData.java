@@ -79,7 +79,7 @@ public class LargeData implements Application {
                 try {
                     inputStream = fileURL.openStream();
 
-                    CSVSerializer csvSerializer = new CSVSerializer("ISO-8859-1");
+                    CSVSerializer csvSerializer = new CSVSerializer();
                     csvSerializer.getKeys().add("c0");
                     csvSerializer.getKeys().add("c1");
                     csvSerializer.getKeys().add("c2");
@@ -152,7 +152,7 @@ public class LargeData implements Application {
     private static final String BASE_PATH_KEY = "basePath";
 
     public LargeData() {
-        csvSerializer = new CSVSerializer("ISO-8859-1");
+        csvSerializer = new CSVSerializer();
         csvSerializer.getKeys().add("c0");
         csvSerializer.getKeys().add("c1");
         csvSerializer.getKeys().add("c2");

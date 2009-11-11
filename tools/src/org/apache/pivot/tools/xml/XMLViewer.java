@@ -14,20 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.pivot.tools.json;
+package org.apache.pivot.tools.xml;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Iterator;
 
-import org.apache.pivot.collections.List;
+import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.Map;
-import org.apache.pivot.collections.Sequence.Tree.Path;
+import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.io.FileList;
-import org.apache.pivot.serialization.JSONSerializer;
-import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.CardPane;
 import org.apache.pivot.wtk.Clipboard;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
@@ -36,24 +37,31 @@ import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.Manifest;
 import org.apache.pivot.wtk.Prompt;
+import org.apache.pivot.wtk.TableView;
+import org.apache.pivot.wtk.TextArea;
 import org.apache.pivot.wtk.TreeView;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtk.content.TreeBranch;
-import org.apache.pivot.wtk.content.TreeNode;
 import org.apache.pivot.wtk.effects.OverlayDecorator;
 import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
+import org.apache.pivot.xml.Element;
+import org.apache.pivot.xml.Node;
+import org.apache.pivot.xml.TextNode;
+import org.apache.pivot.xml.XMLSerializer;
 
-public class JSONViewer implements Application {
+public class XMLViewer implements Application {
     private Window window = null;
 
     @WTKX private TreeView treeView = null;
+    @WTKX private CardPane propertiesCardPane = null;
+    @WTKX private TableView attributesTableView = null;
+    @WTKX private TextArea textArea = null;
 
     private OverlayDecorator promptDecorator = new OverlayDecorator();
 
     public static final String APPLICATION_KEY = "application";
-    public static final String WINDOW_TITLE = "JSON Viewer";
+    public static final String WINDOW_TITLE = "XML Viewer";
 
     @Override
     public void startup(Display display, Map<String, String> properties)
@@ -61,10 +69,10 @@ public class JSONViewer implements Application {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         wtkxSerializer.put(APPLICATION_KEY, this);
 
-        window = (Window)wtkxSerializer.readObject(this, "json_viewer.wtkx");
+        window = (Window)wtkxSerializer.readObject(this, "xml_viewer.wtkx");
         wtkxSerializer.bind(this);
 
-        Label prompt = new Label("Drag or paste JSON here");
+        Label prompt = new Label("Drag or paste XML here");
         prompt.getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
         prompt.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
         promptDecorator.setOverlay(prompt);
@@ -97,18 +105,13 @@ public class JSONViewer implements Application {
 
         if (clipboardContent != null
             && clipboardContent.containsText()) {
-            String json = null;
-            JSONSerializer jsonSerializer = new JSONSerializer();
+            String xml = null;
+            XMLSerializer xmlSerializer = new XMLSerializer();
             try {
-                json = clipboardContent.getText();
-                setValue(jsonSerializer.readObject(new StringReader(json)));
-            } catch (IOException exception) {
+                xml = clipboardContent.getText();
+                setDocument(xmlSerializer.readObject(new StringReader(xml)));
+            } catch (Exception exception) {
                 Prompt.prompt(exception.getMessage(), window);
-            } catch(SerializationException exception) {
-                String message = "Serialization exception at line "
-                    + jsonSerializer.getLineNumber() + ": "
-                    + "\"" + exception.getMessage() + "\"";
-                Prompt.prompt(message, window);
             }
 
             window.setTitle(WINDOW_TITLE);
@@ -123,24 +126,19 @@ public class JSONViewer implements Application {
             if (fileList.getLength() == 1) {
                 File file = fileList.get(0);
 
-                JSONSerializer jsonSerializer = new JSONSerializer();
+                XMLSerializer xmlSerializer = new XMLSerializer();
                 FileInputStream fileInputStream = null;
                 try {
                     try {
                         fileInputStream = new FileInputStream(file);
-                        setValue(jsonSerializer.readObject(fileInputStream));
+                        setDocument(xmlSerializer.readObject(fileInputStream));
                     } finally {
                         if (fileInputStream != null) {
                             fileInputStream.close();
                         }
                     }
-                } catch (IOException exception) {
+                } catch (Exception exception) {
                     Prompt.prompt(exception.getMessage(), window);
-                } catch (SerializationException exception) {
-                    String message = "Serialization exception at line "
-                        + jsonSerializer.getLineNumber() + " in " + file + ": "
-                        + "\"" + exception.getMessage() + "\"";
-                    Prompt.prompt(message, window);
                 }
 
                 window.setTitle(WINDOW_TITLE + " - " + file.getName());
@@ -156,75 +154,53 @@ public class JSONViewer implements Application {
         return dropAction;
     }
 
-    private void setValue(Object value) {
-        assert (value instanceof Map<?, ?>
-            || value instanceof List<?>);
+    public void updateProperties() {
+        Node node = (Node)treeView.getSelectedNode();
+
+        if (node instanceof TextNode) {
+            TextNode textNode = (TextNode)node;
+            textArea.setText(textNode.getText());
+            propertiesCardPane.setSelectedIndex(1);
+        } else if (node instanceof Element) {
+            Element element = (Element)node;
+
+            ArrayList<HashMap<String, String>> attributesTableData =
+                new ArrayList<HashMap<String, String>>();
+            Iterator<String> attributes = element.getAttributes();
+
+            while (attributes.hasNext()) {
+                String attribute = attributes.next();
+                HashMap<String, String> row = new HashMap<String, String>();
+                row.put("attribute", attribute);
+                row.put("value", element.get(attribute));
+                attributesTableData.add(row);
+            }
+
+            attributesTableView.setTableData(attributesTableData);
+
+            propertiesCardPane.setSelectedIndex(0);
+        } else {
+            propertiesCardPane.setSelectedIndex(-1);
+        }
+    }
+
+    private void setDocument(Element document) {
         // Remove prompt decorator
         if (promptDecorator != null) {
             treeView.getDecorators().remove(promptDecorator);
             promptDecorator = null;
         }
 
-        TreeBranch treeData = new TreeBranch();
-        treeData.add(build(value));
+        ArrayList<Element> treeData = new ArrayList<Element>();
+        treeData.add(document);
         treeView.setTreeData(treeData);
-        treeView.expandBranch(new Path(0));
-    }
 
-    @SuppressWarnings("unchecked")
-    private static TreeNode build(Object value) {
-        TreeNode treeNode;
-
-        if (value instanceof Map<?, ?>) {
-            TreeBranch treeBranch = new TreeBranch("{}");
-
-            Map<String, Object> map = (Map<String, Object>)value;
-            for (String key : map) {
-                TreeNode valueNode = build(map.get(key));
-
-                String text = valueNode.getText();
-                if (text == null) {
-                    valueNode.setText(key);
-                } else {
-                    valueNode.setText(key + " : " + text);
-                }
-
-                treeBranch.add(valueNode);
-            }
-
-            treeNode = treeBranch;
-        } else if (value instanceof List<?>) {
-            TreeBranch treeBranch = new TreeBranch("[]");
-
-            List<Object> list = (List<Object>)value;
-            for (int i = 0, n = list.getLength(); i < n; i++) {
-                TreeNode itemNode = build(list.get(i));
-
-                String text = itemNode.getText();
-                if (text == null) {
-                    itemNode.setText("[" + i + "]");
-                } else {
-                    itemNode.setText("[" + i + "] " + text);
-                }
-
-                treeBranch.add(itemNode);
-            }
-
-            treeNode = treeBranch;
-        } else if (value instanceof String) {
-            treeNode = new TreeNode("\"" + value.toString() + "\"");
-        } else if (value instanceof Number) {
-            treeNode = new TreeNode(value.toString());
-        } else if (value instanceof Boolean) {
-            treeNode = new TreeNode(value.toString());
-        } else {
-            treeNode = new TreeNode("null");
-        }
-
-        return treeNode;
+        Sequence.Tree.Path path = new Sequence.Tree.Path(0);
+        treeView.expandBranch(path);
+        treeView.setSelectedPath(path);
     }
 
     public static void main(String[] args) {
-        DesktopApplicationContext.main(JSONViewer.class, args);
+        DesktopApplicationContext.main(XMLViewer.class, args);
     }
 }

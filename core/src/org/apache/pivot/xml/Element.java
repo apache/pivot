@@ -255,7 +255,9 @@ public class Element extends Node implements List<Node>, Dictionary<String, Stri
             for (int i = 1, n = namespacePrefix.length(); i < n; i++) {
                 c = namespacePrefix.charAt(i);
 
-                if (!Character.isLetterOrDigit(c)) {
+                if (!Character.isLetterOrDigit(c)
+                    && c != '-'
+                    && c != '.') {
                     throw new IllegalArgumentException("'" + c + "' is not a valid character"
                         + " for a namespace prefix.");
                 }
@@ -480,6 +482,13 @@ public class Element extends Node implements List<Node>, Dictionary<String, Stri
     }
 
     /**
+     * Returns an iterator over this element's attributes.
+     */
+    public Iterator<String> getAttributes() {
+        return new ImmutableIterator<String>(attributes.iterator());
+    }
+
+    /**
      * Adds a node to this element.
      *
      * @param node
@@ -489,7 +498,12 @@ public class Element extends Node implements List<Node>, Dictionary<String, Stri
      */
     @Override
     public int add(Node node) {
+        if (node.getParent() != null) {
+            throw new IllegalArgumentException();
+        }
+
         int index = nodes.add(node);
+        node.setParent(this);
         listListeners.itemInserted(this, index);
 
         return index;
@@ -503,22 +517,22 @@ public class Element extends Node implements List<Node>, Dictionary<String, Stri
      */
     @Override
     public void insert(Node node, int index) {
+        if (node.getParent() != null) {
+            throw new IllegalArgumentException();
+        }
+
         nodes.insert(node, index);
+        node.setParent(this);
         listListeners.itemInserted(this, index);
     }
 
     /**
-     * Updates the node at the given location.
-     *
-     * @param index
-     * @param node
+     * @throws UnsupportedOperationException
+     * This method is not supported.
      */
     @Override
     public Node update(int index, Node node) {
-        Node previousNode = nodes.update(index, node);
-        listListeners.itemUpdated(this, index, previousNode);
-
-        return previousNode;
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -549,6 +563,11 @@ public class Element extends Node implements List<Node>, Dictionary<String, Stri
     public Sequence<Node> remove(int index, int count) {
         Sequence<Node> removed = nodes.remove(index, count);
         if (count > 0) {
+            for (int i = 0, n = removed.getLength(); i < n; i++ ) {
+                Node node = removed.get(i);
+                node.setParent(null);
+            }
+
             listListeners.itemsRemoved(this, index, removed);
         }
 
@@ -561,6 +580,11 @@ public class Element extends Node implements List<Node>, Dictionary<String, Stri
     @Override
     public void clear() {
         if (getLength() > 0) {
+            for (int i = 0, n = nodes.getLength(); i < n; i++) {
+                Node node = nodes.get(i);
+                node.setParent(null);
+            }
+
             nodes.clear();
             listListeners.listCleared(this);
         }

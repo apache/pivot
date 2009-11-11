@@ -37,7 +37,7 @@ limitations under the License.
                                 importPackage(org.apache.pivot.wtk);
                                 function keyPressed(component, keyCode, keyLocation) {
                                     if (keyCode == Keyboard.KeyCode.V
-                                        && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
+                                        && Keyboard.isPressed(Platform.getCommandModifier())) {
                                         application.paste();
                                     }
                                 }

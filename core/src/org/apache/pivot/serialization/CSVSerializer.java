@@ -136,12 +136,13 @@ public class CSVSerializer implements Serializer<List<?>> {
     private KeySequence keySequence = new KeySequence();
     private LineNumberReader lineNumberReader = null;
 
+    public static final String DEFAULT_CHARSET_NAME = "ISO-8859-1";
     public static final String MIME_TYPE = "text/csv";
     public static final int BUFFER_SIZE = 2048;
 
 
     public CSVSerializer() {
-        this(Charset.defaultCharset());
+        this(DEFAULT_CHARSET_NAME);
     }
 
     public CSVSerializer(String charsetName) {

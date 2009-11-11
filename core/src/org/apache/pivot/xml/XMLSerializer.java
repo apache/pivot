@@ -16,9 +16,16 @@
  */
 package org.apache.pivot.xml;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Writer;
+import java.nio.charset.Charset;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -32,21 +39,38 @@ import org.apache.pivot.serialization.Serializer;
  * Reads and writes XML data.
  */
 public class XMLSerializer implements Serializer<Element> {
-    public static final String MIME_TYPE = "text/xml";
-
+    private Charset charset = null;
     private XMLInputFactory xmlInputFactory;
 
     private Element element = null;
 
     public static final String XMLNS_ATTRIBUTE_PREFIX = "xmlns";
 
+    public static final String DEFAULT_CHARSET_NAME = "UTF-8";
+    public static final String MIME_TYPE = "text/xml";
+    public static final int BUFFER_SIZE = 2048;
+
     public XMLSerializer() {
-        this(true);
+        this(DEFAULT_CHARSET_NAME);
     }
 
-    public XMLSerializer(boolean coalesceText) {
+    public XMLSerializer(String charsetName) {
+        this(charsetName == null ? Charset.defaultCharset() : Charset.forName(charsetName));
+    }
+
+    public XMLSerializer(Charset charset) {
+        if (charset == null) {
+            throw new IllegalArgumentException("charset is null.");
+        }
+
+        this.charset = charset;
+
         xmlInputFactory = XMLInputFactory.newInstance();
-        xmlInputFactory.setProperty("javax.xml.stream.isCoalescing", coalesceText);
+        xmlInputFactory.setProperty("javax.xml.stream.isCoalescing", true);
+    }
+
+    public Charset getCharset() {
+        return charset;
     }
 
     @Override
@@ -55,49 +79,73 @@ public class XMLSerializer implements Serializer<Element> {
             throw new IllegalArgumentException("inputStream is null.");
         }
 
+        Reader reader = new BufferedReader(new InputStreamReader(inputStream, charset), BUFFER_SIZE);
+        Element element = readObject(reader);
+
+        return element;
+    }
+
+    public Element readObject(Reader reader) throws SerializationException {
+        if (reader == null) {
+            throw new IllegalArgumentException("reader is null.");
+        }
+
         // Parse the XML stream
         element = null;
 
         try {
-            XMLStreamReader reader = xmlInputFactory.createXMLStreamReader(inputStream);
+            XMLStreamReader xmlStreamReader = xmlInputFactory.createXMLStreamReader(reader);
 
-            while (reader.hasNext()) {
-                int event = reader.next();
+            while (xmlStreamReader.hasNext()) {
+                int event = xmlStreamReader.next();
 
                 switch (event) {
+                    case XMLStreamConstants.NAMESPACE: {
+                        // TODO
+                        break;
+                    }
+
                     case XMLStreamConstants.CHARACTERS: {
-                        element.add(new TextNode(reader.getText()));
+                        String text = xmlStreamReader.getText();
+                        text = text.trim();
+                        if (text.length() > 0) {
+                            element.add(new TextNode(text));
+                        }
+
                         break;
                     }
 
                     case XMLStreamConstants.START_ELEMENT: {
                         // Create the element
-                        String prefix = reader.getPrefix();
-                        String localName = reader.getLocalName();
+                        String prefix = xmlStreamReader.getPrefix();
+                        if (prefix.length() == 0) {
+                            prefix = null;
+                        }
+
+                        String localName = xmlStreamReader.getLocalName();
 
                         Element element = new Element(prefix, localName);
 
-                        for (int i = 0, n = reader.getAttributeCount(); i < n; i++) {
-                            String attributePrefix = reader.getAttributePrefix(i);
-                            String attributeLocalName = reader.getAttributeLocalName(i);
-                            String attributeValue = reader.getAttributeValue(i);
+                        for (int i = 0, n = xmlStreamReader.getAttributeCount(); i < n; i++) {
+                            String attributePrefix = xmlStreamReader.getAttributePrefix(i);
+                            String attributeLocalName = xmlStreamReader.getAttributeLocalName(i);
+                            String attributeValue = xmlStreamReader.getAttributeValue(i);
 
-                            if (attributePrefix != null) {
-                                if (!attributePrefix.equals(XMLNS_ATTRIBUTE_PREFIX)) {
-                                    throw new SerializationException("Attribute namespaces are not supported.");
-                                }
-
-                                element.getNamespaces().put(attributeLocalName, attributeValue);
+                            String attribute;
+                            if (attributePrefix.length() == 0) {
+                                attribute = attributeLocalName;
                             } else {
-                                element.put(attributeLocalName, attributeValue);
+                                attribute = attributePrefix + ":" + attributeLocalName;
                             }
+
+                            element.put(attribute, attributeValue);
                         }
 
-                        if (this.element == null) {
-                            this.element = element;
-                        } else {
+                        if (this.element != null) {
                             this.element.add(element);
                         }
+
+                        this.element = element;
 
                         break;
                     }
@@ -114,7 +162,7 @@ public class XMLSerializer implements Serializer<Element> {
                 }
             }
 
-            reader.close();
+            xmlStreamReader.close();
         } catch (XMLStreamException exception) {
             throw new SerializationException(exception);
         }
@@ -123,10 +171,29 @@ public class XMLSerializer implements Serializer<Element> {
     }
 
     @Override
-    public void writeObject(Element object, OutputStream outputStream)
+    public void writeObject(Element element, OutputStream outputStream)
         throws IOException, SerializationException {
+        if (outputStream == null) {
+            throw new IllegalArgumentException("outputStream is null.");
+        }
+
+        Writer writer = new BufferedWriter(new OutputStreamWriter(outputStream, charset),
+            BUFFER_SIZE);
+        writeObject(element, writer);
+    }
+
+    public void writeObject(Element element, Writer writer) {
+        if (writer == null) {
+            throw new IllegalArgumentException("writer is null.");
+        }
+
+        if (element == null) {
+            throw new IllegalArgumentException("element is null.");
+        }
+
         // TODO (note that we'll need to check for valid namespace prefixes here,
         // since we don't do it in Element)
+
         throw new UnsupportedOperationException();
     }
 

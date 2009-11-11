@@ -50,11 +50,12 @@ public class JSONSerializer implements Serializer<Object> {
     private boolean alwaysDelimitMapKeys = false;
     private LineNumberReader lineNumberReader = null;
 
+    public static final String DEFAULT_CHARSET_NAME = "UTF-8";
     public static final String MIME_TYPE = "application/json";
     public static final int BUFFER_SIZE = 2048;
 
     public JSONSerializer() {
-        this(Charset.defaultCharset());
+        this(DEFAULT_CHARSET_NAME);
     }
 
     public JSONSerializer(String charsetName) {
