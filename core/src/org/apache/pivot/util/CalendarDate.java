@@ -43,8 +43,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
         public final CalendarDate end;
 
         public Range(CalendarDate calendarDate) {
-            start = calendarDate;
-            end = calendarDate;
+            this(calendarDate, calendarDate);
         }
 
         public Range(CalendarDate start, CalendarDate end) {
@@ -261,32 +260,6 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
     }
 
     /**
-     * Compares this calendar date with another calendar date.
-     *
-     * @param calendarDate
-     * The calendar date against which to compare.
-     *
-     * @return
-     * A negative number, zero, or a positive number if the specified calendar
-     * date is less than, equal to, or greater than this calendar date,
-     * respectively.
-     */
-    @Override
-    public int compareTo(CalendarDate calendarDate) {
-        int result = year - calendarDate.year;
-
-        if (result == 0) {
-            result = month - calendarDate.month;
-
-            if (result == 0) {
-                result = day - calendarDate.day;
-            }
-        }
-
-        return result;
-    }
-
-    /**
      * Adds the specified number of days to this calendar date and returns the
      * resulting calendar date. The number of days may be negative, in which
      * case the result will be a date before this calendar date.
@@ -351,7 +324,53 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      * This calendar date as a <tt>GregorianCalendar</tt>.
      */
     public GregorianCalendar toCalendar() {
-        return new GregorianCalendar(year, month, day + 1);
+        return toCalendar(new Time(0, 0, 0));
+    }
+
+    /**
+     * Translates this calendar date to an instance of
+     * <tt>GregorianCalendar</tt>, with the <tt>year</tt>, <tt>month</tt>, and
+     * <tt>dayOfMonth</tt> fields set in the default time zone with the default
+     * locale.
+     *
+     * @param time
+     * The time of day.
+     *
+     * @return
+     * This calendar date as a <tt>GregorianCalendar</tt>.
+     */
+    public GregorianCalendar toCalendar(Time time) {
+        GregorianCalendar calendar = new GregorianCalendar(year, month, day + 1,
+            time.hour, time.minute, time.second);
+        calendar.set(Calendar.MILLISECOND, time.millisecond);
+
+        return calendar;
+    }
+
+    /**
+     * Compares this calendar date with another calendar date.
+     *
+     * @param calendarDate
+     * The calendar date against which to compare.
+     *
+     * @return
+     * A negative number, zero, or a positive number if the specified calendar
+     * date is less than, equal to, or greater than this calendar date,
+     * respectively.
+     */
+    @Override
+    public int compareTo(CalendarDate calendarDate) {
+        int result = year - calendarDate.year;
+
+        if (result == 0) {
+            result = month - calendarDate.month;
+
+            if (result == 0) {
+                result = day - calendarDate.day;
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -408,22 +427,21 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      * string must be in the <tt>ISO 8601</tt> "calendar date" format,
      * which is <tt>[YYYY]-[MM]-[DD]</tt>.
      *
-     * @param date
+     * @param value
      * A string in the form of <tt>[YYYY]-[MM]-[DD]</tt> (e.g. 2008-07-23).
      */
-    public static CalendarDate decode(String date) {
+    public static CalendarDate decode(String value) {
         Pattern pattern = Pattern.compile("^(\\d{4})-(\\d{2})-(\\d{2})$");
-        Matcher matcher = pattern.matcher(date);
+        Matcher matcher = pattern.matcher(value);
 
         if (!matcher.matches()) {
-            throw new IllegalArgumentException("Invalid date format: " + date);
+            throw new IllegalArgumentException("Invalid date format: " + value);
         }
 
-        String year = matcher.group(1);
-        String month = matcher.group(2);
-        String day = matcher.group(3);
+        int year = Integer.parseInt(matcher.group(1));
+        int month = Integer.parseInt(matcher.group(2)) - 1;
+        int day = Integer.parseInt(matcher.group(3)) - 1;
 
-        return new CalendarDate(Integer.parseInt(year), Integer.parseInt(month) - 1,
-            Integer.parseInt(day) - 1);
+        return new CalendarDate(year, month, day);
     }
 }
