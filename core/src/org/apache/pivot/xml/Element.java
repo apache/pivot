@@ -31,11 +31,11 @@ import org.apache.pivot.util.ListenerList;
 /**
  * Node class representing an XML element.
  */
-public class Element extends Node implements List<Node>, Dictionary<String, String> {
+public class Element extends Node implements List<Node> {
     /**
      * Dictionary representing the namespaces declared by this element.
      */
-    public class NamespaceDictionary implements Dictionary<String, String> {
+    public class NamespaceDictionary implements Dictionary<String, String>, Iterable<String> {
         private NamespaceDictionary() {
         }
 
@@ -129,6 +129,111 @@ public class Element extends Node implements List<Node>, Dictionary<String, Stri
         public boolean isEmpty() {
             return namespaces.isEmpty();
         }
+
+        /**
+         * Returns an iterator over the element's namespace prefixes.
+         */
+        @Override
+        public Iterator<String> iterator() {
+            return new ImmutableIterator<String>(namespaces.iterator());
+        }
+    }
+
+    /**
+     * Dictionary representing the attributes declared by this element.
+     */
+    public class AttributeDictionary implements Dictionary<String, String>, Iterable<String> {
+        private AttributeDictionary() {
+        }
+
+        /**
+         * Returns an attribute value.
+         */
+        @Override
+        public String get(String attribute) {
+            return attributes.get(attribute);
+        }
+
+        /**
+         * Sets an attribute value.
+         *
+         * @param attribute
+         * @param value
+         *
+         * @return
+         * The value previously associated with the given attribute.
+         */
+        @Override
+        public String put(String attribute, String value) {
+            if (value == null) {
+                throw new IllegalArgumentException("value is null.");
+            }
+
+            boolean update = containsKey(attribute);
+            String previousValue = attributes.put(attribute, value);
+
+            if (update) {
+                elementListeners.attributeUpdated(Element.this, attribute, previousValue);
+            } else {
+                elementListeners.attributeAdded(Element.this, attribute);
+            }
+
+            return previousValue;
+        }
+
+        /**
+         * Removes an attribute value.
+         *
+         * @param attribute
+         *
+         * @return
+         * The value previously associated with the given attribute.
+         */
+        @Override
+        public String remove(String attribute) {
+            String value = null;
+
+            if (containsKey(attribute)) {
+                value = attributes.remove(attribute);
+                elementListeners.namespaceRemoved(Element.this, attribute, value);
+            }
+
+            return value;
+        }
+
+        /**
+         * Tests for the existence of an attribute.
+         *
+         * @param attribute
+         *
+         * @return
+         * <tt>true</tt> if this element defines the given attribute; <tt>false<tt>,
+         * otherwise.
+         */
+        @Override
+        public boolean containsKey(String attribute) {
+            return attributes.containsKey(attribute);
+        }
+
+        /**
+         * Determines if this element defines any attributes.
+         *
+         * @return
+         * <tt>true</tt> if this element does not define any attributes;
+         * <tt>false</tt>, otherwise.
+         */
+        @Override
+        public boolean isEmpty() {
+            return attributes.isEmpty();
+        }
+
+        /**
+         * Returns an iterator over the element's attributes.
+         */
+        @Override
+        public Iterator<String> iterator() {
+            return new ImmutableIterator<String>(attributes.iterator());
+        }
     }
 
     private static class ElementListenerList extends ListenerList<ElementListener>
@@ -205,6 +310,8 @@ public class Element extends Node implements List<Node>, Dictionary<String, Stri
     private String defaultNamespaceURI = null;
 
     private HashMap<String, String> attributes = new HashMap<String, String>();
+    private AttributeDictionary attributeDictionary = new AttributeDictionary();
+
     private ArrayList<Node> nodes = new ArrayList<Node>();
 
     private ListListenerList<Node> listListeners = new ListListenerList<Node>();
@@ -401,91 +508,10 @@ public class Element extends Node implements List<Node>, Dictionary<String, Stri
     }
 
     /**
-     * Returns an attribute value.
+     * Returns the element's attribute dictionary.
      */
-    @Override
-    public String get(String attribute) {
-        return attributes.get(attribute);
-    }
-
-    /**
-     * Sets an attribute value.
-     *
-     * @param attribute
-     * @param value
-     *
-     * @return
-     * The value previously associated with the given attribute.
-     */
-    @Override
-    public String put(String attribute, String value) {
-        if (value == null) {
-            throw new IllegalArgumentException("value is null.");
-        }
-
-        boolean update = containsKey(attribute);
-        String previousValue = attributes.put(attribute, value);
-
-        if (update) {
-            elementListeners.attributeUpdated(Element.this, attribute, previousValue);
-        } else {
-            elementListeners.attributeAdded(Element.this, attribute);
-        }
-
-        return previousValue;
-    }
-
-    /**
-     * Removes an attribute value.
-     *
-     * @param attribute
-     *
-     * @return
-     * The value previously associated with the given attribute.
-     */
-    @Override
-    public String remove(String attribute) {
-        String value = null;
-
-        if (containsKey(attribute)) {
-            value = attributes.remove(attribute);
-            elementListeners.namespaceRemoved(Element.this, attribute, value);
-        }
-
-        return value;
-    }
-
-    /**
-     * Tests for the existence of an attribute.
-     *
-     * @param attribute
-     *
-     * @return
-     * <tt>true</tt> if this element defines the given attribute; <tt>false<tt>,
-     * otherwise.
-     */
-    @Override
-    public boolean containsKey(String attribute) {
-        return attributes.containsKey(attribute);
-    }
-
-    /**
-     * Determines if this element defines any attributes.
-     *
-     * @return
-     * <tt>true</tt> if this element does not define any attributes;
-     * <tt>false</tt>, otherwise.
-     */
-    @Override
-    public boolean isEmpty() {
-        return attributes.isEmpty();
-    }
-
-    /**
-     * Returns an iterator over this element's attributes.
-     */
-    public Iterator<String> getAttributes() {
-        return new ImmutableIterator<String>(attributes.iterator());
+    public AttributeDictionary getAttributes() {
+        return attributeDictionary;
     }
 
     /**

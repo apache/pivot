@@ -20,7 +20,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.Iterator;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
@@ -55,6 +54,7 @@ public class XMLViewer implements Application {
 
     @WTKX private TreeView treeView = null;
     @WTKX private CardPane propertiesCardPane = null;
+    @WTKX private TableView namespacesTableView = null;
     @WTKX private TableView attributesTableView = null;
     @WTKX private TextArea textArea = null;
 
@@ -164,15 +164,29 @@ public class XMLViewer implements Application {
         } else if (node instanceof Element) {
             Element element = (Element)node;
 
+            // Populate the namespaces table
+            ArrayList<HashMap<String, String>> namespacesTableData =
+                new ArrayList<HashMap<String, String>>();
+
+            Element.NamespaceDictionary namespaceDictionary = element.getNamespaces();
+            for (String prefix : namespaceDictionary) {
+                HashMap<String, String> row = new HashMap<String, String>();
+                row.put("prefix", prefix);
+                row.put("uri", namespaceDictionary.get(prefix));
+                namespacesTableData.add(row);
+            }
+
+            namespacesTableView.setTableData(namespacesTableData);
+
+            // Populate the attributes table
             ArrayList<HashMap<String, String>> attributesTableData =
                 new ArrayList<HashMap<String, String>>();
-            Iterator<String> attributes = element.getAttributes();
 
-            while (attributes.hasNext()) {
-                String attribute = attributes.next();
+            Element.AttributeDictionary attributeDictionary = element.getAttributes();
+            for (String attribute : attributeDictionary) {
                 HashMap<String, String> row = new HashMap<String, String>();
                 row.put("attribute", attribute);
-                row.put("value", element.get(attribute));
+                row.put("value", attributeDictionary.get(attribute));
                 attributesTableData.add(row);
             }
 
@@ -180,7 +194,7 @@ public class XMLViewer implements Application {
 
             propertiesCardPane.setSelectedIndex(0);
         } else {
-            propertiesCardPane.setSelectedIndex(-1);
+            throw new IllegalStateException();
         }
     }
 

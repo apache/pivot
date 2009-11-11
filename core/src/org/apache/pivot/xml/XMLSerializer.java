@@ -66,7 +66,7 @@ public class XMLSerializer implements Serializer<Element> {
         this.charset = charset;
 
         xmlInputFactory = XMLInputFactory.newInstance();
-        xmlInputFactory.setProperty("javax.xml.stream.isCoalescing", true);
+        xmlInputFactory.setProperty("javax.xml.stream.isCoalescing", false);
     }
 
     public Charset getCharset() {
@@ -100,17 +100,9 @@ public class XMLSerializer implements Serializer<Element> {
                 int event = xmlStreamReader.next();
 
                 switch (event) {
-                    case XMLStreamConstants.NAMESPACE: {
-                        // TODO
-                        break;
-                    }
-
                     case XMLStreamConstants.CHARACTERS: {
                         String text = xmlStreamReader.getText();
-                        text = text.trim();
-                        if (text.length() > 0) {
-                            element.add(new TextNode(text));
-                        }
+                        element.add(new TextNode(text));
 
                         break;
                     }
@@ -126,6 +118,19 @@ public class XMLSerializer implements Serializer<Element> {
 
                         Element element = new Element(prefix, localName);
 
+                        // Get the element's namespaces
+                        for (int i = 0, n = xmlStreamReader.getNamespaceCount(); i < n; i++) {
+                            String namespacePrefix = xmlStreamReader.getNamespacePrefix(i);
+                            String namespaceURI = xmlStreamReader.getNamespaceURI(i);
+
+                            if (namespacePrefix == null) {
+                                element.setDefaultNamespaceURI(namespaceURI);
+                            } else {
+                                element.getNamespaces().put(namespacePrefix, namespaceURI);
+                            }
+                        }
+
+                        // Get the element's attributes
                         for (int i = 0, n = xmlStreamReader.getAttributeCount(); i < n; i++) {
                             String attributePrefix = xmlStreamReader.getAttributePrefix(i);
                             String attributeLocalName = xmlStreamReader.getAttributeLocalName(i);
@@ -138,7 +143,7 @@ public class XMLSerializer implements Serializer<Element> {
                                 attribute = attributePrefix + ":" + attributeLocalName;
                             }
 
-                            element.put(attribute, attributeValue);
+                            element.getAttributes().put(attribute, attributeValue);
                         }
 
                         if (this.element != null) {
