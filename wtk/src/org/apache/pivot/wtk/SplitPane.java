@@ -42,6 +42,16 @@ public class SplitPane extends Container {
         BOTTOM_RIGHT
     }
 
+    /**
+     * Enumeration defining split pane resizing modes.
+     */
+    public enum ResizeMode {
+        /** when resizing, maintain the ratio between the regions */
+        SPLIT_RATIO,
+        /** when resizing, preserve the size of the primary region */
+        PRIMARY_REGION
+    }
+    
     private static class SplitPaneListenerList extends ListenerList<SplitPaneListener>
         implements SplitPaneListener {
         @Override
@@ -85,12 +95,20 @@ public class SplitPane extends Container {
                 listener.lockedChanged(splitPane);
             }
         }
+        
+        @Override
+        public void resizeModeChanged(SplitPane splitPane, ResizeMode previousResizeMode) {
+            for (SplitPaneListener listener : this) {
+                listener.resizeModeChanged(splitPane, previousResizeMode);
+            }
+        }
     }
 
     private Component topLeft = null;
     private Component bottomRight = null;
     private Orientation orientation = null;
     private Region primaryRegion = Region.TOP_LEFT;
+    private ResizeMode resizeMode = ResizeMode.SPLIT_RATIO;
     private float splitRatio = 0.5f;
     private boolean locked = false;
 
@@ -278,6 +296,31 @@ public class SplitPane extends Container {
         }
     }
 
+    public ResizeMode getResizeMode() {
+        return resizeMode;
+    }
+
+    public void setResizeMode(ResizeMode resizeMode) {
+        if (resizeMode == null) {
+            throw new IllegalArgumentException("resizeMode is null.");
+        }
+
+        ResizeMode previousResizeMode = this.resizeMode;
+        
+        if (this.resizeMode != resizeMode) {
+            this.resizeMode = resizeMode;
+            splitPaneListeners.resizeModeChanged(this, previousResizeMode);
+        }
+    }
+
+    public void setResizeMode(String resizeMode) {
+        if (resizeMode == null) {
+            throw new IllegalArgumentException("resizeMode is null.");
+        }
+
+        setResizeMode(ResizeMode.valueOf(resizeMode.toUpperCase()));
+    }
+    
     @Override
     public Sequence<Component> remove(int index, int count) {
         for (int i = index, n = index + count; i < n; i++) {

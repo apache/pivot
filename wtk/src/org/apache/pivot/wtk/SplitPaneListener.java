@@ -76,4 +76,16 @@ public interface SplitPaneListener {
      * The source of the event.
      */
     public void lockedChanged(SplitPane splitPane);
+    
+    /**
+     * Called when a split pane's split location has changed.
+     *
+     * @param splitPane
+     * The source of the event.
+     *
+     * @param previousResizeMode
+     * The previous setting of the resizeMode.
+     */
+    public void resizeModeChanged(SplitPane splitPane, SplitPane.ResizeMode previousResizeMode);
+
 }
