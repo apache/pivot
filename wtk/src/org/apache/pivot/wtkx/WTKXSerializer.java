@@ -322,7 +322,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         this.namedSerializers = namedSerializers;
 
         xmlInputFactory = XMLInputFactory.newInstance();
-        xmlInputFactory.setProperty("javax.xml.stream.isCoalescing", true);
+        xmlInputFactory.setProperty("javax.xml.stream.isCoalescing", false);
 
         scriptEngineManager = new javax.script.ScriptEngineManager();
         scriptEngineManager.setBindings(new NamedObjectBindings());
@@ -407,35 +407,35 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
 
         try {
             try {
-                XMLStreamReader reader = xmlInputFactory.createXMLStreamReader(inputStream);
+                XMLStreamReader xmlStreamReader = xmlInputFactory.createXMLStreamReader(inputStream);
 
-                while (reader.hasNext()) {
-                    int event = reader.next();
+                while (xmlStreamReader.hasNext()) {
+                    int event = xmlStreamReader.next();
 
                     switch (event) {
                         case XMLStreamConstants.PROCESSING_INSTRUCTION: {
-                            processProcessingInstruction(reader);
+                            processProcessingInstruction(xmlStreamReader);
                             break;
                         }
 
                         case XMLStreamConstants.CHARACTERS: {
-                            processCharacters(reader);
+                            processCharacters(xmlStreamReader);
                             break;
                         }
 
                         case XMLStreamConstants.START_ELEMENT: {
-                            processStartElement(reader);
+                            processStartElement(xmlStreamReader);
                             break;
                         }
 
                         case XMLStreamConstants.END_ELEMENT: {
-                            processEndElement(reader);
+                            processEndElement(xmlStreamReader);
                             break;
                         }
                     }
                 }
 
-                reader.close();
+                xmlStreamReader.close();
             } catch (XMLStreamException exception) {
                 throw new SerializationException(exception);
             }
@@ -453,9 +453,9 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         return root;
     }
 
-    private void processProcessingInstruction(XMLStreamReader reader) {
-        String piTarget = reader.getPITarget();
-        String piData = reader.getPIData();
+    private void processProcessingInstruction(XMLStreamReader xmlStreamReader) {
+        String piTarget = xmlStreamReader.getPITarget();
+        String piData = xmlStreamReader.getPIData();
 
         if (piTarget.equals(LANGUAGE_PROCESSING_INSTRUCTION)) {
             language = piData;
@@ -463,90 +463,61 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
     }
 
     @SuppressWarnings("unchecked")
-    private void processCharacters(XMLStreamReader reader) throws SerializationException {
-        if (!reader.isWhiteSpace()) {
-            String text = reader.getText();
+    private void processCharacters(XMLStreamReader xmlStreamReader) throws SerializationException {
+        if (!xmlStreamReader.isWhiteSpace()) {
+            // Process the text
+            String text = xmlStreamReader.getText();
 
-            if (text.length() > 0) {
-                // Strip any whitespace characters
-                StringBuilder buf = new StringBuilder();
+            switch (element.type) {
+                case INSTANCE: {
+                    if (element.value instanceof Sequence<?>) {
+                        Sequence<Object> sequence = (Sequence<Object>)element.value;
 
-                int count = 0;
-                for (int i = 0, n = text.length(); i < n; i++) {
-                    char c = text.charAt(i);
-
-                    if (Character.isWhitespace(c)) {
-                        if (count == 0
-                            && i > 0) {
-                            buf.append(' ');
+                        try {
+                            Method addMethod = sequence.getClass().getMethod("add",
+                                new Class<?>[] {String.class});
+                            addMethod.invoke(sequence, new Object[] {text});
+                        } catch (NoSuchMethodException exception) {
+                            throw new SerializationException("Text content cannot be added to "
+                                + sequence.getClass().getName() + ".", exception);
+                        } catch (InvocationTargetException exception) {
+                            throw new SerializationException(exception);
+                        } catch (IllegalAccessException exception) {
+                            throw new SerializationException(exception);
                         }
-
-                        count++;
-                    } else {
-                        buf.append(c);
-                        count = 0;
                     }
+
+                    break;
                 }
 
-                int n = buf.length();
-                if (Character.isWhitespace(buf.charAt(n - 1))) {
-                    buf.deleteCharAt(n - 1);
+                case SCRIPT:
+                case WRITABLE_PROPERTY: {
+                    element.value = text;
+                    break;
                 }
 
-                text = buf.toString();
-
-                // Process the text
-                switch (element.type) {
-                    case INSTANCE: {
-                        if (element.value instanceof Sequence<?>) {
-                            Sequence<Object> sequence = (Sequence<Object>)element.value;
-
-                            try {
-                                Method addMethod = sequence.getClass().getMethod("add",
-                                    new Class<?>[] {String.class});
-                                addMethod.invoke(sequence, new Object[] {text});
-                            } catch (NoSuchMethodException exception) {
-                                throw new SerializationException("Text content cannot be added to "
-                                    + sequence.getClass().getName() + ".", exception);
-                            } catch (InvocationTargetException exception) {
-                                throw new SerializationException(exception);
-                            } catch (IllegalAccessException exception) {
-                                throw new SerializationException(exception);
-                            }
-                        }
-
-                        break;
-                    }
-
-                    case SCRIPT:
-                    case WRITABLE_PROPERTY: {
-                        element.value = text;
-                        break;
-                    }
-
-                    default: {
-                        throw new SerializationException("Unexpected characters in "
-                            + element.type + " element.");
-                    }
+                default: {
+                    throw new SerializationException("Unexpected characters in "
+                        + element.type + " element.");
                 }
             }
         }
     }
 
-    private void processStartElement(XMLStreamReader reader) throws SerializationException {
+    private void processStartElement(XMLStreamReader xmlStreamReader) throws SerializationException {
         // Get element properties
-        String namespaceURI = reader.getNamespaceURI();
-        String prefix = reader.getPrefix();
-        String localName = reader.getLocalName();
+        String namespaceURI = xmlStreamReader.getNamespaceURI();
+        String prefix = xmlStreamReader.getPrefix();
+        String localName = xmlStreamReader.getLocalName();
 
         // Build attribute list; these will be processed in the close tag
         String id = null;
         ArrayList<Attribute> attributes = new ArrayList<Attribute>();
 
-        for (int i = 0, n = reader.getAttributeCount(); i < n; i++) {
-            String attributePrefix = reader.getAttributePrefix(i);
-            String attributeLocalName = reader.getAttributeLocalName(i);
-            String attributeValue = reader.getAttributeValue(i);
+        for (int i = 0, n = xmlStreamReader.getAttributeCount(); i < n; i++) {
+            String attributePrefix = xmlStreamReader.getAttributePrefix(i);
+            String attributeLocalName = xmlStreamReader.getAttributeLocalName(i);
+            String attributeValue = xmlStreamReader.getAttributeValue(i);
 
             if (attributePrefix != null
                 && attributePrefix.equals(WTKX_PREFIX)) {
@@ -562,9 +533,9 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                         + " is not a valid attribute.");
                 }
             } else {
-                String attributeNamespaceURI = reader.getAttributeNamespace(i);
+                String attributeNamespaceURI = xmlStreamReader.getAttributeNamespace(i);
                 if (attributeNamespaceURI == null) {
-                    attributeNamespaceURI = reader.getNamespaceURI("");
+                    attributeNamespaceURI = xmlStreamReader.getNamespaceURI("");
                 }
 
                 attributes.add(new Attribute(attributeNamespaceURI, attributeLocalName,
@@ -656,7 +627,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             tagName = prefix + ":" + tagName;
         }
 
-        Location xmlStreamLocation = reader.getLocation();
+        Location xmlStreamLocation = xmlStreamReader.getLocation();
         element = new Element(element, elementType, id, tagName, xmlStreamLocation.getLineNumber(),
             attributes, value);
 
@@ -667,9 +638,9 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
     }
 
     @SuppressWarnings("unchecked")
-    private void processEndElement(XMLStreamReader reader)
+    private void processEndElement(XMLStreamReader xmlStreamReader)
         throws SerializationException, IOException {
-        String localName = reader.getLocalName();
+        String localName = xmlStreamReader.getLocalName();
 
         switch (element.type) {
             case INSTANCE:

@@ -101,8 +101,10 @@ public class XMLSerializer implements Serializer<Element> {
 
                 switch (event) {
                     case XMLStreamConstants.CHARACTERS: {
-                        String text = xmlStreamReader.getText();
-                        element.add(new TextNode(text));
+                        if (!xmlStreamReader.isWhiteSpace()) {
+                            String text = xmlStreamReader.getText();
+                            element.add(new TextNode(text));
+                        }
 
                         break;
                     }
@@ -110,7 +112,8 @@ public class XMLSerializer implements Serializer<Element> {
                     case XMLStreamConstants.START_ELEMENT: {
                         // Create the element
                         String prefix = xmlStreamReader.getPrefix();
-                        if (prefix.length() == 0) {
+                        if (prefix != null
+                            && prefix.length() == 0) {
                             prefix = null;
                         }
 
