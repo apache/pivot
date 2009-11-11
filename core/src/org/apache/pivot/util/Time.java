@@ -245,9 +245,8 @@ public final class Time implements Comparable<Time>, Serializable {
     }
 
     public Time(int milliseconds) {
-        if (milliseconds < 0 || milliseconds > MILLISECONDS_PER_DAY - 1) {
-            throw new IllegalArgumentException("Invalid milliseconds.");
-        }
+        milliseconds %= MILLISECONDS_PER_DAY;
+        milliseconds = (milliseconds + MILLISECONDS_PER_DAY) % MILLISECONDS_PER_DAY;
 
         hour = milliseconds / MILLISECONDS_PER_HOUR;
         milliseconds %= MILLISECONDS_PER_HOUR;
@@ -273,15 +272,7 @@ public final class Time implements Comparable<Time>, Serializable {
      * The resulting time.
      */
     public Time add(int milliseconds) {
-        milliseconds += toMilliseconds();
-
-        milliseconds %= MILLISECONDS_PER_DAY;
-
-        if (milliseconds < 0) {
-            milliseconds += MILLISECONDS_PER_DAY;
-        }
-
-        return new Time(milliseconds);
+        return new Time(toMilliseconds() + milliseconds);
     }
 
     /**

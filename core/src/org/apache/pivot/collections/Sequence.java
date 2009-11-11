@@ -194,17 +194,11 @@ public interface Sequence<T> {
                 normalize();
             }
 
-            /**
-             * {@inheritDoc}
-             */
             @Override
             public boolean hasNext() {
                 return (stack.peek() != null);
             }
 
-            /**
-             * {@inheritDoc}
-             */
             @Override
             @SuppressWarnings("unchecked")
             public T next() {
@@ -258,17 +252,11 @@ public interface Sequence<T> {
                 }
             }
 
-            /**
-             * {@inheritDoc}
-             */
             @Override
             public void remove() {
                 throw new UnsupportedOperationException();
             }
 
-            /**
-             * {@inheritDoc}
-             */
             @Override
             public Path getPath() {
                 if (previousPath == null) {
@@ -317,8 +305,7 @@ public interface Sequence<T> {
          * sequence.
          */
         @SuppressWarnings("unchecked")
-        public static <T> void insert(Sequence<T> sequence, T item, Path path,
-            int index) {
+        public static <T> void insert(Sequence<T> sequence, T item, Path path, int index) {
             ((Sequence<T>)get(sequence, path)).insert(item, index);
         }
 
