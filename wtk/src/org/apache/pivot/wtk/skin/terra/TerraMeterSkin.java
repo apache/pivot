@@ -24,7 +24,6 @@ import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.font.FontRenderContext;
 import java.awt.font.LineMetrics;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 
 import org.apache.pivot.collections.Dictionary;
@@ -84,7 +83,7 @@ public class TerraMeterSkin extends ComponentSkin
 
         int preferredWidth;
 
-        if (meter.getOrientation()==Orientation.HORIZONTAL) {
+        if (meter.getOrientation() == Orientation.HORIZONTAL) {
             String text = meter.getText();
 
             if (text != null
@@ -98,7 +97,6 @@ public class TerraMeterSkin extends ComponentSkin
             // If the meter has no content, its preferred width is hard-coded by the
             // class and is not affected by the height constraint
             preferredWidth = Math.max(preferredWidth, DEFAULT_WIDTH);
-
         } else {
             preferredWidth = getPreferredHeight(-1);
         }
@@ -112,7 +110,7 @@ public class TerraMeterSkin extends ComponentSkin
 
         int preferredHeight;
 
-        if (meter.getOrientation()==Orientation.HORIZONTAL) {
+        if (meter.getOrientation() == Orientation.HORIZONTAL) {
             preferredHeight = getPreferredWidth(width);
         } else {
             String text = meter.getText();
@@ -154,7 +152,7 @@ public class TerraMeterSkin extends ComponentSkin
         preferredHeight = Math.max(preferredHeight, DEFAULT_HEIGHT);
 
         Dimensions preferredSize;
-        if (meter.getOrientation()==Orientation.HORIZONTAL) {
+        if (meter.getOrientation() == Orientation.HORIZONTAL) {
             preferredSize = new Dimensions(preferredWidth, preferredHeight);
         } else {
             preferredSize = new Dimensions(preferredHeight, preferredWidth);
@@ -213,16 +211,15 @@ public class TerraMeterSkin extends ComponentSkin
         if (meter.getOrientation() == Orientation.HORIZONTAL) {
             drawMeter(meter, graphics, width, height);
         } else {
-            AffineTransform oldTransform = graphics.getTransform();
             graphics.rotate(Math.PI / 2d);
             graphics.translate(0, -width);
             drawMeter(meter, graphics, height, width);
-            graphics.setTransform(oldTransform);
         }
     }
 
     private void drawMeter(Meter meter, Graphics2D graphics, int width, int height) {
         int meterStop = (int)(meter.getPercentage() * width);
+
         // Paint the interior fill
         graphics.setPaint(new GradientPaint(0, 0, TerraTheme.brighten(fillColor),
             0, height, TerraTheme.darken(fillColor)));

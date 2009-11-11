@@ -46,10 +46,14 @@ public class SplitPane extends Container {
      * Enumeration defining split pane resizing modes.
      */
     public enum ResizeMode {
-        /** When resizing, maintains the ratio between the regions. */
+        /**
+         * When resizing, maintain the ratio between the regions.
+         */
         SPLIT_RATIO,
 
-        /** When resizing, preserves the size of the primary region. */
+        /**
+         * When resizing, preserve the size of the primary region.
+         */
         PRIMARY_REGION
     }
 
@@ -308,7 +312,7 @@ public class SplitPane extends Container {
 
         ResizeMode previousResizeMode = this.resizeMode;
 
-        if (this.resizeMode != resizeMode) {
+        if (previousResizeMode != resizeMode) {
             this.resizeMode = resizeMode;
             splitPaneListeners.resizeModeChanged(this, previousResizeMode);
         }

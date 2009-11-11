@@ -29,7 +29,6 @@ import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.SplitPane;
 import org.apache.pivot.wtk.SplitPaneListener;
 import org.apache.pivot.wtk.Theme;
-import org.apache.pivot.wtk.SplitPane.ResizeMode;
 import org.apache.pivot.wtk.skin.ComponentSkin;
 import org.apache.pivot.wtk.skin.ContainerSkin;
 
@@ -157,11 +156,6 @@ public class TerraSplitPaneSkin extends ContainerSkin implements SplitPaneListen
                 if (shadow == null) {
                     // Update the split location immediately
                     splitPane.setSplitRatio(splitRatio);
-                    if (orientation == Orientation.HORIZONTAL) {
-                        splitter.setLocation(splitLocation, 0);
-                    } else {
-                        splitter.setLocation(0, splitLocation);
-                    }
                 } else {
                     // Move the shadow to the split location
                     if (orientation == Orientation.HORIZONTAL) {
@@ -215,7 +209,6 @@ public class TerraSplitPaneSkin extends ContainerSkin implements SplitPaneListen
                 && Mouse.getCapturer() == component) {
                 if (shadow != null) {
                     SplitPane splitPane = (SplitPane)TerraSplitPaneSkin.this.getComponent();
-                    Orientation orientation = splitPane.getOrientation();
 
                     // Update the split location and remove the shadow
                     int splitLocation;
@@ -229,11 +222,7 @@ public class TerraSplitPaneSkin extends ContainerSkin implements SplitPaneListen
                     }
 
                     splitPane.setSplitRatio(splitRatio);
-                    if (orientation == Orientation.HORIZONTAL) {
-                        splitter.setLocation(splitLocation, 0);
-                    } else {
-                        splitter.setLocation(0, splitLocation);
-                    }
+
                     splitPane.remove(shadow);
                     shadow = null;
                 }
@@ -306,9 +295,48 @@ public class TerraSplitPaneSkin extends ContainerSkin implements SplitPaneListen
         SplitPane splitPane = (SplitPane)component;
         splitPane.getSplitPaneListeners().add(this);
 
-        splitter.setLocation(-1, -1);
         splitPane.add(splitter);
         updateSplitterCursor();
+    }
+
+    @Override
+    public void setSize(int width, int height) {
+        int previousWidth = getWidth();
+        int previousHeight = getHeight();
+
+        super.setSize(width, height);
+
+        SplitPane splitPane = (SplitPane)getComponent();
+        Orientation orientation = splitPane.getOrientation();
+
+        if (splitPane.getResizeMode() == SplitPane.ResizeMode.PRIMARY_REGION
+            && ((previousWidth != width && orientation == Orientation.HORIZONTAL)
+            || (previousHeight != height && orientation == Orientation.VERTICAL))) {
+            SplitPane.Region primaryRegion = splitPane.getPrimaryRegion();
+            float splitRatio = splitPane.getSplitRatio();
+
+            if (orientation == Orientation.HORIZONTAL) {
+                int splitLocation = (int)(splitRatio * previousWidth);
+
+                if (primaryRegion == SplitPane.Region.BOTTOM_RIGHT) {
+                    // Move the split location to maintain size on the right
+                    splitLocation += (width - previousWidth);
+                }
+
+                splitRatio = (float)limitSplitLocation(splitLocation) / width;
+            } else {
+                int splitLocation = (int)(splitRatio * previousHeight);
+
+                if (primaryRegion == SplitPane.Region.BOTTOM_RIGHT) {
+                    // Move the split location to maintain size on the bottom
+                    splitLocation += (height - previousHeight);
+                }
+
+                splitRatio = (float)limitSplitLocation(splitLocation) / height;
+            }
+
+            splitPane.setSplitRatio(splitRatio);
+        }
     }
 
     @Override
@@ -334,17 +362,11 @@ public class TerraSplitPaneSkin extends ContainerSkin implements SplitPaneListen
         SplitPane splitPane = (SplitPane)getComponent();
 
         float splitRatio = splitPane.getSplitRatio();
-        SplitPane.ResizeMode resizeMode = splitPane.getResizeMode();
         Component topLeft = splitPane.getTopLeft();
         Component bottomRight = splitPane.getBottomRight();
 
         if (splitPane.getOrientation() == Orientation.HORIZONTAL) {
-            int splitLocation;
-            if (resizeMode == SplitPane.ResizeMode.SPLIT_RATIO || splitter.getX()==-1) {
-                splitLocation = limitSplitLocation((int)(splitRatio * width));
-            } else {
-                splitLocation = limitSplitLocation(splitter.getX());
-            }
+            int splitLocation = limitSplitLocation((int)(splitRatio * width));
             int rightStart = splitLocation + splitterThickness;
             splitter.setLocation(splitLocation, 0);
             splitter.setSize(splitterThickness, height);
@@ -359,12 +381,7 @@ public class TerraSplitPaneSkin extends ContainerSkin implements SplitPaneListen
                 bottomRight.setSize(Math.max(width - rightStart, 0), height);
             }
         } else {
-            int splitLocation;
-            if (resizeMode == SplitPane.ResizeMode.SPLIT_RATIO || splitter.getY()==-1) {
-                splitLocation = limitSplitLocation((int)(splitRatio * height));
-            } else {
-                splitLocation = limitSplitLocation(splitter.getY());
-            }
+            int splitLocation = limitSplitLocation((int)(splitRatio * height));
             int bottomStart = splitLocation + splitterThickness;
             splitter.setLocation(0, splitLocation);
             splitter.setSize(width, splitterThickness);
@@ -489,7 +506,8 @@ public class TerraSplitPaneSkin extends ContainerSkin implements SplitPaneListen
     }
 
     @Override
-    public void resizeModeChanged(SplitPane splitPane, ResizeMode previousResizeMode) {
+    public void resizeModeChanged(SplitPane splitPane, SplitPane.ResizeMode previousResizeMode) {
+        // No-op
     }
 
     private void updateSplitterCursor() {
