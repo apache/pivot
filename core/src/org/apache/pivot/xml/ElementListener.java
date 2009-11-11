@@ -24,28 +24,40 @@ public interface ElementListener {
      * Element listener adapter.
      */
     public static class Adapter implements ElementListener {
+        @Override
         public void namespacePrefixChanged(Element element, String previousNamespacePrefix) {
         }
 
+        @Override
         public void localNameChanged(Element element, String previousLocalName) {
         }
 
+        @Override
         public void attributeAdded(Element element, String attribute) {
         }
 
+        @Override
         public void attributeUpdated(Element element, String attribute, String previousValue) {
         }
 
-        public void attributeRemoved(Element element, String attribute) {
+        @Override
+        public void attributeRemoved(Element element, String attribute, String value) {
         }
 
+        @Override
+        public void defaultNamespaceURIChanged(Element element, String previousDefaultNamespaceURI) {
+        }
+
+        @Override
         public void namespaceAdded(Element element, String prefix) {
         }
 
+        @Override
         public void namespaceUpdated(Element element, String prefix, String previousURI) {
         }
 
-        public void namespaceRemoved(Element element, String prefix) {
+        @Override
+        public void namespaceRemoved(Element element, String prefix, String uri) {
         }
     }
 
@@ -87,8 +99,17 @@ public interface ElementListener {
      *
      * @param element
      * @param attribute
+     * @param value
      */
-    public void attributeRemoved(Element element, String attribute);
+    public void attributeRemoved(Element element, String attribute, String value);
+
+    /**
+     * Called when an element's default namespace URI has changed.
+     *
+     * @param element
+     * @param previousDefaultNamespaceURI
+     */
+    public void defaultNamespaceURIChanged(Element element, String previousDefaultNamespaceURI);
 
     /**
      * Called when a namespace has been added to an element.
@@ -112,6 +133,7 @@ public interface ElementListener {
      *
      * @param element
      * @param prefix
+     * @param uri
      */
-    public void namespaceRemoved(Element element, String prefix);
+    public void namespaceRemoved(Element element, String prefix, String uri);
 }

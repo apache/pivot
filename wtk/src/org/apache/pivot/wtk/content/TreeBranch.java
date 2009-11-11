@@ -102,15 +102,19 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
     @Override
     public Sequence<TreeNode> remove(int index, int count) {
         Sequence<TreeNode> removed = treeNodes.remove(index, count);
-        listListeners.itemsRemoved(this, index, removed);
+        if (count > 0) {
+            listListeners.itemsRemoved(this, index, removed);
+        }
 
         return removed;
     }
 
     @Override
     public void clear() {
-        treeNodes.clear();
-        listListeners.listCleared(this);
+        if (getLength() > 0) {
+            treeNodes.clear();
+            listListeners.listCleared(this);
+        }
     }
 
     @Override
