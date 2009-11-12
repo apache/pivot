@@ -147,12 +147,12 @@ public class TerraSliderSkin extends SliderSkin {
                         sliderY = minY;
                     }
 
-                    int maxY = (sliderHeight - thumbHeight) + dragOffset.y;
+                    int maxY = (sliderHeight) + dragOffset.y;
                     if (sliderY > maxY) {
                         sliderY = maxY;
                     }
 
-                    float ratio = (float)(sliderY - dragOffset.y) / (sliderHeight - thumbHeight);
+                    float ratio = (float)(sliderHeight - sliderY + dragOffset.y) / (sliderHeight - thumbHeight);
 
                     int start = slider.getStart();
                     int end = slider.getEnd();
@@ -229,11 +229,11 @@ public class TerraSliderSkin extends SliderSkin {
             int increment = length / 10;
 
             if (keyCode == Keyboard.KeyCode.LEFT
-                || keyCode == Keyboard.KeyCode.UP) {
+                || keyCode == Keyboard.KeyCode.DOWN) {
                 slider.setValue(Math.max(start, value - increment));
                 consumed = true;
             } else if (keyCode == Keyboard.KeyCode.RIGHT
-                || keyCode == Keyboard.KeyCode.DOWN) {
+                || keyCode == Keyboard.KeyCode.UP) {
                 slider.setValue(Math.min(end, value + increment));
                 consumed = true;
             }
@@ -332,7 +332,7 @@ public class TerraSliderSkin extends SliderSkin {
             thumb.setLocation((int)((width - thumbWidth) * ratio), (height - thumbHeight) / 2);
         } else {
             thumb.setSize(thumbHeight, thumbWidth);
-            thumb.setLocation((width - thumbHeight) / 2, (int)((height - thumbWidth) * ratio));
+            thumb.setLocation((width - thumbHeight) / 2, (int)(height - ((height - thumbWidth) * ratio) - thumbWidth));
         }
     }
 
