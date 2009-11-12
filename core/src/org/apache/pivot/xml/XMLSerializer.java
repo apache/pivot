@@ -34,6 +34,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 
+import org.apache.pivot.collections.List;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.serialization.Serializer;
 
@@ -284,5 +285,17 @@ public class XMLSerializer implements Serializer<Element> {
     @Override
     public String getMIMEType(Element object) {
         return MIME_TYPE;
+    }
+
+    /**
+     * Returns all elements matching the given XPath expression.
+     * <p>
+     * NOTE This method is not yet implemented.
+     *
+     * @param path
+     */
+    public static List<Element> getElements(Element root, String path) {
+        // TODO
+        return null;
     }
 }

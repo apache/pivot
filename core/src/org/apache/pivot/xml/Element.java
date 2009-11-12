@@ -821,18 +821,6 @@ public class Element extends Node implements List<Node>, Dictionary<String, Stri
         return elementListeners;
     }
 
-    /**
-     * Returns all elements matching the given path expression.
-     * <p>
-     * NOTE This method is not yet implemented.
-     *
-     * @param path
-     */
-    public static List<Element> getElements(String path) {
-        // TODO
-        return null;
-    }
-
     private static void validateName(String namespacePrefix, String localName) {
         // Validate prefix
         if (namespacePrefix != null) {
