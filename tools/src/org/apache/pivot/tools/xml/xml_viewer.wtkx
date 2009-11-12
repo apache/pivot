@@ -95,7 +95,7 @@ limitations under the License.
                                                 <view>
                                                     <TableView wtkx:id="attributesTableView" selectMode="none">
                                                         <columns>
-                                                            <TableView.Column name="attribute" width="1*" headerData="Attribute"/>
+                                                            <TableView.Column name="name" width="1*" headerData="Name"/>
                                                             <TableView.Column name="value" width="1*" headerData="Value"/>
                                                         </columns>
                                                     </TableView>

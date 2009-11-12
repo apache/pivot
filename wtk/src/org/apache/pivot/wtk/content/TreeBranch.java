@@ -69,8 +69,8 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
 
     @Override
     public int add(TreeNode treeNode) {
-        int index = treeNodes.add(treeNode);
-        listListeners.itemInserted(this, index);
+        int index = getLength();
+        insert(treeNode, index);
 
         return index;
     }
@@ -91,7 +91,7 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
 
     @Override
     public int remove(TreeNode treeNode) {
-        int index = treeNodes.indexOf(treeNode);
+        int index = indexOf(treeNode);
         if (index != -1) {
             remove(index, 1);
         }

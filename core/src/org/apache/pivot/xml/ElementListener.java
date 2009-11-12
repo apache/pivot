@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.xml;
 
+import org.apache.pivot.collections.Sequence;
+
 /**
  * Element listener interface.
  */
@@ -24,26 +26,6 @@ public interface ElementListener {
      * Element listener adapter.
      */
     public static class Adapter implements ElementListener {
-        @Override
-        public void namespacePrefixChanged(Element element, String previousNamespacePrefix) {
-        }
-
-        @Override
-        public void localNameChanged(Element element, String previousLocalName) {
-        }
-
-        @Override
-        public void attributeAdded(Element element, String attribute) {
-        }
-
-        @Override
-        public void attributeUpdated(Element element, String attribute, String previousValue) {
-        }
-
-        @Override
-        public void attributeRemoved(Element element, String attribute, String value) {
-        }
-
         @Override
         public void defaultNamespaceURIChanged(Element element, String previousDefaultNamespaceURI) {
         }
@@ -59,49 +41,19 @@ public interface ElementListener {
         @Override
         public void namespaceRemoved(Element element, String prefix, String uri) {
         }
+
+        @Override
+        public void attributeInserted(Element element, int index) {
+        }
+
+        @Override
+        public void attributesRemoved(Element element, int index, Sequence<Element.Attribute> attributes) {
+        }
+
+        @Override
+        public void attributeValueChanged(Element.Attribute attribute, String previousValue) {
+        }
     }
-
-    /**
-     * Called when an element's namespace prefix has changed.
-     *
-     * @param element
-     * @param previousNamespacePrefix
-     */
-    public void namespacePrefixChanged(Element element, String previousNamespacePrefix);
-
-    /**
-     * Called when an element's local name has changed.
-     *
-     * @param element
-     * @param previousLocalName
-     */
-    public void localNameChanged(Element element, String previousLocalName);
-
-    /**
-     * Called when an attribute has been added to an element.
-     *
-     * @param element
-     * @param attribute
-     */
-    public void attributeAdded(Element element, String attribute);
-
-    /**
-     * Called when an element attribute has been updated.
-     *
-     * @param element
-     * @param attribute
-     * @param previousValue
-     */
-    public void attributeUpdated(Element element, String attribute, String previousValue);
-
-    /**
-     * Called when an attribute has been removed from an element.
-     *
-     * @param element
-     * @param attribute
-     * @param value
-     */
-    public void attributeRemoved(Element element, String attribute, String value);
 
     /**
      * Called when an element's default namespace URI has changed.
@@ -136,4 +88,29 @@ public interface ElementListener {
      * @param uri
      */
     public void namespaceRemoved(Element element, String prefix, String uri);
+
+    /**
+     * Called when an attribute has been added to an element.
+     *
+     * @param element
+     * @param attribute
+     */
+    public void attributeInserted(Element element, int index);
+
+    /**
+     * Called when attributes have been removed from an element.
+     *
+     * @param element
+     * @param index
+     * @param attributes
+     */
+    public void attributesRemoved(Element element, int index, Sequence<Element.Attribute> attributes);
+
+    /**
+     * Called when an attribute's value has changed.
+     *
+     * @param attribute
+     * @param previousValue
+     */
+    public void attributeValueChanged(Element.Attribute attribute, String previousValue);
 }

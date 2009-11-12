@@ -136,17 +136,16 @@ public class XMLSerializer implements Serializer<Element> {
                         // Get the element's attributes
                         for (int i = 0, n = xmlStreamReader.getAttributeCount(); i < n; i++) {
                             String attributePrefix = xmlStreamReader.getAttributePrefix(i);
+                            if (attributePrefix != null
+                                && attributePrefix.length() == 0) {
+                                attributePrefix = null;
+                            }
+
                             String attributeLocalName = xmlStreamReader.getAttributeLocalName(i);
                             String attributeValue = xmlStreamReader.getAttributeValue(i);
 
-                            String attribute;
-                            if (attributePrefix.length() == 0) {
-                                attribute = attributeLocalName;
-                            } else {
-                                attribute = attributePrefix + ":" + attributeLocalName;
-                            }
-
-                            element.getAttributes().put(attribute, attributeValue);
+                            element.getAttributes().add(new Element.Attribute(attributePrefix,
+                                attributeLocalName, attributeValue));
                         }
 
                         if (this.element != null) {

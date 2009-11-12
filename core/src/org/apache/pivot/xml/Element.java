@@ -31,7 +31,241 @@ import org.apache.pivot.util.ListenerList;
 /**
  * Node class representing an XML element.
  */
-public class Element extends Node implements List<Node> {
+public class Element extends Node implements List<Node>, Dictionary<String, String> {
+    /**
+     * Class representing an XML attribute.
+     */
+    public static class Attribute {
+        private Element element = null;
+
+        private String namespacePrefix;
+        private String localName;
+        private String value;
+
+        public Attribute(String localName, String value) {
+            this(null, localName, value);
+        }
+
+        public Attribute(String namespacePrefix, String localName, String value) {
+            validateName(namespacePrefix, localName);
+
+            this.namespacePrefix = namespacePrefix;
+            this.localName = localName;
+
+            setValue(value);
+        }
+
+        /**
+         * Returns the element to which this attribute belongs.
+         *
+         * @return
+         * This attribute's element, or <tt>null</tt> if the attribute does not
+         * belong to an element.
+         */
+        public Element getElement() {
+            return element;
+        }
+
+        private void setElement(Element element) {
+            this.element = element;
+        }
+
+        /**
+         * Returns the attribute's namespace prefix.
+         *
+         * @return
+         * The attribute's namespace prefix, or <tt>null</tt> if the attribute belongs to the
+         * default namespace.
+         */
+        public String getNamespacePrefix() {
+            return namespacePrefix;
+        }
+
+        /**
+         * Returns the attribute's local name.
+         */
+        public String getLocalName() {
+            return localName;
+        }
+
+        /**
+         * Returns the fully-qualified name of the attribute.
+         */
+        public String getName() {
+            String name;
+            if (namespacePrefix == null) {
+                name = localName;
+            } else {
+                name = namespacePrefix + ":" + localName;
+            }
+
+            return name;
+        }
+
+        /**
+         * Returns the attribute's value.
+         */
+        public String getValue() {
+            return value;
+        }
+
+        /**
+         * Sets the attribute's value.
+         *
+         * @param value
+         */
+        public void setValue(String value) {
+            if (value == null) {
+                throw new IllegalArgumentException();
+            }
+
+            String previousValue = this.value;
+            if (previousValue != value) {
+                this.value = value;
+
+                if (element != null) {
+                    element.elementListeners.attributeValueChanged(this, previousValue);
+                }
+            }
+        }
+    }
+
+    /**
+     * Sequence representing the attributes declared by this element.
+     */
+    public class AttributeSequence implements Sequence<Attribute>, Iterable<Attribute> {
+        private AttributeSequence() {
+        }
+
+        /**
+         * Adds an attribute to the sequence.
+         *
+         * @param attribute
+         */
+        @Override
+        public int add(Attribute attribute) {
+            int index = getLength();
+            insert(attribute, index);
+
+            return index;
+        }
+
+        /**
+         * Inserts an attribute into the sequence at a specific location.
+         *
+         * @param attribute
+         * @param index
+         */
+        @Override
+        public void insert(Attribute attribute, int index) {
+            if (attribute == null) {
+                throw new IllegalArgumentException();
+            }
+
+            if (attribute.getElement() != null) {
+                throw new IllegalArgumentException();
+            }
+
+            String attributeName = attribute.getName();
+            if (attributeMap.containsKey(attributeName)) {
+                throw new IllegalArgumentException("Attribute \"" + attributeName + "\" already exists.");
+            }
+
+            attributes.insert(attribute, index);
+            attributeMap.put(attributeName, attribute);
+            attribute.setElement(Element.this);
+
+            elementListeners.attributeInserted(Element.this, index);
+        }
+
+        /**
+         * @throws UnsupportedOperationException
+         * This method is not supported. Use {@link Attribute#setValue(String)}
+         * instead.
+         */
+        @Override
+        public Attribute update(int index, Attribute item) {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * Removes an attribute from the sequence.
+         *
+         * @param attribute
+         */
+        @Override
+        public int remove(Attribute attribute) {
+            int index = indexOf(attribute);
+            if (index != -1) {
+                remove(index, 1);
+            }
+
+            return index;
+        }
+
+        /**
+         * Removes a range of attributes from the sequence.
+         *
+         * @param index
+         * @param count
+         */
+        @Override
+        public Sequence<Attribute> remove(int index, int count) {
+            Sequence<Attribute> removed = attributes.remove(index, count);
+            if (count > 0) {
+                for (int i = 0, n = removed.getLength(); i < n; i++ ) {
+                    Attribute attribute = removed.get(i);
+                    String attributeName = attribute.getName();
+                    attributeMap.remove(attributeName);
+                    attribute.setElement(null);
+                }
+
+                elementListeners.attributesRemoved(Element.this, index, removed);
+            }
+
+            return removed;
+        }
+
+        /**
+         * Returns the attribute at a given index.
+         *
+         * @param index
+         */
+        @Override
+        public Attribute get(int index) {
+            return attributes.get(index);
+        }
+
+        /**
+         * Determines the index of an attribute.
+         *
+         * @param attribute
+         *
+         * @return
+         * The index of the attribute, if found; otherwise, <tt>-1</tt>.
+         */
+        @Override
+        public int indexOf(Attribute attribute) {
+            return attributes.indexOf(attribute);
+        }
+
+        /**
+         * Returns the number of attributes in the sequence.
+         */
+        @Override
+        public int getLength() {
+            return attributes.getLength();
+        }
+
+        /**
+         * Returns an iterator over the attribute sequence.
+         */
+        @Override
+        public Iterator<Attribute> iterator() {
+            return new ImmutableIterator<Attribute>(attributes.iterator());
+        }
+    }
+
     /**
      * Dictionary representing the namespaces declared by this element.
      */
@@ -139,140 +373,8 @@ public class Element extends Node implements List<Node> {
         }
     }
 
-    /**
-     * Dictionary representing the attributes declared by this element.
-     */
-    public class AttributeDictionary implements Dictionary<String, String>, Iterable<String> {
-        private AttributeDictionary() {
-        }
-
-        /**
-         * Returns an attribute value.
-         */
-        @Override
-        public String get(String attribute) {
-            return attributes.get(attribute);
-        }
-
-        /**
-         * Sets an attribute value.
-         *
-         * @param attribute
-         * @param value
-         *
-         * @return
-         * The value previously associated with the given attribute.
-         */
-        @Override
-        public String put(String attribute, String value) {
-            if (value == null) {
-                throw new IllegalArgumentException("value is null.");
-            }
-
-            boolean update = containsKey(attribute);
-            String previousValue = attributes.put(attribute, value);
-
-            if (update) {
-                elementListeners.attributeUpdated(Element.this, attribute, previousValue);
-            } else {
-                elementListeners.attributeAdded(Element.this, attribute);
-            }
-
-            return previousValue;
-        }
-
-        /**
-         * Removes an attribute value.
-         *
-         * @param attribute
-         *
-         * @return
-         * The value previously associated with the given attribute.
-         */
-        @Override
-        public String remove(String attribute) {
-            String value = null;
-
-            if (containsKey(attribute)) {
-                value = attributes.remove(attribute);
-                elementListeners.namespaceRemoved(Element.this, attribute, value);
-            }
-
-            return value;
-        }
-
-        /**
-         * Tests for the existence of an attribute.
-         *
-         * @param attribute
-         *
-         * @return
-         * <tt>true</tt> if this element defines the given attribute; <tt>false<tt>,
-         * otherwise.
-         */
-        @Override
-        public boolean containsKey(String attribute) {
-            return attributes.containsKey(attribute);
-        }
-
-        /**
-         * Determines if this element defines any attributes.
-         *
-         * @return
-         * <tt>true</tt> if this element does not define any attributes;
-         * <tt>false</tt>, otherwise.
-         */
-        @Override
-        public boolean isEmpty() {
-            return attributes.isEmpty();
-        }
-
-        /**
-         * Returns an iterator over the element's attributes.
-         */
-        @Override
-        public Iterator<String> iterator() {
-            return new ImmutableIterator<String>(attributes.iterator());
-        }
-    }
-
     private static class ElementListenerList extends ListenerList<ElementListener>
         implements ElementListener {
-        @Override
-        public void namespacePrefixChanged(Element element, String previousNamespacePrefix) {
-            for (ElementListener listener : this) {
-                listener.namespacePrefixChanged(element, previousNamespacePrefix);
-            }
-        }
-
-        @Override
-        public void localNameChanged(Element element, String previousLocalName) {
-            for (ElementListener listener : this) {
-                listener.localNameChanged(element, previousLocalName);
-            }
-        }
-
-        @Override
-        public void attributeAdded(Element element, String attribute) {
-            for (ElementListener listener : this) {
-                listener.attributeAdded(element, attribute);
-            }
-        }
-
-        @Override
-        public void attributeUpdated(Element element, String attribute, String previousValue) {
-            for (ElementListener listener : this) {
-                listener.attributeUpdated(element, attribute, previousValue);
-            }
-        }
-
-        @Override
-        public void attributeRemoved(Element element, String attribute, String value) {
-            for (ElementListener listener : this) {
-                listener.attributeRemoved(element, attribute, value);
-            }
-        }
-
         @Override
         public void defaultNamespaceURIChanged(Element element, String previousDefaultNamespaceURI) {
             for (ElementListener listener : this) {
@@ -300,17 +402,39 @@ public class Element extends Node implements List<Node> {
                 listener.namespaceRemoved(element, prefix, uri);
             }
         }
+
+        @Override
+        public void attributeInserted(Element element, int index) {
+            for (ElementListener listener : this) {
+                listener.attributeInserted(element, index);
+            }
+        }
+
+        @Override
+        public void attributesRemoved(Element element, int index, Sequence<Attribute> attributes) {
+            for (ElementListener listener : this) {
+                listener.attributesRemoved(element, index, attributes);
+            }
+        }
+
+        @Override
+        public void attributeValueChanged(Attribute attribute, String previousValue) {
+            for (ElementListener listener : this) {
+                listener.attributeValueChanged(attribute, previousValue);
+            }
+        }
     }
 
     private String namespacePrefix;
     private String localName;
 
+    private String defaultNamespaceURI = null;
     private HashMap<String, String> namespaces = new HashMap<String, String>();
     private NamespaceDictionary namespaceDictionary = new NamespaceDictionary();
-    private String defaultNamespaceURI = null;
 
-    private HashMap<String, String> attributes = new HashMap<String, String>();
-    private AttributeDictionary attributeDictionary = new AttributeDictionary();
+    private ArrayList<Attribute> attributes = new ArrayList<Attribute>();
+    private AttributeSequence attributeSequence = new AttributeSequence();
+    private HashMap<String, Attribute> attributeMap = new HashMap<String, Attribute>();
 
     private ArrayList<Node> nodes = new ArrayList<Node>();
 
@@ -322,8 +446,10 @@ public class Element extends Node implements List<Node> {
     }
 
     public Element(String namespacePrefix, String localName) {
-        setNamespacePrefix(namespacePrefix);
-        setLocalName(localName);
+        validateName(namespacePrefix, localName);
+
+        this.namespacePrefix = namespacePrefix;
+        this.localName = localName;
     }
 
     /**
@@ -338,92 +464,10 @@ public class Element extends Node implements List<Node> {
     }
 
     /**
-     * Sets the element's namespace prefix.
-     * <p>
-     * Note that this method does not ensure that the namespace specified by the
-     * prefix actually exists. It only verifies that the prefix does not contain
-     * invalid characters.
-     *
-     * @param namespacePrefix
-     * The element's namespace prefix, or <tt>null</tt> to use the default namespace.
-     */
-    public void setNamespacePrefix(String namespacePrefix) {
-        if (namespacePrefix != null) {
-            if (namespacePrefix.length() == 0) {
-                throw new IllegalArgumentException("Namespace prefix is empty.");
-            }
-
-            char c = namespacePrefix.charAt(0);
-            if (!Character.isLetter(c)) {
-                throw new IllegalArgumentException("'" + c + "' is not a valid start"
-                    + " character for a namespace prefix.");
-            }
-
-            for (int i = 1, n = namespacePrefix.length(); i < n; i++) {
-                c = namespacePrefix.charAt(i);
-
-                if (!Character.isLetterOrDigit(c)
-                    && c != '-'
-                    && c != '.') {
-                    throw new IllegalArgumentException("'" + c + "' is not a valid character"
-                        + " for a namespace prefix.");
-                }
-            }
-        }
-
-        String previousNamespacePrefix = this.namespacePrefix;
-
-        if (previousNamespacePrefix != namespacePrefix) {
-            this.namespacePrefix = namespacePrefix;
-            elementListeners.namespacePrefixChanged(this, previousNamespacePrefix);
-        }
-    }
-
-    /**
      * Returns the element's local name.
      */
     public String getLocalName() {
         return localName;
-    }
-
-    /**
-     * Sets the element's local name.
-     *
-     * @param localName
-     */
-    public void setLocalName(String localName) {
-        if (localName == null) {
-            throw new IllegalArgumentException();
-        }
-
-        if (localName.length() == 0) {
-            throw new IllegalArgumentException("Local name is empty.");
-        }
-
-        char c = localName.charAt(0);
-        if (!Character.isLetter(c)
-            && c != '_') {
-            throw new IllegalArgumentException("'" + c + "' is not a valid start"
-                + " character for a local name.");
-        }
-
-        for (int i = 1, n = localName.length(); i < n; i++) {
-            c = localName.charAt(i);
-
-            if (!Character.isLetterOrDigit(c)
-                && c != '-'
-                && c != '.') {
-                throw new IllegalArgumentException("'" + c + "' is not a valid character"
-                    + " for a local name.");
-            }
-        }
-
-        String previousLocalName = this.localName;
-
-        if (previousLocalName != localName) {
-            this.localName = localName;
-            elementListeners.localNameChanged(this, previousLocalName);
-        }
     }
 
     /**
@@ -438,13 +482,6 @@ public class Element extends Node implements List<Node> {
         }
 
         return name;
-    }
-
-    /**
-     * Returns the element's namespace dictionary.
-     */
-    public NamespaceDictionary getNamespaces() {
-        return namespaceDictionary;
     }
 
     /**
@@ -472,6 +509,13 @@ public class Element extends Node implements List<Node> {
             this.defaultNamespaceURI = defaultNamespaceURI;
             elementListeners.defaultNamespaceURIChanged(this, previousDefaultNamespaceURI);
         }
+    }
+
+    /**
+     * Returns the element's namespace dictionary.
+     */
+    public NamespaceDictionary getNamespaces() {
+        return namespaceDictionary;
     }
 
     /**
@@ -510,8 +554,8 @@ public class Element extends Node implements List<Node> {
     /**
      * Returns the element's attribute dictionary.
      */
-    public AttributeDictionary getAttributes() {
-        return attributeDictionary;
+    public AttributeSequence getAttributes() {
+        return attributeSequence;
     }
 
     /**
@@ -528,9 +572,8 @@ public class Element extends Node implements List<Node> {
             throw new IllegalArgumentException();
         }
 
-        int index = nodes.add(node);
-        node.setParent(this);
-        listListeners.itemInserted(this, index);
+        int index = getLength();
+        insert(node, index);
 
         return index;
     }
@@ -568,7 +611,7 @@ public class Element extends Node implements List<Node> {
      */
     @Override
     public int remove(Node node) {
-        int index = nodes.indexOf(node);
+        int index = indexOf(node);
         if (index != -1) {
             remove(index, 1);
         }
@@ -673,6 +716,97 @@ public class Element extends Node implements List<Node> {
     }
 
     /**
+     * Returns an attribute value.
+     */
+    @Override
+    public String get(String attributeName) {
+        Attribute attribute = attributeMap.get(attributeName);
+        return (attribute == null) ? null : attribute.getValue();
+    }
+
+    /**
+     * Sets an attribute value.
+     *
+     * @param attributeName
+     * @param value
+     *
+     * @return
+     * The value previously associated with the given attribute, or <tt>null</tt>
+     * if the attribute did not previously exist.
+     */
+    @Override
+    public String put(String attributeName, String value) {
+        String previousValue;
+
+        Attribute attribute = attributeMap.get(attributeName);
+        if (attribute == null) {
+            previousValue = null;
+
+            String namespacePrefix;
+            String localName;
+            int i = attributeName.indexOf(':');
+            if (i == -1) {
+                namespacePrefix = null;
+                localName = attributeName;
+            } else {
+                namespacePrefix = attributeName.substring(0, i);
+                localName = attributeName.substring(i + 1);
+            }
+
+            attributeSequence.add(new Attribute(namespacePrefix, localName, value));
+        } else {
+            previousValue = attribute.getValue();
+            attribute.setValue(value);
+        }
+
+        return previousValue;
+    }
+
+    /**
+     * Removes an attribute.
+     *
+     * @param attributeName
+     *
+     * @return
+     * The value previously associated with the given attribute.
+     */
+    @Override
+    public String remove(String attributeName) {
+        Attribute attribute = attributeMap.get(attributeName);
+        if (attribute != null) {
+            attributeSequence.remove(attribute);
+        }
+
+        return (attribute == null) ? null : attribute.getValue();
+    }
+
+    /**
+     * Tests for the existence of an attribute.
+     *
+     * @param attributeName
+     *
+     * @return
+     * <tt>true</tt> if this element defines the given attribute; <tt>false<tt>,
+     * otherwise.
+     */
+    @Override
+    public boolean containsKey(String attributeName) {
+        return attributeMap.containsKey(attributeName);
+    }
+
+    /**
+     * Determines if this element defines any attributes.
+     *
+     * @return
+     * <tt>true</tt> if this element does not define any attributes;
+     * <tt>false</tt>, otherwise.
+     */
+    @Override
+    public boolean isEmpty() {
+        return attributeMap.isEmpty();
+    }
+
+    /**
      * Returns the element's listener list.
      */
     @Override
@@ -685,5 +819,70 @@ public class Element extends Node implements List<Node> {
      */
     public ListenerList<ElementListener> getElementListeners() {
         return elementListeners;
+    }
+
+    /**
+     * Returns all elements matching the given path expression.
+     * <p>
+     * NOTE This method is not yet implemented.
+     *
+     * @param path
+     */
+    public static List<Element> getElements(String path) {
+        // TODO
+        return null;
+    }
+
+    private static void validateName(String namespacePrefix, String localName) {
+        // Validate prefix
+        if (namespacePrefix != null) {
+            if (namespacePrefix.length() == 0) {
+                throw new IllegalArgumentException("Namespace prefix is empty.");
+            }
+
+            char c = namespacePrefix.charAt(0);
+            if (!Character.isLetter(c)) {
+                throw new IllegalArgumentException("'" + c + "' is not a valid start"
+                    + " character for a namespace prefix.");
+            }
+
+            for (int i = 1, n = namespacePrefix.length(); i < n; i++) {
+                c = namespacePrefix.charAt(i);
+
+                if (!Character.isLetterOrDigit(c)
+                    && c != '-'
+                    && c != '.') {
+                    throw new IllegalArgumentException("'" + c + "' is not a valid character"
+                        + " for a namespace prefix.");
+                }
+            }
+        }
+
+        // Validate local name
+        if (localName == null) {
+            throw new IllegalArgumentException();
+        }
+
+        if (localName.length() == 0) {
+            throw new IllegalArgumentException("Local name is empty.");
+        }
+
+        char c = localName.charAt(0);
+        if (!Character.isLetter(c)
+            && c != '_') {
+            throw new IllegalArgumentException("'" + c + "' is not a valid start"
+                + " character for a local name.");
+        }
+
+        for (int i = 1, n = localName.length(); i < n; i++) {
+            c = localName.charAt(i);
+
+            if (!Character.isLetterOrDigit(c)
+                && c != '-'
+                && c != '.') {
+                throw new IllegalArgumentException("'" + c + "' is not a valid character"
+                    + " for a local name.");
+            }
+        }
     }
 }

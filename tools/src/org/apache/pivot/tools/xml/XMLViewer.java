@@ -182,11 +182,12 @@ public class XMLViewer implements Application {
             ArrayList<HashMap<String, String>> attributesTableData =
                 new ArrayList<HashMap<String, String>>();
 
-            Element.AttributeDictionary attributeDictionary = element.getAttributes();
-            for (String attribute : attributeDictionary) {
+            for (Element.Attribute attribute : element.getAttributes()) {
                 HashMap<String, String> row = new HashMap<String, String>();
-                row.put("attribute", attribute);
-                row.put("value", attributeDictionary.get(attribute));
+
+                String attributeName = attribute.getName();
+                row.put("name", attributeName);
+                row.put("value", element.get(attributeName));
                 attributesTableData.add(row);
             }
 
