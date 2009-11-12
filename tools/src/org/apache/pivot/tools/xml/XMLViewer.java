@@ -213,6 +213,14 @@ public class XMLViewer implements Application {
         Sequence.Tree.Path path = new Sequence.Tree.Path(0);
         treeView.expandBranch(path);
         treeView.setSelectedPath(path);
+
+        XMLSerializer xmlSerializer = new XMLSerializer();
+
+        try {
+            xmlSerializer.writeObject(document, System.out);
+        } catch (Exception exception) {
+            System.err.println("\n" + exception);
+        }
     }
 
     public static void main(String[] args) {

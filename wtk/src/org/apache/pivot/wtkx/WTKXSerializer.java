@@ -322,7 +322,6 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         this.namedSerializers = namedSerializers;
 
         xmlInputFactory = XMLInputFactory.newInstance();
-        xmlInputFactory.setProperty("javax.xml.stream.isCoalescing", false);
 
         scriptEngineManager = new javax.script.ScriptEngineManager();
         scriptEngineManager.setBindings(new NamedObjectBindings());
@@ -407,35 +406,41 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
 
         try {
             try {
-                XMLStreamReader xmlStreamReader = xmlInputFactory.createXMLStreamReader(inputStream);
+                XMLStreamReader xmlStreamReader = null;
 
-                while (xmlStreamReader.hasNext()) {
-                    int event = xmlStreamReader.next();
+                try {
+                    xmlStreamReader = xmlInputFactory.createXMLStreamReader(inputStream);
 
-                    switch (event) {
-                        case XMLStreamConstants.PROCESSING_INSTRUCTION: {
-                            processProcessingInstruction(xmlStreamReader);
-                            break;
-                        }
+                    while (xmlStreamReader.hasNext()) {
+                        int event = xmlStreamReader.next();
 
-                        case XMLStreamConstants.CHARACTERS: {
-                            processCharacters(xmlStreamReader);
-                            break;
-                        }
+                        switch (event) {
+                            case XMLStreamConstants.PROCESSING_INSTRUCTION: {
+                                processProcessingInstruction(xmlStreamReader);
+                                break;
+                            }
 
-                        case XMLStreamConstants.START_ELEMENT: {
-                            processStartElement(xmlStreamReader);
-                            break;
-                        }
+                            case XMLStreamConstants.CHARACTERS: {
+                                processCharacters(xmlStreamReader);
+                                break;
+                            }
 
-                        case XMLStreamConstants.END_ELEMENT: {
-                            processEndElement(xmlStreamReader);
-                            break;
+                            case XMLStreamConstants.START_ELEMENT: {
+                                processStartElement(xmlStreamReader);
+                                break;
+                            }
+
+                            case XMLStreamConstants.END_ELEMENT: {
+                                processEndElement(xmlStreamReader);
+                                break;
+                            }
                         }
                     }
+                } finally {
+                    if (xmlStreamReader != null) {
+                        xmlStreamReader.close();
+                    }
                 }
-
-                xmlStreamReader.close();
             } catch (XMLStreamException exception) {
                 throw new SerializationException(exception);
             }

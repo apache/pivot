@@ -28,9 +28,11 @@ import java.io.Writer;
 import java.nio.charset.Charset;
 
 import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
+import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.serialization.Serializer;
@@ -40,9 +42,6 @@ import org.apache.pivot.serialization.Serializer;
  */
 public class XMLSerializer implements Serializer<Element> {
     private Charset charset = null;
-    private XMLInputFactory xmlInputFactory;
-
-    private Element element = null;
 
     public static final String XMLNS_ATTRIBUTE_PREFIX = "xmlns";
 
@@ -64,9 +63,6 @@ public class XMLSerializer implements Serializer<Element> {
         }
 
         this.charset = charset;
-
-        xmlInputFactory = XMLInputFactory.newInstance();
-        xmlInputFactory.setProperty("javax.xml.stream.isCoalescing", false);
     }
 
     public Charset getCharset() {
@@ -74,7 +70,8 @@ public class XMLSerializer implements Serializer<Element> {
     }
 
     @Override
-    public Element readObject(InputStream inputStream) throws IOException, SerializationException {
+    public Element readObject(InputStream inputStream)
+        throws IOException, SerializationException {
         if (inputStream == null) {
             throw new IllegalArgumentException("inputStream is null.");
         }
@@ -91,90 +88,99 @@ public class XMLSerializer implements Serializer<Element> {
         }
 
         // Parse the XML stream
-        element = null;
+        XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
+
+        Element document = null;
 
         try {
-            XMLStreamReader xmlStreamReader = xmlInputFactory.createXMLStreamReader(reader);
+            XMLStreamReader xmlStreamReader = null;
 
-            while (xmlStreamReader.hasNext()) {
-                int event = xmlStreamReader.next();
+            try {
+                xmlStreamReader = xmlInputFactory.createXMLStreamReader(reader);
 
-                switch (event) {
-                    case XMLStreamConstants.CHARACTERS: {
-                        if (!xmlStreamReader.isWhiteSpace()) {
-                            String text = xmlStreamReader.getText();
-                            element.add(new TextNode(text));
+                Element current = null;
+
+                while (xmlStreamReader.hasNext()) {
+                    int event = xmlStreamReader.next();
+
+                    switch (event) {
+                        case XMLStreamConstants.CHARACTERS: {
+                            if (!xmlStreamReader.isWhiteSpace()) {
+                                String text = xmlStreamReader.getText();
+                                current.add(new TextNode(text));
+                            }
+
+                            break;
                         }
 
-                        break;
-                    }
+                        case XMLStreamConstants.START_ELEMENT: {
+                            // Create the element
+                            String prefix = xmlStreamReader.getPrefix();
+                            if (prefix != null
+                                && prefix.length() == 0) {
+                                prefix = null;
+                            }
 
-                    case XMLStreamConstants.START_ELEMENT: {
-                        // Create the element
-                        String prefix = xmlStreamReader.getPrefix();
-                        if (prefix != null
-                            && prefix.length() == 0) {
-                            prefix = null;
-                        }
+                            String localName = xmlStreamReader.getLocalName();
 
-                        String localName = xmlStreamReader.getLocalName();
+                            Element element = new Element(prefix, localName);
 
-                        Element element = new Element(prefix, localName);
+                            // Get the element's namespaces
+                            for (int i = 0, n = xmlStreamReader.getNamespaceCount(); i < n; i++) {
+                                String namespacePrefix = xmlStreamReader.getNamespacePrefix(i);
+                                String namespaceURI = xmlStreamReader.getNamespaceURI(i);
 
-                        // Get the element's namespaces
-                        for (int i = 0, n = xmlStreamReader.getNamespaceCount(); i < n; i++) {
-                            String namespacePrefix = xmlStreamReader.getNamespacePrefix(i);
-                            String namespaceURI = xmlStreamReader.getNamespaceURI(i);
+                                if (namespacePrefix == null) {
+                                    element.setDefaultNamespaceURI(namespaceURI);
+                                } else {
+                                    element.getNamespaces().put(namespacePrefix, namespaceURI);
+                                }
+                            }
 
-                            if (namespacePrefix == null) {
-                                element.setDefaultNamespaceURI(namespaceURI);
+                            // Get the element's attributes
+                            for (int i = 0, n = xmlStreamReader.getAttributeCount(); i < n; i++) {
+                                String attributePrefix = xmlStreamReader.getAttributePrefix(i);
+                                if (attributePrefix != null
+                                    && attributePrefix.length() == 0) {
+                                    attributePrefix = null;
+                                }
+
+                                String attributeLocalName = xmlStreamReader.getAttributeLocalName(i);
+                                String attributeValue = xmlStreamReader.getAttributeValue(i);
+
+                                element.getAttributes().add(new Element.Attribute(attributePrefix,
+                                    attributeLocalName, attributeValue));
+                            }
+
+                            if (current == null) {
+                                document = element;
                             } else {
-                                element.getNamespaces().put(namespacePrefix, namespaceURI);
-                            }
-                        }
-
-                        // Get the element's attributes
-                        for (int i = 0, n = xmlStreamReader.getAttributeCount(); i < n; i++) {
-                            String attributePrefix = xmlStreamReader.getAttributePrefix(i);
-                            if (attributePrefix != null
-                                && attributePrefix.length() == 0) {
-                                attributePrefix = null;
+                                current.add(element);
                             }
 
-                            String attributeLocalName = xmlStreamReader.getAttributeLocalName(i);
-                            String attributeValue = xmlStreamReader.getAttributeValue(i);
+                            current = element;
 
-                            element.getAttributes().add(new Element.Attribute(attributePrefix,
-                                attributeLocalName, attributeValue));
+                            break;
                         }
 
-                        if (this.element != null) {
-                            this.element.add(element);
+                        case XMLStreamConstants.END_ELEMENT: {
+                            // Move up the stack
+                            current = current.getParent();
+
+                            break;
                         }
-
-                        this.element = element;
-
-                        break;
-                    }
-
-                    case XMLStreamConstants.END_ELEMENT: {
-                        // Move up the stack
-                        Element parent = element.getParent();
-                        if (parent != null) {
-                            element = parent;
-                        }
-
-                        break;
                     }
                 }
+            } finally {
+                if (xmlStreamReader != null) {
+                    xmlStreamReader.close();
+                }
             }
-
-            xmlStreamReader.close();
         } catch (XMLStreamException exception) {
             throw new SerializationException(exception);
         }
 
-        return element;
+        return document;
     }
 
     @Override
@@ -189,7 +195,7 @@ public class XMLSerializer implements Serializer<Element> {
         writeObject(element, writer);
     }
 
-    public void writeObject(Element element, Writer writer) {
+    public void writeObject(Element element, Writer writer) throws SerializationException {
         if (writer == null) {
             throw new IllegalArgumentException("writer is null.");
         }
@@ -198,10 +204,96 @@ public class XMLSerializer implements Serializer<Element> {
             throw new IllegalArgumentException("element is null.");
         }
 
-        // TODO (note that we'll need to check for valid namespace prefixes here,
-        // since we don't do it in Element)
+        XMLOutputFactory output = XMLOutputFactory.newInstance();
 
-        throw new UnsupportedOperationException();
+        try {
+            XMLStreamWriter xmlStreamWriter = null;
+
+            try {
+                xmlStreamWriter = output.createXMLStreamWriter(writer);
+
+                xmlStreamWriter.writeStartDocument();
+                writeElement(element, xmlStreamWriter);
+                xmlStreamWriter.writeEndDocument();
+            } finally {
+                if (xmlStreamWriter != null) {
+                    xmlStreamWriter.close();
+                }
+            }
+        } catch (XMLStreamException exception) {
+            throw new SerializationException(exception);
+        }
+    }
+
+    private void writeElement(Element element, XMLStreamWriter xmlStreamWriter)
+        throws XMLStreamException, SerializationException {
+        String namespacePrefix = element.getNamespacePrefix();
+        String localName = element.getLocalName();
+
+        if (namespacePrefix == null) {
+            if (element.getLength() == 0) {
+                xmlStreamWriter.writeEmptyElement(localName);
+            } else {
+                xmlStreamWriter.writeStartElement(localName);
+            }
+        } else {
+            String namespaceURI = element.getNamespaceURI(namespacePrefix);
+
+            if (element.getLength() == 0) {
+                xmlStreamWriter.writeEmptyElement(namespacePrefix, localName, namespaceURI);
+            } else {
+                xmlStreamWriter.writeStartElement(namespacePrefix, localName, namespaceURI);
+            }
+        }
+
+        // Write out the declared namespaces
+        String defaultNamespaceURI = element.getDefaultNamespaceURI();
+        if (defaultNamespaceURI != null) {
+            xmlStreamWriter.writeDefaultNamespace(defaultNamespaceURI);
+        }
+
+        Element.NamespaceDictionary namespaces = element.getNamespaces();
+        for (String declaredNamespacePrefix : namespaces) {
+            String declaredNamespaceURI = namespaces.get(declaredNamespacePrefix);
+            xmlStreamWriter.writeNamespace(declaredNamespacePrefix, declaredNamespaceURI);
+        }
+
+        // Write out the attributes
+        for (Element.Attribute attribute : element.getAttributes()) {
+            String attributeNamespacePrefix = attribute.getNamespacePrefix();
+            String attributeLocalName = attribute.getLocalName();
+            String attributeValue = attribute.getValue();
+
+            if (attributeNamespacePrefix == null) {
+                xmlStreamWriter.writeAttribute(attributeLocalName, attributeValue);
+            } else {
+                String attributeNamespaceURI = element.getNamespaceURI(attributeNamespacePrefix);
+
+                xmlStreamWriter.writeAttribute(attributeNamespacePrefix, attributeNamespaceURI,
+                    attributeLocalName, attributeValue);
+            }
+        }
+
+        // Write out the child nodes
+        for (Node node : element) {
+            if (node instanceof Element) {
+                writeElement((Element)node, xmlStreamWriter);
+            } else if (node instanceof TextNode) {
+                writeTextNode((TextNode)node, xmlStreamWriter);
+            } else {
+                throw new SerializationException("Unsupported node type: "
+                    + node.getClass().getName());
+            }
+        }
+
+        if (element.getLength() > 0) {
+            xmlStreamWriter.writeEndElement();
+        }
+    }
+
+    private void writeTextNode(TextNode textNode, XMLStreamWriter xmlStreamWriter)
+        throws XMLStreamException {
+        xmlStreamWriter.writeCharacters(textNode.getText());
     }
 
     @Override

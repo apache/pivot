@@ -69,9 +69,8 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
 
     @Override
     public int add(TreeNode treeNode) {
-        int index = getLength();
-        insert(treeNode, index);
-
+        int index = treeNodes.add(treeNode);
+        listListeners.itemInserted(this, index);
         return index;
     }
 
