@@ -211,8 +211,8 @@ public class TerraMeterSkin extends ComponentSkin
         if (meter.getOrientation() == Orientation.HORIZONTAL) {
             drawMeter(meter, graphics, width, height);
         } else {
-            graphics.rotate(Math.PI / 2d);
-            graphics.translate(0, -width);
+            graphics.rotate(-Math.PI / 2d);
+            graphics.translate(-height, 0);
             drawMeter(meter, graphics, height, width);
         }
     }
