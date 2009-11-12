@@ -168,6 +168,14 @@ public class XMLViewer implements Application {
             ArrayList<HashMap<String, String>> namespacesTableData =
                 new ArrayList<HashMap<String, String>>();
 
+            String defaultNamespaceURI = element.getDefaultNamespaceURI();
+            if (defaultNamespaceURI != null) {
+                HashMap<String, String> row = new HashMap<String, String>();
+                row.put("prefix", "(default)");
+                row.put("uri", defaultNamespaceURI);
+                namespacesTableData.add(row);
+            }
+
             Element.NamespaceDictionary namespaceDictionary = element.getNamespaces();
             for (String prefix : namespaceDictionary) {
                 HashMap<String, String> row = new HashMap<String, String>();
@@ -213,14 +221,6 @@ public class XMLViewer implements Application {
         Sequence.Tree.Path path = new Sequence.Tree.Path(0);
         treeView.expandBranch(path);
         treeView.setSelectedPath(path);
-
-        XMLSerializer xmlSerializer = new XMLSerializer();
-
-        try {
-            xmlSerializer.writeObject(document, System.out);
-        } catch (Exception exception) {
-            System.err.println("\n" + exception);
-        }
     }
 
     public static void main(String[] args) {

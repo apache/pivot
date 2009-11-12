@@ -406,39 +406,31 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
 
         try {
             try {
-                XMLStreamReader xmlStreamReader = null;
+                XMLStreamReader xmlStreamReader = xmlInputFactory.createXMLStreamReader(inputStream);
 
-                try {
-                    xmlStreamReader = xmlInputFactory.createXMLStreamReader(inputStream);
+                while (xmlStreamReader.hasNext()) {
+                    int event = xmlStreamReader.next();
 
-                    while (xmlStreamReader.hasNext()) {
-                        int event = xmlStreamReader.next();
-
-                        switch (event) {
-                            case XMLStreamConstants.PROCESSING_INSTRUCTION: {
-                                processProcessingInstruction(xmlStreamReader);
-                                break;
-                            }
-
-                            case XMLStreamConstants.CHARACTERS: {
-                                processCharacters(xmlStreamReader);
-                                break;
-                            }
-
-                            case XMLStreamConstants.START_ELEMENT: {
-                                processStartElement(xmlStreamReader);
-                                break;
-                            }
-
-                            case XMLStreamConstants.END_ELEMENT: {
-                                processEndElement(xmlStreamReader);
-                                break;
-                            }
+                    switch (event) {
+                        case XMLStreamConstants.PROCESSING_INSTRUCTION: {
+                            processProcessingInstruction(xmlStreamReader);
+                            break;
                         }
-                    }
-                } finally {
-                    if (xmlStreamReader != null) {
-                        xmlStreamReader.close();
+
+                        case XMLStreamConstants.CHARACTERS: {
+                            processCharacters(xmlStreamReader);
+                            break;
+                        }
+
+                        case XMLStreamConstants.START_ELEMENT: {
+                            processStartElement(xmlStreamReader);
+                            break;
+                        }
+
+                        case XMLStreamConstants.END_ELEMENT: {
+                            processEndElement(xmlStreamReader);
+                            break;
+                        }
                     }
                 }
             } catch (XMLStreamException exception) {

@@ -89,91 +89,84 @@ public class XMLSerializer implements Serializer<Element> {
 
         // Parse the XML stream
         XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
+        xmlInputFactory.setProperty("javax.xml.stream.isCoalescing", true);
 
         Element document = null;
 
         try {
-            XMLStreamReader xmlStreamReader = null;
+            XMLStreamReader xmlStreamReader = xmlInputFactory.createXMLStreamReader(reader);
 
-            try {
-                xmlStreamReader = xmlInputFactory.createXMLStreamReader(reader);
+            Element current = null;
 
-                Element current = null;
+            while (xmlStreamReader.hasNext()) {
+                int event = xmlStreamReader.next();
 
-                while (xmlStreamReader.hasNext()) {
-                    int event = xmlStreamReader.next();
-
-                    switch (event) {
-                        case XMLStreamConstants.CHARACTERS: {
-                            if (!xmlStreamReader.isWhiteSpace()) {
-                                String text = xmlStreamReader.getText();
-                                current.add(new TextNode(text));
-                            }
-
-                            break;
+                switch (event) {
+                    case XMLStreamConstants.CHARACTERS: {
+                        if (!xmlStreamReader.isWhiteSpace()) {
+                            String text = xmlStreamReader.getText();
+                            current.add(new TextNode(text));
                         }
 
-                        case XMLStreamConstants.START_ELEMENT: {
-                            // Create the element
-                            String prefix = xmlStreamReader.getPrefix();
-                            if (prefix != null
-                                && prefix.length() == 0) {
-                                prefix = null;
-                            }
-
-                            String localName = xmlStreamReader.getLocalName();
-
-                            Element element = new Element(prefix, localName);
-
-                            // Get the element's namespaces
-                            for (int i = 0, n = xmlStreamReader.getNamespaceCount(); i < n; i++) {
-                                String namespacePrefix = xmlStreamReader.getNamespacePrefix(i);
-                                String namespaceURI = xmlStreamReader.getNamespaceURI(i);
-
-                                if (namespacePrefix == null) {
-                                    element.setDefaultNamespaceURI(namespaceURI);
-                                } else {
-                                    element.getNamespaces().put(namespacePrefix, namespaceURI);
-                                }
-                            }
-
-                            // Get the element's attributes
-                            for (int i = 0, n = xmlStreamReader.getAttributeCount(); i < n; i++) {
-                                String attributePrefix = xmlStreamReader.getAttributePrefix(i);
-                                if (attributePrefix != null
-                                    && attributePrefix.length() == 0) {
-                                    attributePrefix = null;
-                                }
-
-                                String attributeLocalName = xmlStreamReader.getAttributeLocalName(i);
-                                String attributeValue = xmlStreamReader.getAttributeValue(i);
-
-                                element.getAttributes().add(new Element.Attribute(attributePrefix,
-                                    attributeLocalName, attributeValue));
-                            }
-
-                            if (current == null) {
-                                document = element;
-                            } else {
-                                current.add(element);
-                            }
-
-                            current = element;
-
-                            break;
-                        }
-
-                        case XMLStreamConstants.END_ELEMENT: {
-                            // Move up the stack
-                            current = current.getParent();
-
-                            break;
-                        }
+                        break;
                     }
-                }
-            } finally {
-                if (xmlStreamReader != null) {
-                    xmlStreamReader.close();
+
+                    case XMLStreamConstants.START_ELEMENT: {
+                        // Create the element
+                        String prefix = xmlStreamReader.getPrefix();
+                        if (prefix != null
+                            && prefix.length() == 0) {
+                            prefix = null;
+                        }
+
+                        String localName = xmlStreamReader.getLocalName();
+
+                        Element element = new Element(prefix, localName);
+
+                        // Get the element's namespaces
+                        for (int i = 0, n = xmlStreamReader.getNamespaceCount(); i < n; i++) {
+                            String namespacePrefix = xmlStreamReader.getNamespacePrefix(i);
+                            String namespaceURI = xmlStreamReader.getNamespaceURI(i);
+
+                            if (namespacePrefix == null) {
+                                element.setDefaultNamespaceURI(namespaceURI);
+                            } else {
+                                element.getNamespaces().put(namespacePrefix, namespaceURI);
+                            }
+                        }
+
+                        // Get the element's attributes
+                        for (int i = 0, n = xmlStreamReader.getAttributeCount(); i < n; i++) {
+                            String attributePrefix = xmlStreamReader.getAttributePrefix(i);
+                            if (attributePrefix != null
+                                && attributePrefix.length() == 0) {
+                                attributePrefix = null;
+                            }
+
+                            String attributeLocalName = xmlStreamReader.getAttributeLocalName(i);
+                            String attributeValue = xmlStreamReader.getAttributeValue(i);
+
+                            element.getAttributes().add(new Element.Attribute(attributePrefix,
+                                attributeLocalName, attributeValue));
+                        }
+
+                        if (current == null) {
+                            document = element;
+                        } else {
+                            current.add(element);
+                        }
+
+                        current = element;
+
+                        break;
+                    }
+
+                    case XMLStreamConstants.END_ELEMENT: {
+                        // Move up the stack
+                        current = current.getParent();
+
+                        break;
+                    }
                 }
             }
         } catch (XMLStreamException exception) {
@@ -193,6 +186,7 @@ public class XMLSerializer implements Serializer<Element> {
         Writer writer = new BufferedWriter(new OutputStreamWriter(outputStream, charset),
             BUFFER_SIZE);
         writeObject(element, writer);
+        writer.flush();
     }
 
     public void writeObject(Element element, Writer writer) throws SerializationException {
@@ -207,19 +201,10 @@ public class XMLSerializer implements Serializer<Element> {
         XMLOutputFactory output = XMLOutputFactory.newInstance();
 
         try {
-            XMLStreamWriter xmlStreamWriter = null;
-
-            try {
-                xmlStreamWriter = output.createXMLStreamWriter(writer);
-
-                xmlStreamWriter.writeStartDocument();
-                writeElement(element, xmlStreamWriter);
-                xmlStreamWriter.writeEndDocument();
-            } finally {
-                if (xmlStreamWriter != null) {
-                    xmlStreamWriter.close();
-                }
-            }
+            XMLStreamWriter xmlStreamWriter = output.createXMLStreamWriter(writer);
+            xmlStreamWriter.writeStartDocument();
+            writeElement(element, xmlStreamWriter);
+            xmlStreamWriter.writeEndDocument();
         } catch (XMLStreamException exception) {
             throw new SerializationException(exception);
         }
