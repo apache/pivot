@@ -21,6 +21,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Transparency;
+import java.util.Arrays;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
@@ -64,9 +65,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     private Color highlightBackgroundColor;
     private boolean showHighlight;
     private boolean variableItemHeight;
-    private ArrayList<Integer> variableItemHeightYCache = new ArrayList<Integer>();
-    /* I can work out all of the heights from the YCache except for the last one */
-    private int variableItemLastHeight;
+    private int [] variableItemHeightYCache;
+    private int fixedItemHeight;
     private Insets checkboxPadding = new Insets(2, 2, 2, 0);
 
     private int highlightedIndex = -1;
@@ -136,21 +136,21 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         ListView listView = (ListView)getComponent();
         List<Object> listData = (List<Object>)listView.getListData();
         ListView.ItemRenderer itemRenderer = listView.getItemRenderer();
-
+        
         if (variableItemHeight) {
             int clientWidth = width;
             if (listView.getCheckmarksEnabled()) {
                 clientWidth = Math.max(clientWidth - (CHECKBOX.getWidth() + (checkboxPadding.left
                     + checkboxPadding.right)), 0);
             }
-
+            
             int index = 0;
             for (Object item : listData) {
                 itemRenderer.render(item, index++, listView, false, false, false, false);
                 preferredHeight += itemRenderer.getPreferredHeight(clientWidth);
             }
         } else {
-            preferredHeight = listData.getLength() * getFixedItemHeight();
+            preferredHeight = listData.getLength() * fixedItemHeight;
         }
 
         return preferredHeight;
@@ -171,7 +171,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
         ListView.ItemRenderer itemRenderer = listView.getItemRenderer();
         List<Object> listData = (List<Object>)listView.getListData();
-        if (variableItemHeight && listData.getLength()>0) {
+        if (variableItemHeight && listData.getLength() > 0) {
             itemRenderer.render(listData.get(0), 0, listView, false, false, false, false);
             int itemHeight = itemRenderer.getPreferredHeight(clientWidth);
             if (listView.getCheckmarksEnabled()) {
@@ -182,15 +182,72 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             baseline = itemRenderer.getBaseline(clientWidth, itemHeight);
         } else {
             itemRenderer.render(null, -1, listView, false, false, false, false);
-            baseline = itemRenderer.getBaseline(clientWidth, getFixedItemHeight());
+            baseline = itemRenderer.getBaseline(clientWidth, fixedItemHeight);
         }
 
         return baseline;
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void layout() {
-        // No-op
+        ListView listView = (ListView)getComponent();
+        List<Object> listData = (List<Object>)listView.getListData();
+        ListView.ItemRenderer itemRenderer = listView.getItemRenderer();
+
+        if (variableItemHeight) {
+            
+            int width = getWidth();
+
+            // Paint the list contents
+            int itemEnd = listData.getLength() - 1;
+
+            int checkboxHeight = 0;
+            if (listView.getCheckmarksEnabled()) {
+                checkboxHeight = CHECKBOX.getHeight() + (checkboxPadding.top
+                    + checkboxPadding.bottom);
+            }
+
+            variableItemHeightYCache = new int[listData.getLength() + 1];
+            int itemY = 0;
+
+            for (int itemIndex = 0; itemIndex <= itemEnd; itemIndex++) {
+                Object item = listData.get(itemIndex);
+                boolean highlighted = (itemIndex == highlightedIndex
+                    && listView.getSelectMode() != ListView.SelectMode.NONE);
+                boolean selected = listView.isItemSelected(itemIndex);
+                boolean disabled = listView.isItemDisabled(itemIndex);
+
+                int itemWidth = width;
+                int itemX = 0;
+                
+                boolean checked = false;
+                if (listView.getCheckmarksEnabled()) {
+                    checked = listView.isItemChecked(itemIndex);
+                    itemX = CHECKBOX.getWidth() + (checkboxPadding.left
+                            + checkboxPadding.right);
+                    itemWidth -= itemX;
+                }
+                
+                itemRenderer.render(item, itemIndex, listView, selected, checked, highlighted, disabled);
+                int itemHeight = itemRenderer.getPreferredHeight(itemWidth);
+                if (listView.getCheckmarksEnabled()) {
+                    itemHeight = Math.max(itemHeight, checkboxHeight);
+                }
+                
+                variableItemHeightYCache[itemIndex] = itemY;
+                itemY += itemHeight;
+            }
+            variableItemHeightYCache[listData.getLength()] = itemY;
+        } else {
+            itemRenderer.render(null, -1, listView, false, false, false, false);
+
+            fixedItemHeight = itemRenderer.getPreferredHeight(-1);
+            if (listView.getCheckmarksEnabled()) {
+                fixedItemHeight = Math.max(CHECKBOX.getHeight() + (checkboxPadding.top
+                    + checkboxPadding.bottom), fixedItemHeight);
+            }
+        }
     }
 
     @Override
@@ -208,13 +265,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             graphics.setPaint(backgroundColor);
             graphics.fillRect(0, 0, width, height);
         }
-
-        if (variableItemHeight) {
-            paintVariableItemHeight(graphics);
-            return;
-        }
-
-        int itemHeight = getFixedItemHeight();
+        
         // Paint the list contents
         int itemStart = 0;
         int itemEnd = listData.getLength() - 1;
@@ -222,18 +273,36 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         // Ensure that we only paint items that are visible
         Rectangle clipBounds = graphics.getClipBounds();
         if (clipBounds != null) {
-            itemStart = Math.max(itemStart, (int)Math.floor(clipBounds.y
-                / (double)itemHeight));
-            itemEnd = Math.min(itemEnd, (int)Math.ceil((clipBounds.y
-                + clipBounds.height) / (double)itemHeight) - 1);
+            if (variableItemHeight) {
+                itemStart = getItemAt(clipBounds.y);
+                itemEnd = getItemAt(clipBounds.y + clipBounds.height - 1);
+            } else {
+                itemStart = Math.max(itemStart, (int)Math.floor(clipBounds.y
+                    / (double)fixedItemHeight));
+                itemEnd = Math.min(itemEnd, (int)Math.ceil((clipBounds.y
+                    + clipBounds.height) / (double)fixedItemHeight) - 1);
+            }
         }
 
+        int itemY;
+        if (variableItemHeight) {
+            itemY = variableItemHeightYCache[itemStart];
+        } else {
+            itemY = itemStart * fixedItemHeight;
+        }
+        
         for (int itemIndex = itemStart; itemIndex <= itemEnd; itemIndex++) {
             Object item = listData.get(itemIndex);
             boolean highlighted = (itemIndex == highlightedIndex
                 && listView.getSelectMode() != ListView.SelectMode.NONE);
             boolean selected = listView.isItemSelected(itemIndex);
             boolean disabled = listView.isItemDisabled(itemIndex);
+            int itemHeight;
+            if (variableItemHeight) {
+                itemHeight = variableItemHeightYCache[itemIndex + 1] - variableItemHeightYCache[itemIndex];
+            } else {
+                itemHeight = fixedItemHeight;
+            }
 
             Color itemBackgroundColor = null;
 
@@ -248,11 +317,10 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
             if (itemBackgroundColor != null) {
                 graphics.setPaint(itemBackgroundColor);
-                graphics.fillRect(0, itemIndex * itemHeight, width, itemHeight);
+                graphics.fillRect(0, itemY, width, itemHeight);
             }
 
             int itemX = 0;
-            int itemY = itemIndex * itemHeight;
             int itemWidth = width;
 
             boolean checked = false;
@@ -282,109 +350,10 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             itemRenderer.setSize(itemWidth, itemHeight);
             itemRenderer.paint(rendererGraphics);
             rendererGraphics.dispose();
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    private void paintVariableItemHeight(Graphics2D graphics) {
-        ListView listView = (ListView)getComponent();
-        List<Object> listData = (List<Object>)listView.getListData();
-        ListView.ItemRenderer itemRenderer = listView.getItemRenderer();
-
-        int width = getWidth();
-
-        // Paint the list contents
-        int itemEnd = listData.getLength() - 1;
-
-        // Ensure that we only paint items that are visible
-        Rectangle clipBounds = graphics.getClipBounds();
-
-        int checkboxHeight = 0;
-        if (listView.getCheckmarksEnabled()) {
-            checkboxHeight = CHECKBOX.getHeight() + (checkboxPadding.top
-                + checkboxPadding.bottom);
-        }
-
-        // if we haven't initialised the cache, we need to paint everything
-        boolean computeCache = variableItemHeightYCache.getLength() != listData.getLength();
-        int itemY = 0;
-
-        for (int itemIndex = 0; itemIndex <= itemEnd; itemIndex++) {
-            if (!computeCache && clipBounds!=null && itemY > clipBounds.y + clipBounds.height) {
-                break;
-            }
-            Object item = listData.get(itemIndex);
-            boolean highlighted = (itemIndex == highlightedIndex
-                && listView.getSelectMode() != ListView.SelectMode.NONE);
-            boolean selected = listView.isItemSelected(itemIndex);
-            boolean disabled = listView.isItemDisabled(itemIndex);
-
-            int itemWidth = width;
-            int itemX = 0;
-
-            boolean checked = false;
-            if (listView.getCheckmarksEnabled()) {
-                checked = listView.isItemChecked(itemIndex);
-                itemX = CHECKBOX.getWidth() + (checkboxPadding.left
-                        + checkboxPadding.right);
-                itemWidth -= itemX;
-            }
-
-            itemRenderer.render(item, itemIndex, listView, selected, checked, highlighted, disabled);
-            int itemHeight = itemRenderer.getPreferredHeight(itemWidth);
-            if (listView.getCheckmarksEnabled()) {
-                itemHeight = Math.max(itemHeight, checkboxHeight);
-            }
-
-            boolean paintItem = true;
-            if (clipBounds != null) {
-                paintItem = (itemY + itemHeight) >= clipBounds.y && itemY < (clipBounds.y + clipBounds.height);
-            }
-            if (paintItem) {
-                Color itemBackgroundColor = null;
-
-                if (selected) {
-                    itemBackgroundColor = (listView.isFocused())
-                        ? this.selectionBackgroundColor : inactiveSelectionBackgroundColor;
-                } else {
-                    if (highlighted && showHighlight && !disabled) {
-                        itemBackgroundColor = highlightBackgroundColor;
-                    }
-                }
-
-                if (itemBackgroundColor != null) {
-                    graphics.setPaint(itemBackgroundColor);
-                    graphics.fillRect(0, itemY, width, itemHeight);
-                }
-
-                if (listView.getCheckmarksEnabled()) {
-                    int checkboxY = (itemHeight - CHECKBOX.getHeight()) / 2;
-                    Graphics2D checkboxGraphics = (Graphics2D)graphics.create(checkboxPadding.left,
-                        itemY + checkboxY, CHECKBOX.getWidth(), CHECKBOX.getHeight());
-
-                    CHECKBOX.setSelected(checked);
-                    CHECKBOX.setEnabled(!disabled && !listView.isCheckmarkDisabled(itemIndex));
-                    CHECKBOX.paint(checkboxGraphics);
-                    checkboxGraphics.dispose();
-                }
-
-                // Paint the data
-                Graphics2D rendererGraphics = (Graphics2D)graphics.create(itemX, itemY,
-                    itemWidth, itemHeight);
-
-                itemRenderer.setSize(itemWidth, itemHeight);
-                itemRenderer.paint(rendererGraphics);
-                rendererGraphics.dispose();
-            }
-
-            if (computeCache) {
-                variableItemHeightYCache.add(itemY);
-                variableItemLastHeight = itemHeight;
-            }
+            
             itemY += itemHeight;
         }
     }
-
 
     // List view skin methods
     @Override
@@ -398,13 +367,12 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
         int index;
         if (variableItemHeight) {
-            index = ArrayList.binarySearch(variableItemHeightYCache, y);
-            if (index<0) {
-                index = -index-2;
-
+            index = Arrays.binarySearch(variableItemHeightYCache, y);
+            if (index < 0) {
+                index = -index - 2;
             }
         } else {
-            index = (y / getFixedItemHeight());
+            index = (y / fixedItemHeight);
         }
         List<Object> listData = (List<Object>)listView.getListData();
         if (index >= listData.getLength()) {
@@ -419,15 +387,11 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         int itemY;
         int itemHeight;
         if (variableItemHeight) {
-            itemY = variableItemHeightYCache.get(index);
-            if (index < variableItemHeightYCache.getLength() - 1) {
-                itemHeight = variableItemHeightYCache.get(index+1) - itemY;
-            } else {
-                itemHeight = variableItemLastHeight;
-            }
+            itemY = variableItemHeightYCache[index];
+            itemHeight = variableItemHeightYCache[index + 1] - itemY;
         } else {
-            itemHeight = getFixedItemHeight();
-            itemY = index * itemHeight;
+            itemY = index * fixedItemHeight;
+            itemHeight = fixedItemHeight;
         }
         return new Bounds(0, itemY, getWidth(), itemHeight);
     }
@@ -444,20 +408,26 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         return itemIndent;
     }
 
-    private int getFixedItemHeight() {
-        ListView listView = (ListView)getComponent();
-        ListView.ItemRenderer itemRenderer = listView.getItemRenderer();
-        itemRenderer.render(null, -1, listView, false, false, false, false);
-
-        int itemHeight = itemRenderer.getPreferredHeight(-1);
-        if (listView.getCheckmarksEnabled()) {
-            itemHeight = Math.max(CHECKBOX.getHeight() + (checkboxPadding.top
-                + checkboxPadding.bottom), itemHeight);
+    private int getItemY(int index) {
+        int itemY;
+        if (variableItemHeight) {
+            itemY = variableItemHeightYCache[index];
+        } else {
+            itemY = index * fixedItemHeight;
         }
-
+        return itemY;
+    }
+    
+    private int getItemHeight(int index) {
+        int itemHeight;
+        if (variableItemHeight) {
+            itemHeight = variableItemHeightYCache[index + 1] - variableItemHeightYCache[index];
+        } else {
+            itemHeight = fixedItemHeight;
+        }
         return itemHeight;
     }
-
+    
     @Override
     public boolean isFocusable() {
         ListView listView = (ListView)getComponent();
@@ -727,7 +697,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         setCheckboxPadding(Insets.decode(checkboxPadding));
     }
 
-    public boolean getVariableItemHeight() {
+    public boolean isVariableItemHeight() {
         return variableItemHeight;
     }
 
@@ -736,7 +706,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         repaintComponent();
     }
 
-
+    
     @Override
     public boolean mouseMove(Component component, int x, int y) {
         boolean consumed = super.mouseMove(component, x, y);
@@ -788,7 +758,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
         int itemIndex = getItemAt(y);
 
-        if (itemIndex != -1
+        if (itemIndex != -1 
             && itemIndex < listData.getLength()
             && !listView.isItemDisabled(itemIndex)) {
             int itemY = getItemBounds(itemIndex).y;
@@ -1023,13 +993,13 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     // List view events
     @Override
     public void listDataChanged(ListView listView, List<?> previousListData) {
-        variableItemHeightYCache.clear();
+        variableItemHeightYCache = null;
         invalidateComponent();
     }
 
     @Override
     public void itemRendererChanged(ListView listView, ListView.ItemRenderer previousItemRenderer) {
-        variableItemHeightYCache.clear();
+        variableItemHeightYCache = null;
         invalidateComponent();
     }
 
@@ -1045,7 +1015,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
     @Override
     public void checkmarksEnabledChanged(ListView listView) {
-        variableItemHeightYCache.clear();
+        variableItemHeightYCache = null;
         invalidateComponent();
     }
 
@@ -1073,31 +1043,31 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     // List view item events
     @Override
     public void itemInserted(ListView listView, int index) {
-        variableItemHeightYCache.clear();
+        variableItemHeightYCache = null;
         invalidateComponent();
     }
 
     @Override
     public void itemsRemoved(ListView listView, int index, int count) {
-        variableItemHeightYCache.clear();
+        variableItemHeightYCache = null;
         invalidateComponent();
     }
 
     @Override
     public void itemUpdated(ListView listView, int index) {
-        variableItemHeightYCache.clear();
+        variableItemHeightYCache = null;
         invalidateComponent();
     }
 
     @Override
     public void itemsCleared(ListView listView) {
-        variableItemHeightYCache.clear();
+        variableItemHeightYCache = null;
         invalidateComponent();
     }
 
     @Override
     public void itemsSorted(ListView listView) {
-        variableItemHeightYCache.clear();
+        variableItemHeightYCache = null;
         if (variableItemHeight) {
             invalidateComponent();
         } else {
@@ -1114,32 +1084,42 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     // List view selection detail events
     @Override
     public void selectedRangeAdded(ListView listView, int rangeStart, int rangeEnd) {
-        if (variableItemHeight) {
-            repaintComponent();
-        } else {
-            // Repaint the area containing the added selection
-            int itemHeight = getFixedItemHeight();
-            repaintComponent(0, rangeStart * itemHeight,
-                getWidth(), (rangeEnd - rangeStart + 1) * itemHeight);
-        }
+        // Repaint the area containing the added selection
+        repaintComponent(0, getItemY(rangeStart),
+            getWidth(), getItemY(rangeEnd) + getItemHeight(rangeEnd));
     }
 
     @Override
     public void selectedRangeRemoved(ListView listView, int rangeStart, int rangeEnd) {
-        if (variableItemHeight) {
-            repaintComponent();
-        } else {
-            // Repaint the area containing the removed selection
-            int itemHeight = getFixedItemHeight();
-            repaintComponent(0, rangeStart * itemHeight,
-                getWidth(), (rangeEnd - rangeStart + 1) * itemHeight);
-        }
+        // Repaint the area containing the removed selection
+        repaintComponent(0, getItemY(rangeStart),
+            getWidth(), getItemY(rangeEnd) + getItemHeight(rangeEnd));
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void selectedRangesChanged(ListView listView, Sequence<Span> previousSelectedRanges) {
-        // TODO Repaint only the area that changed (intersection of previous
+        List<Object> listData = (List<Object>)listView.getListData();
+        
+        // Repaint only the area that changed (intersection of previous
         // and new selection)
-        repaintComponent();
+        
+        int rangeStart = 0;
+        int rangeEnd = listData.getLength() - 1;
+        for (int i = 0; i < previousSelectedRanges.getLength(); i++) {
+            Span span = previousSelectedRanges.get(i);
+            rangeStart = Math.min(rangeStart, span.start);
+            rangeEnd = Math.max(rangeEnd, span.end);
+        }
+
+        Sequence<Span> newSelectedRanges = listView.getSelectedRanges();
+        for (int i = 0; i < newSelectedRanges.getLength(); i++) {
+            Span span = newSelectedRanges.get(i);
+            rangeStart = Math.min(rangeStart, span.start);
+            rangeEnd = Math.max(rangeEnd, span.end);
+        }
+        
+        repaintComponent(0, getItemY(rangeStart),
+            getWidth(), getItemY(rangeEnd) + getItemHeight(rangeEnd));
     }
 }
