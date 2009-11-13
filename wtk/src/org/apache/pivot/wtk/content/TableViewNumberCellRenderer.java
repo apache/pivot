@@ -25,7 +25,6 @@ import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.TableView;
 
-
 /**
  * Default renderer for table view cells that contain numeric data. Renders
  * cell contents as a formatted number.
@@ -66,29 +65,30 @@ public class TableViewNumberCellRenderer extends TableViewCellRenderer {
         boolean rowSelected, boolean rowHighlighted, boolean rowDisabled) {
         renderStyles(tableView, rowSelected, rowDisabled);
 
-        if (value != null) {
-            String formattedNumber = null;
+        String formattedNumber = null;
 
+        if (value != null
+            && columnName != null) {
             // Get the row and cell data
-            if (columnName != null) {
-                Dictionary<String, Object> rowData;
-                if (value instanceof Dictionary<?, ?>) {
-                    rowData = (Dictionary<String, Object>)value;
-                } else {
-                    rowData = new BeanDictionary(value);
-                }
+            Dictionary<String, Object> rowData;
+            if (value instanceof Dictionary<?, ?>) {
+                rowData = (Dictionary<String, Object>)value;
+            } else {
+                rowData = new BeanDictionary(value);
+            }
 
-                Object cellData = rowData.get(columnName);
+            Object cellData = rowData.get(columnName);
 
+            if (cellData != null) {
                 if (cellData instanceof Number) {
                     formattedNumber = numberFormat.format(cellData);
                 } else {
-                    System.err.println("Data for \"" + columnName + "\" is not an instance of "
-                        + Number.class.getName());
+                    System.err.println("Data for \"" + columnName + "\" is a "
+                        + cellData.getClass().getName() + ", not a " + Number.class.getName());
                 }
             }
-
-            setText(formattedNumber);
         }
+
+        setText(formattedNumber);
     }
 }
