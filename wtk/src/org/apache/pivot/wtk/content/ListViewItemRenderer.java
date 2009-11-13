@@ -49,7 +49,7 @@ public class ListViewItemRenderer extends BoxPane implements ListView.ItemRender
         add(imageView);
         add(label);
 
-        imageView.setPreferredSize(DEFAULT_ICON_WIDTH, DEFAULT_ICON_HEIGHT);
+        //imageView.setPreferredSize(DEFAULT_ICON_WIDTH, DEFAULT_ICON_HEIGHT);
         imageView.setVisible(DEFAULT_SHOW_ICON);
     }
 
@@ -116,10 +116,6 @@ public class ListViewItemRenderer extends BoxPane implements ListView.ItemRender
     }
 
     public void setIconWidth(int iconWidth) {
-        if (iconWidth == -1) {
-            throw new IllegalArgumentException();
-        }
-
         imageView.setPreferredWidth(iconWidth);
     }
 
@@ -128,10 +124,6 @@ public class ListViewItemRenderer extends BoxPane implements ListView.ItemRender
     }
 
     public void setIconHeight(int iconHeight) {
-        if (iconHeight == -1) {
-            throw new IllegalArgumentException();
-        }
-
         imageView.setPreferredHeight(iconHeight);
     }
 
