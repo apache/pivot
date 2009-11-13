@@ -70,7 +70,7 @@ img {
 <body>
 <h2>Web Start Demos</h2>
 <p>This page contains a collection of Pivot demos. All demos require Java 6 or greater.</p>
-<p>The demos listed on this page are all executed via Java Web Start. To launch the demos within the browser as applets, click <a href="index.html">here</a>.
+<p>The demos listed on this page are all executed via Java Web Start. To launch the demos within the browser as applets, click <a href="index.html">here</a>.</p>
 
 <h3>"Kitchen Sink"</h3>
 <p>Demonstrates a number of commonly used Pivot components.</p>
@@ -101,7 +101,7 @@ deployJava.createWebStartLaunchButton(url, '1.6');
 </td>
 </tr>
 </table>
-<hr>
+<hr/>
 
 <h3>Component Explorer</h3>
 <p>Allows a user to browse the properties, styles, and events provided by each standard
@@ -119,7 +119,7 @@ deployJava.createWebStartLaunchButton(url, '1.6');
 </td>
 </tr>
 </table>
-<hr>
+<hr/>
 
 <h3>Stock Tracker</h3>
 <p>An example of a simple but practical "real world" application built using
@@ -145,7 +145,7 @@ deployJava.createWebStartLaunchButton(url, '1.6');
 </td>
 </tr>
 </table>
-<hr>
+<hr/>
 
 <h3>iTunes Search</h3>
 <p>Simple application that allows a user to run search queries against the
@@ -163,7 +163,7 @@ deployJava.createWebStartLaunchButton(url, '1.6');
 </td>
 </tr>
 </table>
-<hr>
+<hr/>
 
 <h3>JSON Viewer</h3>
 <p>Allows users to visually browse a JSON structure using a TreeView component.</p>
@@ -180,7 +180,24 @@ deployJava.createWebStartLaunchButton(url, '1.6');
 </td>
 </tr>
 </table>
-<hr>
+<hr/>
+
+<h3>XML Viewer</h3>
+<p>Allows users to visually browse an XML document using a TreeView component.</p>
+<p><img src="xml_viewer.png"></p>
+
+<table>
+<tr>
+<td>
+Signed:
+<script>
+var url = "<%= codebase %>xml_viewer.jnlp";
+deployJava.createWebStartLaunchButton(url, '1.6');
+</script>
+</td>
+</tr>
+</table>
+<hr/>
 
 <h3>Scripting</h3>
 <p>Simple example of a Pivot application written using JavaScript.</p>
@@ -196,7 +213,7 @@ deployJava.createWebStartLaunchButton(url, '1.6');
 </td>
 </tr>
 </table>
-<hr>
+<hr/>
 
 <h3>File Drag &amp; Drop</h3>
 <p>Demonstrates Pivot's support for drag and drop.</p>
@@ -212,7 +229,7 @@ deployJava.createWebStartLaunchButton(url, '1.6');
 </td>
 </tr>
 </table>
-<hr>
+<hr/>
 
 <h3>Table Row Editor</h3>
 <p>Example of a table row editor that uses a "Family Feud"-like flip effect to
@@ -229,7 +246,7 @@ deployJava.createWebStartLaunchButton(url, '1.6');
 </td>
 </tr>
 </table>
-<hr>
+<hr/>
 
 <h3>Animated Clock</h3>
 <p>Demonstrates Pivot's MovieView component, which is used to present a clock
@@ -247,7 +264,7 @@ deployJava.createWebStartLaunchButton(url, '1.6');
 </td>
 </tr>
 </table>
-<hr>
+<hr/>
 
 <h3>Large Data Sets</h3>
 <p>Demonstrates Pivot's ability to handle large data sets of up to 1,000,000
@@ -264,7 +281,7 @@ deployJava.createWebStartLaunchButton(url, '1.6');
 </td>
 </tr>
 </table>
-<hr>
+<hr/>
 
 <h3>RSS Feed</h3>
 <p>Demonstrates how to build a simple RSS client in Pivot.</p>
@@ -280,7 +297,7 @@ deployJava.createWebStartLaunchButton(url, '1.6');
 </td>
 </tr>
 </table>
-<hr>
+<hr/>
 
 <h3>Decorators</h3>
 <p>Demonstrates the use of "decorators" in Pivot. Decorators allow a developer to
@@ -300,7 +317,7 @@ deployJava.createWebStartLaunchButton(url, '1.6');
 </td>
 </tr>
 </table>
-<hr>
+<hr/>
 
 <h3>Fixed Column Table</h3>
 <p>Explains how to create a table with fixed columns in Pivot. Fixed columns are
@@ -317,7 +334,7 @@ deployJava.createWebStartLaunchButton(url, '1.6');
 </td>
 </tr>
 </table>
-<hr>
+<hr/>
 
 <h3>Multiple Selection</h3>
 <p>Demonstrates Pivot's use of ranges to maintain selection state in a ListView
@@ -335,7 +352,7 @@ deployJava.createWebStartLaunchButton(url, '1.6');
 </td>
 </tr>
 </table>
-<hr>
+<hr/>
 
 </body>
 </html>
