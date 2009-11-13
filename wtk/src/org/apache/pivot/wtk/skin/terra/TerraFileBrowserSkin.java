@@ -222,7 +222,8 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     /**
      * Table view file renderer.
      */
-    public static class TableViewFileRenderer extends FileRenderer implements TableView.CellRenderer {
+    public static class TableViewFileRenderer extends FileRenderer
+        implements TableView.CellRenderer {
         public static final String NAME_KEY = "name";
         public static final String SIZE_KEY = "size";
         public static final String LAST_MODIFIED_KEY = "lastModified";
@@ -254,7 +255,8 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                     long lastModified = file.lastModified();
                     Date lastModifiedDate = new Date(lastModified);
 
-                    DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+                    DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT,
+                        DateFormat.SHORT);
                     text = dateFormat.format(lastModifiedDate);
                     getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
                 } else {
@@ -287,7 +289,6 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             label.getStyles().put("color", color);
         }
     }
-
 
     /**
      * Abstract base class for drive renderers.
@@ -332,7 +333,8 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     /**
      * List button drive renderer.
      */
-    public static class ListButtonDriveRenderer extends DriveRenderer implements Button.DataRenderer {
+    public static class ListButtonDriveRenderer extends DriveRenderer
+        implements Button.DataRenderer {
         public ListButtonDriveRenderer() {
             getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
         }
@@ -355,7 +357,8 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     /**
      * List view drive renderer.
      */
-    public static class ListViewDriveRenderer extends DriveRenderer implements ListView.ItemRenderer {
+    public static class ListViewDriveRenderer extends DriveRenderer
+        implements ListView.ItemRenderer {
         public ListViewDriveRenderer() {
             getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
             getStyles().put("padding", new Insets(2, 3, 2, 3));
@@ -439,13 +442,19 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     }
 
     /**
-     * File name filter.
+     * Include file filter.
      */
-    public static class FileNameFilter implements Filter<File> {
+    public static class IncludeFileFilter implements Filter<File> {
         private String match;
+        private Filter<File> excludeFileFilter;
 
-        public FileNameFilter(String match) {
-            this.match = match.toLowerCase();
+        public IncludeFileFilter() {
+            this(null, null);
+        }
+
+        public IncludeFileFilter(String match, Filter<File> excludeFileFilter) {
+            this.match = (match == null ? null : match.toLowerCase());
+            this.excludeFileFilter = excludeFileFilter;
         }
 
         @Override
@@ -453,15 +462,23 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             String name = file.getName();
             name = name.toLowerCase();
 
-            boolean include;
-            if (match.startsWith("*")) {
-                if (match.length() == 1) {
-                    include = true;
+            boolean include = true;
+
+            if (match != null) {
+                if (match.startsWith("*")) {
+                    if (match.length() == 1) {
+                        include = true;
+                    } else {
+                        include = name.contains(match.substring(1));
+                    }
                 } else {
-                    include = name.contains(match.substring(1));
+                    include = name.startsWith(match);
                 }
-            } else {
-                include = name.startsWith(match);
+            }
+
+            if (include
+                && excludeFileFilter != null) {
+                include = !excludeFileFilter.include(file);
             }
 
             return include;
@@ -480,9 +497,10 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     @WTKX private ScrollPane fileScrollPane = null;
     @WTKX private TableView fileTableView = null;
 
-    private FilteredList<File> files = new FilteredList<File>();
+    private FilteredList<File> files = new FilteredList<File>(new IncludeFileFilter());
 
     private boolean keyboardFolderTraversalEnabled = true;
+    private boolean hideDisabledFiles = false;
 
     private boolean updatingSelection = false;
 
@@ -587,13 +605,17 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         searchTextInput.getTextInputTextListeners().add(new TextInputTextListener() {
             @Override
             public void textChanged(TextInput textInput) {
-                String text = textInput.getText();
-
+                String text = textInput.getText().trim();
                 if (text.length() == 0) {
-                    files.setFilter(null);
-                } else {
-                    files.setFilter(new FileNameFilter(text));
+                    text = null;
                 }
+
+                Filter<File> excludeFileFilter = null;
+                if (hideDisabledFiles) {
+                    excludeFileFilter = fileBrowser.getDisabledFileFilter();
+                }
+
+                files.setFilter(new IncludeFileFilter(text, excludeFileFilter));
             }
         });
 
@@ -689,7 +711,8 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
         files.getFilteredListListeners().add(new FilteredListListener.Adapter<File>() {
             @Override
-            public void filterChanged(FilteredList<File> filteredList, Filter<File> previousFilter) {
+            public void filterChanged(FilteredList<File> filteredList,
+                Filter<File> previousFilter) {
                 fileBrowser.clearSelection();
             }
         });
@@ -698,7 +721,8 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
         fileBrowser.setFocusTraversalPolicy(new IndexFocusTraversalPolicy() {
             @Override
-            public Component getNextComponent(Container container, Component component, Direction direction) {
+            public Component getNextComponent(Container container, Component component,
+                Direction direction) {
                 Component nextComponent;
                 if (component == null) {
                     nextComponent = fileTableView;
@@ -764,6 +788,27 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
     public void setKeyboardFolderTraversalEnabled(boolean keyboardFolderTraversalEnabled) {
         this.keyboardFolderTraversalEnabled = keyboardFolderTraversalEnabled;
+    }
+
+    public boolean isHideDisabledFiles() {
+        return hideDisabledFiles;
+    }
+
+    public void setHideDisabledFiles(boolean hideDisabledFiles) {
+        this.hideDisabledFiles = hideDisabledFiles;
+
+        String text = searchTextInput.getText().trim();
+        if (text.length() == 0) {
+            text = null;
+        }
+
+        Filter<File> excludeFileFilter = null;
+        if (hideDisabledFiles) {
+            FileBrowser fileBrowser = (FileBrowser)getComponent();
+            excludeFileFilter = fileBrowser.getDisabledFileFilter();
+        }
+
+        files.setFilter(new IncludeFileFilter(text, excludeFileFilter));
     }
 
     @Override
@@ -911,8 +956,20 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     }
 
     @Override
-    public void disabledFileFilterChanged(FileBrowser fileBrowser, Filter<File> previousDisabledFileFilter) {
-        fileTableView.setDisabledRowFilter(fileBrowser.getDisabledFileFilter());
+    public void disabledFileFilterChanged(FileBrowser fileBrowser,
+        Filter<File> previousDisabledFileFilter) {
+        Filter<File> disabledFileFilter = fileBrowser.getDisabledFileFilter();
+
+        fileTableView.setDisabledRowFilter(disabledFileFilter);
+
+        if (hideDisabledFiles) {
+            String text = searchTextInput.getText().trim();
+            if (text.length() == 0) {
+                text = null;
+            }
+
+            files.setFilter(new IncludeFileFilter(text, disabledFileFilter));
+        }
     }
 
     private void refreshFileList() {

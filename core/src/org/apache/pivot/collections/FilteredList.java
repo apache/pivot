@@ -154,11 +154,20 @@ public class FilteredList<T> implements List<T> {
     private FilteredListListenerList<T> filteredListListeners = new FilteredListListenerList<T>();
 
     public FilteredList() {
-        this(null);
+        this(null, null);
     }
 
     public FilteredList(List<T> source) {
+        this(source, null);
+    }
+
+    public FilteredList(Filter<T> filter) {
+        this(null, filter);
+    }
+
+    public FilteredList(List<T> source, Filter<T> filter) {
         setSource(source);
+        setFilter(filter);
     }
 
     /**

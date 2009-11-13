@@ -258,6 +258,14 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
         disabledFileFilterChanged(fileBrowserSheet, null);
     }
 
+    public boolean isHideDisabledFiles() {
+        return (Boolean)fileBrowser.getStyles().get("hideDisabledFiles");
+    }
+
+    public void setHideDisabledFiles(boolean hideDisabledFiles) {
+        fileBrowser.getStyles().put("hideDisabledFiles", hideDisabledFiles);
+    }
+
     @Override
     public void windowOpened(Window window) {
         super.windowOpened(window);
@@ -307,21 +315,24 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
     }
 
     @Override
-    public void rootDirectoryChanged(FileBrowserSheet fileBrowserSheet, File previousRootDirectory) {
+    public void rootDirectoryChanged(FileBrowserSheet fileBrowserSheet,
+        File previousRootDirectory) {
         if (!updatingSelection) {
             fileBrowser.setRootDirectory(fileBrowserSheet.getRootDirectory());
         }
     }
 
     @Override
-    public void selectedFilesChanged(FileBrowserSheet fileBrowserSheet, Sequence<File> previousSelectedFiles) {
+    public void selectedFilesChanged(FileBrowserSheet fileBrowserSheet,
+        Sequence<File> previousSelectedFiles) {
         if (!updatingSelection) {
             fileBrowser.setSelectedFiles(fileBrowserSheet.getSelectedFiles());
         }
     }
 
     @Override
-    public void disabledFileFilterChanged(FileBrowserSheet fileBrowserSheet, Filter<File> previousDisabledFileFilter) {
+    public void disabledFileFilterChanged(FileBrowserSheet fileBrowserSheet,
+        Filter<File> previousDisabledFileFilter) {
         Filter<File> disabledFileFilter = fileBrowserSheet.getDisabledFileFilter();
 
         FileBrowserSheet.Mode mode = fileBrowserSheet.getMode();
