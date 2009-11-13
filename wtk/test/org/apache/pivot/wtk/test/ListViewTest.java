@@ -58,7 +58,6 @@ public class ListViewTest implements Application {
             }
         });
 
-        listView.setCheckmarksEnabled(true);
         listView.setItemChecked(4, true);
         listView.setItemChecked(6, true);
 

@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<BoxPane 
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:collections="org.apache.pivot.collections"
+    xmlns:content="org.apache.pivot.wtk.content"
+    xmlns="org.apache.pivot.wtk"
+    styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:12}">
+    <BoxPane orientation="vertical" styles="{spacing:6}">
+        <Label text="Editable" styles="{font:{bold:true}}"/>
+        <Border styles="{color:10}">
+            <content>
+                <ScrollPane preferredWidth="62" preferredHeight="80" horizontalScrollBarPolicy="fill">
+                    <view>
+                        <ListView wtkx:id="editableListView" selectMode="single" selectedIndex="0">
+                            <listData>
+                                <collections:ArrayList>
+                                    <content:ListItem text="Red"/>
+                                    <content:ListItem text="Orange"/>
+                                    <content:ListItem text="Yellow"/>
+                                    <content:ListItem text="Green"/>
+                                    <content:ListItem text="Blue"/>
+                                    <content:ListItem text="Purple"/>
+                                </collections:ArrayList>
+                            </listData>
+                            <itemEditor>
+                                <content:ListViewItemEditor/>
+                            </itemEditor>
+                        </ListView>
+                    </view>
+                </ScrollPane>
+            </content>
+        </Border>
+    </BoxPane>
+
+    <BoxPane orientation="vertical" styles="{spacing:6}">
+        <Label text="Multi-Select" styles="{font:{bold:true}}"/>
+        <Border styles="{color:10}">
+            <content>
+                <ScrollPane preferredHeight="80">
+                    <view>
+                        <ListView wtkx:id="shapeListView" selectMode="multi"
+                            selectedRanges="[{start:0, end:0}, {start:2, end:3}]">
+                            <listData>
+                                <collections:ArrayList>
+                                    <content:ListItem text="Circle"/>
+                                    <content:ListItem text="Ellipse"/>
+                                    <content:ListItem text="Square"/>
+                                    <content:ListItem text="Rectangle"/>
+                                    <content:ListItem text="Hexagon"/>
+                                    <content:ListItem text="Octagon"/>
+                                </collections:ArrayList>
+                            </listData>
+                        </ListView>
+                    </view>
+                </ScrollPane>
+            </content>
+        </Border>
+    </BoxPane>
+
+    <BoxPane orientation="vertical" styles="{spacing:6}">
+        <Label text="Image" styles="{font:{bold:true}}"/>
+        <Border styles="{color:10}">
+            <content>
+                <ScrollPane preferredHeight="80">
+                    <view>
+                        <ListView wtkx:id="iconListView" selectMode="multi" selectedIndex="2">
+                            <listData>
+                                <collections:ArrayList>
+                                    <content:ListItem icon="@anchor.png" text="Anchor"/>
+                                    <content:ListItem icon="@bell.png" text="Bell"/>
+                                    <content:ListItem icon="@clock.png" text="Clock"/>
+                                    <content:ListItem icon="@cup.png" text="Cup"/>
+                                    <content:ListItem icon="@house.png" text="House"/>
+                                    <content:ListItem icon="@star.png" text="Star"/>
+                                </collections:ArrayList>
+                            </listData>
+                            <itemRenderer>
+                                <content:ListViewItemRenderer iconWidth="16" iconHeight="16"
+                                    showIcon="true"/>
+                            </itemRenderer>
+                        </ListView>
+                    </view>
+                </ScrollPane>
+            </content>
+        </Border>
+    </BoxPane>
+
+    <BoxPane orientation="vertical" styles="{spacing:6}">
+        <Label text="Image with variableItemHeight" styles="{font:{bold:true}}"/>
+        <Border styles="{color:10}">
+            <content>
+                <ScrollPane preferredHeight="80">
+                    <view>
+                        <ListView wtkx:id="iconListView" selectMode="multi" selectedIndex="2" styles="{variableItemHeight:true}">
+                            <listData>
+                                <collections:ArrayList>
+                                    <content:ListItem icon="@anchor.png" text="Anchor"/>
+                                    <content:ListItem icon="@weather-few-clouds-32x32.png" text="Bell"/>
+                                    <content:ListItem icon="@clock.png" text="Clock"/>
+                                    <content:ListItem icon="@cup.png" text="Cup"/>
+                                    <content:ListItem icon="@house.png" text="House"/>
+                                    <content:ListItem icon="@star.png" text="Star"/>
+                                </collections:ArrayList>
+                            </listData>
+                            <itemRenderer>
+                                <content:ListViewItemRenderer iconWidth="-1" iconHeight="-1"
+                                    showIcon="true"/>
+                            </itemRenderer>
+                            <itemEditor>
+                                <content:ListViewItemEditor/>
+                            </itemEditor>
+                        </ListView>
+                    </view>
+                </ScrollPane>
+            </content>
+        </Border>
+    </BoxPane>
+    
+    <BoxPane orientation="vertical" styles="{spacing:6}">
+        <Label text="Checked" styles="{font:{bold:true}}"/>
+        <Border styles="{color:10}">
+            <content>
+                <ScrollPane preferredHeight="80">
+                    <view>
+                        <ListView wtkx:id="checkedListView" selectMode="single"
+                            listData="['One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten']"
+                            checkmarksEnabled="true" selectedIndex="0"/>
+                    </view>
+                </ScrollPane>
+            </content>
+        </Border>
+    </BoxPane>
+
+    <BoxPane orientation="vertical" styles="{spacing:6}">
+        <Label text="List Buttons" styles="{font:{bold:true}}"/>
+        <Form>
+            <sections>
+                <Form.Section>
+                    <ListButton Form.label="Basic" selectedIndex="0">
+                        <listData>
+                            <collections:ArrayList>
+                                <content:ListItem text="Red"/>
+                                <content:ListItem text="Orange"/>
+                                <content:ListItem text="Yellow"/>
+                                <content:ListItem text="Green"/>
+                                <content:ListItem text="Blue"/>
+                                <content:ListItem text="Purple"/>
+                            </collections:ArrayList>
+                        </listData>
+                    </ListButton>
+
+                    <ListButton wtkx:id="iconListButton" Form.label="Image" selectedIndex="2">
+                        <listData>
+                            <collections:ArrayList>
+                                <content:ListItem icon="@anchor.png" text="Anchor"/>
+                                <content:ListItem icon="@bell.png" text="Bell"/>
+                                <content:ListItem icon="@clock.png" text="Clock"/>
+                                <content:ListItem icon="@cup.png" text="Cup"/>
+                                <content:ListItem icon="@house.png" text="House"/>
+                                <content:ListItem icon="@star.png" text="Star"/>
+                            </collections:ArrayList>
+                        </listData>
+                        <itemRenderer>
+                            <content:ListViewItemRenderer iconWidth="16" iconHeight="16"
+                                showIcon="true"/>
+                        </itemRenderer>
+                    </ListButton>
+
+                    <ListButton Form.label="Color" selectedIndex="0"
+                        styles="{listSize:6}">
+                        <listData>
+                            <collections:ArrayList>
+                                <content:ColorItem color="#000000" name="Black"/>
+                                <content:ColorItem color="#0000AA" name="Blue"/>
+                                <content:ColorItem color="#00AA00" name="Green"/>
+                                <content:ColorItem color="#00AAAA" name="Cyan"/>
+                                <content:ColorItem color="#AA0000" name="Red"/>
+                                <content:ColorItem color="#AA00AA" name="Magenta"/>
+                                <content:ColorItem color="#AA5500" name="Brown"/>
+                                <content:ColorItem color="#AAAAAA" name="Light Gray"/>
+                                <content:ColorItem color="#555555" name="Dark Gray"/>
+                                <content:ColorItem color="#5555FF" name="Bright Blue"/>
+                                <content:ColorItem color="#55FF55" name="Bright Green"/>
+                                <content:ColorItem color="#55FFFF" name="Bright Cyan"/>
+                                <content:ColorItem color="#FF5555" name="Bright Red"/>
+                                <content:ColorItem color="#FF55FF" name="Bright Magenta"/>
+                                <content:ColorItem color="#FFFF55" name="Bright Yellow"/>
+                                <content:ColorItem color="#FFFFFF" name="White"/>
+                            </collections:ArrayList>
+                        </listData>
+                        <dataRenderer>
+                            <content:ListButtonColorItemRenderer/>
+                        </dataRenderer>
+                        <itemRenderer>
+                            <content:ListViewColorItemRenderer/>
+                        </itemRenderer>
+                    </ListButton>
+                </Form.Section>
+            </sections>
+        </Form>
+    </BoxPane>
+</BoxPane>
