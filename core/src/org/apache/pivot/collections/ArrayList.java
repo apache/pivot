@@ -91,10 +91,7 @@ public class ArrayList<T> implements List<T>, Serializable {
 
         @Override
         public void insert(T item) {
-            if (index < 0
-                || index >= ArrayList.this.length) {
-                throw new IllegalStateException();
-            }
+            indexBoundsCheck();
 
             ArrayList.this.insert(item, index);
             modificationCount++;
@@ -102,10 +99,7 @@ public class ArrayList<T> implements List<T>, Serializable {
 
         @Override
         public void update(T item) {
-            if (index < 0
-                || index >= ArrayList.this.length) {
-                throw new IllegalStateException();
-            }
+            indexBoundsCheck();
 
             ArrayList.this.update(index, item);
             modificationCount++;
@@ -113,13 +107,16 @@ public class ArrayList<T> implements List<T>, Serializable {
 
         @Override
         public void remove() {
-            if (index < 0
-                || index >= ArrayList.this.length) {
-                throw new IllegalStateException();
-            }
+            indexBoundsCheck();
 
             ArrayList.this.remove(index, 1);
             modificationCount++;
+        }
+        
+        private void indexBoundsCheck() {
+            if (index < 0 || index >+ ArrayList.this.length) {
+                throw new IllegalStateException("index  " + index + " out of bounds");
+            }
         }
     }
 
@@ -144,9 +141,7 @@ public class ArrayList<T> implements List<T>, Serializable {
     }
 
     public ArrayList(int capacity) {
-        if (capacity < 0) {
-            throw new IllegalArgumentException();
-        }
+    		CollectionArgChecks.zeroOrGreater("capacity", capacity);
 
         items = new Object[capacity];
     }
@@ -156,18 +151,8 @@ public class ArrayList<T> implements List<T>, Serializable {
     }
 
     public ArrayList(T[] items, int index, int count) {
-        if (items == null) {
-            throw new IllegalArgumentException();
-        }
-
-        if (count < 0) {
-            throw new IllegalArgumentException();
-        }
-
-        if (index < 0
-            || index + count > items.length) {
-            throw new IndexOutOfBoundsException();
-        }
+        CollectionArgChecks.notNull("items", items);
+        CollectionArgChecks.indexBounds(index, count, 0, items.length);
 
         this.items = new Object[count];
         System.arraycopy(items, index, this.items, 0, count);
@@ -180,18 +165,8 @@ public class ArrayList<T> implements List<T>, Serializable {
     }
 
     public ArrayList(Sequence<T> items, int index, int count) {
-        if (items == null) {
-            throw new IllegalArgumentException();
-        }
-
-        if (count < 0) {
-            throw new IllegalArgumentException();
-        }
-
-        if (index < 0
-            || index + count > items.getLength()) {
-            throw new IndexOutOfBoundsException();
-        }
+        CollectionArgChecks.notNull("items", items);
+        CollectionArgChecks.indexBounds(index, count, 0, items.getLength());
 
         this.items = new Object[count];
 
@@ -207,18 +182,8 @@ public class ArrayList<T> implements List<T>, Serializable {
     }
 
     public ArrayList(ArrayList<T> arrayList, int index, int count) {
-        if (arrayList == null) {
-            throw new IllegalArgumentException();
-        }
-
-        if (count < 0) {
-            throw new IllegalArgumentException();
-        }
-
-        if (index < 0
-            || index + count > arrayList.length) {
-            throw new IndexOutOfBoundsException();
-        }
+        CollectionArgChecks.notNull("arrayList", arrayList);
+        CollectionArgChecks.indexBounds(index, count, 0, arrayList.length);
 
         items = new Object[count];
         length = count;
@@ -255,10 +220,7 @@ public class ArrayList<T> implements List<T>, Serializable {
     }
 
     private void insert(T item, int index, boolean validate) {
-        if (index < 0
-            || index > length) {
-            throw new IndexOutOfBoundsException();
-        }
+    		CollectionArgChecks.indexBounds(index, 0, length);
 
         if (comparator != null
             && validate) {
@@ -288,10 +250,7 @@ public class ArrayList<T> implements List<T>, Serializable {
     @SuppressWarnings("unchecked")
     @Override
     public T update(int index, T item) {
-        if (index < 0
-            || index >= length) {
-            throw new IndexOutOfBoundsException();
-        }
+    		CollectionArgChecks.indexBounds(index, 0, length - 1);
 
         T previousItem = (T)items[index];
 
@@ -336,10 +295,7 @@ public class ArrayList<T> implements List<T>, Serializable {
     @SuppressWarnings("unchecked")
     @Override
     public Sequence<T> remove(int index, int count) {
-        if (index < 0
-            || index + count > length) {
-            throw new IndexOutOfBoundsException();
-        }
+    		CollectionArgChecks.indexBounds(index, count, 0, length);
 
         ArrayList<T> removed = new ArrayList<T>((T[])items, index, count);
 
@@ -380,10 +336,7 @@ public class ArrayList<T> implements List<T>, Serializable {
     @SuppressWarnings("unchecked")
     @Override
     public T get(int index) {
-        if (index < 0
-            || index >= length) {
-            throw new IndexOutOfBoundsException();
-        }
+   		CollectionArgChecks.indexBounds(index, 0, length);
 
         return (T)items[index];
     }
@@ -551,10 +504,8 @@ public class ArrayList<T> implements List<T>, Serializable {
 
     @SuppressWarnings("unchecked")
     public static <T> void sort(ArrayList<T> arrayList, int from, int to, Comparator<T> comparator) {
-        if (arrayList == null
-            || comparator == null) {
-            throw new IllegalArgumentException();
-        }
+    		CollectionArgChecks.notNull("arrayList", arrayList);
+    		CollectionArgChecks.notNull("comparator", comparator);
 
         Arrays.sort((T[])arrayList.items, from, to, comparator);
 
@@ -572,11 +523,9 @@ public class ArrayList<T> implements List<T>, Serializable {
 
     @SuppressWarnings("unchecked")
     public static <T> int binarySearch(ArrayList<T> arrayList, T item, Comparator<T> comparator) {
-        if (arrayList == null
-            || item == null
-            || comparator == null) {
-            throw new IllegalArgumentException();
-        }
+    		CollectionArgChecks.notNull("arrayList", arrayList);
+    		CollectionArgChecks.notNull("comparator", comparator);
+    		CollectionArgChecks.notNull("item", item);
 
         int index = Arrays.binarySearch((T[])arrayList.items, 0, arrayList.length, item, comparator);
 

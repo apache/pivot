@@ -305,10 +305,7 @@ public class LinkedList<T> implements List<T>, Serializable {
 
     @Override
     public void insert(T item, int index) {
-        if (index < 0
-            || index > length) {
-            throw new IndexOutOfBoundsException();
-        }
+        CollectionArgChecks.indexBounds(index, 0, length);
 
         Node<T> next = null;
         Node<T> previous = null;
@@ -348,10 +345,7 @@ public class LinkedList<T> implements List<T>, Serializable {
 
     @Override
     public T update(int index, T item) {
-        if (index < 0
-            || index >= length) {
-            throw new IndexOutOfBoundsException();
-        }
+        CollectionArgChecks.indexBounds(index, 0, length - 1);
 
         // Get the previous item at index
         Node<T> node = getNode(index);
@@ -409,10 +403,7 @@ public class LinkedList<T> implements List<T>, Serializable {
 
     @Override
     public Sequence<T> remove(int index, int count) {
-        if (index < 0
-            || index + count > length) {
-            throw new IndexOutOfBoundsException();
-        }
+        CollectionArgChecks.indexBounds(index, count, 0, length);
 
         LinkedList<T> removed = new LinkedList<T>();
 
@@ -479,10 +470,7 @@ public class LinkedList<T> implements List<T>, Serializable {
 
     @Override
     public T get(int index) {
-        if (index < 0
-            || index >= length) {
-            throw new IndexOutOfBoundsException();
-        }
+        CollectionArgChecks.indexBounds(index, 0, length - 1);
 
         Node<T> node = getNode(index);
         return node.item;

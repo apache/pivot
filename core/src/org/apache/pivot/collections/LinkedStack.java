@@ -51,7 +51,7 @@ public class LinkedStack<T> implements Stack<T>, Serializable {
     public T pop() {
         int length = linkedList.getLength();
         if (length == 0) {
-            throw new IllegalStateException();
+            throw new IllegalStateException("queue is empty");
         }
 
         T item = linkedList.remove(length - 1, 1).get(0);

@@ -19,6 +19,7 @@ package org.apache.pivot.collections.concurrent;
 import java.util.Comparator;
 import java.util.Iterator;
 
+import org.apache.pivot.collections.CollectionArgChecks;
 import org.apache.pivot.collections.Queue;
 import org.apache.pivot.collections.QueueListener;
 import org.apache.pivot.util.ImmutableIterator;
@@ -56,9 +57,7 @@ public class SynchronizedQueue<T> implements Queue<T> {
     private SynchronizedQueueListenerList<T> queueListeners = new SynchronizedQueueListenerList<T>();
 
     public SynchronizedQueue(Queue<T> queue) {
-        if (queue == null) {
-            throw new IllegalArgumentException();
-        }
+        CollectionArgChecks.notNull("queue", queue);
 
         this.queue = queue;
     }

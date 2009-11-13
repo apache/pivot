@@ -19,6 +19,7 @@ package org.apache.pivot.collections.concurrent;
 import java.util.Comparator;
 import java.util.Iterator;
 
+import org.apache.pivot.collections.CollectionArgChecks;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Sequence;
@@ -72,9 +73,7 @@ public class SynchronizedList<T> implements List<T> {
     private SynchronizedListListenerList<T> listListeners = new SynchronizedListListenerList<T>();
 
     public SynchronizedList(List<T> list) {
-        if (list == null) {
-            throw new IllegalArgumentException();
-        }
+        CollectionArgChecks.notNull("list", list);
 
         this.list = list;
     }
@@ -107,7 +106,7 @@ public class SynchronizedList<T> implements List<T> {
     public synchronized int remove (T item) {
         int index = indexOf(item);
         if (index == -1) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("item not in list");
         }
 
         remove(index, 1);

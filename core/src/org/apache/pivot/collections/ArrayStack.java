@@ -56,7 +56,7 @@ public class ArrayStack<T> implements Stack<T>, Serializable {
     public T pop() {
         int length = arrayList.getLength();
         if (length == 0) {
-            throw new IllegalStateException();
+            throw new IllegalStateException("queue is empty");
         }
 
         T item = arrayList.remove(length - 1, 1).get(0);

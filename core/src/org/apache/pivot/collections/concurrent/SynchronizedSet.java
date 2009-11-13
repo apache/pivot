@@ -19,6 +19,7 @@ package org.apache.pivot.collections.concurrent;
 import java.util.Comparator;
 import java.util.Iterator;
 
+import org.apache.pivot.collections.CollectionArgChecks;
 import org.apache.pivot.collections.Set;
 import org.apache.pivot.collections.SetListener;
 import org.apache.pivot.util.ImmutableIterator;
@@ -65,9 +66,7 @@ public class SynchronizedSet<E> implements Set<E> {
     private SynchronizedSetListenerList<E> setListeners = new SynchronizedSetListenerList<E>();
 
     public SynchronizedSet(Set<E> set) {
-        if (set == null) {
-            throw new IllegalArgumentException();
-        }
+        CollectionArgChecks.notNull("set", set);
 
         this.set = set;
     }

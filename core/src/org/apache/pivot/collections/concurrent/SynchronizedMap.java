@@ -19,6 +19,7 @@ package org.apache.pivot.collections.concurrent;
 import java.util.Comparator;
 import java.util.Iterator;
 
+import org.apache.pivot.collections.CollectionArgChecks;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.MapListener;
 import org.apache.pivot.util.ImmutableIterator;
@@ -70,9 +71,7 @@ public class SynchronizedMap<K, V> implements Map<K, V> {
     private SynchronizedMapListenerList<K, V> mapListeners = new SynchronizedMapListenerList<K, V>();
 
     public SynchronizedMap(Map<K, V> map) {
-        if (map == null) {
-            throw new IllegalArgumentException();
-        }
+        CollectionArgChecks.notNull("map", map);
 
         this.map = map;
     }

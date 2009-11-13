@@ -28,9 +28,7 @@ public interface Dictionary<K, V> {
         public final V value;
 
         public Pair(K key, V value) {
-            if (key == null) {
-                throw new IllegalArgumentException();
-            }
+            CollectionArgChecks.notNull("key", key);
 
             this.key = key;
             this.value = value;
