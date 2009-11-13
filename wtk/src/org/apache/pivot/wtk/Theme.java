@@ -23,10 +23,12 @@ import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.util.Service;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.skin.BorderSkin;
+import org.apache.pivot.wtk.skin.BoxPaneSkin;
 import org.apache.pivot.wtk.skin.CardPaneSkin;
 import org.apache.pivot.wtk.skin.ColorChooserButtonSkin;
-import org.apache.pivot.wtk.skin.BoxPaneSkin;
 import org.apache.pivot.wtk.skin.FlowPaneSkin;
+import org.apache.pivot.wtk.skin.GridPaneFillerSkin;
+import org.apache.pivot.wtk.skin.GridPaneSkin;
 import org.apache.pivot.wtk.skin.ImageViewSkin;
 import org.apache.pivot.wtk.skin.LabelSkin;
 import org.apache.pivot.wtk.skin.MovieViewSkin;
@@ -83,6 +85,8 @@ public abstract class Theme {
         componentSkinMap.put(ColorChooserButtonSkin.ColorChooserPopup.class,
             ColorChooserButtonSkin.ColorChooserPopupSkin.class);
         componentSkinMap.put(FlowPane.class, FlowPaneSkin.class);
+        componentSkinMap.put(GridPane.class, GridPaneSkin.class);
+        componentSkinMap.put(GridPane.Filler.class, GridPaneFillerSkin.class);
         componentSkinMap.put(ImageView.class, ImageViewSkin.class);
         componentSkinMap.put(Label.class, LabelSkin.class);
         componentSkinMap.put(MovieView.class, MovieViewSkin.class);

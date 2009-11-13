@@ -18,8 +18,8 @@ package org.apache.pivot.wtk.skin.terra;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 
 import org.apache.pivot.collections.List;
@@ -33,6 +33,7 @@ import org.apache.pivot.wtk.ActivityIndicator;
 import org.apache.pivot.wtk.Alert;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Border;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Calendar;
 import org.apache.pivot.wtk.CalendarButton;
 import org.apache.pivot.wtk.Checkbox;
@@ -40,11 +41,11 @@ import org.apache.pivot.wtk.ColorChooser;
 import org.apache.pivot.wtk.ColorChooserButton;
 import org.apache.pivot.wtk.Dialog;
 import org.apache.pivot.wtk.Expander;
-import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.FileBrowser;
 import org.apache.pivot.wtk.FileBrowserSheet;
 import org.apache.pivot.wtk.Form;
 import org.apache.pivot.wtk.Frame;
+import org.apache.pivot.wtk.GridPane;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.LinkButton;
 import org.apache.pivot.wtk.ListButton;
@@ -105,6 +106,7 @@ public final class TerraTheme extends Theme {
         componentSkinMap.put(Form.class, TerraFormSkin.class);
         componentSkinMap.put(BoxPane.class, TerraBoxPaneSkin.class);
         componentSkinMap.put(Frame.class, TerraFrameSkin.class);
+        componentSkinMap.put(GridPane.class, TerraGridPaneSkin.class);
         componentSkinMap.put(Label.class, TerraLabelSkin.class);
         componentSkinMap.put(LinkButton.class, TerraLinkButtonSkin.class);
         componentSkinMap.put(ListButton.class, TerraListButtonSkin.class);
