@@ -35,8 +35,7 @@ import org.apache.pivot.wtk.Orientation;
 /**
  * Grid pane skin.
  */
-public class GridPaneSkin extends ContainerSkin implements GridPane.Skin,
-    GridPaneListener {
+public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPaneListener {
     private Insets padding = Insets.NONE;
     private int horizontalSpacing = 0;
     private int verticalSpacing = 0;

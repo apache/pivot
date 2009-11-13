@@ -19,8 +19,6 @@ package org.apache.pivot.collections;
 /**
  * Implements various assert-style checking for the Pivot collections classes.
  * Throws nice descriptive exceptions if something goes wrong.
- *
- * @author Noel Grandin
  */
 public class CollectionArgChecks {
 

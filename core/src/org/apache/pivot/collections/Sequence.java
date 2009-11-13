@@ -21,7 +21,6 @@ import java.util.NoSuchElementException;
 
 import org.apache.pivot.util.ImmutableIterator;
 
-
 /**
  * Interface representing an ordered sequence of items.
  */

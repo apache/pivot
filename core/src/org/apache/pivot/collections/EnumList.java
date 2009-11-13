@@ -27,7 +27,6 @@ import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ListenerList;
 
-
 /**
  * Implementation of the {@link List} interface that is backed by an enum.
  */

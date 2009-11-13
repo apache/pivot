@@ -25,7 +25,6 @@ import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 
-
 /**
  * Unmodifiable implementation of the {@link List} interface.
  */

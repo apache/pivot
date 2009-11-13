@@ -22,7 +22,6 @@ import java.util.Iterator;
 
 import org.apache.pivot.util.ListenerList;
 
-
 /**
  * Implementation of the {@link Set} interface whose keys are backed by a set
  * of enum values.

@@ -23,7 +23,6 @@ import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 
-
 /**
  * Container that arranges components in a two-dimensional grid, where every cell is the same size.
  */
@@ -149,7 +148,6 @@ public class GridPane extends Container {
                 }
 
                 cells.update(index, component);
-                previousComponent.setAttributes(null);
 
                 if (gridPane != null) {
                     gridPane.add(component);
@@ -174,11 +172,6 @@ public class GridPane extends Container {
         @Override
         public Sequence<Component> remove(int index, int count) {
             Sequence<Component> removed = cells.remove(index, count);
-
-            for (int i = 0, n = removed.getLength(); i < n; i++) {
-                Component component = removed.get(i);
-                component.setAttributes(null);
-            }
 
             if (gridPane != null) {
                 gridPane.gridPaneListeners.cellsRemoved(this, index, removed);
@@ -298,7 +291,7 @@ public class GridPane extends Container {
     }
 
     /**
-     * grid pane skin interface. grid pane skins must implement
+     * Grid pane skin interface. Grid pane skins must implement
      * this interface to facilitate additional communication between the
      * component and the skin.
      */
@@ -578,8 +571,6 @@ public class GridPane extends Container {
 
     private GridPaneListenerList gridPaneListeners = new GridPaneListenerList();
 
-    public static final String RELATIVE_SIZE_INDICATOR = "*";
-
     /**
      * Creates a new <tt>GridPane</tt> with empty row and column sequences.
      */
@@ -712,23 +703,6 @@ public class GridPane extends Container {
     }
 
     /**
-     * Sets the component at the specified cell in this grid pane.
-     *
-     * @param row
-     * The row index of the cell
-     *
-     * @param column
-     * The column index of the cell
-     *
-     * @param component
-     * The component to place in the specified cell, or <tt>null</tt> to empty
-     * the cell
-     */
-    public void setCellComponent(int row, int column, Component component) {
-        rows.get(row).update(column, component);
-    }
-
-    /**
      * Overrides the base method to check whether or not a cell component is
      * being removed, and fires the appropriate event in that case.
      *
@@ -763,6 +737,4 @@ public class GridPane extends Container {
     public ListenerList<GridPaneListener> getGridPaneListeners() {
         return gridPaneListeners;
     }
-
-
 }

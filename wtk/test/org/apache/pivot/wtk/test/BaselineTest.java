@@ -24,10 +24,6 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
-/**
- *
- * @author Noel Grandin
- */
 public class BaselineTest implements Application {
     private Frame frame = null;
 
