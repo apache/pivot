@@ -19,7 +19,7 @@ package org.apache.pivot.collections;
 /**
  * Implements various assert-style checking for the Pivot collections classes.
  * Throws nice descriptive exceptions if something goes wrong.
- * 
+ *
  * @author Noel Grandin
  */
 public class CollectionArgChecks {
@@ -29,19 +29,19 @@ public class CollectionArgChecks {
             throw new IllegalArgumentException(fieldName + " cannot be null");
         }
     }
-    
+
     public static void zeroOrGreater(String fieldName, int field) {
         if (field < 0) {
             throw new IllegalArgumentException(fieldName + " " + field + " cannot be < 0");
         }
     }
-    
+
     public static void indexBounds(int index, int boundStart, int boundEnd) {
         if (index < boundStart || index > boundEnd) {
             throw new IndexOutOfBoundsException("index " + index + " out of bounds");
         }
     }
-    
+
     public static void indexBounds(int index, int count, int boundStart, int boundEnd) {
         if (count < 0) {
             throw new IllegalArgumentException();

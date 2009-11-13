@@ -81,7 +81,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin,
                 }
             }
         }
-        
+
         int visibleRowCount = 0;
         int clientHeight = height - padding.top - padding.bottom;
         for (int i = 0; i < rowCount; i++) {
@@ -97,7 +97,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin,
         if (visibleRowCount > 0) {
             cellHeight = clientHeight / visibleRowCount;
         }
-        
+
         int cellPreferredWidth = 0;
         for (int i = 0; i < rowCount; i++) {
             GridPane.Row row = rows.get(i);
@@ -111,7 +111,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin,
                 }
             }
         }
-        
+
         // The preferred width of the grid pane is the sum of the column
         // widths, plus padding and spacing
 
@@ -156,7 +156,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin,
                 }
             }
         }
-        
+
         int visibleColumnCount = 0;
         int clientWidth = width - padding.left - padding.right;
         for (int i = 0; i < columnCount; i++) {
@@ -224,7 +224,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin,
                 }
             }
         }
-        
+
         // The preferred width of the grid pane is the sum of the column
         // widths, plus padding and spacing
 
@@ -244,7 +244,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin,
 
         // The preferred height of the grid pane is the sum of the row
         // heights, plus padding and spacing
-        
+
         int visibleRowCount = 0;
         int preferredHeight = padding.top + padding.bottom;
         for (int i = 0; i < rowCount; i++) {
@@ -256,7 +256,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin,
         if (visibleRowCount > 1) {
             preferredHeight += (visibleRowCount - 1) * verticalSpacing;
         }
-        
+
         return new Dimensions(preferredWidth, preferredHeight);
     }
 
@@ -310,10 +310,10 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin,
                 }
             }
         }
-        
-        
+
+
         // Calculate cell width
-        
+
         int visibleColumnCount = 0;
         int clientWidth = width - padding.left - padding.right;
         for (int i = 0; i < columnCount; i++) {
@@ -329,10 +329,10 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin,
         if (visibleColumnCount > 0) {
             cellWidth = clientWidth / visibleColumnCount;
         }
-        
-        
+
+
         // Calculate cell height
-        
+
         int visibleRowCount = 0;
         int clientHeight = height - padding.top - padding.bottom;
         for (int i = 0; i < rowCount; i++) {
@@ -348,7 +348,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin,
         if (visibleRowCount > 0) {
             cellHeight = clientHeight / visibleRowCount;
         }
-        
+
         int componentY = padding.top;
         for (int i = 0; i < rowCount; i++) {
             GridPane.Row row = rows.get(i);
@@ -692,7 +692,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin,
         GridPane.RowSequence rows = gridPane.getRows();
 
         int rowCount = rows.getLength();
-        
+
         int rowIndex = -1;
         int rowY = padding.top;
 
@@ -715,7 +715,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin,
         GridPane.RowSequence rows = gridPane.getRows();
 
         int rowCount = rows.getLength();
-        
+
         if (row < 0
             || row >= rowCount) {
             throw new IndexOutOfBoundsException(String.valueOf(row));
@@ -736,7 +736,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin,
         GridPane.ColumnSequence columns = gridPane.getColumns();
 
         int columnCount = columns.getLength();
-        
+
         int columnIndex = -1;
 
         for (int j = 0, columnX = padding.left; columnX <= x && j < columnCount; j++) {
@@ -758,7 +758,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin,
         GridPane.ColumnSequence columns = gridPane.getColumns();
 
         int columnCount = columns.getLength();
-        
+
         if (column < 0
             || column >= columnCount) {
             throw new IndexOutOfBoundsException(String.valueOf(column));

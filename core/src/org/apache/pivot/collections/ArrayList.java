@@ -112,7 +112,7 @@ public class ArrayList<T> implements List<T>, Serializable {
             ArrayList.this.remove(index, 1);
             modificationCount++;
         }
-        
+
         private void indexBoundsCheck() {
             if (index < 0 || index >+ ArrayList.this.length) {
                 throw new IllegalStateException("index  " + index + " out of bounds");
@@ -141,7 +141,7 @@ public class ArrayList<T> implements List<T>, Serializable {
     }
 
     public ArrayList(int capacity) {
-    		CollectionArgChecks.zeroOrGreater("capacity", capacity);
+            CollectionArgChecks.zeroOrGreater("capacity", capacity);
 
         items = new Object[capacity];
     }
@@ -220,7 +220,7 @@ public class ArrayList<T> implements List<T>, Serializable {
     }
 
     private void insert(T item, int index, boolean validate) {
-    		CollectionArgChecks.indexBounds(index, 0, length);
+            CollectionArgChecks.indexBounds(index, 0, length);
 
         if (comparator != null
             && validate) {
@@ -250,7 +250,7 @@ public class ArrayList<T> implements List<T>, Serializable {
     @SuppressWarnings("unchecked")
     @Override
     public T update(int index, T item) {
-    		CollectionArgChecks.indexBounds(index, 0, length - 1);
+            CollectionArgChecks.indexBounds(index, 0, length - 1);
 
         T previousItem = (T)items[index];
 
@@ -295,7 +295,7 @@ public class ArrayList<T> implements List<T>, Serializable {
     @SuppressWarnings("unchecked")
     @Override
     public Sequence<T> remove(int index, int count) {
-    		CollectionArgChecks.indexBounds(index, count, 0, length);
+            CollectionArgChecks.indexBounds(index, count, 0, length);
 
         ArrayList<T> removed = new ArrayList<T>((T[])items, index, count);
 
@@ -336,7 +336,7 @@ public class ArrayList<T> implements List<T>, Serializable {
     @SuppressWarnings("unchecked")
     @Override
     public T get(int index) {
-   		CollectionArgChecks.indexBounds(index, 0, length);
+           CollectionArgChecks.indexBounds(index, 0, length);
 
         return (T)items[index];
     }
@@ -504,8 +504,8 @@ public class ArrayList<T> implements List<T>, Serializable {
 
     @SuppressWarnings("unchecked")
     public static <T> void sort(ArrayList<T> arrayList, int from, int to, Comparator<T> comparator) {
-    		CollectionArgChecks.notNull("arrayList", arrayList);
-    		CollectionArgChecks.notNull("comparator", comparator);
+            CollectionArgChecks.notNull("arrayList", arrayList);
+            CollectionArgChecks.notNull("comparator", comparator);
 
         Arrays.sort((T[])arrayList.items, from, to, comparator);
 
@@ -523,9 +523,9 @@ public class ArrayList<T> implements List<T>, Serializable {
 
     @SuppressWarnings("unchecked")
     public static <T> int binarySearch(ArrayList<T> arrayList, T item, Comparator<T> comparator) {
-    		CollectionArgChecks.notNull("arrayList", arrayList);
-    		CollectionArgChecks.notNull("comparator", comparator);
-    		CollectionArgChecks.notNull("item", item);
+            CollectionArgChecks.notNull("arrayList", arrayList);
+            CollectionArgChecks.notNull("comparator", comparator);
+            CollectionArgChecks.notNull("item", item);
 
         int index = Arrays.binarySearch((T[])arrayList.items, 0, arrayList.length, item, comparator);
 

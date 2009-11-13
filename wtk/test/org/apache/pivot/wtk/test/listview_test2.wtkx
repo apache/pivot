@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<BoxPane 
+<BoxPane
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:collections="org.apache.pivot.collections"
     xmlns:content="org.apache.pivot.wtk.content"
@@ -132,7 +132,7 @@ limitations under the License.
             </content>
         </Border>
     </BoxPane>
-    
+
     <BoxPane orientation="vertical" styles="{spacing:6}">
         <Label text="Checked" styles="{font:{bold:true}}"/>
         <Border styles="{color:10}">
