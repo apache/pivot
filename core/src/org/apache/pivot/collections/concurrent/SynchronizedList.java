@@ -73,7 +73,7 @@ public class SynchronizedList<T> implements List<T> {
     private SynchronizedListListenerList<T> listListeners = new SynchronizedListListenerList<T>();
 
     public SynchronizedList(List<T> list) {
-        CollectionArgChecks.notNull("list", list);
+        CollectionArgChecks.verifyNotNull("list", list);
 
         this.list = list;
     }

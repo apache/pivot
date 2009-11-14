@@ -57,7 +57,7 @@ public class SynchronizedStack<T> implements Stack<T> {
     private SynchronizedStackListenerList<T> stackListeners = new SynchronizedStackListenerList<T>();
 
     public SynchronizedStack(Stack<T> stack) {
-        CollectionArgChecks.notNull("stack", stack);
+        CollectionArgChecks.verifyNotNull("stack", stack);
 
         this.stack = stack;
     }

@@ -71,7 +71,7 @@ public class SynchronizedMap<K, V> implements Map<K, V> {
     private SynchronizedMapListenerList<K, V> mapListeners = new SynchronizedMapListenerList<K, V>();
 
     public SynchronizedMap(Map<K, V> map) {
-        CollectionArgChecks.notNull("map", map);
+        CollectionArgChecks.verifyNotNull("map", map);
 
         this.map = map;
     }

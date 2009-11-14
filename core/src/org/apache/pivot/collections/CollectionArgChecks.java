@@ -22,33 +22,10 @@ package org.apache.pivot.collections;
  */
 public class CollectionArgChecks {
 
-    public static void notNull(String fieldName, Object field) {
+    public static void verifyNotNull(String fieldName, Object field) {
         if (field == null) {
             throw new IllegalArgumentException(fieldName + " cannot be null");
         }
     }
 
-    public static void zeroOrGreater(String fieldName, int field) {
-        if (field < 0) {
-            throw new IllegalArgumentException(fieldName + " " + field + " cannot be < 0");
-        }
-    }
-
-    public static void indexBounds(int index, int boundStart, int boundEnd) {
-        if (index < boundStart || index > boundEnd) {
-            throw new IndexOutOfBoundsException("index " + index + " out of bounds");
-        }
-    }
-
-    public static void indexBounds(int index, int count, int boundStart, int boundEnd) {
-        if (count < 0) {
-            throw new IllegalArgumentException();
-        }
-        if (index < boundStart) {
-            throw new IndexOutOfBoundsException("index " + index + " out of bounds");
-        }
-        if (index + count > boundEnd) {
-            throw new IndexOutOfBoundsException("index + count " + index + "," + count + " out of range");
-        }
-    }
 }

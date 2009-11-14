@@ -57,7 +57,7 @@ public class SynchronizedQueue<T> implements Queue<T> {
     private SynchronizedQueueListenerList<T> queueListeners = new SynchronizedQueueListenerList<T>();
 
     public SynchronizedQueue(Queue<T> queue) {
-        CollectionArgChecks.notNull("queue", queue);
+        CollectionArgChecks.verifyNotNull("queue", queue);
 
         this.queue = queue;
     }

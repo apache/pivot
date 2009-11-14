@@ -305,7 +305,7 @@ public class LinkedList<T> implements List<T>, Serializable {
 
     @Override
     public void insert(T item, int index) {
-        CollectionArgChecks.indexBounds(index, 0, length);
+        verifyIndexBounds(index, 0, length);
 
         Node<T> next = null;
         Node<T> previous = null;
@@ -345,7 +345,7 @@ public class LinkedList<T> implements List<T>, Serializable {
 
     @Override
     public T update(int index, T item) {
-        CollectionArgChecks.indexBounds(index, 0, length - 1);
+        verifyIndexBounds(index, 0, length - 1);
 
         // Get the previous item at index
         Node<T> node = getNode(index);
@@ -403,7 +403,7 @@ public class LinkedList<T> implements List<T>, Serializable {
 
     @Override
     public Sequence<T> remove(int index, int count) {
-        CollectionArgChecks.indexBounds(index, count, 0, length);
+        verifyIndexBounds(index, count, 0, length);
 
         LinkedList<T> removed = new LinkedList<T>();
 
@@ -470,7 +470,7 @@ public class LinkedList<T> implements List<T>, Serializable {
 
     @Override
     public T get(int index) {
-        CollectionArgChecks.indexBounds(index, 0, length - 1);
+        verifyIndexBounds(index, 0, length - 1);
 
         Node<T> node = getNode(index);
         return node.item;
@@ -649,5 +649,23 @@ public class LinkedList<T> implements List<T>, Serializable {
         sb.append("]");
 
         return sb.toString();
+    }
+    
+    private static void verifyIndexBounds(int index, int boundStart, int boundEnd) {
+        if (index < boundStart || index > boundEnd) {
+            throw new IndexOutOfBoundsException("index " + index + " out of bounds");
+        }
+    }
+
+    private static void verifyIndexBounds(int index, int count, int boundStart, int boundEnd) {
+        if (count < 0) {
+            throw new IllegalArgumentException();
+        }
+        if (index < boundStart) {
+            throw new IndexOutOfBoundsException("index " + index + " out of bounds");
+        }
+        if (index + count > boundEnd) {
+            throw new IndexOutOfBoundsException("index + count " + index + "," + count + " out of range");
+        }
     }
 }

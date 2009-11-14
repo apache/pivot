@@ -66,7 +66,7 @@ public class SynchronizedSet<E> implements Set<E> {
     private SynchronizedSetListenerList<E> setListeners = new SynchronizedSetListenerList<E>();
 
     public SynchronizedSet(Set<E> set) {
-        CollectionArgChecks.notNull("set", set);
+        CollectionArgChecks.verifyNotNull("set", set);
 
         this.set = set;
     }

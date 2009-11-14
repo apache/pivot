@@ -44,7 +44,7 @@ public class EnumMap<E extends Enum<E>, V> implements Map<E, V>, Serializable {
     @SuppressWarnings("unchecked")
     @Override
     public V get(E key) {
-        CollectionArgChecks.notNull("key", key);
+        CollectionArgChecks.verifyNotNull("key", key);
 
         return (V)values[key.ordinal()];
     }
@@ -52,7 +52,7 @@ public class EnumMap<E extends Enum<E>, V> implements Map<E, V>, Serializable {
     @SuppressWarnings("unchecked")
     @Override
     public V put(E key, V value) {
-        CollectionArgChecks.notNull("key", key);
+        CollectionArgChecks.verifyNotNull("key", key);
 
         int ordinal = key.ordinal();
         V previousValue = (V)values[ordinal];
@@ -71,7 +71,7 @@ public class EnumMap<E extends Enum<E>, V> implements Map<E, V>, Serializable {
     @SuppressWarnings("unchecked")
     @Override
     public V remove(E key) {
-        CollectionArgChecks.notNull("key", key);
+        CollectionArgChecks.verifyNotNull("key", key);
 
         V value = null;
         if (keySet.contains(key)) {
