@@ -16,21 +16,21 @@ in their associated libraries:
 Distribution JARs
 =================
 
-* Core (pivot-core-1.3-incubating.jar):
+* Core (pivot-core-1.4-incubating.jar):
   A set of common, non-UI-specific classes.
 
-* WTK (pivot-wtk-1.3-incubating.jar, pivot-wtk-1.3-incubating.terra.jar):
+* WTK (pivot-wtk-1.4-incubating.jar, pivot-wtk-1.4-incubating.terra.jar):
   Classes for user interface development, including windows, dialogs, buttons,
   lists, text input, layout, drag and drop, XML markup, etc.
 
-* Web (pivot-web-1.3-incubating.jar, pivot-web-1.3-incubating.server.jar):
+* Web (pivot-web-1.4-incubating.jar, pivot-web-1.4-incubating.server.jar):
   Classes to facilitate communication with and implementation of remote data
   services.
 
-* Charting (pivot-charts-1.3-incubating.jar):
+* Charting (pivot-charts-1.4-incubating.jar):
   Classes for adding interactive charting capabilities to Pivot applications.
 
-* Tools (pivot-tools-1.3-incubating.jar):
+* Tools (pivot-tools-1.4-incubating.jar):
   Development tools and utility applications.
 
 To begin developing with Pivot, simply include the necessary libraries on your
@@ -67,7 +67,7 @@ Dependencies
 
   http://code.google.com/p/pivot-jfree/
 
-  Version 1.3 of this provider is compatible with Pivot 1.3. Please note that
+  Version 1.4 of this provider is compatible with Pivot 1.4. Please note that
   this provider has a dependency on JFreeChart, which is licensed under LGPL.
 
 * Scripting support requires a compatible script engine. See
@@ -80,6 +80,6 @@ Documentation
 =============
 
 Pivot home page: http://incubator.apache.org/pivot
-Demos:           http://incubator.apache.org/pivot/1.3/demos/
-Tutorials:       http://incubator.apache.org/pivot/1.3/tutorials/
-Javadoc:         http://incubator.apache.org/pivot/1.3/docs/api/
+Demos:           http://incubator.apache.org/pivot/1.4/demos/
+Tutorials:       http://incubator.apache.org/pivot/1.4/tutorials/
+Javadoc:         http://incubator.apache.org/pivot/1.4/docs/api/
