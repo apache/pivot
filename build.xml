@@ -149,6 +149,12 @@ limitations under the License.
         <sequential>
             <mkdir dir="${folder.lib}"/>
             <jar destfile="${folder.lib}/@{jarFile}" index="${compiler.indexJars}">
+            	<metainf dir="${basedir}">
+            		<include name="DISCLAIMER"/>
+            		<include name="LICENSE"/>
+            		<include name="NOTICE"/>
+            		<include name="README"/>
+            	</metainf>
                 <manifest>
                     <attribute name="Sealed" value="true"/>
                     <attribute name="Implementation-Vendor-Id" value="org.apache"/>
