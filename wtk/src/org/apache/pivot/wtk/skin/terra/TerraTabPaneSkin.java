@@ -1084,6 +1084,9 @@ public class TerraTabPaneSkin extends ContainerSkin
 
         this.buttonPadding = buttonPadding;
         invalidateComponent();
+        for (Component tabButton : buttonBoxPane) {
+            tabButton.invalidate();
+        }
     }
 
     public final void setButtonPadding(int buttonPadding) {

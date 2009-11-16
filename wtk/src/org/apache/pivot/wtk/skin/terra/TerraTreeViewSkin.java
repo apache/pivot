@@ -538,6 +538,47 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     @Override
+    public int getBaseline(int width, int height) {
+        int baseline = -1;
+
+        if (visibleNodes.getLength() > 0) {
+            TreeView treeView = (TreeView)getComponent();
+            TreeView.NodeRenderer nodeRenderer = treeView.getNodeRenderer();
+
+            NodeInfo nodeInfo = visibleNodes.get(0);
+
+            int nodeWidth = width - (nodeInfo.depth - 1) * (indent + spacing);
+            int nodeHeight = getNodeHeight();
+
+            boolean expanded = false;
+            boolean selected = nodeInfo.isSelected();
+            boolean highlighted = nodeInfo.isHighlighted();
+            boolean disabled = nodeInfo.isDisabled();
+
+            if (showBranchControls) {
+                if (nodeInfo instanceof BranchInfo) {
+                    BranchInfo branchInfo = (BranchInfo)nodeInfo;
+                    expanded = branchInfo.isExpanded();
+                }
+
+                nodeWidth -= (indent + spacing);
+            }
+
+            TreeView.NodeCheckState checkState = TreeView.NodeCheckState.UNCHECKED;
+            if (treeView.getCheckmarksEnabled()) {
+                checkState = nodeInfo.getCheckState();
+                nodeWidth -= (Math.max(indent, CHECKBOX.getWidth()) + spacing);
+            }
+
+            nodeRenderer.render(nodeInfo.data, nodeInfo.getPath(), 0, treeView, expanded, selected,
+                checkState, highlighted, disabled);
+            baseline = nodeRenderer.getBaseline(nodeWidth, nodeHeight);
+        }
+
+        return baseline;
+    }
+
+    @Override
     public void layout() {
         // No-op
     }

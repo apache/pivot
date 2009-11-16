@@ -383,6 +383,28 @@ public class TerraExpanderSkin extends ExpanderSkin
     }
 
     @Override
+    public int getBaseline(int width, int height) {
+        Expander expander = (Expander)getComponent();
+        Component content = expander.getContent();
+
+        int baseline = -1;
+
+        if (content != null) {
+            int titleBarWidth = Math.max(width - 2, 0);
+            int titleBarHeight = titleBarTablePane.getPreferredHeight(-1);
+
+            baseline = titleBarTablePane.getBaseline(titleBarWidth, titleBarHeight);
+
+            if (baseline != -1) {
+                // Account for top border
+                baseline += 1;
+            }
+        }
+
+        return baseline;
+    }
+
+    @Override
     public void layout() {
         Expander expander = (Expander)getComponent();
         Component content = expander.getContent();

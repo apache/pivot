@@ -540,6 +540,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
         }
 
         this.listSize = listSize;
+        listViewBorder.setPreferredHeight(-1);
     }
 
     public Object getListFont() {

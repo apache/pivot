@@ -453,13 +453,57 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
 
     @Override
     public int getBaseline(int width, int height) {
+        TablePane tablePane = (TablePane)getComponent();
+
+        TablePane.RowSequence rows = tablePane.getRows();
+        TablePane.ColumnSequence columns = tablePane.getColumns();
+
+        int rowCount = rows.getLength();
+        int columnCount = columns.getLength();
+
+        int[] columnWidths = getColumnWidths(width);
+        int[] rowHeights = getRowHeights(height, columnWidths);
+        boolean[][] occupiedCells = getOccupiedCells();
+
         int baseline = -1;
 
-        // TODO Return the first available baseline by traversing cells top left to bottom right
+        int rowY = padding.top;
 
-        // Include top padding value
-        if (baseline != -1) {
-            baseline += padding.top;
+        for (int i = 0; i < rowCount && baseline == -1; i++) {
+            TablePane.Row row = rows.get(i);
+            boolean rowVisible = false;
+
+            for (int j = 0, n = row.getLength(); j < n && j < columnCount && baseline == -1; j++) {
+                Component component = row.get(j);
+
+                if (component != null
+                    && component.isVisible()) {
+                    int columnSpan = Math.min(TablePane.getColumnSpan(component), columnCount - j);
+                    int componentWidth = (columnSpan - 1) * horizontalSpacing;
+                    for (int k = 0; k < columnSpan && j + k < columnCount; k++) {
+                        componentWidth += columnWidths[j + k];
+                    }
+
+                    int rowSpan = Math.min(TablePane.getRowSpan(component), rowCount  - i);
+                    int componentHeight = (rowSpan - 1) * verticalSpacing;
+                    for (int k = 0; k < rowSpan && i + k < rowCount; k++) {
+                        componentHeight += rowHeights[i + k];
+                    }
+
+                    baseline = component.getBaseline(Math.max(componentWidth, 0),
+                        Math.max(componentHeight, 0));
+
+                    if (baseline != -1) {
+                        baseline += rowY;
+                    }
+                }
+
+                rowVisible |= occupiedCells[i][j];
+            }
+
+            if (rowVisible) {
+                rowY += (rowHeights[i] + verticalSpacing);
+            }
         }
 
         return baseline;
@@ -941,11 +985,9 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
                     int columnSpan = TablePane.getColumnSpan(component);
 
                     for (int k = 0; k < rowSpan && i + k < rowCount; k++) {
-                        occupiedCells[i + k][j] = true;
-                    }
-
-                    for (int k = 0; k < columnSpan && j + k < columnCount; k++) {
-                        occupiedCells[i][j + k] = true;
+                        for (int l = 0; l < columnSpan && j + l < columnCount; l++) {
+                            occupiedCells[i + k][j + l] = true;
+                        }
                     }
                 }
             }
@@ -958,9 +1000,10 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
      * Gets the preferred width of a table pane column, which is defined as the
      * maximum preferred width of the column's visible components.
      * <p>
-     * Components that span multiple columns will not be considered in the
-     * calculation (even if they live in the column directly). It is up to the
-     * caller to factor such components into the column widths calculation.
+     * Because their preferred width relates to the preferred widths of other
+     * columns, components that span multiple columns will not be considered in
+     * this calculation (even if they live in the column directly). It is up to
+     * the caller to factor such components into the column widths calculation.
      *
      * @param columnIndex
      * The index of the column whose preferred width we're calculating
@@ -1024,9 +1067,10 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
      * the width of the column that the component occupies (as specified in the
      * array of column widths).
      * <p>
-     * Components that span multiple rows will not be considered in the
-     * calculation (even if they live in the column directly). It is up to the
-     * caller to factor such components into the row heights calculation.
+     * Because their preferred height relates to the preferred heights of other
+     * rows, components that span multiple rows will not be considered in
+     * this calculation (even if they live in the column directly). It is up to
+     * the caller to factor such components into the row heights calculation.
      *
      * @param rowIndex
      * The index of the row whose preferred height we're calculating
@@ -1525,8 +1569,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
     }
 
     @Override
-    public void rowHeightChanged(TablePane.Row row, int previousHeight,
-        boolean previousRelative) {
+    public void rowHeightChanged(TablePane.Row row, int previousHeight, boolean previousRelative) {
         invalidateComponent();
     }
 
@@ -1542,8 +1585,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
     }
 
     @Override
-    public void columnsRemoved(TablePane tablePane, int index,
-        Sequence<TablePane.Column> columns) {
+    public void columnsRemoved(TablePane tablePane, int index, Sequence<TablePane.Column> columns) {
         invalidateComponent();
     }
 
@@ -1565,22 +1607,19 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
     }
 
     @Override
-    public void cellsRemoved(TablePane.Row row, int column,
-        Sequence<Component> removed) {
+    public void cellsRemoved(TablePane.Row row, int column, Sequence<Component> removed) {
         invalidateComponent();
     }
 
     @Override
-    public void cellUpdated(TablePane.Row row, int column,
-        Component previousComponent) {
+    public void cellUpdated(TablePane.Row row, int column, Component previousComponent) {
         invalidateComponent();
     }
 
     // TablePaneAttribute events
 
     @Override
-    public void rowSpanChanged(TablePane tablePane, Component component,
-        int previousRowSpan) {
+    public void rowSpanChanged(TablePane tablePane, Component component, int previousRowSpan) {
         invalidateComponent();
     }
 

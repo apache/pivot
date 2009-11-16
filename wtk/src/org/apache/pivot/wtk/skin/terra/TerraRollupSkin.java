@@ -279,6 +279,30 @@ public class TerraRollupSkin extends RollupSkin {
     }
 
     @Override
+    public int getBaseline(int width, int height) {
+        Rollup rollup = (Rollup)getComponent();
+        Component heading = rollup.getHeading();
+
+        int baseline = -1;
+
+        if (heading != null) {
+            int headingWidth, headingHeight;
+            if (fill) {
+                headingWidth = Math.max(width - rollupButton.getPreferredWidth(-1) - buffer, 0);
+                headingHeight = heading.getPreferredHeight(headingWidth);
+            } else {
+                Dimensions headingPreferredSize = heading.getPreferredSize();
+                headingWidth = headingPreferredSize.width;
+                headingHeight = headingPreferredSize.height;
+            }
+
+            baseline = heading.getBaseline(headingWidth, headingHeight);
+        }
+
+        return baseline;
+    }
+
+    @Override
     public void layout() {
         Rollup rollup = (Rollup)getComponent();
 

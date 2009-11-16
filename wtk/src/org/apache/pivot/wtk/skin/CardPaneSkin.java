@@ -411,6 +411,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 
     @Override
     public int getBaseline(int width, int height) {
+        // TODO Should this report the baseline of the currently selected card?
         return -1;
     }
 
