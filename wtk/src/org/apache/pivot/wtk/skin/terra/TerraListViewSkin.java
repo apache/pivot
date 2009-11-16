@@ -384,16 +384,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
     @Override
     public Bounds getItemBounds(int index) {
-        int itemY;
-        int itemHeight;
-        if (variableItemHeight) {
-            itemY = variableItemHeightYCache[index];
-            itemHeight = variableItemHeightYCache[index + 1] - itemY;
-        } else {
-            itemY = index * fixedItemHeight;
-            itemHeight = fixedItemHeight;
-        }
-        return new Bounds(0, itemY, getWidth(), itemHeight);
+        return new Bounds(0, getItemY(index), getWidth(), getItemHeight(index));
     }
 
     @Override
@@ -703,7 +694,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
     public void setVariableItemHeight(boolean variableItemHeight) {
         this.variableItemHeight = variableItemHeight;
-        repaintComponent();
+        invalidateComponent();
     }
 
 
