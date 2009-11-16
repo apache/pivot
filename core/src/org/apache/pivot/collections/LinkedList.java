@@ -650,22 +650,22 @@ public class LinkedList<T> implements List<T>, Serializable {
 
         return sb.toString();
     }
-    
-    private static void verifyIndexBounds(int index, int boundStart, int boundEnd) {
-        if (index < boundStart || index > boundEnd) {
-            throw new IndexOutOfBoundsException("index " + index + " out of bounds");
+
+    private static void verifyIndexBounds(int index, int start, int end) {
+        if (index < start || index > end) {
+            throw new IndexOutOfBoundsException("index " + index + " out of bounds.");
         }
     }
 
-    private static void verifyIndexBounds(int index, int count, int boundStart, int boundEnd) {
+    private static void verifyIndexBounds(int index, int count, int start, int end) {
         if (count < 0) {
             throw new IllegalArgumentException();
         }
-        if (index < boundStart) {
-            throw new IndexOutOfBoundsException("index " + index + " out of bounds");
+        if (index < start) {
+            throw new IndexOutOfBoundsException("index " + index + " out of bounds.");
         }
-        if (index + count > boundEnd) {
-            throw new IndexOutOfBoundsException("index + count " + index + "," + count + " out of range");
+        if (index + count > end) {
+            throw new IndexOutOfBoundsException("index + count " + index + "," + count + " out of range.");
         }
     }
 }

@@ -141,7 +141,7 @@ public class ArrayList<T> implements List<T>, Serializable {
     }
 
     public ArrayList(int capacity) {
-        ArrayList.validateZeroOrGreater("capacity", capacity);
+        ArrayList.verifyNonNegative("capacity", capacity);
 
         items = new Object[capacity];
     }
@@ -151,7 +151,7 @@ public class ArrayList<T> implements List<T>, Serializable {
     }
 
     public ArrayList(T[] items, int index, int count) {
-        CollectionArgChecks.verifyNotNull("items", items);
+        verifyNotNull("items", items);
         verifyIndexBounds(index, count, 0, items.length);
 
         this.items = new Object[count];
@@ -165,7 +165,7 @@ public class ArrayList<T> implements List<T>, Serializable {
     }
 
     public ArrayList(Sequence<T> items, int index, int count) {
-        CollectionArgChecks.verifyNotNull("items", items);
+        verifyNotNull("items", items);
         verifyIndexBounds(index, count, 0, items.getLength());
 
         this.items = new Object[count];
@@ -182,7 +182,7 @@ public class ArrayList<T> implements List<T>, Serializable {
     }
 
     public ArrayList(ArrayList<T> arrayList, int index, int count) {
-        CollectionArgChecks.verifyNotNull("arrayList", arrayList);
+        verifyNotNull("arrayList", arrayList);
         verifyIndexBounds(index, count, 0, arrayList.length);
 
         items = new Object[count];
@@ -498,20 +498,14 @@ public class ArrayList<T> implements List<T>, Serializable {
         return sb.toString();
     }
 
-    private static void validateZeroOrGreater(String fieldName, int field) {
-	    if (field < 0) {
-	        throw new IllegalArgumentException(fieldName + " " + field + " cannot be < 0");
-	    }
-	}
-
-	public static <T> void sort(ArrayList<T> arrayList, Comparator<T> comparator) {
+    public static <T> void sort(ArrayList<T> arrayList, Comparator<T> comparator) {
         sort(arrayList, 0, arrayList.getLength(), comparator);
     }
 
     @SuppressWarnings("unchecked")
     public static <T> void sort(ArrayList<T> arrayList, int from, int to, Comparator<T> comparator) {
-        CollectionArgChecks.verifyNotNull("arrayList", arrayList);
-        CollectionArgChecks.verifyNotNull("comparator", comparator);
+        verifyNotNull("arrayList", arrayList);
+        verifyNotNull("comparator", comparator);
 
         Arrays.sort((T[])arrayList.items, from, to, comparator);
 
@@ -529,9 +523,9 @@ public class ArrayList<T> implements List<T>, Serializable {
 
     @SuppressWarnings("unchecked")
     public static <T> int binarySearch(ArrayList<T> arrayList, T item, Comparator<T> comparator) {
-        CollectionArgChecks.verifyNotNull("arrayList", arrayList);
-        CollectionArgChecks.verifyNotNull("comparator", comparator);
-        CollectionArgChecks.verifyNotNull("item", item);
+        verifyNotNull("arrayList", arrayList);
+        verifyNotNull("comparator", comparator);
+        verifyNotNull("item", item);
 
         int index = Arrays.binarySearch((T[])arrayList.items, 0, arrayList.length, item, comparator);
 
@@ -547,22 +541,36 @@ public class ArrayList<T> implements List<T>, Serializable {
             }
         });
     }
-    
-    private static void verifyIndexBounds(int index, int boundStart, int boundEnd) {
-        if (index < boundStart || index > boundEnd) {
-            throw new IndexOutOfBoundsException("index " + index + " out of bounds");
+
+    private static void verifyNotNull(String argument, Object value) {
+        if (value == null) {
+            throw new IllegalArgumentException(argument + " cannot be null.");
         }
     }
 
-    private static void verifyIndexBounds(int index, int count, int boundStart, int boundEnd) {
+    private static void verifyNonNegative(String argument, int value) {
+        if (value < 0) {
+            throw new IllegalArgumentException(argument + " cannot be negative.");
+        }
+    }
+
+    private static void verifyIndexBounds(int index, int start, int end) {
+        if (index < start || index > end) {
+            throw new IndexOutOfBoundsException("index " + index + " out of bounds.");
+        }
+    }
+
+    private static void verifyIndexBounds(int index, int count, int start, int end) {
         if (count < 0) {
             throw new IllegalArgumentException();
         }
-        if (index < boundStart) {
-            throw new IndexOutOfBoundsException("index " + index + " out of bounds");
+
+        if (index < start) {
+            throw new IndexOutOfBoundsException("index " + index + " out of bounds.");
         }
-        if (index + count > boundEnd) {
-            throw new IndexOutOfBoundsException("index + count " + index + "," + count + " out of range");
+
+        if (index + count > end) {
+            throw new IndexOutOfBoundsException("index + count " + index + "," + count + " out of range.");
         }
     }
 }

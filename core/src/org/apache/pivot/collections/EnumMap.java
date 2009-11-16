@@ -44,7 +44,7 @@ public class EnumMap<E extends Enum<E>, V> implements Map<E, V>, Serializable {
     @SuppressWarnings("unchecked")
     @Override
     public V get(E key) {
-        CollectionArgChecks.verifyNotNull("key", key);
+        verifyNotNull("key", key);
 
         return (V)values[key.ordinal()];
     }
@@ -52,7 +52,7 @@ public class EnumMap<E extends Enum<E>, V> implements Map<E, V>, Serializable {
     @SuppressWarnings("unchecked")
     @Override
     public V put(E key, V value) {
-        CollectionArgChecks.verifyNotNull("key", key);
+        verifyNotNull("key", key);
 
         int ordinal = key.ordinal();
         V previousValue = (V)values[ordinal];
@@ -71,7 +71,7 @@ public class EnumMap<E extends Enum<E>, V> implements Map<E, V>, Serializable {
     @SuppressWarnings("unchecked")
     @Override
     public V remove(E key) {
-        CollectionArgChecks.verifyNotNull("key", key);
+        verifyNotNull("key", key);
 
         V value = null;
         if (keySet.contains(key)) {
@@ -127,5 +127,11 @@ public class EnumMap<E extends Enum<E>, V> implements Map<E, V>, Serializable {
     @Override
     public ListenerList<MapListener<E, V>> getMapListeners() {
         return mapListeners;
+    }
+
+    private static void verifyNotNull(String argument, Object value) {
+        if (value == null) {
+            throw new IllegalArgumentException(argument + " cannot be null.");
+        }
     }
 }

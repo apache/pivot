@@ -107,7 +107,9 @@ public class EnumList<E extends Enum<E>> implements List<E>, Serializable {
 
     @Override
     public int indexOf(E item) {
-        CollectionArgChecks.verifyNotNull("item", item);
+        if (item == null) {
+            throw new IllegalArgumentException("item cannot be null.");
+        }
 
         return item.ordinal();
     }

@@ -19,13 +19,11 @@ package org.apache.pivot.collections.concurrent;
 import java.util.Comparator;
 import java.util.Iterator;
 
-import org.apache.pivot.collections.CollectionArgChecks;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
-
 
 /**
  * Synchronized implementation of the {@link List} interface.
@@ -73,7 +71,9 @@ public class SynchronizedList<T> implements List<T> {
     private SynchronizedListListenerList<T> listListeners = new SynchronizedListListenerList<T>();
 
     public SynchronizedList(List<T> list) {
-        CollectionArgChecks.verifyNotNull("list", list);
+        if (list == null) {
+            throw new IllegalArgumentException("list cannot be null.");
+        }
 
         this.list = list;
     }

@@ -19,12 +19,10 @@ package org.apache.pivot.collections.concurrent;
 import java.util.Comparator;
 import java.util.Iterator;
 
-import org.apache.pivot.collections.CollectionArgChecks;
 import org.apache.pivot.collections.Stack;
 import org.apache.pivot.collections.StackListener;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
-
 
 /**
  * Synchronized implementation of the {@link Stack} interface.
@@ -57,7 +55,9 @@ public class SynchronizedStack<T> implements Stack<T> {
     private SynchronizedStackListenerList<T> stackListeners = new SynchronizedStackListenerList<T>();
 
     public SynchronizedStack(Stack<T> stack) {
-        CollectionArgChecks.verifyNotNull("stack", stack);
+        if (stack == null) {
+            throw new IllegalArgumentException("stack cannot be null.");
+        }
 
         this.stack = stack;
     }
