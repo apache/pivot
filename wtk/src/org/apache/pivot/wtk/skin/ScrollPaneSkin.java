@@ -309,17 +309,47 @@ public class ScrollPaneSkin extends ContainerSkin
 
     @Override
     public int getBaseline(int width, int height) {
+        ScrollPane scrollPane = (ScrollPane)getComponent();
+
+        Component view = scrollPane.getView();
+        Component rowHeader = scrollPane.getRowHeader();
+        Component columnHeader = scrollPane.getColumnHeader();
+
         int baseline = -1;
 
-        ScrollPane scrollPane = (ScrollPane)getComponent();
-        Component view = scrollPane.getView();
+        int clientWidth = width;
+        int clientHeight = height;
 
-        // TODO Look for baseline in column header, then row header, then view
+        int rowHeaderWidth = 0;
+        if (rowHeader != null) {
+            rowHeaderWidth = rowHeader.getPreferredWidth(-1);
+            clientWidth -= rowHeaderWidth;
+        }
 
-        // Delegate baseline calculation to the view component
-        if (view != null) {
-            // TODO Offset baseline by the expected view y-coordinate given width and height
-            baseline = view.getBaseline(width, height);
+        int columnHeaderHeight = 0;
+        if (columnHeader != null) {
+            columnHeaderHeight = columnHeader.getPreferredHeight(-1);
+            clientHeight -= columnHeaderHeight;
+
+            baseline = columnHeader.getBaseline(clientWidth, columnHeaderHeight);
+        }
+
+        if (baseline == -1
+            && rowHeader != null) {
+            baseline = rowHeader.getBaseline(rowHeaderWidth, clientHeight);
+
+            if (baseline != -1) {
+                baseline += columnHeaderHeight;
+            }
+        }
+
+        if (baseline == -1
+            && view != null) {
+            baseline = view.getBaseline(clientWidth, clientHeight);
+
+            if (baseline != -1) {
+                baseline += columnHeaderHeight;
+            }
         }
 
         return baseline;

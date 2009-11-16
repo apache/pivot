@@ -537,6 +537,11 @@ public class TerraCalendarSkin extends CalendarSkin {
     }
 
     @Override
+    public int getBaseline(int width, int height) {
+        return calendarTablePane.getBaseline(width, height);
+    }
+
+    @Override
     public void layout() {
         calendarTablePane.setSize(getWidth(), getHeight());
         calendarTablePane.setLocation(0, 0);
