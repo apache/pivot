@@ -143,22 +143,20 @@ public class RSSFeedDemo implements Application {
                     String title = (String)xpath.evaluate("title", itemElement, XPathConstants.STRING);
                     titleLabel.setText(title);
 
-//                    String categories = "";
-                    StringBuffer categories = new StringBuffer("");
-
+                    String categories = "";
                     NodeList categoryNodeList = (NodeList)xpath.evaluate("category", itemElement,
                         XPathConstants.NODESET);
                     for (int j = 0; j < categoryNodeList.getLength(); j++) {
                         Element categoryElement = (Element)categoryNodeList.item(j);
                         String category = categoryElement.getTextContent();
                         if (j > 0) {
-                            categories.append(", ");
+                            categories += ", ";
                         }
 
-                        categories.append(category);
+                        categories += category;
                     }
 
-                    categoriesLabel.setText(categories.toString());
+                    categoriesLabel.setText(categories);
 
                     String submitter = (String)xpath.evaluate("dz:submitter/dz:username", itemElement,
                         XPathConstants.STRING);
@@ -229,7 +227,7 @@ public class RSSFeedDemo implements Application {
 
             return false;
         }
-    }
+    };
 
     private XPath xpath;
 
