@@ -110,8 +110,13 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
     }
 
     @Override
+    public final int getBaseline() {
+        return getBaseline(width, height);
+    }
+
+    @Override
     public int getBaseline(int width, int height) {
-       return -1;
+        return -1;
     }
 
     @Override

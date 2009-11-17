@@ -29,6 +29,10 @@ public interface MovieListener {
         }
 
         @Override
+        public void baselineChanged(Movie movie, int previousBaseline) {
+        }
+
+        @Override
         public void currentFrameChanged(Movie movie, int previousFrame) {
         }
 
@@ -57,6 +61,14 @@ public interface MovieListener {
      * @param previousHeight
      */
     public void sizeChanged(Movie movie, int previousWidth, int previousHeight);
+
+    /**
+     * Called when a movie's baseline has changed.
+     *
+     * @param movie
+     * @param previousBaseline
+     */
+    public void baselineChanged(Movie movie, int previousBaseline);
 
     /**
      * Called when the movie's current frame changed.

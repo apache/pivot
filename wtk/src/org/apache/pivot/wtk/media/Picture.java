@@ -39,6 +39,8 @@ public class Picture extends Image {
     // when modified?
     private BufferedImage bufferedImage = null;
 
+    private int baseline = -1;
+
     public Picture(BufferedImage bufferedImage) {
         if (bufferedImage == null) {
             throw new IllegalArgumentException("bufferedImage is null.");
@@ -138,6 +140,20 @@ public class Picture extends Image {
             this.bufferedImage = bufferedImage;
 
             imageListeners.sizeChanged(this, previousWidth, previousHeight);
+        }
+    }
+
+    @Override
+    public int getBaseline() {
+        return baseline;
+    }
+
+    public void setBaseline(int baseline) {
+        int previousBaseline = this.baseline;
+
+        if (baseline != previousBaseline) {
+            this.baseline = baseline;
+            imageListeners.baselineChanged(this, previousBaseline);
         }
     }
 

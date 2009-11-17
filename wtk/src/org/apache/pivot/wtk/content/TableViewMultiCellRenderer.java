@@ -267,6 +267,11 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
     }
 
     @Override
+    public int getBaseline() {
+        return currentRenderer.getBaseline();
+    }
+
+    @Override
     public void paint(Graphics2D graphics) {
         currentRenderer.paint(graphics);
     }

@@ -54,6 +54,8 @@ public class Drawing extends Image {
 
     private Dimensions size = null;
 
+    private int baseline = -1;
+
     private CanvasListener canvasListener = new CanvasListener() {
         @Override
         public void regionUpdated(Canvas canvas, int x, int y, int width, int height) {
@@ -77,14 +79,30 @@ public class Drawing extends Image {
         setCanvas(new Canvas());
     }
 
+    @Override
     public int getWidth() {
         validate();
         return size.width;
     }
 
+    @Override
     public int getHeight() {
         validate();
         return size.height;
+    }
+
+    @Override
+    public int getBaseline() {
+        return baseline;
+    }
+
+    public void setBaseline(int baseline) {
+        int previousBaseline = this.baseline;
+
+        if (baseline != previousBaseline) {
+            this.baseline = baseline;
+            imageListeners.baselineChanged(this, previousBaseline);
+        }
     }
 
     private void invalidate() {

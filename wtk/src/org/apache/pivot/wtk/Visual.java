@@ -34,6 +34,15 @@ public interface Visual {
     public int getHeight();
 
     /**
+     * Returns the visual's baseline.
+     *
+     * @return
+     * The baseline relative to the origin of the visual, or <tt>-1</tt> if
+     * this visual does not have a baseline.
+     */
+    public int getBaseline();
+
+    /**
      * Paints the visual.
      *
      * @param graphics

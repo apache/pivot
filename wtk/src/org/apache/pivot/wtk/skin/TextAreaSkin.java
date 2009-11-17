@@ -121,6 +121,12 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             return height;
         }
 
+        @Override
+        public int getBaseline() {
+            // TODO Can this return a valid value?
+            return -1;
+        }
+
         public Dimensions getSize() {
             return new Dimensions(width, height);
         }
@@ -1317,10 +1323,17 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             }
         }
 
+        @Override
         public void sizeChanged(Image image, int previousWidth, int previousHeight) {
             invalidate();
         }
 
+        @Override
+        public void baselineChanged(Image image, int previousBaseline) {
+            // TODO Invalidate once baseline alignment of node view is supported
+        }
+
+        @Override
         public void regionUpdated(Image image, int x, int y, int width, int height) {
             // TODO Repaint the corresponding area of the component (add a repaint()
             // method to NodeView to facilitate this as well as paint-only updates

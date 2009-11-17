@@ -40,6 +40,13 @@ public abstract class Movie implements Visual {
         }
 
         @Override
+        public void baselineChanged(Movie movie, int previousBaseline) {
+            for (MovieListener listener : this) {
+                listener.baselineChanged(movie, previousBaseline);
+            }
+        }
+
+        @Override
         public void currentFrameChanged(Movie movie, int previousFrame) {
             for (MovieListener listener : this) {
                 listener.currentFrameChanged(movie, previousFrame);
@@ -97,6 +104,11 @@ public abstract class Movie implements Visual {
             }
         }
     };
+
+    @Override
+    public int getBaseline() {
+        return -1;
+    }
 
     public Dimensions getSize() {
         return new Dimensions(getWidth(), getHeight());

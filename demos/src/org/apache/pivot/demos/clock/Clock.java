@@ -49,6 +49,11 @@ public class Clock extends Movie {
             }
 
             @Override
+            public void baselineChanged(Image image, int previousBaseline) {
+                movieListeners.baselineChanged(Clock.this, previousBaseline);
+            }
+
+            @Override
             public void regionUpdated(Image image, int x, int y, int width, int height) {
                 movieListeners.regionUpdated(Clock.this, x, y, width, height);
             }
@@ -85,6 +90,11 @@ public class Clock extends Movie {
     @Override
     public int getHeight() {
         return image.getHeight();
+    }
+
+    @Override
+    public int getBaseline() {
+        return image.getBaseline();
     }
 
     @Override

@@ -59,6 +59,11 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
         }
 
         @Override
+        public void baselineChanged(Image image, int previousBaseline) {
+            invalidateComponent();
+        }
+
+        @Override
         public void regionUpdated(Image image, int x, int y, int width, int height) {
             // TODO A rounding error is causing an off-by-one error; we're
             // accounting for it here by adding 1 to width and height
@@ -106,6 +111,39 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
 
         return (image == null) ? new Dimensions(0, 0) : new Dimensions(image.getWidth(),
             image.getHeight());
+    }
+
+    @Override
+    public int getBaseline(int width, int height) {
+        ImageView imageView = (ImageView)getComponent();
+        Image image = imageView.getImage();
+
+        int baseline = -1;
+
+        if (image != null) {
+            baseline = image.getBaseline();
+
+            if (baseline != -1) {
+                Dimensions imageSize = image.getSize();
+
+                if (fill) {
+                    // Scale to fit
+                    if (preserveAspectRatio) {
+                        // TODO
+                    } else {
+                        baseline *= (float)height / (float)imageSize.height;
+                    }
+                } else {
+                    if (verticalAlignment == VerticalAlignment.CENTER) {
+                        baseline += (height - imageSize.height) / 2;
+                    } else if (verticalAlignment == VerticalAlignment.BOTTOM) {
+                        baseline += height - imageSize.height;
+                    }
+                }
+            }
+        }
+
+        return baseline;
     }
 
     @Override

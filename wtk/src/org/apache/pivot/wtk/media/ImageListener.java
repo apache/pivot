@@ -30,6 +30,14 @@ public interface ImageListener {
     public void sizeChanged(Image image, int previousWidth, int previousHeight);
 
     /**
+     * Called when an image's baseline has changed.
+     *
+     * @param image
+     * @param previousBaseline
+     */
+    public void baselineChanged(Image image, int previousBaseline);
+
+    /**
      * Called when a region within an image needs to be repainted.
      *
      * @param image

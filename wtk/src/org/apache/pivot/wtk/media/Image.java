@@ -50,6 +50,13 @@ public abstract class Image implements Visual {
         }
 
         @Override
+        public void baselineChanged(Image image, int previousBaseline) {
+            for (ImageListener listener : this) {
+                listener.baselineChanged(image, previousBaseline);
+            }
+        }
+
+        @Override
         public void regionUpdated(Image image, int x, int y, int width, int height) {
             for (ImageListener listener : this) {
                 listener.regionUpdated(image, x, y, width, height);
@@ -111,6 +118,11 @@ public abstract class Image implements Visual {
     }
 
     protected ImageListenerList imageListeners = new ImageListenerList();
+
+    @Override
+    public int getBaseline() {
+        return -1;
+    }
 
     public Dimensions getSize() {
         return new Dimensions(getWidth(), getHeight());

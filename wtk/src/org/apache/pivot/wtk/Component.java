@@ -1450,7 +1450,19 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     /**
-     * Returns the component's baseline for a given width.
+     * Returns the component's baseline.
+     *
+     * @return
+     * The baseline relative to the origin of this component, or <tt>-1</tt> if
+     * this component does not have a baseline.
+     */
+    @Override
+    public int getBaseline() {
+        return skin.getBaseline();
+    }
+
+    /**
+     * Returns the component's baseline for a given width and height.
      *
      * @return
      * The baseline relative to the origin of this component, or <tt>-1</tt> if
