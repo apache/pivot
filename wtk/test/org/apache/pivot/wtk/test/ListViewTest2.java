@@ -33,7 +33,7 @@ public class ListViewTest2 implements Application {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = new Window((Component)wtkxSerializer.readObject(getClass().getResource("listview_test2.wtkx")));
 
-        window.setTitle("ListView Test");
+        window.setTitle("ListView Test2");
         window.setMaximized(true);
         window.open(display);
     }
