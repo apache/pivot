@@ -150,6 +150,13 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                 preferredHeight += itemRenderer.getPreferredHeight(clientWidth);
             }
         } else {
+            itemRenderer.render(null, -1, listView, false, false, false, false);
+
+            int fixedItemHeight = itemRenderer.getPreferredHeight(-1);
+            if (listView.getCheckmarksEnabled()) {
+                fixedItemHeight = Math.max(CHECKBOX.getHeight() + (checkboxPadding.top
+                    + checkboxPadding.bottom), fixedItemHeight);
+            }
             preferredHeight = listData.getLength() * fixedItemHeight;
         }
 
@@ -182,6 +189,12 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             baseline = itemRenderer.getBaseline(clientWidth, itemHeight);
         } else {
             itemRenderer.render(null, -1, listView, false, false, false, false);
+
+            int fixedItemHeight = itemRenderer.getPreferredHeight(-1);
+            if (listView.getCheckmarksEnabled()) {
+                fixedItemHeight = Math.max(CHECKBOX.getHeight() + (checkboxPadding.top
+                    + checkboxPadding.bottom), fixedItemHeight);
+            }
             baseline = itemRenderer.getBaseline(clientWidth, fixedItemHeight);
         }
 
