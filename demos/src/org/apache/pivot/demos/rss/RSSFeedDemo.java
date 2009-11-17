@@ -143,20 +143,22 @@ public class RSSFeedDemo implements Application {
                     String title = (String)xpath.evaluate("title", itemElement, XPathConstants.STRING);
                     titleLabel.setText(title);
 
-                    String categories = "";
+//                    String categories = "";
+                    StringBuffer categories = new StringBuffer("");
+
                     NodeList categoryNodeList = (NodeList)xpath.evaluate("category", itemElement,
                         XPathConstants.NODESET);
                     for (int j = 0; j < categoryNodeList.getLength(); j++) {
                         Element categoryElement = (Element)categoryNodeList.item(j);
                         String category = categoryElement.getTextContent();
                         if (j > 0) {
-                            categories += ", ";
+                            categories.append(", ");
                         }
 
-                        categories += category;
+                        categories.append(category);
                     }
 
-                    categoriesLabel.setText(categories);
+                    categoriesLabel.setText(categories.toString());
 
                     String submitter = (String)xpath.evaluate("dz:submitter/dz:username", itemElement,
                         XPathConstants.STRING);
