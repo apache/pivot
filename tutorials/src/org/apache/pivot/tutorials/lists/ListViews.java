@@ -51,7 +51,7 @@ public class ListViews implements Application {
         }
 
         private void updateSelection(ListView listView) {
-            StringBuffer selectionText = new StringBuffer("");
+            String selectionText = "";
 
             Sequence<Span> selectedRanges = listView.getSelectedRanges();
             for (int i = 0, n = selectedRanges.getLength(); i < n; i++) {
@@ -61,15 +61,15 @@ public class ListViews implements Application {
                     j <= selectedRange.end;
                     j++) {
                     if (selectionText.length() > 0) {
-                        selectionText.append(", ");
+                        selectionText += ", ";
                     }
 
                     String text = (String)listView.getListData().get(j);
-                    selectionText.append(text);
+                    selectionText += text;
                 }
             }
 
-            selectionLabel.setText(selectionText.toString());
+            selectionLabel.setText(selectionText);
         }
     };
 
