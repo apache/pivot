@@ -411,13 +411,30 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 
     @Override
     public int getBaseline(int width, int height) {
-        // TODO Should this report the baseline of the currently selected card?
-        return -1;
+        int baseline = -1;
+
+        if (sizeToSelection) {
+            CardPane cardPane = (CardPane)getComponent();
+            Component selectedCard = cardPane.getSelectedCard();
+
+            if (selectedCard != null) {
+                int cardWidth = Math.max(width - (padding.left + padding.right), 0);
+                int cardHeight = Math.max(height - (padding.top + padding.bottom), 0);
+
+                baseline = selectedCard.getBaseline(cardWidth, cardHeight);
+
+                if (baseline != -1) {
+                    baseline += padding.top;
+                }
+            }
+        }
+
+        return baseline;
     }
 
     @Override
     public void layout() {
-        // Set the size of all components to match the size of the stack pane,
+        // Set the size of all components to match the size of the card pane,
         // minus padding
         CardPane cardPane = (CardPane)getComponent();
         int width = Math.max(getWidth() - (padding.left + padding.right), 0);
