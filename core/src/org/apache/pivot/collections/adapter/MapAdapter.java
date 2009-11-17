@@ -107,8 +107,8 @@ public class MapAdapter<K, V> implements Map<K, V>, Serializable {
     @SuppressWarnings("unchecked")
     @Override
     public Comparator<K> getComparator() {
-        if (this.map instanceof SortedMap) {
-            return ((SortedMap) this.map).comparator();
+        if (this.map instanceof SortedMap<?, ?>) {
+            return (Comparator<K>)((SortedMap<?, ?>)this.map).comparator();
         }
         return null;
     }
@@ -119,11 +119,11 @@ public class MapAdapter<K, V> implements Map<K, V>, Serializable {
         Comparator<K> previousComparator = getComparator();
 
         // If the adapted map supports it, construct a new sorted map
-        if (this.map instanceof SortedMap) {
+        if (this.map instanceof SortedMap<?, ?>) {
             try {
-                Constructor constructor = this.map.getClass().getConstructor(Comparator.class);
+                Constructor<?> constructor = this.map.getClass().getConstructor(Comparator.class);
                 if (constructor != null) {
-                    java.util.Map<K, V> map = (java.util.Map)constructor.newInstance(comparator);
+                    java.util.Map<K, V> map = (java.util.Map<K, V>)constructor.newInstance(comparator);
                     map.putAll(this.map);
                     this.map = map;
                 }

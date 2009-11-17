@@ -471,9 +471,8 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                         Sequence<Object> sequence = (Sequence<Object>)element.value;
 
                         try {
-                            Method addMethod = sequence.getClass().getMethod("add",
-                                new Class<?>[] {String.class});
-                            addMethod.invoke(sequence, new Object[] {text});
+                            Method addMethod = sequence.getClass().getMethod("add", String.class);
+                            addMethod.invoke(sequence, text);
                         } catch (NoSuchMethodException exception) {
                             throw new SerializationException("Text content cannot be added to "
                                 + sequence.getClass().getName() + ".", exception);
@@ -764,14 +763,14 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                             Method getListenerListMethod;
                             try {
                                 Class<?> type = element.value.getClass();
-                                getListenerListMethod = type.getMethod(getListenerListMethodName, new Class<?>[]{});
+                                getListenerListMethod = type.getMethod(getListenerListMethodName);
                             } catch (NoSuchMethodException exception) {
                                 throw new SerializationException(exception);
                             }
 
                             Object listenerList;
                             try {
-                                listenerList = getListenerListMethod.invoke(element.value, new Object[]{});
+                                listenerList = getListenerListMethod.invoke(element.value);
                             } catch (InvocationTargetException exception) {
                                 throw new SerializationException(exception);
                             } catch (IllegalAccessException exception) {
@@ -789,19 +788,19 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                     attribute.value);
 
                             Object listener = Proxy.newProxyInstance(ThreadUtilities.getClassLoader(),
-                                new Class[]{propertyClass}, handler);
+                                new Class<?>[]{propertyClass}, handler);
 
                             // Add the listener
                             Class<?> listenerListClass = listenerList.getClass();
                             Method addMethod;
                             try {
-                                addMethod = listenerListClass.getMethod("add", new Class<?>[] {Object.class});
+                                addMethod = listenerListClass.getMethod("add", Object.class);
                             } catch (NoSuchMethodException exception) {
                                 throw new RuntimeException(exception);
                             }
 
                             try {
-                                addMethod.invoke(listenerList, new Object[] {listener});
+                                addMethod.invoke(listenerList, listener);
                             } catch (IllegalAccessException exception) {
                                 throw new SerializationException(exception);
                             } catch (InvocationTargetException exception) {
@@ -843,7 +842,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
 
                             // Invoke the setter
                             try {
-                                setterMethod.invoke(null, new Object[] {element.value, value});
+                                setterMethod.invoke(null, element.value, value);
                             } catch (Exception exception) {
                                 throw new SerializationException(exception);
                             }
@@ -985,18 +984,16 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
 
                     Method addMethod;
                     try {
-                        addMethod = listenerListClass.getMethod("add",
-                            new Class<?>[] {Object.class});
+                        addMethod = listenerListClass.getMethod("add", Object.class);
                     } catch (NoSuchMethodException exception) {
                         throw new RuntimeException(exception);
                     }
 
-                    Object listener =
-                        Proxy.newProxyInstance(ThreadUtilities.getClassLoader(),
-                            new Class[]{listenerClass}, handler);
+                    Object listener = Proxy.newProxyInstance(ThreadUtilities.getClassLoader(),
+                        new Class<?>[]{listenerClass}, handler);
 
                     try {
-                        addMethod.invoke(element.parent.value, new Object[] {listener});
+                        addMethod.invoke(element.parent.value, listener);
                     } catch (IllegalAccessException exception) {
                         throw new SerializationException(exception);
                     } catch (InvocationTargetException exception) {
@@ -1382,7 +1379,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         if (objectType != null) {
             try {
                 method = propertyClass.getMethod(BeanDictionary.GET_PREFIX
-                    + propertyName, new Class<?>[] {objectType});
+                    + propertyName, objectType);
             } catch (NoSuchMethodException exception) {
                 // No-op
             }
@@ -1390,7 +1387,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             if (method == null) {
                 try {
                     method = propertyClass.getMethod(BeanDictionary.IS_PREFIX
-                        + propertyName, new Class<?>[] {objectType});
+                        + propertyName, objectType);
                 } catch (NoSuchMethodException exception) {
                     // No-op
                 }
@@ -1413,8 +1410,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             final String methodName = BeanDictionary.SET_PREFIX + propertyName;
 
             try {
-                method = propertyClass.getMethod(methodName,
-                    new Class<?>[] {objectType, propertyValueType});
+                method = propertyClass.getMethod(methodName, objectType, propertyValueType);
             } catch (NoSuchMethodException exception) {
                 // No-op
             }
@@ -1428,7 +1424,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
 
                     try {
                         method = propertyClass.getMethod(methodName,
-                            new Class<?>[] {objectType, primitivePropertyValueType});
+                            objectType, primitivePropertyValueType);
                     } catch (NoSuchMethodException exception) {
                         // No-op
                     }

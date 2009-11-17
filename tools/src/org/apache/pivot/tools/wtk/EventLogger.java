@@ -334,7 +334,7 @@ public class EventLogger extends Container {
                     Object listener = eventListenerProxies.get(listenerInterface);
                     if (listener == null) {
                         listener = Proxy.newProxyInstance(ThreadUtilities.getClassLoader(),
-                            new Class[]{listenerInterface}, loggerInvocationHandler);
+                            new Class<?>[]{listenerInterface}, loggerInvocationHandler);
                         eventListenerProxies.put(listenerInterface, listener);
                     }
 
@@ -342,14 +342,13 @@ public class EventLogger extends Container {
                     Class<?> listenerListClass = listenerList.getClass();
                     Method addMethod;
                     try {
-                        addMethod = listenerListClass.getMethod("add",
-                            new Class<?>[] {Object.class});
+                        addMethod = listenerListClass.getMethod("add", Object.class);
                     } catch (NoSuchMethodException exception) {
                         throw new RuntimeException(exception);
                     }
 
                     try {
-                        addMethod.invoke(listenerList, new Object[] {listener});
+                        addMethod.invoke(listenerList, listener);
                     } catch (IllegalAccessException exception) {
                         throw new RuntimeException(exception);
                     } catch (InvocationTargetException exception) {
@@ -394,14 +393,13 @@ public class EventLogger extends Container {
                     Class<?> listenerListClass = listenerList.getClass();
                     Method removeMethod;
                     try {
-                        removeMethod = listenerListClass.getMethod("remove",
-                            new Class<?>[] {Object.class});
+                        removeMethod = listenerListClass.getMethod("remove", Object.class);
                     } catch (NoSuchMethodException exception) {
                         throw new RuntimeException(exception);
                     }
 
                     try {
-                        removeMethod.invoke(listenerList, new Object[] {listener});
+                        removeMethod.invoke(listenerList, listener);
                     } catch (IllegalAccessException exception) {
                         throw new RuntimeException(exception);
                     } catch (InvocationTargetException exception) {

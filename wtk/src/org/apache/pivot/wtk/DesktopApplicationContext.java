@@ -146,7 +146,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
                                     Object eawtApplicationListener =
                                         Proxy.newProxyInstance(DesktopApplicationContext.class.getClassLoader(),
-                                            new Class[]{eawtApplicationListenerClass}, handler);
+                                            new Class<?>[]{eawtApplicationListenerClass}, handler);
 
                                     // Invoke the addApplicationListener() method with the proxy listener
                                     addApplicationListenerMethod.invoke(eawtApplication, new Object[] {eawtApplicationListener});

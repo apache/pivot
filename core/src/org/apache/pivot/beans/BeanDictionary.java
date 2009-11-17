@@ -627,7 +627,7 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
                     Object listener = beanListenerProxies.get(listenerInterface);
                     if (listener == null) {
                         listener = Proxy.newProxyInstance(ThreadUtilities.getClassLoader(),
-                            new Class[]{listenerInterface}, invocationHandler);
+                            new Class<?>[]{listenerInterface}, invocationHandler);
                         beanListenerProxies.put(listenerInterface, listener);
                     }
 

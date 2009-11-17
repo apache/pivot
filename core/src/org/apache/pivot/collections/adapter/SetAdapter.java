@@ -103,8 +103,8 @@ public class SetAdapter<E> implements Set<E>, Serializable {
     @SuppressWarnings("unchecked")
     @Override
     public Comparator<E> getComparator() {
-        if (this.set instanceof java.util.SortedSet) {
-            return ((java.util.SortedSet) this.set).comparator();
+        if (this.set instanceof java.util.SortedSet<?>) {
+            return (Comparator<E>)((java.util.SortedSet<?>)this.set).comparator();
         }
         return null;
     }
@@ -115,11 +115,11 @@ public class SetAdapter<E> implements Set<E>, Serializable {
         Comparator<E> previousComparator = getComparator();
 
         // If the adapted set supports it, construct a new sorted set
-        if (this.set instanceof java.util.SortedSet) {
+        if (this.set instanceof java.util.SortedSet<?>) {
             try {
-                Constructor constructor = this.set.getClass().getConstructor(Comparator.class);
+                Constructor<?> constructor = this.set.getClass().getConstructor(Comparator.class);
                 if (constructor != null) {
-                    java.util.SortedSet<E> set = (java.util.SortedSet) constructor.newInstance(comparator);
+                    java.util.SortedSet<E> set = (java.util.SortedSet<E>)constructor.newInstance(comparator);
                     set.addAll(this.set);
                     this.set = set;
                 }
