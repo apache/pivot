@@ -129,7 +129,16 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
                 if (fill) {
                     // Scale to fit
                     if (preserveAspectRatio) {
-                        // TODO
+                        float aspectRatio = (float)width / (float)height;
+                        float imageAspectRatio = (float)imageSize.width / (float)imageSize.height;
+
+                        if (aspectRatio > imageAspectRatio) {
+                            baseline *= (float)height / (float)imageSize.height;
+                        } else {
+                            float scaleY = (float)width / (float)imageSize.width;
+                            baseline *= scaleY;
+                            baseline += (int)(height - imageSize.height * scaleY) / 2;
+                        }
                     } else {
                         baseline *= (float)height / (float)imageSize.height;
                     }
@@ -160,7 +169,10 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
             if (fill) {
                 // Scale to fit
                 if (preserveAspectRatio) {
-                    if (width > height) {
+                    float aspectRatio = (float)width / (float)height;
+                    float imageAspectRatio = (float)imageSize.width / (float)imageSize.height;
+
+                    if (aspectRatio > imageAspectRatio) {
                         imageY = 0;
                         scaleY = (float)height / (float)imageSize.height;
 
