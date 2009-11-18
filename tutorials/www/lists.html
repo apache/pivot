@@ -57,7 +57,7 @@ deployJava.writeAppletTag(attributes, parameters);
 
 <p>The WTKX source for the example follows. Note that the list view is itself contained within a <tt>ScrollPane</tt>. List views do not support scrolling internally. This allows a UI designer to place a list view within an application and have the list view simply grow to accommodate its contents, rather than requiring the designer to specify a fixed height for the list in advance. However, if the designer knows that the list will be long and that it is likely to scroll, it can be placed in a scroll pane. <tt>ScrollPane</tt> is discussed in more detail in the <a href="navigation_containers.html">Navigation Containers</a> section.</p>
 
-<p>Also note that the list's contents are specified in the WTKX document itself, as a JSON array of strings in the <tt>listData</tt> attribute. Any type of object can actually be used as a list item, provided that the list view has been given a renderer that is capable of painting it. However, they are most often specified as strings (as in this example) or as instances of, both of which the default renderer is capable of presenting.</p>
+<p>Also note that the list's contents are specified in the WTKX document itself, as a JSON array of strings in the <tt>listData</tt> attribute. Any type of object can actually be used as a list item, provided that the list view has been given a renderer that is capable of painting it. However, they are most often specified as strings (as in this example) or as instances of <tt>org.apache.pivot.wtk.content.ListItem</tt>, both of which the default renderer is capable of presenting.</p>
 
 <pre class="brush:xml">
 &lt;Window title="List Views" maximized="true"
@@ -87,7 +87,7 @@ deployJava.writeAppletTag(attributes, parameters);
 &lt;/Window&gt;
 </pre>
 
-<p>The Java code for the example also uses the list data to populate the label component as the list selection changes. A <tt>ListView</tt>'s selection is represented by a sorted list of <tt>pivot.wtk.Span</tt> objects that contain the currently selected ranges; the application retrieves the list of currently selected ranges and then constructs the label's text by appending each selected item to the string:</p>
+<p>The Java code for the example also uses the list data to populate the label component as the list selection changes. A <tt>ListView</tt>'s selection is represented by a sorted list of <tt>org.apache.pivot.wtk.Span</tt> objects that contain the currently selected ranges; the application retrieves the list of currently selected ranges and then constructs the label's text by appending each selected item to the string:</p>
 
 <pre class="brush:java">
 package org.apache.pivot.tutorials.lists;
@@ -130,9 +130,7 @@ public class ListViews implements Application {
             for (int i = 0, n = selectedRanges.getLength(); i &lt; n; i++) {
                 Span selectedRange = selectedRanges.get(i);
 
-                for (int j = selectedRange.getStart();
-                    j &lt;= selectedRange.getEnd();
-                    j++) {
+                for (int j = selectedRange.getStart(); j &lt;= selectedRange.getEnd(); j++) {
                     if (selectionText.length() &gt; 0) {
                         selectionText += ", ";
                     }

@@ -56,6 +56,7 @@ limitations under the License.
 <li><tt>org.apache.pivot.collections.immutable</tt> - A set of read-only collection implementations.</li>
 <li><tt>org.apache.pivot.io</tt> - Classes related to input/output operations.</li>
 <li><tt>org.apache.pivot.serialization</tt> - Classes for use in data serialization.</li>
+<li><tt>org.apache.pivot.text</tt> - Classes for working with text.</li>
 <li><tt>org.apache.pivot.util</tt> - A collection of common utility classes.</li>
 <li><tt>org.apache.pivot.util.concurrent</tt> - Classes to simplify the execution of background tasks.</li>
 <li><tt>org.apache.pivot.xml</tt> - Classes for working with XML data.</li>
@@ -69,6 +70,7 @@ limitations under the License.
 <li><tt>org.apache.pivot.wtk.effects</tt> - Classes supporting visual effects such as blurs, reflections, and drop shadows.</li>
 <li><tt>org.apache.pivot.wtk.effects.easing</tt> - Contains "easing" operations for producing natural-looking transitions. Based on easing equations developed by <a href="http://robertpenner.com/">Robert Penner</a>.</li>
 <li><tt>org.apache.pivot.wtk.media</tt> - Classes to enable multimedia support in Pivot applications.</li>
+<li><tt>org.apache.pivot.wtk.media.drawing</tt> - Classes for constructing vector-based drawings.</li>
 <li><tt>org.apache.pivot.wtk.skin</tt> - Contains common skins and abstract base classes for theme-specific skins.</li>
 <li><tt>org.apache.pivot.wtk.text</tt> - Contains classes representing a text object model.</li>
 <li><tt>org.apache.pivot.wtk.text.validation</tt> - Provides classes for validating user-entered text.</li>
@@ -104,7 +106,8 @@ limitations under the License.
 
 <ul>
 <li><tt>org.apache.pivot.tools.json</tt> - Utility applications for working with JSON data.</li>
-<li><tt>org.apache.pivot.tools.net</tt> - Utility applications for testing and debugging client/server communications.</li>
+<li><tt>org.apache.pivot.tools.wtk</tt> - GUI components for use in tool applications.</li>
+<li><tt>org.apache.pivot.tools.xml</tt> - Utility applications for working with XML data.</li>
 </ul>
 
 <p>Most of Pivot's classes live in the WTK libraries.</p>
@@ -113,7 +116,7 @@ limitations under the License.
 
 <p>The design of WTK is based on the <a href="http://en.wikipedia.org/wiki/Model-view-controller">model-view-controller</a> architecture employed by many current user interface toolkits. In WTK, model data is represented by the generic collection classes defined in the Core library (most commonly <tt>org.apache.pivot.collections.List</tt> and <tt>org.apache.pivot.collections.Map</tt>). The component classes discussed in the next section represent the controller, which acts as the intermediary between the model data and the component's "skin", the MVC view.</p>
 
-<p>The skin defines the actual appearance of the component, as a component has no inherent visual representation. The skin also defines how the component responds to user input including keyboard and mouse events. Components may have multiple skins (though only a single skin can be installed at a time), and skins can be dynamically changed or applied at runtime. However, the existence of the skin should be effectively transparent to most developers, as skins do not expose any public API. All interaction with the skin takes place via the skin's component.</p>
+<p>The skin defines the actual appearance of the component, as a component has no inherent visual representation. The skin also defines how the component responds to user input including keyboard and mouse events. Components may have multiple skins (though only a single skin can be installed on any component instance). However, the existence of the skin should be effectively transparent to most developers, as skins do not expose any public API. All interaction with the skin takes place via the skin's component.</p>
 
 <p>Skins can be "styled" in a manner similar to CSS. Through the component, a skin may expose a set of style properties such as "color" and "font" that a user can change to achieve a custom application appearance without having to write a new skin. By default, all components use the skin classes defined by the Terra look and feel. The skins in this package provide considerable flexibility in setting style properties. Almost every aspect of a Terra skin's appearance can be varied via a style property. Terra also provides customizable "color schemes" that allow a designer to easily replace the color palette for an entire application.</p>
 
@@ -166,6 +169,7 @@ limitations under the License.
 <li><p><b>FlowPane</b> - Container that arranges components in a horizontal line, wrapping when contents don't fit on a single line.</p></li>
 <li><p><b>BoxPane</b> - Container that arranges components in a line, either vertically or horizontally.</p></li>
 <li><p><b>TablePane</b> - A container that lays out its children in a two-dimensional table structure, optionally spanning table cells.</p></li>
+<li><p><b>GridPane</b> - Similar to TablePane, but without spanning cells and where each cell is the same size.</p></li>
 <li><p><b>Border</b> - A container with an optional title that draws a border around a single content component.</p></li>
 <li><p><b>StackPane</b> - Arranges components in layers, like a stack of transparencies.</p></li>
 <li><p><b>SplitPane</b> - Provides a draggable divider between two components allowing a user to dynamically change the size of each; may be horizontal or vertical.</p></li>
@@ -182,7 +186,7 @@ limitations under the License.
 <li><p><b>TabPane</b> - Similar to CardPane but with built-in "tabs" for navigation; may optionally be "collapsed" such that only the tab buttons show.</p></li>
 <li><p><b>Accordion</b> - Similar to <tt>TabPane</tt>, but subcomponents are presented like the folds of an accordion, with headers for navigating between panels.</p></li>
 <li><p><b>Expander</b> - Similar to a border but collapsible such that only the title shows.</p></li>
-<li><p><b>Rollup</b> - Similar to Expander but can contain an aribitrary number of child components; when collapsed, only the first component is visible. Can be nested to create the appearance of a "tree" structure.</p></li>
+<li><p><b>Rollup</b> - Similar to Expander but with an aribitrary component as a heading instead of a string; when collapsed, only the first component is visible. Can be nested to create the appearance of a "tree" structure.</p></li>
 <li><p><b><i>Viewport</i></b> - Abstract base class for a scrollable region. Viewport sublcasses include:
 <ul>
 <li><b>ScrollPane</b> - A scrollable area with optional vertical and horizontal scroll bars as well as row and column headers.
@@ -228,8 +232,8 @@ Non-container components are generally used to present data to the user, retriev
 <li><b>MenuButton</b> - A button that displays a drop-down list of menu items; can optionally reflect the user's selection allowing the action associated with the item to be repeated (i.e. behave like a "split button").</li>
 <li><b>Menu.Item</b> - A button that provides behavior for menu items.</li>
 <li><b>Menu.BarItem</b> - A button that provides behavior for menu bar items.</li>
-</ul></p></li>
 <li><b>ColorChooserButton</b> - A button that displays a pop-up color chooser when pushed and reflects the user's selection.</li>
+</ul></p></li>
 <li><b>Separator</b> - A simple horizontal rule component.</p></li>
 <li><b>TextInput</b> - A component for entering a single line of text.</p></li>
 <li><b>TextArea</b> - A component for viewing or entering multiple lines of (optionally formatted) text.</p></li>
@@ -247,7 +251,7 @@ Non-container components are generally used to present data to the user, retriev
 
 <h2>Internationalization/Localization</h2>
 
-<p>Pivot applications can be localized using the standard Java localization APIs, including resources and resource bundles. In addition, Pivot supports localization using JSON-based resource files, which are more powerful and flexible than Java's standard properties files: hierarchical resource data is much more easily represented, and strings can be encoded in UTF-8 rather than ISO-8859, making it easier to author content for locale's with characters that are not available in ISO-8859.</p>
+<p>Pivot applications can be localized using the standard Java localization APIs, including resources and resource bundles. In addition, Pivot supports localization using JSON-based resource files, which are more powerful and flexible than Java's standard properties files: hierarchical resource data is much more easily represented, and strings can be encoded in UTF-8 rather than ISO-8859, making it easier to author content for locales with characters that are not available in ISO-8859.</p>
 
 <h2>XML Markup</h2>
 
@@ -285,6 +289,8 @@ Non-container components are generally used to present data to the user, retriev
 <p>The default button renderer is capable of handling this type of data and automatically draws the button appropriately.</p>
 
 <p>Note that the icon values are preceded by an '@' symbol. This is a "hint" to the WTKX loader that the following string should be treated as a URL; specifically, a URL that is relative to the source WTKX file. The special syntax is required because XML does not natively support a URL data type. WTKX also supports similar hints for embedding resource values in a WTKX file as well as referring to object instances in markup. This is discussed in more detail in later sections.</p>
+
+<p>For a detailed description of how WTKX works, see the <a href="wtkx_primer.html">WTKX primer</a>.</p>
 
 <h2>Effects</h2>
 
