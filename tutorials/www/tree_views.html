@@ -33,7 +33,85 @@ limitations under the License.
 </head>
 <body>
 <h1>Tree Views</h1>
-<p>This section is not yet complete.</p>
+
+<p>TODO</p>
+
+<script src="version.js"></script>
+<script>
+var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
+    archive:"lib/pivot-core-" + version + ".jar"
+        + ",lib/pivot-wtk-" + version + ".jar"
+        + ",lib/pivot-wtk-" + version + ".terra.jar"
+        + ",lib/pivot-tutorials-" + version + ".jar",
+    width:320,
+    height:240
+};
+var parameters = {application_class_name:"org.apache.pivot.wtk.ScriptApplication",
+    codebase_lookup:false,
+    java_arguments:"-Dsun.awt.noerasebackground=true -Dsun.awt.erasebackgroundonresize=true",
+    startup_properties:"src=org/apache/pivot/tutorials/treeviews/tree_views.wtkx"
+};
+deployJava.writeAppletTag(attributes, parameters);
+</script>
+
+<p>The WTKX for this example is shown below:</p>
+
+<pre class="brush:xml">
+&lt;Window title="Tree Views" maximized="true"
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns="org.apache.pivot.wtk"&gt;
+    &lt;content&gt;
+        &lt;SplitPane orientation="horizontal" splitRatio="0.5"&gt;
+            &lt;left&gt;
+                &lt;Border&gt;
+                    &lt;content&gt;
+                        &lt;ScrollPane horizontalScrollBarPolicy="fill_to_capacity"&gt;
+                            &lt;view&gt;
+                                &lt;TreeView wtkx:id="treeView"&gt;
+                                    &lt;treeData&gt;
+                                        &lt;wtkx:include src="tree_data.wtkx"/&gt;
+                                    &lt;/treeData&gt;
+                                &lt;/TreeView&gt;
+                            &lt;/view&gt;
+                        &lt;/ScrollPane&gt;
+                    &lt;/content&gt;
+                &lt;/Border&gt;
+            &lt;/left&gt;
+            &lt;right&gt;
+                &lt;Border styles="{padding:{top:10}}"&gt;
+                    &lt;content&gt;
+                        &lt;BoxPane styles="{horizontalAlignment:'right'}"&gt;
+                            &lt;Form styles="{horizontalSpacing:18, rightAlignLabels:true}"&gt;
+                                &lt;sections&gt;
+                                    &lt;Form.Section&gt;
+                                        &lt;ListButton wtkx:id="selectModeListButton"
+                                            Form.label="Select Mode"
+                                            listData="['None', 'Single', 'Multi']"
+                                            selectedIndex="1"
+                                            ListButtonSelectionListener.selectedIndexChanged="treeView.setSelectMode(selectModeListButton.getSelectedItem());"/&gt;
+                                        &lt;BoxPane Form.label="Flags" orientation="vertical"
+                                            styles="{spacing:10}"&gt;
+                                            &lt;Checkbox wtkx:id="checkmarksEnabledButton"
+                                                buttonData="Checkmarks Enabled"
+                                                ButtonStateListener.stateChanged="treeView.setCheckmarksEnabled(checkmarksEnabledButton.isSelected());"/&gt;
+                                            &lt;Checkbox wtkx:id="showMixedCheckmarkStateButton"
+                                                buttonData="Show Mixed Checkmark State"
+                                                ButtonStateListener.stateChanged="treeView.setShowMixedCheckmarkState(showMixedCheckmarkStateButton.isSelected());"/&gt;
+                                        &lt;/BoxPane&gt;
+                                    &lt;/Form.Section&gt;
+                                &lt;/sections&gt;
+                            &lt;/Form&gt;
+                        &lt;/BoxPane&gt;
+                    &lt;/content&gt;
+                &lt;/Border&gt;
+            &lt;/right&gt;
+        &lt;/SplitPane&gt;
+    &lt;/content&gt;
+&lt;/Window&gt;
+</pre>
+
+<p>Since this example is written entirely in WTKX and script, there is no associated Java source.</p>
+
 <p>Next: <a href="file_browsing.html">File Browsing</a></p>
 </body>
 </html>
