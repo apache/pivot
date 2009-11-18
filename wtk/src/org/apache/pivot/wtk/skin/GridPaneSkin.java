@@ -43,7 +43,6 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
     private boolean showVerticalGridLines = false;
     private Color horizontalGridColor = Color.BLACK;
     private Color verticalGridColor = Color.BLACK;
-    private Color highlightBackgroundColor = Color.GRAY;
 
     private int cellWidth = 0;
     private int cellHeight = 0;
@@ -389,30 +388,6 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
         int width = getWidth();
         int height = getHeight();
 
-        graphics.setPaint(highlightBackgroundColor);
-
-        // Paint the highlighted rows
-        for (int i = 0, rowY = padding.top; i < rowCount; i++) {
-            GridPane.Row row = rows.get(i);
-
-            if (row.isHighlighted()) {
-                graphics.fillRect(0, rowY, width, cellHeight);
-            }
-
-            rowY += cellHeight + verticalSpacing;
-        }
-
-        // Paint the highlighted columns
-        for (int j = 0, columnX = padding.left; j < columnCount; j++) {
-            GridPane.Column column = columns.get(j);
-
-            if (column.isHighlighted()) {
-                graphics.fillRect(columnX, 0, cellWidth, height);
-            }
-
-            columnX += cellWidth + horizontalSpacing;
-        }
-
         // Paint the grid lines
         if ((showHorizontalGridLines && verticalSpacing > 0)
             || (showVerticalGridLines && horizontalSpacing > 0)) {
@@ -653,36 +628,6 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
         setVerticalGridColor(GraphicsUtilities.decodeColor(verticalGridColor));
     }
 
-    /**
-     * Gets the background color used to paint the highlighted rows and columns.
-     */
-    public Color getHighlightBackgroundColor() {
-        return highlightBackgroundColor;
-    }
-
-    /**
-     * Sets the background color used to paint the highlighted rows and columns.
-     */
-    public void setHighlightBackgroundColor(Color highlightBackgroundColor) {
-        if (highlightBackgroundColor == null) {
-            throw new IllegalArgumentException("highlightBackgroundColor is null.");
-        }
-
-        this.highlightBackgroundColor = highlightBackgroundColor;
-        repaintComponent();
-    }
-
-    /**
-     * Sets the background color used to paint the highlighted rows and columns.
-     */
-    public final void setHighlightBackgroundColor(String highlightBackgroundColor) {
-        if (highlightBackgroundColor == null) {
-            throw new IllegalArgumentException("highlightBackgroundColor is null.");
-        }
-
-        setHighlightBackgroundColor(GraphicsUtilities.decodeColor(highlightBackgroundColor));
-    }
-
     // GridPane.Skin methods
 
     @Override
@@ -785,12 +730,6 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
     }
 
     @Override
-    public void rowHighlightedChanged(GridPane.Row row) {
-        GridPane gridPane = row.getGridPane();
-        repaintComponent(getRowBounds(gridPane.getRows().indexOf(row)));
-    }
-
-    @Override
     public void columnInserted(GridPane gridPane, int index) {
         invalidateComponent();
     }
@@ -799,12 +738,6 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
     public void columnsRemoved(GridPane gridPane, int index,
         Sequence<GridPane.Column> columns) {
         invalidateComponent();
-    }
-
-    @Override
-    public void columnHighlightedChanged(GridPane.Column column) {
-        GridPane gridPane = column.getGridPane();
-        repaintComponent(getColumnBounds(gridPane.getColumns().indexOf(column)));
     }
 
     @Override

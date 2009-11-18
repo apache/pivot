@@ -31,19 +31,9 @@ public class GridPane extends Container {
      * Represents a grid pane row.
      */
     public static final class Row implements Sequence<Component>, Iterable<Component> {
-        private boolean highlighted;
-
         private ArrayList<Component> cells = new ArrayList<Component>();
 
         private GridPane gridPane = null;
-
-        public Row() {
-            this(false);
-        }
-
-        public Row(boolean highlighted) {
-            this.highlighted = highlighted;
-        }
 
         /**
          * Returns the grid pane with which this row is associated.
@@ -65,33 +55,6 @@ public class GridPane extends Container {
          */
         private void setGridPane(GridPane gridPane) {
             this.gridPane = gridPane;
-        }
-
-        /**
-         * Returns the highlighted flag.
-         *
-         * @return
-         * <tt>true</tt> if the row is highlighted, <tt>false</tt> if it is not
-         */
-        public boolean isHighlighted() {
-            return highlighted;
-        }
-
-        /**
-         * Sets the highlighted flag.
-         *
-         * @param highlighted
-         * <tt>true</tt> to set the row as highlighted, <tt>false</tt> to set
-         * it as not highlighted
-         */
-        public void setHighlighted(boolean highlighted) {
-            if (highlighted != this.highlighted) {
-                this.highlighted = highlighted;
-
-                if (gridPane != null) {
-                    gridPane.gridPaneListeners.rowHighlightedChanged(this);
-                }
-            }
         }
 
         /**
@@ -212,16 +175,6 @@ public class GridPane extends Container {
     public static class Column {
         private GridPane gridPane = null;
 
-        private boolean highlighted;
-
-        public Column() {
-            this(false);
-        }
-
-        public Column(boolean highlighted) {
-            this.highlighted = highlighted;
-        }
-
         /**
          * Returns the grid pane with which this column is associated.
          *
@@ -242,33 +195,6 @@ public class GridPane extends Container {
          */
         private void setGridPane(GridPane gridPane) {
             this.gridPane = gridPane;
-        }
-
-        /**
-         * Returns the highlighted flag.
-         *
-         * @return
-         * <tt>true</tt> if the column is highlighted, <tt>false</tt> if it is not
-         */
-        public boolean isHighlighted() {
-            return highlighted;
-        }
-
-        /**
-         * Sets the highlighted flag.
-         *
-         * @param highlighted
-         * <tt>true</tt> to set the column as highlighted, <tt>false</tt> to set
-         * it as not highlighted
-         */
-        public void setHighlighted(boolean highlighted) {
-            if (highlighted != this.highlighted) {
-                this.highlighted = highlighted;
-
-                if (gridPane != null) {
-                    gridPane.gridPaneListeners.columnHighlightedChanged(this);
-                }
-            }
         }
 
         /**
@@ -511,13 +437,6 @@ public class GridPane extends Container {
         }
 
         @Override
-        public void rowHighlightedChanged(GridPane.Row row) {
-            for (GridPaneListener listener : this) {
-                listener.rowHighlightedChanged(row);
-            }
-        }
-
-        @Override
         public void columnInserted(GridPane gridPane, int index) {
             for (GridPaneListener listener : this) {
                 listener.columnInserted(gridPane, index);
@@ -529,13 +448,6 @@ public class GridPane extends Container {
             Sequence<GridPane.Column> columns) {
             for (GridPaneListener listener : this) {
                 listener.columnsRemoved(gridPane, index, columns);
-            }
-        }
-
-        @Override
-        public void columnHighlightedChanged(GridPane.Column column) {
-            for (GridPaneListener listener : this) {
-                listener.columnHighlightedChanged(column);
             }
         }
 

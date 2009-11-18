@@ -27,28 +27,20 @@ public interface GridPaneListener {
      */
     public static class Adapter implements GridPaneListener {
         @Override
-        public void rowInserted(GridPane GridPane, int index) {
+        public void rowInserted(GridPane gridPane, int index) {
         }
 
         @Override
-        public void rowsRemoved(GridPane GridPane, int index, Sequence<GridPane.Row> rows) {
+        public void rowsRemoved(GridPane gridPane, int index, Sequence<GridPane.Row> rows) {
         }
 
         @Override
-        public void rowHighlightedChanged(GridPane.Row row) {
+        public void columnInserted(GridPane gridPane, int index) {
         }
 
         @Override
-        public void columnInserted(GridPane GridPane, int index) {
-        }
-
-        @Override
-        public void columnsRemoved(GridPane GridPane, int index,
+        public void columnsRemoved(GridPane gridPane, int index,
             Sequence<GridPane.Column> columns) {
-        }
-
-        @Override
-        public void columnHighlightedChanged(GridPane.Column column) {
         }
 
         @Override
@@ -67,34 +59,27 @@ public interface GridPaneListener {
     /**
      * Called when a row has been inserted into a grid pane.
      *
-     * @param GridPane
+     * @param gridPane
      * @param index
      */
-    public void rowInserted(GridPane GridPane, int index);
+    public void rowInserted(GridPane gridPane, int index);
 
     /**
      * Called when rows have been removed from a grid pane.
      *
-     * @param GridPane
+     * @param gridPane
      * @param index
      * @param rows
      */
-    public void rowsRemoved(GridPane GridPane, int index, Sequence<GridPane.Row> rows);
-
-    /**
-     * Called when a row's highlighted state has changed.
-     *
-     * @param row
-     */
-    public void rowHighlightedChanged(GridPane.Row row);
+    public void rowsRemoved(GridPane gridPane, int index, Sequence<GridPane.Row> rows);
 
     /**
      * Called when a column has been inserted into a grid pane.
      *
-     * @param GridPane
+     * @param gridPane
      * @param index
      */
-    public void columnInserted(GridPane GridPane, int index);
+    public void columnInserted(GridPane gridPane, int index);
 
     /**
      * Called when column's have been removed from a grid pane.
@@ -103,14 +88,7 @@ public interface GridPaneListener {
      * @param index
      * @param columns
      */
-    public void columnsRemoved(GridPane GridPane, int index, Sequence<GridPane.Column> columns);
-
-    /**
-     * Called when a column's highlighted state has changed.
-     *
-     * @param column
-     */
-    public void columnHighlightedChanged(GridPane.Column column);
+    public void columnsRemoved(GridPane gridPane, int index, Sequence<GridPane.Column> columns);
 
     /**
      * Called when a cell has been inserted into a grid pane.

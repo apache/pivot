@@ -26,7 +26,6 @@ public class TerraGridPaneSkin extends GridPaneSkin {
     public TerraGridPaneSkin() {
         setHorizontalGridColor(7);
         setVerticalGridColor(7);
-        setHighlightBackgroundColor(10);
     }
 
     public final void setBackgroundColor(int backgroundColor) {
@@ -42,10 +41,5 @@ public class TerraGridPaneSkin extends GridPaneSkin {
     public final void setVerticalGridColor(int verticalGridColor) {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
         setVerticalGridColor(theme.getColor(verticalGridColor));
-    }
-
-    public final void setHighlightBackgroundColor(int highlightBackgroundColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
-        setHighlightBackgroundColor(theme.getColor(highlightBackgroundColor));
     }
 }
