@@ -218,6 +218,28 @@ public class KitchenSink implements Application, Application.AboutHandler {
         }
     }
 
+    private class ColorChoosersRollupStateHandler extends RollupStateHandler {
+        private Component component = null;
+
+        @Override
+        public Vote previewExpandedChange(Rollup rollup) {
+            if (component == null) {
+                WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                try {
+                    component = (Component)wtkxSerializer.readObject(this, "color_choosers.wtkx");
+                } catch(IOException exception) {
+                    throw new RuntimeException(exception);
+                } catch(SerializationException exception) {
+                    throw new RuntimeException(exception);
+                }
+
+                rollup.setContent(component);
+            }
+
+            return Vote.APPROVE;
+        }
+    }
+
     private class NavigationRollupStateHandler extends RollupStateHandler {
         private Component component = null;
 
@@ -896,6 +918,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
     private Rollup listsRollup;
     private Rollup textRollup;
     private Rollup calendarsRollup;
+    private Rollup colorChoosersRollup;
     private Rollup navigationRollup;
     private Rollup splittersRollup;
     private Rollup menusRollup;
@@ -927,6 +950,9 @@ public class KitchenSink implements Application, Application.AboutHandler {
 
         calendarsRollup = (Rollup)wtkxSerializer.get("calendarsRollup");
         calendarsRollup.getRollupStateListeners().add(new CalendarsRollupStateHandler());
+
+        colorChoosersRollup = (Rollup)wtkxSerializer.get("colorChoosersRollup");
+        colorChoosersRollup.getRollupStateListeners().add(new ColorChoosersRollupStateHandler());
 
         navigationRollup = (Rollup)wtkxSerializer.get("navigationRollup");
         navigationRollup.getRollupStateListeners().add(new NavigationRollupStateHandler());

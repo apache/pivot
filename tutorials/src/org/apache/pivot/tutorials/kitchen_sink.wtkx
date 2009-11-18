@@ -50,6 +50,11 @@ limitations under the License.
                                             <Label text="Calendars" styles="{font:{size:'110%', bold:true}, color:13}"/>
                                         </heading>
                                     </Rollup>
+                                    <Rollup wtkx:id="colorChoosersRollup">
+                                        <heading>
+                                            <Label text="Color Choosers" styles="{font:{size:'110%', bold:true}, color:13}"/>
+                                        </heading>
+                                    </Rollup>
                                     <Rollup wtkx:id="navigationRollup">
                                         <heading>
                                             <Label text="Navigation" styles="{font:{size:'110%', bold:true}, color:13}"/>
