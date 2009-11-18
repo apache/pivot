@@ -37,15 +37,15 @@ public class TableViewTest2 implements Application {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "table_view_test2.wtkx");
         tableView = (TableView)wtkxSerializer.get("tableView");
-        
+
         TableViewRowEditor tableViewRowEditor = new TableViewRowEditor();
         tableViewRowEditor.setEditEffect(CardPaneSkin.SelectionChangeEffect.HORIZONTAL_SLIDE);
         tableView.setRowEditor(tableViewRowEditor);
-        
+
         TextArea textArea = new TextArea();
         textArea.setTextKey("value");
         tableViewRowEditor.getCellEditors().put("value", textArea);
-        
+
         window.open(display);
     }
 

@@ -180,7 +180,7 @@ public class ComponentExplorer implements Application {
                         break;
                     }
                 } else {
-                    sourceTextArea.setText(null);
+                    sourceTextArea.setText((String)null);
                 }
 
                 contentPane.setContent(component);

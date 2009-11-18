@@ -18,7 +18,6 @@ package org.apache.pivot.tutorials;
 
 import java.awt.Color;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.Comparator;
 
@@ -68,7 +67,6 @@ import org.apache.pivot.wtk.SortDirection;
 import org.apache.pivot.wtk.Spinner;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TableViewSortListener;
-import org.apache.pivot.wtk.TextArea;
 import org.apache.pivot.wtk.TreeView;
 import org.apache.pivot.wtk.Visual;
 import org.apache.pivot.wtk.Window;
@@ -81,8 +79,6 @@ import org.apache.pivot.wtk.content.TreeBranch;
 import org.apache.pivot.wtk.content.TreeNode;
 import org.apache.pivot.wtk.effects.ReflectionDecorator;
 import org.apache.pivot.wtk.media.Image;
-import org.apache.pivot.wtk.text.Document;
-import org.apache.pivot.wtk.text.PlainTextSerializer;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class KitchenSink implements Application, Application.AboutHandler {
@@ -180,7 +176,6 @@ public class KitchenSink implements Application, Application.AboutHandler {
 
     private class TextRollupStateHandler extends RollupStateHandler {
         private Component component = null;
-        private TextArea textArea = null;
 
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
@@ -194,20 +189,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                     throw new RuntimeException(exception);
                 }
 
-                textArea = (TextArea)wtkxSerializer.get("textArea");
                 rollup.setContent(component);
-
-                PlainTextSerializer plainTextSerializer = new PlainTextSerializer("UTF-8");
-                InputStream inputStream = getClass().getResourceAsStream("text_area.txt");
-
-                Document document = null;
-                try {
-                    document = plainTextSerializer.readObject(inputStream);
-                } catch(Exception exception) {
-                    System.err.println(exception);
-                }
-
-                textArea.setDocument(document);
             }
 
             return Vote.APPROVE;

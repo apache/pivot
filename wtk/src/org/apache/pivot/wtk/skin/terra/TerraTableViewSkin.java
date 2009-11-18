@@ -214,7 +214,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
         TableView.ColumnSequence columns = tableView.getColumns();
         ArrayList<Integer> columnWidths = getColumnWidths(tableView, width);
-        
+
         if (variableRowHeight) {
             int rowHeight = getVariableRowHeight(0);
             Object rowData = tableData.get(0);
@@ -225,7 +225,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                 cellRenderer.render(rowData, 0, i, tableView, column.getName(), false, false, false);
                 baseline = Math.max(baseline, cellRenderer.getBaseline(columnWidths.get(i), rowHeight));
             }
-            
+
         } else {
             int rowHeight = calculateFixedRowHeight(tableView, columns);
 
@@ -244,15 +244,15 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     @SuppressWarnings("unchecked")
     public void layout() {
         columnWidths = getColumnWidths((TableView)getComponent(), getWidth());
-        
+
         TableView tableView = (TableView)getComponent();
         TableView.ColumnSequence columns = tableView.getColumns();
-        
+
         if (variableRowHeight) {
             List<Object> tableData = (List<Object>)tableView.getTableData();
 
             variableRowHeightYCache = new int[tableData.getLength() + 1];
-            
+
             int rowEnd = tableData.getLength() - 1;
             int rowY = 0;
 
@@ -301,10 +301,10 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
             fixedRowHeight = Math.max(fixedRowHeight, cellRenderer.getPreferredHeight(-1));
         }
-        
+
         return fixedRowHeight;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public void paint(Graphics2D graphics) {
@@ -386,7 +386,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             boolean rowDisabled = tableView.isRowDisabled(rowIndex);
             int rowY = getRowY(rowIndex);
             int rowHeight = getRowHeight(rowIndex);
-            
+
             // Paint selection state
             Color rowBackgroundColor = null;
             if (rowSelected) {
@@ -491,7 +491,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             }
         }
     }
-    
+
     private int getRowY(int rowIndex) {
         int rowY;
         if (variableRowHeight) {
@@ -511,7 +511,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         }
         return rowHeight;
     }
-    
+
     /**
      * Returns the table row height, which is determined as the maximum
      * preferred height of all cell renderers.
@@ -526,7 +526,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
         TableView.ColumnSequence columns = tableView.getColumns();
         Object rowData = tableData.get(0);
-        
+
         int rowHeight = 0;
         for (int i = 0, n = columns.getLength(); i < n; i++) {
             TableView.Column column = columns.get(i);
@@ -1107,7 +1107,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         this.fixedRowHeight = -1;
         invalidateComponent();
     }
-    
+
     @Override
     public boolean mouseMove(Component component, int x, int y) {
         boolean consumed = super.mouseMove(component, x, y);
@@ -1461,10 +1461,10 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     @Override
     public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges) {
         List<?> tableData = tableView.getTableData();
-        
+
         // Repaint only the area that changed (intersection of previous
         // and new selection)
-        
+
         int rangeStart = 0;
         int rangeEnd = tableData.getLength() - 1;
         for (int i = 0; i < previousSelectedRanges.getLength(); i++) {
@@ -1479,7 +1479,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             rangeStart = Math.min(rangeStart, span.start);
             rangeEnd = Math.max(rangeEnd, span.end);
         }
-        
+
         repaintComponent(0, getRowY(rangeStart),
             getWidth(), getRowY(rangeEnd) + getRowY(rangeEnd));
     }

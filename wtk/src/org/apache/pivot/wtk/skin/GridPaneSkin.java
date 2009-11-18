@@ -96,7 +96,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
             clientHeight -= (visibleRowCount - 1) * verticalSpacing;
         }
         clientHeight = Math.max(0, clientHeight);
-        
+
         int cellHeight = 0;
         if (visibleRowCount > 0) {
             cellHeight = clientHeight / visibleRowCount;
@@ -178,7 +178,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
             clientWidth -= (visibleColumnCount - 1) * horizontalSpacing;
         }
         clientWidth = Math.max(0, clientWidth);
-        
+
         int cellWidth = 0;
         if (visibleColumnCount > 0) {
             cellWidth = clientWidth / visibleColumnCount;
@@ -199,7 +199,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
                 }
             }
         }
-        
+
         // The preferred height of the grid pane is the sum of the row
         // heights, plus padding and spacing
 
@@ -290,7 +290,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
     @Override
     public int getBaseline(int width, int height) {
         int baseline = -1;
-        
+
         GridPane gridPane = (GridPane)getComponent();
         GridPane.RowSequence rows = gridPane.getRows();
         GridPane.ColumnSequence columns = gridPane.getColumns();
@@ -331,7 +331,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
             clientWidth -= (visibleColumnCount - 1) * horizontalSpacing;
         }
         clientWidth = Math.max(0, clientWidth);
-        
+
         int cellWidth = 0;
         if (visibleColumnCount > 0) {
             cellWidth = clientWidth / visibleColumnCount;
@@ -352,14 +352,14 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
             clientHeight -= (visibleRowCount - 1) * verticalSpacing;
         }
         clientHeight = Math.max(0, clientHeight);
-        
+
         int cellHeight = 0;
         if (visibleRowCount > 0) {
             cellHeight = clientHeight / visibleRowCount;
         }
 
         // Return the first available baseline by traversing cells top left to bottom right
-        
+
         for (int i = 0; i < rowCount; i++) {
             GridPane.Row row = rows.get(i);
 
@@ -376,7 +376,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
                 break;
             }
         }
-        
+
         // Include top padding value
         if (baseline != -1) {
             baseline += padding.top;
@@ -432,7 +432,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
             clientWidth -= (visibleColumnCount - 1) * horizontalSpacing;
         }
         clientWidth = Math.max(0, clientWidth);
-        
+
         cellWidth = 0;
         if (visibleColumnCount > 0) {
             cellWidth = clientWidth / visibleColumnCount;
@@ -453,7 +453,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
             clientHeight -= (visibleRowCount - 1) * verticalSpacing;
         }
         clientHeight = Math.max(0, clientHeight);
-        
+
         cellHeight = 0;
         if (visibleRowCount > 0) {
             cellHeight = clientHeight / visibleRowCount;

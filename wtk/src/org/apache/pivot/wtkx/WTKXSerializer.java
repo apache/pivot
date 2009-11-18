@@ -322,6 +322,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         this.namedSerializers = namedSerializers;
 
         xmlInputFactory = XMLInputFactory.newInstance();
+        xmlInputFactory.setProperty("javax.xml.stream.isCoalescing", true);
 
         scriptEngineManager = new javax.script.ScriptEngineManager();
         scriptEngineManager.setBindings(new NamedObjectBindings());

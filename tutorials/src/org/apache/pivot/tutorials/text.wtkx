@@ -64,7 +64,7 @@ limitations under the License.
                                     <content>
                                         <ScrollPane horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fill_to_capacity">
                                             <view>
-                                                <TextArea wtkx:id="textArea"/>
+                                                <TextArea text="@text_area.txt"/>
                                             </view>
                                         </ScrollPane>
                                     </content>

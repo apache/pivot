@@ -17,8 +17,10 @@
 package org.apache.pivot.wtk;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.net.URL;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
@@ -272,6 +274,30 @@ public class TextArea extends Component {
         } else {
             document = new Document();
             document.add(new Paragraph(""));
+        }
+
+        setDocument(document);
+    }
+
+    public void setText(URL text) {
+        PlainTextSerializer plainTextSerializer = new PlainTextSerializer("UTF-8");
+
+        Document document = null;
+        InputStream inputStream = null;
+
+        try {
+            try {
+                inputStream = text.openStream();
+                document = plainTextSerializer.readObject(inputStream);
+            } finally {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+            }
+        } catch (IOException exception) {
+            throw new IllegalArgumentException(exception);
+        } catch (SerializationException exception) {
+            throw new IllegalArgumentException(exception);
         }
 
         setDocument(document);
@@ -755,7 +781,7 @@ public class TextArea extends Component {
     @Override
     public void clear() {
         if (textKey != null) {
-            setText(null);
+            setText((String)null);
         }
     }
 
