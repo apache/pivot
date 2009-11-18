@@ -498,7 +498,7 @@ public class Element extends Node implements List<Node>, Dictionary<String, Stri
     /**
      * Sets the element's default namespace URI.
      *
-     * @return
+     * @param defaultNamespaceURI
      * The default namespace URI declared by this element, or <tt>null</tt> if
      * this element does not declare a default namespace.
      */
@@ -607,7 +607,7 @@ public class Element extends Node implements List<Node>, Dictionary<String, Stri
     /**
      * Removes a node from this element.
      *
-     * @param
+     * @param node
      */
     @Override
     public int remove(Node node) {

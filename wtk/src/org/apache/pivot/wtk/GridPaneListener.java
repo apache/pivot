@@ -84,7 +84,7 @@ public interface GridPaneListener {
     /**
      * Called when column's have been removed from a grid pane.
      *
-     * @param GridPane
+     * @param gridPane
      * @param index
      * @param columns
      */

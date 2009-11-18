@@ -132,8 +132,18 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         setComparator(comparator);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws IllegalArgumentException
+     * If {@code key} is {@literal null}.
+     */
     @Override
     public V get(K key) {
+        if (key == null) {
+            throw new IllegalArgumentException("key cannot be null.");
+        }
+
         V value = null;
 
         // Locate the entry
@@ -152,8 +162,18 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         return value;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws IllegalArgumentException
+     * If {@code key} is {@literal null}.
+     */
     @Override
     public V put(K key, V value) {
+        if (key == null) {
+            throw new IllegalArgumentException("key cannot be null.");
+        }
+
         V previousValue = null;
 
         // Locate the entry
@@ -203,8 +223,18 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         return previousValue;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws IllegalArgumentException
+     * If {@code key} is {@literal null}.
+     */
     @Override
     public V remove(K key) {
+        if (key == null) {
+            throw new IllegalArgumentException("key cannot be null.");
+        }
+
         V value = null;
 
         // Locate the entry
@@ -260,8 +290,18 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws IllegalArgumentException
+     * If {@code key} is {@literal null}.
+     */
     @Override
     public boolean containsKey(K key) {
+        if (key == null) {
+            throw new IllegalArgumentException("key cannot be null.");
+        }
+
         // Locate the entry
         LinkedList<Pair<K, V>> bucket = getBucket(key);
 

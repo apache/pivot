@@ -93,7 +93,7 @@ public interface ElementListener {
      * Called when an attribute has been added to an element.
      *
      * @param element
-     * @param attribute
+     * @param index
      */
     public void attributeInserted(Element element, int index);
 
