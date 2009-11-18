@@ -19,7 +19,6 @@ package org.apache.pivot.wtk.skin;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
@@ -81,7 +80,12 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
         }
 
         int visibleRowCount = 0;
-        int clientHeight = height - padding.top - padding.bottom;
+        int clientHeight;
+        if (height == -1) {
+            clientHeight = Integer.MAX_VALUE;
+        } else {
+            clientHeight = height - padding.top - padding.bottom;
+        }
         for (int i = 0; i < rowCount; i++) {
             if (visibleRows[i]) {
                 visibleRowCount++;
@@ -91,6 +95,8 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
         if (visibleRowCount > 1) {
             clientHeight -= (visibleRowCount - 1) * verticalSpacing;
         }
+        clientHeight = Math.max(0, clientHeight);
+        
         int cellHeight = 0;
         if (visibleRowCount > 0) {
             cellHeight = clientHeight / visibleRowCount;
@@ -156,7 +162,12 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
         }
 
         int visibleColumnCount = 0;
-        int clientWidth = width - padding.left - padding.right;
+        int clientWidth;
+        if (width == -1) {
+            clientWidth = Integer.MAX_VALUE;
+        } else {
+            clientWidth = width - padding.left - padding.right;
+        }
         for (int i = 0; i < columnCount; i++) {
             if (visibleColumns[i]) {
                 visibleColumnCount++;
@@ -166,11 +177,29 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
         if (visibleColumnCount > 1) {
             clientWidth -= (visibleColumnCount - 1) * horizontalSpacing;
         }
+        clientWidth = Math.max(0, clientWidth);
+        
         int cellWidth = 0;
         if (visibleColumnCount > 0) {
             cellWidth = clientWidth / visibleColumnCount;
         }
 
+        int preferredCellHeight = 0;
+        for (int i = 0; i < rowCount; i++) {
+            GridPane.Row row = rows.get(i);
+
+            for (int j = 0, n = row.getLength(); j < n && j < columnCount; j++) {
+                Component component = row.get(j);
+
+                if (component != null
+                    && component.isVisible()) {
+                    visibleColumns[j] = true;
+                    visibleRows[i] = true;
+                    preferredCellHeight = Math.max(preferredCellHeight, component.getPreferredHeight(cellWidth));
+                }
+            }
+        }
+        
         // The preferred height of the grid pane is the sum of the row
         // heights, plus padding and spacing
 
@@ -180,7 +209,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
         for (int i = 0; i < rowCount; i++) {
 
             if (visibleRows[i]) {
-                preferredHeight += cellWidth;
+                preferredHeight += preferredCellHeight;
                 visibleRowCount++;
             }
         }
@@ -261,9 +290,93 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
     @Override
     public int getBaseline(int width, int height) {
         int baseline = -1;
+        
+        GridPane gridPane = (GridPane)getComponent();
+        GridPane.RowSequence rows = gridPane.getRows();
+        GridPane.ColumnSequence columns = gridPane.getColumns();
 
-        // TODO Return the first available baseline by traversing cells top left to bottom right
+        int rowCount = rows.getLength();
+        int columnCount = columns.getLength();
 
+        // Determine which rows and column should be visible so we know which
+        // ones should be collapsed
+        boolean[] visibleRows = new boolean[rowCount];
+        boolean[] visibleColumns = new boolean[columnCount];
+
+        for (int i = 0; i < rowCount; i++) {
+            GridPane.Row row = rows.get(i);
+
+            for (int j = 0, n = row.getLength(); j < n && j < columnCount; j++) {
+                Component child = row.get(j);
+
+                if (child != null
+                    && child.isVisible()) {
+                    visibleRows[i] = true;
+                    visibleColumns[j] = true;
+                }
+            }
+        }
+
+        // Calculate cell width
+
+        int visibleColumnCount = 0;
+        int clientWidth = width - padding.left - padding.right;
+        for (int i = 0; i < columnCount; i++) {
+            if (visibleColumns[i]) {
+                visibleColumnCount++;
+            }
+        }
+
+        if (visibleColumnCount > 1) {
+            clientWidth -= (visibleColumnCount - 1) * horizontalSpacing;
+        }
+        clientWidth = Math.max(0, clientWidth);
+        
+        int cellWidth = 0;
+        if (visibleColumnCount > 0) {
+            cellWidth = clientWidth / visibleColumnCount;
+        }
+
+
+        // Calculate cell height
+
+        int visibleRowCount = 0;
+        int clientHeight = height - padding.top - padding.bottom;
+        for (int i = 0; i < rowCount; i++) {
+            if (visibleRows[i]) {
+                visibleRowCount++;
+            }
+        }
+
+        if (visibleRowCount > 1) {
+            clientHeight -= (visibleRowCount - 1) * verticalSpacing;
+        }
+        clientHeight = Math.max(0, clientHeight);
+        
+        int cellHeight = 0;
+        if (visibleRowCount > 0) {
+            cellHeight = clientHeight / visibleRowCount;
+        }
+
+        // Return the first available baseline by traversing cells top left to bottom right
+        
+        for (int i = 0; i < rowCount; i++) {
+            GridPane.Row row = rows.get(i);
+
+            for (int j = 0, n = row.getLength(); j < n && j < columnCount; j++) {
+                Component child = row.get(j);
+
+                if (child != null
+                    && child.isVisible()) {
+                    baseline = child.getBaseline(cellWidth, cellHeight);
+                    break;
+                }
+            }
+            if (baseline != -1) {
+                break;
+            }
+        }
+        
         // Include top padding value
         if (baseline != -1) {
             baseline += padding.top;
@@ -289,8 +402,6 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
         // ones should be collapsed
         boolean[] visibleRows = new boolean[rowCount];
         boolean[] visibleColumns = new boolean[columnCount];
-        int cellPreferredHeight = 0;
-        int cellPreferredWidth = 0;
 
         for (int i = 0; i < rowCount; i++) {
             GridPane.Row row = rows.get(i);
@@ -302,9 +413,6 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
                     && child.isVisible()) {
                     visibleRows[i] = true;
                     visibleColumns[j] = true;
-                    Dimensions d = child.getPreferredSize();
-                    cellPreferredHeight = Math.max(cellPreferredHeight, d.height);
-                    cellPreferredWidth = Math.max(cellPreferredWidth, d.width);
                 }
             }
         }
@@ -323,6 +431,8 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
         if (visibleColumnCount > 1) {
             clientWidth -= (visibleColumnCount - 1) * horizontalSpacing;
         }
+        clientWidth = Math.max(0, clientWidth);
+        
         cellWidth = 0;
         if (visibleColumnCount > 0) {
             cellWidth = clientWidth / visibleColumnCount;
@@ -342,6 +452,8 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
         if (visibleRowCount > 1) {
             clientHeight -= (visibleRowCount - 1) * verticalSpacing;
         }
+        clientHeight = Math.max(0, clientHeight);
+        
         cellHeight = 0;
         if (visibleRowCount > 0) {
             cellHeight = clientHeight / visibleRowCount;
@@ -389,47 +501,38 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
         int height = getHeight();
 
         // Paint the grid lines
-        if ((showHorizontalGridLines && verticalSpacing > 0)
-            || (showVerticalGridLines && horizontalSpacing > 0)) {
-            Graphics2D gridGraphics = (Graphics2D)graphics.create();
+        graphics.setStroke(new BasicStroke());
 
-            gridGraphics.setStroke(new BasicStroke());
-            gridGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
+        if (showHorizontalGridLines
+            && verticalSpacing > 0
+            && rowCount > 1) {
+            graphics.setPaint(horizontalGridColor);
 
-            if (showHorizontalGridLines
-                && verticalSpacing > 0
-                && rowCount > 1) {
-                gridGraphics.setPaint(horizontalGridColor);
+            int rowY = padding.top + (cellHeight + verticalSpacing);
 
-                int rowY = padding.top + (cellHeight + verticalSpacing);
+            for (int i = 1; i < rowCount; i++) {
+                int gridY = Math.max(rowY - (int)Math.ceil(verticalSpacing * 0.5f), 0);
+                GraphicsUtilities.drawLine(graphics, 0, gridY,
+                    width, Orientation.HORIZONTAL);
 
-                for (int i = 1; i < rowCount; i++) {
-                    int gridY = Math.max(rowY - (int)Math.ceil(verticalSpacing * 0.5f), 0);
-                    GraphicsUtilities.drawLine(gridGraphics, 0, gridY,
-                        width, Orientation.HORIZONTAL);
-
-                    rowY += (cellHeight + verticalSpacing);
-                }
+                rowY += (cellHeight + verticalSpacing);
             }
+        }
 
-            if (showVerticalGridLines
-                && horizontalSpacing > 0
-                && columnCount > 1) {
-                gridGraphics.setPaint(verticalGridColor);
+        if (showVerticalGridLines
+            && horizontalSpacing > 0
+            && columnCount > 1) {
+            graphics.setPaint(verticalGridColor);
 
-                int columnX = padding.left + (cellWidth + horizontalSpacing);
+            int columnX = padding.left + (cellWidth + horizontalSpacing);
 
-                for (int j = 1; j < columnCount; j++) {
-                    int gridX = Math.max(columnX - (int)Math.ceil(horizontalSpacing * 0.5), 0);
-                    GraphicsUtilities.drawLine(gridGraphics, gridX, 0,
-                        height, Orientation.VERTICAL);
+            for (int j = 1; j < columnCount; j++) {
+                int gridX = Math.max(columnX - (int)Math.ceil(horizontalSpacing * 0.5), 0);
+                GraphicsUtilities.drawLine(graphics, gridX, 0,
+                    height, Orientation.VERTICAL);
 
-                    columnX += (cellWidth + horizontalSpacing);
-                }
+                columnX += (cellWidth + horizontalSpacing);
             }
-
-            gridGraphics.dispose();
         }
     }
 
