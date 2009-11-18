@@ -168,7 +168,10 @@ public class TableViewRowEditor implements TableView.RowEditor {
 
                 // Determine which component to use as the editor for this column
                 String columnName = tableViewColumns.get(i).getName();
-                Component editorComponent = cellEditors.get(columnName);
+                Component editorComponent = null;
+                if (columnName != null) {
+                    editorComponent = cellEditors.get(columnName);
+                }
 
                 // Default to a TextInput editor
                 if (editorComponent == null) {

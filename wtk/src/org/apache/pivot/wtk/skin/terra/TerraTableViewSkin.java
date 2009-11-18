@@ -21,6 +21,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Transparency;
+import java.util.Arrays;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
@@ -76,8 +77,11 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     private boolean showVerticalGridLines;
     private boolean includeTrailingVerticalGridLine;
     private boolean includeTrailingHorizontalGridLine;
+    private boolean variableRowHeight;
 
     private ArrayList<Integer> columnWidths = null;
+    private int [] variableRowHeightYCache;
+    private int fixedRowHeight = -1;
 
     private int highlightedIndex = -1;
     private int editIndex = -1;
@@ -126,6 +130,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         int preferredWidth = 0;
 
         TableView.ColumnSequence columns = tableView.getColumns();
+        List<?> tableData = tableView.getTableData();
 
         int n = columns.getLength();
         for (int i = 0; i < n; i++) {
@@ -139,7 +144,6 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                     columnWidth = 0;
 
                     TableView.CellRenderer cellRenderer = column.getCellRenderer();
-                    List<?> tableData = tableView.getTableData();
 
                     int rowIndex = 0;
                     for (Object rowData : tableData) {
@@ -172,11 +176,18 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         int preferredHeight = 0;
 
         TableView tableView = (TableView)getComponent();
+        TableView.ColumnSequence columns = tableView.getColumns();
 
         int n = tableView.getTableData().getLength();
 
-        int rowHeight = getRowHeight();
-        preferredHeight = rowHeight * n;
+        if (variableRowHeight) {
+            for (int i=0; i < n; i++) {
+                preferredHeight += getVariableRowHeight(i);
+            }
+        } else {
+            int fixedRowHeight = calculateFixedRowHeight(tableView, columns);
+            preferredHeight = fixedRowHeight * n;
+        }
 
         // Include space for horizontal grid lines
         preferredHeight += (n - 1);
@@ -194,30 +205,106 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public int getBaseline(int width, int height) {
         TableView tableView = (TableView)getComponent();
+        List<Object> tableData = (List<Object>)tableView.getTableData();
 
         int baseline = -1;
 
         TableView.ColumnSequence columns = tableView.getColumns();
         ArrayList<Integer> columnWidths = getColumnWidths(tableView, width);
-        int rowHeight = getRowHeight();
+        
+        if (variableRowHeight) {
+            int rowHeight = getVariableRowHeight(0);
+            Object rowData = tableData.get(0);
 
-        for (int i = 0, n = columns.getLength(); i < n; i++) {
-            TableView.Column column = columns.get(i);
-            TableView.CellRenderer cellRenderer = column.getCellRenderer();
-            cellRenderer.render(null, -1, i, tableView, column.getName(), false, false, false);
-            baseline = Math.max(baseline, cellRenderer.getBaseline(columnWidths.get(i), rowHeight));
+            for (int i = 0, n = columns.getLength(); i < n; i++) {
+                TableView.Column column = columns.get(i);
+                TableView.CellRenderer cellRenderer = column.getCellRenderer();
+                cellRenderer.render(rowData, 0, i, tableView, column.getName(), false, false, false);
+                baseline = Math.max(baseline, cellRenderer.getBaseline(columnWidths.get(i), rowHeight));
+            }
+            
+        } else {
+            int rowHeight = calculateFixedRowHeight(tableView, columns);
+
+            for (int i = 0, n = columns.getLength(); i < n; i++) {
+                TableView.Column column = columns.get(i);
+                TableView.CellRenderer cellRenderer = column.getCellRenderer();
+                cellRenderer.render(null, -1, i, tableView, column.getName(), false, false, false);
+                baseline = Math.max(baseline, cellRenderer.getBaseline(columnWidths.get(i), rowHeight));
+            }
         }
 
         return baseline;
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void layout() {
         columnWidths = getColumnWidths((TableView)getComponent(), getWidth());
+        
+        TableView tableView = (TableView)getComponent();
+        TableView.ColumnSequence columns = tableView.getColumns();
+        
+        if (variableRowHeight) {
+            List<Object> tableData = (List<Object>)tableView.getTableData();
+
+            variableRowHeightYCache = new int[tableData.getLength() + 1];
+            
+            int rowEnd = tableData.getLength() - 1;
+            int rowY = 0;
+
+            for (int rowIndex = 0; rowIndex <= rowEnd; rowIndex++) {
+                Object rowData = tableData.get(rowIndex);
+                boolean rowHighlighted = (rowIndex == highlightedIndex
+                    && tableView.getSelectMode() != TableView.SelectMode.NONE);
+                boolean rowSelected = tableView.isRowSelected(rowIndex);
+                boolean rowDisabled = tableView.isRowDisabled(rowIndex);
+
+                int rowHeight = 0;
+                for (int columnIndex = 0, columnCount = columns.getLength();
+                    columnIndex < columnCount; columnIndex++) {
+                    TableView.Column column = columns.get(columnIndex);
+
+                    TableView.CellRenderer cellRenderer = column.getCellRenderer();
+
+                    int columnWidth = columnWidths.get(columnIndex);
+
+                    cellRenderer.render(rowData, rowIndex, columnIndex, tableView, column.getName(),
+                        rowSelected, rowHighlighted, rowDisabled);
+                    rowHeight = Math.max(rowHeight, cellRenderer.getPreferredHeight(columnWidth));
+                }
+
+                variableRowHeightYCache[rowIndex] = rowY;
+                rowY += rowHeight + 1;
+            }
+            variableRowHeightYCache[tableData.getLength()] = rowY;
+
+        } else {
+            fixedRowHeight = calculateFixedRowHeight(tableView, columns);
+        }
     }
 
+    /**
+     * Calculates the table row height, which is determined as the maximum
+     * preferred height of all cell renderers.
+     */
+    private int calculateFixedRowHeight(TableView tableView, TableView.ColumnSequence columns) {
+        int fixedRowHeight = 0;
+
+        for (int i = 0, n = columns.getLength(); i < n; i++) {
+            TableView.Column column = columns.get(i);
+            TableView.CellRenderer cellRenderer = column.getCellRenderer();
+            cellRenderer.render(null, -1, i, tableView, column.getName(), false, false, false);
+
+            fixedRowHeight = Math.max(fixedRowHeight, cellRenderer.getPreferredHeight(-1));
+        }
+        
+        return fixedRowHeight;
+    }
+    
     @Override
     @SuppressWarnings("unchecked")
     public void paint(Graphics2D graphics) {
@@ -227,8 +314,6 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
         int width = getWidth();
         int height = getHeight();
-
-        int rowHeight = getRowHeight();
 
         // Paint the background
         if (backgroundColor != null) {
@@ -242,23 +327,30 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
         Rectangle clipBounds = graphics.getClipBounds();
         if (clipBounds != null) {
-            rowStart = Math.max(rowStart, (int)Math.floor(clipBounds.y
-                / (double)(rowHeight + 1)));
-            rowEnd = Math.min(rowEnd, (int)Math.ceil((clipBounds.y
-                + clipBounds.height) / (double)(rowHeight + 1)) - 1);
+            if (variableRowHeight) {
+                rowStart = getRowAt(clipBounds.y);
+                if (rowStart == -1) {
+                    rowStart = tableData.getLength();
+                }
+                int lastRowBottomY = variableRowHeightYCache[rowEnd+1] - 1;
+                rowEnd = getRowAt(Math.min(clipBounds.y + clipBounds.height - 1, lastRowBottomY));
+            } else {
+                rowStart = Math.max(rowStart, (int)Math.floor(clipBounds.y
+                    / (double)(fixedRowHeight + 1)));
+                rowEnd = Math.min(rowEnd, (int)Math.ceil((clipBounds.y
+                    + clipBounds.height) / (double)(fixedRowHeight + 1)) - 1);
+            }
         }
 
         // Paint the row backgrounds
-        int rowY = rowStart * (rowHeight + 1);
-
         if (alternateRowColor != null) {
             for (int rowIndex = rowStart; rowIndex <= rowEnd; rowIndex++) {
+                int rowY = getRowY(rowIndex);
+                int rowHeight = getRowHeight(rowIndex);
                 if (rowIndex % 2 > 0) {
                     graphics.setPaint(alternateRowColor);
                     graphics.fillRect(0, rowY, width, rowHeight + 1);
                 }
-
-                rowY += rowHeight + 1;
             }
         }
 
@@ -285,7 +377,6 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         }
 
         // Paint the table contents
-        rowY = rowStart * (rowHeight + 1);
 
         for (int rowIndex = rowStart; rowIndex <= rowEnd; rowIndex++) {
             Object rowData = tableData.get(rowIndex);
@@ -293,7 +384,9 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                 && tableView.getSelectMode() != TableView.SelectMode.NONE);
             boolean rowSelected = tableView.isRowSelected(rowIndex);
             boolean rowDisabled = tableView.isRowDisabled(rowIndex);
-
+            int rowY = getRowY(rowIndex);
+            int rowHeight = getRowHeight(rowIndex);
+            
             // Paint selection state
             Color rowBackgroundColor = null;
             if (rowSelected) {
@@ -333,8 +426,6 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
                 columnX += columnWidth + 1;
             }
-
-            rowY += rowHeight + 1;
         }
 
         // Paint the vertical grid lines
@@ -363,7 +454,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             int rowCount = tableData.getLength();
 
             for (int rowIndex = rowStart; rowIndex <= rowEnd; rowIndex++) {
-                int gridY = (rowIndex + 1) * (rowHeight + 1) - 1;
+                int gridY = getRowY(rowIndex + 1) - 1;
 
                 if (rowIndex < rowCount - 1
                     || includeTrailingHorizontalGridLine) {
@@ -385,7 +476,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                     SortDirection sortDirection = tableView.getSort().get(columnName);
                     if (sortDirection != null) {
                         for (int rowIndex = rowStart; rowIndex <= rowEnd; rowIndex++) {
-                            int gridY = (rowIndex + 1) * (rowHeight + 1) - 1;
+                            int gridY = getRowY(rowIndex + 1) - 1;
 
                             if (rowIndex < rowCount - 1
                                 || includeTrailingHorizontalGridLine) {
@@ -400,7 +491,27 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             }
         }
     }
+    
+    private int getRowY(int rowIndex) {
+        int rowY;
+        if (variableRowHeight) {
+            rowY = variableRowHeightYCache[rowIndex];
+        } else {
+            rowY = rowIndex * (fixedRowHeight + 1);
+        }
+        return rowY;
+    }
 
+    private int getRowHeight(int rowIndex) {
+        int rowHeight;
+        if (variableRowHeight) {
+            rowHeight = variableRowHeightYCache[rowIndex + 1] - variableRowHeightYCache[rowIndex];
+        } else {
+            rowHeight = fixedRowHeight;
+        }
+        return rowHeight;
+    }
+    
     /**
      * Returns the table row height, which is determined as the maximum
      * preferred height of all cell renderers.
@@ -408,16 +519,19 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
      * @return
      * The height of one table row.
      */
-    public int getRowHeight() {
+    @SuppressWarnings("unchecked")
+    protected int getVariableRowHeight(int rowIndex) {
         TableView tableView = (TableView)getComponent();
+        List<Object> tableData = (List<Object>)tableView.getTableData();
 
         TableView.ColumnSequence columns = tableView.getColumns();
+        Object rowData = tableData.get(0);
+        
         int rowHeight = 0;
-
         for (int i = 0, n = columns.getLength(); i < n; i++) {
             TableView.Column column = columns.get(i);
             TableView.CellRenderer cellRenderer = column.getCellRenderer();
-            cellRenderer.render(null, -1, i, tableView, column.getName(), false, false, false);
+            cellRenderer.render(rowData, rowIndex, i, tableView, column.getName(), false, false, false);
 
             rowHeight = Math.max(rowHeight, cellRenderer.getPreferredHeight(-1));
         }
@@ -436,8 +550,15 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         TableView tableView = (TableView)getComponent();
         List<Object> tableData = (List<Object>)tableView.getTableData();
 
-        int rowHeight = getRowHeight();
-        int rowIndex = (y / (rowHeight + 1));
+        int rowIndex;
+        if (variableRowHeight) {
+            rowIndex = Arrays.binarySearch(variableRowHeightYCache, y);
+            if (rowIndex < 0) {
+                rowIndex = -rowIndex - 2;
+            }
+        } else {
+            rowIndex = (y / (fixedRowHeight + 1));
+        }
 
         if (rowIndex >= tableData.getLength()) {
             rowIndex = -1;
@@ -474,8 +595,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
     @Override
     public Bounds getRowBounds(int rowIndex) {
-        int rowHeight = getRowHeight();
-        return new Bounds(0, rowIndex * (rowHeight + 1), getWidth(), rowHeight);
+        return new Bounds(0, getRowY(rowIndex), getWidth(), getRowHeight(rowIndex));
     }
 
     @Override
@@ -504,7 +624,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             cellX += (columnWidths.get(i) + 1);
         }
 
-        int rowHeight = getRowHeight();
+        int rowHeight = getRowHeight(rowIndex);
 
         return new Bounds(cellX, rowIndex * (rowHeight + 1), columnWidths.get(columnIndex), rowHeight);
     }
@@ -977,6 +1097,17 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         invalidateComponent();
     }
 
+    public boolean isVariableRowHeight() {
+        return variableRowHeight;
+    }
+
+    public void setVariableRowHeight(boolean variableRowHeight) {
+        this.variableRowHeight = variableRowHeight;
+        this.variableRowHeightYCache = null;
+        this.fixedRowHeight = -1;
+        invalidateComponent();
+    }
+    
     @Override
     public boolean mouseMove(Component component, int x, int y) {
         boolean consumed = super.mouseMove(component, x, y);
@@ -1291,7 +1422,11 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
     @Override
     public void rowUpdated(TableView tableView, int index) {
-        repaintComponent(getRowBounds(index));
+        if (variableRowHeight) {
+            invalidateComponent();
+        } else {
+            repaintComponent(getRowBounds(index));
+        }
     }
 
     @Override
@@ -1301,30 +1436,51 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
     @Override
     public void rowsSorted(TableView tableView) {
-        repaintComponent();
+        if (variableRowHeight) {
+            invalidateComponent();
+        } else {
+            repaintComponent();
+        }
     }
 
     // Table view selection detail events
     @Override
     public void selectedRangeAdded(TableView tableView, int rangeStart, int rangeEnd) {
         // Repaint the area containing the added selection
-        int rowHeight = getRowHeight();
-        repaintComponent(0, rangeStart * (rowHeight + 1),
-            getWidth(), (rangeEnd - rangeStart + 1) * (rowHeight + 1));
+        repaintComponent(0, getRowY(rangeStart),
+            getWidth(), getRowY(rangeEnd + 1) - getRowY(rangeStart));
     }
 
     @Override
     public void selectedRangeRemoved(TableView tableView, int rangeStart, int rangeEnd) {
         // Repaint the area containing the removed selection
-        int rowHeight = getRowHeight();
-        repaintComponent(0, rangeStart * (rowHeight + 1),
-            getWidth(), (rangeEnd - rangeStart + 1) * (rowHeight + 1));
+        repaintComponent(0, getRowY(rangeStart),
+            getWidth(), getRowY(rangeStart) - getRowY(rangeEnd));
     }
 
     @Override
     public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges) {
-        // TODO Repaint only the area that changed (intersection of previous
+        List<?> tableData = tableView.getTableData();
+        
+        // Repaint only the area that changed (intersection of previous
         // and new selection)
-        repaintComponent();
+        
+        int rangeStart = 0;
+        int rangeEnd = tableData.getLength() - 1;
+        for (int i = 0; i < previousSelectedRanges.getLength(); i++) {
+            Span span = previousSelectedRanges.get(i);
+            rangeStart = Math.min(rangeStart, span.start);
+            rangeEnd = Math.max(rangeEnd, span.end);
+        }
+
+        Sequence<Span> newSelectedRanges = tableView.getSelectedRanges();
+        for (int i = 0; i < newSelectedRanges.getLength(); i++) {
+            Span span = newSelectedRanges.get(i);
+            rangeStart = Math.min(rangeStart, span.start);
+            rangeEnd = Math.max(rangeEnd, span.end);
+        }
+        
+        repaintComponent(0, getRowY(rangeStart),
+            getWidth(), getRowY(rangeEnd) + getRowY(rangeEnd));
     }
 }
