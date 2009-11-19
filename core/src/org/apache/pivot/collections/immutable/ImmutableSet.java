@@ -24,7 +24,6 @@ import org.apache.pivot.collections.SetListener;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 
-
 /**
  * Unmodifiable implementation of the {@link Set} interface.
  */
@@ -84,6 +83,11 @@ public class ImmutableSet<E> implements Set<E> {
     @Override
     public Iterator<E> iterator() {
         return new ImmutableIterator<E>(set.iterator());
+    }
+
+    @Override
+    public String toString() {
+        return set.toString();
     }
 
     @Override

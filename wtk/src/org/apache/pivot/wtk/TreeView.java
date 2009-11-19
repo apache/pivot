@@ -853,18 +853,25 @@ public class TreeView extends Component {
                 i = -(i + 1);
             }
 
-            // Update all affected paths by incrementing the appropriate path element
-            for (int depth = basePath.getLength(), n = paths.getLength(); i < n; i++) {
-                Path affectedPath = paths.get(i);
+            // Temporarily clear the comparator while we update the list
+            paths.setComparator(null);
+            try {
+                // Update all affected paths by incrementing the appropriate path element
+                for (int depth = basePath.getLength(), n = paths.getLength(); i < n; i++) {
+                    Path affectedPath = paths.get(i);
 
-                if (!Sequence.Tree.isDescendant(basePath, affectedPath)) {
-                    // All paths from here forward are guaranteed to be unaffected
-                    break;
+                    if (!Sequence.Tree.isDescendant(basePath, affectedPath)) {
+                        // All paths from here forward are guaranteed to be unaffected
+                        break;
+                    }
+
+                    Integer[] elements = affectedPath.toArray();
+                    elements[depth]++;
+                    paths.update(i, new ImmutablePath(elements));
                 }
-
-                Integer[] elements = affectedPath.toArray();
-                elements[depth]++;
-                paths.update(i, new ImmutablePath(elements));
+            } finally {
+                // Restore the comparator
+                paths.setComparator(PATH_COMPARATOR);
             }
         }
 
@@ -888,7 +895,8 @@ public class TreeView extends Component {
          * @param count
          * The number of items removed.
          */
-        private void clearAndDecrementPaths(ArrayList<Path> paths, Path basePath, int index, int count) {
+        private void clearAndDecrementPaths(ArrayList<Path> paths, Path basePath, int index,
+            int count) {
             int depth = basePath.getLength();
 
             // Find the index of the first path to clear (inclusive)

@@ -101,6 +101,11 @@ public final class ImmutableList<T> implements List<T> {
     }
 
     @Override
+    public String toString() {
+        return list.toString();
+    }
+
+    @Override
     public ListenerList<ListListener<T>> getListListeners() {
         return listListeners;
     }

@@ -24,7 +24,6 @@ import org.apache.pivot.collections.MapListener;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 
-
 /**
  * Unmodifiable implementation of the {@link Map} interface.
  */
@@ -90,6 +89,11 @@ public class ImmutableMap<K, V> implements Map<K, V> {
     @Override
     public Iterator<K> iterator() {
         return new ImmutableIterator<K>(map.iterator());
+    }
+
+    @Override
+    public String toString() {
+        return map.toString();
     }
 
     @Override
