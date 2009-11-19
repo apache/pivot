@@ -44,6 +44,7 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.ScrollPane;
 import org.apache.pivot.wtk.ScrollPane.ScrollBarPolicy;
+import org.apache.pivot.wtk.SplitPane;
 import org.apache.pivot.wtk.TextArea;
 import org.apache.pivot.wtk.TreeView;
 import org.apache.pivot.wtk.TreeViewSelectionListener;
@@ -54,6 +55,7 @@ import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class ComponentExplorer implements Application {
     private Window window = null;
+    private SplitPane splitPane = null;
     private TreeView treeView = null;
     private ScrollPane contentScrollPane = null;
     private Border contentPane = null;
@@ -84,6 +86,7 @@ public class ComponentExplorer implements Application {
         WTKXSerializer wtkxSerializer = new WTKXSerializer(resources);
         window = (Window)wtkxSerializer.readObject(this, "component_explorer.wtkx");
 
+        splitPane = wtkxSerializer.getValue("splitPane");
         treeView = wtkxSerializer.getValue("treeView");
         contentScrollPane = wtkxSerializer.getValue("contentScrollPane");
         contentPane = wtkxSerializer.getValue("contentPane");
@@ -285,6 +288,9 @@ public class ComponentExplorer implements Application {
                     // class property was set; open the corresponding
                     // component node
                     if (componentNode.getText().equals(classProperty)) {
+                        splitPane.setSplitRatio(0);
+                        splitPane.setLocked(true);
+
                         initialSelectedPath = path;
                         break;
                     }

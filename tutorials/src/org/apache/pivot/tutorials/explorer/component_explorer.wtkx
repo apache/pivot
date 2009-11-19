@@ -24,7 +24,7 @@ limitations under the License.
     xmlns="org.apache.pivot.wtk">
     <content>
         <CardPane styles="{padding:3}">
-            <SplitPane orientation="horizontal" splitRatio="0.25">
+            <SplitPane wtkx:id="splitPane" orientation="horizontal" splitRatio="0.25">
                 <left>
                     <TabPane>
                         <tabs>
