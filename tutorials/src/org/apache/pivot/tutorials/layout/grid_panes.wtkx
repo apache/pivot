@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<Window title="Grid Panes" maximized="true"
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:content="org.apache.pivot.wtk.content"
+    xmlns="org.apache.pivot.wtk">
+    <wtkx:define>
+        <Menu.Section wtkx:id="rowSection">
+            <Menu.Item action="insertRow" buttonData="Insert Row"/>
+            <Menu.Item action="removeRow" buttonData="Remove Row"/>
+        </Menu.Section>
+        <Menu.Section wtkx:id="columnSection">
+            <Menu.Item action="insertColumn" buttonData="Insert Column"/>
+            <Menu.Item action="removeColumn" buttonData="Remove Column"/>
+        </Menu.Section>
+    </wtkx:define>
+
+    <content>
+        <SplitPane splitRatio="0.6">
+            <left>
+                <Border>
+                    <content>
+                        <GridPane wtkx:id="gridPane" styles="{verticalSpacing:21, showHorizontalGridLines:true,
+                            horizontalSpacing:21, showVerticalGridLines:true, padding:10}">
+                            <columns>
+                                <GridPane.Column />
+                                <GridPane.Column />
+                                <GridPane.Column />
+                                <GridPane.Column />
+                            </columns>
+
+                            <rows>
+                                <GridPane.Row>
+                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                                </GridPane.Row>
+                                <GridPane.Row>
+                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                                </GridPane.Row>
+                                <GridPane.Row>
+                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                                </GridPane.Row>
+                                <GridPane.Row>
+                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                                </GridPane.Row>
+                            </rows>
+                        </GridPane>
+                    </content>
+                </Border>
+            </left>
+            <right>
+                <Border styles="{padding:10}">
+                    <content>
+                        <Form>
+                            <sections>
+                                <Form.Section>
+                                    <Checkbox Form.label="Show horizontal grid lines" selected="true">
+                                        <buttonStateListeners>
+                                            <wtkx:script>
+                                            <![CDATA[
+                                            function stateChanged(button, previousState) {
+                                                gridPane.getStyles().put("showHorizontalGridLines",
+                                                    button.isSelected());
+                                            }
+                                            ]]>
+                                            </wtkx:script>
+                                        </buttonStateListeners>
+                                    </Checkbox>
+                                    <Checkbox Form.label="Show vertical grid lines" selected="true">
+                                        <buttonStateListeners>
+                                            <wtkx:script>
+                                            <![CDATA[
+                                            function stateChanged(button, previousState) {
+                                                gridPane.getStyles().put("showVerticalGridLines",
+                                                    button.isSelected());
+                                            }
+                                            ]]>
+                                            </wtkx:script>
+                                        </buttonStateListeners>
+                                    </Checkbox>
+                                    <Spinner Form.label="Horizontal spacing" selectedIndex="21"
+                                        styles="{sizeToContent:true}">
+                                        <spinnerData>
+                                            <content:NumericSpinnerData lowerBound="0" upperBound="50"/>
+                                        </spinnerData>
+                                        <spinnerSelectionListeners>
+                                            <wtkx:script>
+                                            <![CDATA[
+                                            function selectedIndexChanged(spinner, previousSelectedIndex) {
+                                                gridPane.getStyles().put("horizontalSpacing",
+                                                    spinner.getSelectedItem());
+                                            }
+                                            ]]>
+                                            </wtkx:script>
+                                        </spinnerSelectionListeners>
+                                    </Spinner>
+                                    <Spinner Form.label="Vertical spacing" selectedIndex="21"
+                                        styles="{sizeToContent:true}">
+                                        <spinnerData>
+                                            <content:NumericSpinnerData lowerBound="0" upperBound="50"/>
+                                        </spinnerData>
+                                        <spinnerSelectionListeners>
+                                            <wtkx:script>
+                                            <![CDATA[
+                                            function selectedIndexChanged(spinner, previousSelectedIndex) {
+                                                gridPane.getStyles().put("verticalSpacing",
+                                                    spinner.getSelectedItem());
+                                            }
+                                            ]]>
+                                            </wtkx:script>
+                                        </spinnerSelectionListeners>
+                                    </Spinner>
+                                    <Spinner Form.label="Padding" selectedIndex="10"
+                                        styles="{sizeToContent:true}">
+                                        <spinnerData>
+                                            <content:NumericSpinnerData lowerBound="0" upperBound="25"/>
+                                        </spinnerData>
+                                        <spinnerSelectionListeners>
+                                            <wtkx:script>
+                                            <![CDATA[
+                                            function selectedIndexChanged(spinner, previousSelectedIndex) {
+                                                gridPane.getStyles().put("padding",
+                                                    spinner.getSelectedItem());
+                                            }
+                                            ]]>
+                                            </wtkx:script>
+                                        </spinnerSelectionListeners>
+                                    </Spinner>
+                                </Form.Section>
+                            </sections>
+                        </Form>
+                    </content>
+                </Border>
+            </right>
+        </SplitPane>
+    </content>
+</Window>
