@@ -16,17 +16,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<ScrollPane xmlns:wtkx="http://pivot.apache.org/wtkx"
-    xmlns:navigation="org.apache.pivot.demos.explorer.navigation"
-    xmlns="org.apache.pivot.wtk">
-    <view>
-        <ImageView image="org/apache/pivot/demos/explorer/IMG_1147.jpg"
-            tooltipText="Pemaquid Point Lighthouse, Bristol ME"/>
-    </view>
-    <columnHeader>
-        <navigation:Ruler orientation="horizontal"/>
-    </columnHeader>
-    <rowHeader>
-        <navigation:Ruler orientation="vertical"/>
-    </rowHeader>
-</ScrollPane>
+<ImageView image="org/apache/pivot/tutorials/IMG_0725_2.jpg"
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns="org.apache.pivot.wtk"/>

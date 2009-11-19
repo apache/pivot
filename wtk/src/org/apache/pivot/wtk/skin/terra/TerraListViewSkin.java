@@ -21,7 +21,6 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Transparency;
-import java.util.Arrays;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;

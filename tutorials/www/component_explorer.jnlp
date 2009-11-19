@@ -43,11 +43,11 @@
         <extension name="pivot-runtime" href="<%= codebase %>pivot-runtime.signed.jnlp" />
 
         <jar href="lib/pivot-tools-<%= version %>.signed.jar" />
-        <jar href="lib/pivot-demos-<%= version %>.signed.jar" />
+        <jar href="lib/pivot-tutorials-<%= version %>.signed.jar" />
     </resources>
 
     <application-desc main-class="org.apache.pivot.wtk.DesktopApplicationContext">
-        <argument>org.apache.pivot.demos.explorer.ComponentExplorer</argument>
+        <argument>org.apache.pivot.tutorials.explorer.ComponentExplorer</argument>
         <argument>--width=1000</argument>
         <argument>--height=700</argument>
         <argument>--center=true</argument>

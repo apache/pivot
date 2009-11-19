@@ -16,18 +16,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<SplitPane wtkx:id="splitPane" orientation="horizontal" splitRatio="0.5"
-    xmlns:wtkx="http://pivot.apache.org/wtkx"
-    xmlns:tools="org.apache.pivot.tools.wtk"
+<Panorama xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <left>
-        <ImageView asynchronous="true"
-            image="org/apache/pivot/demos/explorer/IMG_0735_2.jpg"
-            styles="{backgroundColor:'#404040'}"/>
-    </left>
-    <right>
-        <ImageView asynchronous="true"
-            image="org/apache/pivot/demos/explorer/IMG_0767_2.jpg"
-            styles="{backgroundColor:'#404040'}"/>
-    </right>
-</SplitPane>
+    <view>
+        <ImageView image="org/apache/pivot/tutorials/IMG_1147.jpg"
+            tooltipText="Pemaquid Point Lighthouse, Bristol ME"/>
+    </view>
+</Panorama>

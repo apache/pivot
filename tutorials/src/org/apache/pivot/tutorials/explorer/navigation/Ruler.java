@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.pivot.demos.explorer.navigation;
+package org.apache.pivot.tutorials.explorer.navigation;
 
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.Component;

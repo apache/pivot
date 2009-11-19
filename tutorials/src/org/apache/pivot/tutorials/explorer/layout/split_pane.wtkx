@@ -16,9 +16,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<CardPane xmlns:wtkx="http://pivot.apache.org/wtkx"
+<SplitPane wtkx:id="splitPane" orientation="horizontal" splitRatio="0.5"
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:tools="org.apache.pivot.tools.wtk"
     xmlns="org.apache.pivot.wtk">
-    <ImageView image="org/apache/pivot/demos/explorer/IMG_0725_2.jpg"/>
-    <ImageView image="org/apache/pivot/demos/explorer/IMG_0735_2.jpg"/>
-    <ImageView image="org/apache/pivot/demos/explorer/IMG_0767_2.jpg"/>
-</CardPane>
+    <left>
+        <ImageView asynchronous="true"
+            image="org/apache/pivot/tutorials/IMG_0735_2.jpg"
+            styles="{backgroundColor:'#404040'}"/>
+    </left>
+    <right>
+        <ImageView asynchronous="true"
+            image="org/apache/pivot/tutorials/IMG_0767_2.jpg"
+            styles="{backgroundColor:'#404040'}"/>
+    </right>
+</SplitPane>

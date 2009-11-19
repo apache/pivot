@@ -182,7 +182,7 @@ limitations under the License.
         depends="compile-main, compile-test"/>
 
     <target name="compile-main"
-        depends="charts, core, web, wtk, tutorials, demos, tools"/>
+        depends="charts, core, web, wtk, tools, tutorials, demos"/>
 
     <target name="compile-test"
         depends="core-test, web-test, wtk-test"/>
@@ -400,11 +400,12 @@ limitations under the License.
     </target>
 
     <!-- Tutorials -->
-    <target name="tutorials" depends="core, wtk, web">
+    <target name="tutorials" depends="core, wtk, web, tools">
         <compile project="tutorials">
             <pathelement location="core/${folder.bin}"/>
             <pathelement location="web/${folder.bin}"/>
             <pathelement location="wtk/${folder.bin}"/>
+            <pathelement location="tools/${folder.bin}"/>
         </compile>
     </target>
 
@@ -424,12 +425,11 @@ limitations under the License.
     </target>
 
     <!-- Demos -->
-    <target name="demos" depends="core, wtk, web, tools">
+    <target name="demos" depends="core, wtk, web">
         <compile project="demos">
             <pathelement location="core/${folder.bin}"/>
             <pathelement location="web/${folder.bin}"/>
             <pathelement location="wtk/${folder.bin}"/>
-            <pathelement location="tools/${folder.bin}"/>
         </compile>
     </target>
 

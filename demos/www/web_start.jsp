@@ -103,24 +103,6 @@ deployJava.createWebStartLaunchButton(url, '1.6');
 </table>
 <hr/>
 
-<h3>Component Explorer</h3>
-<p>Allows a user to browse the properties, styles, and events provided by each standard
-Pivot component.</p>
-<p><img src="component_explorer.png"></p>
-
-<table>
-<tr>
-<td>
-Unsigned:
-<script>
-var url = "<%= codebase %>component_explorer.jnlp";
-deployJava.createWebStartLaunchButton(url, '1.6');
-</script>
-</td>
-</tr>
-</table>
-<hr/>
-
 <h3>Stock Tracker</h3>
 <p>An example of a simple but practical "real world" application built using
 Pivot. Monitors stock quotes provided by <a href="http://finance.yahoo.com/">Yahoo!
