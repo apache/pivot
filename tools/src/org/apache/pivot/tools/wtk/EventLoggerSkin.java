@@ -223,6 +223,8 @@ class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLo
 
     @Override
     public void sourceChanged(EventLogger eventLogger, Component previousSource) {
+        //Component source = eventLogger.getSource();
+
         HashMap<Class<?>, ArrayList<Method>> buckets = new HashMap<Class<?>, ArrayList<Method>>();
 
         for (Method event : eventLogger.getDeclaredEvents()) {
@@ -238,6 +240,7 @@ class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLo
         }
 
         ArrayList<TreeNode> treeData = new ArrayList<TreeNode>(treeNodeComparator);
+        declaredEventsTreeView.setTreeData(treeData);
 
         updating = true;
         try {
@@ -252,8 +255,6 @@ class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLo
                 }
             }
 
-            declaredEventsTreeView.setTreeData(treeData);
-
             Sequence.Tree.ItemIterator<TreeNode> iter = Sequence.Tree.depthFirstIterator(treeData);
             while (iter.hasNext()) {
                 iter.next();
@@ -266,12 +267,31 @@ class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLo
 
     @Override
     public void eventIncluded(EventLogger eventLogger, Method method) {
-        // TODO
+        setEventIncluded(method, true);
     }
 
     @Override
     public void eventExcluded(EventLogger eventLogger, Method method) {
-        // TODO
+        setEventIncluded(method, false);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void setEventIncluded(Method event, boolean included) {
+        List<TreeNode> treeData = (List<TreeNode>)declaredEventsTreeView.getTreeData();
+
+        Sequence.Tree.ItemIterator<TreeNode> iter = Sequence.Tree.depthFirstIterator(treeData);
+        while (iter.hasNext()) {
+            TreeNode treeNode = iter.next();
+
+            if (treeNode instanceof EventNode) {
+                EventNode eventNode = (EventNode)treeNode;
+
+                if (eventNode.getEvent() == event) {
+                    declaredEventsTreeView.setNodeChecked(iter.getPath(), included);
+                    break;
+                }
+            }
+        }
     }
 
     @Override
