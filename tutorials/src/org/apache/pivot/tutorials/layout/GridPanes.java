@@ -84,7 +84,7 @@ public class GridPanes implements Application {
                     panel.getStyles().put("backgroundColor", "#dddcd5");
                     row.add(panel);
                 }
-                
+
                 int rowIndex = gridPane.getRowAt(contextMenuHandler.getY());
                 gridPane.getRows().insert(row, rowIndex);
             }
@@ -112,7 +112,7 @@ public class GridPanes implements Application {
                 });
             }
         });
-        
+
         namedActions.put("insertColumn", new Action() {
             @Override
             public void perform() {

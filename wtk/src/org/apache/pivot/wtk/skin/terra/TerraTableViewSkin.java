@@ -180,7 +180,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
         if (variableRowHeight) {
             ArrayList<Integer> columnWidths = getColumnWidths(tableView, width);
-            
+
             for (int i = 0; i < n; i++) {
                 preferredHeight += getVariableRowHeight(i, columnWidths);
             }
@@ -333,7 +333,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                 if (rowStart == -1) {
                     rowStart = tableData.getLength();
                 }
-                
+
                 int lastRowBottomY = rowHeights.get(rowEnd+1) - 1;
                 rowEnd = getRowAt(Math.min(clipBounds.y + clipBounds.height - 1, lastRowBottomY));
             } else {

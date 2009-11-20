@@ -71,7 +71,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
     private ArrayList<Integer> itemHeights;
     private int fixedItemHeight;
-    
+
     private static final Checkbox CHECKBOX = new Checkbox();
 
     static {
@@ -157,7 +157,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                 fixedItemHeight = Math.max(CHECKBOX.getHeight() + (checkboxPadding.top
                     + checkboxPadding.bottom), fixedItemHeight);
             }
-            
+
             preferredHeight = listData.getLength() * fixedItemHeight;
         }
 
@@ -196,7 +196,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                 fixedItemHeight = Math.max(CHECKBOX.getHeight() + (checkboxPadding.top
                     + checkboxPadding.bottom), fixedItemHeight);
             }
-            
+
             baseline = itemRenderer.getBaseline(clientWidth, fixedItemHeight);
         }
 
@@ -250,7 +250,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                 itemHeights.add(itemY);
                 itemY += itemHeight;
             }
-            
+
             itemHeights.add(itemY);
         } else {
             itemRenderer.render(null, -1, listView, false, false, false, false);
@@ -387,7 +387,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         } else {
             index = (y / fixedItemHeight);
         }
-        
+
         List<Object> listData = (List<Object>)listView.getListData();
         if (index >= listData.getLength()) {
             index = -1;
@@ -420,7 +420,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         } else {
             itemY = index * fixedItemHeight;
         }
-        
+
         return itemY;
     }
 
@@ -431,7 +431,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         } else {
             itemHeight = fixedItemHeight;
         }
-        
+
         return itemHeight;
     }
 
