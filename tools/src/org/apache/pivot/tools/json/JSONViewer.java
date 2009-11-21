@@ -26,7 +26,6 @@ import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence.Tree.Path;
 import org.apache.pivot.io.FileList;
 import org.apache.pivot.serialization.JSONSerializer;
-import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Clipboard;
 import org.apache.pivot.wtk.DesktopApplicationContext;
@@ -102,13 +101,8 @@ public class JSONViewer implements Application {
             try {
                 json = clipboardContent.getText();
                 setValue(jsonSerializer.readObject(new StringReader(json)));
-            } catch (IOException exception) {
+            } catch (Exception exception) {
                 Prompt.prompt(exception.getMessage(), window);
-            } catch(SerializationException exception) {
-                String message = "Serialization exception at line "
-                    + jsonSerializer.getLineNumber() + ": "
-                    + "\"" + exception.getMessage() + "\"";
-                Prompt.prompt(message, window);
             }
 
             window.setTitle(WINDOW_TITLE);
@@ -134,13 +128,8 @@ public class JSONViewer implements Application {
                             fileInputStream.close();
                         }
                     }
-                } catch (IOException exception) {
+                } catch (Exception exception) {
                     Prompt.prompt(exception.getMessage(), window);
-                } catch (SerializationException exception) {
-                    String message = "Serialization exception at line "
-                        + jsonSerializer.getLineNumber() + " in " + file + ": "
-                        + "\"" + exception.getMessage() + "\"";
-                    Prompt.prompt(message, window);
                 }
 
                 window.setTitle(WINDOW_TITLE + " - " + file.getName());

@@ -131,6 +131,8 @@ public class SheetTest implements Application {
                 closeButton.requestFocus();
             }
         });
+
+        DesktopApplicationContext.sizeToFit(frame);
     }
 
     @Override

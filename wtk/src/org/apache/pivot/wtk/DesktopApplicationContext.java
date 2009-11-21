@@ -589,6 +589,25 @@ public final class DesktopApplicationContext extends ApplicationContext {
         }
     }
 
+    public static void sizeToFit(Window window) {
+        if (window == null) {
+            throw new IllegalArgumentException();
+        }
+
+        if (applicationContext == null) {
+            throw new IllegalStateException("Desktop application context is not active.");
+        }
+
+        if (isFullScreen()) {
+            setFullScreen(false);
+        }
+
+        Dimensions size = window.getPreferredSize();
+        java.awt.Insets frameInsets = windowedHostFrame.getInsets();
+        windowedHostFrame.setSize(size.width + (frameInsets.left + frameInsets.right),
+            size.height + (frameInsets.top + frameInsets.bottom));
+    }
+
     /**
      * Utility method to make it easier to define <tt>main()</tt> entry-points
      * into applications. For example:

@@ -268,18 +268,7 @@ public class CSVSerializer implements Serializer<List<?>> {
 
     private void logException(Exception exception) {
         System.err.println("An error occurred while processing input at line number "
-            + getLineNumber());
-    }
-
-    /**
-     * Returns the line number currently being processed.
-     *
-     * @return
-     * The line number currently being processed, or <tt>-1</tt> if no line is
-     * currently being processed.
-     */
-    public int getLineNumber() {
-        return (lineNumberReader == null ? -1 : lineNumberReader.getLineNumber() + 1);
+            + (lineNumberReader.getLineNumber() + 1));
     }
 
     /**
