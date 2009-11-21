@@ -123,7 +123,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
         @Override
         public int getBaseline() {
-            // TODO Can this return a valid value?
             return -1;
         }
 
@@ -206,16 +205,19 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
 
         public void setBreakWidth(int breakWidth) {
-            if (breakWidth < 0) {
-                throw new IllegalArgumentException(breakWidth
-                    + " is not a valid value for breakWidth.");
-            }
+            assert (breakWidth < 0);
 
-            int previousMaximumWidth = this.breakWidth;
+            int previousBreakWidth = this.breakWidth;
 
-            if (previousMaximumWidth != breakWidth) {
+            if (previousBreakWidth != breakWidth) {
                 this.breakWidth = breakWidth;
-                invalidate();
+
+                // TODO We can't call invalidateComponent() here because we might
+                // be in layout, and this would cause the parent hiearchy to be invalidated,
+                // triggering an infinite loop.
+                // Would it be better to use a layout flag that would be set and cleared
+                // in layout()?
+                valid = false;
             }
         }
 
@@ -511,7 +513,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 NodeView nodeView = get(i);
                 Bounds nodeViewBounds = nodeView.getBounds();
 
-                if (nodeViewBounds.contains(x, y)) {
+                if (y >= nodeViewBounds.y
+                    && y < nodeViewBounds.y + nodeViewBounds.height) {
                     offset = nodeView.getInsertionPoint(x - nodeView.getX(), y - nodeView.getY())
                         + nodeView.getOffset();
                     break;
@@ -713,10 +716,13 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
                 // Add the row views to this view, lay out, and calculate height
                 int x = 0;
+                int width = 0;
                 int height = 0;
                 for (int i = 0, n = rows.getLength(); i < n; i++) {
                     row = rows.get(i);
                     row.y = height;
+
+                    width = Math.max(width, row.width);
 
                     // Determine the row height
                     for (NodeView nodeView : row.nodeViews) {
@@ -755,9 +761,10 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                     PARAGRAPH_TERMINATOR_WIDTH, terminatorHeight);
 
                 // Ensure that the paragraph is visible even when empty
+                width += terminatorBounds.width;
                 height = Math.max(height, terminatorBounds.height);
 
-                setSize(breakWidth, height);
+                setSize(width, height);
             }
 
             super.validate();
@@ -1471,7 +1478,18 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
     @Override
     public int getPreferredWidth(int height) {
-        return 0;
+        int preferredWidth;
+
+        if (documentView == null) {
+           preferredWidth = 0;
+        } else {
+            documentView.setBreakWidth(Integer.MAX_VALUE);
+            documentView.validate();
+
+            preferredWidth = documentView.getWidth() + margin.left + margin.right;
+        }
+
+        return preferredWidth;
     }
 
     @Override
@@ -1493,7 +1511,21 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
     @Override
     public Dimensions getPreferredSize() {
-        return new Dimensions(0, 0);
+        int preferredHeight;
+        int preferredWidth;
+
+        if (documentView == null) {
+           preferredWidth = 0;
+           preferredHeight = 0;
+        } else {
+            documentView.setBreakWidth(Integer.MAX_VALUE);
+            documentView.validate();
+
+            preferredWidth = documentView.getWidth() + margin.left + margin.right;
+            preferredHeight = documentView.getHeight() + margin.top + margin.bottom;
+        }
+
+        return new Dimensions(preferredWidth, preferredHeight);
     }
 
     @Override
