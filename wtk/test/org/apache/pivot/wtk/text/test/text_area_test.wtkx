@@ -29,7 +29,7 @@ limitations under the License.
                 <TablePane.Row height="1*">
                     <Border>
                         <content>
-                            <ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
+                            <ScrollPane wtkx:id="textAreaScrollPane" horizontalScrollBarPolicy="fill_to_capacity"
                                 verticalScrollBarPolicy="fill_to_capacity">
                                 <view>
                                     <TextArea wtkx:id="textArea" styles="{margin:10, wrapText:false}">
@@ -76,6 +76,29 @@ limitations under the License.
                             </ScrollPane>
                         </content>
                     </Border>
+                </TablePane.Row>
+                <TablePane.Row height="-1">
+                    <Checkbox buttonData="Wrap Text">
+                        <buttonStateListeners>
+                            <wtkx:script>
+                                <![CDATA[
+                                importClass(org.apache.pivot.wtk.ScrollPane);
+                                function stateChanged(button, previousState) {
+                                    textArea.getStyles().put("wrapText", button.isSelected());
+
+                                    var horizontalScrollBarPolicy;
+                                    if (button.isSelected()) {
+                                        horizontalScrollBarPolicy = ScrollPane.ScrollBarPolicy.FILL;
+                                    } else {
+                                        horizontalScrollBarPolicy = ScrollPane.ScrollBarPolicy.FILL_TO_CAPACITY;
+                                    }
+
+                                    textAreaScrollPane.setHorizontalScrollBarPolicy(horizontalScrollBarPolicy);
+                                }
+                                ]]>
+                            </wtkx:script>
+                        </buttonStateListeners>
+                    </Checkbox>
                 </TablePane.Row>
                 <TablePane.Row height="-1">
                     <Form styles="{verticalSpacing:2}">
