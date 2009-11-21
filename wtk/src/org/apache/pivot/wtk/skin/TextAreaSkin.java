@@ -1686,8 +1686,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         Bounds characterBounds = getCharacterBounds(offset);
 
         if (characterBounds != null) {
-            textArea.scrollAreaToVisible(0, characterBounds.y, characterBounds.width,
-                characterBounds.height);
+            textArea.scrollAreaToVisible(characterBounds.x, characterBounds.y,
+                characterBounds.width, characterBounds.height);
         }
     }
 
