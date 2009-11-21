@@ -29,9 +29,10 @@ limitations under the License.
                 <TablePane.Row height="1*">
                     <Border>
                         <content>
-                            <ScrollPane horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fill_to_capacity">
+                            <ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
+                                verticalScrollBarPolicy="fill_to_capacity">
                                 <view>
-                                    <TextArea wtkx:id="textArea" styles="{margin:10}">
+                                    <TextArea wtkx:id="textArea" styles="{margin:10, wrapText:false}">
                                        <document>
                                            <wtkx:include src="document.wtkx"/>
                                        </document>

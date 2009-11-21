@@ -212,11 +212,10 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             if (previousBreakWidth != breakWidth) {
                 this.breakWidth = breakWidth;
 
-                // TODO We can't call invalidateComponent() here because we might
-                // be in layout, and this would cause the parent hiearchy to be invalidated,
-                // triggering an infinite loop.
-                // Would it be better to use a layout flag that would be set and cleared
-                // in layout()?
+                // NOTE We can't call invalidate() here because it would ultimately
+                // trigger a call to invalidateComponent(), which we don't want; this method
+                // is called during preferred size calculations as well as layout, neither
+                // of which should ever trigger an invalidate.
                 valid = false;
             }
         }
@@ -461,7 +460,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         @Override
         public void invalidate() {
             super.invalidate();
-
             invalidateComponent();
         }
 
@@ -1437,6 +1435,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
     private Insets margin = new Insets(4);
 
+    private boolean wrapText = true;
+
     private static final int PARAGRAPH_TERMINATOR_WIDTH = 4;
     private static final FontRenderContext FONT_RENDER_CONTEXT = new FontRenderContext(null, true, true);
     private static final int SCROLL_RATE = 30;
@@ -1500,7 +1500,14 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             || width == -1) {
             preferredHeight = 0;
         } else {
-            documentView.setBreakWidth(Math.max(width - (margin.left + margin.right), 0));
+            int breakWidth;
+            if (wrapText) {
+                breakWidth = Math.max(width - (margin.left + margin.right), 0);
+            } else {
+                breakWidth = Integer.MAX_VALUE;
+            }
+
+            documentView.setBreakWidth(breakWidth);
             documentView.validate();
 
             preferredHeight = documentView.getHeight() + margin.top + margin.bottom;
@@ -1540,6 +1547,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         if (documentView != null) {
             TextArea textArea = (TextArea)getComponent();
             int width = getWidth();
+
             documentView.setBreakWidth(Math.max(width - (margin.left + margin.right), 0));
             documentView.validate();
 
@@ -1896,6 +1904,19 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         setMargin(Insets.decode(margin));
     }
 
+    public boolean getWrapText() {
+        return wrapText;
+    }
+
+    public void setWrapText(boolean wrapText) {
+        if (this.wrapText != wrapText) {
+            this.wrapText = wrapText;
+
+            if (documentView != null) {
+                documentView.invalidate();
+            }
+        }
+    }
     @Override
     public boolean mouseMove(Component component, int x, int y) {
         boolean consumed = super.mouseMove(component, x, y);
