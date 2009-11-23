@@ -150,7 +150,6 @@ limitations under the License.
             <mkdir dir="${folder.lib}"/>
             <jar destfile="${folder.lib}/@{jarFile}" index="${compiler.indexJars}">
                 <metainf dir="${basedir}">
-                    <include name="DISCLAIMER"/>
                     <include name="LICENSE"/>
                     <include name="NOTICE"/>
                     <include name="README"/>
@@ -526,7 +525,6 @@ limitations under the License.
         <!-- Copy base files to the install folder -->
         <copy todir="${folder.install}/${folder.release}">
             <fileset dir=".">
-                <include name="DISCLAIMER"/>
                 <include name="LICENSE"/>
                 <include name="NOTICE"/>
                 <include name="README"/>
@@ -681,7 +679,6 @@ limitations under the License.
     <target name="trim-whitespace">
         <fileset id="trimfiles" dir=".">
             <include name="BUILD"/>
-            <include name="DISCLAIMER"/>
             <include name="LICENSE"/>
             <include name="NOTICE"/>
             <include name="README"/>
