@@ -17,138 +17,95 @@ limitations under the License.
 -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-  <!-- Output method -->
-  <xsl:output method="xml" encoding="UTF-8" indent="no"
-    doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
-    doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+    <xsl:include href="common.xsl"/>
 
-  <!-- Defined parameters (overrideable) -->
-  <xsl:param name="release"/>
+    <!-- Output method -->
+    <xsl:output method="xml" encoding="UTF-8" indent="no"
+        doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
+        doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
 
-  <xsl:variable name="jar-core">
-    <xsl:value-of select="'lib/pivot-core-'"/>
-    <xsl:value-of select="$release"/>
-    <xsl:value-of select="'.jar'"/>
-  </xsl:variable>
+    <xsl:template match="head">
+        <xsl:apply-templates/>
+    </xsl:template>
 
-  <xsl:variable name="jar-wtk">
-    <xsl:value-of select="'lib/pivot-wtk-'"/>
-    <xsl:value-of select="$release"/>
-    <xsl:value-of select="'.jar'"/>
-  </xsl:variable>
+    <xsl:template match="document">
+        <html xmlns="http://www.w3.org/1999/xhtml">
+            <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+                <title>
+                    <xsl:value-of select="properties/title"/>
+                </title>
+                <link rel="stylesheet" href="demo.css" type="text/css"/>
+                <script src="http://java.com/js/deployJava.js"></script>
+                <xsl:apply-templates select="head"/>
+            </head>
 
-  <xsl:variable name="jar-wtk-terra">
-    <xsl:value-of select="'lib/pivot-wtk-'"/>
-    <xsl:value-of select="$release"/>
-    <xsl:value-of select="'.terra.jar'"/>
-  </xsl:variable>
+            <body>
+                <xsl:apply-templates select="body"/>
+            </body>
+        </html>
+    </xsl:template>
 
-  <xsl:variable name="jar-web">
-    <xsl:value-of select="'lib/pivot-web-'"/>
-    <xsl:value-of select="$release"/>
-    <xsl:value-of select="'.jar'"/>
-  </xsl:variable>
+    <xsl:template match="demo">
+        <script type="text/javascript">
+            var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet"};
 
-  <xsl:variable name="jar-demos">
-    <xsl:value-of select="'lib/pivot-demos-'"/>
-    <xsl:value-of select="$release"/>
-    <xsl:value-of select="'.jar'"/>
-  </xsl:variable>
+            <xsl:for-each select="attributes/*">
+                attributes.<xsl:value-of select="name(.)"/> = '<xsl:value-of select="."/>';
+            </xsl:for-each>
 
-  <xsl:variable name="jar-tutorials">
-    <xsl:value-of select="'lib/pivot-tutorials-'"/>
-    <xsl:value-of select="$release"/>
-    <xsl:value-of select="'.jar'"/>
-  </xsl:variable>
+            var libraries = [];
+            <xsl:for-each select="libraries/library">
+                <xsl:choose>
+                    <xsl:when test=".='core'">
+                        libraries.push('<xsl:value-of select="$jar-core"/>');
+                    </xsl:when>
+                    <xsl:when test=".='wtk'">
+                        libraries.push('<xsl:value-of select="$jar-wtk"/>');
+                        libraries.push('<xsl:value-of select="$jar-wtk-terra"/>');
+                    </xsl:when>
+                    <xsl:when test=".='web'">
+                        libraries.push('<xsl:value-of select="$jar-web"/>');
+                    </xsl:when>
+                    <xsl:when test=".='demos'">
+                        libraries.push('<xsl:value-of select="$jar-demos"/>');
+                    </xsl:when>
+                    <xsl:when test=".='tutorials'">
+                        libraries.push('<xsl:value-of select="$jar-tutorials"/>');
+                    </xsl:when>
+                    <xsl:when test=".='tools'">
+                        libraries.push('<xsl:value-of select="$jar-tools"/>');
+                    </xsl:when>
+                </xsl:choose>
+            </xsl:for-each>
+            attributes.archive = libraries.join(",");
 
-  <xsl:variable name="jar-tools">
-    <xsl:value-of select="'lib/pivot-tools-'"/>
-    <xsl:value-of select="$release"/>
-    <xsl:value-of select="'.jar'"/>
-  </xsl:variable>
+            var parameters = {
+                codebase_lookup:false,
+                java_arguments:"-Dsun.awt.noerasebackground=true -Dsun.awt.erasebackgroundonresize=true"
+            };
 
-  <xsl:template match="head">
-     <xsl:apply-templates/>
-  </xsl:template>
+            <xsl:for-each select="parameters/*">
+                <xsl:variable name="parameter">
+                    <xsl:choose>
+                        <xsl:when test="name(.)='class-name'">
+                            <xsl:value-of select="'application_class_name'"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="name(.)"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
+                parameters.<xsl:value-of select="$parameter"/> = '<xsl:value-of select="."/>';
+            </xsl:for-each>
 
-  <xsl:template match="document">
-    <html xmlns="http://www.w3.org/1999/xhtml">
-      <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-        <title>
-          <xsl:value-of select="properties/title"/>
-        </title>
-        <link rel="stylesheet" href="demo.css" type="text/css"/>
-        <script src="http://java.com/js/deployJava.js"></script>
-        <xsl:apply-templates select="head"/>
-      </head>
+            deployJava.runApplet(attributes, parameters, "1.6");
+        </script>
+    </xsl:template>
 
-      <body>
-        <xsl:apply-templates select="body"/>
-      </body>
-    </html>
-  </xsl:template>
-
-  <xsl:template match="demo">
-    <script type="text/javascript">
-      var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet"};
-
-      <xsl:for-each select="attributes/*">
-        attributes.<xsl:value-of select="name(.)"/> = '<xsl:value-of select="."/>';
-      </xsl:for-each>
-
-      var libraries = [];
-      <xsl:for-each select="libraries/library">
-        <xsl:choose>
-          <xsl:when test=".='core'">
-            libraries.push('<xsl:value-of select="$jar-core"/>');
-          </xsl:when>
-          <xsl:when test=".='wtk'">
-            libraries.push('<xsl:value-of select="$jar-wtk"/>');
-            libraries.push('<xsl:value-of select="$jar-wtk-terra"/>');
-          </xsl:when>
-          <xsl:when test=".='web'">
-            libraries.push('<xsl:value-of select="$jar-web"/>');
-          </xsl:when>
-          <xsl:when test=".='demos'">
-            libraries.push('<xsl:value-of select="$jar-demos"/>');
-          </xsl:when>
-          <xsl:when test=".='tutorials'">
-            libraries.push('<xsl:value-of select="$jar-tutorials"/>');
-          </xsl:when>
-          <xsl:when test=".='tools'">
-            libraries.push('<xsl:value-of select="$jar-tools"/>');
-          </xsl:when>
-        </xsl:choose>
-      </xsl:for-each>
-      attributes.archive = libraries.join(",");
-
-      var parameters = {
-        codebase_lookup:false,
-        java_arguments:"-Dsun.awt.noerasebackground=true -Dsun.awt.erasebackgroundonresize=true"
-      };
-
-      <xsl:for-each select="parameters/*">
-        <xsl:variable name="parameter">
-          <xsl:choose>
-            <xsl:when test="name(.)='class-name'">
-              <xsl:value-of select="'application_class_name'"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:value-of select="name(.)"/>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:variable>
-        parameters.<xsl:value-of select="$parameter"/> = '<xsl:value-of select="."/>';
-      </xsl:for-each>
-
-      deployJava.runApplet(attributes, parameters, "1.6");
-    </script>
-  </xsl:template>
-
-  <xsl:template match="*|@*">
-    <xsl:copy>
-      <xsl:apply-templates select="@*|*|text()"/>
-    </xsl:copy>
-  </xsl:template>
+    <xsl:template match="*|@*">
+        <xsl:copy>
+            <xsl:apply-templates select="@*|*|text()"/>
+        </xsl:copy>
+    </xsl:template>
 </xsl:stylesheet>

@@ -17,128 +17,85 @@ limitations under the License.
 -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-  <!-- Output method -->
-  <xsl:output method="text"/>
+    <xsl:include href="common.xsl"/>
 
-  <!-- Defined parameters (overrideable) -->
-  <xsl:param name="release"/>
+    <!-- Output method -->
+    <xsl:output method="text"/>
 
-  <xsl:variable name="jar-core">
-    <xsl:value-of select="'lib/pivot-core-'"/>
-    <xsl:value-of select="$release"/>
-    <xsl:value-of select="'.jar'"/>
-  </xsl:variable>
+    <xsl:variable name="title">
+        <xsl:value-of select="//document/properties/title"/>
+    </xsl:variable>
 
-  <xsl:variable name="jar-wtk">
-    <xsl:value-of select="'lib/pivot-wtk-'"/>
-    <xsl:value-of select="$release"/>
-    <xsl:value-of select="'.jar'"/>
-  </xsl:variable>
+    <xsl:template match="demo">
+        &lt;?xml version="1.0" encoding="UTF-8" ?&gt;
 
-  <xsl:variable name="jar-wtk-terra">
-    <xsl:value-of select="'lib/pivot-wtk-'"/>
-    <xsl:value-of select="$release"/>
-    <xsl:value-of select="'.terra.jar'"/>
-  </xsl:variable>
+        &lt;%@ page language="java" contentType="application/x-java-jnlp-file" pageEncoding="UTF-8" %&gt;
+        &lt;%@ include file="jnlp_common.jsp" %&gt;
 
-  <xsl:variable name="jar-web">
-    <xsl:value-of select="'lib/pivot-web-'"/>
-    <xsl:value-of select="$release"/>
-    <xsl:value-of select="'.jar'"/>
-  </xsl:variable>
+        &lt;jnlp spec="1.6+" codebase="&lt;%= codebase %&gt;" href="&lt;%= href %&gt;"&gt;
+            &lt;information&gt;
+                &lt;title&gt;<xsl:value-of select="$title"/>&lt;/title&gt;
+                &lt;vendor&gt;Apache Pivot&lt;/vendor&gt;
+                &lt;homepage href="http://pivot.apache.org/"/&gt;
+                &lt;icon kind="shortcut" href="logo.png"/&gt;
+                &lt;offline-allowed/&gt;
+                &lt;shortcut online="false"&gt;
+                    &lt;desktop/&gt;
+                &lt;/shortcut&gt;
+            &lt;/information&gt;
 
-  <xsl:variable name="jar-demos">
-    <xsl:value-of select="'lib/pivot-demos-'"/>
-    <xsl:value-of select="$release"/>
-    <xsl:value-of select="'.jar'"/>
-  </xsl:variable>
+            &lt;resources&gt;
+                &lt;property name="jnlp.packEnabled" value="true"/&gt;
+                &lt;property name="sun.awt.noerasebackground" value="true"/&gt;
+                &lt;property name="sun.awt.erasebackgroundonresize=true" value="true"/&gt;
 
-  <xsl:variable name="jar-tutorials">
-    <xsl:value-of select="'lib/pivot-tutorials-'"/>
-    <xsl:value-of select="$release"/>
-    <xsl:value-of select="'.jar'"/>
-  </xsl:variable>
+                &lt;java version="1.6+" href="http://java.sun.com/products/autodl/j2se"/&gt;
 
-  <xsl:variable name="jar-tools">
-    <xsl:value-of select="'lib/pivot-tools-'"/>
-    <xsl:value-of select="$release"/>
-    <xsl:value-of select="'.jar'"/>
-  </xsl:variable>
+                <xsl:for-each select="libraries/library">
+                    <xsl:choose>
+                        <xsl:when test=".='core'">
+                            &lt;jar href="<xsl:value-of select="$jar-core"/>"/&gt;
+                        </xsl:when>
+                        <xsl:when test=".='wtk'">
+                            &lt;jar href="<xsl:value-of select="$jar-wtk"/>" main="true"/&gt;
+                            &lt;jar href="<xsl:value-of select="$jar-wtk-terra"/>"/&gt;
+                        </xsl:when>
+                        <xsl:when test=".='web'">
+                            &lt;jar href="<xsl:value-of select="$jar-web"/>"/&gt;
+                        </xsl:when>
+                        <xsl:when test=".='demos'">
+                            &lt;jar href="<xsl:value-of select="$jar-demos"/>"/&gt;
+                        </xsl:when>
+                        <xsl:when test=".='tutorials'">
+                            &lt;jar href="<xsl:value-of select="$jar-tutorials"/>"/&gt;
+                        </xsl:when>
+                        <xsl:when test=".='tools'">
+                            &lt;jar href="<xsl:value-of select="$jar-tools"/>"/&gt;
+                        </xsl:when>
+                    </xsl:choose>
+                </xsl:for-each>
+            &lt;/resources&gt;
 
-  <xsl:variable name="title">
-    <xsl:value-of select="//document/properties/title"/>
-  </xsl:variable>
+            &lt;application-desc main-class="org.apache.pivot.wtk.DesktopApplicationContext"&gt;
+                <xsl:for-each select="parameters/*">
+                    <xsl:choose>
+                        <xsl:when test="name(.)='class-name'">
+                            &lt;argument&gt;<xsl:value-of select="."/>&lt;/argument&gt;
+                        </xsl:when>
+                        <xsl:otherwise>
+                            &lt;argument&gt;
+                                --<xsl:value-of select="name(.)"/>=<xsl:value-of select="."/>
+                            &lt;/argument&gt;
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:for-each>
+            &lt;/application-desc&gt;
 
-  <xsl:template match="demo">
-      &lt;?xml version="1.0" encoding="UTF-8" ?&gt;
+            &lt;update check="background"/&gt;
+        &lt;/jnlp&gt;
+    </xsl:template>
 
-      &lt;%@ page language="java" contentType="application/x-java-jnlp-file" pageEncoding="UTF-8" %&gt;
-      &lt;%@ include file="jnlp_common.jsp" %&gt;
-
-      &lt;jnlp spec="1.6+" codebase="&lt;%= codebase %&gt;" href="&lt;%= href %&gt;"&gt;
-          &lt;information&gt;
-              &lt;title&gt;<xsl:value-of select="$title"/>&lt;/title&gt;
-              &lt;vendor&gt;Apache Pivot&lt;/vendor&gt;
-              &lt;homepage href="http://pivot.apache.org/"/&gt;
-              &lt;icon kind="shortcut" href="logo.png"/&gt;
-              &lt;offline-allowed/&gt;
-              &lt;shortcut online="false"&gt;
-                  &lt;desktop/&gt;
-              &lt;/shortcut&gt;
-          &lt;/information&gt;
-
-          &lt;resources&gt;
-              &lt;property name="jnlp.packEnabled" value="true"/&gt;
-              &lt;property name="sun.awt.noerasebackground" value="true"/&gt;
-              &lt;property name="sun.awt.erasebackgroundonresize=true" value="true"/&gt;
-
-              &lt;java version="1.6+" href="http://java.sun.com/products/autodl/j2se"/&gt;
-
-              <xsl:for-each select="libraries/library">
-                  <xsl:choose>
-                      <xsl:when test=".='core'">
-                          &lt;jar href="<xsl:value-of select="$jar-core"/>"/&gt;
-                      </xsl:when>
-                      <xsl:when test=".='wtk'">
-                          &lt;jar href="<xsl:value-of select="$jar-wtk"/>" main="true"/&gt;
-                          &lt;jar href="<xsl:value-of select="$jar-wtk-terra"/>"/&gt;
-                      </xsl:when>
-                      <xsl:when test=".='web'">
-                          &lt;jar href="<xsl:value-of select="$jar-web"/>"/&gt;
-                      </xsl:when>
-                      <xsl:when test=".='demos'">
-                          &lt;jar href="<xsl:value-of select="$jar-demos"/>"/&gt;
-                      </xsl:when>
-                      <xsl:when test=".='tutorials'">
-                          &lt;jar href="<xsl:value-of select="$jar-tutorials"/>"/&gt;
-                      </xsl:when>
-                      <xsl:when test=".='tools'">
-                          &lt;jar href="<xsl:value-of select="$jar-tools"/>"/&gt;
-                      </xsl:when>
-                  </xsl:choose>
-              </xsl:for-each>
-          &lt;/resources&gt;
-
-          &lt;application-desc main-class="org.apache.pivot.wtk.DesktopApplicationContext"&gt;
-              <xsl:for-each select="parameters/*">
-                  <xsl:choose>
-                      <xsl:when test="name(.)='class-name'">
-                          &lt;argument&gt;<xsl:value-of select="."/>&lt;/argument&gt;
-                      </xsl:when>
-                      <xsl:otherwise>
-                          &lt;argument&gt;
-                              --<xsl:value-of select="name(.)"/>=<xsl:value-of select="."/>
-                          &lt;/argument&gt;
-                      </xsl:otherwise>
-                  </xsl:choose>
-              </xsl:for-each>
-          &lt;/application-desc&gt;
-
-          &lt;update check="background"/&gt;
-      &lt;/jnlp&gt;
-  </xsl:template>
-
-  <xsl:template match="*|@*">
-      <xsl:apply-templates select="*"/>
-  </xsl:template>
+    <xsl:template match="*|@*">
+        <xsl:apply-templates select="*"/>
+    </xsl:template>
 </xsl:stylesheet>
