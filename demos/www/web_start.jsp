@@ -81,21 +81,21 @@ img {
 <td>
 Unsigned:
 <script>
-var url = "<%= codebase %>kitchen_sink.jnlp";
+var url = "<%= codebase %>kitchen-sink.jnlp";
 deployJava.createWebStartLaunchButton(url, '1.6');
 </script>
 </td>
 <td>
 Signed:
 <script>
-var url = "<%= codebase %>kitchen_sink.signed.jnlp";
+var url = "<%= codebase %>kitchen-sink.signed.jnlp";
 deployJava.createWebStartLaunchButton(url, '1.6');
 </script>
 </td>
 <td>
 Signed, with custom color scheme:
 <script>
-var url = "<%= codebase %>kitchen_sink.custom_colors.jnlp";
+var url = "<%= codebase %>kitchen-sink.custom-colors.jnlp";
 deployJava.createWebStartLaunchButton(url, '1.6');
 </script>
 </td>
@@ -114,14 +114,14 @@ Finance</a>.</p>
 <td>
 Signed:
 <script>
-var url = "<%= codebase %>stock_tracker.jnlp";
+var url = "<%= codebase %>stock-tracker.jnlp";
 deployJava.createWebStartLaunchButton(url, '1.6');
 </script>
 </td>
 <td>
 Signed, in French locale (fr):
 <script>
-var url = "<%= codebase %>stock_tracker_fr.jnlp";
+var url = "<%= codebase %>stock-tracker_fr.jnlp";
 deployJava.createWebStartLaunchButton(url, '1.6');
 </script>
 </td>
@@ -139,7 +139,7 @@ iTunes Music Store and presents the results in a table view.</p>
 <td>
 Signed:
 <script>
-var url = "<%= codebase %>itunes_search.jnlp";
+var url = "<%= codebase %>itunes-search.jnlp";
 deployJava.createWebStartLaunchButton(url, '1.6');
 </script>
 </td>
@@ -156,7 +156,7 @@ deployJava.createWebStartLaunchButton(url, '1.6');
 <td>
 Signed:
 <script>
-var url = "<%= codebase %>json_viewer.jnlp";
+var url = "<%= codebase %>json-viewer.jnlp";
 deployJava.createWebStartLaunchButton(url, '1.6');
 </script>
 </td>
@@ -173,7 +173,7 @@ deployJava.createWebStartLaunchButton(url, '1.6');
 <td>
 Signed:
 <script>
-var url = "<%= codebase %>xml_viewer.jnlp";
+var url = "<%= codebase %>xml-viewer.jnlp";
 deployJava.createWebStartLaunchButton(url, '1.6');
 </script>
 </td>
@@ -205,7 +205,7 @@ deployJava.createWebStartLaunchButton(url, '1.6');
 <td>
 Signed:
 <script>
-var url = "<%= codebase %>file_drag_drop.jnlp";
+var url = "<%= codebase %>file-drag-drop.jnlp";
 deployJava.createWebStartLaunchButton(url, '1.6');
 </script>
 </td>
@@ -222,7 +222,7 @@ edit rows.</p>
 <td>
 Unsigned:
 <script>
-var url = "<%= codebase %>table_row_editor.jnlp";
+var url = "<%= codebase %>table-row-editor.jnlp";
 deployJava.createWebStartLaunchButton(url, '1.6');
 </script>
 </td>
@@ -240,7 +240,7 @@ constructed using Pivot's drawing API.</p>
 <td>
 Unsigned:
 <script>
-var url = "<%= codebase %>animated_clock.jnlp";
+var url = "<%= codebase %>animated-clock.jnlp";
 deployJava.createWebStartLaunchButton(url, '1.6');
 </script>
 </td>
@@ -257,7 +257,7 @@ rows.</p>
 <td>
 Unsigned:
 <script>
-var url = "<%= codebase %>large_data.jnlp";
+var url = "<%= codebase %>large-data.jnlp";
 deployJava.createWebStartLaunchButton(url, '1.6');
 </script>
 </td>
@@ -273,7 +273,7 @@ deployJava.createWebStartLaunchButton(url, '1.6');
 <td>
 Unsigned:
 <script>
-var url = "<%= codebase %>rss_feed.jnlp";
+var url = "<%= codebase %>rss-feed.jnlp";
 deployJava.createWebStartLaunchButton(url, '1.6');
 </script>
 </td>
@@ -310,7 +310,7 @@ handy when displaying tables with many columns.</p>
 <td>
 Unsigned:
 <script>
-var url = "<%= codebase %>fixed_column_table.jnlp";
+var url = "<%= codebase %>fixed-column-table.jnlp";
 deployJava.createWebStartLaunchButton(url, '1.6');
 </script>
 </td>

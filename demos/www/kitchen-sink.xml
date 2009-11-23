@@ -16,6 +16,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
+<!--
+TODO create version that specifies system property:
+org.apache.pivot.wtk.skin.terra.location=org/apache/pivot/tutorials/TerraTheme_dark.json
+-->
 <document group="demos">
     <properties>
         <title>Pivot "Kitchen Sink" Demo</title>

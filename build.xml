@@ -449,6 +449,7 @@ limitations under the License.
         <clean-www project="demos"/>
         <delete>
             <fileset dir="demos/www" includes="*.html" excludes="index.html"/>
+            <fileset dir="demos/www" includes="*.jnlp"/>
         </delete>
     </target>
 
@@ -614,6 +615,7 @@ limitations under the License.
             </fileset>
         </copy>
 
+        <!-- Transform demos html -->
         <xslt basedir="demos/www"
             destdir="demos/www"
             extension=".html"
@@ -623,13 +625,15 @@ limitations under the License.
             <param name="release" expression="${version}"/>
         </xslt>
 
-        <!-- Generate demos version templates -->
-        <copy todir="demos/www" filtering="true">
-            <fileset dir="demos/www">
-                <include name="version.template.jsp"/>
-            </fileset>
-            <mapper type="glob" from="version.template.jsp" to="version.jsp"/>
-        </copy>
+        <!-- Transform demos jnlp -->
+        <xslt basedir="demos/www"
+            destdir="demos/www"
+            extension=".jnlp"
+            style="demos/xsl/jnlp.xsl"
+            includes="*.xml"
+            excludes="index.xml">
+            <param name="release" expression="${version}"/>
+        </xslt>
 
         <!-- Generate demos WAR -->
         <war destfile="${folder.lib}/${ant.project.name}-demos.war" webxml="demos/web.xml">
