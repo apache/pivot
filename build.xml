@@ -613,11 +613,18 @@ limitations under the License.
             </fileset>
         </copy>
 
+        <!-- Transform demos index -->
+        <xslt basedir="demos/www"
+            destdir="demos/www"
+            extension=".html"
+            style="demos/xsl/index.xsl"
+            includes="index.xml"/>
+
         <!-- Transform demos html -->
         <xslt basedir="demos/www"
             destdir="demos/www"
             extension=".html"
-            style="demos/xsl/html.xsl"
+            style="demos/xsl/demo.html.xsl"
             includes="*.xml"
             excludes="index.xml">
             <param name="release" expression="${version}"/>
@@ -627,7 +634,7 @@ limitations under the License.
         <xslt basedir="demos/www"
             destdir="demos/www"
             extension=".jnlp"
-            style="demos/xsl/jnlp.xsl"
+            style="demos/xsl/demo.jnlp.xsl"
             includes="*.xml"
             excludes="index.xml">
             <param name="release" expression="${version}"/>

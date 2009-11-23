@@ -25,19 +25,33 @@ limitations under the License.
         <p>
             This page contains a collection of Pivot demos. All demos require Java 6 or greater.
         </p>
-        <demo id="kitchen-sink" featured="true"/>
-        <demo id="stock-tracker"/>
-        <demo id="itunes-search"/>
-        <demo id="json-viewer"/>
-        <demo id="xml-viewer"/>
+        <demo id="kitchen-sink" featured="true">
+            <screenshot kind="large">kitchen-sink.png</screenshot>
+        </demo>
+        <demo id="stock-tracker">
+            <screenshot kind="large">stock-tracker.png</screenshot>
+        </demo>
+        <demo id="itunes-search">
+            <screenshot kind="large">itunes-search.png</screenshot>
+        </demo>
+        <demo id="json-viewer">
+            <screenshot kind="large">json-viewer.png</screenshot>
+        </demo>
+        <demo id="xml-viewer">
+            <screenshot kind="large">xml-viewer.png</screenshot>
+        </demo>
         <demo id="scripting"/>
         <demo id="file-drag-drop"/>
         <demo id="table-row-editor"/>
-        <demo id="animated-clock"/>
+        <demo id="animated-clock">
+            <screenshot kind="large">animated-clock.png</screenshot>
+        </demo>
         <demo id="large-data"/>
         <demo id="rss-feed"/>
         <demo id="dom-interaction"/>
-        <demo id="decorators"/>
+        <demo id="decorators">
+            <screenshot kind="large">decorators.png</screenshot>
+        </demo>
         <demo id="fixed-column-table"/>
         <demo id="multiselect"/>
     </body>
