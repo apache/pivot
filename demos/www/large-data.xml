@@ -44,9 +44,9 @@ limitations under the License.
                 <library>wtk</library>
                 <library>demos</library>
             </libraries>
-            <parameters>
-                <startup_properties>basePath=pivot-demos/assets</startup_properties>
-            </parameters>
+            <startup-properties>
+                <basePath>pivot-demos/assets</basePath>
+            </startup-properties>
         </demo>
     </body>
 </document>

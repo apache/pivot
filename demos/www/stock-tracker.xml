@@ -38,9 +38,9 @@ limitations under the License.
                 <library>web</library>
                 <library>tutorials</library>
             </libraries>
-            <parameters>
-                <startup_properties>language=en</startup_properties>
-            </parameters>
+            <startup-properties>
+                <language>en</language>
+            </startup-properties>
         </demo>
         <p>
             Users can add or remove stock symbols using the text input and buttons at the bottom

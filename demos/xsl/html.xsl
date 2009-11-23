@@ -94,9 +94,15 @@ limitations under the License.
                 application_class_name:"<xsl:value-of select="@class"/>"
             };
 
-            <xsl:for-each select="parameters/*">
-                parameters.<xsl:value-of select="name(.)"/> = '<xsl:value-of select="."/>';
-            </xsl:for-each>
+            <xsl:if test="startup-properties">
+                var startupProperties = [];
+
+                <xsl:for-each select="startup-properties/*">
+                    startupProperties.push("<xsl:value-of select="name(.)"/>=<xsl:value-of select="."/>");
+                </xsl:for-each>
+
+                parameters.startup_properties = startupProperties.join("&amp;");
+            </xsl:if>
 
             deployJava.runApplet(attributes, parameters, "1.6");
         </script>

@@ -19,7 +19,10 @@ limitations under the License.
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
     <xsl:include href="common.xsl"/>
 
-    <!-- Output method -->
+    <!--
+    Output method. NOTE This must be text because JSP tags are not valid XML, so setting the
+    output method to XML caused the XSLT process to escape the JSP tags, thus breaking the JSP
+    -->
     <xsl:output method="text"/>
 
     <xsl:template match="demo">
@@ -77,11 +80,9 @@ limitations under the License.
                 &lt;argument&gt;<xsl:value-of select="@class"/>&lt;/argument&gt;
                 &lt;argument&gt;--width=<xsl:value-of select="@width"/>&lt;/argument&gt;
                 &lt;argument&gt;--height=<xsl:value-of select="@height"/>&lt;/argument&gt;
-
-                <xsl:for-each select="parameters/*">
-                    &lt;argument&gt;
-                        --<xsl:value-of select="name(.)"/>=<xsl:value-of select="."/>
-                    &lt;/argument&gt;
+                &lt;argument&gt;--center=true&lt;/argument&gt;
+                <xsl:for-each select="startup-properties/*">
+                &lt;argument&gt;--<xsl:value-of select="name(.)"/>=<xsl:value-of select="."/>&lt;/argument&gt;
                 </xsl:for-each>
             &lt;/application-desc&gt;
 
