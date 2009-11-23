@@ -447,8 +447,10 @@ limitations under the License.
         <delete file="${folder.lib}/${jar.demos}"/>
         <clean-www project="demos"/>
         <delete>
-            <fileset dir="demos/www" includes="*.html" excludes="index.html"/>
-            <fileset dir="demos/www" includes="*.jnlp"/>
+            <fileset dir="demos/www">
+                <include name="*.html"/>
+                <include name="*.jnlp"/>
+            </fileset>
         </delete>
     </target>
 

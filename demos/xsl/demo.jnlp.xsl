@@ -29,7 +29,27 @@ limitations under the License.
         &lt;?xml version="1.0" encoding="UTF-8" ?&gt;
 
         &lt;%@ page language="java" contentType="application/x-java-jnlp-file" pageEncoding="UTF-8" %&gt;
-        &lt;%@ include file="jnlp_common.jsp" %&gt;
+        &lt;%
+            // response.setHeader("Cache-Control", "no-cache");
+            // response.setHeader("Pragma", "no-cache");
+            // response.setDateHeader("Expires", 0);
+
+            String requestURL = request.getRequestURL().toString();
+            int lastSlash = requestURL.lastIndexOf('/');
+            String codebase = "";
+            String href = "";
+            if (requestURL != null) {
+                if (lastSlash &lt; 0) {
+                    lastSlash = 0;
+                }
+
+                codebase = requestURL.substring(0, lastSlash + 1);
+                if ((lastSlash + 1) &lt; requestURL.length()) {
+                    href = requestURL.substring(lastSlash + 1);
+                }
+
+            }
+        %&gt;
 
         &lt;jnlp spec="1.6+" codebase="&lt;%= codebase %&gt;" href="&lt;%= href %&gt;"&gt;
             &lt;information&gt;
