@@ -27,16 +27,12 @@ limitations under the License.
         <p>
             Allows users to visually browse an XML document using a TreeView component.
         </p>
-        <demo class="org.apache.pivot.tools.xml.XMLViewer" signed="true">
+        <demo class="org.apache.pivot.tools.xml.XMLViewer" width="640" height="480" signed="true">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>
                 <library>tools</library>
             </libraries>
-            <attributes>
-                <width>640</width>
-                <height>480</height>
-            </attributes>
         </demo>
     </body>
 </document>

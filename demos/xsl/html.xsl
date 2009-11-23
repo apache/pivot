@@ -20,13 +20,9 @@ limitations under the License.
     <xsl:include href="common.xsl"/>
 
     <!-- Output method -->
-    <xsl:output method="xml" encoding="UTF-8" indent="no"
+    <xsl:output method="html" encoding="UTF-8" indent="no"
         doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
         doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
-
-    <xsl:template match="head">
-        <xsl:apply-templates/>
-    </xsl:template>
 
     <xsl:template match="document">
         <html xmlns="http://www.w3.org/1999/xhtml">
@@ -36,7 +32,7 @@ limitations under the License.
                     Pivot <xsl:value-of select="properties/title"/> Demo
                 </title>
                 <link rel="stylesheet" href="demo.css" type="text/css"/>
-                <script src="http://java.com/js/deployJava.js"></script>
+                <script xmlns="" type="text/javascript" src="http://java.com/js/deployJava.js"></script>
                 <xsl:apply-templates select="head"/>
             </head>
 
@@ -46,9 +42,21 @@ limitations under the License.
         </html>
     </xsl:template>
 
+    <xsl:template match="head">
+        <xsl:apply-templates/>
+    </xsl:template>
+
+    <xsl:template match="body">
+        <xsl:apply-templates/>
+    </xsl:template>
+
     <xsl:template match="demo">
         <script type="text/javascript">
-            var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet"};
+            var attributes = {
+                code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
+                width:"<xsl:value-of select="@width"/>",
+                height:"<xsl:value-of select="@height"/>"
+            };
 
             <xsl:for-each select="attributes/*">
                 attributes.<xsl:value-of select="name(.)"/> = '<xsl:value-of select="."/>';

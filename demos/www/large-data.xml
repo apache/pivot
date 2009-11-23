@@ -38,16 +38,12 @@ limitations under the License.
             Note that the 10e3.csv, 10e4.csv, and 10e5.csv files are not included in this
             distribution due to their large size.
         </p>
-        <demo class="org.apache.pivot.demos.million.LargeData">
+        <demo class="org.apache.pivot.demos.million.LargeData" width="600" height="480">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>
                 <library>demos</library>
             </libraries>
-            <attributes>
-                <width>600</width>
-                <height>480</height>
-            </attributes>
             <parameters>
                 <startup_properties>basePath=pivot-demos/assets</startup_properties>
             </parameters>

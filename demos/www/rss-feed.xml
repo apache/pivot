@@ -29,16 +29,12 @@ limitations under the License.
             custom list view item renderer to present the news data. Double-clicking an item in
             the list will open the article in a new window.
         </p>
-        <demo class="org.apache.pivot.demos.rss.RSSFeedDemo">
+        <demo class="org.apache.pivot.demos.rss.RSSFeedDemo" width="480" height="360">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>
                 <library>demos</library>
             </libraries>
-            <attributes>
-                <width>480</width>
-                <height>360</height>
-            </attributes>
         </demo>
     </body>
 </document>

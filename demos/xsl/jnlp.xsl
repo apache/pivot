@@ -75,6 +75,9 @@ limitations under the License.
 
             &lt;application-desc main-class="org.apache.pivot.wtk.DesktopApplicationContext"&gt;
                 &lt;argument&gt;<xsl:value-of select="@class"/>&lt;/argument&gt;
+                &lt;argument&gt;--width=<xsl:value-of select="@width"/>&lt;/argument&gt;
+                &lt;argument&gt;--height=<xsl:value-of select="@height"/>&lt;/argument&gt;
+
                 <xsl:for-each select="parameters/*">
                     &lt;argument&gt;
                         --<xsl:value-of select="name(.)"/>=<xsl:value-of select="."/>

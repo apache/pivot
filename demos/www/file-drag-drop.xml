@@ -29,16 +29,13 @@ limitations under the License.
             from the desktop or local file system into the applet for upload to a web or other
             server.
         </p>
-        <demo class="org.apache.pivot.demos.dnd.FileDropTargetDemo" signed="true">
+        <demo class="org.apache.pivot.demos.dnd.FileDropTargetDemo" width="280" height="260"
+            signed="true">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>
                 <library>demos</library>
             </libraries>
-            <attributes>
-                <width>280</width>
-                <height>260</height>
-            </attributes>
         </demo>
         <p>
             Note that the application doesn't actually perform the upload - it merely serves as a
