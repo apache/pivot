@@ -22,13 +22,16 @@ org.apache.pivot.wtk.skin.terra.location=org/apache/pivot/tutorials/TerraTheme_d
 -->
 <document group="demos">
     <properties>
-        <title>Pivot "Kitchen Sink" Demo</title>
+        <title>"Kitchen Sink"</title>
+        <description>
+            Demonstrates a number of commonly used Pivot components.
+        </description>
     </properties>
     <body>
         <p>
             This application demonstrates a number of commonly used Pivot components:
         </p>
-        <demo>
+        <demo class="org.apache.pivot.tutorials.KitchenSink">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>
@@ -38,9 +41,6 @@ org.apache.pivot.wtk.skin.terra.location=org/apache/pivot/tutorials/TerraTheme_d
                 <width>800</width>
                 <height>600</height>
             </attributes>
-            <parameters>
-                <class-name>org.apache.pivot.tutorials.KitchenSink</class-name>
-            </parameters>
         </demo>
     </body>
 </document>

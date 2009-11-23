@@ -22,10 +22,6 @@ limitations under the License.
     <!-- Output method -->
     <xsl:output method="text"/>
 
-    <xsl:variable name="title">
-        <xsl:value-of select="//document/properties/title"/>
-    </xsl:variable>
-
     <xsl:template match="demo">
         &lt;?xml version="1.0" encoding="UTF-8" ?&gt;
 
@@ -34,7 +30,8 @@ limitations under the License.
 
         &lt;jnlp spec="1.6+" codebase="&lt;%= codebase %&gt;" href="&lt;%= href %&gt;"&gt;
             &lt;information&gt;
-                &lt;title&gt;<xsl:value-of select="$title"/>&lt;/title&gt;
+                &lt;title&gt;Pivot <xsl:value-of select="//document/properties/title"/> Demo&lt;/title&gt;
+                &lt;description&gt;<xsl:value-of select="//document/properties/description"/>&lt;/description&gt;
                 &lt;vendor&gt;Apache Pivot&lt;/vendor&gt;
                 &lt;homepage href="http://pivot.apache.org/"/&gt;
                 &lt;icon kind="shortcut" href="logo.png"/&gt;
@@ -77,17 +74,11 @@ limitations under the License.
             &lt;/resources&gt;
 
             &lt;application-desc main-class="org.apache.pivot.wtk.DesktopApplicationContext"&gt;
+                &lt;argument&gt;<xsl:value-of select="@class"/>&lt;/argument&gt;
                 <xsl:for-each select="parameters/*">
-                    <xsl:choose>
-                        <xsl:when test="name(.)='class-name'">
-                            &lt;argument&gt;<xsl:value-of select="."/>&lt;/argument&gt;
-                        </xsl:when>
-                        <xsl:otherwise>
-                            &lt;argument&gt;
-                                --<xsl:value-of select="name(.)"/>=<xsl:value-of select="."/>
-                            &lt;/argument&gt;
-                        </xsl:otherwise>
-                    </xsl:choose>
+                    &lt;argument&gt;
+                        --<xsl:value-of select="name(.)"/>=<xsl:value-of select="."/>
+                    &lt;/argument&gt;
                 </xsl:for-each>
             &lt;/application-desc&gt;
 

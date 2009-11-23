@@ -33,7 +33,7 @@ limitations under the License.
             <head>
                 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
                 <title>
-                    <xsl:value-of select="properties/title"/>
+                    Pivot <xsl:value-of select="properties/title"/> Demo
                 </title>
                 <link rel="stylesheet" href="demo.css" type="text/css"/>
                 <script src="http://java.com/js/deployJava.js"></script>
@@ -82,21 +82,12 @@ limitations under the License.
 
             var parameters = {
                 codebase_lookup:false,
-                java_arguments:"-Dsun.awt.noerasebackground=true -Dsun.awt.erasebackgroundonresize=true"
+                java_arguments:"-Dsun.awt.noerasebackground=true -Dsun.awt.erasebackgroundonresize=true",
+                application_class_name:"<xsl:value-of select="@class"/>"
             };
 
             <xsl:for-each select="parameters/*">
-                <xsl:variable name="parameter">
-                    <xsl:choose>
-                        <xsl:when test="name(.)='class-name'">
-                            <xsl:value-of select="'application_class_name'"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="name(.)"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:variable>
-                parameters.<xsl:value-of select="$parameter"/> = '<xsl:value-of select="."/>';
+                parameters.<xsl:value-of select="name(.)"/> = '<xsl:value-of select="."/>';
             </xsl:for-each>
 
             deployJava.runApplet(attributes, parameters, "1.6");

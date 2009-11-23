@@ -18,14 +18,17 @@ limitations under the License.
 
 <document group="demos">
     <properties>
-        <title>Pivot Table Row Editor Demo</title>
+        <title>Table Row Editor</title>
+        <description>
+            An example of a table row editor that uses a slide effect to edit rows.
+        </description>
     </properties>
     <body>
         <p>
             This sample application demonstrates the use of a flip transition to bring up a table
             view row editor.
         </p>
-        <demo>
+        <demo class="org.apache.pivot.demos.roweditor.RowEditorDemo">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>
@@ -35,9 +38,6 @@ limitations under the License.
                 <width>480</width>
                 <height>360</height>
             </attributes>
-            <parameters>
-                <class-name>org.apache.pivot.demos.roweditor.RowEditorDemo</class-name>
-            </parameters>
         </demo>
         <p>
             Users can double click on any row to bring up the editor. Pressing the Enter key or

@@ -18,14 +18,18 @@ limitations under the License.
 
 <document group="demos">
     <properties>
-        <title>Pivot Animated Clock Demo</title>
+        <title>Animated Clock</title>
+        <description>
+            Demonstrates Pivot's MovieView component, which is used to present a clock constructed
+            using Pivot's drawing API.
+        </description>
     </properties>
     <body>
         <p>
             Demonstrates the use of the MovieView component, which is used to present an animated
             clock. The clock is drawn using Pivot's drawing API.
         </p>
-        <demo>
+        <demo class="org.apache.pivot.demos.clock.ClockDemo">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>
@@ -35,9 +39,6 @@ limitations under the License.
                 <width>320</width>
                 <height>320</height>
             </attributes>
-            <parameters>
-                <class-name>org.apache.pivot.demos.clock.ClockDemo</class-name>
-            </parameters>
         </demo>
     </body>
 </document>

@@ -16,30 +16,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<document group="demos">
+<document>
     <properties>
-        <title>iTunes Search</title>
-        <description>
-            Simple application that allows a user to run search queries against the iTunes Music
-            Store and presents the results in a table view.
-        </description>
+        <title>Pivot Demos</title>
     </properties>
     <body>
         <p>
-            Simple application that allows a user to run search queries against the iTunes Music
-            Store and presents the results in a table view.
+            This page contains a collection of Pivot demos. All demos require Java 6 or greater.
         </p>
-        <demo class="org.apache.pivot.demos.itunes.SearchDemo" signed="true">
-            <libraries>
-                <library>core</library>
-                <library>wtk</library>
-                <library>web</library>
-                <library>demos</library>
-            </libraries>
-            <attributes>
-                <width>640</width>
-                <height>480</height>
-            </attributes>
-        </demo>
+        <demo id="kitchen-sink" featured="true"/>
+        <demo id="stock-tracker"/>
+        <demo id="itunes-search"/>
+        <demo id="json-viewer"/>
+        <demo id="xml-viewer"/>
+        <demo id="scripting"/>
+        <demo id="file-drag-drop"/>
+        <demo id="table-row-editor"/>
+        <demo id="animated-clock"/>
+        <demo id="large-data"/>
+        <demo id="rss-feed"/>
+        <demo id="dom-interaction"/>
+        <demo id="decorators"/>
+        <demo id="fixed-column-table"/>
+        <demo id="multiselect"/>
     </body>
 </document>

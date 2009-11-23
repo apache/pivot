@@ -18,7 +18,11 @@ limitations under the License.
 
 <document group="demos">
     <properties>
-        <title>Pivot Stock Tracker Demo</title>
+        <title>Stock Tracker</title>
+        <description>
+            An example of a simple but practical "real world" Pivot application. It monitors stock
+            quotes provided by <a href="http://finance.yahoo.com/">Yahoo! Finance</a>.
+        </description>
     </properties>
     <body>
         <p>
@@ -26,7 +30,7 @@ limitations under the License.
             Yahoo! Finance as a CSV file and presents it in a table view component (the applet is
             signed to allow it to communicate with the Yahoo web service):
         </p>
-        <demo signed="true">
+        <demo class="org.apache.pivot.tutorials.stocktracker.StockTracker" signed="true">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>
@@ -38,8 +42,7 @@ limitations under the License.
                 <height>360</height>
             </attributes>
             <parameters>
-                <class-name>org.apache.pivot.tutorials.stocktracker.StockTracker</class-name>
-                <startup-properties>language=en</startup-properties>
+                <startup_properties>language=en</startup_properties>
             </parameters>
         </demo>
         <p>

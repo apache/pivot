@@ -18,13 +18,16 @@ limitations under the License.
 
 <document group="demos">
     <properties>
-        <title>Pivot JSON Viewer</title>
+        <title>JSON Viewer</title>
+        <description>
+            Allows users to visually browse a JSON structure using a TreeView component.
+        </description>
     </properties>
     <body>
         <p>
             Allows users to visually browse a JSON structure using a TreeView component.
         </p>
-        <demo signed="true">
+        <demo class="org.apache.pivot.tools.json.JSONViewer" signed="true">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>
@@ -34,9 +37,6 @@ limitations under the License.
                 <width>360</width>
                 <height>480</height>
             </attributes>
-            <parameters>
-                <class-name>org.apache.pivot.tools.json.JSONViewer</class-name>
-            </parameters>
         </demo>
     </body>
 </document>

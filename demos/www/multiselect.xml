@@ -18,7 +18,11 @@ limitations under the License.
 
 <document group="demos">
     <properties>
-        <title>Pivot Multiple Selection Demo</title>
+        <title>Multiple Selection</title>
+        <description>
+            Demonstrates Pivot's use of ranges to maintain selection state in a ListView component.
+            This is more efficient than maintaining a list of individual selected indexes.
+        </description>
     </properties>
     <body>
         <p>
@@ -26,7 +30,7 @@ limitations under the License.
             ListView component. This is more efficient than maintaining a list of individual
             selected indexes.
         </p>
-        <demo>
+        <demo class="org.apache.pivot.demos.lists.MultiSelect">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>
@@ -36,9 +40,6 @@ limitations under the License.
                 <width>480</width>
                 <height>360</height>
             </attributes>
-            <parameters>
-                <class-name>org.apache.pivot.demos.lists.MultiSelect</class-name>
-            </parameters>
         </demo>
         <p>
             TableView also maintains selection in this manner.

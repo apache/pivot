@@ -18,7 +18,10 @@ limitations under the License.
 
 <document group="demos">
     <properties>
-        <title>Pivot RSS Feed Demo</title>
+        <title>RSS Feed</title>
+        <description>
+            Demonstrates how to build a simple RSS client in Pivot.
+        </description>
     </properties>
     <body>
         <p>
@@ -26,7 +29,7 @@ limitations under the License.
             custom list view item renderer to present the news data. Double-clicking an item in
             the list will open the article in a new window.
         </p>
-        <demo>
+        <demo class="org.apache.pivot.demos.rss.RSSFeedDemo">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>
@@ -36,9 +39,6 @@ limitations under the License.
                 <width>480</width>
                 <height>360</height>
             </attributes>
-            <parameters>
-                <class-name>org.apache.pivot.demos.rss.RSSFeedDemo</class-name>
-            </parameters>
         </demo>
     </body>
 </document>

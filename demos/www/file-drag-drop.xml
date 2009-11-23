@@ -18,7 +18,10 @@ limitations under the License.
 
 <document group="demos">
     <properties>
-        <title>Pivot File Drag &amp; Drop Demo</title>
+        <title>File Drag &amp; Drop</title>
+        <description>
+            Demonstrates Pivot's support for drag and drop.
+        </description>
     </properties>
     <body>
         <p>
@@ -26,7 +29,7 @@ limitations under the License.
             from the desktop or local file system into the applet for upload to a web or other
             server.
         </p>
-        <demo signed="true">
+        <demo class="org.apache.pivot.demos.dnd.FileDropTargetDemo" signed="true">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>
@@ -36,9 +39,6 @@ limitations under the License.
                 <width>280</width>
                 <height>260</height>
             </attributes>
-            <parameters>
-                <class-name>org.apache.pivot.demos.dnd.FileDropTargetDemo</class-name>
-            </parameters>
         </demo>
         <p>
             Note that the application doesn't actually perform the upload - it merely serves as a

@@ -619,7 +619,7 @@ limitations under the License.
         <xslt basedir="demos/www"
             destdir="demos/www"
             extension=".html"
-            style="demos/xsl/demo.xsl"
+            style="demos/xsl/html.xsl"
             includes="*.xml"
             excludes="index.xml">
             <param name="release" expression="${version}"/>

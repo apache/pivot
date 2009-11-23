@@ -18,7 +18,10 @@ limitations under the License.
 
 <document group="demos">
     <properties>
-        <title>Pivot Large Data Sets Demo</title>
+        <title>Large Data Sets</title>
+        <description>
+            Demonstrates Pivot's ability to handle large data sets of up to 1,000,000 rows.
+        </description>
     </properties>
     <body>
         <p>
@@ -35,7 +38,7 @@ limitations under the License.
             Note that the 10e3.csv, 10e4.csv, and 10e5.csv files are not included in this
             distribution due to their large size.
         </p>
-        <demo>
+        <demo class="org.apache.pivot.demos.million.LargeData">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>
@@ -46,8 +49,7 @@ limitations under the License.
                 <height>480</height>
             </attributes>
             <parameters>
-                <class-name>org.apache.pivot.demos.million.LargeData</class-name>
-                <startup-properties>basePath=pivot-demos/assets</startup-properties>
+                <startup_properties>basePath=pivot-demos/assets</startup_properties>
             </parameters>
         </demo>
     </body>

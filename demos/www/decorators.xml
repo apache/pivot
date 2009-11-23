@@ -18,7 +18,13 @@ limitations under the License.
 
 <document group="demos">
     <properties>
-        <title>Pivot Decorators Demo</title>
+        <title>Decorators</title>
+        <description>
+            Demonstrates the use of "decorators" in Pivot. Decorators allow a developer to attach
+            additional presentation to components, such as drop shadows, reflections, image
+            effects, etc. This example shows a window with a reflection decorator and a frame with
+            a fade decorator.
+        </description>
     </properties>
     <body>
         <p>
@@ -27,7 +33,7 @@ limitations under the License.
             effects, etc. This example shows a window with a reflection decorator and a frame with
             a fade decorator.
         </p>
-        <demo>
+        <demo class="org.apache.pivot.demos.decorator.DecoratorDemo">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>
@@ -37,9 +43,6 @@ limitations under the License.
                 <width>640</width>
                 <height>640</height>
             </attributes>
-            <parameters>
-                <class-name>org.apache.pivot.demos.decorator.DecoratorDemo</class-name>
-            </parameters>
         </demo>
     </body>
 </document>

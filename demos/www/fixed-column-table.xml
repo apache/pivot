@@ -18,14 +18,18 @@ limitations under the License.
 
 <document group="demos">
     <properties>
-        <title>Pivot Fixed-Column Table Demo</title>
+        <title>Fixed-Column Table</title>
+        <description>
+            Explains how to create a table with fixed columns in Pivot. Fixed columns are handy
+            when displaying tables with many columns.
+        </description>
     </properties>
     <body>
         <p>
             Demonstrates how to create a table with fixed columns in Pivot. Fixed columns are
             handy when displaying tables with many columns.
         </p>
-        <demo>
+        <demo class="org.apache.pivot.demos.tables.FixedColumnTable">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>
@@ -35,9 +39,6 @@ limitations under the License.
                 <width>300</width>
                 <height>170</height>
             </attributes>
-            <parameters>
-                <class-name>org.apache.pivot.demos.tables.FixedColumnTable</class-name>
-            </parameters>
         </demo>
     </body>
 </document>

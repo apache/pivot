@@ -18,7 +18,10 @@ limitations under the License.
 
 <document group="demos">
     <properties>
-        <title>Pivot Scripting Demo</title>
+        <title>Scripting</title>
+        <description>
+            Simple example of a Pivot application written using JavaScript.
+        </description>
     </properties>
     <body>
         <p>
@@ -26,7 +29,7 @@ limitations under the License.
             implement event handlers and populate a list view component with data. It also
             demonstrates data sharing between script and Java code:
         </p>
-        <demo>
+        <demo class="org.apache.pivot.tutorials.scripting.Scripting">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>
@@ -36,9 +39,6 @@ limitations under the License.
                 <width>480</width>
                 <height>360</height>
             </attributes>
-            <parameters>
-                <class-name>org.apache.pivot.tutorials.scripting.Scripting</class-name>
-            </parameters>
         </demo>
     </body>
 </document>
