@@ -16,13 +16,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<document group="demos">
+<document>
     <properties>
         <title>Scripting</title>
         <description>
             Simple example of a Pivot application written using JavaScript.
         </description>
     </properties>
+
     <body>
         <p>
             This application demonstrates Pivot's scripting capabilities. It uses JavaScript to

@@ -16,13 +16,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<document group="demos">
+<document>
     <properties>
         <title>RSS Feed</title>
         <description>
             Demonstrates how to build a simple RSS client in Pivot.
         </description>
     </properties>
+
     <body>
         <p>
             This application demonstrates how to build a simple RSS client in Pivot. It uses a

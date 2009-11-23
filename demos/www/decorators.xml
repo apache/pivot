@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<document group="demos">
+<document>
     <properties>
         <title>Decorators</title>
         <description>
@@ -26,6 +26,7 @@ limitations under the License.
             a fade decorator.
         </description>
     </properties>
+
     <body>
         <p>
             Demonstrates the use of "decorators" in Pivot. Decorators allow a developer to attach

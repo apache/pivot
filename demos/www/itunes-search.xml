@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<document group="demos">
+<document>
     <properties>
         <title>iTunes Search</title>
         <description>
@@ -24,6 +24,7 @@ limitations under the License.
             Store and presents the results in a table view.
         </description>
     </properties>
+
     <body>
         <p>
             Simple application that allows a user to run search queries against the iTunes Music

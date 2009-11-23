@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<document group="demos">
+<document>
     <properties>
         <title>Multiple Selection</title>
         <description>
@@ -24,6 +24,7 @@ limitations under the License.
             This is more efficient than maintaining a list of individual selected indexes.
         </description>
     </properties>
+
     <body>
         <p>
             This application demonstrates Pivot's use of ranges to maintain selection state in a

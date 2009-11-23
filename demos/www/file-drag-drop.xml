@@ -16,13 +16,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<document group="demos">
+<document>
     <properties>
         <title>File Drag &amp; Drop</title>
         <description>
             Demonstrates Pivot's support for drag and drop.
         </description>
     </properties>
+
     <body>
         <p>
             This application demonstrates Pivot's support for drag and drop. Users can drag files

@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<document group="demos">
+<document>
     <properties>
         <title>DOM Interaction</title>
         <description>
@@ -24,6 +24,7 @@ limitations under the License.
             application and the browser DOM.
         </description>
     </properties>
+
     <head>
         <script type="text/javascript">
             // This function will be called by Pivot
@@ -38,6 +39,7 @@ limitations under the License.
             }
         </script>
     </head>
+
     <body>
         <p>
             Demonstrates Pivot's support for bi-directional communication between a Pivot

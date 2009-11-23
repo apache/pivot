@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<document group="demos">
+<document>
     <properties>
         <title>Fixed-Column Table</title>
         <description>
@@ -24,6 +24,7 @@ limitations under the License.
             when displaying tables with many columns.
         </description>
     </properties>
+
     <body>
         <p>
             Demonstrates how to create a table with fixed columns in Pivot. Fixed columns are

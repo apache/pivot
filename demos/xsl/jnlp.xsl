@@ -17,7 +17,7 @@ limitations under the License.
 -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-    <xsl:include href="common.xsl"/>
+    <xsl:param name="release"/>
 
     <!--
     Output method. NOTE This must be text because JSP tags are not valid XML, so setting the
@@ -51,29 +51,9 @@ limitations under the License.
 
                 &lt;java version="1.6+" href="http://java.sun.com/products/autodl/j2se"/&gt;
 
-                <xsl:for-each select="libraries/library">
-                    <xsl:choose>
-                        <xsl:when test=".='core'">
-                            &lt;jar href="<xsl:value-of select="$jar-core"/>"/&gt;
-                        </xsl:when>
-                        <xsl:when test=".='wtk'">
-                            &lt;jar href="<xsl:value-of select="$jar-wtk"/>" main="true"/&gt;
-                            &lt;jar href="<xsl:value-of select="$jar-wtk-terra"/>"/&gt;
-                        </xsl:when>
-                        <xsl:when test=".='web'">
-                            &lt;jar href="<xsl:value-of select="$jar-web"/>"/&gt;
-                        </xsl:when>
-                        <xsl:when test=".='demos'">
-                            &lt;jar href="<xsl:value-of select="$jar-demos"/>"/&gt;
-                        </xsl:when>
-                        <xsl:when test=".='tutorials'">
-                            &lt;jar href="<xsl:value-of select="$jar-tutorials"/>"/&gt;
-                        </xsl:when>
-                        <xsl:when test=".='tools'">
-                            &lt;jar href="<xsl:value-of select="$jar-tools"/>"/&gt;
-                        </xsl:when>
-                    </xsl:choose>
-                </xsl:for-each>
+                <xsl:apply-templates select="libraries/library">
+                    <xsl:with-param name="signed" select="@signed"/>
+                </xsl:apply-templates>
             &lt;/resources&gt;
 
             &lt;application-desc main-class="org.apache.pivot.wtk.DesktopApplicationContext"&gt;
@@ -88,6 +68,47 @@ limitations under the License.
 
             &lt;update check="background"/&gt;
         &lt;/jnlp&gt;
+    </xsl:template>
+
+    <xsl:template match="library">
+        <xsl:param name="signed"/>
+
+        <xsl:choose>
+            <xsl:when test=".='wtk'">
+                <xsl:variable name="jar">
+                    <xsl:value-of select="'lib/pivot-wtk-'"/>
+                    <xsl:value-of select="$release"/>
+                    <xsl:if test="$signed='true'">
+                        <xsl:value-of select="'.signed'"/>
+                    </xsl:if>
+                    <xsl:value-of select="'.jar'"/>
+                </xsl:variable>
+                &lt;jar href="<xsl:value-of select="$jar"/>" main="true"/&gt;
+                <xsl:variable name="jar-terra">
+                    <xsl:value-of select="'lib/pivot-wtk-'"/>
+                    <xsl:value-of select="$release"/>
+                    <xsl:value-of select="'.terra'"/>
+                    <xsl:if test="$signed='true'">
+                        <xsl:value-of select="'.signed'"/>
+                    </xsl:if>
+                    <xsl:value-of select="'.jar'"/>
+                </xsl:variable>
+                &lt;jar href="<xsl:value-of select="$jar-terra"/>"/&gt;
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:variable name="jar">
+                    <xsl:value-of select="'lib/pivot-'"/>
+                    <xsl:value-of select="."/>
+                    <xsl:value-of select="'-'"/>
+                    <xsl:value-of select="$release"/>
+                    <xsl:if test="$signed='true'">
+                        <xsl:value-of select="'.signed'"/>
+                    </xsl:if>
+                    <xsl:value-of select="'.jar'"/>
+                </xsl:variable>
+                &lt;jar href="<xsl:value-of select="$jar"/>"/&gt;
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template match="*|@*">

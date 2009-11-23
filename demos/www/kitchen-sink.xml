@@ -20,13 +20,14 @@ limitations under the License.
 TODO create version that specifies system property:
 org.apache.pivot.wtk.skin.terra.location=org/apache/pivot/tutorials/TerraTheme_dark.json
 -->
-<document group="demos">
+<document>
     <properties>
         <title>"Kitchen Sink"</title>
         <description>
             Demonstrates a number of commonly used Pivot components.
         </description>
     </properties>
+
     <body>
         <p>
             This application demonstrates a number of commonly used Pivot components:

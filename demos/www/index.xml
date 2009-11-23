@@ -20,6 +20,7 @@ limitations under the License.
     <properties>
         <title>Pivot Demos</title>
     </properties>
+
     <body>
         <p>
             This page contains a collection of Pivot demos. All demos require Java 6 or greater.

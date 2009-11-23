@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<document group="demos">
+<document>
     <properties>
         <title>Stock Tracker</title>
         <description>
@@ -24,6 +24,7 @@ limitations under the License.
             quotes provided by <a href="http://finance.yahoo.com/">Yahoo! Finance</a>.
         </description>
     </properties>
+
     <body>
         <p>
             This sample application retrieves live (delayed by 15 minutes) stock quote data from

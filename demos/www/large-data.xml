@@ -16,13 +16,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<document group="demos">
+<document>
     <properties>
         <title>Large Data Sets</title>
         <description>
             Demonstrates Pivot's ability to handle large data sets of up to 1,000,000 rows.
         </description>
     </properties>
+
     <body>
         <p>
             This application demonstrates Pivot's ability to handle large data sets. The
