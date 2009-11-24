@@ -29,7 +29,7 @@ import org.apache.pivot.util.ListenerList;
 
 /**
  * Implementation of the {@link Set} interface that is backed by an instance of
- * <tt>java.util.Set</tt>.
+ * {@link java.util.Set}.
  */
 public class SetAdapter<E> implements Set<E>, Serializable {
     private static final long serialVersionUID = -816891924416727900L;

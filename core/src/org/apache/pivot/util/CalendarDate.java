@@ -35,6 +35,9 @@ import org.apache.pivot.serialization.SerializationException;
 public final class CalendarDate implements Comparable<CalendarDate>, Serializable {
     private static final long serialVersionUID = 3974393986540543704L;
 
+    /**
+     * Represents a range of calendar dates.
+     */
     public static final class Range {
         public static final String START_KEY = "start";
         public static final String END_KEY = "end";

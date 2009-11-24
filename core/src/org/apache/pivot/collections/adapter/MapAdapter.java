@@ -30,7 +30,7 @@ import org.apache.pivot.util.ListenerList;
 
 /**
  * Implementation of the {@link Map} interface that is backed by an instance of
- * <tt>java.util.Map</tt>.
+ * {@link java.util.Map}.
  */
 public class MapAdapter<K, V> implements Map<K, V>, Serializable {
     private static final long serialVersionUID = 4005649560306864969L;

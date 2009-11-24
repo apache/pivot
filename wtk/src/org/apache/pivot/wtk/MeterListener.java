@@ -20,7 +20,9 @@ package org.apache.pivot.wtk;
  * Meter listener interface.
  */
 public interface MeterListener {
-
+    /**
+     * Meter listener adapter.
+     */
     public static class Adapter implements MeterListener {
         @Override
         public void percentageChanged(Meter meter, double previousPercentage) {

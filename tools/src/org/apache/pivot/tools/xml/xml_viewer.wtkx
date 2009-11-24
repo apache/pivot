@@ -112,10 +112,10 @@ limitations under the License.
 
                             <Border styles="{color:10}">
                                 <content>
-                                    <ScrollPane horizontalScrollBarPolicy="fill"
+                                    <ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
                                         verticalScrollBarPolicy="fill_to_capacity">
                                         <view>
-                                            <TextArea wtkx:id="textArea" editable="false"/>
+                                            <TextArea wtkx:id="textArea" editable="false" styles="{wrapText:false}"/>
                                         </view>
                                     </ScrollPane>
                                 </content>

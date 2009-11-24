@@ -33,6 +33,9 @@ import org.apache.pivot.serialization.SerializationException;
 public final class Time implements Comparable<Time>, Serializable {
     private static final long serialVersionUID = -2813485511869915193L;
 
+    /**
+     * Represents a range of times.
+     */
     public static final class Range {
         public static final String START_KEY = "start";
         public static final String END_KEY = "end";

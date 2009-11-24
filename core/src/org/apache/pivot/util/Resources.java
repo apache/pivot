@@ -30,15 +30,7 @@ import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 
 /**
- * Reads a JSON resource at {@link #baseName} using
- * {@link ClassLoader#getResourceAsStream(String)}. It applies localization to
- * the resource using a method similar to that of
- * {@link java.util.ResourceBundle} in that it attempts to load the base resource,
- * then applies a country specified resource over-writing the values in the base
- * using the country specified. It then does the same for country/language
- * specific.
- *
- * @see java.util.ResourceBundle
+ * Represents a set of localizable resources.
  */
 public class Resources implements Dictionary<String, Object>, Iterable<String> {
     private final Resources parent;
