@@ -94,12 +94,29 @@ limitations under the License.
             <hr/>
         </xsl:if>
 
-        <xsl:variable name="id" select="@id"/>
-        <xsl:variable name="demo" select="document(concat('../www/', $id, '.xml'))/document"/>
+        <xsl:choose>
+            <xsl:when test="@href">
+                <!--
+                Demo items with an href are assumed to be hosted remote. Remote hosted demos
+                do not have a JNLP launcher, and their title and description is assumed to be
+                nested in the demo item itself.
+                -->
+                <xsl:variable name="href" select="@href"/>
+                <h3><a href="{$href}"><xsl:value-of select="title"/></a></h3>
+                <p><xsl:value-of select="description"/></p>
+            </xsl:when>
+            <xsl:otherwise>
+                <!--
+                Locally hosted demo. We pull the demo metadata from the demo XML file.
+                -->
+                <xsl:variable name="id" select="@id"/>
+                <xsl:variable name="demo" select="document(concat('../www/', $id, '.xml'))/document"/>
+                <h3><a href="{$id}.html"><xsl:value-of select="$demo/properties/title"/></a></h3>
+                <p><a href="{$id}.jnlp">Web start</a></p>
+                <p><xsl:value-of select="$demo/properties/description"/></p>
+            </xsl:otherwise>
+        </xsl:choose>
 
-        <h3><a href="{$id}.html"><xsl:value-of select="$demo/properties/title"/></a></h3>
-        <p><a href="{$id}.jnlp">Web start</a></p>
-        <p><xsl:value-of select="$demo/properties/description"/></p>
         <xsl:if test="screenshot">
             <xsl:variable name="src" select="screenshot"/>
             <p><img src="{$src}"/></p>
