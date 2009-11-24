@@ -98,6 +98,7 @@ limitations under the License.
         <xsl:variable name="demo" select="document(concat('../www/', $id, '.xml'))/document"/>
 
         <h3><a href="{$id}.html"><xsl:value-of select="$demo/properties/title"/></a></h3>
+        <p><a href="{$id}.jnlp">Web start</a></p>
         <p><xsl:value-of select="$demo/properties/description"/></p>
         <xsl:if test="screenshot[@kind='large']">
             <xsl:variable name="src" select="screenshot[@kind='large']"/>
