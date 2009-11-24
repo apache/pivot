@@ -25,34 +25,42 @@ limitations under the License.
         <p>
             This page contains a collection of Pivot demos. All demos require Java 6 or greater.
         </p>
-        <demo id="kitchen-sink" featured="true">
-            <screenshot kind="large">kitchen-sink.png</screenshot>
-        </demo>
-        <demo id="stock-tracker">
-            <screenshot kind="large">stock-tracker.png</screenshot>
-        </demo>
-        <demo id="itunes-search">
-            <screenshot kind="large">itunes-search.png</screenshot>
-        </demo>
-        <demo id="json-viewer">
-            <screenshot kind="large">json-viewer.png</screenshot>
-        </demo>
-        <demo id="xml-viewer">
-            <screenshot kind="large">xml-viewer.png</screenshot>
-        </demo>
-        <demo id="scripting"/>
-        <demo id="file-drag-drop"/>
-        <demo id="table-row-editor"/>
-        <demo id="animated-clock">
-            <screenshot kind="large">animated-clock.png</screenshot>
-        </demo>
-        <demo id="large-data"/>
-        <demo id="rss-feed"/>
-        <demo id="dom-interaction"/>
-        <demo id="decorators">
-            <screenshot kind="large">decorators.png</screenshot>
-        </demo>
-        <demo id="fixed-column-table"/>
-        <demo id="multiselect"/>
+        <demo-item id="kitchen-sink">
+            <screenshot>kitchen-sink.png</screenshot>
+        </demo-item>
+        <demo-item id="stock-tracker">
+            <screenshot>stock-tracker.png</screenshot>
+        </demo-item>
+        <demo-item id="itunes-search">
+            <screenshot>itunes-search.png</screenshot>
+        </demo-item>
+        <demo-item id="charts" href="http://ixnay.biz/charts.html">
+            <title>Charting</title>
+            <description>
+                Demonstrates charting in Pivot using the JFreeChart chart provider (hosted at
+                http://ixnay.biz).
+            </description>
+            <screenshot>charts.png</screenshot>
+        </demo-item>
+        <demo-item id="json-viewer">
+            <screenshot>json-viewer.png</screenshot>
+        </demo-item>
+        <demo-item id="xml-viewer">
+            <screenshot>xml-viewer.png</screenshot>
+        </demo-item>
+        <demo-item id="scripting"/>
+        <demo-item id="file-drag-drop"/>
+        <demo-item id="table-row-editor"/>
+        <demo-item id="animated-clock">
+            <screenshot>animated-clock.png</screenshot>
+        </demo-item>
+        <demo-item id="large-data"/>
+        <demo-item id="rss-feed"/>
+        <demo-item id="dom-interaction"/>
+        <demo-item id="decorators">
+            <screenshot>decorators.png</screenshot>
+        </demo-item>
+        <demo-item id="fixed-column-table"/>
+        <demo-item id="multiselect"/>
     </body>
 </document>

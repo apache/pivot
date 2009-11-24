@@ -89,7 +89,7 @@ limitations under the License.
         <xsl:apply-templates/>
     </xsl:template>
 
-    <xsl:template match="demo">
+    <xsl:template match="demo-item">
         <xsl:if test="position()&gt;1">
             <hr/>
         </xsl:if>
@@ -100,8 +100,8 @@ limitations under the License.
         <h3><a href="{$id}.html"><xsl:value-of select="$demo/properties/title"/></a></h3>
         <p><a href="{$id}.jnlp">Web start</a></p>
         <p><xsl:value-of select="$demo/properties/description"/></p>
-        <xsl:if test="screenshot[@kind='large']">
-            <xsl:variable name="src" select="screenshot[@kind='large']"/>
+        <xsl:if test="screenshot">
+            <xsl:variable name="src" select="screenshot"/>
             <p><img src="{$src}"/></p>
         </xsl:if>
     </xsl:template>
