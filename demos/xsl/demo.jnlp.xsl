@@ -64,6 +64,12 @@ limitations under the License.
                 &lt;/shortcut&gt;
             &lt;/information&gt;
 
+            <xsl:if test="@signed='true'">
+                &lt;security&gt;
+                    &lt;all-permissions/&gt;
+                &lt;/security&gt;
+            </xml:if>
+
             &lt;resources&gt;
                 &lt;property name="jnlp.packEnabled" value="true"/&gt;
                 &lt;property name="sun.awt.noerasebackground" value="true"/&gt;
