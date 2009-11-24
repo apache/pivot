@@ -68,7 +68,7 @@ limitations under the License.
                 &lt;security&gt;
                     &lt;all-permissions/&gt;
                 &lt;/security&gt;
-            </xml:if>
+            </xsl:if>
 
             &lt;resources&gt;
                 &lt;property name="jnlp.packEnabled" value="true"/&gt;
