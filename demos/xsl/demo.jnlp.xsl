@@ -16,14 +16,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
+<!-- Translates a demo XML document into a JNLP demo file -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
     <xsl:param name="release"/>
 
     <!--
-    Output method. NOTE This must be text because JSP tags are not valid XML, so setting the
-    output method to XML caused the XSLT process to escape the JSP tags, thus breaking the JSP
+    Output method. NOTE This must be "text" because JSP tags are not valid XML, so setting the
+    output method to "xml" (or "html") causes the XSLT process to escape the JSP tags, thus
+    breaking the JSP
     -->
     <xsl:output method="text"/>
+
+    <xsl:variable name="project" select="document('project.xml')/project"/>
 
     <xsl:template match="demo">
         &lt;?xml version="1.0" encoding="UTF-8" ?&gt;
@@ -55,8 +59,8 @@ limitations under the License.
             &lt;information&gt;
                 &lt;title&gt;Pivot <xsl:value-of select="//document/properties/title"/> Demo&lt;/title&gt;
                 &lt;description&gt;<xsl:value-of select="//document/properties/description"/>&lt;/description&gt;
-                &lt;vendor&gt;Apache Pivot&lt;/vendor&gt;
-                &lt;homepage href="http://pivot.apache.org/"/&gt;
+                &lt;vendor&gt;<xsl:value-of select="$project/vendor"/>&lt;/vendor&gt;
+                &lt;homepage href="<xsl:value-of select="$project/@href"/>"/&gt;
                 &lt;icon kind="shortcut" href="logo.png"/&gt;
                 &lt;offline-allowed/&gt;
                 &lt;shortcut online="false"&gt;
@@ -64,7 +68,7 @@ limitations under the License.
                 &lt;/shortcut&gt;
             &lt;/information&gt;
 
-            <xsl:if test="@signed='true'">
+            <xsl:if test="signed">
                 &lt;security&gt;
                     &lt;all-permissions/&gt;
                 &lt;/security&gt;
@@ -78,7 +82,7 @@ limitations under the License.
                 &lt;java version="1.6+" href="http://java.sun.com/products/autodl/j2se"/&gt;
 
                 <xsl:apply-templates select="libraries/library">
-                    <xsl:with-param name="signed" select="@signed"/>
+                    <xsl:with-param name="signed" select="signed"/>
                 </xsl:apply-templates>
             &lt;/resources&gt;
 
@@ -104,7 +108,7 @@ limitations under the License.
                 <xsl:variable name="jar">
                     <xsl:value-of select="'lib/pivot-wtk-'"/>
                     <xsl:value-of select="$release"/>
-                    <xsl:if test="$signed='true'">
+                    <xsl:if test="$signed">
                         <xsl:value-of select="'.signed'"/>
                     </xsl:if>
                     <xsl:value-of select="'.jar'"/>
@@ -114,7 +118,7 @@ limitations under the License.
                     <xsl:value-of select="'lib/pivot-wtk-'"/>
                     <xsl:value-of select="$release"/>
                     <xsl:value-of select="'.terra'"/>
-                    <xsl:if test="$signed='true'">
+                    <xsl:if test="$signed">
                         <xsl:value-of select="'.signed'"/>
                     </xsl:if>
                     <xsl:value-of select="'.jar'"/>
@@ -127,7 +131,7 @@ limitations under the License.
                     <xsl:value-of select="."/>
                     <xsl:value-of select="'-'"/>
                     <xsl:value-of select="$release"/>
-                    <xsl:if test="$signed='true'">
+                    <xsl:if test="$signed">
                         <xsl:value-of select="'.signed'"/>
                     </xsl:if>
                     <xsl:value-of select="'.jar'"/>

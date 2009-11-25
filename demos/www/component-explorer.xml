@@ -18,29 +18,38 @@ limitations under the License.
 
 <document>
     <properties>
-        <title>File Drag &amp; Drop</title>
+        <title>Component Explorer</title>
         <description>
-            Demonstrates Pivot's support for drag and drop.
+            Allows interaction with the properties and styles of the stock Pivot components.
         </description>
+        <footer/>
+        <new-window/>
     </properties>
 
+    <head>
+        <style type="text/css">
+            * {
+                padding: 0px;
+                margin: 0px;
+            }
+
+            html, body {
+                height: 100%;
+                overflow: hidden;
+            }
+        </style>
+    </head>
+
     <body>
-        <p>
-            This application demonstrates Pivot's support for drag and drop. Users can drag files
-            from the desktop or local file system into the applet for upload to a web or other
-            server.
-        </p>
-        <demo class="org.apache.pivot.demos.dnd.FileDropTargetDemo" width="280" height="260">
+        <demo class="org.apache.pivot.tutorials.explorer.ComponentExplorer" width="100%"
+            height="100%">
             <signed/>
             <libraries>
                 <library>core</library>
                 <library>wtk</library>
-                <library>demos</library>
+                <library>tools</library>
+                <library>tutorials</library>
             </libraries>
         </demo>
-        <p>
-            Note that the application doesn't actually perform the upload - it merely serves as a
-            demonstration of Pivot's ability to interact with the native OS.
-        </p>
     </body>
 </document>

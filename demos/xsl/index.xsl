@@ -16,19 +16,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
+<!-- Translates a demo index XML document into an HTML demo index -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-    <xsl:param name="release"/>
-
-    <!-- Output method -->
     <xsl:output method="html" encoding="UTF-8" indent="no"
         doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
         doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
 
+    <xsl:variable name="project" select="document('project.xml')/project"/>
+
+    <!-- <document> gets translated to an HTML container -->
     <xsl:template match="document">
         <html xmlns="http://www.w3.org/1999/xhtml">
             <head>
                 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-                <title>Pivot Demos</title>
+                <title><xsl:value-of select="$project/vendor"/> Demos</title>
                 <link rel="stylesheet" href="demo.css" type="text/css"/>
                 <link rel="icon" href="favicon.png" type="image/png" />
                 <link rel="shortcut icon" href="favicon.png" type="image/png" />
@@ -81,48 +82,71 @@ limitations under the License.
         </html>
     </xsl:template>
 
+    <!-- <head> content gets passed through -->
     <xsl:template match="head">
         <xsl:apply-templates/>
     </xsl:template>
 
+    <!-- <body> content gets passed through -->
     <xsl:template match="body">
         <xsl:apply-templates/>
     </xsl:template>
 
+    <!-- <demo-item> gets translated to a demo summary with links to the demo -->
     <xsl:template match="demo-item">
+        <xsl:variable name="id" select="@id"/>
+
         <xsl:if test="position()&gt;1">
             <hr/>
         </xsl:if>
 
         <xsl:choose>
-            <xsl:when test="@href">
+            <xsl:when test="remote">
                 <!--
-                Demo items with an href are assumed to be hosted remote. Remote hosted demos
-                do not have a JNLP launcher, and their title and description is assumed to be
-                nested in the demo item itself.
+                Remotely hosted demos do not have a JNLP launcher, and their properties are
+                specified in the demo item itself.
                 -->
-                <xsl:variable name="href" select="@href"/>
-                <h3><a href="{$href}"><xsl:value-of select="title"/></a></h3>
-                <p><xsl:value-of select="description"/></p>
+                <xsl:variable name="href" select="remote/@href"/>
+                <h3><xsl:value-of select="properties/title"/></h3>
+                <p>
+                    <xsl:choose>
+                        <xsl:when test="properties/new-window">
+                            <a href="{$href}" target="_new">Applet</a>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <a href="{$href}">Applet</a>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p>
+                <p><xsl:value-of select="properties/description"/></p>
             </xsl:when>
             <xsl:otherwise>
-                <!--
-                Locally hosted demo. We pull the demo metadata from the demo XML file.
-                -->
-                <xsl:variable name="id" select="@id"/>
+                <!-- Locally hosted demo; title amd description comes from the demo XML file -->
                 <xsl:variable name="demo" select="document(concat('../www/', $id, '.xml'))/document"/>
-                <h3><a href="{$id}.html"><xsl:value-of select="$demo/properties/title"/></a></h3>
-                <p><a href="{$id}.jnlp">Web start</a></p>
+                <h3><xsl:value-of select="$demo/properties/title"/></h3>
+                <p>
+                    <xsl:choose>
+                        <xsl:when test="$demo/properties/new-window">
+                            <a href="{$id}.html" target="_new">Applet</a>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <a href="{$id}.html">Applet</a>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    | <a href="{$id}.jnlp">Web start</a>
+                </p>
                 <p><xsl:value-of select="$demo/properties/description"/></p>
             </xsl:otherwise>
         </xsl:choose>
 
-        <xsl:if test="screenshot">
-            <xsl:variable name="src" select="screenshot"/>
+        <!-- Include a screenshot if one exists -->
+        <xsl:if test="$project/demo-screenshots/screenshot[@id=$id]">
+            <xsl:variable name="src" select="$project/demo-screenshots/screenshot[@id=$id]/@src"/>
             <p><img src="{$src}"/></p>
         </xsl:if>
     </xsl:template>
 
+    <!-- Everything else gets passed through -->
     <xsl:template match="*|@*">
         <xsl:copy>
             <xsl:apply-templates select="@*|*|text()"/>

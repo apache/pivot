@@ -26,6 +26,8 @@ org.apache.pivot.wtk.skin.terra.location=org/apache/pivot/tutorials/TerraTheme_d
         <description>
             Demonstrates a number of commonly used Pivot components.
         </description>
+        <featured/>
+        <footer/>
     </properties>
 
     <body>

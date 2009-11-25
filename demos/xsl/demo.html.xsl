@@ -16,14 +16,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
+<!-- Translates a demo XML document into an HTML demo page -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
     <xsl:param name="release"/>
 
-    <!-- Output method -->
     <xsl:output method="html" encoding="UTF-8" indent="no"
         doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
         doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
 
+    <!-- <document> gets translated into an HTML container -->
     <xsl:template match="document">
         <html xmlns="http://www.w3.org/1999/xhtml">
             <head>
@@ -42,14 +43,17 @@ limitations under the License.
         </html>
     </xsl:template>
 
+    <!-- <head> content gets passed through -->
     <xsl:template match="head">
         <xsl:apply-templates/>
     </xsl:template>
 
+    <!-- <body> content gets passed through -->
     <xsl:template match="body">
         <xsl:apply-templates/>
     </xsl:template>
 
+    <!-- <demo> gets translated to a JavaScript block that launches the applet -->
     <xsl:template match="demo">
         <script type="text/javascript">
             var attributes = {
@@ -64,7 +68,7 @@ limitations under the License.
 
             var libraries = [];
             <xsl:apply-templates select="libraries/library">
-                <xsl:with-param name="signed" select="@signed"/>
+                <xsl:with-param name="signed" select="signed"/>
             </xsl:apply-templates>
             attributes.archive = libraries.join(",");
 
@@ -88,6 +92,7 @@ limitations under the License.
         </script>
     </xsl:template>
 
+    <!-- <library> gets translated to JavaScript that adds a JAR file to a JavaScript array -->
     <xsl:template match="library">
         <xsl:param name="signed"/>
 
@@ -96,7 +101,7 @@ limitations under the License.
                 <xsl:variable name="jar">
                     <xsl:value-of select="'lib/pivot-wtk-'"/>
                     <xsl:value-of select="$release"/>
-                    <xsl:if test="$signed='true'">
+                    <xsl:if test="$signed">
                         <xsl:value-of select="'.signed'"/>
                     </xsl:if>
                     <xsl:value-of select="'.jar'"/>
@@ -106,7 +111,7 @@ limitations under the License.
                     <xsl:value-of select="'lib/pivot-wtk-'"/>
                     <xsl:value-of select="$release"/>
                     <xsl:value-of select="'.terra'"/>
-                    <xsl:if test="$signed='true'">
+                    <xsl:if test="$signed">
                         <xsl:value-of select="'.signed'"/>
                     </xsl:if>
                     <xsl:value-of select="'.jar'"/>
@@ -119,7 +124,7 @@ limitations under the License.
                     <xsl:value-of select="."/>
                     <xsl:value-of select="'-'"/>
                     <xsl:value-of select="$release"/>
-                    <xsl:if test="$signed='true'">
+                    <xsl:if test="$signed">
                         <xsl:value-of select="'.signed'"/>
                     </xsl:if>
                     <xsl:value-of select="'.jar'"/>
@@ -129,6 +134,7 @@ limitations under the License.
         </xsl:choose>
     </xsl:template>
 
+    <!-- Everything else gets passed through -->
     <xsl:template match="*|@*">
         <xsl:copy>
             <xsl:apply-templates select="@*|*|text()"/>

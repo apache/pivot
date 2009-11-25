@@ -31,8 +31,8 @@ limitations under the License.
             Yahoo! Finance as a CSV file and presents it in a table view component (the applet is
             signed to allow it to communicate with the Yahoo web service):
         </p>
-        <demo class="org.apache.pivot.tutorials.stocktracker.StockTracker" width="480" height="360"
-            signed="true">
+        <demo class="org.apache.pivot.tutorials.stocktracker.StockTracker" width="480" height="360">
+            <signed/>
             <libraries>
                 <library>core</library>
                 <library>wtk</library>

@@ -16,25 +16,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<document>
-    <properties>
-        <title>JSON Viewer</title>
-        <description>
-            Allows users to visually browse a JSON structure using a TreeView component.
-        </description>
-    </properties>
+<project href="http://pivot.apache.org/">
+    <vendor>Apache Pivot</vendor>
 
-    <body>
-        <p>
-            Allows users to visually browse a JSON structure using a TreeView component.
-        </p>
-        <demo class="org.apache.pivot.tools.json.JSONViewer" width="360" height="480">
-            <signed/>
-            <libraries>
-                <library>core</library>
-                <library>wtk</library>
-                <library>tools</library>
-            </libraries>
-        </demo>
-    </body>
-</document>
+    <demo-screenshots>
+        <screenshot id="kitchen-sink" src="kitchen-sink.png"/>
+        <screenshot id="stock-tracker" src="stock-tracker.png"/>
+        <screenshot id="itunes-search" src="itunes-search.png"/>
+        <screenshot id="charting" src="charts.png"/>
+        <screenshot id="json-viewer" src="json-viewer.png"/>
+        <screenshot id="xml-viewer" src="xml-viewer.png"/>
+        <screenshot id="ticker-slideshow" src="sci.png"/>
+        <screenshot id="animated-clock" src="animated-clock.png"/>
+        <screenshot id="decorators" src="decorators.png"/>
+    </demo-screenshots>
+</project>

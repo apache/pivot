@@ -23,43 +23,47 @@ limitations under the License.
 
     <body>
         <p>
-            This page contains a collection of Pivot demos. All demos require Java 6 or greater.
+            A collection of Pivot demos. All demos require
+            <a href="http://www.java.com/">Java 6</a> or greater.
         </p>
-        <demo-item id="kitchen-sink">
-            <screenshot>kitchen-sink.png</screenshot>
+        <demo-item id="kitchen-sink"/>
+        <demo-item id="stock-tracker"/>
+        <demo-item id="component-explorer"/>
+        <demo-item id="itunes-search"/>
+        <demo-item id="charting">
+            <remote href="http://ixnay.biz/charts.html"/>
+            <properties>
+                <title>Charting</title>
+                <description>
+                    Demonstrates charting in Pivot using the JFreeChart chart provider (hosted at
+                    http://ixnay.biz).
+                </description>
+                <featured/>
+                <footer/>
+                <new-window/>
+            </properties>
         </demo-item>
-        <demo-item id="stock-tracker">
-            <screenshot>stock-tracker.png</screenshot>
-        </demo-item>
-        <demo-item id="itunes-search">
-            <screenshot>itunes-search.png</screenshot>
-        </demo-item>
-        <demo-item id="charts" href="http://ixnay.biz/charts.html">
-            <title>Charting</title>
-            <description>
-                Demonstrates charting in Pivot using the JFreeChart chart provider (hosted at
-                http://ixnay.biz).
-            </description>
-            <screenshot>charts.png</screenshot>
-        </demo-item>
-        <demo-item id="json-viewer">
-            <screenshot>json-viewer.png</screenshot>
-        </demo-item>
-        <demo-item id="xml-viewer">
-            <screenshot>xml-viewer.png</screenshot>
-        </demo-item>
+        <demo-item id="json-viewer"/>
+        <demo-item id="xml-viewer"/>
         <demo-item id="scripting"/>
         <demo-item id="file-drag-drop"/>
         <demo-item id="table-row-editor"/>
-        <demo-item id="animated-clock">
-            <screenshot>animated-clock.png</screenshot>
+        <demo-item id="ticker-slideshow">
+            <remote href="http://www.satelliteconsulting.com/"/>
+            <properties>
+                <title>News Ticker/Slide Show</title>
+                <description>
+                    Demonstrates Pivot used in a real-world context, used to show a news feed and
+                    a slide show of client logos (hosted at www.satelliteconsulting.com).
+                </description>
+                <new-window/>
+            </properties>
         </demo-item>
+        <demo-item id="animated-clock"/>
         <demo-item id="large-data"/>
         <demo-item id="rss-feed"/>
         <demo-item id="dom-interaction"/>
-        <demo-item id="decorators">
-            <screenshot>decorators.png</screenshot>
-        </demo-item>
+        <demo-item id="decorators"/>
         <demo-item id="fixed-column-table"/>
         <demo-item id="multiselect"/>
     </body>
