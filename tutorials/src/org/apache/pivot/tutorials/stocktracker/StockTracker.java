@@ -280,7 +280,8 @@ public class StockTracker implements Application {
             @Override
             public void taskExecuted(Task<Object> task) {
                 if (task == getQuery) {
-                    Sequence<Span> selectedRanges = stocksTableView.getSelectedRanges();
+                    Sequence<Span> selectedRanges =
+                        new ArrayList<Span>(stocksTableView.getSelectedRanges());
 
                     List<Object> quotes = (List<Object>)task.getResult();
 

@@ -434,7 +434,7 @@ public interface Sequence<T> {
          * The path of first occurrence of the item if it exists in the
          * sequence; <tt>null</tt>, otherwise.
          */
-        @SuppressWarnings({"unchecked"})
+        @SuppressWarnings("unchecked")
         public static <T> Path pathOf(Sequence<T> sequence, T item) {
             if (sequence == null) {
                 throw new IllegalArgumentException("sequence is null.");

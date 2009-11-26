@@ -108,7 +108,7 @@ public class ProxyServlet extends HttpServlet {
     }
 
     @Override
-    @SuppressWarnings({ "unchecked", "null" })
+    @SuppressWarnings("unchecked")
     protected void service(HttpServletRequest request, HttpServletResponse response)
         throws IOException, ServletException {
         // Construct the URL
@@ -204,7 +204,7 @@ public class ProxyServlet extends HttpServlet {
         for (String key = connection.getHeaderFieldKey(i);
             key != null;
             key = connection.getHeaderFieldKey(++i)) {
-            if (key != null && !ignoreResponseHeaders.contains(key)) {
+            if (!ignoreResponseHeaders.contains(key)) {
                 String value = connection.getHeaderField(i);
 
                 if (response.containsHeader(key)) {
