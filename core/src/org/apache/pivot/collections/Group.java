@@ -55,13 +55,4 @@ public interface Group<E> {
      * otherwise.
      */
     public boolean contains(E element);
-
-    /**
-     * Tests the emptiness of the group.
-     *
-     * @return
-     * <tt>true</tt> if the group contains no elements; <tt>false</tt>,
-     * otherwise.
-     */
-    public boolean isEmpty();
 }

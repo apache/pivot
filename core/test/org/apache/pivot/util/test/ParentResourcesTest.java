@@ -106,7 +106,6 @@ public class ParentResourcesTest {
     public void testMyMap() {
         assertFalse("not contains noMap", main.containsKey("noMap"));
         assertTrue("contains myMap", main.containsKey("myMap"));
-        assertFalse("empty map", main.isEmpty());
         assertNotNull("myMap as object not null", main.get("myMap"));
         assertNull("noMap as map is null", main.getMap("noMap"));
         assertNotNull("myMap as map not null", main.getMap("myMap"));

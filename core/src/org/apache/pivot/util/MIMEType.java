@@ -62,11 +62,6 @@ public class MIMEType implements Dictionary<String, String>, Iterable<String> {
     }
 
     @Override
-    public boolean isEmpty() {
-        return parameters.isEmpty();
-    }
-
-    @Override
     public Iterator<String> iterator() {
         return new ImmutableIterator<String>(parameters.iterator());
     }

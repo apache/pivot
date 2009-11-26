@@ -81,6 +81,11 @@ public final class ImmutableList<T> implements List<T> {
     }
 
     @Override
+    public boolean isEmpty() {
+        return list.isEmpty();
+    }
+
+    @Override
     public int getLength() {
         return list.getLength();
     }

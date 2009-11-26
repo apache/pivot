@@ -74,7 +74,7 @@ public class SynchronizedStack<T> implements Stack<T> {
     public synchronized T pop() {
         T item = null;
         try {
-            while (stack.getDepth() == 0) {
+            while (stack.isEmpty()) {
                 wait();
             }
 
@@ -94,10 +94,15 @@ public class SynchronizedStack<T> implements Stack<T> {
 
     @Override
     public synchronized void clear() {
-        if (stack.getDepth() > 0) {
+        if (!stack.isEmpty()) {
             stack.clear();
             stackListeners.stackCleared(this);
         }
+    }
+
+    @Override
+    public synchronized boolean isEmpty() {
+        return stack.isEmpty();
     }
 
     @Override

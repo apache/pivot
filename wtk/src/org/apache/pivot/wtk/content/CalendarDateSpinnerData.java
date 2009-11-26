@@ -210,6 +210,11 @@ public class CalendarDateSpinnerData implements List<CalendarDate> {
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public boolean isEmpty() {
+        return (length == 0);
+    }
+
     /**
      * Gets the number of entries in this list.
      *

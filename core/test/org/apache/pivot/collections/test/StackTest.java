@@ -41,7 +41,7 @@ public class StackTest {
         }
 
         i = 4;
-        while (stack.getDepth() > 0) {
+        while (!stack.isEmpty()) {
             String s = stack.pop();
             char c = s.charAt(0);
             c -= i;

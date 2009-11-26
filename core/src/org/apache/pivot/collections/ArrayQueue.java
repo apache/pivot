@@ -94,6 +94,11 @@ public class ArrayQueue<T> implements Queue<T>, Serializable {
         return (arrayList.getLength() == 0);
     }
 
+    @Override
+    public int getLength() {
+        return arrayList.getLength();
+    }
+
     public void ensureCapacity(int capacity) {
         arrayList.ensureCapacity(capacity);
     }

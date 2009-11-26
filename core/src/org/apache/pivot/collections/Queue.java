@@ -95,6 +95,11 @@ public interface Queue<T> extends Collection<T> {
     public boolean isEmpty();
 
     /**
+     * Returns the length of the queue.
+     */
+    public int getLength();
+
+    /**
      * Returns the queue listener list.
      */
     public ListenerList<QueueListener<T>> getQueueListeners();

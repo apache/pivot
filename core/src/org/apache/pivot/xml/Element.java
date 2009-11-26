@@ -353,18 +353,6 @@ public class Element extends Node implements List<Node>, Dictionary<String, Stri
         }
 
         /**
-         * Determines if this element declares any namespaces.
-         *
-         * @return
-         * <tt>true</tt> if this element does not declare any namespaces;
-         * <tt>false</tt> if the element declares at least one namespace.
-         */
-        @Override
-        public boolean isEmpty() {
-            return namespaces.isEmpty();
-        }
-
-        /**
          * Returns an iterator over the element's namespace prefixes.
          */
         @Override

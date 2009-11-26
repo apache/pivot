@@ -1160,7 +1160,6 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         return containsKey;
     }
 
-    @Override
     public boolean isEmpty() {
         return namedObjects.isEmpty()
             && namedSerializers.isEmpty();

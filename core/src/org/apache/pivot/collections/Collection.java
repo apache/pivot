@@ -29,6 +29,11 @@ public interface Collection<T> extends Iterable<T> {
     public void clear();
 
     /**
+     * Tests the emptiness of the collection.
+     */
+    public boolean isEmpty();
+
+    /**
      * Returns the collection's sort order.
      *
      * @return

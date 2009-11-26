@@ -85,6 +85,11 @@ public class ArrayStack<T> implements Stack<T>, Serializable {
     }
 
     @Override
+    public boolean isEmpty() {
+        return (arrayList.getLength() == 0);
+    }
+
+    @Override
     public int getDepth() {
         return arrayList.getLength();
     }

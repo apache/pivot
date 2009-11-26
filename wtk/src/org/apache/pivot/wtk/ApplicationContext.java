@@ -1376,11 +1376,6 @@ public abstract class ApplicationContext {
         }
 
         @Override
-        public boolean isEmpty() {
-            return resourceCache.isEmpty();
-        }
-
-        @Override
         public Iterator<URL> iterator() {
             return new Iterator<URL>() {
                 private Iterator<URI> iterator = resourceCache.iterator();

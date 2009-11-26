@@ -115,6 +115,11 @@ public class EnumList<E extends Enum<E>> implements List<E>, Serializable {
     }
 
     @Override
+    public boolean isEmpty() {
+        return (items.length == 0);
+    }
+
+    @Override
     public int getLength() {
         return items.length;
     }

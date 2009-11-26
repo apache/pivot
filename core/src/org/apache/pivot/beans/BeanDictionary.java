@@ -446,18 +446,6 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
     }
 
     /**
-     * Verifies that the bean contains at least one property.
-     */
-    @Override
-    public boolean isEmpty() {
-        if (bean == null) {
-            throw new IllegalStateException("bean is null.");
-        }
-
-        return !iterator().hasNext();
-    }
-
-    /**
      * Tests the read-only state of a property.
      *
      * @param key

@@ -17,7 +17,6 @@
 package org.apache.pivot.web.test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -83,10 +82,7 @@ public class QueryDictionaryTest {
         assertEquals(0, validKeys.size());
 
         assertTrue(dict.containsKey("key2"));
-        assertFalse(dict.isEmpty());
 
         dict.clear();
-        assertTrue(dict.isEmpty());
-
     }
 }

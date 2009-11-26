@@ -80,6 +80,11 @@ public class LinkedStack<T> implements Stack<T>, Serializable {
     }
 
     @Override
+    public boolean isEmpty() {
+        return (linkedList.getLength() == 0);
+    }
+
+    @Override
     public int getDepth() {
         return linkedList.getLength();
     }

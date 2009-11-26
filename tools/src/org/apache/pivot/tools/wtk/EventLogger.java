@@ -74,11 +74,6 @@ public class EventLogger extends Container {
         }
 
         @Override
-        public boolean isEmpty() {
-            return declaredEvents.isEmpty();
-        }
-
-        @Override
         public Iterator<Method> iterator() {
             return new ImmutableIterator<Method>(declaredEvents.iterator());
         }
@@ -125,11 +120,6 @@ public class EventLogger extends Container {
         @Override
         public boolean contains(Method event) {
             return includeEvents.contains(event);
-        }
-
-        @Override
-        public boolean isEmpty() {
-            return includeEvents.isEmpty();
         }
 
         @Override

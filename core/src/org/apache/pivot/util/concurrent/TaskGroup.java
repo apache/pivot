@@ -112,11 +112,6 @@ public class TaskGroup extends Task<Void>
     }
 
     @Override
-    public boolean isEmpty() {
-        return tasks.isEmpty();
-    }
-
-    @Override
     public Iterator<Task<?>> iterator() {
         return new ImmutableIterator<Task<?>>(tasks.iterator());
     }

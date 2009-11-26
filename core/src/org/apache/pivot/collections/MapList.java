@@ -365,6 +365,14 @@ public class MapList<K, V> implements List<Pair<K, V>> {
      * {@inheritDoc}
      */
     @Override
+    public boolean isEmpty() {
+        return view.isEmpty();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public int getLength() {
         return view.getLength();
     }

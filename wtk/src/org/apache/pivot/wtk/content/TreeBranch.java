@@ -127,6 +127,11 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
     }
 
     @Override
+    public boolean isEmpty() {
+        return treeNodes.isEmpty();
+    }
+
+    @Override
     public int getLength() {
         return treeNodes.getLength();
     }

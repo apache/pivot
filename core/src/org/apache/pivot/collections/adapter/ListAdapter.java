@@ -212,6 +212,11 @@ public class ListAdapter<T> implements List<T>, Serializable {
     }
 
     @Override
+    public boolean isEmpty() {
+        return (list.isEmpty());
+    }
+
+    @Override
     public int getLength() {
         return list.size();
     }

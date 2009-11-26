@@ -145,7 +145,8 @@ public interface List<T> extends Sequence<T>, Collection<T> {
     /**
      * Returns the length of the list.
      *
-     * @return The number of items in the list, or -1 if the list's length is
+     * @return
+     * The number of items in the list, or -1 if the list's length is
      * not known. In this case, the iterator must be used to retrieve the
      * contents of the list.
      */

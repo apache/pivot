@@ -196,6 +196,11 @@ public class NumericSpinnerData implements List<Integer> {
     }
 
     @Override
+    public boolean isEmpty() {
+        return (getLength() == 0);
+    }
+
+    @Override
     public int getLength() {
         return ((upperBound - lowerBound) / increment) + 1;
     }

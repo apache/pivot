@@ -79,11 +79,6 @@ public abstract class Action {
         }
 
         @Override
-        public boolean isEmpty() {
-            return namedActions.isEmpty();
-        }
-
-        @Override
         public Iterator<String> iterator() {
             return new ImmutableIterator<String>(namedActions.iterator());
         }

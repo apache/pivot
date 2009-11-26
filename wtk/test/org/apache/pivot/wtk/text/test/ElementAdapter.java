@@ -147,6 +147,11 @@ public class ElementAdapter extends NodeAdapter implements List<NodeAdapter> {
     }
 
     @Override
+    public boolean isEmpty() {
+        return (nodeAdapters.getLength() == 0);
+    }
+
+    @Override
     public int getLength() {
         return nodeAdapters.getLength();
     }

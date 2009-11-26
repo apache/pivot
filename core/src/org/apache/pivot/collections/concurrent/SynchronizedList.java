@@ -143,6 +143,11 @@ public class SynchronizedList<T> implements List<T> {
     }
 
     @Override
+    public boolean isEmpty() {
+        return list.isEmpty();
+    }
+
+    @Override
     public synchronized int getLength() {
         return list.getLength();
     }

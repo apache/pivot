@@ -91,6 +91,11 @@ public class LinkedQueue<T> implements Queue<T>, Serializable {
     }
 
     @Override
+    public int getLength() {
+        return linkedList.getLength();
+    }
+
+    @Override
     public Comparator<T> getComparator() {
         return linkedList.getComparator();
     }

@@ -333,15 +333,6 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
     }
 
     @Override
-    public boolean isEmpty() {
-        boolean empty = resourceMap.isEmpty();
-        if (empty && parent != null) {
-            return parent.isEmpty();
-        }
-        return empty;
-    }
-
-    @Override
     public Iterator<String> iterator() {
         return new ImmutableIterator<String>(resourceMap.iterator());
     }

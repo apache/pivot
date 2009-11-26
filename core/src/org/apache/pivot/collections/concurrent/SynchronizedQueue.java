@@ -105,6 +105,11 @@ public class SynchronizedQueue<T> implements Queue<T> {
     }
 
     @Override
+    public int getLength() {
+        return queue.getLength();
+    }
+
+    @Override
     public synchronized Comparator<T> getComparator() {
         return queue.getComparator();
     }

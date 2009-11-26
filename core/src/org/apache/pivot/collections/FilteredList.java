@@ -477,6 +477,11 @@ public class FilteredList<T> implements List<T> {
     }
 
     @Override
+    public boolean isEmpty() {
+        return (view == null) ? true : (view.isEmpty());
+    }
+
+    @Override
     public int getLength() {
         return (view == null) ? 0 : view.getLength();
     }

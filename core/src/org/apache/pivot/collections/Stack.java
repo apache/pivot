@@ -86,6 +86,15 @@ public interface Stack<T> extends Collection<T> {
     public T peek();
 
     /**
+     * Tests the emptiness of the stack.
+     *
+     * @return
+     * <tt>true</tt> if the stack contains no items; <tt>false</tt>,
+     * otherwise.
+     */
+    public boolean isEmpty();
+
+    /**
      * Returns the stack depth.
      */
     public int getDepth();

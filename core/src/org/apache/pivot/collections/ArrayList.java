@@ -377,6 +377,11 @@ public class ArrayList<T> implements List<T>, Serializable {
     }
 
     @Override
+    public boolean isEmpty() {
+        return (length == 0);
+    }
+
+    @Override
     public int getLength() {
         return length;
     }

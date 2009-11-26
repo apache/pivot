@@ -112,13 +112,4 @@ public interface Dictionary<K, V> {
      * otherwise.
      */
     public boolean containsKey(K key);
-
-    /**
-     * Tests the emptiness of the dictionary.
-     *
-     * @return
-     * <tt>true</tt> if the dictionary contains no keys; <tt>false</tt>,
-     * otherwise.
-     */
-    public boolean isEmpty();
 }

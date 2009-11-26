@@ -109,10 +109,6 @@ public final class QueryDictionary implements Dictionary<String, String>, Iterab
         return map.containsKey(key);
     }
 
-    @Override
-    public boolean isEmpty() {
-        return map.isEmpty();
-    }
 
     public int getLength(String key) {
         ArrayList<String> list = map.get(key);

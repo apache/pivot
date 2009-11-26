@@ -102,11 +102,6 @@ public class ButtonGroup implements Group<Button>, Iterable<Button> {
         return buttons.contains(button);
     }
 
-    @Override
-    public boolean isEmpty() {
-        return buttons.isEmpty();
-    }
-
     public Button getSelection() {
         return selection;
     }

@@ -114,6 +114,11 @@ public class NodeListAdapter implements List<Node> {
     }
 
     @Override
+    public boolean isEmpty() {
+        return (nodeList.getLength() == 0);
+    }
+
+    @Override
     public int getLength() {
         return nodeList.getLength();
     }

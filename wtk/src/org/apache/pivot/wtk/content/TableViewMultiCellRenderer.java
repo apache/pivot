@@ -56,11 +56,6 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
         public boolean containsKey(String key) {
             return false;
         }
-
-        @Override
-        public boolean isEmpty() {
-            return true;
-        }
     }
 
     /**

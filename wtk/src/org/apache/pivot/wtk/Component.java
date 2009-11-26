@@ -90,11 +90,6 @@ public abstract class Component implements ConstrainedVisual {
             return styles.containsKey(key);
         }
 
-        @Override
-        public boolean isEmpty() {
-            return styles.isEmpty();
-        }
-
         public boolean isReadOnly(String key) {
             return styles.isReadOnly(key);
         }
@@ -152,11 +147,6 @@ public abstract class Component implements ConstrainedVisual {
         @Override
         public boolean containsKey(String key) {
             return userData.containsKey(key);
-        }
-
-        @Override
-        public boolean isEmpty() {
-            return userData.isEmpty();
         }
 
         @Override
