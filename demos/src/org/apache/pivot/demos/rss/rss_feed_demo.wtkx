@@ -29,7 +29,11 @@ limitations under the License.
                         styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
                     <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
                         <view>
-                            <ListView wtkx:id="feedListView"/>
+                            <ListView wtkx:id="feedListView">
+                                <itemRenderer>
+                                    <rss:RSSItemRenderer/>
+                                </itemRenderer>
+                            </ListView>
                         </view>
                     </ScrollPane>
                 </CardPane>

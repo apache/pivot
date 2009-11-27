@@ -34,6 +34,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 
+import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.serialization.Serializer;
@@ -288,14 +289,131 @@ public class XMLSerializer implements Serializer<Element> {
     }
 
     /**
-     * Returns all elements matching the given XPath expression.
-     * <p>
-     * NOTE This method is not yet implemented.
+     * Returns the first element matching the given path.
      *
+     * @param root
+     * @param path
+     */
+    public static Element getElement(Element root, String path) {
+        if (root == null) {
+            throw new IllegalArgumentException("root is null.");
+        }
+
+        if (path == null) {
+            throw new IllegalArgumentException("path is null.");
+        }
+
+        if (path.length() == 0) {
+            throw new IllegalArgumentException("path is empty.");
+        }
+
+        return getElement(root, new ArrayList<String>(path.split("/")));
+    }
+
+    /**
+     * Returns the first set of elements matching the given path.
+     *
+     * @param root
      * @param path
      */
     public static List<Element> getElements(Element root, String path) {
-        // TODO
-        return null;
+        if (root == null) {
+            throw new IllegalArgumentException("root is null.");
+        }
+
+        if (path == null) {
+            throw new IllegalArgumentException("path is null.");
+        }
+
+        if (path.length() == 0) {
+            throw new IllegalArgumentException("path is empty.");
+        }
+
+        ArrayList<Element> elements = new ArrayList<Element>();
+
+        ArrayList<String> tagNames = new ArrayList<String>(path.split("/"));
+        String tagName = tagNames.remove(tagNames.getLength() - 1, 1).get(0);
+        Element parent = getElement(root, tagNames);
+        if (parent != null) {
+            for (int i = 0, n = parent.getLength(); i < n; i++) {
+                Node node = parent.get(i);
+
+                if (node instanceof Element) {
+                    Element element = (Element)node;
+
+                    if (element.getName().equals(tagName)) {
+                        elements.add(element);
+                    }
+                }
+            }
+        }
+
+        return elements;
+    }
+
+    /**
+     * Returns the text content of the first element matching the given
+     * tag name.
+     *
+     * @param root
+     * @param path
+     */
+    public static String getText(Element root, String path) {
+        if (root == null) {
+            throw new IllegalArgumentException("root is null.");
+        }
+
+        if (path == null) {
+            throw new IllegalArgumentException("path is null.");
+        }
+
+        if (path.length() == 0) {
+            throw new IllegalArgumentException("path is empty.");
+        }
+
+        String text = null;
+
+        ArrayList<String> tagNames = new ArrayList<String>(path.split("/"));
+        Element element = getElement(root, tagNames);
+        if (element != null
+            && element.getLength() > 0) {
+            Node first = element.get(0);
+
+            if (first instanceof TextNode) {
+                TextNode textNode = (TextNode)first;
+                text = textNode.getText();
+            }
+        }
+
+        return text;
+    }
+
+    private static Element getElement(Element root, ArrayList<String> tagNames) {
+        Element current = root;
+
+        for (int i = 0, n = tagNames.getLength(); i < n; i++) {
+            String tagName = tagNames.get(i);
+
+            int j = 0;
+            for (Node node : current) {
+                if (node instanceof Element) {
+                    Element element = (Element)node;
+                    if (element.getName().equals(tagName)) {
+                        break;
+                    }
+                }
+
+                j++;
+            }
+
+            if (j < current.getLength()) {
+                current = (Element)current.get(j);
+            } else {
+                current = null;
+                break;
+            }
+        }
+
+        return current;
     }
 }
