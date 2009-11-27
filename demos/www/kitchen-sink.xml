@@ -20,21 +20,34 @@ limitations under the License.
 TODO create version that specifies system property:
 org.apache.pivot.wtk.skin.terra.location=org/apache/pivot/tutorials/TerraTheme_dark.json
 -->
+
 <document>
     <properties>
         <title>"Kitchen Sink"</title>
         <description>
             Demonstrates a number of commonly used Pivot components.
         </description>
-        <featured/>
         <footer/>
+        <new-window/>
     </properties>
 
+    <head>
+        <style type="text/css">
+            * {
+                padding: 0px;
+                margin: 0px;
+            }
+
+            html, body {
+                height: 100%;
+                overflow: hidden;
+            }
+        </style>
+    </head>
+
     <body>
-        <p>
-            This application demonstrates a number of commonly used Pivot components:
-        </p>
-        <demo class="org.apache.pivot.tutorials.KitchenSink" width="800" height="600">
+        <demo class="org.apache.pivot.tutorials.KitchenSink" width="100%"
+            height="100%">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>
@@ -43,3 +56,4 @@ org.apache.pivot.wtk.skin.terra.location=org/apache/pivot/tutorials/TerraTheme_d
         </demo>
     </body>
 </document>
+
