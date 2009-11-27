@@ -34,6 +34,7 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.Mouse;
+import org.apache.pivot.wtk.TaskAdapter;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtkx.WTKXSerializer;
 import org.apache.pivot.xml.Element;
@@ -87,7 +88,7 @@ public class RSSFeedDemo implements Application {
         getQuery.setSerializer(new XMLSerializer());
         getQuery.getParameters().put("format", "xml");
 
-        getQuery.execute(new TaskListener<Object>() {
+        getQuery.execute(new TaskAdapter<Object>(new TaskListener<Object>() {
             @Override
             public void taskExecuted(Task<Object> task) {
                 Element root = (Element)task.getResult();
@@ -99,7 +100,7 @@ public class RSSFeedDemo implements Application {
             public void executeFailed(Task<Object> task) {
                 statusLabel.setText(task.getFault().toString());
             }
-        });
+        }));
 
         window.setMaximized(true);
         window.open(display);

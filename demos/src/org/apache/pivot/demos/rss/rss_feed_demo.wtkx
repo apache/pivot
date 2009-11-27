@@ -27,9 +27,9 @@ limitations under the License.
                 <CardPane wtkx:id="cardPane" selectedIndex="0" styles="{selectionChangeEffect:'crossfade'}">
                     <Label wtkx:id="statusLabel" text="Loading..."
                         styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
-                    <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
+                    <ScrollPane horizontalScrollBarPolicy="fill">
                         <view>
-                            <ListView wtkx:id="feedListView">
+                            <ListView wtkx:id="feedListView" styles="{variableItemHeight:true}">
                                 <itemRenderer>
                                     <rss:RSSItemRenderer/>
                                 </itemRenderer>

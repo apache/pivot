@@ -30,29 +30,23 @@ import org.apache.pivot.xml.XMLSerializer;
 
 public class RSSItemRenderer extends BoxPane implements ListView.ItemRenderer {
     private Label titleLabel = new Label();
-    private Label categoriesHeadingLabel = new Label("subject:");
     private Label categoriesLabel = new Label();
-    private Label submitterHeadingLabel = new Label("submitter:");
     private Label submitterLabel = new Label();
 
     public RSSItemRenderer() {
         super(Orientation.VERTICAL);
 
         getStyles().put("padding", new Insets(2, 2, 8, 2));
+        getStyles().put("fill", true);
 
+        titleLabel.getStyles().put("wrapText", true);
         add(titleLabel);
 
-        BoxPane categoriesBoxPane = new BoxPane();
-        add(categoriesBoxPane);
+        categoriesLabel.getStyles().put("wrapText", true);
+        add(categoriesLabel);
 
-        categoriesBoxPane.add(categoriesHeadingLabel);
-        categoriesBoxPane.add(categoriesLabel);
-
-        BoxPane submitterBoxPane = new BoxPane();
-        add(submitterBoxPane);
-
-        submitterBoxPane.add(submitterHeadingLabel);
-        submitterBoxPane.add(submitterLabel);
+        submitterLabel.getStyles().put("wrapText", true);
+        add(submitterLabel);
     }
 
     @Override
@@ -73,7 +67,7 @@ public class RSSItemRenderer extends BoxPane implements ListView.ItemRenderer {
             String title = XMLSerializer.getText(itemElement, "title");
             titleLabel.setText(title);
 
-            String categories = "";
+            String categories = "Categories:";
             List<Element> categoryElements = XMLSerializer.getElements(itemElement, "category");
             for (int i = 0, n = categoryElements.getLength(); i < n; i++) {
                 Element categoryElement = categoryElements.get(i);
@@ -90,7 +84,7 @@ public class RSSItemRenderer extends BoxPane implements ListView.ItemRenderer {
             categoriesLabel.setText(categories);
 
             String submitter = XMLSerializer.getText(itemElement, "dz:submitter/dz:username");
-            submitterLabel.setText(submitter);
+            submitterLabel.setText("Submitter: " + submitter);
         }
 
         Font font = (Font)listView.getStyles().get("font");
@@ -115,9 +109,7 @@ public class RSSItemRenderer extends BoxPane implements ListView.ItemRenderer {
         }
 
         titleLabel.getStyles().put("color", color);
-        categoriesHeadingLabel.getStyles().put("color", color);
         categoriesLabel.getStyles().put("color", color);
-        submitterHeadingLabel.getStyles().put("color", color);
         submitterLabel.getStyles().put("color", color);
     }
 }
