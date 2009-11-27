@@ -33,6 +33,7 @@ limitations under the License.
         <demo class="org.apache.pivot.demos.rss.RSSFeedDemo" width="480" height="360">
             <libraries>
                 <library>core</library>
+                <library>web</library>
                 <library>wtk</library>
                 <library>demos</library>
             </libraries>

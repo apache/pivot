@@ -30,7 +30,7 @@ limitations under the License.
             from the desktop or local file system into the applet for upload to a web or other
             server.
         </p>
-        <demo class="org.apache.pivot.demos.dnd.FileDropTargetDemo" width="280" height="260">
+        <demo class="org.apache.pivot.demos.dnd.FileDropTargetDemo" width="380" height="260">
             <signed/>
             <libraries>
                 <library>core</library>
