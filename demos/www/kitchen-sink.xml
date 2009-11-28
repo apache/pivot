@@ -27,33 +27,17 @@ org.apache.pivot.wtk.skin.terra.location=org/apache/pivot/tutorials/TerraTheme_d
         <description>
             Demonstrates a number of commonly used Pivot components.
         </description>
-        <footer/>
-        <new-window/>
+        <full-screen>true</full-screen>
     </properties>
 
-    <head>
-        <style type="text/css">
-            * {
-                padding: 0px;
-                margin: 0px;
-            }
-
-            html, body {
-                height: 100%;
-                overflow: hidden;
-            }
-        </style>
-    </head>
-
     <body>
-        <demo class="org.apache.pivot.tutorials.KitchenSink" width="100%"
-            height="100%">
+        <application class="org.apache.pivot.tutorials.KitchenSink" width="100%" height="100%">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>
                 <library>tutorials</library>
             </libraries>
-        </demo>
+        </application>
     </body>
 </document>
 

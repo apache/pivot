@@ -48,8 +48,8 @@ limitations under the License.
         <table>
             <tr>
                 <td style="text-align:center; border:solid 1px #999999">
-                    <demo class="org.apache.pivot.demos.dom.DOMInteractionDemo" width="380"
-                        height="240">
+                    <application class="org.apache.pivot.demos.dom.DOMInteractionDemo"
+                        width="380" height="240">
                         <libraries>
                             <library>core</library>
                             <library>wtk</library>
@@ -58,7 +58,7 @@ limitations under the License.
                         <attributes>
                             <id>domTestApplet</id>
                         </attributes>
-                    </demo>
+                    </application>
                 </td>
             </tr>
             <tr>

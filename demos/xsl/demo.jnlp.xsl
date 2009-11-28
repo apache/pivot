@@ -29,7 +29,7 @@ limitations under the License.
 
     <xsl:variable name="project" select="document('project.xml')/project"/>
 
-    <xsl:template match="demo">
+    <xsl:template match="application">
         &lt;?xml version="1.0" encoding="UTF-8" ?&gt;
 
         &lt;%@ page language="java" contentType="application/x-java-jnlp-file" pageEncoding="UTF-8" %&gt;
@@ -68,7 +68,7 @@ limitations under the License.
                 &lt;/shortcut&gt;
             &lt;/information&gt;
 
-            <xsl:if test="signed">
+            <xsl:if test="boolean(@signed)">
                 &lt;security&gt;
                     &lt;all-permissions/&gt;
                 &lt;/security&gt;
@@ -82,7 +82,7 @@ limitations under the License.
                 &lt;java version="1.6+" href="http://java.sun.com/products/autodl/j2se"/&gt;
 
                 <xsl:apply-templates select="libraries/library">
-                    <xsl:with-param name="signed" select="signed"/>
+                    <xsl:with-param name="signed" select="boolean(@signed)"/>
                 </xsl:apply-templates>
             &lt;/resources&gt;
 

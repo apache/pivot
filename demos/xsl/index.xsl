@@ -92,8 +92,8 @@ limitations under the License.
         <xsl:apply-templates/>
     </xsl:template>
 
-    <!-- <demo-item> gets translated to a demo summary with links to the demo -->
-    <xsl:template match="demo-item">
+    <!-- <application-item> gets translated to a demo summary with links to the demo -->
+    <xsl:template match="application-item">
         <xsl:variable name="id" select="@id"/>
 
         <xsl:if test="position()&gt;1">
@@ -110,7 +110,7 @@ limitations under the License.
                 <h3><xsl:value-of select="properties/title"/></h3>
                 <p>
                     <xsl:choose>
-                        <xsl:when test="properties/new-window">
+                        <xsl:when test="@new-window='true'">
                             <a href="{$href}" target="_new">Applet</a>
                         </xsl:when>
                         <xsl:otherwise>
@@ -126,7 +126,7 @@ limitations under the License.
                 <h3><xsl:value-of select="$demo/properties/title"/></h3>
                 <p>
                     <xsl:choose>
-                        <xsl:when test="$demo/properties/new-window">
+                        <xsl:when test="@new-window='true'">
                             <a href="{$id}.html" target="_new">Applet</a>
                         </xsl:when>
                         <xsl:otherwise>

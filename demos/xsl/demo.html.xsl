@@ -34,6 +34,19 @@ limitations under the License.
                 </title>
                 <link rel="stylesheet" href="demo.css" type="text/css"/>
                 <script xmlns="" type="text/javascript" src="http://java.com/js/deployJava.js"></script>
+                <xsl:if test="boolean(properties/full-screen)">
+                    <style type="text/css">
+                        * {
+                            padding: 0px;
+                            margin: 0px;
+                        }
+
+                        html, body {
+                            height: 100%;
+                            overflow: hidden;
+                        }
+                    </style>
+                </xsl:if>
                 <xsl:apply-templates select="head"/>
             </head>
 
@@ -53,8 +66,8 @@ limitations under the License.
         <xsl:apply-templates/>
     </xsl:template>
 
-    <!-- <demo> gets translated to a JavaScript block that launches the applet -->
-    <xsl:template match="demo">
+    <!-- <application> gets translated to a JavaScript block that launches the applet -->
+    <xsl:template match="application">
         <script type="text/javascript">
             var attributes = {
                 code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
@@ -68,7 +81,7 @@ limitations under the License.
 
             var libraries = [];
             <xsl:apply-templates select="libraries/library">
-                <xsl:with-param name="signed" select="signed"/>
+                <xsl:with-param name="signed" select="boolean(@signed)"/>
             </xsl:apply-templates>
             attributes.archive = libraries.join(",");
 

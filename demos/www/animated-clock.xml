@@ -30,12 +30,12 @@ limitations under the License.
             Demonstrates the use of the MovieView component, which is used to present an animated
             clock. The clock is drawn using Pivot's drawing API.
         </p>
-        <demo class="org.apache.pivot.demos.clock.ClockDemo" width="320" height="320">
+        <application class="org.apache.pivot.demos.clock.ClockDemo" width="320" height="320">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>
                 <library>demos</library>
             </libraries>
-        </demo>
+        </application>
     </body>
 </document>

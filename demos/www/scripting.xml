@@ -30,12 +30,13 @@ limitations under the License.
             implement event handlers and populate a list view component with data. It also
             demonstrates data sharing between script and Java code:
         </p>
-        <demo class="org.apache.pivot.tutorials.scripting.Scripting" width="480" height="360">
+        <application class="org.apache.pivot.tutorials.scripting.Scripting"
+            width="480" height="360">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>
                 <library>tutorials</library>
             </libraries>
-        </demo>
+        </application>
     </body>
 </document>

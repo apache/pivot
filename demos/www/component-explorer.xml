@@ -22,34 +22,18 @@ limitations under the License.
         <description>
             Allows interaction with the properties and styles of the stock Pivot components.
         </description>
-        <footer/>
-        <new-window/>
+        <full-screen>true</full-screen>
     </properties>
 
-    <head>
-        <style type="text/css">
-            * {
-                padding: 0px;
-                margin: 0px;
-            }
-
-            html, body {
-                height: 100%;
-                overflow: hidden;
-            }
-        </style>
-    </head>
-
     <body>
-        <demo class="org.apache.pivot.tutorials.explorer.ComponentExplorer" width="100%"
-            height="100%">
-            <signed/>
+        <application class="org.apache.pivot.tutorials.explorer.ComponentExplorer"
+            width="100%" height="100%" signed="true">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>
                 <library>tools</library>
                 <library>tutorials</library>
             </libraries>
-        </demo>
+        </application>
     </body>
 </document>

@@ -31,13 +31,13 @@ limitations under the License.
             ListView component. This is more efficient than maintaining a list of individual
             selected indexes.
         </p>
-        <demo class="org.apache.pivot.demos.lists.MultiSelect" width="480" height="360">
+        <application class="org.apache.pivot.demos.lists.MultiSelect" width="480" height="360">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>
                 <library>demos</library>
             </libraries>
-        </demo>
+        </application>
         <p>
             TableView also maintains selection in this manner.
         </p>

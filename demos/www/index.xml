@@ -26,11 +26,11 @@ limitations under the License.
             A collection of Pivot demos. All demos require
             <a href="http://www.java.com/">Java 6</a> or greater.
         </p>
-        <demo-item id="kitchen-sink"/>
-        <demo-item id="stock-tracker"/>
-        <demo-item id="component-explorer"/>
-        <demo-item id="itunes-search"/>
-        <demo-item id="charting">
+        <application-item id="kitchen-sink" footer="true" featured="true" new-window="true"/>
+        <application-item id="stock-tracker"/>
+        <application-item id="component-explorer" footer="true" featured="true" new-window="true"/>
+        <application-item id="itunes-search"/>
+        <application-item id="charting" footer="true" featured="true" new-window="true">
             <remote href="http://ixnay.biz/charts.html"/>
             <properties>
                 <title>Charting</title>
@@ -38,17 +38,14 @@ limitations under the License.
                     Demonstrates charting in Pivot using the JFreeChart chart provider (hosted at
                     http://ixnay.biz).
                 </description>
-                <featured/>
-                <footer/>
-                <new-window/>
             </properties>
-        </demo-item>
-        <demo-item id="json-viewer"/>
-        <demo-item id="xml-viewer"/>
-        <demo-item id="scripting"/>
-        <demo-item id="file-drag-drop"/>
-        <demo-item id="table-row-editor"/>
-        <demo-item id="ticker-slideshow">
+        </application-item>
+        <application-item id="json-viewer"/>
+        <application-item id="xml-viewer"/>
+        <application-item id="scripting"/>
+        <application-item id="file-drag-drop"/>
+        <application-item id="table-row-editor"/>
+        <application-item id="ticker-slideshow" new-window="true">
             <remote href="http://www.satelliteconsulting.com/"/>
             <properties>
                 <title>News Ticker/Slide Show</title>
@@ -56,15 +53,14 @@ limitations under the License.
                     Demonstrates Pivot used in a real-world context, used to show a news feed and
                     a slide show of client logos (hosted at www.satelliteconsulting.com).
                 </description>
-                <new-window/>
             </properties>
-        </demo-item>
-        <demo-item id="animated-clock"/>
-        <demo-item id="large-data"/>
-        <demo-item id="rss-feed"/>
-        <demo-item id="dom-interaction"/>
-        <demo-item id="decorators"/>
-        <demo-item id="fixed-column-table"/>
-        <demo-item id="multiselect"/>
+        </application-item>
+        <application-item id="animated-clock"/>
+        <application-item id="large-data"/>
+        <application-item id="rss-feed"/>
+        <application-item id="dom-interaction"/>
+        <application-item id="decorators"/>
+        <application-item id="fixed-column-table"/>
+        <application-item id="multiselect"/>
     </body>
 </document>

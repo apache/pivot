@@ -30,14 +30,14 @@ limitations under the License.
             Simple application that allows a user to run search queries against the iTunes Music
             Store and presents the results in a table view.
         </p>
-        <demo class="org.apache.pivot.demos.itunes.SearchDemo" width="640" height="480">
-            <signed/>
+        <application class="org.apache.pivot.demos.itunes.SearchDemo"
+            width="640" height="480" signed="true">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>
                 <library>web</library>
                 <library>demos</library>
             </libraries>
-        </demo>
+        </application>
     </body>
 </document>

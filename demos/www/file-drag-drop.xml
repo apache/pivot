@@ -30,14 +30,14 @@ limitations under the License.
             from the desktop or local file system into the applet for upload to a web or other
             server.
         </p>
-        <demo class="org.apache.pivot.demos.dnd.FileDropTargetDemo" width="380" height="260">
-            <signed/>
+        <application class="org.apache.pivot.demos.dnd.FileDropTargetDemo"
+            width="380" height="260" signed="true">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>
                 <library>demos</library>
             </libraries>
-        </demo>
+        </application>
         <p>
             Note that the application doesn't actually perform the upload - it merely serves as a
             demonstration of Pivot's ability to interact with the native OS.

@@ -34,12 +34,13 @@ limitations under the License.
             effects, etc. This example shows a window with a reflection decorator and a frame with
             a fade decorator.
         </p>
-        <demo class="org.apache.pivot.demos.decorator.DecoratorDemo" width="640" height="640">
+        <application class="org.apache.pivot.demos.decorator.DecoratorDemo"
+            width="640" height="640">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>
                 <library>demos</library>
             </libraries>
-        </demo>
+        </application>
     </body>
 </document>
