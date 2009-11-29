@@ -289,10 +289,21 @@ public class XMLSerializer implements Serializer<Element> {
     }
 
     /**
-     * Returns the first element matching the given path.
+     * Returns the element matching a given path.
      *
      * @param root
+     * The element from which to begin the search.
+     *
      * @param path
+     * A path of the form:
+     * <pre>
+     * tag[n]/tag[n]/...
+     * </pre>
+     * where the index values are optional and default to {@code 0} if
+     * omitted.
+     *
+     * @return
+     * The matching element, or {@code null} if no such element exists.
      */
     public static Element getElement(Element root, String path) {
         if (root == null) {
@@ -307,88 +318,9 @@ public class XMLSerializer implements Serializer<Element> {
             throw new IllegalArgumentException("path is empty.");
         }
 
-        return getElement(root, new ArrayList<String>(path.split("/")));
-    }
-
-    /**
-     * Returns the first set of elements matching the given path.
-     *
-     * @param root
-     * @param path
-     */
-    public static List<Element> getElements(Element root, String path) {
-        if (root == null) {
-            throw new IllegalArgumentException("root is null.");
-        }
-
-        if (path == null) {
-            throw new IllegalArgumentException("path is null.");
-        }
-
-        if (path.length() == 0) {
-            throw new IllegalArgumentException("path is empty.");
-        }
-
-        ArrayList<Element> elements = new ArrayList<Element>();
+        // TODO Parse into list of name/index structs
 
         ArrayList<String> tagNames = new ArrayList<String>(path.split("/"));
-        String tagName = tagNames.remove(tagNames.getLength() - 1, 1).get(0);
-        Element parent = getElement(root, tagNames);
-        if (parent != null) {
-            for (int i = 0, n = parent.getLength(); i < n; i++) {
-                Node node = parent.get(i);
-
-                if (node instanceof Element) {
-                    Element element = (Element)node;
-
-                    if (element.getName().equals(tagName)) {
-                        elements.add(element);
-                    }
-                }
-            }
-        }
-
-        return elements;
-    }
-
-    /**
-     * Returns the text content of the first element matching the given
-     * tag name.
-     *
-     * @param root
-     * @param path
-     */
-    public static String getText(Element root, String path) {
-        if (root == null) {
-            throw new IllegalArgumentException("root is null.");
-        }
-
-        if (path == null) {
-            throw new IllegalArgumentException("path is null.");
-        }
-
-        if (path.length() == 0) {
-            throw new IllegalArgumentException("path is empty.");
-        }
-
-        String text = null;
-
-        ArrayList<String> tagNames = new ArrayList<String>(path.split("/"));
-        Element element = getElement(root, tagNames);
-        if (element != null
-            && element.getLength() > 0) {
-            Node first = element.get(0);
-
-            if (first instanceof TextNode) {
-                TextNode textNode = (TextNode)first;
-                text = textNode.getText();
-            }
-        }
-
-        return text;
-    }
-
-    private static Element getElement(Element root, ArrayList<String> tagNames) {
         Element current = root;
 
         for (int i = 0, n = tagNames.getLength(); i < n; i++) {
@@ -415,5 +347,50 @@ public class XMLSerializer implements Serializer<Element> {
         }
 
         return current;
+    }
+
+    /**
+     * Returns the sub-elements of a descendant of {@code root} whose tag names
+     * match the given name.
+     *
+     * @param root
+     * The element from which to begin the search.
+     *
+     * @param path
+     * The path to the descendant, relative to {@code root}.
+     *
+     * @param name
+     * The tag name to match.
+     *
+     * @return
+     * The matching elements, or {@code null} if no such descendant exists.
+     *
+     * @see #getElement(Element, String)
+     * @see Element#getElements(String)
+     */
+    public static List<Element> getElements(Element root, String path, String name) {
+        Element element = getElement(root, path);
+        return (element == null) ? null : element.getElements(name);
+    }
+
+    /**
+     * Returns the text content of a descendant of {@code root}.
+     *
+     * @param root
+     * The element from which to begin the search.
+     *
+     * @param path
+     * The path to the descendant, relative to {@code root}.
+     *
+     * @return
+     * The text of the descedant, or {@code null} if no such descendant
+     * exists.
+     *
+     * @see #getElement(Element, String)
+     * @see Element#getText()
+     */
+    public static String getText(Element root, String path) {
+        Element element = getElement(root, path);
+        return (element == null) ? null : element.getText();
     }
 }

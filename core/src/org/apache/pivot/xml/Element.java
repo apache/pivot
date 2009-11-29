@@ -795,6 +795,59 @@ public class Element extends Node implements List<Node>, Dictionary<String, Stri
     }
 
     /**
+     * Returns the sub-elements of of this element whose tag names match the
+     * given name.
+     *
+     * @param name
+     * The tag name to match.
+     *
+     * @return
+     * A list containing the matching elements. The list will be empty if no
+     * elements matched the given tag name.
+     */
+    public List<Element> getElements(String name) {
+        ArrayList<Element> elements = new ArrayList<Element>();
+
+        for (int i = 0, n = getLength(); i < n; i++) {
+            Node node = get(i);
+
+            if (node instanceof Element) {
+                Element element = (Element)node;
+
+                if (element.getName().equals(name)) {
+                    elements.add(element);
+                }
+            }
+        }
+
+        return elements;
+    }
+
+    /**
+     * Returns the text content of this element. An element is defined to
+     * contain text when it contains a single child that is an instance of
+     * {@link TextNode}.
+     *
+     * @return
+     * The text content of the element, or {@code null} if this element does
+     * not contain text.
+     */
+    public String getText() {
+        String text = null;
+
+        if (getLength() == 1) {
+            Node node = get(0);
+
+            if (node instanceof TextNode) {
+                TextNode textNode = (TextNode)node;
+                text = textNode.getText();
+            }
+        }
+
+        return text;
+    }
+
+    /**
      * Returns the element's listener list.
      */
     @Override

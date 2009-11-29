@@ -30,6 +30,11 @@ limitations under the License.
             <f>3</f>
             <g>4</g>
             <f>5</f>
+            <is>
+                <i id="1"/>
+                <i id="2"/>
+                <i id="3"/>
+            </is>
         </e>
         <foo:h>Hello</foo:h>
     </d>

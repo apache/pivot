@@ -68,7 +68,7 @@ public class RSSItemRenderer extends BoxPane implements ListView.ItemRenderer {
             titleLabel.setText(title);
 
             String categories = "Categories:";
-            List<Element> categoryElements = XMLSerializer.getElements(itemElement, "category");
+            List<Element> categoryElements = itemElement.getElements("category");
             for (int i = 0, n = categoryElements.getLength(); i < n; i++) {
                 Element categoryElement = categoryElements.get(i);
                 TextNode categoryTextNode = (TextNode)categoryElement.get(0);

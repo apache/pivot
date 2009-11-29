@@ -92,7 +92,7 @@ public class RSSFeedDemo implements Application {
             @Override
             public void taskExecuted(Task<Object> task) {
                 Element root = (Element)task.getResult();
-                feedListView.setListData(XMLSerializer.getElements(root, "channel/item"));
+                feedListView.setListData(XMLSerializer.getElements(root, "channel", "item"));
                 cardPane.setSelectedIndex(1);
             }
 

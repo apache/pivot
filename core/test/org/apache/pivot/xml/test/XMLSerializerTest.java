@@ -48,10 +48,10 @@ public class XMLSerializerTest {
         assertEquals(b.getName(), "b");
         assertEquals(b.get("id"), "y");
 
-        List<Element> cs = XMLSerializer.getElements(root, "a/b/c");
+        List<Element> cs = XMLSerializer.getElements(root, "a/b", "c");
         assertEquals(cs.getLength(), 1);
 
-        List<Element> fs = XMLSerializer.getElements(root, "d/e/f");
+        List<Element> fs = XMLSerializer.getElements(root, "d/e", "f");
         assertEquals(fs.getLength(), 4);
 
         Element e = XMLSerializer.getElement(root, "d/e");
@@ -70,8 +70,11 @@ public class XMLSerializerTest {
         assertNull(XMLSerializer.getElement(root, "a/b/n"));
         assertNull(XMLSerializer.getText(root, "a/b/n"));
 
-        assertEquals(XMLSerializer.getElements(root, "a/b/n").getLength(), 0);
+        assertEquals(XMLSerializer.getElements(root, "a/b", "n").getLength(), 0);
 
         assertEquals(XMLSerializer.getText(root, "d/foo:h"), "Hello");
+
+        List<Element> is = XMLSerializer.getElements(e, "is", "i");
+        assertEquals(is.getLength(), 3);
     }
 }
