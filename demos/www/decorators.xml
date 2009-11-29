@@ -20,10 +20,8 @@ limitations under the License.
     <properties>
         <title>Decorators</title>
         <description>
-            Demonstrates the use of "decorators" in Pivot. Decorators allow a developer to attach
-            additional presentation to components, such as drop shadows, reflections, image
-            effects, etc. This example shows a window with a reflection decorator and a frame with
-            a fade decorator.
+            Decorators allow a developer to attach additional presentation to components, such as
+            drop shadows, reflections, image effects, etc.
         </description>
     </properties>
 

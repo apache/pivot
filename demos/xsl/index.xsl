@@ -110,7 +110,7 @@ limitations under the License.
                 <h3><xsl:value-of select="properties/title"/></h3>
                 <p>
                     <xsl:choose>
-                        <xsl:when test="@new-window='true'">
+                        <xsl:when test="boolean(@new-window)">
                             <a href="{$href}" target="_new">Applet</a>
                         </xsl:when>
                         <xsl:otherwise>
@@ -126,7 +126,7 @@ limitations under the License.
                 <h3><xsl:value-of select="$demo/properties/title"/></h3>
                 <p>
                     <xsl:choose>
-                        <xsl:when test="@new-window='true'">
+                        <xsl:when test="boolean(@new-window)">
                             <a href="{$id}.html" target="_new">Applet</a>
                         </xsl:when>
                         <xsl:otherwise>

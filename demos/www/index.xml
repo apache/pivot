@@ -18,7 +18,7 @@ limitations under the License.
 
 <document>
     <properties>
-        <title>Pivot Demos</title>
+        <title>Demos</title>
     </properties>
 
     <body>
@@ -27,9 +27,9 @@ limitations under the License.
             <a href="http://www.java.com/">Java 6</a> or greater.
         </p>
         <application-item id="kitchen-sink" footer="true" featured="true" new-window="true"/>
-        <application-item id="stock-tracker"/>
-        <application-item id="component-explorer" footer="true" featured="true" new-window="true"/>
-        <application-item id="itunes-search"/>
+        <application-item id="stock-tracker" featured="true"/>
+        <application-item id="component-explorer" footer="true" new-window="true"/>
+        <application-item id="itunes-search" featured="true"/>
         <application-item id="charting" footer="true" featured="true" new-window="true">
             <remote href="http://ixnay.biz/charts.html"/>
             <properties>
@@ -59,7 +59,7 @@ limitations under the License.
         <application-item id="large-data"/>
         <application-item id="rss-feed"/>
         <application-item id="dom-interaction"/>
-        <application-item id="decorators"/>
+        <application-item id="decorators" featured="true"/>
         <application-item id="fixed-column-table"/>
         <application-item id="multiselect"/>
     </body>
