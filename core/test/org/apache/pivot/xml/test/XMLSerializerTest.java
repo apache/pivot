@@ -76,5 +76,8 @@ public class XMLSerializerTest {
 
         List<Element> is = XMLSerializer.getElements(e, "is", "i");
         assertEquals(is.getLength(), 3);
+
+        assertEquals(XMLSerializer.getText(root, "d[0]/e[0]/f[2]"), "3");
+        assertEquals(XMLSerializer.getText(root, "d[0]/e[1]"), null);
     }
 }

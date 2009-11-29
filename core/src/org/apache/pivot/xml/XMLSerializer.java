@@ -318,20 +318,43 @@ public class XMLSerializer implements Serializer<Element> {
             throw new IllegalArgumentException("path is empty.");
         }
 
-        // TODO Parse into list of name/index structs
-
-        ArrayList<String> tagNames = new ArrayList<String>(path.split("/"));
+        ArrayList<String> pathComponents = new ArrayList<String>(path.split("/"));
         Element current = root;
 
-        for (int i = 0, n = tagNames.getLength(); i < n; i++) {
-            String tagName = tagNames.get(i);
+        for (int i = 0, n = pathComponents.getLength(); i < n; i++) {
+            String pathComponent = pathComponents.get(i);
+
+            String tagName;
+            int index;
+            int leadingBracketIndex = pathComponent.indexOf('[');
+            if (leadingBracketIndex == -1) {
+                tagName = pathComponent;
+                index = 0;
+            } else {
+                tagName = pathComponent.substring(0, leadingBracketIndex);
+
+                int trailingBracketIndex = pathComponent.lastIndexOf(']');
+                if (trailingBracketIndex == -1) {
+                    throw new IllegalArgumentException("Unterminated index identifier.");
+                }
+
+                index = Integer.parseInt(pathComponent.substring(leadingBracketIndex + 1,
+                    trailingBracketIndex));
+            }
+
 
             int j = 0;
+            int k = 0;
             for (Node node : current) {
                 if (node instanceof Element) {
                     Element element = (Element)node;
+
                     if (element.getName().equals(tagName)) {
-                        break;
+                        if (k == index) {
+                            break;
+                        }
+
+                        k++;
                     }
                 }
 
