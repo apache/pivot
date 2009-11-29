@@ -299,8 +299,10 @@ public class XMLSerializer implements Serializer<Element> {
      * <pre>
      * tag[n]/tag[n]/...
      * </pre>
-     * where the index values are optional and default to {@code 0} if
-     * omitted.
+     * The bracketed index values are optional and refer to the <i>n</i>th
+     * occurrence of the given tag name within its parent element. If
+     * omitted, the path refers to the first occurrence of the named
+     * element (i.e. the element at index 0).
      *
      * @return
      * The matching element, or {@code null} if no such element exists.
