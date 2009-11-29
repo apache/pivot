@@ -18,6 +18,7 @@ package org.apache.pivot.demos.clock;
 
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.Border;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.MovieView;
@@ -32,7 +33,9 @@ public class ClockDemo implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) {
-        window = new Window(new MovieView(clock));
+        Border border = new Border(new MovieView(clock));
+        border.getStyles().put("color", 7);
+        window = new Window(border);
         window.setMaximized(true);
         window.open(display);
         clock.play();

@@ -47,7 +47,7 @@ limitations under the License.
         </p>
         <table>
             <tr>
-                <td style="text-align:center; border:solid 1px #999999">
+                <td style="text-align:center;">
                     <application class="org.apache.pivot.demos.dom.DOMInteractionDemo"
                         width="380" height="240">
                         <libraries>
@@ -62,7 +62,7 @@ limitations under the License.
                 </td>
             </tr>
             <tr>
-                <td style="text-align:center; border:solid 1px #999999">
+                <td style="padding:5; text-align:center; border:solid 1px #999999">
                     <button onclick="onHelloButtonClick()">Say Hello</button>
                 </td>
             </tr>

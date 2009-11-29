@@ -18,6 +18,7 @@ package org.apache.pivot.demos.decorator;
 
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.Border;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentMouseListener;
 import org.apache.pivot.wtk.DesktopApplicationContext;
@@ -28,12 +29,19 @@ import org.apache.pivot.wtk.effects.FadeDecorator;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class DecoratorDemo implements Application {
+    private Window mainWindow = null;
     private Window reflectionWindow = null;
     private Frame translucentFrame = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
+    public void startup(Display display, Map<String, String> properties) throws Exception {
+        Border border = new Border();
+        border.getStyles().put("color", 7);
+        border.getStyles().put("backgroundColor", 1);
+        mainWindow = new Window(border);
+        mainWindow.setMaximized(true);
+        mainWindow.open(display);
+
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         reflectionWindow = (Window)wtkxSerializer.readObject(this, "reflection.wtkx");
         wtkxSerializer.reset();
@@ -57,8 +65,8 @@ public class DecoratorDemo implements Application {
             }
         });
 
-        reflectionWindow.open(display);
-        translucentFrame.open(display);
+        reflectionWindow.open(mainWindow);
+        translucentFrame.open(mainWindow);
     }
 
     @Override
@@ -69,6 +77,10 @@ public class DecoratorDemo implements Application {
 
         if (translucentFrame != null) {
             translucentFrame.close();
+        }
+
+        if (mainWindow != null) {
+            mainWindow.close();
         }
 
         return false;

@@ -29,7 +29,7 @@ limitations under the License.
 
             <rows>
                 <TablePane.Row height="1*">
-                    <Border styles="{padding:2}">
+                    <Border styles="{color:7, padding:2}">
                         <content>
                             <TablePane>
                                 <columns>
@@ -63,7 +63,7 @@ limitations under the License.
                         </content>
                     </Border>
 
-                    <Border styles="{padding:2}">
+                    <Border styles="{color:7, padding:2}">
                         <content>
                             <TablePane>
                                 <columns>
@@ -93,7 +93,7 @@ limitations under the License.
                         </content>
                     </Border>
 
-                    <Border styles="{padding:2}">
+                    <Border styles="{color:7, padding:2}">
                         <content>
                             <TablePane>
                                 <columns>

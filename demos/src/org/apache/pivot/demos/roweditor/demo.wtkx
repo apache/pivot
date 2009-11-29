@@ -30,7 +30,7 @@ limitations under the License.
             </columns>
             <rows>
                 <TablePane.Row height="1*">
-                    <Border>
+                    <Border styles="{color:7}">
                         <content>
                             <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
                                 <view>

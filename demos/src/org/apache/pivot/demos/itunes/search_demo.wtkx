@@ -21,202 +21,206 @@ limitations under the License.
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
     <content>
-        <TablePane styles="{padding:6, verticalSpacing:6}">
-            <columns>
-                <TablePane.Column width="1*"/>
-            </columns>
-            <rows>
-                <TablePane.Row height="-1">
-                    <TablePane>
-                        <columns>
-                            <TablePane.Column width="-1"/>
-                            <TablePane.Column width="1*"/>
-                        </columns>
-                        <rows>
-                            <TablePane.Row height="-1">
-                                <BoxPane styles="{verticalAlignment:'center'}">
-                                    <TextInput textSize="18" wtkx:id="termTextInput">
-                                        <componentKeyListeners>
-                                            <wtkx:script>
-                                            <![CDATA[
-                                            importPackage(org.apache.pivot.wtk);
-                                            function keyPressed(component, keyCode, keyLocation) {
-                                                var term = termTextInput.getText();
+        <Border styles="{color:7}">
+            <content>
+                <TablePane styles="{padding:6, verticalSpacing:6}">
+                    <columns>
+                        <TablePane.Column width="1*"/>
+                    </columns>
+                    <rows>
+                        <TablePane.Row height="-1">
+                            <TablePane>
+                                <columns>
+                                    <TablePane.Column width="-1"/>
+                                    <TablePane.Column width="1*"/>
+                                </columns>
+                                <rows>
+                                    <TablePane.Row height="-1">
+                                        <BoxPane styles="{verticalAlignment:'center'}">
+                                            <TextInput textSize="18" wtkx:id="termTextInput">
+                                                <componentKeyListeners>
+                                                    <wtkx:script>
+                                                    <![CDATA[
+                                                    importPackage(org.apache.pivot.wtk);
+                                                    function keyPressed(component, keyCode, keyLocation) {
+                                                        var term = termTextInput.getText();
 
-                                                if (keyCode == Keyboard.KeyCode.ENTER) {
-                                                    if (!application.isQueryExecuting()
-                                                        && term.length() > 0) {
-                                                        searchButton.press();
+                                                        if (keyCode == Keyboard.KeyCode.ENTER) {
+                                                            if (!application.isQueryExecuting()
+                                                                && term.length() > 0) {
+                                                                searchButton.press();
+                                                            }
+                                                        }
+
+                                                        return false;
                                                     }
-                                                }
-
-                                                return false;
-                                            }
-                                            ]]>
-                                            </wtkx:script>
-                                        </componentKeyListeners>
-                                        <textInputTextListeners>
-                                            <wtkx:script>
-                                            <![CDATA[
-                                            function textChanged(textInput) {
-                                                var term = termTextInput.getText();
-                                                searchButton.setEnabled(term.length() > 0);
-                                            }
-                                            ]]>
-                                            </wtkx:script>
-                                        </textInputTextListeners>
-                                    </TextInput>
-                                    <PushButton wtkx:id="searchButton" enabled="false"
-                                        styles="{toolbar:true, padding:1}">
-                                        <buttonPressListeners>
-                                            <wtkx:script>
-                                            <![CDATA[
-                                            function buttonPressed(button) {
-                                                if (application.isQueryExecuting()) {
-                                                    application.abortQuery();
-                                                } else {
-                                                    application.executeQuery(termTextInput.getText());
-                                                }
-                                            }
-                                            ]]>
-                                            </wtkx:script>
-                                        </buttonPressListeners>
-                                        <componentKeyListeners>
-                                            <wtkx:script>
-                                            <![CDATA[
-                                            importPackage(org.apache.pivot.wtk);
-                                            function keyPressed(component, keyCode, keyLocation) {
-                                                if (keyCode == Keyboard.KeyCode.ESCAPE) {
-                                                    if (application.isQueryExecuting()) {
-                                                        application.abortQuery();
+                                                    ]]>
+                                                    </wtkx:script>
+                                                </componentKeyListeners>
+                                                <textInputTextListeners>
+                                                    <wtkx:script>
+                                                    <![CDATA[
+                                                    function textChanged(textInput) {
+                                                        var term = termTextInput.getText();
+                                                        searchButton.setEnabled(term.length() > 0);
                                                     }
-                                                }
+                                                    ]]>
+                                                    </wtkx:script>
+                                                </textInputTextListeners>
+                                            </TextInput>
+                                            <PushButton wtkx:id="searchButton" enabled="false"
+                                                styles="{toolbar:true, padding:1}">
+                                                <buttonPressListeners>
+                                                    <wtkx:script>
+                                                    <![CDATA[
+                                                    function buttonPressed(button) {
+                                                        if (application.isQueryExecuting()) {
+                                                            application.abortQuery();
+                                                        } else {
+                                                            application.executeQuery(termTextInput.getText());
+                                                        }
+                                                    }
+                                                    ]]>
+                                                    </wtkx:script>
+                                                </buttonPressListeners>
+                                                <componentKeyListeners>
+                                                    <wtkx:script>
+                                                    <![CDATA[
+                                                    importPackage(org.apache.pivot.wtk);
+                                                    function keyPressed(component, keyCode, keyLocation) {
+                                                        if (keyCode == Keyboard.KeyCode.ESCAPE) {
+                                                            if (application.isQueryExecuting()) {
+                                                                application.abortQuery();
+                                                            }
+                                                        }
 
-                                                return false;
-                                            }
-                                            ]]>
-                                            </wtkx:script>
-                                        </componentKeyListeners>
-                                    </PushButton>
-                                </BoxPane>
-                                <Label wtkx:id="statusLabel" styles="{horizontalAlignment:'right',
-                                    verticalAlignment:'center'}"/>
-                            </TablePane.Row>
-                        </rows>
-                    </TablePane>
-                </TablePane.Row>
+                                                        return false;
+                                                    }
+                                                    ]]>
+                                                    </wtkx:script>
+                                                </componentKeyListeners>
+                                            </PushButton>
+                                        </BoxPane>
+                                        <Label wtkx:id="statusLabel" styles="{horizontalAlignment:'right',
+                                            verticalAlignment:'center'}"/>
+                                    </TablePane.Row>
+                                </rows>
+                            </TablePane>
+                        </TablePane.Row>
 
-                <TablePane.Row height="1*">
-                    <TablePane styles="{horizontalSpacing:6}">
-                        <columns>
-                            <TablePane.Column width="1*"/>
-                            <TablePane.Column width="-1"/>
-                        </columns>
-                        <rows>
-                            <TablePane.Row height="1*">
-                                <StackPane>
-                                    <Border>
-                                        <content>
-                                            <ScrollPane horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fill_to_capacity">
-                                                <view>
-                                                    <TableView wtkx:id="resultsTableView">
-                                                        <columns>
-                                                            <TableView.Column name="itemName" width="1*" headerData="Name"/>
-                                                            <TableView.Column name="itemParentName" width="1*" headerData="Album"/>
-                                                            <TableView.Column name="artistName" width="1*" headerData="Artist"/>
-                                                        </columns>
-                                                        <componentMouseButtonListeners>
-                                                            <wtkx:script>
-                                                            <![CDATA[
-                                                            importPackage(org.apache.pivot.wtk);
-                                                            var selectedResult;
+                        <TablePane.Row height="1*">
+                            <TablePane styles="{horizontalSpacing:6}">
+                                <columns>
+                                    <TablePane.Column width="1*"/>
+                                    <TablePane.Column width="-1"/>
+                                </columns>
+                                <rows>
+                                    <TablePane.Row height="1*">
+                                        <StackPane>
+                                            <Border>
+                                                <content>
+                                                    <ScrollPane horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fill_to_capacity">
+                                                        <view>
+                                                            <TableView wtkx:id="resultsTableView">
+                                                                <columns>
+                                                                    <TableView.Column name="itemName" width="1*" headerData="Name"/>
+                                                                    <TableView.Column name="itemParentName" width="1*" headerData="Album"/>
+                                                                    <TableView.Column name="artistName" width="1*" headerData="Artist"/>
+                                                                </columns>
+                                                                <componentMouseButtonListeners>
+                                                                    <wtkx:script>
+                                                                    <![CDATA[
+                                                                    importPackage(org.apache.pivot.wtk);
+                                                                    var selectedResult;
 
-                                                            function mouseClick(component, button, x, y, count) {
-                                                                if (count == 1) {
-                                                                    selectedResult = resultsTableView.getSelectedRow();
-                                                                } else if (count == 2) {
-                                                                    if (selectedResult == resultsTableView.getSelectedRow()) {
-                                                                        ApplicationContext.open(selectedResult.get("previewUrl"));
+                                                                    function mouseClick(component, button, x, y, count) {
+                                                                        if (count == 1) {
+                                                                            selectedResult = resultsTableView.getSelectedRow();
+                                                                        } else if (count == 2) {
+                                                                            if (selectedResult == resultsTableView.getSelectedRow()) {
+                                                                                ApplicationContext.open(selectedResult.get("previewUrl"));
+                                                                            }
+                                                                        }
                                                                     }
-                                                                }
-                                                            }
-                                                            ]]>
-                                                            </wtkx:script>
-                                                        </componentMouseButtonListeners>
+                                                                    ]]>
+                                                                    </wtkx:script>
+                                                                </componentMouseButtonListeners>
 
-                                                        <tableViewSelectionListeners>
-                                                            <wtkx:script>
-                                                            <![CDATA[
-                                                            function selectedRangeAdded(tableView, rangeStart, rangeEnd) {
-                                                                application.updateArtwork();
-                                                            }
+                                                                <tableViewSelectionListeners>
+                                                                    <wtkx:script>
+                                                                    <![CDATA[
+                                                                    function selectedRangeAdded(tableView, rangeStart, rangeEnd) {
+                                                                        application.updateArtwork();
+                                                                    }
 
-                                                            function selectedRangeRemoved(tableView, rangeStart, rangeEnd) {
-                                                                application.updateArtwork();
-                                                            }
+                                                                    function selectedRangeRemoved(tableView, rangeStart, rangeEnd) {
+                                                                        application.updateArtwork();
+                                                                    }
 
-                                                            function selectedRangesChanged(tableView, previousSelectedRanges) {
-                                                                application.updateArtwork();
-                                                            }
-                                                            ]]>
-                                                            </wtkx:script>
-                                                        </tableViewSelectionListeners>
+                                                                    function selectedRangesChanged(tableView, previousSelectedRanges) {
+                                                                        application.updateArtwork();
+                                                                    }
+                                                                    ]]>
+                                                                    </wtkx:script>
+                                                                </tableViewSelectionListeners>
 
-                                                        <tableViewSortListeners>
-                                                            <wtkx:script>
-                                                            <![CDATA[
-                                                            function sortChanged(tableView) {
-                                                                var tableData = tableView.getTableData();
-                                                                tableData.setComparator(new org.apache.pivot.wtk.content.TableViewRowComparator(tableView));
-                                                            }
-                                                            ]]>
-                                                            </wtkx:script>
-                                                        </tableViewSortListeners>
+                                                                <tableViewSortListeners>
+                                                                    <wtkx:script>
+                                                                    <![CDATA[
+                                                                    function sortChanged(tableView) {
+                                                                        var tableData = tableView.getTableData();
+                                                                        tableData.setComparator(new org.apache.pivot.wtk.content.TableViewRowComparator(tableView));
+                                                                    }
+                                                                    ]]>
+                                                                    </wtkx:script>
+                                                                </tableViewSortListeners>
 
-                                                    </TableView>
-                                                </view>
-                                                <columnHeader>
-                                                    <TableViewHeader tableView="$resultsTableView" sortMode="single_column"/>
-                                                </columnHeader>
-                                            </ScrollPane>
-                                        </content>
-                                    </Border>
+                                                            </TableView>
+                                                        </view>
+                                                        <columnHeader>
+                                                            <TableViewHeader tableView="$resultsTableView" sortMode="single_column"/>
+                                                        </columnHeader>
+                                                    </ScrollPane>
+                                                </content>
+                                            </Border>
 
-                                    <BoxPane wtkx:id="activityIndicatorBoxPane" visible="false"
-                                        styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
-                                        <ActivityIndicator wtkx:id="activityIndicator"
-                                            preferredWidth="96" preferredHeight="96"/>
-                                    </BoxPane>
-                                </StackPane>
+                                            <BoxPane wtkx:id="activityIndicatorBoxPane" visible="false"
+                                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                                                <ActivityIndicator wtkx:id="activityIndicator"
+                                                    preferredWidth="96" preferredHeight="96"/>
+                                            </BoxPane>
+                                        </StackPane>
 
-                                <BoxPane orientation="vertical" styles="{fill:true}">
-                                    <Border>
-                                        <content>
-                                            <ImageView wtkx:id="artworkImageView"
-                                                preferredWidth="120" preferredHeight="120"/>
-                                        </content>
-                                    </Border>
-                                    <BoxPane styles="{horizontalAlignment:'center'}">
-                                        <PushButton wtkx:id="previewButton" buttonData="Preview" enabled="false">
-                                            <buttonPressListeners>
-                                                <wtkx:script>
-                                                <![CDATA[
-                                                importPackage(org.apache.pivot.wtk);
-                                                function buttonPressed(button) {
-                                                    var selectedResult = resultsTableView.getSelectedRow();
-                                                    ApplicationContext.open(selectedResult.get("previewUrl"));
-                                                }
-                                                ]]>
-                                                </wtkx:script>
-                                            </buttonPressListeners>
-                                        </PushButton>
-                                    </BoxPane>
-                                </BoxPane>
-                            </TablePane.Row>
-                        </rows>
-                    </TablePane>
-                </TablePane.Row>
-            </rows>
-        </TablePane>
+                                        <BoxPane orientation="vertical" styles="{fill:true}">
+                                            <Border>
+                                                <content>
+                                                    <ImageView wtkx:id="artworkImageView"
+                                                        preferredWidth="120" preferredHeight="120"/>
+                                                </content>
+                                            </Border>
+                                            <BoxPane styles="{horizontalAlignment:'center'}">
+                                                <PushButton wtkx:id="previewButton" buttonData="Preview" enabled="false">
+                                                    <buttonPressListeners>
+                                                        <wtkx:script>
+                                                        <![CDATA[
+                                                        importPackage(org.apache.pivot.wtk);
+                                                        function buttonPressed(button) {
+                                                            var selectedResult = resultsTableView.getSelectedRow();
+                                                            ApplicationContext.open(selectedResult.get("previewUrl"));
+                                                        }
+                                                        ]]>
+                                                        </wtkx:script>
+                                                    </buttonPressListeners>
+                                                </PushButton>
+                                            </BoxPane>
+                                        </BoxPane>
+                                    </TablePane.Row>
+                                </rows>
+                            </TablePane>
+                        </TablePane.Row>
+                    </rows>
+                </TablePane>
+            </content>
+        </Border>
     </content>
 </Window>

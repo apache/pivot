@@ -18,6 +18,7 @@ package org.apache.pivot.demos.dom;
 
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.Border;
 import org.apache.pivot.wtk.BrowserApplicationContext;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
@@ -33,8 +34,7 @@ public class DOMInteractionDemo implements Application {
     private PushButton helloButton = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
+    public void startup(Display display, Map<String, String> properties) throws Exception {
         BoxPane boxPane = new BoxPane();
         boxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
 
@@ -44,11 +44,15 @@ public class DOMInteractionDemo implements Application {
         helloButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {
-                BrowserApplicationContext.eval("sayHello(\"Hello from Pivot!\")", DOMInteractionDemo.this);
+                BrowserApplicationContext.eval("sayHello(\"Hello from Pivot!\")",
+                    DOMInteractionDemo.this);
             }
         });
 
-        window = new Window(boxPane);
+        Border border = new Border(boxPane);
+        border.getStyles().put("color", 7);
+        border.getStyles().put("padding", 5);
+        window = new Window(border);
         window.setMaximized(true);
         window.open(display);
     }

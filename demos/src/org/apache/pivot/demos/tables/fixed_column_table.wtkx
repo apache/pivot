@@ -21,7 +21,7 @@ limitations under the License.
     xmlns:collections="org.apache.pivot.collections"
     xmlns="org.apache.pivot.wtk">
     <content>
-        <Border styles="{color:10}">
+        <Border styles="{color:7}">
             <content>
                 <ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
                     verticalScrollBarPolicy="fill_to_capacity">
