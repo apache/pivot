@@ -19,6 +19,7 @@ limitations under the License.
 <!-- Translates a demo XML document into an HTML demo page -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
     <xsl:param name="release"/>
+    <xsl:param name="root"/>
 
     <xsl:output method="html" encoding="UTF-8" indent="no"
         doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -66,6 +67,11 @@ limitations under the License.
         <xsl:apply-templates/>
     </xsl:template>
 
+    <!-- <root> gets resolved to the 'root' XSL parameter -->
+    <xsl:template match="root">
+        <xsl:value-of select="$root"/>
+    </xsl:template>
+
     <!-- <application> gets translated to a JavaScript block that launches the applet -->
     <xsl:template match="application">
         <script type="text/javascript">
@@ -95,7 +101,7 @@ limitations under the License.
                 var startupProperties = [];
 
                 <xsl:for-each select="startup-properties/*">
-                    startupProperties.push("<xsl:value-of select="name(.)"/>=<xsl:value-of select="."/>");
+                    startupProperties.push("<xsl:value-of select="name(.)"/>=<xsl:apply-templates/>");
                 </xsl:for-each>
 
                 parameters.startup_properties = startupProperties.join("&amp;");

@@ -46,7 +46,7 @@ limitations under the License.
                 <library>demos</library>
             </libraries>
             <startup-properties>
-                <basePath>pivot-demos/assets</basePath>
+                <basePath><root/>/assets</basePath>
             </startup-properties>
         </application>
     </body>

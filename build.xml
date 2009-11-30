@@ -630,6 +630,7 @@ limitations under the License.
             includes="*.xml"
             excludes="index.xml">
             <param name="release" expression="${version}"/>
+            <param name="root" expression="${ant.project.name}-demos"/>
         </xslt>
 
         <!-- Transform demos jnlp -->

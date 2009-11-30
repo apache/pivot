@@ -19,6 +19,7 @@ limitations under the License.
 <!-- Translates a demo XML document into a JNLP demo file -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
     <xsl:param name="release"/>
+    <xsl:param name="root"/>
 
     <!--
     Output method. NOTE This must be "text" because JSP tags are not valid XML, so setting the
@@ -28,6 +29,11 @@ limitations under the License.
     <xsl:output method="text"/>
 
     <xsl:variable name="project" select="document('project.xml')/project"/>
+
+    <!-- <root> gets resolved to the 'root' XSL parameter -->
+    <xsl:template match="root">
+        <xsl:value-of select="$root"/>
+    </xsl:template>
 
     <xsl:template match="application">
         &lt;?xml version="1.0" encoding="UTF-8" ?&gt;
@@ -92,7 +98,7 @@ limitations under the License.
                 &lt;argument&gt;--height=<xsl:value-of select="@height"/>&lt;/argument&gt;
                 &lt;argument&gt;--center=true&lt;/argument&gt;
                 <xsl:for-each select="startup-properties/*">
-                &lt;argument&gt;--<xsl:value-of select="name(.)"/>=<xsl:value-of select="."/>&lt;/argument&gt;
+                &lt;argument&gt;--<xsl:value-of select="name(.)"/>=<xsl:apply-templates/>&lt;/argument&gt;
                 </xsl:for-each>
             &lt;/application-desc&gt;
 
