@@ -62,8 +62,8 @@ limitations under the License.
                 </td>
             </tr>
             <tr>
-                <td style="padding:5; text-align:center; border:solid 1px #999999">
-                    <button onclick="onHelloButtonClick()">Say Hello</button>
+                <td style="text-align:center; border:solid 1px #999999">
+                    <button style="margin:5px;" onclick="onHelloButtonClick()">Say Hello</button>
                 </td>
             </tr>
         </table>
