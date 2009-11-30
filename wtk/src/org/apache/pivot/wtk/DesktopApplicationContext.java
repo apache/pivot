@@ -381,11 +381,11 @@ public final class DesktopApplicationContext extends ApplicationContext {
             // Load the JNLP classes dynamically because they are only available
             // when run via javaws
             Class<?> serviceManagerClass = Class.forName("javax.jnlp.ServiceManager");
-            Method lookupMethod = serviceManagerClass.getMethod("lookup", new Class<?>[] {String.class});
+            Method lookupMethod = serviceManagerClass.getMethod("lookup", String.class);
             Object basicService = lookupMethod.invoke(null, "javax.jnlp.BasicService");
 
             Class<?> basicServiceClass = Class.forName("javax.jnlp.BasicService");
-            Method getCodeBaseMethod = basicServiceClass.getMethod("getCodeBase", new Class<?>[] {});
+            Method getCodeBaseMethod = basicServiceClass.getMethod("getCodeBase");
             URL codeBase = (URL)getCodeBaseMethod.invoke(basicService);
 
             if (codeBase != null) {

@@ -47,6 +47,9 @@ public interface Collection<T> extends Iterable<T> {
     /**
      * Sets the collection's sort order, re-ordering the collection's contents
      * and ensuring that new entries preserve the sort order.
+     * <p>
+     * Calling this method more than once with the same comparator will re-sort
+     * the collection.
      *
      * @param comparator
      * The comparator used to order elements in the collection, or null if the
