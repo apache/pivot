@@ -157,8 +157,8 @@ public class ObsidianPushButtonSkin extends PushButtonSkin {
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
 
-        graphics.setPaint(new GradientPaint(width / 2, 0, gradientStartColor,
-            width / 2, height, gradientEndColor));
+        graphics.setPaint(new GradientPaint(width / 2f, 0, gradientStartColor,
+            width / 2f, height, gradientEndColor));
         graphics.fill(buttonRectangle);
 
         // Paint the border

@@ -190,8 +190,8 @@ public class TerraTabPaneSkin extends ContainerSkin
             graphics.fillRect(0, 0, width, height);
 
             // Draw the bevel
-            graphics.setPaint(new GradientPaint(width / 2, 1, buttonBevelColor,
-                width / 2, GRADIENT_BEVEL_THICKNESS, backgroundColor));
+            graphics.setPaint(new GradientPaint(width / 2f, 1, buttonBevelColor,
+                width / 2f, GRADIENT_BEVEL_THICKNESS, backgroundColor));
 
             switch(tabOrientation) {
                 case HORIZONTAL: {
@@ -889,8 +889,8 @@ public class TerraTabPaneSkin extends ContainerSkin
 
             // Draw the bevel for vertical tabs
             if (tabOrientation == Orientation.VERTICAL) {
-                graphics.setPaint(new GradientPaint(width / 2, contentBounds.y + 1, buttonBevelColor,
-                    width / 2, contentBounds.y + 1 + GRADIENT_BEVEL_THICKNESS, activeTabColor));
+                graphics.setPaint(new GradientPaint(width / 2f, contentBounds.y + 1, buttonBevelColor,
+                    width / 2f, contentBounds.y + 1 + GRADIENT_BEVEL_THICKNESS, activeTabColor));
                 graphics.fillRect(contentBounds.x + 1, contentBounds.y + 1,
                     contentBounds.width - 2, GRADIENT_BEVEL_THICKNESS);
             }

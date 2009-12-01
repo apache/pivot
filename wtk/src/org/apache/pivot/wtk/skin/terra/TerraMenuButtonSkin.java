@@ -185,8 +185,8 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         // Paint the background
         if (backgroundColor != null
             && bevelColor != null) {
-            graphics.setPaint(new GradientPaint(width / 2, 0, bevelColor,
-                width / 2, height / 2, backgroundColor));
+            graphics.setPaint(new GradientPaint(width / 2f, 0, bevelColor,
+                width / 2f, height / 2, backgroundColor));
             graphics.fillRect(0, 0, width, height);
         }
 

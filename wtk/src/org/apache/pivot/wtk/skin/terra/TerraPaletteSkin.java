@@ -357,8 +357,8 @@ public class TerraPaletteSkin extends WindowSkin {
         graphics.setStroke(new BasicStroke());
 
         // Draw the title area
-        graphics.setPaint(new GradientPaint(width / 2, 0, titleBarBevelColor,
-            width / 2, titleBarHeight + 1, titleBarBackgroundColor));
+        graphics.setPaint(new GradientPaint(width / 2f, 0, titleBarBevelColor,
+            width / 2f, titleBarHeight + 1, titleBarBackgroundColor));
         graphics.fillRect(0, 0, width, titleBarHeight + 1);
 
         // Draw the border

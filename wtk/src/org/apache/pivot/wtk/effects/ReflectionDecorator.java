@@ -68,7 +68,7 @@ public class ReflectionDecorator implements Decorator {
         int width = componentImage.getWidth();
         int height = componentImage.getHeight();
 
-        GradientPaint mask = new GradientPaint(0, height / 4, new Color(1.0f, 1.0f, 1.0f, 0.0f),
+        GradientPaint mask = new GradientPaint(0, height / 4f, new Color(1.0f, 1.0f, 1.0f, 0.0f),
             0, height, new Color(1.0f, 1.0f, 1.0f, 0.5f));
         componentImageGraphics.setPaint(mask);
 

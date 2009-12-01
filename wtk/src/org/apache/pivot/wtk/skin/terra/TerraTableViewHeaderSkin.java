@@ -288,8 +288,8 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
 
                 // Paint the pressed bevel
                 if (columnIndex == pressedHeaderIndex) {
-                    graphics.setPaint(new GradientPaint(width / 2, 0, pressedBevelColor,
-                        width / 2, height, backgroundColor));
+                    graphics.setPaint(new GradientPaint(width / 2f, 0, pressedBevelColor,
+                        width / 2f, height, backgroundColor));
                     graphics.fillRect(0, 0, width, height);
                 }
 

@@ -78,8 +78,8 @@ public class TerraSliderSkin extends SliderSkin {
             int width = getWidth();
             int height = getHeight();
 
-            graphics.setPaint(new GradientPaint(width / 2, 0, buttonBevelColor,
-                width / 2, height, buttonBackgroundColor));
+            graphics.setPaint(new GradientPaint(width / 2f, 0, buttonBevelColor,
+                width / 2f, height, buttonBackgroundColor));
             graphics.fillRect(0, 0, width, height);
 
             float alpha = (highlighted || dragOffset != null) ? 0.25f : 0.0f;

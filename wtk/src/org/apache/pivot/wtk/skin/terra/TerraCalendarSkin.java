@@ -143,8 +143,8 @@ public class TerraCalendarSkin extends CalendarSkin {
 
             // Paint the background
             if (dateButton.isSelected()) {
-                graphics.setPaint(new GradientPaint(width / 2, 0, selectionBevelColor,
-                    width / 2, height, selectionBackgroundColor));
+                graphics.setPaint(new GradientPaint(width / 2f, 0, selectionBevelColor,
+                    width / 2f, height, selectionBackgroundColor));
 
                 graphics.fillRect(0, 0, width, height);
             } else {

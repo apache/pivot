@@ -164,8 +164,8 @@ public class TerraAccordionSkin extends ContainerSkin
             int height = getHeight();
 
             // Paint the background
-            graphics.setPaint(new GradientPaint(width / 2, 0, buttonBevelColor,
-                width / 2, height, buttonBackgroundColor));
+            graphics.setPaint(new GradientPaint(width / 2f, 0, buttonBevelColor,
+                width / 2f, height, buttonBackgroundColor));
             graphics.fillRect(0, 0, width, height);
 
             // Paint the border
