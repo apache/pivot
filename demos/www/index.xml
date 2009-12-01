@@ -40,11 +40,11 @@ limitations under the License.
                 </description>
             </properties>
         </application-item>
-        <application-item id="json-viewer"/>
+        <application-item id="decorators" featured="true"/>
         <application-item id="xml-viewer"/>
-        <application-item id="scripting"/>
-        <application-item id="file-drag-drop"/>
+        <application-item id="json-viewer"/>
         <application-item id="table-row-editor"/>
+        <application-item id="file-drag-drop"/>
         <application-item id="ticker-slideshow" new-window="true">
             <remote href="http://www.satelliteconsulting.com/"/>
             <properties>
@@ -55,12 +55,11 @@ limitations under the License.
                 </description>
             </properties>
         </application-item>
-        <application-item id="animated-clock"/>
         <application-item id="large-data"/>
         <application-item id="rss-feed"/>
         <application-item id="dom-interaction"/>
-        <application-item id="decorators" featured="true"/>
         <application-item id="fixed-column-table"/>
+        <application-item id="animated-clock"/>
         <application-item id="multiselect"/>
     </body>
 </document>

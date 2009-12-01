@@ -26,11 +26,11 @@ limitations under the License.
 
     <body>
         <p>
-            This sample application demonstrates the use of a flip transition to bring up a table
+            This sample application demonstrates the use of a slide transition to bring up a table
             view row editor.
         </p>
         <application class="org.apache.pivot.demos.roweditor.RowEditorDemo"
-            width="480" height="360">
+            width="480" height="200">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>
