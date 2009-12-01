@@ -191,7 +191,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
             }
         }
 
-        private BrowserApplicationContext applicationContext = null;
+        private transient BrowserApplicationContext applicationContext = null;
         private HashMap<String, String> properties = null;
 
         public static final String APPLICATION_CLASS_NAME_PARAMETER = "application_class_name";

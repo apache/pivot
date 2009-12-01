@@ -203,8 +203,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         TextInput textInput = (TextInput)getComponent();
         int textSize = textInput.getTextSize();
 
-        return (int)Math.ceil(averageCharacterSize.width * textSize)
-            + (padding.left + padding.right) + 2;
+        return averageCharacterSize.width * textSize + (padding.left + padding.right) + 2;
     }
 
     @Override

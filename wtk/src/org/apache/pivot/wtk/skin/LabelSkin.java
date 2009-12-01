@@ -181,8 +181,8 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     public int getBaseline(int width, int height) {
         LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
         float ascent = lm.getAscent();
-        float textHeight = lm.getHeight();
 
+        float textHeight;
         if (wrapText) {
             textHeight = Math.max(getPreferredHeight(width) - (padding.top + padding.bottom), 0);
         } else {
