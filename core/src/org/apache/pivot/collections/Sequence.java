@@ -457,7 +457,7 @@ public interface Sequence<T> {
                         path = pathOf((Sequence<T>)t, item);
 
                         if (path != null) {
-                            path.insert(0, i);
+                            path.insert(i, 0);
                         }
                     }
                 }
