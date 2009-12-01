@@ -22,7 +22,7 @@ limitations under the License.
     xmlns:rss="org.apache.pivot.demos.rss"
     xmlns="org.apache.pivot.wtk">
     <content>
-        <Border styles="{color:7}">
+        <Border styles="{color:10}">
             <content>
                 <CardPane wtkx:id="cardPane" selectedIndex="0" styles="{selectionChangeEffect:'crossfade'}">
                     <Label wtkx:id="statusLabel" text="Loading..."

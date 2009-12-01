@@ -21,7 +21,7 @@ limitations under the License.
     xmlns:terra="org.apache.pivot.wtk.skin.terra"
     xmlns="org.apache.pivot.wtk">
     <content>
-        <TablePane>
+        <TablePane styles="{verticalSpacing:6}">
             <columns>
                 <TablePane.Column width="1*"/>
             </columns>
@@ -61,7 +61,7 @@ limitations under the License.
                     </Border>
                 </TablePane.Row>
                 <TablePane.Row height="-1">
-                    <BoxPane styles="{padding:6, horizontalAlignment:'right', verticalAlignment:'center'}">
+                    <BoxPane styles="{horizontalAlignment:'right', verticalAlignment:'center'}">
                         <PushButton wtkx:id="uploadButton" buttonData="Upload"
                            enabled="false" styles="{minimumAspectRatio:3}"/>
                     </BoxPane>

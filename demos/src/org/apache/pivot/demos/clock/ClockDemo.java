@@ -34,7 +34,7 @@ public class ClockDemo implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties) {
         Border border = new Border(new MovieView(clock));
-        border.getStyles().put("color", 7);
+        border.getStyles().put("color", 10);
         window = new Window(border);
         window.setMaximized(true);
         window.open(display);

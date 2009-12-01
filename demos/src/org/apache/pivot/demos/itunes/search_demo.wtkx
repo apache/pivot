@@ -21,7 +21,7 @@ limitations under the License.
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
     <content>
-        <Border styles="{color:7}">
+        <Border styles="{color:10}">
             <content>
                 <TablePane styles="{padding:6, verticalSpacing:6}">
                     <columns>
@@ -130,7 +130,8 @@ limitations under the License.
                                                                 <componentMouseButtonListeners>
                                                                     <wtkx:script>
                                                                     <![CDATA[
-                                                                    importPackage(org.apache.pivot.wtk);
+                                                                    importClass(java.awt.Desktop);
+                                                                    importClass(java.net.URL);
                                                                     var selectedResult;
 
                                                                     function mouseClick(component, button, x, y, count) {
@@ -138,7 +139,8 @@ limitations under the License.
                                                                             selectedResult = resultsTableView.getSelectedRow();
                                                                         } else if (count == 2) {
                                                                             if (selectedResult == resultsTableView.getSelectedRow()) {
-                                                                                ApplicationContext.open(selectedResult.get("previewUrl"));
+                                                                                var url = new URL(selectedResult.get("previewUrl"));
+                                                                                Desktop.getDesktop().browse(url.toURI());
                                                                             }
                                                                         }
                                                                     }
@@ -203,10 +205,12 @@ limitations under the License.
                                                     <buttonPressListeners>
                                                         <wtkx:script>
                                                         <![CDATA[
-                                                        importPackage(org.apache.pivot.wtk);
+                                                        importClass(java.awt.Desktop);
+                                                        importClass(java.net.URL);
                                                         function buttonPressed(button) {
                                                             var selectedResult = resultsTableView.getSelectedRow();
-                                                            ApplicationContext.open(selectedResult.get("previewUrl"));
+                                                            var url = new URL(selectedResult.get("previewUrl"));
+                                                            Desktop.getDesktop().browse(url.toURI());
                                                         }
                                                         ]]>
                                                         </wtkx:script>

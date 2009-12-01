@@ -36,8 +36,8 @@ public class DecoratorDemo implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         Border border = new Border();
-        border.getStyles().put("color", 7);
-        border.getStyles().put("backgroundColor", 1);
+        border.getStyles().put("color", 10);
+        border.getStyles().put("backgroundColor", 3);
         mainWindow = new Window(border);
         mainWindow.setMaximized(true);
         mainWindow.open(display);
@@ -66,7 +66,7 @@ public class DecoratorDemo implements Application {
         });
 
         reflectionWindow.open(mainWindow);
-        translucentFrame.open(mainWindow);
+        translucentFrame.open(reflectionWindow);
     }
 
     @Override

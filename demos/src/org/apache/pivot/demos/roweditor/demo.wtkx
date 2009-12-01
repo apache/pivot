@@ -24,55 +24,40 @@ limitations under the License.
     xmlns:demo="org.apache.pivot.demos.roweditor"
     xmlns="org.apache.pivot.wtk">
     <content>
-        <TablePane>
-            <columns>
-                <TablePane.Column width="1*"/>
-            </columns>
-            <rows>
-                <TablePane.Row height="1*">
-                    <Border styles="{color:7}">
-                        <content>
-                            <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
-                                <view>
-                                    <TableView wtkx:id="tableView" selectMode="single">
-                                        <columns>
-                                            <TableView.Column name="date" width="87" headerData="Date"/>
-                                            <TableView.Column name="type" width="125" headerData="Type"/>
-                                            <TableView.Column name="amount" width="75" headerData="Amount">
-                                                <cellRenderer>
-                                                    <content:TableViewNumberCellRenderer numberFormat="&#164;#,##0.00"/>
-                                                </cellRenderer>
-                                            </TableView.Column>
-                                            <TableView.Column name="description" width="1*" headerData="Description" minimumWidth="150"/>
-                                        </columns>
-                                        <tableData>
-                                            <collections:ArrayList>
-                                                <demo:CustomTableRow date="2009-03-28" type="Travel" amount="1286.90" description="Ticket #145-XX-71903-09"/>
-                                                <demo:CustomTableRow date="2009-03-28" type="Meals" amount="34.12" description="Took client out"/>
-                                                <demo:CustomTableRow date="2009-03-31" type="Meals" amount="27.00" description=""/>
-                                                <demo:CustomTableRow date="2009-04-01" type="Meals" amount="12.55" description=""/>
-                                                <demo:CustomTableRow date="2009-04-02" type="Meals" amount="18.86" description=""/>
-                                                <demo:CustomTableRow date="2009-04-02" type="Parking" amount="30.00" description="Cambridge Center parking"/>
-                                                <demo:CustomTableRow date="2009-04-03" type="Meals" amount="20.72" description=""/>
-                                                <demo:CustomTableRow date="2009-04-06" type="Hotel" amount="529.90" description="Marriott reservation #DF-9982-BRN"/>
-                                            </collections:ArrayList>
-                                        </tableData>
-                                    </TableView>
-                                </view>
-                                <columnHeader>
-                                    <TableViewHeader tableView="$tableView" styles="{headersPressable:false}"/>
-                                </columnHeader>
-                            </ScrollPane>
-                        </content>
-                    </Border>
-                </TablePane.Row>
-                <TablePane.Row height="-1">
-                    <BoxPane orientation="vertical" styles="{padding:6, fill:true}">
-                        <Label text="Double click on a row to edit its contents."
-                            styles="{horizontalAlignment:'center', font:{bold:true}}"/>
-                    </BoxPane>
-                </TablePane.Row>
-            </rows>
-        </TablePane>
+        <Border styles="{color:7}">
+            <content>
+                <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
+                    <view>
+                        <TableView wtkx:id="tableView" selectMode="single">
+                            <columns>
+                                <TableView.Column name="date" width="87" headerData="Date"/>
+                                <TableView.Column name="type" width="125" headerData="Type"/>
+                                <TableView.Column name="amount" width="75" headerData="Amount">
+                                    <cellRenderer>
+                                        <content:TableViewNumberCellRenderer numberFormat="&#164;#,##0.00"/>
+                                    </cellRenderer>
+                                </TableView.Column>
+                                <TableView.Column name="description" width="1*" headerData="Description" minimumWidth="150"/>
+                            </columns>
+                            <tableData>
+                                <collections:ArrayList>
+                                    <demo:CustomTableRow date="2009-03-28" type="Travel" amount="1286.90" description="Ticket #145-XX-71903-09"/>
+                                    <demo:CustomTableRow date="2009-03-28" type="Meals" amount="34.12" description="Took client out"/>
+                                    <demo:CustomTableRow date="2009-03-31" type="Meals" amount="27.00" description=""/>
+                                    <demo:CustomTableRow date="2009-04-01" type="Meals" amount="12.55" description=""/>
+                                    <demo:CustomTableRow date="2009-04-02" type="Meals" amount="18.86" description=""/>
+                                    <demo:CustomTableRow date="2009-04-02" type="Parking" amount="30.00" description="Cambridge Center parking"/>
+                                    <demo:CustomTableRow date="2009-04-03" type="Meals" amount="20.72" description=""/>
+                                    <demo:CustomTableRow date="2009-04-06" type="Hotel" amount="529.90" description="Marriott reservation #DF-9982-BRN"/>
+                                </collections:ArrayList>
+                            </tableData>
+                        </TableView>
+                    </view>
+                    <columnHeader>
+                        <TableViewHeader tableView="$tableView" styles="{headersPressable:false}"/>
+                    </columnHeader>
+                </ScrollPane>
+            </content>
+        </Border>
     </content>
 </Window>

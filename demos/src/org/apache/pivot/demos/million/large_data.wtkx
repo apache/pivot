@@ -22,46 +22,50 @@ limitations under the License.
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
     <content>
-        <TablePane styles="{padding:8, backgroundColor:10}">
-            <columns>
-                <TablePane.Column width="1*"/>
-            </columns>
-            <rows>
-                <TablePane.Row height="-1">
-                    <BoxPane orientation="vertical" styles="{fill:true}">
-                        <BoxPane>
-                            <ListButton wtkx:id="fileListButton"
-                                listData="['10e0.csv', '10e1.csv', '10e2.csv', '10e3.csv', '10e4.csv', '10e5.csv']" selectedIndex="0"/>
-                            <PushButton wtkx:id="loadDataButton" buttonData="Load Data" styles="{minimumAspectRatio:3}"/>
-                            <PushButton wtkx:id="cancelButton" buttonData="Cancel" enabled="false" styles="{minimumAspectRatio:3}"/>
-                        </BoxPane>
-                        <Label wtkx:id="statusLabel"/>
-                        <Separator/>
-                    </BoxPane>
-                </TablePane.Row>
-                <TablePane.Row height="1*">
-                    <Border>
-                        <content>
-                            <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
-                                <view>
-                                    <TableView wtkx:id="tableView" selectMode="single"
-                                        styles="{showHorizontalGridLines:false}">
-                                        <columns>
-                                            <TableView.Column name="c0" headerData="0" width="120"/>
-                                            <TableView.Column name="c1" headerData="1" width="120"/>
-                                            <TableView.Column name="c2" headerData="2" width="120"/>
-                                            <TableView.Column name="c3" headerData="3" width="120"/>
-                                        </columns>
-                                    </TableView>
-                                </view>
-                                <columnHeader>
-                                    <TableViewHeader tableView="$tableView" sortMode="single_column"/>
-                                </columnHeader>
-                            </ScrollPane>
-                        </content>
-                    </Border>
-                </TablePane.Row>
-            </rows>
-        </TablePane>
+        <Border>
+            <content>
+                <TablePane styles="{padding:8, backgroundColor:10}">
+                    <columns>
+                        <TablePane.Column width="1*"/>
+                    </columns>
+                    <rows>
+                        <TablePane.Row height="-1">
+                            <BoxPane orientation="vertical" styles="{fill:true}">
+                                <BoxPane>
+                                    <ListButton wtkx:id="fileListButton"
+                                        listData="['10e0.csv', '10e1.csv', '10e2.csv', '10e3.csv', '10e4.csv', '10e5.csv']" selectedIndex="0"/>
+                                    <PushButton wtkx:id="loadDataButton" buttonData="Load Data" styles="{minimumAspectRatio:3}"/>
+                                    <PushButton wtkx:id="cancelButton" buttonData="Cancel" enabled="false" styles="{minimumAspectRatio:3}"/>
+                                </BoxPane>
+                                <Label wtkx:id="statusLabel"/>
+                                <Separator/>
+                            </BoxPane>
+                        </TablePane.Row>
+                        <TablePane.Row height="1*">
+                            <Border>
+                                <content>
+                                    <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
+                                        <view>
+                                            <TableView wtkx:id="tableView" selectMode="single"
+                                                styles="{showHorizontalGridLines:false}">
+                                                <columns>
+                                                    <TableView.Column name="c0" headerData="0" width="120"/>
+                                                    <TableView.Column name="c1" headerData="1" width="120"/>
+                                                    <TableView.Column name="c2" headerData="2" width="120"/>
+                                                    <TableView.Column name="c3" headerData="3" width="120"/>
+                                                </columns>
+                                            </TableView>
+                                        </view>
+                                        <columnHeader>
+                                            <TableViewHeader tableView="$tableView" sortMode="single_column"/>
+                                        </columnHeader>
+                                    </ScrollPane>
+                                </content>
+                            </Border>
+                        </TablePane.Row>
+                    </rows>
+                </TablePane>
+            </content>
+        </Border>
     </content>
 </Window>
