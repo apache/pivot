@@ -1140,26 +1140,28 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                     // Add all preceding text to the selection
                     selectionLength = selectionStart + selectionLength;
                     selectionStart = 0;
+                    consumed = true;
                 } else if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
                     // Add the previous character to the selection
                     if (selectionStart > 0) {
                         selectionStart--;
                         selectionLength++;
                     }
+
+                    consumed = true;
                 } else if (Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
                     // Clear the selection and move the caret to the beginning of
                     // the text
                     selectionStart = 0;
                     selectionLength = 0;
+                    consumed = true;
                 } else {
                     // Clear the selection and move the caret back by one
                     // character
-                    if (selectionLength == 0) {
-                        if (selectionStart > 0) {
-                            selectionStart--;
-                        } else {
-                            consumed = false;
-                        }
+                    if (selectionLength == 0
+                        && selectionStart > 0) {
+                        selectionStart--;
+                        consumed = true;
                     }
 
                     selectionLength = 0;
@@ -1172,8 +1174,6 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 } else {
                     setScrollLeft(0);
                 }
-
-                consumed = true;
             } else if (keyCode == Keyboard.KeyCode.RIGHT) {
                 int selectionStart = textInput.getSelectionStart();
                 int selectionLength = textInput.getSelectionLength();
@@ -1182,27 +1182,29 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                     && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
                     // Add all subsequent text to the selection
                     selectionLength = textNode.getCharacterCount() - selectionStart;
+                    consumed = true;
                 } else if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
                     // Add the next character to the selection
                     if (selectionStart + selectionLength < textNode.getCharacterCount()) {
                         selectionLength++;
                     }
+
+                    consumed = true;
                 } else if (Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
                     // Clear the selection and move the caret to the end of
                     // the text
                     selectionStart = textNode.getCharacterCount();
                     selectionLength = 0;
+                    consumed = true;
                 } else {
                     // Clear the selection and move the caret forward by one
                     // character
                     selectionStart += selectionLength;
 
-                    if (selectionLength == 0) {
-                        if (selectionStart < textNode.getCharacterCount()) {
-                            selectionStart++;
-                        } else {
-                            consumed = false;
-                        }
+                    if (selectionLength == 0
+                        && selectionStart < textNode.getCharacterCount()) {
+                        selectionStart++;
+                        consumed = true;
                     }
 
                     selectionLength = 0;
@@ -1216,8 +1218,6 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                     scrollLeft = 0;
                     updateSelection();
                 }
-
-                consumed = true;
             } else if (keyCode == Keyboard.KeyCode.HOME) {
                 // Move the caret to the beginning of the text
                 if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {

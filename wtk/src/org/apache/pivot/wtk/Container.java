@@ -331,15 +331,12 @@ public abstract class Container extends Component
     }
 
     @Override
-    public void validate() {
-        if (!isValid()
-            && isVisible()) {
-            super.validate();
+    protected void layout() {
+        super.layout();
 
-            for (int i = 0, n = components.getLength(); i < n; i++) {
-                Component component = components.get(i);
-                component.validate();
-            }
+        for (int i = 0, n = components.getLength(); i < n; i++) {
+            Component component = components.get(i);
+            component.validate();
         }
     }
 

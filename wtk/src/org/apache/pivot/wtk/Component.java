@@ -1897,9 +1897,16 @@ public abstract class Component implements ConstrainedVisual {
     public void validate() {
         if (!valid
             && visible) {
-            skin.layout();
+            layout();
             valid = true;
         }
+    }
+
+    /**
+     * Called to lay out the component.
+     */
+    protected void layout() {
+        skin.layout();
     }
 
     /**
