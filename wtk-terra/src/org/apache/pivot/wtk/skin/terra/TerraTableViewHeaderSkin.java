@@ -265,8 +265,8 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
             borderColor = disabledBorderColor;
         }
 
-        graphics.setPaint(new GradientPaint(width / 2, 0, bevelColor,
-            width / 2, height, backgroundColor));
+        graphics.setPaint(new GradientPaint(width / 2f, 0, bevelColor,
+            width / 2f, height, backgroundColor));
         graphics.fillRect(0, 0, width, height);
 
         // Paint the border
