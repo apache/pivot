@@ -205,7 +205,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
 
         public void setBreakWidth(int breakWidth) {
-            assert (breakWidth < 0);
+            assert (breakWidth > 0);
 
             int previousBreakWidth = this.breakWidth;
 

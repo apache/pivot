@@ -170,7 +170,6 @@ public class TerraFormSkin extends ContainerSkin
 
                     // Determine the label size and baseline
                     Dimensions labelSize = label.getPreferredSize();
-                    label.setSize(labelSize);
                     int labelAscent = label.getBaseline(labelSize.width, labelSize.height);
                     if (labelAscent == -1) {
                         labelAscent = labelSize.height;
@@ -186,8 +185,6 @@ public class TerraFormSkin extends ContainerSkin
                     } else {
                         fieldSize = field.getPreferredSize();
                     }
-
-                    field.setSize(fieldSize);
 
                     int fieldAscent = field.getBaseline(fieldSize.width, fieldSize.height);
                     if (fieldAscent == -1) {
@@ -277,7 +274,6 @@ public class TerraFormSkin extends ContainerSkin
 
                     // Determine the label size and baseline
                     Dimensions labelSize = label.getPreferredSize();
-                    label.setSize(labelSize);
                     int labelAscent = label.getBaseline(labelSize.width, labelSize.height);
                     if (labelAscent == -1) {
                         labelAscent = labelSize.height;
@@ -291,8 +287,6 @@ public class TerraFormSkin extends ContainerSkin
                     } else {
                         fieldSize = field.getPreferredSize();
                     }
-
-                    field.setSize(fieldSize);
 
                     int fieldAscent = field.getBaseline(fieldSize.width, fieldSize.height);
                     if (fieldAscent == -1) {
