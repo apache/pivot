@@ -72,8 +72,6 @@ limitations under the License.
     <!-- Compile macro -->
     <macrodef name="compile">
         <attribute name="project"/>
-        <attribute name="srcDir" default="src"/>
-        <element name="classpath-elements" optional="true" implicit="true"/>
 
         <sequential>
             <!-- JDK version check -->
@@ -98,18 +96,24 @@ limitations under the License.
             </fail>
 
             <mkdir dir="@{project}/${folder.bin}"/>
-            <javac srcdir="@{project}/@{srcDir}"
-                destDir="@{project}/${folder.bin}"
+            <javac destDir="@{project}/${folder.bin}"
                 includejavaruntime="true"
                 deprecation="${compiler.deprecation}"
                 debug="${compiler.debug}"
                 target="${compiler.target}"
                 encoding="${compiler.encoding}"
                 failonerror="true">
+                <src>
+                    <dirset dir="@{project}">
+                        <include name="src"/>
+                        <include name="test"/>
+                    </dirset>
+                </src>
                 <compilerarg line="${compiler.arg}"/>
                 <classpath>
                     <path refid="classpath.javalib"/>
-                    <classpath-elements/>
+                    <dirset dir="${basedir}" includes="**/${folder.bin}"/>
+                    <fileset dir="@{project}" includes="lib/**/*.jar"/>
                 </classpath>
             </javac>
         </sequential>
@@ -118,10 +122,9 @@ limitations under the License.
     <!-- Test macro -->
     <macrodef name="test">
         <attribute name="project"/>
-        <element name="classpath-elements" optional="true" implicit="true"/>
 
         <sequential>
-            <echo message="@{project}: Executing test cases"/>
+            <echo message="@{project}: Executing test cases..."/>
 
             <condition property="test.formatter">
                 <istrue value="${test.verbose}"/>
@@ -129,7 +132,10 @@ limitations under the License.
 
             <junit fork="true">
                 <classpath>
-                    <classpath-elements/>
+                    <path refid="classpath.javalib"/>
+                    <dirset dir="${basedir}" includes="**/${folder.bin}"/>
+                    <dirset dir="@{project}" includes="test"/>
+                    <fileset dir="@{project}" includes="lib/**/*.jar"/>
                 </classpath>
 
                 <formatter type="brief" usefile="false" if="test.formatter"/>
@@ -173,6 +179,23 @@ limitations under the License.
         </sequential>
     </macrodef>
 
+    <!-- Clean macro -->
+    <macrodef name="clean">
+        <attribute name="project"/>
+
+        <sequential>
+            <delete includeemptydirs="true">
+                <fileset dir="@{project}">
+                    <include name="${folder.bin}/**"/>
+                    <include name="${folder.deploy}/**"/>
+                </fileset>
+                <fileset dir="${basedir}">
+                    <include name="${folder.lib}/${ant.project.name}-@{project}-${version}.jar"/>
+                </fileset>
+            </delete>
+        </sequential>
+    </macrodef>
+
     <macrodef name="clean-www">
         <attribute name="project"/>
 
@@ -183,26 +206,41 @@ limitations under the License.
         </sequential>
     </macrodef>
 
-    <!-- Aggregate targets -->
+    <!-- Compile all classes (tests included) -->
     <target name="compile" description="Compiles all projects"
-        depends="compile-main, compile-test"/>
-
-    <target name="compile-main"
         depends="charts, core, demos, tools, tutorials, web, web-server, wtk, wtk-terra"/>
 
-    <target name="compile-test"
-        depends="core-test, web-test, wtk-test"/>
+    <!-- Package JAR files -->
+    <target name="package" description="Packages all projects into JAR files" depends="compile">
+        <package project="charts" jarFile="${jar.charts}" title="Charts"/>
+        <package project="core" jarFile="${jar.core}" title="Core"/>
+        <package project="demos" jarFile="${jar.demos}" title="Demos"/>
+        <package project="tools" jarFile="${jar.tools}" title="Tools"/>
+        <package project="tutorials" jarFile="${jar.tutorials}" title="Tutorials"/>
+        <package project="web" jarFile="${jar.web}" title="Web Queries"/>
+        <package project="web-server" jarFile="${jar.web-server}" title="Web Queries Server"/>
+        <package project="wtk" jarFile="${jar.wtk}" title="WTK"/>
+        <package project="wtk-terra" jarFile="${jar.wtk-terra}" title="WTK Terra Theme Provider"/>
+    </target>
 
-    <target name="package"
-        depends="charts-package, core-package, demos-package, tools-package, tutorials-package,
-                 web-package, web-server-package, wtk-package, wtk-terra-package"/>
+    <!-- Run unit tests -->
+    <target name="test" description="Executes unit tests" depends="compile">
+        <test project="core"/>
+        <test project="web"/>
+    </target>
 
-    <target name="test"
-        depends="core-test-run, web-test-run"/>
-
-    <target name="clean" description="Removes all build artifacts"
-        depends="charts-clean, core-clean, demos-clean, tools-clean, tutorials-clean, web-clean,
-                 web-server-clean, wtk-clean, wtk-terra-clean">
+    <!-- Clean -->
+    <target name="clean" description="Removes all build artifacts">
+        <clean project="charts"/>
+        <clean project="core"/>
+        <clean project="demos"/>
+        <clean project="tools"/>
+        <clean project="tutorials"/>
+        <clean project="web"/>
+        <clean project="web-server"/>
+        <clean project="wtk"/>
+        <clean project="wtk-terra"/>
+        <clean-www project="tutorials"/>
         <delete dir="${folder.dist}"/>
         <delete dir="${folder.doc}"/>
         <delete dir="${folder.install}"/>
@@ -232,159 +270,36 @@ limitations under the License.
         </javadoc>
     </target>
 
-    <!-- charts -->
+    <!-- Individual compile targets resolve inter-project dependency -->
     <target name="charts" depends="core, wtk">
-        <compile project="charts">
-            <pathelement location="core/${folder.bin}"/>
-            <pathelement location="wtk/${folder.bin}"/>
-        </compile>
+        <compile project="charts"/>
     </target>
 
-    <target name="charts-package" depends="charts">
-        <package project="charts" jarFile="${jar.charts}" title="Charts"/>
-    </target>
-
-    <target name="charts-clean">
-        <delete dir="charts/${folder.bin}"/>
-        <delete file="${folder.lib}/${jar.charts}"/>
-    </target>
-
-    <!-- core -->
     <target name="core">
         <compile project="core"/>
     </target>
 
-    <target name="core-package" depends="core">
-        <package project="core" jarFile="${jar.core}" title="Core"/>
-    </target>
-
-    <target name="core-clean">
-        <delete dir="core/${folder.bin}"/>
-        <delete file="${folder.lib}/${jar.core}"/>
-    </target>
-
-    <target name="core-test" depends="core">
-        <compile project="core" srcDir="test">
-            <pathelement location="core/${folder.bin}"/>
-            <pathelement location="core/test"/>
-        </compile>
-    </target>
-
-    <target name="core-test-run" depends="core-test">
-        <test project="core">
-            <pathelement location="core/${folder.bin}"/>
-            <pathelement location="core/test"/>
-        </test>
-    </target>
-
-    <!-- demos -->
     <target name="demos" depends="core, wtk, web">
-        <compile project="demos">
-            <pathelement location="core/${folder.bin}"/>
-            <pathelement location="web/${folder.bin}"/>
-            <pathelement location="wtk/${folder.bin}"/>
-        </compile>
+        <compile project="demos"/>
     </target>
 
-    <target name="demos-package" depends="demos">
-        <package project="demos" jarFile="${jar.demos}" title="Demos"/>
+    <target name="tools" depends="core, wtk">
+        <compile project="tools"/>
     </target>
 
-    <target name="demos-clean">
-        <delete dir="demos/${folder.bin}"/>
-        <delete dir="demos/${folder.deploy}"/>
-        <delete file="${folder.lib}/${jar.demos}"/>
-    </target>
-
-    <!-- tools -->
-    <target name="tools" depends="core, wtk, web">
-        <compile project="tools">
-            <pathelement location="core/${folder.bin}"/>
-            <pathelement location="web/${folder.bin}"/>
-            <pathelement location="wtk/${folder.bin}"/>
-        </compile>
-    </target>
-
-    <target name="tools-package" depends="tools">
-        <package project="tools" jarFile="${jar.tools}" title="Tools"/>
-    </target>
-
-    <target name="tools-clean">
-        <delete dir="tools/${folder.bin}"/>
-        <delete file="${folder.lib}/${jar.tools}"/>
-    </target>
-
-    <!-- tutorials -->
     <target name="tutorials" depends="core, wtk, web, tools">
-        <compile project="tutorials">
-            <pathelement location="core/${folder.bin}"/>
-            <pathelement location="web/${folder.bin}"/>
-            <pathelement location="wtk/${folder.bin}"/>
-            <pathelement location="tools/${folder.bin}"/>
-        </compile>
+        <compile project="tutorials"/>
     </target>
 
-    <target name="tutorials-package" depends="tutorials">
-        <package project="tutorials" jarFile="${jar.tutorials}" title="Tutorials"/>
-    </target>
-
-    <target name="tutorials-clean">
-        <delete dir="tutorials/${folder.bin}"/>
-        <delete file="${folder.lib}/${jar.tutorials}"/>
-        <clean-www project="tutorials"/>
-    </target>
-
-    <!-- web -->
     <target name="web" depends="core">
-        <compile project="web">
-            <pathelement location="core/${folder.bin}"/>
-        </compile>
+        <compile project="web"/>
     </target>
 
-    <target name="web-package" depends="web">
-        <package project="web" jarFile="${jar.web}" title="Web Queries"/>
-    </target>
-
-    <target name="web-clean">
-        <delete dir="web/${folder.bin}"/>
-        <delete file="${folder.lib}/${jar.web}"/>
-    </target>
-
-    <target name="web-test" depends="web">
-        <compile project="web" srcDir="test">
-            <pathelement location="core/${folder.bin}"/>
-            <pathelement location="web/${folder.bin}"/>
-        </compile>
-    </target>
-
-    <target name="web-test-run" depends="web-test">
-        <test project="web">
-            <pathelement location="core/${folder.bin}"/>
-            <pathelement location="web/${folder.bin}"/>
-        </test>
-    </target>
-
-    <!-- web-server -->
     <target name="web-server" depends="core, web">
-        <compile project="web-server">
-            <pathelement location="core/${folder.bin}"/>
-            <pathelement location="web/${folder.bin}"/>
-            <fileset dir="web-server/lib" includes="**/*.jar"/>
-        </compile>
+        <compile project="web-server"/>
     </target>
 
-    <target name="web-server-package" depends="web-server">
-        <package project="web-server" jarFile="${jar.web-server}" title="Web Queries Server"/>
-    </target>
-
-    <target name="web-server-clean">
-        <delete dir="web-server/${folder.bin}"/>
-        <delete file="${folder.lib}/${jar.web-server}"/>
-    </target>
-
-    <!-- wtk -->
     <target name="wtk" depends="core">
-        <!-- Fail descriptively if the user's classpath is not set up correctly -->
         <fail message="LiveConnect not found. Please see the BUILD file for more information.">
             <condition>
                 <not>
@@ -394,42 +309,11 @@ limitations under the License.
             </condition>
         </fail>
 
-        <compile project="wtk">
-            <pathelement location="core/${folder.bin}"/>
-        </compile>
+        <compile project="wtk"/>
     </target>
 
-    <target name="wtk-package" depends="wtk">
-        <package project="wtk" jarFile="${jar.wtk}" title="WTK"/>
-    </target>
-
-    <target name="wtk-clean">
-        <delete dir="wtk/${folder.bin}"/>
-        <delete file="${folder.lib}/${jar.wtk}"/>
-    </target>
-
-    <target name="wtk-test" depends="core, wtk">
-        <compile project="wtk" srcDir="test">
-            <pathelement location="core/${folder.bin}"/>
-            <pathelement location="wtk/${folder.bin}"/>
-        </compile>
-    </target>
-
-    <!-- wtk-terra -->
     <target name="wtk-terra" depends="core, wtk">
-        <compile project="wtk-terra">
-            <pathelement location="core/${folder.bin}"/>
-            <pathelement location="wtk/${folder.bin}"/>
-        </compile>
-    </target>
-
-    <target name="wtk-terra-package" depends="wtk-terra">
-        <package project="wtk-terra" jarFile="${jar.wtk-terra}" title="WTK Terra Theme Provider"/>
-    </target>
-
-    <target name="wtk-terra-clean">
-        <delete dir="wtk-terra/${folder.bin}"/>
-        <delete file="${folder.lib}/${jar.wtk-terra}"/>
+        <compile project="wtk-terra"/>
     </target>
 
     <!-- Package source distribution -->
