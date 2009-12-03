@@ -127,9 +127,8 @@ limitations under the License.
                 </xsl:variable>
                 libraries.push('<xsl:value-of select="$jar"/>');
                 <xsl:variable name="jar-terra">
-                    <xsl:value-of select="'lib/pivot-wtk-'"/>
+                    <xsl:value-of select="'lib/pivot-wtk-terra-'"/>
                     <xsl:value-of select="$release"/>
-                    <xsl:value-of select="'.terra'"/>
                     <xsl:if test="$signed">
                         <xsl:value-of select="'.signed'"/>
                     </xsl:if>
