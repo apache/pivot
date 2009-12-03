@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 Licensed to the Apache Software Foundation (ASF) under one or more
 contributor license agreements.  See the NOTICE file distributed with
@@ -15,64 +16,69 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<html>
-<head>
-<title>Text</title>
-<link rel="stylesheet" href="tutorial.css">
-<script src="http://java.com/js/deployJava.js"></script>
+<document id="text">
+    <properties>
+        <title>Text</title>
+    </properties>
 
-<!-- NOTE: Syntax highlighting script is LGPL -->
-<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shCore.js"></script>
-<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushJava.js"></script>
-<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushXml.js"></script>
-<link type="text/css" rel="stylesheet" href="http://alexgorbatchev.com/pub/sh/current/styles/shCore.css"/>
-<link type="text/css" rel="stylesheet" href="http://alexgorbatchev.com/pub/sh/current/styles/shThemeDefault.css"/>
-<script type="text/javascript">
-    SyntaxHighlighter.all();
-</script>
-</head>
-<body>
-<h1>Text</h1>
+    <body>
+        <p>
+            Text input components in Pivot include <tt>TextInput</tt> and <tt>TextArea</tt>.
+            <tt>TextInput</tt> allows a user to enter a single line of unformatted text; the text
+            may be presented in the clear or may be masked for use as a "password" field.
+            <tt>TextArea</tt> is a rich, multi-line text component and is discussed in the next
+            section.
+        </p>
 
-<p>Text input components in Pivot include <tt>TextInput</tt> and <tt>TextArea</tt>. <tt>TextInput</tt> allows a user to enter a single line of unformatted text; the text may be presented in the clear or may be masked for use as a "password" field. <tt>TextArea</tt> is a rich, multi-line text component and is discussed in the next section.</p>
+        <p>
+            The following example application demonstrates use of the <tt>TextInput</tt> component:
+        </p>
 
-<p>The following example application demonstrates use of the <tt>TextInput</tt> component:</p>
+        <application class="org.apache.pivot.tutorials.text.TextInputs" width="240" height="40">
+            <libraries>
+                <library>core</library>
+                <library>wtk</library>
+                <library>wtk-terra</library>
+                <library>tutorials</library>
+            </libraries>
+        </application>
 
-<script src="version.js"></script>
-<script>
-var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
-    archive:"lib/pivot-core-" + version + ".jar"
-        + ",lib/pivot-wtk-" + version + ".jar"
-        + ",lib/pivot-wtk-" + version + ".terra.jar"
-        + ",lib/pivot-tutorials-" + version + ".jar",
-    width:240,
-    height:40
-};
-var parameters = {application_class_name:"org.apache.pivot.tutorials.text.TextInputs",
-    codebase_lookup:false,
-    java_arguments:"-Dsun.awt.noerasebackground=true -Dsun.awt.erasebackgroundonresize=true"
-};
-deployJava.writeAppletTag(attributes, parameters);
-</script>
+        <p>
+            The example helps simplify the task of entering the name of a U.S. state. As soon as
+            enough characters are entered to uniquely identify a state's name, the application
+            automatically populates the component with the full name of the state. Some states,
+            such as Florida, can be identified by a single character. Others, such as Washington,
+            Wisconsin, and Wyoming, require two; Alaska and Alabama require 4.
+        </p>
 
-<p>The example helps simplify the task of entering the name of a U.S. state. As soon as enough characters are entered to uniquely identify a state's name, the application automatically populates the component with the full name of the state. Some states, such as Florida, can be identified by a single character. Others, such as Washington, Wisconsin, and Wyoming, require two; Alaska and Alabama require 4.</p>
-
-<pre class="brush:xml">
-&lt;Window title="Text Inputs" maximized="true"
+        <source type="xml" location="org/apache/pivot/tutorials/text/text_inputs.wtkx">
+            <![CDATA[
+<Window title="Text Inputs" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
-    xmlns="org.apache.pivot.wtk"&gt;
-    &lt;content&gt;
-        &lt;BoxPane styles="{padding:4, verticalAlignment:'center'}"&gt;
-            &lt;Label text="State:"/&gt;
-            &lt;TextInput wtkx:id="stateTextInput" textSize="20"/&gt;
-        &lt;/BoxPane&gt;
-    &lt;/content&gt;
-&lt;/Window&gt;
-</pre>
+    xmlns="org.apache.pivot.wtk">
+    <content>
+        <BoxPane styles="{padding:4, verticalAlignment:'center'}">
+            <Label text="State:"/>
+            <TextInput wtkx:id="stateTextInput"/>
+        </BoxPane>
+    </content>
+</Window>
+            ]]>
+        </source>
 
-<p>The WTKX source for this example is quite short, consisting of only a <tt>BoxPane</tt>, <tt>Label</tt>, and <tt>TextInput</tt>. Most of the demo's functionality is defined in the Java source, shown below. The application's constructor first establishes a sorted list of state names. In <tt>startup()</tt>, the application attaches a <tt>TextInputCharacterListener</tt> to the text input. In the listener's <tt>charactersInserted()</tt> method, the handler attempts to identify the state whose name matches the entered text. If found, it is set as the text property of the text input.</p>
+        <p>
+            The WTKX source for this example is quite short, consisting of only a <tt>BoxPane</tt>,
+            <tt>Label</tt>, and <tt>TextInput</tt>. Most of the demo's functionality is defined in
+            the Java source, shown below. The application's constructor first establishes a sorted
+            list of state names. In <tt>startup()</tt>, the application attaches a
+            <tt>TextInputCharacterListener</tt> to the text input. In the listener's
+            <tt>charactersInserted()</tt> method, the handler attempts to identify the state whose
+            name matches the entered text. If found, it is set as the text property of the text
+            input.
+        </p>
 
-<pre class="brush:java">
+        <source type="java" location="org/apache/pivot/tutorials/text/TextInputs.java">
+            <![CDATA[
 package org.apache.pivot.tutorials.text;
 
 import org.apache.pivot.collections.ArrayList;
@@ -89,7 +95,7 @@ public class TextInputs implements Application {
     private Window window = null;
     private TextInput stateTextInput = null;
 
-    private ArrayList&lt;String&gt; states;
+    private ArrayList<String> states;
 
     private TextInputCharacterListener textInputCharacterListener =
         new TextInputCharacterListener.Adapter() {
@@ -99,11 +105,11 @@ public class TextInputs implements Application {
             int i = ArrayList.binarySearch(states, text,
                 states.getComparator());
 
-            if (i &lt; 0) {
+            if (i < 0) {
                 i = -(i + 1);
                 int n = states.getLength();
 
-                if (i &lt; n) {
+                if (i < n) {
                     text = text.toLowerCase();
                     final String state = states.get(i);
 
@@ -123,7 +129,7 @@ public class TextInputs implements Application {
 
     public TextInputs() {
         // Populate the lookup values, ensuring that they are sorted
-        states = new ArrayList&lt;String&gt;();
+        states = new ArrayList<String>();
         states.setComparator(String.CASE_INSENSITIVE_ORDER);
 
         states.add("Alabama");
@@ -179,7 +185,7 @@ public class TextInputs implements Application {
         states.add("Wyoming");
     }
 
-    public void startup(Display display, Map&lt;String, String&gt; properties)
+    public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "text_inputs.wtkx");
@@ -209,8 +215,7 @@ public class TextInputs implements Application {
         DesktopApplicationContext.main(Text.class, args);
     }
 }
-</pre>
-
-<p>Next: <a href="text_areas.html">Text Areas</a></p>
-</body>
-</html>
+            ]]>
+        </source>
+    </body>
+</document>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<document id="toggle-buttons">
+    <properties>
+        <title>Toggle Buttons</title>
+    </properties>
+
+    <body>
+        <p>
+            While some button types, such as radio buttons and checkboxes, are always toggle
+            buttons, other types, including push buttons, may optionally be configured to behave as
+            toggle buttons. For example, see the push buttons in the application below. Clicking a
+            button causes it to retain a pressed state; clicking it again releases the button:
+        </p>
+
+        <application class="org.apache.pivot.wtk.ScriptApplication" width="240" height="80">
+            <libraries>
+                <library>core</library>
+                <library>wtk</library>
+                <library>wtk-terra</library>
+                <library>tutorials</library>
+            </libraries>
+            <startup-properties>
+                <src>org/apache/pivot/tutorials/buttons/toggle_buttons.wtkx</src>
+            </startup-properties>
+        </application>
+
+        <p>The WTKX source for the example is below:</p>
+
+        <source type="xml" location="org/apache/pivot/tutorials/buttons/toggle_buttons.wtkx">
+            <![CDATA[
+<Window title="Toggle Buttons" maximized="true"
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:content="org.apache.pivot.wtk.content"
+    xmlns="org.apache.pivot.wtk">
+    <content>
+        <BoxPane styles="{padding:4, horizontalAlignment:'center',
+            verticalAlignment:'center'}">
+            <PushButton toggleButton="true">
+                <buttonData>
+                    <content:ButtonData text="Anchor" icon="org/apache/pivot/tutorials/anchor.png"/>
+                </buttonData>
+            </PushButton>
+            <PushButton toggleButton="true">
+                <buttonData>
+                    <content:ButtonData text="Cup" icon="org/apache/pivot/tutorials/cup.png"/>
+                </buttonData>
+            </PushButton>
+            <PushButton toggleButton="true">
+                <buttonData>
+                    <content:ButtonData text="Star" icon="org/apache/pivot/tutorials/star.png"/>
+                </buttonData>
+            </PushButton>
+        </BoxPane>
+    </content>
+</Window>
+]]>
+        </source>
+
+        <p>
+            Note that the push buttons in the example display both an icon and a text label. The
+            data for each button is specified as an instance of
+            <tt>org.apache.pivot.wtk.content.ButtonData</tt>, which defines "icon" and "text"
+            properties. In addition to simple string data, the default button data renderer is
+            also capable of displaying button data provided in this manner.
+        </p>
+
+        <p>
+            Note also that the values of the "icon" attributes do not begin with an '@' symbol. In
+            WTKX, image URLs are commonly specified with this prefix, to indicate that an image's
+            location is relative to the WTKX source file currently being loaded. An image path
+            without an '@' prefix, such as those in this example, is generally treated as an
+            absolute location relative to the application's classpath.
+        </p>
+
+        <p>
+            Finally, note that the buttons' states are all managed independently: clicking one
+            button does not affect the selection state of the others. This is because the buttons
+            are not part of a group. Had the buttons all been assigned to the same group, only a
+            single button would be selected at a time, and clicking one button would automatically
+            deselect the previously selected button.
+        </p>
+
+        <p>
+            Because this application doesn't require any special logic, there is no Java source for
+            this example; the example is launched using the
+            <tt>org.apache.pivot.wtk.ScriptApplication</tt> class.
+        </p>
+    </body>
+</document>

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<document id="text-areas">
+    <properties>
+        <title>Text Areas</title>
+        <explore>TextArea</explore>
+    </properties>
+
+    <body>
+        <p>
+            While the <tt>TextInput</tt> component restricts the user to entering a single line of
+            text, <tt>TextArea</tt> provides support for entering multiple lines of wrapped text.
+            The following application demonstrates the use of <tt>TextArea</tt>:
+        </p>
+
+        <application class="org.apache.pivot.wtk.ScriptApplication" width="420" height="420">
+            <libraries>
+                <library>core</library>
+                <library>wtk</library>
+                <library>wtk-terra</library>
+                <library>tutorials</library>
+            </libraries>
+            <startup-properties>
+                <src>org/apache/pivot/tutorials/text/text_areas.wtkx</src>
+            </startup-properties>
+        </application>
+
+
+        <p>
+            The WTKX source for this example is shown below (there is no corresponding Java source):
+        </p>
+
+        <source type="xml" location="org/apache/pivot/tutorials/text/text_areas.wtkx">
+            <![CDATA[
+<Window title="Text Areas" maximized="true"
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns="org.apache.pivot.wtk">
+    <content>
+        <Border styles="{color:10}">
+            <content>
+                <ScrollPane horizontalScrollBarPolicy="fill">
+                    <view>
+                        <TablePane styles="{padding:8, verticalSpacing:8}">
+                            <columns>
+                                <TablePane.Column width="1*"/>
+                            </columns>
+                            <rows>
+                                <TablePane.Row height="1*">
+                                    <Border styles="{color:10}">
+                                        <content>
+                                            <ScrollPane horizontalScrollBarPolicy="fill"
+                                                verticalScrollBarPolicy="fill_to_capacity"
+                                                preferredHeight="240">
+                                                <view>
+                                                    <TextArea wtkx:id="textArea">
+                                                        <text>
+                                                        Lorem ipsum dolor sit amet, consetetur
+                                                        sadipscing elitr, sed diam nonumy eirmod
+                                                        tempor invidunt ut labore et dolore magna
+                                                        aliquyam erat, sed diam voluptua. At vero
+                                                        eos et accusam et justo duo dolores et ea
+                                                        rebum. Stet clita kasd gubergren, no sea
+                                                        takimata sanctus est Lorem ipsum dolor sit
+                                                        amet.
+
+                                                        Stet clita kasd gubergren, no sea takimata
+                                                        sanctus est Lorem ipsum dolor sit amet.
+
+                                                        Lorem ipsum dolor sit amet, consetetur
+                                                        sadipscing elitr, sed diam nonumy eirmod
+                                                        tempor invidunt ut labore et dolore magna
+                                                        aliquyam erat, sed diam voluptua. At vero
+                                                        eos et accusam et justo duo dolores et ea
+                                                        rebum.
+
+                                                        Stet clita kasd gubergren, no sea takimata
+                                                        sanctus est Lorem ipsum dolor sit amet.
+
+                                                        Lorem ipsum dolor sit amet, consetetur
+                                                        sadipscing elitr, sed diam nonumy eirmod
+                                                        tempor invidunt ut labore et dolore magna
+                                                        aliquyam erat, sed diam voluptua. At vero
+                                                        eos et accusam et justo duo dolores et ea
+                                                        rebum. Stet clita kasd gubergren, no sea
+                                                        takimata sanctus est Lorem ipsum dolor sit
+                                                        amet.
+
+                                                        Lorem ipsum dolor sit amet, consetetur
+                                                        sadipscing elitr, sed diam nonumy eirmod
+                                                        tempor invidunt ut labore et dolore magna
+                                                        aliquyam erat, sed diam voluptua. At vero
+                                                        eos et accusam et justo duo dolores et ea
+                                                        rebum.
+                                                        </text>
+                                                    </TextArea>
+                                                </view>
+                                            </ScrollPane>
+                                        </content>
+                                    </Border>
+                                </TablePane.Row>
+                                <TablePane.Row height="-1">
+                                    <Border styles="{color:10}">
+                                        <content>
+                                            <TextArea minimumPreferredHeight="80">
+                                                <text>
+                                                Lorem ipsum dolor sit amet, consetetur
+                                                sadipscing elitr, sed diam nonumy eirmod
+                                                tempor invidunt ut labore et dolore magna
+                                                aliquyam erat, sed diam voluptua. At vero
+                                                eos et accusam et justo duo dolores et ea
+                                                rebum.
+                                                </text>
+                                            </TextArea>
+                                        </content>
+                                    </Border>
+                                </TablePane.Row>
+                            </rows>
+                        </TablePane>
+                    </view>
+                </ScrollPane>
+            </content>
+        </Border>
+    </content>
+</Window>
+            ]]>
+        </source>
+
+        <p>
+            Text areas are often placed in scroll panes because their content may grow too long to
+            fit on the screen. However, as shown in the above example, they are not required to be
+            direct descendants of a scroll pane - typing in the bottom text area causes the text
+            area to grow as each new line is added. A top-level scroll pane that contains the
+            entire application content displays a scroll bar as needed to accommodate the height of
+            the bottom text area.
+        </p>
+
+        <p>
+            Though it is not demonstrated in this example, text areas may be flagged as
+            non-editable by setting the "editable" flag to <tt>false</tt>. When non-editable, the
+            user is still able to select text but is not allowed to modify it. This is useful when
+            an application needs to present some read-only text to the user but still allow that
+            text to be selected (e.g. for copy to the clipboard).
+        </p>
+    </body>
+</document>
