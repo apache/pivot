@@ -48,6 +48,7 @@ limitations under the License.
 
     <!-- <item-group> gets translated to a properly indented list -->
     <xsl:template match="item-group">
+        <h3><xsl:value-of select="@name"/></h3>
         <ul style="padding-left: 0px;">
             <xsl:apply-templates/>
         </ul>

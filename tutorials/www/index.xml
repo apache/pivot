@@ -106,7 +106,10 @@ limitations under the License.
                 <document-item id="menu-buttons"/>
             </document-item>
             <document-item id="color-choosers"/>
-            <document-item id="table-views"/>
+            <document-item id="table-views">
+                <document-item id="table-views.json"/>
+                <document-item id="table-views.custom"/>
+            </document-item>
             <document-item id="tree-views"/>
             <document-item id="file-browsing"/>
             <document-item id="windows"/>
@@ -123,6 +126,10 @@ limitations under the License.
 
         <item-group name="More About WTKX">
             <document-item id="wtkx-primer"/>
+        </item-group>
+
+        <item-group name="Summary">
+            <document-item id="summary"/>
         </item-group>
 
         <item-group name="Putting it All Together">
