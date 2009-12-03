@@ -16,10 +16,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<document>
+<document id="windows">
     <properties>
         <title>Windows</title>
-        <next>clipboard</next>
     </properties>
 
     <body>
@@ -140,7 +139,7 @@ limitations under the License.
 
         <p>The content of each frame is defined in "frame.wtkx":</p>
 
-        <source type="xml">
+        <source type="xml" location="org/apache/pivot/tutorials/windows/frame.wtkx">
 &lt;Frame wtkx:id="frame" icon="@application_form.png"
     preferredWidth="480" preferredHeight="360"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
@@ -237,7 +236,7 @@ limitations under the License.
             palette windows opened by the main frame:
         </p>
 
-        <source type="xml">
+        <source type="xml" location="org/apache/pivot/tutorials/windows/dialog.wtkx">
 &lt;Dialog wtkx:id="dialog" title="Dialog"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk"&gt;
@@ -265,7 +264,7 @@ limitations under the License.
         </source>
         <p class="caption">dialog.wtkx</p>
 
-        <source type="xml">
+        <source type="xml" location="org/apache/pivot/tutorials/windows/sheet.wtkx">
 &lt;Sheet wtkx:id="sheet" title="Sheet"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk"&gt;
@@ -295,7 +294,7 @@ limitations under the License.
         </source>
         <p class="caption">sheet.wtkx</p>
 
-        <source type="xml">
+        <source type="xml" location="org/apache/pivot/tutorials/windows/palette.wtkx">
 &lt;Palette title="Palette" preferredWidth="60" preferredHeight="120"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk"&gt;
@@ -318,7 +317,7 @@ limitations under the License.
             component read from the WTKX as the frames' contents:
         </p>
 
-        <source type="java">
+        <source type="java" location="org/apache/pivot/tutorials/windows/Windows.java">
 package org.apache.pivot.tutorials.windows;
 
 import java.io.IOException;

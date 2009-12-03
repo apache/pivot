@@ -18,16 +18,10 @@ limitations under the License.
 
 <!-- Translates a tutorial XML document into an HTML tutorial page -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-    <!-- Output method -->
-    <xsl:output method="html" encoding="UTF-8" indent="no"
-        doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
-        doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+    <xsl:import href="project.xsl"/>
 
     <!-- Parameters (overrideable) -->
     <xsl:param name="release"/>
-
-    <!-- Variables (not overrideable) -->
-    <xsl:variable name="project" select="document('project.xml')/project"/>
 
     <!-- <document> gets translated into an HTML container -->
     <xsl:template match="document">
@@ -59,27 +53,33 @@ limitations under the License.
             <body>
                 <h1><xsl:value-of select="properties/title"/></h1>
                 <xsl:apply-templates select="body"/>
-                <xsl:if test="properties/next">
+
+                <xsl:variable name="index" select="document('../www/index.xml')/document"/>
+                <xsl:variable name="id" select="@id"/>
+
+                <xsl:variable name="next-id">
+                    <xsl:choose>
+                        <xsl:when test="$index//document-item[@id=$id]/document-item">
+                            <xsl:value-of select="$index//document-item[@id=$id]/document-item/@id"/>
+                        </xsl:when>
+                        <xsl:when test="$index//document-item[@id=$id]/following::document-item">
+                            <xsl:value-of select="$index//document-item[@id=$id]/following::document-item/@id"/>
+                        </xsl:when>
+                    </xsl:choose>
+                </xsl:variable>
+
+                <xsl:if test="boolean($next-id)">
                     <p>
                         Next:
-                        <a href="{properties/next}.html">
-                            <!-- TODO Pull title from properties of next document -->
-                            <xsl:value-of select="properties/next"/>
+                        <a href="{$next-id}.html">
+                            <xsl:variable name="tutorial"
+                                select="document(concat('../www/', $next-id, '.xml'))/document"/>
+                            <xsl:value-of select="$tutorial/properties/title"/>
                         </a>
                     </p>
                 </xsl:if>
             </body>
         </html>
-    </xsl:template>
-
-    <!-- <head> content gets passed through -->
-    <xsl:template match="head">
-        <xsl:apply-templates/>
-    </xsl:template>
-
-    <!-- <body> content gets passed through -->
-    <xsl:template match="body">
-        <xsl:apply-templates/>
     </xsl:template>
 
     <!-- <application> gets translated to a JavaScript block that launches the applet -->
@@ -153,10 +153,4 @@ limitations under the License.
         </xsl:element>
     </xsl:template>
 
-    <!-- Everything else gets passed through -->
-    <xsl:template match="*|@*">
-        <xsl:copy>
-            <xsl:apply-templates select="@*|*|text()"/>
-        </xsl:copy>
-    </xsl:template>
 </xsl:stylesheet>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<document id="viewports">
+    <properties>
+        <title>Viewports</title>
+    </properties>
+
+    <body>
+        <p>
+            <tt>Viewport</tt> is abstract base class for "viewport" components. Viewports provide a
+            windowed view on a component (called the "view") that is too large to fit within a
+            given area. They are generally scrollable, though their means for scrolling the view
+            may differ. Pivot includes two viewport components:
+            <a href="scroll-panes.html">ScrollPane</a> and <a href="panoramas.html">Panorama</a>.
+            Scroll panes facilitate scrolling by presenting a vertical or horizontal scroll bar
+            that the user can drag to access the obscured parts of the view. Panoramas scroll via
+            four directional scroll arrows shown at the top, left, bottom, or right as needed.
+        </p>
+    </body>
+</document>

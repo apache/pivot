@@ -501,6 +501,13 @@ limitations under the License.
             </fileset>
         </copy>
 
+        <!-- Transform tutorials index -->
+        <xslt basedir="tutorials/www"
+            destdir="tutorials/${folder.deploy}"
+            extension=".html"
+            style="tutorials/xsl/index.xsl"
+            includes="index.xml"/>
+
         <!-- Transform tutorials html -->
         <xslt basedir="tutorials/www"
             destdir="tutorials/${folder.deploy}"
@@ -516,27 +523,9 @@ limitations under the License.
             <fileset dir="tutorials/www" excludes="**/*.xml"/>
         </copy>
 
-        <!-- Generate tutorials version templates -->
-        <copy todir="tutorials/${folder.deploy}" filtering="true">
-            <fileset dir="tutorials/www">
-                <include name="version.template.jsp"/>
-            </fileset>
-            <mapper type="glob" from="version.template.jsp" to="version.jsp"/>
-        </copy>
-
-        <copy todir="tutorials/${folder.deploy}" filtering="true">
-            <fileset dir="tutorials/www">
-                <include name="version.template.js"/>
-            </fileset>
-            <mapper type="glob" from="version.template.js" to="version.js"/>
-        </copy>
-
         <!-- Generate tutorials WAR -->
         <war destfile="${folder.lib}/${ant.project.name}-tutorials.war" webxml="tutorials/web.xml">
-            <fileset dir="tutorials/www">
-                <exclude name="version.template.js"/>
-                <exclude name="version.template.jsp"/>
-            </fileset>
+            <fileset dir="tutorials/${folder.deploy}"/>
         </war>
     </target>
 
