@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 Licensed to the Apache Software Foundation (ASF) under one or more
 contributor license agreements.  See the NOTICE file distributed with
@@ -15,72 +16,131 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<html>
-<head>
-<title>Windows</title>
-<link rel="stylesheet" href="tutorial.css">
-<script src="http://java.com/js/deployJava.js"></script>
+<document>
+    <properties>
+        <title>Windows</title>
+        <next>clipboard</next>
+    </properties>
 
-<!-- NOTE: Syntax highlighting script is LGPL -->
-<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shCore.js"></script>
-<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushJava.js"></script>
-<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushXml.js"></script>
-<link type="text/css" rel="stylesheet" href="http://alexgorbatchev.com/pub/sh/current/styles/shCore.css"/>
-<link type="text/css" rel="stylesheet" href="http://alexgorbatchev.com/pub/sh/current/styles/shThemeDefault.css"/>
-<script type="text/javascript">
-    SyntaxHighlighter.all();
-</script>
-</head>
-<body>
-<h1>Windows</h1>
-<p>Though every tutorial example thus far has used windows, Pivot's actual window classes have not yet been explicitly discussed. This is because, for many applications (especially those that are browser-based), a single main application window is sufficient. However, more complex applications often require multiple windows, allowing a user to see and interact with a variety of information.</p>
+    <body>
+        <p>
+            Though every tutorial example thus far has used windows, Pivot's actual window classes
+            have not yet been explicitly discussed. This is because, for many applications
+            (especially those that are browser-based), a single main application window is
+            sufficient. However, more complex applications often require multiple windows, allowing
+            a user to see and interact with a variety of information.
+        </p>
 
-<p>Though the root of the WTK component hierarchy is an instance of <tt>Display</tt>, windows generally represent an application's primary entry point into the UI. Windows are always direct descendants of the display. They represent a place on the screen where the application can draw or place user interface elements.</p>
+        <p>
+            Though the root of the WTK component hierarchy is an instance of <tt>Display</tt>,
+            windows generally represent an application's primary entry point into the UI. Windows
+            are always direct descendants of the display. They represent a place on the screen
+            where the application can draw or place user interface elements.
+        </p>
 
-<p>The class diagram below shows the Pivot window class hierarchy (though it is not shown in this diagram, Window actually extends Container, which extends Component, the root of all WTK UI classes):</p>
+        <p>
+            The class diagram below shows the Pivot window class hierarchy (though it is not shown
+            in this diagram, Window actually extends Container, which extends Component, the root
+            of all WTK UI classes):
+        </p>
 
-<p><img src="windows/windows.png"></p>
-<p class="caption">Window class hierarchy.</p>
+        <p><img src="windows/windows.png"/></p>
+        <p class="caption">Window class hierarchy.</p>
 
-<p>The following is a description of each window type:</p>
+        <p>The following is a description of each window type:</p>
 
-<ul>
-<li><p><b>Window</b> - Base window class; it is not abstract and is the most basic means by which content may be placed on the screen. It simply provides an undecorated region in which other components may be placed.</p></li>
-<li><p><b>Frame</b> - A window with a title bar and border for dragging and resizing.</p></li>
-<li><p><b>Dialog</b> - A frame that is generally used for collecting user input (engaging in a "dialog" with the user); may optionally be "modal", blocking input to its owner.</p></li>
-<li><p><b>Alert</b> - A dialog that is generally used to present brief notifications to the user.</p></li>
-<li><p><b>Sheet</b> - A window that, like a dialog, is generally used for collecting user input; however, unlike dialogs, sheets always have an owner, and are always modal over the owner's client area.</p></li>
-<li><p><b>Prompt</b> - A sheet that is generally used to present brief notifications to the user; the sheet equivalent of <tt>Alert</tt>.</p></li>
-<li><p><b>MenuPopup</b> - A "popup" window that is used to present a menu to the user. It can be used stand-alone as a context menu, but is also used by other components including <tt>MenuBar</tt> and <tt>MenuButton</tt>.</p></li>
-<li><p><b>Palette</b> - A floating tool palette window.</p></li>
-<li><p><b>FileBrowserSheet</b> - A sheet that allows the user to browse the local file system.</p></li>
-<li><p><b>Tooltip</b> - A small, popup-like window that disappears as soon as the user moves the mouse.</p></li>
-</ul>
+        <ul>
+            <li>
+                <p>
+                    <b>Window</b> - Base window class; it is not abstract and is the most basic
+                    means by which content may be placed on the screen. It simply provides an
+                    undecorated region in which other components may be placed.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <b>Frame</b> - A window with a title bar and border for dragging and resizing.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <b>Dialog</b> - A frame that is generally used for collecting user input
+                    (engaging in a "dialog" with the user); may optionally be "modal", blocking
+                    input to its owner.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <b>Alert</b> - A dialog that is generally used to present brief notifications
+                    to the user.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <b>Sheet</b> - A window that, like a dialog, is generally used for collecting
+                    user input; however, unlike dialogs, sheets always have an owner, and are
+                    always modal over the owner's client area.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <b>Prompt</b> - A sheet that is generally used to present brief notifications
+                    to the user; the sheet equivalent of <tt>Alert</tt>.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <b>MenuPopup</b> - A "popup" window that is used to present a menu to the user.
+                    It can be used stand-alone as a context menu, but is also used by other
+                    components including <tt>MenuBar</tt> and <tt>MenuButton</tt>.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <b>Palette</b> - A floating tool palette window.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <b>FileBrowserSheet</b> - A sheet that allows the user to browse the local file
+                    system.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <b>Tooltip</b> - A small, popup-like window that disappears as soon as the
+                    user moves the mouse.
+                </p>
+            </li>
+        </ul>
 
-<p>Most of the tutorial examples up to this point have used a single, maximized, decorationless <tt>Window</tt> to host their example content, since this type of user interface is well-suited to browser-based deployment as employed by this tutorial. However, Pivot applications are not limited to this sort of interface. Just like a native windowing toolkit, a Pivot application can open as many windows on the display of as many different types as are required by the application.</p>
+        <p>
+            Most of the tutorial examples up to this point have used a single, maximized,
+            decorationless <tt>Window</tt> to host their example content, since this type of user
+            interface is well-suited to browser-based deployment as employed by this tutorial.
+            However, Pivot applications are not limited to this sort of interface. Just like a
+            native windowing toolkit, a Pivot application can open as many windows on the display
+            of as many different types as are required by the application.
+        </p>
 
-<p>The following sample application demonstrates each of these window types. It creates three top-level frames, each of which contains buttons for launching several other window types:</p>
+        <p>
+            The following sample application demonstrates each of these window types. It creates
+            three top-level frames, each of which contains buttons for launching several other
+            window types:
+        </p>
 
-<script src="version.js"></script>
-<script>
-var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
-    archive:"lib/pivot-core-" + version + ".jar"
-        + ",lib/pivot-wtk-" + version + ".jar"
-        + ",lib/pivot-wtk-" + version + ".terra.jar"
-        + ",lib/pivot-tutorials-" + version + ".jar",
-    width:800,
-    height:600
-};
-var parameters = {application_class_name:"org.apache.pivot.tutorials.windows.Windows",
-    codebase_lookup:false,
-    java_arguments:"-Dsun.awt.noerasebackground=true -Dsun.awt.erasebackgroundonresize=true"
-};
-deployJava.writeAppletTag(attributes, parameters);
-</script>
+        <application class="org.apache.pivot.tutorials.windows.Windows" width="100%" height="600">
+            <libraries>
+                <library>core</library>
+                <library>wtk</library>
+                <library>wtk-terra</library>
+                <library>tutorials</library>
+            </libraries>
+        </application>
 
-<p>The content of each frame is defined in "frame.wtkx":</p>
+        <p>The content of each frame is defined in "frame.wtkx":</p>
 
-<pre class="brush:xml">
+        <source type="xml">
 &lt;Frame wtkx:id="frame" icon="@application_form.png"
     preferredWidth="480" preferredHeight="360"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
@@ -169,12 +229,15 @@ deployJava.writeAppletTag(attributes, parameters);
         &lt;/BoxPane&gt;
     &lt;/content&gt;
 &lt;/Frame&gt;
-</pre>
-<p class="caption">frame.wtkx</p>
+        </source>
+        <p class="caption">frame.wtkx</p>
 
-<p>This file includes several additional WTKX files that define the dialog, sheet, and palette windows opened by the main frame:</p>
+        <p>
+            This file includes several additional WTKX files that define the dialog, sheet, and
+            palette windows opened by the main frame:
+        </p>
 
-<pre class="brush:xml">
+        <source type="xml">
 &lt;Dialog wtkx:id="dialog" title="Dialog"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk"&gt;
@@ -199,10 +262,10 @@ deployJava.writeAppletTag(attributes, parameters);
         &lt;/TablePane&gt;
     &lt;/content&gt;
 &lt;/Dialog&gt;
-</pre>
-<p class="caption">dialog.wtkx</p>
+        </source>
+        <p class="caption">dialog.wtkx</p>
 
-<pre class="brush:xml">
+        <source type="xml">
 &lt;Sheet wtkx:id="sheet" title="Sheet"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk"&gt;
@@ -229,10 +292,10 @@ deployJava.writeAppletTag(attributes, parameters);
         &lt;/BoxPane&gt;
     &lt;/content&gt;
 &lt;/Sheet&gt;
-</pre>
-<p class="caption">sheet.wtkx</p>
+        </source>
+        <p class="caption">sheet.wtkx</p>
 
-<pre class="brush:xml">
+        <source type="xml">
 &lt;Palette title="Palette" preferredWidth="60" preferredHeight="120"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk"&gt;
@@ -247,12 +310,15 @@ deployJava.writeAppletTag(attributes, parameters);
         &lt;/FlowPane&gt;
     &lt;/content&gt;
 &lt;/Palette&gt;
-</pre>
-<p class="caption">palette.wtkx</p>
+        </source>
+        <p class="caption">palette.wtkx</p>
 
-<p>The application code simply instantiates three <tt>Frame</tt> objects and sets the component read from the WTKX as the frames' contents:</p>
+        <p>
+            The application code simply instantiates three <tt>Frame</tt> objects and sets the
+            component read from the WTKX as the frames' contents:
+        </p>
 
-<pre class="brush:java">
+        <source type="java">
 package org.apache.pivot.tutorials.windows;
 
 import java.io.IOException;
@@ -326,8 +392,6 @@ public class Windows implements Application {
         DesktopApplicationContext.main(Windows.class, args);
     }
 }
-</pre>
-
-<p>Next: <a href="clipboard.html">The Clipboard</a></p>
-</body>
-</html>
+        </source>
+    </body>
+</document>

@@ -449,6 +449,7 @@ limitations under the License.
         <copy todir="demos/${folder.deploy}/lib">
             <fileset dir="${folder.lib}">
                 <include name="*.jar"/>
+                <exclude name="*-server*.jar"/>
             </fileset>
         </copy>
 
@@ -491,24 +492,39 @@ limitations under the License.
         </war>
 
         <!-- Deploy tutorials -->
-        <mkdir dir="tutorials/www/lib"/>
-        <copy todir="tutorials/www/lib">
+        <mkdir dir="tutorials/${folder.deploy}/lib"/>
+        <copy todir="tutorials/${folder.deploy}/lib">
             <fileset dir="${folder.lib}">
                 <include name="*.jar"/>
                 <exclude name="*-demos*.jar"/>
-                <exclude name="*.server.jar"/>
+                <exclude name="*-server*.jar"/>
             </fileset>
         </copy>
 
+        <!-- Transform tutorials html -->
+        <xslt basedir="tutorials/www"
+            destdir="tutorials/${folder.deploy}"
+            extension=".html"
+            style="tutorials/xsl/tutorial.xsl"
+            includes="*.xml"
+            excludes="index.xml">
+            <param name="release" expression="${version}"/>
+        </xslt>
+
+        <!-- Copy static tutorial files to deploy folder -->
+        <copy todir="tutorials/${folder.deploy}">
+            <fileset dir="tutorials/www" excludes="**/*.xml"/>
+        </copy>
+
         <!-- Generate tutorials version templates -->
-        <copy todir="tutorials/www" filtering="true">
+        <copy todir="tutorials/${folder.deploy}" filtering="true">
             <fileset dir="tutorials/www">
                 <include name="version.template.jsp"/>
             </fileset>
             <mapper type="glob" from="version.template.jsp" to="version.jsp"/>
         </copy>
 
-        <copy todir="tutorials/www" filtering="true">
+        <copy todir="tutorials/${folder.deploy}" filtering="true">
             <fileset dir="tutorials/www">
                 <include name="version.template.js"/>
             </fileset>
