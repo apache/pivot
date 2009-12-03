@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<document>
+    <properties>
+        <title>Tutorials</title>
+    </properties>
+
+    <body>
+        <p>
+            This tutorial introduces developers to the Pivot platform. It is designed as a
+            step-by-step guide that explains how to get started using a number of common Pivot
+            features, beginning with a detailed introduction to the platform and the compulsory
+            first programming exercise, "Hello World", written in Pivot. The sections are
+            organized as follows:
+        </p>
+
+        <p>
+            Readers who want a quicker introduction to the platform may prefer to jump directly to
+            the <a href="stock-tracker.html">final section</a>, which walks through the
+            implementation of a simple but practical sample application called "Stock Tracker".
+            Stock Tracker demonstrates a number of key features used by many "real world"
+            applications, including UI markup, event handling, web queries, data binding, and
+            localization, among others. Readers may also find it helpful to review the
+            <a href="wtkx-primer.html">WTKX Primer</a> section, which provides a detailed
+            description of Pivot's markup language, before browsing the tutorials themsevles.
+        </p>
+
+        <item-group name="Introduction">
+            <document-item id="sample-application"/>
+        </item-group>
+
+        <item-group name="Architecture">
+            <document-item id="platform-overview"/>
+            <document-item id="hello-world">
+                <document-item id="hello-wtkx"/>
+            </document-item>
+            <document-item id="component-and-container"/>
+        </item-group>
+
+        <item-group name="Pivot Components">
+            <document-item id="labels-and-image-views"/>
+            <document-item id="buttons">
+                <document-item id="push-buttons"/>
+                <document-item id="toggle-buttons"/>
+                <document-item id="radio-buttons"/>
+                <document-item id="checkboxes"/>
+                <document-item id="link-buttons"/>
+            </document-item>
+            <document-item id="lists">
+                <document-item id="list-buttons"/>
+            </document-item>
+            <document-item id="text">
+                <document-item id="text-areas"/>
+            </document-item>
+            <document-item id="separators"/>
+            <document-item id="layout-containers">
+                <document-item id="flow-panes"/>
+                <document-item id="box-panes"/>
+                <document-item id="table-panes"/>
+                <document-item id="borders"/>
+                <document-item id="stack-panes"/>
+                <document-item id="split-panes"/>
+                <document-item id="forms"/>
+                <document-item id="panels"/>
+            </document-item>
+            <document-item id="navigation-containers">
+                <document-item id="card-panes"/>
+                <document-item id="tab-panes"/>
+                <document-item id="accordions"/>
+                <document-item id="expanders"/>
+                <document-item id="rollups"/>
+                <document-item id="viewports">
+                    <document-item id="scroll-panes"/>
+                    <document-item id="panoramas"/>
+                </document-item>
+            </document-item>
+            <document-item id="progress-indicators">
+                <document-item id="meters"/>
+                <document-item id="activity-indicators"/>
+            </document-item>
+            <document-item id="bounded-range-components">
+                <document-item id="scroll-bars"/>
+                <document-item id="sliders"/>
+                <document-item id="spinners"/>
+            </document-item>
+            <document-item id="calendars"/>
+            <document-item id="menus">
+                <document-item id="context-menus"/>
+                <document-item id="menu-bars"/>
+                <document-item id="menu-buttons"/>
+            </document-item>
+            <document-item id="color-choosers"/>
+            <document-item id="table-views"/>
+            <document-item id="tree-views"/>
+            <document-item id="file-browsing"/>
+            <document-item id="windows"/>
+            <document-item id="clipboard"/>
+            <document-item id="drag-and-drop"/>
+            <document-item id="drawing"/>
+            <document-item id="effects"/>
+            <document-item id="background-tasks"/>
+            <document-item id="web-queries"/>
+            <document-item id="data-binding"/>
+            <document-item id="localization"/>
+            <document-item id="scripting"/>
+        </item-group>
+
+        <item-group name="More About WTKX">
+            <document-item id="wtkx-primer"/>
+        </item-group>
+
+        <item-group name="Putting it All Together">
+            <document-item id="stock-tracker">
+                <document-item id="stock-tracker.ui"/>
+                <document-item id="stock-tracker.events"/>
+                <document-item id="stock-tracker.web-queries"/>
+                <document-item id="stock-tracker.data-binding"/>
+                <document-item id="stock-tracker.localization"/>
+            </document-item>
+        </item-group>
+    </body>
+</document>

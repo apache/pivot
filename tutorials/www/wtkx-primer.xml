@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 Licensed to the Apache Software Foundation (ASF) under one or more
 contributor license agreements.  See the NOTICE file distributed with
@@ -15,25 +16,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<html>
-<head>
-<title>WTKX Primer</title>
-<link rel="stylesheet" href="tutorial.css">
+<document>
+    <properties>
+        <title>WTKX Primer</title>
+    </properties>
 
-<!-- NOTE: Syntax highlighting script is LGPL -->
-<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shCore.js"></script>
-<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushJava.js"></script>
-<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushXml.js"></script>
-<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushJScript.js"></script>
-<link type="text/css" rel="stylesheet" href="http://alexgorbatchev.com/pub/sh/current/styles/shCore.css"/>
-<link type="text/css" rel="stylesheet" href="http://alexgorbatchev.com/pub/sh/current/styles/shThemeDefault.css"/>
-<script type="text/javascript">
-    SyntaxHighlighter.all();
-</script>
-</head>
-<body>
-<h1>WTKX Primer</h1>
-
+    <body>
 <p>WTKX is an XML-based markup language used for building Apache Pivot applications. Though it is most commonly used for defining the structure of an application's user interface, it can be used to declaratively construct any type of Java object hierarchy.</p>
 
 <p>This section introduces WTKX and explains how it can be used to create and configure a collection of Java objects. It assumes some familiarity with Pivot and Java programming in general. For an introduction to Pivot, please see the Pivot <a href="platform_overview.html">Platform Overview</a>.</p>
@@ -54,32 +42,32 @@ limitations under the License.
 
 <p>For example, the following WTKX would produce an instance of the <tt>org.apache.pivot.wtk.Label</tt> class populated with the text "Hello, World!" (like property elements, attributes can also be used to set property values, and are discussed in the next section):</p>
 
-<pre class="brush:xml"/>
+<source type="xml">
 &lt;Label text="Hello, World!"
     xmlns="org.apache.pivot.wtk" /&gt;
-</pre>
+</source>
 
 <p>Note that the default namespace is defined as <tt>org.apache.pivot.wtk</tt>. This is fairly common practice in Pivot development, since WTKX is often used to construct user interfaces using components defined in this package.</p>
 
 <p>More complex examples may also use classes defined in other packages and will require multiple namespaces. Namespace prefixes can be used for this purpose. For example, the following WTKX assigns the <tt>org.apache.pivot.wtk.charts</tt> package to the <tt>charts</tt> namespace prefix, and sets an instance of <tt>org.apache.pivot.wtk.charts.BarChartView</tt> as the content of a <tt>Window</tt>:</p>
 
-<pre class="brush:xml"/>
+<source type="xml">
 &lt;Window xmlns="org.apache.pivot.wtk"
     xmlns:charts="org.apache.pivot.wtk.charts"&gt;
     &lt;content&gt;
         &lt;charts:BarChartView/&gt;
     &lt;/content&gt;
 &lt;/Window&gt;
-</pre>
+</source>
 
 <h4>Dictionary vs. BeanDictionary</h4>
 
 <p>In general, uppercase elements in a WTKX file will represent instances of JavaBean classes. Internally, the WTKX serializer uses an instance of <tt>org.apache.pivot.beans.BeanDictionary</tt> to wrap the instantiated class and invoke its setter methods. However, if the class name represents an object that already implements the <tt>org.apache.pivot.collections.Dictionary</tt> interface (such as <tt>org.apache.pivot.collections.HashMap</tt>), it is not wrapped, and its dictionary methods are accessed directly. For example, the following WTKX creates an instance of <tt>org.apache.pivot.collections.HashMap</tt> and sets its "foo" and "bar" values to "123" and "456", respectively:</p>
 
-<pre class="brush:xml"/>
+<source type="xml">
 &lt;HashMap foo="123" bar="456"
     xmlns="org.apache.pivot.collections"/&gt;
-</pre>
+</source>
 
 <h3>Instance Property Elements</h3>
 <p>Elements whose tag names begin with a lowercase letter represent instance properties. A property element may represent one of the following:</p>
@@ -96,22 +84,22 @@ limitations under the License.
 <h4>JavaBean Property Setters</h4>
 <p>If the element represents a JavaBean property setter, the contents of the element (which must be either a text node or a class instance element) are passed as the value to the setter for the property. For example, the following WTKX creates an instance of the <tt>Label</tt> class and sets the value of the label's "text" property to "Hello, World!":</p>
 
-<pre class="brush:xml">
+<source type="xml">
 &lt;Label xmlns="org.apache.pivot.wtk"&gt;
     &lt;text&gt;Hello, World!&lt;/text&gt;
 &lt;/Label&gt;
-</pre>
+</source>
 
 <p>It produces the same result as the earlier example which used an attribute to set the "text" property:</p>
 
-<pre class="brush:xml">
+<source type="xml">
 &lt;Label text="Hello, World!"
     xmlns="org.apache.pivot.wtk"/&gt;
-</pre>
+</source>
 
 <p>This example creates an instance of <tt>ListView</tt> and sets the value of its "listData" property to an instance of <tt>org.apache.pivot.collections.ArrayList</tt> that has been populated with several instances of <tt>org.apache.pivot.wtk.content.ListItem</tt> (a data class recognized by the default list item renderer):</p>
 
-<pre class="brush:xml">
+<source type="xml">
 &lt;ListView xmlns="org.apache.pivot.wtk"
     xmlns:collections="org.apache.pivot.collections"
     xmlns:content="org.apache.pivot.wtk.content"&gt;
@@ -123,29 +111,29 @@ limitations under the License.
         &lt;/collections:ArrayList&gt;
     &lt;/listData&gt;
 &lt;/ListView&gt;
-</pre>
+</source>
 
 <h4>Read-Only Sequences</h4>
 <p>If the property represents a read-only sequence (a bean property whose getter returns an instance of <tt>org.apache.pivot.collections.Sequence</tt> and has no corresponding setter method), the contents of the element are added to the sequence. For example, the "tabs" property of the <tt>org.apache.pivot.wtk.TabPane</tt> class returns an instance of <tt>TabSequence</tt>, which implements <tt>Sequence&lt;Component&gt;</tt>; tabs are added to a <tt>TabPane</tt> in WTKX as follows:</p>
 
-<pre class="brush:xml">
+<source type="xml">
 &lt;TabPane xmlns="org.apache.pivot.wtk"&gt;
     &lt;tabs&gt;
         &lt;Label text="Foo"/&gt;
         &lt;Label text="Bar"/&gt;
     &lt;/tabs&gt;
 &lt;/TabPane&gt;
-</pre>
+</source>
 
 <h4>Read-Only Dictionaries</h4>
 <p>A property element may also represent a read-only dictionary (a bean property whose getter returns an instance of <tt>org.apache.pivot.collections.Dictionary</tt> but has no corresponding setter method). For example, the "userData" property of <tt>org.apache.pivot.wtk.Component</tt> (which the <tt>Label</tt> class in this example extends) represents a read-only dictionary:</p>
 
-<pre class="brush:xml">
+<source type="xml">
 &lt;Label text="Hello, World!"
     xmlns="org.apache.pivot.wtk"&gt;
     &lt;userData foo="123" bar="456"/&gt;
 &lt;/Label&gt;
-</pre>
+</source>
 
 <p>The attribute values are put into the dictionary using the attribute names as keys.</p>
 
@@ -165,7 +153,7 @@ limitations under the License.
 
 <p>If an attribute represents a bean property setter, the attribute value is passed as the argument to the setter method. If the type of the property is a string, the value is passed as-is; however, if it is one of the simple types (<tt>boolean</tt>, <tt>char</tt>, <tt>byte</tt>, <tt>short</tt>, <tt>int</tt>, <tt>long</tt>, <tt>float</tt>, or <tt>double</tt>) or one of their wrapper equivalents, it is converted the appropriate type before invoking the setter. Whenever possible, <tt>WTKXSerializer</tt> will use <tt>BeanDictionary</tt> to determine what, if any, type conversion needs to take place. For example, given the following simple bean class:</p>
 
-<pre class="brush:java">
+<source type="java">
 package com.foo;
 
 public class MyBean {
@@ -174,14 +162,14 @@ public class MyBean {
     public int getBar() { ... }
     public void setBar(int bar) { ... }
 }
-</pre>
+</source>
 
 <p>the following WTKX would instantiate the bean and invoke the "foo" and "bar" setters, passing a string to <tt>setFoo()</tt> and an int to <tt>setBar()</tt>:</p>
 
-<pre class="brush:xml">
+<source type="xml">
 &lt;MyBean foo="hello" bar="123"
     xmlns="com.foo"/&gt;
-</pre>
+</source>
 
 <p>However, if the element represents a class that already implements the <tt>Dictionary</tt> interface (such as <tt>HashMap</tt>), the type of the attribute cannot be determined, no conversion takes place - the values are simply passed as strings.</p>
 
@@ -190,23 +178,23 @@ public class MyBean {
 
 <p>The following WTKX invokes the static setter for the <tt>TabPane</tt> class's "label" property:</p>
 
-<pre class="brush:xml">
+<source type="xml">
 &lt;TabPane xmlns="org.apache.pivot.wtk"&gt;
     &lt;tabs&gt;
         &lt;Label TabPane.label="First Tab" text="Tab 1"/&gt;
     &lt;tabs&gt;
 &lt;/TabPane&gt;
-</pre>
+</source>
 
 <p>This translates roughly to the following in Java:</p>
 
-<pre class="snippet">
+<source type="java">
 TabPane tabPane = new TabPane();
 Label label = new Label();
 label.setText("Tab 1");
 tabPane.getTabs().add(label);
 TabPane.setLabel(label, "First Tab");
-</pre>
+</source>
 
 <p>The call to <tt>TabPane.setLabel()</tt> attaches the "name" property to the <tt>Label</tt> instance. The tab pane then uses the value of this property as the button data for the label's tab in the tab panes button bar. <tt>TabPane</tt> also defines a static setter for a tab's icon. Other containers, including <tt>Accordion</tt> and <tt>TablePane</tt>, define similar setters.</p>
 
@@ -230,7 +218,7 @@ TabPane.setLabel(label, "First Tab");
 
 <p>For example, a table view header must be associated with an instance of TableView; in Java, this is done via the <tt>setTableView()</tt> method. In WTKX, the object dereference operator is used. The following WTKX defines an instance of <tt>ScrollPane</tt>, setting a <tt>TableView</tt> as its view component and a <tt>TableViewHeader</tt> as the column header. The table view is associated with the header via the "tableView" attribute:</p>
 
-<pre class="brush:xml">
+<source type="xml">
 &lt;ScrollPane xmlns="org.apache.pivot.wtk"
     xmlns:wtkx="http://pivot.apache.org/wtkx"&gt;
     &lt;view&gt;
@@ -242,7 +230,7 @@ TabPane.setLabel(label, "First Tab");
         &lt;TableViewHeader tableView="$tableView"/&gt;
     &lt;/columnHeader&gt;
 &lt;/ScrollPane&gt;
-</pre>
+</source>
 
 <p>Note the use of the "wtkx" namespace prefix in the preceding example. This is a special namespace reserved by the WTKX serializer. As shown above, it defines an "id" element that is used to assign a name to a class instance. In addition to the object dereference operator, this ID can also be used to obtain a reference to the instantiated element in the Java code that processes the WTKX or by script code defined or included by the WTKX file.</p>
 
@@ -251,17 +239,18 @@ TabPane.setLabel(label, "First Tab");
 <h4>Resource Resolution</h4>
 <p>In WTKX, resource substitution can be performed at load time for localization purposes. When given an instance of <tt>org.apache.pivot.util.Resources</tt>, <tt>WTKXSerializer</tt> will replace instances of resource names with their locale-specific values. Resource names are identified by a "%" prefix, as shown below:</p>
 
-<pre class="brush:xml">
+<source type="xml">
 &lt;Label text="%myText"/
     xmlns="org.apache.pivot.wtk"&gt;
-</pre>
+</source>
 
 <p>The associated localized resource file might contain something like the following:</p>
 
-<pre class="brush:jscript">
-{   myText:"This is my text!"
+<source type="jscript">
+{
+    myText:"This is my text!"
 }
-</pre>
+</source>
 
 <p>producing a label displaying the text "This is my text!".</p>
 
@@ -270,10 +259,10 @@ TabPane.setLabel(label, "First Tab");
 <h4>URL Resolution</h4>
 <p>Attributes can also be used to specify URLs. An attribute that begins with the "@" character is converted to a URL whose path is interpreted as relative to the location of the WTKX source file. For example, the following WTKX would load an image from the same directory as the WTKX file into an <tt>ImageView</tt> component. This WTKX translates to a call to the <tt>ImageView#setImage(java.net.URL)</tt> method:</p>
 
-<pre class="brush:xml">
+<source type="xml">
 &lt;ImageView image="@foo.png"
     xmlns="org.apache.pivot.wtk"/&gt;
-</pre>
+</source>
 
 <p>Without the "@" operator, bean properties would have no context by which to determine the path to such a resource.</p>
 
@@ -282,18 +271,18 @@ TabPane.setLabel(label, "First Tab");
 
 <p>The following WTKX defines a Window whose content is defined in an external file named "content.wtkx":</p>
 
-<pre class="brush:xml">
+<source type="xml">
 &lt;Window xmlns="org.apache.pivot.wtk"
     xmlns:wtkx="http://pivot.apache.org/wtkx"&gt;
     &lt;content&gt;
         &lt;wtkx:include src="content.wtkx"/&gt;
     &lt;/content&gt;
 &lt;/Window&gt;
-</pre>
+</source>
 
 <p>The contents of the included file are loaded using a nested instance of <tt>WTKXSerializer</tt>. If the include tag is given an ID, the objects defined in the included file will be accessible by name using <tt>WTKXSerializer#get()</tt>, discussed in more detail below. For example, given the following WTKX, a caller can later retrieve the <tt>Label</tt> instance from the serializer by the name "content.label":</p>
 
-<pre class="brush:xml">
+<source type="xml">
 &lt;-- window.wtkx --&gt;
 
 &lt;Window xmlns="org.apache.pivot.wtk"
@@ -302,21 +291,21 @@ TabPane.setLabel(label, "First Tab");
         &lt;wtkx:include wtkx:id="content" src="content.wtkx"/&gt;
     &lt;/content&gt;
 &lt;/Window&gt;
-</pre>
+</source>
 
-<pre class="brush:xml">
+<source type="xml">
 &lt;-- content.wtkx --&gt;
 
 &lt;Label xmlns="org.apache.pivot.wtk"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     wtkx:id="label" text="Hello, World!"/&gt;
-</pre>
+</source>
 
 <p>Java code:</p>
 
-<pre class="snippet">
+<source type="java">
 Label label = (Label)wtkxSerializer.get("content.label");
-</pre>
+</source>
 
 <h2><a name="scripting">Defines</a></h2>
 
@@ -324,7 +313,7 @@ Label label = (Label)wtkxSerializer.get("content.label");
 
 <p>For example, the following WTKX instantiates a login dialog by including a file named "login_dialog.wtkx" within a define block. The dialog instance is assigned an ID, presumably so it can be used by an event handler defined in script or Java code later on:</p>
 
-<pre class="brush:xml">
+<source type="xml">
 &lt;Window xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk"&gt;
     &lt;wtkx:define&gt;
@@ -335,14 +324,14 @@ Label label = (Label)wtkxSerializer.get("content.label");
         ...
     &lt;/content&gt;
 &lt;/Window&gt;
-</pre>
+</source>
 
 <h2><a name="scripting">Scripting</a></h2>
 <p>The <tt>&lt;wtkx:script&gt;</tt> tag allows a caller to import scripting code into or embed script within a WTKX file. Any JVM scripting language can be used. The name of the scripting language is passed to the <tt>WTKXSerializer</tt> instance that is used to load the WTKX file. <tt>WTKXSerializer</tt> is discussed in more detail below.</p>
 
 <p>For example, the following WTKX defines a JavaScript block that defines a variable named "foo". The value of this variable is used to populate the <tt>Label</tt> instance that is declared as the window's content:</p>
 
-<pre class="brush:xml">
+<source type="xml">
 &lt;Window xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk"&gt;
     &lt;wtkx:script&gt;
@@ -352,11 +341,11 @@ Label label = (Label)wtkxSerializer.get("content.label");
         &lt;Label text="$foo"/&gt;
     &lt;/content&gt;
 &lt;/Window&gt;
-</pre>
+</source>
 
 <p>The script could also have been defined in an external file:</p>
 
-<pre class="brush:xml">
+<source type="xml">
 &lt;Window xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk"&gt;
     &lt;wtkx:script src="foo.js"/&gt;
@@ -364,22 +353,22 @@ Label label = (Label)wtkxSerializer.get("content.label");
         &lt;Label text="$foo"/&gt;
     &lt;/content&gt;
 &lt;/Window&gt;
-</pre>
+</source>
 
 <p>In either case, any global variables declared in a script are added to the WTKX file's namespace, and become available for use by the object dereference operator (as shown) as well as to callers via the <tt>WTKXSerializer#get()</tt> method discussed below.</p>
 
 <h3>Listener List Elements</h3>
 <p>Script code can also be used to define event handlers in WTKX. Event handlers can often be defined more succinctly in script than in Java. For example, given the following WTKX:</p>
 
-<pre class="brush:xml">
+<source type="xml">
 &lt;PushButton xmlns="org.apache.pivot.wtk"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     wtkx:id="pushButton" buttonData="Click Me!"/&gt;
-</pre>
+</source>
 
 <p>the Java code to obtain a reference to a <tt>PushButton</tt> and attach a button press listener to it might look like this:</p>
 
-<pre class="snippet">
+<source type="java">
 PushButton pushButton = (PushButton)wtkxSerializer.get("pushButton");
 
 pushButton.getButtonPressListeners().add(new ButtonPressListener() {
@@ -387,13 +376,13 @@ pushButton.getButtonPressListeners().add(new ButtonPressListener() {
         // Handle event
     }
 });
-</pre>
+</source>
 
 <p>While this is simple enough, it can become cumbersome in any non-trivial application where many such event handlers are defined. It also dissociates the event handler from the element to which it applies, making it difficult to track down event handling logic.</p>
 
 <p>A similar event handler might be defined in JavaScript as follows:</p>
 
-<pre class="brush:xml">
+<source type="xml">
 &lt;PushButton xmlns="org.apache.pivot.wtk"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     buttonData="Click Me!"&gt;
@@ -405,7 +394,7 @@ pushButton.getButtonPressListeners().add(new ButtonPressListener() {
         &lt;/wtkx:script&gt;
     &lt;/buttonPressListeners&gt;
 &lt;/PushButton&gt;
-</pre>
+</source>
 
 <p>This version is quite a bit easier to read, and creates a much stronger association between the button and the handler. It doesn't even require the button to be given an ID.</p>
 
@@ -418,40 +407,40 @@ pushButton.getButtonPressListeners().add(new ButtonPressListener() {
 
 <p>For example, the above button press listener can be declared in an attribute as follows:</p>
 
-<pre class="brush:xml">
+<source type="xml">
 &lt;PushButton xmlns="org.apache.pivot.wtk"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     buttonData="Click Me!"
     ButtonPressListener.buttonPressed="// Handle event"/&gt;
-</pre>
+</source>
 
 <p>Attribute-based event handlers are well suited to short handler code that, ideally, fits on a single line. Longer event handler code may be better suited to an element-based listener list, or, depending on the level of complexity, a Java-based event handler.</p>
 
 <h2>WTKXSerializer</h2>
 <p>The <tt>org.apache.pivot.wtkx.WTKXSerializer</tt> class, which has been mentioned in previous sections, is what drives the actual loading and processing of a WTKX file and its associated script and includes. It implements the <tt>org.apache.pivot.serialization.Serializer</tt> interface, and returns the object hierarchy corresponding to the structure declared within the WTKX file. It defines the following overloads for the <tt>readObject()</tt> method:</p>
 
-<pre class="snippet">
+<source type="java">
 public Object readObject(String resourceName) { ... }
 public Object readObject(URL location) { ... }
 public Object readObject(InputStream inputStream) { ... }
-</pre>
+</source>
 
 <p>The first version loads a WTKX file from a resource specified on the application's classpath. This method delegates to the second version, which loads a resource from an arbitrary URL. Callers must use one of these versions in order to use the URL resolution operator described in the previous section, since the location URL is used as the base URL for any relative URLs specified in the file.</p>
 
 <p>The second method delegates in turn to the third version, which performs the actual processing and returns the deserialized object graph. For example, given the following WTKX, which defines a root <tt>Window</tt> object and sets its contents to a <tt>Label</tt> displaying the text "Hello, World!":</p>
 
-<pre class="brush:xml">
+<source type="xml">
 &lt;Window xmlns="org.apache.pivot.wtk"
     xmlns:wtkx="http://pivot.apache.org/wtkx"&gt;
     &lt;content&gt;
         &lt;Label wtkx:id="label" text="Hello, World!"/&gt;
     &lt;/content&gt;
 &lt;Window&gt;
-</pre>
+</source>
 
 <p>this Java code, taken from an implementation of <tt>org.apache.pivot.wtk.Application</tt>, would load the WTKX into a local variable and open the window on the application's display:</p>
 
-<pre class="snippet">
+<source type="java">
 public void startup(Display display, Map&lt;String, String&gt; properties)
     throws Exception {
     WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -460,14 +449,14 @@ public void startup(Display display, Map&lt;String, String&gt; properties)
         (Window)wtkxSerializer.readObject(getClass().getResource("window.wtkx"));
     window.open(display);
 }
-</pre>
+</source>
 
 <h3>Accessing Named Objects</h3>
 <p>As previously discussed, the <tt>WTKXSerializer#get()</tt> method allows a caller to retrieve a named object instance from a WTKX file once the root object has been loaded. The <tt>readObject()</tt> method populates a map of named object IDs to object instances that can later be used to obtain a reference to those objects.</p>
 
 <p>Continuing the previous example, the following code would obtain a reference to the <tt>Label</tt> instance and change its text to "Welcome to Pivot"!:</p>
 
-<pre class="snippet">
+<source type="java">
 public void startup(Display display, Map&lt;String, String&gt; properties)
     throws Exception {
     WTKXSerializer wtkxSerializer = new WTKXSerializer();
@@ -478,18 +467,18 @@ public void startup(Display display, Map&lt;String, String&gt; properties)
     label.setText("Welcome to Pivot!");
     window.open(display);
 }
-</pre>
+</source>
 
 <p><tt>WTKXSerializer</tt> implements the <tt>Dictionary</tt> interface, so callers can also use the <tt>put()</tt> or <tt>remove()</tt> methods to modify the serializer's namespace before the WTKX file is loaded (effectively "parameterizing" the WTKX).</p>
 
 <h4>Nested Includes</h4>
 <p>As mentioned earlier, objects defined in WTKX includes can also be retrieved via <tt>get()</tt>. The ID of the included file defines the namespace for the include; callers can use a dot-separated namespace path to a nested object to access it:</p>
 
-<pre class="snippet">
+<source type="java">
 Label label = (Label)wtkxSerializer.get("content.label")
-</pre>
+</source>
 
-<p>where "content" is the ID of a <tt><wtkx:include></tt> file containing a <tt>Label</tt> instance, and "label" is the ID of the label itself.</p>
+<p>where "content" is the ID of a <tt>&lt;wtkx:include&gt;</tt> file containing a <tt>Label</tt> instance, and "label" is the ID of the label itself.</p>
 
 <h3>WTKX Binding</h3>
 
@@ -497,24 +486,24 @@ Label label = (Label)wtkxSerializer.get("content.label")
 
 <p>For example, given the following WTKX:</p>
 
-<pre class="brush:xml">
+<source type="xml">
 &lt;Window xmlns="org.apache.pivot.wtk"
     xmlns:wtkx="http://pivot.apache.org/wtkx"&gt;
     &lt;content&gt;
         &lt;Label wtkx:id="label" text="Hello, World!"/&gt;
     &lt;/content&gt;
 &lt;Window&gt;
-</pre>
+</source>
 
 <p>a Java member variable declared as follows will be automatically populated with the declared <tt>Label</tt> instance when the <tt>WTKXSerializer#bind()</tt> method is called on an instance of the declaring class:</p>
 
-<pre class="snippet">
+<source type="java">
 @WTKX private Label label;
-</pre>
+</source>
 
 <p>As a result, the <tt>@WTKX</tt> annotation can significanly simplify the process of working with loaded WTKX data in Java code. However, because it relies on reflection to set the member variables, it can only be used with trusted code, or to set public fields.</p>
 
 <h2>Summary</h2>
 <p>WTKX provides a number of features that help simplify the process of building a user interface. It can be used to instantiate objects and set member variables as well as define script logic for working with those objects. It is a powerful and efficient way to construct a Pivot application.</p>
-</body>
-</html>
+    </body>
+</document>

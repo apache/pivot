@@ -18,11 +18,16 @@ limitations under the License.
 
 <!-- Translates a tutorial XML document into an HTML tutorial page -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-    <xsl:param name="release"/>
-
+    <!-- Output method -->
     <xsl:output method="html" encoding="UTF-8" indent="no"
         doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
         doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+
+    <!-- Parameters (overrideable) -->
+    <xsl:param name="release"/>
+
+    <!-- Variables (not overrideable) -->
+    <xsl:variable name="project" select="document('project.xml')/project"/>
 
     <!-- <document> gets translated into an HTML container -->
     <xsl:template match="document">
@@ -30,7 +35,9 @@ limitations under the License.
             <head>
                 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
                 <title>
-                    Pivot <xsl:value-of select="properties/title"/> Tutorial
+                  <xsl:value-of select="properties/title"/>
+                  <xsl:text> | </xsl:text>
+                  <xsl:value-of select="$project/title"/>
                 </title>
                 <link rel="stylesheet" href="tutorial.css" type="text/css"/>
                 <script xmlns="" type="text/javascript" src="http://java.com/js/deployJava.js"/>
@@ -39,6 +46,7 @@ limitations under the License.
                 <script xmlns="" type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shCore.js"/>
                 <script xmlns="" type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushJava.js"/>
                 <script xmlns="" type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushXml.js"/>
+                <script xmlns="" type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushJScript.js"/>
                 <link type="text/css" rel="stylesheet" href="http://alexgorbatchev.com/pub/sh/current/styles/shCore.css"/>
                 <link type="text/css" rel="stylesheet" href="http://alexgorbatchev.com/pub/sh/current/styles/shThemeDefault.css"/>
                 <script type="text/javascript">
@@ -51,13 +59,15 @@ limitations under the License.
             <body>
                 <h1><xsl:value-of select="properties/title"/></h1>
                 <xsl:apply-templates select="body"/>
-                <p>
-                    Next:
-                    <a href="{properties/next}.html">
-                      <!-- TODO Pull title from properties of next document -->
-                      <xsl:value-of select="properties/next"/>
-                    </a>
-                </p>
+                <xsl:if test="properties/next">
+                    <p>
+                        Next:
+                        <a href="{properties/next}.html">
+                            <!-- TODO Pull title from properties of next document -->
+                            <xsl:value-of select="properties/next"/>
+                        </a>
+                    </p>
+                </xsl:if>
             </body>
         </html>
     </xsl:template>
@@ -130,14 +140,9 @@ limitations under the License.
         <xsl:element name="pre">
             <xsl:attribute name="class">
                 <xsl:choose>
-                    <xsl:when test="@type='xml'">
-                        <xsl:text>brush:xml</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="@type='java'">
-                        <xsl:text>brush:java</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="@type='javascript'">
-                        <xsl:text>brush:javascript</xsl:text>
+                    <xsl:when test="@type">
+                        <xsl:text>brush:</xsl:text>
+                        <xsl:value-of select="@type"/>
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:text>brush</xsl:text>
