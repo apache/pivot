@@ -26,7 +26,8 @@ limitations under the License.
         <version>1.4</version>
     </parent>
     <artifactId>pivot-core</artifactId>
+    <version>1.4</version>
     <packaging>jar</packaging>
     <name>Apache Pivot Core</name>
-    <description>Apache Pivot Core</description>
+    <description>Apache Pivot Core Library</description>
 </project>

@@ -26,9 +26,10 @@ limitations under the License.
         <version>1.4</version>
     </parent>
     <artifactId>pivot-wtk</artifactId>
+    <version>1.4</version>
     <packaging>jar</packaging>
     <name>Apache Pivot WTK</name>
-    <description>Apache Pivot WTK</description>
+    <description>Apache Pivot WTK Library</description>
     <dependencies>
         <dependency>
             <groupId>org.apache.pivot</groupId>

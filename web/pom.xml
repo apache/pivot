@@ -26,9 +26,10 @@ limitations under the License.
         <version>1.4</version>
     </parent>
     <artifactId>pivot-web</artifactId>
+    <version>1.4</version>
     <packaging>jar</packaging>
     <name>Apache Pivot Web</name>
-    <description>Apache Pivot Web</description>
+    <description>Apache Pivot Web Library</description>
     <dependencies>
         <dependency>
             <groupId>org.apache.pivot</groupId>

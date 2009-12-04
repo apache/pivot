@@ -30,17 +30,13 @@ limitations under the License.
     </organization>
     <name>Apache Pivot</name>
     <url>http://pivot.apache.org</url>
-    <description>
-        Pivot is a platform for building rich internet applications in Java. It  combines the
-        enhanced productivity and usability features of a modern RIA toolkit with the robustness
-        of the industry-standard Java platform.
-    </description>
+    <description>Pivot is a platform for building rich internet applications in Java.</description>
     <modules>
-        <module>charts</module>
         <module>core</module>
         <module>web</module>
         <module>wtk</module>
         <module>wtk-terra</module>
+        <module>charts</module>
     </modules>
     <licenses>
         <license>

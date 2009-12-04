@@ -2,9 +2,9 @@ System Requirements
 ===================
 
 * JDK 1.6 or greater (http://java.sun.com/)
-* Ant 1.7.1 or greater (http://ant.apache.org/)
-* JUnit 4.6 or greater (http://www.junit.org/)
-
+* Ant 1.7 or greater (http://ant.apache.org/)
+* JUnit 4.3 or greater (http://www.junit.org/)
+* Maven Ant Tasks 2.0.10 or greater (http://maven.apache.org/) (optional)
 
 Project Set-Up
 ==============
@@ -53,3 +53,8 @@ Building Pivot
 * To generate the Pivot binary distribution
 
   $ ant install
+
+* To install in a local Maven repository (requires Maven Ant tasks):
+
+  $ ant maven-install
+

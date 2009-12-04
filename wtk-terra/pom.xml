@@ -26,9 +26,10 @@ limitations under the License.
         <version>1.4</version>
     </parent>
     <artifactId>pivot-wtk-terra</artifactId>
+    <version>1.4</version>
     <packaging>jar</packaging>
     <name>Apache Pivot WTK Terra Theme</name>
-    <description>Apache Pivot WTK Terra Theme</description>
+    <description>Apache Pivot WTK Terra Theme Library</description>
     <dependencies>
         <dependency>
             <groupId>org.apache.pivot</groupId>

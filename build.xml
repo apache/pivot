@@ -16,7 +16,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<project name="pivot" default="compile">
+<project name="pivot" default="compile"
+    xmlns:artifact="antlib:org.apache.maven.artifact.ant">
     <path id="classpath.javalib">
         <fileset dir="${java.home}/lib" includes="**/*.jar"/>
     </path>
@@ -532,6 +533,28 @@ limitations under the License.
         <war destfile="${folder.lib}/${ant.project.name}-tutorials.war" webxml="tutorials/web.xml">
             <fileset dir="tutorials/${folder.deploy}"/>
         </war>
+    </target>
+
+    <!-- Installs JARs to local Maven repository -->
+    <target name="maven-install" depends="clean, package">
+        <artifact:install>
+            <artifact:pom file="pom.xml"/>
+        </artifact:install>
+        <artifact:install file="lib/pivot-core-${version}.jar">
+            <artifact:pom file="core/pom.xml"/>
+        </artifact:install>
+        <artifact:install file="lib/pivot-web-${version}.jar">
+            <artifact:pom file="web/pom.xml"/>
+        </artifact:install>
+        <artifact:install file="lib/pivot-wtk-${version}.jar">
+            <artifact:pom file="wtk/pom.xml"/>
+        </artifact:install>
+        <artifact:install file="lib/pivot-wtk-terra-${version}.jar">
+            <artifact:pom file="wtk-terra/pom.xml"/>
+        </artifact:install>
+        <artifact:install file="lib/pivot-charts-${version}.jar">
+            <artifact:pom file="charts/pom.xml"/>
+        </artifact:install>
     </target>
 
     <!-- Remove trailing white space in all source files -->

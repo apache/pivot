@@ -26,6 +26,7 @@ limitations under the License.
         <version>1.4</version>
     </parent>
     <artifactId>pivot-charts</artifactId>
+    <version>1.4</version>
     <packaging>jar</packaging>
     <name>Apache Pivot Charts</name>
     <description>Apache Pivot Charts</description>
