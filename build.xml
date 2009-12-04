@@ -417,7 +417,7 @@ limitations under the License.
     </target>
 
     <!-- Generate deployment files -->
-    <target name="deploy" depends="clean, package">
+    <target name="deploy" depends="package">
         <!-- Sign JARS -->
         <mkdir dir="${folder.lib}/signed"/>
         <copy todir="${folder.lib}/signed">
@@ -457,6 +457,7 @@ limitations under the License.
         <xslt basedir="demos/www"
             destdir="demos/${folder.deploy}"
             extension=".html"
+            force="true"
             style="demos/xsl/index.xsl"
             includes="index.xml"/>
 
@@ -464,6 +465,7 @@ limitations under the License.
         <xslt basedir="demos/www"
             destdir="demos/${folder.deploy}"
             extension=".html"
+            force="true"
             style="demos/xsl/demo.html.xsl"
             includes="*.xml"
             excludes="index.xml">
@@ -475,6 +477,7 @@ limitations under the License.
         <xslt basedir="demos/www"
             destdir="demos/${folder.deploy}"
             extension=".jnlp"
+            force="true"
             style="demos/xsl/demo.jnlp.xsl"
             includes="*.xml"
             excludes="index.xml">
@@ -505,6 +508,7 @@ limitations under the License.
         <xslt basedir="tutorials/www"
             destdir="tutorials/${folder.deploy}"
             extension=".html"
+            force="true"
             style="tutorials/xsl/index.xsl"
             includes="index.xml"/>
 
@@ -512,6 +516,7 @@ limitations under the License.
         <xslt basedir="tutorials/www"
             destdir="tutorials/${folder.deploy}"
             extension=".html"
+            force="true"
             style="tutorials/xsl/tutorial.xsl"
             includes="*.xml"
             excludes="index.xml">
