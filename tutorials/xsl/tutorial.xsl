@@ -148,6 +148,9 @@ limitations under the License.
                         <xsl:text>brush</xsl:text>
                     </xsl:otherwise>
                 </xsl:choose>
+                <xsl:if test="@line-numbers='false'">
+                    <xsl:text>;gutter:false</xsl:text>
+                </xsl:if>
             </xsl:attribute>
             <xsl:apply-templates/>
         </xsl:element>

@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<document id="table-panes">
+    <properties>
+        <title>Table Panes</title>
+        <explore>TablePane</explore>
+    </properties>
+
+    <body>
+        <p>
+            Table panes are used to arrange components in a variable 2-dimensional grid, much like
+            an HTML table. Table panes have a "columns" collection that defines the column
+            structure of the table and a "rows" collection that defines both the row structure of
+            the table and the contents of each row.
+        </p>
+
+        <p>
+            Table panes support a number of styles that allow a caller to customize the arrangement
+            of child components:
+        </p>
+
+        <ul>
+            <li>
+                "padding" - the amount of space the table pane reserves around the perimeter of the
+                container.
+            </li>
+            <li>
+                "horizontalSpacing" - the amount of space the table pane inserts between columns.
+            </li>
+            <li>
+                "verticalSpacing" - the amount of space the table pane inserts between rows.
+            </li>
+            <li>
+                "showHorizontalGridLines" - whether horizontal grid lines will be painted in the
+                space between rows. Note that this will be ignored if "verticalSpacing" is zero, as
+                there would be no space in which to paint the grid lines.
+            </li>
+            <li>
+                "showVerticalGridLines" - whether vertical grid lines will be painted in the space
+                between columns. Note that this will be ignored if "horizontalSpacing" is zero, as
+                there would be no space in which to paint the grid lines.
+            </li>
+            <li>
+                "horizontalGridColor" - the color of the horizontal grid lines.
+            </li>
+            <li>
+                "verticalGridColor" - the color of the vertical grid lines.
+            </li>
+            <li>
+                "highlightBackgroundColor" - the background color of rows and columns whose
+                "highlighted" flag is set to <tt>true</tt>.
+            </li>
+        </ul>
+
+        <p>
+            Below is a sample application that demonstrates a basic table pane structure and
+            responds to mouse clicks with information about where the user clicked:
+        </p>
+
+        <application class="org.apache.pivot.tutorials.layout.SimpleTablePanes"
+            width="500" height="350">
+            <libraries>
+                <library>core</library>
+                <library>wtk</library>
+                <library>wtk-terra</library>
+                <library>tutorials</library>
+            </libraries>
+        </application>
+
+        <p>The WTKX source for the application is shown below:</p>
+
+        <source type="xml">
+            <![CDATA[
+<Window wtkx:id="window" title="Table Panes" maximized="true"
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns="org.apache.pivot.wtk">
+    <content>
+        <Border styles="{padding:0}">
+            <content>
+                <TablePane wtkx:id="tablePane" styles="{verticalSpacing:1, showHorizontalGridLines:true,
+                    horizontalSpacing:1, showVerticalGridLines:true}">
+                    <columns>
+                        <TablePane.Column width="-1"/>
+                        <TablePane.Column width="50"/>
+                        <TablePane.Column width="-1"/>
+                        <TablePane.Column width="1*"/>
+                        <TablePane.Column width="2*"/>
+                    </columns>
+
+                    <rows>
+                        <TablePane.Row height="-1">
+                            <TablePane.Filler/>
+                            <Label text="50" styles="{horizontalAlignment:'center'}"/>
+                            <Label text="-1" styles="{horizontalAlignment:'center'}"/>
+                            <Label text="1*" styles="{horizontalAlignment:'center'}"/>
+                            <Label text="2*" styles="{horizontalAlignment:'center'}"/>
+                        </TablePane.Row>
+                        <TablePane.Row height="50">
+                            <Label text="50" styles="{verticalAlignment:'center'}"/>
+                        </TablePane.Row>
+                        <TablePane.Row height="-1">
+                            <Label text="-1" styles="{verticalAlignment:'center'}"/>
+                        </TablePane.Row>
+                        <TablePane.Row height="1*">
+                            <Label text="1*" styles="{verticalAlignment:'center'}"/>
+                        </TablePane.Row>
+                        <TablePane.Row height="2*">
+                            <Label text="2*" styles="{verticalAlignment:'center'}"/>
+                        </TablePane.Row>
+                    </rows>
+                </TablePane>
+            </content>
+        </Border>
+    </content>
+</Window>
+            ]]>
+        </source>
+
+        <p>
+            The Java source is as follows. Most of the code is simply event handling logic that
+            responds to mouse clicks:
+        </p>
+
+        <source type="java">
+            <![CDATA[
+package org.apache.pivot.tutorials.layout;
+
+import org.apache.pivot.collections.Map;
+import org.apache.pivot.wtk.BoxPane;
+import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.ComponentMouseButtonListener;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.DesktopApplicationContext;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.Label;
+import org.apache.pivot.wtk.MessageType;
+import org.apache.pivot.wtk.Mouse;
+import org.apache.pivot.wtk.Orientation;
+import org.apache.pivot.wtk.Prompt;
+import org.apache.pivot.wtk.TablePane;
+import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtkx.WTKXSerializer;
+
+public class SimpleTablePanes implements Application {
+    private Window window = null;
+    private TablePane tablePane = null;
+
+    @Override
+    public void startup(Display display, Map<String, String> properties) throws Exception {
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        window = (Window)wtkxSerializer.readObject(this, "simple_table_panes.wtkx");
+        tablePane = (TablePane)wtkxSerializer.get("tablePane");
+
+        tablePane.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
+            @Override
+            public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+                int rowIndex = tablePane.getRowAt(y);
+                int columnIndex = tablePane.getColumnAt(x);
+
+                if (rowIndex >= 0
+                    && columnIndex >= 0) {
+                    TablePane.Row row = tablePane.getRows().get(rowIndex);
+                    TablePane.Column column = tablePane.getColumns().get(columnIndex);
+
+                    int rowHeight = row.getHeight();
+                    int columnWidth = column.getWidth();
+
+                    String message = "Registered Click At " + rowIndex + "," + columnIndex;
+
+                    Label heightLabel = new Label(String.format("The row's height is %d (%s)",
+                        rowHeight,
+                        rowHeight == -1 ? "default" : (row.isRelative() ? "relative" : "absolute")));
+                    Label widthLabel = new Label(String.format("The column's width is %d (%s)",
+                        columnWidth,
+                        columnWidth == -1 ? "default" : (column.isRelative() ? "relative" : "absolute")));
+
+                    BoxPane body = new BoxPane(Orientation.VERTICAL);
+                    body.add(heightLabel);
+                    body.add(widthLabel);
+
+                    Prompt.prompt(MessageType.INFO, message, body, window);
+                }
+
+                return false;
+            }
+        });
+
+        window.open(display);
+    }
+
+    @Override
+    public boolean shutdown(boolean optional) {
+        if (window != null) {
+            window.close();
+        }
+
+        return false;
+    }
+
+    @Override
+    public void suspend() {
+        // No-op
+    }
+
+    @Override
+    public void resume() {
+        // No-op
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(SimpleTablePanes.class, args);
+    }
+}
+            ]]>
+        </source>
+
+        <p>
+            Next, let's look at a more involved application that allows you to interact with the
+            table pane to get a feel for how you can achieve the layout that you desire. The
+            following application allows you to control the table pane's styles via the controls on
+            the left and responds to right-clicks over the table pane itself. You can also move the
+            splitter to see the effect it has on the relative columns in the table pane.
+        </p>
+
+        <application class="org.apache.pivot.tutorials.layout.TablePanes" width="500" height="350">
+            <libraries>
+                <library>core</library>
+                <library>wtk</library>
+                <library>wtk-terra</library>
+                <library>tutorials</library>
+            </libraries>
+            <startup-properties>
+                <src>org/apache/pivot/tutorials/treeviews/tree_views.wtkx</src>
+            </startup-properties>
+        </application>
+    </body>
+</document>
