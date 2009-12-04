@@ -354,22 +354,27 @@ public final class DesktopApplicationContext extends ApplicationContext {
                 String key = property[0];
                 String value = property[1];
 
-                if (key.equals(X_ARGUMENT)) {
-                    x = Integer.parseInt(value);
-                } else if (key.equals(Y_ARGUMENT)) {
-                    y = Integer.parseInt(value);
-                } else if (key.equals(WIDTH_ARGUMENT)) {
-                    width = Integer.parseInt(value);
-                } else if (key.equals(HEIGHT_ARGUMENT)) {
-                    height = Integer.parseInt(value);
-                } else if (key.equals(CENTER_ARGUMENT)) {
-                    center = Boolean.parseBoolean(value);
-                } else if (key.equals(RESIZABLE_ARGUMENT)) {
-                    resizable = Boolean.parseBoolean(value);
-                } else if (key.equals(FULL_SCREEN_ARGUMENT)) {
-                    fullScreen = Boolean.parseBoolean(value);
-                } else {
-                    properties.put(key, value);
+                try {
+                    if (key.equals(X_ARGUMENT)) {
+                        x = Integer.parseInt(value);
+                    } else if (key.equals(Y_ARGUMENT)) {
+                        y = Integer.parseInt(value);
+                    } else if (key.equals(WIDTH_ARGUMENT)) {
+                        width = Integer.parseInt(value);
+                    } else if (key.equals(HEIGHT_ARGUMENT)) {
+                        height = Integer.parseInt(value);
+                    } else if (key.equals(CENTER_ARGUMENT)) {
+                        center = Boolean.parseBoolean(value);
+                    } else if (key.equals(RESIZABLE_ARGUMENT)) {
+                        resizable = Boolean.parseBoolean(value);
+                    } else if (key.equals(FULL_SCREEN_ARGUMENT)) {
+                        fullScreen = Boolean.parseBoolean(value);
+                    } else {
+                        properties.put(key, value);
+                    }
+                } catch (NumberFormatException exception) {
+                    System.err.println("Warning: " + exception.getClass().getSimpleName() + ": " +
+                        exception.getLocalizedMessage());
                 }
             } else {
                 System.err.println(arg + " is not a valid startup property.");

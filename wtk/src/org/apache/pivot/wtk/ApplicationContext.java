@@ -668,7 +668,7 @@ public abstract class ApplicationContext {
             switch (event.getID()) {
                 case ComponentEvent.COMPONENT_RESIZED: {
                     if (scale == 1) {
-                        display.setSize(getWidth(), getHeight());
+                        display.setSize(Math.max(getWidth(), 0), Math.max(getHeight(), 0));
                     } else {
                         display.setSize(Math.max((int)Math.ceil(getWidth() / scale), 0),
                             Math.max((int)Math.ceil(getHeight() / scale), 0));
