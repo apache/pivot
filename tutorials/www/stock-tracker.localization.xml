@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<document id="stock-tracker.localization">
+    <properties>
+        <title>Stock Tracker - Localization</title>
+    </properties>
+
+    <body>
+        <p>
+            In Java, any translatable text is generally stored in a set of localized property files
+            called "resource bundles". The appropriate file is loaded at runtime for either the
+            default locale or an explicitly selected non-default locale. While it is possible to
+            use standard Java resource bundles in a Pivot application, Pivot adds support for
+            JSON-based resource bundles that are slightly more flexible the built-in
+            properties-based bundles. JSON resource bundles allow developers to more easily work
+            with UTF-8 encoded resource strings, and also natively support hierarchical data, which
+            can only be simulated when using properties files.
+        </p>
+
+        <p>
+            Stock Tracker provides two resource files, one for English users and one for
+            French-speaking users:
+        </p>
+
+        <source type="jscript">
+            <![CDATA[
+            {   stockTracker: "Pivot Stock Tracker",
+                symbol: "Symbol",
+                companyName: "Company",
+                value: "Value",
+                openingValue: "Open",
+                highValue: "High",
+                lowValue: "Low",
+                change: "Change",
+                volume: "Volume",
+                addSymbol: "Add symbol",
+                removeSymbol: "Remove selected symbols",
+                lastUpdate: "Last Update",
+                dataProvidedBy: "Data provided by",
+                yahooFinance: "Yahoo! Finance"
+            }
+            ]]>
+        </source>
+        <p class="caption">StockTracker.json</p>
+
+        <source type="jscript">
+            <![CDATA[
+            {   stockTracker: "La Bourse Pivot",
+                symbol: "Code",
+                companyName: "Société",
+                value: "Cours",
+                openingValue: "Ouverture",
+                highValue: "+ Haut",
+                lowValue: "+ Bas",
+                change: "Variation",
+                volume: "Volume",
+                addSymbol: "Ajouter un code",
+                removeSymbol: "Enlever codes sélectionnés",
+                lastUpdate: "Dernier échange",
+                dataProvidedBy: "Données fournies par",
+                yahooFinance: "Yahoo! Finance"
+            }
+            ]]>
+        </source>
+        <p class="caption">StockTracker_fr.json</p>
+
+        <p>
+            As we've seen, references to these string resources can be embedded directly within a
+            WTKX file:
+        </p>
+
+        <source type="xml">
+            <![CDATA[
+            <Form styles="{rightAlignLabels:true, fill:true}">
+                <sections>
+                    <Form.Section>
+                        <Label Form.name="%value" textKey="value"
+                            styles="{horizontalAlignment:'right'}"/>
+                        <Label wtkx:id="changeLabel" Form.name="%change" textKey="change"
+                            styles="{horizontalAlignment:'right'}"/>
+                        <Label Form.name="%openingValue" textKey="openingValue"
+                            styles="{horizontalAlignment:'right'}"/>
+                        <Label Form.name="%highValue" textKey="highValue"
+                            styles="{horizontalAlignment:'right'}"/>
+                        <Label Form.name="%lowValue" textKey="lowValue"
+                            styles="{horizontalAlignment:'right'}"/>
+                        <Label Form.name="%volume" textKey="volume"
+                            styles="{horizontalAlignment:'right'}"/>
+                    </Form.Section>
+                </sections>
+            </Form>
+            ]]>
+        </source>
+
+        <p>
+            The application loads the resources for the appropriate locale at startup, and the WTKX
+            serializer handles the details of resource substitution so the developer doesn't have
+            to worry about it. The following applet demonstrates the Stock Tracker application run
+            using the "fr" locale. No code changes are required; the same JAR files are used to
+            execute both the English and French versions:
+        </p>
+
+        <application class="org.apache.pivot.tutorials.stocktracker.StockTracker"
+            width="480" height="360" signed="true">
+            <libraries>
+                <library>core</library>
+                <library>web</library>
+                <library>wtk</library>
+                <library>wtk-terra</library>
+                <library>tutorials</library>
+            </libraries>
+            <startup-properties>
+                <language>fr</language>
+            </startup-properties>
+        </application>
+
+        <p>
+            Not all localization requirements can be handled by WTKX alone, however. For example,
+            Stock Tracker needs to manually handle the localization of the "last updated" message:
+        </p>
+
+        <source type="java">
+            <![CDATA[
+            DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG,
+                DateFormat.MEDIUM, Locale.getDefault());
+            lastUpdateLabel.setText(dateFormat.format(new Date()));
+            ]]>
+        </source>
+
+        <p>
+            However, most static localization can be addressed in the WTKX source itself, making it
+            very easy to build internationalized applications in Pivot.
+        </p>
+
+        <h2>Summary</h2>
+
+        <p>
+            The examples in this section demonstrate the implementation of a simple but complete
+            application implemented in Pivot. They discuss features common to many "real-world"
+            applications, including UI markup, event handling, server communication, data binding,
+            and internationalization, and should provide a good starting point for any developer
+            interested in working with Pivot.
+        </p>
+    </body>
+</document>

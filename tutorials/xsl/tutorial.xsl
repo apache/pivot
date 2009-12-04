@@ -68,7 +68,7 @@ limitations under the License.
                     </xsl:choose>
                 </xsl:variable>
 
-                <xsl:if test="boolean($next-id)">
+                <xsl:if test="string-length($next-id)!=0">
                     <p>
                         <xsl:text>Next: </xsl:text>
                         <a href="{$next-id}.html">
