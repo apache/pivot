@@ -29,6 +29,7 @@ limitations under the License.
     <property name="folder.install" value="install"/>
     <property name="folder.lib" value="lib"/>
     <property name="folder.deploy" value="deploy"/>
+    <property name="folder.maven" value="maven"/>
 
     <!-- Keystore properties -->
     <property name="keystore.location" value="etc/pivot.keystore"/>
@@ -246,6 +247,7 @@ limitations under the License.
         <delete dir="${folder.doc}"/>
         <delete dir="${folder.install}"/>
         <delete dir="${folder.lib}"/>
+        <delete dir="${folder.maven}"/>
     </target>
 
     <!-- Javadoc -->
@@ -555,6 +557,62 @@ limitations under the License.
         <artifact:install file="lib/pivot-charts-${version}.jar">
             <artifact:pom file="charts/pom.xml"/>
         </artifact:install>
+    </target>
+
+    <!-- Generates artifact bundles for Maven repository deployment -->
+    <target name="maven-deploy" depends="clean, package">
+        <mkdir dir="${folder.maven}"/>
+
+        <jar destfile="${folder.maven}/pivot-${version}-bundle.jar">
+            <fileset dir=".">
+                <include name="pom.xml"/>
+            </fileset>
+        </jar>
+
+        <jar destfile="${folder.maven}/pivot-core-${version}-bundle.jar">
+            <fileset dir="core">
+                <include name="pom.xml"/>
+            </fileset>
+            <fileset dir="lib">
+                <include name="${jar.core}"/>
+            </fileset>
+        </jar>
+
+        <jar destfile="${folder.maven}/pivot-web-${version}-bundle.jar">
+            <fileset dir="web">
+                <include name="pom.xml"/>
+            </fileset>
+            <fileset dir="lib">
+                <include name="${jar.web}"/>
+            </fileset>
+        </jar>
+
+        <jar destfile="${folder.maven}/pivot-wtk-${version}-bundle.jar">
+            <fileset dir="wtk">
+                <include name="pom.xml"/>
+            </fileset>
+            <fileset dir="lib">
+                <include name="${jar.wtk}"/>
+            </fileset>
+        </jar>
+
+        <jar destfile="${folder.maven}/pivot-wtk-terra-${version}-bundle.jar" >
+            <fileset dir="wtk-terra">
+                <include name="pom.xml"/>
+            </fileset>
+            <fileset dir="lib">
+                <include name="${jar.wtk-terra}"/>
+            </fileset>
+        </jar>
+
+        <jar destfile="${folder.maven}/pivot-charts-${version}-bundle.jar">
+            <fileset dir="charts">
+                <include name="pom.xml"/>
+            </fileset>
+            <fileset dir="lib">
+                <include name="${jar.charts}"/>
+            </fileset>
+        </jar>
     </target>
 
     <!-- Remove trailing white space in all source files -->
