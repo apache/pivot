@@ -18,16 +18,14 @@ limitations under the License.
 
 <!-- Translates a demo XML document into a JNLP demo file -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+    <!-- Output method -->
+    <xsl:output method="xml" encoding="UTF-8" indent="no"/>
+
+    <!-- Parameters (overrideable) -->
     <xsl:param name="release"/>
     <xsl:param name="root"/>
 
-    <!--
-    Output method. NOTE This must be "text" because JSP tags are not valid XML, so setting the
-    output method to "xml" (or "html") causes the XSLT process to escape the JSP tags, thus
-    breaking the JSP
-    -->
-    <xsl:output method="text"/>
-
+    <!-- Variables (not overrideable) -->
     <xsl:variable name="project" select="document('project.xml')/project"/>
 
     <!-- <root> gets resolved to the 'root' XSL parameter -->
@@ -36,114 +34,95 @@ limitations under the License.
     </xsl:template>
 
     <xsl:template match="application">
-        &lt;?xml version="1.0" encoding="UTF-8" ?&gt;
+        <xsl:text disable-output-escaping="yes">
+            <![CDATA[
+            <%@ page language="java" contentType="application/x-java-jnlp-file" pageEncoding="UTF-8" %>
+            <%
+                // response.setHeader("Cache-Control", "no-cache");
+                // response.setHeader("Pragma", "no-cache");
+                // response.setDateHeader("Expires", 0);
 
-        &lt;%@ page language="java" contentType="application/x-java-jnlp-file" pageEncoding="UTF-8" %&gt;
-        &lt;%
-            // response.setHeader("Cache-Control", "no-cache");
-            // response.setHeader("Pragma", "no-cache");
-            // response.setDateHeader("Expires", 0);
+                String requestURL = request.getRequestURL().toString();
+                int lastSlash = requestURL.lastIndexOf('/');
+                String codebase = "";
+                String href = "";
+                if (requestURL != null) {
+                    if (lastSlash < 0) {
+                        lastSlash = 0;
+                    }
 
-            String requestURL = request.getRequestURL().toString();
-            int lastSlash = requestURL.lastIndexOf('/');
-            String codebase = "";
-            String href = "";
-            if (requestURL != null) {
-                if (lastSlash &lt; 0) {
-                    lastSlash = 0;
+                    codebase = requestURL.substring(0, lastSlash + 1);
+                    if ((lastSlash + 1) < requestURL.length()) {
+                        href = requestURL.substring(lastSlash + 1);
+                    }
+
                 }
+            %>
 
-                codebase = requestURL.substring(0, lastSlash + 1);
-                if ((lastSlash + 1) &lt; requestURL.length()) {
-                    href = requestURL.substring(lastSlash + 1);
-                }
+            <jnlp spec="1.6+" codebase="<%= codebase %>" href="<%= href %>">
+            ]]>
+        </xsl:text>
 
-            }
-        %&gt;
+        <information>
+            <title>Pivot <xsl:value-of select="//document/properties/title"/> Demo</title>
+            <description>
+                <xsl:value-of select="normalize-space(//document/properties/description)"/>
+            </description>
+            <vendor><xsl:value-of select="$project/vendor"/></vendor>
+            <homepage href="{$project/@href}"/>
+            <icon kind="shortcut" href="logo.png"/>
+            <offline-allowed/>
+            <shortcut online="false">
+                <desktop/>
+            </shortcut>
+        </information>
 
-        &lt;jnlp spec="1.6+" codebase="&lt;%= codebase %&gt;" href="&lt;%= href %&gt;"&gt;
-            &lt;information&gt;
-                &lt;title&gt;Pivot <xsl:value-of select="//document/properties/title"/> Demo&lt;/title&gt;
-                &lt;description&gt;<xsl:value-of select="//document/properties/description"/>&lt;/description&gt;
-                &lt;vendor&gt;<xsl:value-of select="$project/vendor"/>&lt;/vendor&gt;
-                &lt;homepage href="<xsl:value-of select="$project/@href"/>"/&gt;
-                &lt;icon kind="shortcut" href="logo.png"/&gt;
-                &lt;offline-allowed/&gt;
-                &lt;shortcut online="false"&gt;
-                    &lt;desktop/&gt;
-                &lt;/shortcut&gt;
-            &lt;/information&gt;
+        <xsl:if test="boolean(@signed)">
+            <security>
+                <all-permissions/>
+            </security>
+        </xsl:if>
 
-            <xsl:if test="boolean(@signed)">
-                &lt;security&gt;
-                    &lt;all-permissions/&gt;
-                &lt;/security&gt;
-            </xsl:if>
+        <resources>
+            <property name="jnlp.packEnabled" value="true"/>
+            <property name="sun.awt.noerasebackground" value="true"/>
+            <property name="sun.awt.erasebackgroundonresize=true" value="true"/>
 
-            &lt;resources&gt;
-                &lt;property name="jnlp.packEnabled" value="true"/&gt;
-                &lt;property name="sun.awt.noerasebackground" value="true"/&gt;
-                &lt;property name="sun.awt.erasebackgroundonresize=true" value="true"/&gt;
+            <java version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
 
-                &lt;java version="1.6+" href="http://java.sun.com/products/autodl/j2se"/&gt;
-
-                <xsl:apply-templates select="libraries/library">
-                    <xsl:with-param name="signed" select="boolean(@signed)"/>
-                </xsl:apply-templates>
-            &lt;/resources&gt;
-
-            &lt;application-desc main-class="org.apache.pivot.wtk.DesktopApplicationContext"&gt;
-                &lt;argument&gt;<xsl:value-of select="@class"/>&lt;/argument&gt;
-                &lt;argument&gt;--width=<xsl:value-of select="@width"/>&lt;/argument&gt;
-                &lt;argument&gt;--height=<xsl:value-of select="@height"/>&lt;/argument&gt;
-                &lt;argument&gt;--center=true&lt;/argument&gt;
-                <xsl:for-each select="startup-properties/*">
-                &lt;argument&gt;--<xsl:value-of select="name(.)"/>=<xsl:apply-templates/>&lt;/argument&gt;
-                </xsl:for-each>
-            &lt;/application-desc&gt;
-
-            &lt;update check="background"/&gt;
-        &lt;/jnlp&gt;
-    </xsl:template>
-
-    <xsl:template match="library">
-        <xsl:param name="signed"/>
-
-        <xsl:choose>
-            <xsl:when test=".='wtk'">
-                <xsl:variable name="jar">
-                    <xsl:value-of select="'lib/pivot-wtk-'"/>
-                    <xsl:value-of select="$release"/>
-                    <xsl:if test="$signed">
-                        <xsl:value-of select="'.signed'"/>
+            <xsl:variable name="signed" select="@signed"/>
+            <xsl:for-each select="libraries/library">
+                <xsl:element name="jar">
+                    <xsl:attribute name="href">
+                        <xsl:value-of select="'lib/pivot-'"/>
+                        <xsl:value-of select="."/>
+                        <xsl:value-of select="'-'"/>
+                        <xsl:value-of select="$release"/>
+                        <xsl:if test="$signed">
+                            <xsl:value-of select="'.signed'"/>
+                        </xsl:if>
+                        <xsl:value-of select="'.jar'"/>
+                    </xsl:attribute>
+                    <xsl:if test=".='wtk'">
+                        <xsl:attribute name="main">true</xsl:attribute>
                     </xsl:if>
-                    <xsl:value-of select="'.jar'"/>
-                </xsl:variable>
-                &lt;jar href="<xsl:value-of select="$jar"/>" main="true"/&gt;
-                <xsl:variable name="jar-terra">
-                    <xsl:value-of select="'lib/pivot-wtk-terra-'"/>
-                    <xsl:value-of select="$release"/>
-                    <xsl:if test="$signed">
-                        <xsl:value-of select="'.signed'"/>
-                    </xsl:if>
-                    <xsl:value-of select="'.jar'"/>
-                </xsl:variable>
-                &lt;jar href="<xsl:value-of select="$jar-terra"/>"/&gt;
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:variable name="jar">
-                    <xsl:value-of select="'lib/pivot-'"/>
-                    <xsl:value-of select="."/>
-                    <xsl:value-of select="'-'"/>
-                    <xsl:value-of select="$release"/>
-                    <xsl:if test="$signed">
-                        <xsl:value-of select="'.signed'"/>
-                    </xsl:if>
-                    <xsl:value-of select="'.jar'"/>
-                </xsl:variable>
-                &lt;jar href="<xsl:value-of select="$jar"/>"/&gt;
-            </xsl:otherwise>
-        </xsl:choose>
+                </xsl:element>
+            </xsl:for-each>
+        </resources>
+
+        <application-desc main-class="org.apache.pivot.wtk.DesktopApplicationContext">
+            <argument><xsl:value-of select="@class"/></argument>
+            <argument>--width=<xsl:value-of select="@width"/></argument>
+            <argument>--height=<xsl:value-of select="@height"/></argument>
+            <argument>--center=true</argument>
+            <xsl:for-each select="startup-properties/*">
+            <argument>--<xsl:value-of select="name(.)"/>=<xsl:apply-templates/></argument>
+            </xsl:for-each>
+        </application-desc>
+
+        <update check="background"/>
+
+        <xsl:text disable-output-escaping="yes"><![CDATA[</jnlp>]]></xsl:text>
     </xsl:template>
 
     <xsl:template match="*|@*">

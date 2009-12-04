@@ -75,81 +75,54 @@ limitations under the License.
     <!-- <application> gets translated to a JavaScript block that launches the applet -->
     <xsl:template match="application">
         <script type="text/javascript">
+            <!-- Base attributes -->
             var attributes = {
                 code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
                 width:"<xsl:value-of select="@width"/>",
                 height:"<xsl:value-of select="@height"/>"
             };
 
+            <!-- Additional attributes -->
             <xsl:for-each select="attributes/*">
                 attributes.<xsl:value-of select="name(.)"/> = '<xsl:value-of select="."/>';
             </xsl:for-each>
 
+            <!-- Archive attribute -->
             var libraries = [];
-            <xsl:apply-templates select="libraries/library">
-                <xsl:with-param name="signed" select="boolean(@signed)"/>
-            </xsl:apply-templates>
+            <xsl:variable name="signed" select="@signed"/>
+            <xsl:for-each select="libraries/library">
+                <xsl:text><![CDATA[libraries.push("]]></xsl:text>
+                <xsl:value-of select="'lib/pivot-'"/>
+                <xsl:value-of select="."/>
+                <xsl:value-of select="'-'"/>
+                <xsl:value-of select="$release"/>
+                <xsl:if test="$signed">
+                    <xsl:value-of select="'.signed'"/>
+                </xsl:if>
+                <xsl:value-of select="'.jar'"/>
+                <xsl:text><![CDATA[");
+                ]]></xsl:text>
+            </xsl:for-each>
             attributes.archive = libraries.join(",");
 
+            <!-- Base parameters -->
             var parameters = {
                 codebase_lookup:false,
                 java_arguments:"-Dsun.awt.noerasebackground=true -Dsun.awt.erasebackgroundonresize=true",
                 application_class_name:"<xsl:value-of select="@class"/>"
             };
 
+            <!-- Startup properties -->
             <xsl:if test="startup-properties">
                 var startupProperties = [];
-
                 <xsl:for-each select="startup-properties/*">
                     startupProperties.push("<xsl:value-of select="name(.)"/>=<xsl:apply-templates/>");
                 </xsl:for-each>
-
                 parameters.startup_properties = startupProperties.join("&amp;");
             </xsl:if>
 
             deployJava.runApplet(attributes, parameters, "1.6");
         </script>
-    </xsl:template>
-
-    <!-- <library> gets translated to JavaScript that adds a JAR file to a JavaScript array -->
-    <xsl:template match="library">
-        <xsl:param name="signed"/>
-
-        <xsl:choose>
-            <xsl:when test=".='wtk'">
-                <xsl:variable name="jar">
-                    <xsl:value-of select="'lib/pivot-wtk-'"/>
-                    <xsl:value-of select="$release"/>
-                    <xsl:if test="$signed">
-                        <xsl:value-of select="'.signed'"/>
-                    </xsl:if>
-                    <xsl:value-of select="'.jar'"/>
-                </xsl:variable>
-                libraries.push('<xsl:value-of select="$jar"/>');
-                <xsl:variable name="jar-terra">
-                    <xsl:value-of select="'lib/pivot-wtk-terra-'"/>
-                    <xsl:value-of select="$release"/>
-                    <xsl:if test="$signed">
-                        <xsl:value-of select="'.signed'"/>
-                    </xsl:if>
-                    <xsl:value-of select="'.jar'"/>
-                </xsl:variable>
-                libraries.push('<xsl:value-of select="$jar-terra"/>');
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:variable name="jar">
-                    <xsl:value-of select="'lib/pivot-'"/>
-                    <xsl:value-of select="."/>
-                    <xsl:value-of select="'-'"/>
-                    <xsl:value-of select="$release"/>
-                    <xsl:if test="$signed">
-                        <xsl:value-of select="'.signed'"/>
-                    </xsl:if>
-                    <xsl:value-of select="'.jar'"/>
-                </xsl:variable>
-                libraries.push('<xsl:value-of select="$jar"/>');
-            </xsl:otherwise>
-        </xsl:choose>
     </xsl:template>
 
     <!-- Everything else gets passed through -->
