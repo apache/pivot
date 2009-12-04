@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 Licensed to the Apache Software Foundation (ASF) under one or more
 contributor license agreements.  See the NOTICE file distributed with
@@ -15,49 +16,38 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<html>
-<head>
-<title>JSON-based TableView</title>
-<link rel="stylesheet" href="tutorial.css">
-<script src="http://java.com/js/deployJava.js"></script>
+<document id="table-views.custom">
+    <properties>
+        <title>Custom TableView</title>
+    </properties>
 
-<!-- NOTE: Syntax highlighting script is LGPL -->
-<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shCore.js"></script>
-<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushJava.js"></script>
-<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushXml.js"></script>
-<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushJScript.js"></script>
-<link type="text/css" rel="stylesheet" href="http://alexgorbatchev.com/pub/sh/current/styles/shCore.css"/>
-<link type="text/css" rel="stylesheet" href="http://alexgorbatchev.com/pub/sh/current/styles/shThemeDefault.css"/>
-<script type="text/javascript">
-    SyntaxHighlighter.all();
-</script>
-</head>
-<body>
-<h1>Custom TableView</h1>
+    <body>
+        <p>
+            This example continues the theme of the previous two examples and presents the final
+            standings of the top ten medal-winning countries in the 2008 Summer Olympics in a
+            <tt>TableView</tt> component. However, rather than representing the data using simple
+            string-based hash maps or deserialized JSON values, this example uses a custom JavaBean
+            component to represent a table row. In addition to the "nation", "gold", "silver",
+            "bronze", and "total" properties used in the previous examples, it also defines a
+            "flag" property of type <tt>org.apache.pivot.wtk.media.Image</tt>, which is shown in
+            the first column:
+        </p>
 
-<p>This example continues the theme of the previous two examples and presents the final standings of the top ten medal-winning countries in the 2008 Summer Olympics in a <tt>TableView</tt> component. However, rather than representing the data using simple string-based hash maps or deserialized JSON values, this example uses a custom JavaBean component to represent a table row. In addition to the "nation", "gold", "silver", "bronze", and "total" properties used in the previous examples, it also defines a "flag" property of type <tt>org.apache.pivot.wtk.media.Image</tt>, which is shown in the first column:</p>
+        <application class="org.apache.pivot.wtk.ScriptApplication" width="480" height="240">
+            <libraries>
+                <library>core</library>
+                <library>wtk</library>
+                <library>wtk-terra</library>
+                <library>tutorials</library>
+            </libraries>
+            <startup-properties>
+                <src>org/apache/pivot/tutorials/tableviews/custom_table_view.wtkx</src>
+            </startup-properties>
+        </application>
 
-<script src="version.js"></script>
-<script>
-var attributes = {code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
-    archive:"lib/pivot-core-" + version + ".jar"
-        + ",lib/pivot-wtk-" + version + ".jar"
-        + ",lib/pivot-wtk-" + version + ".terra.jar"
-        + ",lib/pivot-tutorials-" + version + ".jar",
-    width:480,
-    height:240
-};
-var parameters = {application_class_name:"org.apache.pivot.wtk.ScriptApplication",
-    codebase_lookup:false,
-    java_arguments:"-Dsun.awt.noerasebackground=true -Dsun.awt.erasebackgroundonresize=true",
-    startup_properties:"src=org/apache/pivot/tutorials/tableviews/custom_table_view.wtkx"
-};
-deployJava.writeAppletTag(attributes, parameters);
-</script>
+        <p>The Java source for the bean class is as follows:</p>
 
-<p>The Java source for the bean class is as follows:</p>
-
-<pre class="brush:java">
+        <source type="java">
 package org.apache.pivot.tutorials.tableviews;
 
 import java.net.URL;
@@ -124,11 +114,14 @@ public class OlympicStanding {
         return (gold + silver + bronze);
     }
 }
-</pre>
+        </source>
 
-<p>The WTKX source is as follows. Note that, in this example, the value for "total" no longer needs to be hard-coded, because it is calculated by the bean class:</p>
+        <p>
+            The WTKX source is as follows. Note that, in this example, the value for "total" no
+            longer needs to be hard-coded, because it is calculated by the bean class:
+        </p>
 
-<pre class="brush:xml">
+        <source type="xml">
 &lt;Window title="Table Views" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:collections="org.apache.pivot.collections"
@@ -190,10 +183,10 @@ public class OlympicStanding {
         &lt;/Border&gt;
     &lt;/content&gt;
 &lt;/Window&gt;
-</pre>
+        </source>
 
-<p>Like the previous example, this one also supports sorting, using the same logic as the JSON version. The only other major difference between this example and the previous is the use of relative-width columns in the table view. The "n*" notation used here is identical to that used by the <a href="table_panes.html">TablePane</a> container discussed earlier.</p>
-
-<p>Next: <a href="tree_views.html">Tree Views</a></p>
-</body>
-</html>
+        <p>
+            Like the previous example, this one also supports sorting, using the same logic as the JSON version. The only other major difference between this example and the previous is the use of relative-width columns in the table view. The "n*" notation used here is identical to that used by the <a href="table-panes.html">TablePane</a> container discussed earlier.
+        </p>
+    </body>
+</document>

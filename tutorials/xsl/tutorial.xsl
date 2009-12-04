@@ -70,7 +70,7 @@ limitations under the License.
 
                 <xsl:if test="boolean($next-id)">
                     <p>
-                        Next:
+                        <xsl:text>Next: </xsl:text>
                         <a href="{$next-id}.html">
                             <xsl:variable name="tutorial"
                                 select="document(concat('../www/', $next-id, '.xml'))/document"/>
