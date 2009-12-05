@@ -198,16 +198,6 @@ limitations under the License.
         </sequential>
     </macrodef>
 
-    <macrodef name="clean-www">
-        <attribute name="project"/>
-
-        <sequential>
-            <delete dir="@{project}/www/lib"/>
-            <delete file="@{project}/www/version.jsp"/>
-            <delete file="@{project}/www/version.js"/>
-        </sequential>
-    </macrodef>
-
     <!-- Compile all classes (tests included) -->
     <target name="compile" description="Compiles all projects"
         depends="charts, core, demos, tools, tutorials, web, web-server, wtk, wtk-terra"/>
@@ -242,7 +232,6 @@ limitations under the License.
         <clean project="web-server"/>
         <clean project="wtk"/>
         <clean project="wtk-terra"/>
-        <clean-www project="tutorials"/>
         <delete dir="${folder.dist}"/>
         <delete dir="${folder.doc}"/>
         <delete dir="${folder.install}"/>
