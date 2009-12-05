@@ -22,5 +22,185 @@ limitations under the License.
     </properties>
 
     <body>
+        <p>
+            The Pivot framework provides platform support for context menus via the
+            <tt>MenuPopup</tt> class, a subclass of <tt>Window</tt> that contains an instance of
+            <tt>Menu</tt>. Though it is possible to instantiate and open a <tt>MenuPopup</tt>
+            directly, it is often more convenient to use the <tt>MenuHandler</tt> interface. When
+            an instance of <tt>MenuHandler</tt> is attached to a component, the Pivot platform
+            automatically handles many of the details associated with menu processing.
+            <tt>MenuHandler</tt> defines the following methods:
+        </p>
+
+        <p>
+            <tt>public void configureMenuBar(Component component, MenuBar menuBar);</tt><br/>
+            <tt>public void cleanupMenuBar(Component component, MenuBar menuBar);</tt><br/>
+            <tt>public boolean configureContextMenu(Component component, Menu menu, int x, int y);</tt><br/>
+        </p>
+
+        <p>
+            The first two methods are related to menu bars and are discussed in the next section.
+            The third method can be used to automatically present a context menu when the user
+            right-clicks on a component to which the handler is attached. For example, the
+            following application uses a menu handler to present a simple context-sensitive help
+            menu that describes what the user clicked on:
+        </p>
+
+        <application class="org.apache.pivot.tutorials.menus.ContextMenus"
+            width="420" height="240">
+            <libraries>
+                <library>core</library>
+                <library>wtk</library>
+                <library>wtk-terra</library>
+                <library>tutorials</library>
+            </libraries>
+        </application>
+
+        <p>
+            The WTKX source for the example is shown below. It simply instantiates four image
+            view components and places a description of the image shown in each in the component's
+            user data:
+        </p>
+
+        <source type="xml" location="org/apache/pivot/tutorials/menus/context_menus.wtkx">
+            <![CDATA[
+            <Window title="Context Menus" maximized="true"
+                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns="org.apache.pivot.wtk">
+                <content>
+                    <Border styles="{color:10}">
+                        <content>
+                            <TablePane styles="{horizontalSpacing:1, verticalSpacing:1,
+                                showHorizontalGridLines:true, showVerticalGridLines:true,
+                                horizontalGridColor:10, verticalGridColor:10}">
+                                <columns>
+                                    <TablePane.Column width="1*"/>
+                                    <TablePane.Column width="1*"/>
+                                </columns>
+                                <rows>
+                                    <TablePane.Row height="1*">
+                                        <ImageView image="@battery.png">
+                                            <userData description="battery"/>
+                                        </ImageView>
+                                        <ImageView image="@emblem-favorite.png">
+                                            <userData description="heart"/>
+                                        </ImageView>
+                                    </TablePane.Row>
+                                    <TablePane.Row height="1*">
+                                        <ImageView image="@edit-paste.png">
+                                            <userData description="clipboard"/>
+                                        </ImageView>
+                                        <ImageView image="@face-smile.png">
+                                            <userData description="smiley face"/>
+                                        </ImageView>
+                                    </TablePane.Row>
+                                </rows>
+                            </TablePane>
+                        </content>
+                    </Border>
+                </content>
+            </Window>
+            ]]>
+        </source>
+
+        <p>
+            The Java source is shown below. The application class defines an anonymous inner class
+            instance that extends <tt>MenuHandler.Adapter</tt> and overrides the
+            <tt>configureContextMenu()</tt> method to add a menu section containing a single "What
+            is this?" menu item. The Pivot platform handles the details of detecting the right
+            click and instantiating and configuring the menu popup. It walks the ancestry of the
+            component over which the mouse click occurred from the top down, calling
+            <tt>configureContextMenu()</tt> for each menu handler it encounters along the way.
+            This allows handlers attached to sub-components to override any menu configuration
+            performed by an ancestor.
+        </p>
+
+        <p>
+            <tt>Menu.Item</tt> is actually a subclass of <tt>Button</tt>, so it can be assigned
+            an <tt>Action</tt> like any other button. The example code below creates an
+            <tt>Action</tt> that displays a prompt containing a description of the selected item
+            when the item is pressed:
+        </p>
+
+        <source type="java" location="org/apache/pivot/tutorials/menus/ContextMenus.java">
+            <![CDATA[
+            package org.apache.pivot.tutorials.menus;
+
+            import org.apache.pivot.collections.Map;
+            import org.apache.pivot.wtk.Action;
+            import org.apache.pivot.wtk.Application;
+            import org.apache.pivot.wtk.Component;
+            import org.apache.pivot.wtk.DesktopApplicationContext;
+            import org.apache.pivot.wtk.Display;
+            import org.apache.pivot.wtk.Menu;
+            import org.apache.pivot.wtk.MenuHandler;
+            import org.apache.pivot.wtk.Prompt;
+            import org.apache.pivot.wtk.Window;
+            import org.apache.pivot.wtkx.WTKXSerializer;
+
+            public class ContextMenus implements Application {
+                private Window window = null;
+                private MenuHandler menuHandler = new MenuHandler.Adapter() {
+                    @Override
+                    public boolean configureContextMenu(Component component, Menu menu, int x, int y) {
+                        final Component descendant = window.getDescendantAt(x, y);
+
+                        Menu.Section menuSection = new Menu.Section();
+                        menu.getSections().add(menuSection);
+
+                        Menu.Item whatIsThisMenuItem = new Menu.Item("What is this?");
+                        whatIsThisMenuItem.setAction(new Action() {
+                            @Override
+                            public void perform() {
+                                String description = (String)descendant.getUserData().get("description");
+                                String message = "This is a " + description + ".";
+
+                                Prompt.prompt(message, window);
+                            }
+                        });
+
+                        menuSection.add(whatIsThisMenuItem);
+
+                        return false;
+                    }
+                };
+
+                @Override
+                public void startup(Display display, Map<String, String> properties) throws Exception {
+                    WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                    window = (Window)wtkxSerializer.readObject(this, "context_menus.wtkx");
+                    window.setMenuHandler(menuHandler);
+
+                    window.open(display);
+                }
+
+                @Override
+                public boolean shutdown(boolean optional) {
+                    if (window != null) {
+                        window.close();
+                    }
+
+                    return false;
+                }
+
+                @Override
+                public void suspend() {
+                }
+
+                @Override
+                public void resume() {
+                }
+
+                public static void main(String[] args) {
+                    DesktopApplicationContext.main(ContextMenus.class, args);
+                }
+            }
+            ]]>
+        </source>
+
+        <p>
+            When the menu closes, the platform takes care of cleaning up the menu instance - no
+            further interaction by the handler is required.
+        </p>
     </body>
 </document>

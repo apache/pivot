@@ -22,5 +22,430 @@ limitations under the License.
     </properties>
 
     <body>
+        <p>
+            All Pivot components ultimately extend the base <tt>Component</tt> class. This class,
+            in conjunction with the similarly abstract <tt>Container</tt> class, defines the APIs
+            that specify where a component will appear on screen, what it will look like, and how a
+            user will interact with it.
+        </p>
+
+        <h2>Visual and ConstrainedVisual</h2>
+
+        <p><img src="component_and_container/visuals.png"/></p>
+
+        <p>
+            As shown in the diagram, <tt>Component</tt> implements the <tt>ConstrainedVisual</tt>
+            interface. This interface extends the <tt>Visual</tt> interface, which defines methods
+            common to all visual elements in Pivot. The <tt>org.apache.pivot.wtk.media.Image</tt>
+            class also implements the <tt>Visual</tt> interface:
+        </p>
+
+        <p>
+            <tt>public int getWidth()</tt><br/>
+            <tt>public int getHeight()</tt><br/>
+            <tt>public int getBaseline()</tt><br/>
+            <tt>public void paint(Graphics2D graphics)</tt><br/>
+        </p>
+
+        <p>
+            A visual's size is specified in "device-independent units"; though these generally map
+            one-to-one to actual pixels on an output device, they are not required to do so. This
+            allows Pivot applications to be written in a resolution-independent manner, supporting
+            UI scaling either for accessibility purposes or for very high resolution output devices.
+            The <tt>getBaseline()</tt> method allows a visual to report a baseline offset, which
+            is used by containers that support it to align components to a common baseline.
+        </p>
+
+        <p>
+            The <tt>paint()</tt> method is called as needed to ensure that the visual's current
+            state is correctly represented on-screen. For example, a component may need to be
+            repainted when an internal value, such as a button's label, has changed, or when some
+            part of the component has been exposed due to an overlapping window or other component
+            having been moved or resized.
+        </p>
+
+        <p>
+            <tt>ConstrainedVisual</tt> adds methods to support layout, which is discussed in more
+            detail below:
+        </p>
+
+        <p>
+            <tt>public void setSize(int width, int height)</tt><br/>
+            <tt>public int getPreferredWidth(int height)</tt><br/>
+            <tt>public int getPreferredHeight(int width)</tt><br/>
+            <tt>public Dimensions getPreferredSize()</tt><br/>
+            <tt>public int getBaseline(int width, int height)</tt><br/>
+        </p>
+
+        <p>
+            In addition to <tt>Component</tt>, the <tt>Skin</tt> and <tt>Renderer</tt> interfaces
+            also extend <tt>ConstrainedVisual</tt>. In Pivot, a component's "skin" is responsible
+            for the visual representation of the component. As a result, <tt>Component</tt>
+            delegates the implementation of all <tt>ConstrainedVisual</tt> methods to the skin.
+            The skin may, in turn, delegate some renderering responsibility to one or more
+            renderers, which are used to paint some components' content (such as a button label or
+            a list item). Renderers are often implemented as extensions of the <tt>Component</tt>
+            class, allowing the component's implementation of <tt>ConstrainedVisual</tt> to be
+            re-used (and giving rise to the notion of renderers as "lightweight components").
+        </p>
+
+        <p>
+            Components are painted in the order in which they are defined in the parent container's
+            component sequence. The component sequence thus defines the "z-order" of the components
+            in the container: components are painted in ascending order, allowing higer components
+            to overlap lower ones. In practice, though, z-order is often only noticeable at the
+            window level - individual components within an application rarely overlap. This is
+            primarily due to layout management, which is discussed next.
+        </p>
+
+        <h2>Layout</h2>
+
+        <p>
+            "Layout management" is the process of automatically determining how components should
+            be arranged on screen, as opposed to requiring the the developer to explicitly set
+            component size and position. Layout management is performed by all Pivot containers,
+            and is the responsibility of a container's skin.
+        </p>
+
+        <p>
+            <tt>ConstrainedVisual</tt>'s preferred size methods, <tt>getPreferredWidth()</tt>,
+            <tt>getPreferredHeight()</tt>, and <tt>getPreferredSize()</tt>, return information
+            about the size the visual "wants" to be. This is generally determined based on
+            attributes such as font size and border thickness, or, in the case of containers, by
+            recursively asking subcomponents about their own preferred sizes. Containers may use
+            this information to determine how to arrange their subcomponents during layout.
+        </p>
+
+        <p>
+            In Pivot, preferred sizes may optionally be constrained by passing a height constraint
+            value to <tt>getPreferredWidth()</tt> or a width constraint value to
+            <tt>getPreferredHeight()</tt>. This allows components to "wrap" their contents. For
+            example, a <tt>Label</tt> component with the "wrapText" style set to true will report a
+            preferred height that is tall enough to render its entire content by applying line break
+            logic using the given width constraint.
+        </p>
+
+        <p>
+            <tt>ConstrainedVisual</tt> defines an additional signature for <tt>getBaseline()</tt>
+            that takes <tt>width</tt> and <tt>height</tt> arguments. This allows a component to
+            report a constrained baseline given a possible width and height.
+        </p>
+
+        <h3>Location and Visibility</h3>
+
+        <p>
+            <tt>Component</tt> defines several additional methods that are used by containers
+            during layout:
+        </p>
+
+        <p>
+            <tt>public int getX()</tt><br/>
+            <tt>public int getY()</tt><br/>
+            <tt>public Point getLocation()</tt><br/>
+            <tt>public void setLocation(int x, int y)</tt><br/>
+            <tt>public final void setLocation(Point location)</tt><br/>
+        </p>
+
+        <p>
+            These methods are used to manage a component's location, which is defined as an (x, y)
+            coordinate pair that is relative to the origin of its parent container.
+        </p>
+
+        <p>
+            <tt>public boolean isVisible()</tt><br/>
+            <tt>public void setVisible(boolean visible)</tt><br/>
+        </p>
+
+        <p>
+            These methods manage a component's visibility. A component that is not visible is not
+            painted. Layout containers will also exclude non-visible components from layout.
+        </p>
+
+        <p>
+            Container skins use the preferred size and visibility values to determine how to
+            arrange their subcomponents. They first query the subcomponents for the preferred
+            values, and then use these values to set the components' actual size and location. As
+            a result, callers should generally not invoke the methods that set these properties
+            directly, since the container is likely to override any values set by the caller
+            during layout.
+        </p>
+
+        <p>
+            It is important to note that containers are not required to respect a component's
+            preferred size or visibility. For example, <tt>CardPane</tt> sets the size of its
+            subcomponent to the maximum preferred size of all its child components, and
+            <tt>TablePane</tt> sets the size of its components based on the width of its rows and
+            columns. However, most respect at least one, and many respect both.
+        </p>
+
+        <h2>Disabled Components</h2>
+
+        <p>
+            A component that is "enabled" is currently capable of receiving user input. A component
+            may be "disabled" to prevent it from receiving input from the user. For example,
+            buttons are often disabled to prevent a user from initiating an action that would not
+            be appropriate for the current state of the application. Most components display a
+            disabled state to indicate to the user that interaction is currently forbidden.
+        </p>
+
+        <p>
+            Note that, while a user is prevented from interacting with a disabled component,
+            programmatic interaction is still allowed. For example, it is still valid to set the
+            selection state of a disabled list view component in code, even though the user cannot
+            click on an item in the list to change the list's selection state.
+        </p>
+
+        <p>
+            Also note that disabling a container will prevent all child components of the container
+            from receiving input as well. Thus, there is no need to propagate the enabled state of
+            a container down to its children. When a component is either disabled or one of its
+            ancestors is disabled, it is said to be "blocked".
+        </p>
+
+        <h2>Focus Management</h2>
+
+        <p>
+            A component that is eligible to receive keyboard input is said to have the "input
+            focus", or simply "focus". Only one component is allowed to have the focus at any given
+            time. Not all components are focusable, though many are, including text inputs, buttons,
+            and list views, among others. It is up to a component's skin to decide whether or not it
+            is capable of receiving focus. In order to receive the focus, a component (and its
+            ancestry) must be enabled, visible, and focusable.
+        </p>
+
+        <p>
+            Generally, a focusable component will paint a slightly different state when it has the
+            focus as a visual cue to the user. For example, a text input may show a blinking
+            cursor, while a button might draw a dotted line around its label.
+        </p>
+
+        <p>
+            Clicking on a component with the mouse will usually transfer focus to that component.
+            However, focus can also be transferred between using the Tab (or Shift-Tab) key. This
+            is called "focus traversal". Each container provides a "focus traversal policy" that
+            defines how focus management is performed within the container. By default, most
+            containers use a default traversal policy that simply traverses child components in the
+            order in which they appear in the container's component sequence. However, windows use
+            a traversal policy that ensures that focus is never transferred out of the window
+            itself; tab panes employ a similar policy. However, callers and skin developers are
+            free to override these defaults and can install a custom traversal policy on any
+            container.
+        </p>
+
+        <h2>Cursors</h2>
+
+        <p>
+            A component's skin will generally ensure that an appropriate cursor is displayed when
+            the mouse is over the component. However, a caller may customize the component's cursor
+            using the <tt>setCursor()</tt> method of <tt>Component</tt>. Valid cursor values are
+            defined by the Cursor enum.
+        </p>
+
+        <h2>Styles</h2>
+
+        <p>
+            Styles are a means of customizing a component's appearance. They are implemented as
+            named properties exposed by a skin via the component. For example, a label skin might
+            define styles such as "font", "color", and "textDecoration", and a list view skin might
+            define styles including "font", "color", "selectionColor" and
+            "selectionBackgroundColor". These properties correspond directly to the Java bean
+            getters and setters defined by the skin class.
+        </p>
+
+        <p>
+            By design, skins are programmatically hidden from the developer; a caller interacts
+            with a skin's styles via the component's style collection, an instance of
+            <tt>org.apache.pivot.wtk.Component.StyleDictionary</tt> returned by
+            <tt>Component#getStyles()</tt>:
+        </p>
+
+        <p>
+            <tt>public Object get(String key) - returns the value of a given style</tt><br/>
+            <tt>public Object put(String key, Object value) - sets a style value</tt><br/>
+        </p>
+
+        <p>
+            This facilitates a loose, flexible coupling between an application and a skin: an
+            application need not be tied to a particular skin implementation, and skin developers
+            are free to add or remove styles without the risk of breaking existing applications.
+            However, it becomes the responsibility of the caller to be aware of the styles
+            supported by the current skin. Attempting to set a non-existent style value will
+            simply generate a warning, but passing an invalid type for a valid style will throw
+            an exception.
+        </p>
+
+        <p>
+            Style values can be set in WTKX using the "styles" attribute. The value of this
+            attribute is a JSON-formatted string representing the style values to be applied to
+            the component after it is constructed. For example, the following attribute applied to
+            the Label element would produce a bold, 24-point Arial label with red text:
+        </p>
+
+        <p>
+            <tt>styles="{font:'Arial bold 24', color:'#ff0000'}"</tt><br/>
+        </p>
+
+        <p>
+            Styles can also be set via a URL reference to a JSON file, allowing common style
+            settings to be shared across multiple components, similar to CSS classes:
+        </p>
+
+        <p>
+            <tt>styles="@myStyles.json"</tt><br/>
+        </p>
+
+        <h2>Attributes</h2>
+
+        <p>
+            Attributes are a means of attaching container-specific properties to a component.
+            Attributes are typed values defined by containers that support or require them. For
+            example, <tt>TabPane</tt> defines a "label" attribute that allows a caller to specify
+            the text that is displayed on the tab button for the component; <tt>TablePane</tt>
+            defines a "rowSpan" attribute that determines how a cell is laid out. Attributes
+            effectively allow a caller to "tag" a component with values that are relevant only to
+            its parent container (and the container's skin).
+        </p>
+
+        <p>
+            Callers can set attribute values programmatically using a static setter method of
+            the <tt>Container</tt> subclass (e.g. <tt>TabPane#setLabel(Component, String)</tt>).
+            Alternatively, attributes can be specified in WTKX. For example, the sub-elements of
+            a <tt>TabPane</tt> can provide a "TabPane.label" attribute to specify the value that
+            should be used as the name for that component.
+         </p>
+
+        <h2>Events</h2>
+
+        <p>
+            In GUI programming, the term "event" generally refers to a notification sent by a
+            program in response to some triggering action. The trigger may have been input from
+            the user, a response from a remote server, or a change in some internal state.
+        </p>
+
+        <p>
+            Pivot components rely heavily on events, both to respond to change notifications from
+            data models or other components and to notify external listeners of changes to their
+            own states. Each concrete component class defines a set of events specific to its own
+            implementation, and all components inherit a set of common events defined by the base
+            <tt>Component</tt> and <tt>Container</tt> classes.
+        </p>
+
+        <p>
+            Events are often placed into groupings of events that share some common
+            characteristics. For example, <tt>Component</tt> defines a set of mouse button events
+            that include "mouse down", "mouse up", and "mouse click". Components maintain a list
+            of listeners who have registered interest in a particular group of events, and each
+            listener is notified, in turn, as events occur.
+        </p>
+
+        <p>
+            Event listeners implement a listener interface defined for a particular group. For
+            example, component mouse listeners implement the ComponentMouseListener interface,
+            which defines the following methods:
+        </p>
+
+        <p>
+            <tt>public void mouseMove(Component component, int x, int y)</tt><br/>
+            <tt>public void mouseOver(Component component)</tt><br/>
+            <tt>public void mouseOut(Component component)</tt><br/>
+        </p>
+
+        <p>
+            A caller that implements the <tt>ComponentMouseListener</tt> interface can add itself
+            as a listener by calling <tt>Component#getComponentMouseListeners().add()</tt>.
+            Conversely, a listener can remove itself via the
+            <tt>Component#getComponentMouseButtonListeners().remove()</tt> method. Other event
+            listeners are registered and unregistered similarly.
+        </p>
+
+        <p>
+            <tt>Component</tt> defines the following event listener interfaces that are inherited
+            by all component subclasses:
+        </p>
+
+        <ul>
+            <li>
+                <p>
+                    <b>ComponentListener</b> - defines events related to core component properties
+                    including location, size, visibility, etc.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <b>ComponentStateListener</b> - defines events related to component enabled and
+                    focus state.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <b>ComponentDecoratorListener</b> - defines events related to component
+                    decorators.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <b>ComponentMouseListener</b> - defines events that are fired when the mouse
+                    is positioned over the component.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <b>ComponentMouseButtonListener</b> - defines mouse button events.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <b>ComponentMouseWheelListener</b> - defines mouse wheel events.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <b>ComponentKeyListener</b> - defines events that are fired when the component
+                    has the input focus.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <b>ComponentDataListener</b> - defines events that are fired when component
+                    user data changes.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <b>ComponentClassListener</b> - defines events that are fired when class-level
+                    component properties change.
+                </p>
+            </li>
+        </ul>
+
+        <p>
+            The <tt>Container</tt> class defines the following additional events that are inherited
+            by its subclasses:
+        </p>
+
+        <ul>
+            <li>
+                <p>
+                    <b>ContainerListener</b> - defines events related to core container properties
+                    including insertion/removal of components.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <b>ContainerMouseListener</b> - defines events that are fired when the mouse
+                    is positioned over the container.
+                </p>
+            </li>
+        </ul>
+
+        <p>
+            Note that both <tt>Component</tt> and <tt>Container</tt> define interfaces related to
+            mouse events. Container mouse events are "tunneling" events, and are fired as an event
+            is propagated down the container hierarchy, whereas component mouse events are
+            "bubbling" events, and are fired as the event moves up the container hierarchy. In
+            other words, the parent of a component will receive a container mouse event before the
+            component does, but the component will recieve a component mouse event before its
+            parent does.
+        </p>
     </body>
 </document>

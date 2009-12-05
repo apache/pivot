@@ -36,7 +36,7 @@ limitations under the License.
                                     <BoxPane>
                                         <TextInput textKey="city" prompt="City"/>
                                         <TextInput textKey="state" textSize="6" prompt="State"/>
-                                        <TextInput textKey="zip" textSize="10" prompt="Zip"/>
+                                        <TextInput textKey="zip" textSize="6" prompt="Zip"/>
                                     </BoxPane>
                                 </BoxPane>
 

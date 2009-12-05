@@ -49,12 +49,10 @@ limitations under the License.
             invoking one of the methods defined by the listener interface:
         </p>
 
-        <source type="java">
-            <![CDATA[
-            public void taskExecuted(Task<V> task);
-            public void executeFailed(Task<V> task);
-            ]]>
-        </source>
+        <p>
+            <tt>public void taskExecuted(Task&lt;V&gt; task);</tt><br/>
+            <tt>public void executeFailed(Task&lt;V&gt; task);</tt><br/>
+        </p>
 
         <p>
             If the <tt>execute()</tt> method returns successfully, the <tt>taskExecuted()</tt>

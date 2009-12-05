@@ -19,8 +19,180 @@ limitations under the License.
 <document id="drag-and-drop">
     <properties>
         <title>Drag and Drop</title>
+        <style>
+        td {
+            text-align:center;
+            vertical-align:top;
+        }
+        </style>
     </properties>
 
     <body>
+        <p>
+            Like the clipboard, drag and drop is a common metaphor for data transfer. By clicking
+            and dragging with the mouse, the user can move, copy, or link data within or between
+            applications.
+        </p>
+
+        <p>
+            The following application demonstrates Pivot's support for drag and drop. Users can
+            drag the sample images from this page into the applet (the area within the border), or
+            drag the image out of the applet into any other application that supports images:
+        </p>
+
+        <table>
+            <tr>
+                <td rowspan="2">
+                    <application class="org.apache.pivot.wtk.ScriptApplication"
+                        width="420" height="240">
+                        <libraries>
+                            <library>core</library>
+                            <library>wtk</library>
+                            <library>wtk-terra</library>
+                            <library>tutorials</library>
+                        </libraries>
+                        <startup-properties>
+                            <src>org/apache/pivot/tutorials/dragdrop/drag_drop.wtkx</src>
+                        </startup-properties>
+                    </application>
+                </td>
+                <td>
+                    <img src="IMG_0725_2.jpg"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="IMG_0735_2.jpg"/>
+                </td>
+            </tr>
+        </table>
+
+        <p>
+            The WTKX source for this example is as follows. It creates an <tt>ImageView</tt> and
+            attaches a drag source and drop target to it via the <tt>dragSource</tt> and
+            <tt>dropTarget</tt> attributes, respectively. The code for these handlers is defined
+            in "dragdrop.js", discussed next:
+        </p>
+
+        <source type="xml" location="org/apache/pivot/tutorials/dragdrop/drag_drop.wtkx">
+            <![CDATA[
+            <Window title="Drag and Drop" maximized="true"
+                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns="org.apache.pivot.wtk">
+                <wtkx:script src="dragdrop.js"/>
+                <content>
+                    <Border styles="{padding:2}">
+                        <content>
+                            <ImageView wtkx:id="imageView" image="org/apache/pivot/tutorials/IMG_0767_2.jpg"
+                                dragSource="$dragSoure" dropTarget="$dropTarget"/>
+                        </content>
+                    </Border>
+                </content>
+            </Window>
+            ]]>
+        </source>
+
+        <p>
+            The contents of "dragdrop.js" are as follows:
+        </p>
+
+        <source type="jscript" location="org/apache/pivot/tutorials/dragdrop/dragdrop.js">
+            <![CDATA[
+            importPackage(org.apache.pivot.wtk);
+
+            var dragSoure = new DragSource() {
+                beginDrag: function(component, x, y) {
+                    return true;
+                },
+
+                endDrag: function(component, dropAction) {
+                    // No-op
+                },
+
+                getContent: function() {
+                    var content = new LocalManifest();
+                    content.putImage(imageView.getImage());
+
+                    return content;
+                },
+
+                getOffset: function() {
+                    // No-op; not used for native drags
+                    return null;
+                },
+
+                getRepresentation: function() {
+                    // No-op; not used for native drags
+                    return null;
+                },
+
+                getSupportedDropActions: function() {
+                    return DropAction.COPY.getMask();
+                },
+
+                isNative: function() {
+                    return true;
+                }
+            };
+
+            var dropTarget = new DropTarget() {
+                dragEnter: function(component, dragContent, supportedDropActions, userDropAction) {
+                    return (dragContent.containsImage()) ? DropAction.COPY : null;
+                },
+
+                dragExit: function(component) {
+                    // No-op
+                },
+
+                dragMove: function(component, dragContent, supportedDropActions, x, y, userDropAction) {
+                    return (dragContent.containsImage()) ? DropAction.COPY : null;
+                },
+
+                userDropActionChange: function(component, dragContent, supportedDropActions,
+                    x, y, userDropAction) {
+                    return (dragContent.containsImage()) ? DropAction.COPY : null;
+                },
+
+                drop: function(component, dragContent, supportedDropActions, x, y, userDropAction) {
+                    var dropAction = null;
+
+                    if (dragContent.containsImage()) {
+                        imageView.setImage(dragContent.getImage());
+                        dropAction = DropAction.COPY;
+                    }
+
+                    return dropAction;
+                }
+            };
+            ]]>
+        </source>
+
+        <p>
+            When the user initiates a drag operation, the Pivot platform detects the gesture and
+            walks the component hierarchy looking for a drag source. When it finds one, it calls
+            <tt>beginDrag()</tt>. If this method returns <tt>true</tt>, the platform calls
+            <tt>getContent()</tt> and begins the drag. Like the clipboard, drag/drop content is
+            also stored in a <tt>Manifest</tt>. In the case of a drag source, a
+            <tt>LocalManifest</tt> is used. The drag source in this example simply places the
+            image that is currently displayed by the image view in the manifest. It also reports
+            that the only supported action for this drag operation is COPY, by returning the
+            bitmask value of <tt>DropAction.COPY</tt> from <tt>getSupportedDropActions()</tt>.
+        </p>
+
+        <p>
+            When the user drags an image over the image view, the platform walks the component
+            hierarchy looking for a drop target. When it finds one, it calls <tt>dragEnter()</tt>.
+            If the drop target is capable of accepting the drop, it returns its preferred drop
+            action (the action that would result if the user dropped the drag content at that
+            point). The platform repeatedly calls <tt>dragMove()</tt> while the mouse remains over
+            the drop target, giving the application the opportunity to report a different drop
+            action depending on the current mouse location.
+        </p>
+
+        <p>
+            Finally, when the user releases the mouse button, the <tt>drop()</tt> method is
+            called. This method actually performs the drop, and returns the actual drop action
+            that was performed (or <tt>null</tt> if nothing was dropped).
+        </p>
     </body>
 </document>
