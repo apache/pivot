@@ -43,9 +43,6 @@ limitations under the License.
 
         <item-group name="Introduction">
             <document-item id="sample-application"/>
-        </item-group>
-
-        <item-group name="Architecture">
             <document-item id="platform-overview"/>
             <document-item id="hello-world">
                 <document-item id="hello-wtkx"/>
@@ -122,17 +119,10 @@ limitations under the License.
             <document-item id="data-binding"/>
             <document-item id="localization"/>
             <document-item id="scripting"/>
-        </item-group>
-
-        <item-group name="More About WTKX">
-            <document-item id="wtkx-primer"/>
-        </item-group>
-
-        <item-group name="Summary">
             <document-item id="summary"/>
         </item-group>
 
-        <item-group name="Putting it All Together">
+        <item-group name="Practical Example: &quot;Stock Tracker&quot;">
             <document-item id="stock-tracker">
                 <document-item id="stock-tracker.ui"/>
                 <document-item id="stock-tracker.events"/>
@@ -140,6 +130,10 @@ limitations under the License.
                 <document-item id="stock-tracker.data-binding"/>
                 <document-item id="stock-tracker.localization"/>
             </document-item>
+        </item-group>
+
+        <item-group name="WTKX Primer">
+            <document-item id="wtkx-primer"/>
         </item-group>
     </body>
 </document>

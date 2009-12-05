@@ -35,7 +35,8 @@ limitations under the License.
             info, payment info, and order summary:
         </p>
 
-        <application class="org.apache.pivot.tutorials.navigation.Accordions" width="260" height="380">
+        <application class="org.apache.pivot.tutorials.navigation.Accordions"
+            width="260" height="380">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>

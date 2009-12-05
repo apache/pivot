@@ -41,103 +41,53 @@ limitations under the License.
             </startup-properties>
         </application>
 
-
         <p>
             The WTKX source for this example is shown below (there is no corresponding Java source):
         </p>
 
         <source type="xml" location="org/apache/pivot/tutorials/text/text_areas.wtkx">
             <![CDATA[
-<Window title="Text Areas" maximized="true"
-    xmlns:wtkx="http://pivot.apache.org/wtkx"
-    xmlns="org.apache.pivot.wtk">
-    <content>
-        <Border styles="{color:10}">
-            <content>
-                <ScrollPane horizontalScrollBarPolicy="fill">
-                    <view>
-                        <TablePane styles="{padding:8, verticalSpacing:8}">
-                            <columns>
-                                <TablePane.Column width="1*"/>
-                            </columns>
-                            <rows>
-                                <TablePane.Row height="1*">
-                                    <Border styles="{color:10}">
-                                        <content>
-                                            <ScrollPane horizontalScrollBarPolicy="fill"
-                                                verticalScrollBarPolicy="fill_to_capacity"
-                                                preferredHeight="240">
-                                                <view>
-                                                    <TextArea wtkx:id="textArea">
-                                                        <text>
-                                                        Lorem ipsum dolor sit amet, consetetur
-                                                        sadipscing elitr, sed diam nonumy eirmod
-                                                        tempor invidunt ut labore et dolore magna
-                                                        aliquyam erat, sed diam voluptua. At vero
-                                                        eos et accusam et justo duo dolores et ea
-                                                        rebum. Stet clita kasd gubergren, no sea
-                                                        takimata sanctus est Lorem ipsum dolor sit
-                                                        amet.
-
-                                                        Stet clita kasd gubergren, no sea takimata
-                                                        sanctus est Lorem ipsum dolor sit amet.
-
-                                                        Lorem ipsum dolor sit amet, consetetur
-                                                        sadipscing elitr, sed diam nonumy eirmod
-                                                        tempor invidunt ut labore et dolore magna
-                                                        aliquyam erat, sed diam voluptua. At vero
-                                                        eos et accusam et justo duo dolores et ea
-                                                        rebum.
-
-                                                        Stet clita kasd gubergren, no sea takimata
-                                                        sanctus est Lorem ipsum dolor sit amet.
-
-                                                        Lorem ipsum dolor sit amet, consetetur
-                                                        sadipscing elitr, sed diam nonumy eirmod
-                                                        tempor invidunt ut labore et dolore magna
-                                                        aliquyam erat, sed diam voluptua. At vero
-                                                        eos et accusam et justo duo dolores et ea
-                                                        rebum. Stet clita kasd gubergren, no sea
-                                                        takimata sanctus est Lorem ipsum dolor sit
-                                                        amet.
-
-                                                        Lorem ipsum dolor sit amet, consetetur
-                                                        sadipscing elitr, sed diam nonumy eirmod
-                                                        tempor invidunt ut labore et dolore magna
-                                                        aliquyam erat, sed diam voluptua. At vero
-                                                        eos et accusam et justo duo dolores et ea
-                                                        rebum.
-                                                        </text>
-                                                    </TextArea>
-                                                </view>
-                                            </ScrollPane>
-                                        </content>
-                                    </Border>
-                                </TablePane.Row>
-                                <TablePane.Row height="-1">
-                                    <Border styles="{color:10}">
-                                        <content>
-                                            <TextArea minimumPreferredHeight="80">
-                                                <text>
-                                                Lorem ipsum dolor sit amet, consetetur
-                                                sadipscing elitr, sed diam nonumy eirmod
-                                                tempor invidunt ut labore et dolore magna
-                                                aliquyam erat, sed diam voluptua. At vero
-                                                eos et accusam et justo duo dolores et ea
-                                                rebum.
-                                                </text>
-                                            </TextArea>
-                                        </content>
-                                    </Border>
-                                </TablePane.Row>
-                            </rows>
-                        </TablePane>
-                    </view>
-                </ScrollPane>
-            </content>
-        </Border>
-    </content>
-</Window>
+            <Window title="Text Areas" maximized="true"
+                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns="org.apache.pivot.wtk">
+                <content>
+                    <Border styles="{color:10}">
+                        <content>
+                            <ScrollPane horizontalScrollBarPolicy="fill">
+                                <view>
+                                    <TablePane styles="{padding:8, verticalSpacing:8}">
+                                        <columns>
+                                            <TablePane.Column width="1*"/>
+                                        </columns>
+                                        <rows>
+                                            <TablePane.Row height="1*">
+                                                <Border styles="{color:10}">
+                                                    <content>
+                                                        <ScrollPane horizontalScrollBarPolicy="fill"
+                                                            verticalScrollBarPolicy="fill_to_capacity"
+                                                            preferredHeight="240">
+                                                            <view>
+                                                                <TextArea text="@sample1.txt"/>
+                                                            </view>
+                                                        </ScrollPane>
+                                                    </content>
+                                                </Border>
+                                            </TablePane.Row>
+                                            <TablePane.Row height="-1">
+                                                <Border styles="{color:10}">
+                                                    <content>
+                                                        <TextArea minimumPreferredHeight="80" text="@sample2.txt"/>
+                                                    </content>
+                                                </Border>
+                                            </TablePane.Row>
+                                        </rows>
+                                    </TablePane>
+                                </view>
+                            </ScrollPane>
+                        </content>
+                    </Border>
+                </content>
+            </Window>
             ]]>
         </source>
 

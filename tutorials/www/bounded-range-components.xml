@@ -22,5 +22,32 @@ limitations under the License.
     </properties>
 
     <body>
+        <p>
+            "Bounded range" components allow a user to interactively select one of a bounded range
+            of values. Bounded range components in Pivot include:
+        </p>
+
+        <ul>
+            <li>
+                <p>
+                    <a href="scroll_bars.html"><b>ScrollBar</b></a> - Allows a user to select one
+                    of a range of values using up/down buttons or a draggable "thumb" that also
+                    represents an extent value. Most often used to facilitate scrolling in a scroll
+                    pane but can be used in other contexts.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <a href="sliders.html"><b>Slider</b></a> - Allows a user to select one of a
+                    range of values by dragging the mouse.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <a href="spinners.html"><b>Spinner</b></a> - An "up/down" control allowing a
+                    user to cycle through a range of pre-defined values.
+                </p>
+            </li>
+        </ul>
     </body>
 </document>

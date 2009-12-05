@@ -64,49 +64,49 @@ limitations under the License.
 
         <source type="xml">
             <![CDATA[
-<Window title="Table Views" maximized="true"
-    xmlns:wtkx="http://pivot.apache.org/wtkx"
-    xmlns="org.apache.pivot.wtk">
-    <content>
-        <Border styles="{padding:0}">
-            <content>
-                <ScrollPane>
-                    <view>
-                        <TableView wtkx:id="tableView">
-                            <columns>
-                                <TableView.Column name="nation" width="180" headerData="Nation"/>
-                                <TableView.Column name="gold" width="60" headerData="Gold"/>
-                                <TableView.Column name="silver" width="60" headerData="Silver"/>
-                                <TableView.Column name="bronze" width="60" headerData="Bronze"/>
-                                <TableView.Column name="total" width="60" headerData="Total"/>
-                            </columns>
+            <Window title="Table Views" maximized="true"
+                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns="org.apache.pivot.wtk">
+                <content>
+                    <Border styles="{padding:0}">
+                        <content>
+                            <ScrollPane>
+                                <view>
+                                    <TableView wtkx:id="tableView">
+                                        <columns>
+                                            <TableView.Column name="nation" width="180" headerData="Nation"/>
+                                            <TableView.Column name="gold" width="60" headerData="Gold"/>
+                                            <TableView.Column name="silver" width="60" headerData="Silver"/>
+                                            <TableView.Column name="bronze" width="60" headerData="Bronze"/>
+                                            <TableView.Column name="total" width="60" headerData="Total"/>
+                                        </columns>
 
-                            <!-- Source: http://en.wikipedia.org/wiki/2008_Summer_Olympics_medal_table -->
-                            <tableData xmlns="org.apache.pivot.collections">
-                                <ArrayList>
-                                    <HashMap nation="China" gold="51" silver="21" bronze="28" total="100"/>
-                                    <HashMap nation="United States" gold="36" silver="38" bronze="36" total="110"/>
-                                    <HashMap nation="Russia" gold="23" silver="21" bronze="28" total="72"/>
-                                    <HashMap nation="Great Britain" gold="19" silver="13" bronze="15" total="47"/>
-                                    <HashMap nation="Germany" gold="16" silver="10" bronze="15" total="41"/>
-                                    <HashMap nation="Australia" gold="14" silver="15" bronze="17" total="46"/>
-                                    <HashMap nation="South Korea" gold="13" silver="10" bronze="8" total="31"/>
-                                    <HashMap nation="Japan" gold="9" silver="6" bronze="11" total="26"/>
-                                    <HashMap nation="Italy" gold="8" silver="10" bronze="10" total="28"/>
-                                    <HashMap nation="France" gold="7" silver="16" bronze="17" total="40"/>
-                                </ArrayList>
-                            </tableData>
-                        </TableView>
-                    </view>
+                                        <!-- Source: http://en.wikipedia.org/wiki/2008_Summer_Olympics_medal_table -->
+                                        <tableData xmlns="org.apache.pivot.collections">
+                                            <ArrayList>
+                                                <HashMap nation="China" gold="51" silver="21" bronze="28" total="100"/>
+                                                <HashMap nation="United States" gold="36" silver="38" bronze="36" total="110"/>
+                                                <HashMap nation="Russia" gold="23" silver="21" bronze="28" total="72"/>
+                                                <HashMap nation="Great Britain" gold="19" silver="13" bronze="15" total="47"/>
+                                                <HashMap nation="Germany" gold="16" silver="10" bronze="15" total="41"/>
+                                                <HashMap nation="Australia" gold="14" silver="15" bronze="17" total="46"/>
+                                                <HashMap nation="South Korea" gold="13" silver="10" bronze="8" total="31"/>
+                                                <HashMap nation="Japan" gold="9" silver="6" bronze="11" total="26"/>
+                                                <HashMap nation="Italy" gold="8" silver="10" bronze="10" total="28"/>
+                                                <HashMap nation="France" gold="7" silver="16" bronze="17" total="40"/>
+                                            </ArrayList>
+                                        </tableData>
+                                    </TableView>
+                                </view>
 
-                    <columnHeader>
-                        <TableViewHeader tableView="$tableView"/>
-                    </columnHeader>
-                </ScrollPane>
-            </content>
-        </Border>
-    </content>
-</Window>
+                                <columnHeader>
+                                    <TableViewHeader tableView="$tableView"/>
+                                </columnHeader>
+                            </ScrollPane>
+                        </content>
+                    </Border>
+                </content>
+            </Window>
             ]]>
         </source>
 

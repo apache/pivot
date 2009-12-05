@@ -71,8 +71,8 @@ limitations under the License.
 
         <source type="xml">
             <![CDATA[
-<Label text="Hello, World!"
-    xmlns="org.apache.pivot.wtk" />
+            <Label text="Hello, World!"
+                xmlns="org.apache.pivot.wtk" />
             ]]>
         </source>
 
@@ -92,12 +92,12 @@ limitations under the License.
 
         <source type="xml">
             <![CDATA[
-<Window xmlns="org.apache.pivot.wtk"
-    xmlns:charts="org.apache.pivot.wtk.charts">
-    <content>
-        <charts:BarChartView/>
-    </content>
-</Window>
+            <Window xmlns="org.apache.pivot.wtk"
+                xmlns:charts="org.apache.pivot.wtk.charts">
+                <content>
+                    <charts:BarChartView/>
+                </content>
+            </Window>
             ]]>
         </source>
 
@@ -117,8 +117,8 @@ limitations under the License.
 
         <source type="xml">
             <![CDATA[
-<HashMap foo="123" bar="456"
-    xmlns="org.apache.pivot.collections"/>
+            <HashMap foo="123" bar="456"
+                xmlns="org.apache.pivot.collections"/>
             ]]>
         </source>
 
@@ -151,9 +151,9 @@ limitations under the License.
 
         <source type="xml">
             <![CDATA[
-<Label xmlns="org.apache.pivot.wtk">
-    <text>Hello, World!</text>
-</Label>
+            <Label xmlns="org.apache.pivot.wtk">
+                <text>Hello, World!</text>
+            </Label>
             ]]>
         </source>
 
@@ -164,8 +164,8 @@ limitations under the License.
 
         <source type="xml">
             <![CDATA[
-<Label text="Hello, World!"
-    xmlns="org.apache.pivot.wtk"/>
+            <Label text="Hello, World!"
+                xmlns="org.apache.pivot.wtk"/>
             ]]>
         </source>
 
@@ -179,17 +179,17 @@ limitations under the License.
 
         <source type="xml">
             <![CDATA[
-<ListView xmlns="org.apache.pivot.wtk"
-    xmlns:collections="org.apache.pivot.collections"
-    xmlns:content="org.apache.pivot.wtk.content">
-    <listData>
-        <collections:ArrayList>
-            <content:ListItem text="A"/>
-            <content:ListItem text="B"/>
-            <content:ListItem text="C"/>
-        </collections:ArrayList>
-    </listData>
-</ListView>
+            <ListView xmlns="org.apache.pivot.wtk"
+                xmlns:collections="org.apache.pivot.collections"
+                xmlns:content="org.apache.pivot.wtk.content">
+                <listData>
+                    <collections:ArrayList>
+                        <content:ListItem text="A"/>
+                        <content:ListItem text="B"/>
+                        <content:ListItem text="C"/>
+                    </collections:ArrayList>
+                </listData>
+            </ListView>
             ]]>
         </source>
 
@@ -205,12 +205,12 @@ limitations under the License.
 
         <source type="xml">
             <![CDATA[
-<TabPane xmlns="org.apache.pivot.wtk">
-    <tabs>
-        <Label text="Foo"/>
-        <Label text="Bar"/>
-    </tabs>
-</TabPane>
+            <TabPane xmlns="org.apache.pivot.wtk">
+                <tabs>
+                    <Label text="Foo"/>
+                    <Label text="Bar"/>
+                </tabs>
+            </TabPane>
             ]]>
         </source>
 
@@ -225,10 +225,10 @@ limitations under the License.
 
         <source type="xml">
             <![CDATA[
-<Label text="Hello, World!"
-    xmlns="org.apache.pivot.wtk">
-    <userData foo="123" bar="456"/>
-</Label>
+            <Label text="Hello, World!"
+                xmlns="org.apache.pivot.wtk">
+                <userData foo="123" bar="456"/>
+            </Label>
             ]]>
         </source>
 
@@ -270,14 +270,14 @@ limitations under the License.
 
         <source type="java">
             <![CDATA[
-package com.foo;
+            package com.foo;
 
-public class MyBean {
-    public String getFoo() { ... }
-    public void setFoo(String foo) { ... }
-    public int getBar() { ... }
-    public void setBar(int bar) { ... }
-}
+            public class MyBean {
+                public String getFoo() { ... }
+                public void setFoo(String foo) { ... }
+                public int getBar() { ... }
+                public void setBar(int bar) { ... }
+            }
             ]]>
         </source>
 
@@ -288,8 +288,8 @@ public class MyBean {
 
         <source type="xml">
             <![CDATA[
-<MyBean foo="hello" bar="123"
-    xmlns="com.foo"/>
+            <MyBean foo="hello" bar="123"
+                xmlns="com.foo"/>
             ]]>
         </source>
 
@@ -315,11 +315,11 @@ public class MyBean {
 
         <source type="xml">
             <![CDATA[
-<TabPane xmlns="org.apache.pivot.wtk">
-    <tabs>
-        <Label TabPane.label="First Tab" text="Tab 1"/>
-    <tabs>
-</TabPane>
+            <TabPane xmlns="org.apache.pivot.wtk">
+                <tabs>
+                    <Label TabPane.label="First Tab" text="Tab 1"/>
+                <tabs>
+            </TabPane>
             ]]>
         </source>
 
@@ -329,11 +329,11 @@ public class MyBean {
 
         <source type="java">
             <![CDATA[
-TabPane tabPane = new TabPane();
-Label label = new Label();
-label.setText("Tab 1");
-tabPane.getTabs().add(label);
-TabPane.setLabel(label, "First Tab");
+            TabPane tabPane = new TabPane();
+            Label label = new Label();
+            label.setText("Tab 1");
+            tabPane.getTabs().add(label);
+            TabPane.setLabel(label, "First Tab");
             ]]>
         </source>
 
@@ -393,17 +393,17 @@ TabPane.setLabel(label, "First Tab");
 
         <source type="xml">
             <![CDATA[
-<ScrollPane xmlns="org.apache.pivot.wtk"
-    xmlns:wtkx="http://pivot.apache.org/wtkx">
-    <view>
-        <TableView wtkx:id="tableView">
-            ...
-        </TableView>
-    </view>
-    <columnHeader>
-        <TableViewHeader tableView="$tableView"/>
-    </columnHeader>
-</ScrollPane>
+            <ScrollPane xmlns="org.apache.pivot.wtk"
+                xmlns:wtkx="http://pivot.apache.org/wtkx">
+                <view>
+                    <TableView wtkx:id="tableView">
+                        ...
+                    </TableView>
+                </view>
+                <columnHeader>
+                    <TableViewHeader tableView="$tableView"/>
+                </columnHeader>
+            </ScrollPane>
             ]]>
         </source>
 
@@ -431,8 +431,8 @@ TabPane.setLabel(label, "First Tab");
 
         <source type="xml">
             <![CDATA[
-<Label text="%myText"/
-    xmlns="org.apache.pivot.wtk">
+            <Label text="%myText"/
+                xmlns="org.apache.pivot.wtk">
             ]]>
         </source>
 
@@ -442,9 +442,8 @@ TabPane.setLabel(label, "First Tab");
 
         <source type="jscript">
             <![CDATA[
-{
-    myText:"This is my text!"
-}
+            {   myText:"This is my text!"
+            }
             ]]>
         </source>
 
@@ -467,8 +466,8 @@ TabPane.setLabel(label, "First Tab");
 
         <source type="xml">
             <![CDATA[
-<ImageView image="@foo.png"
-    xmlns="org.apache.pivot.wtk"/>
+            <ImageView image="@foo.png"
+                xmlns="org.apache.pivot.wtk"/>
             ]]>
         </source>
 
@@ -492,12 +491,12 @@ TabPane.setLabel(label, "First Tab");
 
         <source type="xml">
             <![CDATA[
-<Window xmlns="org.apache.pivot.wtk"
-    xmlns:wtkx="http://pivot.apache.org/wtkx">
-    <content>
-        <wtkx:include src="content.wtkx"/>
-    </content>
-</Window>
+            <Window xmlns="org.apache.pivot.wtk"
+                xmlns:wtkx="http://pivot.apache.org/wtkx">
+                <content>
+                    <wtkx:include src="content.wtkx"/>
+                </content>
+            </Window>
             ]]>
         </source>
 
@@ -511,24 +510,22 @@ TabPane.setLabel(label, "First Tab");
 
         <source type="xml">
             <![CDATA[
-<-- window.wtkx -->
-
-<Window xmlns="org.apache.pivot.wtk"
-    xmlns:wtkx="http://pivot.apache.org/wtkx">
-    <content>
-        <wtkx:include wtkx:id="content" src="content.wtkx"/>
-    </content>
-</Window>
+            <-- window.wtkx -->
+            <Window xmlns="org.apache.pivot.wtk"
+                xmlns:wtkx="http://pivot.apache.org/wtkx">
+                <content>
+                    <wtkx:include wtkx:id="content" src="content.wtkx"/>
+                </content>
+            </Window>
             ]]>
         </source>
 
         <source type="xml">
             <![CDATA[
-<-- content.wtkx -->
-
-<Label xmlns="org.apache.pivot.wtk"
-    xmlns:wtkx="http://pivot.apache.org/wtkx"
-    wtkx:id="label" text="Hello, World!"/>
+            <-- content.wtkx -->
+            <Label xmlns="org.apache.pivot.wtk"
+                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                wtkx:id="label" text="Hello, World!"/>
             ]]>
         </source>
 
@@ -538,7 +535,7 @@ TabPane.setLabel(label, "First Tab");
 
         <source type="java">
             <![CDATA[
-Label label = (Label)wtkxSerializer.get("content.label");
+            Label label = (Label)wtkxSerializer.get("content.label");
             ]]>
         </source>
 
@@ -561,16 +558,16 @@ Label label = (Label)wtkxSerializer.get("content.label");
 
         <source type="xml">
             <![CDATA[
-<Window xmlns:wtkx="http://pivot.apache.org/wtkx"
-    xmlns="org.apache.pivot.wtk">
-    <wtkx:define>
-        <wtkx:include wtkx:id="loginDialog" src="login_dialog.wtkx"/>
-    </wtkx:define>
+            <Window xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns="org.apache.pivot.wtk">
+                <wtkx:define>
+                    <wtkx:include wtkx:id="loginDialog" src="login_dialog.wtkx"/>
+                </wtkx:define>
 
-    <content>
-        ...
-    </content>
-</Window>
+                <content>
+                    ...
+                </content>
+            </Window>
             ]]>
         </source>
 
@@ -590,15 +587,15 @@ Label label = (Label)wtkxSerializer.get("content.label");
 
         <source type="xml">
             <![CDATA[
-<Window xmlns:wtkx="http://pivot.apache.org/wtkx"
-    xmlns="org.apache.pivot.wtk">
-    <wtkx:script>
-    var foo = "Hello, World!";
-    </wtkx:script>
-    <content>
-        <Label text="$foo"/>
-    </content>
-</Window>
+            <Window xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns="org.apache.pivot.wtk">
+                <wtkx:script>
+                var foo = "Hello, World!";
+                </wtkx:script>
+                <content>
+                    <Label text="$foo"/>
+                </content>
+            </Window>
             ]]>
         </source>
 
@@ -608,13 +605,13 @@ Label label = (Label)wtkxSerializer.get("content.label");
 
         <source type="xml">
             <![CDATA[
-<Window xmlns:wtkx="http://pivot.apache.org/wtkx"
-    xmlns="org.apache.pivot.wtk">
-    <wtkx:script src="foo.js"/>
-    <content>
-        <Label text="$foo"/>
-    </content>
-</Window>
+            <Window xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns="org.apache.pivot.wtk">
+                <wtkx:script src="foo.js"/>
+                <content>
+                    <Label text="$foo"/>
+                </content>
+            </Window>
             ]]>
         </source>
 
@@ -633,9 +630,9 @@ Label label = (Label)wtkxSerializer.get("content.label");
 
         <source type="xml">
             <![CDATA[
-<PushButton xmlns="org.apache.pivot.wtk"
-    xmlns:wtkx="http://pivot.apache.org/wtkx"
-    wtkx:id="pushButton" buttonData="Click Me!"/>
+            <PushButton xmlns="org.apache.pivot.wtk"
+                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                wtkx:id="pushButton" buttonData="Click Me!"/>
             ]]>
         </source>
 
@@ -646,13 +643,13 @@ Label label = (Label)wtkxSerializer.get("content.label");
 
         <source type="java">
             <![CDATA[
-PushButton pushButton = (PushButton)wtkxSerializer.get("pushButton");
+            PushButton pushButton = (PushButton)wtkxSerializer.get("pushButton");
 
-pushButton.getButtonPressListeners().add(new ButtonPressListener() {
-    public void buttonPressed(Button button) {
-        // Handle event
-    }
-});
+            pushButton.getButtonPressListeners().add(new ButtonPressListener() {
+                public void buttonPressed(Button button) {
+                    // Handle event
+                }
+            });
             ]]>
         </source>
 
@@ -668,17 +665,17 @@ pushButton.getButtonPressListeners().add(new ButtonPressListener() {
 
         <source type="xml">
             <![CDATA[
-<PushButton xmlns="org.apache.pivot.wtk"
-    xmlns:wtkx="http://pivot.apache.org/wtkx"
-    buttonData="Click Me!">
-    <buttonPressListeners>
-        <wtkx:script>
-        function buttonPressed(button) {
-            // Handle event
-        }
-        </wtkx:script>
-    </buttonPressListeners>
-</PushButton>
+            <PushButton xmlns="org.apache.pivot.wtk"
+                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                buttonData="Click Me!">
+                <buttonPressListeners>
+                    <wtkx:script>
+                    function buttonPressed(button) {
+                        // Handle event
+                    }
+                    </wtkx:script>
+                </buttonPressListeners>
+            </PushButton>
             ]]>
         </source>
 
@@ -717,10 +714,10 @@ pushButton.getButtonPressListeners().add(new ButtonPressListener() {
 
         <source type="xml">
             <![CDATA[
-<PushButton xmlns="org.apache.pivot.wtk"
-    xmlns:wtkx="http://pivot.apache.org/wtkx"
-    buttonData="Click Me!"
-    ButtonPressListener.buttonPressed="// Handle event"/>
+            <PushButton xmlns="org.apache.pivot.wtk"
+                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                buttonData="Click Me!"
+                ButtonPressListener.buttonPressed="// Handle event"/>
             ]]>
         </source>
 
@@ -743,9 +740,9 @@ pushButton.getButtonPressListeners().add(new ButtonPressListener() {
 
         <source type="java">
             <![CDATA[
-public Object readObject(String resourceName) { ... }
-public Object readObject(URL location) { ... }
-public Object readObject(InputStream inputStream) { ... }
+            public Object readObject(String resourceName) { ... }
+            public Object readObject(URL location) { ... }
+            public Object readObject(InputStream inputStream) { ... }
             ]]>
         </source>
 
@@ -766,12 +763,12 @@ public Object readObject(InputStream inputStream) { ... }
 
         <source type="xml">
             <![CDATA[
-<Window xmlns="org.apache.pivot.wtk"
-    xmlns:wtkx="http://pivot.apache.org/wtkx">
-    <content>
-        <Label wtkx:id="label" text="Hello, World!"/>
-    </content>
-<Window>
+            <Window xmlns="org.apache.pivot.wtk"
+                xmlns:wtkx="http://pivot.apache.org/wtkx">
+                <content>
+                    <Label wtkx:id="label" text="Hello, World!"/>
+                </content>
+            <Window>
             ]]>
         </source>
 
@@ -783,14 +780,14 @@ public Object readObject(InputStream inputStream) { ... }
 
         <source type="java">
             <![CDATA[
-public void startup(Display display, Map<String, String> properties)
-    throws Exception {
-    WTKXSerializer wtkxSerializer = new WTKXSerializer();
+            public void startup(Display display, Map<String, String> properties)
+                throws Exception {
+                WTKXSerializer wtkxSerializer = new WTKXSerializer();
 
-    Window window =
-        (Window)wtkxSerializer.readObject(getClass().getResource("window.wtkx"));
-    window.open(display);
-}
+                Window window =
+                    (Window)wtkxSerializer.readObject(getClass().getResource("window.wtkx"));
+                window.open(display);
+            }
             ]]>
         </source>
 
@@ -809,16 +806,16 @@ public void startup(Display display, Map<String, String> properties)
 
         <source type="java">
             <![CDATA[
-public void startup(Display display, Map<String, String> properties)
-    throws Exception {
-    WTKXSerializer wtkxSerializer = new WTKXSerializer();
+            public void startup(Display display, Map<String, String> properties)
+                throws Exception {
+                WTKXSerializer wtkxSerializer = new WTKXSerializer();
 
-    Window window =
-        (Window)wtkxSerializer.readObject(getClass().getResource("window.wtkx"));
-    Label label = wtkxSerializer.getObjectByID("label");
-    label.setText("Welcome to Pivot!");
-    window.open(display);
-}
+                Window window =
+                    (Window)wtkxSerializer.readObject(getClass().getResource("window.wtkx"));
+                Label label = wtkxSerializer.getObjectByID("label");
+                label.setText("Welcome to Pivot!");
+                window.open(display);
+            }
             ]]>
         </source>
 
@@ -837,7 +834,7 @@ public void startup(Display display, Map<String, String> properties)
 
         <source type="java">
             <![CDATA[
-Label label = (Label)wtkxSerializer.get("content.label")
+            Label label = (Label)wtkxSerializer.get("content.label")
             ]]>
         </source>
 
@@ -862,12 +859,12 @@ Label label = (Label)wtkxSerializer.get("content.label")
 
         <source type="xml">
             <![CDATA[
-<Window xmlns="org.apache.pivot.wtk"
-    xmlns:wtkx="http://pivot.apache.org/wtkx">
-    <content>
-        <Label wtkx:id="label" text="Hello, World!"/>
-    </content>
-<Window>
+            <Window xmlns="org.apache.pivot.wtk"
+                xmlns:wtkx="http://pivot.apache.org/wtkx">
+                <content>
+                    <Label wtkx:id="label" text="Hello, World!"/>
+                </content>
+            <Window>
             ]]>
         </source>
 
@@ -879,7 +876,7 @@ Label label = (Label)wtkxSerializer.get("content.label")
 
         <source type="java">
             <![CDATA[
-@WTKX private Label label;
+            @WTKX private Label label;
             ]]>
         </source>
 

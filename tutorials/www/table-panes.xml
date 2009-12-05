@@ -74,7 +74,7 @@ limitations under the License.
         </p>
 
         <application class="org.apache.pivot.tutorials.layout.SimpleTablePanes"
-            width="500" height="350">
+            width="560" height="320">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>
@@ -87,48 +87,48 @@ limitations under the License.
 
         <source type="xml">
             <![CDATA[
-<Window wtkx:id="window" title="Table Panes" maximized="true"
-    xmlns:wtkx="http://pivot.apache.org/wtkx"
-    xmlns="org.apache.pivot.wtk">
-    <content>
-        <Border styles="{padding:0}">
-            <content>
-                <TablePane wtkx:id="tablePane" styles="{verticalSpacing:1, showHorizontalGridLines:true,
-                    horizontalSpacing:1, showVerticalGridLines:true}">
-                    <columns>
-                        <TablePane.Column width="-1"/>
-                        <TablePane.Column width="50"/>
-                        <TablePane.Column width="-1"/>
-                        <TablePane.Column width="1*"/>
-                        <TablePane.Column width="2*"/>
-                    </columns>
+            <Window wtkx:id="window" title="Table Panes" maximized="true"
+                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns="org.apache.pivot.wtk">
+                <content>
+                    <Border styles="{padding:0}">
+                        <content>
+                            <TablePane wtkx:id="tablePane" styles="{verticalSpacing:1, showHorizontalGridLines:true,
+                                horizontalSpacing:1, showVerticalGridLines:true}">
+                                <columns>
+                                    <TablePane.Column width="-1"/>
+                                    <TablePane.Column width="50"/>
+                                    <TablePane.Column width="-1"/>
+                                    <TablePane.Column width="1*"/>
+                                    <TablePane.Column width="2*"/>
+                                </columns>
 
-                    <rows>
-                        <TablePane.Row height="-1">
-                            <TablePane.Filler/>
-                            <Label text="50" styles="{horizontalAlignment:'center'}"/>
-                            <Label text="-1" styles="{horizontalAlignment:'center'}"/>
-                            <Label text="1*" styles="{horizontalAlignment:'center'}"/>
-                            <Label text="2*" styles="{horizontalAlignment:'center'}"/>
-                        </TablePane.Row>
-                        <TablePane.Row height="50">
-                            <Label text="50" styles="{verticalAlignment:'center'}"/>
-                        </TablePane.Row>
-                        <TablePane.Row height="-1">
-                            <Label text="-1" styles="{verticalAlignment:'center'}"/>
-                        </TablePane.Row>
-                        <TablePane.Row height="1*">
-                            <Label text="1*" styles="{verticalAlignment:'center'}"/>
-                        </TablePane.Row>
-                        <TablePane.Row height="2*">
-                            <Label text="2*" styles="{verticalAlignment:'center'}"/>
-                        </TablePane.Row>
-                    </rows>
-                </TablePane>
-            </content>
-        </Border>
-    </content>
-</Window>
+                                <rows>
+                                    <TablePane.Row height="-1">
+                                        <TablePane.Filler/>
+                                        <Label text="50" styles="{horizontalAlignment:'center'}"/>
+                                        <Label text="-1" styles="{horizontalAlignment:'center'}"/>
+                                        <Label text="1*" styles="{horizontalAlignment:'center'}"/>
+                                        <Label text="2*" styles="{horizontalAlignment:'center'}"/>
+                                    </TablePane.Row>
+                                    <TablePane.Row height="50">
+                                        <Label text="50" styles="{verticalAlignment:'center'}"/>
+                                    </TablePane.Row>
+                                    <TablePane.Row height="-1">
+                                        <Label text="-1" styles="{verticalAlignment:'center'}"/>
+                                    </TablePane.Row>
+                                    <TablePane.Row height="1*">
+                                        <Label text="1*" styles="{verticalAlignment:'center'}"/>
+                                    </TablePane.Row>
+                                    <TablePane.Row height="2*">
+                                        <Label text="2*" styles="{verticalAlignment:'center'}"/>
+                                    </TablePane.Row>
+                                </rows>
+                            </TablePane>
+                        </content>
+                    </Border>
+                </content>
+            </Window>
             ]]>
         </source>
 
@@ -139,94 +139,94 @@ limitations under the License.
 
         <source type="java">
             <![CDATA[
-package org.apache.pivot.tutorials.layout;
+            package org.apache.pivot.tutorials.layout;
 
-import org.apache.pivot.collections.Map;
-import org.apache.pivot.wtk.BoxPane;
-import org.apache.pivot.wtk.Component;
-import org.apache.pivot.wtk.ComponentMouseButtonListener;
-import org.apache.pivot.wtk.Application;
-import org.apache.pivot.wtk.DesktopApplicationContext;
-import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.Label;
-import org.apache.pivot.wtk.MessageType;
-import org.apache.pivot.wtk.Mouse;
-import org.apache.pivot.wtk.Orientation;
-import org.apache.pivot.wtk.Prompt;
-import org.apache.pivot.wtk.TablePane;
-import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKXSerializer;
+            import org.apache.pivot.collections.Map;
+            import org.apache.pivot.wtk.BoxPane;
+            import org.apache.pivot.wtk.Component;
+            import org.apache.pivot.wtk.ComponentMouseButtonListener;
+            import org.apache.pivot.wtk.Application;
+            import org.apache.pivot.wtk.DesktopApplicationContext;
+            import org.apache.pivot.wtk.Display;
+            import org.apache.pivot.wtk.Label;
+            import org.apache.pivot.wtk.MessageType;
+            import org.apache.pivot.wtk.Mouse;
+            import org.apache.pivot.wtk.Orientation;
+            import org.apache.pivot.wtk.Prompt;
+            import org.apache.pivot.wtk.TablePane;
+            import org.apache.pivot.wtk.Window;
+            import org.apache.pivot.wtkx.WTKXSerializer;
 
-public class SimpleTablePanes implements Application {
-    private Window window = null;
-    private TablePane tablePane = null;
+            public class SimpleTablePanes implements Application {
+                private Window window = null;
+                private TablePane tablePane = null;
 
-    @Override
-    public void startup(Display display, Map<String, String> properties) throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "simple_table_panes.wtkx");
-        tablePane = (TablePane)wtkxSerializer.get("tablePane");
+                @Override
+                public void startup(Display display, Map<String, String> properties) throws Exception {
+                    WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                    window = (Window)wtkxSerializer.readObject(this, "simple_table_panes.wtkx");
+                    tablePane = (TablePane)wtkxSerializer.get("tablePane");
 
-        tablePane.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
-            @Override
-            public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-                int rowIndex = tablePane.getRowAt(y);
-                int columnIndex = tablePane.getColumnAt(x);
+                    tablePane.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
+                        @Override
+                        public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+                            int rowIndex = tablePane.getRowAt(y);
+                            int columnIndex = tablePane.getColumnAt(x);
 
-                if (rowIndex >= 0
-                    && columnIndex >= 0) {
-                    TablePane.Row row = tablePane.getRows().get(rowIndex);
-                    TablePane.Column column = tablePane.getColumns().get(columnIndex);
+                            if (rowIndex >= 0
+                                && columnIndex >= 0) {
+                                TablePane.Row row = tablePane.getRows().get(rowIndex);
+                                TablePane.Column column = tablePane.getColumns().get(columnIndex);
 
-                    int rowHeight = row.getHeight();
-                    int columnWidth = column.getWidth();
+                                int rowHeight = row.getHeight();
+                                int columnWidth = column.getWidth();
 
-                    String message = "Registered Click At " + rowIndex + "," + columnIndex;
+                                String message = "Registered Click At " + rowIndex + "," + columnIndex;
 
-                    Label heightLabel = new Label(String.format("The row's height is %d (%s)",
-                        rowHeight,
-                        rowHeight == -1 ? "default" : (row.isRelative() ? "relative" : "absolute")));
-                    Label widthLabel = new Label(String.format("The column's width is %d (%s)",
-                        columnWidth,
-                        columnWidth == -1 ? "default" : (column.isRelative() ? "relative" : "absolute")));
+                                Label heightLabel = new Label(String.format("The row's height is %d (%s)",
+                                    rowHeight,
+                                    rowHeight == -1 ? "default" : (row.isRelative() ? "relative" : "absolute")));
+                                Label widthLabel = new Label(String.format("The column's width is %d (%s)",
+                                    columnWidth,
+                                    columnWidth == -1 ? "default" : (column.isRelative() ? "relative" : "absolute")));
 
-                    BoxPane body = new BoxPane(Orientation.VERTICAL);
-                    body.add(heightLabel);
-                    body.add(widthLabel);
+                                BoxPane body = new BoxPane(Orientation.VERTICAL);
+                                body.add(heightLabel);
+                                body.add(widthLabel);
 
-                    Prompt.prompt(MessageType.INFO, message, body, window);
+                                Prompt.prompt(MessageType.INFO, message, body, window);
+                            }
+
+                            return false;
+                        }
+                    });
+
+                    window.open(display);
                 }
 
-                return false;
+                @Override
+                public boolean shutdown(boolean optional) {
+                    if (window != null) {
+                        window.close();
+                    }
+
+                    return false;
+                }
+
+                @Override
+                public void suspend() {
+                    // No-op
+                }
+
+                @Override
+                public void resume() {
+                    // No-op
+                }
+
+                public static void main(String[] args) {
+                    DesktopApplicationContext.main(SimpleTablePanes.class, args);
+                }
             }
-        });
-
-        window.open(display);
-    }
-
-    @Override
-    public boolean shutdown(boolean optional) {
-        if (window != null) {
-            window.close();
-        }
-
-        return false;
-    }
-
-    @Override
-    public void suspend() {
-        // No-op
-    }
-
-    @Override
-    public void resume() {
-        // No-op
-    }
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(SimpleTablePanes.class, args);
-    }
-}
             ]]>
         </source>
 
@@ -238,7 +238,7 @@ public class SimpleTablePanes implements Application {
             splitter to see the effect it has on the relative columns in the table pane.
         </p>
 
-        <application class="org.apache.pivot.tutorials.layout.TablePanes" width="500" height="350">
+        <application class="org.apache.pivot.tutorials.layout.TablePanes" width="560" height="320">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>

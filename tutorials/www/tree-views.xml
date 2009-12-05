@@ -41,57 +41,57 @@ limitations under the License.
 
         <source type="xml" location="org/apache/pivot/tutorials/treeviews/tree_views.wtkx">
             <![CDATA[
-<Window title="Tree Views" maximized="true"
-    xmlns:wtkx="http://pivot.apache.org/wtkx"
-    xmlns="org.apache.pivot.wtk">
-    <content>
-        <SplitPane orientation="horizontal" splitRatio="0.5">
-            <left>
-                <Border>
-                    <content>
-                        <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
-                            <view>
-                                <TreeView wtkx:id="treeView">
-                                    <treeData>
-                                        <wtkx:include src="tree_data.wtkx"/>
-                                    </treeData>
-                                </TreeView>
-                            </view>
-                        </ScrollPane>
-                    </content>
-                </Border>
-            </left>
-            <right>
-                <Border styles="{padding:{top:10}}">
-                    <content>
-                        <BoxPane styles="{horizontalAlignment:'right'}">
-                            <Form styles="{horizontalSpacing:18, rightAlignLabels:true}">
-                                <sections>
-                                    <Form.Section>
-                                        <ListButton wtkx:id="selectModeListButton"
-                                            Form.label="Select Mode"
-                                            listData="['None', 'Single', 'Multi']"
-                                            selectedIndex="1"
-                                            ListButtonSelectionListener.selectedIndexChanged="treeView.setSelectMode(selectModeListButton.getSelectedItem());"/>
-                                        <BoxPane Form.label="Flags" orientation="vertical"
-                                            styles="{spacing:10}">
-                                            <Checkbox wtkx:id="checkmarksEnabledButton"
-                                                buttonData="Checkmarks Enabled"
-                                                ButtonStateListener.stateChanged="treeView.setCheckmarksEnabled(checkmarksEnabledButton.isSelected());"/>
-                                            <Checkbox wtkx:id="showMixedCheckmarkStateButton"
-                                                buttonData="Show Mixed Checkmark State"
-                                                ButtonStateListener.stateChanged="treeView.setShowMixedCheckmarkState(showMixedCheckmarkStateButton.isSelected());"/>
-                                        </BoxPane>
-                                    </Form.Section>
-                                </sections>
-                            </Form>
-                        </BoxPane>
-                    </content>
-                </Border>
-            </right>
-        </SplitPane>
-    </content>
-</Window>
+            <Window title="Tree Views" maximized="true"
+                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns="org.apache.pivot.wtk">
+                <content>
+                    <SplitPane orientation="horizontal" splitRatio="0.5">
+                        <left>
+                            <Border>
+                                <content>
+                                    <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
+                                        <view>
+                                            <TreeView wtkx:id="treeView">
+                                                <treeData>
+                                                    <wtkx:include src="tree_data.wtkx"/>
+                                                </treeData>
+                                            </TreeView>
+                                        </view>
+                                    </ScrollPane>
+                                </content>
+                            </Border>
+                        </left>
+                        <right>
+                            <Border styles="{padding:{top:10}}">
+                                <content>
+                                    <BoxPane styles="{horizontalAlignment:'right'}">
+                                        <Form styles="{horizontalSpacing:18, rightAlignLabels:true}">
+                                            <sections>
+                                                <Form.Section>
+                                                    <ListButton wtkx:id="selectModeListButton"
+                                                        Form.label="Select Mode"
+                                                        listData="['None', 'Single', 'Multi']"
+                                                        selectedIndex="1"
+                                                        ListButtonSelectionListener.selectedIndexChanged="treeView.setSelectMode(selectModeListButton.getSelectedItem());"/>
+                                                    <BoxPane Form.label="Flags" orientation="vertical"
+                                                        styles="{spacing:10}">
+                                                        <Checkbox wtkx:id="checkmarksEnabledButton"
+                                                            buttonData="Checkmarks Enabled"
+                                                            ButtonStateListener.stateChanged="treeView.setCheckmarksEnabled(checkmarksEnabledButton.isSelected());"/>
+                                                        <Checkbox wtkx:id="showMixedCheckmarkStateButton"
+                                                            buttonData="Show Mixed Checkmark State"
+                                                            ButtonStateListener.stateChanged="treeView.setShowMixedCheckmarkState(showMixedCheckmarkStateButton.isSelected());"/>
+                                                    </BoxPane>
+                                                </Form.Section>
+                                            </sections>
+                                        </Form>
+                                    </BoxPane>
+                                </content>
+                            </Border>
+                        </right>
+                    </SplitPane>
+                </content>
+            </Window>
             ]]>
         </source>
 

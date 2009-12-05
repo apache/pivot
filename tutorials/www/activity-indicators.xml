@@ -36,7 +36,8 @@ limitations under the License.
             <tt>ActivityIndicator</tt> component, shown below:
         </p>
 
-        <application class="org.apache.pivot.tutorials.progress.ActivityIndicators" width="320" height="240">
+        <application class="org.apache.pivot.tutorials.progress.ActivityIndicators"
+            width="320" height="240">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>

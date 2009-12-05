@@ -44,46 +44,46 @@ limitations under the License.
         <p>The WTKX source is as follows:</p>
 
         <source type="xml" location="org/apache/pivot/tutorials/tableviews/json_table_view.wtkx">
-&lt;Window title="Table Views" maximized="true"
-    xmlns:wtkx="http://pivot.apache.org/wtkx"
-    xmlns="org.apache.pivot.wtk"&gt;
-    &lt;content&gt;
-        &lt;Border styles="{padding:0}"&gt;
-            &lt;content&gt;
-                &lt;ScrollPane horizontalScrollBarPolicy="fill_to_capacity"&gt;
-                    &lt;view&gt;
-                        &lt;TableView wtkx:id="tableView" tableData="@standings.json"
-                            styles="{includeTrailingVerticalGridLine:true}"&gt;
-                            &lt;columns&gt;
-                                &lt;TableView.Column name="nation" width="180" headerData="Nation"/&gt;
-                                &lt;TableView.Column name="gold" width="60" headerData="Gold"/&gt;
-                                &lt;TableView.Column name="silver" width="60" headerData="Silver"/&gt;
-                                &lt;TableView.Column name="bronze" width="60" headerData="Bronze"/&gt;
-                                &lt;TableView.Column name="total" width="60" headerData="Total"/&gt;
-                            &lt;/columns&gt;
+            <![CDATA[
+            <Window title="Table Views" maximized="true"
+                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns="org.apache.pivot.wtk">
+                <content>
+                    <Border>
+                        <content>
+                            <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
+                                <view>
+                                    <TableView wtkx:id="tableView" tableData="@standings.json"
+                                        styles="{includeTrailingVerticalGridLine:true}">
+                                        <columns>
+                                            <TableView.Column name="nation" width="180" headerData="Nation"/>
+                                            <TableView.Column name="gold" width="60" headerData="Gold"/>
+                                            <TableView.Column name="silver" width="60" headerData="Silver"/>
+                                            <TableView.Column name="bronze" width="60" headerData="Bronze"/>
+                                            <TableView.Column name="total" width="60" headerData="Total"/>
+                                        </columns>
 
-                            &lt;tableViewSortListeners&gt;
-                                &lt;wtkx:script&gt;
-                                &lt;![CDATA[
-                                function sortChanged(tableView) {
-                                    var tableData = tableView.getTableData();
-                                    tableData.setComparator(new org.apache.pivot.wtk.content.TableViewRowComparator(tableView));
-                                }
-                                ]]&gt;
-                                &lt;/wtkx:script&gt;
-                            &lt;/tableViewSortListeners&gt;
-                        &lt;/TableView&gt;
-                    &lt;/view&gt;
+                                        <tableViewSortListeners>
+                                            <wtkx:script>
+                                            function sortChanged(tableView) {
+                                                var tableData = tableView.getTableData();
+                                                tableData.setComparator(new org.apache.pivot.wtk.content.TableViewRowComparator(tableView));
+                                            }
+                                            </wtkx:script>
+                                        </tableViewSortListeners>
+                                    </TableView>
+                                </view>
 
-                    &lt;columnHeader&gt;
-                        &lt;TableViewHeader tableView="$tableView" sortMode="single_column"
-                            styles="{includeTrailingVerticalGridLine:true}"/&gt;
-                    &lt;/columnHeader&gt;
-                &lt;/ScrollPane&gt;
-            &lt;/content&gt;
-        &lt;/Border&gt;
-    &lt;/content&gt;
-&lt;/Window&gt;
+                                <columnHeader>
+                                    <TableViewHeader tableView="$tableView" sortMode="single_column"
+                                        styles="{includeTrailingVerticalGridLine:true}"/>
+                                </columnHeader>
+                            </ScrollPane>
+                        </content>
+                    </Border>
+                </content>
+            </Window>
+            ]]>
         </source>
 
         <p>It is very similar to the previous example, with the following exceptions:</p>
@@ -121,16 +121,16 @@ limitations under the License.
                 </p>
 
                 <source type="xml" location="org/apache/pivot/tutorials/tableviews/json_table_view.wtkx">
-&lt;tableViewSortListeners&gt;
-    &lt;wtkx:script&gt;
-    &lt;![CDATA[
-    function sortChanged(tableView) {
-        var tableData = tableView.getTableData();
-        tableData.setComparator(new org.apache.pivot.wtk.content.TableViewRowComparator(tableView));
-    }
-    ]]&gt;
-    &lt;/wtkx:script&gt;
-&lt;/tableViewSortListeners&gt;
+                    <![CDATA[
+                    <tableViewSortListeners>
+                        <wtkx:script>
+                        function sortChanged(tableView) {
+                            var tableData = tableView.getTableData();
+                            tableData.setComparator(new org.apache.pivot.wtk.content.TableViewRowComparator(tableView));
+                        }
+                        </wtkx:script>
+                    </tableViewSortListeners>
+                    ]]>
                 </source>
                 <p>
                     In this case, the listener assigns an instance of
@@ -148,20 +148,24 @@ limitations under the License.
         </p>
 
         <source type="javascript" location="org/apache/pivot/tutorials/tableviews/standings.json">
-// Source: http://en.wikipedia.org/wiki/2008_Summer_Olympics_medal_table
-[   {nation:"China", gold:51, silver:21, bronze:28, total:100},
-    {nation:"United States", gold:36, silver:38, bronze:36, total:110},
-    {nation:"Russia", gold:23, silver:21, bronze:28, total:72},
-    {nation:"Great Britain", gold:19, silver:13, bronze:15, total:47},
-    {nation:"Germany", gold:16, silver:10, bronze:15, total:41},
-    {nation:"Australia", gold:14, silver:15, bronze:17, total:46},
-    {nation:"South Korea", gold:13, silver:10, bronze:8, total:31},
-    {nation:"Japan", gold:9, silver:6, bronze:11, total:26},
-    {nation:"Italy", gold:8, silver:10, bronze:10, total:28},
-    {nation:"France", gold:7, silver:16, bronze:17, total:40}
-]
+            <![CDATA[
+            // Source: http://en.wikipedia.org/wiki/2008_Summer_Olympics_medal_table
+            [   {nation:"China", gold:51, silver:21, bronze:28, total:100},
+                {nation:"United States", gold:36, silver:38, bronze:36, total:110},
+                {nation:"Russia", gold:23, silver:21, bronze:28, total:72},
+                {nation:"Great Britain", gold:19, silver:13, bronze:15, total:47},
+                {nation:"Germany", gold:16, silver:10, bronze:15, total:41},
+                {nation:"Australia", gold:14, silver:15, bronze:17, total:46},
+                {nation:"South Korea", gold:13, silver:10, bronze:8, total:31},
+                {nation:"Japan", gold:9, silver:6, bronze:11, total:26},
+                {nation:"Italy", gold:8, silver:10, bronze:10, total:28},
+                {nation:"France", gold:7, silver:16, bronze:17, total:40}
+            ]
+            ]]>
         </source>
 
-        <p>There is no associated Java source code for this example.</p>
+        <p>
+            There is no associated Java source code for this example.
+        </p>
     </body>
 </document>

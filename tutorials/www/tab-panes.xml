@@ -61,81 +61,81 @@ limitations under the License.
 
         <source type="xml" location="org/apache/pivot/tutorials/navigation/tab_panes.wtkx">
             <![CDATA[
-<Window title="Tab Panes" maximized="true"
-    xmlns:wtkx="http://pivot.apache.org/wtkx"
-    xmlns="org.apache.pivot.wtk">
-    <content>
-        <TablePane styles="{padding:8, horizontalSpacing:6}">
-            <columns>
-                <TablePane.Column width="1*"/>
-                <TablePane.Column/>
-            </columns>
-            <rows>
-                <TablePane.Row height="1*">
-                    <Border styles="{padding:12}">
-                        <content>
-                            <BoxPane>
-                                <TabPane wtkx:id="tabPane">
-                                    <tabs>
-                                        <BoxPane TabPane.icon="org/apache/pivot/tutorials/bell.png" TabPane.label="Bell"
-                                            styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
-                                            <Border>
-                                                <content>
-                                                    <Label text="240x180" preferredWidth="240" preferredHeight="180"
-                                                        styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
-                                                </content>
-                                            </Border>
-                                        </BoxPane>
+            <Window title="Tab Panes" maximized="true"
+                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns="org.apache.pivot.wtk">
+                <content>
+                    <TablePane styles="{padding:8, horizontalSpacing:6}">
+                        <columns>
+                            <TablePane.Column width="1*"/>
+                            <TablePane.Column/>
+                        </columns>
+                        <rows>
+                            <TablePane.Row height="1*">
+                                <Border styles="{padding:12}">
+                                    <content>
+                                        <BoxPane>
+                                            <TabPane wtkx:id="tabPane">
+                                                <tabs>
+                                                    <BoxPane TabPane.icon="org/apache/pivot/tutorials/bell.png" TabPane.label="Bell"
+                                                        styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                                                        <Border>
+                                                            <content>
+                                                                <Label text="240x180" preferredWidth="240" preferredHeight="180"
+                                                                    styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
+                                                            </content>
+                                                        </Border>
+                                                    </BoxPane>
 
-                                        <BoxPane TabPane.icon="org/apache/pivot/tutorials/clock.png" TabPane.label="Clock"
-                                            styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
-                                            <Border>
-                                                <content>
-                                                    <Label text="320x240" preferredWidth="320" preferredHeight="240"
-                                                        styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
-                                                </content>
-                                            </Border>
-                                        </BoxPane>
+                                                    <BoxPane TabPane.icon="org/apache/pivot/tutorials/clock.png" TabPane.label="Clock"
+                                                        styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                                                        <Border>
+                                                            <content>
+                                                                <Label text="320x240" preferredWidth="320" preferredHeight="240"
+                                                                    styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
+                                                            </content>
+                                                        </Border>
+                                                    </BoxPane>
 
-                                        <BoxPane TabPane.icon="org/apache/pivot/tutorials/house.png" TabPane.label="House"
-                                            styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
-                                            <Border>
-                                                <content>
-                                                    <Label text="480x360" preferredWidth="480" preferredHeight="360"
-                                                        styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
-                                                </content>
-                                            </Border>
-                                        </BoxPane>
+                                                    <BoxPane TabPane.icon="org/apache/pivot/tutorials/house.png" TabPane.label="House"
+                                                        styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                                                        <Border>
+                                                            <content>
+                                                                <Label text="480x360" preferredWidth="480" preferredHeight="360"
+                                                                    styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
+                                                            </content>
+                                                        </Border>
+                                                    </BoxPane>
 
-                                        <BoxPane TabPane.icon="org/apache/pivot/tutorials/star.png" TabPane.label="Star" enabled="false"/>
-                                    </tabs>
-                                    <corner>
-                                        <BoxPane wtkx:id="cornerBoxPane" styles="{horizontalAlignment:'right'}">
-                                            <TextInput/>
+                                                    <BoxPane TabPane.icon="org/apache/pivot/tutorials/star.png" TabPane.label="Star" enabled="false"/>
+                                                </tabs>
+                                                <corner>
+                                                    <BoxPane wtkx:id="cornerBoxPane" styles="{horizontalAlignment:'right'}">
+                                                        <TextInput/>
+                                                    </BoxPane>
+                                                </corner>
+                                            </TabPane>
                                         </BoxPane>
-                                    </corner>
-                                </TabPane>
-                            </BoxPane>
-                        </content>
-                    </Border>
+                                    </content>
+                                </Border>
 
-                    <Border>
-                        <content>
-                            <BoxPane orientation="vertical" styles="{padding:4, spacing:6}">
-                                <Checkbox wtkx:id="collapsibleCheckbox" buttonData="Collapsible"/>
-                                <Label text="Tab orientation:"/>
-                                <RadioButton wtkx:id="horizontalRadioButton" buttonData="Horizontal" selected="true"
-                                    group="tabOrientation"/>
-                                <RadioButton wtkx:id="verticalRadioButton" buttonData="Vertical"
-                                    group="tabOrientation"/>
-                            </BoxPane>
-                        </content>
-                    </Border>
-                </TablePane.Row>
-            </rows>
-        </TablePane>
-    </content>
-</Window>
+                                <Border>
+                                    <content>
+                                        <BoxPane orientation="vertical" styles="{padding:4, spacing:6}">
+                                            <Checkbox wtkx:id="collapsibleCheckbox" buttonData="Collapsible"/>
+                                            <Label text="Tab orientation:"/>
+                                            <RadioButton wtkx:id="horizontalRadioButton" buttonData="Horizontal" selected="true"
+                                                group="tabOrientation"/>
+                                            <RadioButton wtkx:id="verticalRadioButton" buttonData="Vertical"
+                                                group="tabOrientation"/>
+                                        </BoxPane>
+                                    </content>
+                                </Border>
+                            </TablePane.Row>
+                        </rows>
+                    </TablePane>
+                </content>
+            </Window>
             ]]>
         </source>
 
@@ -158,98 +158,98 @@ limitations under the License.
 
         <source type="java" location="org/apache/pivot/tutorials/navigation/TabPanes.java">
             <![CDATA[
-package org.apache.pivot.tutorials.navigation;
+            package org.apache.pivot.tutorials.navigation;
 
-import org.apache.pivot.collections.Map;
-import org.apache.pivot.wtk.Application;
-import org.apache.pivot.wtk.Button;
-import org.apache.pivot.wtk.ButtonStateListener;
-import org.apache.pivot.wtk.Checkbox;
-import org.apache.pivot.wtk.DesktopApplicationContext;
-import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.BoxPane;
-import org.apache.pivot.wtk.Orientation;
-import org.apache.pivot.wtk.RadioButton;
-import org.apache.pivot.wtk.TabPane;
-import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKXSerializer;
+            import org.apache.pivot.collections.Map;
+            import org.apache.pivot.wtk.Application;
+            import org.apache.pivot.wtk.Button;
+            import org.apache.pivot.wtk.ButtonStateListener;
+            import org.apache.pivot.wtk.Checkbox;
+            import org.apache.pivot.wtk.DesktopApplicationContext;
+            import org.apache.pivot.wtk.Display;
+            import org.apache.pivot.wtk.BoxPane;
+            import org.apache.pivot.wtk.Orientation;
+            import org.apache.pivot.wtk.RadioButton;
+            import org.apache.pivot.wtk.TabPane;
+            import org.apache.pivot.wtk.Window;
+            import org.apache.pivot.wtkx.WTKXSerializer;
 
-public class TabPanes implements Application {
-    private Window window = null;
-    private TabPane tabPane = null;
-    private Checkbox collapsibleCheckbox = null;
-    private RadioButton horizontalRadioButton = null;
-    private RadioButton verticalRadioButton = null;
-    private BoxPane cornerBoxPane = null;
+            public class TabPanes implements Application {
+                private Window window = null;
+                private TabPane tabPane = null;
+                private Checkbox collapsibleCheckbox = null;
+                private RadioButton horizontalRadioButton = null;
+                private RadioButton verticalRadioButton = null;
+                private BoxPane cornerBoxPane = null;
 
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "tab_panes.wtkx");
-        tabPane = (TabPane)wtkxSerializer.get("tabPane");
-        collapsibleCheckbox = (Checkbox)wtkxSerializer.get("collapsibleCheckbox");
-        horizontalRadioButton = (RadioButton)wtkxSerializer.get("horizontalRadioButton");
-        verticalRadioButton = (RadioButton)wtkxSerializer.get("verticalRadioButton");
-        cornerBoxPane = (BoxPane)wtkxSerializer.get("cornerBoxPane");
+                public void startup(Display display, Map<String, String> properties)
+                    throws Exception {
+                    WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                    window = (Window)wtkxSerializer.readObject(this, "tab_panes.wtkx");
+                    tabPane = (TabPane)wtkxSerializer.get("tabPane");
+                    collapsibleCheckbox = (Checkbox)wtkxSerializer.get("collapsibleCheckbox");
+                    horizontalRadioButton = (RadioButton)wtkxSerializer.get("horizontalRadioButton");
+                    verticalRadioButton = (RadioButton)wtkxSerializer.get("verticalRadioButton");
+                    cornerBoxPane = (BoxPane)wtkxSerializer.get("cornerBoxPane");
 
-        ButtonStateListener checkboxStateListener = new ButtonStateListener() {
-            public void stateChanged(Button button, Button.State previousState) {
-                updateTabPane();
-            }
-        };
+                    ButtonStateListener checkboxStateListener = new ButtonStateListener() {
+                        public void stateChanged(Button button, Button.State previousState) {
+                            updateTabPane();
+                        }
+                    };
 
-        collapsibleCheckbox.getButtonStateListeners().add(checkboxStateListener);
+                    collapsibleCheckbox.getButtonStateListeners().add(checkboxStateListener);
 
-        ButtonStateListener radioButtonStateListener = new ButtonStateListener() {
-            public void stateChanged(Button button, Button.State previousState) {
-                if (button.isSelected()) {
+                    ButtonStateListener radioButtonStateListener = new ButtonStateListener() {
+                        public void stateChanged(Button button, Button.State previousState) {
+                            if (button.isSelected()) {
+                                updateTabPane();
+                            }
+                        }
+                    };
+
+                    horizontalRadioButton.getButtonStateListeners().add(radioButtonStateListener);
+                    verticalRadioButton.getButtonStateListeners().add(radioButtonStateListener);
+
                     updateTabPane();
+
+                    window.open(display);
+                }
+
+                public boolean shutdown(boolean optional) {
+                    if (window != null) {
+                        window.close();
+                    }
+
+                    return false;
+                }
+
+                public void suspend() {
+                }
+
+                public void resume() {
+                }
+
+                private void updateTabPane() {
+                    tabPane.getStyles().put("collapsible", collapsibleCheckbox.isSelected());
+
+                    if (horizontalRadioButton.isSelected()) {
+                        tabPane.getStyles().put("tabOrientation", Orientation.HORIZONTAL);
+                        if (tabPane.getCorner() == null) {
+                            tabPane.setCorner(cornerBoxPane);
+                        }
+                    } else {
+                        tabPane.getStyles().put("tabOrientation", Orientation.VERTICAL);
+                        if (tabPane.getCorner() == cornerBoxPane) {
+                            tabPane.setCorner(null);
+                        }
+                    }
+                }
+
+                public static void main(String[] args) {
+                    DesktopApplicationContext.main(TabPanes.class, args);
                 }
             }
-        };
-
-        horizontalRadioButton.getButtonStateListeners().add(radioButtonStateListener);
-        verticalRadioButton.getButtonStateListeners().add(radioButtonStateListener);
-
-        updateTabPane();
-
-        window.open(display);
-    }
-
-    public boolean shutdown(boolean optional) {
-        if (window != null) {
-            window.close();
-        }
-
-        return false;
-    }
-
-    public void suspend() {
-    }
-
-    public void resume() {
-    }
-
-    private void updateTabPane() {
-        tabPane.getStyles().put("collapsible", collapsibleCheckbox.isSelected());
-
-        if (horizontalRadioButton.isSelected()) {
-            tabPane.getStyles().put("tabOrientation", Orientation.HORIZONTAL);
-            if (tabPane.getCorner() == null) {
-                tabPane.setCorner(cornerBoxPane);
-            }
-        } else {
-            tabPane.getStyles().put("tabOrientation", Orientation.VERTICAL);
-            if (tabPane.getCorner() == cornerBoxPane) {
-                tabPane.setCorner(null);
-            }
-        }
-    }
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(TabPanes.class, args);
-    }
-}
             ]]>
         </source>
 

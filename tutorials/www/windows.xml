@@ -128,7 +128,7 @@ limitations under the License.
             window types:
         </p>
 
-        <application class="org.apache.pivot.tutorials.windows.Windows" width="100%" height="600">
+        <application class="org.apache.pivot.tutorials.windows.Windows" width="720" height="600">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>
@@ -140,94 +140,86 @@ limitations under the License.
         <p>The content of each frame is defined in "frame.wtkx":</p>
 
         <source type="xml" location="org/apache/pivot/tutorials/windows/frame.wtkx">
-&lt;Frame wtkx:id="frame" icon="@application_form.png"
-    preferredWidth="480" preferredHeight="360"
-    xmlns:wtkx="http://pivot.apache.org/wtkx"
-    xmlns:content="org.apache.pivot.wtk.content"
-    xmlns="org.apache.pivot.wtk"&gt;
-    &lt;wtkx:define&gt;
-        &lt;wtkx:include wtkx:id="dialog" src="dialog.wtkx"/&gt;
-        &lt;wtkx:include wtkx:id="sheet" src="sheet.wtkx"/&gt;
-    &lt;/wtkx:define&gt;
+            <![CDATA[
+            <Frame wtkx:id="frame" icon="@application_form.png"
+                preferredWidth="480" preferredHeight="360"
+                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns:content="org.apache.pivot.wtk.content"
+                xmlns="org.apache.pivot.wtk">
+                <wtkx:define>
+                    <wtkx:include wtkx:id="dialog" src="dialog.wtkx"/>
+                    <wtkx:include wtkx:id="sheet" src="sheet.wtkx"/>
+                </wtkx:define>
 
-    &lt;wtkx:script&gt;
-    var palette = null;
-    &lt;/wtkx:script&gt;
+                <wtkx:script>
+                var palette = null;
+                </wtkx:script>
 
-    &lt;content&gt;
-        &lt;BoxPane orientation="vertical"&gt;
-            &lt;PushButton buttonData="Show Alert"&gt;
-                &lt;buttonPressListeners&gt;
-                    &lt;wtkx:script&gt;
-                    &lt;![CDATA[
-                    importPackage(org.apache.pivot.wtk);
-                    function buttonPressed(button) {
-                        Alert.alert("This is an Alert.", frame);
-                    }
-                    ]]&gt;
-                    &lt;/wtkx:script&gt;
-                &lt;/buttonPressListeners&gt;
-            &lt;/PushButton&gt;
+                <content>
+                    <BoxPane orientation="vertical">
+                        <PushButton buttonData="Show Alert">
+                            <buttonPressListeners>
+                                <wtkx:script>
+                                importPackage(org.apache.pivot.wtk);
+                                function buttonPressed(button) {
+                                    Alert.alert("This is an Alert.", frame);
+                                }
+                                </wtkx:script>
+                            </buttonPressListeners>
+                        </PushButton>
 
-            &lt;PushButton buttonData="Show Prompt"&gt;
-                &lt;buttonPressListeners&gt;
-                    &lt;wtkx:script&gt;
-                    &lt;![CDATA[
-                    importPackage(org.apache.pivot.wtk);
-                    function buttonPressed(button) {
-                        Prompt.prompt("This is a Prompt.", frame);
-                    }
-                    ]]&gt;
-                    &lt;/wtkx:script&gt;
-                &lt;/buttonPressListeners&gt;
-            &lt;/PushButton&gt;
+                        <PushButton buttonData="Show Prompt">
+                            <buttonPressListeners>
+                                <wtkx:script>
+                                importPackage(org.apache.pivot.wtk);
+                                function buttonPressed(button) {
+                                    Prompt.prompt("This is a Prompt.", frame);
+                                }
+                                </wtkx:script>
+                            </buttonPressListeners>
+                        </PushButton>
 
-            &lt;PushButton buttonData="Show Dialog"&gt;
-                &lt;buttonPressListeners&gt;
-                    &lt;wtkx:script&gt;
-                    &lt;![CDATA[
-                    importPackage(org.apache.pivot.wtk);
-                    function buttonPressed(button) {
-                        dialog.open(frame, null);
-                    }
-                    ]]&gt;
-                    &lt;/wtkx:script&gt;
-                &lt;/buttonPressListeners&gt;
-            &lt;/PushButton&gt;
+                        <PushButton buttonData="Show Dialog">
+                            <buttonPressListeners>
+                                <wtkx:script>
+                                importPackage(org.apache.pivot.wtk);
+                                function buttonPressed(button) {
+                                    dialog.open(frame, null);
+                                }
+                                </wtkx:script>
+                            </buttonPressListeners>
+                        </PushButton>
 
-            &lt;PushButton buttonData="Show Sheet"&gt;
-                &lt;buttonPressListeners&gt;
-                    &lt;wtkx:script&gt;
-                    &lt;![CDATA[
-                    importPackage(org.apache.pivot.wtk);
-                    function buttonPressed(button) {
-                        sheet.open(frame, null);
-                    }
-                    ]]&gt;
-                    &lt;/wtkx:script&gt;
-                &lt;/buttonPressListeners&gt;
-            &lt;/PushButton&gt;
+                        <PushButton buttonData="Show Sheet">
+                            <buttonPressListeners>
+                                <wtkx:script>
+                                importPackage(org.apache.pivot.wtk);
+                                function buttonPressed(button) {
+                                    sheet.open(frame, null);
+                                }
+                                </wtkx:script>
+                            </buttonPressListeners>
+                        </PushButton>
 
-            &lt;PushButton buttonData="Show Palette"&gt;
-                &lt;buttonPressListeners&gt;
-                    &lt;wtkx:script&gt;
-                    &lt;![CDATA[
-                    importPackage(org.apache.pivot.wtk);
-                    function buttonPressed(button) {
-                        if (palette == null) {
-                            palette = application.load("palette.wtkx");
-                            palette.setLocation(frame.getX() + frame.getWidth() + 20, frame.getY() + 20);
-                        }
+                        <PushButton buttonData="Show Palette">
+                            <buttonPressListeners>
+                                <wtkx:script>
+                                importPackage(org.apache.pivot.wtk);
+                                function buttonPressed(button) {
+                                    if (palette == null) {
+                                        palette = application.load("palette.wtkx");
+                                        palette.setLocation(frame.getX() + frame.getWidth() + 20, frame.getY() + 20);
+                                    }
 
-                        palette.open(frame);
-                    }
-                    ]]&gt;
-                    &lt;/wtkx:script&gt;
-                &lt;/buttonPressListeners&gt;
-            &lt;/PushButton&gt;
-        &lt;/BoxPane&gt;
-    &lt;/content&gt;
-&lt;/Frame&gt;
+                                    palette.open(frame);
+                                }
+                                </wtkx:script>
+                            </buttonPressListeners>
+                        </PushButton>
+                    </BoxPane>
+                </content>
+            </Frame>
+            ]]>
         </source>
         <p class="caption">frame.wtkx</p>
 
@@ -237,78 +229,84 @@ limitations under the License.
         </p>
 
         <source type="xml" location="org/apache/pivot/tutorials/windows/dialog.wtkx">
-&lt;Dialog wtkx:id="dialog" title="Dialog"
-    xmlns:wtkx="http://pivot.apache.org/wtkx"
-    xmlns="org.apache.pivot.wtk"&gt;
-    &lt;content&gt;
-        &lt;TablePane preferredWidth="320" preferredHeight="210"&gt;
-            &lt;columns&gt;
-                &lt;TablePane.Column width="1*"/&gt;
-            &lt;/columns&gt;
-            &lt;rows&gt;
-                &lt;TablePane.Row height="1*"&gt;
-                    &lt;Label text="This is a dialog."
-                        preferredWidth="320" preferredHeight="210"
-                        styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/&gt;
-                &lt;/TablePane.Row&gt;
-                &lt;TablePane.Row height="-1"&gt;
-                    &lt;BoxPane styles="{horizontalAlignment:'right'}"&gt;
-                        &lt;PushButton buttonData="Close"
-                            ButtonPressListener.buttonPressed="dialog.close()"/&gt;
-                    &lt;/BoxPane&gt;
-                &lt;/TablePane.Row&gt;
-            &lt;/rows&gt;
-        &lt;/TablePane&gt;
-    &lt;/content&gt;
-&lt;/Dialog&gt;
+            <![CDATA[
+            <Dialog wtkx:id="dialog" title="Dialog"
+                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns="org.apache.pivot.wtk">
+                <content>
+                    <TablePane preferredWidth="320" preferredHeight="210">
+                        <columns>
+                            <TablePane.Column width="1*"/>
+                        </columns>
+                        <rows>
+                            <TablePane.Row height="1*">
+                                <Label text="This is a dialog."
+                                    preferredWidth="320" preferredHeight="210"
+                                    styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
+                            </TablePane.Row>
+                            <TablePane.Row height="-1">
+                                <BoxPane styles="{horizontalAlignment:'right'}">
+                                    <PushButton buttonData="Close"
+                                        ButtonPressListener.buttonPressed="dialog.close()"/>
+                                </BoxPane>
+                            </TablePane.Row>
+                        </rows>
+                    </TablePane>
+                </content>
+            </Dialog>
+            ]]>
         </source>
         <p class="caption">dialog.wtkx</p>
 
         <source type="xml" location="org/apache/pivot/tutorials/windows/sheet.wtkx">
-&lt;Sheet wtkx:id="sheet" title="Sheet"
-    xmlns:wtkx="http://pivot.apache.org/wtkx"
-    xmlns="org.apache.pivot.wtk"&gt;
-    &lt;content&gt;
-        &lt;BoxPane styles="{verticalAlignment:'bottom'}"&gt;
-            &lt;TablePane&gt;
-                &lt;columns&gt;
-                    &lt;TablePane.Column width="1*"/&gt;
-                &lt;/columns&gt;
-                &lt;rows&gt;
-                    &lt;TablePane.Row height="1*"&gt;
-                        &lt;Label text="This is a sheet."
-                            preferredWidth="320" preferredHeight="210"
-                            styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/&gt;
-                    &lt;/TablePane.Row&gt;
-                    &lt;TablePane.Row height="-1"&gt;
-                        &lt;BoxPane styles="{horizontalAlignment:'right'}"&gt;
-                            &lt;PushButton buttonData="Close"
-                                ButtonPressListener.buttonPressed="sheet.close()"/&gt;
-                        &lt;/BoxPane&gt;
-                    &lt;/TablePane.Row&gt;
-                &lt;/rows&gt;
-            &lt;/TablePane&gt;
-        &lt;/BoxPane&gt;
-    &lt;/content&gt;
-&lt;/Sheet&gt;
+            <![CDATA[
+            <Sheet wtkx:id="sheet" title="Sheet"
+                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns="org.apache.pivot.wtk">
+                <content>
+                    <BoxPane styles="{verticalAlignment:'bottom'}">
+                        <TablePane>
+                            <columns>
+                                <TablePane.Column width="1*"/>
+                            </columns>
+                            <rows>
+                                <TablePane.Row height="1*">
+                                    <Label text="This is a sheet."
+                                        preferredWidth="320" preferredHeight="210"
+                                        styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
+                                </TablePane.Row>
+                                <TablePane.Row height="-1">
+                                    <BoxPane styles="{horizontalAlignment:'right'}">
+                                        <PushButton buttonData="Close"
+                                            ButtonPressListener.buttonPressed="sheet.close()"/>
+                                    </BoxPane>
+                                </TablePane.Row>
+                            </rows>
+                        </TablePane>
+                    </BoxPane>
+                </content>
+            </Sheet>
+            ]]>
         </source>
         <p class="caption">sheet.wtkx</p>
 
         <source type="xml" location="org/apache/pivot/tutorials/windows/palette.wtkx">
-&lt;Palette title="Palette" preferredWidth="60" preferredHeight="120"
-    xmlns:wtkx="http://pivot.apache.org/wtkx"
-    xmlns="org.apache.pivot.wtk"&gt;
-    &lt;content&gt;
-        &lt;FlowPane styles="{padding:1}"&gt;
-            &lt;PushButton buttonData="1" styles="{toolbar:true, minimumAspectRatio:1, maximumAspectRatio:1}"/&gt;
-            &lt;PushButton buttonData="2" styles="{toolbar:true, minimumAspectRatio:1, maximumAspectRatio:1}"/&gt;
-            &lt;PushButton buttonData="3" styles="{toolbar:true, minimumAspectRatio:1, maximumAspectRatio:1}"/&gt;
-            &lt;PushButton buttonData="4" styles="{toolbar:true, minimumAspectRatio:1, maximumAspectRatio:1}"/&gt;
-            &lt;PushButton buttonData="5" styles="{toolbar:true, minimumAspectRatio:1, maximumAspectRatio:1}"/&gt;
-            &lt;PushButton buttonData="6" styles="{toolbar:true, minimumAspectRatio:1, maximumAspectRatio:1}"/&gt;
-        &lt;/FlowPane&gt;
-    &lt;/content&gt;
-&lt;/Palette&gt;
+            <![CDATA[
+            <Palette title="Palette" preferredWidth="60" preferredHeight="120"
+                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns="org.apache.pivot.wtk">
+                <content>
+                    <FlowPane styles="{padding:1}">
+                        <PushButton buttonData="1" styles="{toolbar:true, minimumAspectRatio:1, maximumAspectRatio:1}"/>
+                        <PushButton buttonData="2" styles="{toolbar:true, minimumAspectRatio:1, maximumAspectRatio:1}"/>
+                        <PushButton buttonData="3" styles="{toolbar:true, minimumAspectRatio:1, maximumAspectRatio:1}"/>
+                        <PushButton buttonData="4" styles="{toolbar:true, minimumAspectRatio:1, maximumAspectRatio:1}"/>
+                        <PushButton buttonData="5" styles="{toolbar:true, minimumAspectRatio:1, maximumAspectRatio:1}"/>
+                        <PushButton buttonData="6" styles="{toolbar:true, minimumAspectRatio:1, maximumAspectRatio:1}"/>
+                    </FlowPane>
+                </content>
+            </Palette>
+            ]]>
         </source>
         <p class="caption">palette.wtkx</p>
 
@@ -318,79 +316,81 @@ limitations under the License.
         </p>
 
         <source type="java" location="org/apache/pivot/tutorials/windows/Windows.java">
-package org.apache.pivot.tutorials.windows;
+            <![CDATA[
+            package org.apache.pivot.tutorials.windows;
 
-import java.io.IOException;
+            import java.io.IOException;
 
-import org.apache.pivot.collections.Map;
-import org.apache.pivot.serialization.SerializationException;
-import org.apache.pivot.wtk.Application;
-import org.apache.pivot.wtk.DesktopApplicationContext;
-import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.Frame;
-import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKXSerializer;
+            import org.apache.pivot.collections.Map;
+            import org.apache.pivot.serialization.SerializationException;
+            import org.apache.pivot.wtk.Application;
+            import org.apache.pivot.wtk.DesktopApplicationContext;
+            import org.apache.pivot.wtk.Display;
+            import org.apache.pivot.wtk.Frame;
+            import org.apache.pivot.wtk.Window;
+            import org.apache.pivot.wtkx.WTKXSerializer;
 
-public class Windows implements Application {
-    private Display display = null;
+            public class Windows implements Application {
+                private Display display = null;
 
-    @Override
-    public void startup(Display display, Map&lt;String, String&gt; properties) throws Exception {
-        this.display = display;
+                @Override
+                public void startup(Display display, Map<String, String> properties) throws Exception {
+                    this.display = display;
 
-        int x = 0;
-        int y = 0;
+                    int x = 0;
+                    int y = 0;
 
-        for (int i = 0; i &lt; 3; i++) {
-            WTKXSerializer wtkxSerializer = new WTKXSerializer();
-            wtkxSerializer.put("application", this);
+                    for (int i = 0; i < 3; i++) {
+                        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                        wtkxSerializer.put("application", this);
 
-            Frame frame;
-            try {
-                frame = (Frame)wtkxSerializer.readObject(Windows.this, "frame.wtkx");
-            } catch (SerializationException exception) {
-                throw new RuntimeException(exception);
-            } catch (IOException exception) {
-                throw new RuntimeException(exception);
+                        Frame frame;
+                        try {
+                            frame = (Frame)wtkxSerializer.readObject(Windows.this, "frame.wtkx");
+                        } catch (SerializationException exception) {
+                            throw new RuntimeException(exception);
+                        } catch (IOException exception) {
+                            throw new RuntimeException(exception);
+                        }
+
+                        frame.setTitle("Frame " + (i + 1));
+                        frame.setLocation(x, y);
+                        x += 20;
+                        y += 20;
+
+                        frame.open(display);
+                    }
+                }
+
+                @Override
+                public boolean shutdown(boolean optional) {
+                    for (int i = display.getLength() - 1; i >= 0; i--) {
+                        Window window = (Window)display.get(i);
+                        window.close();
+                    }
+
+                    return false;
+                }
+
+                @Override
+                public void suspend() {
+                }
+
+                @Override
+                public void resume() {
+                }
+
+                public Window load(String fileName)
+                    throws SerializationException, IOException {
+                    WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                    return (Window)wtkxSerializer.readObject(this, fileName);
+                }
+
+                public static void main(String[] args) {
+                    DesktopApplicationContext.main(Windows.class, args);
+                }
             }
-
-            frame.setTitle("Frame " + (i + 1));
-            frame.setLocation(x, y);
-            x += 20;
-            y += 20;
-
-            frame.open(display);
-        }
-    }
-
-    @Override
-    public boolean shutdown(boolean optional) {
-        for (int i = display.getLength() - 1; i &gt;= 0; i--) {
-            Window window = (Window)display.get(i);
-            window.close();
-        }
-
-        return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
-    public Window load(String fileName)
-        throws SerializationException, IOException {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        return (Window)wtkxSerializer.readObject(this, fileName);
-    }
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(Windows.class, args);
-    }
-}
+            ]]>
         </source>
     </body>
 </document>
