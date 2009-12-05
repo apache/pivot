@@ -56,14 +56,15 @@ limitations under the License.
 
                 <xsl:variable name="index" select="document('../www/index.xml')/document"/>
                 <xsl:variable name="id" select="@id"/>
+                <xsl:variable name="index-node" select="$index//document-item[@id=$id]"/>
 
                 <xsl:variable name="next-id">
                     <xsl:choose>
-                        <xsl:when test="$index//document-item[@id=$id]/document-item">
-                            <xsl:value-of select="$index//document-item[@id=$id]/document-item/@id"/>
+                        <xsl:when test="$index-node/document-item">
+                            <xsl:value-of select="$index-node/document-item/@id"/>
                         </xsl:when>
-                        <xsl:when test="$index//document-item[@id=$id]/following::document-item">
-                            <xsl:value-of select="$index//document-item[@id=$id]/following::document-item/@id"/>
+                        <xsl:when test="$index-node/following::document-item">
+                            <xsl:value-of select="$index-node/following::document-item/@id"/>
                         </xsl:when>
                     </xsl:choose>
                 </xsl:variable>
