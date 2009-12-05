@@ -53,7 +53,7 @@ limitations under the License.
             The WTKX for this example is shown below:
         </p>
 
-        <source type="xml">
+        <source type="xml" location="org/apache/pivot/tutorials/layout/borders.wtkx">
             <![CDATA[
             <Window title="Borders" maximized="true"
                 xmlns:wtkx="http://pivot.apache.org/wtkx"

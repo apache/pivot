@@ -22,5 +22,315 @@ limitations under the License.
     </properties>
 
     <body>
+        <p>
+            Card panes are the most basic of the navigation components. They present a simple
+            "card stack" of components, only one of which is visible at a time.
+        </p>
+
+        <p>
+            Unlike other navigation components, card panes don't include any "chrome" or intrinsic
+            means of navigation - all selection management must be performed programmatically by
+            the caller. While this imposes more responsibility on the developer, it is also the most
+            flexible, giving the developer complete control over the navigation experience.
+        </p>
+
+        <p>
+            By default, the preferred size of a card pane is the maximum of the preferred widths
+            and heights of the cards, and each card is sized to fill the entire space. However,
+            card panes can also dynamically resize to match the preferred size of the currently
+            selected card. Additionally, a transition effect can be applied to the selection change
+            event, providing a more visually engaging experience when navigating between cards.
+            <tt>CardPane</tt> currently supports the following transition effects:
+        </p>
+
+        <ul>
+            <li>Crossfade</li>
+            <li>Horizontal slide ("wipe" left/right)</li>
+            <li>Vertical slide ("wipe" up/down)</li>
+            <li>Horizonal Flip</li>
+            <li>Vertical Flip</li>
+            <li>Zoom</li>
+        </ul>
+
+        <p>
+            Note that, by default, "directional" transitions (such as slide and zoom) will appear
+            to move forward when transitioning from a lower card index to a higher card index, and
+            vice versa. This means that, when moving from the last card to the first card, for
+            example, the transition will appear to move forward rather than backward. Since this
+            may not always be the desired user experience, card panes can also be specified as
+            circular, preserving the apparent direction when the selection wraps.
+        </p>
+
+        <p>
+            The following application demonstrates the behavior of <tt>CardPane</tt>:
+        </p>
+
+        <application class="org.apache.pivot.tutorials.navigation.CardPanes"
+            width="640" height="480">
+            <libraries>
+                <library>core</library>
+                <library>wtk</library>
+                <library>wtk-terra</library>
+                <library>tutorials</library>
+            </libraries>
+        </application>
+
+        <p>
+            The WTKX source for the application is shown below. A set of buttons is provided to
+            allow the user to control the styles that affect the card pane's presentation;
+            specifically, "sizeToSelection" and "selectionChangeEffect". The card pane itself is
+            contained within a <tt>FlowPane</tt> so that its response to changes in these styles is
+            visible:
+        </p>
+
+        <source type="xml" location="org/apache/pivot/tutorials/navigation/card_panes.wtkx">
+            <![CDATA[
+            <Window title="Card Panes" maximized="true"
+                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns="org.apache.pivot.wtk">
+                <content>
+                    <TablePane styles="{padding:8, horizontalSpacing:6}">
+                        <columns>
+                            <TablePane.Column width="1*"/>
+                            <TablePane.Column/>
+                        </columns>
+                        <rows>
+                            <TablePane.Row height="1*">
+                                <Border styles="{padding:12}">
+                                    <content>
+                                        <TablePane styles="{verticalSpacing:6}">
+                                            <columns>
+                                                <TablePane.Column width="1*"/>
+                                            </columns>
+                                            <rows>
+                                                <TablePane.Row height="1*">
+                                                    <BoxPane styles="{horizontalAlignment:'center', verticalAlignment:'center',
+                                                        backgroundColor:'#cccccc'}">
+                                                        <Border styles="{padding:6}">
+                                                            <content>
+                                                                <CardPane wtkx:id="cardPane">
+                                                                    <ImageView image="org/apache/pivot/tutorials/IMG_0725_2.jpg"/>
+                                                                    <ImageView image="org/apache/pivot/tutorials/IMG_0735_2.jpg"/>
+                                                                    <ImageView image="org/apache/pivot/tutorials/IMG_0767_2.jpg"/>
+                                                                </CardPane>
+                                                            </content>
+                                                        </Border>
+                                                    </BoxPane>
+                                                </TablePane.Row>
+                                                <TablePane.Row>
+                                                    <Separator/>
+                                                </TablePane.Row>
+                                                <TablePane.Row>
+                                                    <BoxPane styles="{horizontalAlignment:'center'}">
+                                                        <LinkButton wtkx:id="previousButton" buttonData="Previous"/>
+                                                        <LinkButton wtkx:id="nextButton" buttonData="Next"/>
+                                                    </BoxPane>
+                                                </TablePane.Row>
+                                            </rows>
+                                        </TablePane>
+                                    </content>
+                                </Border>
+
+                                <Border styles="{padding:2}">
+                                    <content>
+                                        <BoxPane orientation="vertical" styles="{padding:4, spacing:6}">
+                                            <Checkbox wtkx:id="sizeToSelectionCheckbox" buttonData="Size to selection"/>
+                                            <Label text="Selection change effect:"/>
+
+                                            <wtkx:define>
+                                                <ButtonGroup wtkx:id="selectionChangeEffect"/>
+                                            </wtkx:define>
+
+                                            <RadioButton wtkx:id="crossfadeRadioButton" buttonData="Crossfade" selected="true"
+                                                buttonGroup="$selectionChangeEffect"/>
+                                            <RadioButton wtkx:id="horizontalSlideRadioButton" buttonData="Horizontal Slide"
+                                                buttonGroup="$selectionChangeEffect"/>
+                                            <RadioButton wtkx:id="verticalSlideRadioButton" buttonData="Vertical Slide"
+                                                buttonGroup="$selectionChangeEffect"/>
+                                            <RadioButton wtkx:id="horizontalFlipRadioButton" buttonData="Horizontal Flip"
+                                                buttonGroup="$selectionChangeEffect"/>
+                                            <RadioButton wtkx:id="verticalFlipRadioButton" buttonData="Vertical Flip"
+                                                buttonGroup="$selectionChangeEffect"/>
+                                            <RadioButton wtkx:id="zoomRadioButton" buttonData="Zoom"
+                                                buttonGroup="$selectionChangeEffect"/>
+                                            <RadioButton wtkx:id="noneRadioButton" buttonData="None"
+                                                buttonGroup="$selectionChangeEffect"/>
+                                        </BoxPane>
+                                    </content>
+                                </Border>
+                            </TablePane.Row>
+                        </rows>
+                    </TablePane>
+                </content>
+            </Window>
+            ]]>
+        </source>
+
+        <p>
+            The Java source is as follows. The <tt>updateCardPane()</tt> method applies the
+            appropriate styles to the card pane based on the button state:
+        </p>
+
+        <source type="java" location="org/apache/pivot/tutorials/navigation/CardPanes.java">
+            <![CDATA[
+            package org.apache.pivot.tutorials.navigation;
+
+            import org.apache.pivot.collections.Map;
+            import org.apache.pivot.wtk.Application;
+            import org.apache.pivot.wtk.Button;
+            import org.apache.pivot.wtk.ButtonPressListener;
+            import org.apache.pivot.wtk.ButtonStateListener;
+            import org.apache.pivot.wtk.CardPane;
+            import org.apache.pivot.wtk.CardPaneListener;
+            import org.apache.pivot.wtk.Checkbox;
+            import org.apache.pivot.wtk.DesktopApplicationContext;
+            import org.apache.pivot.wtk.Display;
+            import org.apache.pivot.wtk.LinkButton;
+            import org.apache.pivot.wtk.RadioButton;
+            import org.apache.pivot.wtk.Window;
+            import org.apache.pivot.wtk.skin.CardPaneSkin;
+            import org.apache.pivot.wtkx.WTKXSerializer;
+
+            public class CardPanes implements Application {
+                private Window window = null;
+                private CardPane cardPane = null;
+                private LinkButton previousButton = null;
+                private LinkButton nextButton = null;
+                private Checkbox sizeToSelectionCheckbox = null;
+                private RadioButton crossfadeRadioButton = null;
+                private RadioButton horizontalSlideRadioButton = null;
+                private RadioButton verticalSlideRadioButton = null;
+                private RadioButton horizontalFlipRadioButton = null;
+                private RadioButton verticalFlipRadioButton = null;
+                private RadioButton zoomRadioButton = null;
+                private RadioButton noneRadioButton = null;
+
+                @Override
+                public void startup(Display display, Map<String, String> properties)
+                    throws Exception {
+                    WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                    window = (Window)wtkxSerializer.readObject(this, "card_panes.wtkx");
+                    cardPane = (CardPane)wtkxSerializer.get("cardPane");
+                    previousButton = (LinkButton)wtkxSerializer.get("previousButton");
+                    nextButton = (LinkButton)wtkxSerializer.get("nextButton");
+                    sizeToSelectionCheckbox = (Checkbox)wtkxSerializer.get("sizeToSelectionCheckbox");
+
+
+                    crossfadeRadioButton = (RadioButton)wtkxSerializer.get("crossfadeRadioButton");
+                    horizontalSlideRadioButton = (RadioButton)wtkxSerializer.get("horizontalSlideRadioButton");
+                    verticalSlideRadioButton = (RadioButton)wtkxSerializer.get("verticalSlideRadioButton");
+                    horizontalFlipRadioButton = (RadioButton)wtkxSerializer.get("horizontalFlipRadioButton");
+                    verticalFlipRadioButton = (RadioButton)wtkxSerializer.get("verticalFlipRadioButton");
+                    zoomRadioButton = (RadioButton)wtkxSerializer.get("zoomRadioButton");
+                    noneRadioButton = (RadioButton)wtkxSerializer.get("noneRadioButton");
+
+                    cardPane.getCardPaneListeners().add(new CardPaneListener.Adapter() {
+                        @Override
+                        public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex) {
+                            updateLinkButtonState();
+                        }
+                    });
+
+                    previousButton.getButtonPressListeners().add(new ButtonPressListener() {
+                        @Override
+                        public void buttonPressed(Button button) {
+                            cardPane.setSelectedIndex(cardPane.getSelectedIndex() - 1);
+                        }
+                    });
+
+                    nextButton.getButtonPressListeners().add(new ButtonPressListener() {
+                        @Override
+                        public void buttonPressed(Button button) {
+                            cardPane.setSelectedIndex(cardPane.getSelectedIndex() + 1);
+                        }
+                    });
+
+                    ButtonStateListener checkboxStateListener = new ButtonStateListener() {
+                        @Override
+                        public void stateChanged(Button button, Button.State previousState) {
+                            updateCardPane();
+                        }
+                    };
+
+                    sizeToSelectionCheckbox.getButtonStateListeners().add(checkboxStateListener);
+
+                    ButtonStateListener radioButtonStateListener = new ButtonStateListener() {
+                        @Override
+                        public void stateChanged(Button button, Button.State previousState) {
+                            if (button.isSelected()) {
+                                updateCardPane();
+                            }
+                        }
+                    };
+
+                    crossfadeRadioButton.getButtonStateListeners().add(radioButtonStateListener);
+                    horizontalSlideRadioButton.getButtonStateListeners().add(radioButtonStateListener);
+                    verticalSlideRadioButton.getButtonStateListeners().add(radioButtonStateListener);
+                    horizontalFlipRadioButton.getButtonStateListeners().add(radioButtonStateListener);
+                    verticalFlipRadioButton.getButtonStateListeners().add(radioButtonStateListener);
+                    zoomRadioButton.getButtonStateListeners().add(radioButtonStateListener);
+                    noneRadioButton.getButtonStateListeners().add(radioButtonStateListener);
+
+                    updateCardPane();
+                    updateLinkButtonState();
+
+                    window.open(display);
+                }
+
+                @Override
+                public boolean shutdown(boolean optional) {
+                    if (window != null) {
+                        window.close();
+                    }
+
+                    return false;
+                }
+
+                @Override
+                public void suspend() {
+                }
+
+                @Override
+                public void resume() {
+                }
+
+                private void updateCardPane() {
+                    cardPane.getStyles().put("sizeToSelection", sizeToSelectionCheckbox.isSelected());
+
+                    if (crossfadeRadioButton.isSelected()) {
+                        cardPane.getStyles().put("selectionChangeEffect",
+                            CardPaneSkin.SelectionChangeEffect.CROSSFADE);
+                    } else if (horizontalSlideRadioButton.isSelected()) {
+                        cardPane.getStyles().put("selectionChangeEffect",
+                            CardPaneSkin.SelectionChangeEffect.HORIZONTAL_SLIDE);
+                    } else if (verticalSlideRadioButton.isSelected()) {
+                        cardPane.getStyles().put("selectionChangeEffect",
+                            CardPaneSkin.SelectionChangeEffect.VERTICAL_SLIDE);
+                    } else if (horizontalFlipRadioButton.isSelected()) {
+                        cardPane.getStyles().put("selectionChangeEffect",
+                            CardPaneSkin.SelectionChangeEffect.HORIZONTAL_FLIP);
+                    } else if (verticalFlipRadioButton.isSelected()) {
+                        cardPane.getStyles().put("selectionChangeEffect",
+                            CardPaneSkin.SelectionChangeEffect.VERTICAL_FLIP);
+                    } else if (zoomRadioButton.isSelected()) {
+                        cardPane.getStyles().put("selectionChangeEffect",
+                            CardPaneSkin.SelectionChangeEffect.ZOOM);
+                    } else {
+                        cardPane.getStyles().put("selectionChangeEffect", null);
+                    }
+                }
+
+                private void updateLinkButtonState() {
+                    int selectedIndex = cardPane.getSelectedIndex();
+                    previousButton.setEnabled(selectedIndex > 0);
+                    nextButton.setEnabled(selectedIndex < cardPane.getLength() - 1);
+                }
+
+                public static void main(String[] args) {
+                    DesktopApplicationContext.main(CardPanes.class, args);
+                }
+            }
+            ]]>
+        </source>
     </body>
 </document>

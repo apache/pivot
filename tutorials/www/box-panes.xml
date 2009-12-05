@@ -74,7 +74,7 @@ limitations under the License.
             The WTKX source for the application is shown below:
         </p>
 
-        <source type="xml">
+        <source type="xml" location="org/apache/pivot/tutorials/layout/box_panes.wtkx">
             <![CDATA[
             <Window title="Box Panes" maximized="true"
                 xmlns:wtkx="http://pivot.apache.org/wtkx"
@@ -135,7 +135,7 @@ limitations under the License.
             responds to changes in the radio buttons' state:
         </p>
 
-        <source type="java">
+        <source type="java" location="org/apache/pivot/tutorials/layout/BoxPanes.java">
             <![CDATA[
             package org.apache.pivot.tutorials.layout;
 

@@ -94,7 +94,7 @@ limitations under the License.
             The WTKX for this example is shown below:
         </p>
 
-        <source type="xml">
+        <source type="xml" location="org/apache/pivot/tutorials/backgroundtasks/background_tasks.wtkx">
             <![CDATA[
             <Window title="Background Tasks" maximized="true"
                 xmlns:wtkx="http://pivot.apache.org/wtkx"
@@ -121,7 +121,7 @@ limitations under the License.
             milliseconds and then returns a simulated result value:
         </p>
 
-        <source type="java">
+        <source type="java" location="org/apache/pivot/tutorials/backgroundtasks/SleepTask.java">
             <![CDATA[
             package org.apache.pivot.tutorials.backgroundtasks;
 
@@ -149,7 +149,7 @@ limitations under the License.
             The Java source for the application is shown below:
         </p>
 
-        <source type="java">
+        <source type="java" location="org/apache/pivot/tutorials/backgroundtasks/BackgroundTasks.java">
             <![CDATA[
             package org.apache.pivot.tutorials.backgroundtasks;
 

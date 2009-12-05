@@ -93,7 +93,7 @@ limitations under the License.
             property of the indicators:
         </p>
 
-        <source type="xml" location="org/apache/pivot/tutorials/navigation/progress/activity_indicators.wtkx">
+        <source type="java" location="org/apache/pivot/tutorials/navigation/progress/ActivityIndicators.java">
             <![CDATA[
             package org.apache.pivot.tutorials.progress;
 

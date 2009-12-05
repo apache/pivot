@@ -22,5 +22,94 @@ limitations under the License.
     </properties>
 
     <body>
+        <p>
+            The following example demonstrates how to use the <tt>Checkbox</tt> class in a Pivot
+            application. Selecting a checkbox shows or hides an associated icon:
+        </p>
+
+        <application class="org.apache.pivot.wtk.ScriptApplication"
+            width="140" height="100">
+            <libraries>
+                <library>core</library>
+                <library>wtk</library>
+                <library>wtk-terra</library>
+                <library>tutorials</library>
+            </libraries>
+            <startup-properties>
+                <src>org/apache/pivot/tutorials/buttons/checkboxes.wtkx</src>
+            </startup-properties>
+        </application>
+
+        <p>
+            The WTKX source for the example is below:
+        </p>
+
+        <source type="xml" location="org/apache/pivot/tutorials/buttons/checkboxes.wtkx">
+            <![CDATA[
+            <Window title="Checkboxes" maximized="true"
+                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns="org.apache.pivot.wtk">
+                <content>
+                    <TablePane styles="{showHorizontalGridLines: true, showVerticalGridLines:true,
+                        padding:4, horizontalSpacing:1, verticalSpacing:1,
+                        horizontalGridColor:10, verticalGridColor:10}">
+                        <columns>
+                            <TablePane.Column width="-1"/>
+                            <TablePane.Column width="24"/>
+                        </columns>
+
+                        <rows>
+                            <TablePane.Row height="24">
+                                <BoxPane styles="{verticalAlignment:'center'}">
+                                    <Checkbox buttonData="Bell"
+                                        ButtonPressListener.buttonPressed="bellImageView.setVisible(!bellImageView.isVisible());"/>
+                                </BoxPane>
+                                <ImageView wtkx:id="bellImageView" image="org/apache/pivot/tutorials/bell.png" visible="false"/>
+                            </TablePane.Row>
+
+                            <TablePane.Row height="24">
+                                <BoxPane styles="{verticalAlignment:'center'}">
+                                    <Checkbox buttonData="Clock"
+                                        ButtonPressListener.buttonPressed="clockImageView.setVisible(!clockImageView.isVisible());"/>
+                                </BoxPane>
+                                <ImageView wtkx:id="clockImageView" image="org/apache/pivot/tutorials/clock.png" visible="false"/>
+                            </TablePane.Row>
+
+                            <TablePane.Row height="24">
+                                <BoxPane styles="{verticalAlignment:'center'}">
+                                    <Checkbox buttonData="House"
+                                        ButtonPressListener.buttonPressed="houseImageView.setVisible(!houseImageView.isVisible());"/>
+                                </BoxPane>
+                                <ImageView wtkx:id="houseImageView" image="org/apache/pivot/tutorials/house.png" visible="false"/>
+                            </TablePane.Row>
+                        </rows>
+                    </TablePane>
+                </content>
+            </Window>
+            ]]>
+        </source>
+
+        <p>
+            Note that this example uses the <tt>TablePane</tt> layout container. <tt>TablePane</tt>
+            defines a two-dimensional grid structure and is similar to an HTML table. It is
+            discussed in more detail in the <a href="layout_containers.html">Layout Containers</a>
+            section.
+        </p>
+
+        <p>
+            Note also that this example defines some button handler logic directly within the WTKX
+            file. The "ButtonPressListener.buttonPressed" attribute of each <tt>PushButton</tt>
+            contains JavaScript code that toggles the visibility of the corresponding image view
+            when the handler is invoked, causing the image to appear and disappear based on the
+            checkbox's selection state. It is common in Pivot development to implement simple event
+            handlers in script code this way, since it can often be much less verbose than
+            performing the same logic in Java.
+        </p>
+
+        <p>
+            In fact, this application does not implement any logic in Java at all and is launched
+            using <tt>ScriptApplication</tt>, a class provided by the Pivot platform to handle this
+            fairly common use case.
+        </p>
     </body>
 </document>

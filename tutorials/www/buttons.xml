@@ -22,5 +22,53 @@ limitations under the License.
     </properties>
 
     <body>
+        <p>
+            Pivot supports the standard set of common button types including push buttons, radio
+            buttons, and checkboxes. A button resembling an HTML hyperlink is also supported.
+        </p>
+
+        <p><img src="platform_overview/buttons.png"/></p>
+        <p class="caption">Some Pivot buttons.</p>
+
+        <p>
+            Pivot also provides a number of additional button classes that expand on the
+            functionality offered by the basic button types:
+        </p>
+
+        <ul>
+            <li>
+                <p>
+                    <tt>ListButton</tt> - Also known as "drop-downs", list buttons are similar to
+                    an HTML <tt>&lt;select&gt;</tt> element. They are discussed in the
+                    <a href="lists.html">Lists</a> section of the tutorial.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <tt>MenuButton</tt> - Menu buttons are similar to list buttons but provide
+                    drop-down access to a popup menu rather than a list; they are discussed in the
+                    <a href="menus.html">Menus</a> section.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <tt>CalendarButton</tt> - Provide drop-down access to a calendar component;
+                    discussed in the <a href="calendars.html">Calendars</a> section.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <tt>ColorChooserButton</tt> - Provide drop-down access to a color chooser
+                    component; discussed in the <a href="color_choosers.html">Color Choosers</a>
+                    section.
+                </p>
+            </li>
+        </ul>
+
+        <p>
+            <tt>Menu.Item</tt> and <tt>MenuBar.Item</tt> are two additional Button subclasses. They
+            are used primarily by the menu components and are discussed in the
+            <a href="menus.html">menus</a> section.
+        </p>
     </body>
 </document>

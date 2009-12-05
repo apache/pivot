@@ -22,5 +22,266 @@ limitations under the License.
     </properties>
 
     <body>
+        <p>
+            The clipboard is a shared storage area that can be used to transfer data within an
+            application or between multiple applications. Content placed on the clipboard can be
+            copied (or "pasted") into another section of an application or into a completely
+            different application.
+        </p>
+
+        <p>
+            The following application demonstrates the use of the clipboard. It is signed to allow
+            it to access the system clipboard; untrusted Pivot applications can only perform copy
+            and paste with a local clipboard whose content is not shared with other applications.
+        </p>
+
+        <application class="org.apache.pivot.wtk.ScriptApplication"
+            width="720" height="480" signed="true">
+            <libraries>
+                <library>core</library>
+                <library>wtk</library>
+                <library>wtk-terra</library>
+                <library>tutorials</library>
+            </libraries>
+            <startup-properties>
+                <src>org/apache/pivot/tutorials/clipboard/clipboard.wtkx</src>
+            </startup-properties>
+        </application>
+
+        <p>
+            The application source code consists of two files: a main WTKX file that declares the
+            structure of the user interface along with some simple event handlers, and a JavaScript
+            file that defines two functions: <tt>copy()</tt> and <tt>paste()</tt>. These functions
+            are invoked by the button press listeners attached to the UI elements declared in the
+            WTKX file. The WTKX source code for the example is shown below:
+        </p>
+
+        <source type="xml" location="org/apache/pivot/tutorials/layout/box_panes.wtkx">
+            <![CDATA[
+            <Window title="Clipboard" maximized="true"
+                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns="org.apache.pivot.wtk">
+                <wtkx:script src="clipboard.js"/>
+
+                <windowStateListeners>
+                    <wtkx:script>
+                    function windowOpened(window) {
+                        sourceImageButtonGroup.setSelection(sourceImageButton1);
+                        sourceImageButton1.requestFocus();
+                    }
+                    </wtkx:script>
+                </windowStateListeners>
+
+                <content>
+                    <TablePane styles="{horizontalSpacing:4, verticalSpacing:4}">
+                        <columns>
+                            <TablePane.Column width="1*"/>
+                            <TablePane.Column width="1*"/>
+                        </columns>
+                        <rows>
+                            <TablePane.Row height="1*">
+                                <Border styles="{padding:2}">
+                                    <content>
+                                        <CardPane wtkx:id="sourceImageCardPane" styles="{padding:4}">
+                                            <ImageView image="org/apache/pivot/tutorials/IMG_0725_2.jpg"/>
+                                            <ImageView image="org/apache/pivot/tutorials/IMG_0735_2.jpg"/>
+                                            <ImageView image="org/apache/pivot/tutorials/IMG_0767_2.jpg"/>
+                                        </CardPane>
+                                    </content>
+                                </Border>
+                                <Border styles="{padding:2}">
+                                    <content>
+                                        <CardPane selectedIndex="0" styles="{padding:4}">
+                                            <ImageView wtkx:id="destinationImageView"/>
+                                        </CardPane>
+                                    </content>
+                                </Border>
+                            </TablePane.Row>
+
+                            <TablePane.Row height="-1">
+                                <BoxPane orientation="vertical" styles="{fill:true}">
+                                    <BoxPane wtkx:id="sourceImageButtonBoxPane"
+                                        styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                                        <wtkx:define>
+                                            <ButtonGroup wtkx:id="sourceImageButtonGroup">
+                                                <buttonGroupListeners>
+                                                    <wtkx:script>
+                                                    function selectionChanged(buttonGroup, previousSelection) {
+                                                        var selection = buttonGroup.getSelection();
+
+                                                        if (selection != null) {
+                                                            var index = sourceImageButtonBoxPane.indexOf(selection);
+                                                            sourceImageCardPane.setSelectedIndex(index);
+                                                        }
+                                                    }
+                                                    </wtkx:script>
+                                                </buttonGroupListeners>
+                                            </ButtonGroup>
+                                        </wtkx:define>
+
+                                        <PushButton wtkx:id="sourceImageButton1"
+                                            buttonData="IMG_0725_2.jpg" toggleButton="true"
+                                            buttonGroup="$sourceImageButtonGroup"/>
+                                        <PushButton wtkx:id="sourceImageButton2"
+                                            buttonData="IMG_0735_2.jpg" toggleButton="true"
+                                            buttonGroup="$sourceImageButtonGroup"/>
+                                        <PushButton wtkx:id="sourceImageButton3"
+                                            buttonData="IMG_0767_2.jpg" toggleButton="true"
+                                            buttonGroup="$sourceImageButtonGroup"/>
+                                    </BoxPane>
+
+                                    <BoxPane styles="{horizontalAlignment:'center'}">
+                                        <PushButton wtkx:id="copyButton" buttonData="Copy"
+                                            ButtonPressListener.buttonPressed="copy()"/>
+                                    </BoxPane>
+                                </BoxPane>
+
+                                <BoxPane styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                                    <PushButton wtkx:id="pasteButton" buttonData="Paste"
+                                        ButtonPressListener.buttonPressed="paste()"/>
+                                </BoxPane>
+                            </TablePane.Row>
+                        </rows>
+                    </TablePane>
+                </content>
+            </Window>
+            ]]>
+        </source>
+
+        <p>
+            Like most Pivot tutorial examples, it defines a single top-level, maximized,
+            undecorated <tt>Window</tt> instance that contains the rest of the UI. The source
+            images are contained in a set of <tt>ImageView</tt> components stored in a
+            <tt>CardPane</tt>, and a set of toggle-style <tt>PushButton</tt>s is used to navigate
+            between them. Another <tt>ImageView</tt> is used to display the image content pasted
+            from the clipboard.
+        </p>
+
+        <p>The file defines several event handlers:</p>
+
+        <ul>
+            <li>
+                <p>A window state listener that initializes the selection of the card pane when the window is opened:</p>
+
+                <source type="xml">
+                    <![CDATA[
+                    <windowStateListeners>
+                        <wtkx:script>
+                        function windowOpened(window) {
+                            sourceImageButtonGroup.setSelection(sourceImageButton1);
+                            sourceImageButton1.requestFocus();
+                        }
+                        </wtkx:script>
+                    </windowStateListeners>
+                    ]]>
+                </source>
+            </li>
+            <li>
+                <p>A button group listener that changes the card pane's selection in response to a button group selection change:</p>
+                <source type="xml">
+                    <![CDATA[
+                    <buttonGroupListeners>
+                        <wtkx:script>
+                        function selectionChanged(buttonGroup, previousSelection) {
+                            var selection = buttonGroup.getSelection();
+
+                            if (selection != null) {
+                                var index = sourceImageButtonBoxPane.indexOf(selection);
+                                sourceImageCardPane.setSelectedIndex(index);
+                            }
+                        }
+                        </wtkx:script>
+                    </buttonGroupListeners>
+                    ]]>
+                </source>
+            </li>
+            <li>
+                <p>A button press listener that calls the <tt>copy()</tt> function when the "Copy" button is pressed:</p>
+                <source type="xml">
+                    <![CDATA[
+                    <PushButton wtkx:id="copyButton" buttonData="Copy"
+                        ButtonPressListener.buttonPressed="copy()"/>
+                    ]]>
+                </source>
+            </li>
+            <li>
+                <p>A button press listener that calls the <tt>paste()</tt> function when the "Paste" button is pressed:</p>
+                <source type="xml">
+                    <![CDATA[
+                    <PushButton wtkx:id="pasteButton" buttonData="Paste"
+                        ButtonPressListener.buttonPressed="paste()"/>
+                    ]]>
+                </source>
+            </li>
+        </ul>
+
+        <p>
+            Since all of the application's logic is implemented in script, there is no Java source
+            file for this example. The contents of "clipboard.js" are shown below:
+        </p>
+
+        <source type="javascript">
+            <![CDATA[
+            importPackage(org.apache.pivot.wtk);
+
+            function copy() {
+                // Copy the selected image to the clipboard
+                var selectedSourceIndex = sourceImageCardPane.getSelectedIndex();
+                var sourceImageView = sourceImageCardPane.get(selectedSourceIndex);
+                var sourceImage = sourceImageView.getImage();
+
+                var content = new LocalManifest();
+                content.putImage(sourceImage);
+
+                Clipboard.setContent(content);
+            }
+
+            function paste() {
+                // Paste any available image from the clipboard
+                var content = Clipboard.getContent();
+
+                if (content != null) {
+                    var image = content.getImage();
+
+                    if (image != null) {
+                        destinationImageView.setImage(image);
+                    }
+                }
+            }
+            ]]>
+        </source>
+
+        <p>
+            These two functions perform the actual copying and pasting of the image data. The
+            <tt>copy()</tt> function gets a reference to the actual image displayed by the selected
+            card (an instance of <tt>org.apache.pivot.wtk.media.Image</tt>) and sets it as the
+            "image" property of a <tt>LocalManifest</tt> instance. <tt>LocalManifest</tt> is a
+            concrete implementation of the abstract <tt>Manifest</tt> class that is used to
+            represent the source data in a clipboard transaction. In contrast, a
+            <tt>RemoteManifest</tt> represents data obtained from the clipboard. Local manifests
+            are created by an application, whereas remote manifests are created by the system.
+        </p>
+
+        <p>
+            A manifest encapsulates the content that may be placed on the clipboard by a Pivot
+            application. It can represent the data in a variety of "flavors": as text, as an image,
+            as a list of files, as a URL, or as a custom data format. An application may provide
+            one or more flavors depending on the nature of the data. An application that is
+            interested in consuming the data can then choose the most appropriate format based on
+            the available flavors.
+        </p>
+
+        <p>
+            Once the manifest has been created and populated, it is placed on the clipboard via
+            the <tt>Clipboard.setContent()</tt> method. It is now available for other applications
+            to consume.
+        </p>
+
+        <p>
+            The <tt>paste()</tt> method performs the opposite transaction. It retrieves the current
+            clipboard contents and checks for the presence of an image flavor. If available, it
+            extracts the image content and sets it as the source of the "destinationImageView"
+            component.
+        </p>
     </body>
 </document>
