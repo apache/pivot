@@ -41,7 +41,7 @@ limitations under the License.
             description of Pivot's markup language, before browsing the tutorials themsevles.
         </p>
 
-        <item-group name="Introduction">
+        <item-group name="Introduction to Pivot">
             <document-item id="sample-application"/>
             <document-item id="platform-overview"/>
             <document-item id="hello-world">
@@ -122,17 +122,16 @@ limitations under the License.
             <document-item id="summary"/>
         </item-group>
 
-        <item-group name="Practical Example: &quot;Stock Tracker&quot;">
-            <document-item id="stock-tracker">
-                <document-item id="stock-tracker.ui"/>
-                <document-item id="stock-tracker.events"/>
-                <document-item id="stock-tracker.web-queries"/>
-                <document-item id="stock-tracker.data-binding"/>
-                <document-item id="stock-tracker.localization"/>
-            </document-item>
+        <item-group name="A Practical Example">
+            <document-item id="stock-tracker"/>
+            <document-item id="stock-tracker.ui"/>
+            <document-item id="stock-tracker.events"/>
+            <document-item id="stock-tracker.web-queries"/>
+            <document-item id="stock-tracker.data-binding"/>
+            <document-item id="stock-tracker.localization"/>
         </item-group>
 
-        <item-group name="WTKX Primer">
+        <item-group name="Further Reading">
             <document-item id="wtkx-primer"/>
         </item-group>
     </body>
