@@ -18,147 +18,79 @@ limitations under the License.
 
 <Window title="Grid Panes" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
-    xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
-    <wtkx:define>
-        <Menu.Section wtkx:id="rowSection">
-            <Menu.Item action="insertRow" buttonData="Insert Row"/>
-            <Menu.Item action="removeRow" buttonData="Remove Row"/>
-        </Menu.Section>
-        <Menu.Section wtkx:id="columnSection">
-            <Menu.Item action="insertColumn" buttonData="Insert Column"/>
-            <Menu.Item action="removeColumn" buttonData="Remove Column"/>
-        </Menu.Section>
-    </wtkx:define>
-
     <content>
-        <SplitPane splitRatio="0.6">
-            <left>
-                <Border>
-                    <content>
-                        <GridPane wtkx:id="gridPane" styles="{verticalSpacing:21, showHorizontalGridLines:true,
-                            horizontalSpacing:21, showVerticalGridLines:true, padding:10}">
-                            <columns>
-                                <GridPane.Column />
-                                <GridPane.Column />
-                                <GridPane.Column />
-                                <GridPane.Column />
-                            </columns>
+        <Border>
+            <content>
+                <GridPane wtkx:id="gridPane" styles="{horizontalSpacing:1, verticalSpacing:1,
+                    showHorizontalGridLines:true, showVerticalGridLines:true}">
+                    <columns>
+                        <GridPane.Column/>
+                        <GridPane.Column/>
+                        <GridPane.Column/>
+                        <GridPane.Column/>
+                        <GridPane.Column/>
+                    </columns>
 
-                            <rows>
-                                <GridPane.Row>
-                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
-                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
-                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
-                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
-                                </GridPane.Row>
-                                <GridPane.Row>
-                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
-                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
-                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
-                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
-                                </GridPane.Row>
-                                <GridPane.Row>
-                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
-                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
-                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
-                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
-                                </GridPane.Row>
-                                <GridPane.Row>
-                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
-                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
-                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
-                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
-                                </GridPane.Row>
-                            </rows>
-                        </GridPane>
-                    </content>
-                </Border>
-            </left>
-            <right>
-                <Border styles="{padding:10}">
-                    <content>
-                        <Form>
-                            <sections>
-                                <Form.Section>
-                                    <Checkbox Form.label="Show horizontal grid lines" selected="true">
-                                        <buttonStateListeners>
-                                            <wtkx:script>
-                                            <![CDATA[
-                                            function stateChanged(button, previousState) {
-                                                gridPane.getStyles().put("showHorizontalGridLines",
-                                                    button.isSelected());
-                                            }
-                                            ]]>
-                                            </wtkx:script>
-                                        </buttonStateListeners>
-                                    </Checkbox>
-                                    <Checkbox Form.label="Show vertical grid lines" selected="true">
-                                        <buttonStateListeners>
-                                            <wtkx:script>
-                                            <![CDATA[
-                                            function stateChanged(button, previousState) {
-                                                gridPane.getStyles().put("showVerticalGridLines",
-                                                    button.isSelected());
-                                            }
-                                            ]]>
-                                            </wtkx:script>
-                                        </buttonStateListeners>
-                                    </Checkbox>
-                                    <Spinner Form.label="Horizontal spacing" selectedIndex="21"
-                                        styles="{sizeToContent:true}">
-                                        <spinnerData>
-                                            <content:NumericSpinnerData lowerBound="0" upperBound="50"/>
-                                        </spinnerData>
-                                        <spinnerSelectionListeners>
-                                            <wtkx:script>
-                                            <![CDATA[
-                                            function selectedIndexChanged(spinner, previousSelectedIndex) {
-                                                gridPane.getStyles().put("horizontalSpacing",
-                                                    spinner.getSelectedItem());
-                                            }
-                                            ]]>
-                                            </wtkx:script>
-                                        </spinnerSelectionListeners>
-                                    </Spinner>
-                                    <Spinner Form.label="Vertical spacing" selectedIndex="21"
-                                        styles="{sizeToContent:true}">
-                                        <spinnerData>
-                                            <content:NumericSpinnerData lowerBound="0" upperBound="50"/>
-                                        </spinnerData>
-                                        <spinnerSelectionListeners>
-                                            <wtkx:script>
-                                            <![CDATA[
-                                            function selectedIndexChanged(spinner, previousSelectedIndex) {
-                                                gridPane.getStyles().put("verticalSpacing",
-                                                    spinner.getSelectedItem());
-                                            }
-                                            ]]>
-                                            </wtkx:script>
-                                        </spinnerSelectionListeners>
-                                    </Spinner>
-                                    <Spinner Form.label="Padding" selectedIndex="10"
-                                        styles="{sizeToContent:true}">
-                                        <spinnerData>
-                                            <content:NumericSpinnerData lowerBound="0" upperBound="25"/>
-                                        </spinnerData>
-                                        <spinnerSelectionListeners>
-                                            <wtkx:script>
-                                            <![CDATA[
-                                            function selectedIndexChanged(spinner, previousSelectedIndex) {
-                                                gridPane.getStyles().put("padding",
-                                                    spinner.getSelectedItem());
-                                            }
-                                            ]]>
-                                            </wtkx:script>
-                                        </spinnerSelectionListeners>
-                                    </Spinner>
-                                </Form.Section>
-                            </sections>
-                        </Form>
-                    </content>
-                </Border>
-            </right>
-        </SplitPane>
+                    <rows>
+                        <GridPane.Row>
+                            <Label text="0, 0" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}"/>
+                            <Label text="0, 1" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}"/>
+                            <Label text="0, 2" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}"/>
+                            <Label text="0, 3" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}"/>
+                            <GridPane.Filler/>
+                        </GridPane.Row>
+                        <GridPane.Row>
+                            <Label text="1, 0" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}"/>
+                            <Label text="1, 1" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}"/>
+                            <Label text="1, 2" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}"/>
+                            <GridPane.Filler/>
+                            <Label text="1, 4" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}"/>
+                        </GridPane.Row>
+                        <GridPane.Row>
+                            <Label text="2, 0" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}"/>
+                            <Label text="2, 1" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}"/>
+                            <GridPane.Filler/>
+                            <Label text="2, 3" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}"/>
+                            <Label text="2, 4" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}"/>
+                        </GridPane.Row>
+                        <GridPane.Row>
+                            <Label text="3, 0" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}"/>
+                            <GridPane.Filler/>
+                            <Label text="3, 2" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}"/>
+                            <Label text="3, 3" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}"/>
+                            <Label text="3, 4" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}"/>
+                        </GridPane.Row>
+                        <GridPane.Row>
+                            <GridPane.Filler/>
+                            <Label text="4, 1" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}"/>
+                            <Label text="4, 2" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}"/>
+                            <Label text="4, 3" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}"/>
+                            <Label text="4, 4" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}"/>
+                        </GridPane.Row>
+                    </rows>
+                </GridPane>
+            </content>
+        </Border>
     </content>
 </Window>

@@ -74,7 +74,7 @@ limitations under the License.
         </p>
 
         <application class="org.apache.pivot.tutorials.layout.SimpleTablePanes"
-            width="560" height="320">
+            width="560" height="340">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>
@@ -231,14 +231,15 @@ limitations under the License.
         </source>
 
         <p>
-            Next, let's look at a more involved application that allows you to interact with the
-            table pane to get a feel for how you can achieve the layout that you desire. The
-            following application allows you to control the table pane's styles via the controls on
-            the left and responds to right-clicks over the table pane itself. You can also move the
-            splitter to see the effect it has on the relative columns in the table pane.
+            The following is a more involved application that allows the user to interact with the
+            table pane and get a feel for how the different settings affect layout. The
+            application manages the table pane's styles via the controls on the left and responds
+            to right-clicks over the table pane itself. The user can also drag the splitter to see
+            the effect it has on the relative columns in the grid pane.
         </p>
 
-        <application class="org.apache.pivot.tutorials.layout.TablePanes" width="560" height="320">
+        <application class="org.apache.pivot.tutorials.layout.TablePanes"
+            width="560" height="340">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>

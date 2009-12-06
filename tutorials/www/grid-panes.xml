@@ -22,5 +22,49 @@ limitations under the License.
     </properties>
 
     <body>
+        <p>
+            Grid panes are used to arrange components in a fixed 2-dimensional grid. Grid panes
+            have a "columns" collection that defines the column structure of the grid and a "rows"
+            collection that defines both the row structure of the grid and the contents of each
+            row.
+        </p>
+
+        <p>
+            Each cell in a grid pane is given the same size, based on the available width and
+            height. For more complex table layouts, <tt>TablePane</tt>, discussed next, may be
+            used.
+        </p>
+
+        <p>
+            Below is a simple application that demonstrates the use of the <tt>GridPane</tt>
+            component. Note the use of the <tt>GridPane.Filler</tt> component, which is used to
+            insert empty cells:
+        </p>
+
+        <application class="org.apache.pivot.wtk.ScriptApplication"
+            width="360" height="360">
+            <libraries>
+                <library>core</library>
+                <library>wtk</library>
+                <library>wtk-terra</library>
+                <library>tutorials</library>
+            </libraries>
+            <startup-properties>
+                <src>org/apache/pivot/tutorials/layout/grid_panes.wtkx</src>
+            </startup-properties>
+        </application>
+
+        <p>
+            The WTKX source for the application is shown below:
+        </p>
+
+        <source type="xml" location="org/apache/pivot/tutorials/layout/grid_panes.wtkx">
+            <![CDATA[
+            ]]>
+        </source>
+
+        <p>
+            Since this application contains no logic, there is no associated Java source.
+        </p>
     </body>
 </document>
