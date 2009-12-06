@@ -22,5 +22,188 @@ limitations under the License.
     </properties>
 
     <body>
+        <p>
+            Flow panes arrange components in a horizontal line, wrapping when the contents don't
+            fit on a single line. Components may be horizontally aligned to left, right, or center
+            when there is space left over within a given line, and may optionally be vertically
+            aligned by to their baselines.
+        </p>
+
+        <p>
+            The following example demonstrates the use of the <tt>FlowPane</tt> container. The
+            buttons on the right can be used to modify the alignment properties. A
+            <tt>BaselineDecorator</tt> is used to highlight the flow pane's baseline. This
+            decorator draws a red line across a component's baseline. If the component does not
+            have a baseline, it draws a blue line across the component's vertical midpoint:
+        </p>
+
+        <application class="org.apache.pivot.tutorials.layout.FlowPanes"
+            width="360" height="240">
+            <libraries>
+                <library>core</library>
+                <library>wtk</library>
+                <library>wtk-terra</library>
+                <library>tutorials</library>
+            </libraries>
+        </application>
+
+        <p>
+            The WTKX source for this example is shown below:
+        </p>
+
+        <source type="xml" location="org/apache/pivot/tutorials/layout/flow_panes.wtkx">
+            <![CDATA[
+            <Window title="Flow Panes" maximized="true"
+                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns:effects="org.apache.pivot.wtk.effects"
+                xmlns="org.apache.pivot.wtk">
+                <content>
+                    <SplitPane splitRatio="0.75">
+                        <left>
+                            <Border styles="{padding:4}">
+                                <content>
+                                    <BoxPane orientation="vertical" styles="{fill:true}">
+                                        <FlowPane wtkx:id="flowPane" styles="{padding:2}">
+                                            <decorators>
+                                                <effects:BaselineDecorator/>
+                                            </decorators>
+
+                                            <PushButton buttonData="0" styles="{minimumAspectRatio:1.5}"/>
+                                            <PushButton buttonData="1" styles="{minimumAspectRatio:1.5}"/>
+                                            <PushButton buttonData="2" styles="{minimumAspectRatio:1.5}"/>
+                                            <PushButton buttonData="3" preferredWidth="20" preferredHeight="20"/>
+                                            <PushButton buttonData="4" preferredWidth="30" preferredHeight="30"/>
+                                            <PushButton buttonData="5" preferredWidth="40" preferredHeight="40"/>
+                                            <PushButton buttonData="6" styles="{minimumAspectRatio:1.5}"/>
+                                            <PushButton buttonData="7" styles="{minimumAspectRatio:1.5}"/>
+                                        </FlowPane>
+                                    </BoxPane>
+                                </content>
+                            </Border>
+                        </left>
+                        <right>
+                            <Border styles="{padding:{top:2, left:6}}">
+                                <content>
+                                    <BoxPane orientation="vertical">
+                                        <Label text="Alignment" styles="{font:{bold:true}}"/>
+
+                                        <wtkx:define>
+                                            <ButtonGroup wtkx:id="alignment"/>
+                                        </wtkx:define>
+                                        <RadioButton wtkx:id="leftRadioButton" buttonData="Left" buttonGroup="$alignment" selected="true"/>
+                                        <RadioButton wtkx:id="rightRadioButton" buttonData="Right" buttonGroup="$alignment"/>
+                                        <RadioButton wtkx:id="centerRadioButton" buttonData="Center" buttonGroup="$alignment"/>
+
+                                        <BoxPane styles="{padding:{top:6}}">
+                                            <Checkbox wtkx:id="alignToBaselineCheckbox" buttonData="Align to baseline"/>
+                                        </BoxPane>
+                                    </BoxPane>
+                                </content>
+                            </Border>
+                        </right>
+                    </SplitPane>
+                </content>
+            </Window>
+            ]]>
+        </source>
+
+        <p>
+            The Java source is as follows. It wires up the event handlers that respond to changes
+            in the radio buttons' state:
+        </p>
+
+        <source type="xml" location="org/apache/pivot/tutorials/layout/FlowPanes.java">
+            <![CDATA[
+            package org.apache.pivot.tutorials.layout;
+
+            import org.apache.pivot.collections.Map;
+            import org.apache.pivot.wtk.Application;
+            import org.apache.pivot.wtk.Button;
+            import org.apache.pivot.wtk.ButtonStateListener;
+            import org.apache.pivot.wtk.Checkbox;
+            import org.apache.pivot.wtk.DesktopApplicationContext;
+            import org.apache.pivot.wtk.Display;
+            import org.apache.pivot.wtk.FlowPane;
+            import org.apache.pivot.wtk.HorizontalAlignment;
+            import org.apache.pivot.wtk.RadioButton;
+            import org.apache.pivot.wtk.Window;
+            import org.apache.pivot.wtkx.WTKXSerializer;
+
+            public class FlowPanes implements Application {
+                private Window window = null;
+                private FlowPane flowPane = null;
+                private RadioButton leftRadioButton = null;
+                private RadioButton rightRadioButton = null;
+                private RadioButton centerRadioButton = null;
+                private Checkbox alignToBaselineCheckbox = null;
+
+                @Override
+                public void startup(Display display, Map<String, String> properties) throws Exception {
+                    WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                    window = (Window)wtkxSerializer.readObject(this, "flow_panes.wtkx");
+                    flowPane = (FlowPane)wtkxSerializer.get("flowPane");
+                    leftRadioButton = (RadioButton)wtkxSerializer.get("leftRadioButton");
+                    rightRadioButton = (RadioButton)wtkxSerializer.get("rightRadioButton");
+                    centerRadioButton = (RadioButton)wtkxSerializer.get("centerRadioButton");
+                    alignToBaselineCheckbox = (Checkbox)wtkxSerializer.get("alignToBaselineCheckbox");
+
+                    ButtonStateListener buttonStateListener = new ButtonStateListener() {
+                        @Override
+                        public void stateChanged(Button button, Button.State previousState) {
+                            updateFlowPaneState();
+                        }
+                    };
+
+                    leftRadioButton.getButtonStateListeners().add(buttonStateListener);
+                    rightRadioButton.getButtonStateListeners().add(buttonStateListener);
+                    centerRadioButton.getButtonStateListeners().add(buttonStateListener);
+                    alignToBaselineCheckbox.getButtonStateListeners().add(buttonStateListener);
+
+                    updateFlowPaneState();
+
+                    window.open(display);
+                }
+
+                @Override
+                public boolean shutdown(boolean optional) {
+                    if (window != null) {
+                        window.close();
+                    }
+
+                    return false;
+                }
+
+                @Override
+                public void suspend() {
+                }
+
+                @Override
+                public void resume() {
+                }
+
+                private void updateFlowPaneState() {
+                    HorizontalAlignment alignment = null;
+
+                    if (leftRadioButton.isSelected()) {
+                        alignment = HorizontalAlignment.LEFT;
+                    } else if (rightRadioButton.isSelected()) {
+                        alignment = HorizontalAlignment.RIGHT;
+                    } else if (centerRadioButton.isSelected()) {
+                        alignment = HorizontalAlignment.CENTER;
+                    }
+
+                    if (alignment != null) {
+                        flowPane.getStyles().put("alignment", alignment);
+                    }
+
+                    flowPane.getStyles().put("alignToBaseline", alignToBaselineCheckbox.isSelected());
+                }
+
+                public static void main(String[] args) {
+                    DesktopApplicationContext.main(FlowPanes.class, args);
+                }
+            }
+            ]]>
+        </source>
     </body>
 </document>
