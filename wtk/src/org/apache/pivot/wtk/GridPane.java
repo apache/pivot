@@ -46,29 +46,8 @@ public class GridPane extends Container {
             return gridPane;
         }
 
-        /**
-         * Sets the grid pane with which this row is associated.
-         *
-         * @param gridPane
-         * The row's grid pane, or <tt>null</tt> if the row does not
-         * currently belong to a grid.
-         */
         private void setGridPane(GridPane gridPane) {
             this.gridPane = gridPane;
-        }
-
-        /**
-         * Sets the visible flag for all components in the row.
-         * <p>
-         * This is a convenience method that iterates through the row, calling
-         * <tt>setVisible</tt> on all components.
-         */
-        public void setVisible(boolean visible) {
-            if (gridPane != null) {
-                for (Component component : cells) {
-                    component.setVisible(visible);
-                }
-            }
         }
 
         @Override
@@ -166,53 +145,6 @@ public class GridPane extends Container {
         @Override
         public Iterator<Component> iterator() {
             return new ImmutableIterator<Component>(cells.iterator());
-        }
-    }
-
-    /**
-     * Represents a grid pane column.
-     */
-    public static class Column {
-        private GridPane gridPane = null;
-
-        /**
-         * Returns the grid pane with which this column is associated.
-         *
-         * @return
-         * The column's grid pane, or <tt>null</tt> if the column does not
-         * currently belong to a grid.
-         */
-        public GridPane getGridPane() {
-            return gridPane;
-        }
-
-        /**
-         * Sets the grid pane with which this column is associated.
-         *
-         * @param gridPane
-         * The column's grid pane, or <tt>null</tt> if the column does not
-         * currently belong to a grid.
-         */
-        private void setGridPane(GridPane gridPane) {
-            this.gridPane = gridPane;
-        }
-
-        /**
-         * Sets the visible flag for all components in the column.
-         * <p>
-         * This is a convenience method that iterates through the components in
-         * the column, calling <tt>setVisible</tt> on all such components.
-         */
-        public void setVisible(boolean visible) {
-            if (gridPane != null) {
-                int columnIndex = gridPane.columns.indexOf(this);
-
-                for (Row row : gridPane.rows) {
-                    if (row.getLength() > columnIndex) {
-                        row.get(columnIndex).setVisible(visible);
-                    }
-                }
-            }
         }
     }
 
@@ -325,92 +257,6 @@ public class GridPane extends Container {
     }
 
     /**
-     * Class that manages a grid pane's column list. Callers get access to the
-     * column sequence via {@link GridPane#getColumns()}.
-     */
-    public final class ColumnSequence implements Sequence<Column>, Iterable<Column> {
-        private ColumnSequence() {
-        }
-
-        @Override
-        public int add(Column column) {
-            int i = getLength();
-            insert(column, i);
-
-            return i;
-        }
-
-        @Override
-        public void insert(Column column, int index) {
-            if (column == null) {
-                throw new IllegalArgumentException("column is null.");
-            }
-
-            if (column.getGridPane() != null) {
-                throw new IllegalArgumentException
-                    ("column is already in use by another grid pane.");
-            }
-
-            columns.insert(column, index);
-            column.setGridPane(GridPane.this);
-
-            // Notify listeners
-            gridPaneListeners.columnInserted(GridPane.this, index);
-        }
-
-        @Override
-        public Column update(int index, Column column) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public int remove(Column column) {
-            int index = indexOf(column);
-            if (index != -1) {
-                remove(index, 1);
-            }
-
-            return index;
-        }
-
-        @Override
-        public Sequence<Column> remove(int index, int count) {
-            Sequence<Column> removed = columns.remove(index, count);
-
-            if (count > 0) {
-                for (int i = 0, n = removed.getLength(); i < n; i++) {
-                    Column column = removed.get(i);
-                    column.setGridPane(null);
-                }
-
-                gridPaneListeners.columnsRemoved(GridPane.this, index, removed);
-            }
-
-            return removed;
-        }
-
-        @Override
-        public Column get(int index) {
-            return columns.get(index);
-        }
-
-        @Override
-        public int indexOf(Column column) {
-            return columns.indexOf(column);
-        }
-
-        @Override
-        public int getLength() {
-            return columns.getLength();
-        }
-
-        @Override
-        public Iterator<Column> iterator() {
-            return new ImmutableIterator<Column>(columns.iterator());
-        }
-    }
-
-    /**
      * Component that can be used as filler for empty cells.
      */
     public static class Filler extends Component {
@@ -421,6 +267,13 @@ public class GridPane extends Container {
 
     private static class GridPaneListenerList extends ListenerList<GridPaneListener>
         implements GridPaneListener {
+        @Override
+        public void columnCountChanged(GridPane gridPane, int previousColumnCount) {
+            for (GridPaneListener listener : this) {
+                listener.columnCountChanged(gridPane, previousColumnCount);
+            }
+        }
+
         @Override
         public void rowInserted(GridPane gridPane, int index) {
             for (GridPaneListener listener : this) {
@@ -433,21 +286,6 @@ public class GridPane extends Container {
             Sequence<GridPane.Row> rows) {
             for (GridPaneListener listener : this) {
                 listener.rowsRemoved(gridPane, index, rows);
-            }
-        }
-
-        @Override
-        public void columnInserted(GridPane gridPane, int index) {
-            for (GridPaneListener listener : this) {
-                listener.columnInserted(gridPane, index);
-            }
-        }
-
-        @Override
-        public void columnsRemoved(GridPane gridPane, int index,
-            Sequence<GridPane.Column> columns) {
-            for (GridPaneListener listener : this) {
-                listener.columnsRemoved(gridPane, index, columns);
             }
         }
 
@@ -475,11 +313,10 @@ public class GridPane extends Container {
         }
     }
 
-    private ArrayList<Row> rows = null;
-    private RowSequence rowSequence = new RowSequence();
+    private int columnCount;
 
-    private ArrayList<Column> columns = null;
-    private ColumnSequence columnSequence = new ColumnSequence();
+    private ArrayList<Row> rows = new ArrayList<Row>();
+    private RowSequence rowSequence = new RowSequence();
 
     private GridPaneListenerList gridPaneListeners = new GridPaneListenerList();
 
@@ -487,7 +324,7 @@ public class GridPane extends Container {
      * Creates a new <tt>GridPane</tt> with empty row and column sequences.
      */
     public GridPane() {
-        this(new ArrayList<Column>());
+        this(0);
     }
 
     /**
@@ -496,13 +333,12 @@ public class GridPane extends Container {
      * @param columns
      * The column sequence to use. A copy of this sequence will be made
      */
-    public GridPane(Sequence<Column> columns) {
-        if (columns == null) {
-            throw new IllegalArgumentException("columns is null");
+    public GridPane(int columnCount) {
+        if (columnCount < 0) {
+            throw new IllegalArgumentException("columnCount is negative.");
         }
 
-        this.rows = new ArrayList<Row>();
-        this.columns = new ArrayList<Column>(columns);
+        setColumnCount(columnCount);
 
         installThemeSkin(GridPane.class);
     }
@@ -515,6 +351,27 @@ public class GridPane extends Container {
         }
 
         super.setSkin(skin);
+    }
+
+    /**
+     * Returns the number of columns in the grid pane.
+     */
+    public int getColumnCount() {
+        return columnCount;
+    }
+
+    /**
+     * Sets the number of columns in the grid pane.
+     *
+     * @param columnCount
+     */
+    public void setColumnCount(int columnCount) {
+        int previousColumnCount = this.columnCount;
+
+        if (previousColumnCount != columnCount) {
+            this.columnCount = columnCount;
+            gridPaneListeners.columnCountChanged(this, previousColumnCount);
+        }
     }
 
     /**
@@ -551,16 +408,6 @@ public class GridPane extends Container {
     public Bounds getRowBounds(int row) {
         GridPane.Skin gridPaneSkin = (GridPane.Skin)getSkin();
         return gridPaneSkin.getRowBounds(row);
-    }
-
-    /**
-     * Returns the grid pane column sequence.
-     *
-     * @return
-     * The grid pane column sequence
-     */
-    public ColumnSequence getColumns() {
-        return columnSequence;
     }
 
     /**

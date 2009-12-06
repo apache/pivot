@@ -27,20 +27,15 @@ public interface GridPaneListener {
      */
     public static class Adapter implements GridPaneListener {
         @Override
+        public void columnCountChanged(GridPane gridPane, int previousColumnCount) {
+        }
+
+        @Override
         public void rowInserted(GridPane gridPane, int index) {
         }
 
         @Override
         public void rowsRemoved(GridPane gridPane, int index, Sequence<GridPane.Row> rows) {
-        }
-
-        @Override
-        public void columnInserted(GridPane gridPane, int index) {
-        }
-
-        @Override
-        public void columnsRemoved(GridPane gridPane, int index,
-            Sequence<GridPane.Column> columns) {
         }
 
         @Override
@@ -55,6 +50,14 @@ public interface GridPaneListener {
         public void cellUpdated(GridPane.Row row, int column, Component previousComponent) {
         }
     }
+
+    /**
+     * Called when a grid pane's column count has changed.
+     *
+     * @param gridPane
+     * @param previousColumnCount
+     */
+    public void columnCountChanged(GridPane gridPane, int previousColumnCount);
 
     /**
      * Called when a row has been inserted into a grid pane.
@@ -72,23 +75,6 @@ public interface GridPaneListener {
      * @param rows
      */
     public void rowsRemoved(GridPane gridPane, int index, Sequence<GridPane.Row> rows);
-
-    /**
-     * Called when a column has been inserted into a grid pane.
-     *
-     * @param gridPane
-     * @param index
-     */
-    public void columnInserted(GridPane gridPane, int index);
-
-    /**
-     * Called when column's have been removed from a grid pane.
-     *
-     * @param gridPane
-     * @param index
-     * @param columns
-     */
-    public void columnsRemoved(GridPane gridPane, int index, Sequence<GridPane.Column> columns);
 
     /**
      * Called when a cell has been inserted into a grid pane.

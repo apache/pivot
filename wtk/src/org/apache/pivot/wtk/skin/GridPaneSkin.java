@@ -49,10 +49,9 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
             GridPane gridPane = (GridPane)getComponent();
 
             GridPane.RowSequence rows = gridPane.getRows();
-            GridPane.ColumnSequence columns = gridPane.getColumns();
 
+            int columnCount = gridPane.getColumnCount();
             int rowCount = rows.getLength();
-            int columnCount = columns.getLength();
 
             visibleRows = new boolean[rowCount];
             visibleColumns = new boolean[columnCount];
@@ -118,10 +117,9 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
         GridPane gridPane = (GridPane)getComponent();
 
         GridPane.RowSequence rows = gridPane.getRows();
-        GridPane.ColumnSequence columns = gridPane.getColumns();
 
+        int columnCount = gridPane.getColumnCount();
         int rowCount = rows.getLength();
-        int columnCount = columns.getLength();
 
         Metadata metadata = new Metadata();
 
@@ -160,10 +158,9 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
         GridPane gridPane = (GridPane)getComponent();
 
         GridPane.RowSequence rows = gridPane.getRows();
-        GridPane.ColumnSequence columns = gridPane.getColumns();
 
+        int columnCount = gridPane.getColumnCount();
         int rowCount = rows.getLength();
-        int columnCount = columns.getLength();
 
         Metadata metadata = new Metadata();
 
@@ -202,10 +199,9 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
         GridPane gridPane = (GridPane)getComponent();
 
         GridPane.RowSequence rows = gridPane.getRows();
-        GridPane.ColumnSequence columns = gridPane.getColumns();
 
+        int columnCount = gridPane.getColumnCount();
         int rowCount = rows.getLength();
-        int columnCount = columns.getLength();
 
         Metadata metadata = new Metadata();
 
@@ -255,10 +251,9 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
         GridPane gridPane = (GridPane)getComponent();
 
         GridPane.RowSequence rows = gridPane.getRows();
-        GridPane.ColumnSequence columns = gridPane.getColumns();
 
+        int columnCount = gridPane.getColumnCount();
         int rowCount = rows.getLength();
-        int columnCount = columns.getLength();
 
         Metadata metadata = new Metadata();
 
@@ -300,10 +295,9 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
         GridPane gridPane = (GridPane)getComponent();
 
         GridPane.RowSequence rows = gridPane.getRows();
-        GridPane.ColumnSequence columns = gridPane.getColumns();
 
+        int columnCount = gridPane.getColumnCount();
         int rowCount = rows.getLength();
-        int columnCount = columns.getLength();
 
         int width = getWidth();
         int height = getHeight();
@@ -345,10 +339,9 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
         GridPane gridPane = (GridPane)getComponent();
 
         GridPane.RowSequence rows = gridPane.getRows();
-        GridPane.ColumnSequence columns = gridPane.getColumns();
 
+        int columnCount = gridPane.getColumnCount();
         int rowCount = rows.getLength();
-        int columnCount = columns.getLength();
 
         int width = getWidth();
         int height = getHeight();
@@ -680,10 +673,8 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
     @Override
     public int getColumnAt(int x) {
         GridPane gridPane = (GridPane)getComponent();
-        GridPane.ColumnSequence columns = gridPane.getColumns();
 
-        int columnCount = columns.getLength();
-
+        int columnCount = gridPane.getColumnCount();
         int columnIndex = -1;
 
         for (int j = 0, columnX = padding.left; columnX <= x && j < columnCount; j++) {
@@ -702,9 +693,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
     @Override
     public Bounds getColumnBounds(int column) {
         GridPane gridPane = (GridPane)getComponent();
-        GridPane.ColumnSequence columns = gridPane.getColumns();
-
-        int columnCount = columns.getLength();
+        int columnCount = gridPane.getColumnCount();
 
         if (column < 0
             || column >= columnCount) {
@@ -721,6 +710,10 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
     }
 
     // GridPaneListener methods
+    @Override
+    public void columnCountChanged(GridPane gridPane, int previousColumnCount) {
+        invalidateComponent();
+    }
 
     @Override
     public void rowInserted(GridPane gridPane, int index) {
@@ -729,17 +722,6 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
 
     @Override
     public void rowsRemoved(GridPane gridPane, int index, Sequence<GridPane.Row> rows) {
-        invalidateComponent();
-    }
-
-    @Override
-    public void columnInserted(GridPane gridPane, int index) {
-        invalidateComponent();
-    }
-
-    @Override
-    public void columnsRemoved(GridPane gridPane, int index,
-        Sequence<GridPane.Column> columns) {
         invalidateComponent();
     }
 

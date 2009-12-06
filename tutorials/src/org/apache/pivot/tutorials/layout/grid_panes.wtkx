@@ -22,16 +22,8 @@ limitations under the License.
     <content>
         <Border>
             <content>
-                <GridPane wtkx:id="gridPane" styles="{horizontalSpacing:1, verticalSpacing:1,
+                <GridPane columnCount="5" styles="{horizontalSpacing:1, verticalSpacing:1,
                     showHorizontalGridLines:true, showVerticalGridLines:true}">
-                    <columns>
-                        <GridPane.Column/>
-                        <GridPane.Column/>
-                        <GridPane.Column/>
-                        <GridPane.Column/>
-                        <GridPane.Column/>
-                    </columns>
-
                     <rows>
                         <GridPane.Row>
                             <Label text="0, 0" styles="{horizontalAlignment:'center',
