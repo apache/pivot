@@ -53,7 +53,7 @@ limitations under the License.
             of a subsequent page in such a checkout process may depend on the user's entries on
             a previous page. The user may freely navigate backward at any point, however.
             The last panel simulates the order confirmation by displaying an
-            <a href="activity_indicators.html">activity indicator</a>.
+            <a href="activity-indicators.html">activity indicator</a>.
         </p>
 
         <p>

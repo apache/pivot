@@ -59,7 +59,7 @@ limitations under the License.
             <li>
                 <p>
                     <tt>ColorChooserButton</tt> - Provide drop-down access to a color chooser
-                    component; discussed in the <a href="color_choosers.html">Color Choosers</a>
+                    component; discussed in the <a href="color-choosers.html">Color Choosers</a>
                     section.
                 </p>
             </li>

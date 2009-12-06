@@ -59,15 +59,7 @@ limitations under the License.
         <xsl:variable name="document" select="document(concat('../www/', @id, '.xml'))/document"/>
         <li>
             <a href="{@id}.html">
-                <!-- TODO Remove this check once all tutorials have been migrated from HTML -->
-                <xsl:choose>
-                    <xsl:when test="$document/properties/title">
-                        <xsl:value-of select="$document/properties/title"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <span style="color:#cccccc; text-decoration:none;"><xsl:value-of select="@id"/></span>
-                    </xsl:otherwise>
-                </xsl:choose>
+                <xsl:value-of select="$document/properties/title"/>
             </a>
             <xsl:if test="*">
                 <xsl:element name="ul">

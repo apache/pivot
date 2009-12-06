@@ -92,7 +92,7 @@ limitations under the License.
         <p>
             Note that this example uses the <tt>TablePane</tt> layout container. <tt>TablePane</tt>
             defines a two-dimensional grid structure and is similar to an HTML table. It is
-            discussed in more detail in the <a href="layout_containers.html">Layout Containers</a>
+            discussed in more detail in the <a href="layout-containers.html">Layout Containers</a>
             section.
         </p>
 
