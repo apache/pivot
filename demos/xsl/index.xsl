@@ -92,52 +92,30 @@ limitations under the License.
         <xsl:apply-templates/>
     </xsl:template>
 
-    <!-- <application-item> gets translated to a demo summary with links to the demo -->
-    <xsl:template match="application-item">
+    <!-- <document-item> gets translated to a demo summary with links to the demo -->
+    <xsl:template match="document-item">
         <xsl:variable name="id" select="@id"/>
+        <xsl:variable name="document" select="document(concat('../www/', $id, '.xml'))/document"/>
 
         <xsl:if test="position()&gt;1">
             <hr/>
         </xsl:if>
 
-        <xsl:choose>
-            <xsl:when test="remote">
-                <!--
-                Remotely hosted demos do not have a JNLP launcher, and their properties are
-                specified in the demo item itself.
-                -->
-                <xsl:variable name="href" select="remote/@href"/>
-                <h3><xsl:value-of select="properties/title"/></h3>
-                <p>
-                    <xsl:choose>
-                        <xsl:when test="boolean(@new-window)">
-                            <a href="{$href}" target="_new">Applet</a>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <a href="{$href}">Applet</a>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </p>
-                <p><xsl:value-of select="properties/description"/></p>
-            </xsl:when>
-            <xsl:otherwise>
-                <!-- Locally hosted demo; title amd description comes from the demo XML file -->
-                <xsl:variable name="demo" select="document(concat('../www/', $id, '.xml'))/document"/>
-                <h3><xsl:value-of select="$demo/properties/title"/></h3>
-                <p>
-                    <xsl:choose>
-                        <xsl:when test="boolean(@new-window)">
-                            <a href="{$id}.html" target="_new">Applet</a>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <a href="{$id}.html">Applet</a>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                    | <a href="{$id}.jnlp">Web start</a>
-                </p>
-                <p><xsl:value-of select="$demo/properties/description"/></p>
-            </xsl:otherwise>
-        </xsl:choose>
+        <h3><xsl:value-of select="$document/properties/title"/></h3>
+        <p>
+            <xsl:element name="a">
+                <xsl:attribute name="href">
+                    <xsl:value-of select="concat($id, '.html')"/>
+                </xsl:attribute>
+                <xsl:if test="boolean($document/properties/full-screen)">
+                    <xsl:attribute name="target">_new</xsl:attribute>
+                </xsl:if>
+                <xsl:text>Applet</xsl:text>
+            </xsl:element>
+            <xsl:text> | </xsl:text>
+            <a href="{$id}.jnlp">Web start</a>
+        </p>
+        <p><xsl:value-of select="$document/properties/description"/></p>
 
         <!-- Include a screenshot if one exists -->
         <xsl:if test="$project/demo-screenshots/screenshot[@id=$id]">

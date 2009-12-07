@@ -18,7 +18,7 @@ limitations under the License.
 
 <!-- Translates a demo XML document into an HTML demo page -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-    <xsl:param name="release"/>
+    <xsl:param name="version"/>
     <xsl:param name="root"/>
 
     <xsl:output method="html" encoding="UTF-8" indent="no"
@@ -95,7 +95,7 @@ limitations under the License.
                 <xsl:value-of select="'lib/pivot-'"/>
                 <xsl:value-of select="."/>
                 <xsl:value-of select="'-'"/>
-                <xsl:value-of select="$release"/>
+                <xsl:value-of select="$version"/>
                 <xsl:if test="$signed">
                     <xsl:value-of select="'.signed'"/>
                 </xsl:if>

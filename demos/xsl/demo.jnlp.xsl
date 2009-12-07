@@ -22,7 +22,7 @@ limitations under the License.
     <xsl:output method="xml" encoding="UTF-8" indent="no"/>
 
     <!-- Parameters (overrideable) -->
-    <xsl:param name="release"/>
+    <xsl:param name="version"/>
     <xsl:param name="root"/>
 
     <!-- Variables (not overrideable) -->
@@ -64,9 +64,9 @@ limitations under the License.
         </xsl:text>
 
         <information>
-            <title>Pivot <xsl:value-of select="//document/properties/title"/> Demo</title>
+            <title>Pivot <xsl:value-of select="/document/properties/title"/> Demo</title>
             <description>
-                <xsl:value-of select="normalize-space(//document/properties/description)"/>
+                <xsl:value-of select="normalize-space(/document/properties/description)"/>
             </description>
             <vendor><xsl:value-of select="$project/vendor"/></vendor>
             <homepage href="{$project/@href}"/>
@@ -97,7 +97,7 @@ limitations under the License.
                         <xsl:value-of select="'lib/pivot-'"/>
                         <xsl:value-of select="."/>
                         <xsl:value-of select="'-'"/>
-                        <xsl:value-of select="$release"/>
+                        <xsl:value-of select="$version"/>
                         <xsl:if test="$signed">
                             <xsl:value-of select="'.signed'"/>
                         </xsl:if>

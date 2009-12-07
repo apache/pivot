@@ -461,7 +461,7 @@ limitations under the License.
             style="demos/xsl/demo.html.xsl"
             includes="*.xml"
             excludes="index.xml">
-            <param name="release" expression="${version}"/>
+            <param name="version" expression="${version}"/>
             <param name="root" expression="${ant.project.name}-demos"/>
         </xslt>
 
@@ -473,7 +473,7 @@ limitations under the License.
             style="demos/xsl/demo.jnlp.xsl"
             includes="*.xml"
             excludes="index.xml">
-            <param name="release" expression="${version}"/>
+            <param name="version" expression="${version}"/>
         </xslt>
 
         <!-- Copy static demo files to deploy folder -->

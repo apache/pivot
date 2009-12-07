@@ -26,40 +26,20 @@ limitations under the License.
             A collection of Pivot demos. All demos require
             <a href="http://www.java.com/">Java 6</a> or greater.
         </p>
-        <application-item id="kitchen-sink" footer="true" featured="true" new-window="true"/>
-        <application-item id="stock-tracker" featured="true"/>
-        <application-item id="component-explorer" footer="true" new-window="true"/>
-        <application-item id="itunes-search" featured="true"/>
-        <application-item id="charting" footer="true" featured="true" new-window="true">
-            <remote href="http://ixnay.biz/charts.html"/>
-            <properties>
-                <title>Charting</title>
-                <description>
-                    Demonstrates charting in Pivot using the JFreeChart chart provider (hosted at
-                    http://ixnay.biz).
-                </description>
-            </properties>
-        </application-item>
-        <application-item id="decorators" featured="true"/>
-        <application-item id="xml-viewer"/>
-        <application-item id="json-viewer"/>
-        <application-item id="table-row-editor"/>
-        <application-item id="file-drag-drop"/>
-        <application-item id="ticker-slideshow" new-window="true">
-            <remote href="http://www.satelliteconsulting.com/"/>
-            <properties>
-                <title>News Ticker/Slide Show</title>
-                <description>
-                    Demonstrates Pivot used in a real-world context, used to show a news feed and
-                    a slide show of client logos (hosted at www.satelliteconsulting.com).
-                </description>
-            </properties>
-        </application-item>
-        <application-item id="large-data"/>
-        <application-item id="rss-feed"/>
-        <application-item id="dom-interaction"/>
-        <application-item id="fixed-column-table"/>
-        <application-item id="animated-clock"/>
-        <application-item id="multiselect"/>
+        <document-item id="kitchen-sink"/>
+        <document-item id="stock-tracker"/>
+        <document-item id="component-explorer"/>
+        <document-item id="itunes-search"/>
+        <document-item id="decorators"/>
+        <document-item id="xml-viewer"/>
+        <document-item id="json-viewer"/>
+        <document-item id="table-row-editor"/>
+        <document-item id="file-drag-drop"/>
+        <document-item id="large-data"/>
+        <document-item id="rss-feed"/>
+        <document-item id="dom-interaction"/>
+        <document-item id="fixed-column-table"/>
+        <document-item id="animated-clock"/>
+        <document-item id="multiselect"/>
     </body>
 </document>

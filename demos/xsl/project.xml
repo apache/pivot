@@ -23,10 +23,8 @@ limitations under the License.
         <screenshot id="kitchen-sink" src="kitchen-sink.png"/>
         <screenshot id="stock-tracker" src="stock-tracker.png"/>
         <screenshot id="itunes-search" src="itunes-search.png"/>
-        <screenshot id="charting" src="charts.png"/>
         <screenshot id="json-viewer" src="json-viewer.png"/>
         <screenshot id="xml-viewer" src="xml-viewer.png"/>
-        <screenshot id="ticker-slideshow" src="sci.png"/>
         <screenshot id="animated-clock" src="animated-clock.png"/>
         <screenshot id="decorators" src="decorators.png"/>
     </demo-screenshots>
