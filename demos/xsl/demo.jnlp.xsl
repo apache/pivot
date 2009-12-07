@@ -18,6 +18,8 @@ limitations under the License.
 
 <!-- Translates a demo XML document into a JNLP demo file -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+    <xsl:import href="project.xsl"/>
+
     <!-- Output method -->
     <xsl:output method="xml" encoding="UTF-8" indent="no"/>
 
@@ -25,14 +27,17 @@ limitations under the License.
     <xsl:param name="version"/>
     <xsl:param name="root"/>
 
-    <!-- Variables (not overrideable) -->
-    <xsl:variable name="project" select="document('project.xml')/project"/>
+    <!-- <document> delegates to <application> -->
+    <xsl:template match="document">
+        <xsl:apply-templates select="//application"/>
+    </xsl:template>
 
     <!-- <root> gets resolved to the 'root' XSL parameter -->
     <xsl:template match="root">
         <xsl:value-of select="$root"/>
     </xsl:template>
 
+    <!-- <application> translates to JNLP XML -->
     <xsl:template match="application">
         <xsl:text disable-output-escaping="yes">
             <![CDATA[
@@ -70,14 +75,9 @@ limitations under the License.
             </description>
             <vendor><xsl:value-of select="$project/vendor"/></vendor>
             <homepage href="{$project/@href}"/>
-            <icon kind="shortcut" href="logo.png"/>
-            <offline-allowed/>
-            <shortcut online="false">
-                <desktop/>
-            </shortcut>
         </information>
 
-        <xsl:if test="boolean(@signed)">
+        <xsl:if test="boolean(libraries/@signed)">
             <security>
                 <all-permissions/>
             </security>
@@ -85,12 +85,14 @@ limitations under the License.
 
         <resources>
             <property name="jnlp.packEnabled" value="true"/>
-            <property name="sun.awt.noerasebackground" value="true"/>
-            <property name="sun.awt.erasebackgroundonresize=true" value="true"/>
+            <xsl:if test="boolean(libraries/@signed)">
+                <property name="sun.awt.noerasebackground" value="true"/>
+                <property name="sun.awt.erasebackgroundonresize=true" value="true"/>
+            </xsl:if>
 
             <java version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
 
-            <xsl:variable name="signed" select="@signed"/>
+            <xsl:variable name="signed" select="libraries/@signed"/>
             <xsl:for-each select="libraries/library">
                 <xsl:element name="jar">
                     <xsl:attribute name="href">
@@ -123,9 +125,5 @@ limitations under the License.
         <update check="background"/>
 
         <xsl:text disable-output-escaping="yes"><![CDATA[</jnlp>]]></xsl:text>
-    </xsl:template>
-
-    <xsl:template match="*|@*">
-        <xsl:apply-templates select="*"/>
     </xsl:template>
 </xsl:stylesheet>

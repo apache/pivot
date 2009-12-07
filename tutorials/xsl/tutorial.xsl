@@ -21,7 +21,7 @@ limitations under the License.
     <xsl:import href="project.xsl"/>
 
     <!-- Parameters (overrideable) -->
-    <xsl:param name="release"/>
+    <xsl:param name="version"/>
 
     <!-- <document> gets translated into an HTML container -->
     <xsl:template match="document">
@@ -100,13 +100,13 @@ limitations under the License.
 
             <!-- Archive attribute -->
             var libraries = [];
-            <xsl:variable name="signed" select="@signed"/>
+            <xsl:variable name="signed" select="libraries/@signed"/>
             <xsl:for-each select="libraries/library">
                 <xsl:text><![CDATA[libraries.push("]]></xsl:text>
                 <xsl:value-of select="'lib/pivot-'"/>
                 <xsl:value-of select="."/>
                 <xsl:value-of select="'-'"/>
-                <xsl:value-of select="$release"/>
+                <xsl:value-of select="$version"/>
                 <xsl:if test="$signed">
                     <xsl:value-of select="'.signed'"/>
                 </xsl:if>

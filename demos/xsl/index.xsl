@@ -18,11 +18,12 @@ limitations under the License.
 
 <!-- Translates a demo index XML document into an HTML demo index -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+    <xsl:import href="project.xsl"/>
+
+    <!-- Output method -->
     <xsl:output method="html" encoding="UTF-8" indent="no"
         doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
         doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
-
-    <xsl:variable name="project" select="document('project.xml')/project"/>
 
     <!-- <document> gets translated to an HTML container -->
     <xsl:template match="document">
@@ -33,46 +34,6 @@ limitations under the License.
                 <link rel="stylesheet" href="demo.css" type="text/css"/>
                 <link rel="icon" href="favicon.png" type="image/png" />
                 <link rel="shortcut icon" href="favicon.png" type="image/png" />
-                <style>
-                    body {
-                        font-family:Verdana;
-                        font-size:11px;
-                    }
-
-                    p.caption {
-                        font-style:italic;
-                        padding-top:0px;
-                    }
-
-                    p.command {
-                        font-family:"Consolas", "Monaco", "Bitstream Vera Sans Mono", "Courier New";
-                        background-color:#E7E5DC;
-                        padding-top:12px;
-                        padding-left:24px;
-                        padding-bottom:12px;
-                        padding-right:24px;
-                    }
-
-                    pre.snippet {
-                        padding:6px;
-                        border:#E7E5DC solid 1px;
-                        font-family:"Consolas", "Monaco", "Bitstream Vera Sans Mono", "Courier New";
-                        font-size:1em;
-                    }
-
-                    tt {
-                        font-family:"Consolas", "Monaco", "Bitstream Vera Sans Mono", "Courier New";
-                    }
-
-                    table {
-                        font-size:11px;
-                    }
-
-                    img {
-                        vertical-align: middle;
-                    }
-                </style>
-                <script xmlns="" type="text/javascript" src="http://java.com/js/deployJava.js"></script>
                 <xsl:apply-templates select="head"/>
             </head>
 
@@ -82,52 +43,33 @@ limitations under the License.
         </html>
     </xsl:template>
 
-    <!-- <head> content gets passed through -->
-    <xsl:template match="head">
-        <xsl:apply-templates/>
-    </xsl:template>
-
-    <!-- <body> content gets passed through -->
-    <xsl:template match="body">
-        <xsl:apply-templates/>
-    </xsl:template>
-
     <!-- <document-item> gets translated to a demo summary with links to the demo -->
     <xsl:template match="document-item">
         <xsl:variable name="id" select="@id"/>
         <xsl:variable name="document" select="document(concat('../www/', $id, '.xml'))/document"/>
 
-        <xsl:if test="position()&gt;1">
+        <xsl:if test="preceding::document-item">
             <hr/>
         </xsl:if>
 
-        <h3><xsl:value-of select="$document/properties/title"/></h3>
+        <h3><xsl:value-of select="normalize-space($document/properties/title)"/></h3>
         <p>
-            <xsl:element name="a">
-                <xsl:attribute name="href">
-                    <xsl:value-of select="concat($id, '.html')"/>
-                </xsl:attribute>
-                <xsl:if test="boolean($document/properties/full-screen)">
-                    <xsl:attribute name="target">_new</xsl:attribute>
-                </xsl:if>
-                <xsl:text>Applet</xsl:text>
-            </xsl:element>
-            <xsl:text> | </xsl:text>
-            <a href="{$id}.jnlp">Web start</a>
+            <a href="{$id}.html">Applet</a>
+
+            <!-- JNLP translation must ignore the head, so if one exists, we skip JNLP link -->
+            <xsl:if test="not($document/head)">
+                <xsl:text> | </xsl:text>
+                <a href="{$id}.jnlp">Web start</a>
+            </xsl:if>
         </p>
-        <p><xsl:value-of select="$document/properties/description"/></p>
+        <p>
+            <xsl:value-of select="normalize-space($document/properties/description)"/>
+        </p>
 
         <!-- Include a screenshot if one exists -->
         <xsl:if test="$project/demo-screenshots/screenshot[@id=$id]">
             <xsl:variable name="src" select="$project/demo-screenshots/screenshot[@id=$id]/@src"/>
             <p><img src="{$src}"/></p>
         </xsl:if>
-    </xsl:template>
-
-    <!-- Everything else gets passed through -->
-    <xsl:template match="*|@*">
-        <xsl:copy>
-            <xsl:apply-templates select="@*|*|text()"/>
-        </xsl:copy>
     </xsl:template>
 </xsl:stylesheet>

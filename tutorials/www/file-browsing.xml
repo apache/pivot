@@ -22,11 +22,14 @@ limitations under the License.
     </properties>
 
     <body>
-        <p>Pivot includes support for easily adding local file system access to an application. The following example demonstrates the use of the <tt>FileBrowserSheet</tt> class:</p>
+        <p>
+            Pivot includes support for easily adding local file system access to an application.
+            The following example demonstrates the use of the <tt>FileBrowserSheet</tt> class:
+        </p>
 
         <application class="org.apache.pivot.tutorials.filebrowsing.FileBrowsing"
-            width="640" height="480" signed="true">
-            <libraries>
+            width="640" height="480">
+            <libraries signed="true">
                 <library>core</library>
                 <library>wtk</library>
                 <library>wtk-terra</library>

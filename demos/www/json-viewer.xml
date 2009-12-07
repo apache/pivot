@@ -28,9 +28,8 @@ limitations under the License.
         <p>
             Allows users to visually browse a JSON structure using a TreeView component.
         </p>
-        <application class="org.apache.pivot.tools.json.JSONViewer"
-            width="360" height="480" signed="true">
-            <libraries>
+        <application class="org.apache.pivot.tools.json.JSONViewer" width="360" height="480">
+            <libraries signed="true">
                 <library>core</library>
                 <library>wtk</library>
                 <library>wtk-terra</library>

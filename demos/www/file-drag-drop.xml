@@ -30,9 +30,8 @@ limitations under the License.
             from the desktop or local file system into the applet for upload to a web or other
             server.
         </p>
-        <application class="org.apache.pivot.demos.dnd.FileDropTargetDemo"
-            width="380" height="260" signed="true">
-            <libraries>
+        <application class="org.apache.pivot.demos.dnd.FileDropTargetDemo" width="380" height="260">
+            <libraries signed="true">
                 <library>core</library>
                 <library>wtk</library>
                 <library>wtk-terra</library>

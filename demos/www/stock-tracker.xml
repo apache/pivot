@@ -32,8 +32,8 @@ limitations under the License.
             signed to allow it to communicate with the Yahoo web service):
         </p>
         <application class="org.apache.pivot.tutorials.stocktracker.StockTracker"
-            width="480" height="360" signed="true">
-            <libraries>
+            width="480" height="360">
+            <libraries signed="true">
                 <library>core</library>
                 <library>wtk</library>
                 <library>wtk-terra</library>

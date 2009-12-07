@@ -117,8 +117,8 @@ limitations under the License.
         </p>
 
         <application class="org.apache.pivot.tutorials.stocktracker.StockTracker"
-            width="480" height="360" signed="true">
-            <libraries>
+            width="480" height="360">
+            <libraries signed="true">
                 <library>core</library>
                 <library>web</library>
                 <library>wtk</library>

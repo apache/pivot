@@ -20,12 +20,12 @@ limitations under the License.
     <vendor>Apache Pivot</vendor>
 
     <demo-screenshots>
-        <screenshot id="kitchen-sink" src="kitchen-sink.png"/>
-        <screenshot id="stock-tracker" src="stock-tracker.png"/>
-        <screenshot id="itunes-search" src="itunes-search.png"/>
-        <screenshot id="json-viewer" src="json-viewer.png"/>
-        <screenshot id="xml-viewer" src="xml-viewer.png"/>
-        <screenshot id="animated-clock" src="animated-clock.png"/>
+        <screenshot id="kitchen-sink" src="kitchen_sink.png"/>
+        <screenshot id="stock-tracker" src="stock_tracker.png"/>
+        <screenshot id="itunes-search" src="itunes_search.png"/>
+        <screenshot id="json-viewer" src="json_viewer.png"/>
+        <screenshot id="xml-viewer" src="xml_viewer.png"/>
+        <screenshot id="animated-clock" src="animated_clock.png"/>
         <screenshot id="decorators" src="decorators.png"/>
     </demo-screenshots>
 </project>

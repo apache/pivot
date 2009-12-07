@@ -18,23 +18,25 @@ limitations under the License.
 
 <!-- Translates a demo XML document into an HTML demo page -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-    <xsl:param name="version"/>
-    <xsl:param name="root"/>
+    <xsl:import href="project.xsl"/>
 
+    <!-- Output method -->
     <xsl:output method="html" encoding="UTF-8" indent="no"
         doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
         doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+
+    <!-- Parameters (overrideable) -->
+    <xsl:param name="version"/>
+    <xsl:param name="root"/>
 
     <!-- <document> gets translated into an HTML container -->
     <xsl:template match="document">
         <html xmlns="http://www.w3.org/1999/xhtml">
             <head>
                 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-                <title>
-                    Pivot <xsl:value-of select="properties/title"/> Demo
-                </title>
+                <title>Pivot <xsl:value-of select="properties/title"/> Demo</title>
                 <link rel="stylesheet" href="demo.css" type="text/css"/>
-                <script xmlns="" type="text/javascript" src="http://java.com/js/deployJava.js"></script>
+                <script xmlns="" type="text/javascript" src="http://java.com/js/deployJava.js"/>
                 <xsl:if test="boolean(properties/full-screen)">
                     <style type="text/css">
                         * {
@@ -55,16 +57,6 @@ limitations under the License.
                 <xsl:apply-templates select="body"/>
             </body>
         </html>
-    </xsl:template>
-
-    <!-- <head> content gets passed through -->
-    <xsl:template match="head">
-        <xsl:apply-templates/>
-    </xsl:template>
-
-    <!-- <body> content gets passed through -->
-    <xsl:template match="body">
-        <xsl:apply-templates/>
     </xsl:template>
 
     <!-- <root> gets resolved to the 'root' XSL parameter -->
@@ -89,7 +81,7 @@ limitations under the License.
 
             <!-- Archive attribute -->
             var libraries = [];
-            <xsl:variable name="signed" select="@signed"/>
+            <xsl:variable name="signed" select="libraries/@signed"/>
             <xsl:for-each select="libraries/library">
                 <xsl:text><![CDATA[libraries.push("]]></xsl:text>
                 <xsl:value-of select="'lib/pivot-'"/>
@@ -123,12 +115,5 @@ limitations under the License.
 
             deployJava.runApplet(attributes, parameters, "1.6");
         </script>
-    </xsl:template>
-
-    <!-- Everything else gets passed through -->
-    <xsl:template match="*|@*">
-        <xsl:copy>
-            <xsl:apply-templates select="@*|*|text()"/>
-        </xsl:copy>
     </xsl:template>
 </xsl:stylesheet>

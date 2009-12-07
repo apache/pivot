@@ -512,7 +512,7 @@ limitations under the License.
             style="tutorials/xsl/tutorial.xsl"
             includes="*.xml"
             excludes="index.xml">
-            <param name="release" expression="${version}"/>
+            <param name="version" expression="${version}"/>
         </xslt>
 
         <!-- Copy static tutorial files to deploy folder -->

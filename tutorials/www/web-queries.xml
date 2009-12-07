@@ -67,8 +67,8 @@ limitations under the License.
         </p>
 
         <application class="org.apache.pivot.tutorials.webqueries.WebQueries"
-            width="240" height="320" signed="true">
-            <libraries>
+            width="240" height="320">
+            <libraries signed="true">
                 <library>core</library>
                 <library>web</library>
                 <library>wtk</library>
