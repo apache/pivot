@@ -31,9 +31,6 @@ Project Set-Up
 * Ensure that the JNLP APIs are on your classpath; follow the same process as
   described in the previous step, substituting javaws.jar for plugin.jar.
 
-* Ensure that the JAVA_HOME environment variable is set correctly
-  to point to a Java 6 installation (not required on Mac OS X).
-
 
 Building Pivot
 ==============

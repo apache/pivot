@@ -19,13 +19,19 @@ Distribution JARs
 * Core (pivot-core-1.4.jar):
   A set of common, non-UI-specific classes.
 
-* WTK (pivot-wtk-1.4.jar, pivot-wtk-terra-1.4.jar):
+* WTK (pivot-wtk-1.4.jar):
   Classes for user interface development, including windows, dialogs, buttons,
   lists, text input, layout, drag and drop, XML markup, etc.
 
-* Web (pivot-web-1.4.jar, pivot-web-server-1.4.jar):
-  Classes to facilitate communication with and implementation of remote data
-  services.
+* WTK Terra Theme (pivot-wtk-terra-1.4.jar):
+  The default WTK theme provider for Pivot, responsible for the look & feel of
+  the user interface components.
+
+* Web (pivot-web-1.4.jar):
+  Classes to facilitate communication with remote data services.
+
+* Web Server (pivot-web-server-1.4.jar):
+  Classes to facilitate implementation of server-side data services.
 
 * Charting (pivot-charts-1.4.jar):
   Classes for adding interactive charting capabilities to Pivot applications.
