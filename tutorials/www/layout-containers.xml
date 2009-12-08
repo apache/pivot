@@ -22,5 +22,73 @@ limitations under the License.
     </properties>
 
     <body>
+        <p>
+            Layout containers are used primarily to arrange other components on the screen. Layout 
+            containers include:
+        </p>
+        
+        <ul>
+            <li>
+                <p>
+                    <a href="flow_panes.html"><b>FlowPane</b></a> - Arranges components in a 
+                    horizontal line, wrapping when contents don't fit on a single line.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <a href="box_panes.html"><b>BoxPane</b></a> - Arranges components in a line, 
+                    either vertically or horizontally.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <a href="grid_panes.html"><b>GridPane</b></a> - Arranges components in a 
+                    two-dimensional grid where each cell is given the same size, based on the 
+                    available width and height.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <a href="table_panes.html"><b>TablePane</b></a> - Arranges components in a 
+                    two-dimensional table structure, optionally spanning table cells.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <a href="borders.html"><b>Border</b></a> - Container with an optional title 
+                    that draws a border around a single content component.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <a href="stack_panes.html"><b>StackPane</b></a> - Arranges components in 
+                    layers, like a stack of transparencies.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <a href="split_panes.html"><b>SplitPane</b></a> - Provides a draggable divider 
+                    between two components allowing a user to dynamically change the size of 
+                    each; may be horizontal or vertical.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <a href="forms.html"><b>Form</b></a> - Arranges components in a "form" layout 
+                    with labels to the left and optional flag messages (e.g. to alert a user to 
+                    input errors) to the right.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <a href="panels.html"><b>Panel</b></a> - Performs no layout, allowing the 
+                    application to specify absolute component positions and sizes.
+                </p>
+            </li>
+        </ul>
+        
+        <p>
+            Each of these are discussed in detail in the following sections.
+        </p>
     </body>
 </document>

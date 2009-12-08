@@ -22,5 +22,100 @@ limitations under the License.
     </properties>
 
     <body>
+        <p>The following example demonstrates use of the <tt>LinkButton</tt> class in a Pivot application. Clicking the links allows the user to navigate between two "pages", each containing a single image:</p>
+        
+        <application class="org.apache.pivot.wtk.ScriptApplication"
+            width="360" height="360">
+            <libraries>
+                <library>core</library>
+                <library>wtk</library>
+                <library>wtk-terra</library>
+                <library>tutorials</library>
+            </libraries>
+            <startup-properties>
+                <src>org/apache/pivot/tutorials/buttons/link_buttons.wtkx</src>
+            </startup-properties>
+        </application>
+
+        <p>The WTKX source for the example is below:</p>
+        
+        <source type="xml" location="org/apache/pivot/tutorials/buttons/link_buttons.wtkx">
+            <![CDATA[
+            <Window title="Link Buttons" maximized="true"
+                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns:content="org.apache.pivot.wtk.content"
+                xmlns="org.apache.pivot.wtk">
+                <content>
+                    <CardPane wtkx:id="cardPane" selectedIndex="0" styles="{selectionChangeEffect:'horizontal_slide'}">
+                        <BoxPane orientation="vertical" styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                            <ImageView image="org/apache/pivot/tutorials/IMG_0735_2.jpg"/>
+                            <LinkButton>
+                                <buttonData>
+                                    <content:ButtonData text="Next" icon="@resultset_next.png"/>
+                                </buttonData>
+            
+                                <buttonPressListeners>
+                                    <wtkx:script>
+                                    function buttonPressed(button) {
+                                        cardPane.setSelectedIndex(1);
+                                    }
+                                    </wtkx:script>
+                                </buttonPressListeners>
+                            </LinkButton>
+                        </BoxPane>
+            
+                        <BoxPane orientation="vertical" styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                            <ImageView image="org/apache/pivot/tutorials/IMG_0767_2.jpg"/>
+                            <LinkButton>
+                                <buttonData>
+                                    <content:ButtonData text="Previous" icon="@resultset_previous.png"/>
+                                </buttonData>
+            
+                                <buttonPressListeners>
+                                    <wtkx:script>
+                                    function buttonPressed(button) {
+                                        cardPane.setSelectedIndex(0);
+                                    }
+                                    </wtkx:script>
+                                </buttonPressListeners>
+                            </LinkButton>
+                        </BoxPane>
+                    </CardPane>
+                </content>
+            </Window>
+            ]]>
+        </source>
+        
+        <p>
+            This example uses the <tt>CardPane</tt> layout container. A card pane lays out its 
+            components like a stack of cards, only one of which is visible at a time. 
+            <tt>CardPane</tt> is discussed in more detail in the 
+            <a href="navigation-containers.html">Navigation Containers</a> section.
+        </p>
+        
+        <p>
+            This example demonstrates another means of defining event handlers in WTKX: within an 
+            element that refers to a listener list property of its parent element. The 
+            <tt>&lt;buttonPressListeners&gt;</tt> element of each <tt>LinkButton</tt> contains 
+            script code that will be executed in response to a button press. In this case, the 
+            handlers simply set the selected index of the card pane is assigned to each link 
+            button. However, it is possible to define more complex logic in a handler declared 
+            this way, and element-based event handlers such as this are often used when the event 
+            logic is more complex than can be represented in a single line (such as might be used 
+            in an attribute-based handler).
+        </p>
+        
+        <p>
+            Though it is not obvious from this example, other listener methods can also be defined 
+            within the same script block (if, for example, the <tt>ButtonPressListener</tt> 
+            interface declared additional methods). However, in such cases, callers are not 
+            required to provide implementations for all listener methods, only the ones they are 
+            interested in (similar to using an <tt>Adapter</tt> class in Java code).
+        </p>
+        
+        <p>
+            Since all of the logic for this application is implemented in script, there is no Java 
+            source associated with this example.
+        </p>        
     </body>
 </document>

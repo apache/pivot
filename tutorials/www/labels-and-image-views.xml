@@ -22,5 +22,123 @@ limitations under the License.
     </properties>
 
     <body>
+        <p>
+            This section introduces two of the least complex but most common Pivot components: 
+            <tt>Label</tt> and <tt>ImageView</tt>. Labels are used to present a block of static, 
+            optionally wrapped, text, and image views are used to display a static graphic. The 
+            applet below shows an <tt>ImageView</tt> followed by a <tt>Label</tt>:
+        </p>
+        
+        <application class="org.apache.pivot.tutorials.labels.Labels"
+            width="120" height="40">
+            <libraries>
+                <library>core</library>
+                <library>wtk</library>
+                <library>wtk-terra</library>
+                <library>tutorials</library>
+            </libraries>
+        </application>
+
+        <p>
+            Below is the WTKX source used to generate the applet's contents. Note that the 
+            <tt>ImageView</tt> element defines a cursor attribute with a value of "crosshair" (move 
+            the mouse pointer over the image to see the effect):
+        </p>
+        
+        <source type="xml" location="org/apache/pivot/tutorials/labels/labels.wtkx">
+            <![CDATA[
+            <Window title="Labels" maximized="true"
+                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns="org.apache.pivot.wtk">
+                <content>
+                    <BoxPane styles="{padding:4, verticalAlignment:'center'}">
+                        <ImageView image="org/apache/pivot/tutorials/clock.png" cursor="crosshair"/>
+                        <Label text="What time is it?"/>
+                    </BoxPane>
+                </content>
+            </Window>
+            ]]>
+        </source>
+        
+        <p>
+            Also note that the example uses a <tt>BoxPane</tt> to arrange the components 
+            horizontally. <tt>BoxPane</tt> is discussed in more detail in the 
+            <a href="layout-containers.html">Layout Containers</a> section.
+        </p>
+        
+        <p>
+            Finally, note that, while the graphic used in this example is a static bitmap 
+            (represented by the <tt>org.apache.pivot.wtk.media.Picture</tt> class), 
+            <tt>ImageView</tt> is also capable of presenting vector graphic images, represented by 
+            the <tt>org.apache.pivot.wtk.media.Drawing</tt> class. Drawings are discussed in more 
+            detail in the <a href="drawing.html">Drawing</a> section.
+        </p>
+        
+        <p>
+            The application code used in this example is not significantly different from the code 
+            used in the "Hello, World!" example. It simply loads the WTKX file and opens the 
+            window:
+        </p>
+        
+        <source type="xml" location="org/apache/pivot/tutorials/labels/labels.wtkx">
+            <![CDATA[
+            package org.apache.pivot.tutorials.labels;
+            
+            import org.apache.pivot.collections.Map;
+            import org.apache.pivot.wtk.Application;
+            import org.apache.pivot.wtk.DesktopApplicationContext;
+            import org.apache.pivot.wtk.Display;
+            import org.apache.pivot.wtk.Window;
+            import org.apache.pivot.wtkx.WTKXSerializer;
+            
+            public class Labels implements Application {
+                private Window window = null;
+            
+                @Override
+                public void startup(Display display, Map<String, String> properties) throws Exception {
+                    WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                    window = (Window)wtkxSerializer.readObject(this, "labels.wtkx");
+                    window.open(display);
+                }
+            
+                @Override
+                public boolean shutdown(boolean optional) {
+                    if (window != null) {
+                        window.close();
+                    }
+            
+                    return false;
+                }
+            
+                @Override
+                public void suspend() {
+                }
+            
+                @Override
+                public void resume() {
+                }
+            
+                public static void main(String[] args) {
+                    DesktopApplicationContext.main(Labels.class, args);
+                }
+            }
+            ]]>
+        </source>
+        
+        <p>
+            In fact, because this application does not include any special logic, it could actually 
+            have been launched using the <tt>org.apache.pivot.wtk.ScriptApplication</tt> class. 
+            This class, which is included with the Pivot platform, implements the 
+            <tt>Application</tt> interface and takes the name of a WTKX file to launch as a startup 
+            property. The WTKX file is expected to contain a root element representing a 
+            <tt>Window</tt> subclass.
+        </p>
+        
+        <p>
+            The class is named <tt>ScriptApplication</tt> because it is often used to launch 
+            applications whose logic is defined entirely in script; however, it can actually be 
+            used to launch any application whose main window is defined in a single WTKX file. Many 
+            of the examples in the following sections are launched using this class.
+        </p>
     </body>
 </document>
