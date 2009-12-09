@@ -569,7 +569,7 @@ limitations under the License.
     </target>
 
     <!-- Generates artifact bundles for Maven repository deployment -->
-    <target name="maven-deploy" depends="clean, package">
+    <target name="maven-deploy" depends="package">
         <mkdir dir="${folder.maven}"/>
         <mkdir dir="${folder.maven}/bundle"/>
 
@@ -651,12 +651,8 @@ limitations under the License.
         <attribute name="name"/>
 
         <sequential>
-            <!-- TODO Replace with gpg -->
-            <exec executable="echo">
-                <arg value="--passphrase ${gpg.passphrase}"/>
-                <arg value="--armor"/>
-                <arg value="--detach-sig"/>
-                <arg value="@{name}"/>
+            <exec executable="gpg">
+                <arg line="--passphrase ${gpg.passphrase} --armor --detach-sig @{name}"/>
             </exec>
         </sequential>
     </macrodef>
