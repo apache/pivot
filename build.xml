@@ -569,23 +569,23 @@ limitations under the License.
     </target>
 
     <!-- Generates artifact bundles for Maven repository deployment -->
-    <target name="maven-deploy" depends="package">
+    <target name="maven-deploy" depends="clean, package">
         <mkdir dir="${folder.maven}"/>
         <mkdir dir="${folder.maven}/bundle"/>
 
         <!-- Generate pivot bundle -->
         <mkdir dir="${folder.maven}/bundle/${ant.project.name}"/>
         <copy file="pom.xml" todir="${folder.maven}/bundle/${ant.project.name}"/>
+        <sign-pom-bundle name="${ant.project.name}"/>
 
         <jar basedir="${folder.maven}/bundle/${ant.project.name}"
             destfile="${folder.maven}/${ant.project.name}-${version}-bundle.jar"/>
-        <sign-pom-bundle name="pivot"/>
 
         <!-- Generate core bundle -->
         <mkdir dir="${folder.maven}/bundle/${ant.project.name}-core"/>
         <copy file="core/pom.xml" todir="${folder.maven}/bundle/${ant.project.name}-core"/>
         <copy file="lib/${jar.core}" todir="${folder.maven}/bundle/${ant.project.name}-core"/>
-        <sign-jar-bundle name="core"/>
+        <sign-jar-bundle name="${ant.project.name}-core"/>
 
         <jar basedir="${folder.maven}/bundle/${ant.project.name}-core"
             destfile="${folder.maven}/${ant.project.name}-core-${version}-bundle.jar"/>
@@ -594,7 +594,7 @@ limitations under the License.
         <mkdir dir="${folder.maven}/bundle/${ant.project.name}-web"/>
         <copy file="web/pom.xml" todir="${folder.maven}/bundle/${ant.project.name}-web"/>
         <copy file="lib/${jar.web}" todir="${folder.maven}/bundle/${ant.project.name}-web"/>
-        <sign-jar-bundle name="web"/>
+        <sign-jar-bundle name="${ant.project.name}-web"/>
 
         <jar basedir="${folder.maven}/bundle/${ant.project.name}-web"
             destfile="${folder.maven}/${ant.project.name}-web-${version}-bundle.jar"/>
@@ -603,7 +603,7 @@ limitations under the License.
         <mkdir dir="${folder.maven}/bundle/${ant.project.name}-wtk"/>
         <copy file="wtk/pom.xml" todir="${folder.maven}/bundle/${ant.project.name}-wtk"/>
         <copy file="lib/${jar.wtk}" todir="${folder.maven}/bundle/${ant.project.name}-wtk"/>
-        <sign-jar-bundle name="wtk"/>
+        <sign-jar-bundle name="${ant.project.name}-wtk"/>
 
         <jar basedir="${folder.maven}/bundle/${ant.project.name}-wtk"
             destfile="${folder.maven}/${ant.project.name}-wtk-${version}-bundle.jar"/>
@@ -612,7 +612,7 @@ limitations under the License.
         <mkdir dir="${folder.maven}/bundle/${ant.project.name}-wtk-terra"/>
         <copy file="wtk-terra/pom.xml" todir="${folder.maven}/bundle/${ant.project.name}-wtk-terra"/>
         <copy file="lib/${jar.wtk-terra}" todir="${folder.maven}/bundle/${ant.project.name}-wtk-terra"/>
-        <sign-jar-bundle name="wtk-terra"/>
+        <sign-jar-bundle name="${ant.project.name}-wtk-terra"/>
 
         <jar basedir="${folder.maven}/bundle/${ant.project.name}-wtk-terra"
             destfile="${folder.maven}/${ant.project.name}-wtk-terra-${version}-bundle.jar"/>
@@ -621,7 +621,7 @@ limitations under the License.
         <mkdir dir="${folder.maven}/bundle/${ant.project.name}-charts"/>
         <copy file="charts/pom.xml" todir="${folder.maven}/bundle/${ant.project.name}-charts"/>
         <copy file="lib/${jar.charts}" todir="${folder.maven}/bundle/${ant.project.name}-charts"/>
-        <sign-jar-bundle name="charts"/>
+        <sign-jar-bundle name="${ant.project.name}-charts"/>
 
         <jar basedir="${folder.maven}/bundle/${ant.project.name}-charts"
             destfile="${folder.maven}/${ant.project.name}-charts-${version}-bundle.jar"/>
@@ -642,7 +642,7 @@ limitations under the License.
 
         <sequential>
             <sign-file name="${folder.maven}/bundle/@{name}/pom.xml"/>
-            <sign-file name="${folder.maven}/bundle/@{name}/${ant.project.name}-@{name}-${version}.jar"/>
+            <sign-file name="${folder.maven}/bundle/@{name}/@{name}-${version}.jar"/>
         </sequential>
     </macrodef>
 
@@ -652,7 +652,7 @@ limitations under the License.
 
         <sequential>
             <exec executable="gpg">
-                <arg line="--passphrase ${gpg.passphrase} --armor --detach-sig @{name}"/>
+                <arg line="--passphrase ${gpg.passphrase} --armor --detach-sig --quiet --yes @{name}"/>
             </exec>
         </sequential>
     </macrodef>
