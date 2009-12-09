@@ -22,5 +22,213 @@ limitations under the License.
     </properties>
 
     <body>
+        <p>
+            In Java, any translatable text is generally stored in a set of localized property files
+            called "resource bundles". The appropriate file is loaded at runtime for either the
+            default locale or an explicitly selected non-default locale. While it is possible to
+            use standard Java resource bundles in a Pivot application, Pivot adds support for
+            JSON-based resource bundles that are slightly more flexible the built-in
+            properties-based bundles. JSON resource bundles allow developers to more easily work
+            with UTF-8 encoded resource strings, and also natively support hierarchical data, which
+            can only be simulated when using properties files.
+        </p>
+
+        <p>
+            The following application provides a simple demonstration of localization in Pivot:
+        </p>
+
+        <application class="org.apache.pivot.tutorials.localization.Localization"
+            width="320" height="240">
+            <libraries>
+                <library>core</library>
+                <library>wtk</library>
+                <library>wtk-terra</library>
+                <library>tutorials</library>
+            </libraries>
+        </application>
+
+        <p>
+            The following resource bundles are provided; if your default system locale is among
+            these, you should see a localized version of the application. Otherwise, the default
+            locale ("en") will be used:
+        </p>
+
+        <ul>
+            <li>Localization.json</li>
+            <li>Localization_cn.json</li>
+            <li>Localization_de.json</li>
+            <li>Localization_it.json</li>
+            <li>Localization_ph.json</li>
+        </ul>
+
+        <p>
+            The resource bundle for the default locale is shown below:
+        </p>
+
+        <source type="jscript">
+            <![CDATA[
+            {   firstName: "First name",
+                lastName: "Last name",
+                street: "Street",
+                city: "City",
+                state: "State",
+                postalCode: "Zip",
+                country: "Country"
+            }
+            ]]>
+        </source>
+
+        <p>
+            The WTKX source for the application is as follows. Note the use of the "%" prefix in
+            the form label attributes. This prefix is known as the "resource resolution operator"
+            in WTKX. As the WTKX is read, attribute values that begin with the "%" character are
+            replaced by the corresponding values defined in the resource bundle:
+        </p>
+
+        <source type="xml" location="org/apache/pivot/tutorials/localization/localization.wtkx">
+            <![CDATA[
+            <Window title="Localization" maximized="true"
+                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns="org.apache.pivot.wtk">
+                <windowStateListeners>
+                    <wtkx:script>
+                    function windowOpened(window) {
+                        window.requestFocus();
+                    }
+                    </wtkx:script>
+                </windowStateListeners>
+
+                <content>
+                    <Border styles="{padding:6}">
+                        <content>
+                            <Form>
+                                <sections>
+                                    <Form.Section>
+                                        <TextInput Form.label="%firstName"/>
+                                        <TextInput Form.label="%lastName"/>
+                                        <TextInput Form.label="%street"/>
+                                        <TextInput Form.label="%city"/>
+                                        <TextInput Form.label="%state" textSize="4"/>
+                                        <TextInput Form.label="%postalCode"/>
+                                        <TextInput Form.label="%country"/>
+                                    </Form.Section>
+                                </sections>
+                            </Form>
+                        </content>
+                    </Border>
+                </content>
+            </Window>
+            ]]>
+        </source>
+
+        <p>
+            The Java source for the application is shown below:
+        </p>
+
+        <source type="java" location="org/apache/pivot/tutorials/localization/Localization.java">
+            <![CDATA[
+            package org.apache.pivot.tutorials.localization;
+
+            import java.awt.Font;
+            import java.awt.GraphicsEnvironment;
+            import java.util.Locale;
+
+            import org.apache.pivot.collections.Map;
+            import org.apache.pivot.util.Resources;
+            import org.apache.pivot.wtk.Application;
+            import org.apache.pivot.wtk.DesktopApplicationContext;
+            import org.apache.pivot.wtk.Display;
+            import org.apache.pivot.wtk.Theme;
+            import org.apache.pivot.wtk.Window;
+            import org.apache.pivot.wtkx.WTKXSerializer;
+
+            public class Localization implements Application {
+                private Window window = null;
+
+                public static final String LANGUAGE_KEY = "language";
+
+                @Override
+                public void startup(Display display, Map<String, String> properties) throws Exception {
+                    String language = properties.get(LANGUAGE_KEY);
+                    if (language != null) {
+                        Locale.setDefault(new Locale(language));
+                    }
+
+                    Resources resources = new Resources(getClass().getName(), "UTF-8");
+
+                    Theme theme = Theme.getTheme();
+                    Font font = theme.getFont();
+
+                    // Search for a font that can support the sample string
+                    String sampleResource = resources.getString("firstName");
+                    if (font.canDisplayUpTo(sampleResource) != -1) {
+                        Font[] fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts();
+
+                        for (int i = 0; i < fonts.length; i++) {
+                            if (fonts[i].canDisplayUpTo(sampleResource) == -1) {
+                                theme.setFont(fonts[i].deriveFont(Font.PLAIN, 12));
+                                break;
+                            }
+                        }
+                    }
+
+                    WTKXSerializer wtkxSerializer = new WTKXSerializer(resources);
+
+                    window = (Window)wtkxSerializer.readObject(this, "localization.wtkx");
+                    window.open(display);
+                }
+
+                @Override
+                public boolean shutdown(boolean optional) {
+                    if (window != null) {
+                        window.close();
+                    }
+
+                    return false;
+                }
+
+                @Override
+                public void suspend() {
+                }
+
+                @Override
+                public void resume() {
+                }
+
+                public static void main(String[] args) {
+                    DesktopApplicationContext.main(Localization.class, args);
+                }
+            }
+            ]]>
+        </source>
+
+        <p>
+            Note that the application accepts a startup property named "language" to allow a caller
+            to override the default locale. The following example shows the application loaded with
+            "language" value of "de" (the applet is signed to allow the code to set the locale):
+        </p>
+
+        <application class="org.apache.pivot.tutorials.localization.Localization"
+            width="320" height="240">
+            <libraries>
+                <library>core</library>
+                <library>wtk</library>
+                <library>wtk-terra</library>
+                <library>tutorials</library>
+            </libraries>
+            <startup-properties>
+                <language>de</language>
+            </startup-properties>
+        </application>
+
+        <p>
+            Notice that the <tt>startup()</tt> method includes code to search for a font that can
+            display a sample set of characters obtained from the "firstName" resource. This is
+            because all fonts are not guaranteed to include support for all possible Unicode
+            characters. If the current theme font is not capable of displaying the sample string,
+            this block of code attempts to identify and set one that can. This code must be
+            executed prior to constructing any user interface elements so that the correct font
+            will be used.
+        </p>
     </body>
 </document>

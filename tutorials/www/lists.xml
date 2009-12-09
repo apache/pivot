@@ -22,5 +22,188 @@ limitations under the License.
     </properties>
 
     <body>
+        <p>
+            List components in Pivot include <tt>ListView</tt> and <tt>ListButton</tt>.
+            <tt>ListView</tt> is a (often scrollable) list of items of which one or more may be
+            selected. <tt>ListButton</tt> is a popup list of items of which only one may be
+            selected at a time. It is often used in place of a group of radio buttons, particularly
+            when space is limited.
+        </p>
+
+        <p>
+            <tt>ListButton</tt> is discussed in the next section. The following example
+            demonstrates the <tt>ListView</tt> component. Multiple items may be selected at a time,
+            and list selections are reflected in the label to the right.
+        </p>
+
+        <application class="org.apache.pivot.tutorials.lists.ListViews"
+            width="216" height="122">
+            <libraries>
+                <library>core</library>
+                <library>wtk</library>
+                <library>wtk-terra</library>
+                <library>tutorials</library>
+            </libraries>
+        </application>
+
+        <p>
+            The WTKX source for the example follows. Note that the list view is itself contained
+            within a <tt>ScrollPane</tt>. List views do not support scrolling internally. This
+            allows a UI designer to place a list view within an application and have the list view
+            simply grow to accommodate its contents, rather than requiring the designer to specify
+            a fixed height for the list in advance. However, if the designer knows that the list
+            will be long and that it is likely to scroll, it can be placed in a scroll pane.
+            <tt>ScrollPane</tt> is discussed in more detail in the
+            <a href="navigation_containers.html">Navigation Containers</a> section.
+        </p>
+
+        <p>
+            Also note that the list's contents are specified in the WTKX document itself, as a JSON
+            array of strings in the <tt>listData</tt> attribute. Any type of object can actually be
+            used as a list item, provided that the list view has been given a renderer that is
+            capable of painting it. However, they are most often specified as strings (as in this
+            example) or as instances of <tt>org.apache.pivot.wtk.content.ListItem</tt>, both of
+            which the default renderer is capable of presenting.
+        </p>
+
+        <source type="xml" location="org/apache/pivot/tutorials/lists/list_views.wtkx">
+            <![CDATA[
+            <Window title="List Views" maximized="true"
+                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns="org.apache.pivot.wtk">
+                <content>
+                    <Border>
+                        <content>
+                            <BoxPane styles="{padding:4, spacing:4}">
+                                <Border styles="{color:10}">
+                                    <content>
+                                        <ScrollPane preferredWidth="80" preferredHeight="110"
+                                            horizontalScrollBarPolicy="fill"
+                                            verticalScrollBarPolicy="fill_to_capacity">
+                                            <view>
+                                                <ListView wtkx:id="listView" selectMode="multi"
+                                                    listData="['One', 'Two', 'Three', 'Four', 'Five',
+                                                        'Six', 'Seven', 'Eight', 'Nine', 'Ten']"/>
+                                            </view>
+                                        </ScrollPane>
+                                    </content>
+                                </Border>
+                                <BoxPane orientation="vertical" preferredWidth="120" styles="{fill:true}">
+                                    <Label text="You selected:"/>
+                                    <Label wtkx:id="selectionLabel" styles="{wrapText:true}"/>
+                                </BoxPane>
+                            </BoxPane>
+                        </content>
+                    </Border>
+                </content>
+            </Window>
+            ]]>
+        </source>
+
+        <p>
+            The Java code for the example also uses the list data to populate the label component
+            as the list selection changes. A <tt>ListView</tt>'s selection is represented by a
+            sorted list of <tt>org.apache.pivot.wtk.Span</tt> objects that contain the currently
+            selected ranges; the application retrieves the list of currently selected ranges and
+            then constructs the label's text by appending each selected item to the string:
+        </p>
+
+        <source type="java" location="org/apache/pivot/tutorials/lists/ListViews.java">
+            <![CDATA[
+            package org.apache.pivot.tutorials.lists;
+
+            import org.apache.pivot.collections.Map;
+            import org.apache.pivot.collections.Sequence;
+            import org.apache.pivot.wtk.Application;
+            import org.apache.pivot.wtk.DesktopApplicationContext;
+            import org.apache.pivot.wtk.Display;
+            import org.apache.pivot.wtk.Label;
+            import org.apache.pivot.wtk.ListView;
+            import org.apache.pivot.wtk.ListViewSelectionListener;
+            import org.apache.pivot.wtk.Span;
+            import org.apache.pivot.wtk.Window;
+            import org.apache.pivot.wtkx.WTKXSerializer;
+
+            public class ListViews implements Application {
+                private Window window = null;
+                private Label selectionLabel = null;
+                private ListView listView = null;
+
+                private ListViewSelectionListener listViewSelectionListener =
+                    new ListViewSelectionListener() {
+                    @Override
+                    public void selectedRangeAdded(ListView listView, int rangeStart, int rangeEnd) {
+                        updateSelection(listView);
+                    }
+
+                    @Override
+                    public void selectedRangeRemoved(ListView listView, int rangeStart, int rangeEnd) {
+                        updateSelection(listView);
+                    }
+
+                    @Override
+                    public void selectedRangesChanged(ListView listView, Sequence<Span> previousSelectedRanges) {
+                        updateSelection(listView);
+                    }
+
+                    private void updateSelection(ListView listView) {
+                        String selectionText = "";
+
+                        Sequence<Span> selectedRanges = listView.getSelectedRanges();
+                        for (int i = 0, n = selectedRanges.getLength(); i < n; i++) {
+                            Span selectedRange = selectedRanges.get(i);
+
+                            for (int j = selectedRange.start;
+                                j <= selectedRange.end;
+                                j++) {
+                                if (selectionText.length() > 0) {
+                                    selectionText += ", ";
+                                }
+
+                                String text = (String)listView.getListData().get(j);
+                                selectionText += text;
+                            }
+                        }
+
+                        selectionLabel.setText(selectionText);
+                    }
+                };
+
+                @Override
+                public void startup(Display display, Map<String, String> properties)
+                    throws Exception {
+                    WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                    window = (Window)wtkxSerializer.readObject(this, "list_views.wtkx");
+                    selectionLabel = (Label)wtkxSerializer.get("selectionLabel");
+                    listView = (ListView)wtkxSerializer.get("listView");
+
+                    listView.getListViewSelectionListeners().add(listViewSelectionListener);
+
+                    window.open(display);
+                }
+
+                @Override
+                public boolean shutdown(boolean optional) {
+                    if (window != null) {
+                        window.close();
+                    }
+
+                    return false;
+                }
+
+                @Override
+                public void suspend() {
+                }
+
+                @Override
+                public void resume() {
+                }
+
+                public static void main(String[] args) {
+                    DesktopApplicationContext.main(ListViews.class, args);
+                }
+            }
+            ]]>
+        </source>
     </body>
 </document>
