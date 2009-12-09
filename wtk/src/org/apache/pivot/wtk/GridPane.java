@@ -321,17 +321,16 @@ public class GridPane extends Container {
     private GridPaneListenerList gridPaneListeners = new GridPaneListenerList();
 
     /**
-     * Creates a new <tt>GridPane</tt> with empty row and column sequences.
+     * Creates a new grid pane.
      */
     public GridPane() {
         this(0);
     }
 
     /**
-     * Creates a new <tt>GridPane</tt> with the specified columns.
+     * Creates a new grid pane with the specified column count.
      *
-     * @param columns
-     * The column sequence to use. A copy of this sequence will be made
+     * @param columnCount
      */
     public GridPane(int columnCount) {
         if (columnCount < 0) {

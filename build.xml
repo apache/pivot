@@ -456,10 +456,6 @@ limitations under the License.
 
         <delete dir="${folder.lib}/signed"/>
 
-        <!-- Define filters for processing HTML files -->
-        <filter token="project_name" value="${ant.project.name}"/>
-        <filter token="version" value="${version}"/>
-
         <!-- Deploy demos -->
         <mkdir dir="demos/${folder.deploy}/lib"/>
         <copy todir="demos/${folder.deploy}/lib">
@@ -575,58 +571,95 @@ limitations under the License.
     <!-- Generates artifact bundles for Maven repository deployment -->
     <target name="maven-deploy" depends="clean, package">
         <mkdir dir="${folder.maven}"/>
+        <mkdir dir="${folder.maven}/bundle"/>
 
-        <jar destfile="${folder.maven}/pivot-${version}-bundle.jar">
-            <fileset dir=".">
-                <include name="pom.xml"/>
-            </fileset>
-        </jar>
+        <!-- Generate pivot bundle -->
+        <mkdir dir="${folder.maven}/bundle/${ant.project.name}"/>
+        <copy file="pom.xml" todir="${folder.maven}/bundle/${ant.project.name}"/>
 
-        <jar destfile="${folder.maven}/pivot-core-${version}-bundle.jar">
-            <fileset dir="core">
-                <include name="pom.xml"/>
-            </fileset>
-            <fileset dir="lib">
-                <include name="${jar.core}"/>
-            </fileset>
-        </jar>
+        <jar basedir="${folder.maven}/bundle/${ant.project.name}"
+            destfile="${folder.maven}/${ant.project.name}-${version}-bundle.jar"/>
+        <sign-pom-bundle name="pivot"/>
 
-        <jar destfile="${folder.maven}/pivot-web-${version}-bundle.jar">
-            <fileset dir="web">
-                <include name="pom.xml"/>
-            </fileset>
-            <fileset dir="lib">
-                <include name="${jar.web}"/>
-            </fileset>
-        </jar>
+        <!-- Generate core bundle -->
+        <mkdir dir="${folder.maven}/bundle/${ant.project.name}-core"/>
+        <copy file="core/pom.xml" todir="${folder.maven}/bundle/${ant.project.name}-core"/>
+        <copy file="lib/${jar.core}" todir="${folder.maven}/bundle/${ant.project.name}-core"/>
+        <sign-jar-bundle name="core"/>
 
-        <jar destfile="${folder.maven}/pivot-wtk-${version}-bundle.jar">
-            <fileset dir="wtk">
-                <include name="pom.xml"/>
-            </fileset>
-            <fileset dir="lib">
-                <include name="${jar.wtk}"/>
-            </fileset>
-        </jar>
+        <jar basedir="${folder.maven}/bundle/${ant.project.name}-core"
+            destfile="${folder.maven}/${ant.project.name}-core-${version}-bundle.jar"/>
 
-        <jar destfile="${folder.maven}/pivot-wtk-terra-${version}-bundle.jar" >
-            <fileset dir="wtk-terra">
-                <include name="pom.xml"/>
-            </fileset>
-            <fileset dir="lib">
-                <include name="${jar.wtk-terra}"/>
-            </fileset>
-        </jar>
+        <!-- Generate web bundle -->
+        <mkdir dir="${folder.maven}/bundle/${ant.project.name}-web"/>
+        <copy file="web/pom.xml" todir="${folder.maven}/bundle/${ant.project.name}-web"/>
+        <copy file="lib/${jar.web}" todir="${folder.maven}/bundle/${ant.project.name}-web"/>
+        <sign-jar-bundle name="web"/>
 
-        <jar destfile="${folder.maven}/pivot-charts-${version}-bundle.jar">
-            <fileset dir="charts">
-                <include name="pom.xml"/>
-            </fileset>
-            <fileset dir="lib">
-                <include name="${jar.charts}"/>
-            </fileset>
-        </jar>
+        <jar basedir="${folder.maven}/bundle/${ant.project.name}-web"
+            destfile="${folder.maven}/${ant.project.name}-web-${version}-bundle.jar"/>
+
+        <!-- Generate wtk bundle -->
+        <mkdir dir="${folder.maven}/bundle/${ant.project.name}-wtk"/>
+        <copy file="wtk/pom.xml" todir="${folder.maven}/bundle/${ant.project.name}-wtk"/>
+        <copy file="lib/${jar.wtk}" todir="${folder.maven}/bundle/${ant.project.name}-wtk"/>
+        <sign-jar-bundle name="wtk"/>
+
+        <jar basedir="${folder.maven}/bundle/${ant.project.name}-wtk"
+            destfile="${folder.maven}/${ant.project.name}-wtk-${version}-bundle.jar"/>
+
+        <!-- Generate wtk-terra bundle -->
+        <mkdir dir="${folder.maven}/bundle/${ant.project.name}-wtk-terra"/>
+        <copy file="wtk-terra/pom.xml" todir="${folder.maven}/bundle/${ant.project.name}-wtk-terra"/>
+        <copy file="lib/${jar.wtk-terra}" todir="${folder.maven}/bundle/${ant.project.name}-wtk-terra"/>
+        <sign-jar-bundle name="wtk-terra"/>
+
+        <jar basedir="${folder.maven}/bundle/${ant.project.name}-wtk-terra"
+            destfile="${folder.maven}/${ant.project.name}-wtk-terra-${version}-bundle.jar"/>
+
+        <!-- Generate charts bundle -->
+        <mkdir dir="${folder.maven}/bundle/${ant.project.name}-charts"/>
+        <copy file="charts/pom.xml" todir="${folder.maven}/bundle/${ant.project.name}-charts"/>
+        <copy file="lib/${jar.charts}" todir="${folder.maven}/bundle/${ant.project.name}-charts"/>
+        <sign-jar-bundle name="charts"/>
+
+        <jar basedir="${folder.maven}/bundle/${ant.project.name}-charts"
+            destfile="${folder.maven}/${ant.project.name}-charts-${version}-bundle.jar"/>
     </target>
+
+    <!-- Signs a Maven POM bundle -->
+    <macrodef name="sign-pom-bundle">
+        <attribute name="name"/>
+
+        <sequential>
+            <sign-file name="${folder.maven}/bundle/@{name}/pom.xml"/>
+        </sequential>
+    </macrodef>
+
+    <!-- Signs a Maven JAR bundle -->
+    <macrodef name="sign-jar-bundle">
+        <attribute name="name"/>
+
+        <sequential>
+            <sign-file name="${folder.maven}/bundle/@{name}/pom.xml"/>
+            <sign-file name="${folder.maven}/bundle/@{name}/${ant.project.name}-@{name}-${version}.jar"/>
+        </sequential>
+    </macrodef>
+
+    <!-- Signs a file using PGP -->
+    <macrodef name="sign-file">
+        <attribute name="name"/>
+
+        <sequential>
+            <!-- TODO Replace with gpg -->
+            <exec executable="echo">
+                <arg value="--passphrase ${gpg.passphrase}"/>
+                <arg value="--armor"/>
+                <arg value="--detach-sig"/>
+                <arg value="@{name}"/>
+            </exec>
+        </sequential>
+    </macrodef>
 
     <!-- Remove trailing white space in all source files -->
     <target name="trim-whitespace">
