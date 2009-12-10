@@ -22,5 +22,85 @@ limitations under the License.
     </properties>
 
     <body>
+        <p>
+            Although Pivot's automatic layout management features are convenient, sometimes it is
+            preferable to perform layout manually (for example, when aligning components to an
+            existing graphical asset being used as a background image). The <tt>Panel</tt>
+            container can be used for this purpose. <tt>Panel</tt> performs no layout or preferred
+            size calculations itself, giving the application complete control over components' size
+            and position.
+        </p>
+
+        <p>
+            The following example demonstrates use of the <tt>Panel</tt> container. It defines a
+            stack pane that contains an <tt>ImageView</tt> and a <tt>Panel</tt>. The image view
+            contains a drawing that defines an absolutely positioned rectangle. The buttons in
+            the <tt>Panel</tt>, which sits on top of the <tt>ImageView</tt>, are absolutely
+            positioned such that they appear within the bounds of the rectangle:
+        </p>
+
+        <application class="org.apache.pivot.wtk.ScriptApplication"
+            width="400" height="320">
+            <libraries>
+                <library>core</library>
+                <library>wtk</library>
+                <library>wtk-terra</library>
+                <library>tutorials</library>
+            </libraries>
+            <startup-properties>
+                <src>org/apache/pivot/tutorials/layout/panels.wtkx</src>
+            </startup-properties>
+        </application>
+
+        <p>
+            The WTKX source code for this example is as follows. The <tt>Drawing</tt> and
+            <tt>Rectangle</tt> classes are discussed in more detail in the
+            <a href="drawings.html">Drawing</a> section:
+        </p>
+
+        <source type="xml" location="org/apache/pivot/tutorials/layout/panels.wtkx">
+            <![CDATA[
+            <Window title="Panels" maximized="true"
+                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns:media="org.apache.pivot.wtk.media"
+                xmlns:drawing="org.apache.pivot.wtk.media.drawing"
+                xmlns="org.apache.pivot.wtk">
+                <content>
+                    <StackPane>
+                        <ImageView styles="{horizontalAlignment:'left', verticalAlignment:'top'}">
+                            <image>
+                                <media:Drawing>
+                                    <canvas>
+                                        <drawing:Canvas>
+                                            <drawing:Rectangle x="20" y="20" width="320" height="240"
+                                                fill="{paintType:'gradient', startX:0, startY:0, startColor:'#4444ff',
+                                                    endX:320, endY:240, endColor:'#000044'}"
+                                                stroke="#0000aa" strokeThickness="4"
+                                                cornerRadius="10"/>
+                                        </drawing:Canvas>
+                                    </canvas>
+                                </media:Drawing>
+                            </image>
+                        </ImageView>
+                        <Panel>
+                            <PushButton buttonData="Button 1"
+                                styles="{color:'#ffffff', backgroundColor:'#000066', borderColor:'#0000dd'}"
+                                x="30" y="30" width="120" height="24"/>
+                            <PushButton buttonData="Button 2"
+                                styles="{color:'#ffffff', backgroundColor:'#000066', borderColor:'#0000dd'}"
+                                x="30" y="60" width="120" height="24"/>
+                            <PushButton buttonData="Button 3"
+                                styles="{color:'#ffffff', backgroundColor:'#000066', borderColor:'#0000dd'}"
+                                x="30" y="90" width="120" height="24"/>
+                        </Panel>
+                    </StackPane>
+                </content>
+            </Window>
+            ]]>
+        </source>
+
+        <p>
+            Since this example contains no logic, there is no associated Java source.
+        </p>
     </body>
 </document>

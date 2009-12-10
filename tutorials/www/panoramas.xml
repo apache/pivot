@@ -22,5 +22,55 @@ limitations under the License.
     </properties>
 
     <body>
+        <p>
+            Panoramas scroll via four directional scroll arrows shown at the top, left, bottom, or
+            right as needed. They are not as common as scroll panes in application development, but
+            are used by other components such as <tt>ListButton</tt> and <tt>MenuPopup</tt> to
+            present long lists of items.
+        </p>
+
+        <p>
+            The following example demonstrates the <tt>Panorama</tt> component. It is identical to
+            the previous example except that it uses a panorama instead of a scroll pane:
+        </p>
+
+        <application class="org.apache.pivot.wtk.ScriptApplication"
+            width="400" height="320">
+            <libraries>
+                <library>core</library>
+                <library>wtk</library>
+                <library>wtk-terra</library>
+                <library>tutorials</library>
+            </libraries>
+            <startup-properties>
+                <src>org/apache/pivot/tutorials/navigation/panoramas.wtkx</src>
+            </startup-properties>
+        </application>
+
+
+        <source type="xml" location="org/apache/pivot/tutorials/navigation/panoramas.wtkx">
+            <![CDATA[
+            <Window title="Panoramas" maximized="true"
+                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns="org.apache.pivot.wtk">
+                <content>
+                    <Border styles="{color:10}">
+                        <content>
+                            <Panorama styles="{buttonColor:'0xffffffff', buttonBackgroundColor:'0x00000044'}">
+                                <view>
+                                    <ImageView image="org/apache/pivot/tutorials/IMG_1147.jpg"
+                                        tooltipText="Pemaquid Point Lighthouse, Bristol ME"/>
+                                </view>
+                            </Panorama>
+                        </content>
+                    </Border>
+                </content>
+            </Window>
+            ]]>
+        </source>
+
+        <p>
+            Since this example contains no logic, there is no associated Java source.
+        </p>
     </body>
 </document>

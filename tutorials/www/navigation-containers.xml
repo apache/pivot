@@ -22,5 +22,66 @@ limitations under the License.
     </properties>
 
     <body>
+        <p>
+            Navigation containers are used to maximize screen real estate, showing or hiding their
+            children as needed. Navigation containers include:
+        </p>
+
+        <ul>
+            <li>
+                <p>
+                    <a href="card-panes.html"><b>CardPane</b></a> - A simple "card stack" of
+                    components, only one of which is visible at a time.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <a href="tab-panes.html"><b>TabPane</b></a> - Similar to <tt>CardPane</tt> but
+                    with built-in "tabs" for navigation; may optionally be "collapsed" such that
+                    only the tab buttons show.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <a href="accordions.html"><b>Accordion</b></a> - Similar to <tt>TabPane</tt>,
+                    but subcomponents are presented like the folds of an accordion, with headers
+                    for navigating between panels.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <a href="expanders.html"><b>Expander</b></a> - Similar to a border but
+                    collapsible such that only the title shows.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <a href="rollups.html"><b>Rollup</b></a> - Similar to <tt>Expander</tt> but
+                    supports a configurable "header" component; when collapsed, only the header is
+                    visible. Can be nested to create the appearance of a "tree" structure.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <a href="viewports.html"><b><i>Viewport</i></b></a> - Abstract base class for a
+                    scrollable region. Sublcasses of <tt>Viewport</tt> include:
+                    <ul>
+                        <li>
+                            <a href="scroll_panes.html"><b>ScrollPane</b></a> - A scrollable area
+                            with optional vertical and horizontal scroll bars as well as row and
+                            column headers.
+                        </li>
+                        <li>
+                            <a href="panoramas.html"><b>Panorama</b></a> - A scrollable area with
+                            optional up/down/left/right arrows.
+                        </li>
+                    </ul>
+                </p>
+            </li>
+        </ul>
+
+        <p>
+            Each of these are discussed in detail in the following sections.
+        </p>
     </body>
 </document>
