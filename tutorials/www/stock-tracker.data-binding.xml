@@ -22,5 +22,241 @@ limitations under the License.
     </properties>
 
     <body>
+        <p>
+            Data binding is the process of automatically mapping values between a set of user
+            interface elements and an internal data representation; for example, from a order entry
+            form to a collection of database fields or vice versa. Data binding can help simplify
+            development by eliminating some or all of the tedious boilerplate code that often goes
+            along with this type of programming.
+        </p>
+
+        <p>
+            In Pivot, data binding is controlled by the <tt>load()</tt> and <tt>store()</tt>
+            methods of the <tt>Component</tt> class:
+        </p>
+
+        <p>
+            <tt>public void load(Dictionary&lt;String, Object&gt; context) {...}</tt><br/>
+            <tt>public void store(Dictionary&lt;String, Object&gt; context) {...}</tt><br/>
+        </p>
+
+        <p>
+            The <tt>Dictionary</tt> argument passed to these methods provides the "bind context":
+            a collection of name/value pairs representing the data to which the components are
+            bound. Each bindable component can be assigned a "bind key" that associates the
+            component with a value in the context. The default implementations do nothing;
+            components that support data binding override them to import data to the component
+            from the context during a load, and export data from the component to the context
+            during a store.
+        </p>
+
+        <p>
+            Data binding is most often supported by components that accept and present user input
+            (such as a text field), but it can also be implemented by read-only components, such
+            as labels and progress meters. Most components allow a caller to bind only to a single
+            value (such as the "text" property of a label), though some support additional bindings
+            (for example, a checked list view that allows a caller to bind to both its items'
+            checked and selected states).
+        </p>
+
+        <p>
+            It is important to note that it is not possible to bind to a container directly.
+            However, containers may act as nested bind contexts - when a bind key is assigned to a
+            container, it is assumed to point to a nested <tt>Dictionary</tt> instance representing
+            a subordinate bind context. This enables complex JSON object graphs returned from a
+            web query to be seamlessly mapped to a set of data-bound components arranged in a
+            non-trivial layout, for example.
+        </p>
+
+        <h2>Data Binding in the Stock Tracker Demo</h2>
+
+        <p>
+            The Stock Tracker demo isn't quite that sophisticated. It uses a single, flat bind
+            context to populate the fields in the quote detail view. The bind context is actually
+            the row data retrieved from the web query for the selected stock. This is why we
+            requested more data than we seemed to need from the GET query: the extra fields are
+            used to fill in the data in the detail form.
+        </p>
+
+        <p>
+            The bound components, in this case, are read-only labels - Stock Tracker uses a
+            one-way binding to map the retrieved quote data to the text property of each. We
+            specified the name of the key to use for each label in the
+            <tt>stocktracker.detail.wtkx</tt> file:
+        </p>
+
+        <source type="xml">
+            <![CDATA[
+            ...
+            <Label Form.label="%value" textKey="value"/>
+            ...
+            ]]>
+        </source>
+
+        <p>
+            The actual binding occurs when the selection changes in the table view; as we saw in
+            the <a href="stock_tracker.events.html">Event Handling</a> section, the selection
+            change handler calls the <tt>refreshDetail()</tt> method in response to a selection
+            change event. The code for this method is as follows:
+        </p>
+
+        <source type="java">
+            <![CDATA[
+            private void refreshDetail() {
+                int firstSelectedIndex = stocksTableView.getFirstSelectedIndex();
+                removeSymbolsButton.setEnabled(firstSelectedIndex != -1);
+
+                StockQuote stockQuote = null;
+                Form.setFlag(detailChangeLabel, (Form.Flag)null);
+
+                if (firstSelectedIndex != -1) {
+                    int lastSelectedIndex = stocksTableView.getLastSelectedIndex();
+
+                    if (firstSelectedIndex == lastSelectedIndex) {
+                        List<StockQuote> tableData = (List<StockQuote>)stocksTableView.getTableData();
+                        stockQuote = tableData.get(firstSelectedIndex);
+
+                        if (stockQuote.getChange() < 0) {
+                            Form.setFlag(detailChangeLabel, new Form.Flag(MessageType.ERROR));
+                        }
+                    }
+                }
+
+                if (stockQuote == null) {
+                    detailRootPane.load(new HashMap<String, Object>());
+                } else {
+                    StockQuoteView stockQuoteView = new StockQuoteView(stockQuote);
+                    detailRootPane.load(stockQuoteView);
+                }
+            }
+
+            ]]>
+        </source>
+
+        <p>
+            The method does the following:
+        </p>
+
+        <ul>
+            <li>
+                <p>
+                    Obtains the first selected index in the table (if more than one item is
+                    selected, we don't want to show anything in the detail)
+                </p>
+            </li>
+            <li>
+                <p>
+                    Clears the "flag" attribute from the detail change label (the <tt>Form</tt>
+                    container allows a caller to tag fields with a flag value, for use in data
+                    validation or just simple notification - here, a flag is used to indicate a
+                    negative change in the stock value)
+                </p>
+            </li>
+            <li>
+                <p>
+                    Gets a reference to the table view's data model and then to the data for the
+                    selected row
+                </p>
+            </li>
+            <li>
+                <p>
+                    If the change percentage is negative, shows a red "error" flag next to the
+                    detail label
+                </p>
+            </li>
+            <li>
+                <p>
+                    Wraps the row data in an instance of <tt>StockQuoteView</tt> and calls
+                    <tt>load()</tt>, populating the form with data from the selected quote
+                </p>
+            </li>
+        </ul>
+
+        <p>
+            <tt>StockQuoteView</tt> is a "decorator" (in the
+            <a href="http://en.wikipedia.org/wiki/Design_pattern_(computer_science)">design
+            pattern</a> sense, not the WTK sense) - it ensures that it is formatted and presented
+            in a readable manner in the detail view:
+        </p>
+
+        <source type="java" location="org/apache/pivot/tutorials/stocktracker/StockQuoteView.java">
+            <![CDATA[
+            package org.apache.pivot.tutorials.stocktracker;
+
+            import java.text.DecimalFormat;
+
+            import org.apache.pivot.beans.BeanDictionary;
+
+            public class StockQuoteView extends BeanDictionary {
+                private static final DecimalFormat valueFormat = new DecimalFormat("$0.00");
+                private static final DecimalFormat changeFormat = new DecimalFormat("+0.00;-0.00");
+                private static final DecimalFormat volumeFormat = new DecimalFormat();
+
+                public StockQuoteView(StockQuote stockQuote) {
+                    super(stockQuote);
+                }
+
+                @Override
+                public Object get(String key) {
+                    if (key == null) {
+                        throw new IllegalArgumentException("key is null.");
+                    }
+
+                    Object value = null;
+                    StockQuote stockQuote = (StockQuote)getBean();
+
+                    if (stockQuote == null) {
+                        value = "";
+                    } else {
+                        value = super.get(key);
+
+                        if (key.equals("value")
+                            || key.equals("openingValue")
+                            || key.equals("highValue")
+                            || key.equals("lowValue")) {
+                            try {
+                                Float floatValue = (Float)value;
+                                if (floatValue.isNaN()) {
+                                    value = "n/a";
+                                } else {
+                                    value = valueFormat.format(floatValue);
+                                }
+                            } catch(Exception exception) {
+                                value = "";
+                            }
+                        } else if (key.equals("change")) {
+                            try {
+                                value = changeFormat.format(value);
+                            } catch(Exception exception) {
+                                value = "";
+                            }
+                        } else if (key.equals("volume")) {
+                            try {
+                                value = volumeFormat.format(value);
+                            } catch(Exception exception) {
+                                value = "";
+                            }
+                        } else {
+                            if (value != null) {
+                                value = value.toString();
+                            }
+                        }
+                    }
+
+                    return value;
+                }
+            }
+            ]]>
+        </source>
+
+        <p>
+            Note that the <tt>load()</tt> method is actually called on the parent container of
+            the <tt>Form</tt>, rather than on the form itself. This is because we also want to
+            bind to the label that contains the company name, which is not a child of the
+            <tt>Form</tt>. A nested container does not automatically imply the existence of a
+            sub-context - sub-contexts are created only when a nested container is assigned its
+            own bind key. Because a bind key is not defined for it, the form simply inherits the
+            bind context that was passed to its parent.
+        </p>
     </body>
 </document>

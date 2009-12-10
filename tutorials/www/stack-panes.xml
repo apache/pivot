@@ -22,5 +22,56 @@ limitations under the License.
     </properties>
 
     <body>
+        <p>
+            Stack panes arrange their children in layers, like a stack of transparencies.
+            Unlike <a href="card-panes.html">card panes</a>, which show only a single component at
+            a time, stack panes always display all of their child components. Components with a
+            higher z-index (position within the stack pane) are painted on top of components with
+            a lower z-index.
+        </p>
+
+        <p>
+            The following example shows a stack pane containing an image view and a label. The
+            label is layered on top of the image:
+        </p>
+
+        <application class="org.apache.pivot.wtk.ScriptApplication"
+            width="480" height="360">
+            <libraries>
+                <library>core</library>
+                <library>wtk</library>
+                <library>wtk-terra</library>
+                <library>tutorials</library>
+            </libraries>
+            <startup-properties>
+                <src>org/apache/pivot/tutorials/layout/stack_panes.wtkx</src>
+            </startup-properties>
+        </application>
+
+        <p>
+            The WTKX source for the example is as follows:
+        </p>
+
+        <source type="xml" location="org/apache/pivot/tutorials/layout/stack_panes.wtkx">
+            <![CDATA[
+            <Window title="Stack Panes" maximized="true"
+                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns="org.apache.pivot.wtk">
+                <content>
+                    <StackPane>
+                        <ImageView image="@background.png"
+                            styles="{fill:true, preserveAspectRatio:false}"/>
+                        <Label text="StackPane Demo"
+                            styles="{font:'Helvetica bold 64', color:'#ffffff', wrapText:true,
+                                horizontalAlignment:'center', verticalAlignment:'center'}"/>
+                    </StackPane>
+                </content>
+            </Window>
+            ]]>
+        </source>
+
+        <p>
+            Since this example contains no logic, there is no associated Java source.
+        </p>
     </body>
 </document>

@@ -22,5 +22,111 @@ limitations under the License.
     </properties>
 
     <body>
+        <p>
+            Sliders allow a user to interactively select one of a range of values by dragging the
+            mouse. The following example demonstrates the use of the <tt>Slider</tt> component. It
+            allows the user to select a value from 0 - 255 and displays the value in a
+            <tt>Label</tt> component:
+        </p>
+
+        <application class="org.apache.pivot.tutorials.boundedrange.Sliders"
+            width="160" height="30">
+            <libraries>
+                <library>core</library>
+                <library>wtk</library>
+                <library>wtk-terra</library>
+                <library>tutorials</library>
+            </libraries>
+        </application>
+
+        <p>
+            The WTKX source for the example is as follows:
+        </p>
+
+        <source type="xml" location="org/apache/pivot/tutorials/boundedrange/sliders.wtkx">
+            <![CDATA[
+            <Window title="Sliders" maximized="true"
+                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns="org.apache.pivot.wtk">
+                <content>
+                    <BoxPane styles="{verticalAlignment:'center'}">
+                        <Slider wtkx:id="slider" range="{start:0, end:255}" value="0"/>
+                        <Label wtkx:id="label"/>
+                    </BoxPane>
+                </content>
+            </Window>
+            ]]>
+        </source>
+
+        <p>
+            The Java source loads the WTKX and attaches a <tt>SliderValueListener</tt> to the
+            slider. When the slider value changes, the <tt>updateLabel()</tt> method is called to
+            set the current value:
+        </p>
+
+        <source type="java" location="org/apache/pivot/tutorials/boundedrange/Sliders.java">
+            <![CDATA[
+            package org.apache.pivot.tutorials.boundedrange;
+
+            import org.apache.pivot.collections.Map;
+            import org.apache.pivot.wtk.Application;
+            import org.apache.pivot.wtk.DesktopApplicationContext;
+            import org.apache.pivot.wtk.Display;
+            import org.apache.pivot.wtk.Label;
+            import org.apache.pivot.wtk.Slider;
+            import org.apache.pivot.wtk.SliderValueListener;
+            import org.apache.pivot.wtk.Window;
+            import org.apache.pivot.wtkx.WTKXSerializer;
+
+            public class Sliders implements Application {
+                private Window window = null;
+                private Slider slider = null;
+                private Label label = null;
+
+                @Override
+                public void startup(Display display, Map<String, String> properties) throws Exception {
+                    WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                    window = (Window)wtkxSerializer.readObject(this, "sliders.wtkx");
+                    slider = (Slider)wtkxSerializer.get("slider");
+                    label = (Label)wtkxSerializer.get("label");
+
+                    slider.getSliderValueListeners().add(new SliderValueListener() {
+                        @Override
+                        public void valueChanged(Slider slider, int previousValue) {
+                            updateLabel();
+                        }
+                    });
+
+                    updateLabel();
+                    window.open(display);
+                }
+
+                @Override
+                public boolean shutdown(boolean optional) {
+                    if (window != null) {
+                        window.close();
+                    }
+
+                    return false;
+                }
+
+                @Override
+                public void suspend() {
+                }
+
+                @Override
+                public void resume() {
+                }
+
+                private void updateLabel() {
+                    label.setText(Integer.toString(slider.getValue()));
+                }
+
+                public static void main(String[] args) {
+                    DesktopApplicationContext.main(Sliders.class, args);
+                }
+            }
+            ]]>
+        </source>
     </body>
 </document>

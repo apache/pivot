@@ -22,5 +22,51 @@ limitations under the License.
     </properties>
 
     <body>
+        <p>
+            Separators are simple components that are similar to a horizontal rule in HTML. They
+            have an optional heading and are generally used to partition content, as shown in the
+            sample application below:
+        </p>
+
+        <application class="org.apache.pivot.wtk.ScriptApplication"
+            width="420" height="240">
+            <libraries>
+                <library>core</library>
+                <library>wtk</library>
+                <library>wtk-terra</library>
+                <library>tutorials</library>
+            </libraries>
+            <startup-properties>
+                <src>org/apache/pivot/tutorials/separators/separators.wtkx</src>
+            </startup-properties>
+        </application>
+
+        <p>
+            The WTKX for this sample is as follows. Note that the box pane sets the "fill" style to
+            true; otherwise, the separator would not grow to fill the horizontal space:
+        </p>
+
+        <source type="xml" location="org/apache/pivot/tutorials/separators/separators.wtkx">
+            <![CDATA[
+            <Window title="Separators" maximized="true"
+                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns="org.apache.pivot.wtk">
+                <content>
+                    <BoxPane orientation="vertical" styles="{padding:4, spacing:10, fill:true}">
+                        <Separator heading="Section 1"/>
+                        <Label text="This is the content of section 1."/>
+                        <Separator heading="Section 2"/>
+                        <Label text="This is the content of section 2."/>
+                        <Separator heading="Section 3"/>
+                        <Label text="This is the content of section 3."/>
+                    </BoxPane>
+                </content>
+            </Window>
+            ]]>
+        </source>
+
+        <p>
+            Since this example contains no logic, there is no associated Java source.
+        </p>
     </body>
 </document>

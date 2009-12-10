@@ -22,5 +22,24 @@ limitations under the License.
     </properties>
 
     <body>
+        <p>
+            This section discusses components that are used to present progress information. Pivot
+            supports two types of progress indicator components:
+        </p>
+
+        <ul>
+            <li>
+                <p>
+                    <a href="meters.html"><b>Meter</b></a> - Display state based on a known
+                    completion percentage.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <a href="activity_indicators.html"><b>ActivityIndicator</b></a> - Present an
+                    indeterminate progress state.
+                </p>
+            </li>
+        </ul>
     </body>
 </document>

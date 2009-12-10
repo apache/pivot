@@ -22,5 +22,71 @@ limitations under the License.
     </properties>
 
     <body>
+        <p>
+            <tt>Spinner</tt> is a component that provides a means of cycling through a list of
+            items. The items are defined by the spinner's model data, specified via the
+            "spinnerData" property. Spinners behave similarly to a single-select
+            <tt>ListView</tt> or a <tt>ListButton</tt>, allowing a user to select one of the items
+            in the list. However, unlike list views and list buttons, spinners only present a
+            single item at a time.
+        </p>
+
+        <p>
+            Note that spinners may be "circular". When a spinner's "circular" property is set to
+            <tt>true</tt>, the spinner's selection will wrap when it reaches the first or last
+            item in the list. In the following example, the first spinner is circular, and the
+            second is not:
+        </p>
+
+        <application class="org.apache.pivot.wtk.ScriptApplication"
+            width="160" height="30">
+            <libraries>
+                <library>core</library>
+                <library>wtk</library>
+                <library>wtk-terra</library>
+                <library>tutorials</library>
+            </libraries>
+            <startup-properties>
+                <src>org/apache/pivot/tutorials/boundedrange/spinners.wtkx</src>
+            </startup-properties>
+        </application>
+
+        <p>
+            Because spinner data is specified using an instance of the <tt>List</tt> interface,
+            spinners are quite flexible. The second spinner in the above example uses an instance
+            of <tt>NumericSpinnerData</tt> as its model. This class is a lightweight means of
+            representing a list of numeric value options: it doesn't actually store the values as
+            a list in memory - it simply calculates the appropriate value for a given index using
+            its lower and upper bounds and increment value.
+        </p>
+
+        <p>
+            The WTKX for this example is shown below:
+        </p>
+
+        <source type="xml" location="org/apache/pivot/tutorials/boundedrange/spinners.wtkx">
+            <![CDATA[
+            <Window title="Spinners" maximized="true"
+                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns:content="org.apache.pivot.wtk.content"
+                xmlns="org.apache.pivot.wtk">
+                <content>
+                    <BoxPane styles="{verticalAlignment:'center'}">
+                        <Spinner spinnerData="['One', 'Two', 'Three', 'Four', 'Five']"
+                            circular="true" preferredWidth="80" selectedIndex="0"/>
+                        <Spinner preferredWidth="40" selectedIndex="0">
+                            <spinnerData>
+                                <content:NumericSpinnerData lowerBound="0" upperBound="9" increment="1"/>
+                            </spinnerData>
+                        </Spinner>
+                    </BoxPane>
+                </content>
+            </Window>
+            ]]>
+        </source>
+
+        <p>
+            Since this example contains no logic, there is no associated Java source.
+        </p>
     </body>
 </document>

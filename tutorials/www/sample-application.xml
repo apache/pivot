@@ -22,5 +22,19 @@ limitations under the License.
     </properties>
 
     <body>
+        <p>
+            The following is a sample application written to demonstrate a number of commonly used
+            Pivot components:
+        </p>
+
+        <application class="org.apache.pivot.tutorials.KitchenSink"
+            width="800" height="600">
+            <libraries>
+                <library>core</library>
+                <library>wtk</library>
+                <library>wtk-terra</library>
+                <library>tutorials</library>
+            </libraries>
+        </application>
     </body>
 </document>

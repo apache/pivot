@@ -22,5 +22,298 @@ limitations under the License.
     </properties>
 
     <body>
+        <p>
+            Because Pivot requires a minimum of Java 6 update 10, Pivot applications can take
+            advantage of the JVM scripting support provided by the <tt>javax.script</tt> package
+            included with JDK versions 1.6 and later. While these APIs can be used on their own to
+            script Pivot applications, Pivot includes platform support for easily embedding script
+            code in WTKX files.
+        </p>
+
+        <p>
+            Script blocks can be defined in WTKX files in three different ways:
+        </p>
+
+        <ul>
+            <li>
+                Inline in a <tt>&lt;wtkx:script&gt;</tt> tag
+            </li>
+            <li>
+                As an external file included by a <tt>&lt;wtkx:script&gt;</tt> with a <tt>src</tt>
+                attribute
+            </li>
+            <li>
+                In an event listener attribute
+            </li>
+            <li>
+                In a <tt>&lt;wtkx:script&gt;</tt> tag defined in an event listener element
+            </li>
+        </ul>
+
+        <p>
+            Though the first and last methods may seem similar, they are actually handled slightly
+            differently. All four methods are discussed in more detail below.
+        </p>
+
+        <p>
+            The following application demonstrate's Pivot's scripting support:
+        </p>
+
+        <application class="org.apache.pivot.tutorials.scripting.Scripting"
+            width="480" height="360">
+            <libraries>
+                <library>core</library>
+                <library>wtk</library>
+                <library>wtk-terra</library>
+                <library>tutorials</library>
+            </libraries>
+        </application>
+
+        <p>
+            This application is completely contrived - it doesn't present any practical example,
+            but instead serves only to demonstrate the various means of using scripting in a WTKX
+            file. The Java source code for the application is shown below:
+        </p>
+
+        <source type="java" location="org/apache/pivot/tutorials/scripting/Scripting.java">
+            <![CDATA[
+            package org.apache.pivot.tutorials.scripting;
+
+            import org.apache.pivot.collections.List;
+            import org.apache.pivot.collections.Map;
+            import org.apache.pivot.wtk.Application;
+            import org.apache.pivot.wtk.Button;
+            import org.apache.pivot.wtk.ButtonPressListener;
+            import org.apache.pivot.wtk.DesktopApplicationContext;
+            import org.apache.pivot.wtk.Display;
+            import org.apache.pivot.wtk.Window;
+            import org.apache.pivot.wtkx.WTKXSerializer;
+
+            public class Scripting implements Application {
+                public static class MyButtonPressListener implements ButtonPressListener {
+                    @Override
+                    public void buttonPressed(Button button) {
+                        System.out.println("[Java] A button was clicked.");
+                    }
+                }
+
+                private Window window = null;
+
+                private String foo;
+                private List<?> listData;
+
+                @Override
+                public void startup(Display display, Map<String, String> properties)
+                    throws Exception {
+                    WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                    wtkxSerializer.put("bar", "12345");
+
+                    window = (Window)wtkxSerializer.readObject(this, "scripting.wtkx");
+                    foo = (String)wtkxSerializer.get("foo");
+                    listData = (List<?>)wtkxSerializer.get("listData");
+
+                    System.out.println("foo = " + foo);
+                    System.out.println("listData.getLength() = " + listData.getLength());
+
+                    window.open(display);
+                }
+
+                @Override
+                public boolean shutdown(boolean optional) {
+                    if (window != null) {
+                        window.close();
+                    }
+
+                    return false;
+                }
+
+                @Override
+                public void suspend() {
+                }
+
+                @Override
+                public void resume() {
+                }
+
+                public static void main(String[] args) {
+                    DesktopApplicationContext.main(Scripting.class, args);
+                }
+            }
+            ]]>
+        </source>
+
+        <p>
+            Notice how the <tt>startup()</tt> method calls <tt>put()</tt> on the
+            <tt>WTKXSerializer</tt> instance. <tt>WTKXSerializer</tt>'s dictionary methods allow a
+            caller to manipulate the script namespace before the WTKX is loaded and retrieve values
+            from it afterwards. In this example, the "bar" variable is pre-populated with the value
+            "12345", which is later written to the console by script defined in "scripting.wtkx".
+            Similarly, the values of "foo" and "listData" are obtained from the serializer and
+            written to the console after the WTKX file has been read.
+        </p>
+
+        <p>
+            The WTKX source is shown below:
+        </p>
+
+        <source type="java" location="org/apache/pivot/tutorials/scripting/Scripting.java">
+            <![CDATA[
+            <Window wtkx:id="window" title="Scripting Demo" maximized="true"
+                WindowStateListener.windowOpened="java.lang.System.out.println('Window opened: ' + x)"
+                WindowStateListener.windowClosed="java.lang.System.out.println('Window closed: ' + y)"
+                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns:scripting="org.apache.pivot.demos.scripting"
+                xmlns="org.apache.pivot.wtk">
+                <?language javascript?>
+
+                <wtkx:script>
+                importClass(java.lang.System);
+                importPackage(org.apache.pivot.wtk);
+                System.out.println("bar = " + bar);
+
+                var x = 10;
+                var y = 20;
+
+                function buttonClicked() {
+                    Prompt.prompt("y = " + y, window);
+                }
+                </wtkx:script>
+
+                <wtkx:script src="example.js"/>
+
+                <content>
+                    <Border styles="{padding:2}">
+                        <content>
+                            <BoxPane orientation="vertical" styles="{padding:6}">
+                                <PushButton buttonData="Click Me!">
+                                    <buttonPressListeners>
+                                        <wtkx:script>
+                                        importPackage(org.apache.pivot.wtk);
+                                        function buttonPressed(button) {
+                                            Prompt.prompt("x = " + x, button.getWindow());
+                                        }
+                                        </wtkx:script>
+                                    </buttonPressListeners>
+                                </PushButton>
+
+                                <PushButton buttonData="No, Click Me!"
+                                    ButtonPressListener.buttonPressed="buttonClicked()"/>
+
+                                <Border styles="{color:10}">
+                                    <content>
+                                        <ListView listData="$listData" selectedIndex="0"/>
+                                    </content>
+                                </Border>
+                            </BoxPane>
+                        </content>
+                    </Border>
+                </content>
+            </Window>
+            ]]>
+        </source>
+
+        <p>
+            This code demonstrates the various means by which script code can be used in WTKX:
+        </p>
+
+        <ul>
+            <li>
+                <p>
+                    <i>Inline in a <tt>&lt;wtkx:script&gt;</tt> tag.</i> The first
+                    <tt>&lt;wtkx:script&gt;</tt> tag defines its content inline. This code is
+                    executed as it is processed by the WTKX serializer. This example first outputs
+                    the "bar" value set by the application, then declares two variables
+                    (<tt>x</tt> and <tt>y</tt>) and a function (<tt>buttonClicked()</tt>. These
+                    values are visible to all other script code declared within the page.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <i>As an external file included by a <tt>&lt;wtkx:script&gt;</tt> with a
+                    <tt>src</tt> attribute.</i> The second <tt>&lt;wtkx:script&gt;</tt> tag
+                    includes an externally defined script into the page. The contents of the script
+                    are defined in "example.js", which is shown below. Any previously defined
+                    values will be visible to the script, and any variables declared by the script
+                    will be visible to other script blocks declared by the page.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <i>In an event listener attribute.</i> Event listeners can be declared in
+                    attributes, using a syntax similar to that used for static property setters.
+                    The attribute name for an event listener consists of the name of the interface
+                    that defines the event plus the name of the event, separated by a period. The
+                    WTKX source contains several examples of attribute-based listeners:
+                </p>
+                <ul>
+                    <li>
+                        <tt>WindowStateListener.windowOpened</tt>
+                    </li>
+                    <li>
+                        <tt>WindowStateListener.windowClosed</tt>
+                    </li>
+                    <li>
+                        <tt>ButtonPressListener.buttonPressed</tt>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <p>
+                    <i>In a <tt>&lt;wtkx:script&gt;</tt> tag defined in an event listener
+                    element.</i> Attribute-based event handlers are convenient for simple one-line
+                    listeners, but are not particuarly well suited to anything much more complex.
+                    Pivot also provides the ability to define event listeners within a listener
+                    list element. For example, the <tt>buttonPressListeners</tt> sub-element of
+                    the "Click Me!" push button defines a <tt>buttonPressed()</tt> function that
+                    is invoked when the corresponding button press event is fired by the button.
+                    Because the script for element-based listeners doesn't need to fit within a
+                    single XML attribute, more sophisticated handler code can be defined, while
+                    still maintaining proximity to the element to which the handler applies.
+                </p>
+                <p>
+                    Though it isn't obvious from this simple example, script-based event handlers
+                    are not required to provide implementations for every method defined by the
+                    listener interface. Any omitted methods are simply processed by a default no-op
+                    handler.
+                </p>
+            </li>
+        </ul>
+
+        <p>
+            Note that a special scope is created for event listener scripts that is local to the
+            listener; although all page-level variables remain visible to the listener code, any
+            variables defined within the listener (including functions) are only visible within
+            that block. This prevents listener script from "polluting" the global page namespace.
+            While this is generally not an issue for attribute-based listeners (which tend to be
+            focused and short), can easily become an issue for element-based listeners, which may
+            declare multiple functions with the same name (for example, when multiple button press
+            handlers are defined within the same page).
+        </p>
+
+        <p>
+            The "example.js" file is defined as follows:
+        </p>
+
+        <source type="jscript" location="org/apache/pivot/tutorials/scripting/example.js">
+            <![CDATA[
+            importClass(java.lang.System);
+            importPackage(org.apache.pivot.collections);
+
+            System.out.println("Executing external script block; x = " + x);
+
+            var foo = "ABCDE";
+
+            var listData = new ArrayList();
+            listData.add("One");
+            listData.add("Two");
+            listData.add("Three");
+            ]]>
+        </source>
+
+        <p>
+            This script declares the "foo" value that is later output by the Java application code,
+            and also defines the list data that is used by the example <tt>ListView</tt> defined by
+            the WTKX file.
+        </p>
     </body>
 </document>

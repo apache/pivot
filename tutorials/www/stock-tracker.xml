@@ -22,5 +22,44 @@ limitations under the License.
     </properties>
 
     <body>
+        <p>
+            This section walks through the implementation of a simple but practical "stock tracker"
+            sample application. It demonstrates a number of key features used by many "real world"
+            applications, including:
+        </p>
+
+        <ul>
+            <li>UI markup using WTKX</li>
+            <li>Event handling</li>
+            <li>Web queries</li>
+            <li>Data binding</li>
+            <li>Localization</li>
+        </ul>
+
+        <p>
+            The sample application is shown below. The application retrieves live (delayed by 15
+            minutes) stock quote data from <a href="http://finance.yahoo.com/">Yahoo! Finance</a>
+            as a CSV file and presents it in a table view component (the applet is signed to allow
+            it to communicate with the Yahoo web service):
+        </p>
+
+        <application class="org.apache.pivot.tutorials.stocktracker.StockTracker"
+            width="480" height="360">
+            <libraries>
+                <library>core</library>
+                <library>wtk</library>
+                <library>wtk-terra</library>
+                <library>tutorials</library>
+            </libraries>
+            <startup-properties>
+                <language>en</language>
+            </startup-properties>
+        </application>
+
+        <p>
+            Users can add or remove stock symbols using the text input and buttons at the bottom
+            of the applet. Selecting a row in the table shows additional information about the
+            stock in the form on the right. The data is automatically updated every 15 seconds.
+        </p>
     </body>
 </document>

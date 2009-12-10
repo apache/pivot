@@ -22,5 +22,124 @@ limitations under the License.
     </properties>
 
     <body>
+        <p>
+            Rollups are conceptually similar to Expanders. Like expanders, rollups also allow the
+            user to expand or collapse a region of the screen to make more room for other content.
+            However, rather than a defining a titled, rectangular region, Rollups supports a
+            configurable "header" component; when collapsed, only the header is visible.
+            Additionally, rollups can be nested to create the appearance of a "tree"
+            structure.
+        </p>
+
+        <p>
+            The first three rollups in the example below present the same content as in the
+            Expanders example. The fourth includes an example of nested rollups:
+        </p>
+
+        <application class="org.apache.pivot.wtk.ScriptApplication"
+            width="480" height="360">
+            <libraries>
+                <library>core</library>
+                <library>wtk</library>
+                <library>wtk-terra</library>
+                <library>tutorials</library>
+            </libraries>
+            <startup-properties>
+                <src>org/apache/pivot/tutorials/navigation/rollups.wtkx</src>
+            </startup-properties>
+        </application>
+
+        <p>
+            The WTKX source for this example is as follows. Note that the "fill" style is set
+            to <tt>true</tt> on the nested rollups - this allows the rollup content to wrap:
+        </p>
+
+        <source type="xml" location="org/apache/pivot/tutorials/navigation/rollups.wtkx">
+            <![CDATA[
+            <Window title="Rollups" maximized="true"
+                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns="org.apache.pivot.wtk">
+                <content>
+                    <Border styles="{padding:6}">
+                        <content>
+                            <ScrollPane horizontalScrollBarPolicy="fill">
+                                <view>
+                                    <BoxPane orientation="vertical" styles="{fill:true,
+                                        padding:{left:2, right:2}}">
+                                        <Rollup expanded="true">
+                                            <heading>
+                                                <Label text="Stocks" styles="{font:{bold:true}, color:13}"/>
+                                            </heading>
+                                            <content>
+                                                <wtkx:include src="stocks.wtkx"/>
+                                            </content>
+                                        </Rollup>
+                                        <Rollup>
+                                            <heading>
+                                                <Label text="Weather" styles="{font:{bold:true}, color:13}"/>
+                                            </heading>
+                                            <content>
+                                                <wtkx:include src="weather.wtkx"/>
+                                            </content>
+                                        </Rollup>
+                                        <Rollup>
+                                            <heading>
+                                                <Label text="Calendar" styles="{font:{bold:true}, color:13}"/>
+                                            </heading>
+                                            <content>
+                                                <Calendar/>
+                                            </content>
+                                        </Rollup>
+                                        <Rollup styles="{fill:true}">
+                                            <heading>
+                                                <Label text="Nested" styles="{font:{bold:true}, color:13}"/>
+                                            </heading>
+                                            <content>
+                                                <BoxPane orientation="vertical" styles="{fill:true}">
+                                                    <Rollup styles="{fill:true}">
+                                                        <heading>
+                                                            <Label text="Level 1"/>
+                                                        </heading>
+                                                        <content>
+                                                            <Label text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum."
+                                                                styles="{wrapText:true}"/>
+                                                        </content>
+                                                    </Rollup>
+
+                                                    <Rollup styles="{fill:true}">
+                                                        <heading>
+                                                            <Label text="Level 2"/>
+                                                        </heading>
+                                                        <content>
+                                                            <Label text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum."
+                                                                styles="{wrapText:true}"/>
+                                                        </content>
+                                                    </Rollup>
+
+                                                    <Rollup styles="{fill:true}">
+                                                        <heading>
+                                                            <Label text="Level 3"/>
+                                                        </heading>
+                                                        <content>
+                                                            <Label text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum."
+                                                                styles="{wrapText:true}"/>
+                                                        </content>
+                                                    </Rollup>
+                                                </BoxPane>
+                                            </content>
+                                        </Rollup>
+                                    </BoxPane>
+                                </view>
+                            </ScrollPane>
+                        </content>
+                    </Border>
+                </content>
+            </Window>
+            ]]>
+        </source>
+
+        <p>
+            Since this example contains no logic, there is no associated Java source.
+        </p>
     </body>
 </document>

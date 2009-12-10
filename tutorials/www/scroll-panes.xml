@@ -22,5 +22,83 @@ limitations under the License.
     </properties>
 
     <body>
+        <p>
+            Scroll panes are a type of viewport that facilitates scrolling by presenting a
+            vertical or horizontal scroll bar that the user can drag to access the obscured parts
+            of the view. They are often used to wrap data-driven components containing a lot of
+            items (such as a <a href="table_views.html">TableView</a> displaying a long list of
+            database query results), or to wrap long forms.
+        </p>
+
+        <p>
+            The following example demonstrates the use of a scroll pane to display a large
+            image:
+        </p>
+
+        <application class="org.apache.pivot.wtk.ScriptApplication"
+            width="420" height="240">
+            <libraries>
+                <library>core</library>
+                <library>wtk</library>
+                <library>wtk-terra</library>
+                <library>tutorials</library>
+            </libraries>
+            <startup-properties>
+                <src>org/apache/pivot/tutorials/navigation/scroll_panes.wtkx</src>
+            </startup-properties>
+        </application>
+
+        <p>
+            The WTKX source for this example is shown below:
+        </p>
+
+        <source type="xml" location="org/apache/pivot/tutorials/navigation/scroll_panes.wtkx">
+            <![CDATA[
+            <Window title="Scroll Panes" maximized="true"
+                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns:navigation="org.apache.pivot.tutorials.navigation"
+                xmlns="org.apache.pivot.wtk">
+                <content>
+                    <Border styles="{color:10}">
+                        <content>
+                            <ScrollPane>
+                                <view>
+                                    <ImageView image="org/apache/pivot/tutorials/IMG_1147.jpg"
+                                        tooltipText="Pemaquid Point Lighthouse, Bristol ME"/>
+                                </view>
+
+                                <columnHeader>
+                                    <navigation:Ruler orientation="horizontal"/>
+                                </columnHeader>
+
+                                <rowHeader>
+                                    <navigation:Ruler orientation="vertical"/>
+                                </rowHeader>
+                            </ScrollPane>
+                        </content>
+                    </Border>
+                </content>
+            </Window>
+            ]]>
+        </source>
+
+        <p>
+            In addition to the view (an <tt>ImageView</tt>, in this example), scroll panes also
+            support the concept of row and column "header" components. A column header remains
+            fixed vertically at the top of the scroll pane but scrolls horizontally with the view,
+            and a row header is fixed horizontally at the left of the scroll pane but scrolls
+            vertically with the view.
+        </p>
+
+        <p>
+            The column header is commonly used to display a <tt>TableViewHeader</tt> component for
+            a <tt>TableView</tt>, discussed in more detail in the <a href="table-views.html">Table
+            Views</a> section. In this example, the header components are set to instances of a
+            custom <tt>Ruler</tt> component that displays a tick mark every 5 pixels.
+        </p>
+
+        <p>
+            Since this example contains no logic, there is no associated Java source.
+        </p>
     </body>
 </document>
