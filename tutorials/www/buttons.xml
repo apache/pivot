@@ -68,7 +68,7 @@ limitations under the License.
         <p>
             <tt>Menu.Item</tt> and <tt>MenuBar.Item</tt> are two additional Button subclasses. They
             are used primarily by the menu components and are discussed in the
-            <a href="menus.html">menus</a> section.
+            <a href="menus.html">Menus</a> section.
         </p>
     </body>
 </document>

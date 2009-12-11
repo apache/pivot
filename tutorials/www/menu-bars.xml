@@ -48,7 +48,7 @@ limitations under the License.
 
         <application class="org.apache.pivot.tutorials.menus.MenuBars"
             width="640" height="480">
-            <libraries>
+            <libraries signed="true">
                 <library>core</library>
                 <library>wtk</library>
                 <library>wtk-terra</library>

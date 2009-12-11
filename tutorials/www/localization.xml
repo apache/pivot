@@ -210,7 +210,7 @@ limitations under the License.
 
         <application class="org.apache.pivot.tutorials.localization.Localization"
             width="320" height="240">
-            <libraries>
+            <libraries signed="true">
                 <library>core</library>
                 <library>wtk</library>
                 <library>wtk-terra</library>

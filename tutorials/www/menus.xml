@@ -29,16 +29,16 @@ limitations under the License.
 
         <ul>
             <li>
-                <a href="context_menus.html"><b>Context Menus</b></a> - generally provide
+                <a href="context-menus.html"><b>Context Menus</b></a> - generally provide
                 convenient "right-click" access to context-sensitive functionality.
             </li>
             <li>
-                <a href="menu_bars.html"><b>Menu Bars</b></a> - collection of menus generally
+                <a href="menu-bars.html"><b>Menu Bars</b></a> - collection of menus generally
                 located at the top of an application window that provide access to major
                 application features.
             </li>
             <li>
-                <a href="menu_buttons.html"><b>Menu Buttons</b></a> - provide access to "drop-down"
+                <a href="menu-buttons.html"><b>Menu Buttons</b></a> - provide access to "drop-down"
                 menus, similar to <a href="list_buttons.html">list buttons</a>; often used in
                 toolbars.
             </li>

@@ -30,26 +30,26 @@ limitations under the License.
         <ul>
             <li>
                 <p>
-                    <a href="flow_panes.html"><b>FlowPane</b></a> - Arranges components in a
+                    <a href="flow-panes.html"><b>FlowPane</b></a> - Arranges components in a
                     horizontal line, wrapping when contents don't fit on a single line.
                 </p>
             </li>
             <li>
                 <p>
-                    <a href="box_panes.html"><b>BoxPane</b></a> - Arranges components in a line,
+                    <a href="box-panes.html"><b>BoxPane</b></a> - Arranges components in a line,
                     either vertically or horizontally.
                 </p>
             </li>
             <li>
                 <p>
-                    <a href="grid_panes.html"><b>GridPane</b></a> - Arranges components in a
+                    <a href="grid-panes.html"><b>GridPane</b></a> - Arranges components in a
                     two-dimensional grid where each cell is given the same size, based on the
                     available width and height.
                 </p>
             </li>
             <li>
                 <p>
-                    <a href="table_panes.html"><b>TablePane</b></a> - Arranges components in a
+                    <a href="table-panes.html"><b>TablePane</b></a> - Arranges components in a
                     two-dimensional table structure, optionally spanning table cells.
                 </p>
             </li>
@@ -61,13 +61,13 @@ limitations under the License.
             </li>
             <li>
                 <p>
-                    <a href="stack_panes.html"><b>StackPane</b></a> - Arranges components in
+                    <a href="stack-panes.html"><b>StackPane</b></a> - Arranges components in
                     layers, like a stack of transparencies.
                 </p>
             </li>
             <li>
                 <p>
-                    <a href="split_panes.html"><b>SplitPane</b></a> - Provides a draggable divider
+                    <a href="split-panes.html"><b>SplitPane</b></a> - Provides a draggable divider
                     between two components allowing a user to dynamically change the size of
                     each; may be horizontal or vertical.
                 </p>

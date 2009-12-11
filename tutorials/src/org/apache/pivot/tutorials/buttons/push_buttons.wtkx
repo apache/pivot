@@ -20,10 +20,14 @@ limitations under the License.
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
     <content>
-        <BoxPane styles="{padding:4, horizontalAlignment:'center',
-            verticalAlignment:'center'}">
-            <PushButton wtkx:id="pushButton" buttonData="Click Me!"/>
-        </BoxPane>
+        <Border>
+            <content>
+                <BoxPane styles="{padding:4, horizontalAlignment:'center',
+                    verticalAlignment:'center'}">
+                    <PushButton wtkx:id="pushButton" buttonData="Click Me!"/>
+                </BoxPane>
+            </content>
+        </Border>
     </content>
 </Window>
 

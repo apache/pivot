@@ -29,7 +29,7 @@ limitations under the License.
             button causes it to retain a pressed state; clicking it again releases the button:
         </p>
 
-        <application class="org.apache.pivot.wtk.ScriptApplication" width="240" height="80">
+        <application class="org.apache.pivot.wtk.ScriptApplication" width="220" height="60">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>
