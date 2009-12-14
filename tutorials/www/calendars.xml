@@ -25,8 +25,8 @@ limitations under the License.
         <p>
             Pivot supports two types of calendar components: a standalone <tt>Calendar</tt>
             component that can be used anywhere within an application's user interface, and a
-            <tt>CalendarButton</tt> component that, like a <a href="lists.html">list button</a>,
-            displays a popup calendar when pressed.
+            <tt>CalendarButton</tt> component that, like a <a href="list-buttons.html">list
+            button</a>, displays a popup calendar when pressed.
         </p>
 
         <p>

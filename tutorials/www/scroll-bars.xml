@@ -19,11 +19,154 @@ limitations under the License.
 <document id="scroll-bars">
     <properties>
         <title>Scroll Bars</title>
+        <explore>ScrollBar</explore>
     </properties>
 
     <body>
         <p>
-            This section is not yet complete.
+            Like sliders, scroll bars allow the user to interactively select from a range of values.
+            Unlike sliders, scroll bars are used to select a sub-range rather than an individual
+            value. The size of this sub-range is known as the scroll bar's "extent". The extent,
+            together with the start and end values of the outer range, comprise the scroll bar's
+            "scope", represented by the <tt>ScrollBar.Scope</tt> enum.
         </p>
+
+        <p>
+            Visually, a scroll bar is usually presented as a scroll "handle" within a larger
+            "track", with two buttons on either end of the track to move the handle. In this
+            metaphor, the track represents the outer range from which the user can select, and the
+            size of the handle represents the scroll bar's extent.
+        </p>
+
+        <p>
+            A scroll bar's value represents the start of the selected sub-range; its value plus its
+            extent represents the end of the sub-range. Using the visual metaphor above, the start
+            of the handle and the end of the handle represent the bounds of the selected sub-range.
+            Note that this means that the scroll bar's value plus its extend must never exceed its
+            scope; doing so would mean that the scroll bar's handle would have moved outside of the
+            track.
+        </p>
+
+        <p>
+            Finally, a scroll bar has a unit increment and a block increment. These values specify
+            how much to adjust the scroll bar's value when a user clicks on the buttons or within
+            the track, respectively.
+        </p>
+
+        <p>
+            Scroll bars are used within <a href="scroll-panes.html">scroll panes</a> and are most
+            often transparent to the application developer. However, they can be used directly just
+            like any other components.
+        </p>
+
+        <p>
+            The following application uses a scroll bar to represent a simple timeline. It is
+            written entirely in WTKX and script, so there's no associated Java source code.
+        </p>
+
+        <application class="org.apache.pivot.wtk.ScriptApplication"
+            width="550" height="200">
+            <libraries>
+                <library>core</library>
+                <library>wtk</library>
+                <library>wtk-terra</library>
+                <library>tutorials</library>
+            </libraries>
+            <startup-properties>
+                <src>org/apache/pivot/tutorials/boundedrange/scroll_bars.wtkx</src>
+            </startup-properties>
+        </application>
+
+        <p>
+            The WTKX source for this example is shown below:
+        </p>
+
+        <source type="xml" location="org/apache/pivot/tutorials/boundedrange/scroll_bars.wtkx">
+            <![CDATA[
+            <Window title="Scroll Bars" maximized="true"
+                WindowStateListener.windowOpened="init();"
+                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns="org.apache.pivot.wtk">
+                <wtkx:script src="scroll_bars.js"/>
+
+                <content>
+                    <Border>
+                        <content>
+                            <TablePane>
+                                <columns>
+                                    <TablePane.Column width="1*"/>
+                                </columns>
+                                <rows>
+                                    <TablePane.Row>
+                                        <FlowPane styles="{padding:6}">
+                                            <wtkx:define>
+                                                <ButtonGroup wtkx:id="ranges"
+                                                    ButtonGroupListener.selectionChanged="updateRange();"/>
+                                            </wtkx:define>
+                                            <RadioButton wtkx:id="dayButton"
+                                                buttonGroup="$ranges" buttonData="Day"/>
+                                            <RadioButton wtkx:id="weekButton"
+                                                buttonGroup="$ranges" buttonData="Week"/>
+                                            <RadioButton wtkx:id="fortnightButton"
+                                                buttonGroup="$ranges" buttonData="Fortnight"/>
+                                            <RadioButton wtkx:id="monthButton"
+                                                buttonGroup="$ranges" buttonData="Month"/>
+                                        </FlowPane>
+                                    </TablePane.Row>
+                                    <TablePane.Row height="1*">
+                                        <BoxPane orientation="vertical" styles="{horizontalAlignment:'center',
+                                            verticalAlignment:'center'}">
+                                            <Label wtkx:id="label"/>
+                                        </BoxPane>
+                                    </TablePane.Row>
+                                    <TablePane.Row>
+                                        <ScrollBar wtkx:id="scrollBar" start="0" end="60"
+                                            ScrollBarListener.scopeChanged="updateLabel();"
+                                            ScrollBarValueListener.valueChanged="updateLabel();"/>
+                                    </TablePane.Row>
+                                </rows>
+                            </TablePane>
+                        </content>
+                    </Border>
+                </content>
+            </Window>
+            ]]>
+        </source>
+
+        <p>
+            This example places the script code in an external JavaScript file,
+            <tt>scroll_bars.js</tt> for readability. The source of the JavaScript is as follows:
+        </p>
+
+        <source type="js" location="org/apache/pivot/tutorials/boundedrange/scroll_bars.js">
+            <![CDATA[
+            function init() {
+                ranges.selection = weekButton;
+            }
+
+            function updateRange() {
+                var amount;
+
+                if (ranges.selection == dayButton) {
+                    amount = 1;
+                } else if (ranges.selection == weekButton) {
+                    amount = 7;
+                } else if (ranges.selection == fortnightButton) {
+                    amount = 14;
+                } else {
+                    amount = 30;
+                }
+
+                scrollBar.extent = scrollBar.unitIncrement = amount;
+                scrollBar.blockIncrement = 2 * amount;
+            }
+
+            function updateLabel() {
+                var first = scrollBar.value + 1;
+                var last = scrollBar.value + scrollBar.extent;
+                label.setText("Days " + first + " through " + last);
+            }
+            ]]>
+        </source>
     </body>
 </document>

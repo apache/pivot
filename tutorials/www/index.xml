@@ -96,8 +96,8 @@ limitations under the License.
                 <document-item id="activity-indicators"/>
             </document-item>
             <document-item id="bounded-range-components">
-                <document-item id="scroll-bars"/>
                 <document-item id="sliders"/>
+                <document-item id="scroll-bars"/>
                 <document-item id="spinners"/>
             </document-item>
             <document-item id="calendars"/>

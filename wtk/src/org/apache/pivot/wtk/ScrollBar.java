@@ -17,6 +17,8 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ListenerList;
 
 /**
@@ -32,10 +34,56 @@ public class ScrollBar extends Container {
         public final int end;
         public final int extent;
 
+        public static final String START_KEY = "start";
+        public static final String END_KEY = "end";
+        public static final String EXTENT_KEY = "extent";
+
         public Scope(int start, int end, int extent) {
             this.start = start;
             this.end = end;
             this.extent = extent;
+        }
+
+        public Scope(Dictionary<String, ?> scope) {
+            if (scope == null) {
+                throw new IllegalArgumentException("scope is null.");
+            }
+
+            if (!scope.containsKey(START_KEY)) {
+                throw new IllegalArgumentException(START_KEY + " is required.");
+            }
+
+            if (!scope.containsKey(END_KEY)) {
+                throw new IllegalArgumentException(END_KEY + " is required.");
+            }
+
+            if (!scope.containsKey(EXTENT_KEY)) {
+                throw new IllegalArgumentException(EXTENT_KEY + " is required.");
+            }
+
+            start = (Integer)scope.get(START_KEY);
+            end = (Integer)scope.get(END_KEY);
+            extent = (Integer)scope.get(EXTENT_KEY);
+        }
+
+        @Override
+        public String toString() {
+            return ("{start: " + start + ", end: " + end + ", extent: " + extent + "}");
+        }
+
+        public static Scope decode(String value) {
+            if (value == null) {
+                throw new IllegalArgumentException();
+            }
+
+            Scope scope;
+            try {
+                scope = new Scope(JSONSerializer.parseMap(value));
+            } catch (SerializationException exception) {
+                throw new IllegalArgumentException(exception);
+            }
+
+            return scope;
         }
     }
 
@@ -87,7 +135,7 @@ public class ScrollBar extends Container {
     private Orientation orientation;
     private int start = 0;
     private int end = 100;
-    private int extent = 100;
+    private int extent = 1;
     private int value = 0;
     private int unitIncrement = 1;
     private int blockIncrement = 1;
@@ -225,6 +273,22 @@ public class ScrollBar extends Container {
         }
 
         setScope(scope.start, scope.end, scope.extent);
+    }
+
+    public final void setScope(Dictionary<String, ?> scope) {
+        if (scope == null) {
+            throw new IllegalArgumentException("scope is null.");
+        }
+
+        setScope(new Scope(scope));
+    }
+
+    public final void setScope(String scope) {
+        if (scope == null) {
+            throw new IllegalArgumentException("scope is null.");
+        }
+
+        setScope(Scope.decode(scope));
     }
 
     public int getValue() {
