@@ -19,11 +19,46 @@ limitations under the License.
 <document id="split-panes">
     <properties>
         <title>Split Panes</title>
+        <explore>SplitPane</explore>
     </properties>
 
     <body>
         <p>
-            TODO
+            Split panes provide a draggable divider, known as a "splitter", between two components,
+            allowing a user to dynamically change the size of each component. The location of the
+            splitter is expressed in terms of a percentage value (<tt>0.0</tt> to <tt>1.0</tt>)
+            called the "split ratio", which determines how much space is allocated to each
+            component.
+        </p>
+
+        <p>
+            Split panes also have an orientation, which dictates whether the two components sit
+            side by side or one on top of another. A horizontally oriented split pane has a left
+            region and a right region; a vertically oriented split pane has a top region and a
+            bottom region. Since orientation is a runtime property of <tt>SplitPane</tt>, the
+            regions are referred to generically as the "top/left" region and the "bottom/right"
+            region and are specified using the <tt>SplitPane.Region</tt> enum.
+        </p>
+
+        <p>
+            When a split pane is resized, the caller can control how the change should affect the
+            sizes of the two components by setting the split pane's "resize mode" and its "primary
+            region". The resize mode can be set to either maintain the existing split ratio
+            (allocate space according to existing allocation percentages) or to maintain the
+            existing size of the primary region.
+        </p>
+
+        <p>
+            Finally, a split pane may be locked, which will prevent the user from dragging the
+            splitter. Note that callers will still be able to programatically adjust the split
+            ratio.
+        </p>
+
+        <p>
+            The following example shows a simple split pane that can be used to control the scale
+            of an image view. You can change the orientation of the split pane by using the
+            associated radio buttons. It also highlights the "useShadow" style, which is one of the
+            styles supported by the Terra there's implementation of the split pane skin.
         </p>
 
         <application class="org.apache.pivot.wtk.ScriptApplication"
@@ -43,189 +78,66 @@ limitations under the License.
             The WTKX for this example is shown below:
         </p>
 
-        <source type="xml" location="org/apache/pivot/tutorials/boundedrange/spinners.wtkx">
+        <source type="xml" location="org/apache/pivot/tutorials/layout/split_panes.wtkx">
             <![CDATA[
             <Window title="Split Panes" maximized="true"
                 WindowStateListener.windowOpened="init();"
                 xmlns:wtkx="http://pivot.apache.org/wtkx"
-                xmlns:collections="org.apache.pivot.collections"
-                xmlns:content="org.apache.pivot.wtk.content"
                 xmlns="org.apache.pivot.wtk">
                 <wtkx:script>
-                function init() {
-                    spinner.setSelectedIndex(3);
-                    primaryColorListButton.setSelectedIndex(0);
-                    secondaryColorListButton.setSelectedIndex(1);
-                    orientationListButton.setSelectedIndex(0);
-                }
+                    function init() {
+                        orientation.setSelection(horizontalOrientationButton);
+                    }
                 </wtkx:script>
 
                 <content>
                     <SplitPane wtkx:id="splitPane" orientation="horizontal" splitRatio="0.6">
-                        <splitPaneListeners>
-                            <wtkx:script>
-                            function splitRatioChanged(splitPane, previousSplitRatio) {
-                                var value = Math.floor(splitPane.getSplitRatio() * 100);
-                                label.setText(value + "%");
-                            }
-                            </wtkx:script>
-                        </splitPaneListeners>
                         <left>
-                            <Border>
+                            <Border styles="{padding:6}">
                                 <content>
-                                    <Panel styles="{backgroundColor:'#f7f5ed'}"/>
+                                    <ImageView image="org/apache/pivot/tutorials/IMG_0725_2.jpg"
+                                        styles="{fill:true}"/>
                                 </content>
                             </Border>
                         </left>
                         <right>
                             <Border styles="{padding:{top:10}}">
                                 <content>
-                                    <BoxPane orientation="vertical" styles="{fill:true,
-                                        horizontalAlignment:'right'}">
-                                        <Label text="Properties" styles="{padding:{left:10}, font:{bold:true}}"/>
-                                        <BoxPane orientation="vertical" styles="{horizontalAlignment:'right'}">
-                                            <Form styles="{horizontalSpacing:18, rightAlignLabels:true}">
-                                                <sections>
-                                                    <Form.Section>
-                                                        <Label wtkx:id="label" Form.label="Split Ratio"
-                                                            minimumPreferredWidth="100"/>
-                                                        <ListButton wtkx:id="orientationListButton"
-                                                            Form.label="Orientation"
-                                                            listData="['Horizontal', 'Vertical']">
-                                                            <listButtonSelectionListeners>
-                                                                <wtkx:script>
-                                                                function selectedIndexChanged(listButton,
-                                                                    previousSelectedIndex) {
-                                                                    var orientation = listButton.getSelectedItem();
-                                                                    splitPane.setOrientation(orientation);
-                                                                }
-                                                                </wtkx:script>
-                                                            </listButtonSelectionListeners>
-                                                        </ListButton>
-                                                        <BoxPane Form.label="Flags" orientation="vertical"
-                                                            styles="{spacing:10}">
-                                                            <Checkbox buttonData="Locked">
-                                                                <buttonStateListeners>
-                                                                    <wtkx:script>
-                                                                    function stateChanged(button, previousState) {
-                                                                        splitPane.setLocked(button.isSelected());
-                                                                    }
-                                                                    </wtkx:script>
-                                                                </buttonStateListeners>
-                                                            </Checkbox>
-                                                        </BoxPane>
-                                                    </Form.Section>
-                                                </sections>
-                                            </Form>
-                                        </BoxPane>
-                                        <Separator/>
-                                        <Label text="Styles" styles="{padding:{left:10}, font:{bold:true}}"/>
-                                        <BoxPane orientation="vertical" styles="{horizontalAlignment:'right'}">
-                                            <Form styles="{horizontalSpacing:18, rightAlignLabels:true}">
-                                                <sections>
-                                                    <Form.Section>
-                                                        <Spinner wtkx:id="spinner"
-                                                            Form.label="Splitter Thickness"
-                                                            styles="{sizeToContent:true}">
-                                                            <spinnerSelectionListeners>
-                                                                <wtkx:script>
-                                                                function selectedIndexChanged(spinner,
-                                                                    previousSelectedIndex) {
-                                                                    var value = spinner.getSelectedItem();
-                                                                    splitPane.getStyles().put
-                                                                        ("splitterThickness", value);
-                                                                }
-                                                                </wtkx:script>
-                                                            </spinnerSelectionListeners>
-                                                            <spinnerData>
-                                                                <content:NumericSpinnerData lowerBound="3"
-                                                                    upperBound="20" />
-                                                            </spinnerData>
-                                                        </Spinner>
-                                                        <ListButton wtkx:id="primaryColorListButton"
-                                                            Form.label="Splitter Handle Primary Color"
-                                                            styles="{listSize:6}">
-                                                            <listData>
-                                                                <collections:ArrayList>
-                                                                    <content:ColorItem color="#000000"
-                                                                        name="Black"/>
-                                                                    <content:ColorItem color="#dddcd5"
-                                                                        name="Tan"/>
-                                                                    <content:ColorItem color="#14538b"
-                                                                        name="Blue"/>
-                                                                    <content:ColorItem color="#b0000f"
-                                                                        name="Red"/>
-                                                                </collections:ArrayList>
-                                                            </listData>
-                                                            <dataRenderer>
-                                                                <content:ListButtonColorItemRenderer/>
-                                                            </dataRenderer>
-                                                            <itemRenderer>
-                                                                <content:ListViewColorItemRenderer/>
-                                                            </itemRenderer>
-                                                            <listButtonSelectionListeners>
-                                                                <wtkx:script>
-                                                                function selectedIndexChanged(listButton,
-                                                                    previousSelectedIndex) {
-                                                                    var colorItem = listButton.getSelectedItem();
-                                                                    splitPane.getStyles().put
-                                                                        ("splitterHandlePrimaryColor",
-                                                                         colorItem.getColor());
-                                                                }
-                                                                </wtkx:script>
-                                                            </listButtonSelectionListeners>
-                                                        </ListButton>
-                                                        <ListButton wtkx:id="secondaryColorListButton"
-                                                            Form.label="Splitter Handle Secondary Color"
-                                                            styles="{listSize:6}">
-                                                            <listData>
-                                                                <collections:ArrayList>
-                                                                    <content:ColorItem color="#000000"
-                                                                        name="Black"/>
-                                                                    <content:ColorItem color="#dddcd5"
-                                                                        name="Tan"/>
-                                                                    <content:ColorItem color="#14538b"
-                                                                        name="Blue"/>
-                                                                    <content:ColorItem color="#b0000f"
-                                                                        name="Red"/>
-                                                                </collections:ArrayList>
-                                                            </listData>
-                                                            <dataRenderer>
-                                                                <content:ListButtonColorItemRenderer/>
-                                                            </dataRenderer>
-                                                            <itemRenderer>
-                                                                <content:ListViewColorItemRenderer/>
-                                                            </itemRenderer>
-                                                            <listButtonSelectionListeners>
-                                                                <wtkx:script>
-                                                                function selectedIndexChanged(listButton,
-                                                                    previousSelectedIndex) {
-                                                                    var colorItem = listButton.getSelectedItem();
-                                                                    splitPane.getStyles().put
-                                                                        ("splitterHandleSecondaryColor",
-                                                                         colorItem.getColor());
-                                                                }
-                                                                </wtkx:script>
-                                                            </listButtonSelectionListeners>
-                                                        </ListButton>
-                                                        <BoxPane Form.label="Flags" orientation="vertical"
-                                                            minimumPreferredWidth="100"
-                                                            styles="{spacing:10}">
-                                                            <Checkbox buttonData="Use Shadow">
-                                                                <buttonStateListeners>
-                                                                    <wtkx:script>
-                                                                    function stateChanged(button, previousState) {
-                                                                        splitPane.getStyles().put("useShadow",
-                                                                            button.isSelected());
-                                                                    }
-                                                                    </wtkx:script>
-                                                                </buttonStateListeners>
-                                                            </Checkbox>
-                                                        </BoxPane>
-                                                    </Form.Section>
-                                                </sections>
-                                            </Form>
-                                        </BoxPane>
+                                    <BoxPane orientation="vertical" styles="{padding:6, spacing:8}">
+                                        <wtkx:define>
+                                            <ButtonGroup wtkx:id="orientation">
+                                                <buttonGroupListeners>
+                                                    <wtkx:script>
+                                                        function selectionChanged(buttonGroup, previousSelection) {
+                                                            var selection = buttonGroup.getSelection();
+                                                            if (selection == horizontalOrientationButton) {
+                                                                splitPane.setOrientation("horizontal");
+                                                            } else {
+                                                                splitPane.setOrientation("vertical");
+                                                            }
+                                                        }
+                                                    </wtkx:script>
+                                                </buttonGroupListeners>
+                                            </ButtonGroup>
+                                        </wtkx:define>
+
+                                        <Label text="Orientation" styles="{font:{bold:true}}"/>
+                                        <RadioButton wtkx:id="horizontalOrientationButton"
+                                            buttonData="Horizontal" buttonGroup="$orientation"/>
+                                        <RadioButton wtkx:id="verticalOrientationButton"
+                                            buttonData="Vertical" buttonGroup="$orientation"/>
+
+                                        <Separator preferredWidth="100"/>
+
+                                        <Checkbox buttonData="Use Shadow">
+                                            <buttonStateListeners>
+                                                <wtkx:script>
+                                                    function stateChanged(button, previousState) {
+                                                        splitPane.getStyles().put("useShadow", button.isSelected());
+                                                    }
+                                                </wtkx:script>
+                                            </buttonStateListeners>
+                                        </Checkbox>
                                     </BoxPane>
                                 </content>
                             </Border>

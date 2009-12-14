@@ -24,7 +24,7 @@ limitations under the License.
     <body>
         <p>
             Grid panes are used to arrange components in a fixed two-dimensional grid. Grid panes
-            have a "columns" collection that defines the column structure of the grid and a "rows"
+            have a "columnCount" property that defines the column structure of the grid and a "rows"
             collection that defines both the row structure of the grid and the contents of each
             row.
         </p>

@@ -56,6 +56,10 @@ public class TextInputs implements Application {
                         if (nextState == null
                             || !nextState.toLowerCase().startsWith(text)) {
                             textInput.setText(state);
+
+                            int selectionStart = text.length();
+                            int selectionLength = state.length() - selectionStart;
+                            textInput.setSelection(selectionStart, selectionLength);
                         }
                     }
                 }
