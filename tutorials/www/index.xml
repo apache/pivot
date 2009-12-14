@@ -26,8 +26,7 @@ limitations under the License.
             This tutorial introduces developers to the Pivot platform. It is designed as a
             step-by-step guide that explains how to get started using a number of common Pivot
             features, beginning with a detailed introduction to the platform and the compulsory
-            first programming exercise, "Hello World", written in Pivot. The sections are
-            organized as follows:
+            first programming exercise, "Hello World", written in Pivot.
         </p>
 
         <p>
@@ -39,6 +38,10 @@ limitations under the License.
             localization, among others. Readers may also find it helpful to review the
             <a href="wtkx-primer.html">WTKX Primer</a> section, which provides a detailed
             description of Pivot's markup language, before browsing the tutorials themsevles.
+        </p>
+
+        <p>
+            The sections are organized as follows:
         </p>
 
         <item-group name="Introduction to Pivot">

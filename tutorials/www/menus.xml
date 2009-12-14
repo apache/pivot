@@ -39,7 +39,7 @@ limitations under the License.
             </li>
             <li>
                 <a href="menu-buttons.html"><b>Menu Buttons</b></a> - provide access to "drop-down"
-                menus, similar to <a href="list_buttons.html">list buttons</a>; often used in
+                menus, similar to <a href="list-buttons.html">list buttons</a>; often used in
                 toolbars.
             </li>
         </ul>

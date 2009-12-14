@@ -54,7 +54,7 @@ limitations under the License.
             a fixed height for the list in advance. However, if the designer knows that the list
             will be long and that it is likely to scroll, it can be placed in a scroll pane.
             <tt>ScrollPane</tt> is discussed in more detail in the
-            <a href="navigation_containers.html">Navigation Containers</a> section.
+            <a href="navigation-containers.html">Navigation Containers</a> section.
         </p>
 
         <p>

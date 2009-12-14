@@ -67,7 +67,7 @@ limitations under the License.
                     scrollable region. Sublcasses of <tt>Viewport</tt> include:
                     <ul>
                         <li>
-                            <a href="scroll_panes.html"><b>ScrollPane</b></a> - A scrollable area
+                            <a href="scroll-panes.html"><b>ScrollPane</b></a> - A scrollable area
                             with optional vertical and horizontal scroll bars as well as row and
                             column headers.
                         </li>

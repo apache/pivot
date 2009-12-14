@@ -162,7 +162,7 @@ limitations under the License.
 
         <p>
             <tt>java -cp pivot-core-<i>[version]</i>.jar:pivot-wtk-<i>[version]</i>.jar:
-            pivot-wtk-terra-<i>[version]</i>.terra.jar:pivot-tutorials-<i>[version]</i>.jar
+            pivot-wtk-terra-<i>[version]</i>.jar:pivot-tutorials-<i>[version]</i>.jar
             org.apache.pivot.wtk.DesktopApplicationContext org.apache.pivot.tutorials.HelloJava</tt>
         </p>
 
@@ -172,7 +172,7 @@ limitations under the License.
 
         <p>
             <tt>java -cp pivot-core-<i>[version]</i>.jar;pivot-wtk-<i>[version]</i>.jar;
-            pivot-wtk-terra<i>[version]</i>.terra.jar;pivot-tutorials-<i>[version]</i>.jar
+            pivot-wtk-terra-<i>[version]</i>.jar;pivot-tutorials-<i>[version]</i>.jar
             org.apache.pivot.wtk.DesktopApplicationContext org.apache.pivot.tutorials.HelloJava</tt>
         </p>
 

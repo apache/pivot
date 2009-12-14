@@ -26,7 +26,7 @@ limitations under the License.
             Scroll panes are a type of viewport that facilitates scrolling by presenting a
             vertical or horizontal scroll bar that the user can drag to access the obscured parts
             of the view. They are often used to wrap data-driven components containing a lot of
-            items (such as a <a href="table_views.html">TableView</a> displaying a long list of
+            items (such as a <a href="table-views.html">TableView</a> displaying a long list of
             database query results), or to wrap long forms.
         </p>
 

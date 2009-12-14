@@ -238,7 +238,7 @@ limitations under the License.
             A component's skin will generally ensure that an appropriate cursor is displayed when
             the mouse is over the component. However, a caller may customize the component's cursor
             using the <tt>setCursor()</tt> method of <tt>Component</tt>. Valid cursor values are
-            defined by the Cursor enum.
+            defined by the <tt>Cursor</tt> enum.
         </p>
 
         <h2>Styles</h2>

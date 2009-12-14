@@ -95,7 +95,7 @@ limitations under the License.
 
         <p>
             The actual binding occurs when the selection changes in the table view; as we saw in
-            the <a href="stock_tracker.events.html">Event Handling</a> section, the selection
+            the <a href="stock-tracker.events.html">Event Handling</a> section, the selection
             change handler calls the <tt>refreshDetail()</tt> method in response to a selection
             change event. The code for this method is as follows:
         </p>

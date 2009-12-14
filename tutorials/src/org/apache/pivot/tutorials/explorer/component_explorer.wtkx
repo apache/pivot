@@ -378,11 +378,11 @@ limitations under the License.
                                             </Border>
                                             <Border TabPane.label="%contentPane.wtkxSourceLabel">
                                                 <content>
-                                                    <ScrollPane horizontalScrollBarPolicy="fill">
+                                                    <ScrollPane>
                                                         <view>
                                                             <TextArea wtkx:id="sourceTextArea"
                                                                 editable="false"
-                                                                styles="{font:'Courier 10'}"/>
+                                                                styles="{wrapText:false, font:'Courier 10'}"/>
                                                         </view>
                                                     </ScrollPane>
                                                 </content>

@@ -23,7 +23,7 @@ limitations under the License.
 
     <body>
         <p>
-            Menu buttons are similar to <a href="list_buttons.html">list buttons</a>, but provide
+            Menu buttons are similar to <a href="list-buttons.html">list buttons</a>, but provide
             access to "drop-down" menus rather than list views. They are often used in toolbars,
             but can be placed anywhere within an application's user interface.
         </p>

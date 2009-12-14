@@ -27,7 +27,7 @@ public final class Display extends Container {
     private ApplicationContext.DisplayHost displayHost;
     private Point mouseLocation = null;
 
-    protected Display(ApplicationContext.DisplayHost displayHost) {
+    public Display(ApplicationContext.DisplayHost displayHost) {
         this.displayHost = displayHost;
         super.setSkin(new DisplaySkin());
     }
