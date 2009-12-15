@@ -23,9 +23,22 @@ limitations under the License.
     </properties>
 
     <body>
-        <p>TODO</p>
+        <p>
+            Tree views are used to present nested lists of data that form a hierarchy. A tree
+            view's data is specified just like that of a <a href="lists.html">list view</a>,
+            but any item in the tree data that is itself an instance of
+            <tt>org.apache.pivot.collections.List</tt> will be treated as a branch in the tree,
+            and the user will be able to expand the branch to see its children.
+        </p>
 
-        <application class="org.apache.pivot.wtk.ScriptApplication" width="320" height="240">
+        <p>
+            The following example shows a basic tree view. This example specifies the tree data as
+            the contents of <tt>tree_data.wtkx</tt>. For the purpose of this example, this data is
+            static. A real application could load dynamic data and use a custom renderer to present
+            the raw data straight to the user.
+        </p>
+
+        <application class="org.apache.pivot.wtk.ScriptApplication" width="300" height="300">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>
@@ -45,59 +58,80 @@ limitations under the License.
                 xmlns:wtkx="http://pivot.apache.org/wtkx"
                 xmlns="org.apache.pivot.wtk">
                 <content>
-                    <SplitPane orientation="horizontal" splitRatio="0.5">
-                        <left>
-                            <Border>
-                                <content>
-                                    <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
-                                        <view>
-                                            <TreeView wtkx:id="treeView">
-                                                <treeData>
-                                                    <wtkx:include src="tree_data.wtkx"/>
-                                                </treeData>
-                                            </TreeView>
-                                        </view>
-                                    </ScrollPane>
-                                </content>
-                            </Border>
-                        </left>
-                        <right>
-                            <Border styles="{padding:{top:10}}">
-                                <content>
-                                    <BoxPane styles="{horizontalAlignment:'right'}">
-                                        <Form styles="{horizontalSpacing:18, rightAlignLabels:true}">
-                                            <sections>
-                                                <Form.Section>
-                                                    <ListButton wtkx:id="selectModeListButton"
-                                                        Form.label="Select Mode"
-                                                        listData="['None', 'Single', 'Multi']"
-                                                        selectedIndex="1"
-                                                        ListButtonSelectionListener.selectedIndexChanged="treeView.setSelectMode(selectModeListButton.getSelectedItem());"/>
-                                                    <BoxPane Form.label="Flags" orientation="vertical"
-                                                        styles="{spacing:10}">
-                                                        <Checkbox wtkx:id="checkmarksEnabledButton"
-                                                            buttonData="Checkmarks Enabled"
-                                                            ButtonStateListener.stateChanged="treeView.setCheckmarksEnabled(checkmarksEnabledButton.isSelected());"/>
-                                                        <Checkbox wtkx:id="showMixedCheckmarkStateButton"
-                                                            buttonData="Show Mixed Checkmark State"
-                                                            ButtonStateListener.stateChanged="treeView.setShowMixedCheckmarkState(showMixedCheckmarkStateButton.isSelected());"/>
-                                                    </BoxPane>
-                                                </Form.Section>
-                                            </sections>
-                                        </Form>
-                                    </BoxPane>
-                                </content>
-                            </Border>
-                        </right>
-                    </SplitPane>
+                    <Border>
+                        <content>
+                            <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
+                                <view>
+                                    <TreeView>
+                                        <treeData>
+                                            <wtkx:include src="tree_data.wtkx"/>
+                                        </treeData>
+                                    </TreeView>
+                                </view>
+                            </ScrollPane>
+                        </content>
+                    </Border>
                 </content>
             </Window>
             ]]>
         </source>
 
         <p>
-            Since this example is written entirely in WTKX and script, there is no associated Java
-            source.
+            The WTKX that defines the tree data is shown below.
+        </p>
+
+        <source type="xml" location="org/apache/pivot/tutorials/treeviews/tree_data.wtkx">
+            <![CDATA[
+            <TreeBranch xmlns="org.apache.pivot.wtk.content">
+                <TreeBranch text="Activity" icon="org/apache/pivot/tutorials/folder.png">
+                    <TreeBranch text="Games" icon="org/apache/pivot/tutorials/folder.png">
+                        <TreeNode text="Foosball" icon="org/apache/pivot/tutorials/page_white.png"/>
+                        <TreeNode text="Ping Pong" icon="org/apache/pivot/tutorials/page_white.png"/>
+                        <TreeNode text="Air Hockey" icon="org/apache/pivot/tutorials/page_white.png"/>
+                    </TreeBranch>
+                    <TreeBranch text="Sports" icon="org/apache/pivot/tutorials/folder.png">
+                        <TreeNode text="Baseball" icon="org/apache/pivot/tutorials/page_white.png"/>
+                        <TreeNode text="Basketball" icon="org/apache/pivot/tutorials/page_white.png"/>
+                        <TreeNode text="Football" icon="org/apache/pivot/tutorials/page_white.png"/>
+                        <TreeNode text="Ice Hockey" icon="org/apache/pivot/tutorials/page_white.png"/>
+                        <TreeNode text="Soccer" icon="org/apache/pivot/tutorials/page_white.png"/>
+                        <TreeNode text="Softball" icon="org/apache/pivot/tutorials/page_white.png"/>
+                    </TreeBranch>
+                    <TreeNode text="Camping" icon="org/apache/pivot/tutorials/page_white.png"/>
+                    <TreeNode text="Skiing" icon="org/apache/pivot/tutorials/page_white.png"/>
+                </TreeBranch>
+                <TreeBranch text="Occasion" icon="org/apache/pivot/tutorials/folder.png">
+                    <TreeBranch text="Holidays" icon="org/apache/pivot/tutorials/folder.png">
+                        <TreeNode text="Christmas" icon="org/apache/pivot/tutorials/page_white.png"/>
+                        <TreeNode text="Independence Day" icon="org/apache/pivot/tutorials/page_white.png"/>
+                        <TreeNode text="Labor Day" icon="org/apache/pivot/tutorials/page_white.png"/>
+                        <TreeNode text="New Year's Day" icon="org/apache/pivot/tutorials/page_white.png"/>
+                        <TreeNode text="President's Day" icon="org/apache/pivot/tutorials/page_white.png"/>
+                        <TreeNode text="Thanksgiving" icon="org/apache/pivot/tutorials/page_white.png"/>
+                        <TreeNode text="Valentine's Day" icon="org/apache/pivot/tutorials/page_white.png"/>
+                        <TreeNode text="Veteran's Day" icon="org/apache/pivot/tutorials/page_white.png"/>
+                    </TreeBranch>
+                    <TreeNode text="Anniversary" icon="org/apache/pivot/tutorials/page_white.png"/>
+                    <TreeNode text="Birthday" icon="org/apache/pivot/tutorials/page_white.png"/>
+                    <TreeNode text="Wedding" icon="org/apache/pivot/tutorials/page_white.png"/>
+                </TreeBranch>
+                <TreeBranch text="Location" icon="org/apache/pivot/tutorials/folder.png">
+                    <TreeNode text="Africa" icon="org/apache/pivot/tutorials/folder.png"/>
+                    <TreeNode text="Antarctica" icon="org/apache/pivot/tutorials/folder.png"/>
+                    <TreeNode text="Asia" icon="org/apache/pivot/tutorials/folder.png"/>
+                    <TreeNode text="Australia" icon="org/apache/pivot/tutorials/folder.png"/>
+                    <TreeNode text="Europe" icon="org/apache/pivot/tutorials/folder.png"/>
+                    <TreeNode text="North America" icon="org/apache/pivot/tutorials/folder.png"/>
+                    <TreeBranch text="South America" icon="org/apache/pivot/tutorials/folder.png">
+                        <TreeNode text="Peru" icon="org/apache/pivot/tutorials/page_white.png"/>
+                    </TreeBranch>
+                </TreeBranch>
+            </TreeBranch>
+            ]]>
+        </source>
+
+        <p>
+            Since this example is written entirely in WTKX, there is no associated Java source.
         </p>
     </body>
 </document>
