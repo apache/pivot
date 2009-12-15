@@ -986,6 +986,7 @@ public class ScrollPaneSkin extends ContainerSkin
         int scrollTop = scrollPane.getScrollTop();
 
         if (view != null
+            && view.isShowing()
             && isOptimizeScrolling()) {
             Bounds blitArea = view.getVisibleArea();
 
@@ -1055,6 +1056,7 @@ public class ScrollPaneSkin extends ContainerSkin
         int scrollLeft = scrollPane.getScrollLeft();
 
         if (view != null
+            && view.isShowing()
             && isOptimizeScrolling()) {
             Bounds blitArea = view.getVisibleArea();
 
