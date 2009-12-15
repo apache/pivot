@@ -140,10 +140,17 @@ limitations under the License.
 
         <source type="js" location="org/apache/pivot/tutorials/boundedrange/scroll_bars.js">
             <![CDATA[
+            /**
+             * Called when the main app window is opened.
+             */
             function init() {
                 ranges.selection = weekButton;
             }
 
+            /**
+             * Updates the scroll bar's extent and block increment based on the selected
+             * range (in the ranges button group).
+             */
             function updateRange() {
                 var amount;
 
@@ -161,6 +168,9 @@ limitations under the License.
                 scrollBar.blockIncrement = 2 * amount;
             }
 
+            /**
+             * Updates the "timeline" label based on the scroll bar's value and extent.
+             */
             function updateLabel() {
                 var first = scrollBar.value + 1;
                 var last = scrollBar.value + scrollBar.extent;

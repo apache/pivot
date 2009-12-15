@@ -19,11 +19,165 @@ limitations under the License.
 <document id="color-choosers">
     <properties>
         <title>Color Choosers</title>
+        <explore>ColorChooser</explore>
     </properties>
 
     <body>
         <p>
-            This section is not yet complete.
+            Color choosers, as the name implies, are used to allow the user to select a color. They
+            present the user with a color spectrum from which the user can select a standard RGB
+            color.
+        </p>
+
+        <p>
+            The following example shows a color chooser and will show the user the HTML
+            representation of the color they have chosen.
+        </p>
+
+        <application class="org.apache.pivot.wtk.ScriptApplication" width="420" height="197">
+            <libraries>
+                <library>core</library>
+                <library>wtk</library>
+                <library>wtk-terra</library>
+                <library>tutorials</library>
+            </libraries>
+            <startup-properties>
+                <src>org/apache/pivot/tutorials/colorchoosers/color_choosers.wtkx</src>
+            </startup-properties>
+        </application>
+
+        <p>The WTKX for this example is shown below:</p>
+
+        <source type="xml" location="org/apache/pivot/tutorials/colorchoosers/color_choosers.wtkx">
+            <![CDATA[
+            <Window title="Color Choosers" maximized="true"
+                WindowStateListener.windowOpened="init()"
+                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns="org.apache.pivot.wtk">
+                <wtkx:script src="color_choosers.js"/>
+
+                <content>
+                    <Border>
+                        <content>
+                            <BoxPane styles="{padding:4, spacing:12}">
+                                <Border styles="{color:10}">
+                                    <content>
+                                        <ColorChooser wtkx:id="colorChooser"
+                                            ColorChooserSelectionListener.selectedColorChanged="onColorChange()">
+                                        </ColorChooser>
+                                    </content>
+                                </Border>
+                                <Form>
+                                    <sections>
+                                        <Form.Section>
+                                            <Border Form.label="Selected Color" styles="{padding:1}">
+                                                <content>
+                                                    <Border wtkx:id="sampleBorder" preferredWidth="100"
+                                                        preferredHeight="14" styles="{thickness:0}">
+                                                        <content>
+                                                            <Label/>
+                                                        </content>
+                                                    </Border>
+                                                </content>
+                                            </Border>
+                                            <TextInput wtkx:id="hexInput" Form.label="HTML Notation"
+                                                ComponentStateListener.focusedChanged="onInputFocusChange()">
+                                                <componentKeyListeners>
+                                                    <wtkx:script>
+                                                        importClass(org.apache.pivot.wtk.Component);
+                                                        importClass(org.apache.pivot.wtk.Keyboard);
+
+                                                        function keyPressed(component, keyCode, keyLocation) {
+                                                            if (keyCode == Keyboard.KeyCode.TAB ||
+                                                                keyCode == Keyboard.KeyCode.ENTER) {
+                                                                Component.clearFocus();
+                                                            }
+                                                        }
+                                                    </wtkx:script>
+                                                </componentKeyListeners>
+                                            </TextInput>
+                                        </Form.Section>
+                                    </sections>
+                                </Form>
+                            </BoxPane>
+                        </content>
+                    </Border>
+                </content>
+            </Window>
+            ]]>
+        </source>
+
+        <p>The JavaScript for this example, which lives in an external script file, is below:</p>
+
+        <source type="js" location="org/apache/pivot/tutorials/colorchoosers/color_choosers.js">
+            <![CDATA[
+            /**
+             * Called when the main app window is opened.
+             */
+            function init() {
+                colorChooser.selectedColor = "#59a2b0";
+            }
+
+            /**
+             * Converts a hex string into a Color instance.
+             */
+            function hexToColor(hex) {
+                if (!hex.startsWith("#")) {
+                    hex = "#" + hex;
+                }
+
+                return java.awt.Color.decode(hex);
+            }
+
+            /**
+             * Converts a Color instance into a hex string.
+             */
+            function colorToHex(color) {
+                var result = "";
+
+                var primaries = ["red", "green", "blue"];
+                for (var i = 0, n = primaries.length; i < n; i++) {
+                    var value = color[primaries[i]].toString(16);
+                    if (value.length == 1) {
+                        // Pad the value with a leading zero
+                        value = "0" + value;
+                    }
+                    result += value;
+                }
+
+                return result;
+            }
+
+            /**
+             * Called when the selected color changes.
+             */
+            function onColorChange() {
+                var color = colorChooser.selectedColor;
+                sampleBorder.styles.put("backgroundColor", color);
+                hexInput.text = colorToHex(color);
+            }
+
+            /**
+             * Called when the hex input changes its focus state.
+             */
+            function onInputFocusChange() {
+                if (!hexInput.focused) {
+                    try {
+                        colorChooser.selectedColor = hexToColor(hexInput.text);
+                    } catch (ex) {
+                        var color = colorChooser.selectedColor;
+                        if (color) {
+                            hexInput.text = colorToHex(color);
+                        }
+                    }
+                }
+            }
+            ]]>
+        </source>
+
+        <p>
+            Since this example is written entirely in WTKX and script, there is no associated Java
+            source.
         </p>
     </body>
 </document>
