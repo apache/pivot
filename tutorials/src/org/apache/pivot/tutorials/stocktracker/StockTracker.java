@@ -336,6 +336,8 @@ public class StockTracker implements Application {
                 if (stockQuote.getChange() < 0) {
                     Form.setFlag(detailChangeLabel, new Form.Flag(MessageType.ERROR));
                 }
+            } else {
+                stockQuote = new StockQuote();
             }
         } else {
             stockQuote = new StockQuote();

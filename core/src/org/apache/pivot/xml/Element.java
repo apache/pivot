@@ -880,6 +880,7 @@ public class Element extends Node implements List<Node>, Dictionary<String, Stri
 
                 if (!Character.isLetterOrDigit(c)
                     && c != '-'
+                    && c != '_'
                     && c != '.') {
                     throw new IllegalArgumentException("'" + c + "' is not a valid character"
                         + " for a namespace prefix.");
@@ -908,6 +909,7 @@ public class Element extends Node implements List<Node>, Dictionary<String, Stri
 
             if (!Character.isLetterOrDigit(c)
                 && c != '-'
+                && c != '_'
                 && c != '.') {
                 throw new IllegalArgumentException("'" + c + "' is not a valid character"
                     + " for a local name.");

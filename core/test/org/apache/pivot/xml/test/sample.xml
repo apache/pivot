@@ -38,4 +38,5 @@ limitations under the License.
         </e>
         <foo:h>Hello</foo:h>
     </d>
+    <abc_123/>
 </root>

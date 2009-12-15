@@ -51,7 +51,11 @@ public class StockQuote {
     }
 
     public void setValue(String value) {
-        setValue(Float.parseFloat(value));
+        try {
+            setValue(Float.parseFloat(value));
+        } catch(NumberFormatException exception) {
+            setValue(Float.NaN);
+        }
     }
 
     public float getOpeningValue() {
@@ -111,7 +115,11 @@ public class StockQuote {
     }
 
     public void setChange(String change) {
-        setChange(Float.parseFloat(change));
+        try {
+            setChange(Float.parseFloat(change));
+        } catch(NumberFormatException exception) {
+            setChange(Float.NaN);
+        }
     }
 
     public float getVolume() {
@@ -123,6 +131,10 @@ public class StockQuote {
     }
 
     public void setVolume(String volume) {
-        setVolume(Float.parseFloat(volume));
+        try {
+            setVolume(Float.parseFloat(volume));
+        } catch(NumberFormatException exception) {
+            setVolume(Float.NaN);
+        }
     }
 }
