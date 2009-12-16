@@ -30,16 +30,16 @@ limitations under the License.
         <ul>
             <li>
                 <p>
-                    <a href="scroll-bars.html"><b>ScrollBar</b></a> - Allows a user to select one
-                    of a range of values using up/down buttons or a draggable "thumb" that also
-                    represents an extent value. Most often used to facilitate scrolling in a scroll
-                    pane but can be used in other contexts.
+                    <a href="sliders.html"><b>Slider</b></a> - Allows a user to select one of a
+                    range of values by dragging the mouse.
                 </p>
             </li>
             <li>
                 <p>
-                    <a href="sliders.html"><b>Slider</b></a> - Allows a user to select one of a
-                    range of values by dragging the mouse.
+                    <a href="scroll-bars.html"><b>ScrollBar</b></a> - Allows a user to select one
+                    of a range of values using up/down buttons or a draggable "thumb" that also
+                    represents an extent value. Most often used to facilitate scrolling in a scroll
+                    pane but can be used in other contexts.
                 </p>
             </li>
             <li>
