@@ -760,13 +760,17 @@ public class KitchenSink implements Application, Application.AboutHandler {
                     @Override
                     public DropAction dragMove(Component component, Manifest dragContent,
                         int supportedDropActions, int x, int y, DropAction userDropAction) {
-                        return (dragContent.containsImage() ? DropAction.MOVE : null);
+                        ImageView imageView = (ImageView)component;
+                        return (imageView.getImage() == null
+                            && dragContent.containsImage() ? DropAction.MOVE : null);
                     }
 
                     @Override
                     public DropAction userDropActionChange(Component component, Manifest dragContent,
                         int supportedDropActions, int x, int y, DropAction userDropAction) {
-                        return (dragContent.containsImage() ? DropAction.MOVE : null);
+                        ImageView imageView = (ImageView)component;
+                        return (imageView.getImage() == null
+                            && dragContent.containsImage() ? DropAction.MOVE : null);
                     }
 
                     @Override
@@ -774,8 +778,9 @@ public class KitchenSink implements Application, Application.AboutHandler {
                         int supportedDropActions, int x, int y, DropAction userDropAction) {
                         DropAction dropAction = null;
 
-                        if (dragContent.containsImage()) {
-                            ImageView imageView = (ImageView)component;
+                        ImageView imageView = (ImageView)component;
+                        if (imageView.getImage() == null
+                            && dragContent.containsImage()) {
                             try {
                                 imageView.setImage(dragContent.getImage());
                                 dropAction = DropAction.MOVE;
