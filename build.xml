@@ -29,7 +29,6 @@ limitations under the License.
     <property name="folder.install" value="install"/>
     <property name="folder.lib" value="lib"/>
     <property name="folder.deploy" value="deploy"/>
-    <property name="folder.maven" value="maven"/>
 
     <!-- Keystore properties -->
     <property name="keystore.location" value="etc/pivot.keystore"/>
@@ -254,7 +253,6 @@ limitations under the License.
         <delete dir="${folder.doc}"/>
         <delete dir="${folder.install}"/>
         <delete dir="${folder.lib}"/>
-        <delete dir="${folder.maven}"/>
     </target>
 
     <!-- Javadoc -->
