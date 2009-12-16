@@ -280,20 +280,32 @@ public class StockTracker implements Application {
             @Override
             public void taskExecuted(Task<Object> task) {
                 if (task == getQuery) {
-                    Sequence<Span> selectedRanges =
-                        new ArrayList<Span>(stocksTableView.getSelectedRanges());
-
                     List<Object> quotes = (List<Object>)task.getResult();
 
-                    // Preserve any existing sort
+                    // Preserve any existing sort and selection
+                    Sequence<?> selectedStocks = stocksTableView.getSelectedRows();
+
                     List<Object> tableData = (List<Object>)stocksTableView.getTableData();
                     Comparator<Object> comparator = tableData.getComparator();
                     quotes.setComparator(comparator);
 
                     stocksTableView.setTableData(quotes);
 
-                    if (selectedRanges.getLength() > 0) {
-                        stocksTableView.setSelectedRanges(selectedRanges);
+                    if (selectedStocks.getLength() > 0) {
+                        // Select current indexes of selected stocks
+                        for (int i = 0, n = selectedStocks.getLength(); i < n; i++) {
+                            StockQuote selectedStock = (StockQuote)selectedStocks.get(i);
+
+                            int index = 0;
+                            for (StockQuote stock : (List<StockQuote>)stocksTableView.getTableData()) {
+                                if (stock.getSymbol().equals(selectedStock.getSymbol())) {
+                                    stocksTableView.addSelectedIndex(index);
+                                    break;
+                                }
+
+                                index++;
+                            }
+                        }
                     } else {
                         if (quotes.getLength() > 0) {
                             stocksTableView.setSelectedIndex(0);
@@ -324,7 +336,6 @@ public class StockTracker implements Application {
         removeSymbolsButton.setEnabled(firstSelectedIndex != -1);
 
         StockQuote stockQuote = null;
-        Form.setFlag(detailChangeLabel, (Form.Flag)null);
 
         if (firstSelectedIndex != -1) {
             int lastSelectedIndex = stocksTableView.getLastSelectedIndex();
@@ -332,10 +343,6 @@ public class StockTracker implements Application {
             if (firstSelectedIndex == lastSelectedIndex) {
                 List<StockQuote> tableData = (List<StockQuote>)stocksTableView.getTableData();
                 stockQuote = tableData.get(firstSelectedIndex);
-
-                if (stockQuote.getChange() < 0) {
-                    Form.setFlag(detailChangeLabel, new Form.Flag(MessageType.ERROR));
-                }
             } else {
                 stockQuote = new StockQuote();
             }
@@ -345,6 +352,14 @@ public class StockTracker implements Application {
 
         StockQuoteView stockQuoteView = new StockQuoteView(stockQuote);
         detailRootPane.load(stockQuoteView);
+
+        float change = stockQuote.getChange();
+        if (!Float.isNaN(change)
+            && change < 0) {
+            Form.setFlag(detailChangeLabel, new Form.Flag(MessageType.ERROR));
+        } else {
+            Form.setFlag(detailChangeLabel, (Form.Flag)null);
+        }
     }
 
     @SuppressWarnings("unchecked")
