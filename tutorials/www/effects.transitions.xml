@@ -179,7 +179,7 @@ limitations under the License.
             Finally, the source for the transition itself is shown below:
         </p>
 
-        <source type="xml" location="org/apache/pivot/tutorials/effects/CollapseTransition.java">
+        <source type="java" location="org/apache/pivot/tutorials/effects/CollapseTransition.java">
             <![CDATA[
             package org.apache.pivot.tutorials.effects;
 

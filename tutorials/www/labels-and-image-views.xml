@@ -80,7 +80,7 @@ limitations under the License.
             window:
         </p>
 
-        <source type="xml" location="org/apache/pivot/tutorials/labels/labels.wtkx">
+        <source type="java" location="org/apache/pivot/tutorials/labels/labels.wtkx">
             <![CDATA[
             package org.apache.pivot.tutorials.labels;
 

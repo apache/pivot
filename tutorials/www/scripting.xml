@@ -156,7 +156,7 @@ limitations under the License.
             The WTKX source is shown below:
         </p>
 
-        <source type="java" location="org/apache/pivot/tutorials/scripting/Scripting.java">
+        <source type="xml" location="org/apache/pivot/tutorials/scripting/Scripting.java">
             <![CDATA[
             <Window wtkx:id="window" title="Scripting Demo" maximized="true"
                 WindowStateListener.windowOpened="java.lang.System.out.println('Window opened: ' + x)"
