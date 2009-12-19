@@ -34,7 +34,7 @@ limitations under the License.
                                 <TableView.Column name="type" width="125" headerData="Type"/>
                                 <TableView.Column name="amount" width="75" headerData="Amount">
                                     <cellRenderer>
-                                        <content:TableViewNumberCellRenderer numberFormat="&#164;#,##0.00"/>
+                                        <content:TableViewNumberCellRenderer numberFormat="&#36;#,##0.00"/>
                                     </cellRenderer>
                                 </TableView.Column>
                                 <TableView.Column name="description" width="1*" headerData="Description" minimumWidth="150"/>
