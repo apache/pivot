@@ -38,7 +38,7 @@ limitations under the License.
         </p>
 
         <application class="org.apache.pivot.tutorials.layout.FlowPanes"
-            width="480" height="240">
+            width="512" height="240">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>

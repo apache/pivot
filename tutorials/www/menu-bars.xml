@@ -164,7 +164,7 @@ limitations under the License.
             that the actions be available before the WTKX is read.
         </p>
 
-        <source type="xml" location="org/apache/pivot/tutorials/menus/MenuBars.java">
+        <source type="java" location="org/apache/pivot/tutorials/menus/MenuBars.java">
             <![CDATA[
             package org.apache.pivot.tutorials.menus;
 

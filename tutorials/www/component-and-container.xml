@@ -84,18 +84,20 @@ limitations under the License.
             delegates the implementation of all <tt>ConstrainedVisual</tt> methods to the skin.
             The skin may, in turn, delegate some renderering responsibility to one or more
             renderers, which are used to paint some components' content (such as a button label or
-            a list item). Renderers are often implemented as extensions of the <tt>Component</tt>
-            class, allowing the component's implementation of <tt>ConstrainedVisual</tt> to be
-            re-used (and giving rise to the notion of renderers as "lightweight components").
+            a list item); this relationship is represented by the dotted line in the diagram.
+            Renderers are often implemented as extensions of the <tt>Component</tt> class, allowing
+            the component's implementation of <tt>ConstrainedVisual</tt> to be re-used (and giving
+            rise to the notion of renderers as "lightweight components").
         </p>
 
         <p>
             Components are painted in the order in which they are defined in the parent container's
             component sequence. The component sequence thus defines the "z-order" of the components
             in the container: components are painted in ascending order, allowing higer components
-            to overlap lower ones. In practice, though, z-order is often only noticeable at the
-            window level - individual components within an application rarely overlap. This is
-            primarily due to layout management, which is discussed next.
+            to overlap lower ones. Z-order is often only noticeable at the window level - individual
+            components within an application are generally arranged such that the user can see and
+            readily interact with them. This process, called "layout management", is generally
+            handled automatically in a Pivot application, and is discussed next.
         </p>
 
         <h2>Layout</h2>
@@ -120,15 +122,18 @@ limitations under the License.
             In Pivot, preferred sizes may optionally be constrained by passing a height constraint
             value to <tt>getPreferredWidth()</tt> or a width constraint value to
             <tt>getPreferredHeight()</tt>. This allows components to "wrap" their contents. For
-            example, a <tt>Label</tt> component with the "wrapText" style set to true will report a
-            preferred height that is tall enough to render its entire content by applying line break
-            logic using the given width constraint.
+            example, a <tt>Label</tt> component with the "wrapText" style set to <tt>true</tt> will
+            report a preferred height that is tall enough to render its entire content by applying
+            line break logic using the given width constraint.
         </p>
 
         <p>
             <tt>ConstrainedVisual</tt> defines an additional signature for <tt>getBaseline()</tt>
             that takes <tt>width</tt> and <tt>height</tt> arguments. This allows a component to
-            report a constrained baseline given a possible width and height.
+            report a constrained baseline given a possible width and height (for example, a
+            label whose content is vertically aligned to bottom will report a different baseline
+            than one that is vertically aligned to top when it is given more than its preferred
+            height).
         </p>
 
         <h3>Location and Visibility</h3>

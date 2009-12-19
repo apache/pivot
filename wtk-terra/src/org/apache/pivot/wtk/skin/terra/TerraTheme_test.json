@@ -15,7 +15,6 @@
  * limitations under the License.
  */
 {   font: "Verdana 11",
-
     colors: [
         "#404039",
         "#ffffff",

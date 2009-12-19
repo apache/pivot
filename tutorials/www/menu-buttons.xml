@@ -139,7 +139,7 @@ limitations under the License.
             named actions. The Java source, which defines the actions, is shown below:
         </p>
 
-        <source type="xml" location="org/apache/pivot/tutorials/menus/MenuButtons.java">
+        <source type="java" location="org/apache/pivot/tutorials/menus/MenuButtons.java">
             <![CDATA[
             package org.apache.pivot.tutorials.menus;
 

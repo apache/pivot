@@ -59,7 +59,7 @@ limitations under the License.
             <!-- JNLP translation must ignore the head, so if one exists, we skip JNLP link -->
             <xsl:if test="not($document/head)">
                 <xsl:text> | </xsl:text>
-                <a href="{$id}.jnlp">Web start</a>
+                <a href="{$id}.jnlp">Web Start</a>
             </xsl:if>
         </p>
         <p>

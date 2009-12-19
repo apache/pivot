@@ -19,21 +19,6 @@ limitations under the License.
 <document id="platform-overview">
     <properties>
         <title>Platform Overview</title>
-        <style>
-            table {
-                border:solid 1px #999999;
-                border-collapse:collapse;
-            }
-
-            td {
-                border:solid 1px #999999;
-                padding:3px;
-            }
-
-            td.heading {
-                font-weight:bold;
-            }
-        </style>
     </properties>
 
     <body>
@@ -410,14 +395,15 @@ limitations under the License.
             </li>
             <li>
                 <p>
-                    <b>TablePane</b> - A container that lays out its children in a two-dimensional
-                    table structure, optionally spanning table cells.
+                    <b>GridPane</b> - Container that arranges components in a two-dimensional grid
+                    where each cell is given the same size, based on the available width and
+                    height.
                 </p>
             </li>
             <li>
                 <p>
-                    <b>GridPane</b> - Similar to TablePane, but without spanning cells and where
-                    each cell is the same size.
+                    <b>TablePane</b> - A container that lays out its children in a two-dimensional
+                    table structure, optionally spanning table cells.
                 </p>
             </li>
             <li>
@@ -564,12 +550,12 @@ limitations under the License.
             </li>
             <li>
                 <p>
-                    <b>FileBrowser</b> - Allows a user to select a file.
+                    <b>ColorChooser</b> - Allows a user to select a color.
                 </p>
             </li>
             <li>
                 <p>
-                    <b>ColorChooser</b> - Allows a user to select a color.
+                    <b>FileBrowser</b> - Allows a user to select a file.
                 </p>
             </li>
         </ul>
@@ -621,6 +607,10 @@ limitations under the License.
                             pushed and reflects the user's selection.
                         </li>
                         <li>
+                            <b>ColorChooserButton</b> - A button that displays a pop-up color
+                            chooser when pushed and reflects the user's selection.
+                        </li>
+                        <li>
                             <b>MenuButton</b> - A button that displays a drop-down list of menu
                             items; can optionally reflect the user's selection allowing the action
                             associated with the item to be repeated (i.e. behave like a "split
@@ -632,10 +622,6 @@ limitations under the License.
                         <li>
                             <b>Menu.BarItem</b> - A button that provides behavior for menu bar
                             items.
-                        </li>
-                        <li>
-                            <b>ColorChooserButton</b> - A button that displays a pop-up color
-                            chooser when pushed and reflects the user's selection.
                         </li>
                     </ul>
                 </p>
@@ -809,7 +795,19 @@ limitations under the License.
             in a manner that is very similar to their corresponding SQL equivalents:
         </p>
 
-        <table>
+
+        <table style="border:solid 1px #999999; border-collapse:collapse">
+            <style>
+                td {
+                    border:solid 1px #999999;
+                    padding:3px;
+                }
+
+                td.heading {
+                    font-weight:bold;
+                }
+            </style>
+
             <thead>
                 <tr>
                     <td class="heading">Behavior</td>

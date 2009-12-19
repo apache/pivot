@@ -47,6 +47,7 @@ limitations under the License.
                                     </content>
                                 </Border>
                                 <TextInput wtkx:id="hexInput" Form.label="HTML Notation"
+                                    textSize="6"
                                     ComponentStateListener.focusedChanged="onInputFocusChange()">
                                     <componentKeyListeners>
                                         <wtkx:script>

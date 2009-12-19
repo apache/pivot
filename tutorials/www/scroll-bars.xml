@@ -33,9 +33,9 @@ limitations under the License.
 
         <p>
             Visually, a scroll bar is usually presented as a scroll "handle" within a larger
-            "track", with two buttons on either end of the track to move the handle. In this
-            metaphor, the track represents the outer range from which the user can select, and the
-            size of the handle represents the scroll bar's extent.
+            "track", with two buttons on either end of the track to move the handle. The track
+            represents the outer range from which the user can select, and the size of the handle
+            represents the scroll bar's extent.
         </p>
 
         <p>
@@ -56,12 +56,8 @@ limitations under the License.
         <p>
             Scroll bars are used within <a href="scroll-panes.html">scroll panes</a> and are most
             often transparent to the application developer. However, they can be used directly just
-            like any other components.
-        </p>
-
-        <p>
-            The following application uses a scroll bar to represent a simple timeline. It is
-            written entirely in WTKX and script, so there's no associated Java source code.
+            like any other components. The following application uses a scroll bar to represent a
+            simple timeline.
         </p>
 
         <application class="org.apache.pivot.wtk.ScriptApplication"
@@ -178,5 +174,10 @@ limitations under the License.
             }
             ]]>
         </source>
+
+        <p>
+            Since this application is written entirely in WTKX and script, there is no associated
+            Java source.
+        </p>
     </body>
 </document>

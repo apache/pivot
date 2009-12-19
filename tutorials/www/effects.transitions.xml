@@ -73,7 +73,7 @@ limitations under the License.
             it if one is already running):
         </p>
 
-        <source type="xml" location="org/apache/pivot/tutorials/effects/Transitions.java">
+        <source type="java" location="org/apache/pivot/tutorials/effects/Transitions.java">
             <![CDATA[
             package org.apache.pivot.tutorials.effects;
 

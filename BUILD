@@ -31,6 +31,10 @@ Project Set-Up
 * Ensure that the JNLP APIs are on your classpath; follow the same process as
   described in the previous step, substituting javaws.jar for plugin.jar.
 
+* Ensure that the Maven Ant tasks are installed (optional); see:
+
+  http://maven.apache.org/ant-tasks/installation.html
+
 
 Building Pivot
 ==============

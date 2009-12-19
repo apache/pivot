@@ -44,6 +44,10 @@ import org.apache.pivot.wtk.effects.OverlayDecorator;
 import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
+/**
+ * Utility application that allows the user to browse a JSON structure
+ * using a tree view component.
+ */
 public class JSONViewer implements Application {
     private Window window = null;
 

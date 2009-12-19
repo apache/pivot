@@ -42,6 +42,15 @@ limitations under the License.
         </application>
 
         <p>
+            Text areas are often placed in scroll panes because their content may grow too long to
+            fit on the screen. However, as shown in the above example, they are not required to be
+            direct descendants of a scroll pane - typing in the bottom text area causes the text
+            area to grow as each new line is added. A top-level scroll pane that contains the
+            entire application content displays a scroll bar as needed to accommodate the height of
+            the bottom text area.
+        </p>
+
+        <p>
             The WTKX source for this example is shown below (there is no corresponding Java source):
         </p>
 
@@ -90,15 +99,6 @@ limitations under the License.
             </Window>
             ]]>
         </source>
-
-        <p>
-            Text areas are often placed in scroll panes because their content may grow too long to
-            fit on the screen. However, as shown in the above example, they are not required to be
-            direct descendants of a scroll pane - typing in the bottom text area causes the text
-            area to grow as each new line is added. A top-level scroll pane that contains the
-            entire application content displays a scroll bar as needed to accommodate the height of
-            the bottom text area.
-        </p>
 
         <p>
             Though it is not demonstrated in this example, text areas may be flagged as

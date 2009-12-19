@@ -96,7 +96,7 @@ limitations under the License.
             selection:
         </p>
 
-        <source type="xml" location="org/apache/pivot/tutorials/filebrowsing/FileBrowsing.java">
+        <source type="java" location="org/apache/pivot/tutorials/filebrowsing/FileBrowsing.java">
             <![CDATA[
             package org.apache.pivot.tutorials.filebrowsing;
 

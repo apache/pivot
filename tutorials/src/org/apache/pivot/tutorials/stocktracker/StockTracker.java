@@ -312,6 +312,8 @@ public class StockTracker implements Application {
                         }
                     }
 
+                    refreshDetail();
+
                     DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG,
                         DateFormat.MEDIUM, Locale.getDefault());
                     lastUpdateLabel.setText(dateFormat.format(new Date()));

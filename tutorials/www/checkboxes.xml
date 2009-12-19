@@ -98,7 +98,7 @@ limitations under the License.
 
         <p>
             Note also that this example defines some button handler logic directly within the WTKX
-            file. The "ButtonPressListener.buttonPressed" attribute of each <tt>PushButton</tt>
+            file. The <tt>ButtonPressListener.buttonPressed</tt> attribute of each <tt>PushButton</tt>
             contains JavaScript code that toggles the visibility of the corresponding image view
             when the handler is invoked, causing the image to appear and disappear based on the
             checkbox's selection state. It is common in Pivot development to implement simple event

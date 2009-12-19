@@ -25,6 +25,9 @@ import org.apache.pivot.wtk.TreeView;
 import org.apache.pivot.xml.Element;
 import org.apache.pivot.xml.TextNode;
 
+/**
+ * Custom tree view node renderer for presenting XML nodes.
+ */
 public class NodeRenderer extends Label implements TreeView.NodeRenderer {
     public static int MAXIMUM_TEXT_LENGTH = 20;
 

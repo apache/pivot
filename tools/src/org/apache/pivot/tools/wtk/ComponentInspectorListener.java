@@ -19,7 +19,7 @@ package org.apache.pivot.tools.wtk;
 import org.apache.pivot.wtk.Component;
 
 /**
- * component inspector listener interface.
+ * Component inspector listener interface.
  */
 public interface ComponentInspectorListener {
     /**

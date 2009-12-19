@@ -39,9 +39,9 @@ limitations under the License.
                 </Border>
             </left>
             <right>
-                <Border styles="{padding:{top:10}}">
+                <Border>
                     <content>
-                        <BoxPane orientation="vertical" styles="{padding:6, spacing:8}">
+                        <BoxPane orientation="vertical" styles="{padding:6, spacing:8, fill:true}">
                             <wtkx:define>
                                 <ButtonGroup wtkx:id="orientation">
                                     <buttonGroupListeners>
@@ -67,7 +67,7 @@ limitations under the License.
                             <RadioButton wtkx:id="verticalOrientationButton"
                                 buttonData="Vertical" buttonGroup="$orientation"/>
 
-                            <Separator preferredWidth="100"/>
+                            <Separator/>
 
                             <Checkbox buttonData="Use Shadow">
                                 <buttonStateListeners>

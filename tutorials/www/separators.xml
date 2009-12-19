@@ -29,7 +29,7 @@ limitations under the License.
         </p>
 
         <application class="org.apache.pivot.wtk.ScriptApplication"
-            width="420" height="240">
+            width="420" height="180">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>
