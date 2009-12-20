@@ -32,10 +32,10 @@ limitations under the License.
         </p>
 
         <p>
-            Visually, a scroll bar is usually presented as a scroll "handle" within a larger
-            "track", with two buttons on either end of the track to move the handle. The track
-            represents the outer range from which the user can select, and the size of the handle
-            represents the scroll bar's extent.
+            Visually, a scroll bar is usually presented as a scroll "handle" (sometimes called the
+            "thumb") within a larger "track", with two buttons on either end of the track to move
+            the handle. The track represents the outer range from which the user can select, and
+            the size of the handle represents the scroll bar's extent.
         </p>
 
         <p>
@@ -60,8 +60,7 @@ limitations under the License.
             simple timeline.
         </p>
 
-        <application class="org.apache.pivot.wtk.ScriptApplication"
-            width="550" height="200">
+        <application class="org.apache.pivot.wtk.ScriptApplication" width="550" height="200">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>

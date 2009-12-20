@@ -18,6 +18,9 @@ package org.apache.pivot.tools.wtk;
 
 import org.apache.pivot.wtk.Component;
 
+/**
+ * Inspects a source component's intrinsic properties.
+ */
 public class ComponentPropertyInspector extends ComponentInspector {
     public ComponentPropertyInspector() {
         this(null);

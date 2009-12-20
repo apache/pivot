@@ -18,6 +18,9 @@ package org.apache.pivot.tools.wtk;
 
 import org.apache.pivot.wtk.Component;
 
+/**
+ * Inspects a source component's style properties.
+ */
 public class ComponentStyleInspector extends ComponentInspector {
     public ComponentStyleInspector() {
         this(null);

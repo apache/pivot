@@ -20,6 +20,10 @@ import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Container;
 
+/**
+ * Abstract base class for a component that is designed to inspect another
+ * component (its "source").
+ */
 public abstract class ComponentInspector extends Container {
     private static class ComponentInspectorListenerList
         extends ListenerList<ComponentInspectorListener> implements ComponentInspectorListener {
