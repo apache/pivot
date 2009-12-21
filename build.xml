@@ -547,7 +547,7 @@ limitations under the License.
 
     <!-- Installs JARs to local Maven repository -->
     <target name="maven-install" depends="clean, package">
-        <artifact:install>
+        <artifact:install file="pom.xml">
             <artifact:pom file="pom.xml"/>
         </artifact:install>
         <artifact:install file="lib/pivot-core-${version}.jar">
