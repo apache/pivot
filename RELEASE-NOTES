@@ -69,6 +69,8 @@ New Features
 
 - Add native XML support (PIVOT-358)
 
+- Add "showEmptyBranchControls" style to TerraTreeViewSkin (PIVOT-370)
+
 
 Improvements
 ------------
