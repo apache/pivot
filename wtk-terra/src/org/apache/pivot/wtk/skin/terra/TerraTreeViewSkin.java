@@ -435,6 +435,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     private int indent;
     private boolean showHighlight;
     private boolean showBranchControls;
+    private boolean showEmptyBranchControls;
     private Color branchControlColor;
     private Color branchControlSelectionColor;
     private Color branchControlInactiveSelectionColor;
@@ -470,6 +471,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         indent = 16;
         showHighlight = true;
         showBranchControls = true;
+        showEmptyBranchControls = true;
         branchControlColor = theme.getColor(18);
         branchControlSelectionColor = theme.getColor(4);
         branchControlInactiveSelectionColor = theme.getColor(19);
@@ -643,48 +645,57 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             if (showBranchControls) {
                 if (nodeInfo instanceof BranchInfo) {
                     BranchInfo branchInfo = (BranchInfo)nodeInfo;
-                    expanded = branchInfo.isExpanded();
 
-                    Color branchControlColor;
+                    boolean showBranchControl = true;
+                    if (!showEmptyBranchControls) {
+                        branchInfo.loadChildren();
+                        showBranchControl = !branchInfo.children.isEmpty();
+                    }
 
-                    if (selected) {
-                        if (treeView.isFocused()) {
-                            branchControlColor = branchControlSelectionColor;
+                    if (showBranchControl) {
+                        expanded = branchInfo.isExpanded();
+
+                        Color branchControlColor;
+
+                        if (selected) {
+                            if (treeView.isFocused()) {
+                                branchControlColor = branchControlSelectionColor;
+                            } else {
+                                branchControlColor = branchControlInactiveSelectionColor;
+                            }
                         } else {
-                            branchControlColor = branchControlInactiveSelectionColor;
+                            branchControlColor = this.branchControlColor;
                         }
-                    } else {
-                        branchControlColor = this.branchControlColor;
+
+                        GeneralPath shape = new GeneralPath();
+
+                        int imageX = nodeX + (indent - BRANCH_CONTROL_IMAGE_WIDTH) / 2;
+                        int imageY = nodeY + (nodeHeight - BRANCH_CONTROL_IMAGE_HEIGHT) / 2;
+
+                        if (expanded) {
+                            shape.moveTo(imageX, imageY + 1);
+                            shape.lineTo(imageX + 8, imageY + 1);
+                            shape.lineTo(imageX + 4, imageY + 7);
+                        } else {
+                            shape.moveTo(imageX + 1, imageY);
+                            shape.lineTo(imageX + 7, imageY + 4);
+                            shape.lineTo(imageX + 1, imageY + 8);
+                        }
+
+                        shape.closePath();
+
+                        Graphics2D branchControlGraphics = (Graphics2D)graphics.create();
+                        branchControlGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                            RenderingHints.VALUE_ANTIALIAS_ON);
+                        if (!treeView.isEnabled()
+                            || disabled) {
+                            branchControlGraphics.setComposite
+                                (AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+                        }
+                        branchControlGraphics.setPaint(branchControlColor);
+                        branchControlGraphics.fill(shape);
+                        branchControlGraphics.dispose();
                     }
-
-                    GeneralPath shape = new GeneralPath();
-
-                    int imageX = nodeX + (indent - BRANCH_CONTROL_IMAGE_WIDTH) / 2;
-                    int imageY = nodeY + (nodeHeight - BRANCH_CONTROL_IMAGE_HEIGHT) / 2;
-
-                    if (expanded) {
-                        shape.moveTo(imageX, imageY + 1);
-                        shape.lineTo(imageX + 8, imageY + 1);
-                        shape.lineTo(imageX + 4, imageY + 7);
-                    } else {
-                        shape.moveTo(imageX + 1, imageY);
-                        shape.lineTo(imageX + 7, imageY + 4);
-                        shape.lineTo(imageX + 1, imageY + 8);
-                    }
-
-                    shape.closePath();
-
-                    Graphics2D branchControlGraphics = (Graphics2D)graphics.create();
-                    branchControlGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                        RenderingHints.VALUE_ANTIALIAS_ON);
-                    if (!treeView.isEnabled()
-                        || disabled) {
-                        branchControlGraphics.setComposite
-                            (AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
-                    }
-                    branchControlGraphics.setPaint(branchControlColor);
-                    branchControlGraphics.fill(shape);
-                    branchControlGraphics.dispose();
                 }
 
                 nodeX += indent + spacing;
@@ -1064,6 +1075,15 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     public void setShowBranchControls(boolean showBranchControls) {
         this.showBranchControls = showBranchControls;
         invalidateComponent();
+    }
+
+    public boolean getShowEmptyBranchControls() {
+        return showEmptyBranchControls;
+    }
+
+    public void setShowEmptyBranchControls(boolean showEmptyBranchControls) {
+        this.showEmptyBranchControls = showEmptyBranchControls;
+        repaintComponent();
     }
 
     public Color getBranchControlColor() {
