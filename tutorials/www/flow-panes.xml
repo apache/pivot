@@ -112,7 +112,7 @@ limitations under the License.
             in the radio buttons' state:
         </p>
 
-        <source type="xml" location="org/apache/pivot/tutorials/layout/FlowPanes.java">
+        <source type="java" location="org/apache/pivot/tutorials/layout/FlowPanes.java">
             <![CDATA[
             package org.apache.pivot.tutorials.layout;
 
