@@ -37,11 +37,8 @@ public class Localization implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         String language = properties.get(LANGUAGE_KEY);
-        if (language != null) {
-            Locale.setDefault(new Locale(language));
-        }
-
-        Resources resources = new Resources(getClass().getName(), "UTF-8");
+        Locale locale = (language == null) ? Locale.getDefault() : new Locale(language);
+        Resources resources = new Resources(getClass().getName(), locale);
 
         Theme theme = Theme.getTheme();
         Font font = theme.getFont();
