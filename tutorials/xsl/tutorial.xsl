@@ -36,7 +36,7 @@ limitations under the License.
                 <link rel="stylesheet" href="tutorial.css" type="text/css"/>
                 <script xmlns="" type="text/javascript" src="http://java.com/js/deployJava.js"/>
 
-                <script>/* NOTE: Syntax highlighting script is LGPL */</script>
+                <xsl:comment>NOTE: Syntax highlighting script is LGPL</xsl:comment>
                 <script xmlns="" type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shCore.js"/>
                 <script xmlns="" type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushJava.js"/>
                 <script xmlns="" type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushXml.js"/>
