@@ -111,10 +111,10 @@ public class WindowSkin extends ContainerSkin implements Window.Skin,
     }
 
     @Override
-    public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
-        boolean consumed = super.mouseDown(component, button, x, y);
+    public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
+        boolean consumed = super.mouseDown(container, button, x, y);
 
-        Window window = (Window)component;
+        Window window = (Window)container;
         window.moveToFront();
 
         return consumed;

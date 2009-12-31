@@ -26,16 +26,18 @@ import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.ContainerListener;
+import org.apache.pivot.wtk.ContainerMouseListener;
 import org.apache.pivot.wtk.Direction;
 import org.apache.pivot.wtk.FocusTraversalPolicy;
 import org.apache.pivot.wtk.GraphicsUtilities;
+import org.apache.pivot.wtk.Mouse;
 
 
 /**
  * Abstract base class for container skins.
  */
 public abstract class ContainerSkin extends ComponentSkin
-    implements ContainerListener {
+    implements ContainerListener, ContainerMouseListener {
     /**
      * Focus traversal policy that determines traversal order based on the order
      * of components in the container's component sequence.
@@ -130,6 +132,7 @@ public abstract class ContainerSkin extends ComponentSkin
 
         // Add this as a container listener
         container.getContainerListeners().add(this);
+        container.getContainerMouseListeners().add(this);
 
         // Set the focus traversal policy
         container.setFocusTraversalPolicy(DEFAULT_FOCUS_TRAVERSAL_POLICY);
@@ -235,5 +238,26 @@ public abstract class ContainerSkin extends ComponentSkin
     public void focusTraversalPolicyChanged(Container container,
         FocusTraversalPolicy previousFocusTraversalPolicy) {
         // No-op
+    }
+
+    @Override
+    public boolean mouseMove(Container container, int x, int y) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseUp(Container container, Mouse.Button button, int x, int y) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseWheel(Container container, Mouse.ScrollType scrollType,
+        int scrollAmount, int wheelRotation, int x, int y) {
+        return false;
     }
 }
