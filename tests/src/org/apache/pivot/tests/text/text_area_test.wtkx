@@ -18,7 +18,7 @@ limitations under the License.
 
 <SplitPane splitRatio="0.75"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
-    xmlns:test="org.apache.pivot.wtk.text.test"
+    xmlns:test="org.apache.pivot.tests.text"
     xmlns="org.apache.pivot.wtk">
     <left>
         <TablePane styles="{verticalSpacing:8}">

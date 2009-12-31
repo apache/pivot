@@ -20,7 +20,7 @@ limitations under the License.
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
     <content>
-        <GridPane columnCount="2" 
+        <GridPane columnCount="2"
             styles="{padding:6, verticalSpacing:8, horizontalSpacing:4,
                 showHorizontalGridLines:true, showVerticalGridLines:true}">
             <rows>
