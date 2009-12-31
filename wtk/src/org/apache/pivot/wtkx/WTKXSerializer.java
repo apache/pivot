@@ -448,6 +448,13 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             throw exception;
         }
 
+        if (root instanceof Bindable) {
+            bind(root);
+
+            Bindable bindable = (Bindable)root;
+            bindable.initialize();
+        }
+
         return root;
     }
 
