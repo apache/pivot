@@ -16,16 +16,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<GridPane styles="{verticalSpacing:1, showHorizontalGridLines:true,
+<GridPane columnCount="3"
+    styles="{verticalSpacing:1, showHorizontalGridLines:true,
     horizontalSpacing:1, showVerticalGridLines:true}"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <columns>
-        <GridPane.Column/>
-        <GridPane.Column/>
-        <GridPane.Column/>
-    </columns>
-
     <rows>
         <GridPane.Row>
             <GridPane.Filler/>

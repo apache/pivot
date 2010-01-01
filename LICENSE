@@ -249,9 +249,9 @@ The following components are available in Public Domain:
      tutorials/src/org/apache/pivot/tutorials/weather-overcast.png
      tutorials/src/org/apache/pivot/tutorials/weather-showers-scattered.png
      tutorials/src/org/apache/pivot/tutorials/x-office-document.png
-     wtk/test/org/apache/pivot/wtk/test/applications-games.png
-     wtk/test/org/apache/pivot/wtk/test/go-home.png
-     wtk/test/org/apache/pivot/wtk/test/weather-few-clouds-32x32.png
+     tests/src/org/apache/pivot/tests/applications-games.png
+     tests/src/org/apache/pivot/tests/go-home.png
+     tests/src/org/apache/pivot/tests/weather-few-clouds-32x32.png
 
   2. The FamFamFam Flag icons (http://www.famfamfam.com/lab/icons/flags/)
 
@@ -380,12 +380,12 @@ The following components are licensed under the Creative Commons Attribution
      wtk-terra/src/org/apache/pivot/wtk/skin/terra/message_type-question-16x16.png
      wtk-terra/src/org/apache/pivot/wtk/skin/terra/message_type-warning-16x16.png
      wtk-terra/src/org/apache/pivot/wtk/skin/terra/page_white.png
-     wtk/test/org/apache/pivot/wtk/test/anchor.png
-     wtk/test/org/apache/pivot/wtk/test/bell.png
-     wtk/test/org/apache/pivot/wtk/test/clock.png
-     wtk/test/org/apache/pivot/wtk/test/cup.png
-     wtk/test/org/apache/pivot/wtk/test/house.png
-     wtk/test/org/apache/pivot/wtk/test/star.png
+     tests/src/org/apache/pivot/tests/anchor.png
+     tests/src/org/apache/pivot/tests/bell.png
+     tests/src/org/apache/pivot/tests/clock.png
+     tests/src/org/apache/pivot/tests/cup.png
+     tests/src/org/apache/pivot/tests/house.png
+     tests/src/org/apache/pivot/tests/star.png
 
   2. The Silk Companion Icons (http://damieng.com/creative/icons/silk-companion-1-icons)
 
