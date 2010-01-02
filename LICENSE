@@ -215,7 +215,7 @@ the following licenses.
 
 The following components are licensed under the Apache Software License 2.0:
 
-  * web/lib/servlet-api.jar (http://tomcat.apache.org/)
+  * web-server/lib/servlet-api.jar (http://tomcat.apache.org/)
 
 ===============================================================================
 
