@@ -150,12 +150,12 @@ public class TerraDialogSkin extends TerraFrameSkin implements DialogStateListen
     }
 
     @Override
-    public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
-        Dialog dialog = (Dialog)component;
+    public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
+        Dialog dialog = (Dialog)container;
         Window rootOwner = dialog.getRootOwner();
         rootOwner.moveToFront();
 
-        return super.mouseDown(component, button, x, y);
+        return super.mouseDown(container, button, x, y);
     }
 
     @Override

@@ -422,19 +422,19 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     }
 
     @Override
-    public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
-        Sheet sheet = (Sheet)component;
+    public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
+        Sheet sheet = (Sheet)container;
         Window owner = sheet.getOwner();
         owner.moveToFront();
 
-        boolean consumed = super.mouseDown(component, button, x, y);
+        boolean consumed = super.mouseDown(container, button, x, y);
 
         if (resizable && button == Mouse.Button.LEFT) {
             Bounds resizeHandleBounds = resizeHandle.getBounds();
 
             if (resizeHandleBounds.contains(x, y)) {
                 resizeOffset = new Point(getWidth() - x, getHeight() - y);
-                Mouse.capture(component);
+                Mouse.capture(container);
             }
         }
 
