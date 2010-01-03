@@ -19,12 +19,12 @@ import java.awt.Toolkit;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.util.Vote;
-import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.ContainerMouseListener;
 import org.apache.pivot.wtk.Dialog;
 import org.apache.pivot.wtk.DialogStateListener;
+import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
@@ -34,31 +34,7 @@ import org.apache.pivot.wtk.Window;
  * Dialog skin.
  */
 public class TerraDialogSkin extends TerraFrameSkin implements DialogStateListener {
-    private class RepositionCallback implements Runnable {
-        private static final float GOLDEN_SECTION = 0.382f;
-
-        @Override
-        public void run() {
-            Dialog dialog = (Dialog)getComponent();
-            Container ancestor = dialog.getOwner();
-
-            if (ancestor == null) {
-                ancestor = dialog.getDisplay();
-            }
-
-            int deltaWidth = ancestor.getWidth() - getWidth();
-            int deltaHeight = ancestor.getHeight() - getHeight();
-
-            int x = Math.max(0, Math.round(ancestor.getX() + 0.5f * deltaWidth));
-            int y = Math.max(0, Math.round(ancestor.getY() + GOLDEN_SECTION * deltaHeight));
-
-            dialog.setLocation(x, y);
-
-            queuedCallback = null;
-        }
-    }
-
-    private ApplicationContext.QueuedCallback queuedCallback = null;
+    private static final float GOLDEN_SECTION = 0.382f;
 
     private ContainerMouseListener displayMouseListener = new ContainerMouseListener.Adapter() {
         @Override
@@ -183,26 +159,33 @@ public class TerraDialogSkin extends TerraFrameSkin implements DialogStateListen
 
         Display display = window.getDisplay();
         display.getContainerMouseListeners().add(displayMouseListener);
-
         display.reenterMouse();
 
         if (!window.requestFocus()) {
             Component.clearFocus();
         }
 
-        queuedCallback = ApplicationContext.queueCallback(new RepositionCallback());
+        // Center the window over its owner
+        Container ancestor = window.getOwner();
+
+        if (ancestor == null) {
+            ancestor = window.getDisplay();
+        }
+
+        Dimensions size = getPreferredSize();
+        int deltaWidth = ancestor.getWidth() - size.width;
+        int deltaHeight = ancestor.getHeight() - size.height;
+
+        int x = Math.max(0, Math.round(ancestor.getX() + 0.5f * deltaWidth));
+        int y = Math.max(0, Math.round(ancestor.getY() + GOLDEN_SECTION * deltaHeight));
+
+        window.setLocation(x, y);
     }
 
     @Override
     public void windowClosed(Window window, Display display, Window owner) {
         super.windowClosed(window, display, owner);
-
         display.getContainerMouseListeners().remove(displayMouseListener);
-
-        if (queuedCallback != null) {
-            queuedCallback.cancel();
-            queuedCallback = null;
-        }
     }
 
     @Override

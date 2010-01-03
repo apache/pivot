@@ -20,6 +20,7 @@ import java.awt.Color;
 
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentListener;
 import org.apache.pivot.wtk.DesktopApplicationContext;
@@ -58,9 +59,14 @@ public class WindowTest implements Application {
         window1.setContent(new Label("Hello Bar"));
         window1.open(display);
 
-        Sheet sheet = new Sheet();
+        final Sheet sheet = new Sheet();
         sheet.setContent(new Label("Hello Foo"));
-        sheet.open(window1);
+        ApplicationContext.queueCallback(new Runnable() {
+            @Override
+            public void run() {
+                sheet.open(window1);
+            }
+        });
 
         Frame window1a = new Frame();
         window1a.setTitle("Window 1 A");
