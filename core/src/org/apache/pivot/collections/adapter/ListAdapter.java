@@ -31,7 +31,7 @@ import org.apache.pivot.util.ListenerList;
 
 /**
  * Implementation of the {@link List} interface that is backed by an
- * instance of {@link java.util.List}</tt>.
+ * instance of {@link java.util.List}.
  */
 public class ListAdapter<T> implements List<T>, Serializable {
     private static final long serialVersionUID = 1649736907064653706L;

@@ -87,6 +87,9 @@ limitations under the License.
                 <tt>org.apache.pivot.serialization</tt> - Classes for use in data serialization.
             </li>
             <li>
+                <tt>org.apache.pivot.sql</tt> - Classes for working with SQL data.
+            </li>
+            <li>
                 <tt>org.apache.pivot.text</tt> - Classes for working with text.
             </li>
             <li>
