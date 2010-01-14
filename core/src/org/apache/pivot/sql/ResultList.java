@@ -19,7 +19,6 @@ package org.apache.pivot.sql;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.NoSuchElementException;
 
 import org.apache.pivot.collections.ArrayList;
@@ -33,6 +32,9 @@ import org.apache.pivot.util.ListenerList;
 /**
  * Implementation of the {@link List} interface that is backed by a
  * instance of {@link java.sql.ResultSet}.
+ * <p>
+ * Note that this list is not suitable for random access and can only be
+ * navigated via an iterator.
  */
 public class ResultList implements List<Map<String, Object>> {
     /**
@@ -45,7 +47,7 @@ public class ResultList implements List<Map<String, Object>> {
         public final String columnName;
 
         /**
-         * The name of the map key.
+         * The name of the map key. If <tt>null</tt>, the column name will be used.
          */
         public final String key;
 
@@ -54,8 +56,12 @@ public class ResultList implements List<Map<String, Object>> {
          */
         public final Class<?> type;
 
+        public Field(String columnName) {
+            this(columnName, null, null);
+        }
+
         public Field(String columnName, String key) {
-            this(key, columnName, null);
+            this(columnName, key, null);
         }
 
         public Field(String columnName, String key, Class<?> type) {
@@ -71,7 +77,7 @@ public class ResultList implements List<Map<String, Object>> {
             boolean hasNext;
 
             try {
-                hasNext = !resultSet.isAfterLast();
+                hasNext = !resultSet.isLast();
             } catch (SQLException exception) {
                 throw new RuntimeException(exception);
             }
@@ -99,7 +105,7 @@ public class ResultList implements List<Map<String, Object>> {
             boolean hasPrevious;
 
             try {
-                hasPrevious = !resultSet.isBeforeFirst();
+                hasPrevious = !resultSet.isFirst();
             } catch (SQLException exception) {
                 throw new RuntimeException(exception);
             }
@@ -150,13 +156,18 @@ public class ResultList implements List<Map<String, Object>> {
                     } else if (field.type == Double.class
                         || field.type == Double.TYPE) {
                         value = resultSet.getDouble(field.columnName);
-                    } else if (field.type == Date.class) {
-                        value = resultSet.getDate(field.columnName);
+                    } else if (field.type == String.class) {
+                        value = resultSet.getString(field.columnName);
                     } else {
                         value = resultSet.getObject(field.columnName);
                     }
 
-                    current.put(field.key, value);
+                    if (resultSet.wasNull()) {
+                        value = null;
+                    }
+
+                    String key = (field.key == null) ? field.columnName : field.key;
+                    current.put(key, value);
                 }
             } catch (SQLException exception) {
                 throw new RuntimeException(exception);
@@ -225,6 +236,10 @@ public class ResultList implements List<Map<String, Object>> {
         }
 
         for (Field field : fields) {
+            if (field.columnName == null) {
+                throw new IllegalArgumentException("columnName is required.");
+            }
+
             if (!(field.type == null
                 || field.type == Boolean.class
                 || field.type == Boolean.TYPE
@@ -240,7 +255,7 @@ public class ResultList implements List<Map<String, Object>> {
                 || field.type == Float.TYPE
                 || field.type == Double.class
                 || field.type == Double.TYPE
-                || field.type == Date.class)) {
+                || field.type == String.class)) {
                 throw new IllegalArgumentException(field.type.getName()
                     + " is not a supported type.");
             }
