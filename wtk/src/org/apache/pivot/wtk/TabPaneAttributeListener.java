@@ -23,7 +23,24 @@ import org.apache.pivot.wtk.media.Image;
  */
 public interface TabPaneAttributeListener {
     /**
-     * Called when a tab's name attribute has changed.
+     * Tab pane attribute listener adapter.
+     */
+    public static class Adapter implements TabPaneAttributeListener {
+        @Override
+        public void labelChanged(TabPane tabPane, Component component, String previousLabel) {
+        }
+
+        @Override
+        public void iconChanged(TabPane tabPane, Component component, Image previousIcon) {
+        }
+
+        @Override
+        public void closeableChanged(TabPane tabPane, Component component) {
+        }
+    }
+
+    /**
+     * Called when a tab's label attribute has changed.
      *
      * @param tabPane
      * @param component

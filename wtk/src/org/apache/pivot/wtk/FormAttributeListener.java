@@ -21,13 +21,38 @@ package org.apache.pivot.wtk;
  */
 public interface FormAttributeListener {
     /**
-     * Called when a fields's name attribute has changed.
+     * Form attribute listener adapter.
+     */
+    public class Adapter implements FormAttributeListener {
+        @Override
+        public void labelChanged(Form form, Component field, String previousLabel) {
+        }
+
+        @Override
+        public void requiredChanged(Form form, Component field) {
+        }
+
+        @Override
+        public void flagChanged(Form form, Component field, Form.Flag previousFlag) {
+        }
+    }
+
+    /**
+     * Called when a fields's label attribute has changed.
      *
      * @param form
      * @param field
-     * @param previousName
+     * @param previousLabel
      */
-    public void labelChanged(Form form, Component field, String previousName);
+    public void labelChanged(Form form, Component field, String previousLabel);
+
+    /**
+     * Called when a fields's required attribute has changed.
+     *
+     * @param form
+     * @param field
+     */
+    public void requiredChanged(Form form, Component field);
 
     /**
      * Called when a field's flag attribute has changed.

@@ -23,6 +23,19 @@ import org.apache.pivot.wtk.media.Image;
  */
 public interface AccordionAttributeListener {
     /**
+     * Accordion attribute listener adapter.
+     */
+    public static class Adapter implements AccordionAttributeListener {
+        @Override
+        public void labelChanged(Accordion accordion, Component component, String previousLabel) {
+        }
+
+        @Override
+        public void iconChanged(Accordion accordion, Component component, Image previousIcon) {
+        }
+    }
+
+    /**
      * Called when a panel's label attribute has changed.
      *
      * @param accordion

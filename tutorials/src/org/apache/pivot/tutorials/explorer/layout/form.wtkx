@@ -16,8 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Form styles="{rightAlignLabels:true}"
-    xmlns:wtkx="http://pivot.apache.org/wtkx"
+<Form xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
     <sections>
         <Form.Section heading="Personal Information">

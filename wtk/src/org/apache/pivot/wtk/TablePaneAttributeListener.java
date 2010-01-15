@@ -21,6 +21,20 @@ package org.apache.pivot.wtk;
  */
 public interface TablePaneAttributeListener {
     /**
+     * Table pane attribute listener adapter.
+     */
+    public static class Adapter implements TablePaneAttributeListener {
+        @Override
+        public void rowSpanChanged(TablePane tablePane, Component component,
+            int previousRowSpan) {
+        }
+
+        @Override
+        public void columnSpanChanged(TablePane tablePane, Component component,
+            int previousColumnSpan) {
+        }
+    }
+    /**
      * Called when a component's row span attribute has changed.
      *
      * @param tablePane

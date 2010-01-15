@@ -40,8 +40,6 @@ public class TerraFormSkin extends ContainerSkin
     private ArrayList<ArrayList<Label>> labels = new ArrayList<ArrayList<Label>>();
     private ArrayList<ArrayList<ImageView>> flagImageViews = new ArrayList<ArrayList<ImageView>>();
 
-    private boolean rightAlignLabels = false;
-
     // Make the field fill the width of the form
     private boolean fill = false;
     private int horizontalSpacing = 6;
@@ -397,7 +395,7 @@ public class TerraFormSkin extends ContainerSkin
                     int rowHeight = Math.max(baseline + Math.max(labelDescent, fieldDescent), FLAG_IMAGE_SIZE);
 
                     // Align the label and field to baseline
-                    int labelX = rightAlignLabels ? maximumLabelWidth - label.getWidth() : 0;
+                    int labelX = maximumLabelWidth - label.getWidth();
                     int labelY = rowY + (baseline - labelAscent);
                     label.setLocation(labelX, labelY);
 
@@ -419,15 +417,6 @@ public class TerraFormSkin extends ContainerSkin
                 }
             }
         }
-    }
-
-    public boolean getRightAlignLabels() {
-        return rightAlignLabels;
-    }
-
-    public void setRightAlignLabels(boolean rightAlignLabels) {
-        this.rightAlignLabels = rightAlignLabels;
-        invalidateComponent();
     }
 
     public boolean getFill() {
@@ -562,6 +551,11 @@ public class TerraFormSkin extends ContainerSkin
     public void labelChanged(Form form, Component field, String previousLabel) {
         Form.Section section = Form.getSection(field);
         updateFieldLabel(section, section.indexOf(field));
+    }
+
+    @Override
+    public void requiredChanged(Form form, Component field) {
+        // TODO
     }
 
     @Override

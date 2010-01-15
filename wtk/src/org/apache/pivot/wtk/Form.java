@@ -325,6 +325,7 @@ public class Form extends Container {
     private static class Attributes {
         public final Section section;
         public String label = null;
+        public boolean required = false;
         public Flag flag = null;
 
         public Attributes(Section section) {
@@ -376,6 +377,13 @@ public class Form extends Container {
         public void labelChanged(Form form, Component component, String previousLabel) {
             for (FormAttributeListener listener : this) {
                 listener.labelChanged(form, component, previousLabel);
+            }
+        }
+
+        @Override
+        public void requiredChanged(Form form, Component field) {
+            for (FormAttributeListener listener : this) {
+                listener.requiredChanged(form, field);
             }
         }
 
@@ -496,6 +504,27 @@ public class Form extends Container {
             Form form = (Form)component.getParent();
             if (form != null) {
                 form.formAttributeListeners.labelChanged(form, component, previousLabel);
+            }
+        }
+    }
+
+    public static boolean isRequired(Component component) {
+        Attributes attributes = (Attributes)component.getAttributes();
+        return (attributes == null) ? false : attributes.required;
+    }
+
+    public static void setRequired(Component component, boolean required) {
+        Attributes attributes = (Attributes)component.getAttributes();
+        if (attributes == null) {
+            throw new IllegalStateException();
+        }
+
+        if (attributes.required != required) {
+            attributes.required = required;
+
+            Form form = (Form)component.getParent();
+            if (form != null) {
+                form.formAttributeListeners.requiredChanged(form, component);
             }
         }
     }

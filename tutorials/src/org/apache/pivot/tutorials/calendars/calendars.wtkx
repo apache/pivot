@@ -22,7 +22,7 @@ limitations under the License.
     <content>
         <Border styles="{padding:8}">
             <content>
-                <Form styles="{rightAlignLabels:true}">
+                <Form>
                     <sections>
                         <Form.Section>
                             <Border Form.label="Calendar" styles="{color:10}">

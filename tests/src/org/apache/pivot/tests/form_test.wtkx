@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Form styles="{rightAlignLabels:true, fill:true}"
+<Form styles="{fill:true}"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:effects="org.apache.pivot.wtk.effects"
     xmlns="org.apache.pivot.wtk">

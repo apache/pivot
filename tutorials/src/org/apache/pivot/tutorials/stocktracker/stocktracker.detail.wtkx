@@ -21,7 +21,7 @@ limitations under the License.
     xmlns="org.apache.pivot.wtk">
     <Label textKey="companyName" styles="{font:{size:12, bold:true}}"/>
     <Separator/>
-    <Form styles="{rightAlignLabels:true, fill:true}">
+    <Form styles="{fill:true}">
         <sections>
             <Form.Section>
                 <Label Form.label="%value" textKey="value"
