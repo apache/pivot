@@ -24,21 +24,26 @@ public interface ScrollPaneListener {
      * Scroll pane listener adapter.
      */
     public static class Adapter implements ScrollPaneListener {
+        @Override
         public void horizontalScrollBarPolicyChanged(ScrollPane scrollPane,
             ScrollPane.ScrollBarPolicy previousPolicy) {
         }
 
+        @Override
         public void verticalScrollBarPolicyChanged(ScrollPane scrollPane,
             ScrollPane.ScrollBarPolicy previousPolicy) {
         }
 
+        @Override
         public void rowHeaderChanged(ScrollPane scrollPane, Component previousRowHeader) {
         }
 
+        @Override
         public void columnHeaderChanged(ScrollPane scrollPane,
             Component previousColumnHeader) {
         }
 
+        @Override
         public void cornerChanged(ScrollPane scrollPane, Component previousCorner) {
         }
     }

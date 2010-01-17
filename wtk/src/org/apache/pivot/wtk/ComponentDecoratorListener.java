@@ -27,12 +27,15 @@ public interface ComponentDecoratorListener {
      * Component decorator list adapter.
      */
     public static class Adapter implements ComponentDecoratorListener {
+        @Override
         public void decoratorInserted(Component component, int index) {
         }
 
+        @Override
         public void decoratorUpdated(Component component, int index, Decorator previousDecorator) {
         }
 
+        @Override
         public void decoratorsRemoved(Component component, int index,
             Sequence<Decorator> decorators) {
         }

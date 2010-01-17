@@ -125,9 +125,13 @@ public class MenuPopup extends Window {
 
     public void open(Display display, Window owner, int x, int y) {
         contextMenu = true;
-
         setLocation(x, y);
+
         super.open(display, owner);
+
+        if (!isOpen()) {
+            contextMenu = false;
+        }
     }
 
     @Override

@@ -26,12 +26,15 @@ public interface MenuBarListener {
      * Menu bar listener adapter.
      */
     public static class Adapter implements MenuBarListener {
+        @Override
         public void itemInserted(MenuBar menuBar, int index) {
         }
 
+        @Override
         public void itemsRemoved(MenuBar menuBar, int index, Sequence<MenuBar.Item> removed) {
         }
 
+        @Override
         public void activeItemChanged(MenuBar menuBar, MenuBar.Item previousActiveItem) {
         }
     }

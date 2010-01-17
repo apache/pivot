@@ -24,9 +24,11 @@ public interface LabelListener {
      * Label listener adapter.
      */
     public static class Adapter implements LabelListener {
+        @Override
         public void textChanged(Label label, String previousText) {
         }
 
+        @Override
         public void textKeyChanged(Label label, String previousTextKey) {
         }
     }

@@ -26,7 +26,6 @@ import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.content.ListButtonDataRenderer;
 import org.apache.pivot.wtk.content.ListViewItemRenderer;
 
-
 /**
  * Component that allows a user to select one of several list options. The
  * options are hidden until the user pushes the button.
@@ -80,7 +79,7 @@ public class ListButton extends Button {
     }
 
     private List<?> listData;
-    private ListView.ItemRenderer itemRenderer = null;
+    private ListView.ItemRenderer itemRenderer;
     private int selectedIndex = -1;
     private Filter<?> disabledItemFilter = null;
     private String selectedItemKey = null;

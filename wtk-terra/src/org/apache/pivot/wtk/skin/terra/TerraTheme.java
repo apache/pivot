@@ -69,6 +69,7 @@ import org.apache.pivot.wtk.Sheet;
 import org.apache.pivot.wtk.Slider;
 import org.apache.pivot.wtk.Spinner;
 import org.apache.pivot.wtk.SplitPane;
+import org.apache.pivot.wtk.SuggestionPopup;
 import org.apache.pivot.wtk.TabPane;
 import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.TableView;
@@ -132,6 +133,7 @@ public final class TerraTheme extends Theme {
         componentSkinMap.put(Slider.class, TerraSliderSkin.class);
         componentSkinMap.put(Spinner.class, TerraSpinnerSkin.class);
         componentSkinMap.put(SplitPane.class, TerraSplitPaneSkin.class);
+        componentSkinMap.put(SuggestionPopup.class, TerraSuggestionPopupSkin.class);
         componentSkinMap.put(TablePane.class, TerraTablePaneSkin.class);
         componentSkinMap.put(TableViewHeader.class, TerraTableViewHeaderSkin.class);
         componentSkinMap.put(TableView.class, TerraTableViewSkin.class);

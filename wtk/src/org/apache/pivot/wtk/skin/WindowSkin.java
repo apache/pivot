@@ -159,6 +159,7 @@ public class WindowSkin extends ContainerSkin implements Window.Skin,
 
     @Override
     public void windowOpened(Window window) {
+        // No-op
     }
 
     @Override

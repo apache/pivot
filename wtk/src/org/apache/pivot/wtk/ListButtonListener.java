@@ -27,15 +27,19 @@ public interface ListButtonListener {
      * List button listener adapter.
      */
     public static class Adapter implements ListButtonListener {
+        @Override
         public void listDataChanged(ListButton listButton, List<?> previousListData) {
         }
 
+        @Override
         public void itemRendererChanged(ListButton listButton, ListView.ItemRenderer previousItemRenderer) {
         }
 
+        @Override
         public void disabledItemFilterChanged(ListButton listButton, Filter<?> previousDisabledItemFilter) {
         }
 
+        @Override
         public void selectedItemKeyChanged(ListButton listButton, String previousSelectedItemKey) {
         }
     }

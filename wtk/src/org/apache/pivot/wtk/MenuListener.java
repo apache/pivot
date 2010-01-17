@@ -26,12 +26,15 @@ public interface MenuListener {
      * Menu listener adapter.
      */
     public static class Adapter implements MenuListener {
+        @Override
         public void sectionInserted(Menu menu, int index) {
         }
 
+        @Override
         public void sectionsRemoved(Menu menu, int index, Sequence<Menu.Section> removed) {
         }
 
+        @Override
         public void activeItemChanged(Menu menu, Menu.Item previousActiveItem) {
         }
     }

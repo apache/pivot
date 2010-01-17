@@ -24,12 +24,15 @@ public interface ComponentDataListener {
      * Component data listener adapter.
      */
     public static class Adapter implements ComponentDataListener {
+        @Override
         public void valueAdded(Component component, String key) {
         }
 
+        @Override
         public void valueUpdated(Component component, String key, Object previousValue) {
         }
 
+        @Override
         public void valueRemoved(Component component, String key, Object value) {
         }
     }

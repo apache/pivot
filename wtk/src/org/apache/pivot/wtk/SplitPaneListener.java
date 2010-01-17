@@ -24,24 +24,31 @@ public interface SplitPaneListener {
      * Split pane listener adapter.
      */
     public static class Adapter implements SplitPaneListener {
+        @Override
         public void topLeftChanged(SplitPane splitPane, Component previousTopLeft) {
         }
 
+        @Override
         public void bottomRightChanged(SplitPane splitPane, Component previousBottomRight) {
         }
 
+        @Override
         public void orientationChanged(SplitPane splitPane) {
         }
 
+        @Override
         public void primaryRegionChanged(SplitPane splitPane) {
         }
 
+        @Override
         public void splitRatioChanged(SplitPane splitPane, float previousSplitRatio) {
         }
 
+        @Override
         public void lockedChanged(SplitPane splitPane) {
         }
 
+        @Override
         public void resizeModeChanged(SplitPane splitPane,
             SplitPane.ResizeMode previousResizeMode) {
         }

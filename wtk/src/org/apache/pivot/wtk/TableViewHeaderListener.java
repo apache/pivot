@@ -26,13 +26,16 @@ public interface TableViewHeaderListener {
      * Table view header listener adapter.
      */
     public static class Adapter implements TableViewHeaderListener {
+        @Override
         public void tableViewChanged(TableViewHeader tableViewHeader, TableView previousTableView) {
         }
 
+        @Override
         public void dataRendererChanged(TableViewHeader tableViewHeader,
             TableViewHeader.DataRenderer previousDataRenderer) {
         }
 
+        @Override
         public void sortModeChanged(TableViewHeader tableViewHeader, SortMode previousSortMode) {
         }
     }

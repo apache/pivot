@@ -24,9 +24,11 @@ public interface MenuButtonListener {
      * Menu button listener adapter.
      */
     public static class Adapter implements MenuButtonListener {
+        @Override
         public void menuChanged(MenuButton menuButton, Menu previousMenu) {
         }
 
+        @Override
         public void repeatableChanged(MenuButton menuButton) {
         }
     }

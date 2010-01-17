@@ -24,9 +24,11 @@ public interface SliderListener {
      * Slider listener adapter.
      */
     public static class Adapter implements SliderListener {
+        @Override
         public void rangeChanged(Slider slider, int previousStart, int previousEnd) {
         }
 
+        @Override
         public void orientationChanged(Slider slider) {
         }
     }
