@@ -23,6 +23,21 @@ import org.apache.pivot.wtk.TableViewHeader.SortMode;
  */
 public interface TableViewHeaderListener {
     /**
+     * Table view header listener adapter.
+     */
+    public static class Adapter implements TableViewHeaderListener {
+        public void tableViewChanged(TableViewHeader tableViewHeader, TableView previousTableView) {
+        }
+
+        public void dataRendererChanged(TableViewHeader tableViewHeader,
+            TableViewHeader.DataRenderer previousDataRenderer) {
+        }
+
+        public void sortModeChanged(TableViewHeader tableViewHeader, SortMode previousSortMode) {
+        }
+    }
+
+    /**
      * Called when a table view header's table view has changed.
      *
      * @param tableViewHeader

@@ -23,6 +23,20 @@ import org.apache.pivot.collections.Sequence;
  */
 public interface MenuBarListener {
     /**
+     * Menu bar listener adapter.
+     */
+    public static class Adapter implements MenuBarListener {
+        public void itemInserted(MenuBar menuBar, int index) {
+        }
+
+        public void itemsRemoved(MenuBar menuBar, int index, Sequence<MenuBar.Item> removed) {
+        }
+
+        public void activeItemChanged(MenuBar menuBar, MenuBar.Item previousActiveItem) {
+        }
+    }
+
+    /**
      * Called when a menu bar item has been inserted.
      *
      * @param menuBar

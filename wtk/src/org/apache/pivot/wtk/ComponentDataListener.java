@@ -21,6 +21,20 @@ package org.apache.pivot.wtk;
  */
 public interface ComponentDataListener {
     /**
+     * Component data listener adapter.
+     */
+    public static class Adapter implements ComponentDataListener {
+        public void valueAdded(Component component, String key) {
+        }
+
+        public void valueUpdated(Component component, String key, Object previousValue) {
+        }
+
+        public void valueRemoved(Component component, String key, Object value) {
+        }
+    }
+
+    /**
      * Called when a value has been added to a component's user data
      * dictionary.
      *

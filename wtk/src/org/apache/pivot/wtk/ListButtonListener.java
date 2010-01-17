@@ -24,6 +24,23 @@ import org.apache.pivot.util.Filter;
  */
 public interface ListButtonListener {
     /**
+     * List button listener adapter.
+     */
+    public static class Adapter implements ListButtonListener {
+        public void listDataChanged(ListButton listButton, List<?> previousListData) {
+        }
+
+        public void itemRendererChanged(ListButton listButton, ListView.ItemRenderer previousItemRenderer) {
+        }
+
+        public void disabledItemFilterChanged(ListButton listButton, Filter<?> previousDisabledItemFilter) {
+        }
+
+        public void selectedItemKeyChanged(ListButton listButton, String previousSelectedItemKey) {
+        }
+    }
+
+    /**
      * Called when a list button's list data has changed.
      *
      * @param listButton

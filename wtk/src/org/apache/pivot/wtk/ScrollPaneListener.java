@@ -21,6 +21,29 @@ package org.apache.pivot.wtk;
  */
 public interface ScrollPaneListener {
     /**
+     * Scroll pane listener adapter.
+     */
+    public static class Adapter implements ScrollPaneListener {
+        public void horizontalScrollBarPolicyChanged(ScrollPane scrollPane,
+            ScrollPane.ScrollBarPolicy previousPolicy) {
+        }
+
+        public void verticalScrollBarPolicyChanged(ScrollPane scrollPane,
+            ScrollPane.ScrollBarPolicy previousPolicy) {
+        }
+
+        public void rowHeaderChanged(ScrollPane scrollPane, Component previousRowHeader) {
+        }
+
+        public void columnHeaderChanged(ScrollPane scrollPane,
+            Component previousColumnHeader) {
+        }
+
+        public void cornerChanged(ScrollPane scrollPane, Component previousCorner) {
+        }
+    }
+
+    /**
      * Called when the scroll pane's horizontal scroll bar policy changed.
      *
      * @param scrollPane

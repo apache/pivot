@@ -21,6 +21,24 @@ package org.apache.pivot.wtk;
  */
 public interface ScrollBarListener {
     /**
+     * Scroll bar listener adapter.
+     */
+    public static class Adapter implements ScrollBarListener {
+        public void orientationChanged(ScrollBar scrollBar, Orientation previousOrientation) {
+        }
+
+        public void scopeChanged(ScrollBar scrollBar, int previousStart, int previousEnd,
+            int previousExtent) {
+        }
+
+        public void unitIncrementChanged(ScrollBar scrollBar, int previousUnitIncrement) {
+        }
+
+        public void blockIncrementChanged(ScrollBar scrollBar, int previousBlockIncrement) {
+        }
+    }
+
+    /**
      * Called when a scroll bar's orientation has changed.
      *
      * @param scrollBar

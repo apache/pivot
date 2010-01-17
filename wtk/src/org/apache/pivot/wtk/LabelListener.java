@@ -21,6 +21,17 @@ package org.apache.pivot.wtk;
  */
 public interface LabelListener {
     /**
+     * Label listener adapter.
+     */
+    public static class Adapter implements LabelListener {
+        public void textChanged(Label label, String previousText) {
+        }
+
+        public void textKeyChanged(Label label, String previousTextKey) {
+        }
+    }
+
+    /**
      * Called when a label's text has changed.
      *
      * @param label

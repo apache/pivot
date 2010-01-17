@@ -21,6 +21,17 @@ package org.apache.pivot.wtk;
  */
 public interface SliderListener {
     /**
+     * Slider listener adapter.
+     */
+    public static class Adapter implements SliderListener {
+        public void rangeChanged(Slider slider, int previousStart, int previousEnd) {
+        }
+
+        public void orientationChanged(Slider slider) {
+        }
+    }
+
+    /**
      * Called when a slider's range has changed.
      *
      * @param slider
@@ -36,5 +47,4 @@ public interface SliderListener {
      * The source of the event.
      */
     public void orientationChanged(Slider slider);
-
 }

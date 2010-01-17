@@ -19,11 +19,25 @@ package org.apache.pivot.wtk;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.wtk.effects.Decorator;
 
-
 /**
  * Component decorator listener interface.
  */
 public interface ComponentDecoratorListener {
+    /**
+     * Component decorator list adapter.
+     */
+    public static class Adapter implements ComponentDecoratorListener {
+        public void decoratorInserted(Component component, int index) {
+        }
+
+        public void decoratorUpdated(Component component, int index, Decorator previousDecorator) {
+        }
+
+        public void decoratorsRemoved(Component component, int index,
+            Sequence<Decorator> decorators) {
+        }
+    }
+
     /**
      * Called when a decorator has been inserted into a component's decorator
      * sequence.

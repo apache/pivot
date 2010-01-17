@@ -21,6 +21,33 @@ package org.apache.pivot.wtk;
  */
 public interface SplitPaneListener {
     /**
+     * Split pane listener adapter.
+     */
+    public static class Adapter implements SplitPaneListener {
+        public void topLeftChanged(SplitPane splitPane, Component previousTopLeft) {
+        }
+
+        public void bottomRightChanged(SplitPane splitPane, Component previousBottomRight) {
+        }
+
+        public void orientationChanged(SplitPane splitPane) {
+        }
+
+        public void primaryRegionChanged(SplitPane splitPane) {
+        }
+
+        public void splitRatioChanged(SplitPane splitPane, float previousSplitRatio) {
+        }
+
+        public void lockedChanged(SplitPane splitPane) {
+        }
+
+        public void resizeModeChanged(SplitPane splitPane,
+            SplitPane.ResizeMode previousResizeMode) {
+        }
+    }
+
+    /**
      * Called when a split pane's top left component has changed.
      *
      * @param splitPane
@@ -87,5 +114,4 @@ public interface SplitPaneListener {
      * The previous setting of the resizeMode.
      */
     public void resizeModeChanged(SplitPane splitPane, SplitPane.ResizeMode previousResizeMode);
-
 }

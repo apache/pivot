@@ -23,6 +23,39 @@ import org.apache.pivot.collections.Sequence;
  */
 public interface TableViewColumnListener {
     /**
+     * Table view column listener adapter.
+     */
+    public static class Adapter implements TableViewColumnListener {
+        public void columnInserted(TableView tableView, int index) {
+        }
+
+        public void columnsRemoved(TableView tableView, int index,
+            Sequence<TableView.Column> columns) {
+        }
+
+        public void columnNameChanged(TableView.Column column, String previousName) {
+        }
+
+        public void columnHeaderDataChanged(TableView.Column column, Object previousHeaderData) {
+        }
+
+        public void columnWidthChanged(TableView.Column column, int previousWidth,
+            boolean previousRelative) {
+        }
+
+        public void columnWidthLimitsChanged(TableView.Column column, int previousMinimumWidth,
+            int previousMaximumWidth) {
+        }
+
+        public void columnFilterChanged(TableView.Column column, Object previousFilter) {
+        }
+
+        public void columnCellRendererChanged(TableView.Column column,
+            TableView.CellRenderer previousCellRenderer) {
+        }
+    }
+
+    /**
      * Called when a column is inserted into a table view's column sequence.
      *
      * @param tableView

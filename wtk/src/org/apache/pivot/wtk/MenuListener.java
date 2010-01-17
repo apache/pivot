@@ -23,6 +23,20 @@ import org.apache.pivot.collections.Sequence;
  */
 public interface MenuListener {
     /**
+     * Menu listener adapter.
+     */
+    public static class Adapter implements MenuListener {
+        public void sectionInserted(Menu menu, int index) {
+        }
+
+        public void sectionsRemoved(Menu menu, int index, Sequence<Menu.Section> removed) {
+        }
+
+        public void activeItemChanged(Menu menu, Menu.Item previousActiveItem) {
+        }
+    }
+
+    /**
      * Called when a menu section has been inserted.
      *
      * @param menu
