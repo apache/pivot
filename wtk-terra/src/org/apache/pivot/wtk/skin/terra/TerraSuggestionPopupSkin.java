@@ -82,14 +82,13 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
             SuggestionPopup suggestionPopup = (SuggestionPopup)getComponent();
 
             if (keyCode == Keyboard.KeyCode.DOWN) {
-                if (suggestionListView.getListData().getLength() > 0) {
-                    if (suggestionListView.getSelectedIndex() == -1) {
-                        suggestionListView.setSelectedIndex(0);
-                    }
-
-                    suggestionPopup.requestFocus();
-                    consumed = true;
+                if (suggestionListView.getSelectedIndex() == -1
+                    && suggestionListView.getListData().getLength() > 0) {
+                    suggestionListView.setSelectedIndex(0);
                 }
+
+                suggestionPopup.requestFocus();
+                consumed = true;
             } else if (keyCode == Keyboard.KeyCode.ESCAPE) {
                 suggestionPopup.close();
                 consumed = true;
@@ -243,6 +242,8 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
         display.getContainerMouseListeners().remove(displayMouseListener);
 
         SuggestionPopup suggestionPopup = (SuggestionPopup)getComponent();
+        suggestionPopup.clearFocusDescendant();
+
         TextInput textInput = suggestionPopup.getTextInput();
         textInput.getComponentKeyListeners().remove(textInputKeyListener);
 

@@ -22,7 +22,7 @@ limitations under the License.
     <content>
         <BoxPane orientation="vertical">
             <TextInput wtkx:id="textInput"/>
-            <PushButton wtkx:id="showSuggestionsButton" buttonData="Show Suggestions"/>
+            <TextInput/>
         </BoxPane>
     </content>
 </Window>

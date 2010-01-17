@@ -19,13 +19,11 @@ package org.apache.pivot.tests;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
-import org.apache.pivot.wtk.Button;
-import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.SuggestionPopup;
 import org.apache.pivot.wtk.TextInput;
+import org.apache.pivot.wtk.TextInputCharacterListener;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
@@ -34,7 +32,8 @@ public class SuggestionPopupTest implements Application {
     private Window window = null;
 
     @WTKX private TextInput textInput = null;
-    @WTKX private PushButton showSuggestionsButton = null;
+
+    private SuggestionPopup suggestionPopup = new SuggestionPopup();
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
@@ -42,12 +41,17 @@ public class SuggestionPopupTest implements Application {
         window = (Window)wtkxSerializer.readObject(this, "suggestion_popup_test.wtkx");
         wtkxSerializer.bind(this);
 
-        showSuggestionsButton.getButtonPressListeners().add(new ButtonPressListener() {
+        textInput.getTextInputCharacterListeners().add(new TextInputCharacterListener() {
             @Override
-            public void buttonPressed(Button button) {
+            public void charactersInserted(TextInput textInput, int index, int count) {
                 ArrayList<String> suggestions = new ArrayList<String>("One", "Two", "Three", "Four", "Five");
-                SuggestionPopup suggestionPopup = new SuggestionPopup(suggestions);
+                suggestionPopup.setSuggestions(suggestions);
                 suggestionPopup.open(textInput);
+            }
+
+            @Override
+            public void charactersRemoved(TextInput textInput, int index, int count) {
+                suggestionPopup.close();
             }
         });
 
