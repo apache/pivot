@@ -21,13 +21,23 @@ import java.awt.Font;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
+import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.wtk.Border;
 import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.ComponentKeyListener;
+import org.apache.pivot.wtk.Container;
+import org.apache.pivot.wtk.ContainerMouseListener;
+import org.apache.pivot.wtk.Direction;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.GraphicsUtilities;
+import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.ListView;
+import org.apache.pivot.wtk.ListViewSelectionListener;
+import org.apache.pivot.wtk.Mouse;
+import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.SuggestionPopup;
 import org.apache.pivot.wtk.SuggestionPopupListener;
+import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.skin.WindowSkin;
@@ -39,10 +49,74 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
     private Border suggestionListViewBorder = new Border();
     private ListView suggestionListView = new ListView();
 
-    public TerraSuggestionPopupSkin () {
-        suggestionListViewBorder.setContent(suggestionListView);
+    private ContainerMouseListener displayMouseListener = new ContainerMouseListener.Adapter() {
+        @Override
+        public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
+            SuggestionPopup suggestionPopup = (SuggestionPopup)getComponent();
+            TextInput textInput = suggestionPopup.getTextInput();
 
-        // TODO Attach listeners to suggestion list view
+            Display display = (Display)container;
+            Component descendant = display.getDescendantAt(x, y);
+
+            if (!suggestionPopup.isAncestor(descendant)
+                && descendant != textInput) {
+                suggestionPopup.close();
+            }
+
+            return false;
+        }
+
+        @Override
+        public boolean mouseWheel(Container container, Mouse.ScrollType scrollType,
+            int scrollAmount, int wheelRotation, int x, int y) {
+            return true;
+        }
+    };
+
+    private ComponentKeyListener textInputKeyListener = new ComponentKeyListener.Adapter() {
+        @Override
+        public boolean keyPressed(Component component, int keyCode,
+            Keyboard.KeyLocation keyLocation) {
+            boolean consumed = false;
+
+            SuggestionPopup suggestionPopup = (SuggestionPopup)getComponent();
+
+            if (keyCode == Keyboard.KeyCode.DOWN) {
+                if (suggestionListView.getListData().getLength() > 0) {
+                    if (suggestionListView.getSelectedIndex() == -1) {
+                        suggestionListView.setSelectedIndex(0);
+                    }
+
+                    suggestionPopup.requestFocus();
+                    consumed = true;
+                }
+            } else if (keyCode == Keyboard.KeyCode.ESCAPE) {
+                suggestionPopup.close();
+                consumed = true;
+            }
+
+            return consumed;
+        }
+    };
+
+    private ListViewSelectionListener listViewSelectionListener = new ListViewSelectionListener.Adapter() {
+        @Override
+        public void selectedRangesChanged(ListView listView, Sequence<Span> previousSelectedRanges) {
+            SuggestionPopup suggestionPopup = (SuggestionPopup)getComponent();
+            TextInput textInput = suggestionPopup.getTextInput();
+
+            Object suggestion = suggestionListView.getSelectedItem();
+            if (suggestion != null) {
+                // TODO Add a translation interface so callers can provide custom toString()
+                // implementations
+                textInput.setText(suggestion.toString());
+            }
+        }
+    };
+
+    public TerraSuggestionPopupSkin () {
+        suggestionListView.getListViewSelectionListeners().add(listViewSelectionListener);
+        suggestionListViewBorder.setContent(suggestionListView);
     }
 
     @Override
@@ -115,17 +189,67 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
     }
 
     @Override
+    public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+        SuggestionPopup suggestionPopup = (SuggestionPopup)getComponent();
+        suggestionPopup.close();
+
+        return true;
+    }
+
+    @Override
+    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+        SuggestionPopup suggestionPopup = (SuggestionPopup)getComponent();
+        TextInput textInput = suggestionPopup.getTextInput();
+
+        switch (keyCode) {
+            case Keyboard.KeyCode.TAB:
+            case Keyboard.KeyCode.ENTER:
+            case Keyboard.KeyCode.ESCAPE: {
+                suggestionPopup.close();
+
+                if (keyCode == Keyboard.KeyCode.TAB) {
+                    Direction direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ?
+                        Direction.BACKWARD : Direction.FORWARD;
+                    textInput.transferFocus(direction);
+                }
+
+                break;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
     public void windowOpened(Window window) {
         super.windowOpened(window);
 
-        // TODO Add listeners to text input
+        Display display = window.getDisplay();
+        display.getContainerMouseListeners().add(displayMouseListener);
+
+        SuggestionPopup suggestionPopup = (SuggestionPopup)getComponent();
+        TextInput textInput = suggestionPopup.getTextInput();
+        textInput.getComponentKeyListeners().add(textInputKeyListener);
+
+        // Reposition under text input
+        int x = textInput.getX();
+        int y = textInput.getY() + textInput.getHeight();
+        suggestionPopup.setLocation(x, y - 1);
+        suggestionPopup.setPreferredWidth(textInput.getWidth());
     }
 
     @Override
     public void windowClosed(Window window, Display display, Window owner) {
-        // TODO Remove listeners from text input
+        display.getContainerMouseListeners().remove(displayMouseListener);
+
+        SuggestionPopup suggestionPopup = (SuggestionPopup)getComponent();
+        TextInput textInput = suggestionPopup.getTextInput();
+        textInput.getComponentKeyListeners().remove(textInputKeyListener);
 
         super.windowClosed(window, display, owner);
+
+        textInput.requestFocus();
+        textInput.setSelection(textInput.getTextLength(), 0);
     }
 
     @Override

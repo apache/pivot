@@ -123,7 +123,7 @@ public class SuggestionPopup extends Window {
             throw new IllegalStateException("textInput is null.");
         }
 
-        open(display, owner);
+        super.open(display, owner);
     }
 
     /**
