@@ -19,12 +19,26 @@ package org.apache.pivot.wtk;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.util.ListenerList;
-import org.apache.pivot.wtk.content.ListViewItemRenderer;
+import org.apache.pivot.wtk.content.SuggestionPopupItemRenderer;
 
 /**
  * Popup that presents a list of text suggestions to the user.
  */
 public class SuggestionPopup extends Window {
+    /**
+     * Extends list view item renderer interface to provide support for converting
+     * suggestions to text.
+     */
+    public interface SuggestionRenderer extends ListView.ItemRenderer {
+        /**
+         * Converts a suggestion to a string representation for display in a
+         * text input.
+         *
+         * @param suggestion
+         */
+        public String toString(Object suggestion);
+    }
+
     private static class SuggestionPopupListenerList extends ListenerList<SuggestionPopupListener>
         implements SuggestionPopupListener {
         @Override
@@ -37,7 +51,7 @@ public class SuggestionPopup extends Window {
 
         @Override
         public void suggestionRendererChanged(SuggestionPopup suggestionPopup,
-            ListView.ItemRenderer previousSuggestionRenderer) {
+            SuggestionRenderer previousSuggestionRenderer) {
             for (SuggestionPopupListener listener : this) {
                 listener.suggestionRendererChanged(suggestionPopup, previousSuggestionRenderer);
             }
@@ -46,12 +60,12 @@ public class SuggestionPopup extends Window {
 
     private TextInput textInput = null;
     private List<?> suggestions;
-    private ListView.ItemRenderer suggestionRenderer;
+    private SuggestionRenderer suggestionRenderer;
 
     private SuggestionPopupListenerList suggestionPopupListeners = new SuggestionPopupListenerList();
 
-    private static final ListView.ItemRenderer DEFAULT_SUGGESTION_RENDERER =
-        new ListViewItemRenderer();
+    private static final SuggestionRenderer DEFAULT_SUGGESTION_RENDERER =
+        new SuggestionPopupItemRenderer();
 
     public SuggestionPopup() {
         this(new ArrayList<Object>());
@@ -99,7 +113,7 @@ public class SuggestionPopup extends Window {
     /**
      * Returns the list view item renderer used to present suggestions.
      */
-    public ListView.ItemRenderer getSuggestionRenderer() {
+    public SuggestionRenderer getSuggestionRenderer() {
         return suggestionRenderer;
     }
 
@@ -108,8 +122,8 @@ public class SuggestionPopup extends Window {
      *
      * @param suggestionRenderer
      */
-    public void setSuggestionRenderer(ListView.ItemRenderer suggestionRenderer) {
-        ListView.ItemRenderer previousSuggestionRenderer = this.suggestionRenderer;
+    public void setSuggestionRenderer(SuggestionRenderer suggestionRenderer) {
+        SuggestionRenderer previousSuggestionRenderer = this.suggestionRenderer;
 
         if (previousSuggestionRenderer != suggestionRenderer) {
             this.suggestionRenderer = suggestionRenderer;

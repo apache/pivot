@@ -33,7 +33,7 @@ public interface SuggestionPopupListener {
 
         @Override
         public void suggestionRendererChanged(SuggestionPopup suggestionPopup,
-            ListView.ItemRenderer previousSuggestionRenderer) {
+            SuggestionPopup.SuggestionRenderer previousSuggestionRenderer) {
         }
     }
 
@@ -52,5 +52,5 @@ public interface SuggestionPopupListener {
      * @param previousSuggestionRenderer
      */
     public void suggestionRendererChanged(SuggestionPopup suggestionPopup,
-        ListView.ItemRenderer previousSuggestionRenderer);
+        SuggestionPopup.SuggestionRenderer previousSuggestionRenderer);
 }

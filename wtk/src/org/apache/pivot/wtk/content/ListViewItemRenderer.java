@@ -49,7 +49,7 @@ public class ListViewItemRenderer extends BoxPane implements ListView.ItemRender
         add(imageView);
         add(label);
 
-        //imageView.setPreferredSize(DEFAULT_ICON_WIDTH, DEFAULT_ICON_HEIGHT);
+        imageView.setPreferredSize(DEFAULT_ICON_WIDTH, DEFAULT_ICON_HEIGHT);
         imageView.setVisible(DEFAULT_SHOW_ICON);
     }
 

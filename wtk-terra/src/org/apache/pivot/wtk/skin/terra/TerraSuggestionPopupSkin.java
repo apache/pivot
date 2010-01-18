@@ -106,9 +106,9 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
 
             Object suggestion = suggestionListView.getSelectedItem();
             if (suggestion != null) {
-                // TODO Add a translation interface so callers can provide custom toString()
-                // implementations
-                textInput.setText(suggestion.toString());
+                SuggestionPopup.SuggestionRenderer suggestionRenderer =
+                    suggestionPopup.getSuggestionRenderer();
+                textInput.setText(suggestionRenderer.toString(suggestion));
             }
         }
     };
@@ -261,7 +261,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
 
     @Override
     public void suggestionRendererChanged(SuggestionPopup suggestionPopup,
-        ListView.ItemRenderer previousSuggestionRenderer) {
+        SuggestionPopup.SuggestionRenderer previousSuggestionRenderer) {
         suggestionListView.setItemRenderer(suggestionPopup.getSuggestionRenderer());
     }
 }
