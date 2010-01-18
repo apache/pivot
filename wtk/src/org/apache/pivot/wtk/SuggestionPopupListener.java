@@ -35,6 +35,11 @@ public interface SuggestionPopupListener {
         public void suggestionRendererChanged(SuggestionPopup suggestionPopup,
             SuggestionPopup.SuggestionRenderer previousSuggestionRenderer) {
         }
+
+        @Override
+        public void selectedIndexChanged(SuggestionPopup suggestionPopup,
+            int previousSelectedIndex) {
+        }
     }
 
     /**
@@ -53,4 +58,12 @@ public interface SuggestionPopupListener {
      */
     public void suggestionRendererChanged(SuggestionPopup suggestionPopup,
         SuggestionPopup.SuggestionRenderer previousSuggestionRenderer);
+
+    /**
+     * Called when a suggestion popup's selected index has changed.
+     *
+     * @param suggestionPopup
+     * @param previousSelectedIndex
+     */
+    public void selectedIndexChanged(SuggestionPopup suggestionPopup, int previousSelectedIndex);
 }

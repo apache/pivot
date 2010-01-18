@@ -23,6 +23,7 @@ limitations under the License.
         <BoxPane orientation="vertical">
             <TextInput wtkx:id="textInput"/>
             <TextInput/>
+            <Label wtkx:id="selectedIndexLabel"/>
         </BoxPane>
     </content>
 </Window>

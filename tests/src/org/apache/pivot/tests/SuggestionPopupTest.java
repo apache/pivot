@@ -21,7 +21,9 @@ import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.SuggestionPopup;
+import org.apache.pivot.wtk.SuggestionPopupCloseListener;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextInputCharacterListener;
 import org.apache.pivot.wtk.Window;
@@ -32,6 +34,7 @@ public class SuggestionPopupTest implements Application {
     private Window window = null;
 
     @WTKX private TextInput textInput = null;
+    @WTKX private Label selectedIndexLabel = null;
 
     private SuggestionPopup suggestionPopup = new SuggestionPopup();
 
@@ -46,7 +49,13 @@ public class SuggestionPopupTest implements Application {
             public void charactersInserted(TextInput textInput, int index, int count) {
                 ArrayList<String> suggestions = new ArrayList<String>("One", "Two", "Three", "Four", "Five");
                 suggestionPopup.setSuggestions(suggestions);
-                suggestionPopup.open(textInput);
+                suggestionPopup.open(textInput, new SuggestionPopupCloseListener() {
+                    @Override
+                    public void suggestionPopupClosed(SuggestionPopup suggestionPopup) {
+                        selectedIndexLabel.setText("You selected suggestion number "
+                            + suggestionPopup.getSelectedIndex() + ".");
+                    }
+                });
             }
 
             @Override

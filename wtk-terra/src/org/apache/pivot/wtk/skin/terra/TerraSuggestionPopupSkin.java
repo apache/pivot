@@ -101,15 +101,10 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
     private ListViewSelectionListener listViewSelectionListener = new ListViewSelectionListener.Adapter() {
         @Override
         public void selectedRangesChanged(ListView listView, Sequence<Span> previousSelectedRanges) {
-            SuggestionPopup suggestionPopup = (SuggestionPopup)getComponent();
-            TextInput textInput = suggestionPopup.getTextInput();
+            int index = suggestionListView.getSelectedIndex();
 
-            Object suggestion = suggestionListView.getSelectedItem();
-            if (suggestion != null) {
-                SuggestionPopup.SuggestionRenderer suggestionRenderer =
-                    suggestionPopup.getSuggestionRenderer();
-                textInput.setText(suggestionRenderer.toString(suggestion));
-            }
+            SuggestionPopup suggestionPopup = (SuggestionPopup)getComponent();
+            suggestionPopup.setSelectedIndex(index);
         }
     };
 
@@ -263,5 +258,18 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
     public void suggestionRendererChanged(SuggestionPopup suggestionPopup,
         SuggestionPopup.SuggestionRenderer previousSuggestionRenderer) {
         suggestionListView.setItemRenderer(suggestionPopup.getSuggestionRenderer());
+    }
+
+    @Override
+    public void selectedIndexChanged(SuggestionPopup suggestionPopup,
+        int previousSelectedIndex) {
+        TextInput textInput = suggestionPopup.getTextInput();
+
+        Object suggestion = suggestionPopup.getSelectedSuggestion();
+        if (suggestion != null) {
+            SuggestionPopup.SuggestionRenderer suggestionRenderer =
+                suggestionPopup.getSuggestionRenderer();
+            textInput.setText(suggestionRenderer.toString(suggestion));
+        }
     }
 }
