@@ -16,7 +16,10 @@
  */
 package org.apache.pivot.wtk.skin.terra;
 
+import java.awt.Graphics2D;
+
 import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
@@ -24,6 +27,7 @@ import org.apache.pivot.wtk.Form;
 import org.apache.pivot.wtk.FormAttributeListener;
 import org.apache.pivot.wtk.FormListener;
 import org.apache.pivot.wtk.ImageView;
+import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.MessageType;
 import org.apache.pivot.wtk.Separator;
@@ -40,13 +44,14 @@ public class TerraFormSkin extends ContainerSkin
     private ArrayList<ArrayList<Label>> labels = new ArrayList<ArrayList<Label>>();
     private ArrayList<ArrayList<ImageView>> flagImageViews = new ArrayList<ArrayList<ImageView>>();
 
-    // Make the field fill the width of the form
-    private boolean fill = false;
+    private Insets padding = new Insets(4);
     private int horizontalSpacing = 6;
     private int verticalSpacing = 6;
     private int flagImageOffset = 4;
     private boolean showFirstSectionHeading = false;
-
+    private boolean showFlagMessagesInline = false;
+    private boolean fill = false;
+    private boolean leftAlignLabels = false;
     private String delimiter = DEFAULT_DELIMITER;
 
     private static final int FLAG_IMAGE_SIZE = 16;
@@ -68,6 +73,9 @@ public class TerraFormSkin extends ContainerSkin
 
     @Override
     public int getPreferredWidth(int height) {
+        // TODO Respect padding
+        // TODO Respect showFlagMessagesInline
+
         int preferredWidth = 0;
 
         // Preferred width is maximum of either the sum of the maximum label
@@ -113,6 +121,9 @@ public class TerraFormSkin extends ContainerSkin
 
     @Override
     public int getPreferredHeight(int width) {
+        // TODO Respect padding
+        // TODO Respect showFlagMessagesInline
+
         int preferredHeight = 0;
 
         Form form = (Form)getComponent();
@@ -215,6 +226,9 @@ public class TerraFormSkin extends ContainerSkin
 
     @Override
     public int getBaseline(int width, int height) {
+        // TODO Respect padding
+        // TODO Respect showFlagMessagesInline
+
         Form form = (Form)getComponent();
         Form.SectionSequence sections = form.getSections();
 
@@ -306,6 +320,9 @@ public class TerraFormSkin extends ContainerSkin
 
     @Override
     public void layout() {
+        // TODO Respect padding
+        // TODO Respect showFlagMessagesInline
+
         Form form = (Form)getComponent();
         Form.SectionSequence sections = form.getSections();
 
@@ -395,7 +412,7 @@ public class TerraFormSkin extends ContainerSkin
                     int rowHeight = Math.max(baseline + Math.max(labelDescent, fieldDescent), FLAG_IMAGE_SIZE);
 
                     // Align the label and field to baseline
-                    int labelX = maximumLabelWidth - label.getWidth();
+                    int labelX = leftAlignLabels ? 0 : maximumLabelWidth - label.getWidth();
                     int labelY = rowY + (baseline - labelAscent);
                     label.setLocation(labelX, labelY);
 
@@ -419,13 +436,52 @@ public class TerraFormSkin extends ContainerSkin
         }
     }
 
-    public boolean getFill() {
-        return fill;
+    @Override
+    public void paint(Graphics2D graphics) {
+        super.paint(graphics);
+
+        // TODO
     }
 
-    public void setFill(boolean fill) {
-        this.fill = fill;
+    public Insets getPadding() {
+        return padding;
+    }
+
+    public void setPadding(Insets padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        this.padding = padding;
         invalidateComponent();
+    }
+
+    public final void setPadding(Dictionary<String, ?> padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setPadding(new Insets(padding));
+    }
+
+    public final void setPadding(int padding) {
+        setPadding(new Insets(padding));
+    }
+
+    public final void setPadding(Number padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setPadding(padding.intValue());
+    }
+
+    public final void setPadding(String padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setPadding(Insets.decode(padding));
     }
 
     public int getHorizontalSpacing() {
@@ -485,12 +541,39 @@ public class TerraFormSkin extends ContainerSkin
         setFlagImageOffset(flagImageOffset.intValue());
     }
 
-    public boolean isShowFirstSectionHeading() {
+    public boolean getShowFirstSectionHeading() {
         return showFirstSectionHeading;
     }
 
     public void setShowFirstSectionHeading(boolean showFirstSectionHeading) {
         this.showFirstSectionHeading = showFirstSectionHeading;
+        invalidateComponent();
+    }
+
+    public boolean getShowFlagMessagesInline() {
+        return showFlagMessagesInline;
+    }
+
+    public void setShowFlagMessagesInline(boolean showFlagMessagesInline) {
+        this.showFlagMessagesInline = showFlagMessagesInline;
+        invalidateComponent();
+    }
+
+    public boolean getFill() {
+        return fill;
+    }
+
+    public void setFill(boolean fill) {
+        this.fill = fill;
+        invalidateComponent();
+    }
+
+    public boolean getLeftAlignLabels() {
+        return leftAlignLabels;
+    }
+
+    public void setLeftAlignLabels(boolean leftAlignLabels) {
+        this.leftAlignLabels = leftAlignLabels;
         invalidateComponent();
     }
 
@@ -555,7 +638,7 @@ public class TerraFormSkin extends ContainerSkin
 
     @Override
     public void requiredChanged(Form form, Component field) {
-        // TODO
+        // No-op
     }
 
     @Override
