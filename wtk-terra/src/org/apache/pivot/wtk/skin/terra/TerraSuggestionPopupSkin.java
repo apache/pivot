@@ -60,7 +60,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
 
             if (!suggestionPopup.isAncestor(descendant)
                 && descendant != textInput) {
-                suggestionPopup.close();
+                suggestionPopup.close(false);
             }
 
             return false;
@@ -90,7 +90,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
                 suggestionPopup.requestFocus();
                 consumed = true;
             } else if (keyCode == Keyboard.KeyCode.ESCAPE) {
-                suggestionPopup.close();
+                suggestionPopup.close(false);
                 consumed = true;
             }
 
@@ -185,7 +185,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
     @Override
     public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         SuggestionPopup suggestionPopup = (SuggestionPopup)getComponent();
-        suggestionPopup.close();
+        suggestionPopup.close(true);
 
         return true;
     }
@@ -196,17 +196,25 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
         TextInput textInput = suggestionPopup.getTextInput();
 
         switch (keyCode) {
-            case Keyboard.KeyCode.TAB:
-            case Keyboard.KeyCode.ENTER:
-            case Keyboard.KeyCode.ESCAPE: {
-                suggestionPopup.close();
+            case Keyboard.KeyCode.ENTER: {
+                suggestionPopup.close(true);
+                break;
+            }
 
-                if (keyCode == Keyboard.KeyCode.TAB) {
+            case Keyboard.KeyCode.TAB: {
+                suggestionPopup.close(true);
+
+                if (suggestionPopup.isClosed()) {
                     Direction direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ?
                         Direction.BACKWARD : Direction.FORWARD;
                     textInput.transferFocus(direction);
                 }
 
+                break;
+            }
+
+            case Keyboard.KeyCode.ESCAPE: {
+                suggestionPopup.close(false);
                 break;
             }
         }

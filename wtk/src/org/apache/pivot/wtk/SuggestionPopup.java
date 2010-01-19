@@ -73,6 +73,8 @@ public class SuggestionPopup extends Window {
     private SuggestionRenderer suggestionRenderer;
     private int selectedIndex = -1;
 
+    private boolean result = false;
+
     private SuggestionPopupListenerList suggestionPopupListeners = new SuggestionPopupListenerList();
 
     private static final SuggestionRenderer DEFAULT_SUGGESTION_RENDERER =
@@ -142,15 +144,6 @@ public class SuggestionPopup extends Window {
         }
     }
 
-    @Override
-    public final void open(Display display, Window owner) {
-        if (textInput == null) {
-            throw new IllegalStateException("textInput is null.");
-        }
-
-        super.open(display, owner);
-    }
-
     /**
      * Returns the current selection.
      *
@@ -200,6 +193,15 @@ public class SuggestionPopup extends Window {
         return item;
     }
 
+    @Override
+    public final void open(Display display, Window owner) {
+        if (textInput == null) {
+            throw new IllegalStateException("textInput is null.");
+        }
+
+        super.open(display, owner);
+    }
+
     /**
      * Opens the suggestion popup window.
      *
@@ -232,15 +234,23 @@ public class SuggestionPopup extends Window {
         if (!isOpen()) {
             this.textInput = null;
             this.suggestionPopupCloseListener = null;
+
+            result = false;
         }
     }
 
     @Override
-    public void close() {
+    public final void close() {
+        close(false);
+    }
+
+    public void close(boolean result) {
         if (!isClosed()) {
             super.close();
 
             if (isClosed()) {
+                this.result = result;
+
                 textInput = null;
 
                 if (suggestionPopupCloseListener != null) {
@@ -249,6 +259,14 @@ public class SuggestionPopup extends Window {
                 }
             }
         }
+    }
+
+    public SuggestionPopupCloseListener getSuggestionPopupCloseListener() {
+        return suggestionPopupCloseListener;
+    }
+
+    public boolean getResult() {
+        return result;
     }
 
     public ListenerList<SuggestionPopupListener> getSuggestionPopupListeners() {

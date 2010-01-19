@@ -68,24 +68,30 @@ public abstract class ListButtonSkin extends ButtonSkin
             ListButton listButton = (ListButton)getComponent();
 
             switch (keyCode) {
-                case Keyboard.KeyCode.ESCAPE: {
-                    listViewPopup.close();
-                    break;
-                }
-
-                case Keyboard.KeyCode.TAB:
                 case Keyboard.KeyCode.ENTER: {
                     listViewPopup.close();
-
-                    if (keyCode == Keyboard.KeyCode.TAB) {
-                        Direction direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ?
-                            Direction.BACKWARD : Direction.FORWARD;
-                        listButton.transferFocus(direction);
-                    }
 
                     int index = listView.getSelectedIndex();
                     listButton.setSelectedIndex(index);
 
+                    break;
+                }
+
+                case Keyboard.KeyCode.TAB: {
+                    listViewPopup.close();
+
+                    int index = listView.getSelectedIndex();
+                    listButton.setSelectedIndex(index);
+
+                    Direction direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ?
+                        Direction.BACKWARD : Direction.FORWARD;
+                    listButton.transferFocus(direction);
+
+                    break;
+                }
+
+                case Keyboard.KeyCode.ESCAPE: {
+                    listViewPopup.close();
                     break;
                 }
             }

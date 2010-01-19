@@ -52,8 +52,12 @@ public class SuggestionPopupTest implements Application {
                 suggestionPopup.open(textInput, new SuggestionPopupCloseListener() {
                     @Override
                     public void suggestionPopupClosed(SuggestionPopup suggestionPopup) {
-                        selectedIndexLabel.setText("You selected suggestion number "
-                            + suggestionPopup.getSelectedIndex() + ".");
+                        if (suggestionPopup.getResult()) {
+                            selectedIndexLabel.setText("You selected suggestion number "
+                                + suggestionPopup.getSelectedIndex() + ".");
+                        } else {
+                            selectedIndexLabel.setText("You didn't select anything.");
+                        }
                     }
                 });
             }
