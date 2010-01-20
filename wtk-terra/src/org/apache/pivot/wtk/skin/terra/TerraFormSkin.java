@@ -19,34 +19,35 @@ package org.apache.pivot.wtk.skin.terra;
 import java.awt.Graphics2D;
 
 import org.apache.pivot.collections.ArrayList;
-import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Form;
 import org.apache.pivot.wtk.FormAttributeListener;
 import org.apache.pivot.wtk.FormListener;
+import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.ImageView;
-import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.MessageType;
 import org.apache.pivot.wtk.Separator;
 import org.apache.pivot.wtk.Theme;
+import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.skin.ContainerSkin;
 
 /**
- * Form skin.
+ * Terra form skin.
  */
 public class TerraFormSkin extends ContainerSkin
     implements FormListener, FormAttributeListener {
     private ArrayList<Separator> separators = new ArrayList<Separator>();
-    private ArrayList<ArrayList<Label>> labels = new ArrayList<ArrayList<Label>>();
-    private ArrayList<ArrayList<ImageView>> flagImageViews = new ArrayList<ArrayList<ImageView>>();
+    private ArrayList<ArrayList<BoxPane>> rowHeaders = new ArrayList<ArrayList<BoxPane>>();
+    // TODO
+    // private ArrayList<ArrayList<Label>> flagMessages = new ArrayList<ArrayList<Label>>();
 
-    private Insets padding = new Insets(4);
-    private int horizontalSpacing = 6;
-    private int verticalSpacing = 6;
+    private int horizontalSpacing = 4;
+    private int verticalSpacing = 4;
     private int flagImageOffset = 4;
     private boolean showFirstSectionHeading = false;
     private boolean showFlagMessagesInline = false;
@@ -55,6 +56,8 @@ public class TerraFormSkin extends ContainerSkin
     private String delimiter = DEFAULT_DELIMITER;
 
     private static final int FLAG_IMAGE_SIZE = 16;
+    private static final int FLAG_HIGHLIGHT_PADDING = 2;
+
     private static final String DEFAULT_DELIMITER = ":";
 
     @Override
@@ -73,15 +76,11 @@ public class TerraFormSkin extends ContainerSkin
 
     @Override
     public int getPreferredWidth(int height) {
-        // TODO Respect padding
         // TODO Respect showFlagMessagesInline
 
         int preferredWidth = 0;
 
-        // Preferred width is maximum of either the sum of the maximum label
-        // width, maximum field width, horizontal spacing, flag image offset,
-        // and flag image size values or the maximum separator width
-        int maximumLabelWidth = 0;
+        int maximumRowHeaderWidth = 0;
         int maximumFieldWidth = 0;
         int maximumSeparatorWidth = 0;
 
@@ -104,24 +103,23 @@ public class TerraFormSkin extends ContainerSkin
                 Component field = section.get(fieldIndex);
 
                 if (field.isVisible()) {
-                    Label label = labels.get(sectionIndex).get(fieldIndex);
-                    maximumLabelWidth = Math.max(maximumLabelWidth,
-                        label.getPreferredWidth(-1));
+                    BoxPane rowHeader = rowHeaders.get(sectionIndex).get(fieldIndex);
+                    maximumRowHeaderWidth = Math.max(maximumRowHeaderWidth,
+                        rowHeader.getPreferredWidth(-1));
                     maximumFieldWidth = Math.max(maximumFieldWidth,
                         field.getPreferredWidth(-1));
                 }
             }
         }
 
-        preferredWidth = Math.max(maximumLabelWidth + horizontalSpacing + maximumFieldWidth
-            + flagImageOffset + FLAG_IMAGE_SIZE, maximumSeparatorWidth);
+        preferredWidth = Math.max(maximumRowHeaderWidth + horizontalSpacing + maximumFieldWidth
+            + FLAG_HIGHLIGHT_PADDING * 2, maximumSeparatorWidth);
 
         return preferredWidth;
     }
 
     @Override
     public int getPreferredHeight(int width) {
-        // TODO Respect padding
         // TODO Respect showFlagMessagesInline
 
         int preferredHeight = 0;
@@ -132,9 +130,8 @@ public class TerraFormSkin extends ContainerSkin
         // If justified and constrained, determine field width constraint
         int fieldWidth = -1;
 
-        if (fill
-            && width != -1) {
-            int maximumLabelWidth = 0;
+        if (fill && width != -1) {
+            int maximumRowHeaderWidth = 0;
 
             for (int sectionIndex = 0, sectionCount = sections.getLength();
                 sectionIndex < sectionCount; sectionIndex++) {
@@ -145,20 +142,17 @@ public class TerraFormSkin extends ContainerSkin
                     Component field = section.get(fieldIndex);
 
                     if (field.isVisible()) {
-                        Label label = labels.get(sectionIndex).get(fieldIndex);
-                        maximumLabelWidth = Math.max(maximumLabelWidth,
-                            label.getPreferredWidth(-1));
+                        BoxPane rowHeader = rowHeaders.get(sectionIndex).get(fieldIndex);
+                        maximumRowHeaderWidth = Math.max(maximumRowHeaderWidth,
+                            rowHeader.getPreferredWidth(-1));
                     }
                 }
             }
 
-            fieldWidth = Math.max(0, width - (maximumLabelWidth
-                + horizontalSpacing + flagImageOffset + FLAG_IMAGE_SIZE));
+            fieldWidth = Math.max(0, width - (maximumRowHeaderWidth + horizontalSpacing
+                + FLAG_HIGHLIGHT_PADDING * 2));
         }
 
-        // Preferred height is the sum of the maximum value of the label,
-        // field, and flag image for each row, plus vertical spacing and
-        // preferred separator heights
         for (int sectionIndex = 0, sectionCount = sections.getLength();
             sectionIndex < sectionCount; sectionIndex++) {
             Form.Section section = sections.get(sectionIndex);
@@ -175,16 +169,17 @@ public class TerraFormSkin extends ContainerSkin
                 Component field = section.get(fieldIndex);
 
                 if (field.isVisible()) {
-                    Label label = labels.get(sectionIndex).get(fieldIndex);
+                    BoxPane rowHeader = rowHeaders.get(sectionIndex).get(fieldIndex);
 
-                    // Determine the label size and baseline
-                    Dimensions labelSize = label.getPreferredSize();
-                    int labelAscent = label.getBaseline(labelSize.width, labelSize.height);
-                    if (labelAscent == -1) {
-                        labelAscent = labelSize.height;
+                    // Determine the row header size and baseline
+                    Dimensions rowHeaderSize = rowHeader.getPreferredSize();
+                    int rowHeaderAscent = rowHeader.getBaseline(rowHeaderSize.width,
+                        rowHeaderSize.height);
+                    if (rowHeaderAscent == -1) {
+                        rowHeaderAscent = rowHeaderSize.height;
                     }
 
-                    int labelDescent = labelSize.height - labelAscent;
+                    int rowHeaderDescent = rowHeaderSize.height - rowHeaderAscent;
 
                     // Determine the field size and baseline
                     Dimensions fieldSize;
@@ -203,8 +198,8 @@ public class TerraFormSkin extends ContainerSkin
                     int fieldDescent = fieldSize.height - fieldAscent;
 
                     // Determine the baseline and row height
-                    int baseline = Math.max(labelAscent, fieldAscent);
-                    int rowHeight = Math.max(baseline + Math.max(labelDescent, fieldDescent), FLAG_IMAGE_SIZE);
+                    int baseline = Math.max(rowHeaderAscent, fieldAscent);
+                    int rowHeight = baseline + Math.max(rowHeaderDescent, fieldDescent);
 
                     preferredHeight += rowHeight;
 
@@ -214,6 +209,8 @@ public class TerraFormSkin extends ContainerSkin
                 }
             }
         }
+
+        preferredHeight += FLAG_HIGHLIGHT_PADDING * 2;
 
         return preferredHeight;
     }
@@ -226,7 +223,6 @@ public class TerraFormSkin extends ContainerSkin
 
     @Override
     public int getBaseline(int width, int height) {
-        // TODO Respect padding
         // TODO Respect showFlagMessagesInline
 
         Form form = (Form)getComponent();
@@ -236,7 +232,8 @@ public class TerraFormSkin extends ContainerSkin
         int fieldWidth = -1;
 
         if (fill) {
-            int maximumLabelWidth = 0;
+            int maximumRowHeaderWidth = 0;
+
             for (int sectionIndex = 0, sectionCount = sections.getLength();
                 sectionIndex < sectionCount; sectionIndex++) {
                 Form.Section section = sections.get(sectionIndex);
@@ -246,15 +243,15 @@ public class TerraFormSkin extends ContainerSkin
                     Component field = section.get(fieldIndex);
 
                     if (field.isVisible()) {
-                        Label label = labels.get(sectionIndex).get(fieldIndex);
-                        maximumLabelWidth = Math.max(maximumLabelWidth,
-                            label.getPreferredWidth(-1));
+                        BoxPane rowHeader = rowHeaders.get(sectionIndex).get(fieldIndex);
+                        maximumRowHeaderWidth = Math.max(maximumRowHeaderWidth,
+                            rowHeader.getPreferredWidth(-1));
                     }
                 }
             }
 
-            fieldWidth = Math.max(0, width - (maximumLabelWidth
-                + horizontalSpacing + flagImageOffset + FLAG_IMAGE_SIZE));
+            fieldWidth = Math.max(0, width - (maximumRowHeaderWidth + horizontalSpacing
+                + FLAG_HIGHLIGHT_PADDING * 2));
         }
 
         int baseline = -1;
@@ -282,19 +279,19 @@ public class TerraFormSkin extends ContainerSkin
                 Component field = section.get(fieldIndex);
 
                 if (field.isVisible()) {
-                    Label label = labels.get(sectionIndex).get(fieldIndex);
+                    BoxPane rowHeader = rowHeaders.get(sectionIndex).get(fieldIndex);
 
-                    // Determine the label size and baseline
-                    Dimensions labelSize = label.getPreferredSize();
-                    int labelAscent = label.getBaseline(labelSize.width, labelSize.height);
-                    if (labelAscent == -1) {
-                        labelAscent = labelSize.height;
+                    // Determine the row header size and baseline
+                    Dimensions rowHeaderSize = rowHeader.getPreferredSize();
+                    int rowHeaderAscent = rowHeader.getBaseline(rowHeaderSize.width,
+                        rowHeaderSize.height);
+                    if (rowHeaderAscent == -1) {
+                        rowHeaderAscent = rowHeaderSize.height;
                     }
 
                     // Determine the field size and baseline
                     Dimensions fieldSize;
-                    if (fill
-                        && fieldWidth != -1) {
+                    if (fill && fieldWidth != -1) {
                         fieldSize = new Dimensions(fieldWidth, field.getPreferredHeight(fieldWidth));
                     } else {
                         fieldSize = field.getPreferredSize();
@@ -306,7 +303,7 @@ public class TerraFormSkin extends ContainerSkin
                     }
 
                     // Determine the baseline
-                    baseline = rowY + Math.max(labelAscent, fieldAscent);
+                    baseline = rowY + Math.max(rowHeaderAscent, fieldAscent);
                 }
 
                 fieldIndex++;
@@ -315,19 +312,20 @@ public class TerraFormSkin extends ContainerSkin
             sectionIndex++;
         }
 
+        baseline += FLAG_HIGHLIGHT_PADDING;
+
         return baseline;
     }
 
     @Override
     public void layout() {
-        // TODO Respect padding
         // TODO Respect showFlagMessagesInline
 
         Form form = (Form)getComponent();
         Form.SectionSequence sections = form.getSections();
 
-        // Determine the maximum label width
-        int maximumLabelWidth = 0;
+        // Determine the maximum row header width
+        int maximumRowHeaderWidth = 0;
 
         for (int sectionIndex = 0, sectionCount = sections.getLength();
             sectionIndex < sectionCount; sectionIndex++) {
@@ -338,20 +336,20 @@ public class TerraFormSkin extends ContainerSkin
                 Component field = section.get(fieldIndex);
 
                 if (field.isVisible()) {
-                    Label label = labels.get(sectionIndex).get(fieldIndex);
-                    maximumLabelWidth = Math.max(maximumLabelWidth,
-                        label.getPreferredWidth(-1));
+                    BoxPane rowHeader = rowHeaders.get(sectionIndex).get(fieldIndex);
+                    maximumRowHeaderWidth = Math.max(maximumRowHeaderWidth,
+                        rowHeader.getPreferredWidth(-1));
                 }
             }
         }
 
         // Determine the field width
         int width = getWidth();
-        int fieldWidth = Math.max(0, width - (maximumLabelWidth + horizontalSpacing
-            + flagImageOffset + FLAG_IMAGE_SIZE));
+        int fieldWidth = Math.max(0, width - (maximumRowHeaderWidth + horizontalSpacing
+            + FLAG_HIGHLIGHT_PADDING * 2));
 
         // Lay out the components
-        int rowY = 0;
+        int rowY = FLAG_HIGHLIGHT_PADDING;
 
         for (int sectionIndex = 0, sectionCount = sections.getLength();
             sectionIndex < sectionCount; sectionIndex++) {
@@ -364,7 +362,7 @@ public class TerraFormSkin extends ContainerSkin
             } else {
                 separator.setVisible(true);
                 separator.setSize(width, separator.getPreferredHeight(width));
-                separator.setLocation(0, rowY);
+                separator.setLocation(FLAG_HIGHLIGHT_PADDING, rowY);
                 rowY += separator.getHeight();
             }
 
@@ -372,23 +370,23 @@ public class TerraFormSkin extends ContainerSkin
                 fieldIndex < fieldCount; fieldIndex++) {
                 Component field = section.get(fieldIndex);
 
-                Label label = labels.get(sectionIndex).get(fieldIndex);
-                ImageView flagImageView = flagImageViews.get(sectionIndex).get(fieldIndex);
+                BoxPane rowHeader = rowHeaders.get(sectionIndex).get(fieldIndex);
 
                 if (field.isVisible()) {
-                    // Show the row components
-                    label.setVisible(true);
-                    flagImageView.setVisible(true);
+                    // Show the row header
+                    rowHeader.setVisible(true);
 
-                    // Determine the label size and baseline
-                    Dimensions labelSize = label.getPreferredSize();
-                    label.setSize(labelSize);
-                    int labelAscent = label.getBaseline(labelSize.width, labelSize.height);
-                    if (labelAscent == -1) {
-                        labelAscent = labelSize.height;
+                    // Determine the row header size and baseline
+                    Dimensions rowHeaderSize = new Dimensions(maximumRowHeaderWidth,
+                        rowHeader.getPreferredHeight());
+                    rowHeader.setSize(rowHeaderSize);
+                    int rowHeaderAscent = rowHeader.getBaseline(rowHeaderSize.width,
+                        rowHeaderSize.height);
+                    if (rowHeaderAscent == -1) {
+                        rowHeaderAscent = rowHeaderSize.height;
                     }
 
-                    int labelDescent = labelSize.height - labelAscent;
+                    int rowHeaderDescent = rowHeaderSize.height - rowHeaderAscent;
 
                     // Determine the field size and baseline
                     Dimensions fieldSize;
@@ -408,29 +406,24 @@ public class TerraFormSkin extends ContainerSkin
                     int fieldDescent = fieldSize.height - fieldAscent;
 
                     // Determine the baseline and row height
-                    int baseline = Math.max(labelAscent, fieldAscent);
-                    int rowHeight = Math.max(baseline + Math.max(labelDescent, fieldDescent), FLAG_IMAGE_SIZE);
+                    int baseline = Math.max(rowHeaderAscent, fieldAscent);
+                    int rowHeight = baseline + Math.max(rowHeaderDescent, fieldDescent);
 
-                    // Align the label and field to baseline
-                    int labelX = leftAlignLabels ? 0 : maximumLabelWidth - label.getWidth();
-                    int labelY = rowY + (baseline - labelAscent);
-                    label.setLocation(labelX, labelY);
+                    // Position the row header
+                    int rowHeaderX = FLAG_HIGHLIGHT_PADDING;
+                    int rowHeaderY = rowY + (baseline - rowHeaderAscent);
+                    rowHeader.setLocation(rowHeaderX, rowHeaderY);
 
-                    int fieldX = maximumLabelWidth + horizontalSpacing;
+                    // Position the field
+                    int fieldX = FLAG_HIGHLIGHT_PADDING + maximumRowHeaderWidth + horizontalSpacing;
                     int fieldY = rowY + (baseline - fieldAscent);
                     field.setLocation(fieldX, fieldY);
-
-                    // Vertically center the flag on the label
-                    flagImageView.setSize(flagImageView.getPreferredSize());
-                    int flagImageY = labelY + (labelSize.height - flagImageView.getHeight()) / 2;
-                    flagImageView.setLocation(fieldX + field.getWidth() + flagImageOffset, flagImageY);
 
                     // Update the row y-coordinate
                     rowY += rowHeight + verticalSpacing;
                 } else {
-                    // Hide the row components
-                    label.setVisible(false);
-                    flagImageView.setVisible(false);
+                    // Hide the row header
+                    rowHeader.setVisible(false);
                 }
             }
         }
@@ -440,48 +433,19 @@ public class TerraFormSkin extends ContainerSkin
     public void paint(Graphics2D graphics) {
         super.paint(graphics);
 
-        // TODO
-    }
+        Form form = (Form)getComponent();
+        Form.SectionSequence sections = form.getSections();
 
-    public Insets getPadding() {
-        return padding;
-    }
+        for (int sectionIndex = 0, sectionCount = sections.getLength();
+            sectionIndex < sectionCount; sectionIndex++) {
+            Form.Section section = sections.get(sectionIndex);
 
-    public void setPadding(Insets padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
+            for (int fieldIndex = 0, fieldCount = section.getLength();
+                fieldIndex < fieldCount; fieldIndex++) {
+                // TODO
+                // Component field = section.get(fieldIndex);
+            }
         }
-
-        this.padding = padding;
-        invalidateComponent();
-    }
-
-    public final void setPadding(Dictionary<String, ?> padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
-        setPadding(new Insets(padding));
-    }
-
-    public final void setPadding(int padding) {
-        setPadding(new Insets(padding));
-    }
-
-    public final void setPadding(Number padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
-        setPadding(padding.intValue());
-    }
-
-    public final void setPadding(String padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
-        setPadding(Insets.decode(padding));
     }
 
     public int getHorizontalSpacing() {
@@ -492,6 +456,7 @@ public class TerraFormSkin extends ContainerSkin
         if (horizontalSpacing < 0) {
             throw new IllegalArgumentException("horizontalSpacing is negative.");
         }
+
         this.horizontalSpacing = horizontalSpacing;
         invalidateComponent();
     }
@@ -512,6 +477,7 @@ public class TerraFormSkin extends ContainerSkin
         if (verticalSpacing < 0) {
             throw new IllegalArgumentException("verticalSpacing is negative.");
         }
+
         this.verticalSpacing = verticalSpacing;
         invalidateComponent();
     }
@@ -529,7 +495,14 @@ public class TerraFormSkin extends ContainerSkin
     }
 
     public void setFlagImageOffset(int flagImageOffset) {
+        if (flagImageOffset < 0) {
+            throw new IllegalArgumentException("flagImageOffset is negative.");
+        }
+
         this.flagImageOffset = flagImageOffset;
+
+        // TODO Set spacing style of all existing row headers to flagImageOffset
+
         invalidateComponent();
     }
 
@@ -556,6 +529,9 @@ public class TerraFormSkin extends ContainerSkin
 
     public void setShowFlagMessagesInline(boolean showFlagMessagesInline) {
         this.showFlagMessagesInline = showFlagMessagesInline;
+
+        // TODO?
+
         invalidateComponent();
     }
 
@@ -574,6 +550,9 @@ public class TerraFormSkin extends ContainerSkin
 
     public void setLeftAlignLabels(boolean leftAlignLabels) {
         this.leftAlignLabels = leftAlignLabels;
+
+        // TODO Set horizontal alignment style of all existing row headers to left or right
+
         invalidateComponent();
     }
 
@@ -647,7 +626,6 @@ public class TerraFormSkin extends ContainerSkin
         updateFieldFlag(section, section.indexOf(field));
     }
 
-    // Implementation methods
     private void insertSection(Form.Section section, int index) {
         Form form = (Form)getComponent();
 
@@ -656,12 +634,11 @@ public class TerraFormSkin extends ContainerSkin
         separators.insert(separator, index);
         form.add(separator);
 
-        // Insert field label and flag image view lists
-        ArrayList<Label> sectionLabels = new ArrayList<Label>();
-        labels.insert(sectionLabels, index);
+        // Insert row header list
+        ArrayList<BoxPane> sectionRowHeaders = new ArrayList<BoxPane>();
+        rowHeaders.insert(sectionRowHeaders, index);
 
-        ArrayList<ImageView> sectionFlagImageViews = new ArrayList<ImageView>();
-        flagImageViews.insert(sectionFlagImageViews, index);
+        // TODO Insert flag message list, if inline
 
         // Insert fields
         for (int i = 0, n = section.getLength(); i < n; i++) {
@@ -680,9 +657,10 @@ public class TerraFormSkin extends ContainerSkin
             removeFields(index + i, 0, removed.get(i));
         }
 
-        // Remove field label and flag image view lists
-        labels.remove(index, count);
-        flagImageViews.remove(index, count);
+        // Remove row header list
+        rowHeaders.remove(index, count);
+
+        // TODO Remove flag message list, if inline
 
         // Remove separators
         Sequence<Separator> removedSeparators = separators.remove(index, count);
@@ -697,16 +675,24 @@ public class TerraFormSkin extends ContainerSkin
         Form form = (Form)getComponent();
         int sectionIndex = form.getSections().indexOf(section);
 
-        // Create the label
-        Label label = new Label();
-        labels.get(sectionIndex).insert(label, index);
-        form.add(label);
-        updateFieldLabel(section, index);
+        // Create the row header
+        BoxPane rowHeader = new BoxPane();
+        rowHeader.getStyles().put("horizontalAlignment", leftAlignLabels ?
+            HorizontalAlignment.LEFT : HorizontalAlignment.RIGHT);
+        rowHeader.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
 
-        // Create the flag image view
         ImageView flagImageView = new ImageView();
-        flagImageViews.get(sectionIndex).insert(flagImageView, index);
-        form.add(flagImageView);
+        flagImageView.setPreferredSize(FLAG_IMAGE_SIZE, FLAG_IMAGE_SIZE);
+        rowHeader.add(flagImageView);
+
+        Label label = new Label();
+        rowHeader.add(label);
+
+        rowHeaders.get(sectionIndex).insert(rowHeader, index);
+        form.add(rowHeader);
+
+        // Update the field label and flag
+        updateFieldLabel(section, index);
         updateFieldFlag(section, index);
 
         invalidateComponent();
@@ -716,16 +702,10 @@ public class TerraFormSkin extends ContainerSkin
         Form form = (Form)getComponent();
         int count = removed.getLength();
 
-        // Remove the labels
-        Sequence<Label> removedLabels = labels.get(sectionIndex).remove(index, count);
+        // Remove the row headers
+        Sequence<BoxPane> removedRowHeaders = rowHeaders.get(sectionIndex).remove(index, count);
         for (int i = 0; i < count; i++) {
-            form.remove(removedLabels.get(i));
-        }
-
-        // Remove the flag image views
-        Sequence<ImageView> removedFlagImageViews = flagImageViews.get(sectionIndex).remove(index, count);
-        for (int i = 0; i < count; i++) {
-            form.remove(removedFlagImageViews.get(i));
+            form.remove(removedRowHeaders.get(i));
         }
 
         invalidateComponent();
@@ -744,7 +724,8 @@ public class TerraFormSkin extends ContainerSkin
         Component field = section.get(fieldIndex);
 
         int sectionIndex = form.getSections().indexOf(section);
-        Label label = labels.get(sectionIndex).get(fieldIndex);
+        BoxPane rowHeader = rowHeaders.get(sectionIndex).get(fieldIndex);
+        Label label = (Label)rowHeader.get(1);
         String labelText = Form.getLabel(field);
         label.setText((labelText == null) ? "" : labelText + delimiter);
     }
@@ -754,7 +735,8 @@ public class TerraFormSkin extends ContainerSkin
         Component field = section.get(fieldIndex);
 
         int sectionIndex = form.getSections().indexOf(section);
-        ImageView flagImageView = flagImageViews.get(sectionIndex).get(fieldIndex);
+        BoxPane rowHeader = rowHeaders.get(sectionIndex).get(fieldIndex);
+        ImageView flagImageView = (ImageView)rowHeader.get(0);
         Form.Flag flag = Form.getFlag(field);
 
         Image flagImage = null;
@@ -768,6 +750,6 @@ public class TerraFormSkin extends ContainerSkin
         }
 
         flagImageView.setImage(flagImage);
-        flagImageView.setTooltipText(flagMessage);
+        field.setTooltipText(flagMessage);
     }
 }
