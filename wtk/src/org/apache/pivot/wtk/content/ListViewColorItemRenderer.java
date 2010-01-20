@@ -44,6 +44,11 @@ public class ListViewColorItemRenderer extends ListViewItemRenderer {
             return SIZE;
         }
 
+        @Override
+        public int getBaseline() {
+            return SIZE - 2;
+        }
+
         public Color getColor() {
             return color;
         }

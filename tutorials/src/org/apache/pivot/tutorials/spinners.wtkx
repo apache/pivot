@@ -23,7 +23,7 @@ limitations under the License.
         <content>
             <BoxPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:8, right:4}}">
                 <Label text="Spinners" styles="{font:{bold:true}}"/>
-                <Form>
+                <Form styles="{showFlagIcons:false, showFlagHighlight:false}">
                     <sections>
                         <Form.Section>
                             <Spinner Form.label="Basic" preferredWidth="60"
@@ -43,7 +43,7 @@ limitations under the License.
         <content>
             <BoxPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:8, right:4}}">
                 <Label text="Sliders" styles="{font:{bold:true}}"/>
-                <Form>
+                <Form styles="{showFlagIcons:false, showFlagHighlight:false}">
                     <sections>
                         <Form.Section>
                             <Slider wtkx:id="redSlider" Form.label="Red" range="{start:0, end:255}" value="0"/>
