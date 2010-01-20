@@ -19,23 +19,32 @@ package org.apache.pivot.wtk.skin.terra;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.GeneralPath;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.ComponentMouseListener;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Form;
 import org.apache.pivot.wtk.FormAttributeListener;
 import org.apache.pivot.wtk.FormListener;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.ImageView;
+import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.MessageType;
+import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Separator;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.VerticalAlignment;
+import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtk.effects.Decorator;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.skin.ContainerSkin;
 
@@ -44,6 +53,53 @@ import org.apache.pivot.wtk.skin.ContainerSkin;
  */
 public class TerraFormSkin extends ContainerSkin
     implements FormListener, FormAttributeListener {
+    private class FieldIdentifierDecorator implements Decorator {
+        private Color color;
+        private Graphics2D graphics = null;
+
+        public FieldIdentifierDecorator(Color color) {
+            this.color = color;
+        }
+
+        @Override
+        public Graphics2D prepare(Component component, Graphics2D graphics) {
+            this.graphics = graphics;
+            return graphics;
+        }
+
+        @Override
+        public void update() {
+            GeneralPath arrow = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
+            arrow.moveTo(FIELD_INDICATOR_OFFSET, 0);
+            arrow.lineTo(FIELD_INDICATOR_OFFSET + FIELD_INDICATOR_WIDTH / 2, -FIELD_INDICATOR_HEIGHT);
+            arrow.lineTo(FIELD_INDICATOR_OFFSET + FIELD_INDICATOR_WIDTH, 0);
+            arrow.closePath();
+
+            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+
+            graphics.setStroke(new BasicStroke(0));
+            graphics.setPaint(color);
+
+            graphics.draw(arrow);
+            graphics.fill(arrow);
+
+            graphics = null;
+        }
+
+        @Override
+        public Bounds getBounds(Component component) {
+            return new Bounds(FIELD_INDICATOR_OFFSET, -FIELD_INDICATOR_HEIGHT,
+                FIELD_INDICATOR_WIDTH, FIELD_INDICATOR_HEIGHT);
+        }
+
+        @Override
+        public AffineTransform getTransform(Component component) {
+            return new AffineTransform();
+        }
+    }
+
+
     private ArrayList<Separator> separators = new ArrayList<Separator>();
     private ArrayList<ArrayList<BoxPane>> rowHeaders = new ArrayList<ArrayList<BoxPane>>();
     // TODO private ArrayList<ArrayList<Label>> flagMessages = new ArrayList<ArrayList<Label>>();
@@ -59,8 +115,111 @@ public class TerraFormSkin extends ContainerSkin
     private boolean leftAlignLabels = false;
     private String delimiter = DEFAULT_DELIMITER;
 
+    private Window flagMessageWindow = null;
+
+    private ComponentMouseListener fieldMouseListener = new ComponentMouseListener.Adapter() {
+        @Override
+        public void mouseOver(Component component) {
+            Form.Flag flag = Form.getFlag(component);
+
+            if (flag != null) {
+                String message = flag.getMessage();
+                if (message != null) {
+                    MessageType messageType = flag.getMessageType();
+                    Label label = new Label(message);
+                    label.getStyles().put("padding", new Insets(3, 4, 3, 4));
+
+                    TerraTheme theme = (TerraTheme)Theme.getTheme();
+
+                    Color color = null;
+                    Color backgroundColor = null;
+
+                    switch (messageType) {
+                        case ERROR: {
+                            color = theme.getColor(4);
+                            backgroundColor = theme.getColor(22);
+                            break;
+                        }
+
+                        case WARNING: {
+                            color = theme.getColor(1);
+                            backgroundColor = theme.getColor(25);
+                            break;
+                        }
+
+                        case QUESTION: {
+                            color = theme.getColor(4);
+                            backgroundColor = theme.getColor(16);
+                            break;
+                        }
+
+                        case INFO: {
+                            color = theme.getColor(1);
+                            backgroundColor = theme.getColor(10);
+                            break;
+                        }
+                    }
+
+                    label.getStyles().put("color", color);
+                    label.getStyles().put("backgroundColor", backgroundColor);
+
+                    flagMessageWindow = new Window(label);
+                    flagMessageWindow.getDecorators().add(new FieldIdentifierDecorator(backgroundColor));
+
+                    Point location = component.mapPointToAncestor(component.getDisplay(), 0,
+                        component.getHeight());
+
+                    int y = location.y + FIELD_INDICATOR_HEIGHT - 4;
+                    if (showFlagHighlight) {
+                        y += FLAG_HIGHLIGHT_PADDING;
+                    }
+
+                    flagMessageWindow.setLocation(location.x, y);
+                    flagMessageWindow.open(component.getWindow());
+
+                    // Set a timer to hide the message
+                    scheduledHideFlagMessageCallback =
+                        ApplicationContext.scheduleCallback(hideFlagMessageCallback, HIDE_FLAG_MESSAGE_DELAY);
+                }
+            }
+        }
+
+        @Override
+        public void mouseOut(Component component) {
+            if (flagMessageWindow != null) {
+                flagMessageWindow.close();
+            }
+
+            if (scheduledHideFlagMessageCallback != null) {
+                scheduledHideFlagMessageCallback.cancel();
+            }
+
+            flagMessageWindow = null;
+            scheduledHideFlagMessageCallback = null;
+        }
+    };
+
+    private Runnable hideFlagMessageCallback = new Runnable() {
+        public void run() {
+            if (flagMessageWindow != null) {
+                flagMessageWindow.close();
+            }
+
+            // TODO Fade the message
+
+            flagMessageWindow = null;
+            scheduledHideFlagMessageCallback = null;
+        }
+    };
+
+    private ApplicationContext.ScheduledCallback scheduledHideFlagMessageCallback = null;
+
     private static final int FLAG_IMAGE_SIZE = 16;
     private static final int FLAG_HIGHLIGHT_PADDING = 2;
+    private static final int FIELD_INDICATOR_WIDTH = 13;
+    private static final int FIELD_INDICATOR_HEIGHT = 6;
+    private static final int FIELD_INDICATOR_OFFSET = 10;
+    private static final int HIDE_FLAG_MESSAGE_DELAY = 5000;
 
     private static final String DEFAULT_DELIMITER = ":";
 
@@ -481,23 +640,24 @@ public class TerraFormSkin extends ContainerSkin
 
                 Form.Flag flag = Form.getFlag(field);
                 if (flag != null && showFlagHighlight) {
+                    TerraTheme theme = (TerraTheme)Theme.getTheme();
                     MessageType messageType = flag.getMessageType();
-                    // TODO Get colors from theme
+
                     Color highlightColor = null;
 
                     switch (messageType) {
                         case ERROR: {
-                            highlightColor = Color.RED;
+                            highlightColor = theme.getColor(22);
                             break;
                         }
 
                         case WARNING: {
-                            highlightColor = Color.YELLOW;
+                            highlightColor = theme.getColor(25);
                             break;
                         }
 
                         case QUESTION: {
-                            highlightColor = Color.BLUE;
+                            highlightColor = theme.getColor(16);
                             break;
                         }
                     }
@@ -824,6 +984,11 @@ public class TerraFormSkin extends ContainerSkin
         rowHeaders.get(sectionIndex).insert(rowHeader, index);
         form.add(rowHeader);
 
+        // Add mouse listener
+        if (!showFlagMessagesInline) {
+            field.getComponentMouseListeners().add(fieldMouseListener);
+        }
+
         // Update the field label and flag
         updateFieldLabel(section, index);
         updateFieldFlag(section, index);
@@ -837,8 +1002,15 @@ public class TerraFormSkin extends ContainerSkin
 
         // Remove the row headers
         Sequence<BoxPane> removedRowHeaders = rowHeaders.get(sectionIndex).remove(index, count);
+
         for (int i = 0; i < count; i++) {
             form.remove(removedRowHeaders.get(i));
+
+            // Remove mouse listener
+            if (!showFlagMessagesInline) {
+                Component field = removed.get(i);
+                field.getComponentMouseListeners().remove(fieldMouseListener);
+            }
         }
 
         invalidateComponent();
@@ -867,50 +1039,18 @@ public class TerraFormSkin extends ContainerSkin
         Form form = (Form)getComponent();
         Component field = section.get(fieldIndex);
 
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
 
         int sectionIndex = form.getSections().indexOf(section);
         BoxPane rowHeader = rowHeaders.get(sectionIndex).get(fieldIndex);
         ImageView flagImageView = (ImageView)rowHeader.get(0);
-        Label label = (Label)rowHeader.get(1);
 
         Form.Flag flag = Form.getFlag(field);
         if (flag == null) {
             flagImageView.setImage((Image)null);
-            label.getStyles().put("color", 1);
-            field.setTooltipText(null);
         } else {
             MessageType messageType = flag.getMessageType();
             flagImageView.setImage(theme.getSmallMessageIcon(messageType));
-
-            // TODO Get colors from theme
-            Color labelColor = null;
-
-            switch (messageType) {
-                case ERROR: {
-                    labelColor = Color.RED;
-                    break;
-                }
-
-                case WARNING: {
-                    labelColor = Color.YELLOW;
-                    break;
-                }
-
-                case QUESTION: {
-                    labelColor = Color.BLACK;
-                    break;
-                }
-
-                case INFO: {
-                    labelColor = Color.BLACK;
-                    break;
-                }
-            }
-
-            label.getStyles().put("color", labelColor);
-
-            field.setTooltipText(flag.getMessage());
         }
 
         if (showFlagHighlight) {
