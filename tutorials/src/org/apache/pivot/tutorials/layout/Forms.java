@@ -35,6 +35,8 @@ import org.apache.pivot.wtkx.WTKXSerializer;
 public class Forms implements Application {
     private Window window = null;
     private BoxPane nameBoxPane = null;
+    private BoxPane homeAddressBoxPane = null;
+    private BoxPane workAddressBoxPane = null;
     private TextInput lastNameTextInput = null;
     private TextInput firstNameTextInput = null;
     private PushButton submitButton = null;
@@ -45,6 +47,8 @@ public class Forms implements Application {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "forms.wtkx");
         nameBoxPane = (BoxPane)wtkxSerializer.get("nameBoxPane");
+        homeAddressBoxPane = (BoxPane)wtkxSerializer.get("homeAddressBoxPane");
+        workAddressBoxPane = (BoxPane)wtkxSerializer.get("workAddressBoxPane");
         lastNameTextInput = (TextInput)wtkxSerializer.get("lastNameTextInput");
         firstNameTextInput = (TextInput)wtkxSerializer.get("firstNameTextInput");
         submitButton = (PushButton)wtkxSerializer.get("submitButton");
@@ -63,6 +67,8 @@ public class Forms implements Application {
                 }
 
                 Form.setFlag(nameBoxPane, flag);
+                Form.setFlag(homeAddressBoxPane, new Form.Flag(MessageType.WARNING, "This is a warning."));
+                Form.setFlag(workAddressBoxPane, new Form.Flag(MessageType.WARNING, "This is also a warning."));
 
                 if (flag == null) {
                     errorLabel.setText(null);

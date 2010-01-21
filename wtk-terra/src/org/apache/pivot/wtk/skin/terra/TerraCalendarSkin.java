@@ -382,7 +382,7 @@ public class TerraCalendarSkin extends CalendarSkin {
         color = theme.getColor(1);
         disabledColor = theme.getColor(7);
         selectionColor = theme.getColor(4);
-        selectionBackgroundColor = theme.getColor(19);
+        selectionBackgroundColor = theme.getColor(13);
         highlightColor = theme.getColor(1);
         highlightBackgroundColor = theme.getColor(10);
         dividerColor = theme.getColor(9);

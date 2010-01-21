@@ -130,7 +130,7 @@ public class TerraFormSkin extends ContainerSkin
 
                         case WARNING: {
                             color = theme.getColor(1);
-                            backgroundColor = theme.getColor(25);
+                            backgroundColor = theme.getColor(19);
                             break;
                         }
 
@@ -205,18 +205,22 @@ public class TerraFormSkin extends ContainerSkin
     private ArrayList<ArrayList<BoxPane>> rowHeaders = new ArrayList<ArrayList<BoxPane>>();
     // TODO private ArrayList<ArrayList<Label>> flagMessages = new ArrayList<ArrayList<Label>>();
 
-    private int horizontalSpacing = 6;
-    private int verticalSpacing = 6;
-    private int flagImageOffset = 4;
-    private boolean fill = false;
-    private boolean showFirstSectionHeading = false;
-    private boolean showFlagIcons = true;
-    private boolean showFlagHighlight = true;
-    private boolean showFlagMessagesInline = false;
-    private boolean leftAlignLabels = false;
-    private String delimiter = DEFAULT_DELIMITER;
+    private int horizontalSpacing;
+    private int verticalSpacing;
+    private int flagImageOffset;
+    private boolean fill;
+    private boolean showFirstSectionHeading;
+    private boolean showFlagIcons;
+    private boolean showFlagHighlight;
+    private boolean showFlagMessagesInline;
+    private boolean leftAlignLabels;
+    private String delimiter;
+    private Image errorMessageIcon = null;
+    private Image warningMessageIcon = null;
+    private Image questionMessageIcon = null;
+    private Image infoMessageIcon = null;
+    private int flagImageWidth = -1;
 
-    private static final int FLAG_IMAGE_SIZE = 16;
     private static final int FLAG_HIGHLIGHT_PADDING = 2;
     private static final int FIELD_INDICATOR_WIDTH = 13;
     private static final int FIELD_INDICATOR_HEIGHT = 6;
@@ -224,6 +228,31 @@ public class TerraFormSkin extends ContainerSkin
     private static final int HIDE_FLAG_MESSAGE_DELAY = 3500;
 
     private static final String DEFAULT_DELIMITER = ":";
+
+    public TerraFormSkin() {
+        horizontalSpacing = 6;
+        verticalSpacing = 6;
+        flagImageOffset = 4;
+        fill = false;
+        showFirstSectionHeading = false;
+        showFlagIcons = true;
+        showFlagHighlight = true;
+        showFlagMessagesInline = false;
+        leftAlignLabels = false;
+        delimiter = DEFAULT_DELIMITER;
+
+        TerraTheme terraTheme = (TerraTheme)Theme.getTheme();
+        errorMessageIcon = terraTheme.getSmallMessageIcon(MessageType.ERROR);
+        warningMessageIcon = terraTheme.getSmallMessageIcon(MessageType.WARNING);
+        questionMessageIcon = terraTheme.getSmallMessageIcon(MessageType.QUESTION);
+        infoMessageIcon = terraTheme.getSmallMessageIcon(MessageType.INFO);
+
+        // Determine maximum icon size
+        flagImageWidth = Math.max(flagImageWidth, errorMessageIcon.getWidth());
+        flagImageWidth = Math.max(flagImageWidth, warningMessageIcon.getWidth());
+        flagImageWidth = Math.max(flagImageWidth, questionMessageIcon.getWidth());
+        flagImageWidth = Math.max(flagImageWidth, infoMessageIcon.getWidth());
+    }
 
     @Override
     public void install(Component component) {
@@ -654,7 +683,7 @@ public class TerraFormSkin extends ContainerSkin
                         }
 
                         case WARNING: {
-                            highlightColor = theme.getColor(24);
+                            highlightColor = theme.getColor(18);
                             break;
                         }
 
@@ -980,7 +1009,7 @@ public class TerraFormSkin extends ContainerSkin
         rowHeader.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
 
         ImageView flagImageView = new ImageView();
-        flagImageView.setPreferredSize(FLAG_IMAGE_SIZE, FLAG_IMAGE_SIZE);
+        flagImageView.setPreferredWidth(flagImageWidth);
         flagImageView.setVisible(showFlagIcons);
 
         rowHeader.add(flagImageView);
@@ -1046,18 +1075,40 @@ public class TerraFormSkin extends ContainerSkin
         Form form = (Form)getComponent();
         Component field = section.get(fieldIndex);
 
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
-
         int sectionIndex = form.getSections().indexOf(section);
         BoxPane rowHeader = rowHeaders.get(sectionIndex).get(fieldIndex);
         ImageView flagImageView = (ImageView)rowHeader.get(0);
 
         Form.Flag flag = Form.getFlag(field);
+
         if (flag == null) {
             flagImageView.setImage((Image)null);
         } else {
             MessageType messageType = flag.getMessageType();
-            flagImageView.setImage(theme.getSmallMessageIcon(messageType));
+            Image messageIcon = null;
+            switch (messageType) {
+                case ERROR: {
+                    messageIcon = errorMessageIcon;
+                    break;
+                }
+
+                case WARNING: {
+                    messageIcon = warningMessageIcon;
+                    break;
+                }
+
+                case QUESTION: {
+                    messageIcon = questionMessageIcon;
+                    break;
+                }
+
+                case INFO: {
+                    messageIcon = infoMessageIcon;
+                    break;
+                }
+            }
+
+            flagImageView.setImage(messageIcon);
         }
 
         if (showFlagHighlight) {

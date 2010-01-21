@@ -28,7 +28,7 @@ limitations under the License.
                     </columns>
                     <rows>
                         <TablePane.Row height="1*">
-                            <Form>
+                            <Form styles="{showFlagIcons:true}">
                                 <sections>
                                     <Form.Section>
                                         <BoxPane wtkx:id="nameBoxPane" Form.label="Name">
@@ -37,7 +37,7 @@ limitations under the License.
                                         </BoxPane>
                                     </Form.Section>
                                     <Form.Section heading="Addresses">
-                                        <BoxPane Form.label="Home" orientation="vertical">
+                                        <BoxPane wtkx:id="homeAddressBoxPane" Form.label="Home" orientation="vertical">
                                             <TextInput prompt="Street" textSize="24"/>
                                             <BoxPane>
                                                 <TextInput prompt="City"/>
@@ -45,7 +45,7 @@ limitations under the License.
                                                 <TextInput prompt="Zip" textSize="10"/>
                                             </BoxPane>
                                         </BoxPane>
-                                        <BoxPane Form.label="Work" orientation="vertical">
+                                        <BoxPane wtkx:id="workAddressBoxPane" Form.label="Work" orientation="vertical">
                                             <TextInput prompt="Street" textSize="24"/>
                                             <BoxPane>
                                                 <TextInput prompt="City"/>

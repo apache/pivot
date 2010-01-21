@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
+import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.serialization.JSONSerializer;
@@ -31,7 +33,6 @@ import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.wtk.Accordion;
 import org.apache.pivot.wtk.ActivityIndicator;
 import org.apache.pivot.wtk.Alert;
-import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Border;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Calendar;
@@ -86,7 +87,9 @@ import org.apache.pivot.wtk.media.Image;
  */
 public final class TerraTheme extends Theme {
     private Font font = null;
-    private Color[] colors = null;
+    private ArrayList<Color> colors = null;
+    private HashMap<MessageType, Image> messageIcons = null;
+    private HashMap<MessageType, Image> smallMessageIcons = null;
 
     public static final String LOCATION_PROPERTY = "org.apache.pivot.wtk.skin.terra.location";
 
@@ -183,16 +186,24 @@ public final class TerraTheme extends Theme {
                 font = Font.decode((String)properties.get("font"));
 
                 List<String> colorCodes = (List<String>)properties.get("colors");
-                colors = new Color[colorCodes.getLength() * 3];
+                colors = new ArrayList<Color>(colorCodes.getLength() * 3);
 
-                for (int i = 0, n = colorCodes.getLength(); i < n; i++) {
-                    int baseIndex = i * 3 + 1;
-                    Color baseColor = Color.decode(colorCodes.get(i));
-
-                    colors[baseIndex] = baseColor;
-                    colors[baseIndex - 1] = darken(baseColor);
-                    colors[baseIndex + 1] = brighten(baseColor);
+                for (String colorCode : colorCodes) {
+                    Color baseColor = Color.decode(colorCode);
+                    colors.add(darken(baseColor));
+                    colors.add(baseColor);
+                    colors.add(brighten(baseColor));
                 }
+
+                Map<String, String> messageIconNames =
+                    (Map<String, String>)properties.get("messageIcons");
+                messageIcons = new HashMap<MessageType, Image>();
+                loadMessageIcons(messageIconNames, messageIcons);
+
+                Map<String, String> smallMessageIconNames =
+                    (Map<String, String>)properties.get("smallMessageIcons");
+                smallMessageIcons = new HashMap<MessageType, Image>();
+                loadMessageIcons(smallMessageIconNames, smallMessageIcons);
             } finally {
                 inputStream.close();
             }
@@ -200,6 +211,22 @@ public final class TerraTheme extends Theme {
             throw new RuntimeException(ex);
         } catch (SerializationException ex) {
             throw new RuntimeException(ex);
+        }
+    }
+
+    private void loadMessageIcons(Map<String, String> messageIconNames,
+        HashMap<MessageType, Image> messageIcons) {
+        for (String messageIconType : messageIconNames) {
+            String messageIconName = messageIconNames.get(messageIconType);
+
+            Image messageIcon;
+            try {
+                messageIcon = Image.load(getClass().getResource(messageIconName));
+            } catch (TaskExecutionException exception) {
+                throw new RuntimeException(exception);
+            }
+
+            messageIcons.put(MessageType.valueOf(messageIconType.toUpperCase()), messageIcon);
         }
     }
 
@@ -227,7 +254,7 @@ public final class TerraTheme extends Theme {
      * A color palette index, from 0 to 23.
      */
     public Color getColor(int index) {
-        return colors[index];
+        return colors.get(index);
     }
 
     /**
@@ -235,57 +262,7 @@ public final class TerraTheme extends Theme {
      * specified type.
      */
     public Image getMessageIcon(MessageType messageType) {
-        String messageIconName;
-
-        switch (messageType) {
-            case ERROR: {
-                messageIconName = "message_type-error-32x32.png";
-                break;
-            }
-
-            case WARNING: {
-                messageIconName = "message_type-warning-32x32.png";
-                break;
-            }
-
-            case QUESTION: {
-                messageIconName = "message_type-question-32x32.png";
-                break;
-            }
-
-            case INFO: {
-                messageIconName = "message_type-info-32x32.png";
-                break;
-            }
-
-            case APPLICATION: {
-                messageIconName = null;
-                break;
-            }
-
-            default: {
-                throw new IllegalArgumentException();
-            }
-        }
-
-        Image messageIcon = null;
-
-        if (messageIconName != null) {
-            URL location = getClass().getResource(messageIconName);
-            messageIcon = (Image)ApplicationContext.getResourceCache().get(location);
-
-            if (messageIcon == null) {
-                try {
-                    messageIcon = Image.load(location);
-                } catch (TaskExecutionException exception) {
-                    throw new RuntimeException(exception);
-                }
-
-                ApplicationContext.getResourceCache().put(location, messageIcon);
-            }
-        }
-
-        return messageIcon;
+        return messageIcons.get(messageType);
     }
 
     /**
@@ -293,57 +270,7 @@ public final class TerraTheme extends Theme {
      * specified type.
      */
     public Image getSmallMessageIcon(MessageType messageType) {
-        String smallMessageIconName;
-
-        switch (messageType) {
-            case ERROR: {
-                smallMessageIconName = "message_type-error-16x16.png";
-                break;
-            }
-
-            case WARNING: {
-                smallMessageIconName = "message_type-warning-16x16.png";
-                break;
-            }
-
-            case QUESTION: {
-                smallMessageIconName = "message_type-question-16x16.png";
-                break;
-            }
-
-            case INFO: {
-                smallMessageIconName = "message_type-info-16x16.png";
-                break;
-            }
-
-            case APPLICATION: {
-                smallMessageIconName = null;
-                break;
-            }
-
-            default: {
-                throw new IllegalArgumentException();
-            }
-        }
-
-        Image smallMessageIcon = null;
-
-        if (smallMessageIconName != null) {
-            URL location = getClass().getResource(smallMessageIconName);
-            smallMessageIcon = (Image)ApplicationContext.getResourceCache().get(location);
-
-            if (smallMessageIcon == null) {
-                try {
-                    smallMessageIcon = Image.load(location);
-                } catch (TaskExecutionException exception) {
-                    throw new RuntimeException(exception);
-                }
-
-                ApplicationContext.getResourceCache().put(location, smallMessageIcon);
-            }
-        }
-
-        return smallMessageIcon;
+        return smallMessageIcons.get(messageType);
     }
 
     /**

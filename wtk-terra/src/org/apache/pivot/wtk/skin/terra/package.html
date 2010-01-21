@@ -23,7 +23,7 @@ Defines skin classes for the "Terra" theme.
 </p>
 <p>
 Terra skins get their colors from the theme's color palette, which contains
-27 indexed colors.  Most Terra skins expose a setter methods for each color
+24 indexed colors.  Most Terra skins expose a setter methods for each color
 style that accepts an integer value; such methods allow callers to style
 the component by referencing the theme's color palette.  The default palette
 is shown below:
@@ -36,7 +36,7 @@ is shown below:
 </font>
 </p>
 
-<p>The font and color palette is defined in a JSON file that should contain a
+<p>The font, color palette, and message icons are defined in a JSON file that should contain a
 <tt>Map</tt> containing the following properties:</p>
 
 <p>
@@ -58,15 +58,30 @@ The default theme font; must be understandable by
 <td><tt>colors</tt></td>
 <td><tt>List&lt;String&gt;</tt></td>
 <td>
-This list should contain 9 colors in a form understandable by
+This list should contain eight colors in a form understandable by
 <tt>java.awt.Color.decode()</tt>. This list represents the theme's
 "base color palette", from which the full color palette is
-derived. Each of these 9 colors will be expanded to three
+derived. Each of these eight colors will be expanded to three
 colors in the final palette: a darker version, the color itself,
 and a lighter version. Thus, the final color palette will contain
-27 colors. For instance, in the <a href="#palette">default color
-palette</a> the "base palette" colors are the colors in the middle
-column.
+24 colors. For instance, in the default color palette, the "base palette"
+colors are the colors in the middle column.
+</td>
+</tr>
+<tr valign="top">
+<td><tt>messageIcons</tt></td>
+<td><tt>Map</tt></td>
+<td>
+Message icon names; must include values for "error", "warning", "question", and "info".
+Names are specified as resource named relative to the <tt>TerraTheme</tt> class.
+</td>
+</tr>
+<tr valign="top">
+<td><tt>smallMessageIcons</tt></td>
+<td><tt>Map</tt></td>
+<td>
+Small message icon names; must include values for "error", "warning", "question", and "info".
+Names are specified as resource named relative to the <tt>TerraTheme</tt> class.
 </td>
 </tr>
 </table>

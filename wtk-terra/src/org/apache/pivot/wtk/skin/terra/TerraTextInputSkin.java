@@ -172,7 +172,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         strictValidation = false;
 
         selectionColor = theme.getColor(4);
-        selectionBackgroundColor = theme.getColor(19);
+        selectionBackgroundColor = theme.getColor(13);
         inactiveSelectionColor = theme.getColor(1);
         inactiveSelectionBackgroundColor = theme.getColor(9);
 

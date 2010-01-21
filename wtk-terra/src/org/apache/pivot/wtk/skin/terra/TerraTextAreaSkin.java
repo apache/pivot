@@ -27,7 +27,7 @@ public class TerraTextAreaSkin extends TextAreaSkin {
         setColor(1);
         setInactiveColor(7);
         setSelectionColor(4);
-        setSelectionBackgroundColor(19);
+        setSelectionBackgroundColor(13);
         setInactiveSelectionColor(1);
         setInactiveSelectionBackgroundColor(9);
     }

@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 {   font: "Verdana 11",
+
     colors: [
         "#000000",
         "#ffffff",
@@ -22,8 +23,21 @@
         "#dddcd5",
         "#2b5580",
         "#3c77b2",
-        "#14538b",
-        "#eb0000",
-        "#ffe480"
-    ]
+        "#ffe480",
+        "#eb0000"
+    ],
+
+    messageIcons: {
+        error: "message_type-error-32x32.png",
+        warning: "message_type-warning-32x32.png",
+        question: "message_type-question-32x32.png",
+        info: "message_type-info-32x32.png"
+    },
+
+    smallMessageIcons: {
+        error: "message_type-error-16x16.png",
+        warning: "message_type-warning-16x16.png",
+        question: "message_type-question-16x16.png",
+        info: "message_type-info-16x16.png"
+    }
 }
