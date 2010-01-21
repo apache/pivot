@@ -23,7 +23,21 @@
         "#0a0a0a",
         "#f0751c",
         "#ff7300",
-        "#f08234",
+        "#ffe480",
         "#c13719"
-    ]
- }
+    ],
+
+    messageIcons: {
+        error: "message_type-error-32x32.png",
+        warning: "message_type-warning-32x32.png",
+        question: "message_type-question-32x32.png",
+        info: "message_type-info-32x32.png"
+    },
+
+    smallMessageIcons: {
+        error: "message_type-error-16x16.png",
+        warning: "message_type-warning-16x16.png",
+        question: "message_type-question-16x16.png",
+        info: "message_type-info-16x16.png"
+    }
+}

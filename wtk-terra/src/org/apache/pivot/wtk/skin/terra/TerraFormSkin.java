@@ -57,12 +57,7 @@ import org.apache.pivot.wtk.skin.ContainerSkin;
 public class TerraFormSkin extends ContainerSkin
     implements FormListener, FormAttributeListener {
     private class FieldIdentifierDecorator implements Decorator {
-        private Color color;
         private Graphics2D graphics = null;
-
-        public FieldIdentifierDecorator(Color color) {
-            this.color = color;
-        }
 
         @Override
         public Graphics2D prepare(Component component, Graphics2D graphics) {
@@ -82,7 +77,7 @@ public class TerraFormSkin extends ContainerSkin
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
             graphics.setStroke(new BasicStroke(0));
-            graphics.setPaint(color);
+            graphics.setColor((Color)flagMessageWindow.getStyles().get("backgroundColor"));
 
             graphics.draw(arrow);
             graphics.fill(arrow);
@@ -102,108 +97,12 @@ public class TerraFormSkin extends ContainerSkin
         }
     }
 
-    private class FieldMouseListener extends ComponentMouseListener.Adapter {
-        private Window flagMessageWindow = null;
-
-        @Override
-        public void mouseOver(Component component) {
-            Form.Flag flag = Form.getFlag(component);
-
-            if (flag != null) {
-                String message = flag.getMessage();
-                if (message != null) {
-                    MessageType messageType = flag.getMessageType();
-                    Label label = new Label(message);
-                    label.getStyles().put("padding", new Insets(3, 4, 3, 4));
-
-                    TerraTheme theme = (TerraTheme)Theme.getTheme();
-
-                    Color color = null;
-                    Color backgroundColor = null;
-
-                    switch (messageType) {
-                        case ERROR: {
-                            color = theme.getColor(4);
-                            backgroundColor = theme.getColor(22);
-                            break;
-                        }
-
-                        case WARNING: {
-                            color = theme.getColor(1);
-                            backgroundColor = theme.getColor(19);
-                            break;
-                        }
-
-                        case QUESTION: {
-                            color = theme.getColor(4);
-                            backgroundColor = theme.getColor(16);
-                            break;
-                        }
-
-                        case INFO: {
-                            color = theme.getColor(1);
-                            backgroundColor = theme.getColor(10);
-                            break;
-                        }
-                    }
-
-                    label.getStyles().put("color", color);
-                    label.getStyles().put("backgroundColor", backgroundColor);
-
-                    flagMessageWindow = new Window(label);
-                    flagMessageWindow.getDecorators().add(new DropShadowDecorator(3, 3, 3));
-                    flagMessageWindow.getDecorators().add(new FieldIdentifierDecorator(backgroundColor));
-
-                    flagMessageWindow.getWindowStateListeners().add(new WindowStateListener.Adapter() {
-                        private ApplicationContext.ScheduledCallback scheduledHideFlagMessageCallback = null;
-
-                        @Override
-                        public void windowOpened(Window window) {
-                            // Set a timer to hide the message
-                            Runnable hideFlagMessageCallback = new Runnable() {
-                                public void run() {
-                                    flagMessageWindow.close();
-                                }
-                            };
-
-                            scheduledHideFlagMessageCallback =
-                                ApplicationContext.scheduleCallback(hideFlagMessageCallback,
-                                    HIDE_FLAG_MESSAGE_DELAY);
-                        }
-
-                        @Override
-                        public void windowClosed(Window window, Display display, Window owner) {
-                            scheduledHideFlagMessageCallback.cancel();
-                            flagMessageWindow = null;
-                        }
-                    });
-
-                    // Open the window
-                    Point location = component.mapPointToAncestor(component.getDisplay(), 0,
-                        component.getHeight());
-
-                    int y = location.y + FIELD_INDICATOR_HEIGHT - 4;
-                    if (showFlagHighlight) {
-                        y += FLAG_HIGHLIGHT_PADDING;
-                    }
-
-                    flagMessageWindow.setLocation(location.x, y);
-                    flagMessageWindow.open(component.getWindow());
-                }
-            }
-        }
-
-        @Override
-        public void mouseOut(Component component) {
-            if (flagMessageWindow != null) {
-                flagMessageWindow.close();
-            }
-        }
-    };
-
     private ArrayList<Separator> separators = new ArrayList<Separator>();
     private ArrayList<ArrayList<BoxPane>> rowHeaders = new ArrayList<ArrayList<BoxPane>>();
-    // TODO private ArrayList<ArrayList<Label>> flagMessages = new ArrayList<ArrayList<Label>>();
+
+    private Label flagMessageLabel = new Label();
+    private Window flagMessageWindow = new Window(flagMessageLabel);
+    private ArrayList<ArrayList<Label>> flagMessageLabels = new ArrayList<ArrayList<Label>>();
 
     private int horizontalSpacing;
     private int verticalSpacing;
@@ -219,7 +118,79 @@ public class TerraFormSkin extends ContainerSkin
     private Image warningMessageIcon = null;
     private Image questionMessageIcon = null;
     private Image infoMessageIcon = null;
+
+    // TODO Add values for flag message colors
+
     private int flagImageWidth = -1;
+
+    private ComponentMouseListener fieldMouseListener = new ComponentMouseListener.Adapter() {
+        @Override
+        public void mouseOver(Component component) {
+            if (!showFlagMessagesInline) {
+                Form.Flag flag = Form.getFlag(component);
+
+                if (flag != null) {
+                    String message = flag.getMessage();
+
+                    if (message != null) {
+                        flagMessageLabel.setText(message);
+
+                        MessageType messageType = flag.getMessageType();
+                        TerraTheme theme = (TerraTheme)Theme.getTheme();
+
+                        Color color = null;
+                        Color backgroundColor = null;
+
+                        switch (messageType) {
+                            case ERROR: {
+                                color = theme.getColor(4);
+                                backgroundColor = theme.getColor(22);
+                                break;
+                            }
+
+                            case WARNING: {
+                                color = theme.getColor(1);
+                                backgroundColor = theme.getColor(19);
+                                break;
+                            }
+
+                            case QUESTION: {
+                                color = theme.getColor(4);
+                                backgroundColor = theme.getColor(16);
+                                break;
+                            }
+
+                            case INFO: {
+                                color = theme.getColor(1);
+                                backgroundColor = theme.getColor(10);
+                                break;
+                            }
+                        }
+
+                        flagMessageLabel.getStyles().put("color", color);
+                        flagMessageWindow.getStyles().put("backgroundColor", backgroundColor);
+
+                        // Open the window
+                        Point location = component.mapPointToAncestor(component.getDisplay(), 0,
+                            component.getHeight());
+
+                        int y = location.y + FIELD_INDICATOR_HEIGHT - 4;
+                        if (showFlagHighlight) {
+                            y += FLAG_HIGHLIGHT_PADDING;
+                        }
+
+                        flagMessageWindow.setLocation(location.x, y);
+                        flagMessageWindow.open(component.getWindow());
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void mouseOut(Component component) {
+            flagMessageWindow.close();
+        }
+    };
 
     private static final int FLAG_HIGHLIGHT_PADDING = 2;
     private static final int FIELD_INDICATOR_WIDTH = 13;
@@ -252,6 +223,35 @@ public class TerraFormSkin extends ContainerSkin
         flagImageWidth = Math.max(flagImageWidth, warningMessageIcon.getWidth());
         flagImageWidth = Math.max(flagImageWidth, questionMessageIcon.getWidth());
         flagImageWidth = Math.max(flagImageWidth, infoMessageIcon.getWidth());
+
+        // Create the flag message popup
+        flagMessageLabel.getStyles().put("padding", new Insets(3, 4, 3, 4));
+
+        flagMessageWindow.getDecorators().add(new DropShadowDecorator(3, 3, 3));
+        flagMessageWindow.getDecorators().add(new FieldIdentifierDecorator());
+
+        flagMessageWindow.getWindowStateListeners().add(new WindowStateListener.Adapter() {
+            private ApplicationContext.ScheduledCallback scheduledHideFlagMessageCallback = null;
+
+            @Override
+            public void windowOpened(Window window) {
+                // Set a timer to hide the message
+                Runnable hideFlagMessageCallback = new Runnable() {
+                    public void run() {
+                        flagMessageWindow.close();
+                    }
+                };
+
+                scheduledHideFlagMessageCallback =
+                    ApplicationContext.scheduleCallback(hideFlagMessageCallback,
+                        HIDE_FLAG_MESSAGE_DELAY);
+            }
+
+            @Override
+            public void windowClosed(Window window, Display display, Window owner) {
+                scheduledHideFlagMessageCallback.cancel();
+            }
+        });
     }
 
     @Override
@@ -270,12 +270,11 @@ public class TerraFormSkin extends ContainerSkin
 
     @Override
     public int getPreferredWidth(int height) {
-        // TODO Respect showFlagMessagesInline
-
         int preferredWidth = 0;
 
         int maximumRowHeaderWidth = 0;
         int maximumFieldWidth = 0;
+        int maximumFlagMessageWidth = 0;
         int maximumSeparatorWidth = 0;
 
         Form form = (Form)getComponent();
@@ -302,12 +301,23 @@ public class TerraFormSkin extends ContainerSkin
                         rowHeader.getPreferredWidth(-1));
                     maximumFieldWidth = Math.max(maximumFieldWidth,
                         field.getPreferredWidth(-1));
+
+                    if (showFlagMessagesInline) {
+                        Label flagMessageLabel = flagMessageLabels.get(sectionIndex).get(fieldIndex);
+                        maximumFlagMessageWidth = Math.max(maximumFlagMessageWidth,
+                            flagMessageLabel.getPreferredWidth(-1));
+                    }
                 }
             }
         }
 
-        preferredWidth = Math.max(maximumRowHeaderWidth + horizontalSpacing + maximumFieldWidth,
-            maximumSeparatorWidth);
+        preferredWidth = maximumRowHeaderWidth + horizontalSpacing + maximumFieldWidth;
+
+        if (showFlagMessagesInline) {
+            preferredWidth += horizontalSpacing + maximumFlagMessageWidth;
+        }
+
+        preferredWidth = Math.max(preferredWidth, maximumSeparatorWidth);
 
         if (showFlagHighlight) {
             preferredWidth += FLAG_HIGHLIGHT_PADDING * 2;
@@ -318,41 +328,13 @@ public class TerraFormSkin extends ContainerSkin
 
     @Override
     public int getPreferredHeight(int width) {
-        // TODO Respect showFlagMessagesInline
-
         int preferredHeight = 0;
 
         Form form = (Form)getComponent();
         Form.SectionSequence sections = form.getSections();
 
-        // If justified and constrained, determine field width constraint
-        int fieldWidth = -1;
-
-        if (fill && width != -1) {
-            int maximumRowHeaderWidth = 0;
-
-            for (int sectionIndex = 0, sectionCount = sections.getLength();
-                sectionIndex < sectionCount; sectionIndex++) {
-                Form.Section section = sections.get(sectionIndex);
-
-                for (int fieldIndex = 0, fieldCount = section.getLength();
-                    fieldIndex < fieldCount; fieldIndex++) {
-                    Component field = section.get(fieldIndex);
-
-                    if (field.isVisible()) {
-                        BoxPane rowHeader = rowHeaders.get(sectionIndex).get(fieldIndex);
-                        maximumRowHeaderWidth = Math.max(maximumRowHeaderWidth,
-                            rowHeader.getPreferredWidth(-1));
-                    }
-                }
-            }
-
-            fieldWidth = Math.max(0, width - (maximumRowHeaderWidth + horizontalSpacing));
-
-            if (showFlagHighlight) {
-                fieldWidth = Math.max(0, fieldWidth - FLAG_HIGHLIGHT_PADDING * 2);
-            }
-        }
+        // Determine the field width constraint
+        int fieldWidth = (fill && width != -1) ? getFieldWidth(width) : -1;
 
         for (int sectionIndex = 0, sectionCount = sections.getLength();
             sectionIndex < sectionCount; sectionIndex++) {
@@ -370,22 +352,16 @@ public class TerraFormSkin extends ContainerSkin
                 Component field = section.get(fieldIndex);
 
                 if (field.isVisible()) {
+                    // Determine the row header size and baseline
                     BoxPane rowHeader = rowHeaders.get(sectionIndex).get(fieldIndex);
 
-                    // Determine the row header size and baseline
                     Dimensions rowHeaderSize = rowHeader.getPreferredSize();
-                    int rowHeaderAscent = rowHeader.getBaseline(rowHeaderSize.width,
-                        rowHeaderSize.height);
-                    if (rowHeaderAscent == -1) {
-                        rowHeaderAscent = rowHeaderSize.height;
-                    }
-
+                    int rowHeaderAscent = rowHeader.getBaseline(rowHeaderSize.width, rowHeaderSize.height);
                     int rowHeaderDescent = rowHeaderSize.height - rowHeaderAscent;
 
                     // Determine the field size and baseline
                     Dimensions fieldSize;
-                    if (fill
-                        && fieldWidth != -1) {
+                    if (fill && fieldWidth != -1) {
                         fieldSize = new Dimensions(fieldWidth, field.getPreferredHeight(fieldWidth));
                     } else {
                         fieldSize = field.getPreferredSize();
@@ -398,9 +374,26 @@ public class TerraFormSkin extends ContainerSkin
 
                     int fieldDescent = fieldSize.height - fieldAscent;
 
-                    // Determine the baseline and row height
-                    int baseline = Math.max(rowHeaderAscent, fieldAscent);
-                    int rowHeight = baseline + Math.max(rowHeaderDescent, fieldDescent);
+                    // Determine the message label size and baseline
+                    int flagMessageLabelAscent = 0;
+                    int flagMessageLabelDescent = 0;
+
+                    if (showFlagMessagesInline) {
+                        Label flagMessageLabel = flagMessageLabels.get(sectionIndex).get(fieldIndex);
+
+                        if (flagMessageLabel != null) {
+                            Dimensions flagMessageLabelSize = flagMessageLabel.getPreferredSize();
+                            flagMessageLabelAscent = flagMessageLabel.getBaseline(flagMessageLabelSize.width,
+                                flagMessageLabelSize.height);
+                            flagMessageLabelDescent = flagMessageLabelSize.height - flagMessageLabelAscent;
+                        }
+                    }
+
+                    // Determine the row height
+                    int maximumAscent = Math.max(rowHeaderAscent, Math.max(fieldAscent, flagMessageLabelAscent));
+                    int maximumDescent = Math.max(rowHeaderDescent, Math.max(fieldDescent, flagMessageLabelDescent));
+
+                    int rowHeight = maximumAscent + maximumDescent;
 
                     preferredHeight += rowHeight;
 
@@ -426,41 +419,13 @@ public class TerraFormSkin extends ContainerSkin
 
     @Override
     public int getBaseline(int width, int height) {
-        // TODO Respect showFlagMessagesInline
+        int baseline = -1;
 
         Form form = (Form)getComponent();
         Form.SectionSequence sections = form.getSections();
 
-        // Determine the field width
-        int fieldWidth = -1;
-
-        if (fill) {
-            int maximumRowHeaderWidth = 0;
-
-            for (int sectionIndex = 0, sectionCount = sections.getLength();
-                sectionIndex < sectionCount; sectionIndex++) {
-                Form.Section section = sections.get(sectionIndex);
-
-                for (int fieldIndex = 0, fieldCount = section.getLength();
-                    fieldIndex < fieldCount; fieldIndex++) {
-                    Component field = section.get(fieldIndex);
-
-                    if (field.isVisible()) {
-                        BoxPane rowHeader = rowHeaders.get(sectionIndex).get(fieldIndex);
-                        maximumRowHeaderWidth = Math.max(maximumRowHeaderWidth,
-                            rowHeader.getPreferredWidth(-1));
-                    }
-                }
-            }
-
-            fieldWidth = Math.max(0, width - (maximumRowHeaderWidth + horizontalSpacing));
-
-            if (showFlagHighlight) {
-                fieldWidth = Math.max(0, FLAG_HIGHLIGHT_PADDING * 2);
-            }
-        }
-
-        int baseline = -1;
+        // Determine the field width constraint
+        int fieldWidth = (fill) ? getFieldWidth(width) : -1;
 
         int sectionCount = sections.getLength();
         int sectionIndex = 0;
@@ -489,11 +454,7 @@ public class TerraFormSkin extends ContainerSkin
 
                     // Determine the row header size and baseline
                     Dimensions rowHeaderSize = rowHeader.getPreferredSize();
-                    int rowHeaderAscent = rowHeader.getBaseline(rowHeaderSize.width,
-                        rowHeaderSize.height);
-                    if (rowHeaderAscent == -1) {
-                        rowHeaderAscent = rowHeaderSize.height;
-                    }
+                    int rowHeaderAscent = rowHeader.getBaseline(rowHeaderSize.width, rowHeaderSize.height);
 
                     // Determine the field size and baseline
                     Dimensions fieldSize;
@@ -505,11 +466,25 @@ public class TerraFormSkin extends ContainerSkin
 
                     int fieldAscent = field.getBaseline(fieldSize.width, fieldSize.height);
                     if (fieldAscent == -1) {
-                        fieldAscent = fieldSize.height;
+                        fieldAscent = rowHeaderAscent;
+                    }
+
+                    // Determine the message label size and baseline
+                    int flagMessageLabelAscent = 0;
+
+                    if (showFlagMessagesInline) {
+                        Label flagMessageLabel = flagMessageLabels.get(sectionIndex).get(fieldIndex);
+
+                        if (flagMessageLabel != null) {
+                            Dimensions flagMessageLabelSize = flagMessageLabel.getPreferredSize();
+                            flagMessageLabelAscent = flagMessageLabel.getBaseline(flagMessageLabelSize.width,
+                                flagMessageLabelSize.height);
+                        }
                     }
 
                     // Determine the baseline
-                    baseline = rowY + Math.max(rowHeaderAscent, fieldAscent);
+                    int maximumAscent = Math.max(rowHeaderAscent, Math.max(fieldAscent, flagMessageLabelAscent));
+                    baseline = rowY + maximumAscent;
                 }
 
                 fieldIndex++;
@@ -525,15 +500,12 @@ public class TerraFormSkin extends ContainerSkin
         return baseline;
     }
 
-    @Override
-    public void layout() {
-        // TODO Respect showFlagMessagesInline
+    private int getFieldWidth(int width) {
+        int maximumRowHeaderWidth = 0;
+        int maximumFlagMessageWidth = 0;
 
         Form form = (Form)getComponent();
         Form.SectionSequence sections = form.getSections();
-
-        // Determine the maximum row header width
-        int maximumRowHeaderWidth = 0;
 
         for (int sectionIndex = 0, sectionCount = sections.getLength();
             sectionIndex < sectionCount; sectionIndex++) {
@@ -547,6 +519,62 @@ public class TerraFormSkin extends ContainerSkin
                     BoxPane rowHeader = rowHeaders.get(sectionIndex).get(fieldIndex);
                     maximumRowHeaderWidth = Math.max(maximumRowHeaderWidth,
                         rowHeader.getPreferredWidth(-1));
+
+                    if (showFlagMessagesInline) {
+                        Label flagMessageLabel = flagMessageLabels.get(sectionIndex).get(fieldIndex);
+
+                        if (flagMessageLabel != null) {
+                            maximumFlagMessageWidth = Math.max(maximumFlagMessageWidth,
+                                flagMessageLabel.getPreferredWidth(-1));
+                        }
+                    }
+                }
+            }
+        }
+
+        int fieldWidth = Math.max(0, width - (maximumRowHeaderWidth + horizontalSpacing));
+
+        if (showFlagMessagesInline) {
+            fieldWidth = Math.max(0, fieldWidth - (horizontalSpacing + maximumFlagMessageWidth));
+        }
+
+        if (showFlagHighlight) {
+            fieldWidth = Math.max(0, fieldWidth - FLAG_HIGHLIGHT_PADDING * 2);
+        }
+
+        return fieldWidth;
+    }
+
+    @Override
+    public void layout() {
+        Form form = (Form)getComponent();
+        Form.SectionSequence sections = form.getSections();
+
+        // Determine the maximum row header and message flag widths
+        int maximumRowHeaderWidth = 0;
+        int maximumFlagMessageWidth = 0;
+
+        for (int sectionIndex = 0, sectionCount = sections.getLength();
+            sectionIndex < sectionCount; sectionIndex++) {
+            Form.Section section = sections.get(sectionIndex);
+
+            for (int fieldIndex = 0, fieldCount = section.getLength();
+                fieldIndex < fieldCount; fieldIndex++) {
+                Component field = section.get(fieldIndex);
+
+                if (field.isVisible()) {
+                    BoxPane rowHeader = rowHeaders.get(sectionIndex).get(fieldIndex);
+                    maximumRowHeaderWidth = Math.max(maximumRowHeaderWidth,
+                        rowHeader.getPreferredWidth(-1));
+
+                    if (showFlagMessagesInline) {
+                        Label flagMessageLabel = flagMessageLabels.get(sectionIndex).get(fieldIndex);
+
+                        if (flagMessageLabel != null) {
+                            maximumFlagMessageWidth = Math.max(maximumFlagMessageWidth,
+                                flagMessageLabel.getPreferredWidth(-1));
+                        }
+                    }
                 }
             }
         }
@@ -554,6 +582,10 @@ public class TerraFormSkin extends ContainerSkin
         // Determine the field width
         int width = getWidth();
         int fieldWidth = Math.max(0, width - (maximumRowHeaderWidth + horizontalSpacing));
+
+        if (showFlagMessagesInline) {
+            fieldWidth = Math.max(0, fieldWidth - (horizontalSpacing + maximumFlagMessageWidth));
+        }
 
         if (showFlagHighlight) {
             fieldWidth = Math.max(0, fieldWidth - FLAG_HIGHLIGHT_PADDING * 2);
@@ -597,12 +629,7 @@ public class TerraFormSkin extends ContainerSkin
                     Dimensions rowHeaderSize = new Dimensions(maximumRowHeaderWidth,
                         rowHeader.getPreferredHeight());
                     rowHeader.setSize(rowHeaderSize);
-                    int rowHeaderAscent = rowHeader.getBaseline(rowHeaderSize.width,
-                        rowHeaderSize.height);
-                    if (rowHeaderAscent == -1) {
-                        rowHeaderAscent = rowHeaderSize.height;
-                    }
-
+                    int rowHeaderAscent = rowHeader.getBaseline(rowHeaderSize.width, rowHeaderSize.height);
                     int rowHeaderDescent = rowHeaderSize.height - rowHeaderAscent;
 
                     // Determine the field size and baseline
@@ -622,9 +649,29 @@ public class TerraFormSkin extends ContainerSkin
 
                     int fieldDescent = fieldSize.height - fieldAscent;
 
+                    // Determine the message label size and baseline
+                    int flagMessageLabelAscent = 0;
+                    int flagMessageLabelDescent = 0;
+
+                    if (showFlagMessagesInline) {
+                        Label flagMessageLabel = flagMessageLabels.get(sectionIndex).get(fieldIndex);
+
+                        if (flagMessageLabel != null) {
+                            Dimensions flagMessageLabelSize = flagMessageLabel.getPreferredSize();
+                            flagMessageLabel.setSize(flagMessageLabelSize);
+
+                            flagMessageLabelAscent = flagMessageLabel.getBaseline(flagMessageLabelSize.width,
+                                flagMessageLabelSize.height);
+                            flagMessageLabelDescent = flagMessageLabelSize.height - flagMessageLabelAscent;
+                        }
+                    }
+
                     // Determine the baseline and row height
-                    int baseline = Math.max(rowHeaderAscent, fieldAscent);
-                    int rowHeight = baseline + Math.max(rowHeaderDescent, fieldDescent);
+                    int maximumAscent = Math.max(rowHeaderAscent, Math.max(fieldAscent, flagMessageLabelAscent));
+                    int maximumDescent = Math.max(rowHeaderDescent, Math.max(fieldDescent, flagMessageLabelDescent));
+
+                    int baseline = maximumAscent;
+                    int rowHeight = maximumAscent + maximumDescent;
 
                     // Position the row header
                     int rowHeaderX = 0;
@@ -643,6 +690,19 @@ public class TerraFormSkin extends ContainerSkin
 
                     int fieldY = rowY + (baseline - fieldAscent);
                     field.setLocation(fieldX, fieldY);
+
+                    // Position the message label
+                    if (showFlagMessagesInline) {
+                        Label flagMessageLabel = flagMessageLabels.get(sectionIndex).get(fieldIndex);
+
+                        if (flagMessageLabel != null) {
+                            int flagMessageLabelX = maximumRowHeaderWidth + horizontalSpacing
+                                + fieldWidth + horizontalSpacing;
+                            int flagMessageLabelY = rowY + (baseline - flagMessageLabelAscent);
+
+                            flagMessageLabel.setLocation(flagMessageLabelX, flagMessageLabelY);
+                        }
+                    }
 
                     // Update the row y-coordinate
                     rowY += rowHeight + verticalSpacing;
@@ -852,7 +912,41 @@ public class TerraFormSkin extends ContainerSkin
     public void setShowFlagMessagesInline(boolean showFlagMessagesInline) {
         this.showFlagMessagesInline = showFlagMessagesInline;
 
-        // TODO?
+        // TODO Don't create messages here
+
+        if (showFlagMessagesInline) {
+            flagMessageLabels = new ArrayList<ArrayList<Label>>();
+
+            Form form = (Form)getComponent();
+            Form.SectionSequence sections = form.getSections();
+
+            for (int sectionIndex = 0, sectionCount = sections.getLength();
+                sectionIndex < sectionCount; sectionIndex++) {
+                flagMessageLabels.add(new ArrayList<Label>());
+
+                Form.Section section = sections.get(sectionIndex);
+
+                for (int fieldIndex = 0, fieldCount = section.getLength();
+                    fieldIndex < fieldCount; fieldIndex++) {
+                    Component field = section.get(fieldIndex);
+
+                    Label flagMessageLabel = null;
+
+                    Form.Flag flag = Form.getFlag(field);
+                    if (flag != null) {
+                        String message = flag.getMessage();
+
+                        if (message != null) {
+                            flagMessageLabel = new Label(message);
+                        }
+                    }
+
+                    flagMessageLabels.get(sectionIndex).add(flagMessageLabel);
+                }
+            }
+        } else {
+            flagMessageLabels = null;
+        }
 
         invalidateComponent();
     }
@@ -965,7 +1059,10 @@ public class TerraFormSkin extends ContainerSkin
         ArrayList<BoxPane> sectionRowHeaders = new ArrayList<BoxPane>();
         rowHeaders.insert(sectionRowHeaders, index);
 
-        // TODO Insert flag message list, if inline
+        // Insert flag message list
+        if (showFlagMessagesInline) {
+            flagMessageLabels.insert(new ArrayList<Label>(), index);
+        }
 
         // Insert fields
         for (int i = 0, n = section.getLength(); i < n; i++) {
@@ -987,7 +1084,10 @@ public class TerraFormSkin extends ContainerSkin
         // Remove row header list
         rowHeaders.remove(index, count);
 
-        // TODO Remove flag message list, if inline
+        // Remove flag message list
+        if (showFlagMessagesInline) {
+            flagMessageLabels.remove(index, count);
+        }
 
         // Remove separators
         Sequence<Separator> removedSeparators = separators.remove(index, count);
@@ -1021,9 +1121,9 @@ public class TerraFormSkin extends ContainerSkin
         form.add(rowHeader);
 
         // Add mouse listener
-        if (!showFlagMessagesInline) {
-            field.getComponentMouseListeners().add(new FieldMouseListener());
-        }
+        field.getComponentMouseListeners().add(fieldMouseListener);
+
+        // TODO Add flag message label
 
         // Update the field label and flag
         updateFieldLabel(section, index);
@@ -1039,14 +1139,15 @@ public class TerraFormSkin extends ContainerSkin
         // Remove the row headers
         Sequence<BoxPane> removedRowHeaders = rowHeaders.get(sectionIndex).remove(index, count);
 
+        // Remove flag message labels
+        flagMessageLabels.get(sectionIndex).remove(index, count);
+
         for (int i = 0; i < count; i++) {
             form.remove(removedRowHeaders.get(i));
 
             // Remove mouse listener
-            if (!showFlagMessagesInline) {
-                Component field = removed.get(i);
-                field.getComponentMouseListeners().remove(new FieldMouseListener());
-            }
+            Component field = removed.get(i);
+            field.getComponentMouseListeners().remove(fieldMouseListener);
         }
 
         invalidateComponent();
@@ -1083,6 +1184,10 @@ public class TerraFormSkin extends ContainerSkin
 
         if (flag == null) {
             flagImageView.setImage((Image)null);
+
+            if (showFlagMessagesInline) {
+                flagMessageLabels.get(sectionIndex).update(fieldIndex, null);
+            }
         } else {
             MessageType messageType = flag.getMessageType();
             Image messageIcon = null;
@@ -1109,6 +1214,50 @@ public class TerraFormSkin extends ContainerSkin
             }
 
             flagImageView.setImage(messageIcon);
+
+            String message = flag.getMessage();
+            if (message != null) {
+                if (showFlagMessagesInline) {
+                    Label flagMessageLabel = new Label(message);
+                    flagMessageLabel.getStyles().put("padding", new Insets(3, 4, 3, 4));
+
+                    TerraTheme theme = (TerraTheme)Theme.getTheme();
+
+                    Color color = null;
+                    Color backgroundColor = null;
+
+                    switch (messageType) {
+                        case ERROR: {
+                            color = theme.getColor(4);
+                            backgroundColor = theme.getColor(22);
+                            break;
+                        }
+
+                        case WARNING: {
+                            color = theme.getColor(1);
+                            backgroundColor = theme.getColor(19);
+                            break;
+                        }
+
+                        case QUESTION: {
+                            color = theme.getColor(4);
+                            backgroundColor = theme.getColor(16);
+                            break;
+                        }
+
+                        case INFO: {
+                            color = theme.getColor(1);
+                            backgroundColor = theme.getColor(10);
+                            break;
+                        }
+                    }
+
+                    flagMessageLabel.getStyles().put("color", color);
+                    flagMessageLabel.getStyles().put("backgroundColor", backgroundColor);
+
+                    flagMessageLabels.get(sectionIndex).update(fieldIndex, flagMessageLabel);
+                }
+            }
         }
 
         if (showFlagHighlight) {
