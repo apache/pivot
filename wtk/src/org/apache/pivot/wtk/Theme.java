@@ -21,7 +21,6 @@ import java.awt.Font;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.util.Service;
-import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.skin.BorderSkin;
 import org.apache.pivot.wtk.skin.BoxPaneSkin;
 import org.apache.pivot.wtk.skin.CardPaneSkin;
@@ -106,9 +105,6 @@ public abstract class Theme {
 
     public abstract Font getFont();
     public abstract void setFont(Font font);
-
-    public abstract Image getMessageIcon(MessageType messageType);
-    public abstract Image getSmallMessageIcon(MessageType messageType);
 
     /**
      * Returns the skin class responsible for skinning the specified component
