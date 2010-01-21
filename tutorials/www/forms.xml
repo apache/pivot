@@ -118,7 +118,7 @@ limitations under the License.
                                             <rows>
                                                 <TablePane.Row>
                                                     <BoxPane styles="{verticalAlignment:'center'}">
-                                                        <Label wtkx:id="errorLabel" styles="{color:'#ff0000'}"/>
+                                                        <Label wtkx:id="errorLabel" styles="{color:22}"/>
                                                     </BoxPane>
                                                     <BoxPane styles="{horizontalAlignment:'right', verticalAlignment:'center'}">
                                                         <PushButton wtkx:id="submitButton" buttonData="Submit"

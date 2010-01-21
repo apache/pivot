@@ -31,6 +31,7 @@ import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentMouseListener;
 import org.apache.pivot.wtk.Dimensions;
+import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Form;
 import org.apache.pivot.wtk.FormAttributeListener;
 import org.apache.pivot.wtk.FormListener;
@@ -44,7 +45,9 @@ import org.apache.pivot.wtk.Separator;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtk.WindowStateListener;
 import org.apache.pivot.wtk.effects.Decorator;
+import org.apache.pivot.wtk.effects.DropShadowDecorator;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.skin.ContainerSkin;
 
@@ -99,25 +102,9 @@ public class TerraFormSkin extends ContainerSkin
         }
     }
 
+    private class FieldMouseListener extends ComponentMouseListener.Adapter {
+        private Window flagMessageWindow = null;
 
-    private ArrayList<Separator> separators = new ArrayList<Separator>();
-    private ArrayList<ArrayList<BoxPane>> rowHeaders = new ArrayList<ArrayList<BoxPane>>();
-    // TODO private ArrayList<ArrayList<Label>> flagMessages = new ArrayList<ArrayList<Label>>();
-
-    private int horizontalSpacing = 6;
-    private int verticalSpacing = 6;
-    private int flagImageOffset = 4;
-    private boolean fill = false;
-    private boolean showFirstSectionHeading = false;
-    private boolean showFlagIcons = true;
-    private boolean showFlagHighlight = true;
-    private boolean showFlagMessagesInline = false;
-    private boolean leftAlignLabels = false;
-    private String delimiter = DEFAULT_DELIMITER;
-
-    private Window flagMessageWindow = null;
-
-    private ComponentMouseListener fieldMouseListener = new ComponentMouseListener.Adapter() {
         @Override
         public void mouseOver(Component component) {
             Form.Flag flag = Form.getFlag(component);
@@ -164,8 +151,34 @@ public class TerraFormSkin extends ContainerSkin
                     label.getStyles().put("backgroundColor", backgroundColor);
 
                     flagMessageWindow = new Window(label);
+                    flagMessageWindow.getDecorators().add(new DropShadowDecorator(3, 3, 3));
                     flagMessageWindow.getDecorators().add(new FieldIdentifierDecorator(backgroundColor));
 
+                    flagMessageWindow.getWindowStateListeners().add(new WindowStateListener.Adapter() {
+                        private ApplicationContext.ScheduledCallback scheduledHideFlagMessageCallback = null;
+
+                        @Override
+                        public void windowOpened(Window window) {
+                            // Set a timer to hide the message
+                            Runnable hideFlagMessageCallback = new Runnable() {
+                                public void run() {
+                                    flagMessageWindow.close();
+                                }
+                            };
+
+                            scheduledHideFlagMessageCallback =
+                                ApplicationContext.scheduleCallback(hideFlagMessageCallback,
+                                    HIDE_FLAG_MESSAGE_DELAY);
+                        }
+
+                        @Override
+                        public void windowClosed(Window window, Display display, Window owner) {
+                            scheduledHideFlagMessageCallback.cancel();
+                            flagMessageWindow = null;
+                        }
+                    });
+
+                    // Open the window
                     Point location = component.mapPointToAncestor(component.getDisplay(), 0,
                         component.getHeight());
 
@@ -176,10 +189,6 @@ public class TerraFormSkin extends ContainerSkin
 
                     flagMessageWindow.setLocation(location.x, y);
                     flagMessageWindow.open(component.getWindow());
-
-                    // Set a timer to hide the message
-                    scheduledHideFlagMessageCallback =
-                        ApplicationContext.scheduleCallback(hideFlagMessageCallback, HIDE_FLAG_MESSAGE_DELAY);
                 }
             }
         }
@@ -189,37 +198,30 @@ public class TerraFormSkin extends ContainerSkin
             if (flagMessageWindow != null) {
                 flagMessageWindow.close();
             }
-
-            if (scheduledHideFlagMessageCallback != null) {
-                scheduledHideFlagMessageCallback.cancel();
-            }
-
-            flagMessageWindow = null;
-            scheduledHideFlagMessageCallback = null;
         }
     };
 
-    private Runnable hideFlagMessageCallback = new Runnable() {
-        public void run() {
-            if (flagMessageWindow != null) {
-                flagMessageWindow.close();
-            }
+    private ArrayList<Separator> separators = new ArrayList<Separator>();
+    private ArrayList<ArrayList<BoxPane>> rowHeaders = new ArrayList<ArrayList<BoxPane>>();
+    // TODO private ArrayList<ArrayList<Label>> flagMessages = new ArrayList<ArrayList<Label>>();
 
-            // TODO Fade the message
-
-            flagMessageWindow = null;
-            scheduledHideFlagMessageCallback = null;
-        }
-    };
-
-    private ApplicationContext.ScheduledCallback scheduledHideFlagMessageCallback = null;
+    private int horizontalSpacing = 6;
+    private int verticalSpacing = 6;
+    private int flagImageOffset = 4;
+    private boolean fill = false;
+    private boolean showFirstSectionHeading = false;
+    private boolean showFlagIcons = true;
+    private boolean showFlagHighlight = true;
+    private boolean showFlagMessagesInline = false;
+    private boolean leftAlignLabels = false;
+    private String delimiter = DEFAULT_DELIMITER;
 
     private static final int FLAG_IMAGE_SIZE = 16;
     private static final int FLAG_HIGHLIGHT_PADDING = 2;
     private static final int FIELD_INDICATOR_WIDTH = 13;
     private static final int FIELD_INDICATOR_HEIGHT = 6;
     private static final int FIELD_INDICATOR_OFFSET = 10;
-    private static final int HIDE_FLAG_MESSAGE_DELAY = 5000;
+    private static final int HIDE_FLAG_MESSAGE_DELAY = 3500;
 
     private static final String DEFAULT_DELIMITER = ":";
 
@@ -647,17 +649,22 @@ public class TerraFormSkin extends ContainerSkin
 
                     switch (messageType) {
                         case ERROR: {
-                            highlightColor = theme.getColor(22);
+                            highlightColor = theme.getColor(21);
                             break;
                         }
 
                         case WARNING: {
-                            highlightColor = theme.getColor(25);
+                            highlightColor = theme.getColor(24);
                             break;
                         }
 
                         case QUESTION: {
-                            highlightColor = theme.getColor(16);
+                            highlightColor = theme.getColor(15);
+                            break;
+                        }
+
+                        case INFO: {
+                            highlightColor = theme.getColor(9);
                             break;
                         }
                     }
@@ -986,7 +993,7 @@ public class TerraFormSkin extends ContainerSkin
 
         // Add mouse listener
         if (!showFlagMessagesInline) {
-            field.getComponentMouseListeners().add(fieldMouseListener);
+            field.getComponentMouseListeners().add(new FieldMouseListener());
         }
 
         // Update the field label and flag
@@ -1009,7 +1016,7 @@ public class TerraFormSkin extends ContainerSkin
             // Remove mouse listener
             if (!showFlagMessagesInline) {
                 Component field = removed.get(i);
-                field.getComponentMouseListeners().remove(fieldMouseListener);
+                field.getComponentMouseListeners().remove(new FieldMouseListener());
             }
         }
 

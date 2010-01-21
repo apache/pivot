@@ -234,7 +234,6 @@ public final class TerraTheme extends Theme {
      * Gets the image that this theme uses to represent messages of the
      * specified type.
      */
-    @Override
     public Image getMessageIcon(MessageType messageType) {
         String messageIconName;
 
@@ -293,7 +292,6 @@ public final class TerraTheme extends Theme {
      * Gets the "small" image that this theme uses to represent messages of the
      * specified type.
      */
-    @Override
     public Image getSmallMessageIcon(MessageType messageType) {
         String smallMessageIconName;
 

@@ -23,8 +23,8 @@ Defines skin classes for the "Terra" theme.
 </p>
 <p>
 Terra skins get their colors from the theme's color palette, which contains
-24 indexed colors.  Each Terra skin exposes setter methods for each of its
-color styles that take an integer value; such methods allow callers to style
+27 indexed colors.  Most Terra skins expose a setter methods for each color
+style that accepts an integer value; such methods allow callers to style
 the component by referencing the theme's color palette.  The default palette
 is shown below:
 </p>
@@ -58,13 +58,13 @@ The default theme font; must be understandable by
 <td><tt>colors</tt></td>
 <td><tt>List&lt;String&gt;</tt></td>
 <td>
-This list should contain 8 colors in a form understandable by
+This list should contain 9 colors in a form understandable by
 <tt>java.awt.Color.decode()</tt>. This list represents the theme's
 "base color palette", from which the full color palette is
-derived. Each of these 8 colors will be expanded to comprise 3
+derived. Each of these 9 colors will be expanded to three
 colors in the final palette: a darker version, the color itself,
 and a lighter version. Thus, the final color palette will contain
-24 colors. For instance, in the <a href="#palette">default color
+27 colors. For instance, in the <a href="#palette">default color
 palette</a> the "base palette" colors are the colors in the middle
 column.
 </td>
