@@ -24,6 +24,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 
 import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
@@ -54,13 +55,11 @@ import org.apache.pivot.wtk.skin.ContainerSkin;
 /**
  * Terra form skin.
  * <p>
- * TODO Re-introduce padding style
- * <p>
  * TODO Create a section info structure
  * <p>
  * TODO Drop use of BoxPane for headers and move image views out into the section info structure
  * <p>
- * TODO Dynamically calculate decorator size based on component size
+ * TODO Dynamically calculate field identifier decorator size based on component size (both types)
  * <p>
  * TODO Animate preferred size calculations when flags change (make this configurable via
  * a style flag)
@@ -166,6 +165,7 @@ public class TerraFormSkin extends ContainerSkin
     private Window flagMessageWindow = new Window(flagMessageLabel);
     private ArrayList<ArrayList<Label>> flagMessageLabels = new ArrayList<ArrayList<Label>>();
 
+    private Insets padding;
     private int horizontalSpacing;
     private int verticalSpacing;
     private int flagImageOffset;
@@ -264,6 +264,7 @@ public class TerraFormSkin extends ContainerSkin
     private static final String DEFAULT_DELIMITER = ":";
 
     public TerraFormSkin() {
+        padding = new Insets(4);
         horizontalSpacing = 6;
         verticalSpacing = 6;
         flagImageOffset = 4;
@@ -380,11 +381,8 @@ public class TerraFormSkin extends ContainerSkin
             preferredWidth += horizontalSpacing + maximumFlagMessageWidth;
         }
 
-        preferredWidth = Math.max(preferredWidth, maximumSeparatorWidth);
-
-        if (showFlagHighlight) {
-            preferredWidth += FLAG_HIGHLIGHT_PADDING * 2;
-        }
+        preferredWidth = Math.max(preferredWidth + padding.left + padding.right,
+            maximumSeparatorWidth);
 
         return preferredWidth;
     }
@@ -465,9 +463,7 @@ public class TerraFormSkin extends ContainerSkin
             }
         }
 
-        if (showFlagHighlight) {
-            preferredHeight += FLAG_HIGHLIGHT_PADDING * 2;
-        }
+        preferredHeight += (padding.top + padding.bottom);
 
         return preferredHeight;
     }
@@ -552,9 +548,7 @@ public class TerraFormSkin extends ContainerSkin
             sectionIndex++;
         }
 
-        if (showFlagHighlight) {
-            baseline += FLAG_HIGHLIGHT_PADDING;
-        }
+        baseline += padding.top;
 
         return baseline;
     }
@@ -595,9 +589,7 @@ public class TerraFormSkin extends ContainerSkin
             fieldWidth = Math.max(0, fieldWidth - (horizontalSpacing + maximumFlagMessageWidth));
         }
 
-        if (showFlagHighlight) {
-            fieldWidth = Math.max(0, fieldWidth - FLAG_HIGHLIGHT_PADDING * 2);
-        }
+        fieldWidth = Math.max(0, fieldWidth - (padding.left + padding.right));
 
         return fieldWidth;
     }
@@ -642,18 +634,11 @@ public class TerraFormSkin extends ContainerSkin
             fieldWidth = Math.max(0, fieldWidth - (horizontalSpacing + maximumFlagMessageWidth));
         }
 
-        if (showFlagHighlight) {
-            fieldWidth = Math.max(0, fieldWidth - FLAG_HIGHLIGHT_PADDING * 2);
-        }
+        fieldWidth = Math.max(0, fieldWidth - (padding.left + padding.right));
 
         // Lay out the components
-        int rowX = 0;
-        int rowY = 0;
-
-        if (showFlagHighlight) {
-            rowX += FLAG_HIGHLIGHT_PADDING;
-            rowY += FLAG_HIGHLIGHT_PADDING;
-        }
+        int rowX = padding.left;
+        int rowY = padding.top;
 
         for (int sectionIndex = 0, sectionCount = sections.getLength();
             sectionIndex < sectionCount; sectionIndex++) {
@@ -727,20 +712,12 @@ public class TerraFormSkin extends ContainerSkin
                     int rowHeight = maximumAscent + maximumDescent;
 
                     // Position the row header
-                    int rowHeaderX = 0;
-                    if (showFlagHighlight) {
-                        rowHeaderX += FLAG_HIGHLIGHT_PADDING;
-                    }
-
+                    int rowHeaderX = padding.left;
                     int rowHeaderY = rowY + (baseline - rowHeaderAscent);
                     rowHeader.setLocation(rowHeaderX, rowHeaderY);
 
                     // Position the field
-                    int fieldX = maximumRowHeaderWidth + horizontalSpacing;
-                    if (showFlagHighlight) {
-                        fieldX += FLAG_HIGHLIGHT_PADDING;
-                    }
-
+                    int fieldX = maximumRowHeaderWidth + horizontalSpacing + padding.left;
                     int fieldY = rowY + (baseline - fieldAscent);
                     field.setLocation(fieldX, fieldY);
 
@@ -828,6 +805,47 @@ public class TerraFormSkin extends ContainerSkin
                 }
             }
         }
+    }
+
+    public Insets getPadding() {
+        return padding;
+    }
+
+    public void setPadding(Insets padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        this.padding = padding;
+        invalidateComponent();
+    }
+
+    public final void setPadding(Dictionary<String, ?> padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setPadding(new Insets(padding));
+    }
+
+    public final void setPadding(int padding) {
+        setPadding(new Insets(padding));
+    }
+
+    public final void setPadding(Number padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setPadding(padding.intValue());
+    }
+
+    public final void setPadding(String padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setPadding(Insets.decode(padding));
     }
 
     public int getHorizontalSpacing() {

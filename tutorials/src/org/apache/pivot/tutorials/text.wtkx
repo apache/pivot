@@ -24,7 +24,7 @@ limitations under the License.
             <BoxPane orientation="vertical" styles="{fill:true,
                 padding:{top:2, left:4, bottom:12, right:4}}">
                 <Label text="Text Input" styles="{font:{bold:true}}"/>
-                <Form styles="{showFlagIcons:false, showFlagHighlight:false}">
+                <Form styles="{showFlagIcons:false, showFlagHighlight:false, padding:0}">
                     <sections>
                         <Form.Section>
                             <TextInput Form.label="Basic" text="Pivot" textSize="12"/>

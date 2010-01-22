@@ -120,7 +120,7 @@ limitations under the License.
 
             <BoxPane orientation="vertical" styles="{spacing:6}">
                 <Label text="List Buttons" styles="{font:{bold:true}}"/>
-                <Form styles="{showFlagIcons:false, showFlagHighlight:false}">
+                <Form styles="{showFlagIcons:false, padding:0}">
                     <sections>
                         <Form.Section>
                             <ListButton Form.label="Basic" selectedIndex="0">

@@ -42,7 +42,7 @@ limitations under the License.
 
                 <BoxPane orientation="vertical">
                     <Label text="Calendar Buttons" styles="{font:{bold:true}}"/>
-                    <Form styles="{showFlagIcons:false, showFlagHighlight:false}">
+                    <Form styles="{showFlagIcons:false, padding:0}">
                         <sections>
                             <Form.Section>
                                 <CalendarButton Form.label="English (US)" locale="{language:'en', country:'us'}"/>

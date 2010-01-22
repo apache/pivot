@@ -446,7 +446,8 @@ limitations under the License.
 
         <source type="xml">
             <![CDATA[
-            <Form styles="{fill:true, showFlagIcons:false, showFlagHighlight:false, leftAlignLabels:true}">
+            <Form styles="{padding:0, fill:true, showFlagIcons:false, showFlagHighlight:false,
+                leftAlignLabels:true}">
                 <sections>
                     <Form.Section>
                         <Label Form.name="%value" textKey="value"
