@@ -584,6 +584,9 @@ public abstract class Component implements ConstrainedVisual {
     // Calculated preferred size value
     private Dimensions preferredSize = null;
 
+    // Calculated baseline for current size
+    private int baseline = -1;
+
     // The component's parent container, or null if the component does not have
     // a parent
     private Container parent = null;
@@ -1448,7 +1451,11 @@ public abstract class Component implements ConstrainedVisual {
      */
     @Override
     public int getBaseline() {
-        return skin.getBaseline();
+        if (baseline == -1) {
+            baseline = skin.getBaseline();
+        }
+
+        return baseline;
     }
 
     /**
@@ -1883,8 +1890,9 @@ public abstract class Component implements ConstrainedVisual {
     public void invalidate() {
         valid = false;
 
-        // Clear the preferred size
+        // Clear the preferred size and baseline
         preferredSize = null;
+        baseline = -1;
 
         if (parent != null) {
             parent.invalidate();
