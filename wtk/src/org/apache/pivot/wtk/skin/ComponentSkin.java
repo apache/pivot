@@ -82,6 +82,7 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
 
     private int width = 0;
     private int height = 0;
+    private int baseline = -1;
 
     private ShowTooltipCallback showTooltipCallback = new ShowTooltipCallback();
     private ApplicationContext.ScheduledCallback scheduledShowTooltipCallback = null;
@@ -102,6 +103,8 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
     public void setSize(int width, int height) {
         this.width = width;
         this.height = height;
+
+        baseline = -1;
     }
 
     @Override
@@ -111,7 +114,11 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
 
     @Override
     public final int getBaseline() {
-        return getBaseline(width, height);
+        if (baseline == -1) {
+            baseline = getBaseline(width, height);
+        }
+
+        return baseline;
     }
 
     @Override

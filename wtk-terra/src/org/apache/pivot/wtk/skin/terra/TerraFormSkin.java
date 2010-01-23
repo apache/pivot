@@ -52,8 +52,6 @@ import org.apache.pivot.wtk.skin.ContainerSkin;
 /**
  * Terra form skin.
  * <p>
- * TODO Complete inline flag message support
- * <p>
  * TODO Animate preferred size calculations when flags change (make this configurable via
  * a style flag)
  */
@@ -157,17 +155,35 @@ public class TerraFormSkin extends ContainerSkin
                                 }
                             }
 
+                            // Draw the label
                             flagMessageLabel.setText(message);
                             flagMessageLabel.setSize(flagMessageLabel.getPreferredSize());
                             flagMessageLabel.validate();
                             flagMessageLabel.getStyles().put("color", messageColor);
                             flagMessageLabel.getStyles().put("backgroundColor", messageBackgroundColor);
 
-                            int flagMessageX = field.getX() + field.getWidth();
-                            int flagMessageY = field.getY();
+                            int flagMessageX = field.getX() + field.getWidth()
+                                + INLINE_FIELD_INDICATOR_WIDTH - 2;
+                            int flagMessageY = field.getY() - field.getBaseline()
+                                + flagMessageLabel.getBaseline();
 
                             graphics.translate(flagMessageX, flagMessageY);
                             flagMessageLabel.paint(graphics);
+
+                            // Draw the arrow
+                            GeneralPath arrow = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
+                            arrow.moveTo(0, 0);
+                            arrow.lineTo(-INLINE_FIELD_INDICATOR_WIDTH, (float)flagMessageLabel.getHeight() / 2);
+                            arrow.lineTo(0, flagMessageLabel.getHeight());
+                            arrow.closePath();
+
+                            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                                RenderingHints.VALUE_ANTIALIAS_ON);
+
+                            graphics.setColor(messageBackgroundColor);
+                            graphics.fill(arrow);
+
+                            // Restore the graphics context
                             graphics.translate(-flagMessageX, -flagMessageY);
                         }
                     }
@@ -298,6 +314,8 @@ public class TerraFormSkin extends ContainerSkin
     private static final int POPUP_FIELD_INDICATOR_OFFSET = 10;
     private static final int HIDE_POPUP_MESSAGE_DELAY = 3500;
 
+    private static final int INLINE_FIELD_INDICATOR_WIDTH = 9;
+
     private static final String DEFAULT_DELIMITER = ":";
 
     public TerraFormSkin() {
@@ -417,11 +435,22 @@ public class TerraFormSkin extends ContainerSkin
 
                 if (field.isVisible()) {
                     Label label = labels.get(sectionIndex).get(fieldIndex);
-                    maximumLabelWidth = Math.max(maximumLabelWidth, label.getPreferredWidth(-1));
-                    maximumFieldWidth = Math.max(maximumFieldWidth, field.getPreferredWidth(-1));
+                    maximumLabelWidth = Math.max(maximumLabelWidth, label.getPreferredWidth());
+                    maximumFieldWidth = Math.max(maximumFieldWidth, field.getPreferredWidth());
 
                     if (showFlagMessagesInline) {
-                        // TODO Calculate maximumFlagMessageWidth
+                        // Calculate maximum flag message width
+                        Form.Flag flag = Form.getFlag(field);
+
+                        if (flag != null) {
+                            String message = flag.getMessage();
+
+                            if (message != null) {
+                                flagMessageLabel.setText(message);
+                                maximumFlagMessageWidth = Math.max(maximumFlagMessageWidth,
+                                    flagMessageLabel.getPreferredWidth());
+                            }
+                        }
                     }
                 }
             }
@@ -431,7 +460,7 @@ public class TerraFormSkin extends ContainerSkin
             + horizontalSpacing + maximumFieldWidth;
 
         if (showFlagMessagesInline) {
-            preferredWidth += horizontalSpacing + maximumFlagMessageWidth;
+            preferredWidth += maximumFlagMessageWidth + (INLINE_FIELD_INDICATOR_WIDTH - 2);
         }
 
         preferredWidth = Math.max(preferredWidth + padding.left + padding.right,
@@ -596,10 +625,21 @@ public class TerraFormSkin extends ContainerSkin
 
                 if (field.isVisible()) {
                     Label label = labels.get(sectionIndex).get(fieldIndex);
-                    maximumLabelWidth = Math.max(maximumLabelWidth, label.getPreferredWidth(-1));
+                    maximumLabelWidth = Math.max(maximumLabelWidth, label.getPreferredWidth());
 
                     if (showFlagMessagesInline) {
-                        // TODO Calculate maximumFlagMessageWidth
+                        // Calculate maximum flag message width
+                        Form.Flag flag = Form.getFlag(field);
+
+                        if (flag != null) {
+                            String message = flag.getMessage();
+
+                            if (message != null) {
+                                flagMessageLabel.setText(message);
+                                maximumFlagMessageWidth = Math.max(maximumFlagMessageWidth,
+                                    flagMessageLabel.getPreferredWidth());
+                            }
+                        }
                     }
                 }
             }
@@ -608,7 +648,8 @@ public class TerraFormSkin extends ContainerSkin
         int fieldWidth = Math.max(0, width - (maximumLabelWidth + horizontalSpacing));
 
         if (showFlagMessagesInline) {
-            fieldWidth = Math.max(0, fieldWidth - (horizontalSpacing + maximumFlagMessageWidth));
+            fieldWidth = Math.max(0, fieldWidth - (maximumFlagMessageWidth
+                + (INLINE_FIELD_INDICATOR_WIDTH - 2)));
         }
 
         fieldWidth = Math.max(0, fieldWidth - (padding.left + padding.right));
@@ -635,10 +676,21 @@ public class TerraFormSkin extends ContainerSkin
 
                 if (field.isVisible()) {
                     Label label = labels.get(sectionIndex).get(fieldIndex);
-                    maximumLabelWidth = Math.max(maximumLabelWidth, label.getPreferredWidth(-1));
+                    maximumLabelWidth = Math.max(maximumLabelWidth, label.getPreferredWidth());
 
                     if (showFlagMessagesInline) {
-                        // TODO Calculate maximumFlagMessageWidth
+                        // Calculate maximum flag message width
+                        Form.Flag flag = Form.getFlag(field);
+
+                        if (flag != null) {
+                            String message = flag.getMessage();
+
+                            if (message != null) {
+                                flagMessageLabel.setText(message);
+                                maximumFlagMessageWidth = Math.max(maximumFlagMessageWidth,
+                                    flagMessageLabel.getPreferredWidth());
+                            }
+                        }
                     }
                 }
             }
@@ -649,7 +701,8 @@ public class TerraFormSkin extends ContainerSkin
         int fieldWidth = Math.max(0, width - (maximumLabelWidth + horizontalSpacing));
 
         if (showFlagMessagesInline) {
-            fieldWidth = Math.max(0, fieldWidth - (horizontalSpacing + maximumFlagMessageWidth));
+            fieldWidth = Math.max(0, fieldWidth - (maximumFlagMessageWidth
+                + (INLINE_FIELD_INDICATOR_WIDTH - 2)));
         }
 
         fieldWidth = Math.max(0, fieldWidth - (padding.left + padding.right));
