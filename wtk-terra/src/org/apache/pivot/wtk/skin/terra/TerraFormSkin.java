@@ -456,8 +456,11 @@ public class TerraFormSkin extends ContainerSkin
             }
         }
 
-        preferredWidth = maximumFlagImageWidth + flagIconOffset + maximumLabelWidth
-            + horizontalSpacing + maximumFieldWidth;
+        preferredWidth = maximumLabelWidth + horizontalSpacing + maximumFieldWidth;
+
+        if (showFlagIcons) {
+            preferredWidth += maximumFlagImageWidth + flagIconOffset;
+        }
 
         if (showFlagMessagesInline) {
             preferredWidth += maximumFlagMessageWidth + (INLINE_FIELD_INDICATOR_WIDTH - 2);
@@ -647,6 +650,10 @@ public class TerraFormSkin extends ContainerSkin
 
         int fieldWidth = Math.max(0, width - (maximumLabelWidth + horizontalSpacing));
 
+        if (showFlagIcons) {
+            fieldWidth = Math.max(0, fieldWidth - (maximumFlagImageWidth + flagIconOffset));
+        }
+
         if (showFlagMessagesInline) {
             fieldWidth = Math.max(0, fieldWidth - (maximumFlagMessageWidth
                 + (INLINE_FIELD_INDICATOR_WIDTH - 2)));
@@ -699,6 +706,10 @@ public class TerraFormSkin extends ContainerSkin
         // Determine the field width
         int width = getWidth();
         int fieldWidth = Math.max(0, width - (maximumLabelWidth + horizontalSpacing));
+
+        if (showFlagIcons) {
+            fieldWidth = Math.max(0, fieldWidth - (maximumFlagImageWidth + flagIconOffset));
+        }
 
         if (showFlagMessagesInline) {
             fieldWidth = Math.max(0, fieldWidth - (maximumFlagMessageWidth
@@ -765,7 +776,11 @@ public class TerraFormSkin extends ContainerSkin
                     int rowHeight = maximumAscent + maximumDescent;
 
                     // Position the label
-                    int labelX = padding.left + maximumFlagImageWidth + flagIconOffset;
+                    int labelX = padding.left;
+                    if (showFlagIcons) {
+                        labelX += (maximumFlagImageWidth + flagIconOffset);
+                    }
+
                     int labelY = rowY + (baseline - labelAscent);
                     label.setLocation(labelX, labelY);
 
