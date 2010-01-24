@@ -107,7 +107,6 @@ public class TerraTooltipSkin extends WindowSkin implements TooltipListener {
         Component.StyleDictionary labelStyles = label.getStyles();
         labelStyles.put("font", theme.getFont());
         labelStyles.put("color", Color.BLACK);
-        labelStyles.put("wrapText", true);
 
         Component.StyleDictionary borderStyles = border.getStyles();
         borderStyles.put("backgroundColor", new Color(0xff, 0xff, 0xe0, 0xf0));
