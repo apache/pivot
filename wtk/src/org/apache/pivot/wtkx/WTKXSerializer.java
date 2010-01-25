@@ -398,9 +398,11 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             throw new IllegalArgumentException("inputStream is null.");
         }
 
-        if (root != null) {
-            throw new IllegalStateException("Serializer must be reset.");
-        }
+        // Reset the serializer
+        namedObjects.clear();
+        namedSerializers.clear();
+        root = null;
+        language = DEFAULT_LANGUAGE;
 
         // Parse the XML stream
         element = null;
@@ -454,6 +456,9 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             Bindable bindable = (Bindable)root;
             bindable.initialize();
         }
+
+        // Clear the location
+        location = null;
 
         return root;
     }
@@ -1170,16 +1175,6 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
     public boolean isEmpty() {
         return namedObjects.isEmpty()
             && namedSerializers.isEmpty();
-    }
-
-    public void reset() {
-        location = null;
-
-        namedObjects.clear();
-        namedSerializers.clear();
-
-        root = null;
-        language = DEFAULT_LANGUAGE;
     }
 
     /**

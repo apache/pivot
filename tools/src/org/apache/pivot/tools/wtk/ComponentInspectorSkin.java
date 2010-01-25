@@ -61,10 +61,6 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
     // Maps key to corresponding control component
     private HashMap<String, Component> controls = new HashMap<String, Component>();
 
-    public ComponentInspectorSkin() {
-        form.getStyles().put("rightAlignLabels", true);
-    }
-
     @Override
     public void install(Component component) {
         super.install(component);

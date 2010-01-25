@@ -341,8 +341,6 @@ public class KitchenSink implements Application, Application.AboutHandler {
 
                 rollup.setContent(component);
 
-                wtkxSerializer.reset();
-
                 try {
                     menuSection = (Menu.Section)wtkxSerializer.readObject(this, "menu_section.wtkx");
                     imageMenuGroup = (ButtonGroup)wtkxSerializer.get("imageMenuGroup");
