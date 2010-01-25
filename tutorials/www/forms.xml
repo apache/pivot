@@ -69,7 +69,7 @@ limitations under the License.
                                 </columns>
                                 <rows>
                                     <TablePane.Row height="1*">
-                                        <Form styles="{rightAlignLabels:true}">
+                                        <Form>
                                             <sections>
                                                 <Form.Section>
                                                     <BoxPane wtkx:id="nameBoxPane" Form.label="Name">
