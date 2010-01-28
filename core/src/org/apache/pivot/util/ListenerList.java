@@ -140,6 +140,10 @@ public abstract class ListenerList<T> implements Iterable<T> {
         }
     }
 
+    public boolean isEmpty() {
+        return (first == null);
+    }
+
     @Override
     public Iterator<T> iterator() {
         return new NodeIterator();
