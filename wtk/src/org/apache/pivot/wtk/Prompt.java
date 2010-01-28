@@ -133,6 +133,11 @@ public class Prompt extends Sheet {
         prompt(messageType, message, null, owner, null);
     }
 
+    public static void prompt(MessageType messageType, String message, Window owner,
+        SheetCloseListener sheetCloseListener) {
+        prompt(messageType, message, null, owner, sheetCloseListener);
+    }
+
     public static void prompt(MessageType messageType, String message, Component body, Window owner) {
         prompt(messageType, message, body, owner, null);
     }

@@ -17,6 +17,7 @@
 package org.apache.pivot.tests;
 
 import org.apache.pivot.collections.Map;
+import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
@@ -27,7 +28,7 @@ public class BindableTest implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer(new Resources(BindableWindow.class.getName()));
         window = (BindableWindow)wtkxSerializer.readObject(this, "bindable_test.wtkx");
         window.open(display);
     }

@@ -454,7 +454,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             bind(root);
 
             Bindable bindable = (Bindable)root;
-            bindable.initialize();
+            bindable.initialize(resources);
         }
 
         // Clear the location

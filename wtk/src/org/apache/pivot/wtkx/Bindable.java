@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.wtkx;
 
+import org.apache.pivot.util.Resources;
+
 /**
  * Allows WTKX serializer to automatically bind to an instance of a
  * deserialized class.
@@ -25,5 +27,5 @@ public interface Bindable {
      * Called to initialize the class after it has been completely
      * processed and bound by the serializer.
      */
-    public void initialize();
+    public void initialize(Resources resources);
 }
