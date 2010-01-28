@@ -272,6 +272,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
     }
 
     private Resources resources;
+    private WTKXSerializer namespaceOwner;
     private HashMap<String, Object> namedObjects;
     private HashMap<String, WTKXSerializer> namedSerializers;
 
@@ -308,18 +309,24 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
     public static final String MIME_TYPE = "application/wtkx";
 
     public WTKXSerializer() {
-        this(null);
+        this(null, null);
     }
 
     public WTKXSerializer(Resources resources) {
-        this(resources, new HashMap<String, Object>(), new HashMap<String, WTKXSerializer>());
+        this(resources, null);
     }
 
-    private WTKXSerializer(Resources resources, HashMap<String, Object> namedObjects,
-        HashMap<String, WTKXSerializer> namedSerializers) {
+    private WTKXSerializer(Resources resources, WTKXSerializer namespaceOwner) {
         this.resources = resources;
-        this.namedObjects = namedObjects;
-        this.namedSerializers = namedSerializers;
+        this.namespaceOwner = namespaceOwner;
+
+        if (namespaceOwner == null) {
+            namedObjects = new HashMap<String, Object>();
+            namedSerializers = new HashMap<String, WTKXSerializer>();
+        } else {
+            namedObjects = namespaceOwner.namedObjects;
+            namedSerializers = namespaceOwner.namedSerializers;
+        }
 
         xmlInputFactory = XMLInputFactory.newInstance();
         xmlInputFactory.setProperty("javax.xml.stream.isCoalescing", true);
@@ -399,8 +406,11 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         }
 
         // Reset the serializer
-        namedObjects.clear();
-        namedSerializers.clear();
+        if (namespaceOwner == null) {
+            namedObjects.clear();
+            namedSerializers.clear();
+        }
+
         root = null;
         language = DEFAULT_LANGUAGE;
 
@@ -688,7 +698,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                     // Read the object
                     WTKXSerializer serializer;
                     if (element.id == null) {
-                        serializer = new WTKXSerializer(resources, namedObjects, namedSerializers);
+                        serializer = new WTKXSerializer(resources, this);
                     } else {
                         serializer = new WTKXSerializer(resources);
                         namedSerializers.put(element.id, serializer);
