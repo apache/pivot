@@ -139,9 +139,9 @@ public abstract class Query<V> extends IOTask<V> {
     private HostnameVerifier hostnameVerifier = null;
     private Proxy proxy = null;
 
-    private QueryDictionary parameters = new QueryDictionary();
-    private QueryDictionary requestHeaders = new QueryDictionary();
-    private QueryDictionary responseHeaders = new QueryDictionary();
+    private QueryDictionary parameters = new QueryDictionary(true);
+    private QueryDictionary requestHeaders = new QueryDictionary(false);
+    private QueryDictionary responseHeaders = new QueryDictionary(false);
     private int status = 0;
 
     private volatile long bytesExpected = -1;

@@ -31,7 +31,7 @@ import org.junit.Test;
 public class QueryDictionaryTest {
     @Test(expected=IndexOutOfBoundsException.class)
     public void testQueryDictionary() {
-        QueryDictionary dict = new QueryDictionary();
+        QueryDictionary dict = new QueryDictionary(true);
 
         assertNull(dict.get("key"));
 
