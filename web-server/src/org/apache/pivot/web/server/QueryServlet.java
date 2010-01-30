@@ -44,7 +44,7 @@ import org.apache.pivot.web.QueryException;
  * Abstract base class for query servlets.
  */
 public abstract class QueryServlet extends HttpServlet {
-    private static final long serialVersionUID = 0;
+    private static final long serialVersionUID = 4881638232902478092L;
 
     private boolean determineContentLength = false;
     private HashMap<String, Class<? extends Serializer<?>>> serializerTypes
@@ -139,6 +139,28 @@ public abstract class QueryServlet extends HttpServlet {
      */
     public QueryDictionary getResponseHeaders() {
         return responseHeaders.get();
+    }
+
+    /**
+     * Prepares a servlet for request execution. This method is called immediately
+     * prior to the HTTP handler method.
+     * <p>
+     * The default implementation is a no-op.
+     *
+     * @throws ServletException
+     */
+    public void prepare() throws ServletException {
+    }
+
+    /**
+     * Disposes any resources allocated in {@link #prepare()}. This method is
+     * guaranteed to be called even if the HTTP handler method throws.
+     * <p>
+     * The default implementation is a no-op.
+     *
+     * @throws ServletException
+     */
+    public void dispose() throws ServletException {
     }
 
     /**
@@ -255,9 +277,15 @@ public abstract class QueryServlet extends HttpServlet {
                 requestHeaderDictionary.add(headerName, headerValue);
             }
 
-            // Call the base method to process the request
+            // Prepare the servlet for request processing
+            prepare();
+
+            // Process the request
             super.service(request, response);
         } finally {
+            // Clean up any allocated resources
+            dispose();
+
             // Clean up thread local variables
             hostname.remove();
             port.remove();
