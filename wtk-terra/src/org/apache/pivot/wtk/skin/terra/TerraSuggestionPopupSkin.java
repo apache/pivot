@@ -235,8 +235,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
         textInput.getComponentKeyListeners().add(textInputKeyListener);
 
         // Reposition under text input
-        Point location = textInput.mapPointToAncestor(textInput.getDisplay(),
-            textInput.getLocation());
+        Point location = textInput.mapPointToAncestor(textInput.getDisplay(), 0, 0);
         suggestionPopup.setLocation(location.x, location.y + textInput.getHeight() - 1);
         suggestionPopup.setPreferredWidth(textInput.getWidth());
     }
