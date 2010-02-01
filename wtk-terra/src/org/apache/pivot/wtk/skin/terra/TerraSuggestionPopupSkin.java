@@ -34,6 +34,7 @@ import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.ListViewSelectionListener;
 import org.apache.pivot.wtk.Mouse;
+import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.SuggestionPopup;
 import org.apache.pivot.wtk.SuggestionPopupListener;
@@ -234,9 +235,9 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
         textInput.getComponentKeyListeners().add(textInputKeyListener);
 
         // Reposition under text input
-        int x = textInput.getX();
-        int y = textInput.getY() + textInput.getHeight();
-        suggestionPopup.setLocation(x, y - 1);
+        Point location = textInput.mapPointToAncestor(textInput.getDisplay(),
+            textInput.getLocation());
+        suggestionPopup.setLocation(location.x, location.y + textInput.getHeight() - 1);
         suggestionPopup.setPreferredWidth(textInput.getWidth());
     }
 

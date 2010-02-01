@@ -16,7 +16,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="Suggestion Popup Test" maximized="true"
+<Window title="Suggestion Popup Test" preferredWidth="480" preferredHeight="360"
+    x="120" y="60"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
     <content>

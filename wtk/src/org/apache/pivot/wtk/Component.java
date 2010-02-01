@@ -1607,6 +1607,14 @@ public abstract class Component implements ConstrainedVisual {
         return coordinates;
     }
 
+    public Point mapPointToAncestor(Container ancestor, Point location) {
+        if (location == null) {
+            throw new IllegalArgumentException();
+        }
+
+        return mapPointToAncestor(ancestor, location.x, location.y);
+    }
+
     /**
      * Maps a point in the specified ancestor's coordinate space to this
      * component's coordinate system.
@@ -1643,6 +1651,14 @@ public abstract class Component implements ConstrainedVisual {
         }
 
         return coordinates;
+    }
+
+    public Point mapPointFromAncestor(Container ancestor, Point location) {
+        if (location == null) {
+            throw new IllegalArgumentException();
+        }
+
+        return mapPointFromAncestor(ancestor, location.x, location.y);
     }
 
     /**

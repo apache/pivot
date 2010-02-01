@@ -32,13 +32,12 @@ public class QueryException extends TaskExecutionException {
 
     public QueryException(int status, String message) {
         super(message);
-
         this.status = status;
     }
 
     public QueryException(Throwable cause) {
         super(cause);
-        status = 0;
+        status = Query.Status.INTERNAL_SERVER_ERROR;
     }
 
     /**
