@@ -77,7 +77,8 @@ public class ResultList implements List<Map<String, Object>> {
             boolean hasNext;
 
             try {
-                hasNext = !resultSet.isLast();
+                hasNext = resultSet.isBeforeFirst()
+                    || (resultSet.getRow() > 0 && !resultSet.isLast());
             } catch (SQLException exception) {
                 throw new RuntimeException(exception);
             }
@@ -105,7 +106,8 @@ public class ResultList implements List<Map<String, Object>> {
             boolean hasPrevious;
 
             try {
-                hasPrevious = !resultSet.isFirst();
+                hasPrevious = resultSet.isAfterLast()
+                    || (resultSet.getRow() > 0 && !resultSet.isFirst());
             } catch (SQLException exception) {
                 throw new RuntimeException(exception);
             }
