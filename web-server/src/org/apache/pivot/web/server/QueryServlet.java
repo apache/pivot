@@ -77,8 +77,6 @@ public abstract class QueryServlet extends HttpServlet {
 
         serializerTypes.put(JSONSerializer.MIME_TYPE, JSONSerializer.class);
         serializerTypes.put(CSVSerializer.MIME_TYPE, CSVSerializer.class);
-
-        System.out.println(serializerTypes);
     }
 
     /**

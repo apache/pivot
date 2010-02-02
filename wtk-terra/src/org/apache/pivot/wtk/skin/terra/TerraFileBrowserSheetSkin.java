@@ -326,7 +326,21 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
     public void selectedFilesChanged(FileBrowserSheet fileBrowserSheet,
         Sequence<File> previousSelectedFiles) {
         if (!updatingSelection) {
-            fileBrowser.setSelectedFiles(fileBrowserSheet.getSelectedFiles());
+            Sequence<File> selectedFiles = fileBrowserSheet.getSelectedFiles();
+            fileBrowser.setSelectedFiles(selectedFiles);
+
+            if (fileBrowser.getSelectedFiles().getLength() == 0
+                && selectedFiles.getLength() == 1) {
+                // The file does not currently exist; set the file name in the
+                // text input if the parent directory is the same as the root
+                // directory
+                File selectedFile = selectedFiles.get(0);
+
+                File rootDirectory = fileBrowser.getRootDirectory();
+                if (rootDirectory.equals(selectedFile.getParentFile())) {
+                    saveAsTextInput.setText(selectedFile.getName());
+                }
+            }
         }
     }
 

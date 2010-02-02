@@ -19,6 +19,7 @@ package org.apache.pivot.sql;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.NoSuchElementException;
 
 import org.apache.pivot.collections.ArrayList;
@@ -160,6 +161,8 @@ public class ResultList implements List<Map<String, Object>> {
                         value = resultSet.getDouble(field.columnName);
                     } else if (field.type == String.class) {
                         value = resultSet.getString(field.columnName);
+                    } else if (field.type == Date.class) {
+                        value = resultSet.getDate(field.columnName);
                     } else {
                         value = resultSet.getObject(field.columnName);
                     }
@@ -257,6 +260,7 @@ public class ResultList implements List<Map<String, Object>> {
                 || field.type == Float.TYPE
                 || field.type == Double.class
                 || field.type == Double.TYPE
+                || field.type == Date.class
                 || field.type == String.class)) {
                 throw new IllegalArgumentException(field.type.getName()
                     + " is not a supported type.");
