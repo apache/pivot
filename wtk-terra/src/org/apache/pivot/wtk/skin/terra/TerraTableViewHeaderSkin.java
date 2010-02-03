@@ -192,7 +192,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
 
             for (int i = 0, n = columns.getLength(); i < n; i++) {
                 TableView.Column column = columns.get(i);
-                dataRenderer.render(column.getHeaderData(), tableViewHeader, false);
+                dataRenderer.render(column.getHeaderData(), i, tableViewHeader, column.getName(), false);
                 preferredHeight = Math.max(preferredHeight, dataRenderer.getPreferredHeight(-1));
             }
 
@@ -224,7 +224,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
 
             for (int i = 0, n = columns.getLength(); i < n; i++) {
                 TableView.Column column = columns.get(i);
-                dataRenderer.render(column.getHeaderData(), tableViewHeader, false);
+                dataRenderer.render(column.getHeaderData(), i, tableViewHeader, column.getName(), false);
                 baseline = Math.max(baseline, dataRenderer.getBaseline(headerWidths.get(i), rowHeight));
             }
         }
@@ -295,7 +295,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
 
                 // Paint the header data
                 Object headerData = column.getHeaderData();
-                dataRenderer.render(headerData, tableViewHeader, false);
+                dataRenderer.render(headerData, columnIndex, tableViewHeader, column.getName(), false);
                 dataRenderer.setSize(headerWidth, height - 1);
 
                 Graphics2D rendererGraphics = (Graphics2D)graphics.create(headerX, 0,

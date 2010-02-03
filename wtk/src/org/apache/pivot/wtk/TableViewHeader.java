@@ -37,7 +37,8 @@ public class TableViewHeader extends Component {
      * Table view header data renderer interface.
      */
     public interface DataRenderer extends Renderer {
-        public void render(Object data, TableViewHeader tableViewHeader, boolean highlighted);
+        public void render(Object data, int columnIndex, TableViewHeader tableViewHeader,
+            String columnName, boolean highlighted);
     }
 
     /**

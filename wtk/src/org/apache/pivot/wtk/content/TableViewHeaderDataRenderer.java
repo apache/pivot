@@ -57,7 +57,8 @@ public class TableViewHeaderDataRenderer extends BoxPane
     }
 
     @Override
-    public void render(Object data, TableViewHeader tableViewHeader, boolean highlighted) {
+    public void render(Object data, int columnIndex, TableViewHeader tableViewHeader,
+        String columnName, boolean highlighted) {
         Image icon = null;
         String text = null;
 
