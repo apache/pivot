@@ -141,7 +141,7 @@ public abstract class QueryServlet extends HttpServlet {
 
     /**
      * Prepares a servlet for request execution. This method is called immediately
-     * prior to the HTTP handler method.
+     * prior to the {@link #validate(String)} method.
      * <p>
      * The default implementation is a no-op.
      *
@@ -159,6 +159,25 @@ public abstract class QueryServlet extends HttpServlet {
      * @throws ServletException
      */
     public void dispose() throws ServletException {
+    }
+
+    /**
+     * Validates a servlet for request execution. This method is called immediately
+     * prior to the HTTP handler method.
+     * <p>
+     * The default implementation is a no-op.
+     *
+     * @throws QueryException
+     */
+    public void validate(String path) throws QueryException {
+    }
+
+    /**
+     * Allows a servlet to configure a serializer
+     *
+     * @param serializer
+     */
+    public void configureSerializer(Serializer<Object> serializer, String path) {
     }
 
     /**
@@ -302,7 +321,10 @@ public abstract class QueryServlet extends HttpServlet {
 
         Object result = null;
         try {
-            result = doGet(request.getPathInfo());
+            String path = request.getPathInfo();
+            validate(path);
+            configureSerializer(serializer, path);
+            result = doGet(path);
         } catch (QueryException exception) {
             response.setStatus(exception.getStatus());
             response.flushBuffer();
@@ -373,7 +395,10 @@ public abstract class QueryServlet extends HttpServlet {
 
             URL location = null;
             try {
-                location = doPost(request.getPathInfo(), value);
+                String path = request.getPathInfo();
+                validate(path);
+                configureSerializer(serializer, path);
+                location = doPost(path, value);
             } catch (QueryException exception) {
                 response.setStatus(exception.getStatus());
                 response.flushBuffer();
@@ -387,7 +412,9 @@ public abstract class QueryServlet extends HttpServlet {
             }
         } else {
             try {
-                doPostAction(request.getPathInfo(), action);
+                String path = request.getPathInfo();
+                validate(path);
+                doPostAction(path, action);
             } catch (QueryException exception) {
                 response.setStatus(exception.getStatus());
                 response.flushBuffer();
@@ -416,7 +443,10 @@ public abstract class QueryServlet extends HttpServlet {
         }
 
         try {
-            doPut(request.getPathInfo(), value);
+            String path = request.getPathInfo();
+            validate(path);
+            configureSerializer(serializer, path);
+            doPut(path, value);
         } catch (QueryException exception) {
             response.setStatus(exception.getStatus());
             response.flushBuffer();
@@ -434,7 +464,9 @@ public abstract class QueryServlet extends HttpServlet {
     protected final void doDelete(HttpServletRequest request, HttpServletResponse response)
         throws IOException, ServletException {
         try {
-            doDelete(request.getPathInfo());
+            String path = request.getPathInfo();
+            validate(path);
+            doDelete(path);
         } catch (QueryException exception) {
             response.setStatus(exception.getStatus());
             response.flushBuffer();
