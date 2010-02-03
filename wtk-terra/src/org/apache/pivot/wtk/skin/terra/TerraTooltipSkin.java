@@ -17,21 +17,20 @@
 package org.apache.pivot.wtk.skin.terra;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
 
 import org.apache.pivot.util.Vote;
-import org.apache.pivot.wtk.Border;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentKeyListener;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.ContainerMouseListener;
+import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
-import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.Mouse;
-import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Tooltip;
-import org.apache.pivot.wtk.TooltipListener;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.effects.DropShadowDecorator;
 import org.apache.pivot.wtk.effects.Transition;
@@ -41,12 +40,7 @@ import org.apache.pivot.wtk.skin.WindowSkin;
 /**
  * Tooltip skin.
  */
-public class TerraTooltipSkin extends WindowSkin implements TooltipListener {
-    private Label label = new Label();
-    private Border border = new Border();
-
-    private boolean fade = true;
-
+public class TerraTooltipSkin extends WindowSkin {
     private ContainerMouseListener displayMouseListener = new ContainerMouseListener() {
         @Override
         public boolean mouseMove(Container container, int x, int y) {
@@ -90,28 +84,20 @@ public class TerraTooltipSkin extends WindowSkin implements TooltipListener {
     };
 
     private Transition closeTransition = null;
-
     private DropShadowDecorator dropShadowDecorator = null;
+    private boolean fade = true;
+
+    private Color borderColor;
+    private Insets padding;
 
     private static final int CLOSE_TRANSITION_DURATION = 500;
     private static final int CLOSE_TRANSITION_RATE = 30;
 
     public TerraTooltipSkin() {
-        setBackgroundColor((Color)null);
+        setBackgroundColor(new Color(0xff, 0xff, 0xe0, 0xf0));
 
-        // Add the label to the border
-        border.setContent(label);
-
-        // Apply the default styles
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
-        Component.StyleDictionary labelStyles = label.getStyles();
-        labelStyles.put("font", theme.getFont());
-        labelStyles.put("color", Color.BLACK);
-
-        Component.StyleDictionary borderStyles = border.getStyles();
-        borderStyles.put("backgroundColor", new Color(0xff, 0xff, 0xe0, 0xf0));
-        borderStyles.put("color", Color.BLACK);
-        borderStyles.put("padding", new Insets(2));
+        borderColor = Color.BLACK;
+        padding = new Insets(2);
     }
 
     @Override
@@ -122,11 +108,90 @@ public class TerraTooltipSkin extends WindowSkin implements TooltipListener {
 
         dropShadowDecorator = new DropShadowDecorator(5, 2, 2);
         tooltip.getDecorators().add(dropShadowDecorator);
+    }
 
-        tooltip.setContent(border);
-        tooltip.getTooltipListeners().add(this);
+    @Override
+    public int getPreferredWidth(int height) {
+        int preferredWidth = 0;
 
-        label.setText(tooltip.getText());
+        Tooltip tooltip = (Tooltip)getComponent();
+        Component content = tooltip.getContent();
+
+        if (height != -1) {
+            height -= (padding.top + padding.bottom + 2);
+        }
+
+        if (content != null) {
+            preferredWidth = content.getPreferredWidth(height);
+        }
+
+        preferredWidth += (padding.left + padding.right + 2);
+
+        return preferredWidth;
+    }
+
+    @Override
+    public int getPreferredHeight(int width) {
+        int preferredHeight = 0;
+
+        Tooltip tooltip = (Tooltip)getComponent();
+        Component content = tooltip.getContent();
+
+        if (width != -1) {
+            width -= (padding.left + padding.right + 2);
+        }
+
+        if (content != null) {
+            preferredHeight = content.getPreferredHeight(width);
+        }
+
+        preferredHeight += (padding.top + padding.bottom + 2);
+
+        return preferredHeight;
+    }
+
+    @Override
+    public Dimensions getPreferredSize() {
+        int preferredWidth = 0;
+        int preferredHeight = 0;
+
+        Tooltip tooltip = (Tooltip)getComponent();
+        Component content = tooltip.getContent();
+
+        if (content != null) {
+            Dimensions contentSize = content.getPreferredSize();
+            preferredWidth = contentSize.width;
+            preferredHeight = contentSize.height;
+        }
+
+        preferredWidth += (padding.left + padding.right + 2);
+        preferredHeight += (padding.top + padding.bottom + 2);
+
+        return new Dimensions(preferredWidth, preferredHeight);
+    }
+
+    @Override
+    public void layout() {
+        Tooltip tooltip = (Tooltip)getComponent();
+        Component content = tooltip.getContent();
+
+        if (content != null) {
+            int contentWidth = Math.max(getWidth() - (padding.left + padding.right + 2), 0);
+            int contentHeight = Math.max(getHeight() - (padding.top + padding.bottom + 2), 0);
+            content.setSize(contentWidth, contentHeight);
+            content.setLocation(padding.left + 1, padding.top + 1);
+        }
+    }
+
+    @Override
+    public void paint(Graphics2D graphics) {
+        super.paint(graphics);
+
+        int width = getWidth();
+        int height = getHeight();
+
+        graphics.setColor(borderColor);
+        GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
     }
 
     @Override
@@ -184,10 +249,5 @@ public class TerraTooltipSkin extends WindowSkin implements TooltipListener {
         display.getComponentKeyListeners().remove(displayKeyListener);
 
         closeTransition = null;
-    }
-
-    @Override
-    public void textChanged(Tooltip tooltip, String previousText) {
-        label.setText(tooltip.getText());
     }
 }

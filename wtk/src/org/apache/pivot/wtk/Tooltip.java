@@ -16,47 +16,19 @@
  */
 package org.apache.pivot.wtk;
 
-import org.apache.pivot.util.ListenerList;
-
 /**
  * Window representing a "tooltip". Tooltips are used to provide additional
  * context information to a user. A tooltip generally appears after a certain
  * amount of time has passed and closes when the user moves the mouse.
  */
 public class Tooltip extends Window {
-    private static class TooltipListenerList extends ListenerList<TooltipListener>
-        implements TooltipListener {
-        @Override
-        public void textChanged(Tooltip tooltip, String previousText) {
-            for (TooltipListener listener : this) {
-                listener.textChanged(tooltip, previousText);
-            }
-        }
+    public Tooltip() {
+        this(null);
     }
 
-    private String text = null;
+    public Tooltip(Component content) {
+        super(content);
 
-    private TooltipListenerList tooltipListeners = new TooltipListenerList();
-
-    public Tooltip(String text) {
-        setText(text);
         installThemeSkin(Tooltip.class);
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        String previousText = this.text;
-
-        if (previousText != text) {
-            this.text = text;
-            tooltipListeners.textChanged(this, previousText);
-        }
-    }
-
-    public ListenerList<TooltipListener> getTooltipListeners() {
-        return tooltipListeners;
     }
 }

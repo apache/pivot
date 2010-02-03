@@ -37,6 +37,7 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.DragSource;
 import org.apache.pivot.wtk.DropTarget;
 import org.apache.pivot.wtk.Keyboard;
+import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.MenuHandler;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Point;
@@ -59,7 +60,7 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
             // The tooltip text may have been cleared while the timeout was
             // outstanding; if so, don't display the tooltip
             if (tooltipText != null) {
-                final Tooltip tooltip = new Tooltip(tooltipText);
+                final Tooltip tooltip = new Tooltip(new Label(tooltipText));
 
                 Point location = component.getDisplay().getMouseLocation();
                 int x = location.x;
