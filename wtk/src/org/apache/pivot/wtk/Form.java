@@ -85,7 +85,7 @@ public class Form extends Container {
             }
 
             fields.insert(field, index);
-            field.setAttributes(new Attributes(this));
+            field.setAttribute(Attribute.SECTION, this);
 
             if (form != null) {
                 form.add(field);
@@ -114,7 +114,7 @@ public class Form extends Container {
 
             for (int i = 0, n = removed.getLength(); i < n; i++) {
                 Component field = removed.get(i);
-                field.setAttributes(null);
+                field.setAttribute(Attribute.SECTION, null);
 
                 if (form != null) {
                     form.remove(field);
@@ -322,15 +322,11 @@ public class Form extends Container {
         }
     }
 
-    private static class Attributes {
-        public final Section section;
-        public String label = null;
-        public boolean required = false;
-        public Flag flag = null;
-
-        public Attributes(Section section) {
-            this.section = section;
-        }
+    private enum Attribute {
+        SECTION,
+        LABEL,
+        REQUIRED,
+        FLAG;
     }
 
     private static class FormListenerList extends ListenerList<FormListener>
@@ -482,70 +478,57 @@ public class Form extends Container {
     }
 
     public static Section getSection(Component component) {
-        Attributes attributes = (Attributes)component.getAttributes();
-        return (attributes == null) ? null : attributes.section;
+        return (Section)component.getAttribute(Attribute.SECTION);
     }
 
     public static String getLabel(Component component) {
-        Attributes attributes = (Attributes)component.getAttributes();
-        return (attributes == null) ? null : attributes.label;
+        return (String)component.getAttribute(Attribute.LABEL);
     }
 
     public static void setLabel(Component component, String label) {
-        Attributes attributes = (Attributes)component.getAttributes();
-        if (attributes == null) {
-            throw new IllegalStateException();
-        }
+        String previousLabel = (String)component.setAttribute(Attribute.LABEL, label);
 
-        String previousLabel = attributes.label;
         if (previousLabel != label) {
-            attributes.label = label;
+            Container parent = component.getParent();
 
-            Form form = (Form)component.getParent();
-            if (form != null) {
+            if (parent instanceof Form) {
+                Form form = (Form)parent;
                 form.formAttributeListeners.labelChanged(form, component, previousLabel);
             }
         }
     }
 
     public static boolean isRequired(Component component) {
-        Attributes attributes = (Attributes)component.getAttributes();
-        return (attributes == null) ? false : attributes.required;
+        Boolean value = (Boolean)component.getAttribute(Attribute.REQUIRED);
+        return (value == null) ? false : value;
     }
 
     public static void setRequired(Component component, boolean required) {
-        Attributes attributes = (Attributes)component.getAttributes();
-        if (attributes == null) {
-            throw new IllegalStateException();
-        }
+        Boolean previousValue = (Boolean)component.setAttribute(Attribute.REQUIRED, required);
+        boolean previousRequired = (previousValue == null) ? false : previousValue;
 
-        if (attributes.required != required) {
-            attributes.required = required;
+        if (previousRequired != required) {
+            Container parent = component.getParent();
 
-            Form form = (Form)component.getParent();
-            if (form != null) {
+            if (parent instanceof Form) {
+                Form form = (Form)parent;
                 form.formAttributeListeners.requiredChanged(form, component);
             }
         }
     }
 
     public static Flag getFlag(Component component) {
-        Attributes attributes = (Attributes)component.getAttributes();
-        return (attributes == null) ? null : attributes.flag;
+        return (Flag)component.getAttribute(Attribute.FLAG);
     }
 
     public static void setFlag(Component component, Flag flag) {
-        Attributes attributes = (Attributes)component.getAttributes();
-        if (attributes == null) {
-            throw new IllegalStateException();
-        }
+        Flag previousFlag = (Flag)component.setAttribute(Attribute.FLAG, flag);
 
-        Flag previousFlag = attributes.flag;
         if (previousFlag != flag) {
-            attributes.flag = flag;
+            Container parent = component.getParent();
 
-            Form form = (Form)component.getParent();
-            if (form != null) {
+            if (parent instanceof Form) {
+                Form form = (Form)parent;
                 form.formAttributeListeners.flagChanged(form, component, previousFlag);
             }
         }

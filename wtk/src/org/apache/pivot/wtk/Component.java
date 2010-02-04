@@ -631,7 +631,7 @@ public abstract class Component implements ConstrainedVisual {
     private UserDataDictionary userDataDictionary = new UserDataDictionary();
 
     // Container attributes
-    private Object attributes = null;
+    private HashMap<? extends Enum<?>, Object> attributes = null;
 
     // The component's automation ID
     private String automationID;
@@ -2523,23 +2523,57 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     /**
-     * Returns the component's attributes.
+     * Gets the specified component attribute. While attributes can be used to
+     * store arbitrary data, they are intended to be used by containers to store
+     * layout-related metadata in their child components.
+     *
+     * @param key
+     * The attribute key
      *
      * @return
-     * The component's attributes, or <tt>null</tt> if no attributes are
-     * installed.
+     * The attribute value, or <tt>null</tt> if no such attribute exists
      */
-    protected Object getAttributes() {
-        return attributes;
+    @SuppressWarnings("unchecked")
+    public <T extends Enum<T>> Object getAttribute(T key) {
+        Object attribute = null;
+
+        if (attributes != null) {
+            attribute = ((HashMap<T, Object>)attributes).get(key);
+        }
+
+        return attribute;
     }
 
     /**
-     * Sets the component's attributes.
+     * Sets the specified component attribute. While attributes can be used to
+     * store arbitrary data, they are intended to be used by containers to store
+     * layout-related metadata in their child components.
      *
-     * @param attributes
+     * @param key
+     * The attribute key
+     *
+     * @param value
+     * The attribute value, or <tt>null</tt> to clear the attribute
+     *
+     * @return
+     * The previous value of the attribute, or <tt>null</tt> if the attribute
+     * was unset
      */
-    protected void setAttributes(Object attributes) {
-        this.attributes = attributes;
+    @SuppressWarnings("unchecked")
+    public <T extends Enum<T>> Object setAttribute(T key, Object value) {
+        if (attributes == null) {
+            attributes = new HashMap<T, Object>();
+        }
+
+        Object previousValue;
+
+        if (value != null) {
+            previousValue = ((HashMap<T, Object>)attributes).put(key, value);
+        } else {
+            previousValue = ((HashMap<T, Object>)attributes).remove(key);
+        }
+
+        return previousValue;
     }
 
     /**

@@ -61,9 +61,6 @@ public class Accordion extends Container {
             Accordion.this.add(panel);
             panels.insert(panel, index);
 
-            // Attach the attributes
-            panel.setAttributes(new Attributes());
-
             // Update the selection
             if (selectedIndex >= index) {
                 selectedIndex++;
@@ -91,11 +88,6 @@ public class Accordion extends Container {
         public Sequence<Component> remove(int index, int count) {
             // Remove the panels from the panel list
             Sequence<Component> removed = panels.remove(index, count);
-
-            // Detach the attributes
-            for (int i = 0, n = removed.getLength(); i < n; i++) {
-                removed.get(i).setAttributes(null);
-            }
 
             // Update the selection
             if (selectedIndex >= index) {
@@ -138,9 +130,9 @@ public class Accordion extends Container {
         }
     }
 
-    private static class Attributes {
-        public String label = null;
-        public Image icon = null;
+    private enum Attribute {
+        LABEL,
+        ICON;
     }
 
     private static class AccordionListenerList extends ListenerList<AccordionListener>
@@ -277,45 +269,37 @@ public class Accordion extends Container {
     }
 
     public static String getLabel(Component component) {
-        Attributes attributes = (Attributes)component.getAttributes();
-        return (attributes == null) ? null : attributes.label;
+        return (String)component.getAttribute(Attribute.LABEL);
     }
 
     public static void setLabel(Component component, String label) {
-        Attributes attributes = (Attributes)component.getAttributes();
-        if (attributes == null) {
-            throw new IllegalStateException();
-        }
+        String previousLabel = (String)component.setAttribute(Attribute.LABEL, label);
 
-        String previousLabel = attributes.label;
         if (previousLabel != label) {
-            attributes.label = label;
+            Container parent = component.getParent();
 
-            Accordion accordion = (Accordion)component.getParent();
-            if (accordion != null) {
-                accordion.accordionAttributeListeners.labelChanged(accordion, component, previousLabel);
+            if (parent instanceof Accordion) {
+                Accordion accordion = (Accordion)parent;
+                accordion.accordionAttributeListeners.labelChanged(accordion, component,
+                    previousLabel);
             }
         }
     }
 
     public static Image getIcon(Component component) {
-        Attributes attributes = (Attributes)component.getAttributes();
-        return (attributes == null) ? null : attributes.icon;
+        return (Image)component.getAttribute(Attribute.ICON);
     }
 
     public static void setIcon(Component component, Image icon) {
-        Attributes attributes = (Attributes)component.getAttributes();
-        if (attributes == null) {
-            throw new IllegalStateException();
-        }
+        Image previousIcon = (Image)component.setAttribute(Attribute.ICON, icon);
 
-        Image previousIcon = attributes.icon;
         if (previousIcon != icon) {
-            attributes.icon = icon;
+            Container parent = component.getParent();
 
-            Accordion accordion = (Accordion)component.getParent();
-            if (accordion != null) {
-                accordion.accordionAttributeListeners.iconChanged(accordion, component, previousIcon);
+            if (parent instanceof Accordion) {
+                Accordion accordion = (Accordion)parent;
+                accordion.accordionAttributeListeners.iconChanged(accordion, component,
+                    previousIcon);
             }
         }
     }

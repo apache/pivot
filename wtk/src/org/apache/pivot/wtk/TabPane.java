@@ -61,9 +61,6 @@ public class TabPane extends Container {
             TabPane.this.add(tab);
             tabs.insert(tab, index);
 
-            // Attach the attributes
-            tab.setAttributes(new Attributes());
-
             // Update the selection
             if (selectedIndex >= index) {
                 selectedIndex++;
@@ -91,11 +88,6 @@ public class TabPane extends Container {
         public Sequence<Component> remove(int index, int count) {
             // Remove the tabs from the tab list
             Sequence<Component> removed = tabs.remove(index, count);
-
-            // Detach the attributes
-            for (int i = 0, n = removed.getLength(); i < n; i++) {
-                removed.get(i).setAttributes(null);
-            }
 
             // Update the selection
             if (selectedIndex >= index) {
@@ -138,10 +130,10 @@ public class TabPane extends Container {
         }
     }
 
-    private static class Attributes {
-        public String label = null;
-        public Image icon = null;
-        public boolean closeable = false;
+    private enum Attribute {
+        LABEL,
+        ICON,
+        CLOSEABLE;
     }
 
     private static class TabPaneListenerList extends ListenerList<TabPaneListener>
@@ -322,44 +314,34 @@ public class TabPane extends Container {
     }
 
     public static String getLabel(Component component) {
-        Attributes attributes = (Attributes)component.getAttributes();
-        return (attributes == null) ? null : attributes.label;
+        return (String)component.getAttribute(Attribute.LABEL);
     }
 
     public static void setLabel(Component component, String label) {
-        Attributes attributes = (Attributes)component.getAttributes();
-        if (attributes == null) {
-            throw new IllegalStateException();
-        }
+        String previousLabel = (String)component.setAttribute(Attribute.LABEL, label);
 
-        String previousLabel = attributes.label;
         if (previousLabel != label) {
-            attributes.label = label;
+            Container parent = component.getParent();
 
-            TabPane tabPane = (TabPane)component.getParent();
-            if (tabPane != null) {
+            if (parent instanceof TabPane) {
+                TabPane tabPane = (TabPane)parent;
                 tabPane.tabPaneAttributeListeners.labelChanged(tabPane, component, previousLabel);
             }
         }
     }
 
     public static Image getIcon(Component component) {
-        Attributes attributes = (Attributes)component.getAttributes();
-        return (attributes == null) ? null : attributes.icon;
+        return (Image)component.getAttribute(Attribute.ICON);
     }
 
     public static void setIcon(Component component, Image icon) {
-        Attributes attributes = (Attributes)component.getAttributes();
-        if (attributes == null) {
-            throw new IllegalStateException();
-        }
+        Image previousIcon = (Image)component.setAttribute(Attribute.ICON, icon);
 
-        Image previousIcon = attributes.icon;
         if (previousIcon != icon) {
-            attributes.icon = icon;
+            Container parent = component.getParent();
 
-            TabPane tabPane = (TabPane)component.getParent();
-            if (tabPane != null) {
+            if (parent instanceof TabPane) {
+                TabPane tabPane = (TabPane)parent;
                 tabPane.tabPaneAttributeListeners.iconChanged(tabPane, component, previousIcon);
             }
         }
@@ -395,21 +377,19 @@ public class TabPane extends Container {
     }
 
     public static boolean isCloseable(Component component) {
-        Attributes attributes = (Attributes)component.getAttributes();
-        return (attributes == null) ? false : attributes.closeable;
+        Boolean value = (Boolean)component.getAttribute(Attribute.CLOSEABLE);
+        return (value == null) ? false : value;
     }
 
     public static void setCloseable(Component component, boolean closeable) {
-        Attributes attributes = (Attributes)component.getAttributes();
-        if (attributes == null) {
-            throw new IllegalStateException();
-        }
+        Boolean previousValue = (Boolean)component.setAttribute(Attribute.CLOSEABLE, closeable);
+        boolean previousCloseable = (previousValue == null) ? false : previousValue;
 
-        if (attributes.closeable != closeable) {
-            attributes.closeable = closeable;
+        if (previousCloseable != closeable) {
+            Container parent = component.getParent();
 
-            TabPane tabPane = (TabPane)component.getParent();
-            if (tabPane != null) {
+            if (parent instanceof TabPane) {
+                TabPane tabPane = (TabPane)parent;
                 tabPane.tabPaneAttributeListeners.closeableChanged(tabPane, component);
             }
         }
