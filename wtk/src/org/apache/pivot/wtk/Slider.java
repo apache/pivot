@@ -90,7 +90,7 @@ public class Slider extends Container {
 
     public void setRange(int start, int end) {
         if (start > end) {
-            throw new IllegalArgumentException("start is greater than maximum.");
+            throw new IllegalArgumentException("start " + start + " is greater than maximum " + end + ".");
         }
 
         int previousStart = this.start;
@@ -148,11 +148,11 @@ public class Slider extends Container {
 
     public void setValue(int value) {
         if (value < start) {
-            throw new IllegalArgumentException("value is less than minimum.");
+            throw new IllegalArgumentException("value " + value + " is less than minimum " + start + ".");
         }
 
         if (value > end) {
-            throw new IllegalArgumentException("value is greater than maximum.");
+            throw new IllegalArgumentException("value " + value + " is greater than maximum " + end + ".");
         }
 
         int previousValue = this.value;
