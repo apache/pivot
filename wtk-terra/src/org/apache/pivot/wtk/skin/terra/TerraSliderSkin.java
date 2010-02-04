@@ -147,12 +147,12 @@ public class TerraSliderSkin extends SliderSkin {
                         sliderY = minY;
                     }
 
-                    int maxY = (sliderHeight) + dragOffset.y;
+                    int maxY = (sliderHeight - thumbHeight) + dragOffset.y;
                     if (sliderY > maxY) {
                         sliderY = maxY;
                     }
 
-                    float ratio = (float)(sliderHeight - sliderY + dragOffset.y) / (sliderHeight - thumbHeight);
+                    float ratio = (float)(sliderY - dragOffset.y) / (sliderHeight - thumbHeight);
 
                     int start = slider.getStart();
                     int end = slider.getEnd();
@@ -332,7 +332,8 @@ public class TerraSliderSkin extends SliderSkin {
             thumb.setLocation((int)((width - thumbWidth) * ratio), (height - thumbHeight) / 2);
         } else {
             thumb.setSize(thumbHeight, thumbWidth);
-            thumb.setLocation((width - thumbHeight) / 2, (int)(height - ((height - thumbWidth) * ratio) - thumbWidth));
+            
+            thumb.setLocation((width - thumbHeight) / 2, (int)((height - thumbWidth) * ratio));
         }
     }
 
