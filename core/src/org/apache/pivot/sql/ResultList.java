@@ -171,8 +171,10 @@ public class ResultList implements List<Map<String, Object>> {
                         value = null;
                     }
 
-                    String key = (field.key == null) ? field.columnName : field.key;
-                    current.put(key, value);
+                    if (value != null || includeNullValues) {
+                        String key = (field.key == null) ? field.columnName : field.key;
+                        current.put(key, value);
+                    }
                 }
             } catch (SQLException exception) {
                 throw new RuntimeException(exception);
@@ -222,20 +224,29 @@ public class ResultList implements List<Map<String, Object>> {
     }
 
     private ResultSet resultSet;
+    private boolean includeNullValues;
     private ArrayList<Field> fields;
 
     private ListListenerList<Map<String, Object>> listListeners =
         new ListListenerList<Map<String,Object>>();
 
     public ResultList(ResultSet resultSet, Field... fields) {
-        this(resultSet, new ArrayList<Field>(fields));
+        this(resultSet, false, new ArrayList<Field>(fields));
+    }
+
+    public ResultList(ResultSet resultSet, boolean includeNullValues, Field... fields) {
+        this(resultSet, false, new ArrayList<Field>(fields));
     }
 
     public ResultList(ResultSet resultSet, Sequence<Field> fields) {
-        this(resultSet, new ArrayList<Field>(fields));
+        this(resultSet, false, new ArrayList<Field>(fields));
     }
 
-    private ResultList(ResultSet resultSet, ArrayList<Field> fields) {
+    public ResultList(ResultSet resultSet, boolean includeNullValues, Sequence<Field> fields) {
+        this(resultSet, false, new ArrayList<Field>(fields));
+    }
+
+    private ResultList(ResultSet resultSet, boolean includeNullValues, ArrayList<Field> fields) {
         if (resultSet == null) {
             throw new IllegalArgumentException();
         }
@@ -268,6 +279,7 @@ public class ResultList implements List<Map<String, Object>> {
         }
 
         this.resultSet = resultSet;
+        this.includeNullValues = includeNullValues;
         this.fields = fields;
     }
 

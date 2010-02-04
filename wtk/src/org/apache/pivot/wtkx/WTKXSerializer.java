@@ -272,7 +272,6 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
     }
 
     private Resources resources;
-    private WTKXSerializer namespaceOwner;
     private HashMap<String, Object> namedObjects;
     private HashMap<String, WTKXSerializer> namedSerializers;
 
@@ -282,6 +281,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
     private URL location = null;
     private Element element = null;
     private Object root = null;
+    private boolean clearNamespaceOnRead = false;
 
     private String language = DEFAULT_LANGUAGE;
 
@@ -316,17 +316,18 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         this(resources, null);
     }
 
-    private WTKXSerializer(Resources resources, WTKXSerializer namespaceOwner) {
+    private WTKXSerializer(Resources resources, WTKXSerializer owner) {
         this.resources = resources;
-        this.namespaceOwner = namespaceOwner;
 
-        if (namespaceOwner == null) {
+        if (owner == null) {
             namedObjects = new HashMap<String, Object>();
             namedSerializers = new HashMap<String, WTKXSerializer>();
         } else {
-            namedObjects = namespaceOwner.namedObjects;
-            namedSerializers = namespaceOwner.namedSerializers;
+            namedObjects = owner.namedObjects;
+            namedSerializers = owner.namedSerializers;
         }
+
+        this.clearNamespaceOnRead = (owner == null);
 
         xmlInputFactory = XMLInputFactory.newInstance();
         xmlInputFactory.setProperty("javax.xml.stream.isCoalescing", true);
@@ -406,7 +407,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         }
 
         // Reset the serializer
-        if (namespaceOwner == null) {
+        if (clearNamespaceOnRead) {
             namedObjects.clear();
             namedSerializers.clear();
         }
@@ -467,7 +468,8 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             bindable.initialize(resources);
         }
 
-        // Clear the location
+        // Reset the serializer
+        clearNamespaceOnRead = true;
         location = null;
 
         return root;
@@ -1133,6 +1135,8 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             WTKXSerializer serializer = getSerializer(serializerName);
             previousValue = serializer.put(id, value);
         }
+
+        clearNamespaceOnRead = false;
 
         return previousValue;
     }

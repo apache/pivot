@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Comparator;
 
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
@@ -170,6 +171,12 @@ public class JSONViewer implements Application {
 
         if (value instanceof Map<?, ?>) {
             TreeBranch treeBranch = new TreeBranch("{}");
+            treeBranch.setComparator(new Comparator<TreeNode>() {
+                @Override
+                public int compare(TreeNode treeNode1, TreeNode treeNode2) {
+                    return treeNode1.getText().compareTo(treeNode2.getText());
+                }
+            });
 
             Map<String, Object> map = (Map<String, Object>)value;
             for (String key : map) {
