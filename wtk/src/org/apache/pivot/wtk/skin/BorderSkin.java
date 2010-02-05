@@ -20,6 +20,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Paint;
 import java.awt.RenderingHints;
 import java.awt.font.FontRenderContext;
 import java.awt.font.LineMetrics;
@@ -234,9 +235,9 @@ public class BorderSkin extends ContainerSkin
         int strokeHeight = Math.max(height - (int)Math.ceil((topThickness + thickness) * 0.5), 0);
 
         // Draw the background
-        Color backgroundColor = getBackgroundColor();
-        if (backgroundColor != null) {
-            graphics.setPaint(backgroundColor);
+        Paint backgroundPaint = getBackgroundPaint();
+        if (backgroundPaint != null) {
+            graphics.setPaint(backgroundPaint);
 
             if (cornerRadius > 0) {
                 graphics.fillRoundRect(strokeX, strokeY, strokeWidth, strokeHeight, cornerRadius, cornerRadius);
