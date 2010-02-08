@@ -804,25 +804,22 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     public Window getWindow() {
-        Component component = this;
-
-        while (component != null
-            && !(component instanceof Window)) {
-            component = component.getParent();
-        }
-
-        return (Window)component;
+        return (Window)getAncestor(Window.class);
     }
 
     public Display getDisplay() {
+        return (Display)getAncestor(Display.class);
+    }
+
+    public Container getAncestor(Class<? extends Container> ancestorType) {
         Component component = this;
 
         while (component != null
-            && !(component instanceof Display)) {
+            && !(ancestorType.isInstance(component))) {
             component = component.getParent();
         }
 
-        return (Display)component;
+        return (Container)component;
     }
 
     @Override

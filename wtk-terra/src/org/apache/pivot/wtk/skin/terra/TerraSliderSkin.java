@@ -332,7 +332,7 @@ public class TerraSliderSkin extends SliderSkin {
             thumb.setLocation((int)((width - thumbWidth) * ratio), (height - thumbHeight) / 2);
         } else {
             thumb.setSize(thumbHeight, thumbWidth);
-            
+
             thumb.setLocation((width - thumbHeight) / 2, (int)((height - thumbWidth) * ratio));
         }
     }
