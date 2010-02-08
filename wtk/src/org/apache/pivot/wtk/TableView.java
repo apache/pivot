@@ -1249,6 +1249,20 @@ public class TableView extends Component {
     }
 
     /**
+     * Replaces the current set of columns with the given column sequence.
+     *
+     * @param columns
+     */
+    public void setColumns(Sequence<Column> columns) {
+        columnSequence.remove(0, columnSequence.getLength());
+
+        for (int i = 0, n = columns.getLength(); i < n; i++) {
+            Column column = columns.get(i);
+            columnSequence.add(column);
+        }
+    }
+
+    /**
      * Returns the table data.
      *
      * @return

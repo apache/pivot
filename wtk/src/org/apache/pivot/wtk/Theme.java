@@ -165,7 +165,12 @@ public abstract class Theme {
     public static Font deriveFont(Dictionary<String, ?> dictionary) {
         Font font = theme.getFont();
 
-        int size;
+        String name = font.getName();
+        if (dictionary.containsKey(NAME_KEY)) {
+            name = (String)dictionary.get(NAME_KEY);
+        }
+
+        int size = font.getSize();
         if (dictionary.containsKey(SIZE_KEY)) {
             Object value = dictionary.get(SIZE_KEY);
 
@@ -181,12 +186,9 @@ public abstract class Theme {
             } else {
                 size = (Integer)value;
             }
-        } else {
-            size = font.getSize();
         }
 
         int style = font.getStyle();
-
         if (dictionary.containsKey(BOLD_KEY)) {
             boolean bold = (Boolean)dictionary.get(BOLD_KEY);
 
@@ -207,6 +209,6 @@ public abstract class Theme {
             }
         }
 
-        return font.deriveFont(style, size);
+        return new Font(name, style, size);
     }
 }
