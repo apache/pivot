@@ -123,7 +123,7 @@ limitations under the License.
                 <Form styles="{showFlagIcons:false, padding:0}">
                     <sections>
                         <Form.Section>
-                            <ListButton Form.label="Basic" selectedIndex="0">
+                            <ListButton Form.label="Basic" buttonData="Color">
                                 <listData>
                                     <collections:ArrayList>
                                         <content:ListItem text="Red"/>

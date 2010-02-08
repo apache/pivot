@@ -18,6 +18,7 @@ package org.apache.pivot.wtk.content;
 
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.HorizontalAlignment;
+import org.apache.pivot.wtk.ListButton;
 
 /**
  * Default list button data renderer.
@@ -42,5 +43,10 @@ public class ListButtonDataRenderer extends ButtonDataRenderer {
         }
 
         super.render(data, button, highlight);
+
+        ListButton listButton = (ListButton)button;
+        if (listButton.getSelectedIndex() == -1) {
+            label.getStyles().put("color", button.getStyles().get("borderColor"));
+        }
     }
 }
