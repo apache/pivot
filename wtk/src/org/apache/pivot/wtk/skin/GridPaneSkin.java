@@ -374,8 +374,8 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
             int columnX = padding.left + (cellWidth + horizontalSpacing);
 
             for (int j = 1; j < columnCount; j++) {
-                if (metadata.isRowVisible(j - 1)) {
-                    int gridX = Math.max(columnX - (int)Math.ceil(horizontalSpacing * 0.5), 0);
+                if (metadata.isColumnVisible(j - 1)) {
+                    int gridX = Math.max(columnX - (int)Math.ceil(horizontalSpacing * 0.5f), 0);
                     GraphicsUtilities.drawLine(graphics, gridX, 0,
                         height, Orientation.VERTICAL);
 
