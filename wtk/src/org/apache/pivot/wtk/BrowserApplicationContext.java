@@ -71,12 +71,10 @@ public final class BrowserApplicationContext extends ApplicationContext {
                     }
                 }
 
-                // Load properties specified in the startup properties parameter
-                properties = new HashMap<String, String>();
-
-                String startupProperties = getParameter(STARTUP_PROPERTIES_PARAMETER);
-                if (startupProperties != null) {
-                    String[] arguments = startupProperties.split("&");
+                // Load properties specified in the system properties parameter
+                String systemPropertiesParameter = getParameter(SYSTEM_PROPERTIES_PARAMETER);
+                if (systemPropertiesParameter != null) {
+                    String[] arguments = systemPropertiesParameter.split("&");
 
                     for (int i = 0, n = arguments.length; i < n; i++) {
                         String argument = arguments[i];
@@ -90,7 +88,34 @@ public final class BrowserApplicationContext extends ApplicationContext {
                             } catch (UnsupportedEncodingException exception) {
                                 throw new RuntimeException(exception);
                             }
-                            properties.put(key, value);
+
+                            System.setProperty(key, value);
+                        } else {
+                            System.err.println(argument + " is not a valid system property.");
+                        }
+                    }
+                }
+
+                // Load properties specified in the startup properties parameter
+                startupProperties = new HashMap<String, String>();
+
+                String startupPropertiesParameter = getParameter(STARTUP_PROPERTIES_PARAMETER);
+                if (startupPropertiesParameter != null) {
+                    String[] arguments = startupPropertiesParameter.split("&");
+
+                    for (int i = 0, n = arguments.length; i < n; i++) {
+                        String argument = arguments[i];
+                        String[] property = argument.split("=");
+
+                        if (property.length == 2) {
+                            String key = property[0].trim();
+                            String value;
+                            try {
+                                value = URLDecoder.decode(property[1].trim(), "UTF-8");
+                            } catch (UnsupportedEncodingException exception) {
+                                throw new RuntimeException(exception);
+                            }
+                            startupProperties.put(key, value);
                         } else {
                             System.err.println(argument + " is not a valid startup property.");
                         }
@@ -148,7 +173,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
                 if (application != null) {
                     try {
                         application.startup(applicationContext.getDisplay(),
-                            new ImmutableMap<String, String>(properties));
+                            new ImmutableMap<String, String>(startupProperties));
                     } catch (Exception exception) {
                         displayException(exception);
                     }
@@ -192,10 +217,11 @@ public final class BrowserApplicationContext extends ApplicationContext {
         }
 
         private transient BrowserApplicationContext applicationContext = null;
-        private HashMap<String, String> properties = null;
+        private HashMap<String, String> startupProperties = null;
 
         public static final String APPLICATION_CLASS_NAME_PARAMETER = "application_class_name";
         public static final String STARTUP_PROPERTIES_PARAMETER = "startup_properties";
+        public static final String SYSTEM_PROPERTIES_PARAMETER = "system_properties";
 
         public Application getApplication() {
             return applicationContext.getApplication();
