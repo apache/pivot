@@ -122,7 +122,7 @@ public class MenuBars implements Application {
         Action.getNamedActions().put("fileOpen", new Action() {
             @Override
             public void perform() {
-                fileBrowserSheet.open(window);
+                fileBrowserSheet.open(window, FileBrowserSheet.Mode.OPEN);
             }
         });
 
@@ -159,7 +159,7 @@ public class MenuBars implements Application {
 
         tabPane = (TabPane)wtkxSerializer.get("tabPane");
 
-        fileBrowserSheet = new FileBrowserSheet(FileBrowserSheet.Mode.OPEN);
+        fileBrowserSheet = new FileBrowserSheet();
 
         window.open(display);
     }

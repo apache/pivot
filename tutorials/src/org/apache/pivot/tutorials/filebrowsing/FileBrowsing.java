@@ -59,13 +59,13 @@ public class FileBrowsing implements Application {
 
                 String mode = (String)selection.getUserData().get("mode");
                 FileBrowserSheet.Mode fileBrowserSheetMode = FileBrowserSheet.Mode.valueOf(mode.toUpperCase());
-                final FileBrowserSheet fileBrowserSheet = new FileBrowserSheet(fileBrowserSheetMode);
+                final FileBrowserSheet fileBrowserSheet = new FileBrowserSheet();
 
                 if (fileBrowserSheetMode == FileBrowserSheet.Mode.SAVE_AS) {
                     fileBrowserSheet.setSelectedFile(new File(fileBrowserSheet.getRootDirectory(), "New File"));
                 }
 
-                fileBrowserSheet.open(window, new SheetCloseListener() {
+                fileBrowserSheet.open(window, fileBrowserSheetMode, new SheetCloseListener() {
                     @Override
                     public void sheetClosed(Sheet sheet) {
                         if (sheet.getResult()) {

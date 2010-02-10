@@ -96,10 +96,12 @@ public class Sheet extends Window {
             throw new IllegalArgumentException("Sheets must have an owner.");
         }
 
+        this.sheetCloseListener = sheetCloseListener;
+
         super.open(display, owner);
 
-        if (isOpen()) {
-            this.sheetCloseListener = sheetCloseListener;
+        if (!isOpen()) {
+            this.sheetCloseListener = null;
         }
     }
 

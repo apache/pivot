@@ -143,13 +143,16 @@ public class Dialog extends Frame {
             throw new IllegalArgumentException("Modal dialogs must have an owner.");
         }
 
+        this.modal = modal;
+        this.dialogCloseListener = dialogCloseListener;
+
+        result = false;
+
         super.open(display, owner);
 
-        if (isOpen()) {
-            this.modal = modal;
-            this.dialogCloseListener = dialogCloseListener;
-
-            result = false;
+        if (!isOpen()) {
+            this.modal = false;
+            this.dialogCloseListener = null;
         }
     }
 
