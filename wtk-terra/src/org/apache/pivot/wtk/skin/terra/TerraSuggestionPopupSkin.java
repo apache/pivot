@@ -22,6 +22,7 @@ import java.awt.Font;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Border;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentKeyListener;
@@ -41,6 +42,9 @@ import org.apache.pivot.wtk.SuggestionPopupListener;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtk.effects.DropShadowDecorator;
+import org.apache.pivot.wtk.effects.Transition;
+import org.apache.pivot.wtk.effects.TransitionListener;
 import org.apache.pivot.wtk.skin.WindowSkin;
 
 /**
@@ -49,6 +53,9 @@ import org.apache.pivot.wtk.skin.WindowSkin;
 public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPopupListener {
     private Border suggestionListViewBorder = new Border();
     private ListView suggestionListView = new ListView();
+
+    private DropShadowDecorator dropShadowDecorator = null;
+    private Transition closeTransition = null;
 
     private ContainerMouseListener displayMouseListener = new ContainerMouseListener.Adapter() {
         @Override
@@ -109,6 +116,9 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
         }
     };
 
+    private static final int CLOSE_TRANSITION_DURATION = 150;
+    private static final int CLOSE_TRANSITION_RATE = 30;
+
     public TerraSuggestionPopupSkin () {
         suggestionListView.getListViewSelectionListeners().add(listViewSelectionListener);
         suggestionListViewBorder.setContent(suggestionListView);
@@ -125,6 +135,10 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
 
         suggestionListView.setListData(suggestionPopup.getSuggestions());
         suggestionListView.setItemRenderer(suggestionPopup.getSuggestionRenderer());
+
+        // Attach the drop-shadow decorator
+        dropShadowDecorator = new DropShadowDecorator(3, 3, 3);
+        suggestionPopup.getDecorators().add(dropShadowDecorator);
     }
 
     public Font getFont() {
@@ -241,6 +255,38 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
     }
 
     @Override
+    public Vote previewWindowClose(final Window window) {
+        if (closeTransition == null) {
+            suggestionListViewBorder.setEnabled(false);
+
+            closeTransition = new FadeWindowTransition(window,
+                CLOSE_TRANSITION_DURATION, CLOSE_TRANSITION_RATE,
+                dropShadowDecorator);
+
+            closeTransition.start(new TransitionListener() {
+                @Override
+                public void transitionCompleted(Transition transition) {
+                    window.close();
+                }
+            });
+        }
+
+        return (closeTransition != null
+            && closeTransition.isRunning()) ? Vote.DEFER : Vote.APPROVE;
+    }
+
+    @Override
+    public void windowCloseVetoed(Window window, Vote reason) {
+        if (reason == Vote.DENY
+            && closeTransition != null) {
+            closeTransition.stop();
+
+            suggestionListViewBorder.setEnabled(true);
+            closeTransition = null;
+        }
+    }
+
+    @Override
     public void windowClosed(Window window, Display display, Window owner) {
         display.getContainerMouseListeners().remove(displayMouseListener);
 
@@ -249,6 +295,9 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
 
         TextInput textInput = suggestionPopup.getTextInput();
         textInput.getComponentKeyListeners().remove(textInputKeyListener);
+
+        suggestionListViewBorder.setEnabled(true);
+        closeTransition = null;
 
         super.windowClosed(window, display, owner);
 

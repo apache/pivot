@@ -229,13 +229,13 @@ public class SuggestionPopup extends Window {
         this.textInput = textInput;
         this.suggestionPopupCloseListener = suggestionPopupCloseListener;
 
+        result = false;
+
         super.open(textInput.getWindow());
 
         if (!isOpen()) {
             this.textInput = null;
             this.suggestionPopupCloseListener = null;
-
-            result = false;
         }
     }
 
