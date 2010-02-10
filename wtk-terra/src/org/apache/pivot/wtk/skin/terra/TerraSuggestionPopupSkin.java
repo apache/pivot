@@ -39,6 +39,7 @@ import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.SuggestionPopup;
 import org.apache.pivot.wtk.SuggestionPopupListener;
+import org.apache.pivot.wtk.SuggestionPopupStateListener;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
@@ -50,7 +51,8 @@ import org.apache.pivot.wtk.skin.WindowSkin;
 /**
  * Terra suggestion popup skin.
  */
-public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPopupListener {
+public class TerraSuggestionPopupSkin extends WindowSkin
+    implements SuggestionPopupListener, SuggestionPopupStateListener {
     private Border suggestionListViewBorder = new Border();
     private ListView suggestionListView = new ListView();
 
@@ -130,6 +132,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
 
         SuggestionPopup suggestionPopup = (SuggestionPopup)component;
         suggestionPopup.getSuggestionPopupListeners().add(this);
+        suggestionPopup.getSuggestionPopupStateListeners().add(this);
 
         suggestionPopup.setContent(suggestionListViewBorder);
 
@@ -243,6 +246,9 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
 
         Display display = window.getDisplay();
         display.getContainerMouseListeners().add(displayMouseListener);
+        display.reenterMouse();
+
+        dropShadowDecorator.setShadowOpacity(DropShadowDecorator.DEFAULT_SHADOW_OPACITY);
 
         SuggestionPopup suggestionPopup = (SuggestionPopup)getComponent();
         TextInput textInput = suggestionPopup.getTextInput();
@@ -252,27 +258,6 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
         Point location = textInput.mapPointToAncestor(textInput.getDisplay(), 0, 0);
         suggestionPopup.setLocation(location.x, location.y + textInput.getHeight() - 1);
         suggestionPopup.setPreferredWidth(textInput.getWidth());
-    }
-
-    @Override
-    public Vote previewWindowClose(final Window window) {
-        if (closeTransition == null) {
-            suggestionListViewBorder.setEnabled(false);
-
-            closeTransition = new FadeWindowTransition(window,
-                CLOSE_TRANSITION_DURATION, CLOSE_TRANSITION_RATE,
-                dropShadowDecorator);
-
-            closeTransition.start(new TransitionListener() {
-                @Override
-                public void transitionCompleted(Transition transition) {
-                    window.close();
-                }
-            });
-        }
-
-        return (closeTransition != null
-            && closeTransition.isRunning()) ? Vote.DEFER : Vote.APPROVE;
     }
 
     @Override
@@ -295,9 +280,6 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
 
         TextInput textInput = suggestionPopup.getTextInput();
         textInput.getComponentKeyListeners().remove(textInputKeyListener);
-
-        suggestionListViewBorder.setEnabled(true);
-        closeTransition = null;
 
         super.windowClosed(window, display, owner);
 
@@ -328,5 +310,43 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
                 suggestionPopup.getSuggestionRenderer();
             textInput.setText(suggestionRenderer.toString(suggestion));
         }
+    }
+
+    @Override
+    public Vote previewSuggestionPopupClose(final SuggestionPopup suggestionPopup, final boolean result) {
+        if (closeTransition == null) {
+            suggestionListViewBorder.setEnabled(false);
+
+            closeTransition = new FadeWindowTransition(suggestionPopup,
+                CLOSE_TRANSITION_DURATION, CLOSE_TRANSITION_RATE,
+                dropShadowDecorator);
+
+            closeTransition.start(new TransitionListener() {
+                @Override
+                public void transitionCompleted(Transition transition) {
+                    suggestionPopup.close(result);
+                }
+            });
+        }
+
+        return (closeTransition != null
+            && closeTransition.isRunning()) ? Vote.DEFER : Vote.APPROVE;
+    }
+
+    @Override
+    public void suggestionPopupCloseVetoed(SuggestionPopup suggestionPopup, Vote reason) {
+        if (reason == Vote.DENY
+            && closeTransition != null) {
+            closeTransition.stop();
+
+            suggestionListViewBorder.setEnabled(true);
+            closeTransition = null;
+        }
+    }
+
+    @Override
+    public void suggestionPopupClosed(SuggestionPopup suggestionPopup) {
+        suggestionListViewBorder.setEnabled(true);
+        closeTransition = null;
     }
 }

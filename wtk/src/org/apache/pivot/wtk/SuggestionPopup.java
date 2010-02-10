@@ -19,6 +19,7 @@ package org.apache.pivot.wtk;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.content.SuggestionPopupItemRenderer;
 
 /**
@@ -66,6 +67,34 @@ public class SuggestionPopup extends Window {
         }
     }
 
+    private static class SuggestionPopupStateListenerList extends ListenerList<SuggestionPopupStateListener>
+        implements SuggestionPopupStateListener {
+        @Override
+        public Vote previewSuggestionPopupClose(SuggestionPopup suggestionPopup, boolean result) {
+            Vote vote = Vote.APPROVE;
+
+            for (SuggestionPopupStateListener listener : this) {
+                vote = vote.tally(listener.previewSuggestionPopupClose(suggestionPopup, result));
+            }
+
+            return vote;
+        }
+
+        @Override
+        public void suggestionPopupCloseVetoed(SuggestionPopup suggestionPopup, Vote reason) {
+            for (SuggestionPopupStateListener listener : this) {
+                listener.suggestionPopupCloseVetoed(suggestionPopup, reason);
+            }
+        }
+
+        @Override
+        public void suggestionPopupClosed(SuggestionPopup suggestionPopup) {
+            for (SuggestionPopupStateListener listener : this) {
+                listener.suggestionPopupClosed(suggestionPopup);
+            }
+        }
+    }
+
     private TextInput textInput = null;
     private SuggestionPopupCloseListener suggestionPopupCloseListener = null;
 
@@ -75,7 +104,10 @@ public class SuggestionPopup extends Window {
 
     private boolean result = false;
 
+    private boolean closing = false;
+
     private SuggestionPopupListenerList suggestionPopupListeners = new SuggestionPopupListenerList();
+    private SuggestionPopupStateListenerList suggestionPopupStateListeners = new SuggestionPopupStateListenerList();
 
     private static final SuggestionRenderer DEFAULT_SUGGESTION_RENDERER =
         new SuggestionPopupItemRenderer();
@@ -240,23 +272,42 @@ public class SuggestionPopup extends Window {
     }
 
     @Override
+    public boolean isClosing() {
+        return closing;
+    }
+
+    @Override
     public final void close() {
         close(false);
     }
 
     public void close(boolean result) {
         if (!isClosed()) {
-            super.close();
+            closing = true;
 
-            if (isClosed()) {
-                this.result = result;
+            Vote vote = suggestionPopupStateListeners.previewSuggestionPopupClose(this, result);
 
-                textInput = null;
+            if (vote == Vote.APPROVE) {
+                super.close();
 
-                if (suggestionPopupCloseListener != null) {
-                    suggestionPopupCloseListener.suggestionPopupClosed(this);
-                    suggestionPopupCloseListener = null;
+                closing = super.isClosing();
+
+                if (isClosed()) {
+                    this.result = result;
+
+                    suggestionPopupStateListeners.suggestionPopupClosed(this);
+
+                    if (suggestionPopupCloseListener != null) {
+                        suggestionPopupCloseListener.suggestionPopupClosed(this);
+                        suggestionPopupCloseListener = null;
+                    }
                 }
+            } else {
+                if (vote == Vote.DENY) {
+                    closing = false;
+                }
+
+                suggestionPopupStateListeners.suggestionPopupCloseVetoed(this, vote);
             }
         }
     }
@@ -271,5 +322,9 @@ public class SuggestionPopup extends Window {
 
     public ListenerList<SuggestionPopupListener> getSuggestionPopupListeners() {
         return suggestionPopupListeners;
+    }
+
+    public ListenerList<SuggestionPopupStateListener> getSuggestionPopupStateListeners() {
+        return suggestionPopupStateListeners;
     }
 }

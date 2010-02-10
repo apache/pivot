@@ -198,6 +198,7 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
 
         Display display = window.getDisplay();
         display.getContainerMouseListeners().add(displayMouseListener);
+        display.reenterMouse();
 
         MenuPopup menuPopup = (MenuPopup)window;
         Menu menu = menuPopup.getMenu();
