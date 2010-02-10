@@ -24,6 +24,16 @@ import org.apache.pivot.util.Vote;
  * an application and a user.
  */
 public class Dialog extends Frame {
+    private static class DialogListenerList extends ListenerList<DialogListener>
+        implements DialogListener {
+        @Override
+        public void modalChanged(Dialog dialog) {
+            for (DialogListener listener : this) {
+                listener.modalChanged(dialog);
+            }
+        }
+    }
+
     private static class DialogStateListenerList extends ListenerList<DialogStateListener>
         implements DialogStateListener {
         @Override
@@ -54,27 +64,58 @@ public class Dialog extends Frame {
 
     private boolean modal = false;
     private DialogCloseListener dialogCloseListener = null;
+
     private boolean result = false;
 
     private boolean closing = false;
 
+    private DialogListenerList dialogListeners = new DialogListenerList();
     private DialogStateListenerList dialogStateListeners = new DialogStateListenerList();
 
     public Dialog() {
-        this(null, null);
+        this(true);
+    }
+
+    public Dialog(boolean modal) {
+        this(null, null, modal);
     }
 
     public Dialog(String title) {
-        this(title, null);
+        this(title, true);
+    }
+
+    public Dialog(String title, boolean modal) {
+        this(title, null, modal);
     }
 
     public Dialog(Component content) {
-        this(null, content);
+        this(content, true);
+    }
+
+    public Dialog(Component content, boolean modal) {
+        this(null, content, modal);
     }
 
     public Dialog(String title, Component content) {
+        this(title, content, true);
+    }
+
+    public Dialog(String title, Component content, boolean modal) {
         super(title, content);
+        this.modal = modal;
+
         installThemeSkin(Dialog.class);
+    }
+
+    public boolean isModal() {
+        return modal;
+    }
+
+    public void setModal(boolean modal) {
+        if (this.modal != modal) {
+            this.modal = modal;
+            dialogListeners.modalChanged(this);
+        }
     }
 
     /**
@@ -88,7 +129,7 @@ public class Dialog extends Frame {
      */
     @Override
     public final void open(Display display, Window owner) {
-        open(display, owner, owner != null, null);
+        open(display, owner, null);
     }
 
     /**
@@ -101,7 +142,7 @@ public class Dialog extends Frame {
      * A listener that will be called when the dialog is closed.
      */
     public final void open(Display display, DialogCloseListener dialogCloseListener) {
-        open(display, null, false, dialogCloseListener);
+        open(display, null, dialogCloseListener);
     }
 
     /**
@@ -118,7 +159,7 @@ public class Dialog extends Frame {
             throw new IllegalArgumentException();
         }
 
-        open(owner.getDisplay(), owner, true, dialogCloseListener);
+        open(owner.getDisplay(), owner, dialogCloseListener);
     }
 
     /**
@@ -137,21 +178,17 @@ public class Dialog extends Frame {
      * @param dialogCloseListener
      * A listener that will be called when the dialog is closed.
      */
-    public void open(Display display, Window owner, boolean modal, DialogCloseListener dialogCloseListener) {
-        if (modal
-            && owner == null) {
+    public void open(Display display, Window owner, DialogCloseListener dialogCloseListener) {
+        if (modal && owner == null) {
             throw new IllegalArgumentException("Modal dialogs must have an owner.");
         }
 
-        this.modal = modal;
         this.dialogCloseListener = dialogCloseListener;
-
         result = false;
 
         super.open(display, owner);
 
         if (!isOpen()) {
-            this.modal = false;
             this.dialogCloseListener = null;
         }
     }
@@ -182,9 +219,6 @@ public class Dialog extends Frame {
                 if (isClosed()) {
                     this.result = result;
 
-                    boolean modal = this.modal;
-                    this.modal = false;
-
                     // Move the owner to the front
                     if (owner != null
                         && owner.isOpen()) {
@@ -209,16 +243,16 @@ public class Dialog extends Frame {
         }
     }
 
-    public boolean isModal() {
-        return modal;
-    }
-
     public DialogCloseListener getDialogCloseListener() {
         return dialogCloseListener;
     }
 
     public boolean getResult() {
         return result;
+    }
+
+    public ListenerList<DialogListener> getDialogListeners() {
+        return dialogListeners;
     }
 
     public ListenerList<DialogStateListener> getDialogStateListeners() {

@@ -57,11 +57,21 @@ public class Alert extends Dialog {
     }
 
     public Alert(MessageType type, String message, Sequence<?> options) {
-        this(type, message, options, null);
+        this(type, message, options, true);
+    }
+
+    public Alert(MessageType type, String message, Sequence<?> options, boolean modal) {
+        this(type, message, options, null, modal);
+    }
+
+    public Alert(MessageType type, String message, Sequence<?> options, Component body) {
+        this(type, message, options, body, true);
     }
 
     @SuppressWarnings("unchecked")
-    public Alert(MessageType type, String message, Sequence<?> options, Component body) {
+    public Alert(MessageType type, String message, Sequence<?> options, Component body, boolean modal) {
+        super(modal);
+
         if (type == null) {
             throw new IllegalArgumentException("type is null.");
         }
@@ -158,14 +168,14 @@ public class Alert extends Dialog {
     public static void alert(MessageType messageType, String message, Component body, Window owner,
         DialogCloseListener dialogCloseListener) {
         Alert alert = createAlert(messageType, message, body);
-        alert.open(owner.getDisplay(), owner, true, dialogCloseListener);
+        alert.open(owner.getDisplay(), owner, dialogCloseListener);
     }
 
     private static Alert createAlert(MessageType messageType, String message, Component body) {
         List<Object> options = new ArrayList<Object>();
         options.add(resources.get("defaultOption"));
 
-        Alert alert = new Alert(messageType, message, options, body);
+        Alert alert = new Alert(messageType, message, options, body, true);
         alert.setTitle((String)resources.get("defaultTitle"));
         alert.setSelectedOption(0);
 

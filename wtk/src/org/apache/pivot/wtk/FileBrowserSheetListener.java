@@ -30,6 +30,11 @@ public interface FileBrowserSheetListener {
      */
     public static class Adapter implements FileBrowserSheetListener {
         @Override
+        public void modeChanged(FileBrowserSheet fileBrowserSheet,
+            FileBrowserSheet.Mode previousMode) {
+        }
+
+        @Override
         public void rootDirectoryChanged(FileBrowserSheet fileBrowserSheet,
             File previousRootDirectory) {
         }
@@ -44,6 +49,14 @@ public interface FileBrowserSheetListener {
             Filter<File> previousDisabledFileFilter) {
         }
     }
+
+    /**
+     * Called when a file browser sheet's mode has changed.
+     *
+     * @param fileBrowserSheet
+     * @param previousMode
+     */
+    public void modeChanged(FileBrowserSheet fileBrowserSheet, FileBrowserSheet.Mode previousMode);
 
     /**
      * Called when a file browser sheet's root directory has changed.

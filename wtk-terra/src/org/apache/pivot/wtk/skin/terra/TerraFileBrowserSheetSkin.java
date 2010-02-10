@@ -238,45 +238,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
     @Override
     public void windowOpened(Window window) {
         super.windowOpened(window);
-
-        if (window.isOpen()) {
-            // Initialize layout and file browser selection state
-            FileBrowserSheet fileBrowserSheet = (FileBrowserSheet)window;
-            FileBrowserSheet.Mode mode = fileBrowserSheet.getMode();
-
-            fileBrowser.getStyles().put("keyboardFolderTraversalEnabled",
-                (mode != FileBrowserSheet.Mode.SAVE_TO));
-
-            switch (mode) {
-                case OPEN: {
-                    saveAsBoxPane.setVisible(false);
-                    fileBrowser.setMultiSelect(false);
-                    break;
-                }
-
-                case OPEN_MULTIPLE: {
-                    saveAsBoxPane.setVisible(false);
-                    fileBrowser.setMultiSelect(true);
-                    break;
-                }
-
-                case SAVE_AS: {
-                    saveAsBoxPane.setVisible(true);
-                    fileBrowser.setMultiSelect(false);
-                    break;
-                }
-
-                case SAVE_TO: {
-                    saveAsBoxPane.setVisible(false);
-                    fileBrowser.setMultiSelect(false);
-                    break;
-                }
-            }
-
-            disabledFileFilterChanged(fileBrowserSheet, null);
-
-            window.requestFocus();
-        }
+        window.requestFocus();
     }
 
     @Override
@@ -318,6 +280,43 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
         return vote;
     }
 
+    public void modeChanged(FileBrowserSheet fileBrowserSheet,
+        FileBrowserSheet.Mode previousMode) {
+        FileBrowserSheet.Mode mode = fileBrowserSheet.getMode();
+
+        fileBrowser.getStyles().put("keyboardFolderTraversalEnabled",
+            (mode != FileBrowserSheet.Mode.SAVE_TO));
+
+        switch (mode) {
+            case OPEN: {
+                saveAsBoxPane.setVisible(false);
+                fileBrowser.setMultiSelect(false);
+                break;
+            }
+
+            case OPEN_MULTIPLE: {
+                saveAsBoxPane.setVisible(false);
+                fileBrowser.setMultiSelect(true);
+                break;
+            }
+
+            case SAVE_AS: {
+                saveAsBoxPane.setVisible(true);
+                fileBrowser.setMultiSelect(false);
+                break;
+            }
+
+            case SAVE_TO: {
+                saveAsBoxPane.setVisible(false);
+                fileBrowser.setMultiSelect(false);
+                break;
+            }
+        }
+
+        updateDisabledFileFilter();
+        updateOKButtonState();
+    }
+
     @Override
     public void rootDirectoryChanged(FileBrowserSheet fileBrowserSheet,
         File previousRootDirectory) {
@@ -351,6 +350,11 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
     @Override
     public void disabledFileFilterChanged(FileBrowserSheet fileBrowserSheet,
         Filter<File> previousDisabledFileFilter) {
+        updateDisabledFileFilter();
+    }
+
+    private void updateDisabledFileFilter() {
+        FileBrowserSheet fileBrowserSheet = (FileBrowserSheet)getComponent();
         Filter<File> disabledFileFilter = fileBrowserSheet.getDisabledFileFilter();
 
         FileBrowserSheet.Mode mode = fileBrowserSheet.getMode();
@@ -365,29 +369,25 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
         FileBrowserSheet fileBrowserSheet = (FileBrowserSheet)getComponent();
 
         FileBrowserSheet.Mode mode = fileBrowserSheet.getMode();
-        if (mode != null) {
-            Sequence<File> selectedFiles = fileBrowser.getSelectedFiles();
+        Sequence<File> selectedFiles = fileBrowser.getSelectedFiles();
 
-            switch (mode) {
-                case OPEN:
-                case OPEN_MULTIPLE: {
-                    okButton.setEnabled(selectedFiles.getLength() > 0
-                        && selectedDirectoryCount == 0);
-                    break;
-                }
-
-                case SAVE_AS: {
-                    okButton.setEnabled(saveAsTextInput.getTextLength() > 0);
-                    break;
-                }
-
-                case SAVE_TO: {
-                    okButton.setEnabled(selectedDirectoryCount > 0);
-                    break;
-                }
+        switch (mode) {
+            case OPEN:
+            case OPEN_MULTIPLE: {
+                okButton.setEnabled(selectedFiles.getLength() > 0
+                    && selectedDirectoryCount == 0);
+                break;
             }
-        } else {
-            okButton.setEnabled(false);
+
+            case SAVE_AS: {
+                okButton.setEnabled(saveAsTextInput.getTextLength() > 0);
+                break;
+            }
+
+            case SAVE_TO: {
+                okButton.setEnabled(selectedDirectoryCount > 0);
+                break;
+            }
         }
     }
 }

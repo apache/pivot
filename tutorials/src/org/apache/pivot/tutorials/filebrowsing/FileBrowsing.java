@@ -65,7 +65,8 @@ public class FileBrowsing implements Application {
                     fileBrowserSheet.setSelectedFile(new File(fileBrowserSheet.getRootDirectory(), "New File"));
                 }
 
-                fileBrowserSheet.open(window, fileBrowserSheetMode, new SheetCloseListener() {
+                fileBrowserSheet.setMode(fileBrowserSheetMode);
+                fileBrowserSheet.open(window, new SheetCloseListener() {
                     @Override
                     public void sheetClosed(Sheet sheet) {
                         if (sheet.getResult()) {

@@ -43,6 +43,14 @@ public class FileBrowserSheet extends Sheet {
         extends ListenerList<FileBrowserSheetListener>
         implements FileBrowserSheetListener {
         @Override
+        public void modeChanged(FileBrowserSheet fileBrowserSheet,
+            FileBrowserSheet.Mode previousMode) {
+            for (FileBrowserSheetListener listener : this) {
+                listener.modeChanged(fileBrowserSheet, previousMode);
+            }
+        }
+
+        @Override
         public void rootDirectoryChanged(FileBrowserSheet fileBrowserSheet,
             File previousRootDirectory) {
             for (FileBrowserSheetListener listener : this) {
@@ -76,6 +84,12 @@ public class FileBrowserSheet extends Sheet {
     private FileBrowserSheetListenerList fileBrowserSheetListeners = new FileBrowserSheetListenerList();
 
     public FileBrowserSheet() {
+        this(Mode.OPEN);
+    }
+
+    public FileBrowserSheet(Mode mode) {
+        this.mode = mode;
+
         String userHome = System.getProperty("user.home");
         rootDirectory = new File(userHome);
 
@@ -84,6 +98,15 @@ public class FileBrowserSheet extends Sheet {
 
     public Mode getMode() {
         return mode;
+    }
+
+    public void setMode(Mode mode) {
+        Mode previousMode = this.mode;
+
+        if (previousMode != mode) {
+            this.mode = mode;
+            fileBrowserSheetListeners.modeChanged(this, previousMode);
+        }
     }
 
     public File getRootDirectory() {
@@ -204,50 +227,6 @@ public class FileBrowserSheet extends Sheet {
         if (previousDisabledFileFilter != disabledFileFilter) {
             this.disabledFileFilter = disabledFileFilter;
             fileBrowserSheetListeners.disabledFileFilterChanged(this, previousDisabledFileFilter);
-        }
-    }
-
-    public final void open(Window owner, Mode mode) {
-        if (owner == null) {
-            throw new IllegalArgumentException("owner is null");
-        }
-
-        open(owner.getDisplay(), owner, mode, null);
-    }
-
-    public final void open(Window owner, Mode mode, SheetCloseListener sheetCloseListener) {
-        if (owner == null) {
-            throw new IllegalArgumentException("owner is null");
-        }
-
-        open(owner.getDisplay(), owner, mode, sheetCloseListener);
-    }
-
-    @Override
-    public final void open(Display display, Window owner, SheetCloseListener sheetCloseListener) {
-        open(display, owner, Mode.OPEN, sheetCloseListener);
-    }
-
-    public void open(Display display, Window owner, Mode mode, SheetCloseListener sheetCloseListener) {
-        if (mode == null) {
-            throw new IllegalArgumentException("mode is null.");
-        }
-
-        this.mode = mode;
-
-        super.open(display, owner, sheetCloseListener);
-
-        if (!isOpen()) {
-            this.mode = null;
-        }
-    }
-
-    @Override
-    public void close(boolean result) {
-        super.close(result);
-
-        if (isClosed()) {
-            mode = null;
         }
     }
 

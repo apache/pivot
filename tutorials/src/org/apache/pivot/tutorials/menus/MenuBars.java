@@ -122,7 +122,7 @@ public class MenuBars implements Application {
         Action.getNamedActions().put("fileOpen", new Action() {
             @Override
             public void perform() {
-                fileBrowserSheet.open(window, FileBrowserSheet.Mode.OPEN);
+                fileBrowserSheet.open(window);
             }
         });
 

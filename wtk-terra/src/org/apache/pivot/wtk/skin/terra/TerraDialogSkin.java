@@ -23,6 +23,7 @@ import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.ContainerMouseListener;
 import org.apache.pivot.wtk.Dialog;
+import org.apache.pivot.wtk.DialogListener;
 import org.apache.pivot.wtk.DialogStateListener;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Display;
@@ -33,7 +34,8 @@ import org.apache.pivot.wtk.Window;
 /**
  * Dialog skin.
  */
-public class TerraDialogSkin extends TerraFrameSkin implements DialogStateListener {
+public class TerraDialogSkin extends TerraFrameSkin
+    implements DialogListener, DialogStateListener {
     private static final float GOLDEN_SECTION = 0.382f;
 
     private ContainerMouseListener displayMouseListener = new ContainerMouseListener.Adapter() {
@@ -186,6 +188,11 @@ public class TerraDialogSkin extends TerraFrameSkin implements DialogStateListen
     public void windowClosed(Window window, Display display, Window owner) {
         super.windowClosed(window, display, owner);
         display.getContainerMouseListeners().remove(displayMouseListener);
+    }
+
+    @Override
+    public void modalChanged(Dialog dialog) {
+        // No-op
     }
 
     @Override
