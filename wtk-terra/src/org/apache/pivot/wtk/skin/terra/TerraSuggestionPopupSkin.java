@@ -122,6 +122,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin
     private static final int CLOSE_TRANSITION_RATE = 30;
 
     public TerraSuggestionPopupSkin () {
+        suggestionListView.getStyles().put("variableItemHeight", true);
         suggestionListView.getListViewSelectionListeners().add(listViewSelectionListener);
         suggestionListViewBorder.setContent(suggestionListView);
     }

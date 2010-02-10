@@ -14,7 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-{   color: 4,
+{   font:{bold:true},
+    color: 4,
     backgroundColor: 16,
     borderColor: 13,
     disabledBackgroundColor: 10,
