@@ -981,6 +981,37 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         return consumed;
     }
 
+    @Override
+    public boolean keyTyped(Component component, char character) {
+        boolean consumed = super.keyTyped(component, character);
+
+        ListView listView = (ListView)getComponent();
+        List<?> listData = listView.getListData();
+        ListView.ItemRenderer itemRenderer = listView.getItemRenderer();
+
+        character = Character.toUpperCase(character);
+
+        for (int i = listView.getLastSelectedIndex() + 1, n = listData.getLength(); i < n; i++) {
+            if (!listView.isItemDisabled(i)) {
+                String string = itemRenderer.toString(listData.get(i));
+
+                if (string != null
+                    && string.length() > 0) {
+                    char first = Character.toUpperCase(string.charAt(0));
+
+                    if (first == character) {
+                        listView.setSelectedIndex(i);
+                        listView.scrollAreaToVisible(getItemBounds(i));
+                        consumed = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return consumed;
+    }
+
     // Component state events
     @Override
     public void enabledChanged(Component component) {
