@@ -83,7 +83,7 @@ public class SuggestionDemo implements Application {
         }
 
         // Get the query text
-        final String text;
+        String text;
         try {
             text = URLEncoder.encode(textInput.getText(), "UTF-8");
         } catch (UnsupportedEncodingException exception) {
@@ -116,6 +116,13 @@ public class SuggestionDemo implements Application {
                             @Override
                             public void suggestionPopupClosed(SuggestionPopup suggestionPopup) {
                                 if (suggestionPopup.getResult()) {
+                                    String text;
+                                    try {
+                                        text = URLEncoder.encode(textInput.getText(), "UTF-8");
+                                    } catch (UnsupportedEncodingException exception) {
+                                        throw new RuntimeException(exception);
+                                    }
+
                                     String location = "http://search.yahoo.com/search?p=" + text;
 
                                     try {

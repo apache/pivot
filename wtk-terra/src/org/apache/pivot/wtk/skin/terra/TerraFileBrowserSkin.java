@@ -217,6 +217,17 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                 label.setText(text);
             }
         }
+
+        @Override
+        public String toString(Object item) {
+            File file = (File)item;
+            String text = file.getName();
+            if (text.length() == 0) {
+                text = System.getProperty("file.separator");
+            }
+
+            return text;
+        }
     }
 
     /**
@@ -397,6 +408,11 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                 // Update the label
                 label.setText(file.toString());
             }
+        }
+
+        @Override
+        public String toString(Object item) {
+            return null;
         }
     }
 

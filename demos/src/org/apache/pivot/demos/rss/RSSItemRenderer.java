@@ -113,4 +113,9 @@ public class RSSItemRenderer extends BoxPane implements ListView.ItemRenderer {
         categoriesLabel.getStyles().put("color", color);
         submitterLabel.getStyles().put("color", color);
     }
+
+    @Override
+    public String toString(Object item) {
+        return XMLSerializer.getText((Element)item, "title");
+    }
 }

@@ -33,7 +33,7 @@ public interface SuggestionPopupListener {
 
         @Override
         public void suggestionRendererChanged(SuggestionPopup suggestionPopup,
-            SuggestionPopup.SuggestionRenderer previousSuggestionRenderer) {
+            ListView.ItemRenderer previousSuggestionRenderer) {
         }
 
         @Override
@@ -57,7 +57,7 @@ public interface SuggestionPopupListener {
      * @param previousSuggestionRenderer
      */
     public void suggestionRendererChanged(SuggestionPopup suggestionPopup,
-        SuggestionPopup.SuggestionRenderer previousSuggestionRenderer);
+        ListView.ItemRenderer previousSuggestionRenderer);
 
     /**
      * Called when a suggestion popup's selected index has changed.

@@ -86,6 +86,22 @@ public class ListViewItemRenderer extends BoxPane implements ListView.ItemRender
         label.setText(text);
     }
 
+    public String toString(Object suggestion) {
+        if (suggestion == null) {
+            throw new IllegalArgumentException();
+        }
+
+        String string;
+        if (suggestion instanceof ListItem) {
+            ListItem listItem = (ListItem)suggestion;
+            string = listItem.getText();
+        } else {
+            string = suggestion.toString();
+        }
+
+        return string;
+    }
+
     protected void renderStyles(ListView listView, boolean selected,
         boolean highlighted, boolean disabled) {
         imageView.getStyles().put("opacity", listView.isEnabled() ? 1.0f : 0.5f);

@@ -92,6 +92,13 @@ public class ListView extends Component {
          */
         public void render(Object item, int index, ListView listView, boolean selected,
             boolean checked, boolean highlighted, boolean disabled);
+
+        /**
+         * Converts a list item to a string representation.
+         *
+         * @param item
+         */
+        public String toString(Object item);
     }
 
     /**

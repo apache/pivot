@@ -296,7 +296,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin
 
     @Override
     public void suggestionRendererChanged(SuggestionPopup suggestionPopup,
-        SuggestionPopup.SuggestionRenderer previousSuggestionRenderer) {
+        ListView.ItemRenderer previousSuggestionRenderer) {
         suggestionListView.setItemRenderer(suggestionPopup.getSuggestionRenderer());
     }
 
@@ -307,8 +307,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin
 
         Object suggestion = suggestionPopup.getSelectedSuggestion();
         if (suggestion != null) {
-            SuggestionPopup.SuggestionRenderer suggestionRenderer =
-                suggestionPopup.getSuggestionRenderer();
+            ListView.ItemRenderer suggestionRenderer = suggestionPopup.getSuggestionRenderer();
             textInput.setText(suggestionRenderer.toString(suggestion));
         }
     }
