@@ -223,6 +223,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
         // Add this as a file browser sheet listener
         fileBrowserSheet.getFileBrowserSheetListeners().add(this);
 
+        modeChanged(fileBrowserSheet, null);
         rootDirectoryChanged(fileBrowserSheet, null);
         selectedFilesChanged(fileBrowserSheet, null);
     }
