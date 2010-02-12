@@ -316,14 +316,14 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
 
     @SuppressWarnings("unchecked")
     @Override
-    public void render(Object value, int rowIndex, int columnIndex,
+    public void render(Object row, int rowIndex, int columnIndex,
         TableView tableView, String columnName,
-        boolean rowSelected, boolean rowHighlighted, boolean rowDisabled) {
-        if (value == null) {
+        boolean selected, boolean highlighted, boolean disabled) {
+        if (row == null) {
             for (Class<?> key : cellRenderers) {
                 TableView.CellRenderer renderer = cellRenderers.get(key);
                 renderer.render(null, rowIndex, columnIndex, tableView, columnName,
-                    rowSelected, rowHighlighted, rowDisabled);
+                    selected, highlighted, disabled);
             }
         } else {
             Object cellData = null;
@@ -331,10 +331,10 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
             // Get the row and cell data
             if (columnName != null) {
                 Dictionary<String, Object> rowData;
-                if (value instanceof Dictionary<?, ?>) {
-                    rowData = (Dictionary<String, Object>)value;
+                if (row instanceof Dictionary<?, ?>) {
+                    rowData = (Dictionary<String, Object>)row;
                 } else {
-                    rowData = new BeanDictionary(value);
+                    rowData = new BeanDictionary(row);
                 }
 
                 cellData = rowData.get(columnName);
@@ -361,8 +361,8 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
                 cellRenderer.setSize(width, height);
             }
 
-            cellRenderer.render(value, rowIndex, columnIndex, tableView, columnName,
-                rowSelected, rowHighlighted, rowDisabled);
+            cellRenderer.render(row, rowIndex, columnIndex, tableView, columnName,
+                selected, highlighted, disabled);
         }
     }
 

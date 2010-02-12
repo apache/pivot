@@ -63,19 +63,19 @@ public class TableViewImageCellRenderer extends ImageView implements CellRendere
 
     @SuppressWarnings("unchecked")
     @Override
-    public void render(Object value, int rowIndex, int columnIndex,
+    public void render(Object row, int rowIndex, int columnIndex,
         TableView tableView, String columnName,
-        boolean rowSelected, boolean rowHighlighted, boolean rowDisabled) {
-        if (value != null) {
+        boolean selected, boolean highlighted, boolean disabled) {
+        if (row != null) {
             Image image = null;
 
             // Get the row and cell data
             if (columnName != null) {
                 Dictionary<String, Object> rowData;
-                if (value instanceof Dictionary<?, ?>) {
-                    rowData = (Dictionary<String, Object>)value;
+                if (row instanceof Dictionary<?, ?>) {
+                    rowData = (Dictionary<String, Object>)row;
                 } else {
-                    rowData = new BeanDictionary(value);
+                    rowData = new BeanDictionary(row);
                 }
 
                 Object cellData = rowData.get(columnName);

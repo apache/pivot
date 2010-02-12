@@ -256,11 +256,11 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         }
 
         @Override
-        public void render(Object value, int rowIndex, int columnIndex,
+        public void render(Object row, int rowIndex, int columnIndex,
             TableView tableView, String columnName,
-            boolean rowSelected, boolean rowHighlighted, boolean rowDisabled) {
-            if (value != null) {
-                File file = (File)value;
+            boolean selected, boolean highlighted, boolean disabled) {
+            if (row != null) {
+                File file = (File)row;
 
                 String text = null;
                 Image icon = null;
@@ -294,8 +294,8 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             label.getStyles().put("font", font);
 
             Color color;
-            if (tableView.isEnabled() && !rowDisabled) {
-                if (rowSelected) {
+            if (tableView.isEnabled() && !disabled) {
+                if (selected) {
                     if (tableView.isFocused()) {
                         color = (Color)tableView.getStyles().get("selectionColor");
                     } else {

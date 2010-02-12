@@ -38,21 +38,21 @@ public class TableViewFileSizeCellRenderer extends TableViewCellRenderer {
 
     @Override
     @SuppressWarnings("unchecked")
-    public void render(Object value, int rowIndex, int columnIndex,
+    public void render(Object row, int rowIndex, int columnIndex,
         TableView tableView, String columnName,
-        boolean rowSelected, boolean rowHighlighted, boolean rowDisabled) {
-        renderStyles(tableView, rowSelected, rowDisabled);
+        boolean selected, boolean highlighted, boolean disabled) {
+        renderStyles(tableView, selected, disabled);
 
-        if (value != null) {
+        if (row != null) {
             String formattedFileSize = null;
 
             // Get the row and cell data
             if (columnName != null) {
                 Dictionary<String, Object> rowData;
-                if (value instanceof Dictionary<?, ?>) {
-                    rowData = (Dictionary<String, Object>)value;
+                if (row instanceof Dictionary<?, ?>) {
+                    rowData = (Dictionary<String, Object>)row;
                 } else {
-                    rowData = new BeanDictionary(value);
+                    rowData = new BeanDictionary(row);
                 }
 
                 Object cellData = rowData.get(columnName);

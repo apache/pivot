@@ -26,15 +26,15 @@ public class ChangeCellRenderer extends TableViewNumberCellRenderer {
     public static final Color DOWN_COLOR = new Color(0xff, 0x00, 0x00);
 
     @Override
-    public void render(Object value, int rowIndex, int columnIndex,
+    public void render(Object row, int rowIndex, int columnIndex,
         TableView tableView, String columnName,
-        boolean rowSelected, boolean rowHighlighted, boolean rowDisabled) {
-        super.render(value, rowIndex, columnIndex, tableView, columnName,
-            rowSelected, rowHighlighted, rowDisabled);
+        boolean selected, boolean highlighted, boolean disabled) {
+        super.render(row, rowIndex, columnIndex, tableView, columnName,
+            selected, highlighted, disabled);
 
-        if (value != null
-            && !rowSelected) {
-            StockQuote stockQuote = (StockQuote)value;
+        if (row != null
+            && !selected) {
+            StockQuote stockQuote = (StockQuote)row;
             float change = stockQuote.getChange();
             getStyles().put("color", change < 0 ? DOWN_COLOR : UP_COLOR);
         }

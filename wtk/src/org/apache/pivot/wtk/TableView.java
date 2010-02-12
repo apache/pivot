@@ -473,9 +473,9 @@ public class TableView extends Component {
         /**
          * Prepares the renderer for layout or paint.
          *
-         * @param value
-         * The cell value to render, or <tt>null</tt> if called to calculate
-         * preferred height for skins that assume a fixed renderer height.
+         * @param row
+         * The row to render, or <tt>null</tt> if called to calculate preferred height for
+         * skins that assume a fixed renderer height.
          *
          * @param rowIndex
          * The index of the row being rendered, or <tt>-1</tt> if <tt>value</tt>
@@ -490,18 +490,18 @@ public class TableView extends Component {
          * @param columnName
          * The name of the column being rendered.
          *
-         * @param rowSelected
+         * @param selected
          * If <tt>true</tt>, the row is selected.
          *
-         * @param rowHighlighted
+         * @param highlighted
          * If <tt>true</tt>, the row is highlighted.
          *
-         * @param rowDisabled
+         * @param disabled
          * If <tt>true</tt>, the row is disabled.
          */
-        public void render(Object value, int rowIndex, int columnIndex,
+        public void render(Object row, int rowIndex, int columnIndex,
             TableView tableView, String columnName,
-            boolean rowSelected, boolean rowHighlighted, boolean rowDisabled);
+            boolean selected, boolean highlighted, boolean disabled);
     }
 
     /**

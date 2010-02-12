@@ -52,19 +52,19 @@ public class TableViewBooleanCellRenderer extends BoxPane
 
     @SuppressWarnings("unchecked")
     @Override
-    public void render(Object value, int rowIndex, int columnIndex,
+    public void render(Object row, int rowIndex, int columnIndex,
         TableView tableView, String columnName,
-        boolean rowSelected, boolean rowHighlighted, boolean rowDisabled) {
-        if (value != null) {
+        boolean selected, boolean highlighted, boolean disabled) {
+        if (row != null) {
             boolean checkboxSelected = false;
 
             // Get the row and cell data
             if (columnName != null) {
                 Dictionary<String, Object> rowData;
-                if (value instanceof Dictionary<?, ?>) {
-                    rowData = (Dictionary<String, Object>)value;
+                if (row instanceof Dictionary<?, ?>) {
+                    rowData = (Dictionary<String, Object>)row;
                 } else {
-                    rowData = new BeanDictionary(value);
+                    rowData = new BeanDictionary(row);
                 }
 
                 Object cellData = rowData.get(columnName);
@@ -82,7 +82,7 @@ public class TableViewBooleanCellRenderer extends BoxPane
             }
 
             checkbox.setSelected(checkboxSelected);
-            checkbox.setEnabled(!checkboxDisabled && tableView.isEnabled() && !rowDisabled);
+            checkbox.setEnabled(!checkboxDisabled && tableView.isEnabled() && !disabled);
         }
     }
 

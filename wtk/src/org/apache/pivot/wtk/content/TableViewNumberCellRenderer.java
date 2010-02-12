@@ -60,21 +60,21 @@ public class TableViewNumberCellRenderer extends TableViewCellRenderer {
 
     @Override
     @SuppressWarnings("unchecked")
-    public void render(Object value, int rowIndex, int columnIndex,
+    public void render(Object row, int rowIndex, int columnIndex,
         TableView tableView, String columnName,
-        boolean rowSelected, boolean rowHighlighted, boolean rowDisabled) {
-        renderStyles(tableView, rowSelected, rowDisabled);
+        boolean selected, boolean highlighted, boolean disabled) {
+        renderStyles(tableView, selected, disabled);
 
         String formattedNumber = null;
 
-        if (value != null
+        if (row != null
             && columnName != null) {
             // Get the row and cell data
             Dictionary<String, Object> rowData;
-            if (value instanceof Dictionary<?, ?>) {
-                rowData = (Dictionary<String, Object>)value;
+            if (row instanceof Dictionary<?, ?>) {
+                rowData = (Dictionary<String, Object>)row;
             } else {
-                rowData = new BeanDictionary(value);
+                rowData = new BeanDictionary(row);
             }
 
             Object cellData = rowData.get(columnName);
