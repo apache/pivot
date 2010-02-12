@@ -111,4 +111,21 @@ public class MenuBarItemDataRenderer extends BoxPane implements Button.DataRende
             label.getStyles().put("color", color);
         }
     }
+
+    @Override
+    public String toString(Object data) {
+        if (data == null) {
+            throw new IllegalArgumentException();
+        }
+
+        String string;
+        if (data instanceof ButtonData) {
+            ButtonData buttonData = (ButtonData)data;
+            string = buttonData.getText();
+        } else {
+            string = data.toString();
+        }
+
+        return string;
+    }
 }

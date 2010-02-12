@@ -97,6 +97,13 @@ public class ListView extends Component {
          * Converts a list item to a string representation.
          *
          * @param item
+         *
+         * @return
+         * The item's string representation, or <tt>null</tt> if the item does not
+         * have a string representation.
+         * <p>
+         * Note that this method may be called often during keyboard navigation, so
+         * implementations should avoid unnecessary string allocations.
          */
         public String toString(Object item);
     }

@@ -60,4 +60,9 @@ public class ListButtonColorItemRenderer extends ImageView
 
         colorBadge.setColor(color);
     }
+
+    @Override
+    public String toString(Object data) {
+        return null;
+    }
 }

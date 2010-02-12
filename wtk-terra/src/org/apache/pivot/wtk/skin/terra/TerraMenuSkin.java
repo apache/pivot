@@ -22,6 +22,7 @@ import java.awt.Graphics2D;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
@@ -30,6 +31,8 @@ import org.apache.pivot.wtk.Menu;
 import org.apache.pivot.wtk.MenuListener;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtk.Menu.Item;
+import org.apache.pivot.wtk.Menu.Section;
 import org.apache.pivot.wtk.skin.ContainerSkin;
 
 /**
@@ -391,10 +394,90 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
         Menu menu = (Menu)component;
 
         if (keyCode == Keyboard.KeyCode.UP) {
-            menu.activatePreviousItem();
+            Menu.SectionSequence sections = menu.getSections();
+            int sectionCount = sections.getLength();
+
+            Menu.Item activeItem = menu.getActiveItem();
+            int sectionIndex;
+            int itemIndex;
+            if (activeItem == null) {
+                sectionIndex = sectionCount - 1;
+                itemIndex = -1;
+            } else {
+                Menu.Section section = activeItem.getSection();
+                sectionIndex = sections.indexOf(section);
+                itemIndex = section.indexOf(activeItem) - 1;
+
+                if (itemIndex == -1) {
+                    sectionIndex--;
+                }
+            }
+
+            while (sectionIndex >= 0) {
+                Section section = sections.get(sectionIndex);
+                if (itemIndex == -1) {
+                    int sectionLength = section.getLength();
+                    itemIndex = sectionLength - 1;
+                }
+
+                while (itemIndex >= 0) {
+                    Item item = section.get(itemIndex);
+
+                    if (item.isEnabled()) {
+                        item.setActive(true);
+                        break;
+                    }
+
+                    itemIndex--;
+                }
+
+                if (itemIndex >= 0) {
+                    break;
+                }
+
+                sectionIndex--;
+            }
+
             consumed = true;
         } else if (keyCode == Keyboard.KeyCode.DOWN) {
-            menu.activateNextItem();
+            Menu.SectionSequence sections = menu.getSections();
+            int sectionCount = sections.getLength();
+
+            Menu.Item activeItem = menu.getActiveItem();
+            int sectionIndex;
+            int itemIndex;
+            if (activeItem == null) {
+                sectionIndex = 0;
+                itemIndex = 0;
+            } else {
+                Menu.Section section = activeItem.getSection();
+                sectionIndex = sections.indexOf(section);
+                itemIndex = section.indexOf(activeItem) + 1;
+            }
+
+            while (sectionIndex < sectionCount) {
+                Section section = sections.get(sectionIndex);
+                int sectionLength = section.getLength();
+
+                while (itemIndex < sectionLength) {
+                    Item item = section.get(itemIndex);
+
+                    if (item.isEnabled()) {
+                        item.setActive(true);
+                        break;
+                    }
+
+                    itemIndex++;
+                }
+
+                if (itemIndex < sectionLength) {
+                    break;
+                }
+
+                sectionIndex++;
+                itemIndex = 0;
+            }
+
             consumed = true;
         } else if (keyCode == Keyboard.KeyCode.LEFT) {
             // Close the window if this is not a top-level menu
@@ -441,6 +524,65 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
                 activeItem.press();
                 consumed = true;
             }
+        }
+
+        return consumed;
+    }
+
+    @Override
+    public boolean keyTyped(Component component, char character) {
+        boolean consumed = super.keyTyped(component, character);
+
+        Menu menu = (Menu)component;
+        Menu.SectionSequence sections = menu.getSections();
+        int sectionCount = sections.getLength();
+
+        Menu.Item activeItem = menu.getActiveItem();
+
+        int sectionIndex;
+        int itemIndex;
+        if (activeItem == null) {
+            sectionIndex = 0;
+            itemIndex = 0;
+        } else {
+            Menu.Section section = activeItem.getSection();
+            sectionIndex = sections.indexOf(section);
+            itemIndex = section.indexOf(activeItem) + 1;
+        }
+
+        character = Character.toUpperCase(character);
+
+        while (sectionIndex < sectionCount) {
+            Section section = sections.get(sectionIndex);
+            int sectionLength = section.getLength();
+
+            while (itemIndex < sectionLength) {
+                Item item = section.get(itemIndex);
+                if (item.isEnabled()) {
+                    Button.DataRenderer itemDataRenderer = item.getDataRenderer();
+                    String string = itemDataRenderer.toString(item.getButtonData());
+
+                    if (string != null
+                        && string.length() > 0) {
+                        char first = Character.toUpperCase(string.charAt(0));
+
+                        if (first == character) {
+                            item.setActive(true);
+                            consumed = true;
+                            break;
+                        }
+                    }
+                }
+
+                itemIndex++;
+            }
+
+            if (itemIndex < sectionLength) {
+                break;
+            }
+
+            sectionIndex++;
+            itemIndex = 0;
         }
 
         return consumed;

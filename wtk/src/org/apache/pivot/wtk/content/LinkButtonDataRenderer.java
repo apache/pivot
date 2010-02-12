@@ -108,4 +108,21 @@ public class LinkButtonDataRenderer extends TablePane implements Button.DataRend
         label.getStyles().put("textDecoration", highlighted ?
             TextDecoration.UNDERLINE : null);
     }
+
+    @Override
+    public String toString(Object data) {
+        if (data == null) {
+            throw new IllegalArgumentException();
+        }
+
+        String string;
+        if (data instanceof ButtonData) {
+            ButtonData buttonData = (ButtonData)data;
+            string = buttonData.getText();
+        } else {
+            string = data.toString();
+        }
+
+        return string;
+    }
 }

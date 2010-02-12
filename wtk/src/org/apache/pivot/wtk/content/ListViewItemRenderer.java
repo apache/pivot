@@ -86,17 +86,17 @@ public class ListViewItemRenderer extends BoxPane implements ListView.ItemRender
         label.setText(text);
     }
 
-    public String toString(Object suggestion) {
-        if (suggestion == null) {
+    public String toString(Object item) {
+        if (item == null) {
             throw new IllegalArgumentException();
         }
 
         String string;
-        if (suggestion instanceof ListItem) {
-            ListItem listItem = (ListItem)suggestion;
+        if (item instanceof ListItem) {
+            ListItem listItem = (ListItem)item;
             string = listItem.getText();
         } else {
-            string = suggestion.toString();
+            string = item.toString();
         }
 
         return string;

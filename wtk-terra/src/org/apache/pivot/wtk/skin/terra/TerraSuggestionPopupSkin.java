@@ -247,7 +247,6 @@ public class TerraSuggestionPopupSkin extends WindowSkin
 
         Display display = window.getDisplay();
         display.getContainerMouseListeners().add(displayMouseListener);
-        display.reenterMouse();
 
         dropShadowDecorator.setShadowOpacity(DropShadowDecorator.DEFAULT_SHADOW_OPACITY);
 

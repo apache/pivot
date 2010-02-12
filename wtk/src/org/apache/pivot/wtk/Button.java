@@ -37,7 +37,34 @@ public abstract class Button extends Component {
      * Button data renderer interface.
      */
     public interface DataRenderer extends Renderer {
+        /**
+         * Prepares the renderer for layout or paint.
+         *
+         * @param data
+         * The data to render, or <tt>null</tt> if called to calculate preferred
+         * height for skins that assume a fixed renderer height.
+         *
+         * @param button
+         * The button that contains the data.
+         *
+         * @param highlighted
+         * If <tt>true</tt>, the item is highlighted.
+         */
         public void render(Object data, Button button, boolean highlighted);
+
+        /**
+         * Converts button data to a string representation.
+         *
+         * @param data
+         *
+         * @return
+         * The data's string representation, or <tt>null</tt> if the data does not
+         * have a string representation.
+         * <p>
+         * Note that this method may be called often during keyboard navigation, so
+         * implementations should avoid unnecessary string allocations.
+         */
+        public String toString(Object data);
     }
 
     /**
