@@ -18,25 +18,27 @@ package org.apache.pivot.collections.test;
 
 import static org.junit.Assert.*;
 
+import java.util.Iterator;
+
 import org.apache.pivot.collections.HashSet;
 import org.junit.Test;
 
 public class HashSetTest {
     @Test
     public void basicTest() {
-        HashSet<String> hashSet = new HashSet<String>();
+        HashSet<String> set = new HashSet<String>();
 
-        hashSet.add("A");
-        assertTrue(hashSet.contains("A"));
+        set.add("A");
+        assertTrue(set.contains("A"));
 
-        hashSet.add("B");
-        assertTrue(hashSet.contains("A"));
-        assertTrue(hashSet.contains("B"));
+        set.add("B");
+        assertTrue(set.contains("A"));
+        assertTrue(set.contains("B"));
 
-        assertEquals(hashSet.getCount(), 2);
+        assertEquals(set.getCount(), 2);
 
         int i = 0;
-        for (String element : hashSet) {
+        for (String element : set) {
             assertTrue(element.equals("A")
                 || element.equals("B"));
             i++;
@@ -44,12 +46,34 @@ public class HashSetTest {
 
         assertEquals(i, 2);
 
-        hashSet.remove("B");
-        assertFalse(hashSet.contains("B"));
+        set.remove("B");
+        assertFalse(set.contains("B"));
 
-        hashSet.remove("A");
-        assertFalse(hashSet.contains("A"));
+        set.remove("A");
+        assertFalse(set.contains("A"));
 
-        assertTrue(hashSet.isEmpty());
+        assertTrue(set.isEmpty());
+
+        set.add("A");
+        set.add("B");
+        set.add("C");
+
+        Iterator<String> iter = set.iterator();
+        int count = 0;
+        while (iter.hasNext()) {
+            String s = iter.next();
+            if (!set.contains(s)) {
+                fail("Unknown element in set " + s);
+            }
+            count++;
+        }
+        assertEquals(3, count);
+
+        iter = set.iterator();
+        while (iter.hasNext()) {
+            iter.next();
+            iter.remove();
+        }
+        assertEquals(0, set.getCount());
     }
 }

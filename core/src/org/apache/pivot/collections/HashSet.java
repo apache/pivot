@@ -19,6 +19,7 @@ package org.apache.pivot.collections;
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import org.apache.pivot.util.ListenerList;
 
@@ -28,6 +29,50 @@ import org.apache.pivot.util.ListenerList;
  */
 public class HashSet<E> implements Set<E>, Serializable {
     private static final long serialVersionUID = 4095129319373194969L;
+
+    private class ElementIterator implements Iterator<E> {
+        private Iterator<E> iterator;
+
+        private E element = null;
+
+        public ElementIterator(Iterator<E> iterator) {
+            if (iterator == null) {
+                throw new IllegalArgumentException("iterator is null.");
+            }
+
+            this.iterator = iterator;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return iterator.hasNext();
+        }
+
+        @Override
+        public E next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+
+            element = iterator.next();
+            return element;
+        }
+
+        @Override
+        public void remove() {
+            if (element == null) {
+                throw new IllegalStateException();
+            }
+
+            iterator.remove();
+
+            if (setListeners != null) {
+                setListeners.elementRemoved(HashSet.this, element);
+            }
+
+            element = null;
+        }
+    }
 
     protected HashMap<E, Void> hashMap = new HashMap<E, Void>();
 
@@ -129,7 +174,7 @@ public class HashSet<E> implements Set<E>, Serializable {
 
     @Override
     public Iterator<E> iterator() {
-        return hashMap.iterator();
+        return new ElementIterator(hashMap.iterator());
     }
 
     @Override

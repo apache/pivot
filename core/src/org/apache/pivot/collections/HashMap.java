@@ -38,6 +38,8 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         private Iterator<Pair<K, V>> entryIterator;
         private int count;
 
+        private Pair<K, V> entry = null;
+
         public KeyIterator() {
             bucketIndex = 0;
             entryIterator = getBucketIterator(bucketIndex);
@@ -67,14 +69,26 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
                 throw new NoSuchElementException();
             }
 
-            Pair<K, V> entry = entryIterator.next();
-
+            entry = entryIterator.next();
             return entry.key;
         }
 
         @Override
         public void remove() {
-            throw new UnsupportedOperationException();
+            if (entry == null
+                || entryIterator == null) {
+                throw new IllegalStateException();
+            }
+
+            entryIterator.remove();
+            count--;
+            HashMap.this.count--;
+
+            if (mapListeners != null) {
+                mapListeners.valueRemoved(HashMap.this, entry.key, entry.value);
+            }
+
+            entry = null;
         }
 
         private Iterator<Pair<K, V>> getBucketIterator(int bucketIndex) {

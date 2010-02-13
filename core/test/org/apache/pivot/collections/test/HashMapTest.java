@@ -82,13 +82,16 @@ public class HashMapTest {
         }
         assertEquals(3, count);
 
-        try {
+        iter = map.iterator();
+        while (iter.hasNext()) {
+            iter.next();
             iter.remove();
-            fail("Expecting " + UnsupportedOperationException.class);
-        } catch (UnsupportedOperationException ex) {
-            // ignore, we're expecting this as part of the test
         }
+        assertEquals(0, map.getCount());
 
+        map.put("a", 1);
+        map.put("b", 2);
+        map.put("c", 3);
         map.clear();
 
         assertEquals(0, map.getCount());

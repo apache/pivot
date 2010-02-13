@@ -22,7 +22,7 @@ import java.util.Iterator;
  * Immutable implementation of the {@link Iterator} interface.
  */
 public class ImmutableIterator<T> implements Iterator<T> {
-    Iterator<T> iterator;
+    private Iterator<T> iterator;
 
     public ImmutableIterator(Iterator<T> iterator) {
         if (iterator == null) {
@@ -43,7 +43,7 @@ public class ImmutableIterator<T> implements Iterator<T> {
     }
 
     @Override
-    public void remove() {
+    public final void remove() {
         throw new UnsupportedOperationException();
     }
 }
