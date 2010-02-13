@@ -42,7 +42,6 @@ import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.skin.ComponentSkin;
 import org.apache.pivot.wtk.skin.ContainerSkin;
 
-
 /**
  * Spinner skin.
  */
@@ -288,6 +287,34 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
             if (newSelectedIndex != selectedIndex) {
                 spinner.setSelectedIndex(newSelectedIndex);
                 consumed = true;
+            }
+
+            return consumed;
+        }
+
+        @Override
+        public boolean keyTyped(Component component, char character) {
+            boolean consumed = super.keyTyped(component, character);
+
+            Spinner spinner = (Spinner)TerraSpinnerSkin.this.getComponent();
+            List<?> spinnerData = spinner.getSpinnerData();
+            Spinner.ItemRenderer itemRenderer = spinner.getItemRenderer();
+
+            character = Character.toUpperCase(character);
+
+            for (int i = spinner.getSelectedIndex() + 1, n = spinnerData.getLength(); i < n; i++) {
+                String string = itemRenderer.toString(spinnerData.get(i));
+
+                if (string != null
+                    && string.length() > 0) {
+                    char first = Character.toUpperCase(string.charAt(0));
+
+                    if (first == character) {
+                        spinner.setSelectedIndex(i);
+                        consumed = true;
+                        break;
+                    }
+                }
             }
 
             return consumed;

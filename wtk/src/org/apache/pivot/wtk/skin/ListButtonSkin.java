@@ -246,18 +246,29 @@ public abstract class ListButtonSkin extends ButtonSkin
             consumed = true;
         } else if (keyCode == Keyboard.KeyCode.UP) {
             ListButton listButton = (ListButton)getComponent();
-            int selectedIndex = listButton.getSelectedIndex();
+            int index = listButton.getSelectedIndex();
 
-            if (selectedIndex > 0) {
-                listButton.setSelectedIndex(selectedIndex - 1);
+            do {
+                index--;
+            } while (index >= 0
+                && listButton.isItemDisabled(index));
+
+            if (index >= 0) {
+                listButton.setSelectedIndex(index);
                 consumed = true;
             }
         } else if (keyCode == Keyboard.KeyCode.DOWN) {
             ListButton listButton = (ListButton)getComponent();
-            int selectedIndex = listButton.getSelectedIndex();
+            int index = listButton.getSelectedIndex();
+            int count = listButton.getListData().getLength();
 
-            if (selectedIndex < listButton.getListData().getLength() - 1) {
-                listButton.setSelectedIndex(selectedIndex + 1);
+            do {
+                index++;
+            } while (index < count
+                && listView.isItemDisabled(index));
+
+            if (index < count) {
+                listButton.setSelectedIndex(index);
                 consumed = true;
             }
         } else {
@@ -280,6 +291,37 @@ public abstract class ListButtonSkin extends ButtonSkin
             listButton.press();
         } else {
             consumed = super.keyReleased(component, keyCode, keyLocation);
+        }
+
+        return consumed;
+    }
+
+    @Override
+    public boolean keyTyped(Component component, char character) {
+        boolean consumed = super.keyTyped(component, character);
+
+        ListButton listButton = (ListButton)getComponent();
+
+        List<?> listData = listButton.getListData();
+        ListView.ItemRenderer itemRenderer = listButton.getItemRenderer();
+
+        character = Character.toUpperCase(character);
+
+        for (int i = listButton.getSelectedIndex() + 1, n = listData.getLength(); i < n; i++) {
+            if (!listButton.isItemDisabled(i)) {
+                String string = itemRenderer.toString(listData.get(i));
+
+                if (string != null
+                    && string.length() > 0) {
+                    char first = Character.toUpperCase(string.charAt(0));
+
+                    if (first == character) {
+                        listButton.setSelectedIndex(i);
+                        consumed = true;
+                        break;
+                    }
+                }
+            }
         }
 
         return consumed;

@@ -130,6 +130,22 @@ public class TreeViewNodeRenderer extends BoxPane implements TreeView.NodeRender
         }
     }
 
+    public String toString(Object node) {
+        if (node == null) {
+            throw new IllegalArgumentException();
+        }
+
+        String string;
+        if (node instanceof TreeNode) {
+            TreeNode treeNode = (TreeNode)node;
+            string = treeNode.getText();
+        } else {
+            string = node.toString();
+        }
+
+        return string;
+    }
+
     public int getIconWidth() {
         return imageView.getPreferredWidth(-1);
     }

@@ -86,22 +86,6 @@ public class ListViewItemRenderer extends BoxPane implements ListView.ItemRender
         label.setText(text);
     }
 
-    public String toString(Object item) {
-        if (item == null) {
-            throw new IllegalArgumentException();
-        }
-
-        String string;
-        if (item instanceof ListItem) {
-            ListItem listItem = (ListItem)item;
-            string = listItem.getText();
-        } else {
-            string = item.toString();
-        }
-
-        return string;
-    }
-
     protected void renderStyles(ListView listView, boolean selected,
         boolean highlighted, boolean disabled) {
         imageView.getStyles().put("opacity", listView.isEnabled() ? 1.0f : 0.5f);
@@ -125,6 +109,22 @@ public class ListViewItemRenderer extends BoxPane implements ListView.ItemRender
         }
 
         label.getStyles().put("color", color);
+    }
+
+    public String toString(Object item) {
+        if (item == null) {
+            throw new IllegalArgumentException();
+        }
+
+        String string;
+        if (item instanceof ListItem) {
+            ListItem listItem = (ListItem)item;
+            string = listItem.getText();
+        } else {
+            string = item.toString();
+        }
+
+        return string;
     }
 
     public int getIconWidth() {

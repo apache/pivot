@@ -75,7 +75,7 @@ public class ListView extends Component {
          * is <tt>null</tt>.
          *
          * @param listView
-         * The list view that contains the item.
+         * The host component.
          *
          * @param selected
          * If <tt>true</tt>, the item is selected.

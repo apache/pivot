@@ -55,9 +55,9 @@ public class TableViewCellRenderer extends Label
         renderStyles(tableView, selected, disabled);
 
         if (row != null) {
+            // Get the row and cell data
             Object cellData = null;
 
-            // Get the row and cell data
             if (columnName != null) {
                 Dictionary<String, Object> rowData;
                 if (row instanceof Dictionary<?, ?>) {
@@ -96,5 +96,24 @@ public class TableViewCellRenderer extends Label
         }
 
         styles.put("color", color);
+    }
+
+    @SuppressWarnings("unchecked")
+    public String toString(Object row, String columnName) {
+        // Get the row and cell data
+        Object cellData = null;
+
+        if (columnName != null) {
+            Dictionary<String, Object> rowData;
+            if (row instanceof Dictionary<?, ?>) {
+                rowData = (Dictionary<String, Object>)row;
+            } else {
+                rowData = new BeanDictionary(row);
+            }
+
+            cellData = rowData.get(columnName);
+        }
+
+        return (cellData == null) ? null : cellData.toString();
     }
 }

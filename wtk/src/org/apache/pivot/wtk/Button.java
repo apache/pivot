@@ -45,7 +45,7 @@ public abstract class Button extends Component {
          * height for skins that assume a fixed renderer height.
          *
          * @param button
-         * The button that contains the data.
+         * The host component.
          *
          * @param highlighted
          * If <tt>true</tt>, the item is highlighted.

@@ -310,6 +310,30 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
             label.getStyles().put("color", color);
         }
+
+        public String toString(Object row, String columnName) {
+            String string;
+
+            File file = (File)row;
+            if (columnName.equals(NAME_KEY)) {
+                string = file.getName();
+            } else if (columnName.equals(SIZE_KEY)) {
+                long length = file.length();
+                string = FileSizeFormat.getInstance().format(length);
+            } else if (columnName.equals(LAST_MODIFIED_KEY)) {
+                long lastModified = file.lastModified();
+                Date lastModifiedDate = new Date(lastModified);
+                DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT,
+                    DateFormat.SHORT);
+                string = dateFormat.format(lastModifiedDate);
+            } else {
+                System.err.println("Unexpected column name in " + getClass().getName()
+                    + ": " + columnName);
+                string = null;
+            }
+
+            return string;
+        }
     }
 
     /**

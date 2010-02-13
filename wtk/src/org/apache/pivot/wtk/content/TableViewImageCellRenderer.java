@@ -91,4 +91,8 @@ public class TableViewImageCellRenderer extends ImageView implements CellRendere
             setImage(image);
         }
     }
+
+    public String toString(Object row, String columnName) {
+        return null;
+    }
 }

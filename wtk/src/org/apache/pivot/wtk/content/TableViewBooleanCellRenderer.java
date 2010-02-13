@@ -86,6 +86,10 @@ public class TableViewBooleanCellRenderer extends BoxPane
         }
     }
 
+    public String toString(Object row, String columnName) {
+        return null;
+    }
+
     public boolean isCheckboxDisabled() {
         return checkboxDisabled;
     }

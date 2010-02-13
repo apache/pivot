@@ -95,4 +95,23 @@ public class TableViewTextAreaCellRenderer extends TextArea
 
         styles.put("color", color);
     }
+
+    @SuppressWarnings("unchecked")
+    public String toString(Object row, String columnName) {
+        Object cellData = null;
+
+        // Get the row and cell data
+        if (columnName != null) {
+            Dictionary<String, Object> rowData;
+            if (row instanceof Dictionary<?, ?>) {
+                rowData = (Dictionary<String, Object>)row;
+            } else {
+                rowData = new BeanDictionary(row);
+            }
+
+            cellData = rowData.get(columnName);
+        }
+
+        return (cellData == null) ? null : cellData.toString();
+    }
 }

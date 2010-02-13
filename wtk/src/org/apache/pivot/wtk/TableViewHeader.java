@@ -37,8 +37,41 @@ public class TableViewHeader extends Component {
      * Table view header data renderer interface.
      */
     public interface DataRenderer extends Renderer {
+        /**
+         * Prepares the renderer for layout or paint.
+         *
+         * @param data
+         * The data to render, or <tt>null</tt> if called to calculate preferred
+         * height for skins that assume a fixed renderer height.
+         *
+         * @param columnIndex
+         * The index of the column being rendered.
+         *
+         * @param tableViewHeader
+         * The host component.
+         *
+         * @param columnName
+         * The name of the column being rendered.
+         *
+         * @param highlighted
+         * If <tt>true</tt>, the item is highlighted.
+         */
         public void render(Object data, int columnIndex, TableViewHeader tableViewHeader,
             String columnName, boolean highlighted);
+
+        /**
+         * Converts table view header data to a string representation.
+         *
+         * @param data
+         *
+         * @return
+         * The data's string representation, or <tt>null</tt> if the data does not
+         * have a string representation.
+         * <p>
+         * Note that this method may be called often during keyboard navigation, so
+         * implementations should avoid unnecessary string allocations.
+         */
+        public String toString(Object item);
     }
 
     /**

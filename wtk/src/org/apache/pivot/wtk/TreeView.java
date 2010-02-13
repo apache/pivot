@@ -105,7 +105,7 @@ public class TreeView extends Component {
          * visible nodes list, or <tt>-1</tt> if <tt>node</tt> is <tt>null</tt>.
          *
          * @param treeView
-         * The tree view that contains the node.
+         * The host component.
          *
          * @param expanded
          * <tt>true</tt> if the node is expanded; <tt>false</tt> otherwise.
@@ -125,6 +125,20 @@ public class TreeView extends Component {
         public void render(Object node, Path path, int rowIndex, TreeView treeView,
             boolean expanded, boolean selected, NodeCheckState checkState,
             boolean highlighted, boolean disabled);
+
+        /**
+         * Converts a tree node to a string representation.
+         *
+         * @param node
+         *
+         * @return
+         * The node's string representation, or <tt>null</tt> if the node does not
+         * have a string representation.
+         * <p>
+         * Note that this method may be called often during keyboard navigation, so
+         * implementations should avoid unnecessary string allocations.
+         */
+        public String toString(Object node);
     }
 
     /**

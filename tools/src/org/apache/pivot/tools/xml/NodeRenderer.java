@@ -85,4 +85,19 @@ public class NodeRenderer extends Label implements TreeView.NodeRenderer {
             getStyles().put("color", color);
         }
     }
+
+    public String toString(Object node) {
+        String string;
+        if (node instanceof Element) {
+            Element element = (Element)node;
+            string = element.getName();
+        } else if (node instanceof TextNode) {
+            TextNode textNode = (TextNode)node;
+            string = textNode.getText();
+        } else {
+            throw new IllegalArgumentException();
+        }
+
+        return string;
+    }
 }

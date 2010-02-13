@@ -66,4 +66,13 @@ public class NodeAdapterRenderer extends Label implements TreeView.NodeRenderer 
            setText(nodeAdapter.getText());
         }
     }
+
+    public String toString(Object node) {
+        if (node == null) {
+            throw new IllegalArgumentException();
+        }
+
+        NodeAdapter nodeAdapter = (NodeAdapter)node;
+        return nodeAdapter.getText();
+    }
 }

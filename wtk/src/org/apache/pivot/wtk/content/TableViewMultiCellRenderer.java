@@ -326,9 +326,9 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
                     selected, highlighted, disabled);
             }
         } else {
+            // Get the row and cell data
             Object cellData = null;
 
-            // Get the row and cell data
             if (columnName != null) {
                 Dictionary<String, Object> rowData;
                 if (row instanceof Dictionary<?, ?>) {
@@ -364,6 +364,41 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
             cellRenderer.render(row, rowIndex, columnIndex, tableView, columnName,
                 selected, highlighted, disabled);
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    public String toString(Object row, String columnName) {
+        // Get the row and cell data
+        Object cellData = null;
+
+        if (columnName != null) {
+            Dictionary<String, Object> rowData;
+            if (row instanceof Dictionary<?, ?>) {
+                rowData = (Dictionary<String, Object>)row;
+            } else {
+                rowData = new BeanDictionary(row);
+            }
+
+            cellData = rowData.get(columnName);
+        }
+
+        TableView.CellRenderer cellRenderer = null;
+
+        Class<?> valueClass = (cellData == null ? null : cellData.getClass());
+        while (cellRenderer == null
+            && valueClass != Object.class) {
+            cellRenderer = cellRenderers.get(valueClass);
+
+            if (cellRenderer == null) {
+                valueClass = valueClass.getSuperclass();
+            }
+        }
+
+        if (cellRenderer == null) {
+            cellRenderer = defaultRenderer;
+        }
+
+        return cellRenderer.toString(row, columnName);
     }
 
     public TableView.CellRenderer getDefaultRenderer() {

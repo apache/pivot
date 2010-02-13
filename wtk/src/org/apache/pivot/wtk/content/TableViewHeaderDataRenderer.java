@@ -29,7 +29,6 @@ import org.apache.pivot.wtk.TableViewHeader;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.media.Image;
 
-
 /**
  * Default table view header data renderer.
  */
@@ -115,5 +114,21 @@ public class TableViewHeaderDataRenderer extends BoxPane
                 labelStyles.put("color", color);
             }
         }
+    }
+
+    public String toString(Object data) {
+        if (data == null) {
+            throw new IllegalArgumentException();
+        }
+
+        String string;
+        if (data instanceof TableViewHeaderData) {
+            TableViewHeaderData tableViewHeaderData = (TableViewHeaderData)data;
+            string = tableViewHeaderData.getText();
+        } else {
+            string = data.toString();
+        }
+
+        return string;
     }
 }

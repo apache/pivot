@@ -485,7 +485,7 @@ public class TableView extends Component {
          * The index of the column being rendered.
          *
          * @param tableView
-         * The table view that contains the cell.
+         * The host component.
          *
          * @param columnName
          * The name of the column being rendered.
@@ -502,6 +502,20 @@ public class TableView extends Component {
         public void render(Object row, int rowIndex, int columnIndex,
             TableView tableView, String columnName,
             boolean selected, boolean highlighted, boolean disabled);
+
+        /**
+         * Converts table view cell data to a string representation.
+         *
+         * @param row
+         *
+         * @return
+         * The cell data's string representation, or <tt>null</tt> if the data does not
+         * have a string representation.
+         * <p>
+         * Note that this method may be called often during keyboard navigation, so
+         * implementations should avoid unnecessary string allocations.
+         */
+        public String toString(Object row, String columnName);
     }
 
     /**
