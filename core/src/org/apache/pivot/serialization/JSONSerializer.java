@@ -55,11 +55,7 @@ public class JSONSerializer implements Serializer<Object> {
     public static final int BUFFER_SIZE = 2048;
 
     public JSONSerializer() {
-        this(DEFAULT_CHARSET_NAME);
-    }
-
-    public JSONSerializer(String charsetName) {
-        this(charsetName == null ? Charset.defaultCharset() : Charset.forName(charsetName));
+        this(Charset.forName(DEFAULT_CHARSET_NAME));
     }
 
     public JSONSerializer(Charset charset) {

@@ -99,7 +99,7 @@ public class StockTracker implements Application {
         symbols.add("AMZN");
         symbols.add("GOOG");
         symbols.add("ORCL");
-        symbols.add("JAVA");
+        symbols.add("IBM");
     }
 
     @Override
@@ -112,7 +112,7 @@ public class StockTracker implements Application {
         }
 
         // Load and bind to the WTKX source
-        Resources resources = new Resources(getClass().getName(), "UTF-8");
+        Resources resources = new Resources(getClass().getName());
         WTKXSerializer wtkxSerializer = new WTKXSerializer(resources);
         window = (Window)wtkxSerializer.readObject(this, "stocktracker.wtkx");
         wtkxSerializer.bind(this, StockTracker.class);

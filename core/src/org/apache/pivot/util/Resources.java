@@ -40,33 +40,25 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
 
     private Map<String, Object> resourceMap = null;
 
+    public static final String DEFAULT_CHARSET_NAME = "UTF-8";
+
     public Resources(String baseName) throws IOException, SerializationException {
-        this(null, baseName, Locale.getDefault(), Charset.defaultCharset());
+        this(null, baseName, Locale.getDefault(), Charset.forName(DEFAULT_CHARSET_NAME));
     }
 
     public Resources(Resources parent, String baseName) throws IOException,
         SerializationException {
-        this(parent, baseName, Locale.getDefault(), Charset.defaultCharset());
+        this(parent, baseName, Locale.getDefault(), Charset.forName(DEFAULT_CHARSET_NAME));
     }
 
     public Resources(String baseName, Locale locale) throws IOException,
         SerializationException {
-        this(null, baseName, locale, Charset.defaultCharset());
+        this(null, baseName, locale, Charset.forName(DEFAULT_CHARSET_NAME));
     }
 
     public Resources(Resources parent, String baseName, Locale locale) throws IOException,
         SerializationException {
-        this(parent, baseName, locale, Charset.defaultCharset());
-    }
-
-    public Resources(String baseName, String charsetName) throws IOException,
-        SerializationException {
-        this(baseName, Locale.getDefault(), charsetName);
-    }
-
-    public Resources(Resources parent, String baseName, String charsetName) throws IOException,
-        SerializationException {
-        this(parent, baseName, Locale.getDefault(), charsetName);
+        this(parent, baseName, locale, Charset.forName(DEFAULT_CHARSET_NAME));
     }
 
     public Resources(String baseName, Charset charset) throws IOException,
@@ -77,16 +69,6 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
     public Resources(Resources parent, String baseName, Charset charset) throws IOException,
         SerializationException {
         this(parent, baseName, Locale.getDefault(), charset);
-    }
-
-    public Resources(String baseName, Locale locale, String charsetName) throws IOException,
-        SerializationException {
-        this(null, baseName, locale, Charset.forName(charsetName));
-    }
-
-    public Resources(Resources parent, String baseName, Locale locale, String charsetName)
-        throws IOException, SerializationException {
-        this(parent, baseName, locale, Charset.forName(charsetName));
     }
 
     /**
@@ -161,9 +143,8 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
         }
 
         if (resourceMap == null) {
-            throw new MissingResourceException(
-                "Can't find resource for base name " + baseName + ", locale "
-                    + locale, baseName, "");
+            throw new MissingResourceException("Can't find resource for base name "
+                + baseName + ", locale " + locale, baseName, "");
         }
     }
 
@@ -189,6 +170,7 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
         if (o == null && parent != null) {
             return parent.get(key);
         }
+
         return o;
     }
 
@@ -197,6 +179,7 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
         if (s == null && parent != null) {
             return parent.getString(key);
         }
+
         return s;
     }
 

@@ -135,7 +135,7 @@ public class ParentResourcesTest {
         main = new Resources(parent, getClass().getName(), Charset.defaultCharset());
         testString();
 
-        main = new Resources(parent, getClass().getName(), Charset.defaultCharset().name());
+        main = new Resources(parent, getClass().getName(), Charset.defaultCharset());
         testString();
 
         main = new Resources(parent, getClass().getName(), Locale.ENGLISH);
@@ -145,7 +145,7 @@ public class ParentResourcesTest {
         testString();
 
         main = new Resources(parent, getClass().getName(), Locale.ENGLISH,
-            Charset.defaultCharset().name());
+            Charset.defaultCharset());
         testString();
 
     }

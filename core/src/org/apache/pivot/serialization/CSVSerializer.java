@@ -142,11 +142,7 @@ public class CSVSerializer implements Serializer<List<?>> {
 
 
     public CSVSerializer() {
-        this(DEFAULT_CHARSET_NAME);
-    }
-
-    public CSVSerializer(String charsetName) {
-        this(charsetName == null ? Charset.defaultCharset() : Charset.forName(charsetName));
+        this(Charset.forName(DEFAULT_CHARSET_NAME));
     }
 
     public CSVSerializer(Charset charset) {
