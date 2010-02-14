@@ -721,9 +721,17 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
 
         if (key.startsWith(FIELD_PREFIX)) {
             Field field = getField(type, key.substring(1));
-            isReadOnly = (field == null
-                || (field.getModifiers() & Modifier.FINAL) != 0);
+            if (field == null) {
+                throw new PropertyNotFoundException();
+            }
+
+            isReadOnly = ((field.getModifiers() & Modifier.FINAL) != 0);
         } else {
+            Method getterMethod = getGetterMethod(type, key);
+            if (getterMethod == null) {
+                throw new PropertyNotFoundException();
+            }
+
             Method setterMethod = getSetterMethod(type, key, getType(type, key));
             isReadOnly = (setterMethod == null);
         }

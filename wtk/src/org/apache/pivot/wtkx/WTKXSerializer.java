@@ -451,13 +451,13 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                 throw new SerializationException(exception);
             }
         } catch (IOException exception) {
-            logException(exception);
+            logException();
             throw exception;
         } catch (SerializationException exception) {
-            logException(exception);
+            logException();
             throw exception;
         } catch (RuntimeException exception) {
-            logException(exception);
+            logException();
             throw exception;
         }
 
@@ -1040,7 +1040,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         }
     }
 
-    private void logException(Exception exception) {
+    private void logException() {
         String message = "An error occurred while processing ";
 
         if (element == null) {
@@ -1057,7 +1057,6 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         message += ":";
 
         System.err.println(message);
-        exception.printStackTrace();
     }
 
     @Override
