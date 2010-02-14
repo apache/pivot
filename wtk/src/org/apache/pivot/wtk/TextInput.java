@@ -252,13 +252,15 @@ public class TextInput extends Component {
                 previousTextNode.getNodeListeners().remove(textNodeListener);
             }
 
-            if (textNode != null) {
+            this.textNode = textNode;
+
+            if (textNode == null) {
+                selectionStart = 0;
+            } else {
+                selectionStart = textNode.getCharacterCount();
                 textNode.getNodeListeners().add(textNodeListener);
             }
 
-            this.textNode = textNode;
-
-            selectionStart = 0;
             selectionLength = 0;
 
             textInputListeners.textNodeChanged(this, previousTextNode);

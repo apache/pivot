@@ -33,50 +33,58 @@ public class ResultListTest {
         // e.g. jdbc:mysql://localhost/test
         String connectionURL = args[0];
 
-        Connection connection = DriverManager.getConnection(connectionURL);
-        Statement statement = connection.createStatement();
-        ResultSet resultSet;
-        ResultList resultList;
+        Connection connection = null;
 
-        resultSet = statement.executeQuery("SELECT * FROM result_list_test");
-        resultList = new ResultList(resultSet,
-            new ResultList.Field("i"),
-            new ResultList.Field("f"),
-            new ResultList.Field("s"),
-            new ResultList.Field("b"));
-        out.println(JSONSerializer.toString(resultList));
+        try {
+            connection = DriverManager.getConnection(connectionURL);
+            Statement statement = connection.createStatement();
+            ResultSet resultSet;
+            ResultList resultList;
 
-        resultSet = statement.executeQuery("SELECT * FROM result_list_test");
-        resultList = new ResultList(resultSet,
-            new ResultList.Field("i", "integer"),
-            new ResultList.Field("f", "float"),
-            new ResultList.Field("s", "string"),
-            new ResultList.Field("b", "boolean"));
-        out.println(JSONSerializer.toString(resultList));
+            resultSet = statement.executeQuery("SELECT * FROM result_list_test");
+            resultList = new ResultList(resultSet,
+                new ResultList.Field("i"),
+                new ResultList.Field("f"),
+                new ResultList.Field("s"),
+                new ResultList.Field("b"));
+            out.println(JSONSerializer.toString(resultList));
 
-        resultSet = statement.executeQuery("SELECT * FROM result_list_test");
-        resultList = new ResultList(resultSet,
-            new ResultList.Field("i", "integer", Integer.class),
-            new ResultList.Field("f", "float", Float.class),
-            new ResultList.Field("s", "string", String.class),
-            new ResultList.Field("b", "boolean", Boolean.class));
-        out.println(JSONSerializer.toString(resultList));
+            resultSet = statement.executeQuery("SELECT * FROM result_list_test");
+            resultList = new ResultList(resultSet,
+                new ResultList.Field("i", "integer"),
+                new ResultList.Field("f", "float"),
+                new ResultList.Field("s", "string"),
+                new ResultList.Field("b", "boolean"));
+            out.println(JSONSerializer.toString(resultList));
 
-        // Test forward and backward iteration
-        resultSet = statement.executeQuery("SELECT * FROM result_list_test");
-        resultList = new ResultList(resultSet,
-            new ResultList.Field("i"),
-            new ResultList.Field("f"),
-            new ResultList.Field("s"),
-            new ResultList.Field("b"));
+            resultSet = statement.executeQuery("SELECT * FROM result_list_test");
+            resultList = new ResultList(resultSet,
+                new ResultList.Field("i", "integer", Integer.class),
+                new ResultList.Field("f", "float", Float.class),
+                new ResultList.Field("s", "string", String.class),
+                new ResultList.Field("b", "boolean", Boolean.class));
+            out.println(JSONSerializer.toString(resultList));
 
-        List.ItemIterator<Map<String, Object>> iterator = resultList.iterator();
-        while (iterator.hasNext()) {
-            out.println(JSONSerializer.toString(iterator.next()));
-        }
+            // Test forward and backward iteration
+            resultSet = statement.executeQuery("SELECT * FROM result_list_test");
+            resultList = new ResultList(resultSet,
+                new ResultList.Field("i"),
+                new ResultList.Field("f"),
+                new ResultList.Field("s"),
+                new ResultList.Field("b"));
 
-        while(iterator.hasPrevious()) {
-            out.println(JSONSerializer.toString(iterator.previous()));
+            List.ItemIterator<Map<String, Object>> iterator = resultList.iterator();
+            while (iterator.hasNext()) {
+                out.println(JSONSerializer.toString(iterator.next()));
+            }
+
+            while(iterator.hasPrevious()) {
+                out.println(JSONSerializer.toString(iterator.previous()));
+            }
+        } finally {
+            if (connection != null) {
+                connection.close();
+            }
         }
     }
 }
