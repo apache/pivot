@@ -145,6 +145,7 @@ public class Alert extends Dialog {
     public static void alert(MessageType messageType, String message, Component body, Display display,
         DialogCloseListener dialogCloseListener) {
         Alert alert = createAlert(messageType, message, body);
+        alert.setModal(false);
         alert.open(display, dialogCloseListener);
     }
 
@@ -168,6 +169,7 @@ public class Alert extends Dialog {
     public static void alert(MessageType messageType, String message, Component body, Window owner,
         DialogCloseListener dialogCloseListener) {
         Alert alert = createAlert(messageType, message, body);
+        alert.setModal(true);
         alert.open(owner.getDisplay(), owner, dialogCloseListener);
     }
 
@@ -175,7 +177,7 @@ public class Alert extends Dialog {
         List<Object> options = new ArrayList<Object>();
         options.add(resources.get("defaultOption"));
 
-        Alert alert = new Alert(messageType, message, options, body, true);
+        Alert alert = new Alert(messageType, message, options, body);
         alert.setTitle((String)resources.get("defaultTitle"));
         alert.setSelectedOption(0);
 

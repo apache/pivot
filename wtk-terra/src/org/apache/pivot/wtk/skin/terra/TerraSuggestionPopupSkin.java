@@ -26,6 +26,7 @@ import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Border;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentKeyListener;
+import org.apache.pivot.wtk.ComponentStateListener;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.ContainerMouseListener;
 import org.apache.pivot.wtk.Direction;
@@ -80,6 +81,18 @@ public class TerraSuggestionPopupSkin extends WindowSkin
         public boolean mouseWheel(Container container, Mouse.ScrollType scrollType,
             int scrollAmount, int wheelRotation, int x, int y) {
             return true;
+        }
+    };
+
+    private ComponentStateListener textInputStateListener = new ComponentStateListener.Adapter() {
+        @Override
+        public void focusedChanged(Component component, Component obverseComponent) {
+            SuggestionPopup suggestionPopup = (SuggestionPopup)getComponent();
+
+            if (!component.isFocused()
+                && !suggestionPopup.containsFocus()) {
+                suggestionPopup.close();
+            }
         }
     };
 
@@ -221,13 +234,11 @@ public class TerraSuggestionPopupSkin extends WindowSkin
             }
 
             case Keyboard.KeyCode.TAB: {
-                suggestionPopup.close(true);
+                suggestionPopup.close(false);
 
-                if (suggestionPopup.isClosed()) {
-                    Direction direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ?
-                        Direction.BACKWARD : Direction.FORWARD;
-                    textInput.transferFocus(direction);
-                }
+                Direction direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ?
+                    Direction.BACKWARD : Direction.FORWARD;
+                textInput.transferFocus(direction);
 
                 break;
             }
@@ -252,6 +263,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin
 
         SuggestionPopup suggestionPopup = (SuggestionPopup)getComponent();
         TextInput textInput = suggestionPopup.getTextInput();
+        textInput.getComponentStateListeners().add(textInputStateListener);
         textInput.getComponentKeyListeners().add(textInputKeyListener);
 
         // Reposition under text input
@@ -274,17 +286,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin
     @Override
     public void windowClosed(Window window, Display display, Window owner) {
         display.getContainerMouseListeners().remove(displayMouseListener);
-
-        SuggestionPopup suggestionPopup = (SuggestionPopup)getComponent();
-        suggestionPopup.clearFocusDescendant();
-
-        TextInput textInput = suggestionPopup.getTextInput();
-        textInput.getComponentKeyListeners().remove(textInputKeyListener);
-
         super.windowClosed(window, display, owner);
-
-        textInput.requestFocus();
-        textInput.setSelection(textInput.getTextLength(), 0);
     }
 
     @Override
@@ -345,6 +347,16 @@ public class TerraSuggestionPopupSkin extends WindowSkin
 
     @Override
     public void suggestionPopupClosed(SuggestionPopup suggestionPopup) {
+        suggestionPopup.clearFocusDescendant();
+
+        TextInput textInput = suggestionPopup.getTextInput();
+        textInput.getComponentStateListeners().remove(textInputStateListener);
+        textInput.getComponentKeyListeners().remove(textInputKeyListener);
+
+        if (suggestionPopup.getResult()) {
+            textInput.requestFocus();
+        }
+
         suggestionListViewBorder.setEnabled(true);
         closeTransition = null;
     }
