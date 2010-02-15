@@ -41,6 +41,10 @@ public interface SpinnerListener {
         @Override
         public void selectedItemKeyChanged(Spinner spinner, String previousSelectedItemKey) {
         }
+
+        @Override
+        public void bindMappingChanged(Spinner spinner, Spinner.BindMapping previousBindMapping) {
+        }
     }
 
     /**
@@ -73,4 +77,12 @@ public interface SpinnerListener {
      * @param previousSelectedItemKey
      */
     public void selectedItemKeyChanged(Spinner spinner, String previousSelectedItemKey);
+
+    /**
+     * Called when a spinner's bind mapping has changed.
+     *
+     * @param spinner
+     * @param previousBindMapping
+     */
+    public void bindMappingChanged(Spinner spinner, Spinner.BindMapping previousBindMapping);
 }

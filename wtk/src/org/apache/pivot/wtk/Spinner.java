@@ -28,7 +28,6 @@ import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.content.SpinnerItemRenderer;
 
-
 /**
  * Component that presents a means of cycling through a list of items.
  */
@@ -70,6 +69,37 @@ public class Spinner extends Container {
      */
     public interface Skin {
         public Bounds getContentBounds();
+    }
+
+    /**
+     * Translates between spinner and bind context data during data binding.
+     */
+    public interface BindMapping {
+        /**
+         * Returns the index of the item in the source list.
+         *
+         * @param spinnerData
+         * The source spinner data.
+         *
+         * @param item
+         * The item to locate.
+         *
+         * @return
+         * The index of first occurrence of the item if it exists in the list;
+         * <tt>-1</tt>, otherwise.
+         */
+        public int indexOf(List<?> spinnerData, Object item);
+
+        /**
+         * Retrieves the item at the given index.
+         *
+         * @param listData
+         * The source spinner data.
+         *
+         * @param index
+         * The index of the item to retrieve.
+         */
+        public Object get(List<?> spinnerData, int index);
     }
 
     /**
@@ -156,6 +186,13 @@ public class Spinner extends Container {
                 listener.selectedItemKeyChanged(spinner, previousSelectedItemKey);
             }
         }
+
+        @Override
+        public void bindMappingChanged(Spinner spinner, BindMapping previousBindMapping) {
+            for (SpinnerListener listener : this) {
+                listener.bindMappingChanged(spinner, previousBindMapping);
+            }
+        }
     }
 
     /**
@@ -220,8 +257,8 @@ public class Spinner extends Container {
 
     private boolean circular = false;
     private int selectedIndex = -1;
-
     private String selectedItemKey = null;
+    private BindMapping bindMapping = null;
 
     private SpinnerListenerList spinnerListeners = new SpinnerListenerList();
     private SpinnerItemListenerList spinnerItemListeners = new SpinnerItemListenerList();
@@ -410,12 +447,34 @@ public class Spinner extends Container {
         }
     }
 
+    public BindMapping getBindMapping() {
+        return bindMapping;
+    }
+
+    public void setBindMapping(BindMapping bindMapping) {
+        BindMapping previousBindMapping = this.bindMapping;
+
+        if (previousBindMapping != bindMapping) {
+            this.bindMapping = bindMapping;
+            spinnerListeners.bindMappingChanged(this, previousBindMapping);
+        }
+    }
+
     @Override
+    @SuppressWarnings("unchecked")
     public void load(Dictionary<String, ?> context) {
         if (selectedItemKey != null
             && JSONSerializer.containsKey(context, selectedItemKey)) {
             Object item = JSONSerializer.get(context, selectedItemKey);
-            setSelectedItem(item);
+
+            int index;
+            if (bindMapping == null) {
+                index = ((List<Object>)spinnerData).indexOf(item);
+            } else {
+                index = bindMapping.indexOf(spinnerData, item);
+            }
+
+            setSelectedIndex(index);
         }
     }
 
@@ -423,7 +482,15 @@ public class Spinner extends Container {
     public void store(Dictionary<String, ?> context) {
         if (isEnabled()
             && selectedItemKey != null) {
-            Object item = getSelectedItem();
+            int selectedIndex = getSelectedIndex();
+
+            Object item;
+            if (bindMapping == null) {
+                item = spinnerData.get(selectedIndex);
+            } else {
+                item = bindMapping.get(spinnerData, selectedIndex);
+            }
+
             JSONSerializer.put(context, selectedItemKey, item);
         }
     }

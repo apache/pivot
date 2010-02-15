@@ -349,6 +349,11 @@ public abstract class ListButtonSkin extends ButtonSkin
         // No-op
     }
 
+    @Override
+    public void bindMappingChanged(ListButton listButton, ListView.BindMapping previousBindMapping) {
+        // No-op
+    }
+
     // List button selection events
     @Override
     public void selectedIndexChanged(ListButton listButton, int previousSelectedIndex) {

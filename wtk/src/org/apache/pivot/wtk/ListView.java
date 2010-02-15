@@ -361,6 +361,37 @@ public class ListView extends Component {
     }
 
     /**
+     * Translates between list and bind context data during data binding.
+     */
+    public interface BindMapping {
+        /**
+         * Returns the index of the item in the source list.
+         *
+         * @param listData
+         * The source list data.
+         *
+         * @param item
+         * The item to locate.
+         *
+         * @return
+         * The index of first occurrence of the item if it exists in the list;
+         * <tt>-1</tt>, otherwise.
+         */
+        public int indexOf(List<?> listData, Object item);
+
+        /**
+         * Retrieves the item at the given index.
+         *
+         * @param listData
+         * The source list data.
+         *
+         * @param index
+         * The index of the item to retrieve.
+         */
+        public Object get(List<?> listData, int index);
+    }
+
+    /**
      * List view listener list.
      */
     private static class ListViewListenerList extends ListenerList<ListViewListener> implements
@@ -430,6 +461,13 @@ public class ListView extends Component {
         public void selectedItemsKeyChanged(ListView listView, String previousSelectedItemsKey) {
             for (ListViewListener listener : this) {
                 listener.selectedItemsKeyChanged(listView, previousSelectedItemsKey);
+            }
+        }
+
+        @Override
+        public void bindMappingChanged(ListView listView, BindMapping previousBindMapping) {
+            for (ListViewListener listener : this) {
+                listener.bindMappingChanged(listView, previousBindMapping);
             }
         }
     }
@@ -614,6 +652,7 @@ public class ListView extends Component {
 
     private String selectedItemKey = null;
     private String selectedItemsKey = null;
+    private BindMapping bindMapping = null;
 
     private ListViewListenerList listViewListeners = new ListViewListenerList();
     private ListViewItemListenerList listViewItemListeners = new ListViewItemListenerList();
@@ -1434,34 +1473,94 @@ public class ListView extends Component {
         }
     }
 
+    public BindMapping getBindMapping() {
+        return bindMapping;
+    }
+
+    public void setBindMapping(BindMapping bindMapping) {
+        BindMapping previousBindMapping = this.bindMapping;
+
+        if (previousBindMapping != bindMapping) {
+            this.bindMapping = bindMapping;
+            listViewListeners.bindMappingChanged(this, previousBindMapping);
+        }
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public void load(Dictionary<String, ?> context) {
         if (selectedItemKey != null
             && JSONSerializer.containsKey(context, selectedItemKey)) {
             Object item = JSONSerializer.get(context, selectedItemKey);
-            setSelectedItem(item);
+
+            int index;
+            if (bindMapping == null) {
+                index = ((List<Object>)listData).indexOf(item);
+            } else {
+                index = bindMapping.indexOf(listData, item);
+            }
+
+            setSelectedIndex(index);
         }
 
         if (selectedItemsKey != null
             && JSONSerializer.containsKey(context, selectedItemsKey)) {
-            Sequence<Object> items = (Sequence<Object>)JSONSerializer.get(context,
-                selectedItemsKey);
-            setSelectedItems(items);
+            Sequence<Object> items = (Sequence<Object>)JSONSerializer.get(context, selectedItemsKey);
+
+            clearSelection();
+
+            for (int i = 0, n = items.getLength(); i < n; i++) {
+                Object item = items.get(i);
+
+                int index;
+                if (bindMapping == null) {
+                    index = ((List<Object>)listData).indexOf(item);
+                } else {
+                    index = bindMapping.indexOf(listData, item);
+                }
+
+                if (index != -1) {
+                    addSelectedIndex(index);
+                }
+            }
         }
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void store(Dictionary<String, ?> context) {
         if (isEnabled()) {
             if (selectedItemKey != null) {
-                Object item = getSelectedItem();
+                int selectedIndex = getSelectedIndex();
+
+                Object item;
+                if (bindMapping == null) {
+                    item = listData.get(selectedIndex);
+                } else {
+                    item = bindMapping.get(listData, selectedIndex);
+                }
+
                 JSONSerializer.put(context, selectedItemKey, item);
             }
 
             if (selectedItemsKey != null) {
-                Sequence<Object> items = (Sequence<Object>)getSelectedItems();
+                ArrayList<Object> items = new ArrayList<Object>();
+
+                Sequence<Span> selectedRanges = getSelectedRanges();
+                for (int i = 0, n = selectedRanges.getLength(); i < n; i++) {
+                    Span range = selectedRanges.get(i);
+
+                    for (int index = range.start; index <= range.end; index++) {
+                        Object item;
+                        if (bindMapping == null) {
+                            item = listData.get(index);
+                        } else {
+                            item = bindMapping.get(listData, index);
+                        }
+
+                        items.add(item);
+                    }
+                }
+
                 JSONSerializer.put(context, selectedItemsKey, items);
             }
         }

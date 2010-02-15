@@ -31,9 +31,6 @@ import org.apache.pivot.wtk.content.ListViewItemRenderer;
  * options are hidden until the user pushes the button.
  */
 public class ListButton extends Button {
-    /**
-     * List button listener list.
-     */
     private static class ListButtonListenerList extends ListenerList<ListButtonListener>
         implements ListButtonListener {
         @Override
@@ -63,11 +60,15 @@ public class ListButton extends Button {
                 listener.selectedItemKeyChanged(listButton, previousSelectedItemKey);
             }
         }
+
+        @Override
+        public void bindMappingChanged(ListButton listButton, ListView.BindMapping previousBindMapping) {
+            for (ListButtonListener listener : this) {
+                listener.bindMappingChanged(listButton, previousBindMapping);
+            }
+        }
     }
 
-    /**
-     * List button selection listener list.
-     */
     private static class ListButtonSelectionListenerList extends ListenerList<ListButtonSelectionListener>
         implements ListButtonSelectionListener {
         @Override
@@ -82,7 +83,9 @@ public class ListButton extends Button {
     private ListView.ItemRenderer itemRenderer;
     private int selectedIndex = -1;
     private Filter<?> disabledItemFilter = null;
+
     private String selectedItemKey = null;
+    private ListView.BindMapping bindMapping = null;
 
     private ListButtonListenerList listButtonListeners = new ListButtonListenerList();
     private ListButtonSelectionListenerList listButtonSelectionListeners = new ListButtonSelectionListenerList();
@@ -328,12 +331,34 @@ public class ListButton extends Button {
         }
     }
 
+    public ListView.BindMapping getBindMapping() {
+        return bindMapping;
+    }
+
+    public void setBindMapping(ListView.BindMapping bindMapping) {
+        ListView.BindMapping previousBindMapping = this.bindMapping;
+
+        if (previousBindMapping != bindMapping) {
+            this.bindMapping = bindMapping;
+            listButtonListeners.bindMappingChanged(this, previousBindMapping);
+        }
+    }
+
     @Override
+    @SuppressWarnings("unchecked")
     public void load(Dictionary<String, ?> context) {
         if (selectedItemKey != null
             && JSONSerializer.containsKey(context, selectedItemKey)) {
             Object item = JSONSerializer.get(context, selectedItemKey);
-            setSelectedItem(item);
+
+            int index;
+            if (bindMapping == null) {
+                index = ((List<Object>)listData).indexOf(item);
+            } else {
+                index = bindMapping.indexOf(listData, item);
+            }
+
+            setSelectedIndex(index);
         }
     }
 
@@ -341,7 +366,15 @@ public class ListButton extends Button {
     public void store(Dictionary<String, ?> context) {
         if (isEnabled()
             && selectedItemKey != null) {
-            Object item = getSelectedItem();
+            int selectedIndex = getSelectedIndex();
+
+            Object item;
+            if (bindMapping == null) {
+                item = listData.get(selectedIndex);
+            } else {
+                item = bindMapping.get(listData, selectedIndex);
+            }
+
             JSONSerializer.put(context, selectedItemKey, item);
         }
     }

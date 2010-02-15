@@ -1074,6 +1074,11 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         // No-op
     }
 
+    @Override
+    public void bindMappingChanged(ListView listView, ListView.BindMapping previousBindMapping) {
+        // No-op
+    }
+
     // List view item events
     @Override
     public void itemInserted(ListView listView, int index) {
