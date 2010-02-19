@@ -183,7 +183,9 @@ public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListen
 
     @Override
     public void activeChanged(Menu.Item menuItem) {
-        if (!menuItem.isActive()) {
+        if (menuItem.isActive()) {
+            menuItem.scrollAreaToVisible(0, 0, menuItem.getWidth(), menuItem.getHeight());
+        } else {
             menuPopup.close(true);
         }
 

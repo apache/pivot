@@ -45,6 +45,7 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
     private Color color;
     private Color disabledColor;
     private int spacing;
+    private boolean alignToBaseline;
 
     private Color buttonColor;
     private Color buttonBorderColor;
@@ -62,6 +63,7 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
         color = theme.getColor(1);
         disabledColor = theme.getColor(7);
         spacing = 3;
+        alignToBaseline = true;
 
         buttonColor = theme.getColor(4);
         buttonBorderColor = theme.getColor(7);
@@ -140,9 +142,17 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
         int width = getWidth();
         int height = getHeight();
 
+        int baseline = alignToBaseline ? getBaseline(width, height) : -1;
+
         // Paint the button
         Graphics2D buttonGraphics = (Graphics2D)graphics.create();
-        paintButton(buttonGraphics, radioButton, height);
+        if (baseline == -1) {
+            graphics.translate(0, (height - BUTTON_DIAMETER) / 2);
+        } else {
+            buttonGraphics.translate(0, (baseline - BUTTON_DIAMETER + 3));
+        }
+
+        paintButton(buttonGraphics, radioButton.isEnabled(), radioButton.isSelected());
         buttonGraphics.dispose();
 
         // Paint the content
@@ -173,7 +183,7 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
         }
     }
 
-    private void paintButton(Graphics2D graphics, RadioButton radioButton, int height) {
+    private void paintButton(Graphics2D graphics, boolean enabled, boolean selected) {
         Paint buttonPaint;
         Color buttonBorderColor = null;
         Color buttonSelectionColor = null;
@@ -181,7 +191,7 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
         Ellipse2D buttonBackgroundCircle = new Ellipse2D.Double(1, 1,
             BUTTON_DIAMETER - 3, BUTTON_DIAMETER - 3);
 
-        if (radioButton.isEnabled()) {
+        if (enabled) {
             buttonPaint = new RadialGradientPaint((float)buttonBackgroundCircle.getCenterX(),
                 (float)buttonBackgroundCircle.getCenterY(),
                 (float)buttonBackgroundCircle.getWidth() * 2 / 3,
@@ -198,9 +208,6 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
 
-        // Center the button vertically
-        graphics.translate(0, (height - BUTTON_DIAMETER) / 2);
-
         // Paint the border
         graphics.setColor(buttonBorderColor);
         graphics.fillOval(0, 0, BUTTON_DIAMETER - 1, BUTTON_DIAMETER - 1);
@@ -210,7 +217,7 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
         graphics.fill(buttonBackgroundCircle);
 
         // Paint the selection
-        if (radioButton.isSelected()) {
+        if (selected) {
             Ellipse2D buttonSelectionCircle = new Ellipse2D.Double((BUTTON_DIAMETER
                 - (BUTTON_SELECTION_DIAMETER - 1)) / 2,
                 (BUTTON_DIAMETER - (BUTTON_SELECTION_DIAMETER - 1)) / 2,
@@ -309,5 +316,14 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
         }
 
         setSpacing(spacing.intValue());
+    }
+
+    public boolean getAlignToBaseline() {
+        return alignToBaseline;
+    }
+
+    public void setAlignToBaseline(boolean alignToBaseline) {
+        this.alignToBaseline = alignToBaseline;
+        repaintComponent();
     }
 }

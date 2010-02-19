@@ -299,6 +299,12 @@ public abstract class QueryServlet extends HttpServlet {
 
             // Process the request
             super.service(request, response);
+        } catch (IOException exception) {
+            System.err.println(exception);
+            throw exception;
+        } catch (RuntimeException exception) {
+            System.err.println(exception);
+            throw exception;
         } finally {
             // Clean up any allocated resources
             dispose();

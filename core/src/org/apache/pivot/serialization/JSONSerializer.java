@@ -37,6 +37,8 @@ import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.collections.immutable.ImmutableList;
+import org.apache.pivot.collections.immutable.ImmutableMap;
 
 
 /**
@@ -44,7 +46,8 @@ import org.apache.pivot.collections.Sequence;
  * and writes data to a JavaScript Object Notation (JSON) file.
  */
 public class JSONSerializer implements Serializer<Object> {
-    private Charset charset = null;
+    private Charset charset;
+    private boolean immutable;
 
     private int c = -1;
     private boolean alwaysDelimitMapKeys = false;
@@ -55,19 +58,41 @@ public class JSONSerializer implements Serializer<Object> {
     public static final int BUFFER_SIZE = 2048;
 
     public JSONSerializer() {
-        this(Charset.forName(DEFAULT_CHARSET_NAME));
+        this(Charset.forName(DEFAULT_CHARSET_NAME), false);
     }
 
     public JSONSerializer(Charset charset) {
+        this(charset, false);
+    }
+
+    public JSONSerializer(boolean immutable) {
+        this(Charset.forName(DEFAULT_CHARSET_NAME), immutable);
+    }
+
+    public JSONSerializer(Charset charset, boolean immutable) {
         if (charset == null) {
             throw new IllegalArgumentException("charset is null.");
         }
 
         this.charset = charset;
+        this.immutable = immutable;
     }
 
+    /**
+     * Returns the character set used to encode/decode the JSON data.
+     */
     public Charset getCharset() {
         return charset;
+    }
+
+    /**
+     * Returns the serializer's immutable flag.
+     *
+     * @return
+     * If <tt>true</tt>, all list and map values will be wrapped in an immutable equivalent.
+     */
+    public boolean isImmutable() {
+        return immutable;
     }
 
     /**
@@ -386,6 +411,10 @@ public class JSONSerializer implements Serializer<Object> {
         // Move to the next character after ']'
         c = reader.read();
 
+        if (immutable) {
+            list = new ImmutableList<Object>(list);
+        }
+
         return list;
     }
 
@@ -460,6 +489,10 @@ public class JSONSerializer implements Serializer<Object> {
 
         // Move to the first character after '}'
         c = reader.read();
+
+        if (immutable) {
+            map = new ImmutableMap<String, Object>(map);
+        }
 
         return map;
     }

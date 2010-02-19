@@ -45,6 +45,7 @@ public class TerraCheckboxSkin extends CheckboxSkin {
     private Color color;
     private Color disabledColor;
     private int spacing;
+    private boolean alignToBaseline;
 
     private Color buttonColor;
     private Color buttonBorderColor;
@@ -62,6 +63,7 @@ public class TerraCheckboxSkin extends CheckboxSkin {
         color = theme.getColor(1);
         disabledColor = theme.getColor(7);
         spacing = 3;
+        alignToBaseline = true;
 
         buttonColor = theme.getColor(4);
         buttonBorderColor = theme.getColor(7);
@@ -154,9 +156,17 @@ public class TerraCheckboxSkin extends CheckboxSkin {
         int width = getWidth();
         int height = getHeight();
 
+        int baseline = alignToBaseline ? getBaseline(width, height) : -1;
+
         // Paint the button
         Graphics2D buttonGraphics = (Graphics2D)graphics.create();
-        paintButton(buttonGraphics, checkbox, height);
+        if (baseline == -1) {
+            buttonGraphics.translate(0, (height - CHECKBOX_SIZE) / 2);
+        } else {
+            buttonGraphics.translate(0, (baseline - CHECKBOX_SIZE + 3));
+        }
+
+        paintButton(buttonGraphics, checkbox.isEnabled(), checkbox.getState());
         buttonGraphics.dispose();
 
         // Paint the content
@@ -187,12 +197,12 @@ public class TerraCheckboxSkin extends CheckboxSkin {
         }
     }
 
-    private void paintButton(Graphics2D graphics, Checkbox checkbox, int height) {
+    private void paintButton(Graphics2D graphics, boolean enabled, Button.State state) {
         Paint buttonPaint;
         Color buttonBorderColor;
         Color buttonSelectionColor;
 
-        if (checkbox.isEnabled()) {
+        if (enabled) {
             buttonPaint = new GradientPaint(CHECKBOX_SIZE / 2, 0, TerraTheme.darken(buttonColor),
                 CHECKBOX_SIZE / 2, CHECKBOX_SIZE, buttonColor);
             buttonBorderColor = this.buttonBorderColor;
@@ -202,9 +212,6 @@ public class TerraCheckboxSkin extends CheckboxSkin {
             buttonBorderColor = disabledButtonBorderColor;
             buttonSelectionColor = disabledButtonSelectionColor;
         }
-
-        // Center the button vertically
-        graphics.translate(0, (height - CHECKBOX_SIZE) / 2);
 
         // Paint the background
         graphics.setPaint(buttonPaint);
@@ -218,12 +225,9 @@ public class TerraCheckboxSkin extends CheckboxSkin {
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
 
-        Button.State state = checkbox.getState();
-
         if (state == Button.State.SELECTED) {
             graphics.setColor(buttonSelectionColor);
             graphics.setStroke(new BasicStroke(2.5f));
-
 
             // Draw a checkmark
             int n = CHECKMARK_SIZE / 2;
@@ -342,5 +346,14 @@ public class TerraCheckboxSkin extends CheckboxSkin {
         }
 
         setSpacing(spacing.intValue());
+    }
+
+    public boolean getAlignToBaseline() {
+        return alignToBaseline;
+    }
+
+    public void setAlignToBaseline(boolean alignToBaseline) {
+        this.alignToBaseline = alignToBaseline;
+        repaintComponent();
     }
 }

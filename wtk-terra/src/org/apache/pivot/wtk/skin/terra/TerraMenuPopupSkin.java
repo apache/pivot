@@ -210,6 +210,8 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
             menu.requestFocus();
         }
 
+        panorama.setScrollTop(0);
+
         if (menuPopup.isContextMenu()) {
             ApplicationContext.queueCallback(new RepositionCallback());
         }

@@ -357,6 +357,8 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         }
 
         if (previousBuckets != null) {
+            count = 0;
+
             for (LinkedList<Pair<K, V>> bucket : previousBuckets) {
                 if (bucket != null) {
                     for (Pair<K, V> entry : bucket) {

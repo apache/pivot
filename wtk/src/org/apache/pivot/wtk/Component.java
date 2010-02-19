@@ -2362,12 +2362,14 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Copies bound values from the bind context to the component by converting
-     * the given context to a bean dictionary.
+     * the given context to a bean dictionary, if necessary.
      *
      * @param context
      */
+    @SuppressWarnings("unchecked")
     public final void load(Object context) {
-        load(new BeanDictionary(context));
+        load((context instanceof Dictionary<?, ?>) ?
+            (Dictionary<String, ?>)context : new BeanDictionary(context));
     }
 
     /**
@@ -2382,12 +2384,14 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Copies bound values from the component to the bind context by converting
-     * the given context to a bean dictionary.
+     * the given context to a bean dictionary, if necessary.
      *
      * @param context
      */
+    @SuppressWarnings("unchecked")
     public final void store(Object context) {
-        store(new BeanDictionary(context));
+        store((context instanceof Dictionary<?, ?>) ?
+            (Dictionary<String, ?>)context : new BeanDictionary(context));
     }
 
     /**
