@@ -306,9 +306,6 @@ public abstract class QueryServlet extends HttpServlet {
             System.err.println(exception);
             throw exception;
         } finally {
-            // Clean up any allocated resources
-            dispose();
-
             // Clean up thread local variables
             hostname.remove();
             port.remove();
@@ -317,6 +314,9 @@ public abstract class QueryServlet extends HttpServlet {
             parameters.remove();
             requestHeaders.remove();
             responseHeaders.remove();
+
+            // Clean up any allocated resources
+            dispose();
         }
     }
 

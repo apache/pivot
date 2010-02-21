@@ -269,7 +269,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin
         // Reposition under text input
         Point location = textInput.mapPointToAncestor(textInput.getDisplay(), 0, 0);
         suggestionPopup.setLocation(location.x, location.y + textInput.getHeight() - 1);
-        suggestionPopup.setPreferredWidth(textInput.getWidth());
+        suggestionPopup.setMinimumPreferredWidth(textInput.getWidth());
     }
 
     @Override
@@ -353,9 +353,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin
         textInput.getComponentStateListeners().remove(textInputStateListener);
         textInput.getComponentKeyListeners().remove(textInputKeyListener);
 
-        if (suggestionPopup.getResult()) {
-            textInput.requestFocus();
-        }
+        textInput.requestFocus();
 
         suggestionListViewBorder.setEnabled(true);
         closeTransition = null;

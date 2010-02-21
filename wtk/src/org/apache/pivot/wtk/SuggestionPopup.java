@@ -216,6 +216,8 @@ public class SuggestionPopup extends Window {
             throw new IllegalStateException("textInput is null.");
         }
 
+        setSelectedIndex(-1);
+
         super.open(display, owner);
     }
 
