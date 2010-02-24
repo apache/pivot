@@ -348,11 +348,7 @@ limitations under the License.
 
         <source type="xml">
             <![CDATA[
-            <TableViewHeader tableView="$stocksTableView">
-                <tableViewHeaderPressListeners>
-                    <TableView.SortHandler/>
-                </tableViewHeaderPressListeners>
-            </TableViewHeader>
+            <TableViewHeader tableView="$stocksTableView" sortMode="single_column"/>
             ]]>
         </source>
 
@@ -363,10 +359,23 @@ limitations under the License.
         </p>
 
         <p>
-            Note that an instance of <tt>TableView.SortHandler</tt> is added as a header press
-            listener on the table view header. This class can be used to provide default sorting
-            behavior in response to a column header click.
+            Note that <tt>TableViewHeader</tt> does not automatically perform sorting. Sorting
+            is implemented in response to a <tt>sortChanged()</tt> event fired by the
+            <tt>TableView</tt> itself. An example is shown below:
         </p>
+
+        <source type="java">
+            <![CDATA[
+            stocksTableView.getTableViewSortListeners().add(new TableViewSortListener.Adapter() {
+                @Override
+                @SuppressWarnings("unchecked")
+                public void sortChanged(TableView tableView) {
+                    List<Object> tableData = (List<Object>)tableView.getTableData();
+                    tableData.setComparator(new TableViewRowComparator(tableView));
+                }
+            });
+            ]]>
+        </source>
 
         <h3>ScrollPane</h3>
 
