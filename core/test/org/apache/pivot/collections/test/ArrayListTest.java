@@ -32,6 +32,9 @@ public class ArrayListTest {
         list.insert("D", 2);
         list.insert("A", 0);
 
+        Object[] array = list.toArray();
+        assertEquals(array[0], "A");
+
         assertEquals(ArrayList.binarySearch(list, "A"), 0);
 
         list.remove(0, 1);

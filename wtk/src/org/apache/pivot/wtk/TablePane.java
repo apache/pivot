@@ -32,7 +32,7 @@ public class TablePane extends Container {
     /**
      * Represents a table pane row.
      */
-    public static final class Row implements Sequence<Component>, Iterable<Component> {
+    public static class Row implements Sequence<Component>, Iterable<Component> {
         private int height;
         private boolean relative;
         private boolean highlighted;
@@ -665,7 +665,7 @@ public class TablePane extends Container {
     /**
      * Component that can be used as filler for empty cells.
      */
-    public static class Filler extends Component {
+    public static final class Filler extends Component {
         public Filler() {
             installThemeSkin(Filler.class);
         }

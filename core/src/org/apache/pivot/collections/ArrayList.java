@@ -408,6 +408,10 @@ public class ArrayList<T> implements List<T>, Serializable {
         return items.length;
     }
 
+    public Object[] toArray() {
+        return Arrays.copyOf(items, length);
+    }
+
     public T[] toArray(Class<? extends T[]> type) {
         return Arrays.copyOf(items, length, type);
     }
