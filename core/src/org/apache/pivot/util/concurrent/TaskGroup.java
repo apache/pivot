@@ -78,6 +78,22 @@ public class TaskGroup extends Task<Void>
         return null;
     }
 
+    /**
+     * Aborts all tasks in this group.
+     */
+    @Override
+    public synchronized void abort() {
+        for (Task<?> task : this) {
+            synchronized(task) {
+                if (!task.isPending()) {
+                    task.abort();
+                }
+            }
+        }
+
+        super.abort();
+    }
+
     @Override
     public boolean add(Task<?> element) {
         if (isPending()) {

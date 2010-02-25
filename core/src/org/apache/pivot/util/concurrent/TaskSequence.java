@@ -42,6 +42,10 @@ public class TaskSequence extends Task<Void>
     @Override
     public Void execute() throws TaskExecutionException {
         for (Task<?> task : tasks) {
+            if (abort) {
+                throw new AbortException();
+            }
+
             task.execute();
         }
 
