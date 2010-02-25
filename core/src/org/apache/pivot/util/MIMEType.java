@@ -21,7 +21,6 @@ import java.util.Iterator;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
 
-
 /**
  * Utility class for introspecting a MIME type string.
  */
