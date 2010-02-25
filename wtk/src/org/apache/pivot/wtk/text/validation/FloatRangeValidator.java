@@ -22,13 +22,13 @@ public class FloatRangeValidator extends FloatValidator {
     private float minValue, maxValue;
 
     public FloatRangeValidator() {
-        this.minValue = Float.MIN_VALUE;
+        this.minValue = -Float.MAX_VALUE;
         this.maxValue = Float.MAX_VALUE;
     }
 
     public FloatRangeValidator(Locale locale) {
         super(locale);
-        this.minValue = Float.MIN_VALUE;
+        this.minValue = -Float.MAX_VALUE;
         this.maxValue = Float.MAX_VALUE;
     }
 

@@ -299,16 +299,22 @@ public class CalendarButton extends Button {
             && JSONSerializer.containsKey(context, selectedDateKey)) {
             Object value = JSONSerializer.get(context, selectedDateKey);
 
+            CalendarDate selectedDate = null;
+
             if (value instanceof CalendarDate) {
-                setSelectedDate((CalendarDate)value);
-            } else if (bindMapping != null) {
-                setSelectedDate(bindMapping.toDate(value));
-            } else if (value instanceof String) {
-                setSelectedDate((String)value);
+                selectedDate = (CalendarDate)value;
+            } else if (bindMapping == null) {
+                if (value instanceof String) {
+                    selectedDate = CalendarDate.decode((String)value);
+                } else if (value != null) {
+                    throw new IllegalArgumentException("Invalid date type: " +
+                        value.getClass().getName());
+                }
             } else {
-                throw new IllegalArgumentException("Invalid date type: " +
-                    value.getClass().getName());
+                selectedDate = bindMapping.toDate(value);
             }
+
+            setSelectedDate(selectedDate);
         }
     }
 

@@ -412,7 +412,6 @@ public class TerraFormSkin extends ContainerSkin
 
         int maximumLabelWidth = 0;
         int maximumFieldWidth = 0;
-        int maximumFlagMessageWidth = 0;
         int maximumSeparatorWidth = 0;
 
         Form form = (Form)getComponent();
@@ -436,7 +435,8 @@ public class TerraFormSkin extends ContainerSkin
                 if (field.isVisible()) {
                     Label label = labels.get(sectionIndex).get(fieldIndex);
                     maximumLabelWidth = Math.max(maximumLabelWidth, label.getPreferredWidth());
-                    maximumFieldWidth = Math.max(maximumFieldWidth, field.getPreferredWidth());
+
+                    int fieldWidth = field.getPreferredWidth();
 
                     if (showFlagMessagesInline) {
                         // Calculate maximum flag message width
@@ -447,11 +447,13 @@ public class TerraFormSkin extends ContainerSkin
 
                             if (message != null) {
                                 flagMessageLabel.setText(message);
-                                maximumFlagMessageWidth = Math.max(maximumFlagMessageWidth,
-                                    flagMessageLabel.getPreferredWidth());
+                                fieldWidth += (INLINE_FIELD_INDICATOR_WIDTH - 2)
+                                    + flagMessageLabel.getPreferredWidth();
                             }
                         }
                     }
+
+                    maximumFieldWidth = Math.max(maximumFieldWidth, fieldWidth);
                 }
             }
         }
@@ -460,10 +462,6 @@ public class TerraFormSkin extends ContainerSkin
 
         if (showFlagIcons) {
             preferredWidth += maximumFlagImageWidth + flagIconOffset;
-        }
-
-        if (showFlagMessagesInline) {
-            preferredWidth += maximumFlagMessageWidth + (INLINE_FIELD_INDICATOR_WIDTH - 2);
         }
 
         preferredWidth = Math.max(preferredWidth + padding.left + padding.right,
