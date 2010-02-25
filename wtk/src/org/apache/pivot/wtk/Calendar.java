@@ -25,17 +25,34 @@ import org.apache.pivot.util.CalendarDate;
 import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.ListenerList;
 
-
 /**
  * Component that allows the user to select a date.
  */
 public class Calendar extends Container {
     /**
+     * Translates between calendar date and context data during data binding.
+     */
+    public interface BindMapping {
+        /**
+         * Converts a context value to a calendar date.
+         *
+         * @param value
+         */
+        public CalendarDate toDate(Object value);
+
+        /**
+         * Converts a calendar date to a context value.
+         *
+         * @param calendarDate
+         */
+        public Object valueOf(CalendarDate calendarDate);
+    }
+
+    /**
      * Calendar listener list.
      */
     private static class CalendarListenerList extends ListenerList<CalendarListener>
         implements CalendarListener {
-
         @Override
         public void yearChanged(Calendar calendar, int previousYear) {
             for (CalendarListener listener : this) {
@@ -71,6 +88,13 @@ public class Calendar extends Container {
                 listener.selectedDateKeyChanged(calendar, previousSelectedDateKey);
             }
         }
+
+        @Override
+        public void bindMappingChanged(Calendar calendar, BindMapping previousBindMapping) {
+            for (CalendarListener listener : this) {
+                listener.bindMappingChanged(calendar, previousBindMapping);
+            }
+        }
     }
 
     /**
@@ -96,6 +120,7 @@ public class Calendar extends Container {
     private Locale locale = Locale.getDefault();
     private Filter<CalendarDate> disabledDateFilter = null;
     private String selectedDateKey = null;
+    private BindMapping bindMapping = null;
 
     private CalendarListenerList calendarListeners = new CalendarListenerList();
     private CalendarSelectionListenerList calendarSelectionListeners =
@@ -305,6 +330,19 @@ public class Calendar extends Container {
         }
     }
 
+    public BindMapping getBindMapping() {
+        return bindMapping;
+    }
+
+    public void setBindMapping(BindMapping bindMapping) {
+        BindMapping previousBindMapping = this.bindMapping;
+
+        if (previousBindMapping != bindMapping) {
+            this.bindMapping = bindMapping;
+            calendarListeners.bindMappingChanged(this, previousBindMapping);
+        }
+    }
+
     /**
      * Loads the selected date from the specified bind context using this date
      * picker's bind key, if one is set.
@@ -317,6 +355,8 @@ public class Calendar extends Container {
 
             if (value instanceof CalendarDate) {
                 setSelectedDate((CalendarDate)value);
+            } else if (bindMapping != null) {
+                setSelectedDate(bindMapping.toDate(value));
             } else if (value instanceof String) {
                 setSelectedDate((String)value);
             } else {
@@ -334,7 +374,8 @@ public class Calendar extends Container {
     public void store(Dictionary<String, ?> context) {
         if (isEnabled()
             && selectedDateKey != null) {
-            JSONSerializer.put(context, selectedDateKey, selectedDate);
+            JSONSerializer.put(context, selectedDateKey, (bindMapping == null) ?
+                selectedDate : bindMapping.valueOf(selectedDate));
         }
     }
 

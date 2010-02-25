@@ -22,7 +22,6 @@ import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextInputListener;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtk.text.TextNode;
 import org.apache.pivot.wtk.text.validation.FloatRangeValidator;
 import org.apache.pivot.wtk.text.validation.IntRangeValidator;
 import org.apache.pivot.wtk.text.validation.RegexTextValidator;
@@ -55,38 +54,10 @@ public class TextInputValidatorTest implements Application {
         textinputFloatRange.setValidator(new FloatRangeValidator(0.3f, 2000f));
 
         // test the listener by updating a label
-        textinputFloatRange.getTextInputListeners().add(new TextInputListener() {
-            @Override
-            public void maximumLengthChanged(TextInput textInput, int previousMaximumLength) {
-            }
-
-            @Override
-            public void passwordChanged(TextInput textInput) {
-            }
-
-            @Override
-            public void promptChanged(TextInput textInput, String previousPrompt) {
-            }
-
-            @Override
-            public void textKeyChanged(TextInput textInput, String previousTextKey) {
-            }
-
-            @Override
-            public void textNodeChanged(TextInput textInput, TextNode previousTextNode) {
-            }
-
-            @Override
-            public void textSizeChanged(TextInput textInput, int previousTextSize) {
-            }
-
+        textinputFloatRange.getTextInputListeners().add(new TextInputListener.Adapter() {
             @Override
             public void textValidChanged(TextInput textInput) {
                 invalidLabel.setText(textInput.isTextValid() ? "valid" : "invalid");
-            }
-
-            @Override
-            public void textValidatorChanged(TextInput textInput, Validator validator) {
             }
         });
 

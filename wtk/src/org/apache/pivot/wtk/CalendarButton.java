@@ -26,7 +26,6 @@ import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.content.CalendarButtonDataRenderer;
 
-
 /**
  * A component that allows a user to select a calendar date. The calendar
  * is hidden until the user pushes the button.
@@ -60,6 +59,14 @@ public class CalendarButton extends Button {
                 listener.selectedDateKeyChanged(calendarButton, previousSelectedDateKey);
             }
         }
+
+        @Override
+        public void bindMappingChanged(CalendarButton calendarButton,
+            Calendar.BindMapping previousBindMapping) {
+            for (CalendarButtonListener listener : this) {
+                listener.bindMappingChanged(calendarButton, previousBindMapping);
+            }
+        }
     }
 
     /**
@@ -82,6 +89,7 @@ public class CalendarButton extends Button {
     private Locale locale = Locale.getDefault();
     private Filter<CalendarDate> disabledDateFilter = null;
     private String selectedDateKey = null;
+    private Calendar.BindMapping bindMapping = null;
 
     private CalendarButtonListenerList calendarButtonListeners =
         new CalendarButtonListenerList();
@@ -266,6 +274,19 @@ public class CalendarButton extends Button {
         }
     }
 
+    public Calendar.BindMapping getBindMapping() {
+        return bindMapping;
+    }
+
+    public void setBindMapping(Calendar.BindMapping bindMapping) {
+        Calendar.BindMapping previousBindMapping = this.bindMapping;
+
+        if (previousBindMapping != bindMapping) {
+            this.bindMapping = bindMapping;
+            calendarButtonListeners.bindMappingChanged(this, previousBindMapping);
+        }
+    }
+
     /**
      * Loads the selected date from the specified bind context using this date
      * picker button's bind key, if one is set.
@@ -280,6 +301,8 @@ public class CalendarButton extends Button {
 
             if (value instanceof CalendarDate) {
                 setSelectedDate((CalendarDate)value);
+            } else if (bindMapping != null) {
+                setSelectedDate(bindMapping.toDate(value));
             } else if (value instanceof String) {
                 setSelectedDate((String)value);
             } else {
@@ -297,7 +320,8 @@ public class CalendarButton extends Button {
     public void store(Dictionary<String, ?> context) {
         if (isEnabled()
             && selectedDateKey != null) {
-            JSONSerializer.put(context, selectedDateKey, selectedDate);
+            JSONSerializer.put(context, selectedDateKey, (bindMapping == null) ?
+                selectedDate : bindMapping.valueOf(selectedDate));
         }
     }
 

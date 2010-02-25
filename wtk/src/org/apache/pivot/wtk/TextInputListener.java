@@ -52,6 +52,10 @@ public interface TextInputListener {
         }
 
         @Override
+        public void bindMappingChanged(TextInput textInput, TextInput.BindMapping previousBindMapping) {
+        }
+
+        @Override
         public void textValidChanged(TextInput textInput) {
         }
 
@@ -105,6 +109,14 @@ public interface TextInputListener {
      * @param previousTextKey
      */
     public void textKeyChanged(TextInput textInput, String previousTextKey);
+
+    /**
+     * Called when a text input's bind mapping has changed.
+     *
+     * @param textInput
+     * @param previousBindMapping
+     */
+    public void bindMappingChanged(TextInput textInput, TextInput.BindMapping previousBindMapping);
 
     /**
      * Called when the text changes validity.

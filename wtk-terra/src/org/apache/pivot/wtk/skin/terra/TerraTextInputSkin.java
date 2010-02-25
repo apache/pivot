@@ -1357,6 +1357,11 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     @Override
+    public void bindMappingChanged(TextInput textInput, TextInput.BindMapping previousBindMapping) {
+        // No-op
+    }
+
+    @Override
     public void textValidChanged(TextInput textInput) {
         repaintComponent();
     }

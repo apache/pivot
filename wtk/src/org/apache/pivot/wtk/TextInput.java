@@ -59,6 +59,18 @@ public class TextInput extends Component {
         public Bounds getCharacterBounds(int offset);
     }
 
+    /**
+     * Translates between text and context data during data binding.
+     */
+    public interface BindMapping {
+        /**
+         * Returns the value that will stored in the bind context.
+         *
+         * @param text
+         */
+        public Object valueOf(String text);
+    }
+
     private static class TextInputListenerList extends ListenerList<TextInputListener>
         implements TextInputListener {
         @Override
@@ -100,6 +112,13 @@ public class TextInput extends Component {
         public void textKeyChanged(TextInput textInput, String previousTextKey) {
             for (TextInputListener listener : this) {
                 listener.textKeyChanged(textInput, previousTextKey);
+            }
+        }
+
+        @Override
+        public void bindMappingChanged(TextInput textInput, TextInput.BindMapping previousBindMapping) {
+            for (TextInputListener listener : this) {
+                listener.bindMappingChanged(textInput, previousBindMapping);
             }
         }
 
@@ -169,6 +188,7 @@ public class TextInput extends Component {
     private String prompt = null;
 
     private String textKey = null;
+    private BindMapping bindMapping = null;
 
     private Validator validator = null;
     private boolean textValid = true;
@@ -695,6 +715,19 @@ public class TextInput extends Component {
         }
     }
 
+    public BindMapping getBindMapping() {
+        return bindMapping;
+    }
+
+    public void setBindMapping(BindMapping bindMapping) {
+        BindMapping previousBindMapping = this.bindMapping;
+
+        if (previousBindMapping != bindMapping) {
+            this.bindMapping = bindMapping;
+            textInputListeners.bindMappingChanged(this, previousBindMapping);
+        }
+    }
+
     @Override
     public void load(Dictionary<String, ?> context) {
         if (textKey != null
@@ -712,7 +745,9 @@ public class TextInput extends Component {
     public void store(Dictionary<String, ?> context) {
         if (isEnabled()
             && textKey != null) {
-            JSONSerializer.put(context, textKey, getText());
+            String text = getText();
+            JSONSerializer.put(context, textKey, (bindMapping == null) ?
+                text : bindMapping.valueOf(text));
         }
     }
 

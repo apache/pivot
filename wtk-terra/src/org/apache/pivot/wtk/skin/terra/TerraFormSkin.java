@@ -747,7 +747,7 @@ public class TerraFormSkin extends ContainerSkin
                     label.setVisible(true);
 
                     // Determine the label size and baseline
-                    Dimensions labelSize = new Dimensions(maximumLabelWidth, label.getPreferredHeight());
+                    Dimensions labelSize = label.getPreferredSize();
                     label.setSize(labelSize);
                     int labelAscent = label.getBaseline(labelSize.width, labelSize.height);
                     int labelDescent = labelSize.height - labelAscent;
@@ -777,7 +777,7 @@ public class TerraFormSkin extends ContainerSkin
                     int rowHeight = maximumAscent + maximumDescent;
 
                     // Position the label
-                    int labelX = padding.left;
+                    int labelX = padding.left + maximumLabelWidth - label.getWidth();
                     if (showFlagIcons) {
                         labelX += (maximumFlagImageWidth + flagIconOffset);
                     }
@@ -786,7 +786,11 @@ public class TerraFormSkin extends ContainerSkin
                     label.setLocation(labelX, labelY);
 
                     // Position the field
-                    int fieldX = labelX + maximumLabelWidth + horizontalSpacing;
+                    int fieldX = padding.left + maximumLabelWidth + horizontalSpacing;
+                    if (showFlagIcons) {
+                        fieldX += (maximumFlagImageWidth + flagIconOffset);
+                    }
+
                     int fieldY = rowY + (baseline - fieldAscent);
                     field.setLocation(fieldX, fieldY);
 

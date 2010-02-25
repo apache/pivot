@@ -291,4 +291,9 @@ public abstract class CalendarButtonSkin extends ButtonSkin
             calendar.setMonth(date.month);
         }
     }
+
+    @Override
+    public void bindMappingChanged(CalendarButton calendarButton,
+        Calendar.BindMapping previousBindMapping) {
+    }
 }

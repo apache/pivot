@@ -46,8 +46,11 @@ public interface CalendarListener {
         }
 
         @Override
-        public void selectedDateKeyChanged(Calendar calendar,
-            String previousSelectedDateKey) {
+        public void selectedDateKeyChanged(Calendar calendar, String previousSelectedDateKey) {
+        }
+
+        @Override
+        public void bindMappingChanged(Calendar calendar, Calendar.BindMapping previousBindMapping) {
         }
     }
 
@@ -89,6 +92,13 @@ public interface CalendarListener {
      * @param calendar
      * @param previousSelectedDateKey
      */
-    public void selectedDateKeyChanged(Calendar calendar,
-        String previousSelectedDateKey);
+    public void selectedDateKeyChanged(Calendar calendar, String previousSelectedDateKey);
+
+    /**
+     * Called when a calendar's bind mapping has changed.
+     *
+     * @param calendar
+     * @param previousBindMapping
+     */
+    public void bindMappingChanged(Calendar calendar, Calendar.BindMapping previousBindMapping);
 }
