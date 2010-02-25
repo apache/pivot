@@ -64,7 +64,14 @@ public class TextInput extends Component {
      */
     public interface BindMapping {
         /**
-         * Returns the value that will stored in the bind context.
+         * Converts a value from the bind context to a text representation.
+         *
+         * @param value
+         */
+        public String toString(Object value);
+
+        /**
+         * Converts a text string to a value to be stored in the bind context.
          *
          * @param text
          */
@@ -733,8 +740,12 @@ public class TextInput extends Component {
         if (textKey != null
             && JSONSerializer.containsKey(context, textKey)) {
             Object value = JSONSerializer.get(context, textKey);
-            if (value != null) {
-               value = value.toString();
+
+            if (bindMapping == null
+                && value != null) {
+                value = value.toString();
+            } else {
+                value = bindMapping.toString(value);
             }
 
             setText((String)value);
