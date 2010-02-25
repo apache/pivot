@@ -22,14 +22,14 @@ public class DoubleRangeValidator extends DoubleValidator {
     private double minValue, maxValue;
 
     public DoubleRangeValidator() {
-        this.minValue = 0;
-        this.maxValue = 1;
+        this.minValue = Double.MIN_VALUE;
+        this.maxValue = Double.MAX_VALUE;
     }
 
     public DoubleRangeValidator(Locale locale) {
         super(locale);
-        this.minValue = 0;
-        this.maxValue = 1;
+        this.minValue = Double.MIN_VALUE;
+        this.maxValue = Double.MAX_VALUE;
     }
 
     public DoubleRangeValidator(double minValue, double maxValue) {

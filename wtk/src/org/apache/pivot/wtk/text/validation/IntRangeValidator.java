@@ -22,14 +22,14 @@ public class IntRangeValidator extends IntValidator {
     private int minValue, maxValue;
 
     public IntRangeValidator() {
-        this.minValue = 0;
-        this.maxValue = 1;
+        this.minValue = Integer.MIN_VALUE;
+        this.maxValue = Integer.MAX_VALUE;
     }
 
     public IntRangeValidator(Locale locale) {
         super(locale);
-        this.minValue = 0;
-        this.maxValue = 1;
+        this.minValue = Integer.MIN_VALUE;
+        this.maxValue = Integer.MAX_VALUE;
     }
 
     public IntRangeValidator(int minValue, int maxValue) {
