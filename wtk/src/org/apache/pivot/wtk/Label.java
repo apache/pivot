@@ -20,11 +20,29 @@ import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.util.ListenerList;
 
-
 /**
  * Component that displays a string of text.
  */
 public class Label extends Component {
+    /**
+     * Translates between text and context data during data binding.
+     */
+    public interface BindMapping {
+        /**
+         * Converts a value from the bind context to a text representation.
+         *
+         * @param value
+         */
+        public String toString(Object value);
+
+        /**
+         * Converts a text string to a value to be stored in the bind context.
+         *
+         * @param text
+         */
+        public Object valueOf(String text);
+    }
+
     private static class LabelListenerList extends ListenerList<LabelListener>
         implements LabelListener {
         @Override
@@ -40,10 +58,19 @@ public class Label extends Component {
                 listener.textKeyChanged(label, previousTextKey);
             }
         }
+
+        @Override
+        public void bindMappingChanged(Label label, Label.BindMapping previousBindMapping) {
+            for (LabelListener listener : this) {
+                listener.bindMappingChanged(label, previousBindMapping);
+            }
+        }
     }
 
     private String text = null;
     private String textKey = null;
+    private BindMapping bindMapping = null;
+
     private LabelListenerList labelListeners = new LabelListenerList();
 
     public Label() {
@@ -93,13 +120,30 @@ public class Label extends Component {
         }
     }
 
+    public BindMapping getBindMapping() {
+        return bindMapping;
+    }
+
+    public void setBindMapping(BindMapping bindMapping) {
+        BindMapping previousBindMapping = this.bindMapping;
+
+        if (previousBindMapping != bindMapping) {
+            this.bindMapping = bindMapping;
+            labelListeners.bindMappingChanged(this, previousBindMapping);
+        }
+    }
+
     @Override
     public void load(Dictionary<String, ?> context) {
         if (textKey != null
             && JSONSerializer.containsKey(context, textKey)) {
             Object value = JSONSerializer.get(context, textKey);
-            if (value != null) {
+
+            if (bindMapping == null
+                && value != null) {
                 value = value.toString();
+            } else {
+                value = bindMapping.toString(value);
             }
 
             setText((String)value);
@@ -110,7 +154,9 @@ public class Label extends Component {
     public void store(Dictionary<String, ?> context) {
         if (isEnabled()
             && textKey != null) {
-            JSONSerializer.put(context, textKey, getText());
+            String text = getText();
+            JSONSerializer.put(context, textKey, (bindMapping == null) ?
+                text : bindMapping.valueOf(text));
         }
     }
 

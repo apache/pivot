@@ -55,6 +55,10 @@ public interface ButtonListener {
         @Override
         public void stateKeyChanged(Button button, String previousStateKey) {
         }
+
+        @Override
+        public void bindMappingChanged(Button button, Button.BindMapping previousBindMapping) {
+        }
     }
 
     /**
@@ -118,4 +122,12 @@ public interface ButtonListener {
      * @param previousStateKey
      */
     public void stateKeyChanged(Button button, String previousStateKey);
+
+    /**
+     * Called when a button's bind mapping has changed.
+     *
+     * @param button
+     * @param previousBindMapping
+     */
+    public void bindMappingChanged(Button button, Button.BindMapping previousBindMapping);
 }

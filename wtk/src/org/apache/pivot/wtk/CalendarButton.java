@@ -61,10 +61,10 @@ public class CalendarButton extends Button {
         }
 
         @Override
-        public void bindMappingChanged(CalendarButton calendarButton,
-            Calendar.BindMapping previousBindMapping) {
+        public void selectionBindMappingChanged(CalendarButton calendarButton,
+            Calendar.BindMapping previousSelectionBindMapping) {
             for (CalendarButtonListener listener : this) {
-                listener.bindMappingChanged(calendarButton, previousBindMapping);
+                listener.selectionBindMappingChanged(calendarButton, previousSelectionBindMapping);
             }
         }
     }
@@ -89,7 +89,7 @@ public class CalendarButton extends Button {
     private Locale locale = Locale.getDefault();
     private Filter<CalendarDate> disabledDateFilter = null;
     private String selectedDateKey = null;
-    private Calendar.BindMapping bindMapping = null;
+    private Calendar.BindMapping selectionBindMapping = null;
 
     private CalendarButtonListenerList calendarButtonListeners =
         new CalendarButtonListenerList();
@@ -274,16 +274,16 @@ public class CalendarButton extends Button {
         }
     }
 
-    public Calendar.BindMapping getBindMapping() {
-        return bindMapping;
+    public Calendar.BindMapping getSelectionBindMapping() {
+        return selectionBindMapping;
     }
 
-    public void setBindMapping(Calendar.BindMapping bindMapping) {
-        Calendar.BindMapping previousBindMapping = this.bindMapping;
+    public void setSelectionBindMapping(Calendar.BindMapping bindMapping) {
+        Calendar.BindMapping previousSelectionBindMapping = this.selectionBindMapping;
 
-        if (previousBindMapping != bindMapping) {
-            this.bindMapping = bindMapping;
-            calendarButtonListeners.bindMappingChanged(this, previousBindMapping);
+        if (previousSelectionBindMapping != bindMapping) {
+            this.selectionBindMapping = bindMapping;
+            calendarButtonListeners.selectionBindMappingChanged(this, previousSelectionBindMapping);
         }
     }
 
@@ -303,15 +303,12 @@ public class CalendarButton extends Button {
 
             if (value instanceof CalendarDate) {
                 selectedDate = (CalendarDate)value;
-            } else if (bindMapping == null) {
-                if (value instanceof String) {
-                    selectedDate = CalendarDate.decode((String)value);
-                } else if (value != null) {
-                    throw new IllegalArgumentException("Invalid date type: " +
-                        value.getClass().getName());
+            } else if (selectionBindMapping == null) {
+                if (value != null) {
+                    selectedDate = CalendarDate.decode(value.toString());
                 }
             } else {
-                selectedDate = bindMapping.toDate(value);
+                selectedDate = selectionBindMapping.toDate(value);
             }
 
             setSelectedDate(selectedDate);
@@ -326,8 +323,8 @@ public class CalendarButton extends Button {
     public void store(Dictionary<String, ?> context) {
         if (isEnabled()
             && selectedDateKey != null) {
-            JSONSerializer.put(context, selectedDateKey, (bindMapping == null) ?
-                selectedDate : bindMapping.valueOf(selectedDate));
+            JSONSerializer.put(context, selectedDateKey, (selectionBindMapping == null) ?
+                selectedDate : selectionBindMapping.valueOf(selectedDate));
         }
     }
 

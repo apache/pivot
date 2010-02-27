@@ -330,6 +330,7 @@ public abstract class ListButtonSkin extends ButtonSkin
     // List button events
     @Override
     public void listDataChanged(ListButton listButton, List<?> previousListData) {
+        listButton.setButtonData(null);
         listView.setListData(listButton.getListData());
         invalidateComponent();
     }
@@ -350,7 +351,7 @@ public abstract class ListButtonSkin extends ButtonSkin
     }
 
     @Override
-    public void bindMappingChanged(ListButton listButton, ListView.BindMapping previousBindMapping) {
+    public void selectionBindMappingChanged(ListButton listButton, ListView.BindMapping previousSelectionBindMapping) {
         // No-op
     }
 

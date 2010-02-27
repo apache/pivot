@@ -68,6 +68,25 @@ public abstract class Button extends Component {
     }
 
     /**
+     * Translates between selection state and context data during data binding.
+     */
+    public interface BindMapping {
+        /**
+         * Converts a context value to a button state.
+         *
+         * @param value
+         */
+        public State toState(Object value);
+
+        /**
+         * Converts a button state to a context value.
+         *
+         * @param state
+         */
+        public Object valueOf(State state);
+    }
+
+    /**
      * Button listener list.
      */
     private static class ButtonListenerList extends ListenerList<ButtonListener>
@@ -127,6 +146,13 @@ public abstract class Button extends Component {
                 listener.stateKeyChanged(button, previousStateKey);
             }
         }
+
+        @Override
+        public void bindMappingChanged(Button button, Button.BindMapping previousBindMapping) {
+            for (ButtonListener listener : this) {
+                listener.bindMappingChanged(button, previousBindMapping);
+            }
+        }
     }
 
     /**
@@ -174,6 +200,7 @@ public abstract class Button extends Component {
 
     private String selectedKey = null;
     private String stateKey = null;
+    private BindMapping bindMapping = null;
 
     private ButtonListenerList buttonListeners = new ButtonListenerList();
     private ButtonStateListenerList buttonStateListeners = new ButtonStateListenerList();
@@ -495,30 +522,56 @@ public abstract class Button extends Component {
         }
     }
 
+    public BindMapping getBindMapping() {
+        return bindMapping;
+    }
+
+    public void setBindMapping(BindMapping bindMapping) {
+        BindMapping previousBindMapping = this.bindMapping;
+
+        if (previousBindMapping != bindMapping) {
+            this.bindMapping = bindMapping;
+            buttonListeners.bindMappingChanged(this, previousBindMapping);
+        }
+    }
+
     @Override
     public void load(Dictionary<String, ?> context) {
         if (selectedKey != null
             && JSONSerializer.containsKey(context, selectedKey)) {
             Object value = JSONSerializer.get(context, selectedKey);
 
+            Boolean selected = false;
             if (value instanceof Boolean) {
-                setSelected((Boolean)value);
+                selected = (Boolean)value;
+            } else if (bindMapping == null) {
+                if (value != null) {
+                    selected = Boolean.valueOf(value.toString());
+                }
             } else {
-                throw new IllegalArgumentException(getClass().getName() + " can't bind to "
-                    + value + ".");
+                State state = bindMapping.toState(value);
+                selected = (state == State.SELECTED);
             }
+
+            setSelected(selected);
         }
 
         if (stateKey != null
             && JSONSerializer.containsKey(context, stateKey)) {
             Object value = JSONSerializer.get(context, stateKey);
 
+            State state = State.UNSELECTED;
             if (value instanceof State) {
-                setState((State)value);
+                state = (State)value;
+            } else if (bindMapping == null) {
+                if (value != null) {
+                    state = State.valueOf(value.toString().toUpperCase());
+                }
             } else {
-                throw new IllegalArgumentException(getClass().getName() + " can't bind to "
-                    + value + ".");
+                state = bindMapping.toState(value);
             }
+
+            setState(state);
         }
     }
 
@@ -526,11 +579,13 @@ public abstract class Button extends Component {
     public void store(Dictionary<String, ?> context) {
         if (isEnabled()) {
             if (selectedKey != null) {
-                JSONSerializer.put(context, selectedKey, isSelected());
+                JSONSerializer.put(context, selectedKey, (bindMapping == null) ?
+                    isSelected() : bindMapping.valueOf(state));
             }
 
             if (stateKey != null) {
-                JSONSerializer.put(context, stateKey, state);
+                JSONSerializer.put(context, stateKey, (bindMapping == null) ?
+                    state : bindMapping.valueOf(state));
             }
         }
     }

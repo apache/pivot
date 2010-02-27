@@ -62,9 +62,9 @@ public class ListButton extends Button {
         }
 
         @Override
-        public void bindMappingChanged(ListButton listButton, ListView.BindMapping previousBindMapping) {
+        public void selectionBindMappingChanged(ListButton listButton, ListView.BindMapping previousSelectionBindMapping) {
             for (ListButtonListener listener : this) {
-                listener.bindMappingChanged(listButton, previousBindMapping);
+                listener.selectionBindMappingChanged(listButton, previousSelectionBindMapping);
             }
         }
     }
@@ -85,7 +85,7 @@ public class ListButton extends Button {
     private Filter<?> disabledItemFilter = null;
 
     private String selectedItemKey = null;
-    private ListView.BindMapping bindMapping = null;
+    private ListView.BindMapping selectionBindMapping = null;
 
     private ListButtonListenerList listButtonListeners = new ListButtonListenerList();
     private ListButtonSelectionListenerList listButtonSelectionListeners = new ListButtonSelectionListenerList();
@@ -331,16 +331,16 @@ public class ListButton extends Button {
         }
     }
 
-    public ListView.BindMapping getBindMapping() {
-        return bindMapping;
+    public ListView.BindMapping getSelectionBindMapping() {
+        return selectionBindMapping;
     }
 
-    public void setBindMapping(ListView.BindMapping bindMapping) {
-        ListView.BindMapping previousBindMapping = this.bindMapping;
+    public void setSelectionBindMapping(ListView.BindMapping bindMapping) {
+        ListView.BindMapping previousSelectionBindMapping = this.selectionBindMapping;
 
-        if (previousBindMapping != bindMapping) {
-            this.bindMapping = bindMapping;
-            listButtonListeners.bindMappingChanged(this, previousBindMapping);
+        if (previousSelectionBindMapping != bindMapping) {
+            this.selectionBindMapping = bindMapping;
+            listButtonListeners.selectionBindMappingChanged(this, previousSelectionBindMapping);
         }
     }
 
@@ -352,10 +352,10 @@ public class ListButton extends Button {
             Object item = JSONSerializer.get(context, selectedItemKey);
 
             int index;
-            if (bindMapping == null) {
+            if (selectionBindMapping == null) {
                 index = ((List<Object>)listData).indexOf(item);
             } else {
-                index = bindMapping.indexOf(listData, item);
+                index = selectionBindMapping.indexOf(listData, item);
             }
 
             setSelectedIndex(index);
@@ -369,10 +369,10 @@ public class ListButton extends Button {
             int selectedIndex = getSelectedIndex();
 
             Object item;
-            if (bindMapping == null) {
+            if (selectionBindMapping == null) {
                 item = listData.get(selectedIndex);
             } else {
-                item = bindMapping.get(listData, selectedIndex);
+                item = selectionBindMapping.get(listData, selectedIndex);
             }
 
             JSONSerializer.put(context, selectedItemKey, item);

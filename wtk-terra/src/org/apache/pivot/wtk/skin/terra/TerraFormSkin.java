@@ -820,78 +820,80 @@ public class TerraFormSkin extends ContainerSkin
                 fieldIndex < fieldCount; fieldIndex++) {
                 Component field = section.get(fieldIndex);
 
-                Form.Flag flag = Form.getFlag(field);
+                if (field.isVisible()) {
+                    Form.Flag flag = Form.getFlag(field);
 
-                if (flag != null) {
-                    if (showFlagIcons) {
-                        MessageType messageType = flag.getMessageType();
-                        Image flagIcon = null;
+                    if (flag != null) {
+                        if (showFlagIcons) {
+                            MessageType messageType = flag.getMessageType();
+                            Image flagIcon = null;
 
-                        switch (messageType) {
-                            case ERROR: {
-                                flagIcon = errorIcon;
-                                break;
+                            switch (messageType) {
+                                case ERROR: {
+                                    flagIcon = errorIcon;
+                                    break;
+                                }
+
+                                case WARNING: {
+                                    flagIcon = warningIcon;
+                                    break;
+                                }
+
+                                case QUESTION: {
+                                    flagIcon = questionIcon;
+                                    break;
+                                }
+
+                                case INFO: {
+                                    flagIcon = infoIcon;
+                                    break;
+                                }
                             }
 
-                            case WARNING: {
-                                flagIcon = warningIcon;
-                                break;
-                            }
+                            Label label = labels.get(sectionIndex).get(fieldIndex);
+                            int flagIconX = label.getX() - (flagIcon.getWidth() + flagIconOffset);
+                            int flagIconY = label.getY() + (label.getHeight() - flagIcon.getHeight()) / 2;
 
-                            case QUESTION: {
-                                flagIcon = questionIcon;
-                                break;
-                            }
-
-                            case INFO: {
-                                flagIcon = infoIcon;
-                                break;
-                            }
+                            graphics.translate(flagIconX, flagIconY);
+                            flagIcon.paint(graphics);
+                            graphics.translate(-flagIconX, -flagIconY);
                         }
 
-                        Label label = labels.get(sectionIndex).get(fieldIndex);
-                        int flagIconX = label.getX() - (flagIcon.getWidth() + flagIconOffset);
-                        int flagIconY = label.getY() + (label.getHeight() - flagIcon.getHeight()) / 2;
+                        if (showFlagHighlight) {
+                            MessageType messageType = flag.getMessageType();
+                            Color highlightColor = null;
 
-                        graphics.translate(flagIconX, flagIconY);
-                        flagIcon.paint(graphics);
-                        graphics.translate(-flagIconX, -flagIconY);
-                    }
+                            switch (messageType) {
+                                case ERROR: {
+                                    highlightColor = errorHighlightColor;
+                                    break;
+                                }
 
-                    if (showFlagHighlight) {
-                        MessageType messageType = flag.getMessageType();
-                        Color highlightColor = null;
+                                case WARNING: {
+                                    highlightColor = warningHighlightColor;
+                                    break;
+                                }
 
-                        switch (messageType) {
-                            case ERROR: {
-                                highlightColor = errorHighlightColor;
-                                break;
+                                case QUESTION: {
+                                    highlightColor = questionHighlightColor;
+                                    break;
+                                }
+
+                                case INFO: {
+                                    highlightColor = infoHighlightColor;
+                                    break;
+                                }
                             }
 
-                            case WARNING: {
-                                highlightColor = warningHighlightColor;
-                                break;
-                            }
+                            Bounds fieldBounds = field.getBounds();
 
-                            case QUESTION: {
-                                highlightColor = questionHighlightColor;
-                                break;
-                            }
-
-                            case INFO: {
-                                highlightColor = infoHighlightColor;
-                                break;
-                            }
+                            graphics.setColor(highlightColor);
+                            graphics.setStroke(new BasicStroke(1));
+                            graphics.drawRect(fieldBounds.x - FLAG_HIGHLIGHT_PADDING,
+                                fieldBounds.y - FLAG_HIGHLIGHT_PADDING,
+                                fieldBounds.width + FLAG_HIGHLIGHT_PADDING * 2 - 1,
+                                fieldBounds.height + FLAG_HIGHLIGHT_PADDING * 2 - 1);
                         }
-
-                        Bounds fieldBounds = field.getBounds();
-
-                        graphics.setColor(highlightColor);
-                        graphics.setStroke(new BasicStroke(1));
-                        graphics.drawRect(fieldBounds.x - FLAG_HIGHLIGHT_PADDING,
-                            fieldBounds.y - FLAG_HIGHLIGHT_PADDING,
-                            fieldBounds.width + FLAG_HIGHLIGHT_PADDING * 2 - 1,
-                            fieldBounds.height + FLAG_HIGHLIGHT_PADDING * 2 - 1);
                     }
                 }
             }

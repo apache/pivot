@@ -358,11 +358,8 @@ public class Calendar extends Container {
             if (value instanceof CalendarDate) {
                 selectedDate = (CalendarDate)value;
             } else if (bindMapping == null) {
-                if (value instanceof String) {
-                    selectedDate = CalendarDate.decode((String)value);
-                } else if (value != null) {
-                    throw new IllegalArgumentException("Invalid date type: " +
-                        value.getClass().getName());
+                if (value != null) {
+                    selectedDate = CalendarDate.decode(value.toString());
                 }
             } else {
                 selectedDate = bindMapping.toDate(value);

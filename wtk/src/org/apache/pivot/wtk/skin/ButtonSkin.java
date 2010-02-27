@@ -123,6 +123,11 @@ public abstract class ButtonSkin extends ComponentSkin
         // No-op
     }
 
+    @Override
+    public void bindMappingChanged(Button button, Button.BindMapping previousBindMapping) {
+        // No-op
+    }
+
     // Button state events
     @Override
     public void stateChanged(Button button, Button.State previousState) {

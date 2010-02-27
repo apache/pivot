@@ -588,4 +588,9 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     public void textKeyChanged(Label label, String previousTextKey) {
         // No-op
     }
+
+    @Override
+    public void bindMappingChanged(Label label, Label.BindMapping previousBindMapping) {
+        // No-op
+    }
 }
