@@ -381,7 +381,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
             }
 
             case SAVE_AS: {
-                okButton.setEnabled(saveAsTextInput.getCharacterCount() > 0);
+                okButton.setEnabled(saveAsTextInput.getTextLength() > 0);
                 break;
             }
 
