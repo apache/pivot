@@ -418,10 +418,10 @@ public class TextArea extends Component {
      * Returns character count of the document.
      *
      * @return
-     * The document's character count, or <tt>-1</tt> if the document is <tt>null</tt>.
+     * The document's character count, or <tt>0</tt> if the document is <tt>null</tt>.
      */
     public int getCharacterCount() {
-        return (document == null) ? -1 : document.getCharacterCount();
+        return (document == null) ? 0 : document.getCharacterCount();
     }
 
     public void delete(Direction direction) {

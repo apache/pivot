@@ -369,10 +369,10 @@ public class TextInput extends Component {
      * Returns the character count of the text node.
      *
      * @return
-     * The text node's length, or <tt>-1</tt> if the text node is <tt>null</tt>.
+     * The text node's length, or <tt>0</tt> if the text node is <tt>null</tt>.
      */
     public int getCharacterCount() {
-        return (textNode == null) ? -1 : textNode.getCharacterCount();
+        return (textNode == null) ? 0 : textNode.getCharacterCount();
     }
 
     public void delete(Direction direction) {
