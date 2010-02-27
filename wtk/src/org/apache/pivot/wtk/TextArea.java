@@ -414,6 +414,16 @@ public class TextArea extends Component {
         setSelection(selectionStart + 1, selectionLength);
     }
 
+    /**
+     * Returns character count of the document.
+     *
+     * @return
+     * The document's character count, or <tt>-1</tt> if the document is <tt>null</tt>.
+     */
+    public int getCharacterCount() {
+        return (document == null) ? -1 : document.getCharacterCount();
+    }
+
     public void delete(Direction direction) {
         if (direction == null) {
             throw new IllegalArgumentException("direction is null.");

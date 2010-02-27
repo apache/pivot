@@ -365,7 +365,13 @@ public class TextInput extends Component {
         }
     }
 
-    public int getTextLength() {
+    /**
+     * Returns the character count of the text node.
+     *
+     * @return
+     * The text node's length, or <tt>-1</tt> if the text node is <tt>null</tt>.
+     */
+    public int getCharacterCount() {
         return (textNode == null) ? -1 : textNode.getCharacterCount();
     }
 
