@@ -34,9 +34,9 @@ limitations under the License.
                 <itemRenderer>
                     <tests:DataBindingTest.TestListViewItemRenderer/>
                 </itemRenderer>
-                <bindMapping>
+                <selectedItemBindMapping>
                     <tests:DataBindingTest.TestBindMapping/>
-                </bindMapping>
+                </selectedItemBindMapping>
             </ListView>
 
             <ListButton listData="$list" selectedItemKey="id2">
@@ -46,18 +46,18 @@ limitations under the License.
                 <itemRenderer>
                     <tests:DataBindingTest.TestListViewItemRenderer/>
                 </itemRenderer>
-                <selectionBindMapping>
+                <selectedItemBindMapping>
                     <tests:DataBindingTest.TestBindMapping/>
-                </selectionBindMapping>
+                </selectedItemBindMapping>
             </ListButton>
 
             <Spinner spinnerData="$list" selectedItemKey="id3">
                 <itemRenderer>
                     <tests:DataBindingTest.TestSpinnerItemRenderer/>
                 </itemRenderer>
-                <bindMapping>
+                <selectedItemBindMapping>
                     <tests:DataBindingTest.TestBindMapping/>
-                </bindMapping>
+                </selectedItemBindMapping>
             </Spinner>
         </BoxPane>
     </content>
