@@ -62,7 +62,7 @@ public class TextInput extends Component {
     /**
      * Translates between text and context data during data binding.
      */
-    public interface BindMapping {
+    public interface TextBindMapping {
         /**
          * Converts a value from the bind context to a text representation.
          *
@@ -123,9 +123,9 @@ public class TextInput extends Component {
         }
 
         @Override
-        public void bindMappingChanged(TextInput textInput, TextInput.BindMapping previousBindMapping) {
+        public void textBindMappingChanged(TextInput textInput, TextInput.TextBindMapping previousTextBindMapping) {
             for (TextInputListener listener : this) {
-                listener.bindMappingChanged(textInput, previousBindMapping);
+                listener.textBindMappingChanged(textInput, previousTextBindMapping);
             }
         }
 
@@ -195,7 +195,7 @@ public class TextInput extends Component {
     private String prompt = null;
 
     private String textKey = null;
-    private BindMapping bindMapping = null;
+    private TextBindMapping textBindMapping = null;
 
     private Validator validator = null;
     private boolean textValid = true;
@@ -728,16 +728,16 @@ public class TextInput extends Component {
         }
     }
 
-    public BindMapping getBindMapping() {
-        return bindMapping;
+    public TextBindMapping getTextBindMapping() {
+        return textBindMapping;
     }
 
-    public void setBindMapping(BindMapping bindMapping) {
-        BindMapping previousBindMapping = this.bindMapping;
+    public void setTextBindMapping(TextBindMapping textBindMapping) {
+        TextBindMapping previousTextBindMapping = this.textBindMapping;
 
-        if (previousBindMapping != bindMapping) {
-            this.bindMapping = bindMapping;
-            textInputListeners.bindMappingChanged(this, previousBindMapping);
+        if (previousTextBindMapping != textBindMapping) {
+            this.textBindMapping = textBindMapping;
+            textInputListeners.textBindMappingChanged(this, previousTextBindMapping);
         }
     }
 
@@ -747,11 +747,11 @@ public class TextInput extends Component {
             && JSONSerializer.containsKey(context, textKey)) {
             Object value = JSONSerializer.get(context, textKey);
 
-            if (bindMapping == null
+            if (textBindMapping == null
                 && value != null) {
                 value = value.toString();
             } else {
-                value = bindMapping.toString(value);
+                value = textBindMapping.toString(value);
             }
 
             setText((String)value);
@@ -763,8 +763,8 @@ public class TextInput extends Component {
         if (isEnabled()
             && textKey != null) {
             String text = getText();
-            JSONSerializer.put(context, textKey, (bindMapping == null) ?
-                text : bindMapping.valueOf(text));
+            JSONSerializer.put(context, textKey, (textBindMapping == null) ?
+                text : textBindMapping.valueOf(text));
         }
     }
 

@@ -62,9 +62,9 @@ public class ListButton extends Button {
         }
 
         @Override
-        public void selectionBindMappingChanged(ListButton listButton, ListView.BindMapping previousSelectionBindMapping) {
+        public void selectedItemBindMappingChanged(ListButton listButton, ListView.SelectedItemBindMapping previousSelectedItemBindMapping) {
             for (ListButtonListener listener : this) {
-                listener.selectionBindMappingChanged(listButton, previousSelectionBindMapping);
+                listener.selectedItemBindMappingChanged(listButton, previousSelectedItemBindMapping);
             }
         }
     }
@@ -85,7 +85,7 @@ public class ListButton extends Button {
     private Filter<?> disabledItemFilter = null;
 
     private String selectedItemKey = null;
-    private ListView.BindMapping selectionBindMapping = null;
+    private ListView.SelectedItemBindMapping selectedItemBindMapping = null;
 
     private ListButtonListenerList listButtonListeners = new ListButtonListenerList();
     private ListButtonSelectionListenerList listButtonSelectionListeners = new ListButtonSelectionListenerList();
@@ -331,16 +331,16 @@ public class ListButton extends Button {
         }
     }
 
-    public ListView.BindMapping getSelectionBindMapping() {
-        return selectionBindMapping;
+    public ListView.SelectedItemBindMapping getSelectedItemBindMapping() {
+        return selectedItemBindMapping;
     }
 
-    public void setSelectionBindMapping(ListView.BindMapping bindMapping) {
-        ListView.BindMapping previousSelectionBindMapping = this.selectionBindMapping;
+    public void setSelectedItemBindMapping(ListView.SelectedItemBindMapping selectedItemBindMapping) {
+        ListView.SelectedItemBindMapping previousSelectedItemBindMapping = this.selectedItemBindMapping;
 
-        if (previousSelectionBindMapping != bindMapping) {
-            this.selectionBindMapping = bindMapping;
-            listButtonListeners.selectionBindMappingChanged(this, previousSelectionBindMapping);
+        if (previousSelectedItemBindMapping != selectedItemBindMapping) {
+            this.selectedItemBindMapping = selectedItemBindMapping;
+            listButtonListeners.selectedItemBindMappingChanged(this, previousSelectedItemBindMapping);
         }
     }
 
@@ -352,10 +352,10 @@ public class ListButton extends Button {
             Object item = JSONSerializer.get(context, selectedItemKey);
 
             int index;
-            if (selectionBindMapping == null) {
+            if (selectedItemBindMapping == null) {
                 index = ((List<Object>)listData).indexOf(item);
             } else {
-                index = selectionBindMapping.indexOf(listData, item);
+                index = selectedItemBindMapping.indexOf(listData, item);
             }
 
             setSelectedIndex(index);
@@ -369,10 +369,10 @@ public class ListButton extends Button {
             int selectedIndex = getSelectedIndex();
 
             Object item;
-            if (selectionBindMapping == null) {
+            if (selectedItemBindMapping == null) {
                 item = listData.get(selectedIndex);
             } else {
-                item = selectionBindMapping.get(listData, selectedIndex);
+                item = selectedItemBindMapping.get(listData, selectedIndex);
             }
 
             JSONSerializer.put(context, selectedItemKey, item);

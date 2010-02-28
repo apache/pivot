@@ -124,7 +124,7 @@ public abstract class ButtonSkin extends ComponentSkin
     }
 
     @Override
-    public void bindMappingChanged(Button button, Button.BindMapping previousBindMapping) {
+    public void stateBindMappingChanged(Button button, Button.StateBindMapping previousStateBindMapping) {
         // No-op
     }
 

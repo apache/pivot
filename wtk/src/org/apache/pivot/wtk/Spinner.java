@@ -74,7 +74,7 @@ public class Spinner extends Container {
     /**
      * Translates between spinner and bind context data during data binding.
      */
-    public interface BindMapping {
+    public interface SelectedItemBindMapping {
         /**
          * Returns the index of the item in the source list.
          *
@@ -188,9 +188,9 @@ public class Spinner extends Container {
         }
 
         @Override
-        public void bindMappingChanged(Spinner spinner, BindMapping previousBindMapping) {
+        public void selectedItemBindMappingChanged(Spinner spinner, SelectedItemBindMapping previousSelectedItemBindMapping) {
             for (SpinnerListener listener : this) {
-                listener.bindMappingChanged(spinner, previousBindMapping);
+                listener.selectedItemBindMappingChanged(spinner, previousSelectedItemBindMapping);
             }
         }
     }
@@ -258,7 +258,7 @@ public class Spinner extends Container {
     private boolean circular = false;
     private int selectedIndex = -1;
     private String selectedItemKey = null;
-    private BindMapping bindMapping = null;
+    private SelectedItemBindMapping selectedItemBindMapping = null;
 
     private SpinnerListenerList spinnerListeners = new SpinnerListenerList();
     private SpinnerItemListenerList spinnerItemListeners = new SpinnerItemListenerList();
@@ -447,16 +447,16 @@ public class Spinner extends Container {
         }
     }
 
-    public BindMapping getBindMapping() {
-        return bindMapping;
+    public SelectedItemBindMapping getSelectedItemBindMapping() {
+        return selectedItemBindMapping;
     }
 
-    public void setBindMapping(BindMapping bindMapping) {
-        BindMapping previousBindMapping = this.bindMapping;
+    public void setSelectedItemBindMapping(SelectedItemBindMapping selectedItemBindMapping) {
+        SelectedItemBindMapping previousSelectedItemBindMapping = this.selectedItemBindMapping;
 
-        if (previousBindMapping != bindMapping) {
-            this.bindMapping = bindMapping;
-            spinnerListeners.bindMappingChanged(this, previousBindMapping);
+        if (previousSelectedItemBindMapping != selectedItemBindMapping) {
+            this.selectedItemBindMapping = selectedItemBindMapping;
+            spinnerListeners.selectedItemBindMappingChanged(this, previousSelectedItemBindMapping);
         }
     }
 
@@ -468,10 +468,10 @@ public class Spinner extends Container {
             Object item = JSONSerializer.get(context, selectedItemKey);
 
             int index;
-            if (bindMapping == null) {
+            if (selectedItemBindMapping == null) {
                 index = ((List<Object>)spinnerData).indexOf(item);
             } else {
-                index = bindMapping.indexOf(spinnerData, item);
+                index = selectedItemBindMapping.indexOf(spinnerData, item);
             }
 
             setSelectedIndex(index);
@@ -485,10 +485,10 @@ public class Spinner extends Container {
             int selectedIndex = getSelectedIndex();
 
             Object item;
-            if (bindMapping == null) {
+            if (selectedItemBindMapping == null) {
                 item = spinnerData.get(selectedIndex);
             } else {
-                item = bindMapping.get(spinnerData, selectedIndex);
+                item = selectedItemBindMapping.get(spinnerData, selectedIndex);
             }
 
             JSONSerializer.put(context, selectedItemKey, item);

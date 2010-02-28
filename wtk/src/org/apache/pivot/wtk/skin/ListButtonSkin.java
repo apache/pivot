@@ -351,7 +351,7 @@ public abstract class ListButtonSkin extends ButtonSkin
     }
 
     @Override
-    public void selectionBindMappingChanged(ListButton listButton, ListView.BindMapping previousSelectionBindMapping) {
+    public void selectedItemBindMappingChanged(ListButton listButton, ListView.SelectedItemBindMapping previousSelectedItemBindMapping) {
         // No-op
     }
 

@@ -33,7 +33,7 @@ public interface LabelListener {
         }
 
         @Override
-        public void bindMappingChanged(Label label, Label.BindMapping previousBindMapping) {
+        public void textBindMappingChanged(Label label, Label.TextBindMapping previousTextBindMapping) {
         }
     }
 
@@ -57,7 +57,7 @@ public interface LabelListener {
      * Called when a label's bind mapping has changed.
      *
      * @param label
-     * @param previousBindMapping
+     * @param previousTextBindMapping
      */
-    public void bindMappingChanged(Label label, Label.BindMapping previousBindMapping);
+    public void textBindMappingChanged(Label label, Label.TextBindMapping previousTextBindMapping);
 }

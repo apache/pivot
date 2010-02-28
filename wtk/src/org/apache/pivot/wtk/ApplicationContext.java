@@ -60,11 +60,6 @@ import org.apache.pivot.wtk.effects.Decorator;
 
 /**
  * Base class for application contexts.
- * <p>
- * TODO Fire events when entries are added to/removed from the cache?
- * <p>
- * TODO Provide a means of mapping common "actions" to keystrokes (e.g. "copy"
- * to Control-C or Command-C)
  */
 public abstract class ApplicationContext {
     /**
@@ -90,7 +85,6 @@ public abstract class ApplicationContext {
         private boolean debugPaint = false;
 
         private Random random = null;
-
 
         private transient DropTargetListener dropTargetListener = new DropTargetListener() {
             @Override

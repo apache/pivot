@@ -293,7 +293,7 @@ public abstract class CalendarButtonSkin extends ButtonSkin
     }
 
     @Override
-    public void selectionBindMappingChanged(CalendarButton calendarButton,
-        Calendar.BindMapping previousSelectionBindMapping) {
+    public void selectedDateBindMappingChanged(CalendarButton calendarButton,
+        Calendar.SelectedDateBindMapping previousSelectedDateBindMapping) {
     }
 }

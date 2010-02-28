@@ -43,7 +43,7 @@ public abstract class CalendarSkin extends ContainerSkin
     }
 
     @Override
-    public void bindMappingChanged(Calendar calendar, Calendar.BindMapping previousBindMapping) {
+    public void selectedDateBindMappingChanged(Calendar calendar, Calendar.SelectedDateBindMapping previousSelectedDateBindMapping) {
         // No-op
     }
 }

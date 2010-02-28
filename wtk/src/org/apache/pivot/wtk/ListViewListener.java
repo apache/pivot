@@ -66,7 +66,7 @@ public interface ListViewListener {
         }
 
         @Override
-        public void bindMappingChanged(ListView listView, ListView.BindMapping previousBindMapping) {
+        public void selectedItemBindMappingChanged(ListView listView, ListView.SelectedItemBindMapping previousSelectedItemBindMapping) {
         }
     }
 
@@ -146,7 +146,7 @@ public interface ListViewListener {
      * Called when a list view's bind mapping has changed.
      *
      * @param listView
-     * @param previousBindMapping
+     * @param previousSelectedItemBindMapping
      */
-    public void bindMappingChanged(ListView listView, ListView.BindMapping previousBindMapping);
+    public void selectedItemBindMappingChanged(ListView listView, ListView.SelectedItemBindMapping previousSelectedItemBindMapping);
 }

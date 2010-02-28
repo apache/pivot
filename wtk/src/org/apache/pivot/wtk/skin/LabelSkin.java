@@ -590,7 +590,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     }
 
     @Override
-    public void bindMappingChanged(Label label, Label.BindMapping previousBindMapping) {
+    public void textBindMappingChanged(Label label, Label.TextBindMapping previousTextBindMapping) {
         // No-op
     }
 }

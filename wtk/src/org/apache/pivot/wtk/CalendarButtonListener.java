@@ -44,8 +44,8 @@ public interface CalendarButtonListener {
         }
 
         @Override
-        public void selectionBindMappingChanged(CalendarButton calendarButton,
-            Calendar.BindMapping previousSelectionBindMapping) {
+        public void selectedDateBindMappingChanged(CalendarButton calendarButton,
+            Calendar.SelectedDateBindMapping previousSelectedDateBindMapping) {
         }
     }
 
@@ -79,8 +79,8 @@ public interface CalendarButtonListener {
      * Called when a calendar button's selection bind mapping has changed.
      *
      * @param calendarButton
-     * @param previousSelectionBindMapping
+     * @param previousSelectedDateBindMapping
      */
-    public void selectionBindMappingChanged(CalendarButton calendarButton,
-        Calendar.BindMapping previousSelectionBindMapping);
+    public void selectedDateBindMappingChanged(CalendarButton calendarButton,
+        Calendar.SelectedDateBindMapping previousSelectedDateBindMapping);
 }

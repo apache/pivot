@@ -27,7 +27,7 @@ public class Label extends Component {
     /**
      * Translates between text and context data during data binding.
      */
-    public interface BindMapping {
+    public interface TextBindMapping {
         /**
          * Converts a value from the bind context to a text representation.
          *
@@ -60,16 +60,16 @@ public class Label extends Component {
         }
 
         @Override
-        public void bindMappingChanged(Label label, Label.BindMapping previousBindMapping) {
+        public void textBindMappingChanged(Label label, Label.TextBindMapping previousTextBindMapping) {
             for (LabelListener listener : this) {
-                listener.bindMappingChanged(label, previousBindMapping);
+                listener.textBindMappingChanged(label, previousTextBindMapping);
             }
         }
     }
 
     private String text = null;
     private String textKey = null;
-    private BindMapping bindMapping = null;
+    private TextBindMapping textBindMapping = null;
 
     private LabelListenerList labelListeners = new LabelListenerList();
 
@@ -120,16 +120,16 @@ public class Label extends Component {
         }
     }
 
-    public BindMapping getBindMapping() {
-        return bindMapping;
+    public TextBindMapping getTextBindMapping() {
+        return textBindMapping;
     }
 
-    public void setBindMapping(BindMapping bindMapping) {
-        BindMapping previousBindMapping = this.bindMapping;
+    public void setTextBindMapping(TextBindMapping textBindMapping) {
+        TextBindMapping previousTextBindMapping = this.textBindMapping;
 
-        if (previousBindMapping != bindMapping) {
-            this.bindMapping = bindMapping;
-            labelListeners.bindMappingChanged(this, previousBindMapping);
+        if (previousTextBindMapping != textBindMapping) {
+            this.textBindMapping = textBindMapping;
+            labelListeners.textBindMappingChanged(this, previousTextBindMapping);
         }
     }
 
@@ -139,11 +139,11 @@ public class Label extends Component {
             && JSONSerializer.containsKey(context, textKey)) {
             Object value = JSONSerializer.get(context, textKey);
 
-            if (bindMapping == null
+            if (textBindMapping == null
                 && value != null) {
                 value = value.toString();
             } else {
-                value = bindMapping.toString(value);
+                value = textBindMapping.toString(value);
             }
 
             setText((String)value);
@@ -155,8 +155,8 @@ public class Label extends Component {
         if (isEnabled()
             && textKey != null) {
             String text = getText();
-            JSONSerializer.put(context, textKey, (bindMapping == null) ?
-                text : bindMapping.valueOf(text));
+            JSONSerializer.put(context, textKey, (textBindMapping == null) ?
+                text : textBindMapping.valueOf(text));
         }
     }
 

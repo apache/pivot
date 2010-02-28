@@ -32,7 +32,7 @@ public class Calendar extends Container {
     /**
      * Translates between calendar date and context data during data binding.
      */
-    public interface BindMapping {
+    public interface SelectedDateBindMapping {
         /**
          * Converts a context value to a calendar date.
          *
@@ -90,9 +90,9 @@ public class Calendar extends Container {
         }
 
         @Override
-        public void bindMappingChanged(Calendar calendar, BindMapping previousBindMapping) {
+        public void selectedDateBindMappingChanged(Calendar calendar, SelectedDateBindMapping previousSelectedDateBindMapping) {
             for (CalendarListener listener : this) {
-                listener.bindMappingChanged(calendar, previousBindMapping);
+                listener.selectedDateBindMappingChanged(calendar, previousSelectedDateBindMapping);
             }
         }
     }
@@ -120,7 +120,7 @@ public class Calendar extends Container {
     private Locale locale = Locale.getDefault();
     private Filter<CalendarDate> disabledDateFilter = null;
     private String selectedDateKey = null;
-    private BindMapping bindMapping = null;
+    private SelectedDateBindMapping selectedDateBindMapping = null;
 
     private CalendarListenerList calendarListeners = new CalendarListenerList();
     private CalendarSelectionListenerList calendarSelectionListeners =
@@ -330,16 +330,16 @@ public class Calendar extends Container {
         }
     }
 
-    public BindMapping getBindMapping() {
-        return bindMapping;
+    public SelectedDateBindMapping getSelectedDateBindMapping() {
+        return selectedDateBindMapping;
     }
 
-    public void setBindMapping(BindMapping bindMapping) {
-        BindMapping previousBindMapping = this.bindMapping;
+    public void setSelectedDateBindMapping(SelectedDateBindMapping selectedDateBindMapping) {
+        SelectedDateBindMapping previousSelectedDateBindMapping = this.selectedDateBindMapping;
 
-        if (previousBindMapping != bindMapping) {
-            this.bindMapping = bindMapping;
-            calendarListeners.bindMappingChanged(this, previousBindMapping);
+        if (previousSelectedDateBindMapping != selectedDateBindMapping) {
+            this.selectedDateBindMapping = selectedDateBindMapping;
+            calendarListeners.selectedDateBindMappingChanged(this, previousSelectedDateBindMapping);
         }
     }
 
@@ -357,12 +357,12 @@ public class Calendar extends Container {
 
             if (value instanceof CalendarDate) {
                 selectedDate = (CalendarDate)value;
-            } else if (bindMapping == null) {
+            } else if (selectedDateBindMapping == null) {
                 if (value != null) {
                     selectedDate = CalendarDate.decode(value.toString());
                 }
             } else {
-                selectedDate = bindMapping.toDate(value);
+                selectedDate = selectedDateBindMapping.toDate(value);
             }
 
             setSelectedDate(selectedDate);
@@ -377,8 +377,8 @@ public class Calendar extends Container {
     public void store(Dictionary<String, ?> context) {
         if (isEnabled()
             && selectedDateKey != null) {
-            JSONSerializer.put(context, selectedDateKey, (bindMapping == null) ?
-                selectedDate : bindMapping.valueOf(selectedDate));
+            JSONSerializer.put(context, selectedDateKey, (selectedDateBindMapping == null) ?
+                selectedDate : selectedDateBindMapping.valueOf(selectedDate));
         }
     }
 

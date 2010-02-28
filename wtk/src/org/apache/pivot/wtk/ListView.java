@@ -363,7 +363,7 @@ public class ListView extends Component {
     /**
      * Translates between list and bind context data during data binding.
      */
-    public interface BindMapping {
+    public interface SelectedItemBindMapping {
         /**
          * Returns the index of the item in the source list.
          *
@@ -465,9 +465,9 @@ public class ListView extends Component {
         }
 
         @Override
-        public void bindMappingChanged(ListView listView, BindMapping previousBindMapping) {
+        public void selectedItemBindMappingChanged(ListView listView, SelectedItemBindMapping previousSelectedItemBindMapping) {
             for (ListViewListener listener : this) {
-                listener.bindMappingChanged(listView, previousBindMapping);
+                listener.selectedItemBindMappingChanged(listView, previousSelectedItemBindMapping);
             }
         }
     }
@@ -652,7 +652,7 @@ public class ListView extends Component {
 
     private String selectedItemKey = null;
     private String selectedItemsKey = null;
-    private BindMapping bindMapping = null;
+    private SelectedItemBindMapping selectedItemBindMapping = null;
 
     private ListViewListenerList listViewListeners = new ListViewListenerList();
     private ListViewItemListenerList listViewItemListeners = new ListViewItemListenerList();
@@ -1473,16 +1473,16 @@ public class ListView extends Component {
         }
     }
 
-    public BindMapping getBindMapping() {
-        return bindMapping;
+    public SelectedItemBindMapping getSelectedItemBindMapping() {
+        return selectedItemBindMapping;
     }
 
-    public void setBindMapping(BindMapping bindMapping) {
-        BindMapping previousBindMapping = this.bindMapping;
+    public void setSelectedItemBindMapping(SelectedItemBindMapping selectedItemBindMapping) {
+        SelectedItemBindMapping previousSelectedItemBindMapping = this.selectedItemBindMapping;
 
-        if (previousBindMapping != bindMapping) {
-            this.bindMapping = bindMapping;
-            listViewListeners.bindMappingChanged(this, previousBindMapping);
+        if (previousSelectedItemBindMapping != selectedItemBindMapping) {
+            this.selectedItemBindMapping = selectedItemBindMapping;
+            listViewListeners.selectedItemBindMappingChanged(this, previousSelectedItemBindMapping);
         }
     }
 
@@ -1494,10 +1494,10 @@ public class ListView extends Component {
             Object item = JSONSerializer.get(context, selectedItemKey);
 
             int index;
-            if (bindMapping == null) {
+            if (selectedItemBindMapping == null) {
                 index = ((List<Object>)listData).indexOf(item);
             } else {
-                index = bindMapping.indexOf(listData, item);
+                index = selectedItemBindMapping.indexOf(listData, item);
             }
 
             setSelectedIndex(index);
@@ -1513,10 +1513,10 @@ public class ListView extends Component {
                 Object item = items.get(i);
 
                 int index;
-                if (bindMapping == null) {
+                if (selectedItemBindMapping == null) {
                     index = ((List<Object>)listData).indexOf(item);
                 } else {
-                    index = bindMapping.indexOf(listData, item);
+                    index = selectedItemBindMapping.indexOf(listData, item);
                 }
 
                 if (index != -1) {
@@ -1533,10 +1533,10 @@ public class ListView extends Component {
                 int selectedIndex = getSelectedIndex();
 
                 Object item;
-                if (bindMapping == null) {
+                if (selectedItemBindMapping == null) {
                     item = listData.get(selectedIndex);
                 } else {
-                    item = bindMapping.get(listData, selectedIndex);
+                    item = selectedItemBindMapping.get(listData, selectedIndex);
                 }
 
                 JSONSerializer.put(context, selectedItemKey, item);
@@ -1551,10 +1551,10 @@ public class ListView extends Component {
 
                     for (int index = range.start; index <= range.end; index++) {
                         Object item;
-                        if (bindMapping == null) {
+                        if (selectedItemBindMapping == null) {
                             item = listData.get(index);
                         } else {
-                            item = bindMapping.get(listData, index);
+                            item = selectedItemBindMapping.get(listData, index);
                         }
 
                         items.add(item);

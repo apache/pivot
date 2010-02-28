@@ -1075,7 +1075,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     }
 
     @Override
-    public void bindMappingChanged(ListView listView, ListView.BindMapping previousBindMapping) {
+    public void selectedItemBindMappingChanged(ListView listView, ListView.SelectedItemBindMapping previousSelectedItemBindMapping) {
         // No-op
     }
 
