@@ -20,6 +20,9 @@ package org.apache.pivot.wtk.text;
  * Abstract base class for block elements.
  * <p>
  * TODO Add horizontal alignment, margin, and line spacing properties.
+ *
+ * @deprecated
+ * This class will be removed in a future release.
  */
 public abstract class Block extends Element {
     public Block() {

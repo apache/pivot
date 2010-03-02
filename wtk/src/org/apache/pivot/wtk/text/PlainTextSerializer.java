@@ -34,6 +34,9 @@ import org.apache.pivot.serialization.Serializer;
 /**
  * Implementation of the {@link Serializer} interface that reads and writes
  * a plain text document.
+ *
+ * @deprecated
+ * This class will be removed in a future release.
  */
 public class PlainTextSerializer implements Serializer<Document> {
     private Charset charset = null;

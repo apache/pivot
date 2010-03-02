@@ -66,8 +66,12 @@ public interface TextInputListener {
 
     /**
      * Called when a text input's text node has changed.
+     *
      * @param textInput
      * @param previousTextNode
+     *
+     * @deprecated
+     * This method will be removed in a future release.
      */
     public void textNodeChanged(TextInput textInput, TextNode previousTextNode);
 

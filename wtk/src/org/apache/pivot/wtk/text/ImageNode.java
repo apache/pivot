@@ -29,6 +29,9 @@ import org.apache.pivot.wtk.media.Image;
  * Node representing an image.
  * <p>
  * TODO Add a URL setter for the image property.
+ *
+ * @deprecated
+ * This class will be removed in a future release.
  */
 public class ImageNode extends Node {
     private static class ImageNodeListenerList extends ListenerList<ImageNodeListener>

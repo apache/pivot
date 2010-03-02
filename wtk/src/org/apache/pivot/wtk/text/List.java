@@ -20,6 +20,9 @@ package org.apache.pivot.wtk.text;
  * Abstract base class for list elements.
  * <p>
  * TODO Add indent and item spacing properties.
+ *
+ * @deprecated
+ * This class will be removed in a future release.
  */
 public abstract class List extends Block {
     /**

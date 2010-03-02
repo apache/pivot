@@ -20,6 +20,9 @@ import org.apache.pivot.collections.Sequence;
 
 /**
  * Element listener interface.
+ *
+ * @deprecated
+ * This class will be removed in a future release.
  */
 public interface ElementListener {
     /**

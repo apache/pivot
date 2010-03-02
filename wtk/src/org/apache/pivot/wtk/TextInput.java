@@ -262,10 +262,26 @@ public class TextInput extends Component {
         super.setSkin(skin);
     }
 
+    /**
+     * Returns the text node that backs the text input's content.
+     *
+     * @deprecated
+     * This method will be removed in a future release. Callers should use
+     * {@link #getText()} instead.
+     */
     public TextNode getTextNode() {
         return textNode;
     }
 
+    /**
+     * Sets the text node that backs the text input's content.
+     *
+     * @param textNode
+     *
+     * @deprecated
+     * This method will be removed in a future release. Callers should use
+     * {@link #setText(String)} instead.
+     */
     public void setTextNode(TextNode textNode) {
         if (textNode != null
             && textNode.getCharacterCount() > maximumLength) {
@@ -747,9 +763,10 @@ public class TextInput extends Component {
             && JSONSerializer.containsKey(context, textKey)) {
             Object value = JSONSerializer.get(context, textKey);
 
-            if (textBindMapping == null
-                && value != null) {
-                value = value.toString();
+            if (textBindMapping == null) {
+                if (value != null) {
+                    value = value.toString();
+                }
             } else {
                 value = textBindMapping.toString(value);
             }

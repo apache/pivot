@@ -20,7 +20,10 @@ import org.apache.pivot.util.ListenerList;
 
 /**
  * Abstract base class for document nodes.
- */
+ *
+ * @deprecated
+ * This class will be removed in a future release.
+*/
 public abstract class Node {
     private static class NodeListenerList extends ListenerList<NodeListener>
         implements NodeListener {
