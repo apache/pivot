@@ -772,7 +772,8 @@ public class JSONSerializer implements Serializer<Object> {
      * @see #get(Object, String)
      */
     public static Short getShort(Object root, String path) {
-        return getNumber(root, path).shortValue();
+        Number number = getNumber(root, path);
+        return (number == null) ? null : number.shortValue();
     }
 
     /**
@@ -784,7 +785,8 @@ public class JSONSerializer implements Serializer<Object> {
      * @see #get(Object, String)
      */
     public static Integer getInteger(Object root, String path) {
-        return getNumber(root, path).intValue();
+        Number number = getNumber(root, path);
+        return (number == null) ? null : number.intValue();
     }
 
     /**
@@ -796,7 +798,8 @@ public class JSONSerializer implements Serializer<Object> {
      * @see #get(Object, String)
      */
     public static Long getLong(Object root, String path) {
-        return getNumber(root, path).longValue();
+        Number number = getNumber(root, path);
+        return (number == null) ? null : number.longValue();
     }
 
     /**
@@ -808,7 +811,8 @@ public class JSONSerializer implements Serializer<Object> {
      * @see #get(Object, String)
      */
     public static Float getFloat(Object root, String path) {
-        return getNumber(root, path).floatValue();
+        Number number = getNumber(root, path);
+        return (number == null) ? null : number.floatValue();
     }
 
     /**
@@ -820,7 +824,8 @@ public class JSONSerializer implements Serializer<Object> {
      * @see #get(Object, String)
      */
     public static Double getDouble(Object root, String path) {
-        return getNumber(root, path).doubleValue();
+        Number number = getNumber(root, path);
+        return (number == null) ? null : number.doubleValue();
     }
 
     /**
