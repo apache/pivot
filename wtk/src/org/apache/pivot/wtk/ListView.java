@@ -1530,13 +1530,17 @@ public class ListView extends Component {
     public void store(Dictionary<String, ?> context) {
         if (isEnabled()) {
             if (selectedItemKey != null) {
-                int selectedIndex = getSelectedIndex();
-
                 Object item;
-                if (selectedItemBindMapping == null) {
-                    item = listData.get(selectedIndex);
+
+                int selectedIndex = getSelectedIndex();
+                if (selectedIndex == -1) {
+                    item = null;
                 } else {
-                    item = selectedItemBindMapping.get(listData, selectedIndex);
+                    if (selectedItemBindMapping == null) {
+                        item = listData.get(selectedIndex);
+                    } else {
+                        item = selectedItemBindMapping.get(listData, selectedIndex);
+                    }
                 }
 
                 JSONSerializer.put(context, selectedItemKey, item);

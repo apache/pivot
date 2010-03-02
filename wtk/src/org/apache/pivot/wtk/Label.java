@@ -139,9 +139,10 @@ public class Label extends Component {
             && JSONSerializer.containsKey(context, textKey)) {
             Object value = JSONSerializer.get(context, textKey);
 
-            if (textBindMapping == null
-                && value != null) {
-                value = value.toString();
+            if (textBindMapping == null) {
+                if (value != null) {
+                    value = value.toString();
+                }
             } else {
                 value = textBindMapping.toString(value);
             }

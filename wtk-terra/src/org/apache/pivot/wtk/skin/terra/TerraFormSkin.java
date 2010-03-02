@@ -121,70 +121,72 @@ public class TerraFormSkin extends ContainerSkin
                         fieldIndex < fieldCount; fieldIndex++) {
                         Component field = section.get(fieldIndex);
 
-                        Form.Flag flag = Form.getFlag(field);
+                        if (field.isVisible()) {
+                            Form.Flag flag = Form.getFlag(field);
 
-                        if (flag != null) {
-                            String message = flag.getMessage();
-                            MessageType messageType = flag.getMessageType();
-                            Color messageColor = null;
-                            Color messageBackgroundColor = null;
+                            if (flag != null) {
+                                String message = flag.getMessage();
+                                MessageType messageType = flag.getMessageType();
+                                Color messageColor = null;
+                                Color messageBackgroundColor = null;
 
-                            switch (messageType) {
-                                case ERROR: {
-                                    messageColor = errorMessageColor;
-                                    messageBackgroundColor = errorMessageBackgroundColor;
-                                    break;
+                                switch (messageType) {
+                                    case ERROR: {
+                                        messageColor = errorMessageColor;
+                                        messageBackgroundColor = errorMessageBackgroundColor;
+                                        break;
+                                    }
+
+                                    case WARNING: {
+                                        messageColor = warningMessageColor;
+                                        messageBackgroundColor = warningMessageBackgroundColor;
+                                        break;
+                                    }
+
+                                    case QUESTION: {
+                                        messageColor = questionMessageColor;
+                                        messageBackgroundColor = questionMessageBackgroundColor;
+                                        break;
+                                    }
+
+                                    case INFO: {
+                                        messageColor = infoMessageColor;
+                                        messageBackgroundColor = infoMessageBackgroundColor;
+                                        break;
+                                    }
                                 }
 
-                                case WARNING: {
-                                    messageColor = warningMessageColor;
-                                    messageBackgroundColor = warningMessageBackgroundColor;
-                                    break;
-                                }
+                                // Draw the label
+                                flagMessageLabel.setText(message);
+                                flagMessageLabel.setSize(flagMessageLabel.getPreferredSize());
+                                flagMessageLabel.validate();
+                                flagMessageLabel.getStyles().put("color", messageColor);
+                                flagMessageLabel.getStyles().put("backgroundColor", messageBackgroundColor);
 
-                                case QUESTION: {
-                                    messageColor = questionMessageColor;
-                                    messageBackgroundColor = questionMessageBackgroundColor;
-                                    break;
-                                }
+                                int flagMessageX = field.getX() + field.getWidth()
+                                    + INLINE_FIELD_INDICATOR_WIDTH - 2;
+                                int flagMessageY = field.getY() - field.getBaseline()
+                                    + flagMessageLabel.getBaseline();
 
-                                case INFO: {
-                                    messageColor = infoMessageColor;
-                                    messageBackgroundColor = infoMessageBackgroundColor;
-                                    break;
-                                }
+                                graphics.translate(flagMessageX, flagMessageY);
+                                flagMessageLabel.paint(graphics);
+
+                                // Draw the arrow
+                                GeneralPath arrow = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
+                                arrow.moveTo(0, 0);
+                                arrow.lineTo(-INLINE_FIELD_INDICATOR_WIDTH, (float)flagMessageLabel.getHeight() / 2);
+                                arrow.lineTo(0, flagMessageLabel.getHeight());
+                                arrow.closePath();
+
+                                graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                                    RenderingHints.VALUE_ANTIALIAS_ON);
+
+                                graphics.setColor(messageBackgroundColor);
+                                graphics.fill(arrow);
+
+                                // Restore the graphics context
+                                graphics.translate(-flagMessageX, -flagMessageY);
                             }
-
-                            // Draw the label
-                            flagMessageLabel.setText(message);
-                            flagMessageLabel.setSize(flagMessageLabel.getPreferredSize());
-                            flagMessageLabel.validate();
-                            flagMessageLabel.getStyles().put("color", messageColor);
-                            flagMessageLabel.getStyles().put("backgroundColor", messageBackgroundColor);
-
-                            int flagMessageX = field.getX() + field.getWidth()
-                                + INLINE_FIELD_INDICATOR_WIDTH - 2;
-                            int flagMessageY = field.getY() - field.getBaseline()
-                                + flagMessageLabel.getBaseline();
-
-                            graphics.translate(flagMessageX, flagMessageY);
-                            flagMessageLabel.paint(graphics);
-
-                            // Draw the arrow
-                            GeneralPath arrow = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-                            arrow.moveTo(0, 0);
-                            arrow.lineTo(-INLINE_FIELD_INDICATOR_WIDTH, (float)flagMessageLabel.getHeight() / 2);
-                            arrow.lineTo(0, flagMessageLabel.getHeight());
-                            arrow.closePath();
-
-                            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                                RenderingHints.VALUE_ANTIALIAS_ON);
-
-                            graphics.setColor(messageBackgroundColor);
-                            graphics.fill(arrow);
-
-                            // Restore the graphics context
-                            graphics.translate(-flagMessageX, -flagMessageY);
                         }
                     }
                 }

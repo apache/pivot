@@ -482,13 +482,15 @@ public class Spinner extends Container {
     public void store(Dictionary<String, ?> context) {
         if (isEnabled()
             && selectedItemKey != null) {
-            int selectedIndex = getSelectedIndex();
-
             Object item;
-            if (selectedItemBindMapping == null) {
-                item = spinnerData.get(selectedIndex);
+            if (selectedIndex == -1) {
+                item = null;
             } else {
-                item = selectedItemBindMapping.get(spinnerData, selectedIndex);
+                if (selectedItemBindMapping == null) {
+                    item = spinnerData.get(selectedIndex);
+                } else {
+                    item = selectedItemBindMapping.get(spinnerData, selectedIndex);
+                }
             }
 
             JSONSerializer.put(context, selectedItemKey, item);

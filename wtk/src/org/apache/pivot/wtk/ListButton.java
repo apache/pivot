@@ -366,13 +366,15 @@ public class ListButton extends Button {
     public void store(Dictionary<String, ?> context) {
         if (isEnabled()
             && selectedItemKey != null) {
-            int selectedIndex = getSelectedIndex();
-
             Object item;
-            if (selectedItemBindMapping == null) {
-                item = listData.get(selectedIndex);
+            if (selectedIndex == -1) {
+                item = null;
             } else {
-                item = selectedItemBindMapping.get(listData, selectedIndex);
+                if (selectedItemBindMapping == null) {
+                    item = listData.get(selectedIndex);
+                } else {
+                    item = selectedItemBindMapping.get(listData, selectedIndex);
+                }
             }
 
             JSONSerializer.put(context, selectedItemKey, item);
