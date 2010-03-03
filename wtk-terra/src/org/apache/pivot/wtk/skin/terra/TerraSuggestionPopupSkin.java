@@ -29,7 +29,7 @@ import org.apache.pivot.wtk.ComponentKeyListener;
 import org.apache.pivot.wtk.ComponentStateListener;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.ContainerMouseListener;
-import org.apache.pivot.wtk.Direction;
+import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Keyboard;
@@ -236,8 +236,8 @@ public class TerraSuggestionPopupSkin extends WindowSkin
             case Keyboard.KeyCode.TAB: {
                 suggestionPopup.close(false);
 
-                Direction direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ?
-                    Direction.BACKWARD : Direction.FORWARD;
+                FocusTraversalDirection direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ?
+                    FocusTraversalDirection.BACKWARD : FocusTraversalDirection.FORWARD;
                 textInput.transferFocus(direction);
 
                 break;

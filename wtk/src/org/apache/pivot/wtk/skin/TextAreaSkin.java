@@ -40,7 +40,7 @@ import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Cursor;
 import org.apache.pivot.wtk.Dimensions;
-import org.apache.pivot.wtk.Direction;
+import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
@@ -232,7 +232,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
         public abstract NodeView getNext();
         public abstract int getInsertionPoint(int x, int y);
-        public abstract int getNextInsertionPoint(int x, int from, Direction direction);
+        public abstract int getNextInsertionPoint(int x, int from, FocusTraversalDirection direction);
         public abstract int getRowIndex(int offset);
         public abstract int getRowCount();
         public abstract Bounds getCharacterBounds(int offset);
@@ -521,12 +521,12 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
 
         @Override
-        public int getNextInsertionPoint(int x, int from, Direction direction) {
+        public int getNextInsertionPoint(int x, int from, FocusTraversalDirection direction) {
             int offset = -1;
 
             if (getLength() > 0) {
                 if (from == -1) {
-                    int i = (direction == Direction.FORWARD) ? 0 : getLength() - 1;
+                    int i = (direction == FocusTraversalDirection.FORWARD) ? 0 : getLength() - 1;
                     NodeView nodeView = get(i);
                     offset = nodeView.getNextInsertionPoint(x - nodeView.getX(), -1, direction);
 
@@ -558,7 +558,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
                         if (offset == -1) {
                             // Move to the next or previous node view
-                            if (direction == Direction.FORWARD) {
+                            if (direction == FocusTraversalDirection.FORWARD) {
                                 nodeView = (i < n - 1) ? get(i + 1) : null;
                             } else {
                                 nodeView = (i > 0) ? get(i - 1) : null;
@@ -817,7 +817,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
 
         @Override
-        public int getNextInsertionPoint(int x, int from, Direction direction) {
+        public int getNextInsertionPoint(int x, int from, FocusTraversalDirection direction) {
             int offset = -1;
 
             int n = rows.getLength();
@@ -828,7 +828,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             } else {
                 int i;
                 if (from == -1) {
-                    i = (direction == Direction.FORWARD) ? -1 : rows.getLength();
+                    i = (direction == FocusTraversalDirection.FORWARD) ? -1 : rows.getLength();
                 } else {
                     // Find the row that contains offset
                     if (from == getCharacterCount() - 1) {
@@ -850,7 +850,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 }
 
                 // Move to the next or previous row
-                if (direction == Direction.FORWARD) {
+                if (direction == FocusTraversalDirection.FORWARD) {
                     i++;
                 } else {
                     i--;
@@ -1160,7 +1160,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
 
         @Override
-        public int getNextInsertionPoint(int x, int from, Direction direction) {
+        public int getNextInsertionPoint(int x, int from, FocusTraversalDirection direction) {
             int offset = -1;
 
             if (from == -1) {
@@ -1293,7 +1293,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
 
         @Override
-        public int getNextInsertionPoint(int x, int from, Direction direction) {
+        public int getNextInsertionPoint(int x, int from, FocusTraversalDirection direction) {
             return (from == -1) ? 0 : -1;
         }
 
@@ -1413,7 +1413,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     private boolean caretOn = false;
 
     private int anchor = -1;
-    private Direction scrollDirection = null;
+    private FocusTraversalDirection scrollDirection = null;
     private int mouseX = -1;
 
     private BlinkCaretCallback blinkCaretCallback = new BlinkCaretCallback();
@@ -1612,9 +1612,9 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             x = Math.min(documentView.getWidth() - 1, Math.max(x - margin.left, 0));
 
             if (y < margin.top) {
-                offset = documentView.getNextInsertionPoint(x, -1, Direction.FORWARD);
+                offset = documentView.getNextInsertionPoint(x, -1, FocusTraversalDirection.FORWARD);
             } else if (y > documentView.getHeight() + margin.top) {
-                offset = documentView.getNextInsertionPoint(x, -1, Direction.BACKWARD);
+                offset = documentView.getNextInsertionPoint(x, -1, FocusTraversalDirection.BACKWARD);
             } else {
                 offset = documentView.getInsertionPoint(x, y - margin.top);
             }
@@ -1624,7 +1624,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     }
 
     @Override
-    public int getNextInsertionPoint(int x, int from, Direction direction) {
+    public int getNextInsertionPoint(int x, int from, FocusTraversalDirection direction) {
         int offset;
 
         if (documentView == null) {
@@ -1947,7 +1947,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 }
             } else {
                 if (scheduledScrollSelectionCallback == null) {
-                    scrollDirection = (y < visibleArea.y) ? Direction.BACKWARD : Direction.FORWARD;
+                    scrollDirection = (y < visibleArea.y) ? FocusTraversalDirection.BACKWARD : FocusTraversalDirection.FORWARD;
 
                     scheduledScrollSelectionCallback =
                         ApplicationContext.scheduleRecurringCallback(scrollSelectionCallback,
@@ -2068,12 +2068,12 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 consumed = true;
             } else if (keyCode == Keyboard.KeyCode.DELETE
                 && textArea.isEditable()) {
-                textArea.delete(Direction.FORWARD);
+                textArea.delete(false);
 
                 consumed = true;
             } else if (keyCode == Keyboard.KeyCode.BACKSPACE
                 && textArea.isEditable()) {
-                textArea.delete(Direction.BACKWARD);
+                textArea.delete(true);
 
                 consumed = true;
             } else if (keyCode == Keyboard.KeyCode.LEFT) {
@@ -2136,7 +2136,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             } else if (keyCode == Keyboard.KeyCode.UP) {
                 int selectionStart = textArea.getSelectionStart();
 
-                int offset = getNextInsertionPoint(caretX, selectionStart, Direction.BACKWARD);
+                int offset = getNextInsertionPoint(caretX, selectionStart, FocusTraversalDirection.BACKWARD);
 
                 if (offset == -1) {
                     offset = 0;
@@ -2174,7 +2174,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                         x = trailingSelectionBounds.x + trailingSelectionBounds.width;
                     }
 
-                    int offset = getNextInsertionPoint(x, from, Direction.FORWARD);
+                    int offset = getNextInsertionPoint(x, from, FocusTraversalDirection.FORWARD);
 
                     if (offset == -1) {
                         offset = documentView.getCharacterCount() - 1;
@@ -2199,7 +2199,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                         from = selectionStart + selectionLength - 1;
                     }
 
-                    int offset = getNextInsertionPoint(caretX, from, Direction.FORWARD);
+                    int offset = getNextInsertionPoint(caretX, from, FocusTraversalDirection.FORWARD);
 
                     if (offset == -1) {
                         offset = documentView.getCharacterCount() - 1;

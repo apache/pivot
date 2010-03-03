@@ -27,7 +27,7 @@ import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.ContainerListener;
 import org.apache.pivot.wtk.ContainerMouseListener;
-import org.apache.pivot.wtk.Direction;
+import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.FocusTraversalPolicy;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Mouse;
@@ -54,7 +54,7 @@ public abstract class ContainerSkin extends ComponentSkin
         }
 
         @Override
-        public Component getNextComponent(Container container, Component component, Direction direction) {
+        public Component getNextComponent(Container container, Component component, FocusTraversalDirection direction) {
             if (container == null) {
                 throw new IllegalArgumentException("container is null.");
             }

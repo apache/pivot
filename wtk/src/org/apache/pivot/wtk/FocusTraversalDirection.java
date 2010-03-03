@@ -19,7 +19,7 @@ package org.apache.pivot.wtk;
 /**
  * Enumeration representing a two-dimensional direction.
  */
-public enum Direction {
+public enum FocusTraversalDirection {
     FORWARD,
     BACKWARD
 }

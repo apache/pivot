@@ -39,5 +39,5 @@ public interface FocusTraversalPolicy {
      * The component to focus, or <tt>null</tt> if there are no more components
      * in the given direction or next component cannot be determined.
      */
-    Component getNextComponent(Container container, Component component, Direction direction);
+    Component getNextComponent(Container container, Component component, FocusTraversalDirection direction);
 }

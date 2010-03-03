@@ -38,7 +38,7 @@ import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Cursor;
 import org.apache.pivot.wtk.Dimensions;
-import org.apache.pivot.wtk.Direction;
+import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
@@ -119,7 +119,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
     private boolean caretOn = true;
 
-    private Direction scrollDirection = null;
+    private FocusTraversalDirection scrollDirection = null;
 
     private BlinkCaretCallback blinkCaretCallback = new BlinkCaretCallback();
     private ApplicationContext.ScheduledCallback scheduledBlinkCaretCallback = null;
@@ -956,7 +956,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 }
             } else {
                 if (scheduledScrollSelectionCallback == null) {
-                    scrollDirection = (x < 0) ? Direction.BACKWARD : Direction.FORWARD;
+                    scrollDirection = (x < 0) ? FocusTraversalDirection.BACKWARD : FocusTraversalDirection.FORWARD;
 
                     scheduledScrollSelectionCallback =
                         ApplicationContext.scheduleRecurringCallback(scrollSelectionCallback,
@@ -1097,8 +1097,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             Keyboard.Modifier commandModifier = Platform.getCommandModifier();
             if (keyCode == Keyboard.KeyCode.DELETE
                 || keyCode == Keyboard.KeyCode.BACKSPACE) {
-                Direction direction = (keyCode == Keyboard.KeyCode.DELETE ?
-                    Direction.FORWARD : Direction.BACKWARD);
+                boolean backspace = (keyCode == Keyboard.KeyCode.DELETE ? false : true);
 
                 Validator validator = textInput.getValidator();
 
@@ -1111,7 +1110,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                     if (count > 0) {
                         buf.delete(index, index + count);
                     } else {
-                        if (direction == Direction.BACKWARD) {
+                        if (backspace) {
                             index--;
                         }
 
@@ -1122,12 +1121,12 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                     }
 
                     if (validator.isValid(buf.toString())) {
-                        textInput.delete(direction);
+                        textInput.delete(backspace);
                     } else {
                         Toolkit.getDefaultToolkit().beep();
                     }
                 } else {
-                    textInput.delete(direction);
+                    textInput.delete(backspace);
                 }
 
                 consumed = true;

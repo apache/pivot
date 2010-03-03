@@ -2297,7 +2297,7 @@ public abstract class Component implements ConstrainedVisual {
      * @param direction
      * The direction in which to transfer focus.
      */
-    public Component transferFocus(Direction direction) {
+    public Component transferFocus(FocusTraversalDirection direction) {
         Component component = null;
 
         Container parent = getParent();

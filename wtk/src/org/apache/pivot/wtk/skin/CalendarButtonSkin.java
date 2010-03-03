@@ -29,7 +29,7 @@ import org.apache.pivot.wtk.ComponentKeyListener;
 import org.apache.pivot.wtk.ComponentMouseButtonListener;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.ContainerMouseListener;
-import org.apache.pivot.wtk.Direction;
+import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
@@ -82,8 +82,8 @@ public abstract class CalendarButtonSkin extends ButtonSkin
                     calendarPopup.close();
 
                     if (keyCode == Keyboard.KeyCode.TAB) {
-                        Direction direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ?
-                            Direction.BACKWARD : Direction.FORWARD;
+                        FocusTraversalDirection direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ?
+                            FocusTraversalDirection.BACKWARD : FocusTraversalDirection.FORWARD;
                         calendarButton.transferFocus(direction);
                     }
 

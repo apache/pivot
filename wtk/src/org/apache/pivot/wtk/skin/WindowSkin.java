@@ -23,7 +23,7 @@ import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.Dimensions;
-import org.apache.pivot.wtk.Direction;
+import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.FocusTraversalPolicy;
 import org.apache.pivot.wtk.Mouse;
@@ -43,7 +43,7 @@ public class WindowSkin extends ContainerSkin implements Window.Skin,
      */
     public static class WindowFocusTraversalPolicy implements FocusTraversalPolicy {
         @Override
-        public Component getNextComponent(Container container, Component component, Direction direction) {
+        public Component getNextComponent(Container container, Component component, FocusTraversalDirection direction) {
             assert (container instanceof Window) : "container is not a Window";
 
             if (direction == null) {

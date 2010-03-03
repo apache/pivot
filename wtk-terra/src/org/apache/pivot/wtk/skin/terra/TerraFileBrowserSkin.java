@@ -45,7 +45,7 @@ import org.apache.pivot.wtk.ComponentKeyListener;
 import org.apache.pivot.wtk.ComponentMouseButtonListener;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.Dimensions;
-import org.apache.pivot.wtk.Direction;
+import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.FileBrowser;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.ImageView;
@@ -778,7 +778,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         fileBrowser.setFocusTraversalPolicy(new IndexFocusTraversalPolicy() {
             @Override
             public Component getNextComponent(Container container, Component component,
-                Direction direction) {
+                FocusTraversalDirection direction) {
                 Component nextComponent;
                 if (component == null) {
                     nextComponent = fileTableView;

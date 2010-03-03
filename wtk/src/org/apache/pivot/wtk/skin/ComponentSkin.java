@@ -32,7 +32,7 @@ import org.apache.pivot.wtk.ComponentStateListener;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.Cursor;
 import org.apache.pivot.wtk.Dimensions;
-import org.apache.pivot.wtk.Direction;
+import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.DragSource;
 import org.apache.pivot.wtk.DropTarget;
@@ -303,8 +303,8 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
 
         if (keyCode == Keyboard.KeyCode.TAB
             && getComponent().isFocused()) {
-            Direction direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ?
-                Direction.BACKWARD : Direction.FORWARD;
+            FocusTraversalDirection direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ?
+                FocusTraversalDirection.BACKWARD : FocusTraversalDirection.FORWARD;
 
             Component previousFocusedComponent = Component.getFocusedComponent();
             previousFocusedComponent.transferFocus(direction);

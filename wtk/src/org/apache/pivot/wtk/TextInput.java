@@ -391,13 +391,9 @@ public class TextInput extends Component {
         return (textNode == null) ? 0 : textNode.getCharacterCount();
     }
 
-    public void delete(Direction direction) {
+    public void delete(boolean backspace) {
         if (textNode == null) {
             throw new IllegalStateException();
-        }
-
-        if (direction == null) {
-            throw new IllegalArgumentException("direction is null.");
         }
 
         if (selectionLength > 0) {
@@ -407,7 +403,7 @@ public class TextInput extends Component {
         } else {
             int offset = selectionStart;
 
-            if (direction == Direction.BACKWARD) {
+            if (backspace) {
                 offset--;
             }
 

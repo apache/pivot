@@ -458,12 +458,12 @@ public abstract class Container extends Component
             focused = super.requestFocus();
         } else {
             if (focusTraversalPolicy != null) {
-                Component first = focusTraversalPolicy.getNextComponent(this, null, Direction.FORWARD);
+                Component first = focusTraversalPolicy.getNextComponent(this, null, FocusTraversalDirection.FORWARD);
 
                 Component component = first;
                 while (component != null
                     && !component.requestFocus()) {
-                    component = focusTraversalPolicy.getNextComponent(this, component, Direction.FORWARD);
+                    component = focusTraversalPolicy.getNextComponent(this, component, FocusTraversalDirection.FORWARD);
 
                     // Ensure that we don't get into an infinite loop
                     if (component == first) {
@@ -487,7 +487,7 @@ public abstract class Container extends Component
      * @param direction
      * The direction in which to transfer focus.
      */
-    public Component transferFocus(Component component, Direction direction) {
+    public Component transferFocus(Component component, FocusTraversalDirection direction) {
         if (focusTraversalPolicy == null) {
             // The container has no traversal policy; move up a level
             component = transferFocus(direction);

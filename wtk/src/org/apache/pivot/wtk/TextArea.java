@@ -67,7 +67,7 @@ public class TextArea extends Component {
          * @return
          * The next insertion point.
          */
-        public int getNextInsertionPoint(int x, int from, Direction direction);
+        public int getNextInsertionPoint(int x, int from, FocusTraversalDirection direction);
 
         /**
          * Returns the row index of the character at a given offset within the document.
@@ -336,7 +336,7 @@ public class TextArea extends Component {
         }
 
         if (selectionLength > 0) {
-            delete(Direction.FORWARD);
+            delete(false);
         }
 
         Node descendant = document.getDescendantAt(selectionStart);
@@ -440,11 +440,7 @@ public class TextArea extends Component {
         return (document == null) ? 0 : document.getCharacterCount();
     }
 
-    public void delete(Direction direction) {
-        if (direction == null) {
-            throw new IllegalArgumentException("direction is null.");
-        }
-
+    public void delete(boolean backspace) {
         if (document == null
             || document.getCharacterCount() == 0) {
             throw new IllegalStateException();
@@ -456,7 +452,7 @@ public class TextArea extends Component {
         if (selectionLength > 0) {
             characterCount = selectionLength;
         } else {
-            if (direction == Direction.BACKWARD) {
+            if (backspace) {
                 offset--;
             }
 
@@ -571,7 +567,7 @@ public class TextArea extends Component {
                 if (selectionLength > 0) {
                     // TODO Make this part of the undoable action (for all such
                     // actions)
-                    delete(Direction.BACKWARD);
+                    delete(true);
                 }
 
                 // Insert the clipboard contents
@@ -816,7 +812,7 @@ public class TextArea extends Component {
         return textAreaSkin.getInsertionPoint(x, y);
     }
 
-    public int getNextInsertionPoint(int x, int from, Direction direction) {
+    public int getNextInsertionPoint(int x, int from, FocusTraversalDirection direction) {
         TextArea.Skin textAreaSkin = (TextArea.Skin)getSkin();
         return textAreaSkin.getNextInsertionPoint(x, from, direction);
     }
