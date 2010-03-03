@@ -1424,7 +1424,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         int selectionLength = textInput.getSelectionLength();
 
         TextNode textNode = textInput.getTextNode();
-        int n = textNode.getCharacterCount();
+        int n = (textNode == null) ? 0 : textNode.getCharacterCount();
 
         Bounds leadingSelectionBounds;
         if (selectionStart < n) {
