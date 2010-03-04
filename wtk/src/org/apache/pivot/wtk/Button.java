@@ -557,6 +557,10 @@ public abstract class Button extends Component {
     }
 
     public void setSelectedBindType(BindType selectedBindType) {
+        if (selectedBindType == null) {
+            throw new IllegalArgumentException();
+        }
+
         BindType previousSelectedBindType = this.selectedBindType;
 
         if (previousSelectedBindType != selectedBindType) {
@@ -596,6 +600,10 @@ public abstract class Button extends Component {
     }
 
     public void setStateBindType(BindType stateBindType) {
+        if (stateBindType == null) {
+            throw new IllegalArgumentException();
+        }
+
         BindType previousStateBindType = this.stateBindType;
 
         if (previousStateBindType != stateBindType) {

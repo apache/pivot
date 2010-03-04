@@ -27,6 +27,7 @@ import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.Filter;
+import org.apache.pivot.wtk.BindType;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Checkbox;
 import org.apache.pivot.wtk.Component;
@@ -1065,7 +1066,34 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     }
 
     @Override
+    public void listDataKeyChanged(ListView listView, String previousListDataKey) {
+        // No-op
+    }
+
+    @Override
+    public void listDataBindTypeChanged(ListView listView, BindType previousListDataBindType) {
+        // No-op
+    }
+
+    @Override
+    public void listDataBindMappingChanged(ListView listView,
+        ListView.ListDataBindMapping previousListDataBindMapping) {
+        // No-op
+    }
+
+    @Override
     public void selectedItemKeyChanged(ListView listView, String previousSelectedItemKey) {
+        // No-op
+    }
+
+    @Override
+    public void selectedItemBindTypeChanged(ListView listView, BindType previousSelectedItemBindType) {
+        // No-op
+    }
+
+    @Override
+    public void selectedItemBindMappingChanged(ListView listView,
+        ListView.SelectedItemBindMapping previousSelectedItemBindMapping) {
         // No-op
     }
 
@@ -1075,7 +1103,13 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     }
 
     @Override
-    public void selectedItemBindMappingChanged(ListView listView, ListView.SelectedItemBindMapping previousSelectedItemBindMapping) {
+    public void selectedItemsBindTypeChanged(ListView listView, BindType previousSelectedItemsBindType) {
+        // No-op
+    }
+
+    @Override
+    public void selectedItemsBindMappingChanged(ListView listView,
+        ListView.SelectedItemBindMapping previousSelectedItemsBindMapping) {
         // No-op
     }
 

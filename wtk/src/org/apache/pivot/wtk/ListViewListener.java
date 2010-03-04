@@ -58,7 +58,29 @@ public interface ListViewListener {
         }
 
         @Override
+        public void listDataKeyChanged(ListView listView, String previousListDataKey) {
+        }
+
+        @Override
+        public void listDataBindTypeChanged(ListView listView, BindType previousListDataBindType) {
+        }
+
+        @Override
+        public void listDataBindMappingChanged(ListView listView,
+            ListView.ListDataBindMapping previousListDataBindMapping) {
+        }
+
+        @Override
         public void selectedItemKeyChanged(ListView listView, String previousSelectedItemKey) {
+        }
+
+        @Override
+        public void selectedItemBindTypeChanged(ListView listView, BindType previousSelectedItemBindType) {
+        }
+
+        @Override
+        public void selectedItemBindMappingChanged(ListView listView,
+            ListView.SelectedItemBindMapping previousSelectedItemBindMapping) {
         }
 
         @Override
@@ -66,7 +88,12 @@ public interface ListViewListener {
         }
 
         @Override
-        public void selectedItemBindMappingChanged(ListView listView, ListView.SelectedItemBindMapping previousSelectedItemBindMapping) {
+        public void selectedItemsBindTypeChanged(ListView listView, BindType previousSelectedItemsBindType) {
+        }
+
+        @Override
+        public void selectedItemsBindMappingChanged(ListView listView,
+            ListView.SelectedItemBindMapping previousSelectedItemsBindMapping) {
         }
     }
 
@@ -127,12 +154,53 @@ public interface ListViewListener {
         Filter<?> previousDisabledCheckmarkFilter);
 
     /**
+     * Called when a list view's list data key has changed.
+     *
+     * @param listView
+     * @param previousListDataKey
+     */
+    public void listDataKeyChanged(ListView listView, String previousListDataKey);
+
+    /**
+     * Called when a list view's list data bind type has changed.
+     *
+     * @param listView
+     * @param previousListDataBindType
+     */
+    public void listDataBindTypeChanged(ListView listView, BindType previousListDataBindType);
+
+    /**
+     * Called when a list view's list data bind mapping has changed.
+     *
+     * @param listView
+     * @param previousListDataBindMapping
+     */
+    public void listDataBindMappingChanged(ListView listView, ListView.ListDataBindMapping previousListDataBindMapping);
+
+    /**
      * Called when a list view's selected item key has changed.
      *
      * @param listView
      * @param previousSelectedItemKey
      */
     public void selectedItemKeyChanged(ListView listView, String previousSelectedItemKey);
+
+    /**
+     * Called when a list view's selected item bind type has changed.
+     *
+     * @param listView
+     * @param previousSelectedItemBindType
+     */
+    public void selectedItemBindTypeChanged(ListView listView, BindType previousSelectedItemBindType);
+
+    /**
+     * Called when a list view's selected item bind mapping has changed.
+     *
+     * @param listView
+     * @param previousSelectedItemBindMapping
+     */
+    public void selectedItemBindMappingChanged(ListView listView,
+        ListView.SelectedItemBindMapping previousSelectedItemBindMapping);
 
     /**
      * Called when a list view's selected items key has changed.
@@ -143,10 +211,19 @@ public interface ListViewListener {
     public void selectedItemsKeyChanged(ListView listView, String previousSelectedItemsKey);
 
     /**
-     * Called when a list view's bind mapping has changed.
+     * Called when a list view's selected items bind type has changed.
      *
      * @param listView
-     * @param previousSelectedItemBindMapping
+     * @param previousSelectedItemsBindType
      */
-    public void selectedItemBindMappingChanged(ListView listView, ListView.SelectedItemBindMapping previousSelectedItemBindMapping);
+    public void selectedItemsBindTypeChanged(ListView listView, BindType previousSelectedItemsBindType);
+
+    /**
+     * Called when a list view's selected items bind mapping has changed.
+     *
+     * @param listView
+     * @param previousSelectedItemsBindMapping
+     */
+    public void selectedItemsBindMappingChanged(ListView listView,
+        ListView.SelectedItemBindMapping previousSelectedItemsBindMapping);
 }
