@@ -70,6 +70,25 @@ public abstract class Button extends Component {
     /**
      * Translates between selection state and context data during data binding.
      */
+    public interface SelectedBindMapping {
+        /**
+         * Converts a context value to a selection state.
+         *
+         * @param value
+         */
+        public Boolean isSelected(Object value);
+
+        /**
+         * Converts a selection state to a context value.
+         *
+         * @param selected
+         */
+        public Object valueOf(Boolean selected);
+    }
+
+    /**
+     * Translates between button state and context data during data binding.
+     */
     public interface StateBindMapping {
         /**
          * Converts a context value to a button state.
@@ -141,9 +160,30 @@ public abstract class Button extends Component {
         }
 
         @Override
+        public void selectedBindTypeChanged(Button button, BindType previousSelectedBindType) {
+            for (ButtonListener listener : this) {
+                listener.selectedBindTypeChanged(button, previousSelectedBindType);
+            }
+        }
+
+        @Override
+        public void selectedBindMappingChanged(Button button, Button.SelectedBindMapping previousSelectedBindMapping) {
+            for (ButtonListener listener : this) {
+                listener.selectedBindMappingChanged(button, previousSelectedBindMapping);
+            }
+        }
+
+        @Override
         public void stateKeyChanged(Button button, String previousStateKey) {
             for (ButtonListener listener : this) {
                 listener.stateKeyChanged(button, previousStateKey);
+            }
+        }
+
+        @Override
+        public void stateBindTypeChanged(Button button, BindType previousStateBindType) {
+            for (ButtonListener listener : this) {
+                listener.stateBindTypeChanged(button, previousStateBindType);
             }
         }
 
@@ -199,7 +239,10 @@ public abstract class Button extends Component {
     private ButtonGroup buttonGroup = null;
 
     private String selectedKey = null;
+    private BindType selectedBindType = BindType.BOTH;
+    private SelectedBindMapping selectedBindMapping = null;
     private String stateKey = null;
+    private BindType stateBindType = BindType.BOTH;
     private StateBindMapping stateBindMapping = null;
 
     private ButtonListenerList buttonListeners = new ButtonListenerList();
@@ -509,6 +552,32 @@ public abstract class Button extends Component {
         }
     }
 
+    public BindType getSelectedBindType() {
+        return selectedBindType;
+    }
+
+    public void setSelectedBindType(BindType selectedBindType) {
+        BindType previousSelectedBindType = this.selectedBindType;
+
+        if (previousSelectedBindType != selectedBindType) {
+            this.selectedBindType = selectedBindType;
+            buttonListeners.selectedBindTypeChanged(this, previousSelectedBindType);
+        }
+    }
+
+    public SelectedBindMapping getSelectedBindMapping() {
+        return selectedBindMapping;
+    }
+
+    public void setSelectedBindMapping(SelectedBindMapping selectedBindMapping) {
+        SelectedBindMapping previousSelectedBindMapping = this.selectedBindMapping;
+
+        if (previousSelectedBindMapping != selectedBindMapping) {
+            this.selectedBindMapping = selectedBindMapping;
+            buttonListeners.selectedBindMappingChanged(this, previousSelectedBindMapping);
+        }
+    }
+
     public String getStateKey() {
         return stateKey;
     }
@@ -519,6 +588,19 @@ public abstract class Button extends Component {
         if (previousStateKey != stateKey) {
             this.stateKey = stateKey;
             buttonListeners.stateKeyChanged(this, previousStateKey);
+        }
+    }
+
+    public BindType getStateBindType() {
+        return stateBindType;
+    }
+
+    public void setStateBindType(BindType stateBindType) {
+        BindType previousStateBindType = this.stateBindType;
+
+        if (previousStateBindType != stateBindType) {
+            this.stateBindType = stateBindType;
+            buttonListeners.stateBindTypeChanged(this, previousStateBindType);
         }
     }
 
@@ -537,55 +619,68 @@ public abstract class Button extends Component {
 
     @Override
     public void load(Dictionary<String, ?> context) {
-        if (selectedKey != null
-            && JSONSerializer.containsKey(context, selectedKey)) {
-            Object value = JSONSerializer.get(context, selectedKey);
+        if (toggleButton) {
+            if (triState) {
+                // Bind using state key
+                if (stateKey != null
+                    && stateBindType != BindType.STORE
+                    && JSONSerializer.containsKey(context, stateKey)) {
+                    Object value = JSONSerializer.get(context, stateKey);
 
-            Boolean selected = false;
-            if (value instanceof Boolean) {
-                selected = (Boolean)value;
-            } else if (stateBindMapping == null) {
-                if (value != null) {
-                    selected = Boolean.valueOf(value.toString());
+                    State state = State.UNSELECTED;
+                    if (value instanceof State) {
+                        state = (State)value;
+                    } else if (stateBindMapping == null) {
+                        if (value != null) {
+                            state = State.valueOf(value.toString().toUpperCase());
+                        }
+                    } else {
+                        state = stateBindMapping.toState(value);
+                    }
+
+                    setState(state);
                 }
             } else {
-                State state = stateBindMapping.toState(value);
-                selected = (state == State.SELECTED);
-            }
+                // Bind using selected key
+                if (selectedKey != null
+                    && selectedBindType != BindType.STORE
+                    && JSONSerializer.containsKey(context, selectedKey)) {
+                    Object value = JSONSerializer.get(context, selectedKey);
 
-            setSelected(selected);
-        }
+                    boolean selected = false;
+                    if (value instanceof Boolean) {
+                        selected = (Boolean)value;
+                    } else if (selectedBindMapping == null) {
+                        if (value != null) {
+                            selected = Boolean.valueOf(value.toString());
+                        }
+                    } else {
+                        selected = selectedBindMapping.isSelected(value);
+                    }
 
-        if (stateKey != null
-            && JSONSerializer.containsKey(context, stateKey)) {
-            Object value = JSONSerializer.get(context, stateKey);
-
-            State state = State.UNSELECTED;
-            if (value instanceof State) {
-                state = (State)value;
-            } else if (stateBindMapping == null) {
-                if (value != null) {
-                    state = State.valueOf(value.toString().toUpperCase());
+                    setSelected(selected);
                 }
-            } else {
-                state = stateBindMapping.toState(value);
             }
-
-            setState(state);
         }
     }
 
     @Override
     public void store(Dictionary<String, ?> context) {
-        if (isEnabled()) {
-            if (selectedKey != null) {
-                JSONSerializer.put(context, selectedKey, (stateBindMapping == null) ?
-                    isSelected() : stateBindMapping.valueOf(state));
-            }
-
-            if (stateKey != null) {
-                JSONSerializer.put(context, stateKey, (stateBindMapping == null) ?
-                    state : stateBindMapping.valueOf(state));
+        if (toggleButton) {
+            if (triState) {
+                // Bind using state key
+                if (stateKey != null
+                    && stateBindType != BindType.LOAD) {
+                    JSONSerializer.put(context, selectedKey, (stateBindMapping == null) ?
+                        isSelected() : stateBindMapping.valueOf(state));
+                }
+            } else {
+                // Bind using selected key
+                if (selectedKey != null
+                    && selectedBindType != BindType.LOAD) {
+                    JSONSerializer.put(context, stateKey, (stateBindMapping == null) ?
+                        state : stateBindMapping.valueOf(state));
+                }
             }
         }
     }
