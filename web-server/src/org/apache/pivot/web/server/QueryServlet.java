@@ -177,7 +177,7 @@ public abstract class QueryServlet extends HttpServlet {
      *
      * @param serializer
      */
-    public void configureSerializer(Serializer<Object> serializer, String path) {
+    public void configureSerializer(Serializer<?> serializer, String path) {
     }
 
     /**
@@ -321,9 +321,10 @@ public abstract class QueryServlet extends HttpServlet {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected final void doGet(HttpServletRequest request, HttpServletResponse response)
         throws IOException, ServletException {
-        Serializer<Object> serializer = createSerializer(request.getHeader(CONTENT_TYPE_HEADER));
+        Serializer<Object> serializer = (Serializer<Object>)createSerializer(request.getHeader(CONTENT_TYPE_HEADER));
 
         Object result = null;
         try {
@@ -388,7 +389,7 @@ public abstract class QueryServlet extends HttpServlet {
     @Override
     protected final void doPost(HttpServletRequest request, HttpServletResponse response)
         throws IOException, ServletException {
-        Serializer<Object> serializer = createSerializer(request.getHeader(CONTENT_TYPE_HEADER));
+        Serializer<?> serializer = createSerializer(request.getHeader(CONTENT_TYPE_HEADER));
         String action = request.getHeader(ACTION_HEADER);
 
         if (action == null) {
@@ -439,7 +440,7 @@ public abstract class QueryServlet extends HttpServlet {
     @Override
     protected final void doPut(HttpServletRequest request, HttpServletResponse response)
         throws IOException, ServletException {
-        Serializer<Object> serializer = createSerializer(request.getHeader(CONTENT_TYPE_HEADER));
+        Serializer<?> serializer = createSerializer(request.getHeader(CONTENT_TYPE_HEADER));
 
         Object value = null;
         try {
@@ -508,7 +509,7 @@ public abstract class QueryServlet extends HttpServlet {
     }
 
     @SuppressWarnings("unchecked")
-    protected Serializer<Object> createSerializer(String mimeType)
+    protected Serializer<?> createSerializer(String mimeType)
         throws ServletException {
         if (mimeType == null) {
             mimeType = JSONSerializer.MIME_TYPE;
