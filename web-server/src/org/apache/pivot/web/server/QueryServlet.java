@@ -31,9 +31,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.pivot.collections.HashMap;
-import org.apache.pivot.serialization.CSVSerializer;
-import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.serialization.Serializer;
 import org.apache.pivot.web.Query;
@@ -47,8 +44,6 @@ public abstract class QueryServlet extends HttpServlet {
     private static final long serialVersionUID = 4881638232902478092L;
 
     private boolean determineContentLength = false;
-    private HashMap<String, Class<? extends Serializer<?>>> serializerTypes
-        = new HashMap<String, Class<? extends Serializer<?>>>();
 
     private transient ThreadLocal<String> hostname = new ThreadLocal<String>();
     private transient ThreadLocal<Integer> port = new ThreadLocal<Integer>();
@@ -67,17 +62,6 @@ public abstract class QueryServlet extends HttpServlet {
     public static final String CONTENT_TYPE_HEADER = "Content-Type";
     public static final String CONTENT_LENGTH_HEADER = "Content-Length";
     public static final String LOCATION_HEADER = "Location";
-
-    @Override
-    public void init() throws ServletException {
-        super.init();
-
-        // TODO Read determineContentLength and MIME type-serializer class mapping
-        // from init params
-
-        serializerTypes.put(JSONSerializer.MIME_TYPE, JSONSerializer.class);
-        serializerTypes.put(CSVSerializer.MIME_TYPE, CSVSerializer.class);
-    }
 
     /**
      * Gets the host name that was requested.
@@ -173,14 +157,6 @@ public abstract class QueryServlet extends HttpServlet {
     }
 
     /**
-     * Allows a servlet to configure a serializer
-     *
-     * @param serializer
-     */
-    public void configureSerializer(Serializer<?> serializer, String path) {
-    }
-
-    /**
      * Handles an HTTP GET request. The default implementation throws an HTTP
      * 405 query exception.
      *
@@ -248,6 +224,13 @@ public abstract class QueryServlet extends HttpServlet {
     public void doDelete(String path) throws QueryException {
         throw new QueryException(Query.Status.METHOD_NOT_ALLOWED);
     }
+
+    /**
+     * Creates a serializer that will be used to serialize the current request data.
+     *
+     * @param path
+     */
+    public abstract Serializer<?> createSerializer(String path) throws ServletException;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -324,13 +307,11 @@ public abstract class QueryServlet extends HttpServlet {
     @SuppressWarnings("unchecked")
     protected final void doGet(HttpServletRequest request, HttpServletResponse response)
         throws IOException, ServletException {
-        Serializer<Object> serializer = (Serializer<Object>)createSerializer(request.getHeader(CONTENT_TYPE_HEADER));
+        String path = request.getPathInfo();
 
         Object result = null;
         try {
-            String path = request.getPathInfo();
             validate(path);
-            configureSerializer(serializer, path);
             result = doGet(path);
         } catch (QueryException exception) {
             response.setStatus(exception.getStatus());
@@ -340,6 +321,8 @@ public abstract class QueryServlet extends HttpServlet {
         if (!response.isCommitted()) {
             response.setStatus(200);
             setResponseHeaders(response);
+
+            Serializer<Object> serializer = (Serializer<Object>)createSerializer(path);
             response.setContentType(serializer.getMIMEType(result));
 
             OutputStream responseOutputStream = response.getOutputStream();
@@ -389,23 +372,21 @@ public abstract class QueryServlet extends HttpServlet {
     @Override
     protected final void doPost(HttpServletRequest request, HttpServletResponse response)
         throws IOException, ServletException {
-        Serializer<?> serializer = createSerializer(request.getHeader(CONTENT_TYPE_HEADER));
         String action = request.getHeader(ACTION_HEADER);
 
         if (action == null) {
             Object value = null;
-            try {
-                value = serializer.readObject(request.getInputStream());
-            } catch (SerializationException exception) {
-                throw new ServletException(exception);
-            }
+
+            String path = request.getPathInfo();
 
             URL location = null;
             try {
-                String path = request.getPathInfo();
                 validate(path);
-                configureSerializer(serializer, path);
+                Serializer<?> serializer = createSerializer(path);
+                value = serializer.readObject(request.getInputStream());
                 location = doPost(path, value);
+            } catch (SerializationException exception) {
+                throw new ServletException(exception);
             } catch (QueryException exception) {
                 response.setStatus(exception.getStatus());
                 response.flushBuffer();
@@ -418,8 +399,9 @@ public abstract class QueryServlet extends HttpServlet {
                 response.setContentLength(0);
             }
         } else {
+            String path = request.getPathInfo();
+
             try {
-                String path = request.getPathInfo();
                 validate(path);
                 doPostAction(path, action);
             } catch (QueryException exception) {
@@ -440,20 +422,17 @@ public abstract class QueryServlet extends HttpServlet {
     @Override
     protected final void doPut(HttpServletRequest request, HttpServletResponse response)
         throws IOException, ServletException {
-        Serializer<?> serializer = createSerializer(request.getHeader(CONTENT_TYPE_HEADER));
-
         Object value = null;
+
+        String path = request.getPathInfo();
+
         try {
+            validate(path);
+            Serializer<?> serializer = createSerializer(path);
             value = serializer.readObject(request.getInputStream());
+            doPut(path, value);
         } catch (SerializationException exception) {
             throw new ServletException(exception);
-        }
-
-        try {
-            String path = request.getPathInfo();
-            validate(path);
-            configureSerializer(serializer, path);
-            doPut(path, value);
         } catch (QueryException exception) {
             response.setStatus(exception.getStatus());
             response.flushBuffer();
@@ -506,33 +485,6 @@ public abstract class QueryServlet extends HttpServlet {
         throws IOException, ServletException {
         response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
         response.flushBuffer();
-    }
-
-    @SuppressWarnings("unchecked")
-    protected Serializer<?> createSerializer(String mimeType)
-        throws ServletException {
-        if (mimeType == null) {
-            mimeType = JSONSerializer.MIME_TYPE;
-        } else {
-            mimeType = mimeType.substring(0, mimeType.indexOf(';'));
-            mimeType = mimeType.trim();
-        }
-
-        Class<? extends Serializer<?>> serializerType = serializerTypes.get(mimeType);
-        if (serializerType == null) {
-            throw new ServletException("A serializer for " + mimeType + " not found.");
-        }
-
-        Serializer<Object> serializer = null;
-        try {
-            serializer = (Serializer<Object>)serializerType.newInstance();
-        } catch (InstantiationException exception) {
-            throw new ServletException(exception);
-        } catch (IllegalAccessException exception) {
-            throw new ServletException(exception);
-        }
-
-        return serializer;
     }
 
     private void setResponseHeaders(HttpServletResponse response) {
