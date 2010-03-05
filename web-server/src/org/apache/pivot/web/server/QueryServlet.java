@@ -508,7 +508,7 @@ public abstract class QueryServlet extends HttpServlet {
     }
 
     @SuppressWarnings("unchecked")
-    private Serializer<Object> createSerializer(String mimeType)
+    protected Serializer<Object> createSerializer(String mimeType)
         throws ServletException {
         if (mimeType == null) {
             mimeType = JSONSerializer.MIME_TYPE;
