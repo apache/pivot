@@ -571,7 +571,14 @@ public abstract class QueryServlet extends HttpServlet {
 
     private Path getPath(HttpServletRequest request) {
         String pathInfo = request.getPathInfo();
-        Path path = (pathInfo.length() == 0) ? new Path() : new Path(pathInfo.substring(1).split("/"));
+        Path path;
+        if (pathInfo == null
+            || pathInfo.length() == 0) {
+            path = new Path();
+        } else {
+           path = new Path(pathInfo.substring(1).split("/"));
+        }
+
         return path;
     }
 
