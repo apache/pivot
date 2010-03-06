@@ -297,6 +297,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
     public static final String INCLUDE_TAG = "include";
     public static final String INCLUDE_SRC_ATTRIBUTE = "src";
     public static final String INCLUDE_RESOURCES_ATTRIBUTE = "resources";
+    public static final String INCLUDE_INLINE_ATTRIBUTE = "inline";
 
     public static final String SCRIPT_TAG = "script";
     public static final String SCRIPT_SRC_ATTRIBUTE = "src";
@@ -674,12 +675,15 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                     // setters only
                     String src = null;
                     Resources resources = this.resources;
+                    boolean inline = false;
 
                     for (Attribute attribute : element.attributes) {
                         if (attribute.localName.equals(INCLUDE_SRC_ATTRIBUTE)) {
                             src = attribute.value;
                         } else if (attribute.localName.equals(INCLUDE_RESOURCES_ATTRIBUTE)) {
                             resources = new Resources(resources, attribute.value);
+                        } else if (attribute.localName.equals(INCLUDE_INLINE_ATTRIBUTE)) {
+                            inline = Boolean.parseBoolean(attribute.value);
                         } else {
                             if (!Character.isUpperCase(attribute.localName.charAt(0))) {
                                 throw new SerializationException("Instance property setters are not"
@@ -699,10 +703,18 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
 
                     // Read the object
                     WTKXSerializer serializer;
-                    if (element.id == null) {
+                    if (inline) {
                         serializer = new WTKXSerializer(resources, this);
                     } else {
                         serializer = new WTKXSerializer(resources);
+                    }
+
+                    if (element.id != null) {
+                        if (namedSerializers.containsKey(element.id)) {
+                            throw new SerializationException("Namespace ID " + element.id
+                                + " is already in use.");
+                        }
+
                         namedSerializers.put(element.id, serializer);
                     }
 
@@ -710,12 +722,6 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                         element.value = serializer.readObject(src.substring(1));
                     } else {
                         element.value = serializer.readObject(new URL(location, src));
-                    }
-
-                    if (element.id == null
-                        && !serializer.isEmpty()
-                        && serializer.scriptEngineManager == null) {
-                        System.err.println("Include \"" + src + "\" defines unreachable objects.");
                     }
                 } else {
                     // Process attributes looking for all property setters
@@ -730,6 +736,11 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
 
                 // Add the value to the named objects map
                 if (element.id != null) {
+                    if (namedObjects.containsKey(element.id)) {
+                        throw new SerializationException("Element ID " + element.id
+                            + " is already in use.");
+                    }
+
                     namedObjects.put(element.id, element.value);
                 }
 

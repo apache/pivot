@@ -30,6 +30,6 @@ limitations under the License.
     </windowStateListeners>
 
     <content>
-        <wtkx:include src="include_test.content.wtkx"/>
+        <wtkx:include src="include_test.content.wtkx" inline="true"/>
     </content>
 </Window>
