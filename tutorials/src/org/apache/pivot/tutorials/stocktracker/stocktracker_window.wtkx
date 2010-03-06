@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="%stockTracker" maximized="true"
+<stocktracker:StockTrackerWindow title="%stockTracker" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns:stocktracker="org.apache.pivot.tutorials.stocktracker"
@@ -72,7 +72,7 @@ limitations under the License.
                         <right>
                             <Border styles="{padding:6, color:10}">
                                 <content>
-                                    <wtkx:include wtkx:id="detail" src="stocktracker.detail.wtkx"/>
+                                    <wtkx:include wtkx:id="detailPane" src="detail_pane.wtkx"/>
                                 </content>
                             </Border>
                         </right>
@@ -124,4 +124,4 @@ limitations under the License.
             </rows>
         </TablePane>
     </content>
-</Window>
+</stocktracker:StockTrackerWindow>

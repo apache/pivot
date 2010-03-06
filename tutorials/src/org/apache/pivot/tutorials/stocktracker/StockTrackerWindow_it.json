@@ -27,5 +27,6 @@
     removeSymbol: "Rimuovi simboli selezionati",
     lastUpdate: "Ultimo Aggiornamento",
     dataProvidedBy: "Dati forniti da",
-    yahooFinance: "Yahoo! Finance"
+    yahooFinance: "Yahoo! Finance",
+    notApplicable: "n/a"
 }

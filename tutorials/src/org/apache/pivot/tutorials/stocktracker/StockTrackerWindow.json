@@ -14,18 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-{   stockTracker: "La Bourse Pivot",
-    symbol: "Code",
-    companyName: "Société",
-    value: "Cours",
-    openingValue: "Ouverture",
-    highValue: "+ Haut",
-    lowValue: "+ Bas",
-    change: "Variation",
+{   stockTracker: "Pivot Stock Tracker",
+    symbol: "Symbol",
+    companyName: "Company",
+    value: "Value",
+    openingValue: "Open",
+    highValue: "High",
+    lowValue: "Low",
+    change: "Change",
     volume: "Volume",
-    addSymbol: "Ajouter un code",
-    removeSymbol: "Enlever codes sélectionnés",
-    lastUpdate: "Dernier échange",
-    dataProvidedBy: "Données fournies par",
-    yahooFinance: "Yahoo! Finance"
+    addSymbol: "Add symbol",
+    removeSymbol: "Remove selected symbols",
+    lastUpdate: "Last Update",
+    dataProvidedBy: "Data provided by",
+    yahooFinance: "Yahoo! Finance",
+    notApplicable: "n/a"
 }

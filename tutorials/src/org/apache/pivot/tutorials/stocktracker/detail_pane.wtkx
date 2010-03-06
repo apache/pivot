@@ -16,8 +16,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<BoxPane wtkx:id="rootPane" orientation="vertical" styles="{fill:true}"
+<stocktracker:DetailPane orientation="vertical" styles="{fill:true}"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:stocktracker="org.apache.pivot.tutorials.stocktracker"
     xmlns="org.apache.pivot.wtk">
     <Label textKey="companyName" styles="{font:{size:12, bold:true}}"/>
     <Separator/>
@@ -25,19 +26,19 @@ limitations under the License.
         leftAlignLabels:true}">
         <sections>
             <Form.Section>
-                <Label Form.label="%value" textKey="value"
+                <Label wtkx:id="valueLabel" Form.label="%value"
                     styles="{horizontalAlignment:'right'}"/>
-                <Label wtkx:id="changeLabel" Form.label="%change" textKey="change"
+                <Label wtkx:id="changeLabel" Form.label="%change"
                     styles="{horizontalAlignment:'right'}"/>
-                <Label Form.label="%openingValue" textKey="openingValue"
+                <Label wtkx:id="openingValueLabel" Form.label="%openingValue"
                     styles="{horizontalAlignment:'right'}"/>
-                <Label Form.label="%highValue" textKey="highValue"
+                <Label wtkx:id="highValueLabel" Form.label="%highValue"
                     styles="{horizontalAlignment:'right'}"/>
-                <Label Form.label="%lowValue" textKey="lowValue"
+                <Label wtkx:id="lowValueLabel" Form.label="%lowValue"
                     styles="{horizontalAlignment:'right'}"/>
-                <Label Form.label="%volume" textKey="volume"
+                <Label wtkx:id="volumeLabel" Form.label="%volume"
                     styles="{horizontalAlignment:'right'}"/>
             </Form.Section>
         </sections>
     </Form>
-</BoxPane>
+</stocktracker:DetailPane>
