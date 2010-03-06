@@ -101,12 +101,24 @@ public class FileBrowserSheet extends Sheet {
     }
 
     public void setMode(Mode mode) {
+        if (mode == null) {
+            throw new IllegalArgumentException();
+        }
+
         Mode previousMode = this.mode;
 
         if (previousMode != mode) {
             this.mode = mode;
             fileBrowserSheetListeners.modeChanged(this, previousMode);
         }
+    }
+
+    public final void setMode(String mode) {
+        if (mode == null) {
+            throw new IllegalArgumentException();
+        }
+
+        setMode(Mode.valueOf(mode.toUpperCase()));
     }
 
     public File getRootDirectory() {

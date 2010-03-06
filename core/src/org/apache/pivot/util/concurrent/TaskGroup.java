@@ -127,6 +127,10 @@ public class TaskGroup extends Task<Void>
         return tasks.contains(element);
     }
 
+    public int getCount() {
+        return tasks.getCount();
+    }
+
     @Override
     public Iterator<Task<?>> iterator() {
         return new ImmutableIterator<Task<?>>(tasks.iterator());

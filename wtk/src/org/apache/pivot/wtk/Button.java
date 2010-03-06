@@ -76,14 +76,14 @@ public abstract class Button extends Component {
          *
          * @param value
          */
-        public Boolean isSelected(Object value);
+        public boolean isSelected(Object value);
 
         /**
          * Converts a selection state to a context value.
          *
          * @param selected
          */
-        public Object valueOf(Boolean selected);
+        public Object valueOf(boolean selected);
     }
 
     /**
@@ -680,14 +680,14 @@ public abstract class Button extends Component {
                 if (stateKey != null
                     && stateBindType != BindType.LOAD) {
                     JSONSerializer.put(context, selectedKey, (stateBindMapping == null) ?
-                        isSelected() : stateBindMapping.valueOf(state));
+                        state : stateBindMapping.valueOf(state));
                 }
             } else {
                 // Bind using selected key
                 if (selectedKey != null
                     && selectedBindType != BindType.LOAD) {
-                    JSONSerializer.put(context, stateKey, (stateBindMapping == null) ?
-                        state : stateBindMapping.valueOf(state));
+                    JSONSerializer.put(context, selectedKey, (selectedBindMapping == null) ?
+                        isSelected() : selectedBindMapping.valueOf(isSelected()));
                 }
             }
         }

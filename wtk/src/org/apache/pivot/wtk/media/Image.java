@@ -68,17 +68,21 @@ public abstract class Image implements Visual {
      * Task that executes an image load operation.
      */
     public static class LoadTask extends IOTask<Image> {
-        private URL url = null;
+        private URL location = null;
 
         private static Dispatcher DEFAULT_DISPATCHER = new Dispatcher();
 
-        public LoadTask(URL url) {
-            this(url, DEFAULT_DISPATCHER);
+        public LoadTask(URL location) {
+            this(location, DEFAULT_DISPATCHER);
         }
 
-        public LoadTask(URL url, Dispatcher dispatcher) {
+        public LoadTask(URL location, Dispatcher dispatcher) {
             super(dispatcher);
-            this.url = url;
+            this.location = location;
+        }
+
+        public URL getLocation() {
+            return location;
         }
 
         @Override
@@ -92,9 +96,9 @@ public abstract class Image implements Visual {
                     // NOTE We don't open the stream until the callback
                     // executes because this is a potentially time-consuming
                     // operation
-                    inputStream = new MonitoredInputStream(new BufferedInputStream(url.openStream()));
+                    inputStream = new MonitoredInputStream(new BufferedInputStream(location.openStream()));
 
-                    if (url.getFile().endsWith("wtkd")) {
+                    if (location.getFile().endsWith("wtkd")) {
                         WTKXSerializer serializer = new WTKXSerializer();
                         image = (Drawing)serializer.readObject(inputStream);
                     } else {
@@ -132,13 +136,13 @@ public abstract class Image implements Visual {
         return imageListeners;
     }
 
-    public static Image load(URL url) throws TaskExecutionException {
-        LoadTask loadTask = new LoadTask(url);
+    public static Image load(URL location) throws TaskExecutionException {
+        LoadTask loadTask = new LoadTask(location);
         return loadTask.execute();
     }
 
-    public static Image.LoadTask load(URL url, TaskListener<Image> loadListener) {
-        LoadTask loadTask = new LoadTask(url);
+    public static Image.LoadTask load(URL location, TaskListener<Image> loadListener) {
+        LoadTask loadTask = new LoadTask(location);
         loadTask.execute(loadListener);
         return loadTask;
     }
