@@ -122,7 +122,8 @@ public class StockTrackerWindow extends Window implements Bindable {
         stocksTableView.getComponentKeyListeners().add(new ComponentKeyListener.Adapter() {
             @Override
             public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
-                if (keyCode == Keyboard.KeyCode.DELETE) {
+                if (keyCode == Keyboard.KeyCode.DELETE
+                    || keyCode == Keyboard.KeyCode.BACKSPACE) {
                     removeSelectedSymbols();
                 }
 

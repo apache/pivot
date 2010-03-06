@@ -278,10 +278,11 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
     private XMLInputFactory xmlInputFactory;
     private ScriptEngineManager scriptEngineManager;
 
+    private boolean inline;
+    private boolean clearNamespaceOnRead;
     private URL location = null;
     private Element element = null;
     private Object root = null;
-    private boolean clearNamespaceOnRead = false;
 
     private String language = DEFAULT_LANGUAGE;
 
@@ -321,14 +322,16 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         this.resources = resources;
 
         if (owner == null) {
+            inline = false;
             namedObjects = new HashMap<String, Object>();
             namedSerializers = new HashMap<String, WTKXSerializer>();
         } else {
+            inline = true;
             namedObjects = owner.namedObjects;
             namedSerializers = owner.namedSerializers;
         }
 
-        this.clearNamespaceOnRead = (owner == null);
+        clearNamespaceOnRead = !inline;
 
         xmlInputFactory = XMLInputFactory.newInstance();
         xmlInputFactory.setProperty("javax.xml.stream.isCoalescing", true);
@@ -462,7 +465,8 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             throw exception;
         }
 
-        if (root instanceof Bindable) {
+        if (root instanceof Bindable
+            && !inline) {
             bind(root);
 
             Bindable bindable = (Bindable)root;
