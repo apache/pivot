@@ -25,14 +25,18 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.Enumeration;
+import java.util.Iterator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.serialization.Serializer;
+import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.web.Query;
 import org.apache.pivot.web.QueryDictionary;
 import org.apache.pivot.web.QueryException;
@@ -41,6 +45,82 @@ import org.apache.pivot.web.QueryException;
  * Abstract base class for query servlets.
  */
 public abstract class QueryServlet extends HttpServlet {
+    /**
+     * Immutable string sequence representing a query path. The path is constructed
+     * by splitting the path info provided by the base servlet on the path separator
+     * character ("/").
+     */
+    public static class Path implements Sequence<String>, Iterable<String> {
+        private ArrayList<String> elements;
+
+        public Path() {
+            this(new String[] {});
+        }
+
+        public Path(String[] elements) {
+            this.elements = new ArrayList<String>(elements);
+        }
+
+        @Override
+        public int add(String element) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void insert(String element, int index) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public String update(int index, String element) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public int remove(String element) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public Sequence<String> remove(int index, int count) {
+            return elements.remove(index, count);
+        }
+
+        @Override
+        public String get(int index) {
+            return elements.get(index);
+        }
+
+        @Override
+        public int indexOf(String element) {
+            return elements.indexOf(element);
+        }
+
+        @Override
+        public int getLength() {
+            return elements.getLength();
+        }
+
+        @Override
+        public Iterator<String> iterator() {
+            return new ImmutableIterator<String>(elements.iterator());
+        }
+
+        @Override
+        public String toString() {
+            StringBuilder sb = new StringBuilder();
+
+            int i = 0;
+            for (String element : elements) {
+                sb.append("/");
+                sb.append(element);
+                i++;
+            }
+
+            return sb.toString();
+        }
+    }
+
     private static final long serialVersionUID = 4881638232902478092L;
 
     private boolean determineContentLength = false;
@@ -131,7 +211,7 @@ public abstract class QueryServlet extends HttpServlet {
      *
      * @throws ServletException
      */
-    public void prepare() throws ServletException {
+    protected void prepare() throws ServletException {
     }
 
     /**
@@ -142,7 +222,7 @@ public abstract class QueryServlet extends HttpServlet {
      *
      * @throws ServletException
      */
-    public void dispose() throws ServletException {
+    protected void dispose() throws ServletException {
     }
 
     /**
@@ -151,9 +231,11 @@ public abstract class QueryServlet extends HttpServlet {
      * <p>
      * The default implementation is a no-op.
      *
+     * @param path
+     *
      * @throws QueryException
      */
-    public void validate(String path) throws QueryException {
+    protected void validate(Path path) throws QueryException {
     }
 
     /**
@@ -167,7 +249,7 @@ public abstract class QueryServlet extends HttpServlet {
      *
      * @throws QueryException
      */
-    public Object doGet(String path) throws QueryException {
+    protected Object doGet(Path path) throws QueryException {
         throw new QueryException(Query.Status.METHOD_NOT_ALLOWED);
     }
 
@@ -183,7 +265,7 @@ public abstract class QueryServlet extends HttpServlet {
      *
      * @throws QueryException
      */
-    public URL doPost(String path, Object value) throws QueryException {
+    protected URL doPost(Path path, Object value) throws QueryException {
         throw new QueryException(Query.Status.METHOD_NOT_ALLOWED);
     }
 
@@ -196,7 +278,7 @@ public abstract class QueryServlet extends HttpServlet {
      *
      * @throws QueryException
      */
-    public void doPostAction(String path, String action) throws QueryException {
+    protected void doPostAction(Path path, String action) throws QueryException {
         throw new QueryException(Query.Status.METHOD_NOT_ALLOWED);
     }
 
@@ -209,7 +291,7 @@ public abstract class QueryServlet extends HttpServlet {
      *
      * @throws QueryException
      */
-    public void doPut(String path, Object value) throws QueryException {
+    protected void doPut(Path path, Object value) throws QueryException {
         throw new QueryException(Query.Status.METHOD_NOT_ALLOWED);
     }
 
@@ -221,7 +303,7 @@ public abstract class QueryServlet extends HttpServlet {
      *
      * @throws QueryException
      */
-    public void doDelete(String path) throws QueryException {
+    protected void doDelete(Path path) throws QueryException {
         throw new QueryException(Query.Status.METHOD_NOT_ALLOWED);
     }
 
@@ -229,8 +311,10 @@ public abstract class QueryServlet extends HttpServlet {
      * Creates a serializer that will be used to serialize the current request data.
      *
      * @param path
+     *
+     * @throws ServletException
      */
-    public abstract Serializer<?> createSerializer(String path) throws ServletException;
+    protected abstract Serializer<?> createSerializer(Path path) throws ServletException;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -307,7 +391,7 @@ public abstract class QueryServlet extends HttpServlet {
     @SuppressWarnings("unchecked")
     protected final void doGet(HttpServletRequest request, HttpServletResponse response)
         throws IOException, ServletException {
-        String path = request.getPathInfo();
+        Path path = getPath(request);
 
         Object result = null;
         try {
@@ -375,15 +459,13 @@ public abstract class QueryServlet extends HttpServlet {
         String action = request.getHeader(ACTION_HEADER);
 
         if (action == null) {
-            Object value = null;
-
-            String path = request.getPathInfo();
+            Path path = getPath(request);
 
             URL location = null;
             try {
                 validate(path);
                 Serializer<?> serializer = createSerializer(path);
-                value = serializer.readObject(request.getInputStream());
+                Object value = serializer.readObject(request.getInputStream());
                 location = doPost(path, value);
             } catch (SerializationException exception) {
                 throw new ServletException(exception);
@@ -399,7 +481,7 @@ public abstract class QueryServlet extends HttpServlet {
                 response.setContentLength(0);
             }
         } else {
-            String path = request.getPathInfo();
+            Path path = getPath(request);
 
             try {
                 validate(path);
@@ -424,7 +506,7 @@ public abstract class QueryServlet extends HttpServlet {
         throws IOException, ServletException {
         Object value = null;
 
-        String path = request.getPathInfo();
+        Path path = getPath(request);
 
         try {
             validate(path);
@@ -450,7 +532,7 @@ public abstract class QueryServlet extends HttpServlet {
     protected final void doDelete(HttpServletRequest request, HttpServletResponse response)
         throws IOException, ServletException {
         try {
-            String path = request.getPathInfo();
+            Path path = getPath(request);
             validate(path);
             doDelete(path);
         } catch (QueryException exception) {
@@ -485,6 +567,12 @@ public abstract class QueryServlet extends HttpServlet {
         throws IOException, ServletException {
         response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
         response.flushBuffer();
+    }
+
+    private Path getPath(HttpServletRequest request) {
+        String pathInfo = request.getPathInfo();
+        Path path = (pathInfo.length() == 0) ? new Path() : new Path(pathInfo.substring(1).split("/"));
+        return path;
     }
 
     private void setResponseHeaders(HttpServletResponse response) {

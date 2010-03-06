@@ -58,22 +58,22 @@ public interface Sequence<T> {
             }
 
             @Override
-            public int add(Integer item) {
-                return elements.add(item);
+            public int add(Integer element) {
+                return elements.add(element);
             }
 
             @Override
-            public void insert(Integer item, int index) {
-                elements.insert(item, index);
+            public void insert(Integer element, int index) {
+                elements.insert(element, index);
             }
 
             @Override
-            public Integer update(int index, Integer item) {
-                return elements.update(index, item);
+            public Integer update(int index, Integer element) {
+                return elements.update(index, element);
             }
 
             @Override
-            public int remove(Integer item) {
+            public int remove(Integer element) {
                 throw new UnsupportedOperationException();
             }
 
@@ -88,8 +88,8 @@ public interface Sequence<T> {
             }
 
             @Override
-            public int indexOf(Integer item) {
-                return elements.indexOf(item);
+            public int indexOf(Integer element) {
+                return elements.indexOf(element);
             }
 
             @Override
@@ -109,12 +109,12 @@ public interface Sequence<T> {
                 sb.append("[");
 
                 int i = 0;
-                for (Integer item : elements) {
+                for (Integer element : elements) {
                     if (i > 0) {
                         sb.append(", ");
                     }
 
-                    sb.append(item);
+                    sb.append(element);
                     i++;
                 }
 
@@ -145,17 +145,17 @@ public interface Sequence<T> {
             }
 
             @Override
-            public int add(Integer item) {
+            public int add(Integer element) {
                 throw new UnsupportedOperationException();
             }
 
             @Override
-            public void insert(Integer item, int index) {
+            public void insert(Integer element, int index) {
                 throw new UnsupportedOperationException();
             }
 
             @Override
-            public Integer update(int index, Integer item) {
+            public Integer update(int index, Integer element) {
                 throw new UnsupportedOperationException();
             }
 
