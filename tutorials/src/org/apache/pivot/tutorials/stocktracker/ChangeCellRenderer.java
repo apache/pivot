@@ -21,6 +21,9 @@ import java.awt.Color;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.content.TableViewNumberCellRenderer;
 
+/**
+ * Table view cell renderer that presents a formatted change value.
+ */
 public class ChangeCellRenderer extends TableViewNumberCellRenderer {
     public static final Color UP_COLOR = new Color(0x00, 0x80, 0x00);
     public static final Color DOWN_COLOR = new Color(0xff, 0x00, 0x00);

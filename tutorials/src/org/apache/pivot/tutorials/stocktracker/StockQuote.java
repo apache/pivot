@@ -16,6 +16,9 @@
  */
 package org.apache.pivot.tutorials.stocktracker;
 
+/**
+ * JavaBean class representing a Stock Quote.
+ */
 public class StockQuote {
     private String symbol = null;
     private String companyName = null;

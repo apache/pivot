@@ -36,6 +36,7 @@ import org.apache.pivot.util.concurrent.Task;
 import org.apache.pivot.util.concurrent.TaskListener;
 import org.apache.pivot.web.GetQuery;
 import org.apache.pivot.wtk.ApplicationContext;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Component;
@@ -56,12 +57,15 @@ import org.apache.pivot.wtk.content.TableViewRowComparator;
 import org.apache.pivot.wtkx.Bindable;
 import org.apache.pivot.wtkx.WTKX;
 
+/**
+ * Main Stock Tracker window.
+ */
 public class StockTrackerWindow extends Window implements Bindable {
     @WTKX private TableView stocksTableView = null;
     @WTKX private TextInput symbolTextInput = null;
     @WTKX private Button addSymbolButton = null;
     @WTKX private Button removeSymbolsButton = null;
-    @WTKX private DetailPane detailPane = null;
+    @WTKX private BoxPane detailPane = null;
     @WTKX private Label lastUpdateLabel = null;
     @WTKX private Button yahooFinanceButton = null;
 

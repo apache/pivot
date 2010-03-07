@@ -14,18 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-{   stockTracker: "La Bourse Pivot",
-    symbol: "Code",
-    companyName: "Société",
-    value: "Cours",
-    openingValue: "Ouverture",
-    highValue: "+ Haut",
-    lowValue: "+ Bas",
-    change: "Variation",
-    volume: "Volume",
-    addSymbol: "Ajouter un code",
-    removeSymbol: "Enlever codes sélectionnés",
-    lastUpdate: "Dernier échange",
-    dataProvidedBy: "Données fournies par",
-    yahooFinance: "Yahoo! Finance"
+package org.apache.pivot.tutorials.stocktracker;
+
+import java.text.DecimalFormat;
+
+import org.apache.pivot.wtk.Label;
+
+/**
+ * Formats a float as a change value (+ or -).
+ */
+public class ChangeMapping implements Label.TextBindMapping {
+    private static final DecimalFormat FORMAT = new DecimalFormat("+0.00;-0.00");
+
+    @Override
+    public String toString(Object value) {
+        return FORMAT.format(value);
+    }
+
+    @Override
+    public Object valueOf(String text) {
+        throw new UnsupportedOperationException();
+    }
 }

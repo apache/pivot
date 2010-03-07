@@ -25,6 +25,9 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
+/**
+ * Stock Tracker application.
+ */
 public class StockTracker implements Application {
     private StockTrackerWindow window = null;
 
@@ -39,7 +42,7 @@ public class StockTracker implements Application {
 
         Resources resources = new Resources(StockTrackerWindow.class.getName());
         WTKXSerializer wtkxSerializer = new WTKXSerializer(resources);
-        window = (StockTrackerWindow)wtkxSerializer.readObject(this, "stocktracker_window.wtkx");
+        window = (StockTrackerWindow)wtkxSerializer.readObject(this, "stock_tracker_window.wtkx");
         window.open(display);
     }
 

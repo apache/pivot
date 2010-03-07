@@ -14,18 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-{   stockTracker: "La Bourse Pivot",
-    symbol: "Code",
-    companyName: "Société",
-    value: "Cours",
-    openingValue: "Ouverture",
-    highValue: "+ Haut",
-    lowValue: "+ Bas",
-    change: "Variation",
-    volume: "Volume",
-    addSymbol: "Ajouter un code",
-    removeSymbol: "Enlever codes sélectionnés",
-    lastUpdate: "Dernier échange",
-    dataProvidedBy: "Données fournies par",
-    yahooFinance: "Yahoo! Finance"
+package org.apache.pivot.tutorials.stocktracker;
+
+import java.text.DecimalFormat;
+
+import org.apache.pivot.wtk.Label;
+
+/**
+ * Formats an int as a volume value (including separator characters).
+ */
+public class VolumeMapping implements Label.TextBindMapping {
+    private static DecimalFormat FORMAT = new DecimalFormat();
+
+    @Override
+    public String toString(Object value) {
+        return FORMAT.format(value);
+    }
+
+    @Override
+    public Object valueOf(String text) {
+        // Not needed; this mapping is for load only
+        throw new UnsupportedOperationException();
+    }
 }
