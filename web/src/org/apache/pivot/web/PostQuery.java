@@ -73,12 +73,14 @@ public class PostQuery extends Query<URL> {
 
         execute(METHOD, value);
 
-        String location = getResponseHeaders().get("Location");
-        if (location != null) {
-            try {
-                valueLocation = new URL(getLocation(), location);
-            } catch(MalformedURLException exception) {
-                throw new RuntimeException(exception);
+        if (getStatus() == Status.CREATED) {
+            String location = getResponseHeaders().get("Location");
+            if (location != null) {
+                try {
+                    valueLocation = new URL(getLocation(), location);
+                } catch(MalformedURLException exception) {
+                    throw new RuntimeException(exception);
+                }
             }
         }
 

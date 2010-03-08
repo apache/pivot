@@ -138,7 +138,6 @@ public abstract class QueryServlet extends HttpServlet {
     public static final String HTTPS_PROTOCOL = "https";
     public static final String URL_ENCODING = "UTF-8";
 
-    public static final String ACTION_HEADER = "Action";
     public static final String CONTENT_TYPE_HEADER = "Content-Type";
     public static final String CONTENT_LENGTH_HEADER = "Content-Length";
     public static final String LOCATION_HEADER = "Location";
@@ -261,24 +260,12 @@ public abstract class QueryServlet extends HttpServlet {
      * @param value
      *
      * @return
-     * A URL containing the location of the created resource.
+     * A URL containing the location of the created resource, or <tt>null</tt> if
+     * operation did not result in the creation of a resource.
      *
      * @throws QueryException
      */
     protected URL doPost(Path path, Object value) throws QueryException {
-        throw new QueryException(Query.Status.METHOD_NOT_ALLOWED);
-    }
-
-    /**
-     * Handles an HTTP POST/Action request. The default implementation throws an HTTP
-     * 405 query exception.
-     *
-     * @param path
-     * @param action
-     *
-     * @throws QueryException
-     */
-    protected void doPostAction(Path path, String action) throws QueryException {
         throw new QueryException(Query.Status.METHOD_NOT_ALLOWED);
     }
 
@@ -289,9 +276,13 @@ public abstract class QueryServlet extends HttpServlet {
      * @param path
      * @param value
      *
+     * @return
+     * <tt>true</tt> if the operation resulted in the creation of a resource;
+     * <tt>false</tt>, otherwise.
+     *
      * @throws QueryException
      */
-    protected void doPut(Path path, Object value) throws QueryException {
+    protected boolean doPut(Path path, Object value) throws QueryException {
         throw new QueryException(Query.Status.METHOD_NOT_ALLOWED);
     }
 
@@ -403,7 +394,7 @@ public abstract class QueryServlet extends HttpServlet {
         }
 
         if (!response.isCommitted()) {
-            response.setStatus(200);
+            response.setStatus(Query.Status.OK);
             setResponseHeaders(response);
 
             Serializer<Object> serializer = (Serializer<Object>)createSerializer(path);
@@ -456,63 +447,19 @@ public abstract class QueryServlet extends HttpServlet {
     @Override
     protected final void doPost(HttpServletRequest request, HttpServletResponse response)
         throws IOException, ServletException {
-        String action = request.getHeader(ACTION_HEADER);
-
-        if (action == null) {
-            Path path = getPath(request);
-
-            URL location = null;
-            try {
-                validate(path);
-                Serializer<?> serializer = createSerializer(path);
-                Object value = serializer.readObject(request.getInputStream());
-                location = doPost(path, value);
-            } catch (SerializationException exception) {
-                throw new ServletException(exception);
-            } catch (QueryException exception) {
-                response.setStatus(exception.getStatus());
-                response.flushBuffer();
-            }
-
-            if (!response.isCommitted()) {
-                response.setStatus(201);
-                setResponseHeaders(response);
-                response.setHeader(LOCATION_HEADER, location.toString());
-                response.setContentLength(0);
-            }
-        } else {
-            Path path = getPath(request);
-
-            try {
-                validate(path);
-                doPostAction(path, action);
-            } catch (QueryException exception) {
-                response.setStatus(exception.getStatus());
-                response.flushBuffer();
-            }
-
-            if (!response.isCommitted()) {
-                response.setStatus(204);
-                setResponseHeaders(response);
-                response.setContentLength(0);
-            }
-
-            response.flushBuffer();
-        }
-    }
-
-    @Override
-    protected final void doPut(HttpServletRequest request, HttpServletResponse response)
-        throws IOException, ServletException {
-        Object value = null;
-
         Path path = getPath(request);
 
+        URL location = null;
         try {
             validate(path);
-            Serializer<?> serializer = createSerializer(path);
-            value = serializer.readObject(request.getInputStream());
-            doPut(path, value);
+
+            Object value = null;
+            if (request.getContentLength() > 0) {
+                Serializer<?> serializer = createSerializer(path);
+                value = serializer.readObject(request.getInputStream());
+            }
+
+            location = doPost(path, value);
         } catch (SerializationException exception) {
             throw new ServletException(exception);
         } catch (QueryException exception) {
@@ -521,7 +468,43 @@ public abstract class QueryServlet extends HttpServlet {
         }
 
         if (!response.isCommitted()) {
-            response.setStatus(204);
+            if (location == null) {
+                response.setStatus(Query.Status.NO_CONTENT);
+            } else {
+                response.setStatus(Query.Status.CREATED);
+                response.setHeader(LOCATION_HEADER, location.toString());
+            }
+
+            setResponseHeaders(response);
+            response.setContentLength(0);
+        }
+    }
+
+    @Override
+    protected final void doPut(HttpServletRequest request, HttpServletResponse response)
+        throws IOException, ServletException {
+        Path path = getPath(request);
+
+        boolean created = false;
+        try {
+            validate(path);
+
+            Object value = null;
+            if (request.getContentLength() > 0) {
+                Serializer<?> serializer = createSerializer(path);
+                value = serializer.readObject(request.getInputStream());
+            }
+
+            created = doPut(path, value);
+        } catch (SerializationException exception) {
+            throw new ServletException(exception);
+        } catch (QueryException exception) {
+            response.setStatus(exception.getStatus());
+            response.flushBuffer();
+        }
+
+        if (!response.isCommitted()) {
+            response.setStatus(created ? Query.Status.CREATED : Query.Status.NO_CONTENT);
             setResponseHeaders(response);
             response.setContentLength(0);
             response.flushBuffer();

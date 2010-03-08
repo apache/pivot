@@ -377,7 +377,7 @@ public abstract class Query<V> extends IOTask<V> {
         URL location = getLocation();
         HttpURLConnection connection = null;
 
-        Serializer<Object> serializer = (Serializer<Object>) this.serializer;
+        Serializer<Object> serializer = (Serializer<Object>)this.serializer;
 
         bytesSent = 0;
         bytesReceived = 0;
@@ -396,6 +396,7 @@ public abstract class Query<V> extends IOTask<V> {
             } else {
                 connection = (HttpURLConnection) location.openConnection(proxy);
             }
+
             connection.setRequestMethod(method.toString());
             connection.setAllowUserInteraction(false);
             connection.setInstanceFollowRedirects(false);
@@ -408,7 +409,7 @@ public abstract class Query<V> extends IOTask<V> {
             }
 
             // Set the request headers
-            if (method == Method.POST || method == Method.PUT) {
+            if (value != null) {
                 connection.setRequestProperty("Content-Type", serializer.getMIMEType(value));
             }
 
@@ -424,14 +425,14 @@ public abstract class Query<V> extends IOTask<V> {
 
             // Set the input/output state
             connection.setDoInput(true);
-            connection.setDoOutput(method == Method.POST || method == Method.PUT);
+            connection.setDoOutput(value != null);
 
             // Connect to the server
             connection.connect();
             queryListeners.connected(this);
 
             // Write the request body
-            if (method == Method.POST || method == Method.PUT) {
+            if (value != null) {
                 OutputStream outputStream = null;
                 try {
                     outputStream = connection.getOutputStream();

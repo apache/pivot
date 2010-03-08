@@ -19,7 +19,7 @@ package org.apache.pivot.web;
 /**
  * Executes an HTTP PUT operation.
  */
-public class PutQuery extends Query<Void> {
+public class PutQuery extends Query<Boolean> {
     private Object value = null;
 
     public static final Method METHOD = Method.PUT;
@@ -58,10 +58,15 @@ public class PutQuery extends Query<Void> {
 
     /**
      * Synchronously executes the PUT operation.
+     *
+     * @return
+     * <tt>true</tt> if the operation resulted in the creation of a server
+     * resource; <tt>false</tt>, otherwise.
      */
     @Override
-    public Void execute() throws QueryException {
+    public Boolean execute() throws QueryException {
         execute(METHOD, value);
-        return null;
+
+        return (getStatus() == Status.CREATED);
     }
 }
