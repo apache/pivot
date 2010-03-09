@@ -2361,18 +2361,6 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     /**
-     * Copies bound values from the bind context to the component by converting
-     * the given context to a bean dictionary, if necessary.
-     *
-     * @param context
-     */
-    @SuppressWarnings("unchecked")
-    public final void load(Object context) {
-        load((context instanceof Dictionary<?, ?>) ?
-            (Dictionary<String, ?>)context : new BeanDictionary(context));
-    }
-
-    /**
      * Copies bound values from the component to the bind context. This
      * functionality must be provided by the subclass; the base implementation
      * is a no-op.
@@ -2380,18 +2368,6 @@ public abstract class Component implements ConstrainedVisual {
      * @param context
      */
     public void store(Dictionary<String, ?> context) {
-    }
-
-    /**
-     * Copies bound values from the component to the bind context by converting
-     * the given context to a bean dictionary, if necessary.
-     *
-     * @param context
-     */
-    @SuppressWarnings("unchecked")
-    public final void store(Object context) {
-        store((context instanceof Dictionary<?, ?>) ?
-            (Dictionary<String, ?>)context : new BeanDictionary(context));
     }
 
     /**

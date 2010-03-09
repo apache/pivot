@@ -29,11 +29,28 @@ limitations under the License.
             method takes an instance of <tt>Dictionary&lt;String, ?&gt;</tt> called the "context".
             Calling <tt>load()</tt> causes data from the context to be "loaded" into the component;
             calling <tt>store()</tt> performs the reverse operation and "stores" data from the
-            component into the context. Overloaded versions of both methods allow a caller to pass
-            a JavaBean value as a bind context, which will be wrapped in a <tt>BeanDictionary</tt>
-            and passed to the version that takes a dictionary argument. A third method,
-            <tt>clear()</tt> allows a caller to reset any bindings.
+            component into the context. A third method, <tt>clear()</tt> allows a caller to reset
+            any bindings.
         </p>
+
+        <p>
+            Components that support data binding provide "key" properties that allow a caller to
+            associate a property value with a value in the bind context. For example, the
+            <tt>Label</tt> class provides a "textKey" property that maps the label's "text" property
+            to a value provided by the context. Though not all components support data binding,
+            many do, including:
+        </p>
+
+        <ul>
+            <li><tt>Button</tt> (to selection state)</li>
+            <li><tt>Label</tt> (to text property)</li>
+            <li><tt>ListButton</tt> (to list data)</li>
+            <li><tt>ListView</tt> (to list data and selection state)</li>
+            <li><tt>Spinner</tt>  (to spinner data and selection state)</li>
+            <li><tt>TableView</tt> (to table data and selection state)</li>
+            <li><tt>TextInput</tt> (to text property)</li>
+            <li><tt>TreeView</tt>  (to tree data and selection state)</li>
+        </ul>
 
         <p>
             The <tt>Container</tt> class overrides <tt>load()</tt> and <tt>store()</tt> to
@@ -45,17 +62,11 @@ limitations under the License.
         </p>
 
         <p>
-            Note that not all components are bindable. In general, binding is limited to
-            components that support user input. However, the read-only <tt>Label</tt> component is
-            bindable, since it is often used to present non-editable data retrieved from a server
-            (such as a database ID). Also, when a bindable component is disabled (effectively
-            making it read only), its value is not stored during a <tt>store()</tt> operation.
-        </p>
-
-        <p>
             The following application demonstrates data binding. It allows the user to load a form
             with address data either from a JSON file or from a JavaBean object, as well as clear
-            the form:
+            the form. Note that binding to a JavaBean is accomplished by wrapping the bean in an
+            instance of <tt>org.apache.pivot.beans.BeanDictionary</tt> before passing it to the
+            <tt>load()</tt> method:
         </p>
 
         <application class="org.apache.pivot.tutorials.databinding.DataBinding"
@@ -125,9 +136,19 @@ limitations under the License.
             ]]>
         </source>
 
-        <p>Note that the <tt>&lt;BoxPane&gt;</tt> for the address section defines a context key. This creates a nested bind context for its sub-elements, allowing the sub-elements to refer to the bound values using a relative key (e.g. "street"). However, since the <tt>&lt;BoxPane&gt;</tt> for the IM account section does not define a context key, its sub-elements must refer to their bound values using a path that is relative to the root context (e.g. "imAccount.id").</p>
+        <p>
+            Note that the <tt>&lt;BoxPane&gt;</tt> for the address section defines a context key.
+            This creates a nested bind context for its sub-elements, allowing the sub-elements to
+            refer to the bound values using a relative key (e.g. "street"). However, since the
+            <tt>&lt;BoxPane&gt;</tt> for the IM account section does not define a context key, its
+            sub-elements must refer to their bound values using a path that is relative to the root
+            context (e.g. "imAccount.id").
+        </p>
 
-        <p>The application's <tt>startup()</tt> method defines the button press listeners that load or clear the form:</p>
+        <p>
+            The application's <tt>startup()</tt> method defines the button press listeners that
+            load or clear the form:
+        </p>
 
         <source type="java" location="org/apache/pivot/tutorials/databinding/DataBinding.java">
             <![CDATA[
@@ -135,6 +156,7 @@ limitations under the License.
 
             import java.io.InputStream;
 
+            import org.apache.pivot.beans.BeanDictionary;
             import org.apache.pivot.collections.Map;
             import org.apache.pivot.serialization.JSONSerializer;
             import org.apache.pivot.wtk.Application;
@@ -175,7 +197,7 @@ limitations under the License.
                     loadJavaButton.getButtonPressListeners().add(new ButtonPressListener() {
                         @Override
                         public void buttonPressed(Button button) {
-                            form.load(CONTACT);
+                            form.load(new BeanDictionary(CONTACT));
                             sourceLabel.setText("Java");
                         }
                     });
@@ -394,5 +416,30 @@ limitations under the License.
             }
             ]]>
         </source>
+
+        <p>
+            This application's data binding requirements are fairly straightforward. It is
+            load-only, and all of the data is simply presented as-is. However, many real-world
+            applications may want to transform the data in some way before presenting it to the
+            user; for example, an application may want to apply currency formatting to a numeric
+            value, or convert an encoded date string to an instance of
+            <tt>org.apache.pivot.util.CalendarDate</tt>. Components that support data binding
+            provide a "bind mapping" interface to facilitate such transformations. Bind mappings
+            are outside the scope of this example but are demonstrated in the
+            <a href="stock_tracker.html">Stock Tracker</a> tutorial.
+        </p>
+
+        <p>
+            Also, though it is not shown in this example, bindable components allow a caller to
+            control the bind direction via a "bind type" property. The bind type is specified by
+            an instance of the <tt>org.apache.pivot.wtk.BindType</tt> enum, which defines the
+            following values:
+        </p>
+
+        <ul>
+            <li><tt>LOAD</tt> - binding will only occur during a <tt>load()</tt> operation</li>
+            <li><tt>STORE</tt> - binding will only occur during a <tt>store()</tt> operation</li>
+            <li><tt>BOTH</tt> - binding occur during both <tt>load()</tt> and <tt>store()</tt> operations</li>
+        </ul>
     </body>
 </document>

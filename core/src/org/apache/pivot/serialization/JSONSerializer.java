@@ -166,7 +166,7 @@ public class JSONSerializer implements Serializer<Object> {
 
     private void logException(Exception exception) {
         System.err.println("An error occurred while processing input at line number "
-            + lineNumberReader.getLineNumber() + 1);
+            + (lineNumberReader.getLineNumber() + 1));
     }
 
     private Object readValue(Reader reader)
