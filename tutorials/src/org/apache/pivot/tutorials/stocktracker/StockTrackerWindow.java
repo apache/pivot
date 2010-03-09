@@ -35,6 +35,7 @@ import org.apache.pivot.util.Resources;
 import org.apache.pivot.util.concurrent.Task;
 import org.apache.pivot.util.concurrent.TaskListener;
 import org.apache.pivot.web.GetQuery;
+import org.apache.pivot.wtk.Action;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Button;
@@ -44,6 +45,7 @@ import org.apache.pivot.wtk.ComponentKeyListener;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Label;
+import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TableViewRowListener;
@@ -69,8 +71,60 @@ public class StockTrackerWindow extends Window implements Bindable {
     @WTKX private Label lastUpdateLabel = null;
     @WTKX private Button yahooFinanceButton = null;
 
-    private ArrayList<String> symbols = new ArrayList<String>();
+    private ArrayList<String> symbols;
     private GetQuery getQuery = null;
+
+    // Action invoked to add a new symbol
+    private Action addSymbolAction = new Action(false) {
+        @Override
+        @SuppressWarnings("unchecked")
+        public void perform() {
+            String symbol = symbolTextInput.getText().toUpperCase();
+            if (symbols.indexOf(symbol) == -1) {
+                symbols.add(symbol);
+
+                List<StockQuote> tableData = (List<StockQuote>)stocksTableView.getTableData();
+                StockQuote stockQuote = new StockQuote();
+                stockQuote.setSymbol(symbol);
+                int index = tableData.add(stockQuote);
+
+                stocksTableView.setSelectedIndex(index);
+            }
+
+            symbolTextInput.setText("");
+            refreshTable();
+        }
+    };
+
+    // Action invoke to remove selected symbols
+    private Action removeSymbolsAction = new Action(false) {
+        @Override
+        public void perform() {
+            int selectedIndex = stocksTableView.getFirstSelectedIndex();
+            int selectionLength = stocksTableView.getLastSelectedIndex() - selectedIndex + 1;
+            stocksTableView.getTableData().remove(selectedIndex, selectionLength);
+            symbols.remove(selectedIndex, selectionLength);
+
+            if (selectedIndex >= symbols.getLength()) {
+                selectedIndex = symbols.getLength() - 1;
+            }
+
+            stocksTableView.setSelectedIndex(selectedIndex);
+
+            if (selectedIndex == -1) {
+                refreshDetail();
+                symbolTextInput.requestFocus();
+            }
+        }
+    };
+
+    // Action invoked to refresh the symbol table view
+    private Action refreshTableAction = new Action() {
+        @Override
+        public void perform() {
+            refreshTable();
+        }
+    };
 
     public static final String SERVICE_HOSTNAME = "download.finance.yahoo.com";
     public static final String SERVICE_PATH = "/d/quotes.csv";
@@ -78,6 +132,10 @@ public class StockTrackerWindow extends Window implements Bindable {
     public static final String YAHOO_FINANCE_HOME = "http://finance.yahoo.com";
 
     public StockTrackerWindow() {
+        // Create the symbol list
+        symbols = new ArrayList<String>();
+
+        // Set a comparator on the symbol list so the entries are sorted
         symbols.setComparator(new Comparator<String>() {
             @Override
             public int compare(String s1, String s2) {
@@ -85,6 +143,7 @@ public class StockTrackerWindow extends Window implements Bindable {
             }
         });
 
+        // Insert some initial symbols
         symbols.add("EBAY");
         symbols.add("AAPL");
         symbols.add("MSFT");
@@ -92,11 +151,17 @@ public class StockTrackerWindow extends Window implements Bindable {
         symbols.add("GOOG");
         symbols.add("ORCL");
         symbols.add("IBM");
+
+        // Add action mapping to refresh the symbol table view
+        Keyboard.Modifier commandModifier = Platform.getCommandModifier();
+        Keyboard.KeyStroke refreshKeystroke = new Keyboard.KeyStroke(Keyboard.KeyCode.R,
+            commandModifier.getMask());
+        getActionMappings().add(new ActionMapping(refreshKeystroke, refreshTableAction));
     }
 
     @Override
     public void initialize(Resources resources) {
-        // Wire up event handlers
+        // Add stocks table view event handlers
         stocksTableView.getTableViewRowListeners().add(new TableViewRowListener.Adapter() {
             @Override
             public void rowsSorted(TableView tableView) {
@@ -110,6 +175,9 @@ public class StockTrackerWindow extends Window implements Bindable {
         stocksTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener.Adapter() {
             @Override
             public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges) {
+                int firstSelectedIndex = stocksTableView.getFirstSelectedIndex();
+                removeSymbolsAction.setEnabled(firstSelectedIndex != -1);
+
                 refreshDetail();
             }
         });
@@ -128,17 +196,21 @@ public class StockTrackerWindow extends Window implements Bindable {
             public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
                 if (keyCode == Keyboard.KeyCode.DELETE
                     || keyCode == Keyboard.KeyCode.BACKSPACE) {
-                    removeSelectedSymbols();
+                    removeSymbolsAction.perform();
+                } else if (keyCode == Keyboard.KeyCode.A
+                    && Keyboard.isPressed(Platform.getCommandModifier())) {
+                    stocksTableView.selectAll();
                 }
 
                 return false;
             }
         });
 
+        // Add symbol text input event handlers
         symbolTextInput.getTextInputTextListeners().add(new TextInputTextListener() {
             @Override
             public void textChanged(TextInput textInput) {
-                addSymbolButton.setEnabled(textInput.getTextLength() > 0);
+                addSymbolAction.setEnabled(textInput.getTextLength() > 0);
             }
         });
 
@@ -146,27 +218,21 @@ public class StockTrackerWindow extends Window implements Bindable {
             @Override
             public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
                 if (keyCode == Keyboard.KeyCode.ENTER) {
-                    addSymbol();
+                    if (addSymbolAction.isEnabled()) {
+                        addSymbolAction.perform();
+                    }
                 }
 
                 return false;
             }
         });
 
-        addSymbolButton.getButtonPressListeners().add(new ButtonPressListener() {
-            @Override
-            public void buttonPressed(Button button) {
-                addSymbol();
-            }
-        });
+        // Assign actions to add and remove symbol buttons
+        addSymbolButton.setAction(addSymbolAction);
+        removeSymbolsButton.setAction(removeSymbolsAction);
 
-        removeSymbolsButton.getButtonPressListeners().add(new ButtonPressListener() {
-            @Override
-            public void buttonPressed(Button button) {
-                removeSelectedSymbols();
-            }
-        });
-
+        // Add a button press listener to open the Yahoo! Finance web page when
+        // the link is clicked
         yahooFinanceButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {
@@ -204,110 +270,120 @@ public class StockTrackerWindow extends Window implements Bindable {
 
     @SuppressWarnings("unchecked")
     private void refreshTable() {
-        getQuery = new GetQuery(SERVICE_HOSTNAME, SERVICE_PATH);
-
-        StringBuilder symbolsArgumentBuilder = new StringBuilder();
-        for (int i = 0, n = symbols.getLength(); i < n; i++) {
-            if (i > 0) {
-                symbolsArgumentBuilder.append(",");
+        // Abort any outstanding query
+        if (getQuery != null) {
+            synchronized (getQuery) {
+                if (getQuery.isPending()) {
+                    getQuery.abort();
+                }
             }
-
-            symbolsArgumentBuilder.append(symbols.get(i));
         }
 
-        // Format:
-        // s - symbol
-        // n - company name
-        // l1 - most recent value
-        // o - opening value
-        // h - high value
-        // g - low value
-        // c1 - change percentage
-        // v - volume
-        String symbolsArgument = symbolsArgumentBuilder.toString();
-        getQuery.getParameters().put("s", symbolsArgument);
-        getQuery.getParameters().put("f", "snl1ohgc1v");
+        // Execute the query
+        if (symbols.getLength() > 0) {
+            getQuery = new GetQuery(SERVICE_HOSTNAME, SERVICE_PATH);
 
-        CSVSerializer quoteSerializer = new CSVSerializer();
-        quoteSerializer.setItemClass(StockQuote.class);
+            StringBuilder symbolsArgumentBuilder = new StringBuilder();
+            for (int i = 0, n = symbols.getLength(); i < n; i++) {
+                if (i > 0) {
+                    symbolsArgumentBuilder.append(",");
+                }
 
-        quoteSerializer.getKeys().add("symbol");
-        quoteSerializer.getKeys().add("companyName");
-        quoteSerializer.getKeys().add("value");
-        quoteSerializer.getKeys().add("openingValue");
-        quoteSerializer.getKeys().add("highValue");
-        quoteSerializer.getKeys().add("lowValue");
-        quoteSerializer.getKeys().add("change");
-        quoteSerializer.getKeys().add("volume");
+                symbolsArgumentBuilder.append(symbols.get(i));
+            }
 
-        getQuery.setSerializer(quoteSerializer);
+            // Format:
+            // s - symbol
+            // n - company name
+            // l1 - most recent value
+            // o - opening value
+            // h - high value
+            // g - low value
+            // c1 - change percentage
+            // v - volume
+            String symbolsArgument = symbolsArgumentBuilder.toString();
+            getQuery.getParameters().put("s", symbolsArgument);
+            getQuery.getParameters().put("f", "snl1ohgc1v");
 
-        getQuery.execute(new TaskAdapter<Object>(new TaskListener<Object>() {
-            @Override
-            public void taskExecuted(Task<Object> task) {
-                if (task == getQuery) {
-                    List<Object> quotes = (List<Object>)task.getResult();
+            CSVSerializer quoteSerializer = new CSVSerializer();
+            quoteSerializer.setItemClass(StockQuote.class);
 
-                    // Preserve any existing sort and selection
-                    Sequence<?> selectedStocks = stocksTableView.getSelectedRows();
+            quoteSerializer.getKeys().add("symbol");
+            quoteSerializer.getKeys().add("companyName");
+            quoteSerializer.getKeys().add("value");
+            quoteSerializer.getKeys().add("openingValue");
+            quoteSerializer.getKeys().add("highValue");
+            quoteSerializer.getKeys().add("lowValue");
+            quoteSerializer.getKeys().add("change");
+            quoteSerializer.getKeys().add("volume");
 
-                    List<Object> tableData = (List<Object>)stocksTableView.getTableData();
-                    Comparator<Object> comparator = tableData.getComparator();
-                    quotes.setComparator(comparator);
+            getQuery.setSerializer(quoteSerializer);
 
-                    stocksTableView.setTableData(quotes);
+            getQuery.execute(new TaskAdapter<Object>(new TaskListener<Object>() {
+                @Override
+                public void taskExecuted(Task<Object> task) {
+                    if (task == getQuery) {
+                        List<Object> quotes = (List<Object>)task.getResult();
 
-                    if (selectedStocks.getLength() > 0) {
-                        // Select current indexes of selected stocks
-                        for (int i = 0, n = selectedStocks.getLength(); i < n; i++) {
-                            Object selectedStock = selectedStocks.get(i);
+                        // Preserve any existing sort and selection
+                        Sequence<?> selectedStocks = stocksTableView.getSelectedRows();
 
-                            int index = 0;
-                            for (Object stock : stocksTableView.getTableData()) {
-                                String symbol = JSONSerializer.getString(stock, "symbol");
-                                String selectedSymbol = JSONSerializer.getString(selectedStock, "symbol");
+                        List<Object> tableData = (List<Object>)stocksTableView.getTableData();
+                        Comparator<Object> comparator = tableData.getComparator();
+                        quotes.setComparator(comparator);
 
-                                if (symbol.equals(selectedSymbol)) {
-                                    stocksTableView.addSelectedIndex(index);
-                                    break;
+                        stocksTableView.setTableData(quotes);
+
+                        if (selectedStocks.getLength() > 0) {
+                            // Select current indexes of selected stocks
+                            for (int i = 0, n = selectedStocks.getLength(); i < n; i++) {
+                                Object selectedStock = selectedStocks.get(i);
+
+                                int index = 0;
+                                for (Object stock : stocksTableView.getTableData()) {
+                                    String symbol = JSONSerializer.getString(stock, "symbol");
+                                    String selectedSymbol = JSONSerializer.getString(selectedStock, "symbol");
+
+                                    if (symbol.equals(selectedSymbol)) {
+                                        stocksTableView.addSelectedIndex(index);
+                                        break;
+                                    }
+
+                                    index++;
                                 }
-
-                                index++;
+                            }
+                        } else {
+                            if (quotes.getLength() > 0) {
+                                stocksTableView.setSelectedIndex(0);
                             }
                         }
-                    } else {
-                        if (quotes.getLength() > 0) {
-                            stocksTableView.setSelectedIndex(0);
-                        }
+
+                        refreshDetail();
+
+                        DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG,
+                            DateFormat.MEDIUM, Locale.getDefault());
+                        lastUpdateLabel.setText(dateFormat.format(new Date()));
+
+                        getQuery = null;
                     }
-
-                    refreshDetail();
-
-                    DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG,
-                        DateFormat.MEDIUM, Locale.getDefault());
-                    lastUpdateLabel.setText(dateFormat.format(new Date()));
-
-                    getQuery = null;
                 }
-            }
 
-            @Override
-            public void executeFailed(Task<Object> task) {
-                if (task == getQuery) {
-                    System.err.println(task.getFault());
-                    getQuery = null;
+                @Override
+                public void executeFailed(Task<Object> task) {
+                    if (task == getQuery) {
+                        System.err.println(task.getFault());
+                        getQuery = null;
+                    }
                 }
-            }
-        }));
+            }));
+        }
     }
 
     @SuppressWarnings("unchecked")
     private void refreshDetail() {
-        int firstSelectedIndex = stocksTableView.getFirstSelectedIndex();
-        removeSymbolsButton.setEnabled(firstSelectedIndex != -1);
-
         StockQuote stockQuote = null;
 
+        int firstSelectedIndex = stocksTableView.getFirstSelectedIndex();
         if (firstSelectedIndex != -1) {
             int lastSelectedIndex = stocksTableView.getLastSelectedIndex();
 
@@ -322,40 +398,5 @@ public class StockTrackerWindow extends Window implements Bindable {
         }
 
         detailPane.load(stockQuote);
-    }
-
-    @SuppressWarnings("unchecked")
-    private void addSymbol() {
-        String symbol = symbolTextInput.getText().toUpperCase();
-        if (symbols.indexOf(symbol) == -1) {
-            symbols.add(symbol);
-
-            List<StockQuote> tableData = (List<StockQuote>)stocksTableView.getTableData();
-            StockQuote stockQuote = new StockQuote();
-            stockQuote.setSymbol(symbol);
-            int index = tableData.add(stockQuote);
-
-            stocksTableView.setSelectedIndex(index);
-        }
-
-        symbolTextInput.setText("");
-        refreshTable();
-    }
-
-    private void removeSelectedSymbols() {
-        int selectedIndex = stocksTableView.getFirstSelectedIndex();
-        int selectionLength = stocksTableView.getLastSelectedIndex() - selectedIndex + 1;
-        stocksTableView.getTableData().remove(selectedIndex, selectionLength);
-        symbols.remove(selectedIndex, selectionLength);
-
-        if (selectedIndex >= symbols.getLength()) {
-            selectedIndex = symbols.getLength() - 1;
-        }
-
-        stocksTableView.setSelectedIndex(selectedIndex);
-
-        if (selectedIndex == -1) {
-            refreshDetail();
-        }
     }
 }

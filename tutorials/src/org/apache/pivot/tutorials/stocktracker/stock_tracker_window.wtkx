@@ -41,25 +41,27 @@ limitations under the License.
                                     <ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
                                         verticalScrollBarPolicy="fill_to_capacity">
                                         <view>
-                                            <TableView wtkx:id="stocksTableView" selectMode="multi"
-                                                styles="{showHorizontalGridLines:false}">
-                                                <columns>
-                                                    <TableView.Column name="symbol"
-                                                        headerData="%symbol" width="1*" />
-                                                    <TableView.Column name="value" headerData="%value" width="1*">
-                                                        <cellRenderer>
-                                                            <content:TableViewNumberCellRenderer styles="{horizontalAlignment:'right'}"
-                                                                numberFormat="$$0.00"/>
-                                                        </cellRenderer>
-                                                    </TableView.Column>
-                                                    <TableView.Column name="change" headerData="%change" width="1*">
-                                                        <cellRenderer>
-                                                            <stocktracker:ChangeCellRenderer styles="{horizontalAlignment:'right'}"
-                                                                numberFormat="+0.00;-0.00"/>
-                                                        </cellRenderer>
-                                                    </TableView.Column>
-                                                </columns>
-                                            </TableView>
+                                            <StackPane>
+                                                <TableView wtkx:id="stocksTableView" selectMode="multi"
+                                                    styles="{showHorizontalGridLines:false}">
+                                                    <columns>
+                                                        <TableView.Column name="symbol"
+                                                            headerData="%symbol" width="1*" />
+                                                        <TableView.Column name="value" headerData="%value" width="1*">
+                                                            <cellRenderer>
+                                                                <content:TableViewNumberCellRenderer styles="{horizontalAlignment:'right'}"
+                                                                    numberFormat="$$0.00"/>
+                                                            </cellRenderer>
+                                                        </TableView.Column>
+                                                        <TableView.Column name="change" headerData="%change" width="1*">
+                                                            <cellRenderer>
+                                                                <stocktracker:ChangeCellRenderer styles="{horizontalAlignment:'right'}"
+                                                                    numberFormat="+0.00;-0.00"/>
+                                                            </cellRenderer>
+                                                        </TableView.Column>
+                                                    </columns>
+                                                </TableView>
+                                            </StackPane>
                                         </view>
 
                                         <columnHeader>
