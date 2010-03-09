@@ -54,6 +54,8 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     private Color disabledBorderColor;
     private Insets padding;
     private int spacing;
+    private float minumumAspectRatio;
+    private float maximumAspectRatio;
     private boolean toolbar;
 
     // Derived colors
@@ -82,6 +84,8 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         disabledBorderColor = theme.getColor(7);
         padding = new Insets(3);
         spacing = 0;
+        minumumAspectRatio = Float.NaN;
+        maximumAspectRatio = Float.NaN;
         toolbar = false;
 
         // Set the derived colors
@@ -94,26 +98,51 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
 
     @Override
     public int getPreferredWidth(int height) {
-        MenuButton menuButton = (MenuButton)getComponent();
+        int preferredWidth = 0;
 
-        Button.DataRenderer dataRenderer = menuButton.getDataRenderer();
-        dataRenderer.render(menuButton.getButtonData(), menuButton, false);
 
-        int preferredWidth = dataRenderer.getPreferredWidth(-1) + TRIGGER_WIDTH
-            + padding.left + padding.right + spacing + 2;
+
+        if (height == -1) {
+            preferredWidth = getPreferredSize().width;
+        } else {
+            MenuButton menuButton = (MenuButton)getComponent();
+            Button.DataRenderer dataRenderer = menuButton.getDataRenderer();
+            dataRenderer.render(menuButton.getButtonData(), menuButton, false);
+
+            preferredWidth = dataRenderer.getPreferredWidth(-1) + TRIGGER_WIDTH
+                + padding.left + padding.right + spacing + 2;
+
+            // Adjust for preferred aspect ratio
+            if (!Float.isNaN(minumumAspectRatio)
+                && (float) preferredWidth / (float) height < minumumAspectRatio) {
+                preferredWidth = (int) (height * minumumAspectRatio);
+            }
+        }
 
         return preferredWidth;
     }
 
     @Override
     public int getPreferredHeight(int width) {
-        MenuButton menuButton = (MenuButton)getComponent();
+        int preferredHeight = 0;
 
-        Button.DataRenderer dataRenderer = menuButton.getDataRenderer();
-        dataRenderer.render(menuButton.getButtonData(), menuButton, false);
+        if (width == -1) {
+            preferredHeight = getPreferredSize().height;
+        } else {
+            MenuButton menuButton = (MenuButton)getComponent();
 
-        int preferredHeight = dataRenderer.getPreferredHeight(-1)
-            + padding.top + padding.bottom + 2;
+            Button.DataRenderer dataRenderer = menuButton.getDataRenderer();
+            dataRenderer.render(menuButton.getButtonData(), menuButton, false);
+
+            preferredHeight = dataRenderer.getPreferredHeight(-1)
+                + padding.top + padding.bottom + 2;
+
+            // Adjust for preferred aspect ratio
+            if (!Float.isNaN(maximumAspectRatio)
+                && (float) width / (float) preferredHeight > maximumAspectRatio) {
+                preferredHeight = (int) (width / maximumAspectRatio);
+            }
+        }
 
         return preferredHeight;
     }
@@ -128,6 +157,19 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         Dimensions contentSize = dataRenderer.getPreferredSize();
         int preferredWidth = contentSize.width + TRIGGER_WIDTH + padding.left + padding.right + 2;
         int preferredHeight = contentSize.height + padding.top + padding.bottom + 2;
+
+        // Adjust for preferred aspect ratio
+        float aspectRatio = (float) preferredWidth / (float) preferredHeight;
+
+        if (!Float.isNaN(minumumAspectRatio)
+            && aspectRatio < minumumAspectRatio) {
+            preferredWidth = (int) (preferredHeight * minumumAspectRatio);
+        }
+
+        if (!Float.isNaN(maximumAspectRatio)
+            && aspectRatio > maximumAspectRatio) {
+            preferredHeight = (int) (preferredWidth / maximumAspectRatio);
+        }
 
         return new Dimensions(preferredWidth, preferredHeight);
     }
@@ -474,6 +516,50 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         }
 
         setSpacing(spacing.intValue());
+    }
+
+    public float getMinimumAspectRatio() {
+        return minumumAspectRatio;
+    }
+
+    public void setMinimumAspectRatio(float minumumAspectRatio) {
+        if (!Float.isNaN(maximumAspectRatio)
+            && minumumAspectRatio > maximumAspectRatio) {
+            throw new IllegalArgumentException("minumumAspectRatio is greater than maximumAspectRatio.");
+        }
+
+        this.minumumAspectRatio = minumumAspectRatio;
+        invalidateComponent();
+    }
+
+    public final void setMinimumAspectRatio(Number minumumAspectRatio) {
+        if (minumumAspectRatio == null) {
+            throw new IllegalArgumentException("minumumAspectRatio is null.");
+        }
+
+        setMinimumAspectRatio(minumumAspectRatio.floatValue());
+    }
+
+    public float getMaximumAspectRatio() {
+        return maximumAspectRatio;
+    }
+
+    public void setMaximumAspectRatio(float maximumAspectRatio) {
+        if (!Float.isNaN(minumumAspectRatio)
+            && maximumAspectRatio < minumumAspectRatio) {
+            throw new IllegalArgumentException("maximumAspectRatio is less than minimumAspectRatio.");
+        }
+
+        this.maximumAspectRatio = maximumAspectRatio;
+        invalidateComponent();
+    }
+
+    public final void setMaximumAspectRatio(Number maximumAspectRatio) {
+        if (maximumAspectRatio == null) {
+            throw new IllegalArgumentException("maximumAspectRatio is null.");
+        }
+
+        setMaximumAspectRatio(maximumAspectRatio.floatValue());
     }
 
     public boolean isToolbar() {
