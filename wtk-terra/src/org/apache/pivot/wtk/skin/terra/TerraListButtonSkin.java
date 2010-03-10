@@ -245,16 +245,19 @@ public class TerraListButtonSkin extends ListButtonSkin {
         int width = getWidth();
         int height = getHeight();
 
+        Color color = null;
         Color backgroundColor = null;
         Color bevelColor = null;
         Color borderColor = null;
 
         if (listButton.isEnabled()) {
+            color = this.color;
             backgroundColor = this.backgroundColor;
             bevelColor = (pressed
                 || (listViewPopup.isOpen() && closeTransition == null)) ? pressedBevelColor : this.bevelColor;
             borderColor = this.borderColor;
         } else {
+            color = disabledColor;
             backgroundColor = disabledBackgroundColor;
             bevelColor = disabledBevelColor;
             borderColor = disabledBorderColor;
