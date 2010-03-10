@@ -27,6 +27,7 @@ import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.Filter;
+import org.apache.pivot.wtk.BindType;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
@@ -1360,6 +1361,54 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     @Override
     public void disabledRowFilterChanged(TableView tableView, Filter<?> previousDisabledRowFilter) {
         repaintComponent();
+    }
+
+    @Override
+    public void tableDataKeyChanged(TableView tableView, String previousTableDataKey) {
+        // No-op
+    }
+
+    @Override
+    public void tableDataBindTypeChanged(TableView tableView, BindType previousTableDataBindType) {
+        // No-op
+    }
+
+    @Override
+    public void tableDataBindMappingChanged(TableView tableView,
+        TableView.TableDataBindMapping previousTableDataBindMapping) {
+        // No-op
+    }
+
+    @Override
+    public void selectedRowKeyChanged(TableView tableView, String previousSelectedRowKey) {
+        // No-op
+    }
+
+    @Override
+    public void selectedRowBindTypeChanged(TableView tableView, BindType previousSelectedRowBindType) {
+        // No-op
+    }
+
+    @Override
+    public void selectedRowBindMappingChanged(TableView tableView,
+        TableView.SelectedRowBindMapping previousSelectedRowBindMapping) {
+        // No-op
+    }
+
+    @Override
+    public void selectedRowsKeyChanged(TableView tableView, String previousSelectedRowsKey) {
+        // No-op
+    }
+
+    @Override
+    public void selectedRowsBindTypeChanged(TableView tableView, BindType previousSelectedRowsBindType) {
+        // No-op
+    }
+
+    @Override
+    public void selectedRowsBindMappingChanged(TableView tableView,
+        TableView.SelectedRowBindMapping previousSelectedRowsBindMapping) {
+        // No-op
     }
 
     // Table view column events

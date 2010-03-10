@@ -28,6 +28,7 @@ import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.serialization.JSON;
 import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.Filter;
@@ -37,7 +38,7 @@ import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.content.TableViewCellRenderer;
 
 /**
- * Component that displays a sequence of items partitioned into columns,
+ * Component that displays a sequence of rows partitioned into columns,
  * optionally allowing a user to select one or more rows.
  */
 public class TableView extends Component {
@@ -804,6 +805,56 @@ public class TableView extends Component {
     }
 
     /**
+     * Translates between table and bind context data during data binding.
+     */
+    public interface TableDataBindMapping {
+        /**
+         * Converts a context value to table data.
+         *
+         * @param value
+         */
+        public List<?> toTableData(Object value);
+
+        /**
+         * Converts table data to a context value.
+         *
+         * @param list
+         */
+        public Object valueOf(List<?> tableData);
+    }
+
+    /**
+     * Translates between selection and bind context data during data binding.
+     */
+    public interface SelectedRowBindMapping {
+        /**
+         * Returns the index of the row in the source list.
+         *
+         * @param tableData
+         * The source table data.
+         *
+         * @param value
+         * The value to locate.
+         *
+         * @return
+         * The index of first occurrence of the value if it exists in the list;
+         * <tt>-1</tt>, otherwise.
+         */
+        public int indexOf(List<?> tableData, Object value);
+
+        /**
+         * Retrieves the value at the given index.
+         *
+         * @param tableData
+         * The source table data.
+         *
+         * @param index
+         * The index of the value to retrieve.
+         */
+        public Object get(List<?> tableData, int index);
+    }
+
+    /**
      * Column sequence implementation.
      */
     public final class ColumnSequence implements Sequence<Column>, Iterable<Column> {
@@ -920,6 +971,72 @@ public class TableView extends Component {
         public void disabledRowFilterChanged(TableView tableView, Filter<?> previousDisabledRowFilter) {
             for (TableViewListener listener : this) {
                 listener.disabledRowFilterChanged(tableView, previousDisabledRowFilter);
+            }
+        }
+
+        @Override
+        public void tableDataKeyChanged(TableView tableView, String previousTableDataKey) {
+            for (TableViewListener listener : this) {
+                listener.tableDataKeyChanged(tableView, previousTableDataKey);
+            }
+        }
+
+        @Override
+        public void tableDataBindTypeChanged(TableView tableView, BindType previousTableDataBindType) {
+            for (TableViewListener listener : this) {
+                listener.tableDataBindTypeChanged(tableView, previousTableDataBindType);
+            }
+        }
+
+        @Override
+        public void tableDataBindMappingChanged(TableView tableView,
+            TableView.TableDataBindMapping previousTableDataBindMapping) {
+            for (TableViewListener listener : this) {
+                listener.tableDataBindMappingChanged(tableView, previousTableDataBindMapping);
+            }
+        }
+
+        @Override
+        public void selectedRowKeyChanged(TableView tableView, String previousSelectedRowKey) {
+            for (TableViewListener listener : this) {
+                listener.selectedRowKeyChanged(tableView, previousSelectedRowKey);
+            }
+        }
+
+        @Override
+        public void selectedRowBindTypeChanged(TableView tableView, BindType previousSelectedRowBindType) {
+            for (TableViewListener listener : this) {
+                listener.selectedRowBindTypeChanged(tableView, previousSelectedRowBindType);
+            }
+        }
+
+        @Override
+        public void selectedRowBindMappingChanged(TableView tableView,
+            TableView.SelectedRowBindMapping previousSelectedRowBindMapping) {
+            for (TableViewListener listener : this) {
+                listener.selectedRowBindMappingChanged(tableView, previousSelectedRowBindMapping);
+            }
+        }
+
+        @Override
+        public void selectedRowsKeyChanged(TableView tableView, String previousSelectedRowsKey) {
+            for (TableViewListener listener : this) {
+                listener.selectedRowsKeyChanged(tableView, previousSelectedRowsKey);
+            }
+        }
+
+        @Override
+        public void selectedRowsBindTypeChanged(TableView tableView, BindType previousSelectedRowsBindType) {
+            for (TableViewListener listener : this) {
+                listener.selectedRowsBindTypeChanged(tableView, previousSelectedRowsBindType);
+            }
+        }
+
+        @Override
+        public void selectedRowsBindMappingChanged(TableView tableView,
+            TableView.SelectedRowBindMapping previousSelectedRowsBindMapping) {
+            for (TableViewListener listener : this) {
+                listener.selectedRowsBindMappingChanged(tableView, previousSelectedRowsBindMapping);
             }
         }
     }
@@ -1051,7 +1168,7 @@ public class TableView extends Component {
     }
 
     /**
-     * Table view item listener list.
+     * Table view row listener list.
      */
     private static class TableViewRowListenerList extends ListenerList<TableViewRowListener>
         implements TableViewRowListener {
@@ -1151,6 +1268,31 @@ public class TableView extends Component {
     private ColumnSequence columnSequence = new ColumnSequence();
 
     private List<?> tableData = null;
+    private TableView columnSource = null;
+
+    private RowEditor rowEditor = null;
+
+    private ListSelection selectedRanges = new ListSelection();
+    private SelectMode selectMode = SelectMode.SINGLE;
+
+    private HashMap<String, SortDirection> sortMap = new HashMap<String, SortDirection>();
+    private ArrayList<String> sortList = new ArrayList<String>();
+    private SortDictionary sortDictionary = new SortDictionary();
+
+    private Filter<?> disabledRowFilter = null;
+
+    private String tableDataKey = null;
+    private BindType tableDataBindType = BindType.BOTH;
+    private TableDataBindMapping tableDataBindMapping = null;
+
+    private String selectedRowKey = null;
+    private BindType selectedRowBindType = BindType.BOTH;
+    private SelectedRowBindMapping selectedRowBindMapping = null;
+
+    private String selectedRowsKey = null;
+    private BindType selectedRowsBindType = BindType.BOTH;
+    private SelectedRowBindMapping selectedRowsBindMapping = null;
+
     private ListListener<Object> tableDataListener = new ListListener<Object>() {
         @Override
         public void itemInserted(List<Object> list, int index) {
@@ -1196,19 +1338,6 @@ public class TableView extends Component {
             }
         }
     };
-
-    private TableView columnSource = null;
-
-    private ListSelection selectedRanges = new ListSelection();
-    private SelectMode selectMode = SelectMode.SINGLE;
-
-    private HashMap<String, SortDirection> sortMap = new HashMap<String, SortDirection>();
-    private ArrayList<String> sortList = new ArrayList<String>();
-    private SortDictionary sortDictionary = new SortDictionary();
-
-    private Filter<?> disabledRowFilter = null;
-
-    private RowEditor rowEditor = null;
 
     private TableViewListenerList tableViewListeners = new TableViewListenerList();
     private TableViewColumnListenerList tableViewColumnListeners = new TableViewColumnListenerList();
@@ -1725,6 +1854,11 @@ public class TableView extends Component {
         return row;
     }
 
+    @SuppressWarnings("unchecked")
+    public void setSelectedRow(Object row) {
+        setSelectedIndex((row == null) ? -1 : ((List<Object>)tableData).indexOf(row));
+    }
+
     public Sequence<?> getSelectedRows() {
         ArrayList<Object> rows = new ArrayList<Object>();
 
@@ -1738,6 +1872,31 @@ public class TableView extends Component {
         }
 
         return rows;
+    }
+
+    @SuppressWarnings("unchecked")
+    public void setSelectedRows(Sequence<Object> rows) {
+        if (rows == null) {
+            throw new IllegalArgumentException();
+        }
+
+        ArrayList<Span> selectedRanges = new ArrayList<Span>();
+
+        for (int i = 0, n = rows.getLength(); i < n; i++) {
+            Object row = rows.get(i);
+            if (row == null) {
+                throw new IllegalArgumentException("item is null");
+            }
+
+            int index = ((List<Object>)tableData).indexOf(row);
+            if (index == -1) {
+                throw new IllegalArgumentException("\"" + row + "\" is not a valid selection.");
+            }
+
+            selectedRanges.add(new Span(index));
+        }
+
+        setSelectedRanges(selectedRanges);
     }
 
     /**
@@ -1929,6 +2088,284 @@ public class TableView extends Component {
         if (previousDisabledRowFilter != disabledRowFilter) {
             this.disabledRowFilter = disabledRowFilter;
             tableViewListeners.disabledRowFilterChanged(this, previousDisabledRowFilter);
+        }
+    }
+
+    public String getTableDataKey() {
+        return tableDataKey;
+    }
+
+    public void setTableDataKey(String tableDataKey) {
+        String previousTableDataKey = this.tableDataKey;
+        if (previousTableDataKey != tableDataKey) {
+            this.tableDataKey = tableDataKey;
+            tableViewListeners.tableDataKeyChanged(this, previousTableDataKey);
+        }
+    }
+
+    public BindType getTableDataBindType() {
+        return tableDataBindType;
+    }
+
+    public void setTableDataBindType(BindType tableDataBindType) {
+        if (tableDataBindType == null) {
+            throw new IllegalArgumentException();
+        }
+
+        BindType previousTableDataBindType = this.tableDataBindType;
+
+        if (previousTableDataBindType != tableDataBindType) {
+            this.tableDataBindType = tableDataBindType;
+            tableViewListeners.tableDataBindTypeChanged(this, previousTableDataBindType);
+        }
+    }
+
+    public TableDataBindMapping getTableDataBindMapping() {
+        return tableDataBindMapping;
+    }
+
+    public void setTableDataBindMapping(TableDataBindMapping tableDataBindMapping) {
+        TableDataBindMapping previousTableDataBindMapping = this.tableDataBindMapping;
+
+        if (previousTableDataBindMapping != tableDataBindMapping) {
+            this.tableDataBindMapping = tableDataBindMapping;
+            tableViewListeners.tableDataBindMappingChanged(this, previousTableDataBindMapping);
+        }
+    }
+
+    public String getSelectedRowKey() {
+        return selectedRowKey;
+    }
+
+    public void setSelectedRowKey(String selectedRowKey) {
+        String previousSelectedRowKey = this.selectedRowKey;
+
+        if (previousSelectedRowKey != selectedRowKey) {
+            this.selectedRowKey = selectedRowKey;
+            tableViewListeners.selectedRowKeyChanged(this, previousSelectedRowKey);
+        }
+    }
+
+    public BindType getSelectedRowBindType() {
+        return selectedRowBindType;
+    }
+
+    public void setSelectedRowBindType(BindType selectedRowBindType) {
+        if (selectedRowBindType == null) {
+            throw new IllegalArgumentException();
+        }
+
+        BindType previousSelectedRowBindType = this.selectedRowBindType;
+        if (previousSelectedRowBindType != selectedRowBindType) {
+            this.selectedRowBindType = selectedRowBindType;
+            tableViewListeners.selectedRowBindTypeChanged(this, previousSelectedRowBindType);
+        }
+    }
+
+    public SelectedRowBindMapping getSelectedRowBindMapping() {
+        return selectedRowBindMapping;
+    }
+
+    public void setSelectedRowBindMapping(SelectedRowBindMapping selectedRowBindMapping) {
+        SelectedRowBindMapping previousSelectedRowBindMapping = this.selectedRowBindMapping;
+
+        if (previousSelectedRowBindMapping != selectedRowBindMapping) {
+            this.selectedRowBindMapping = selectedRowBindMapping;
+            tableViewListeners.selectedRowBindMappingChanged(this, previousSelectedRowBindMapping);
+        }
+    }
+
+    public String getSelectedRowsKey() {
+        return selectedRowsKey;
+    }
+
+    public void setSelectedRowsKey(String selectedRowsKey) {
+        String previousSelectedRowsKey = this.selectedRowsKey;
+
+        if (previousSelectedRowsKey != selectedRowsKey) {
+            this.selectedRowsKey = selectedRowsKey;
+            tableViewListeners.selectedRowsKeyChanged(this, previousSelectedRowsKey);
+        }
+    }
+
+    public BindType getSelectedRowsBindType() {
+        return selectedRowsBindType;
+    }
+
+    public void setSelectedRowsBindType(BindType selectedRowsBindType) {
+        if (selectedRowsBindType == null) {
+            throw new IllegalArgumentException();
+        }
+
+        BindType previousSelectedRowsBindType = this.selectedRowsBindType;
+        if (previousSelectedRowsBindType != selectedRowsBindType) {
+            this.selectedRowsBindType = selectedRowsBindType;
+            tableViewListeners.selectedRowsBindTypeChanged(this, previousSelectedRowsBindType);
+        }
+    }
+
+    public SelectedRowBindMapping getSelectedRowsBindMapping() {
+        return selectedRowsBindMapping;
+    }
+
+    public void setSelectedRowsBindMapping(SelectedRowBindMapping selectedRowsBindMapping) {
+        SelectedRowBindMapping previousSelectedRowsBindMapping = this.selectedRowsBindMapping;
+
+        if (previousSelectedRowsBindMapping != selectedRowsBindMapping) {
+            this.selectedRowsBindMapping = selectedRowsBindMapping;
+            tableViewListeners.selectedRowsBindMappingChanged(this, previousSelectedRowsBindMapping);
+        }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void load(Dictionary<String, ?> context) {
+        // Bind to list data
+        if (tableDataKey != null
+            && tableDataBindType != BindType.STORE
+            && JSON.containsKey(context, tableDataKey)) {
+            Object value = JSON.get(context, tableDataKey);
+
+            List<?> tableData;
+            if (tableDataBindMapping == null) {
+                tableData = (List<?>)value;
+            } else {
+                tableData = tableDataBindMapping.toTableData(value);
+            }
+
+            setTableData(tableData);
+        }
+
+        switch (selectMode) {
+            case SINGLE: {
+                // Bind using selected row key
+                if (selectedRowKey != null
+                    && selectedRowBindType != BindType.STORE
+                    && JSON.containsKey(context, selectedRowKey)) {
+                    Object row = JSON.get(context, selectedRowKey);
+
+                    int index;
+                    if (selectedRowBindMapping == null) {
+                        index = ((List<Object>)tableData).indexOf(row);
+                    } else {
+                        index = selectedRowBindMapping.indexOf(tableData, row);
+                    }
+
+                    setSelectedIndex(index);
+                }
+
+                break;
+            }
+
+            case MULTI: {
+                // Bind using selected rows key
+                if (selectedRowsKey != null
+                    && selectedRowsBindType != BindType.STORE
+                    && JSON.containsKey(context, selectedRowsKey)) {
+                    Sequence<Object> rows = (Sequence<Object>)JSON.get(context, selectedRowsKey);
+
+                    clearSelection();
+
+                    for (int i = 0, n = rows.getLength(); i < n; i++) {
+                        Object row = rows.get(i);
+
+                        int index;
+                        if (selectedRowsBindMapping == null) {
+                            index = ((List<Object>)tableData).indexOf(row);
+                        } else {
+                            index = selectedRowsBindMapping.indexOf(tableData, row);
+                        }
+
+                        if (index != -1) {
+                            addSelectedIndex(index);
+                        }
+                    }
+                }
+
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void store(Dictionary<String, ?> context) {
+        // Bind to table data
+        if (tableDataKey != null
+            && tableDataBindType != BindType.LOAD) {
+
+            Object value;
+            if (tableDataBindMapping == null) {
+                value = tableData;
+            } else {
+                value = tableDataBindMapping.valueOf(tableData);
+            }
+
+            JSON.put(context, tableDataKey, value);
+        }
+
+        switch (selectMode) {
+            case SINGLE: {
+                // Bind using selected row key
+                if (selectedRowKey != null
+                    && selectedRowBindType != BindType.LOAD) {
+                    Object row;
+
+                    int selectedIndex = getSelectedIndex();
+                    if (selectedIndex == -1) {
+                        row = null;
+                    } else {
+                        if (selectedRowBindMapping == null) {
+                            row = tableData.get(selectedIndex);
+                        } else {
+                            row = selectedRowBindMapping.get(tableData, selectedIndex);
+                        }
+                    }
+
+                    JSON.put(context, selectedRowKey, row);
+                }
+
+                break;
+            }
+
+            case MULTI: {
+                // Bind using selected rows key
+                if (selectedRowsKey != null
+                    && selectedRowsBindType != BindType.LOAD) {
+                    ArrayList<Object> rows = new ArrayList<Object>();
+
+                    Sequence<Span> selectedRanges = getSelectedRanges();
+                    for (int i = 0, n = selectedRanges.getLength(); i < n; i++) {
+                        Span range = selectedRanges.get(i);
+
+                        for (int index = range.start; index <= range.end; index++) {
+                            Object row;
+                            if (selectedRowsBindMapping == null) {
+                                row = tableData.get(index);
+                            } else {
+                                row = selectedRowsBindMapping.get(tableData, index);
+                            }
+
+                            rows.add(row);
+                        }
+                    }
+
+                    JSON.put(context, selectedRowsKey, rows);
+                }
+
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void clear() {
+        if (tableDataKey != null) {
+            setTableData(new ArrayList<Object>());
+        }
+
+        if (selectedRowKey != null
+            || selectedRowsKey != null) {
+            setSelectedRow(null);
         }
     }
 

@@ -82,23 +82,23 @@ public class Spinner extends Container {
          * @param spinnerData
          * The source spinner data.
          *
-         * @param item
-         * The item to locate.
+         * @param value
+         * The value to locate.
          *
          * @return
-         * The index of first occurrence of the item if it exists in the list;
+         * The index of first occurrence of the value if it exists in the list;
          * <tt>-1</tt>, otherwise.
          */
-        public int indexOf(List<?> spinnerData, Object item);
+        public int indexOf(List<?> spinnerData, Object value);
 
         /**
          * Retrieves the item at the given index.
          *
-         * @param listData
+         * @param spinnerData
          * The source spinner data.
          *
          * @param index
-         * The index of the item to retrieve.
+         * The index of the value to retrieve.
          */
         public Object get(List<?> spinnerData, int index);
     }

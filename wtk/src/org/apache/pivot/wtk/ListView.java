@@ -374,10 +374,10 @@ public class ListView extends Component {
 
         /**
          * Converts list data to a context value.
-         * @param list
-         * @return
+         *
+         * @param listData
          */
-        public Object valueOf(List<?> list);
+        public Object valueOf(List<?> listData);
     }
 
     /**
@@ -390,23 +390,23 @@ public class ListView extends Component {
          * @param listData
          * The source list data.
          *
-         * @param item
-         * The item to locate.
+         * @param value
+         * The value to locate.
          *
          * @return
-         * The index of first occurrence of the item if it exists in the list;
+         * The index of first occurrence of the value if it exists in the list;
          * <tt>-1</tt>, otherwise.
          */
-        public int indexOf(List<?> listData, Object item);
+        public int indexOf(List<?> listData, Object value);
 
         /**
-         * Retrieves the item at the given index.
+         * Retrieves the value at the given index.
          *
          * @param listData
          * The source list data.
          *
          * @param index
-         * The index of the item to retrieve.
+         * The index of the value to retrieve.
          */
         public Object get(List<?> listData, int index);
     }

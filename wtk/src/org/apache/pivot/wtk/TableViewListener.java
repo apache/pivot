@@ -46,6 +46,45 @@ public interface TableViewListener {
         @Override
         public void disabledRowFilterChanged(TableView tableView, Filter<?> previousDisabledRowFilter) {
         }
+
+        @Override
+        public void tableDataKeyChanged(TableView tableView, String previousTableDataKey) {
+        }
+
+        @Override
+        public void tableDataBindTypeChanged(TableView tableView, BindType previousTableDataBindType) {
+        }
+
+        @Override
+        public void tableDataBindMappingChanged(TableView tableView,
+            TableView.TableDataBindMapping previousTableDataBindMapping) {
+        }
+
+        @Override
+        public void selectedRowKeyChanged(TableView tableView, String previousSelectedRowKey) {
+        }
+
+        @Override
+        public void selectedRowBindTypeChanged(TableView tableView, BindType previousSelectedRowBindType) {
+        }
+
+        @Override
+        public void selectedRowBindMappingChanged(TableView tableView,
+            TableView.SelectedRowBindMapping previousSelectedRowBindMapping) {
+        }
+
+        @Override
+        public void selectedRowsKeyChanged(TableView tableView, String previousSelectedRowsKey) {
+        }
+
+        @Override
+        public void selectedRowsBindTypeChanged(TableView tableView, BindType previousSelectedRowsBindType) {
+        }
+
+        @Override
+        public void selectedRowsBindMappingChanged(TableView tableView,
+            TableView.SelectedRowBindMapping previousSelectedRowsBindMapping) {
+        }
     }
 
     /**
@@ -87,4 +126,78 @@ public interface TableViewListener {
      * @param previousDisabledRowFilter
      */
     public void disabledRowFilterChanged(TableView tableView, Filter<?> previousDisabledRowFilter);
+
+    /**
+     * Called when a table view's table data key has changed.
+     *
+     * @param tableView
+     * @param previousTableDataKey
+     */
+    public void tableDataKeyChanged(TableView tableView, String previousTableDataKey);
+
+    /**
+     * Called when a table view's table data bind type has changed.
+     *
+     * @param tableView
+     * @param previousTableDataBindType
+     */
+    public void tableDataBindTypeChanged(TableView tableView, BindType previousTableDataBindType);
+
+    /**
+     * Called when a table view's table data bind mapping has changed.
+     *
+     * @param tableView
+     * @param previousTableDataBindMapping
+     */
+    public void tableDataBindMappingChanged(TableView tableView, TableView.TableDataBindMapping previousTableDataBindMapping);
+
+    /**
+     * Called when a table view's selected item key has changed.
+     *
+     * @param tableView
+     * @param previousSelectedRowKey
+     */
+    public void selectedRowKeyChanged(TableView tableView, String previousSelectedRowKey);
+
+    /**
+     * Called when a table view's selected item bind type has changed.
+     *
+     * @param tableView
+     * @param previousSelectedRowBindType
+     */
+    public void selectedRowBindTypeChanged(TableView tableView, BindType previousSelectedRowBindType);
+
+    /**
+     * Called when a table view's selected item bind mapping has changed.
+     *
+     * @param tableView
+     * @param previousSelectedRowBindMapping
+     */
+    public void selectedRowBindMappingChanged(TableView tableView,
+        TableView.SelectedRowBindMapping previousSelectedRowBindMapping);
+
+    /**
+     * Called when a table view's selected items key has changed.
+     *
+     * @param tableView
+     * @param previousSelectedRowsKey
+     */
+    public void selectedRowsKeyChanged(TableView tableView, String previousSelectedRowsKey);
+
+    /**
+     * Called when a table view's selected items bind type has changed.
+     *
+     * @param tableView
+     * @param previousSelectedRowsBindType
+     */
+    public void selectedRowsBindTypeChanged(TableView tableView, BindType previousSelectedRowsBindType);
+
+    /**
+     * Called when a table view's selected items bind mapping has changed.
+     *
+     * @param tableView
+     * @param previousSelectedRowsBindMapping
+     */
+    public void selectedRowsBindMappingChanged(TableView tableView,
+        TableView.SelectedRowBindMapping previousSelectedRowsBindMapping);
 }

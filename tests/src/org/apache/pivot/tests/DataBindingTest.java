@@ -85,12 +85,12 @@ public class DataBindingTest implements Application {
 
     public static class TestBindMapping implements ListView.SelectedItemBindMapping, Spinner.SelectedItemBindMapping {
         @SuppressWarnings("unchecked")
-        public int indexOf(List<?> list, Object item) {
+        public int indexOf(List<?> list, Object value) {
             int i = 0;
             int n = list.getLength();
             while (i < n) {
                 Map<String, ?> map = (Map<String, ?>)list.get(i);
-                if (map.get("id").equals(item)) {
+                if (map.get("id").equals(value)) {
                     break;
                 }
 
