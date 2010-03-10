@@ -683,6 +683,7 @@ public class JSONSerializer extends JSON implements Serializer<Object> {
 
     /**
      * @deprecated
+     * @see JSON#get(Object, String)
      */
     public static Object get(Object root, String path) {
         return JSON.get(root, path);
@@ -690,6 +691,7 @@ public class JSONSerializer extends JSON implements Serializer<Object> {
 
     /**
      * @deprecated
+     * @see JSON#getString(Object, String)
      */
     public static String getString(Object root, String path) {
         return JSON.getString(root, path);
@@ -697,6 +699,7 @@ public class JSONSerializer extends JSON implements Serializer<Object> {
 
     /**
      * @deprecated
+     * @see JSON#getNumber(Object, String)
      */
     public static Number getNumber(Object root, String path) {
         return JSON.getNumber(root, path);
@@ -704,6 +707,7 @@ public class JSONSerializer extends JSON implements Serializer<Object> {
 
     /**
      * @deprecated
+     * @see JSON#getShort(Object, String)
      */
     public static Short getShort(Object root, String path) {
         return JSON.getShort(root, path);
@@ -711,6 +715,7 @@ public class JSONSerializer extends JSON implements Serializer<Object> {
 
     /**
      * @deprecated
+     * @see JSON#getInteger(Object, String)
      */
     public static Integer getInteger(Object root, String path) {
         return JSON.getInteger(root, path);
@@ -718,6 +723,7 @@ public class JSONSerializer extends JSON implements Serializer<Object> {
 
     /**
      * @deprecated
+     * @see JSON#getLong(Object, String)
      */
     public static Long getLong(Object root, String path) {
         return JSON.getLong(root, path);
@@ -725,6 +731,7 @@ public class JSONSerializer extends JSON implements Serializer<Object> {
 
     /**
      * @deprecated
+     * @see JSON#getFloat(Object, String)
      */
     public static Float getFloat(Object root, String path) {
         return JSON.getFloat(root, path);
@@ -732,6 +739,7 @@ public class JSONSerializer extends JSON implements Serializer<Object> {
 
     /**
      * @deprecated
+     * @see JSON#getDouble(Object, String)
      */
     public static Double getDouble(Object root, String path) {
         return JSON.getDouble(root, path);
@@ -739,6 +747,7 @@ public class JSONSerializer extends JSON implements Serializer<Object> {
 
     /**
      * @deprecated
+     * @see JSON#getBoolean(Object, String)
      */
     public static Boolean getBoolean(Object root, String path) {
         return JSON.getBoolean(root, path);
@@ -746,6 +755,7 @@ public class JSONSerializer extends JSON implements Serializer<Object> {
 
     /**
      * @deprecated
+     * @see JSON#getList(Object, String)
      */
     public static List<?> getList(Object root, String path) {
         return JSON.getList(root, path);
@@ -753,6 +763,7 @@ public class JSONSerializer extends JSON implements Serializer<Object> {
 
     /**
      * @deprecated
+     * @see JSON#getMap(Object, String)
      */
     public static Map<String, ?> getMap(Object root, String path) {
         return JSON.getMap(root, path);
@@ -760,6 +771,7 @@ public class JSONSerializer extends JSON implements Serializer<Object> {
 
     /**
      * @deprecated
+     * @see JSON#put(Object, String, Object)
      */
     public static Object put(Object root, String path, Object value) {
         return JSON.put(root, path, value);
@@ -767,6 +779,7 @@ public class JSONSerializer extends JSON implements Serializer<Object> {
 
     /**
      * @deprecated
+     * @see JSON#remove(Object, String)
      */
     public static Object remove(Object root, String path) {
         return JSON.remove(root, path);
@@ -774,6 +787,7 @@ public class JSONSerializer extends JSON implements Serializer<Object> {
 
     /**
      * @deprecated
+     * @see JSON#containsKey(Object, String)
      */
     public static boolean containsKey(Object root, String path) {
         return JSON.containsKey(root, path);
