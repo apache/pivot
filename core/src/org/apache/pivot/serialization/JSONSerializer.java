@@ -43,6 +43,7 @@ import org.apache.pivot.collections.immutable.ImmutableMap;
  */
 public class JSONSerializer extends JSON implements Serializer<Object> {
     // TODO Don't extends JSON when this class is moved to org.apache.pivot.json
+    // TODO Remove deprecated methods
     private Charset charset;
     private boolean immutable;
 
@@ -681,6 +682,104 @@ public class JSONSerializer extends JSON implements Serializer<Object> {
     }
 
     /**
+     * @deprecated
+     */
+    public static Object get(Object root, String path) {
+        return JSON.get(root, path);
+    }
+
+    /**
+     * @deprecated
+     */
+    public static String getString(Object root, String path) {
+        return JSON.getString(root, path);
+    }
+
+    /**
+     * @deprecated
+     */
+    public static Number getNumber(Object root, String path) {
+        return JSON.getNumber(root, path);
+    }
+
+    /**
+     * @deprecated
+     */
+    public static Short getShort(Object root, String path) {
+        return JSON.getShort(root, path);
+    }
+
+    /**
+     * @deprecated
+     */
+    public static Integer getInteger(Object root, String path) {
+        return JSON.getInteger(root, path);
+    }
+
+    /**
+     * @deprecated
+     */
+    public static Long getLong(Object root, String path) {
+        return JSON.getLong(root, path);
+    }
+
+    /**
+     * @deprecated
+     */
+    public static Float getFloat(Object root, String path) {
+        return JSON.getFloat(root, path);
+    }
+
+    /**
+     * @deprecated
+     */
+    public static Double getDouble(Object root, String path) {
+        return JSON.getDouble(root, path);
+    }
+
+    /**
+     * @deprecated
+     */
+    public static Boolean getBoolean(Object root, String path) {
+        return JSON.getBoolean(root, path);
+    }
+
+    /**
+     * @deprecated
+     */
+    public static List<?> getList(Object root, String path) {
+        return JSON.getList(root, path);
+    }
+
+    /**
+     * @deprecated
+     */
+    public static Map<String, ?> getMap(Object root, String path) {
+        return JSON.getMap(root, path);
+    }
+
+    /**
+     * @deprecated
+     */
+    public static Object put(Object root, String path, Object value) {
+        return JSON.put(root, path, value);
+    }
+
+    /**
+     * @deprecated
+     */
+    public static Object remove(Object root, String path) {
+        return JSON.remove(root, path);
+    }
+
+    /**
+     * @deprecated
+     */
+    public static boolean containsKey(Object root, String path) {
+        return JSON.containsKey(root, path);
+    }
+
+    /**
      * Converts a JSON value to a Java object.
      *
      * @param json
@@ -689,8 +788,7 @@ public class JSONSerializer extends JSON implements Serializer<Object> {
      * @return
      * The parsed object.
      */
-    public static Object parse(String json)
-        throws SerializationException {
+    public static Object parse(String json) throws SerializationException {
         JSONSerializer jsonSerializer = new JSONSerializer();
 
         Object object;
@@ -712,8 +810,7 @@ public class JSONSerializer extends JSON implements Serializer<Object> {
      * @return
      * The parsed string.
      */
-    public static String parseString(String json)
-        throws SerializationException {
+    public static String parseString(String json) throws SerializationException {
         return (String)parse(json);
     }
 
@@ -726,8 +823,7 @@ public class JSONSerializer extends JSON implements Serializer<Object> {
      * @return
      * The parsed number.
      */
-    public static Number parseNumber(String json)
-        throws SerializationException {
+    public static Number parseNumber(String json) throws SerializationException {
         return (Number)parse(json);
     }
 
@@ -740,8 +836,7 @@ public class JSONSerializer extends JSON implements Serializer<Object> {
      * @return
      * The parsed short.
      */
-    public static Short parseShort(String json)
-        throws SerializationException {
+    public static Short parseShort(String json) throws SerializationException {
         return (Short)parse(json);
     }
 
@@ -754,8 +849,7 @@ public class JSONSerializer extends JSON implements Serializer<Object> {
      * @return
      * The parsed integer.
      */
-    public static Integer parseInteger(String json)
-        throws SerializationException {
+    public static Integer parseInteger(String json) throws SerializationException {
         return (Integer)parse(json);
     }
 
@@ -768,8 +862,7 @@ public class JSONSerializer extends JSON implements Serializer<Object> {
      * @return
      * The parsed number.
      */
-    public static Long parseLong(String json)
-        throws SerializationException {
+    public static Long parseLong(String json) throws SerializationException {
         return (Long)parse(json);
     }
 
@@ -782,8 +875,7 @@ public class JSONSerializer extends JSON implements Serializer<Object> {
      * @return
      * The parsed float.
      */
-    public static Float parseFloat(String json)
-        throws SerializationException {
+    public static Float parseFloat(String json) throws SerializationException {
         return (Float)parse(json);
     }
 
@@ -796,8 +888,7 @@ public class JSONSerializer extends JSON implements Serializer<Object> {
      * @return
      * The parsed double.
      */
-    public static Double parseDouble(String json)
-        throws SerializationException {
+    public static Double parseDouble(String json) throws SerializationException {
         return (Double)parse(json);
     }
 
@@ -810,8 +901,7 @@ public class JSONSerializer extends JSON implements Serializer<Object> {
      * @return
      * The parsed boolean.
      */
-    public static Boolean parseBoolean(String json)
-        throws SerializationException {
+    public static Boolean parseBoolean(String json) throws SerializationException {
         return (Boolean)parse(json);
     }
 
@@ -824,8 +914,7 @@ public class JSONSerializer extends JSON implements Serializer<Object> {
      * @return
      * The parsed list.
      */
-    public static List<?> parseList(String json)
-        throws SerializationException {
+    public static List<?> parseList(String json) throws SerializationException {
         return (List<?>)parse(json);
     }
 
@@ -839,8 +928,7 @@ public class JSONSerializer extends JSON implements Serializer<Object> {
      * The parsed map.
      */
     @SuppressWarnings("unchecked")
-    public static Map<String, ?> parseMap(String json)
-        throws SerializationException {
+    public static Map<String, ?> parseMap(String json) throws SerializationException {
         return (Map<String, ?>)parse(json);
     }
 
@@ -853,8 +941,7 @@ public class JSONSerializer extends JSON implements Serializer<Object> {
      * @return
      * The resulting JSON string.
      */
-    public static String toString(Object value)
-        throws SerializationException {
+    public static String toString(Object value) throws SerializationException {
         JSONSerializer jsonSerializer = new JSONSerializer();
         StringWriter writer = new StringWriter();
 
