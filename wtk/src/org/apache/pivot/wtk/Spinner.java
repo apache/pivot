@@ -23,6 +23,7 @@ import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.serialization.JSON;
 import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ListenerList;
@@ -464,8 +465,8 @@ public class Spinner extends Container {
     @SuppressWarnings("unchecked")
     public void load(Dictionary<String, ?> context) {
         if (selectedItemKey != null
-            && JSONSerializer.containsKey(context, selectedItemKey)) {
-            Object item = JSONSerializer.get(context, selectedItemKey);
+            && JSON.containsKey(context, selectedItemKey)) {
+            Object item = JSON.get(context, selectedItemKey);
 
             int index;
             if (selectedItemBindMapping == null) {
@@ -493,7 +494,7 @@ public class Spinner extends Container {
                 }
             }
 
-            JSONSerializer.put(context, selectedItemKey, item);
+            JSON.put(context, selectedItemKey, item);
         }
     }
 

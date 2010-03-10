@@ -17,7 +17,7 @@
 package org.apache.pivot.tutorials.webqueries;
 
 import org.apache.pivot.collections.Map;
-import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.serialization.JSON;
 import org.apache.pivot.util.concurrent.Task;
 import org.apache.pivot.util.concurrent.TaskListener;
 import org.apache.pivot.web.GetQuery;
@@ -53,7 +53,7 @@ public class WebQueries implements Application {
         getQuery.execute(new TaskAdapter<Object>(new TaskListener<Object>() {
             @Override
             public void taskExecuted(Task<Object> task) {
-                listView.setListData(JSONSerializer.getList(task.getResult(), "value.items"));
+                listView.setListData(JSON.getList(task.getResult(), "value.items"));
                 loadingLabel.setVisible(false);
             }
 

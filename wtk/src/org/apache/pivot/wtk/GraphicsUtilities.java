@@ -27,6 +27,7 @@ import java.awt.geom.AffineTransform;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
+import org.apache.pivot.serialization.JSON;
 import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.wtk.Orientation;
@@ -234,7 +235,7 @@ public final class GraphicsUtilities {
 
     @SuppressWarnings("unchecked")
     public static Paint decodePaint(Dictionary<String, ?> dictionary) {
-        String paintType = JSONSerializer.getString(dictionary, PAINT_TYPE_KEY);
+        String paintType = JSON.getString(dictionary, PAINT_TYPE_KEY);
         if (paintType == null) {
             throw new IllegalArgumentException(PAINT_TYPE_KEY + " is required.");
         }
@@ -242,30 +243,30 @@ public final class GraphicsUtilities {
         Paint paint;
         switch(PaintType.valueOf(paintType.toUpperCase())) {
             case SOLID_COLOR: {
-                String color = JSONSerializer.getString(dictionary, COLOR_KEY);
+                String color = JSON.getString(dictionary, COLOR_KEY);
                 paint = decodeColor(color);
                 break;
             }
 
             case GRADIENT: {
-                float startX = JSONSerializer.getFloat(dictionary, START_X_KEY);
-                float startY = JSONSerializer.getFloat(dictionary, START_Y_KEY);
-                float endX = JSONSerializer.getFloat(dictionary, END_X_KEY);
-                float endY = JSONSerializer.getFloat(dictionary, END_Y_KEY);
-                Color startColor = decodeColor(JSONSerializer.getString(dictionary, START_COLOR_KEY));
-                Color endColor = decodeColor(JSONSerializer.getString(dictionary, END_COLOR_KEY));
+                float startX = JSON.getFloat(dictionary, START_X_KEY);
+                float startY = JSON.getFloat(dictionary, START_Y_KEY);
+                float endX = JSON.getFloat(dictionary, END_X_KEY);
+                float endY = JSON.getFloat(dictionary, END_Y_KEY);
+                Color startColor = decodeColor(JSON.getString(dictionary, START_COLOR_KEY));
+                Color endColor = decodeColor(JSON.getString(dictionary, END_COLOR_KEY));
                 paint = new GradientPaint(startX, startY, startColor, endX, endY, endColor);
                 break;
             }
 
             case LINEAR_GRADIENT: {
-                float startX = JSONSerializer.getFloat(dictionary, START_X_KEY);
-                float startY = JSONSerializer.getFloat(dictionary, START_Y_KEY);
-                float endX = JSONSerializer.getFloat(dictionary, END_X_KEY);
-                float endY = JSONSerializer.getFloat(dictionary, END_Y_KEY);
+                float startX = JSON.getFloat(dictionary, START_X_KEY);
+                float startY = JSON.getFloat(dictionary, START_Y_KEY);
+                float endX = JSON.getFloat(dictionary, END_X_KEY);
+                float endY = JSON.getFloat(dictionary, END_Y_KEY);
 
                 List<Dictionary<String, ?>> stops =
-                    (List<Dictionary<String, ?>>)JSONSerializer.getList(dictionary, STOPS_KEY);
+                    (List<Dictionary<String, ?>>)JSON.getList(dictionary, STOPS_KEY);
 
                 int n = stops.getLength();
                 float[] fractions = new float[n];
@@ -273,10 +274,10 @@ public final class GraphicsUtilities {
                 for (int i = 0; i < n; i++) {
                     Dictionary<String, ?> stop = stops.get(i);
 
-                    float offset = JSONSerializer.getFloat(stop, OFFSET_KEY);
+                    float offset = JSON.getFloat(stop, OFFSET_KEY);
                     fractions[i] = offset;
 
-                    Color color = decodeColor(JSONSerializer.getString(stop, COLOR_KEY));
+                    Color color = decodeColor(JSON.getString(stop, COLOR_KEY));
                     colors[i] = color;
                 }
 
@@ -285,12 +286,12 @@ public final class GraphicsUtilities {
             }
 
             case RADIAL_GRADIENT: {
-                float centerX = JSONSerializer.getFloat(dictionary, CENTER_X_KEY);
-                float centerY = JSONSerializer.getFloat(dictionary, CENTER_Y_KEY);
-                float radius = JSONSerializer.getFloat(dictionary, RADIUS_KEY);
+                float centerX = JSON.getFloat(dictionary, CENTER_X_KEY);
+                float centerY = JSON.getFloat(dictionary, CENTER_Y_KEY);
+                float radius = JSON.getFloat(dictionary, RADIUS_KEY);
 
                 List<Dictionary<String, ?>> stops =
-                    (List<Dictionary<String, ?>>)JSONSerializer.getList(dictionary, STOPS_KEY);
+                    (List<Dictionary<String, ?>>)JSON.getList(dictionary, STOPS_KEY);
 
                 int n = stops.getLength();
                 float[] fractions = new float[n];
@@ -298,10 +299,10 @@ public final class GraphicsUtilities {
                 for (int i = 0; i < n; i++) {
                     Dictionary<String, ?> stop = stops.get(i);
 
-                    float offset = JSONSerializer.getFloat(stop, OFFSET_KEY);
+                    float offset = JSON.getFloat(stop, OFFSET_KEY);
                     fractions[i] = offset;
 
-                    Color color = decodeColor(JSONSerializer.getString(stop, COLOR_KEY));
+                    Color color = decodeColor(JSON.getString(stop, COLOR_KEY));
                     colors[i] = color;
                 }
 

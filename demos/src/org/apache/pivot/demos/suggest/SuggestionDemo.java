@@ -25,7 +25,7 @@ import java.net.URLEncoder;
 
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
-import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.serialization.JSON;
 import org.apache.pivot.util.concurrent.Task;
 import org.apache.pivot.util.concurrent.TaskListener;
 import org.apache.pivot.web.GetQuery;
@@ -102,7 +102,7 @@ public class SuggestionDemo implements Application {
                 if (task == suggestionQuery) {
                     List<?> suggestions = null;
 
-                    Object result = JSONSerializer.get(task.getResult(), "ResultSet.Result");
+                    Object result = JSON.get(task.getResult(), "ResultSet.Result");
                     if (result instanceof List<?>) {
                         suggestions = (List<?>)result;
                     }

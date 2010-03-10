@@ -31,7 +31,7 @@ import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.serialization.CSVSerializer;
-import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.serialization.JSON;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.util.concurrent.Task;
 import org.apache.pivot.util.concurrent.TaskListener;
@@ -342,8 +342,8 @@ public class StockTrackerWindow extends Window implements Bindable {
 
                                 int index = 0;
                                 for (Object stock : stocksTableView.getTableData()) {
-                                    String symbol = JSONSerializer.getString(stock, "symbol");
-                                    String selectedSymbol = JSONSerializer.getString(selectedStock, "symbol");
+                                    String symbol = JSON.getString(stock, "symbol");
+                                    String selectedSymbol = JSON.getString(selectedStock, "symbol");
 
                                     if (symbol.equals(selectedSymbol)) {
                                         stocksTableView.addSelectedIndex(index);

@@ -19,6 +19,7 @@ package org.apache.pivot.wtk;
 import java.util.Locale;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.serialization.JSON;
 import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.CalendarDate;
@@ -296,8 +297,8 @@ public class CalendarButton extends Button {
         String selectedDateKey = getSelectedDateKey();
 
         if (selectedDateKey != null
-            && JSONSerializer.containsKey(context, selectedDateKey)) {
-            Object value = JSONSerializer.get(context, selectedDateKey);
+            && JSON.containsKey(context, selectedDateKey)) {
+            Object value = JSON.get(context, selectedDateKey);
 
             CalendarDate selectedDate = null;
 
@@ -323,7 +324,7 @@ public class CalendarButton extends Button {
     public void store(Dictionary<String, ?> context) {
         if (isEnabled()
             && selectedDateKey != null) {
-            JSONSerializer.put(context, selectedDateKey, (selectedDateBindMapping == null) ?
+            JSON.put(context, selectedDateKey, (selectedDateBindMapping == null) ?
                 selectedDate : selectedDateBindMapping.valueOf(selectedDate));
         }
     }

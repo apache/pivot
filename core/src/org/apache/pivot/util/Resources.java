@@ -26,6 +26,7 @@ import java.util.MissingResourceException;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
+import org.apache.pivot.serialization.JSON;
 import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 
@@ -166,7 +167,7 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
 
     @Override
     public Object get(String key) {
-        Object o = JSONSerializer.get(resourceMap, key);
+        Object o = JSON.get(resourceMap, key);
         if (o == null && parent != null) {
             return parent.get(key);
         }
@@ -175,7 +176,7 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
     }
 
     public String getString(String key) {
-        String s = JSONSerializer.getString(resourceMap, key);
+        String s = JSON.getString(resourceMap, key);
         if (s == null && parent != null) {
             return parent.getString(key);
         }
@@ -223,7 +224,7 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
     }
 
     public Number getNumber(String key) {
-        Number n = JSONSerializer.getNumber(resourceMap, key);
+        Number n = JSON.getNumber(resourceMap, key);
         if (n == null && parent != null) {
             return parent.getNumber(key);
         }
@@ -231,7 +232,7 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
     }
 
     public Short getShort(String key) {
-        Short s = JSONSerializer.getShort(resourceMap, key);
+        Short s = JSON.getShort(resourceMap, key);
         if (s == null && parent != null) {
             return parent.getShort(key);
         }
@@ -239,7 +240,7 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
     }
 
     public Integer getInteger(String key) {
-        Integer i = JSONSerializer.getInteger(resourceMap, key);
+        Integer i = JSON.getInteger(resourceMap, key);
         if (i == null && parent != null) {
             return parent.getInteger(key);
         }
@@ -247,7 +248,7 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
     }
 
     public Long getLong(String key) {
-        Long l = JSONSerializer.getLong(resourceMap, key);
+        Long l = JSON.getLong(resourceMap, key);
         if (l == null && parent != null) {
             return parent.getLong(key);
         }
@@ -255,7 +256,7 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
     }
 
     public Float getFloat(String key) {
-        Float f = JSONSerializer.getFloat(resourceMap, key);
+        Float f = JSON.getFloat(resourceMap, key);
         if (f == null && parent != null) {
             return parent.getFloat(key);
         }
@@ -263,7 +264,7 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
     }
 
     public Double getDouble(String key) {
-        Double d = JSONSerializer.getDouble(resourceMap, key);
+        Double d = JSON.getDouble(resourceMap, key);
         if (d == null && parent != null) {
             return parent.getDouble(key);
         }
@@ -271,7 +272,7 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
     }
 
     public Boolean getBoolean(String key) {
-        Boolean b = JSONSerializer.getBoolean(resourceMap, key);
+        Boolean b = JSON.getBoolean(resourceMap, key);
         if (b == null && parent != null) {
             return parent.getBoolean(key);
         }
@@ -279,7 +280,7 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
     }
 
     public List<?> getList(String key) {
-        List<?> list = JSONSerializer.getList(resourceMap, key);
+        List<?> list = JSON.getList(resourceMap, key);
         if (list == null && parent != null) {
             return parent.getList(key);
         }
@@ -287,7 +288,7 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
     }
 
     public Map<String, ?> getMap(String key) {
-        Map<String, ?> map = JSONSerializer.getMap(resourceMap, key);
+        Map<String, ?> map = JSON.getMap(resourceMap, key);
         if (map == null && parent != null) {
             return parent.getMap(key);
         }

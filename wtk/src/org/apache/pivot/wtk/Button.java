@@ -17,7 +17,7 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.Dictionary;
-import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.serialization.JSON;
 import org.apache.pivot.util.ListenerList;
 
 /**
@@ -241,6 +241,7 @@ public abstract class Button extends Component {
     private String selectedKey = null;
     private BindType selectedBindType = BindType.BOTH;
     private SelectedBindMapping selectedBindMapping = null;
+
     private String stateKey = null;
     private BindType stateBindType = BindType.BOTH;
     private StateBindMapping stateBindMapping = null;
@@ -632,8 +633,8 @@ public abstract class Button extends Component {
                 // Bind using state key
                 if (stateKey != null
                     && stateBindType != BindType.STORE
-                    && JSONSerializer.containsKey(context, stateKey)) {
-                    Object value = JSONSerializer.get(context, stateKey);
+                    && JSON.containsKey(context, stateKey)) {
+                    Object value = JSON.get(context, stateKey);
 
                     State state = State.UNSELECTED;
                     if (value instanceof State) {
@@ -652,8 +653,8 @@ public abstract class Button extends Component {
                 // Bind using selected key
                 if (selectedKey != null
                     && selectedBindType != BindType.STORE
-                    && JSONSerializer.containsKey(context, selectedKey)) {
-                    Object value = JSONSerializer.get(context, selectedKey);
+                    && JSON.containsKey(context, selectedKey)) {
+                    Object value = JSON.get(context, selectedKey);
 
                     boolean selected = false;
                     if (value instanceof Boolean) {
@@ -679,14 +680,14 @@ public abstract class Button extends Component {
                 // Bind using state key
                 if (stateKey != null
                     && stateBindType != BindType.LOAD) {
-                    JSONSerializer.put(context, selectedKey, (stateBindMapping == null) ?
+                    JSON.put(context, selectedKey, (stateBindMapping == null) ?
                         state : stateBindMapping.valueOf(state));
                 }
             } else {
                 // Bind using selected key
                 if (selectedKey != null
                     && selectedBindType != BindType.LOAD) {
-                    JSONSerializer.put(context, selectedKey, (selectedBindMapping == null) ?
+                    JSON.put(context, selectedKey, (selectedBindMapping == null) ?
                         isSelected() : selectedBindMapping.valueOf(isSelected()));
                 }
             }

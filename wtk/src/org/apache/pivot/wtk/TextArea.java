@@ -24,7 +24,7 @@ import java.net.URL;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
-import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.serialization.JSON;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.media.Image;
@@ -782,8 +782,8 @@ public class TextArea extends Component {
     @Override
     public void load(Dictionary<String, ?> context) {
         if (textKey != null
-            && JSONSerializer.containsKey(context, textKey)) {
-            Object value = JSONSerializer.get(context, textKey);
+            && JSON.containsKey(context, textKey)) {
+            Object value = JSON.get(context, textKey);
             if (value != null) {
                 value = value.toString();
             }
@@ -796,7 +796,7 @@ public class TextArea extends Component {
     public void store(Dictionary<String, ?> context) {
         if (isEnabled()
             && textKey != null) {
-            JSONSerializer.put(context, textKey, getText());
+            JSON.put(context, textKey, getText());
         }
     }
 

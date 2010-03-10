@@ -26,6 +26,7 @@ import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.serialization.JSON;
 import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.Filter;
@@ -619,6 +620,30 @@ public class ListView extends Component {
 
     private List<?> listData = null;
 
+    private ItemRenderer itemRenderer = null;
+    private ItemEditor itemEditor = null;
+
+    private ListSelection selectedRanges = new ListSelection();
+    private SelectMode selectMode = SelectMode.SINGLE;
+
+    private boolean checkmarksEnabled = false;
+    private ArrayList<Integer> checkedIndexes = new ArrayList<Integer>();
+
+    private Filter<?> disabledItemFilter = null;
+    private Filter<?> disabledCheckmarkFilter = null;
+
+    private String listDataKey = null;
+    private BindType listDataBindType = BindType.BOTH;
+    private ListDataBindMapping listDataBindMapping = null;
+
+    private String selectedItemKey = null;
+    private BindType selectedItemBindType = BindType.BOTH;
+    private SelectedItemBindMapping selectedItemBindMapping = null;
+
+    private String selectedItemsKey = null;
+    private BindType selectedItemsBindType = BindType.BOTH;
+    private SelectedItemBindMapping selectedItemsBindMapping = null;
+
     private ListListener<Object> listDataListener = new ListListener<Object>() {
         @Override
         public void itemInserted(List<Object> list, int index) {
@@ -701,28 +726,6 @@ public class ListView extends Component {
             }
         }
     };
-
-    private ItemRenderer itemRenderer = null;
-    private ItemEditor itemEditor = null;
-
-    private ListSelection selectedRanges = new ListSelection();
-    private SelectMode selectMode = SelectMode.SINGLE;
-
-    private boolean checkmarksEnabled = false;
-    private ArrayList<Integer> checkedIndexes = new ArrayList<Integer>();
-
-    private Filter<?> disabledItemFilter = null;
-    private Filter<?> disabledCheckmarkFilter = null;
-
-    private String listDataKey = null;
-    private BindType listDataBindType = BindType.BOTH;
-    private ListDataBindMapping listDataBindMapping = null;
-    private String selectedItemKey = null;
-    private BindType selectedItemBindType = BindType.BOTH;
-    private SelectedItemBindMapping selectedItemBindMapping = null;
-    private String selectedItemsKey = null;
-    private BindType selectedItemsBindType = BindType.BOTH;
-    private SelectedItemBindMapping selectedItemsBindMapping = null;
 
     private ListViewListenerList listViewListeners = new ListViewListenerList();
     private ListViewItemListenerList listViewItemListeners = new ListViewItemListenerList();
@@ -1649,8 +1652,8 @@ public class ListView extends Component {
         // Bind to list data
         if (listDataKey != null
             && listDataBindType != BindType.STORE
-            && JSONSerializer.containsKey(context, listDataKey)) {
-            Object value = JSONSerializer.get(context, listDataKey);
+            && JSON.containsKey(context, listDataKey)) {
+            Object value = JSON.get(context, listDataKey);
 
             List<?> listData;
             if (listDataBindMapping == null) {
@@ -1667,8 +1670,8 @@ public class ListView extends Component {
                 // Bind using selected item key
                 if (selectedItemKey != null
                     && selectedItemBindType != BindType.STORE
-                    && JSONSerializer.containsKey(context, selectedItemKey)) {
-                    Object item = JSONSerializer.get(context, selectedItemKey);
+                    && JSON.containsKey(context, selectedItemKey)) {
+                    Object item = JSON.get(context, selectedItemKey);
 
                     int index;
                     if (selectedItemBindMapping == null) {
@@ -1687,8 +1690,8 @@ public class ListView extends Component {
                 // Bind using selected items key
                 if (selectedItemsKey != null
                     && selectedItemsBindType != BindType.STORE
-                    && JSONSerializer.containsKey(context, selectedItemsKey)) {
-                    Sequence<Object> items = (Sequence<Object>)JSONSerializer.get(context, selectedItemsKey);
+                    && JSON.containsKey(context, selectedItemsKey)) {
+                    Sequence<Object> items = (Sequence<Object>)JSON.get(context, selectedItemsKey);
 
                     clearSelection();
 
@@ -1726,7 +1729,7 @@ public class ListView extends Component {
                 value = listDataBindMapping.valueOf(listData);
             }
 
-            JSONSerializer.put(context, listDataKey, value);
+            JSON.put(context, listDataKey, value);
         }
 
         switch (selectMode) {
@@ -1747,7 +1750,7 @@ public class ListView extends Component {
                         }
                     }
 
-                    JSONSerializer.put(context, selectedItemKey, item);
+                    JSON.put(context, selectedItemKey, item);
                 }
 
                 break;
@@ -1775,7 +1778,7 @@ public class ListView extends Component {
                         }
                     }
 
-                    JSONSerializer.put(context, selectedItemsKey, items);
+                    JSON.put(context, selectedItemsKey, items);
                 }
 
                 break;
@@ -1785,6 +1788,10 @@ public class ListView extends Component {
 
     @Override
     public void clear() {
+        if (listDataKey != null) {
+            setListData(new ArrayList<Object>());
+        }
+
         if (selectedItemKey != null
             || selectedItemsKey != null) {
             setSelectedItem(null);

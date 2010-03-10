@@ -20,7 +20,7 @@ import java.awt.Color;
 import java.awt.Font;
 
 import org.apache.pivot.collections.Map;
-import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.serialization.JSON;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Label;
@@ -51,23 +51,23 @@ public class ResultItemRenderer extends BoxPane implements ListView.ItemRenderer
 
     @Override
     public String toString(Object item) {
-        return JSONSerializer.getString(item, "title");
+        return JSON.getString(item, "title");
     }
 
     @Override
     public void render(Object item, int index, ListView listView, boolean selected,
         boolean checked, boolean highlighted, boolean disabled) {
         if (item != null) {
-            titleLabel.setText(JSONSerializer.getString(item, "title"));
-            phoneLabel.setText(JSONSerializer.getString(item, "Phone"));
+            titleLabel.setText(JSON.getString(item, "title"));
+            phoneLabel.setText(JSON.getString(item, "Phone"));
 
-            Map<String, ?> location = JSONSerializer.getMap(item, "['y:location']");
+            Map<String, ?> location = JSON.getMap(item, "['y:location']");
             if (location == null) {
                 addressLabel.setText(null);
             } else {
-                String street = JSONSerializer.getString(location, "street");
-                String city = JSONSerializer.getString(location, "city");
-                String state = JSONSerializer.getString(location, "state");
+                String street = JSON.getString(location, "street");
+                String city = JSON.getString(location, "city");
+                String state = JSON.getString(location, "state");
                 addressLabel.setText(street + ", " + city + " " + state);
             }
         }

@@ -19,6 +19,7 @@ package org.apache.pivot.tests;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
+import org.apache.pivot.serialization.JSON;
 import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Button;
@@ -37,7 +38,7 @@ public class DataBindingTest implements Application {
         @Override
         public void render(Object data, Button button, boolean highlighted) {
             if (data != null) {
-                data = JSONSerializer.getString(data, "text");
+                data = JSON.getString(data, "text");
             }
 
             super.render(data, button, highlighted);
@@ -45,7 +46,7 @@ public class DataBindingTest implements Application {
 
         @Override
         public String toString(Object data) {
-            return JSONSerializer.getString(data, "text");
+            return JSON.getString(data, "text");
         }
     }
 
@@ -54,7 +55,7 @@ public class DataBindingTest implements Application {
         public void render(Object item, int index, ListView listView, boolean selected,
             boolean checked, boolean highlighted, boolean disabled) {
             if (item != null) {
-                item = JSONSerializer.getString(item, "text");
+                item = JSON.getString(item, "text");
             }
 
             super.render(item, index, listView, selected, checked, highlighted, disabled);
@@ -62,7 +63,7 @@ public class DataBindingTest implements Application {
 
         @Override
         public String toString(Object item) {
-            return JSONSerializer.getString(item, "text");
+            return JSON.getString(item, "text");
         }
     }
 
@@ -70,7 +71,7 @@ public class DataBindingTest implements Application {
         @Override
         public void render(Object item, Spinner spinner) {
             if (item != null) {
-                item = JSONSerializer.getString(item, "text");
+                item = JSON.getString(item, "text");
             }
 
             super.render(item, spinner);
@@ -78,7 +79,7 @@ public class DataBindingTest implements Application {
 
         @Override
         public String toString(Object item) {
-            return JSONSerializer.getString(item, "text");
+            return JSON.getString(item, "text");
         }
     }
 

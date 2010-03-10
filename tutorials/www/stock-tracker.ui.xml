@@ -33,27 +33,57 @@ limitations under the License.
             Pivot allows developers to split the definition of the user interface into multiple
             WTKX files. This allows each piece to vary independently and makes the overall
             structure easier to manage. The layout of the Stock Tracker application is divided into
-            two WTKX documents; <tt>stocktracker.wtkx</tt>, which sets up the main structure of the
-            application, and <tt>stocktracker.detail.wtkx</tt>, which defines the layout for the
-            quote detail. We'll take a look at the top-level markup in
-            <tt>stocktracker.wtkx first</tt>, concentrating on the main page elements,
-            <tt>TablePane</tt>, <tt>SplitPane</tt>, and <tt>TableView</tt>. Then we'll investigate
-            the markup for the stock quote detail, which uses the <tt>Form</tt> container and lays
-            the ground work for the data binding support we'll discuss in a later section.
+            two WTKX documents; <tt>stock_tracker_window.wtkx</tt>, which sets up the main structure
+            of the application, and <tt>detail_pane.wtkx</tt>, which defines the layout for the
+            quote detail.
+        </p>
+
+        <p>
+            We'll take a look at the top-level markup in
+            <tt>stock_tracker_window.wtkx</tt> first, concentrating on the main page elements,
+            <tt>StockTrackerWindow</tt>, <tt>TablePane</tt>, <tt>SplitPane</tt>, and
+            <tt>TableView</tt>. Then we'll investigate the markup for the stock quote detail, which
+            uses the <tt>Form</tt> container and lays the ground work for the data binding support
+            we'll discuss in a later section.
+        </p>
+
+        <h2>StockTrackerWindow</h2>
+
+        <p>
+            The root node of the <tt>stock_tracker_window.wtkx</tt> file is a
+            <tt>stocktracker:StockTrackerWindow</tt> element. This element corresponds to an instance
+            of <tt>org.apache.pivot.tutorials.stocktracker.StockTrackerWindow</tt>. The "stocktracker"
+            namespace prefix is used to associate an element with a Java package. In this case,
+            "stocktracker" is mapped to <tt>org.apache.pivot.tutorials.stocktracker</tt>; the
+            default namespace is mapped to <tt>org.apache.pivot.wtk</tt>, the Java package that contains
+            most of Pivot's common components.
+        </p>
+
+        <p>
+            <tt>StockTrackerWindow</tt> extends the base <tt>org.apache.pivot.wtk.Window</tt> class
+            that is included in the Pivot platform. Windows are the primary entry point into a the Pivot
+            UI. Most web-based Pivot applications will use an instance (or subclass of) <tt>Window</tt>,
+            which represents a basic, undecorated window; other common window types
+            include <tt>Frame</tt> and <tt>Dialog</tt>, which provide a title area and window sizing
+            controls, <tt>Sheet</tt> and <tt>Prompt</tt>, which provide a modal window that is useful
+            for collecting user input, as well as <tt>MenuPopup</tt> (used to display a context menu),
+            <tt>SuggestionPopup</tt> (used to display a popup list of auto-complete suggestions), and
+            <tt>Tooltip</tt>.
         </p>
 
         <h2>TablePane</h2>
 
         <p>
-            The root node of <tt>stocktracker.wtkx</tt> is a <tt>TablePane</tt> element. A table
-            pane is a type of layout container that arranges its children in a manner similar to
-            an HTML table.
+            A window's content is specified via its "content" property, represented in WTKX by the
+            <tt>&lt;content&gt;</tt> element. The content of the main Stock Tracker window is
+            a <tt>TablePane</tt> element. A table pane is a type of layout container that arranges
+            its children in a manner similar to an HTML table.
         </p>
 
         <p>
             Like HTML tables, <tt>TablePane</tt> contents are organized into rows and columns.
-            Unlike HTML, however, which may attempt to infer a table structure from its contents,
-            a table pane's structure must be explicitly defined, as shown below:
+            The following code snippet shows the WTKX that is used to create the layout
+            for the Stock Tracker application:
         </p>
 
         <source type="xml">
@@ -91,28 +121,22 @@ limitations under the License.
         </source>
 
         <p>
-            <tt>TablePane</tt> row heights and column widths can be specified as either automatic,
-            absolute, or relative:
+            Note that three of the rows specify a height value of "-1", while the remaining row
+            specifies a value of "1*". A value of -1 indicates that the row height should be
+            determined automatically as the maximum preferred height of all components in that row,
+            and is the default value. A row height can be explicitly set by providing any
+            non-negative value, which represents the desired row height in pixels.
         </p>
 
-        <ul>
-            <li><p>A value of -1 specifies an automatic size; the table pane will determine the
-            height of the row as the maximum preferred height of all components in that row; the
-            same applies to automatic column widths.</p></li>
-            <li><p>An explicit, non-negative value defines an absolute width or height, specified
-            in pixels.</p></li>
-            <li><p>A number followed by an asterisk specifies a relative size; the width or height
-            is determined by applying a weighted percentage of the space left over after
-            subtracting the width or height of all automatic and absolute columns and rows (which
-            may be 0).</p></li>
-        </ul>
-
         <p>
-            In the example above, the single column will be given 100% of the width allocated to
-            the <tt>TablePane</tt>. The heights of rows 1, 3, and 4 will be determined
-            automatically based on the preferred heights of their contents, and the second row
-            will be given 100% of the vertical space left over after the other rows are accounted
-            for.
+            A number followed by an asterisk specifies a relative size; the height is determined by
+            applying a weighted percentage of the space left over after subtracting the height of
+            all automatic and explicitly-sized rows. Only one row in this example has a relative
+            size, so it will be given 100% of the available space. However, if two rows had been
+            given a size of "1*", they would each get 50% of the available space. If one row had
+            been given an height of "1*" and another "2*", the first would recieve one third of the
+            available height, and the second two thirds, and so on. The same logic applies to
+            column widths.
         </p>
 
         <p>
@@ -130,15 +154,16 @@ limitations under the License.
         <p>
             Note the styles attribute of the <tt>TablePane</tt> element. Styles are used to
             customize the appearance of a component, and are specified in WTKX as a JSON-formatted
-            collection of name/value pairs. All WTKX elements support the styles attribute, but
-            each element may support a different set of styles depending on its current skin.
+            collection of name/value pairs. All Pivot components support the styles attribute, but
+            each component may support a different set of styles depending on its current skin.
         </p>
 
         <p>
             In this example, the table pane is assigned a "padding" value of 8 and a
             "horizontalSpacing" value of 6. Padding represents the amount of space that the table
             pane will leave around its components, and horizontal spacing is the size of the gap
-            the table pane will leave between columns.
+            the table pane will leave between columns. Most Pivot containers support the
+            "padding" and "spacing" styles.
         </p>
 
         <h3>Table Pane Cells</h3>
@@ -205,17 +230,10 @@ limitations under the License.
         <p>
             The <tt>TableView</tt> component is used to present tabular data in a grid of rows and
             columns. While it bears a superficial resemblance to <tt>TablePane</tt>, the purpose
-            of the two components is quite different: <tt>TablePane</tt> is a container; its
+            of the two components is different: <tt>TablePane</tt> is a container whose
             primary purpose is to lay out sub-components, and its structure is most often defined
             at design time. <tt>TableView</tt> is a component that acts as a view on a set of
             model data and is most often populated at run time.
-        </p>
-
-        <p>
-            Like <tt>TablePane</tt>, <tt>TableView</tt>'s columns must be defined up front.
-            However, since the contents of a table view are generally not known until run time, it
-            is not necessary to define a table view's row structure - this is provided by the
-            table view's model data when the table view is populated.
         </p>
 
         <p>
@@ -250,21 +268,14 @@ limitations under the License.
         </source>
 
         <p>
-            Note that the <tt>TableView</tt> element includes a <tt>wtkx:id</tt> attribute value
-            with a value of "stocksTableView". This is used to associate the table view with an
-            instance of <tt>TableViewHeader</tt>, which is discussed in the next section. ID values
-            are also used to gain access to WTKX components from Java code when wiring up event
-            handlers. This is discussed in more detail in the
-            <a href="stock-tracker.events.html">Event Handling</a> section.
-        </p>
-
-        <p>
-            Setting the <tt>selectMode</tt> attribute to "multi" specifies that a user may select
-            multiple rows in this table view. Other possible values for <tt>selectMode</tt> are
-            "single" and "none". Setting <tt>showHorizontalGridLines</tt> to false tells the table
-            view not to draw horizontal grid lines separating its cells. Vertical grid lines will
-            still be drawn; however, these can be turned off as well by setting
-            <tt>showVerticalGridLines</tt> to false.
+            Note that the <tt>TableView</tt> element defines a <tt>wtkx:id</tt> attribute
+            with a value of "stocksTableView". The <tt>wtkx:id</tt> attribute is used to assign an
+            identifier value to an element declared in a WTKX file, similar to a variable
+            declaration in Java. In this case, the identifier will be used to associate the table
+            view with an instance of <tt>TableViewHeader</tt>, discussed in the next section.
+            However, ID values are also used to gain access to WTKX components from Java code when
+            wiring up event handlers. This is discussed in more detail in the next section,
+            <a href="stock-tracker.events.html">Event Handling</a>.
         </p>
 
         <h3>TableView Columns</h3>
@@ -282,8 +293,8 @@ limitations under the License.
         <p>
             The width of each column in this example is set to a relative width of "1*". This
             means that each column will be allocated one third of the total width of the table
-            view. Like <tt>TablePane</tt>, <tt>TableView</tt> columns can also be assigned an
-            absolute or an automatic pixel width.
+            view (like <tt>TablePane</tt>, <tt>TableView</tt> columns can also be assigned an
+            absolute or an automatic pixel width).
         </p>
 
         <p>
@@ -353,7 +364,7 @@ limitations under the License.
         </source>
 
         <p>
-            That's it! The header automatically associates itself with the table view instance
+            The header automatically associates itself with the table view instance
             identified by the <tt>tableView</tt> attribute - no additional markup or coding is
             necessary.
         </p>
@@ -381,10 +392,10 @@ limitations under the License.
 
         <p>
             Pivot components do not manage scrolling internally - all scrolling in Pivot is handled
-            by the <tt>ScrollPane</tt> class (more specifically, by an instance of the
-            <tt>Viewport</tt> class, but the distinction is not relevant to this discussion). A
-            scroll pane provides a windowed view onto another component and allows a user to select
-            which part of the component is shown by dragging a horizontal or vertical scroll bar.
+            by an instance of the <tt>Viewport</tt> class, which <tt>ScrollPane</tt> extends.
+            A viewport provides a windowed view onto another component and generally allows a user
+            to select which part of the component is shown (for example, by dragging a horizontal
+            or vertical scroll bar).
         </p>
 
         <p>
@@ -402,45 +413,69 @@ limitations under the License.
         <h2>Stock Quote Detail</h2>
 
         <p>
-            The <tt>stocktracker.wtkx</tt> file defines the overall structure of the application,
-            and the layout of the quote detail content is defined separately in
-            <tt>stocktracker.detail.wtkx</tt>. Yet, when the application is run, it appears as
-            though the entire application was defined in a single WTKX file. How does this work?
+            The <tt>stock_tracker_window.wtkx</tt> file defines the overall structure of the
+            user interface, and the layout of the quote detail content is defined separately in
+            <tt>detail_pane.wtkx</tt>. Yet, when the application is run, it appears as
+            though the entire application was defined by a single WTKX file. How does this work?
             The key is the <tt>wtkx:include</tt> tag:
         </p>
 
         <source type="xml">
             <![CDATA[
-            <wtkx:include namespace="detail" src="stocktracker.detail.wtkx"/>
+            <wtkx:include namespace="detail" src="detail_pane.wtkx"/>
             ]]>
         </source>
 
         <p>
             The <tt>wtkx:include</tt> tag tells the WTKX serializer that a component should be
             placed here, but that the component's content is not defined in this file. The location
-            of the actual content is specified by the src tag and is either an absolute (beginning
-            with a slash character) or relative (no slash) path to another WTKX file. Relative
-            paths are resolved in the context of the current WTKX file, and absolute paths are
-            resolved in the context of the application's classpath. Fully-qualified URLs (those
-            that begin with a protocol) are not supported.
+            of the actual content is specified by the <tt>src</tt> tag and is either absolute
+            (beginning with a slash character) or relative (no slash) to the current WTKX file.
+            Includes are generally used to help partition an application into more manageable
+            chunks. In this case, the main window layout and functionality is defined by
+            <tt>stock_tracker_window.wtkx</tt> and <tt>StockTrackerWindow</tt>, but the behavior
+            of the detail pane is encapsulated in <tt>detail_pane.wtkx</tt> and <tt>DetailPane</tt>.
+            <tt>DetailPane</tt> is discussed in more detail below.
         </p>
 
+        <h3>Data Binding</h3>
+
         <p>
-            In addition to the <tt>src</tt> attribute, the <tt>wtkx:include</tt> tag accepts an
-            optional <tt>wtkx:id</tt> attribute. This is used to partition the ID values defined in
-            each WTKX file into separate namespaces, allowing developers to avoid naming
-            collisions. Components are referenced by concatenating the include IDs with the
-            component's ID; for example, the path "detail.changeLabel" refers to the <tt>Label</tt>
-            with ID "changeLabel" defined in the <tt>stocktracker.detail.wtkx</tt> file.
+            The first child of the <tt>DetailPane</tt> is a <tt>Label</tt> element that is used
+            to present the company name associated with the selected stock symbol. Note that this
+            element defines a <tt>textKey</tt> attribute with a value of "companyName". A label's
+            text key specifies the name of the property from which the label will obtain its text value
+            during data binding. Specifically, it is the name of the value's key in the "bind
+            context", an instance of <tt>Dictionary&lt;String, Object&gt;</tt> that is passed to
+            a component's <tt>load()</tt> method (and recursively to the component's children when
+            the component is a container). This is discussed in more detail in the
+            <a href="stock-tracker.data-binding.html">Data Binding</a> section.
+        </p>
+
+        <source type="xml">
+            <![CDATA[
+            <Label textKey="companyName" styles="{font:{size:12, bold:true}}"/>
+            ]]>
+        </source>
+
+        <p>
+            Data binding is often used to populate the contents of a <tt>Form</tt> component
+            (discussed below). However, there is nothing inherently special about the <tt>Form</tt>
+            class itself that supports data binding - data binding is supported by all container
+            types and many component classes. This allows a Pivot developer to create a user interface
+            that best suits the needs of an application and rely on data binding to simplify the
+            process of populating that UI with data.
         </p>
 
         <h3>Forms</h3>
 
         <p>
-            Though the top-level element of the detail page is a <tt>FlowPane</tt>, most of the
-            layout is handled by the <tt>Form</tt> container. Forms arrange their children in a
-            vertical stack, similar to a vertical <tt>FlowPane</tt>, prepending a text label to
-            each field.
+            Though the top-level element of the detail page, <tt>DetailPane</tt>, extends
+            <tt>BoxPane</tt>, a common Pivot layout container, most of the detail pane's layout is
+            handled by the <tt>Form</tt> container. Forms arrange their children in a
+            vertical stack, prepending a text label to each field. The <tt>Form</tt> class ensures
+            that the fields and labels are neatly aligned. It also supports optional "flag messages",
+            which are useful for drawing a user's attention during form validation.
         </p>
 
         <p>
@@ -449,7 +484,7 @@ limitations under the License.
         <p class="caption">Stock Tracker detail view using Form container.</p>
 
         <p>
-            A field's label is defined by a <tt>Form.name</tt> attribute attached to the child
+            A form field's label is defined by a <tt>Form.label</tt> attribute attached to the child
             element, as shown below:
         </p>
 
@@ -459,17 +494,17 @@ limitations under the License.
                 leftAlignLabels:true}">
                 <sections>
                     <Form.Section>
-                        <Label Form.name="%value" textKey="value"
+                        <Label wtkx:id="valueLabel" Form.label="%value"
                             styles="{horizontalAlignment:'right'}"/>
-                        <Label wtkx:id="changeLabel" Form.name="%change" textKey="change"
+                        <Label wtkx:id="changeLabel" Form.label="%change"
                             styles="{horizontalAlignment:'right'}"/>
-                        <Label Form.name="%openingValue" textKey="openingValue"
+                        <Label wtkx:id="openingValueLabel" Form.label="%openingValue"
                             styles="{horizontalAlignment:'right'}"/>
-                        <Label Form.name="%highValue" textKey="highValue"
+                        <Label wtkx:id="highValueLabel" Form.label="%highValue"
                             styles="{horizontalAlignment:'right'}"/>
-                        <Label Form.name="%lowValue" textKey="lowValue"
+                        <Label wtkx:id="lowValueLabel" Form.label="%lowValue"
                             styles="{horizontalAlignment:'right'}"/>
-                        <Label Form.name="%volume" textKey="volume"
+                        <Label wtkx:id="volumeLabel" Form.label="%volume"
                             styles="{horizontalAlignment:'right'}"/>
                     </Form.Section>
                 </sections>
@@ -478,27 +513,18 @@ limitations under the License.
         </source>
 
         <p>
+            <tt>Form.label</tt> is an example of an "attached property". An attached property
+            is a property that is only relevant in a particular context. In this case, the
+            property represents the label that the form will associate with the field. Attached
+            properties allow a container to associate data with a component without requiring
+            the component to have defined the property beforehand. Other Pivot containers,
+            including <tt>TabPane</tt> and <tt>TablePane</tt>, also use attached properties.
+        </p>
+
+        <p>
             Since the quote data is read-only, the "fields" in this example are actually
-            themselves Label instances. Their form label values are specified as string resources
-            so they can be easily translated.
-        </p>
-
-        <h3>Data Binding</h3>
-
-        <p>
-            Each <tt>Label</tt> in the form defines a <tt>textKey</tt> attribute. This attribute
-            specifies the name of the property from which the label will obtain its text value
-            during data binding. Specifically, it is the name of the value's key in the "bind
-            context", an instance of <tt>Dictionary&lt;String, Object&gt;</tt> that is passed to
-            the <tt>load()</tt> method of the <tt>Form</tt> instance, and then recursively to the
-            <tt>Label</tt>s themselves. This is discussed in more detail in the data binding
-            section.
-        </p>
-
-        <p>
-            Though data binding is often used to populate a <tt>Form</tt>'s contents, there is
-            nothing special about the Form class itself that supports data binding - it is
-            supported by all container types and many component classes.
+            themselves Label instances. Their form labels are specified as string resources
+            so they can be localized.
         </p>
     </body>
 </document>

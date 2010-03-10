@@ -19,10 +19,12 @@ package org.apache.pivot.wtk;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
+import org.apache.pivot.serialization.JSON;
 import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.wtk.ListView.ListDataBindMapping;
 import org.apache.pivot.wtk.content.ListButtonDataRenderer;
 import org.apache.pivot.wtk.content.ListViewItemRenderer;
 
@@ -55,9 +57,38 @@ public class ListButton extends Button {
         }
 
         @Override
+        public void listDataKeyChanged(ListButton listButton, String previousListDataKey) {
+            for (ListButtonListener listener : this) {
+                listener.listDataKeyChanged(listButton, previousListDataKey);
+            }
+        }
+
+        @Override
+        public void listDataBindTypeChanged(ListButton listButton, BindType previousListDataBindType) {
+            for (ListButtonListener listener : this) {
+                listener.listDataBindTypeChanged(listButton, previousListDataBindType);
+            }
+        }
+
+        @Override
+        public void listDataBindMappingChanged(ListButton listButton,
+            ListView.ListDataBindMapping previousListDataBindMapping) {
+            for (ListButtonListener listener : this) {
+                listener.listDataBindMappingChanged(listButton, previousListDataBindMapping);
+            }
+        }
+
+        @Override
         public void selectedItemKeyChanged(ListButton listButton, String previousSelectedItemKey) {
             for (ListButtonListener listener : this) {
                 listener.selectedItemKeyChanged(listButton, previousSelectedItemKey);
+            }
+        }
+
+        @Override
+        public void selectedItemBindTypeChanged(ListButton listButton, BindType previousSelectedItemBindType) {
+            for (ListButtonListener listener : this) {
+                listener.selectedItemBindTypeChanged(listButton, previousSelectedItemBindType);
             }
         }
 
@@ -84,7 +115,12 @@ public class ListButton extends Button {
     private int selectedIndex = -1;
     private Filter<?> disabledItemFilter = null;
 
+    private String listDataKey = null;
+    private BindType listDataBindType = BindType.BOTH;
+    private ListDataBindMapping listDataBindMapping = null;
+
     private String selectedItemKey = null;
+    private BindType selectedItemBindType = BindType.BOTH;
     private ListView.SelectedItemBindMapping selectedItemBindMapping = null;
 
     private ListButtonListenerList listButtonListeners = new ListButtonListenerList();
@@ -318,6 +354,48 @@ public class ListButton extends Button {
         }
     }
 
+    public String getListDataKey() {
+        return listDataKey;
+    }
+
+    public void setListDataKey(String listDataKey) {
+        String previousListDataKey = this.listDataKey;
+        if (previousListDataKey != listDataKey) {
+            this.listDataKey = listDataKey;
+            listButtonListeners.listDataKeyChanged(this, previousListDataKey);
+        }
+    }
+
+    public BindType getListDataBindType() {
+        return listDataBindType;
+    }
+
+    public void setListDataBindType(BindType listDataBindType) {
+        if (listDataBindType == null) {
+            throw new IllegalArgumentException();
+        }
+
+        BindType previousListDataBindType = this.listDataBindType;
+
+        if (previousListDataBindType != listDataBindType) {
+            this.listDataBindType = listDataBindType;
+            listButtonListeners.listDataBindTypeChanged(this, previousListDataBindType);
+        }
+    }
+
+    public ListDataBindMapping getListDataBindMapping() {
+        return listDataBindMapping;
+    }
+
+    public void setListDataBindMapping(ListDataBindMapping listDataBindMapping) {
+        ListDataBindMapping previousListDataBindMapping = this.listDataBindMapping;
+
+        if (previousListDataBindMapping != listDataBindMapping) {
+            this.listDataBindMapping = listDataBindMapping;
+            listButtonListeners.listDataBindMappingChanged(this, previousListDataBindMapping);
+        }
+    }
+
     public String getSelectedItemKey() {
         return selectedItemKey;
     }
@@ -328,6 +406,22 @@ public class ListButton extends Button {
         if (previousSelectedItemKey != selectedItemKey) {
             this.selectedItemKey = selectedItemKey;
             listButtonListeners.selectedItemKeyChanged(this, previousSelectedItemKey);
+        }
+    }
+
+    public BindType getSelectedItemBindType() {
+        return selectedItemBindType;
+    }
+
+    public void setSelectedItemBindType(BindType selectedItemBindType) {
+        if (selectedItemBindType == null) {
+            throw new IllegalArgumentException();
+        }
+
+        BindType previousSelectedItemBindType = this.selectedItemBindType;
+        if (previousSelectedItemBindType != selectedItemBindType) {
+            this.selectedItemBindType = selectedItemBindType;
+            listButtonListeners.selectedItemBindTypeChanged(this, previousSelectedItemBindType);
         }
     }
 
@@ -347,9 +441,27 @@ public class ListButton extends Button {
     @Override
     @SuppressWarnings("unchecked")
     public void load(Dictionary<String, ?> context) {
+        // Bind to list data
+        if (listDataKey != null
+            && listDataBindType != BindType.STORE
+            && JSON.containsKey(context, listDataKey)) {
+            Object value = JSON.get(context, listDataKey);
+
+            List<?> listData;
+            if (listDataBindMapping == null) {
+                listData = (List<?>)value;
+            } else {
+                listData = listDataBindMapping.toListData(value);
+            }
+
+            setListData(listData);
+        }
+
+        // Bind to selected item
         if (selectedItemKey != null
-            && JSONSerializer.containsKey(context, selectedItemKey)) {
-            Object item = JSONSerializer.get(context, selectedItemKey);
+            && selectedItemBindType != BindType.STORE
+            && JSON.containsKey(context, selectedItemKey)) {
+            Object item = JSON.get(context, selectedItemKey);
 
             int index;
             if (selectedItemBindMapping == null) {
@@ -364,9 +476,26 @@ public class ListButton extends Button {
 
     @Override
     public void store(Dictionary<String, ?> context) {
-        if (isEnabled()
-            && selectedItemKey != null) {
+        // Bind to list data
+        if (listDataKey != null
+            && listDataBindType != BindType.LOAD) {
+
+            Object value;
+            if (listDataBindMapping == null) {
+                value = listData;
+            } else {
+                value = listDataBindMapping.valueOf(listData);
+            }
+
+            JSON.put(context, listDataKey, value);
+        }
+
+        // Bind to selected item
+        if (selectedItemKey != null
+            && selectedItemBindType != BindType.LOAD) {
             Object item;
+
+            int selectedIndex = getSelectedIndex();
             if (selectedIndex == -1) {
                 item = null;
             } else {
@@ -377,12 +506,16 @@ public class ListButton extends Button {
                 }
             }
 
-            JSONSerializer.put(context, selectedItemKey, item);
+            JSON.put(context, selectedItemKey, item);
         }
     }
 
     @Override
     public void clear() {
+        if (listDataKey != null) {
+            setListData(new ArrayList<Object>());
+        }
+
         if (selectedItemKey != null) {
             setSelectedItem(null);
         }

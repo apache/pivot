@@ -19,7 +19,7 @@ package org.apache.pivot.wtk;
 import java.awt.Color;
 
 import org.apache.pivot.collections.Dictionary;
-import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.serialization.JSON;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.content.ListButtonColorItemRenderer;
 
@@ -159,8 +159,8 @@ public class ColorChooserButton extends Button {
         String selectedColorKey = getSelectedColorKey();
 
         if (selectedColorKey != null
-            && JSONSerializer.containsKey(context, selectedColorKey)) {
-            Object value = JSONSerializer.get(context, selectedColorKey);
+            && JSON.containsKey(context, selectedColorKey)) {
+            Object value = JSON.get(context, selectedColorKey);
 
             if (value instanceof Color) {
                 setSelectedColor((Color)value);
@@ -181,7 +181,7 @@ public class ColorChooserButton extends Button {
     public void store(Dictionary<String, ?> context) {
         if (isEnabled()
             && selectedColorKey != null) {
-            JSONSerializer.put(context, selectedColorKey, selectedColor);
+            JSON.put(context, selectedColorKey, selectedColor);
         }
     }
 

@@ -22,14 +22,13 @@ import java.net.URL;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
-import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.serialization.JSON;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.ThreadUtilities;
 import org.apache.pivot.util.concurrent.Task;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.util.concurrent.TaskListener;
 import org.apache.pivot.wtk.media.Image;
-
 
 /**
  * Component that displays an image.
@@ -258,8 +257,8 @@ public class ImageView extends Component {
     @Override
     public void load(Dictionary<String, ?> context) {
         if (imageKey != null
-            && JSONSerializer.containsKey(context, imageKey)) {
-            Object value = JSONSerializer.get(context, imageKey);
+            && JSON.containsKey(context, imageKey)) {
+            Object value = JSON.get(context, imageKey);
             if (value instanceof Image) {
                 setImage((Image)value);
             } else if (value instanceof URL) {
@@ -277,7 +276,7 @@ public class ImageView extends Component {
     public void store(Dictionary<String, ?> context) {
         if (isEnabled()
             && imageKey != null) {
-            JSONSerializer.put(context, imageKey, getImage());
+            JSON.put(context, imageKey, getImage());
         }
     }
 

@@ -20,7 +20,7 @@ import java.awt.Toolkit;
 import java.io.IOException;
 
 import org.apache.pivot.collections.Dictionary;
-import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.serialization.JSON;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.text.Element;
 import org.apache.pivot.wtk.text.Node;
@@ -756,8 +756,8 @@ public class TextInput extends Component {
     @Override
     public void load(Dictionary<String, ?> context) {
         if (textKey != null
-            && JSONSerializer.containsKey(context, textKey)) {
-            Object value = JSONSerializer.get(context, textKey);
+            && JSON.containsKey(context, textKey)) {
+            Object value = JSON.get(context, textKey);
 
             if (textBindMapping == null) {
                 if (value != null) {
@@ -776,7 +776,7 @@ public class TextInput extends Component {
         if (isEnabled()
             && textKey != null) {
             String text = getText();
-            JSONSerializer.put(context, textKey, (textBindMapping == null) ?
+            JSON.put(context, textKey, (textBindMapping == null) ?
                 text : textBindMapping.valueOf(text));
         }
     }
