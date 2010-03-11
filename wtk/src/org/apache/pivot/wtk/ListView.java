@@ -366,14 +366,16 @@ public class ListView extends Component {
      */
     public interface ListDataBindMapping {
         /**
-         * Converts a context value to list data.
+         * Converts a context value to list data during a
+         * {@link Component#load(Dictionary)} operation.
          *
          * @param value
          */
         public List<?> toListData(Object value);
 
         /**
-         * Converts list data to a context value.
+         * Converts list data to a context value during a
+         * {@link Component#store(Dictionary)} operation.
          *
          * @param listData
          */
@@ -381,11 +383,12 @@ public class ListView extends Component {
     }
 
     /**
-     * Translates between selection and bind context data during data binding.
+     * Translates between item position and bind context data during data binding.
      */
-    public interface SelectedItemBindMapping {
+    public interface ItemBindMapping {
         /**
-         * Returns the index of the item in the source list.
+         * Returns the index of the item in the source list during a
+         * {@link Component#load(Dictionary)} operation.
          *
          * @param listData
          * The source list data.
@@ -400,7 +403,8 @@ public class ListView extends Component {
         public int indexOf(List<?> listData, Object value);
 
         /**
-         * Retrieves the value at the given index.
+         * Retrieves the value at the given index during a
+         * {@link Component#store(Dictionary)} operation.
          *
          * @param listData
          * The source list data.
@@ -508,7 +512,7 @@ public class ListView extends Component {
 
         @Override
         public void selectedItemBindMappingChanged(ListView listView,
-            SelectedItemBindMapping previousSelectedItemBindMapping) {
+            ItemBindMapping previousSelectedItemBindMapping) {
             for (ListViewListener listener : this) {
                 listener.selectedItemBindMappingChanged(listView, previousSelectedItemBindMapping);
             }
@@ -530,9 +534,31 @@ public class ListView extends Component {
 
         @Override
         public void selectedItemsBindMappingChanged(ListView listView,
-            SelectedItemBindMapping previousSelectedItemsBindMapping) {
+            ItemBindMapping previousSelectedItemsBindMapping) {
             for (ListViewListener listener : this) {
                 listener.selectedItemsBindMappingChanged(listView, previousSelectedItemsBindMapping);
+            }
+        }
+
+        @Override
+        public void checkedItemsKeyChanged(ListView listView, String previousCheckedItemsKey) {
+            for (ListViewListener listener : this) {
+                listener.checkedItemsKeyChanged(listView, previousCheckedItemsKey);
+            }
+        }
+
+        @Override
+        public void checkedItemsBindTypeChanged(ListView listView, BindType previousCheckedItemsBindType) {
+            for (ListViewListener listener : this) {
+                listener.checkedItemsBindTypeChanged(listView, previousCheckedItemsBindType);
+            }
+        }
+
+        @Override
+        public void checkedItemsBindMappingChanged(ListView listView,
+            ListView.ItemBindMapping previousCheckedItemsBindMapping) {
+            for (ListViewListener listener : this) {
+                listener.checkedItemsBindMappingChanged(listView, previousCheckedItemsBindMapping);
             }
         }
     }
@@ -638,11 +664,15 @@ public class ListView extends Component {
 
     private String selectedItemKey = null;
     private BindType selectedItemBindType = BindType.BOTH;
-    private SelectedItemBindMapping selectedItemBindMapping = null;
+    private ItemBindMapping selectedItemBindMapping = null;
 
     private String selectedItemsKey = null;
     private BindType selectedItemsBindType = BindType.BOTH;
-    private SelectedItemBindMapping selectedItemsBindMapping = null;
+    private ItemBindMapping selectedItemsBindMapping = null;
+
+    private String checkedItemsKey = null;
+    private BindType checkedItemsBindType = BindType.BOTH;
+    private ItemBindMapping checkedItemsBindMapping = null;
 
     private ListListener<Object> listDataListener = new ListListener<Object>() {
         @Override
@@ -1409,6 +1439,18 @@ public class ListView extends Component {
     }
 
     /**
+     * Clears the checked state of all checked items.
+     */
+    public void clearCheckmarks() {
+        ArrayList<Integer> checkedIndexes = this.checkedIndexes;
+        this.checkedIndexes = new ArrayList<Integer>();
+
+        for (Integer index : checkedIndexes) {
+            listViewItemStateListeners.itemCheckedChanged(this, index);
+        }
+    }
+
+    /**
      * Tells whether or not an item's checkmark is disabled.
      *
      * @param index
@@ -1591,12 +1633,12 @@ public class ListView extends Component {
         }
     }
 
-    public SelectedItemBindMapping getSelectedItemBindMapping() {
+    public ItemBindMapping getSelectedItemBindMapping() {
         return selectedItemBindMapping;
     }
 
-    public void setSelectedItemBindMapping(SelectedItemBindMapping selectedItemBindMapping) {
-        SelectedItemBindMapping previousSelectedItemBindMapping = this.selectedItemBindMapping;
+    public void setSelectedItemBindMapping(ItemBindMapping selectedItemBindMapping) {
+        ItemBindMapping previousSelectedItemBindMapping = this.selectedItemBindMapping;
 
         if (previousSelectedItemBindMapping != selectedItemBindMapping) {
             this.selectedItemBindMapping = selectedItemBindMapping;
@@ -1633,16 +1675,58 @@ public class ListView extends Component {
         }
     }
 
-    public SelectedItemBindMapping getSelectedItemsBindMapping() {
+    public ItemBindMapping getSelectedItemsBindMapping() {
         return selectedItemsBindMapping;
     }
 
-    public void setSelectedItemsBindMapping(SelectedItemBindMapping selectedItemsBindMapping) {
-        SelectedItemBindMapping previousSelectedItemsBindMapping = this.selectedItemsBindMapping;
+    public void setSelectedItemsBindMapping(ItemBindMapping selectedItemsBindMapping) {
+        ItemBindMapping previousSelectedItemsBindMapping = this.selectedItemsBindMapping;
 
         if (previousSelectedItemsBindMapping != selectedItemsBindMapping) {
             this.selectedItemsBindMapping = selectedItemsBindMapping;
             listViewListeners.selectedItemsBindMappingChanged(this, previousSelectedItemsBindMapping);
+        }
+    }
+
+    public String getCheckedItemsKey() {
+        return checkedItemsKey;
+    }
+
+    public void setCheckedItemsKey(String checkedItemsKey) {
+        String previousCheckedItemsKey = this.checkedItemsKey;
+
+        if (previousCheckedItemsKey != checkedItemsKey) {
+            this.checkedItemsKey = checkedItemsKey;
+            listViewListeners.checkedItemsKeyChanged(this, previousCheckedItemsKey);
+        }
+    }
+
+    public BindType getCheckedItemsBindType() {
+        return checkedItemsBindType;
+    }
+
+    public void setCheckedItemsBindType(BindType checkedItemsBindType) {
+        if (checkedItemsBindType == null) {
+            throw new IllegalArgumentException();
+        }
+
+        BindType previousCheckedItemsBindType = this.checkedItemsBindType;
+        if (previousCheckedItemsBindType != checkedItemsBindType) {
+            this.checkedItemsBindType = checkedItemsBindType;
+            listViewListeners.checkedItemsBindTypeChanged(this, previousCheckedItemsBindType);
+        }
+    }
+
+    public ItemBindMapping getCheckedItemsBindMapping() {
+        return checkedItemsBindMapping;
+    }
+
+    public void setCheckedItemsBindMapping(ItemBindMapping checkedItemsBindMapping) {
+        ItemBindMapping previousCheckedItemsBindMapping = this.checkedItemsBindMapping;
+
+        if (previousCheckedItemsBindMapping != checkedItemsBindMapping) {
+            this.checkedItemsBindMapping = checkedItemsBindMapping;
+            listViewListeners.checkedItemsBindMappingChanged(this, previousCheckedItemsBindMapping);
         }
     }
 
@@ -1712,6 +1796,31 @@ public class ListView extends Component {
                 }
 
                 break;
+            }
+        }
+
+        if (checkmarksEnabled) {
+            if (checkedItemsKey != null
+                && JSON.containsKey(context, checkedItemsKey)
+                && checkedItemsBindType != BindType.STORE) {
+                Sequence<Object> items = (Sequence<Object>)JSON.get(context, checkedItemsKey);
+
+                clearCheckmarks();
+
+                for (int i = 0, n = items.getLength(); i < n; i++) {
+                    Object item = items.get(i);
+
+                    int index;
+                    if (checkedItemsBindMapping == null) {
+                        index = ((List<Object>)listData).indexOf(item);
+                    } else {
+                        index = checkedItemsBindMapping.indexOf(listData, item);
+                    }
+
+                    if (index != -1) {
+                        setItemChecked(index, true);
+                    }
+                }
             }
         }
     }
@@ -1784,6 +1893,29 @@ public class ListView extends Component {
                 break;
             }
         }
+
+        if (checkmarksEnabled) {
+            if (checkedItemsKey != null
+                && JSON.containsKey(context, checkedItemsKey)
+                && checkedItemsBindType != BindType.LOAD) {
+                ArrayList<Object> items = new ArrayList<Object>();
+
+                for (int i = 0, n = checkedIndexes.getLength(); i < n; i++) {
+                    Integer index = checkedIndexes.get(i);
+
+                    Object item;
+                    if (checkedItemsBindMapping == null) {
+                        item = listData.get(index);
+                    } else {
+                        item = checkedItemsBindMapping.get(listData, index);
+                    }
+
+                    items.add(item);
+                }
+
+                JSON.put(context, checkedItemsKey, items);
+            }
+        }
     }
 
     @Override
@@ -1795,6 +1927,10 @@ public class ListView extends Component {
         if (selectedItemKey != null
             || selectedItemsKey != null) {
             setSelectedItem(null);
+        }
+
+        if (checkedItemsKey != null) {
+            clearCheckmarks();
         }
     }
 

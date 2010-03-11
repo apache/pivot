@@ -1093,7 +1093,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
     @Override
     public void selectedItemBindMappingChanged(ListView listView,
-        ListView.SelectedItemBindMapping previousSelectedItemBindMapping) {
+        ListView.ItemBindMapping previousSelectedItemBindMapping) {
         // No-op
     }
 
@@ -1109,7 +1109,23 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
     @Override
     public void selectedItemsBindMappingChanged(ListView listView,
-        ListView.SelectedItemBindMapping previousSelectedItemsBindMapping) {
+        ListView.ItemBindMapping previousSelectedItemsBindMapping) {
+        // No-op
+    }
+
+    @Override
+    public void checkedItemsKeyChanged(ListView listView, String previousCheckedItemsKey) {
+        // No-op
+    }
+
+    @Override
+    public void checkedItemsBindTypeChanged(ListView listView, BindType previousCheckedItemsBindType) {
+        // No-op
+    }
+
+    @Override
+    public void checkedItemsBindMappingChanged(ListView listView,
+        ListView.ItemBindMapping previousCheckedItemsBindMapping) {
         // No-op
     }
 

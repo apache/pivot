@@ -83,7 +83,7 @@ public class DataBindingTest implements Application {
         }
     }
 
-    public static class TestBindMapping implements ListView.SelectedItemBindMapping, Spinner.SelectedItemBindMapping {
+    public static class TestBindMapping implements ListView.ItemBindMapping, Spinner.ItemBindMapping {
         @SuppressWarnings("unchecked")
         public int indexOf(List<?> list, Object value) {
             int i = 0;

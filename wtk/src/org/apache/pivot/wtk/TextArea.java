@@ -99,6 +99,27 @@ public class TextArea extends Component {
         public Bounds getCharacterBounds(int offset);
     }
 
+    /**
+     * Translates between text and context data during data binding.
+     */
+    public interface TextBindMapping {
+        /**
+         * Converts a value from the bind context to a text representation during a
+         * {@link Component#load(Dictionary)} operation.
+         *
+         * @param value
+         */
+        public String toString(Object value);
+
+        /**
+         * Converts a text string to a value to be stored in the bind context during a
+         * {@link Component#store(Dictionary)} operation.
+         *
+         * @param text
+         */
+        public Object valueOf(String text);
+    }
+
     private static class TextAreaListenerList extends ListenerList<TextAreaListener>
         implements TextAreaListener {
         @Override
@@ -119,6 +140,20 @@ public class TextArea extends Component {
         public void textKeyChanged(TextArea textArea, String previousTextKey) {
             for (TextAreaListener listener : this) {
                 listener.textKeyChanged(textArea, previousTextKey);
+            }
+        }
+
+        @Override
+        public void textBindTypeChanged(TextArea textArea, BindType previousTextBindType) {
+            for (TextAreaListener listener : this) {
+                listener.textBindTypeChanged(textArea, previousTextBindType);
+            }
+        }
+
+        @Override
+        public void textBindMappingChanged(TextArea textArea, TextBindMapping previousTextBindMapping) {
+            for (TextAreaListener listener : this) {
+                listener.textBindMappingChanged(textArea, previousTextBindMapping);
             }
         }
     }
@@ -157,7 +192,10 @@ public class TextArea extends Component {
     private int selectionLength = 0;
 
     private boolean editable = true;
+
     private String textKey = null;
+    private BindType textBindType = BindType.BOTH;
+    private TextBindMapping textBindMapping = null;
 
     private NodeListener documentListener = new NodeListener() {
         @Override
@@ -779,13 +817,45 @@ public class TextArea extends Component {
         }
     }
 
+    public BindType getTextBindType() {
+        return textBindType;
+    }
+
+    public void setTextBindType(BindType textBindType) {
+        BindType previousTextBindType = this.textBindType;
+        if (previousTextBindType != textBindType) {
+            this.textBindType = textBindType;
+            textAreaListeners.textBindTypeChanged(this, previousTextBindType);
+        }
+
+    }
+
+    public TextBindMapping getTextBindMapping() {
+        return textBindMapping;
+    }
+
+    public void setTextBindMapping(TextBindMapping textBindMapping) {
+        TextBindMapping previousTextBindMapping = this.textBindMapping;
+
+        if (previousTextBindMapping != textBindMapping) {
+            this.textBindMapping = textBindMapping;
+            textAreaListeners.textBindMappingChanged(this, previousTextBindMapping);
+        }
+    }
+
     @Override
     public void load(Dictionary<String, ?> context) {
         if (textKey != null
-            && JSON.containsKey(context, textKey)) {
+            && JSON.containsKey(context, textKey)
+            && textBindType != BindType.STORE) {
             Object value = JSON.get(context, textKey);
-            if (value != null) {
-                value = value.toString();
+
+            if (textBindMapping == null) {
+                if (value != null) {
+                    value = value.toString();
+                }
+            } else {
+                value = textBindMapping.toString(value);
             }
 
             setText((String)value);
@@ -794,9 +864,11 @@ public class TextArea extends Component {
 
     @Override
     public void store(Dictionary<String, ?> context) {
-        if (isEnabled()
-            && textKey != null) {
-            JSON.put(context, textKey, getText());
+        if (textKey != null
+            && textBindType != BindType.LOAD) {
+            String text = getText();
+            JSON.put(context, textKey, (textBindMapping == null) ?
+                text : textBindMapping.valueOf(text));
         }
     }
 

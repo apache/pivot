@@ -43,7 +43,7 @@ public interface SpinnerListener {
         }
 
         @Override
-        public void selectedItemBindMappingChanged(Spinner spinner, Spinner.SelectedItemBindMapping previousSelectedItemBindMapping) {
+        public void selectedItemBindMappingChanged(Spinner spinner, Spinner.ItemBindMapping previousSelectedItemBindMapping) {
         }
     }
 
@@ -84,5 +84,5 @@ public interface SpinnerListener {
      * @param spinner
      * @param previousSelectedItemBindMapping
      */
-    public void selectedItemBindMappingChanged(Spinner spinner, Spinner.SelectedItemBindMapping previousSelectedItemBindMapping);
+    public void selectedItemBindMappingChanged(Spinner spinner, Spinner.ItemBindMapping previousSelectedItemBindMapping);
 }

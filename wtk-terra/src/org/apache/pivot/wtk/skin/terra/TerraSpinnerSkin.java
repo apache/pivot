@@ -861,7 +861,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
     }
 
     @Override
-    public void selectedItemBindMappingChanged(Spinner spinner, Spinner.SelectedItemBindMapping previousSelectedItemBindMapping) {
+    public void selectedItemBindMappingChanged(Spinner spinner, Spinner.ItemBindMapping previousSelectedItemBindMapping) {
         // No-op
     }
 

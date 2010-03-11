@@ -93,7 +93,7 @@ public class ListButton extends Button {
         }
 
         @Override
-        public void selectedItemBindMappingChanged(ListButton listButton, ListView.SelectedItemBindMapping previousSelectedItemBindMapping) {
+        public void selectedItemBindMappingChanged(ListButton listButton, ListView.ItemBindMapping previousSelectedItemBindMapping) {
             for (ListButtonListener listener : this) {
                 listener.selectedItemBindMappingChanged(listButton, previousSelectedItemBindMapping);
             }
@@ -121,7 +121,7 @@ public class ListButton extends Button {
 
     private String selectedItemKey = null;
     private BindType selectedItemBindType = BindType.BOTH;
-    private ListView.SelectedItemBindMapping selectedItemBindMapping = null;
+    private ListView.ItemBindMapping selectedItemBindMapping = null;
 
     private ListButtonListenerList listButtonListeners = new ListButtonListenerList();
     private ListButtonSelectionListenerList listButtonSelectionListeners = new ListButtonSelectionListenerList();
@@ -425,12 +425,12 @@ public class ListButton extends Button {
         }
     }
 
-    public ListView.SelectedItemBindMapping getSelectedItemBindMapping() {
+    public ListView.ItemBindMapping getSelectedItemBindMapping() {
         return selectedItemBindMapping;
     }
 
-    public void setSelectedItemBindMapping(ListView.SelectedItemBindMapping selectedItemBindMapping) {
-        ListView.SelectedItemBindMapping previousSelectedItemBindMapping = this.selectedItemBindMapping;
+    public void setSelectedItemBindMapping(ListView.ItemBindMapping selectedItemBindMapping) {
+        ListView.ItemBindMapping previousSelectedItemBindMapping = this.selectedItemBindMapping;
 
         if (previousSelectedItemBindMapping != selectedItemBindMapping) {
             this.selectedItemBindMapping = selectedItemBindMapping;

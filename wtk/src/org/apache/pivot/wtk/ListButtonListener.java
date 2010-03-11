@@ -62,7 +62,7 @@ public interface ListButtonListener {
 
         @Override
         public void selectedItemBindMappingChanged(ListButton listButton,
-            ListView.SelectedItemBindMapping previousSelectedItemBindMapping) {
+            ListView.ItemBindMapping previousSelectedItemBindMapping) {
         }
     }
 
@@ -137,5 +137,5 @@ public interface ListButtonListener {
      * @param previousSelectedItemBindMapping
      */
     public void selectedItemBindMappingChanged(ListButton listButton,
-        ListView.SelectedItemBindMapping previousSelectedItemBindMapping);
+        ListView.ItemBindMapping previousSelectedItemBindMapping);
 }

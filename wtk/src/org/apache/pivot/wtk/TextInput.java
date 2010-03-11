@@ -64,14 +64,16 @@ public class TextInput extends Component {
      */
     public interface TextBindMapping {
         /**
-         * Converts a value from the bind context to a text representation.
+         * Converts a value from the bind context to a text representation during a
+         * {@link Component#load(Dictionary)} operation.
          *
          * @param value
          */
         public String toString(Object value);
 
         /**
-         * Converts a text string to a value to be stored in the bind context.
+         * Converts a text string to a value to be stored in the bind context during a
+         * {@link Component#store(Dictionary)} operation.
          *
          * @param text
          */
@@ -119,6 +121,13 @@ public class TextInput extends Component {
         public void textKeyChanged(TextInput textInput, String previousTextKey) {
             for (TextInputListener listener : this) {
                 listener.textKeyChanged(textInput, previousTextKey);
+            }
+        }
+
+        @Override
+        public void textBindTypeChanged(TextInput textInput, BindType previousTextBindType) {
+            for (TextInputListener listener : this) {
+                listener.textBindTypeChanged(textInput, previousTextBindType);
             }
         }
 
@@ -195,6 +204,7 @@ public class TextInput extends Component {
     private String prompt = null;
 
     private String textKey = null;
+    private BindType textBindType = BindType.BOTH;
     private TextBindMapping textBindMapping = null;
 
     private Validator validator = null;
@@ -740,6 +750,19 @@ public class TextInput extends Component {
         }
     }
 
+    public BindType getTextBindType() {
+        return textBindType;
+    }
+
+    public void setTextBindType(BindType textBindType) {
+        BindType previousTextBindType = this.textBindType;
+        if (previousTextBindType != textBindType) {
+            this.textBindType = textBindType;
+            textInputListeners.textBindTypeChanged(this, previousTextBindType);
+        }
+
+    }
+
     public TextBindMapping getTextBindMapping() {
         return textBindMapping;
     }
@@ -756,7 +779,8 @@ public class TextInput extends Component {
     @Override
     public void load(Dictionary<String, ?> context) {
         if (textKey != null
-            && JSON.containsKey(context, textKey)) {
+            && JSON.containsKey(context, textKey)
+            && textBindType != BindType.STORE) {
             Object value = JSON.get(context, textKey);
 
             if (textBindMapping == null) {
@@ -773,8 +797,8 @@ public class TextInput extends Component {
 
     @Override
     public void store(Dictionary<String, ?> context) {
-        if (isEnabled()
-            && textKey != null) {
+        if (textKey != null
+            && textBindType != BindType.LOAD) {
             String text = getText();
             JSON.put(context, textKey, (textBindMapping == null) ?
                 text : textBindMapping.valueOf(text));
@@ -784,7 +808,7 @@ public class TextInput extends Component {
     @Override
     public void clear() {
         if (textKey != null) {
-            setText("");
+            setText(null);
         }
     }
 

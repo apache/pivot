@@ -75,9 +75,10 @@ public class Spinner extends Container {
     /**
      * Translates between spinner and bind context data during data binding.
      */
-    public interface SelectedItemBindMapping {
+    public interface ItemBindMapping {
         /**
-         * Returns the index of the item in the source list.
+         * Returns the index of the item in the source list during a
+         * {@link Component#load(Dictionary)} operation.
          *
          * @param spinnerData
          * The source spinner data.
@@ -92,7 +93,8 @@ public class Spinner extends Container {
         public int indexOf(List<?> spinnerData, Object value);
 
         /**
-         * Retrieves the item at the given index.
+         * Retrieves the item at the given index during a
+         * {@link Component#store(Dictionary)} operation.
          *
          * @param spinnerData
          * The source spinner data.
@@ -189,7 +191,7 @@ public class Spinner extends Container {
         }
 
         @Override
-        public void selectedItemBindMappingChanged(Spinner spinner, SelectedItemBindMapping previousSelectedItemBindMapping) {
+        public void selectedItemBindMappingChanged(Spinner spinner, ItemBindMapping previousSelectedItemBindMapping) {
             for (SpinnerListener listener : this) {
                 listener.selectedItemBindMappingChanged(spinner, previousSelectedItemBindMapping);
             }
@@ -259,7 +261,7 @@ public class Spinner extends Container {
     private boolean circular = false;
     private int selectedIndex = -1;
     private String selectedItemKey = null;
-    private SelectedItemBindMapping selectedItemBindMapping = null;
+    private ItemBindMapping selectedItemBindMapping = null;
 
     private SpinnerListenerList spinnerListeners = new SpinnerListenerList();
     private SpinnerItemListenerList spinnerItemListeners = new SpinnerItemListenerList();
@@ -448,12 +450,12 @@ public class Spinner extends Container {
         }
     }
 
-    public SelectedItemBindMapping getSelectedItemBindMapping() {
+    public ItemBindMapping getSelectedItemBindMapping() {
         return selectedItemBindMapping;
     }
 
-    public void setSelectedItemBindMapping(SelectedItemBindMapping selectedItemBindMapping) {
-        SelectedItemBindMapping previousSelectedItemBindMapping = this.selectedItemBindMapping;
+    public void setSelectedItemBindMapping(ItemBindMapping selectedItemBindMapping) {
+        ItemBindMapping previousSelectedItemBindMapping = this.selectedItemBindMapping;
 
         if (previousSelectedItemBindMapping != selectedItemBindMapping) {
             this.selectedItemBindMapping = selectedItemBindMapping;

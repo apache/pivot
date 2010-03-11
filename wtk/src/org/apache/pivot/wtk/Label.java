@@ -29,14 +29,16 @@ public class Label extends Component {
      */
     public interface TextBindMapping {
         /**
-         * Converts a value from the bind context to a text representation.
+         * Converts a value from the bind context to a text representation during a
+         * {@link Component#load(Dictionary)} operation.
          *
          * @param value
          */
         public String toString(Object value);
 
         /**
-         * Converts a text string to a value to be stored in the bind context.
+         * Converts a text string to a value to be stored in the bind context during a
+         * {@link Component#store(Dictionary)} operation.
          *
          * @param text
          */
@@ -60,6 +62,13 @@ public class Label extends Component {
         }
 
         @Override
+        public void textBindTypeChanged(Label label, BindType previousTextBindType) {
+            for (LabelListener listener : this) {
+                listener.textBindTypeChanged(label, previousTextBindType);
+            }
+        }
+
+        @Override
         public void textBindMappingChanged(Label label, Label.TextBindMapping previousTextBindMapping) {
             for (LabelListener listener : this) {
                 listener.textBindMappingChanged(label, previousTextBindMapping);
@@ -68,7 +77,9 @@ public class Label extends Component {
     }
 
     private String text = null;
+
     private String textKey = null;
+    private BindType textBindType = BindType.BOTH;
     private TextBindMapping textBindMapping = null;
 
     private LabelListenerList labelListeners = new LabelListenerList();
@@ -120,6 +131,19 @@ public class Label extends Component {
         }
     }
 
+    public BindType getTextBindType() {
+        return textBindType;
+    }
+
+    public void setTextBindType(BindType textBindType) {
+        BindType previousTextBindType = this.textBindType;
+        if (previousTextBindType != textBindType) {
+            this.textBindType = textBindType;
+            labelListeners.textBindTypeChanged(this, previousTextBindType);
+        }
+
+    }
+
     public TextBindMapping getTextBindMapping() {
         return textBindMapping;
     }
@@ -136,7 +160,8 @@ public class Label extends Component {
     @Override
     public void load(Dictionary<String, ?> context) {
         if (textKey != null
-            && JSON.containsKey(context, textKey)) {
+            && JSON.containsKey(context, textKey)
+            && textBindType != BindType.STORE) {
             Object value = JSON.get(context, textKey);
 
             if (textBindMapping == null) {
@@ -153,8 +178,8 @@ public class Label extends Component {
 
     @Override
     public void store(Dictionary<String, ?> context) {
-        if (isEnabled()
-            && textKey != null) {
+        if (textKey != null
+            && textBindType != BindType.LOAD) {
             String text = getText();
             JSON.put(context, textKey, (textBindMapping == null) ?
                 text : textBindMapping.valueOf(text));

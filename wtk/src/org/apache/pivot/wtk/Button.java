@@ -72,14 +72,16 @@ public abstract class Button extends Component {
      */
     public interface SelectedBindMapping {
         /**
-         * Converts a context value to a selection state.
+         * Converts a context value to a selection state during a
+         * {@link Component#load(Dictionary)} operation.
          *
          * @param value
          */
         public boolean isSelected(Object value);
 
         /**
-         * Converts a selection state to a context value.
+         * Converts a selection state to a context value during a
+         * {@link Component#store(Dictionary)} operation.
          *
          * @param selected
          */
@@ -91,14 +93,16 @@ public abstract class Button extends Component {
      */
     public interface StateBindMapping {
         /**
-         * Converts a context value to a button state.
+         * Converts a context value to a button state during a
+         * {@link Component#load(Dictionary)} operation.
          *
          * @param value
          */
         public State toState(Object value);
 
         /**
-         * Converts a button state to a context value.
+         * Converts a button state to a context value during a
+         * {@link Component#store(Dictionary)} operation.
          *
          * @param state
          */

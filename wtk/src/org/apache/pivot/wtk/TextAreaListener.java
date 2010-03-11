@@ -37,6 +37,14 @@ public interface TextAreaListener {
         @Override
         public void textKeyChanged(TextArea textArea, String previousTextKey) {
         }
+
+        @Override
+        public void textBindTypeChanged(TextArea textArea, BindType previousTextBindType) {
+        }
+
+        @Override
+        public void textBindMappingChanged(TextArea textArea, TextArea.TextBindMapping previousTextBindMapping) {
+        }
     }
 
     /**
@@ -64,4 +72,20 @@ public interface TextAreaListener {
      * @param previousTextKey
      */
     public void textKeyChanged(TextArea textArea, String previousTextKey);
+
+    /**
+     * Called when a text area's text bind type has changed.
+     *
+     * @param textArea
+     * @param previousTextBindType
+     */
+    public void textBindTypeChanged(TextArea textArea, BindType previousTextBindType);
+
+    /**
+     * Called when a text area's bind mapping has changed.
+     *
+     * @param textArea
+     * @param previousTextBindMapping
+     */
+    public void textBindMappingChanged(TextArea textArea, TextArea.TextBindMapping previousTextBindMapping);
 }

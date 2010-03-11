@@ -34,6 +34,7 @@ import java.text.StringCharacterIterator;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.wtk.ApplicationContext;
+import org.apache.pivot.wtk.BindType;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Cursor;
@@ -1352,6 +1353,11 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
     @Override
     public void textKeyChanged(TextInput textInput, String previousTextKey) {
+        // No-op
+    }
+
+    @Override
+    public void textBindTypeChanged(TextInput textInput, BindType previousTextBindType) {
         // No-op
     }
 
