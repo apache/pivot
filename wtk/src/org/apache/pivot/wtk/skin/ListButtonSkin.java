@@ -18,7 +18,6 @@ package org.apache.pivot.wtk.skin;
 
 import org.apache.pivot.collections.List;
 import org.apache.pivot.util.Filter;
-import org.apache.pivot.wtk.BindType;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentKeyListener;
 import org.apache.pivot.wtk.ComponentMouseButtonListener;
@@ -344,37 +343,6 @@ public abstract class ListButtonSkin extends ButtonSkin
     @Override
     public void disabledItemFilterChanged(ListButton listButton, Filter<?> previousDisabledItemFilter) {
         listView.setDisabledItemFilter(listButton.getDisabledItemFilter());
-    }
-
-    @Override
-    public void listDataKeyChanged(ListButton listButton, String previousListDataKey) {
-        // No-op
-    }
-
-    @Override
-    public void listDataBindTypeChanged(ListButton listButton, BindType previousListDataBindType) {
-        // No-op
-    }
-
-    @Override
-    public void listDataBindMappingChanged(ListButton listButton,
-        ListView.ListDataBindMapping previousListDataBindMapping) {
-        // No-op
-    }
-
-    @Override
-    public void selectedItemKeyChanged(ListButton listButton, String previousSelectedItemKey) {
-        // No-op
-    }
-
-    @Override
-    public void selectedItemBindTypeChanged(ListButton listButton, BindType previousSelectedItemBindType) {
-        // No-op
-    }
-
-    @Override
-    public void selectedItemBindMappingChanged(ListButton listButton, ListView.ItemBindMapping previousSelectedItemBindMapping) {
-        // No-op
     }
 
     // List button selection events

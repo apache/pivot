@@ -415,9 +415,6 @@ public class ListView extends Component {
         public Object get(List<?> listData, int index);
     }
 
-    /**
-     * List view listener list.
-     */
     private static class ListViewListenerList extends ListenerList<ListViewListener>
         implements ListViewListener {
         @Override
@@ -473,99 +470,8 @@ public class ListView extends Component {
                 listener.disabledCheckmarkFilterChanged(listView, previousDisabledCheckmarkFilter);
             }
         }
-
-        @Override
-        public void listDataKeyChanged(ListView listView, String previousListDataKey) {
-            for (ListViewListener listener : this) {
-                listener.listDataKeyChanged(listView, previousListDataKey);
-            }
-        }
-
-        @Override
-        public void listDataBindTypeChanged(ListView listView, BindType previousListDataBindType) {
-            for (ListViewListener listener : this) {
-                listener.listDataBindTypeChanged(listView, previousListDataBindType);
-            }
-        }
-
-        @Override
-        public void listDataBindMappingChanged(ListView listView,
-            ListView.ListDataBindMapping previousListDataBindMapping) {
-            for (ListViewListener listener : this) {
-                listener.listDataBindMappingChanged(listView, previousListDataBindMapping);
-            }
-        }
-
-        @Override
-        public void selectedItemKeyChanged(ListView listView, String previousSelectedItemKey) {
-            for (ListViewListener listener : this) {
-                listener.selectedItemKeyChanged(listView, previousSelectedItemKey);
-            }
-        }
-
-        @Override
-        public void selectedItemBindTypeChanged(ListView listView, BindType previousSelectedItemBindType) {
-            for (ListViewListener listener : this) {
-                listener.selectedItemBindTypeChanged(listView, previousSelectedItemBindType);
-            }
-        }
-
-        @Override
-        public void selectedItemBindMappingChanged(ListView listView,
-            ItemBindMapping previousSelectedItemBindMapping) {
-            for (ListViewListener listener : this) {
-                listener.selectedItemBindMappingChanged(listView, previousSelectedItemBindMapping);
-            }
-        }
-
-        @Override
-        public void selectedItemsKeyChanged(ListView listView, String previousSelectedItemsKey) {
-            for (ListViewListener listener : this) {
-                listener.selectedItemsKeyChanged(listView, previousSelectedItemsKey);
-            }
-        }
-
-        @Override
-        public void selectedItemsBindTypeChanged(ListView listView, BindType previousSelectedItemsBindType) {
-            for (ListViewListener listener : this) {
-                listener.selectedItemsBindTypeChanged(listView, previousSelectedItemsBindType);
-            }
-        }
-
-        @Override
-        public void selectedItemsBindMappingChanged(ListView listView,
-            ItemBindMapping previousSelectedItemsBindMapping) {
-            for (ListViewListener listener : this) {
-                listener.selectedItemsBindMappingChanged(listView, previousSelectedItemsBindMapping);
-            }
-        }
-
-        @Override
-        public void checkedItemsKeyChanged(ListView listView, String previousCheckedItemsKey) {
-            for (ListViewListener listener : this) {
-                listener.checkedItemsKeyChanged(listView, previousCheckedItemsKey);
-            }
-        }
-
-        @Override
-        public void checkedItemsBindTypeChanged(ListView listView, BindType previousCheckedItemsBindType) {
-            for (ListViewListener listener : this) {
-                listener.checkedItemsBindTypeChanged(listView, previousCheckedItemsBindType);
-            }
-        }
-
-        @Override
-        public void checkedItemsBindMappingChanged(ListView listView,
-            ListView.ItemBindMapping previousCheckedItemsBindMapping) {
-            for (ListViewListener listener : this) {
-                listener.checkedItemsBindMappingChanged(listView, previousCheckedItemsBindMapping);
-            }
-        }
     }
 
-    /**
-     * List view item listener list.
-     */
     private static class ListViewItemListenerList extends ListenerList<ListViewItemListener>
         implements ListViewItemListener {
         @Override
@@ -604,9 +510,6 @@ public class ListView extends Component {
         }
     }
 
-    /**
-     * List view item state listener list.
-     */
     private static class ListViewItemStateListenerList extends ListenerList<ListViewItemStateListener>
         implements ListViewItemStateListener {
         @Override
@@ -617,9 +520,6 @@ public class ListView extends Component {
         }
     }
 
-    /**
-     * List view selection detail listener list.
-     */
     private static class ListViewSelectionListenerList extends ListenerList<ListViewSelectionListener>
         implements ListViewSelectionListener {
         @Override
@@ -640,6 +540,97 @@ public class ListView extends Component {
         public void selectedRangesChanged(ListView listView, Sequence<Span> previousSelection) {
             for (ListViewSelectionListener listener : this) {
                 listener.selectedRangesChanged(listView, previousSelection);
+            }
+        }
+    }
+
+    private static class ListViewBindingListenerList extends ListenerList<ListViewBindingListener>
+        implements ListViewBindingListener {
+        @Override
+        public void listDataKeyChanged(ListView listView, String previousListDataKey) {
+            for (ListViewBindingListener listener : this) {
+                listener.listDataKeyChanged(listView, previousListDataKey);
+            }
+        }
+
+        @Override
+        public void listDataBindTypeChanged(ListView listView, BindType previousListDataBindType) {
+            for (ListViewBindingListener listener : this) {
+                listener.listDataBindTypeChanged(listView, previousListDataBindType);
+            }
+        }
+
+        @Override
+        public void listDataBindMappingChanged(ListView listView,
+            ListView.ListDataBindMapping previousListDataBindMapping) {
+            for (ListViewBindingListener listener : this) {
+                listener.listDataBindMappingChanged(listView, previousListDataBindMapping);
+            }
+        }
+
+        @Override
+        public void selectedItemKeyChanged(ListView listView, String previousSelectedItemKey) {
+            for (ListViewBindingListener listener : this) {
+                listener.selectedItemKeyChanged(listView, previousSelectedItemKey);
+            }
+        }
+
+        @Override
+        public void selectedItemBindTypeChanged(ListView listView, BindType previousSelectedItemBindType) {
+            for (ListViewBindingListener listener : this) {
+                listener.selectedItemBindTypeChanged(listView, previousSelectedItemBindType);
+            }
+        }
+
+        @Override
+        public void selectedItemBindMappingChanged(ListView listView,
+            ItemBindMapping previousSelectedItemBindMapping) {
+            for (ListViewBindingListener listener : this) {
+                listener.selectedItemBindMappingChanged(listView, previousSelectedItemBindMapping);
+            }
+        }
+
+        @Override
+        public void selectedItemsKeyChanged(ListView listView, String previousSelectedItemsKey) {
+            for (ListViewBindingListener listener : this) {
+                listener.selectedItemsKeyChanged(listView, previousSelectedItemsKey);
+            }
+        }
+
+        @Override
+        public void selectedItemsBindTypeChanged(ListView listView, BindType previousSelectedItemsBindType) {
+            for (ListViewBindingListener listener : this) {
+                listener.selectedItemsBindTypeChanged(listView, previousSelectedItemsBindType);
+            }
+        }
+
+        @Override
+        public void selectedItemsBindMappingChanged(ListView listView,
+            ItemBindMapping previousSelectedItemsBindMapping) {
+            for (ListViewBindingListener listener : this) {
+                listener.selectedItemsBindMappingChanged(listView, previousSelectedItemsBindMapping);
+            }
+        }
+
+        @Override
+        public void checkedItemsKeyChanged(ListView listView, String previousCheckedItemsKey) {
+            for (ListViewBindingListener listener : this) {
+                listener.checkedItemsKeyChanged(listView, previousCheckedItemsKey);
+            }
+        }
+
+        @Override
+        public void checkedItemsBindTypeChanged(ListView listView, BindType previousCheckedItemsBindType) {
+            for (ListViewBindingListener listener : this) {
+                listener.checkedItemsBindTypeChanged(listView, previousCheckedItemsBindType);
+            }
+        }
+
+        @Override
+        public void checkedItemsBindMappingChanged(ListView listView,
+            ListView.ItemBindMapping previousCheckedItemsBindMapping) {
+            for (ListViewBindingListener listener : this) {
+                listener.checkedItemsBindMappingChanged(listView, previousCheckedItemsBindMapping);
             }
         }
     }
@@ -759,10 +750,9 @@ public class ListView extends Component {
 
     private ListViewListenerList listViewListeners = new ListViewListenerList();
     private ListViewItemListenerList listViewItemListeners = new ListViewItemListenerList();
-    private ListViewItemStateListenerList listViewItemStateListeners =
-        new ListViewItemStateListenerList();
-    private ListViewSelectionListenerList listViewSelectionListeners =
-        new ListViewSelectionListenerList();
+    private ListViewItemStateListenerList listViewItemStateListeners = new ListViewItemStateListenerList();
+    private ListViewSelectionListenerList listViewSelectionListeners = new ListViewSelectionListenerList();
+    private ListViewBindingListenerList listViewBindingListeners = new ListViewBindingListenerList();
 
     private static final ItemRenderer DEFAULT_ITEM_RENDERER = new ListViewItemRenderer();
 
@@ -1570,7 +1560,7 @@ public class ListView extends Component {
         String previousListDataKey = this.listDataKey;
         if (previousListDataKey != listDataKey) {
             this.listDataKey = listDataKey;
-            listViewListeners.listDataKeyChanged(this, previousListDataKey);
+            listViewBindingListeners.listDataKeyChanged(this, previousListDataKey);
         }
     }
 
@@ -1587,7 +1577,7 @@ public class ListView extends Component {
 
         if (previousListDataBindType != listDataBindType) {
             this.listDataBindType = listDataBindType;
-            listViewListeners.listDataBindTypeChanged(this, previousListDataBindType);
+            listViewBindingListeners.listDataBindTypeChanged(this, previousListDataBindType);
         }
     }
 
@@ -1600,7 +1590,7 @@ public class ListView extends Component {
 
         if (previousListDataBindMapping != listDataBindMapping) {
             this.listDataBindMapping = listDataBindMapping;
-            listViewListeners.listDataBindMappingChanged(this, previousListDataBindMapping);
+            listViewBindingListeners.listDataBindMappingChanged(this, previousListDataBindMapping);
         }
     }
 
@@ -1613,7 +1603,7 @@ public class ListView extends Component {
 
         if (previousSelectedItemKey != selectedItemKey) {
             this.selectedItemKey = selectedItemKey;
-            listViewListeners.selectedItemKeyChanged(this, previousSelectedItemKey);
+            listViewBindingListeners.selectedItemKeyChanged(this, previousSelectedItemKey);
         }
     }
 
@@ -1629,7 +1619,7 @@ public class ListView extends Component {
         BindType previousSelectedItemBindType = this.selectedItemBindType;
         if (previousSelectedItemBindType != selectedItemBindType) {
             this.selectedItemBindType = selectedItemBindType;
-            listViewListeners.selectedItemBindTypeChanged(this, previousSelectedItemBindType);
+            listViewBindingListeners.selectedItemBindTypeChanged(this, previousSelectedItemBindType);
         }
     }
 
@@ -1642,7 +1632,7 @@ public class ListView extends Component {
 
         if (previousSelectedItemBindMapping != selectedItemBindMapping) {
             this.selectedItemBindMapping = selectedItemBindMapping;
-            listViewListeners.selectedItemBindMappingChanged(this, previousSelectedItemBindMapping);
+            listViewBindingListeners.selectedItemBindMappingChanged(this, previousSelectedItemBindMapping);
         }
     }
 
@@ -1655,7 +1645,7 @@ public class ListView extends Component {
 
         if (previousSelectedItemsKey != selectedItemsKey) {
             this.selectedItemsKey = selectedItemsKey;
-            listViewListeners.selectedItemsKeyChanged(this, previousSelectedItemsKey);
+            listViewBindingListeners.selectedItemsKeyChanged(this, previousSelectedItemsKey);
         }
     }
 
@@ -1671,7 +1661,7 @@ public class ListView extends Component {
         BindType previousSelectedItemsBindType = this.selectedItemsBindType;
         if (previousSelectedItemsBindType != selectedItemsBindType) {
             this.selectedItemsBindType = selectedItemsBindType;
-            listViewListeners.selectedItemsBindTypeChanged(this, previousSelectedItemsBindType);
+            listViewBindingListeners.selectedItemsBindTypeChanged(this, previousSelectedItemsBindType);
         }
     }
 
@@ -1684,7 +1674,7 @@ public class ListView extends Component {
 
         if (previousSelectedItemsBindMapping != selectedItemsBindMapping) {
             this.selectedItemsBindMapping = selectedItemsBindMapping;
-            listViewListeners.selectedItemsBindMappingChanged(this, previousSelectedItemsBindMapping);
+            listViewBindingListeners.selectedItemsBindMappingChanged(this, previousSelectedItemsBindMapping);
         }
     }
 
@@ -1697,7 +1687,7 @@ public class ListView extends Component {
 
         if (previousCheckedItemsKey != checkedItemsKey) {
             this.checkedItemsKey = checkedItemsKey;
-            listViewListeners.checkedItemsKeyChanged(this, previousCheckedItemsKey);
+            listViewBindingListeners.checkedItemsKeyChanged(this, previousCheckedItemsKey);
         }
     }
 
@@ -1713,7 +1703,7 @@ public class ListView extends Component {
         BindType previousCheckedItemsBindType = this.checkedItemsBindType;
         if (previousCheckedItemsBindType != checkedItemsBindType) {
             this.checkedItemsBindType = checkedItemsBindType;
-            listViewListeners.checkedItemsBindTypeChanged(this, previousCheckedItemsBindType);
+            listViewBindingListeners.checkedItemsBindTypeChanged(this, previousCheckedItemsBindType);
         }
     }
 
@@ -1726,7 +1716,7 @@ public class ListView extends Component {
 
         if (previousCheckedItemsBindMapping != checkedItemsBindMapping) {
             this.checkedItemsBindMapping = checkedItemsBindMapping;
-            listViewListeners.checkedItemsBindMappingChanged(this, previousCheckedItemsBindMapping);
+            listViewBindingListeners.checkedItemsBindMappingChanged(this, previousCheckedItemsBindMapping);
         }
     }
 
@@ -2000,5 +1990,9 @@ public class ListView extends Component {
      */
     public ListenerList<ListViewSelectionListener> getListViewSelectionListeners() {
         return listViewSelectionListeners;
+    }
+
+    public ListenerList<ListViewBindingListener> getListViewBindingListeners() {
+        return listViewBindingListeners;
     }
 }

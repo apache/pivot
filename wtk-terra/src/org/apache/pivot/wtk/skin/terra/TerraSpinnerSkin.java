@@ -855,18 +855,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         // No-op
     }
 
-    @Override
-    public void selectedItemKeyChanged(Spinner spinner, String previousSelectedItemKey) {
-        // No-op
-    }
-
-    @Override
-    public void selectedItemBindMappingChanged(Spinner spinner, Spinner.ItemBindMapping previousSelectedItemBindMapping) {
-        // No-op
-    }
-
     // SpinnerSelectionListener methods
-
     @Override
     public void selectedIndexChanged(Spinner spinner, int previousSelectedIndex) {
         invalidateContent();

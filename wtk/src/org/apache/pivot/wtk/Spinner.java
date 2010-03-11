@@ -182,25 +182,8 @@ public class Spinner extends Container {
                 listener.circularChanged(spinner);
             }
         }
-
-        @Override
-        public void selectedItemKeyChanged(Spinner spinner, String previousSelectedItemKey) {
-            for (SpinnerListener listener : this) {
-                listener.selectedItemKeyChanged(spinner, previousSelectedItemKey);
-            }
-        }
-
-        @Override
-        public void selectedItemBindMappingChanged(Spinner spinner, ItemBindMapping previousSelectedItemBindMapping) {
-            for (SpinnerListener listener : this) {
-                listener.selectedItemBindMappingChanged(spinner, previousSelectedItemBindMapping);
-            }
-        }
     }
 
-    /**
-     * Spinner item listener list.
-     */
     private static class SpinnerItemListenerList extends ListenerList<SpinnerItemListener>
         implements SpinnerItemListener {
         @Override
@@ -239,9 +222,6 @@ public class Spinner extends Container {
         }
     }
 
-    /**
-     * Spinner selection listener list.
-     */
     private static class SpinnerSelectionListenerList
         extends ListenerList<SpinnerSelectionListener>
         implements SpinnerSelectionListener {
@@ -253,6 +233,30 @@ public class Spinner extends Container {
         }
     }
 
+    private class SpinnerBindingListenerList extends ListenerList<SpinnerBindingListener>
+        implements SpinnerBindingListener {
+        @Override
+        public void selectedItemKeyChanged(Spinner spinner, String previousSelectedItemKey) {
+            for (SpinnerBindingListener listener : this) {
+                listener.selectedItemKeyChanged(spinner, previousSelectedItemKey);
+            }
+        }
+
+        @Override
+        public void selectedItemBindTypeChanged(Spinner spinner, BindType previousSelectedItemBindType) {
+            for (SpinnerBindingListener listener : this) {
+                listener.selectedItemBindTypeChanged(spinner, previousSelectedItemBindType);
+            }
+        }
+
+        @Override
+        public void selectedItemBindMappingChanged(Spinner spinner, ItemBindMapping previousSelectedItemBindMapping) {
+            for (SpinnerBindingListener listener : this) {
+                listener.selectedItemBindMappingChanged(spinner, previousSelectedItemBindMapping);
+            }
+        }
+    }
+
     private List<?> spinnerData = null;
     private ListHandler spinnerDataHandler = new ListHandler();
 
@@ -260,13 +264,16 @@ public class Spinner extends Container {
 
     private boolean circular = false;
     private int selectedIndex = -1;
+
     private String selectedItemKey = null;
+    private BindType selectedItemBindType = BindType.BOTH;
     private ItemBindMapping selectedItemBindMapping = null;
 
     private SpinnerListenerList spinnerListeners = new SpinnerListenerList();
     private SpinnerItemListenerList spinnerItemListeners = new SpinnerItemListenerList();
     private SpinnerSelectionListenerList spinnerSelectionListeners =
         new SpinnerSelectionListenerList();
+    private SpinnerBindingListenerList spinnerBindingListeners = new SpinnerBindingListenerList();
 
     /**
      * Creates a spinner populated with an empty array list.
@@ -446,7 +453,23 @@ public class Spinner extends Container {
 
         if (previousSelectedItemKey != selectedItemKey) {
             this.selectedItemKey = selectedItemKey;
-            spinnerListeners.selectedItemKeyChanged(this, previousSelectedItemKey);
+            spinnerBindingListeners.selectedItemKeyChanged(this, previousSelectedItemKey);
+        }
+    }
+
+    public BindType getSelectedItemBindType() {
+        return selectedItemBindType;
+    }
+
+    public void setSelectedItemBindType(BindType selectedItemBindType) {
+        if (selectedItemBindType == null) {
+            throw new IllegalArgumentException();
+        }
+
+        BindType previousSelectedItemBindType = this.selectedItemBindType;
+        if (previousSelectedItemBindType != selectedItemBindType) {
+            this.selectedItemBindType = selectedItemBindType;
+            spinnerBindingListeners.selectedItemBindTypeChanged(this, previousSelectedItemBindType);
         }
     }
 
@@ -459,7 +482,7 @@ public class Spinner extends Container {
 
         if (previousSelectedItemBindMapping != selectedItemBindMapping) {
             this.selectedItemBindMapping = selectedItemBindMapping;
-            spinnerListeners.selectedItemBindMappingChanged(this, previousSelectedItemBindMapping);
+            spinnerBindingListeners.selectedItemBindMappingChanged(this, previousSelectedItemBindMapping);
         }
     }
 
@@ -467,7 +490,8 @@ public class Spinner extends Container {
     @SuppressWarnings("unchecked")
     public void load(Dictionary<String, ?> context) {
         if (selectedItemKey != null
-            && JSON.containsKey(context, selectedItemKey)) {
+            && JSON.containsKey(context, selectedItemKey)
+            && selectedItemBindType != BindType.STORE) {
             Object item = JSON.get(context, selectedItemKey);
 
             int index;
@@ -483,8 +507,8 @@ public class Spinner extends Container {
 
     @Override
     public void store(Dictionary<String, ?> context) {
-        if (isEnabled()
-            && selectedItemKey != null) {
+        if (selectedItemKey != null
+            && selectedItemBindType != BindType.LOAD) {
             Object item;
             if (selectedIndex == -1) {
                 item = null;
@@ -538,5 +562,12 @@ public class Spinner extends Container {
      */
     public ListenerList<SpinnerSelectionListener> getSpinnerSelectionListeners() {
         return spinnerSelectionListeners;
+    }
+
+    /**
+     * Returns the spinner binding listener list.
+     */
+    public ListenerList<SpinnerBindingListener> getSpinnerBindingListeners() {
+        return spinnerBindingListeners;
     }
 }

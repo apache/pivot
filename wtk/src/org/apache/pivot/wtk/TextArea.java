@@ -135,27 +135,6 @@ public class TextArea extends Component {
                 listener.editableChanged(textArea);
             }
         }
-
-        @Override
-        public void textKeyChanged(TextArea textArea, String previousTextKey) {
-            for (TextAreaListener listener : this) {
-                listener.textKeyChanged(textArea, previousTextKey);
-            }
-        }
-
-        @Override
-        public void textBindTypeChanged(TextArea textArea, BindType previousTextBindType) {
-            for (TextAreaListener listener : this) {
-                listener.textBindTypeChanged(textArea, previousTextBindType);
-            }
-        }
-
-        @Override
-        public void textBindMappingChanged(TextArea textArea, TextBindMapping previousTextBindMapping) {
-            for (TextAreaListener listener : this) {
-                listener.textBindMappingChanged(textArea, previousTextBindMapping);
-            }
-        }
     }
 
     private static class TextAreaCharacterListenerList extends ListenerList<TextAreaCharacterListener>
@@ -186,6 +165,29 @@ public class TextArea extends Component {
         }
     }
 
+    private static class TextAreaBindingListenerList extends ListenerList<TextAreaBindingListener>
+        implements TextAreaBindingListener {
+        @Override
+        public void textKeyChanged(TextArea textArea, String previousTextKey) {
+            for (TextAreaBindingListener listener : this) {
+                listener.textKeyChanged(textArea, previousTextKey);
+            }
+        }
+
+        @Override
+        public void textBindTypeChanged(TextArea textArea, BindType previousTextBindType) {
+            for (TextAreaBindingListener listener : this) {
+                listener.textBindTypeChanged(textArea, previousTextBindType);
+            }
+        }
+
+        @Override
+        public void textBindMappingChanged(TextArea textArea, TextBindMapping previousTextBindMapping) {
+            for (TextAreaBindingListener listener : this) {
+                listener.textBindMappingChanged(textArea, previousTextBindMapping);
+            }
+        }
+    }
     private Document document;
 
     private int selectionStart = 0;
@@ -236,6 +238,7 @@ public class TextArea extends Component {
     private TextAreaListenerList textAreaListeners = new TextAreaListenerList();
     private TextAreaCharacterListenerList textAreaCharacterListeners = new TextAreaCharacterListenerList();
     private TextAreaSelectionListenerList textAreaSelectionListeners = new TextAreaSelectionListenerList();
+    private TextAreaBindingListenerList textAreaBindingListeners = new TextAreaBindingListenerList();
 
     public TextArea() {
         installThemeSkin(TextArea.class);
@@ -813,7 +816,7 @@ public class TextArea extends Component {
 
         if (previousTextKey != textKey) {
             this.textKey = textKey;
-            textAreaListeners.textKeyChanged(this, previousTextKey);
+            textAreaBindingListeners.textKeyChanged(this, previousTextKey);
         }
     }
 
@@ -825,7 +828,7 @@ public class TextArea extends Component {
         BindType previousTextBindType = this.textBindType;
         if (previousTextBindType != textBindType) {
             this.textBindType = textBindType;
-            textAreaListeners.textBindTypeChanged(this, previousTextBindType);
+            textAreaBindingListeners.textBindTypeChanged(this, previousTextBindType);
         }
 
     }
@@ -839,7 +842,7 @@ public class TextArea extends Component {
 
         if (previousTextBindMapping != textBindMapping) {
             this.textBindMapping = textBindMapping;
-            textAreaListeners.textBindMappingChanged(this, previousTextBindMapping);
+            textAreaBindingListeners.textBindMappingChanged(this, previousTextBindMapping);
         }
     }
 
@@ -914,5 +917,9 @@ public class TextArea extends Component {
 
     public ListenerList<TextAreaSelectionListener> getTextAreaSelectionListeners() {
         return textAreaSelectionListeners;
+    }
+
+    public ListenerList<TextAreaBindingListener> getTextAreaBindingListeners() {
+        return textAreaBindingListeners;
     }
 }

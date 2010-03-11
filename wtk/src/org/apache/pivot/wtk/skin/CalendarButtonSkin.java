@@ -270,12 +270,6 @@ public abstract class CalendarButtonSkin extends ButtonSkin
         calendar.setDisabledDateFilter(calendarButton.getDisabledDateFilter());
     }
 
-    @Override
-    public void selectedDateKeyChanged(CalendarButton calendarButton,
-        String previousSelectedDateKey) {
-        // No-op
-    }
-
     // Calendar button selection events
     @Override
     public void selectedDateChanged(CalendarButton calendarButton,
@@ -290,10 +284,5 @@ public abstract class CalendarButtonSkin extends ButtonSkin
             calendar.setYear(date.year);
             calendar.setMonth(date.month);
         }
-    }
-
-    @Override
-    public void selectedDateBindMappingChanged(CalendarButton calendarButton,
-        Calendar.SelectedDateBindMapping previousSelectedDateBindMapping) {
     }
 }

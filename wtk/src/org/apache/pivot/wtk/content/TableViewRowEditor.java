@@ -26,7 +26,6 @@ import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.ApplicationContext;
-import org.apache.pivot.wtk.BindType;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.CardPane;
 import org.apache.pivot.wtk.CardPaneListener;
@@ -568,56 +567,7 @@ public class TableViewRowEditor implements TableView.RowEditor {
             // No-op
         }
 
-        @Override
-        public void tableDataKeyChanged(TableView tableView, String previousTableDataKey) {
-            // No-op
-        }
-
-        @Override
-        public void tableDataBindTypeChanged(TableView tableView, BindType previousTableDataBindType) {
-            // No-op
-        }
-
-        @Override
-        public void tableDataBindMappingChanged(TableView tableView,
-            TableView.TableDataBindMapping previousTableDataBindMapping) {
-            // No-op
-        }
-
-        @Override
-        public void selectedRowKeyChanged(TableView tableView, String previousSelectedRowKey) {
-            // No-op
-        }
-
-        @Override
-        public void selectedRowBindTypeChanged(TableView tableView, BindType previousSelectedRowBindType) {
-            // No-op
-        }
-
-        @Override
-        public void selectedRowBindMappingChanged(TableView tableView,
-            TableView.SelectedRowBindMapping previousSelectedRowBindMapping) {
-            // No-op
-        }
-
-        @Override
-        public void selectedRowsKeyChanged(TableView tableView, String previousSelectedRowsKey) {
-            // No-op
-        }
-
-        @Override
-        public void selectedRowsBindTypeChanged(TableView tableView, BindType previousSelectedRowsBindType) {
-            // No-op
-        }
-
-        @Override
-        public void selectedRowsBindMappingChanged(TableView tableView,
-            TableView.SelectedRowBindMapping previousSelectedRowsBindMapping) {
-            // No-op
-        }
-
         // TableViewRowListener methods
-
         @Override
         public void rowInserted(TableView tableView, int index) {
             cancelEdit();

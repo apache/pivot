@@ -53,24 +53,27 @@ public class Label extends Component {
                 listener.textChanged(label, previousText);
             }
         }
+    }
 
+    private static class LabelBindingListenerList extends ListenerList<LabelBindingListener>
+        implements LabelBindingListener {
         @Override
         public void textKeyChanged(Label label, String previousTextKey) {
-            for (LabelListener listener : this) {
+            for (LabelBindingListener listener : this) {
                 listener.textKeyChanged(label, previousTextKey);
             }
         }
 
         @Override
         public void textBindTypeChanged(Label label, BindType previousTextBindType) {
-            for (LabelListener listener : this) {
+            for (LabelBindingListener listener : this) {
                 listener.textBindTypeChanged(label, previousTextBindType);
             }
         }
 
         @Override
         public void textBindMappingChanged(Label label, Label.TextBindMapping previousTextBindMapping) {
-            for (LabelListener listener : this) {
+            for (LabelBindingListener listener : this) {
                 listener.textBindMappingChanged(label, previousTextBindMapping);
             }
         }
@@ -83,6 +86,7 @@ public class Label extends Component {
     private TextBindMapping textBindMapping = null;
 
     private LabelListenerList labelListeners = new LabelListenerList();
+    private LabelBindingListenerList labelBindingListeners = new LabelBindingListenerList();
 
     public Label() {
         this(null);
@@ -127,7 +131,7 @@ public class Label extends Component {
 
         if (previousTextKey != textKey) {
             this.textKey = textKey;
-            labelListeners.textKeyChanged(this, previousTextKey);
+            labelBindingListeners.textKeyChanged(this, previousTextKey);
         }
     }
 
@@ -139,7 +143,7 @@ public class Label extends Component {
         BindType previousTextBindType = this.textBindType;
         if (previousTextBindType != textBindType) {
             this.textBindType = textBindType;
-            labelListeners.textBindTypeChanged(this, previousTextBindType);
+            labelBindingListeners.textBindTypeChanged(this, previousTextBindType);
         }
 
     }
@@ -153,7 +157,7 @@ public class Label extends Component {
 
         if (previousTextBindMapping != textBindMapping) {
             this.textBindMapping = textBindMapping;
-            labelListeners.textBindMappingChanged(this, previousTextBindMapping);
+            labelBindingListeners.textBindMappingChanged(this, previousTextBindMapping);
         }
     }
 
@@ -195,5 +199,9 @@ public class Label extends Component {
 
     public ListenerList<LabelListener> getLabelListeners() {
         return labelListeners;
+    }
+
+    public ListenerList<LabelBindingListener> getLabelBindingListeners() {
+        return labelBindingListeners;
     }
 }

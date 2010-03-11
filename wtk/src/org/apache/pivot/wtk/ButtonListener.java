@@ -47,30 +47,6 @@ public interface ButtonListener {
         @Override
         public void buttonGroupChanged(Button button, ButtonGroup previousButtonGroup) {
         }
-
-        @Override
-        public void selectedKeyChanged(Button button, String previousSelectedKey) {
-        }
-
-        @Override
-        public void selectedBindTypeChanged(Button button, BindType previousSelectedBindType) {
-        }
-
-        @Override
-        public void selectedBindMappingChanged(Button button, Button.SelectedBindMapping previousSelectedBindMapping) {
-        }
-
-        @Override
-        public void stateKeyChanged(Button button, String previousStateKey) {
-        }
-
-        @Override
-        public void stateBindTypeChanged(Button button, BindType previousStateBindType) {
-        }
-
-        @Override
-        public void stateBindMappingChanged(Button button, Button.StateBindMapping previousStateBindMapping) {
-        }
     }
 
     /**
@@ -118,52 +94,4 @@ public interface ButtonListener {
      * @param previousButtonGroup
      */
     public void buttonGroupChanged(Button button, ButtonGroup previousButtonGroup);
-
-    /**
-     * Called when a button's selected key has changed.
-     *
-     * @param button
-     * @param previousSelectedKey
-     */
-    public void selectedKeyChanged(Button button, String previousSelectedKey);
-
-    /**
-     * Called when a button's selected bind type has changed.
-     *
-     * @param button
-     * @param previousSelectedBindType
-     */
-    public void selectedBindTypeChanged(Button button, BindType previousSelectedBindType);
-
-    /**
-     * Called when a button's selected bind mapping has changed.
-     *
-     * @param button
-     * @param previousSelectedBindMapping
-     */
-    public void selectedBindMappingChanged(Button button, Button.SelectedBindMapping previousSelectedBindMapping);
-
-    /**
-     * Called when a button's state key has changed.
-     *
-     * @param button
-     * @param previousStateKey
-     */
-    public void stateKeyChanged(Button button, String previousStateKey);
-
-    /**
-     * Called when a button's state bind type has changed.
-     *
-     * @param button
-     * @param previousStateBindType
-     */
-    public void stateBindTypeChanged(Button button, BindType previousStateBindType);
-
-    /**
-     * Called when a button's bind mapping has changed.
-     *
-     * @param button
-     * @param previousStateBindMapping
-     */
-    public void stateBindMappingChanged(Button button, Button.StateBindMapping previousStateBindMapping);
 }

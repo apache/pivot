@@ -55,49 +55,6 @@ public class ListButton extends Button {
                 listener.disabledItemFilterChanged(listButton, previousDisabledItemFilter);
             }
         }
-
-        @Override
-        public void listDataKeyChanged(ListButton listButton, String previousListDataKey) {
-            for (ListButtonListener listener : this) {
-                listener.listDataKeyChanged(listButton, previousListDataKey);
-            }
-        }
-
-        @Override
-        public void listDataBindTypeChanged(ListButton listButton, BindType previousListDataBindType) {
-            for (ListButtonListener listener : this) {
-                listener.listDataBindTypeChanged(listButton, previousListDataBindType);
-            }
-        }
-
-        @Override
-        public void listDataBindMappingChanged(ListButton listButton,
-            ListView.ListDataBindMapping previousListDataBindMapping) {
-            for (ListButtonListener listener : this) {
-                listener.listDataBindMappingChanged(listButton, previousListDataBindMapping);
-            }
-        }
-
-        @Override
-        public void selectedItemKeyChanged(ListButton listButton, String previousSelectedItemKey) {
-            for (ListButtonListener listener : this) {
-                listener.selectedItemKeyChanged(listButton, previousSelectedItemKey);
-            }
-        }
-
-        @Override
-        public void selectedItemBindTypeChanged(ListButton listButton, BindType previousSelectedItemBindType) {
-            for (ListButtonListener listener : this) {
-                listener.selectedItemBindTypeChanged(listButton, previousSelectedItemBindType);
-            }
-        }
-
-        @Override
-        public void selectedItemBindMappingChanged(ListButton listButton, ListView.ItemBindMapping previousSelectedItemBindMapping) {
-            for (ListButtonListener listener : this) {
-                listener.selectedItemBindMappingChanged(listButton, previousSelectedItemBindMapping);
-            }
-        }
     }
 
     private static class ListButtonSelectionListenerList extends ListenerList<ListButtonSelectionListener>
@@ -106,6 +63,52 @@ public class ListButton extends Button {
         public void selectedIndexChanged(ListButton listButton, int previousSelectedIndex) {
             for (ListButtonSelectionListener listener : this) {
                 listener.selectedIndexChanged(listButton, previousSelectedIndex);
+            }
+        }
+    }
+
+    private static class ListButtonBindingListenerList extends ListenerList<ListButtonBindingListener>
+        implements ListButtonBindingListener {
+        @Override
+        public void listDataKeyChanged(ListButton listButton, String previousListDataKey) {
+            for (ListButtonBindingListener listener : this) {
+                listener.listDataKeyChanged(listButton, previousListDataKey);
+            }
+        }
+
+        @Override
+        public void listDataBindTypeChanged(ListButton listButton, BindType previousListDataBindType) {
+            for (ListButtonBindingListener listener : this) {
+                listener.listDataBindTypeChanged(listButton, previousListDataBindType);
+            }
+        }
+
+        @Override
+        public void listDataBindMappingChanged(ListButton listButton,
+            ListView.ListDataBindMapping previousListDataBindMapping) {
+            for (ListButtonBindingListener listener : this) {
+                listener.listDataBindMappingChanged(listButton, previousListDataBindMapping);
+            }
+        }
+
+        @Override
+        public void selectedItemKeyChanged(ListButton listButton, String previousSelectedItemKey) {
+            for (ListButtonBindingListener listener : this) {
+                listener.selectedItemKeyChanged(listButton, previousSelectedItemKey);
+            }
+        }
+
+        @Override
+        public void selectedItemBindTypeChanged(ListButton listButton, BindType previousSelectedItemBindType) {
+            for (ListButtonBindingListener listener : this) {
+                listener.selectedItemBindTypeChanged(listButton, previousSelectedItemBindType);
+            }
+        }
+
+        @Override
+        public void selectedItemBindMappingChanged(ListButton listButton, ListView.ItemBindMapping previousSelectedItemBindMapping) {
+            for (ListButtonBindingListener listener : this) {
+                listener.selectedItemBindMappingChanged(listButton, previousSelectedItemBindMapping);
             }
         }
     }
@@ -125,6 +128,7 @@ public class ListButton extends Button {
 
     private ListButtonListenerList listButtonListeners = new ListButtonListenerList();
     private ListButtonSelectionListenerList listButtonSelectionListeners = new ListButtonSelectionListenerList();
+    private ListButtonBindingListenerList listButtonBindingListeners = new ListButtonBindingListenerList();
 
     private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new ListButtonDataRenderer();
     private static final ListView.ItemRenderer DEFAULT_ITEM_RENDERER = new ListViewItemRenderer();
@@ -362,7 +366,7 @@ public class ListButton extends Button {
         String previousListDataKey = this.listDataKey;
         if (previousListDataKey != listDataKey) {
             this.listDataKey = listDataKey;
-            listButtonListeners.listDataKeyChanged(this, previousListDataKey);
+            listButtonBindingListeners.listDataKeyChanged(this, previousListDataKey);
         }
     }
 
@@ -379,7 +383,7 @@ public class ListButton extends Button {
 
         if (previousListDataBindType != listDataBindType) {
             this.listDataBindType = listDataBindType;
-            listButtonListeners.listDataBindTypeChanged(this, previousListDataBindType);
+            listButtonBindingListeners.listDataBindTypeChanged(this, previousListDataBindType);
         }
     }
 
@@ -392,7 +396,7 @@ public class ListButton extends Button {
 
         if (previousListDataBindMapping != listDataBindMapping) {
             this.listDataBindMapping = listDataBindMapping;
-            listButtonListeners.listDataBindMappingChanged(this, previousListDataBindMapping);
+            listButtonBindingListeners.listDataBindMappingChanged(this, previousListDataBindMapping);
         }
     }
 
@@ -405,7 +409,7 @@ public class ListButton extends Button {
 
         if (previousSelectedItemKey != selectedItemKey) {
             this.selectedItemKey = selectedItemKey;
-            listButtonListeners.selectedItemKeyChanged(this, previousSelectedItemKey);
+            listButtonBindingListeners.selectedItemKeyChanged(this, previousSelectedItemKey);
         }
     }
 
@@ -421,7 +425,7 @@ public class ListButton extends Button {
         BindType previousSelectedItemBindType = this.selectedItemBindType;
         if (previousSelectedItemBindType != selectedItemBindType) {
             this.selectedItemBindType = selectedItemBindType;
-            listButtonListeners.selectedItemBindTypeChanged(this, previousSelectedItemBindType);
+            listButtonBindingListeners.selectedItemBindTypeChanged(this, previousSelectedItemBindType);
         }
     }
 
@@ -434,7 +438,7 @@ public class ListButton extends Button {
 
         if (previousSelectedItemBindMapping != selectedItemBindMapping) {
             this.selectedItemBindMapping = selectedItemBindMapping;
-            listButtonListeners.selectedItemBindMappingChanged(this, previousSelectedItemBindMapping);
+            listButtonBindingListeners.selectedItemBindMappingChanged(this, previousSelectedItemBindMapping);
         }
     }
 
@@ -533,5 +537,12 @@ public class ListButton extends Button {
      */
     public ListenerList<ListButtonSelectionListener> getListButtonSelectionListeners() {
         return listButtonSelectionListeners;
+    }
+
+    /**
+     * Returns the list button binding listener list.
+     */
+    public ListenerList<ListButtonBindingListener> getListButtonBindingListeners() {
+        return listButtonBindingListeners;
     }
 }

@@ -49,9 +49,6 @@ public class Calendar extends Container {
         public Object valueOf(CalendarDate calendarDate);
     }
 
-    /**
-     * Calendar listener list.
-     */
     private static class CalendarListenerList extends ListenerList<CalendarListener>
         implements CalendarListener {
         @Override
@@ -81,28 +78,9 @@ public class Calendar extends Container {
                 listener.disabledDateFilterChanged(calendar, previousDisabledDateFilter);
             }
         }
-
-        @Override
-        public void selectedDateKeyChanged(Calendar calendar,
-            String previousSelectedDateKey) {
-            for (CalendarListener listener : this) {
-                listener.selectedDateKeyChanged(calendar, previousSelectedDateKey);
-            }
-        }
-
-        @Override
-        public void selectedDateBindMappingChanged(Calendar calendar, SelectedDateBindMapping previousSelectedDateBindMapping) {
-            for (CalendarListener listener : this) {
-                listener.selectedDateBindMappingChanged(calendar, previousSelectedDateBindMapping);
-            }
-        }
     }
 
-    /**
-     * Calendar selection listener list.
-     */
-    private static class CalendarSelectionListenerList
-        extends ListenerList<CalendarSelectionListener>
+    private static class CalendarSelectionListenerList extends ListenerList<CalendarSelectionListener>
         implements CalendarSelectionListener {
 
         @Override
@@ -114,18 +92,46 @@ public class Calendar extends Container {
         }
     }
 
+    private static class CalendarBindingListenerList extends ListenerList<CalendarBindingListener>
+        implements CalendarBindingListener {
+        @Override
+        public void selectedDateKeyChanged(Calendar calendar,
+            String previousSelectedDateKey) {
+            for (CalendarBindingListener listener : this) {
+                listener.selectedDateKeyChanged(calendar, previousSelectedDateKey);
+            }
+        }
+
+        @Override
+        public void selectedDateBindTypeChanged(Calendar calendar, BindType previousSelectedDateBindType) {
+            for (CalendarBindingListener listener : this) {
+                listener.selectedDateBindTypeChanged(calendar, previousSelectedDateBindType);
+            }
+        }
+
+        @Override
+        public void selectedDateBindMappingChanged(Calendar calendar, SelectedDateBindMapping previousSelectedDateBindMapping) {
+            for (CalendarBindingListener listener : this) {
+                listener.selectedDateBindMappingChanged(calendar, previousSelectedDateBindMapping);
+            }
+        }
+    }
+
     private int year;
     private int month;
 
     private CalendarDate selectedDate = null;
     private Locale locale = Locale.getDefault();
     private Filter<CalendarDate> disabledDateFilter = null;
+
     private String selectedDateKey = null;
+    private BindType selectedDateBindType = BindType.BOTH;
     private SelectedDateBindMapping selectedDateBindMapping = null;
 
     private CalendarListenerList calendarListeners = new CalendarListenerList();
     private CalendarSelectionListenerList calendarSelectionListeners =
         new CalendarSelectionListenerList();
+    private CalendarBindingListenerList calendarBindingListeners = new CalendarBindingListenerList();
 
     public static final String LANGUAGE_KEY = "language";
     public static final String COUNTRY_KEY = "country";
@@ -327,7 +333,20 @@ public class Calendar extends Container {
 
         if (selectedDateKey != previousSelectedDateKey) {
             this.selectedDateKey = selectedDateKey;
-            calendarListeners.selectedDateKeyChanged(this, previousSelectedDateKey);
+            calendarBindingListeners.selectedDateKeyChanged(this, previousSelectedDateKey);
+        }
+    }
+
+    public BindType getSelectedDateBindType() {
+        return selectedDateBindType;
+    }
+
+    public void setSelectedDateBindType(BindType selectedDateBindType) {
+        BindType previousSelectedDateBindType = this.selectedDateBindType;
+
+        if (previousSelectedDateBindType != selectedDateBindType) {
+            this.selectedDateBindType = selectedDateBindType;
+            calendarBindingListeners.selectedDateBindTypeChanged(this, previousSelectedDateBindType);
         }
     }
 
@@ -340,18 +359,15 @@ public class Calendar extends Container {
 
         if (previousSelectedDateBindMapping != selectedDateBindMapping) {
             this.selectedDateBindMapping = selectedDateBindMapping;
-            calendarListeners.selectedDateBindMappingChanged(this, previousSelectedDateBindMapping);
+            calendarBindingListeners.selectedDateBindMappingChanged(this, previousSelectedDateBindMapping);
         }
     }
 
-    /**
-     * Loads the selected date from the specified bind context using this date
-     * picker's bind key, if one is set.
-     */
     @Override
     public void load(Dictionary<String, ?> context) {
         if (selectedDateKey != null
-            && JSON.containsKey(context, selectedDateKey)) {
+            && JSON.containsKey(context, selectedDateKey)
+            && selectedDateBindType != BindType.STORE) {
             Object value = JSON.get(context, selectedDateKey);
 
             CalendarDate selectedDate = null;
@@ -370,22 +386,15 @@ public class Calendar extends Container {
         }
     }
 
-    /**
-     * Stores the selected date into the specified bind context using this date
-     * picker's bind key, if one is set.
-     */
     @Override
     public void store(Dictionary<String, ?> context) {
-        if (isEnabled()
-            && selectedDateKey != null) {
+        if (selectedDateKey != null
+            && selectedDateBindType != BindType.LOAD) {
             JSON.put(context, selectedDateKey, (selectedDateBindMapping == null) ?
                 selectedDate : selectedDateBindMapping.valueOf(selectedDate));
         }
     }
 
-    /**
-     * If a bind key is set, clears the selected date.
-     */
     @Override
     public void clear() {
         if (selectedDateKey != null) {
@@ -405,5 +414,12 @@ public class Calendar extends Container {
      */
     public ListenerList<CalendarSelectionListener> getCalendarSelectionListeners() {
         return calendarSelectionListeners;
+    }
+
+    /**
+     * Returns the calendar binding listener list.
+     */
+    public ListenerList<CalendarBindingListener> getCalendarBindingListeners() {
+        return calendarBindingListeners;
     }
 }

@@ -32,9 +32,6 @@ import org.apache.pivot.wtk.content.CalendarButtonDataRenderer;
  * is hidden until the user pushes the button.
  */
 public class CalendarButton extends Button {
-    /**
-     * Calendar button listener list.
-     */
     private static class CalendarButtonListenerList
         extends ListenerList<CalendarButtonListener>
         implements CalendarButtonListener {
@@ -52,27 +49,8 @@ public class CalendarButton extends Button {
                 listener.disabledDateFilterChanged(calendarButton, previousDisabledDateFilter);
             }
         }
-
-        @Override
-        public void selectedDateKeyChanged(CalendarButton calendarButton,
-            String previousSelectedDateKey) {
-            for (CalendarButtonListener listener : this) {
-                listener.selectedDateKeyChanged(calendarButton, previousSelectedDateKey);
-            }
-        }
-
-        @Override
-        public void selectedDateBindMappingChanged(CalendarButton calendarButton,
-            Calendar.SelectedDateBindMapping previousSelectedDateBindMapping) {
-            for (CalendarButtonListener listener : this) {
-                listener.selectedDateBindMappingChanged(calendarButton, previousSelectedDateBindMapping);
-            }
-        }
     }
 
-    /**
-     * Calendar button selection listener list.
-     */
     private static class CalendarButtonSelectionListenerList
         extends ListenerList<CalendarButtonSelectionListener>
         implements CalendarButtonSelectionListener {
@@ -86,16 +64,47 @@ public class CalendarButton extends Button {
         }
     }
 
+    private static class CalendarButtonBindingListenerList extends ListenerList<CalendarButtonBindingListener>
+        implements CalendarButtonBindingListener {
+        @Override
+        public void selectedDateKeyChanged(CalendarButton calendarButton,
+            String previousSelectedDateKey) {
+            for (CalendarButtonBindingListener listener : this) {
+                listener.selectedDateKeyChanged(calendarButton, previousSelectedDateKey);
+            }
+        }
+
+        @Override
+        public void selectedDateBindTypeChanged(CalendarButton calendarButton,
+            BindType previousSelectedDateBindType) {
+            for (CalendarButtonBindingListener listener : this) {
+                listener.selectedDateBindTypeChanged(calendarButton, previousSelectedDateBindType);
+            }
+        }
+
+        @Override
+        public void selectedDateBindMappingChanged(CalendarButton calendarButton,
+            Calendar.SelectedDateBindMapping previousSelectedDateBindMapping) {
+            for (CalendarButtonBindingListener listener : this) {
+                listener.selectedDateBindMappingChanged(calendarButton, previousSelectedDateBindMapping);
+            }
+        }
+    }
+
     private CalendarDate selectedDate = null;
     private Locale locale = Locale.getDefault();
     private Filter<CalendarDate> disabledDateFilter = null;
+
     private String selectedDateKey = null;
+    private BindType selectedDateBindType = BindType.BOTH;
     private Calendar.SelectedDateBindMapping selectedDateBindMapping = null;
 
     private CalendarButtonListenerList calendarButtonListeners =
         new CalendarButtonListenerList();
     private CalendarButtonSelectionListenerList calendarButtonSelectionListeners =
         new CalendarButtonSelectionListenerList();
+    private CalendarButtonBindingListenerList calendarButtonBindingListeners =
+        new CalendarButtonBindingListenerList();
 
     public static final String LANGUAGE_KEY = "language";
     public static final String COUNTRY_KEY = "country";
@@ -271,7 +280,20 @@ public class CalendarButton extends Button {
 
         if (previousSelectedDateKey != selectedDateKey) {
             this.selectedDateKey = selectedDateKey;
-            calendarButtonListeners.selectedDateKeyChanged(this, previousSelectedDateKey);
+            calendarButtonBindingListeners.selectedDateKeyChanged(this, previousSelectedDateKey);
+        }
+    }
+
+    public BindType getSelectedDateBindType() {
+        return selectedDateBindType;
+    }
+
+    public void setSelectedDateBindType(BindType selectedDateBindType) {
+        BindType previousSelectedDateBindType = this.selectedDateBindType;
+
+        if (previousSelectedDateBindType != selectedDateBindType) {
+            this.selectedDateBindType = selectedDateBindType;
+            calendarButtonBindingListeners.selectedDateBindTypeChanged(this, previousSelectedDateBindType);
         }
     }
 
@@ -284,20 +306,15 @@ public class CalendarButton extends Button {
 
         if (previousSelectedDateBindMapping != bindMapping) {
             this.selectedDateBindMapping = bindMapping;
-            calendarButtonListeners.selectedDateBindMappingChanged(this, previousSelectedDateBindMapping);
+            calendarButtonBindingListeners.selectedDateBindMappingChanged(this, previousSelectedDateBindMapping);
         }
     }
 
-    /**
-     * Loads the selected date from the specified bind context using this date
-     * picker button's bind key, if one is set.
-     */
     @Override
     public void load(Dictionary<String, ?> context) {
-        String selectedDateKey = getSelectedDateKey();
-
         if (selectedDateKey != null
-            && JSON.containsKey(context, selectedDateKey)) {
+            && JSON.containsKey(context, selectedDateKey)
+            && selectedDateBindType != BindType.STORE) {
             Object value = JSON.get(context, selectedDateKey);
 
             CalendarDate selectedDate = null;
@@ -316,22 +333,15 @@ public class CalendarButton extends Button {
         }
     }
 
-    /**
-     * Stores the selected date into the specified bind context using this date
-     * picker button's bind key, if one is set.
-     */
     @Override
     public void store(Dictionary<String, ?> context) {
-        if (isEnabled()
-            && selectedDateKey != null) {
+        if (selectedDateKey != null
+            && selectedDateBindType != BindType.LOAD) {
             JSON.put(context, selectedDateKey, (selectedDateBindMapping == null) ?
                 selectedDate : selectedDateBindMapping.valueOf(selectedDate));
         }
     }
 
-    /**
-     * If a bind key is set, clears the selected date.
-     */
     @Override
     public void clear() {
         if (selectedDateKey != null) {

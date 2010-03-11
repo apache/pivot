@@ -31,7 +31,6 @@ import java.text.StringCharacterIterator;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
-import org.apache.pivot.wtk.BindType;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
@@ -583,20 +582,5 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     @Override
     public void textChanged(Label label, String previousText) {
         invalidateComponent();
-    }
-
-    @Override
-    public void textKeyChanged(Label label, String previousTextKey) {
-        // No-op
-    }
-
-    @Override
-    public void textBindTypeChanged(Label label, BindType previousTextBindType) {
-        // No-op
-    }
-
-    @Override
-    public void textBindMappingChanged(Label label, Label.TextBindMapping previousTextBindMapping) {
-        // No-op
     }
 }

@@ -118,27 +118,6 @@ public class TextInput extends Component {
         }
 
         @Override
-        public void textKeyChanged(TextInput textInput, String previousTextKey) {
-            for (TextInputListener listener : this) {
-                listener.textKeyChanged(textInput, previousTextKey);
-            }
-        }
-
-        @Override
-        public void textBindTypeChanged(TextInput textInput, BindType previousTextBindType) {
-            for (TextInputListener listener : this) {
-                listener.textBindTypeChanged(textInput, previousTextBindType);
-            }
-        }
-
-        @Override
-        public void textBindMappingChanged(TextInput textInput, TextInput.TextBindMapping previousTextBindMapping) {
-            for (TextInputListener listener : this) {
-                listener.textBindMappingChanged(textInput, previousTextBindMapping);
-            }
-        }
-
-        @Override
         public void textValidChanged(TextInput textInput) {
             for (TextInputListener listener : this) {
                 listener.textValidChanged(textInput);
@@ -188,6 +167,30 @@ public class TextInput extends Component {
             for (TextInputSelectionListener listener : this) {
                 listener.selectionChanged(textInput,
                     previousSelectionStart, previousSelectionEnd);
+            }
+        }
+    }
+
+    private static class TextInputBindingListenerList extends ListenerList<TextInputBindingListener>
+        implements TextInputBindingListener {
+        @Override
+        public void textKeyChanged(TextInput textInput, String previousTextKey) {
+            for (TextInputBindingListener listener : this) {
+                listener.textKeyChanged(textInput, previousTextKey);
+            }
+        }
+
+        @Override
+        public void textBindTypeChanged(TextInput textInput, BindType previousTextBindType) {
+            for (TextInputBindingListener listener : this) {
+                listener.textBindTypeChanged(textInput, previousTextBindType);
+            }
+        }
+
+        @Override
+        public void textBindMappingChanged(TextInput textInput, TextInput.TextBindMapping previousTextBindMapping) {
+            for (TextInputBindingListener listener : this) {
+                listener.textBindMappingChanged(textInput, previousTextBindMapping);
             }
         }
     }
@@ -254,6 +257,7 @@ public class TextInput extends Component {
     private TextInputTextListenerList textInputTextListeners = new TextInputTextListenerList();
     private TextInputCharacterListenerList textInputCharacterListeners = new TextInputCharacterListenerList();
     private TextInputSelectionListenerList textInputSelectionListeners = new TextInputSelectionListenerList();
+    private TextInputBindingListenerList textInputBindingListeners = new TextInputBindingListenerList();
 
     public static final int DEFAULT_TEXT_SIZE = 16;
 
@@ -746,7 +750,7 @@ public class TextInput extends Component {
 
         if (previousTextKey != textKey) {
             this.textKey = textKey;
-            textInputListeners.textKeyChanged(this, previousTextKey);
+            textInputBindingListeners.textKeyChanged(this, previousTextKey);
         }
     }
 
@@ -758,7 +762,7 @@ public class TextInput extends Component {
         BindType previousTextBindType = this.textBindType;
         if (previousTextBindType != textBindType) {
             this.textBindType = textBindType;
-            textInputListeners.textBindTypeChanged(this, previousTextBindType);
+            textInputBindingListeners.textBindTypeChanged(this, previousTextBindType);
         }
 
     }
@@ -772,7 +776,7 @@ public class TextInput extends Component {
 
         if (previousTextBindMapping != textBindMapping) {
             this.textBindMapping = textBindMapping;
-            textInputListeners.textBindMappingChanged(this, previousTextBindMapping);
+            textInputBindingListeners.textBindMappingChanged(this, previousTextBindMapping);
         }
     }
 
@@ -894,5 +898,12 @@ public class TextInput extends Component {
      */
     public ListenerList<TextInputSelectionListener> getTextInputSelectionListeners() {
         return textInputSelectionListeners;
+    }
+
+    /**
+     * Returns the text input binding listener list.
+     */
+    public ListenerList<TextInputBindingListener> getTextInputBindingListeners() {
+        return textInputBindingListeners;
     }
 }

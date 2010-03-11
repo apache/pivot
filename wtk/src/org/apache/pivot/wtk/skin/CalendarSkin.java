@@ -35,15 +35,4 @@ public abstract class CalendarSkin extends ContainerSkin
         calendar.getCalendarListeners().add(this);
         calendar.getCalendarSelectionListeners().add(this);
     }
-
-    @Override
-    public void selectedDateKeyChanged(Calendar calendar,
-        String previousSelectedDateKey) {
-        // No-op
-    }
-
-    @Override
-    public void selectedDateBindMappingChanged(Calendar calendar, Calendar.SelectedDateBindMapping previousSelectedDateBindMapping) {
-        // No-op
-    }
 }

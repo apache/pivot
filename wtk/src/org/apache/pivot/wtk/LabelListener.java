@@ -21,55 +21,10 @@ package org.apache.pivot.wtk;
  */
 public interface LabelListener {
     /**
-     * Label listener adapter.
-     */
-    public static class Adapter implements LabelListener {
-        @Override
-        public void textChanged(Label label, String previousText) {
-        }
-
-        @Override
-        public void textKeyChanged(Label label, String previousTextKey) {
-        }
-
-        @Override
-        public void textBindTypeChanged(Label label, BindType previousTextBindType) {
-        }
-
-        @Override
-        public void textBindMappingChanged(Label label, Label.TextBindMapping previousTextBindMapping) {
-        }
-    }
-
-    /**
      * Called when a label's text has changed.
      *
      * @param label
      * @param previousText
      */
     public void textChanged(Label label, String previousText);
-
-    /**
-     * Called when a label's text key has changed.
-     *
-     * @param label
-     * @param previousTextKey
-     */
-    public void textKeyChanged(Label label, String previousTextKey);
-
-    /**
-     * Called when a label's text bind type has changed.
-     *
-     * @param label
-     * @param previousTextBindType
-     */
-    public void textBindTypeChanged(Label label, BindType previousTextBindType);
-
-    /**
-     * Called when a label's bind mapping has changed.
-     *
-     * @param label
-     * @param previousTextBindMapping
-     */
-    public void textBindMappingChanged(Label label, Label.TextBindMapping previousTextBindMapping);
 }

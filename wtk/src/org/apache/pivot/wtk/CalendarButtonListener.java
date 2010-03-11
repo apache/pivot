@@ -37,16 +37,6 @@ public interface CalendarButtonListener {
         public void disabledDateFilterChanged(CalendarButton calendarButton,
             Filter<CalendarDate> previousDisabledDateFilter) {
         }
-
-        @Override
-        public void selectedDateKeyChanged(CalendarButton calendarButton,
-            String previousSelectedDateKey) {
-        }
-
-        @Override
-        public void selectedDateBindMappingChanged(CalendarButton calendarButton,
-            Calendar.SelectedDateBindMapping previousSelectedDateBindMapping) {
-        }
     }
 
     /**
@@ -65,22 +55,4 @@ public interface CalendarButtonListener {
      */
     public void disabledDateFilterChanged(CalendarButton calendarButton,
         Filter<CalendarDate> previousDisabledDateFilter);
-
-    /**
-     * Called when a calendar button's selected date key has changed.
-     *
-     * @param calendarButton
-     * @param previousSelectedDateKey
-     */
-    public void selectedDateKeyChanged(CalendarButton calendarButton,
-        String previousSelectedDateKey);
-
-    /**
-     * Called when a calendar button's selection bind mapping has changed.
-     *
-     * @param calendarButton
-     * @param previousSelectedDateBindMapping
-     */
-    public void selectedDateBindMappingChanged(CalendarButton calendarButton,
-        Calendar.SelectedDateBindMapping previousSelectedDateBindMapping);
 }

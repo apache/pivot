@@ -48,18 +48,6 @@ public interface TextInputListener {
         }
 
         @Override
-        public void textKeyChanged(TextInput textInput, String previousTextKey) {
-        }
-
-        @Override
-        public void textBindTypeChanged(TextInput textInput, BindType previousTextBindType) {
-        }
-
-        @Override
-        public void textBindMappingChanged(TextInput textInput, TextInput.TextBindMapping previousTextBindMapping) {
-        }
-
-        @Override
         public void textValidChanged(TextInput textInput) {
         }
 
@@ -109,30 +97,6 @@ public interface TextInputListener {
      * @param previousPrompt
      */
     public void promptChanged(TextInput textInput, String previousPrompt);
-
-    /**
-     * Called when a text input's text key has changed.
-     *
-     * @param textInput
-     * @param previousTextKey
-     */
-    public void textKeyChanged(TextInput textInput, String previousTextKey);
-
-    /**
-     * Called when a text input's text bind type has changed.
-     *
-     * @param textInput
-     * @param previousTextBindType
-     */
-    public void textBindTypeChanged(TextInput textInput, BindType previousTextBindType);
-
-    /**
-     * Called when a text input's bind mapping has changed.
-     *
-     * @param textInput
-     * @param previousTextBindMapping
-     */
-    public void textBindMappingChanged(TextInput textInput, TextInput.TextBindMapping previousTextBindMapping);
 
     /**
      * Called when the text changes validity.

@@ -934,114 +934,6 @@ public class TableView extends Component {
     }
 
     /**
-     * Table view listener list.
-     */
-    private static class TableViewListenerList extends ListenerList<TableViewListener>
-        implements TableViewListener {
-        @Override
-        public void tableDataChanged(TableView tableView, List<?> previousTableData) {
-            for (TableViewListener listener : this) {
-                listener.tableDataChanged(tableView, previousTableData);
-            }
-        }
-
-        @Override
-        public void columnSourceChanged(TableView tableView, TableView previousColumnSource) {
-            for (TableViewListener listener : this) {
-                listener.columnSourceChanged(tableView, previousColumnSource);
-            }
-        }
-
-        @Override
-        public void rowEditorChanged(TableView tableView,
-            TableView.RowEditor previousRowEditor) {
-            for (TableViewListener listener : this) {
-                listener.rowEditorChanged(tableView, previousRowEditor);
-            }
-        }
-
-        @Override
-        public void selectModeChanged(TableView tableView, SelectMode previousSelectMode) {
-            for (TableViewListener listener : this) {
-                listener.selectModeChanged(tableView, previousSelectMode);
-            }
-        }
-
-        @Override
-        public void disabledRowFilterChanged(TableView tableView, Filter<?> previousDisabledRowFilter) {
-            for (TableViewListener listener : this) {
-                listener.disabledRowFilterChanged(tableView, previousDisabledRowFilter);
-            }
-        }
-
-        @Override
-        public void tableDataKeyChanged(TableView tableView, String previousTableDataKey) {
-            for (TableViewListener listener : this) {
-                listener.tableDataKeyChanged(tableView, previousTableDataKey);
-            }
-        }
-
-        @Override
-        public void tableDataBindTypeChanged(TableView tableView, BindType previousTableDataBindType) {
-            for (TableViewListener listener : this) {
-                listener.tableDataBindTypeChanged(tableView, previousTableDataBindType);
-            }
-        }
-
-        @Override
-        public void tableDataBindMappingChanged(TableView tableView,
-            TableView.TableDataBindMapping previousTableDataBindMapping) {
-            for (TableViewListener listener : this) {
-                listener.tableDataBindMappingChanged(tableView, previousTableDataBindMapping);
-            }
-        }
-
-        @Override
-        public void selectedRowKeyChanged(TableView tableView, String previousSelectedRowKey) {
-            for (TableViewListener listener : this) {
-                listener.selectedRowKeyChanged(tableView, previousSelectedRowKey);
-            }
-        }
-
-        @Override
-        public void selectedRowBindTypeChanged(TableView tableView, BindType previousSelectedRowBindType) {
-            for (TableViewListener listener : this) {
-                listener.selectedRowBindTypeChanged(tableView, previousSelectedRowBindType);
-            }
-        }
-
-        @Override
-        public void selectedRowBindMappingChanged(TableView tableView,
-            TableView.SelectedRowBindMapping previousSelectedRowBindMapping) {
-            for (TableViewListener listener : this) {
-                listener.selectedRowBindMappingChanged(tableView, previousSelectedRowBindMapping);
-            }
-        }
-
-        @Override
-        public void selectedRowsKeyChanged(TableView tableView, String previousSelectedRowsKey) {
-            for (TableViewListener listener : this) {
-                listener.selectedRowsKeyChanged(tableView, previousSelectedRowsKey);
-            }
-        }
-
-        @Override
-        public void selectedRowsBindTypeChanged(TableView tableView, BindType previousSelectedRowsBindType) {
-            for (TableViewListener listener : this) {
-                listener.selectedRowsBindTypeChanged(tableView, previousSelectedRowsBindType);
-            }
-        }
-
-        @Override
-        public void selectedRowsBindMappingChanged(TableView tableView,
-            TableView.SelectedRowBindMapping previousSelectedRowsBindMapping) {
-            for (TableViewListener listener : this) {
-                listener.selectedRowsBindMappingChanged(tableView, previousSelectedRowsBindMapping);
-            }
-        }
-    }
-
-    /**
      * Sort dictionary implementation.
      */
     public final class SortDictionary implements Dictionary<String, SortDirection>, Iterable<String> {
@@ -1105,9 +997,45 @@ public class TableView extends Component {
         }
     }
 
-    /**
-     * Table view column listener list.
-     */
+    private static class TableViewListenerList extends ListenerList<TableViewListener>
+        implements TableViewListener {
+        @Override
+        public void tableDataChanged(TableView tableView, List<?> previousTableData) {
+            for (TableViewListener listener : this) {
+                listener.tableDataChanged(tableView, previousTableData);
+            }
+        }
+
+        @Override
+        public void columnSourceChanged(TableView tableView, TableView previousColumnSource) {
+            for (TableViewListener listener : this) {
+                listener.columnSourceChanged(tableView, previousColumnSource);
+            }
+        }
+
+        @Override
+        public void rowEditorChanged(TableView tableView,
+            TableView.RowEditor previousRowEditor) {
+            for (TableViewListener listener : this) {
+                listener.rowEditorChanged(tableView, previousRowEditor);
+            }
+        }
+
+        @Override
+        public void selectModeChanged(TableView tableView, SelectMode previousSelectMode) {
+            for (TableViewListener listener : this) {
+                listener.selectModeChanged(tableView, previousSelectMode);
+            }
+        }
+
+        @Override
+        public void disabledRowFilterChanged(TableView tableView, Filter<?> previousDisabledRowFilter) {
+            for (TableViewListener listener : this) {
+                listener.disabledRowFilterChanged(tableView, previousDisabledRowFilter);
+            }
+        }
+    }
+
     private static class TableViewColumnListenerList extends ListenerList<TableViewColumnListener>
         implements TableViewColumnListener {
         @Override
@@ -1167,9 +1095,6 @@ public class TableView extends Component {
         }
     }
 
-    /**
-     * Table view row listener list.
-     */
     private static class TableViewRowListenerList extends ListenerList<TableViewRowListener>
         implements TableViewRowListener {
         @Override
@@ -1208,9 +1133,6 @@ public class TableView extends Component {
         }
     }
 
-    /**
-     * Table view selection detail listener list.
-     */
     private static class TableViewSelectionListenerList extends ListenerList<TableViewSelectionListener>
         implements TableViewSelectionListener {
         @Override
@@ -1260,6 +1182,75 @@ public class TableView extends Component {
         public void sortChanged(TableView tableView) {
             for (TableViewSortListener listener : this) {
                 listener.sortChanged(tableView);
+            }
+        }
+    }
+
+    private static class TableViewBindingListenerList extends ListenerList<TableViewBindingListener>
+        implements TableViewBindingListener {
+        @Override
+        public void tableDataKeyChanged(TableView tableView, String previousTableDataKey) {
+            for (TableViewBindingListener listener : this) {
+                listener.tableDataKeyChanged(tableView, previousTableDataKey);
+            }
+        }
+
+        @Override
+        public void tableDataBindTypeChanged(TableView tableView, BindType previousTableDataBindType) {
+            for (TableViewBindingListener listener : this) {
+                listener.tableDataBindTypeChanged(tableView, previousTableDataBindType);
+            }
+        }
+
+        @Override
+        public void tableDataBindMappingChanged(TableView tableView,
+            TableView.TableDataBindMapping previousTableDataBindMapping) {
+            for (TableViewBindingListener listener : this) {
+                listener.tableDataBindMappingChanged(tableView, previousTableDataBindMapping);
+            }
+        }
+
+        @Override
+        public void selectedRowKeyChanged(TableView tableView, String previousSelectedRowKey) {
+            for (TableViewBindingListener listener : this) {
+                listener.selectedRowKeyChanged(tableView, previousSelectedRowKey);
+            }
+        }
+
+        @Override
+        public void selectedRowBindTypeChanged(TableView tableView, BindType previousSelectedRowBindType) {
+            for (TableViewBindingListener listener : this) {
+                listener.selectedRowBindTypeChanged(tableView, previousSelectedRowBindType);
+            }
+        }
+
+        @Override
+        public void selectedRowBindMappingChanged(TableView tableView,
+            TableView.SelectedRowBindMapping previousSelectedRowBindMapping) {
+            for (TableViewBindingListener listener : this) {
+                listener.selectedRowBindMappingChanged(tableView, previousSelectedRowBindMapping);
+            }
+        }
+
+        @Override
+        public void selectedRowsKeyChanged(TableView tableView, String previousSelectedRowsKey) {
+            for (TableViewBindingListener listener : this) {
+                listener.selectedRowsKeyChanged(tableView, previousSelectedRowsKey);
+            }
+        }
+
+        @Override
+        public void selectedRowsBindTypeChanged(TableView tableView, BindType previousSelectedRowsBindType) {
+            for (TableViewBindingListener listener : this) {
+                listener.selectedRowsBindTypeChanged(tableView, previousSelectedRowsBindType);
+            }
+        }
+
+        @Override
+        public void selectedRowsBindMappingChanged(TableView tableView,
+            TableView.SelectedRowBindMapping previousSelectedRowsBindMapping) {
+            for (TableViewBindingListener listener : this) {
+                listener.selectedRowsBindMappingChanged(tableView, previousSelectedRowsBindMapping);
             }
         }
     }
@@ -1344,6 +1335,7 @@ public class TableView extends Component {
     private TableViewRowListenerList tableViewRowListeners = new TableViewRowListenerList();
     private TableViewSelectionListenerList tableViewSelectionListeners = new TableViewSelectionListenerList();
     private TableViewSortListenerList tableViewSortListeners = new TableViewSortListenerList();
+    private TableViewBindingListenerList tableViewBindingListeners = new TableViewBindingListenerList();
 
     public static final String COLUMN_NAME_KEY = "columnName";
     public static final String SORT_DIRECTION_KEY = "sortDirection";
@@ -2099,7 +2091,7 @@ public class TableView extends Component {
         String previousTableDataKey = this.tableDataKey;
         if (previousTableDataKey != tableDataKey) {
             this.tableDataKey = tableDataKey;
-            tableViewListeners.tableDataKeyChanged(this, previousTableDataKey);
+            tableViewBindingListeners.tableDataKeyChanged(this, previousTableDataKey);
         }
     }
 
@@ -2116,7 +2108,7 @@ public class TableView extends Component {
 
         if (previousTableDataBindType != tableDataBindType) {
             this.tableDataBindType = tableDataBindType;
-            tableViewListeners.tableDataBindTypeChanged(this, previousTableDataBindType);
+            tableViewBindingListeners.tableDataBindTypeChanged(this, previousTableDataBindType);
         }
     }
 
@@ -2129,7 +2121,7 @@ public class TableView extends Component {
 
         if (previousTableDataBindMapping != tableDataBindMapping) {
             this.tableDataBindMapping = tableDataBindMapping;
-            tableViewListeners.tableDataBindMappingChanged(this, previousTableDataBindMapping);
+            tableViewBindingListeners.tableDataBindMappingChanged(this, previousTableDataBindMapping);
         }
     }
 
@@ -2142,7 +2134,7 @@ public class TableView extends Component {
 
         if (previousSelectedRowKey != selectedRowKey) {
             this.selectedRowKey = selectedRowKey;
-            tableViewListeners.selectedRowKeyChanged(this, previousSelectedRowKey);
+            tableViewBindingListeners.selectedRowKeyChanged(this, previousSelectedRowKey);
         }
     }
 
@@ -2158,7 +2150,7 @@ public class TableView extends Component {
         BindType previousSelectedRowBindType = this.selectedRowBindType;
         if (previousSelectedRowBindType != selectedRowBindType) {
             this.selectedRowBindType = selectedRowBindType;
-            tableViewListeners.selectedRowBindTypeChanged(this, previousSelectedRowBindType);
+            tableViewBindingListeners.selectedRowBindTypeChanged(this, previousSelectedRowBindType);
         }
     }
 
@@ -2171,7 +2163,7 @@ public class TableView extends Component {
 
         if (previousSelectedRowBindMapping != selectedRowBindMapping) {
             this.selectedRowBindMapping = selectedRowBindMapping;
-            tableViewListeners.selectedRowBindMappingChanged(this, previousSelectedRowBindMapping);
+            tableViewBindingListeners.selectedRowBindMappingChanged(this, previousSelectedRowBindMapping);
         }
     }
 
@@ -2184,7 +2176,7 @@ public class TableView extends Component {
 
         if (previousSelectedRowsKey != selectedRowsKey) {
             this.selectedRowsKey = selectedRowsKey;
-            tableViewListeners.selectedRowsKeyChanged(this, previousSelectedRowsKey);
+            tableViewBindingListeners.selectedRowsKeyChanged(this, previousSelectedRowsKey);
         }
     }
 
@@ -2200,7 +2192,7 @@ public class TableView extends Component {
         BindType previousSelectedRowsBindType = this.selectedRowsBindType;
         if (previousSelectedRowsBindType != selectedRowsBindType) {
             this.selectedRowsBindType = selectedRowsBindType;
-            tableViewListeners.selectedRowsBindTypeChanged(this, previousSelectedRowsBindType);
+            tableViewBindingListeners.selectedRowsBindTypeChanged(this, previousSelectedRowsBindType);
         }
     }
 
@@ -2213,7 +2205,7 @@ public class TableView extends Component {
 
         if (previousSelectedRowsBindMapping != selectedRowsBindMapping) {
             this.selectedRowsBindMapping = selectedRowsBindMapping;
-            tableViewListeners.selectedRowsBindMappingChanged(this, previousSelectedRowsBindMapping);
+            tableViewBindingListeners.selectedRowsBindMappingChanged(this, previousSelectedRowsBindMapping);
         }
     }
 
@@ -2462,5 +2454,9 @@ public class TableView extends Component {
 
     public ListenerList<TableViewSortListener> getTableViewSortListeners() {
         return tableViewSortListeners;
+    }
+
+    public ListenerList<TableViewBindingListener> getTableViewBindingListeners() {
+        return tableViewBindingListeners;
     }
 }

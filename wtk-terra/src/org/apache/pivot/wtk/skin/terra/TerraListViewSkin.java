@@ -27,7 +27,6 @@ import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.Filter;
-import org.apache.pivot.wtk.BindType;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Checkbox;
 import org.apache.pivot.wtk.Component;
@@ -1063,70 +1062,6 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     public void disabledCheckmarkFilterChanged(ListView listView,
         Filter<?> previousDisabledCheckmarkFilter) {
         repaintComponent();
-    }
-
-    @Override
-    public void listDataKeyChanged(ListView listView, String previousListDataKey) {
-        // No-op
-    }
-
-    @Override
-    public void listDataBindTypeChanged(ListView listView, BindType previousListDataBindType) {
-        // No-op
-    }
-
-    @Override
-    public void listDataBindMappingChanged(ListView listView,
-        ListView.ListDataBindMapping previousListDataBindMapping) {
-        // No-op
-    }
-
-    @Override
-    public void selectedItemKeyChanged(ListView listView, String previousSelectedItemKey) {
-        // No-op
-    }
-
-    @Override
-    public void selectedItemBindTypeChanged(ListView listView, BindType previousSelectedItemBindType) {
-        // No-op
-    }
-
-    @Override
-    public void selectedItemBindMappingChanged(ListView listView,
-        ListView.ItemBindMapping previousSelectedItemBindMapping) {
-        // No-op
-    }
-
-    @Override
-    public void selectedItemsKeyChanged(ListView listView, String previousSelectedItemsKey) {
-        // No-op
-    }
-
-    @Override
-    public void selectedItemsBindTypeChanged(ListView listView, BindType previousSelectedItemsBindType) {
-        // No-op
-    }
-
-    @Override
-    public void selectedItemsBindMappingChanged(ListView listView,
-        ListView.ItemBindMapping previousSelectedItemsBindMapping) {
-        // No-op
-    }
-
-    @Override
-    public void checkedItemsKeyChanged(ListView listView, String previousCheckedItemsKey) {
-        // No-op
-    }
-
-    @Override
-    public void checkedItemsBindTypeChanged(ListView listView, BindType previousCheckedItemsBindType) {
-        // No-op
-    }
-
-    @Override
-    public void checkedItemsBindMappingChanged(ListView listView,
-        ListView.ItemBindMapping previousCheckedItemsBindMapping) {
-        // No-op
     }
 
     // List view item events

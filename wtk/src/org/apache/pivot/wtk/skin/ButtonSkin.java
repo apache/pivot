@@ -17,7 +17,6 @@
 package org.apache.pivot.wtk.skin;
 
 import org.apache.pivot.wtk.Action;
-import org.apache.pivot.wtk.BindType;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonGroup;
 import org.apache.pivot.wtk.ButtonListener;
@@ -111,36 +110,6 @@ public abstract class ButtonSkin extends ComponentSkin
 
     @Override
     public void buttonGroupChanged(Button button, ButtonGroup previousButtonGroup) {
-        // No-op
-    }
-
-    @Override
-    public void selectedKeyChanged(Button button, String previousSelectedKey) {
-        // No-op
-    }
-
-    @Override
-    public void selectedBindTypeChanged(Button button, BindType previousSelectedBindType) {
-        // No-op
-    }
-
-    @Override
-    public void selectedBindMappingChanged(Button button, Button.SelectedBindMapping previousSelectedBindMapping) {
-        // No-op
-    }
-
-    @Override
-    public void stateKeyChanged(Button button, String previousStateKey) {
-        // No-op
-    }
-
-    @Override
-    public void stateBindTypeChanged(Button button, BindType previousStateBindType) {
-        // No-op
-    }
-
-    @Override
-    public void stateBindMappingChanged(Button button, Button.StateBindMapping previousStateBindMapping) {
         // No-op
     }
 
