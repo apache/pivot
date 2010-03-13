@@ -222,7 +222,8 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
             int n = text.length();
 
             if (n > 0) {
-                if (wrapText) {
+                if (wrapText
+                    && n > 1) {
                     int width = getWidth() - (padding.left + padding.right);
 
                     float lineWidth = 0;
