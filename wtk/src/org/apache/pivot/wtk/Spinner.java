@@ -65,6 +65,27 @@ public class Spinner extends Container {
     }
 
     /**
+     * Translates between spinner and bind context data during data binding.
+     */
+    public interface SpinnerDataBindMapping {
+        /**
+         * Converts a context value to spinner data during a
+         * {@link Component#load(Dictionary)} operation.
+         *
+         * @param value
+         */
+        public List<?> toSpinnerData(Object value);
+
+        /**
+         * Converts spinner data to a context value during a
+         * {@link Component#store(Dictionary)} operation.
+         *
+         * @param spinnerData
+         */
+        public Object valueOf(List<?> spinnerData);
+    }
+
+    /**
      * Spinner skin interface. Spinner skins must implement this interface to
      * facilitate additional communication between the component and the skin.
      */
@@ -105,60 +126,6 @@ public class Spinner extends Container {
         public Object get(List<?> spinnerData, int index);
     }
 
-    /**
-     * List event handler.
-     */
-    private class ListHandler implements ListListener<Object> {
-        @Override
-        public void itemInserted(List<Object> list, int index) {
-            if (index <= selectedIndex) {
-                selectedIndex++;
-            }
-
-            // Notify listeners that items were inserted
-            spinnerItemListeners.itemInserted(Spinner.this, index);
-        }
-
-        @Override
-        public void itemsRemoved(List<Object> list, int index, Sequence<Object> items) {
-            int count = items.getLength();
-
-            if (index + count <= selectedIndex) {
-                selectedIndex--;
-            } else if (index <= selectedIndex) {
-                selectedIndex = -1;
-            }
-
-            // Notify listeners that items were removed
-            spinnerItemListeners.itemsRemoved(Spinner.this, index, count);
-        }
-
-        @Override
-        public void itemUpdated(List<Object> list, int index, Object previousItem) {
-            spinnerItemListeners.itemUpdated(Spinner.this, index);
-        }
-
-        @Override
-        public void listCleared(List<Object> list) {
-            // All items were removed; clear the selection and notify
-            // listeners
-            selectedIndex = -1;
-            spinnerItemListeners.itemsCleared(Spinner.this);
-        }
-
-        @Override
-        public void comparatorChanged(List<Object> list,
-            Comparator<Object> previousComparator) {
-            if (list.getComparator() != null) {
-                selectedIndex = -1;
-                spinnerItemListeners.itemsSorted(Spinner.this);
-            }
-        }
-    }
-
-    /**
-     * Spinner listener list.
-     */
     private static class SpinnerListenerList extends ListenerList<SpinnerListener>
         implements SpinnerListener {
         @Override
@@ -236,6 +203,28 @@ public class Spinner extends Container {
     private class SpinnerBindingListenerList extends ListenerList<SpinnerBindingListener>
         implements SpinnerBindingListener {
         @Override
+        public void spinnerDataKeyChanged(Spinner spinner, String previousSpinnerDataKey) {
+            for (SpinnerBindingListener listener : this) {
+                listener.spinnerDataKeyChanged(spinner, previousSpinnerDataKey);
+            }
+        }
+
+        @Override
+        public void spinnerDataBindTypeChanged(Spinner spinner, BindType previousSpinnerDataBindType) {
+            for (SpinnerBindingListener listener : this) {
+                listener.spinnerDataBindTypeChanged(spinner, previousSpinnerDataBindType);
+            }
+        }
+
+        @Override
+        public void spinnerDataBindMappingChanged(Spinner spinner,
+            Spinner.SpinnerDataBindMapping previousSpinnerDataBindMapping) {
+            for (SpinnerBindingListener listener : this) {
+                listener.spinnerDataBindMappingChanged(spinner, previousSpinnerDataBindMapping);
+            }
+        }
+
+        @Override
         public void selectedItemKeyChanged(Spinner spinner, String previousSelectedItemKey) {
             for (SpinnerBindingListener listener : this) {
                 listener.selectedItemKeyChanged(spinner, previousSelectedItemKey);
@@ -258,16 +247,67 @@ public class Spinner extends Container {
     }
 
     private List<?> spinnerData = null;
-    private ListHandler spinnerDataHandler = new ListHandler();
 
     private ItemRenderer itemRenderer = null;
 
     private boolean circular = false;
     private int selectedIndex = -1;
 
+    private String spinnerDataKey = null;
+    private BindType spinnerDataBindType = BindType.BOTH;
+    private SpinnerDataBindMapping spinnerDataBindMapping = null;
+
     private String selectedItemKey = null;
     private BindType selectedItemBindType = BindType.BOTH;
     private ItemBindMapping selectedItemBindMapping = null;
+
+    private ListListener<Object> spinnerDataListener = new ListListener<Object>() {
+        @Override
+        public void itemInserted(List<Object> list, int index) {
+            if (index <= selectedIndex) {
+                selectedIndex++;
+            }
+
+            // Notify listeners that items were inserted
+            spinnerItemListeners.itemInserted(Spinner.this, index);
+        }
+
+        @Override
+        public void itemsRemoved(List<Object> list, int index, Sequence<Object> items) {
+            int count = items.getLength();
+
+            if (index + count <= selectedIndex) {
+                selectedIndex--;
+            } else if (index <= selectedIndex) {
+                selectedIndex = -1;
+            }
+
+            // Notify listeners that items were removed
+            spinnerItemListeners.itemsRemoved(Spinner.this, index, count);
+        }
+
+        @Override
+        public void itemUpdated(List<Object> list, int index, Object previousItem) {
+            spinnerItemListeners.itemUpdated(Spinner.this, index);
+        }
+
+        @Override
+        public void listCleared(List<Object> list) {
+            // All items were removed; clear the selection and notify
+            // listeners
+            selectedIndex = -1;
+            spinnerItemListeners.itemsCleared(Spinner.this);
+        }
+
+        @Override
+        public void comparatorChanged(List<Object> list,
+            Comparator<Object> previousComparator) {
+            if (list.getComparator() != null) {
+                selectedIndex = -1;
+                spinnerItemListeners.itemsSorted(Spinner.this);
+            }
+        }
+    };
 
     private SpinnerListenerList spinnerListeners = new SpinnerListenerList();
     private SpinnerItemListenerList spinnerItemListeners = new SpinnerItemListenerList();
@@ -323,10 +363,10 @@ public class Spinner extends Container {
                 // Clear any existing selection
                 selectedIndex = -1;
 
-                ((List<Object>)previousSpinnerData).getListListeners().remove(spinnerDataHandler);
+                ((List<Object>)previousSpinnerData).getListListeners().remove(spinnerDataListener);
             }
 
-            ((List<Object>)spinnerData).getListListeners().add(spinnerDataHandler);
+            ((List<Object>)spinnerData).getListListeners().add(spinnerDataListener);
 
             // Update the spinner data and fire change event
             this.spinnerData = spinnerData;
@@ -438,16 +478,60 @@ public class Spinner extends Container {
         setSelectedIndex((item == null) ? -1 : ((List<Object>)spinnerData).indexOf(item));
     }
 
-    /**
-     * Gets the data binding key that is set on this spinner.
-     */
+    public String getSpinnerDataKey() {
+        return spinnerDataKey;
+    }
+
+    public void setSpinnerDataKey(String spinnerDataKey) {
+        String previousSpinnerDataKey = this.spinnerDataKey;
+        if (previousSpinnerDataKey != spinnerDataKey) {
+            this.spinnerDataKey = spinnerDataKey;
+            spinnerBindingListeners.spinnerDataKeyChanged(this, previousSpinnerDataKey);
+        }
+    }
+
+    public BindType getSpinnerDataBindType() {
+        return spinnerDataBindType;
+    }
+
+    public void setSpinnerDataBindType(BindType spinnerDataBindType) {
+        if (spinnerDataBindType == null) {
+            throw new IllegalArgumentException();
+        }
+
+        BindType previousSpinnerDataBindType = this.spinnerDataBindType;
+
+        if (previousSpinnerDataBindType != spinnerDataBindType) {
+            this.spinnerDataBindType = spinnerDataBindType;
+            spinnerBindingListeners.spinnerDataBindTypeChanged(this, previousSpinnerDataBindType);
+        }
+    }
+
+    public final void setSpinnerDataBindType(String spinnerDataBindType) {
+        if (spinnerDataBindType == null) {
+            throw new IllegalArgumentException();
+        }
+
+        setSpinnerDataBindType(BindType.valueOf(spinnerDataBindType.toUpperCase()));
+    }
+
+    public SpinnerDataBindMapping getSpinnerDataBindMapping() {
+        return spinnerDataBindMapping;
+    }
+
+    public void setSpinnerDataBindMapping(SpinnerDataBindMapping spinnerDataBindMapping) {
+        SpinnerDataBindMapping previousSpinnerDataBindMapping = this.spinnerDataBindMapping;
+
+        if (previousSpinnerDataBindMapping != spinnerDataBindMapping) {
+            this.spinnerDataBindMapping = spinnerDataBindMapping;
+            spinnerBindingListeners.spinnerDataBindMappingChanged(this, previousSpinnerDataBindMapping);
+        }
+    }
+
     public String getSelectedItemKey() {
         return selectedItemKey;
     }
 
-    /**
-     * Sets this spinner's data binding key.
-     */
     public void setSelectedItemKey(String selectedItemKey) {
         String previousSelectedItemKey = this.selectedItemKey;
 
@@ -473,6 +557,14 @@ public class Spinner extends Container {
         }
     }
 
+    public final void setSelectedItemBindType(String selectedItemBindType) {
+        if (selectedItemBindType == null) {
+            throw new IllegalArgumentException();
+        }
+
+        setSelectedItemBindType(BindType.valueOf(selectedItemBindType.toUpperCase()));
+    }
+
     public ItemBindMapping getSelectedItemBindMapping() {
         return selectedItemBindMapping;
     }
@@ -489,6 +581,23 @@ public class Spinner extends Container {
     @Override
     @SuppressWarnings("unchecked")
     public void load(Dictionary<String, ?> context) {
+        // Bind to spinner data
+        if (spinnerDataKey != null
+            && spinnerDataBindType != BindType.STORE
+            && JSON.containsKey(context, spinnerDataKey)) {
+            Object value = JSON.get(context, spinnerDataKey);
+
+            List<?> spinnerData;
+            if (spinnerDataBindMapping == null) {
+                spinnerData = (List<?>)value;
+            } else {
+                spinnerData = spinnerDataBindMapping.toSpinnerData(value);
+            }
+
+            setSpinnerData(spinnerData);
+        }
+
+        // Bind to selected item
         if (selectedItemKey != null
             && JSON.containsKey(context, selectedItemKey)
             && selectedItemBindType != BindType.STORE) {
@@ -507,6 +616,20 @@ public class Spinner extends Container {
 
     @Override
     public void store(Dictionary<String, ?> context) {
+        // Bind to spinner data
+        if (spinnerDataKey != null
+            && spinnerDataBindType != BindType.LOAD) {
+            Object value;
+            if (spinnerDataBindMapping == null) {
+                value = spinnerData;
+            } else {
+                value = spinnerDataBindMapping.valueOf(spinnerData);
+            }
+
+            JSON.put(context, spinnerDataKey, value);
+        }
+
+        // Bind to selected item
         if (selectedItemKey != null
             && selectedItemBindType != BindType.LOAD) {
             Object item;

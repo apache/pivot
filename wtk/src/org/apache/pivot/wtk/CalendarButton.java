@@ -289,12 +289,24 @@ public class CalendarButton extends Button {
     }
 
     public void setSelectedDateBindType(BindType selectedDateBindType) {
+        if (selectedDateBindType == null) {
+            throw new IllegalArgumentException();
+        }
+
         BindType previousSelectedDateBindType = this.selectedDateBindType;
 
         if (previousSelectedDateBindType != selectedDateBindType) {
             this.selectedDateBindType = selectedDateBindType;
             calendarButtonBindingListeners.selectedDateBindTypeChanged(this, previousSelectedDateBindType);
         }
+    }
+
+    public final void setSelectedDateBindType(String selectedDateBindType) {
+        if (selectedDateBindType == null) {
+            throw new IllegalArgumentException();
+        }
+
+        setSelectedDateBindType(BindType.valueOf(selectedDateBindType.toUpperCase()));
     }
 
     public Calendar.SelectedDateBindMapping getSelectedDateBindMapping() {

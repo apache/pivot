@@ -25,6 +25,19 @@ public interface SpinnerBindingListener {
      */
     public static class Adapter implements SpinnerBindingListener {
         @Override
+        public void spinnerDataKeyChanged(Spinner spinner, String previousSpinnerDataKey) {
+        }
+
+        @Override
+        public void spinnerDataBindTypeChanged(Spinner spinner, BindType previousSpinnerDataBindType) {
+        }
+
+        @Override
+        public void spinnerDataBindMappingChanged(Spinner spinner,
+            Spinner.SpinnerDataBindMapping previousSpinnerDataBindMapping) {
+        }
+
+        @Override
         public void selectedItemKeyChanged(Spinner spinner, String previousSelectedItemKey) {
         }
 
@@ -36,6 +49,31 @@ public interface SpinnerBindingListener {
         public void selectedItemBindMappingChanged(Spinner spinner, Spinner.ItemBindMapping previousSelectedItemBindMapping) {
         }
     }
+
+    /**
+     * Called when a spinner's spinner data key has changed.
+     *
+     * @param spinner
+     * @param previousSpinnerDataKey
+     */
+    public void spinnerDataKeyChanged(Spinner spinner, String previousSpinnerDataKey);
+
+    /**
+     * Called when a spinner's spinner data bind type has changed.
+     *
+     * @param spinner
+     * @param previousSpinnerDataBindType
+     */
+    public void spinnerDataBindTypeChanged(Spinner spinner, BindType previousSpinnerDataBindType);
+
+    /**
+     * Called when a spinner's spinner data bind mapping has changed.
+     *
+     * @param spinner
+     * @param previousSpinnerDataBindMapping
+     */
+    public void spinnerDataBindMappingChanged(Spinner spinner,
+        Spinner.SpinnerDataBindMapping previousSpinnerDataBindMapping);
 
     /**
      * Called when a spinner's selected item key has changed.

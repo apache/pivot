@@ -188,6 +188,8 @@ public class TextArea extends Component {
             }
         }
     }
+
+    // TODO Don't allow null values, only empty strings
     private Document document;
 
     private int selectionStart = 0;
@@ -825,12 +827,24 @@ public class TextArea extends Component {
     }
 
     public void setTextBindType(BindType textBindType) {
+        if (textBindType == null) {
+            throw new IllegalArgumentException();
+        }
+
         BindType previousTextBindType = this.textBindType;
+
         if (previousTextBindType != textBindType) {
             this.textBindType = textBindType;
             textAreaBindingListeners.textBindTypeChanged(this, previousTextBindType);
         }
+    }
 
+    public final void setTextBindType(String textBindType) {
+        if (textBindType == null) {
+            throw new IllegalArgumentException();
+        }
+
+        setTextBindType(BindType.valueOf(textBindType.toUpperCase()));
     }
 
     public TextBindMapping getTextBindMapping() {
@@ -854,9 +868,7 @@ public class TextArea extends Component {
             Object value = JSON.get(context, textKey);
 
             if (textBindMapping == null) {
-                if (value != null) {
-                    value = value.toString();
-                }
+                value = (value == null) ? "" : value.toString();
             } else {
                 value = textBindMapping.toString(value);
             }
@@ -878,7 +890,7 @@ public class TextArea extends Component {
     @Override
     public void clear() {
         if (textKey != null) {
-            setText((String)null);
+            setText("");
         }
     }
 

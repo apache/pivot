@@ -140,12 +140,24 @@ public class Label extends Component {
     }
 
     public void setTextBindType(BindType textBindType) {
+        if (textBindType == null) {
+            throw new IllegalArgumentException();
+        }
+
         BindType previousTextBindType = this.textBindType;
+
         if (previousTextBindType != textBindType) {
             this.textBindType = textBindType;
             labelBindingListeners.textBindTypeChanged(this, previousTextBindType);
         }
+    }
 
+    public final void setTextBindType(String textBindType) {
+        if (textBindType == null) {
+            throw new IllegalArgumentException();
+        }
+
+        setTextBindType(BindType.valueOf(textBindType.toUpperCase()));
     }
 
     public TextBindMapping getTextBindMapping() {

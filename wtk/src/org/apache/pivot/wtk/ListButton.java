@@ -387,6 +387,14 @@ public class ListButton extends Button {
         }
     }
 
+    public final void setListDataBindType(String listDataBindType) {
+        if (listDataBindType == null) {
+            throw new IllegalArgumentException();
+        }
+
+        setListDataBindType(BindType.valueOf(listDataBindType.toUpperCase()));
+    }
+
     public ListDataBindMapping getListDataBindMapping() {
         return listDataBindMapping;
     }
@@ -427,6 +435,14 @@ public class ListButton extends Button {
             this.selectedItemBindType = selectedItemBindType;
             listButtonBindingListeners.selectedItemBindTypeChanged(this, previousSelectedItemBindType);
         }
+    }
+
+    public final void setSelectedItemBindType(String selectedItemBindType) {
+        if (selectedItemBindType == null) {
+            throw new IllegalArgumentException();
+        }
+
+        setSelectedItemBindType(BindType.valueOf(selectedItemBindType.toUpperCase()));
     }
 
     public ListView.ItemBindMapping getSelectedItemBindMapping() {
@@ -483,7 +499,6 @@ public class ListButton extends Button {
         // Bind to list data
         if (listDataKey != null
             && listDataBindType != BindType.LOAD) {
-
             Object value;
             if (listDataBindMapping == null) {
                 value = listData;

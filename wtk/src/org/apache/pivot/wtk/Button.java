@@ -570,6 +570,14 @@ public abstract class Button extends Component {
         }
     }
 
+    public final void setSelectedBindType(String selectedBindType) {
+        if (selectedBindType == null) {
+            throw new IllegalArgumentException();
+        }
+
+        setSelectedBindType(BindType.valueOf(selectedBindType.toUpperCase()));
+    }
+
     public SelectedBindMapping getSelectedBindMapping() {
         return selectedBindMapping;
     }
@@ -611,6 +619,14 @@ public abstract class Button extends Component {
             this.stateBindType = stateBindType;
             buttonBindingListeners.stateBindTypeChanged(this, previousStateBindType);
         }
+    }
+
+    public final void setStateBindType(String stateBindType) {
+        if (stateBindType == null) {
+            throw new IllegalArgumentException();
+        }
+
+        setStateBindType(BindType.valueOf(stateBindType.toUpperCase()));
     }
 
     public StateBindMapping getStateBindMapping() {

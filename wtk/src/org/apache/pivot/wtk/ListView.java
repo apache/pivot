@@ -1581,6 +1581,14 @@ public class ListView extends Component {
         }
     }
 
+    public final void setListDataBindType(String listDataBindType) {
+        if (listDataBindType == null) {
+            throw new IllegalArgumentException();
+        }
+
+        setListDataBindType(BindType.valueOf(listDataBindType.toUpperCase()));
+    }
+
     public ListDataBindMapping getListDataBindMapping() {
         return listDataBindMapping;
     }
@@ -1623,6 +1631,14 @@ public class ListView extends Component {
         }
     }
 
+    public final void setSelectedItemBindType(String selectedItemBindType) {
+        if (selectedItemBindType == null) {
+            throw new IllegalArgumentException();
+        }
+
+        setSelectedItemBindType(BindType.valueOf(selectedItemBindType.toUpperCase()));
+    }
+
     public ItemBindMapping getSelectedItemBindMapping() {
         return selectedItemBindMapping;
     }
@@ -1663,6 +1679,14 @@ public class ListView extends Component {
             this.selectedItemsBindType = selectedItemsBindType;
             listViewBindingListeners.selectedItemsBindTypeChanged(this, previousSelectedItemsBindType);
         }
+    }
+
+    public final void setSelectedItemsBindType(String selectedItemsBindType) {
+        if (selectedItemsBindType == null) {
+            throw new IllegalArgumentException();
+        }
+
+        setSelectedItemsBindType(BindType.valueOf(selectedItemsBindType.toUpperCase()));
     }
 
     public ItemBindMapping getSelectedItemsBindMapping() {
@@ -1820,7 +1844,6 @@ public class ListView extends Component {
         // Bind to list data
         if (listDataKey != null
             && listDataBindType != BindType.LOAD) {
-
             Object value;
             if (listDataBindMapping == null) {
                 value = listData;

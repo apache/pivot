@@ -1660,26 +1660,22 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Determines if this component is showing. To be showing, the component
-     * and all of its ancestors must be visible, and the component's window
-     * must be open.
+     * and all of its ancestors must be visible and attached to a display.
      *
      * @return
-     * <tt>true</tt> if this component is showing; <tt>false</tt> otherwise
+     * <tt>true</tt> if this component is showing; <tt>false</tt> otherwise.
      */
     public boolean isShowing() {
-        boolean showing = true;
-
         Component component = this;
-        while (component != null
-            && showing) {
-            Container parent = component.getParent();
-            showing &= (component.isVisible()
-                && (parent != null || component instanceof Display));
 
-            component = parent;
+        while (component != null
+            && component.isVisible()
+            && !(component instanceof Display)) {
+            component = component.getParent();
         }
 
-        return showing;
+        return (component != null
+            && component.isVisible());
     }
 
     /**

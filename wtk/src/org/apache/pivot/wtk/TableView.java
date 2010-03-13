@@ -2112,6 +2112,14 @@ public class TableView extends Component {
         }
     }
 
+    public final void setTableDataBindType(String tableDataBindType) {
+        if (tableDataBindType == null) {
+            throw new IllegalArgumentException();
+        }
+
+        setTableDataBindType(BindType.valueOf(tableDataBindType.toUpperCase()));
+    }
+
     public TableDataBindMapping getTableDataBindMapping() {
         return tableDataBindMapping;
     }
@@ -2154,6 +2162,14 @@ public class TableView extends Component {
         }
     }
 
+    public final void setSelectedRowBindType(String selectedRowBindType) {
+        if (selectedRowBindType == null) {
+            throw new IllegalArgumentException();
+        }
+
+        setSelectedRowBindType(BindType.valueOf(selectedRowBindType.toUpperCase()));
+    }
+
     public SelectedRowBindMapping getSelectedRowBindMapping() {
         return selectedRowBindMapping;
     }
@@ -2194,6 +2210,14 @@ public class TableView extends Component {
             this.selectedRowsBindType = selectedRowsBindType;
             tableViewBindingListeners.selectedRowsBindTypeChanged(this, previousSelectedRowsBindType);
         }
+    }
+
+    public final void setSelectedRowsBindType(String selectedRowsBindType) {
+        if (selectedRowsBindType == null) {
+            throw new IllegalArgumentException();
+        }
+
+        setSelectedRowsBindType(BindType.valueOf(selectedRowsBindType.toUpperCase()));
     }
 
     public SelectedRowBindMapping getSelectedRowsBindMapping() {
@@ -2284,7 +2308,6 @@ public class TableView extends Component {
         // Bind to table data
         if (tableDataKey != null
             && tableDataBindType != BindType.LOAD) {
-
             Object value;
             if (tableDataBindMapping == null) {
                 value = tableData;

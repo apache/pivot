@@ -195,6 +195,7 @@ public class TextInput extends Component {
         }
     }
 
+    // TODO Don't allow null values, only empty strings
     private TextNode textNode;
 
     private int selectionStart = 0;
@@ -550,7 +551,7 @@ public class TextInput extends Component {
         }
 
         if (selectionStart < 0
-            || selectionStart + selectionLength > textNode.getCharacterCount()) {
+            || selectionStart + selectionLength > getTextLength()) {
             throw new IndexOutOfBoundsException();
         }
 
@@ -586,7 +587,7 @@ public class TextInput extends Component {
      * Selects all text.
      */
     public void selectAll() {
-        setSelection(0, textNode.getCharacterCount());
+        setSelection(0, getTextLength());
     }
 
     /**
@@ -759,12 +760,24 @@ public class TextInput extends Component {
     }
 
     public void setTextBindType(BindType textBindType) {
+        if (textBindType == null) {
+            throw new IllegalArgumentException();
+        }
+
         BindType previousTextBindType = this.textBindType;
+
         if (previousTextBindType != textBindType) {
             this.textBindType = textBindType;
             textInputBindingListeners.textBindTypeChanged(this, previousTextBindType);
         }
+    }
 
+    public final void setTextBindType(String textBindType) {
+        if (textBindType == null) {
+            throw new IllegalArgumentException();
+        }
+
+        setTextBindType(BindType.valueOf(textBindType.toUpperCase()));
     }
 
     public TextBindMapping getTextBindMapping() {
@@ -788,9 +801,7 @@ public class TextInput extends Component {
             Object value = JSON.get(context, textKey);
 
             if (textBindMapping == null) {
-                if (value != null) {
-                    value = value.toString();
-                }
+                value = (value == null) ? "" : value.toString();
             } else {
                 value = textBindMapping.toString(value);
             }
@@ -812,7 +823,7 @@ public class TextInput extends Component {
     @Override
     public void clear() {
         if (textKey != null) {
-            setText(null);
+            setText("");
         }
     }
 
