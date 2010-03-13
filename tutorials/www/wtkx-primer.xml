@@ -717,9 +717,17 @@ limitations under the License.
             <PushButton xmlns="org.apache.pivot.wtk"
                 xmlns:wtkx="http://pivot.apache.org/wtkx"
                 buttonData="Click Me!"
-                ButtonPressListener.buttonPressed="// Handle event"/>
+                ButtonPressListener.buttonPressed="handleEvent(arguments[0])"/>
             ]]>
         </source>
+
+        <p>
+            Note that the handler function is passed a value of <tt>arguments[0]</tt>. The
+            <tt>arguments</tt> array contains the arguments that were originally passed to the event
+            listener method, and only exists within the scope of the event handler.
+            <tt>arguments[0]</tt> contains the first argument passed to the listener method, which
+            in this case is a reference to the button that fired the event.
+        </p>
 
         <p>
             Attribute-based event handlers are well suited to short handler code that, ideally,

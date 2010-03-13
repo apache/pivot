@@ -199,6 +199,8 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         private String event;
         private String script;
 
+        private static final String ARGUMENTS_KEY = "arguments";
+
         public AttributeInvocationHandler(ScriptEngine scriptEngine, String event, String script) {
             this.scriptEngine = scriptEngine;
             this.event = event;
@@ -213,6 +215,9 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             String methodName = method.getName();
             if (methodName.equals(event)) {
                 try {
+                    SimpleBindings bindings = new SimpleBindings();
+                    bindings.put(ARGUMENTS_KEY, args);
+                    scriptEngine.setBindings(bindings, ScriptContext.ENGINE_SCOPE);
                     scriptEngine.eval(script);
                 } catch (ScriptException exception) {
                     System.err.println(exception);
@@ -817,11 +822,8 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                 throw new SerializationException(exception);
                             }
 
-                            // Don't pollute the engine namespace with the listener functions
-                            ScriptEngine scriptEngine = scriptEngineManager.getEngineByName(language);
-                            scriptEngine.setBindings(new SimpleBindings(), ScriptContext.ENGINE_SCOPE);
-
                             // Create an invocation handler for this listener
+                            ScriptEngine scriptEngine = scriptEngineManager.getEngineByName(language);
                             AttributeInvocationHandler handler =
                                 new AttributeInvocationHandler(scriptEngine,
                                     attribute.localName.substring(attribute.localName.lastIndexOf(".") + 1),

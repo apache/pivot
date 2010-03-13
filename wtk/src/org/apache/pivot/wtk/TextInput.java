@@ -546,12 +546,16 @@ public class TextInput extends Component {
      * The length of the selection.
      */
     public void setSelection(int selectionStart, int selectionLength) {
+        if (textNode == null) {
+            throw new IllegalStateException();
+        }
+
         if (selectionLength < 0) {
             throw new IllegalArgumentException("selectionLength is negative.");
         }
 
         if (selectionStart < 0
-            || selectionStart + selectionLength > getTextLength()) {
+            || selectionStart + selectionLength > textNode.getCharacterCount()) {
             throw new IndexOutOfBoundsException();
         }
 
@@ -587,7 +591,11 @@ public class TextInput extends Component {
      * Selects all text.
      */
     public void selectAll() {
-        setSelection(0, getTextLength());
+        if (textNode == null) {
+            throw new IllegalStateException();
+        }
+
+        setSelection(0, textNode.getCharacterCount());
     }
 
     /**
