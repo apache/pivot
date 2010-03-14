@@ -50,6 +50,10 @@ public class ScriptApplication implements Application {
         ClassLoader classLoader = ThreadUtilities.getClassLoader();
         URL location = classLoader.getResource(src);
 
+        if (location == null) {
+            throw new IllegalArgumentException("Cannot find source file \"" + src + "\".");
+        }
+
         wtkxSerializer.put("location", location);
         window = (Window)wtkxSerializer.readObject(location);
         window.open(display);

@@ -314,12 +314,35 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 
-        if (sizeToSelection
-            || height == -1) {
-            Dimensions preferredSize = getPreferredSize();
-            preferredWidth = preferredSize.width;
+        CardPane cardPane = (CardPane)getComponent();
+
+        if (sizeToSelection) {
+            if (selectionChangeTransition == null) {
+                Component selectedCard = cardPane.getSelectedCard();
+
+                if (selectedCard != null) {
+                    preferredWidth = selectedCard.getPreferredWidth(height);
+                }
+            } else {
+                float percentComplete = selectionChangeTransition.getPercentComplete();
+
+                int previousWidth;
+                if (selectionChangeTransition.fromCard == null) {
+                    previousWidth = 0;
+                } else {
+                    previousWidth = selectionChangeTransition.fromCard.getPreferredWidth(height);
+                }
+
+                int width;
+                if (selectionChangeTransition.toCard == null) {
+                    width = 0;
+                } else {
+                    width = selectionChangeTransition.toCard.getPreferredWidth(height);
+                }
+
+                preferredWidth = previousWidth + (int)((width - previousWidth) * percentComplete);
+            }
         } else {
-            CardPane cardPane = (CardPane)getComponent();
             for (Component card : cardPane) {
                 preferredWidth = Math.max(preferredWidth, card.getPreferredWidth(height));
             }
@@ -334,12 +357,35 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     public int getPreferredHeight(int width) {
         int preferredHeight = 0;
 
-        if (sizeToSelection
-            || width == -1) {
-            Dimensions preferredSize = getPreferredSize();
-            preferredHeight = preferredSize.height;
+        CardPane cardPane = (CardPane)getComponent();
+
+        if (sizeToSelection) {
+            if (selectionChangeTransition == null) {
+                Component selectedCard = cardPane.getSelectedCard();
+
+                if (selectedCard != null) {
+                    preferredHeight = selectedCard.getPreferredHeight(width);
+                }
+            } else {
+                float percentComplete = selectionChangeTransition.getPercentComplete();
+
+                int previousHeight;
+                if (selectionChangeTransition.fromCard == null) {
+                    previousHeight = 0;
+                } else {
+                    previousHeight = selectionChangeTransition.fromCard.getPreferredHeight(width);
+                }
+
+                int height;
+                if (selectionChangeTransition.toCard == null) {
+                    height = 0;
+                } else {
+                    height = selectionChangeTransition.toCard.getPreferredHeight(width);
+                }
+
+                preferredHeight = previousHeight + (int)((height - previousHeight) * percentComplete);
+            }
         } else {
-            CardPane cardPane = (CardPane)getComponent();
             for (Component card : cardPane) {
                 preferredHeight = Math.max(preferredHeight, card.getPreferredHeight(width));
             }
