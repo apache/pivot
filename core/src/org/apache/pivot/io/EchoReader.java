@@ -17,31 +17,44 @@
 package org.apache.pivot.io;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.Reader;
+import java.io.Writer;
 
 /**
  * Reader that echoes characters to the console as they are read.
  */
 public class EchoReader extends Reader {
-    private Reader reader;
+    private Reader in;
+    private Writer echo;
 
-    public EchoReader(Reader reader) {
-        if (reader == null) {
+    public EchoReader(Reader in) {
+        this(in, new PrintWriter(System.out));
+    }
+
+    public EchoReader(Reader in, Writer echo) {
+        if (in == null) {
             throw new IllegalArgumentException();
         }
 
-        this.reader = reader;
+        if (echo == null) {
+            throw new IllegalArgumentException();
+        }
+
+        this.in = in;
+        this.echo = echo;
     }
 
     @Override
     public void close() throws IOException {
-        reader.close();
+        in.close();
     }
 
     @Override
     public int read(char[] cbuf, int off, int len) throws IOException {
-        int n = reader.read(cbuf, off, len);
-        System.out.print(cbuf);
+        int n = in.read(cbuf, off, len);
+        echo.write(cbuf, off, len);
+
         return n;
     }
 }

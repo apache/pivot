@@ -17,35 +17,46 @@
 package org.apache.pivot.io;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.Writer;
 
 /**
  * Writer that echoes characters to the console as they are written.
  */
 public class EchoWriter extends Writer {
-    private Writer writer;
+    private Writer out;
+    private Writer echo;
 
-    public EchoWriter(Writer writer) {
-        if (writer == null) {
+    public EchoWriter(Writer out) {
+        this(out, new PrintWriter(System.out));
+    }
+
+    public EchoWriter(Writer out, Writer echo) {
+        if (out == null) {
             throw new IllegalArgumentException();
         }
 
-        this.writer = writer;
+        if (echo == null) {
+            throw new IllegalArgumentException();
+        }
+
+        this.out = out;
+        this.echo = echo;
     }
 
     @Override
     public void close() throws IOException {
-        writer.close();
+        out.close();
     }
 
     @Override
     public void flush() throws IOException {
-        writer.flush();
+        out.flush();
     }
 
     @Override
     public void write(char[] cbuf, int off, int len) throws IOException {
-        System.out.print(cbuf);
-        writer.write(cbuf, off, len);
+        out.write(cbuf, off, len);
+        echo.write(cbuf, off, len);
     }
 }
