@@ -36,6 +36,8 @@ import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.immutable.ImmutableList;
 import org.apache.pivot.collections.immutable.ImmutableMap;
+import org.apache.pivot.io.EchoReader;
+import org.apache.pivot.io.EchoWriter;
 
 /**
  * Implementation of the {@link Serializer} interface that reads data from
@@ -49,6 +51,8 @@ public class JSONSerializer extends JSON implements Serializer<Object> {
 
     private int c = -1;
     private boolean alwaysDelimitMapKeys = false;
+    private boolean verbose = false;
+
     private LineNumberReader lineNumberReader = null;
 
     public static final String DEFAULT_CHARSET_NAME = "UTF-8";
@@ -94,6 +98,42 @@ public class JSONSerializer extends JSON implements Serializer<Object> {
     }
 
     /**
+     * Returns a flag indicating whether or not map keys will always be
+     * quote-delimited.
+     */
+    public boolean getAlwaysDelimitMapKeys() {
+        return alwaysDelimitMapKeys;
+    }
+
+    /**
+     * Sets a flag indicating that map keys should always be quote-delimited.
+     *
+     * @param alwaysDelimitMapKeys
+     * <tt>true</tt> to bound map keys in double quotes; <tt>false</tt> to
+     * only quote-delimit keys as necessary.
+     */
+    public void setAlwaysDelimitMapKeys(boolean alwaysDelimitMapKeys) {
+        this.alwaysDelimitMapKeys = alwaysDelimitMapKeys;
+    }
+
+    /**
+     * Returns the serializer's verbosity flag.
+     */
+    public boolean isVerbose() {
+        return verbose;
+    }
+
+    /**
+     * Sets the serializer's verbosity flag. When verbosity is enabled, all data read or
+     * written will be echoed to the console.
+     *
+     * @param verbose
+     */
+    public void setVerbose(boolean verbose) {
+        this.verbose = verbose;
+    }
+
+    /**
      * Reads data from a JSON stream.
      *
      * @param inputStream
@@ -109,9 +149,11 @@ public class JSONSerializer extends JSON implements Serializer<Object> {
         }
 
         Reader reader = new BufferedReader(new InputStreamReader(inputStream, charset), BUFFER_SIZE);
-        Object object = readObject(reader);
+        if (verbose) {
+            reader = new EchoReader(reader);
+        }
 
-        return object;
+        return readObject(reader);
     }
 
     /**
@@ -512,8 +554,11 @@ public class JSONSerializer extends JSON implements Serializer<Object> {
             throw new IllegalArgumentException("outputStream is null.");
         }
 
-        Writer writer = new BufferedWriter(new OutputStreamWriter(outputStream, charset),
-            BUFFER_SIZE);
+        Writer writer = new BufferedWriter(new OutputStreamWriter(outputStream, charset), BUFFER_SIZE);
+        if (verbose) {
+            writer = new EchoWriter(writer);
+        }
+
         writeObject(object, writer);
     }
 
@@ -660,25 +705,6 @@ public class JSONSerializer extends JSON implements Serializer<Object> {
     @Override
     public String getMIMEType(Object object) {
         return MIME_TYPE + "; charset=" + charset.name();
-    }
-
-    /**
-     * Returns a flag indicating whether or not map keys will always be
-     * quote-delimited.
-     */
-    public boolean getAlwaysDelimitMapKeys() {
-        return alwaysDelimitMapKeys;
-    }
-
-    /**
-     * Sets a flag indicating that map keys should always be quote-delimited.
-     *
-     * @param alwaysDelimitMapKeys
-     * <tt>true</tt> to bound map keys in double quotes; <tt>false</tt> to
-     * only quote-delimit keys as necessary.
-     */
-    public void setAlwaysDelimitMapKeys(boolean alwaysDelimitMapKeys) {
-        this.alwaysDelimitMapKeys = alwaysDelimitMapKeys;
     }
 
     /**

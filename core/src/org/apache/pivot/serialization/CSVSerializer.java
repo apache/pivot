@@ -35,7 +35,8 @@ import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Sequence;
-
+import org.apache.pivot.io.EchoReader;
+import org.apache.pivot.io.EchoWriter;
 
 /**
  * Implementation of the {@link Serializer} interface that reads data from
@@ -131,15 +132,16 @@ public class CSVSerializer implements Serializer<List<?>> {
     private Charset charset;
 
     int c = -1;
-    private Class<?> itemClass = HashMap.class;
     private ArrayList<String> keys = new ArrayList<String>();
     private KeySequence keySequence = new KeySequence();
+    private Class<?> itemClass = HashMap.class;
+    private boolean verbose = false;
+
     private LineNumberReader lineNumberReader = null;
 
     public static final String DEFAULT_CHARSET_NAME = "ISO-8859-1";
     public static final String MIME_TYPE = "text/csv";
     public static final int BUFFER_SIZE = 2048;
-
 
     public CSVSerializer() {
         this(Charset.forName(DEFAULT_CHARSET_NAME));
@@ -187,6 +189,23 @@ public class CSVSerializer implements Serializer<List<?>> {
     }
 
     /**
+     * Returns the serializer's verbosity flag.
+     */
+    public boolean isVerbose() {
+        return verbose;
+    }
+
+    /**
+     * Sets the serializer's verbosity flag. When verbosity is enabled, all data read or
+     * written will be echoed to the console.
+     *
+     * @param verbose
+     */
+    public void setVerbose(boolean verbose) {
+        this.verbose = verbose;
+    }
+
+    /**
      * Reads values from a comma-separated value stream.
      *
      * @param inputStream
@@ -201,8 +220,11 @@ public class CSVSerializer implements Serializer<List<?>> {
             throw new IllegalArgumentException("inputStream is null.");
         }
 
-        Reader reader = new BufferedReader(new InputStreamReader(inputStream, charset),
-            BUFFER_SIZE);
+        Reader reader = new BufferedReader(new InputStreamReader(inputStream, charset), BUFFER_SIZE);
+        if (verbose) {
+            reader = new EchoReader(reader);
+        }
+
         return readObject(reader);
     }
 
@@ -411,8 +433,11 @@ public class CSVSerializer implements Serializer<List<?>> {
             throw new IllegalArgumentException("outputStream is null.");
         }
 
-        Writer writer = new BufferedWriter(new OutputStreamWriter(outputStream, charset),
-            BUFFER_SIZE);
+        Writer writer = new BufferedWriter(new OutputStreamWriter(outputStream, charset), BUFFER_SIZE);
+        if (verbose) {
+            writer = new EchoWriter(writer);
+        }
+
         writeObject(items, writer);
     }
 
