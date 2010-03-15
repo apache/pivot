@@ -628,7 +628,23 @@ public class JSONSerializer extends JSON implements Serializer<Object> {
 
             writer.append("\"" + stringBuilder.toString() + "\"");
         } else if (object instanceof Number) {
-            writer.append(object.toString());
+            Number number = (Number)object;
+
+            if (number instanceof Float) {
+                Float f = (Float)number;
+                if (f.isNaN()
+                    || f.isInfinite()) {
+                    throw new SerializationException(number + " is not a valid value.");
+                }
+            } else if (number instanceof Double) {
+                Double d = (Double)number;
+                if (d.isNaN()
+                    || d.isInfinite()) {
+                    throw new SerializationException(number + " is not a valid value.");
+                }
+            }
+
+            writer.append(number.toString());
         } else if (object instanceof Boolean) {
             writer.append(object.toString());
         } else if (object instanceof List<?>) {
@@ -695,7 +711,7 @@ public class JSONSerializer extends JSON implements Serializer<Object> {
 
             writer.append("}");
         } else {
-            throw new IllegalArgumentException(object.getClass()
+            throw new SerializationException(object.getClass()
                 + " is not a supported type.");
         }
 

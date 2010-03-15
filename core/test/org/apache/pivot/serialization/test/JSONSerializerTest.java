@@ -35,4 +35,14 @@ public class JSONSerializerTest {
 
         assertEquals(0, emptyList.getLength());
     }
+
+    @Test(expected=RuntimeException.class)
+    public void testInvalidNumbers() {
+        JSONSerializer.toString(Float.NaN);
+        JSONSerializer.toString(Float.NEGATIVE_INFINITY);
+        JSONSerializer.toString(Float.POSITIVE_INFINITY);
+        JSONSerializer.toString(Double.NaN);
+        JSONSerializer.toString(Double.NEGATIVE_INFINITY);
+        JSONSerializer.toString(Double.POSITIVE_INFINITY);
+    }
 }
