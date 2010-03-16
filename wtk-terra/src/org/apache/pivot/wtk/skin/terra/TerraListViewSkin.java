@@ -288,7 +288,14 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         if (clipBounds != null) {
             if (variableItemHeight) {
                 itemStart = getItemAt(clipBounds.y);
-                itemEnd = getItemAt(clipBounds.y + clipBounds.height - 1);
+                if (itemStart == -1) {
+                    itemStart = listData.getLength();
+                }
+
+                if (itemEnd != -1) {
+                    int lastItemBottomY = itemHeights.get(itemEnd + 1) - 1;
+                    itemEnd = getItemAt(Math.min(clipBounds.y + clipBounds.height - 1, lastItemBottomY));
+                }
             } else {
                 itemStart = Math.max(itemStart, (int)Math.floor(clipBounds.y
                     / (double)fixedItemHeight));
@@ -297,28 +304,16 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             }
         }
 
-        int itemY;
-        if (variableItemHeight) {
-            itemY = itemHeights.get(itemStart);
-        } else {
-            itemY = itemStart * fixedItemHeight;
-        }
-
         for (int itemIndex = itemStart; itemIndex <= itemEnd; itemIndex++) {
             Object item = listData.get(itemIndex);
             boolean highlighted = (itemIndex == highlightedIndex
                 && listView.getSelectMode() != ListView.SelectMode.NONE);
             boolean selected = listView.isItemSelected(itemIndex);
             boolean disabled = listView.isItemDisabled(itemIndex);
-            int itemHeight;
-            if (variableItemHeight) {
-                itemHeight = itemHeights.get(itemIndex + 1) - itemHeights.get(itemIndex);
-            } else {
-                itemHeight = fixedItemHeight;
-            }
+            int itemY = getItemY(itemIndex);
+            int itemHeight = getItemHeight(itemIndex);
 
             Color itemBackgroundColor = null;
-
             if (selected) {
                 itemBackgroundColor = (listView.isFocused())
                     ? this.selectionBackgroundColor : inactiveSelectionBackgroundColor;

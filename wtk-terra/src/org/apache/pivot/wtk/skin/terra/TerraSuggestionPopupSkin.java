@@ -234,7 +234,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin
             }
 
             case Keyboard.KeyCode.TAB: {
-                suggestionPopup.close(false);
+                suggestionPopup.close(true);
 
                 FocusTraversalDirection direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ?
                     FocusTraversalDirection.BACKWARD : FocusTraversalDirection.FORWARD;

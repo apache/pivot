@@ -334,8 +334,10 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                     rowStart = tableData.getLength();
                 }
 
-                int lastRowBottomY = rowHeights.get(rowEnd+1) - 1;
-                rowEnd = getRowAt(Math.min(clipBounds.y + clipBounds.height - 1, lastRowBottomY));
+                if (rowEnd != -1) {
+                    int lastRowBottomY = rowHeights.get(rowEnd + 1) - 1;
+                    rowEnd = getRowAt(Math.min(clipBounds.y + clipBounds.height - 1, lastRowBottomY));
+                }
             } else {
                 rowStart = Math.max(rowStart, (int)Math.floor(clipBounds.y
                     / (double)(fixedRowHeight + 1)));

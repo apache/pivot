@@ -222,8 +222,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
             int n = text.length();
 
             if (n > 0) {
-                if (wrapText
-                    && n > 1) {
+                if (wrapText) {
                     int width = getWidth() - (padding.left + padding.right);
 
                     float lineWidth = 0;
@@ -249,7 +248,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
                             lastWhitespaceIndex = -1;
 
                             // Append the current line
-                            if ((i - 1) - start > 0) {
+                            if ((i - 1) - start >= 0) {
                                 StringCharacterIterator line = new StringCharacterIterator(text, start, i, start);
                                 GlyphVector glyphVector = font.createGlyphVector(FONT_RENDER_CONTEXT, line);
                                 glyphVectors.add(glyphVector);
@@ -265,7 +264,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
                     }
 
                     // Append the final line
-                    if ((i - 1) - start > 0) {
+                    if ((i - 1) - start >= 0) {
                         StringCharacterIterator line = new StringCharacterIterator(text, start, i, start);
                         GlyphVector glyphVector = font.createGlyphVector(FONT_RENDER_CONTEXT, line);
                         glyphVectors.add(glyphVector);

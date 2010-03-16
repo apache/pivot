@@ -30,6 +30,7 @@ import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentMouseButtonListener;
+import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.FileBrowser;
 import org.apache.pivot.wtk.FileBrowserListener;
 import org.apache.pivot.wtk.FileBrowserSheet;
@@ -234,6 +235,27 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
 
     public void setHideDisabledFiles(boolean hideDisabledFiles) {
         fileBrowser.getStyles().put("hideDisabledFiles", hideDisabledFiles);
+    }
+
+    public boolean getShowOKButtonFirst() {
+        Container parent = okButton.getParent();
+        return parent.indexOf(okButton) < parent.indexOf(cancelButton);
+    }
+
+    public void setShowOKButtonFirst(boolean showOKButtonFirst) {
+        if (showOKButtonFirst != getShowOKButtonFirst()) {
+            Container parent = okButton.getParent();
+            parent.remove(okButton);
+            parent.remove(cancelButton);
+
+            if (showOKButtonFirst) {
+                parent.add(okButton);
+                parent.add(cancelButton);
+            } else {
+                parent.add(cancelButton);
+                parent.add(okButton);
+            }
+        }
     }
 
     @Override
