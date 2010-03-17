@@ -200,7 +200,7 @@ public class Spinner extends Container {
         }
     }
 
-    private class SpinnerBindingListenerList extends ListenerList<SpinnerBindingListener>
+    private static class SpinnerBindingListenerList extends ListenerList<SpinnerBindingListener>
         implements SpinnerBindingListener {
         @Override
         public void spinnerDataKeyChanged(Spinner spinner, String previousSpinnerDataKey) {

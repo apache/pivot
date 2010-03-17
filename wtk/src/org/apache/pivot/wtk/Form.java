@@ -26,7 +26,6 @@ import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 
-
 /**
  * A container that arranges field components in a form layout. Each field has
  * an optional text label associated with it and may be flagged as requiring
@@ -439,6 +438,34 @@ public class Form extends Container {
         }
 
         return count;
+    }
+
+    /**
+     * Ensures that the first field with the given flag type is visible.
+     *
+     * @param messageType
+     * The message type, or <tt>null</tt> to scroll the first flag of any
+     * type to visible.
+     */
+    public void scrollFirstFlagToVisible(MessageType messageType) {
+        Flag flag = null;
+
+        for (Section section : sections) {
+            for (Component field : section) {
+                flag = getFlag(field);
+
+                if (flag != null
+                   && (messageType == null
+                       || flag.getMessageType() == messageType)) {
+                    field.scrollAreaToVisible(0, 0, field.getWidth(), field.getHeight());
+                    break;
+                }
+            }
+
+            if (flag != null) {
+                break;
+            }
+        }
     }
 
     @Override

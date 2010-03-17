@@ -268,25 +268,16 @@ public class CSVSerializer implements Serializer<List<?>> {
                     item = readItem(lineNumberReader);
                 }
             }
-        } catch (IOException exception) {
-            logException(exception);
-            throw exception;
         } catch (SerializationException exception) {
-            logException(exception);
-            throw exception;
-        } catch (RuntimeException exception) {
-            logException(exception);
+            System.err.println("An error occurred while processing input at line number "
+                + (lineNumberReader.getLineNumber() + 1));
+
             throw exception;
         }
 
         lineNumberReader = null;
 
         return items;
-    }
-
-    private void logException(Exception exception) {
-        System.err.println("An error occurred while processing input at line number "
-            + (lineNumberReader.getLineNumber() + 1));
     }
 
     /**
