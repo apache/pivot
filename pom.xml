@@ -23,7 +23,7 @@ limitations under the License.
     <groupId>org.apache.pivot</groupId>
     <artifactId>pivot</artifactId>
     <packaging>pom</packaging>
-    <version>1.4</version>
+    <version>1.5</version>
     <organization>
         <name>Apache Software Foundation</name>
         <url>http://www.apache.org</url>
