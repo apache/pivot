@@ -46,8 +46,6 @@ import org.apache.pivot.wtk.skin.ComponentSkin;
 
 /**
  * List view skin.
- * <p>
- * NOTE This skin assumes a fixed renderer height.
  */
 public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     ListViewListener, ListViewItemListener, ListViewItemStateListener,
@@ -1099,15 +1097,19 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     @Override
     public void selectedRangeAdded(ListView listView, int rangeStart, int rangeEnd) {
         // Repaint the area containing the added selection
-        repaintComponent(0, getItemY(rangeStart),
-            getWidth(), getItemY(rangeEnd) + getItemHeight(rangeEnd));
+        if (listView.isValid()) {
+            repaintComponent(0, getItemY(rangeStart),
+                getWidth(), getItemY(rangeEnd) + getItemHeight(rangeEnd));
+        }
     }
 
     @Override
     public void selectedRangeRemoved(ListView listView, int rangeStart, int rangeEnd) {
         // Repaint the area containing the removed selection
-        repaintComponent(0, getItemY(rangeStart),
-            getWidth(), getItemY(rangeEnd) + getItemHeight(rangeEnd));
+        if (listView.isValid()) {
+            repaintComponent(0, getItemY(rangeStart),
+                getWidth(), getItemY(rangeEnd) + getItemHeight(rangeEnd));
+        }
     }
 
     @Override
@@ -1116,7 +1118,6 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         List<Object> listData = (List<Object>)listView.getListData();
 
         // Repaint only the area that changed (intersection of previous and new selection)
-
         int rangeStart = 0;
         int rangeEnd = listData.getLength() - 1;
         for (int i = 0; i < previousSelectedRanges.getLength(); i++) {
@@ -1132,7 +1133,9 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             rangeEnd = Math.max(rangeEnd, span.end);
         }
 
-        repaintComponent(0, getItemY(rangeStart),
-            getWidth(), getItemY(rangeEnd) + getItemHeight(rangeEnd));
+        if (listView.isValid()) {
+            repaintComponent(0, getItemY(rangeStart),
+                getWidth(), getItemY(rangeEnd) + getItemHeight(rangeEnd));
+        }
     }
 }

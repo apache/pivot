@@ -48,8 +48,6 @@ import org.apache.pivot.wtk.skin.ComponentSkin;
 /**
  * Table view skin.
  * <p>
- * NOTE This skin assumes a fixed renderer height.
- * <p>
  * TODO Add disableMouseSelection style to support the case where selection
  * should be enabled but the caller wants to implement the management of it;
  * e.g. changing a message's flag state in an email client.
@@ -1443,15 +1441,19 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     @Override
     public void selectedRangeAdded(TableView tableView, int rangeStart, int rangeEnd) {
         // Repaint the area containing the added selection
-        repaintComponent(0, getRowY(rangeStart),
-            getWidth(), getRowY(rangeEnd + 1) - getRowY(rangeStart));
+        if (tableView.isValid()) {
+            repaintComponent(0, getRowY(rangeStart),
+                getWidth(), getRowY(rangeEnd + 1) - getRowY(rangeStart));
+        }
     }
 
     @Override
     public void selectedRangeRemoved(TableView tableView, int rangeStart, int rangeEnd) {
         // Repaint the area containing the removed selection
-        repaintComponent(0, getRowY(rangeStart),
-            getWidth(), getRowY(rangeStart) - getRowY(rangeEnd));
+        if (tableView.isValid()) {
+            repaintComponent(0, getRowY(rangeStart),
+                getWidth(), getRowY(rangeStart) - getRowY(rangeEnd));
+        }
     }
 
     @Override
@@ -1460,7 +1462,6 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
         // Repaint only the area that changed (intersection of previous
         // and new selection)
-
         int rangeStart = 0;
         int rangeEnd = tableData.getLength() - 1;
         for (int i = 0; i < previousSelectedRanges.getLength(); i++) {
@@ -1476,7 +1477,9 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             rangeEnd = Math.max(rangeEnd, span.end);
         }
 
-        repaintComponent(0, getRowY(rangeStart),
-            getWidth(), getRowY(rangeEnd) + getRowY(rangeEnd));
+        if (tableView.isValid()) {
+            repaintComponent(0, getRowY(rangeStart),
+                getWidth(), getRowY(rangeEnd) + getRowY(rangeEnd));
+        }
     }
 }
