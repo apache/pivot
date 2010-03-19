@@ -480,6 +480,11 @@ public final class DesktopApplicationContext extends ApplicationContext {
                     updateFrameTitleBarCallback = new Runnable() {
                         @Override
                         public void run() {
+                            if (previousTopWindow != null) {
+                                Window previousRootOwner = previousTopWindow.getRootOwner();
+                                previousRootOwner.getWindowListeners().remove(TOP_WINDOW_LISTENER);
+                            }
+
                             Display display = applicationContext.getDisplay();
                             int n = display.getLength();
 
@@ -487,11 +492,6 @@ public final class DesktopApplicationContext extends ApplicationContext {
                                 windowedHostFrame.setTitle(DEFAULT_HOST_FRAME_TITLE);
                                 windowedHostFrame.setIconImage(null);
                             } else {
-                                if (previousTopWindow != null) {
-                                    Window previousRootOwner = previousTopWindow.getRootOwner();
-                                    previousRootOwner.getWindowListeners().remove(TOP_WINDOW_LISTENER);
-                                }
-
                                 Window topWindow = (Window)display.get(n - 1);
                                 Window rootOwner = topWindow.getRootOwner();
                                 updateFrameTitleBar(rootOwner);
