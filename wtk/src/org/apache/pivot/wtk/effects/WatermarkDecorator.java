@@ -22,6 +22,8 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.net.URL;
 
+import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ThreadUtilities;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.wtk.ApplicationContext;
@@ -31,6 +33,7 @@ import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.Orientation;
+import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.media.Image;
 
@@ -142,6 +145,10 @@ public class WatermarkDecorator implements Decorator {
      * This decorator's font
      */
     public void setFont(Font font) {
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");
+        }
+
         label.getStyles().put("font", font);
         validate();
     }
@@ -153,7 +160,19 @@ public class WatermarkDecorator implements Decorator {
      * This decorator's font
      */
     public final void setFont(String font) {
-        setFont(Font.decode(font));
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");
+        }
+
+        if (font.startsWith("{")) {
+            try {
+                setFont(Theme.deriveFont(JSONSerializer.parseMap(font)));
+            } catch (SerializationException exception) {
+                throw new IllegalArgumentException(exception);
+            }
+        } else {
+            setFont(Font.decode(font));
+        }
     }
 
     /**

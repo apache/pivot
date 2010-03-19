@@ -29,10 +29,13 @@ import java.awt.geom.Rectangle2D;
 import java.text.StringCharacterIterator;
 
 import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Platform;
+import org.apache.pivot.wtk.Theme;
 
 /**
  * Shape representing a block of text.
@@ -117,7 +120,15 @@ public class Text extends Shape {
             throw new IllegalArgumentException("font is null.");
         }
 
-        setFont(Font.decode(font));
+        if (font.startsWith("{")) {
+            try {
+                setFont(Theme.deriveFont(JSONSerializer.parseMap(font)));
+            } catch (SerializationException exception) {
+                throw new IllegalArgumentException(exception);
+            }
+        } else {
+            setFont(Font.decode(font));
+        }
     }
 
     public int getWidth() {

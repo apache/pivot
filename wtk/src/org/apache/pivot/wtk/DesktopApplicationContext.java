@@ -242,6 +242,18 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
     private static Runnable updateFrameTitleBarCallback = null;
 
+    private static final WindowListener TOP_WINDOW_LISTENER = new WindowListener.Adapter() {
+        @Override
+        public void titleChanged(Window window, String previousTitle) {
+            updateFrameTitleBar(window.getRootOwner());
+        }
+
+        @Override
+        public void iconChanged(Window window, Image previousIcon) {
+            updateFrameTitleBar(window.getRootOwner());
+        }
+    };
+
     private static final String DEFAULT_HOST_FRAME_TITLE = "Apache Pivot";
 
     private static final String X_ARGUMENT = "x";
@@ -441,25 +453,29 @@ public final class DesktopApplicationContext extends ApplicationContext {
             }
 
             @Override
-            public void componentsRemoved(Container container, int index,
-                Sequence<Component> removed) {
-                if (index == container.getLength()) {
-                    topWindowChanged((Display)container,
-                        (Window)removed.get(removed.getLength() - 1));
+            public void componentsRemoved(Container container, int index, Sequence<Component> removed) {
+                int n = removed.getLength();
+
+                if (index + n == container.getLength()) {
+                    topWindowChanged((Display)container, (Window)removed.get(n - 1));
                 }
             }
 
             @Override
             public void componentMoved(Container container, int from, int to) {
                 int n = container.getLength();
-                if (from == n) {
+
+                if (from == n - 1) {
+                    // The top-most window was moved elsewhere
                     topWindowChanged((Display)container, (Window)container.get(from));
-                } else if (to == n) {
-                    topWindowChanged((Display)container, (Window)container.get(n - 1));
+                } else if (to == n - 1) {
+                    // A new window was moved to top
+                    topWindowChanged((Display)container,
+                        (to > 0) ? (Window)container.get(to - 1) : null);
                 }
             }
 
-            private void topWindowChanged(Display display, Window previousTopWindow) {
+            private void topWindowChanged(Display display, final Window previousTopWindow) {
                 if (updateFrameTitleBarCallback == null) {
                     updateFrameTitleBarCallback = new Runnable() {
                         @Override
@@ -471,9 +487,16 @@ public final class DesktopApplicationContext extends ApplicationContext {
                                 windowedHostFrame.setTitle(DEFAULT_HOST_FRAME_TITLE);
                                 windowedHostFrame.setIconImage(null);
                             } else {
+                                if (previousTopWindow != null) {
+                                    Window previousRootOwner = previousTopWindow.getRootOwner();
+                                    previousRootOwner.getWindowListeners().remove(TOP_WINDOW_LISTENER);
+                                }
+
                                 Window topWindow = (Window)display.get(n - 1);
                                 Window rootOwner = topWindow.getRootOwner();
                                 updateFrameTitleBar(rootOwner);
+
+                                rootOwner.getWindowListeners().add(TOP_WINDOW_LISTENER);
                             }
 
                             updateFrameTitleBarCallback = null;
