@@ -245,12 +245,12 @@ public final class DesktopApplicationContext extends ApplicationContext {
     private static final WindowListener TOP_WINDOW_LISTENER = new WindowListener.Adapter() {
         @Override
         public void titleChanged(Window window, String previousTitle) {
-            updateFrameTitleBar(window.getRootOwner());
+            updateFrameTitleBar(window);
         }
 
         @Override
         public void iconChanged(Window window, Image previousIcon) {
-            updateFrameTitleBar(window.getRootOwner());
+            updateFrameTitleBar(window);
         }
     };
 
@@ -476,18 +476,25 @@ public final class DesktopApplicationContext extends ApplicationContext {
             }
 
             private void topWindowChanged(Display display, final Window previousTopWindow) {
+                if (previousTopWindow != null) {
+                    Window previousRootOwner = previousTopWindow.getRootOwner();
+                    previousRootOwner.getWindowListeners().remove(TOP_WINDOW_LISTENER);
+                }
+
+                int n = display.getLength();
+                if (n > 0) {
+                    Window topWindow = (Window)display.get(n - 1);
+                    Window rootOwner = topWindow.getRootOwner();
+                    rootOwner.getWindowListeners().add(TOP_WINDOW_LISTENER);
+                }
+
                 if (updateFrameTitleBarCallback == null) {
                     updateFrameTitleBarCallback = new Runnable() {
                         @Override
                         public void run() {
-                            if (previousTopWindow != null) {
-                                Window previousRootOwner = previousTopWindow.getRootOwner();
-                                previousRootOwner.getWindowListeners().remove(TOP_WINDOW_LISTENER);
-                            }
-
                             Display display = applicationContext.getDisplay();
-                            int n = display.getLength();
 
+                            int n = display.getLength();
                             if (n == 0) {
                                 windowedHostFrame.setTitle(DEFAULT_HOST_FRAME_TITLE);
                                 windowedHostFrame.setIconImage(null);
@@ -495,8 +502,6 @@ public final class DesktopApplicationContext extends ApplicationContext {
                                 Window topWindow = (Window)display.get(n - 1);
                                 Window rootOwner = topWindow.getRootOwner();
                                 updateFrameTitleBar(rootOwner);
-
-                                rootOwner.getWindowListeners().add(TOP_WINDOW_LISTENER);
                             }
 
                             updateFrameTitleBarCallback = null;
