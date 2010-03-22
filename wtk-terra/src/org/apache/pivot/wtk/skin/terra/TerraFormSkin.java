@@ -35,7 +35,6 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Form;
 import org.apache.pivot.wtk.FormAttributeListener;
 import org.apache.pivot.wtk.FormListener;
-import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.MessageType;
@@ -777,7 +776,11 @@ public class TerraFormSkin extends ContainerSkin
                     int rowHeight = maximumAscent + maximumDescent;
 
                     // Position the label
-                    int labelX = padding.left + maximumLabelWidth - label.getWidth();
+                    int labelX = padding.left;
+                    if (!leftAlignLabels) {
+                        labelX += maximumLabelWidth - label.getWidth();
+                    }
+
                     if (showFlagIcons) {
                         labelX += (maximumFlagImageWidth + flagIconOffset);
                     }
@@ -1057,24 +1060,7 @@ public class TerraFormSkin extends ContainerSkin
 
     public void setLeftAlignLabels(boolean leftAlignLabels) {
         this.leftAlignLabels = leftAlignLabels;
-
-        // Set horizontal alignment style of existing labels
-        Form form = (Form)getComponent();
-        Form.SectionSequence sections = form.getSections();
-
-        for (int sectionIndex = 0, sectionCount = sections.getLength();
-            sectionIndex < sectionCount; sectionIndex++) {
-            Form.Section section = sections.get(sectionIndex);
-
-            for (int fieldIndex = 0, fieldCount = section.getLength();
-                fieldIndex < fieldCount; fieldIndex++) {
-                Label label = labels.get(sectionIndex).get(fieldIndex);
-                label.getStyles().put("horizontalAlignment", leftAlignLabels ?
-                    HorizontalAlignment.LEFT : HorizontalAlignment.RIGHT);
-            }
-        }
-
-        repaintComponent();
+        invalidateComponent();
     }
 
     public String getDelimiter() {
@@ -1197,9 +1183,6 @@ public class TerraFormSkin extends ContainerSkin
 
         // Create the label
         Label label = new Label();
-        label.getStyles().put("horizontalAlignment", leftAlignLabels ?
-            HorizontalAlignment.LEFT : HorizontalAlignment.RIGHT);
-
         labels.get(sectionIndex).insert(label, index);
         form.add(label);
 
