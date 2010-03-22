@@ -344,7 +344,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             }
         }
 
-        // Paint the row backgrounds
+        // Paint the row background
         if (alternateRowColor != null) {
             for (int rowIndex = rowStart; rowIndex <= rowEnd; rowIndex++) {
                 int rowY = getRowY(rowIndex);
@@ -378,7 +378,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             }
         }
 
-        // Paint the table contents
+        // Paint the row content
         for (int rowIndex = rowStart; rowIndex <= rowEnd; rowIndex++) {
             Object rowData = tableData.get(rowIndex);
             boolean rowHighlighted = (rowIndex == highlightedIndex

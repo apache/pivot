@@ -58,8 +58,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     private Color selectionBackgroundColor;
     private Color inactiveSelectionColor;
     private Color inactiveSelectionBackgroundColor;
-    private Color highlightColor;
     private Color highlightBackgroundColor;
+    private Color alternateItemColor;
     private boolean showHighlight;
     private boolean variableItemHeight;
     private Insets checkboxPadding = new Insets(2, 2, 2, 0);
@@ -86,8 +86,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         selectionBackgroundColor = theme.getColor(13);
         inactiveSelectionColor = theme.getColor(1);
         inactiveSelectionBackgroundColor = theme.getColor(9);
-        highlightColor = theme.getColor(1);
         highlightBackgroundColor = theme.getColor(10);
+        alternateItemColor = null;
         showHighlight = true;
     }
 
@@ -302,6 +302,19 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             }
         }
 
+        // Paint the item background
+        if (alternateItemColor != null) {
+            for (int itemIndex = itemStart; itemIndex <= itemEnd; itemIndex++) {
+                int itemY = getItemY(itemIndex);
+                int rowHeight = getItemHeight(itemIndex);
+                if (itemIndex % 2 > 0) {
+                    graphics.setPaint(alternateItemColor);
+                    graphics.fillRect(0, itemY, width, rowHeight + 1);
+                }
+            }
+        }
+
+        // Paint the item content
         for (int itemIndex = itemStart; itemIndex <= itemEnd; itemIndex++) {
             Object item = listData.get(itemIndex);
             boolean highlighted = (itemIndex == highlightedIndex
@@ -490,6 +503,11 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         setColor(GraphicsUtilities.decodeColor(color));
     }
 
+    public final void setColor(int color) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setColor(theme.getColor(color));
+    }
+
     public Color getDisabledColor() {
         return disabledColor;
     }
@@ -511,6 +529,11 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
     }
 
+    public final void setDisabledColor(int disabledColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setDisabledColor(theme.getColor(disabledColor));
+    }
+
     public Color getBackgroundColor() {
         return backgroundColor;
     }
@@ -528,6 +551,10 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
     }
 
+    public final void setBackgroundColor(int backgroundColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setBackgroundColor(theme.getColor(backgroundColor));
+    }
 
     public Color getSelectionColor() {
         return selectionColor;
@@ -548,6 +575,11 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         }
 
         setSelectionColor(GraphicsUtilities.decodeColor(selectionColor));
+    }
+
+    public final void setSelectionColor(int selectionColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setSelectionColor(theme.getColor(selectionColor));
     }
 
     public Color getSelectionBackgroundColor() {
@@ -571,6 +603,11 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         setSelectionBackgroundColor(GraphicsUtilities.decodeColor(selectionBackgroundColor));
     }
 
+    public final void setSelectionBackgroundColor(int selectionBackgroundColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setSelectionBackgroundColor(theme.getColor(selectionBackgroundColor));
+    }
+
     public Color getInactiveSelectionColor() {
         return inactiveSelectionColor;
     }
@@ -590,6 +627,11 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         }
 
         setInactiveSelectionColor(GraphicsUtilities.decodeColor(inactiveSelectionColor));
+    }
+
+    public final void setInactiveSelectionColor(int inactiveSelectionColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setInactiveSelectionColor(theme.getColor(inactiveSelectionColor));
     }
 
     public Color getInactiveSelectionBackgroundColor() {
@@ -613,25 +655,9 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         setInactiveSelectionBackgroundColor(GraphicsUtilities.decodeColor(inactiveSelectionBackgroundColor));
     }
 
-    public Color getHighlightColor() {
-        return highlightColor;
-    }
-
-    public void setHighlightColor(Color highlightColor) {
-        if (highlightColor == null) {
-            throw new IllegalArgumentException("highlightColor is null.");
-        }
-
-        this.highlightColor = highlightColor;
-        repaintComponent();
-    }
-
-    public final void setHighlightColor(String highlightColor) {
-        if (highlightColor == null) {
-            throw new IllegalArgumentException("highlightColor is null.");
-        }
-
-        setHighlightColor(GraphicsUtilities.decodeColor(highlightColor));
+    public final void setInactiveSelectionBackgroundColor(int inactiveSelectionBackgroundColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setInactiveSelectionBackgroundColor(theme.getColor(inactiveSelectionBackgroundColor));
     }
 
     public Color getHighlightBackgroundColor() {
@@ -653,6 +679,33 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         }
 
         setHighlightBackgroundColor(GraphicsUtilities.decodeColor(highlightBackgroundColor));
+    }
+
+    public final void setHighlightBackgroundColor(int highlightBackgroundColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setHighlightBackgroundColor(theme.getColor(highlightBackgroundColor));
+    }
+
+    public Color getAlternateItemColor() {
+        return alternateItemColor;
+    }
+
+    public void setAlternateItemColor(Color alternateItemColor) {
+        this.alternateItemColor = alternateItemColor;
+        repaintComponent();
+    }
+
+    public final void setAlternateItemColor(String alternateItemColor) {
+        if (alternateItemColor == null) {
+            throw new IllegalArgumentException("alternateItemColor is null.");
+        }
+
+        setAlternateItemColor(GraphicsUtilities.decodeColor(alternateItemColor));
+    }
+
+    public final void setAlternateItemColor(int alternateItemColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setAlternateItemColor(theme.getColor(alternateItemColor));
     }
 
     public boolean getShowHighlight() {
