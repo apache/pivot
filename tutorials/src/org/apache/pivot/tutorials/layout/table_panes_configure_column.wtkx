@@ -23,7 +23,7 @@ limitations under the License.
     xmlns="org.apache.pivot.wtk">
     <wtkx:define>
         <ButtonGroup wtkx:id="columnWidthGroup">
-            <groupListeners>
+            <buttonGroupListeners>
                 <wtkx:script>
                 <![CDATA[
                 function selectionChanged(group, previousSelection) {
@@ -31,7 +31,7 @@ limitations under the License.
                 }
                 ]]>
                 </wtkx:script>
-            </groupListeners>
+            </buttonGroupListeners>
         </ButtonGroup>
     </wtkx:define>
 
