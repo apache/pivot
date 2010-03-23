@@ -158,7 +158,7 @@ limitations under the License.
 
         <source type="xml" location="org/apache/pivot/tutorials/scripting/Scripting.java">
             <![CDATA[
-            <Window wtkx:id="window" title="Scripting Demo" maximized="true"
+            <Window title="Scripting Demo" maximized="true"
                 WindowStateListener.windowOpened="java.lang.System.out.println('Window opened: ' + x)"
                 WindowStateListener.windowClosed="java.lang.System.out.println('Window closed: ' + y)"
                 xmlns:wtkx="http://pivot.apache.org/wtkx"
@@ -174,8 +174,8 @@ limitations under the License.
                 var x = 10;
                 var y = 20;
 
-                function buttonClicked() {
-                    Prompt.prompt("y = " + y, window);
+                function buttonClicked(button) {
+                    Prompt.prompt("y = " + y, button.window);
                 }
                 </wtkx:script>
 
@@ -197,7 +197,7 @@ limitations under the License.
                                 </PushButton>
 
                                 <PushButton buttonData="No, Click Me!"
-                                    ButtonPressListener.buttonPressed="buttonClicked()"/>
+                                    ButtonPressListener.buttonPressed="buttonClicked(arguments[0])"/>
 
                                 <Border styles="{color:10}">
                                     <content>
