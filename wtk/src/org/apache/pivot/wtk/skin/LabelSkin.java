@@ -107,17 +107,17 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         Label label = (Label)getComponent();
         String text = label.getText();
 
-        LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
-        float lineHeight = lm.getHeight();
+        float preferredHeight;
+        if (text != null) {
+            LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
+            float lineHeight = lm.getHeight();
 
-        float preferredHeight = lineHeight;
+            preferredHeight = lineHeight;
 
-        if (text != null
-            && wrapText
-            && width != -1) {
             int n = text.length();
-
-            if (n > 0) {
+            if (n > 0
+                && wrapText
+                && width != -1) {
                 // Adjust width for padding
                 width -= (padding.left + padding.right);
 
@@ -148,6 +148,8 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
                     i++;
                 }
             }
+        } else {
+            preferredHeight = 0;
         }
 
         preferredHeight += (padding.top + padding.bottom);

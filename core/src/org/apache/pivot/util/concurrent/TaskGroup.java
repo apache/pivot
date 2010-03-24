@@ -47,7 +47,7 @@ public class TaskGroup extends Task<Void>
         TaskListener<Object> taskListener = new TaskListener<Object>() {
             @Override
             public void taskExecuted(Task<Object> task) {
-                synchronized(TaskGroup.this) {
+                synchronized (TaskGroup.this) {
                     complete++;
                     TaskGroup.this.notify();
                 }
@@ -55,7 +55,7 @@ public class TaskGroup extends Task<Void>
 
             @Override
             public void executeFailed(Task<Object> task) {
-                synchronized(TaskGroup.this) {
+                synchronized (TaskGroup.this) {
                     complete++;
                     TaskGroup.this.notify();
                 }
@@ -84,8 +84,8 @@ public class TaskGroup extends Task<Void>
     @Override
     public synchronized void abort() {
         for (Task<?> task : this) {
-            synchronized(task) {
-                if (!task.isPending()) {
+            synchronized (task) {
+                if (task.isPending()) {
                     task.abort();
                 }
             }

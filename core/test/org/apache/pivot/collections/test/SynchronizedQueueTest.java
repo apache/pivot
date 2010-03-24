@@ -78,7 +78,7 @@ public class SynchronizedQueueTest {
             i++;
         }
 
-        synchronized(testTask) {
+        synchronized (testTask) {
             if (testTask.isPending()) {
                 try {
                     testTask.wait(10000);

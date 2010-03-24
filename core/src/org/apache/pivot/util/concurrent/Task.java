@@ -42,7 +42,7 @@ public abstract class Task<V> {
             }
 
             TaskListener<V> taskListener;
-            synchronized(Task.this) {
+            synchronized (Task.this) {
                 Task.this.result = result;
                 Task.this.fault = fault;
 

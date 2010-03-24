@@ -168,8 +168,9 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
     @Override
     public Object get(String key) {
         Object o = JSON.get(resourceMap, key);
-        if (o == null && parent != null) {
-            return parent.get(key);
+        if (o == null
+            && parent != null) {
+            o = parent.get(key);
         }
 
         return o;
@@ -177,8 +178,9 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
 
     public String getString(String key) {
         String s = JSON.getString(resourceMap, key);
-        if (s == null && parent != null) {
-            return parent.getString(key);
+        if (s == null
+            && parent != null) {
+            s = parent.getString(key);
         }
 
         return s;
@@ -225,94 +227,113 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
 
     public Number getNumber(String key) {
         Number n = JSON.getNumber(resourceMap, key);
-        if (n == null && parent != null) {
-            return parent.getNumber(key);
+        if (n == null
+            && parent != null) {
+            n = parent.getNumber(key);
         }
+
         return n;
     }
 
     public Short getShort(String key) {
         Short s = JSON.getShort(resourceMap, key);
-        if (s == null && parent != null) {
-            return parent.getShort(key);
+        if (s == null
+            && parent != null) {
+            s = parent.getShort(key);
         }
+
         return s;
     }
 
     public Integer getInteger(String key) {
         Integer i = JSON.getInteger(resourceMap, key);
-        if (i == null && parent != null) {
-            return parent.getInteger(key);
+        if (i == null
+            && parent != null) {
+            i = parent.getInteger(key);
         }
+
         return i;
     }
 
     public Long getLong(String key) {
         Long l = JSON.getLong(resourceMap, key);
-        if (l == null && parent != null) {
-            return parent.getLong(key);
+        if (l == null
+            && parent != null) {
+            l = parent.getLong(key);
         }
+
         return l;
     }
 
     public Float getFloat(String key) {
         Float f = JSON.getFloat(resourceMap, key);
-        if (f == null && parent != null) {
-            return parent.getFloat(key);
+        if (f == null
+            && parent != null) {
+            f = parent.getFloat(key);
         }
+
         return f;
     }
 
     public Double getDouble(String key) {
         Double d = JSON.getDouble(resourceMap, key);
-        if (d == null && parent != null) {
-            return parent.getDouble(key);
+        if (d == null
+            && parent != null) {
+            d = parent.getDouble(key);
         }
+
         return d;
     }
 
     public Boolean getBoolean(String key) {
         Boolean b = JSON.getBoolean(resourceMap, key);
-        if (b == null && parent != null) {
-            return parent.getBoolean(key);
+        if (b == null
+            && parent != null) {
+            b = parent.getBoolean(key);
         }
+
         return b;
     }
 
     public List<?> getList(String key) {
         List<?> list = JSON.getList(resourceMap, key);
-        if (list == null && parent != null) {
-            return parent.getList(key);
+        if (list == null
+            && parent != null) {
+            list = parent.getList(key);
         }
+
         return list;
     }
 
     public Map<String, ?> getMap(String key) {
         Map<String, ?> map = JSON.getMap(resourceMap, key);
-        if (map == null && parent != null) {
-            return parent.getMap(key);
+        if (map == null
+            && parent != null) {
+            map = parent.getMap(key);
         }
+
         return map;
     }
 
     @Override
     public Object put(String key, Object value) {
-        throw new UnsupportedOperationException(
-                "Resources instances are immutable");
+        throw new UnsupportedOperationException("Resources are immutable.");
     }
 
     @Override
     public Object remove(String key) {
-        throw new UnsupportedOperationException(
-                "Resources instances are immutable");
+        throw new UnsupportedOperationException("Resources are immutable.");
     }
 
     @Override
     public boolean containsKey(String key) {
         boolean containsKey = resourceMap.containsKey(key);
-        if (!containsKey && parent != null) {
+
+        if (!containsKey
+            && parent != null) {
             return parent.containsKey(key);
         }
+
         return containsKey;
     }
 
@@ -323,7 +344,7 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
 
     @SuppressWarnings( { "unchecked" })
     private void applyOverrides(Map<String, Object> sourceMap,
-            Map<String, Object> overridesMap) {
+        Map<String, Object> overridesMap) {
 
         for (String key : overridesMap) {
             if (sourceMap.containsKey(key)) {
@@ -331,31 +352,31 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
                 Object override = overridesMap.get(key);
 
                 if (source instanceof Map<?, ?>
-                        && override instanceof Map<?, ?>) {
+                    && override instanceof Map<?, ?>) {
                     applyOverrides((Map<String, Object>) source,
-                            (Map<String, Object>) override);
+                        (Map<String, Object>) override);
                 } else {
                     sourceMap.put(key, overridesMap.get(key));
                 }
             }
         }
-
     }
 
     @SuppressWarnings("unchecked")
     private Map<String, Object> readJSONResource(String name)
-            throws IOException, SerializationException {
-        InputStream in = getClass().getClassLoader().getResourceAsStream(name);
-        if (in == null) {
-            return null;
-        }
-
-        JSONSerializer serializer = new JSONSerializer(charset);
+        throws IOException, SerializationException {
         Map<String, Object> resourceMap = null;
-        try {
-            resourceMap = (Map<String, Object>) serializer.readObject(in);
-        } finally {
-            in.close();
+
+        InputStream inputStream = ThreadUtilities.getClassLoader().getResourceAsStream(name);
+
+        if (inputStream != null) {
+            JSONSerializer serializer = new JSONSerializer(charset);
+
+            try {
+                resourceMap = (Map<String, Object>)serializer.readObject(inputStream);
+            } finally {
+                inputStream.close();
+            }
         }
 
         return resourceMap;
