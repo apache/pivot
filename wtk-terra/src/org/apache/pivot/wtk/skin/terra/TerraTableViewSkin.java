@@ -79,6 +79,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     private ArrayList<Integer> columnWidths = null;
     private ArrayList<Integer> rowHeights = null;
     private int fixedRowHeight = -1;
+    private int defaultWidthColumnCount = 0;
 
     private int highlightedIndex = -1;
     private int editIndex = -1;
@@ -278,8 +279,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                 rowHeights.add(rowY);
                 rowY += rowHeight + 1;
             }
-            rowHeights.add(rowY);
 
+            rowHeights.add(rowY);
         } else {
             fixedRowHeight = calculateFixedRowHeight(tableView);
         }
@@ -1365,11 +1366,25 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     // Table view column events
     @Override
     public void columnInserted(TableView tableView, int index) {
+        TableView.Column column = tableView.getColumns().get(index);
+
+        if (column.getWidth() == -1) {
+            defaultWidthColumnCount++;
+        }
+
         invalidateComponent();
     }
 
     @Override
     public void columnsRemoved(TableView tableView, int index, Sequence<TableView.Column> columns) {
+        for (int i = 0, n = columns.getLength(); i < n; i++) {
+            TableView.Column column = columns.get(i);
+
+            if (column.getWidth() == -1) {
+                defaultWidthColumnCount--;
+            }
+        }
+
         invalidateComponent();
     }
 
@@ -1385,6 +1400,12 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
     @Override
     public void columnWidthChanged(TableView.Column column, int previousWidth, boolean previousRelative)  {
+        if (column.getWidth() == -1) {
+            defaultWidthColumnCount++;
+        } else {
+            defaultWidthColumnCount--;
+        }
+
         invalidateComponent();
     }
 
@@ -1416,7 +1437,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
     @Override
     public void rowUpdated(TableView tableView, int index) {
-        if (variableRowHeight) {
+        if (variableRowHeight
+            || defaultWidthColumnCount > 0) {
             invalidateComponent();
         } else {
             repaintComponent(getRowBounds(index));
