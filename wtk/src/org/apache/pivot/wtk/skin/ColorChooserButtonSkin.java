@@ -28,7 +28,6 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.ColorChooser;
 import org.apache.pivot.wtk.ColorChooserButton;
-import org.apache.pivot.wtk.ColorChooserButtonListener;
 import org.apache.pivot.wtk.ColorChooserButtonSelectionListener;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Window;
@@ -38,7 +37,7 @@ import org.apache.pivot.wtk.WindowStateListener;
  * Abstract base class for color chooser button skins.
  */
 public abstract class ColorChooserButtonSkin extends ButtonSkin
-    implements ColorChooserButtonListener, ColorChooserButtonSelectionListener {
+    implements ColorChooserButtonSelectionListener {
     /**
      * A focusable window class used by color chooser button skins.
      */
@@ -185,7 +184,6 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin
         super.install(component);
 
         ColorChooserButton colorChooserButton = (ColorChooserButton)component;
-        colorChooserButton.getColorChooserButtonListeners().add(this);
         colorChooserButton.getColorChooserButtonSelectionListeners().add(this);
     }
 
@@ -289,14 +287,6 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin
         }
 
         return consumed;
-    }
-
-    // ColorChooserButtonListener methods
-
-    @Override
-    public void selectedColorKeyChanged(ColorChooserButton colorChooserButton,
-        String previousSelectedColorKey) {
-        // No-op
     }
 
     // ColorChooserButtonSelectionListener methods

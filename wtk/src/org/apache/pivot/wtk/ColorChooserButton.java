@@ -29,21 +29,6 @@ import org.apache.pivot.wtk.content.ListButtonColorItemRenderer;
  */
 public class ColorChooserButton extends Button {
     /**
-     * Color chooser button listener list.
-     */
-    private static class ColorChooserButtonListenerList
-        extends ListenerList<ColorChooserButtonListener>
-        implements ColorChooserButtonListener {
-        @Override
-        public void selectedColorKeyChanged(ColorChooserButton colorChooserButton,
-            String previousSelectedColorKey) {
-            for (ColorChooserButtonListener listener : this) {
-                listener.selectedColorKeyChanged(colorChooserButton, previousSelectedColorKey);
-            }
-        }
-    }
-
-    /**
      * ColorChooser button selection listener list.
      */
     private static class ColorChooserButtonSelectionListenerList
@@ -59,13 +44,49 @@ public class ColorChooserButton extends Button {
         }
     }
 
-    private Color selectedColor = null;
-    private String selectedColorKey = null;
+    /**
+     * Color chooser button binding listener list.
+     */
+    private static class ColorChooserButtonBindingListenerList
+        extends ListenerList<ColorChooserButtonBindingListener>
+        implements ColorChooserButtonBindingListener {
+        @Override
+        public void selectedColorKeyChanged(ColorChooserButton colorChooserButton,
+            String previousSelectedColorKey) {
+            for (ColorChooserButtonBindingListener listener : this) {
+                listener.selectedColorKeyChanged(colorChooserButton, previousSelectedColorKey);
+            }
+        }
 
-    private ColorChooserButtonListenerList colorChooserButtonListeners =
-        new ColorChooserButtonListenerList();
+        @Override
+        public void selectedColorBindTypeChanged(ColorChooserButton colorChooserButton,
+            BindType previousSelectedColorBindType) {
+            for (ColorChooserButtonBindingListener listener : this) {
+                listener.selectedColorBindTypeChanged(colorChooserButton,
+                    previousSelectedColorBindType);
+            }
+        }
+
+        @Override
+        public void selectedColorBindMappingChanged(ColorChooserButton colorChooserButton,
+            ColorChooser.SelectedColorBindMapping previousSelectedColorBindMapping) {
+            for (ColorChooserButtonBindingListener listener : this) {
+                listener.selectedColorBindMappingChanged(colorChooserButton,
+                    previousSelectedColorBindMapping);
+            }
+        }
+    }
+
+    private Color selectedColor = null;
+
+    private String selectedColorKey = null;
+    private BindType selectedColorBindType = BindType.BOTH;
+    private ColorChooser.SelectedColorBindMapping selectedColorBindMapping = null;
+
     private ColorChooserButtonSelectionListenerList colorChooserButtonSelectionListeners =
         new ColorChooserButtonSelectionListenerList();
+    private ColorChooserButtonBindingListenerList colorChooserButtonBindingListeners =
+        new ColorChooserButtonBindingListenerList();
 
     private static final Button.DataRenderer DEFAULT_DATA_RENDERER =
         new ListButtonColorItemRenderer();
@@ -146,7 +167,49 @@ public class ColorChooserButton extends Button {
 
         if (previousSelectedColorKey != selectedColorKey) {
             this.selectedColorKey = selectedColorKey;
-            colorChooserButtonListeners.selectedColorKeyChanged(this, previousSelectedColorKey);
+            colorChooserButtonBindingListeners.selectedColorKeyChanged(this,
+                previousSelectedColorKey);
+        }
+    }
+
+    public BindType getSelectedColorBindType() {
+        return selectedColorBindType;
+    }
+
+    public void setSelectedColorBindType(BindType selectedColorBindType) {
+        if (selectedColorBindType == null) {
+            throw new IllegalArgumentException();
+        }
+
+        BindType previousSelectedColorBindType = this.selectedColorBindType;
+
+        if (previousSelectedColorBindType != selectedColorBindType) {
+            this.selectedColorBindType = selectedColorBindType;
+            colorChooserButtonBindingListeners.selectedColorBindTypeChanged(this,
+                previousSelectedColorBindType);
+        }
+    }
+
+    public final void setSelectedColorBindType(String selectedColorBindType) {
+        if (selectedColorBindType == null) {
+            throw new IllegalArgumentException();
+        }
+
+        setSelectedColorBindType(BindType.valueOf(selectedColorBindType.toUpperCase()));
+    }
+
+    public ColorChooser.SelectedColorBindMapping getSelectedColorBindMapping() {
+        return selectedColorBindMapping;
+    }
+
+    public void setSelectedColorBindMapping(ColorChooser.SelectedColorBindMapping bindMapping) {
+        ColorChooser.SelectedColorBindMapping previousSelectedColorBindMapping =
+            this.selectedColorBindMapping;
+
+        if (previousSelectedColorBindMapping != bindMapping) {
+            this.selectedColorBindMapping = bindMapping;
+            colorChooserButtonBindingListeners.selectedColorBindMappingChanged(this,
+                previousSelectedColorBindMapping);
         }
     }
 
@@ -156,20 +219,24 @@ public class ColorChooserButton extends Button {
      */
     @Override
     public void load(Dictionary<String, ?> context) {
-        String selectedColorKey = getSelectedColorKey();
-
         if (selectedColorKey != null
-            && JSON.containsKey(context, selectedColorKey)) {
+            && JSON.containsKey(context, selectedColorKey)
+            && selectedColorBindType != BindType.STORE) {
             Object value = JSON.get(context, selectedColorKey);
 
+            Color selectedColor = null;
+
             if (value instanceof Color) {
-                setSelectedColor((Color)value);
-            } else if (value instanceof String) {
-                setSelectedColor((String)value);
+                selectedColor = (Color)value;
+            } else if (selectedColorBindMapping == null) {
+                if (value != null) {
+                    selectedColor = Color.decode(value.toString());
+                }
             } else {
-                throw new IllegalArgumentException("Invalid color type: " +
-                    value.getClass().getName());
+                selectedColor = selectedColorBindMapping.toColor(value);
             }
+
+            setSelectedColor(selectedColor);
         }
     }
 
@@ -179,9 +246,10 @@ public class ColorChooserButton extends Button {
      */
     @Override
     public void store(Dictionary<String, ?> context) {
-        if (isEnabled()
-            && selectedColorKey != null) {
-            JSON.put(context, selectedColorKey, selectedColor);
+        if (selectedColorKey != null
+            && selectedColorBindType != BindType.LOAD) {
+            JSON.put(context, selectedColorKey, (selectedColorBindMapping == null) ?
+                selectedColor : selectedColorBindMapping.valueOf(selectedColor));
         }
     }
 
@@ -196,16 +264,16 @@ public class ColorChooserButton extends Button {
     }
 
     /**
-     * Returns the color chooser button listener list.
-     */
-    public ListenerList<ColorChooserButtonListener> getColorChooserButtonListeners() {
-        return colorChooserButtonListeners;
-    }
-
-    /**
      * Returns the color chooser button selection listener list.
      */
     public ListenerList<ColorChooserButtonSelectionListener> getColorChooserButtonSelectionListeners() {
         return colorChooserButtonSelectionListeners;
+    }
+
+    /**
+     * Returns the color chooser button binding listener list.
+     */
+    public ListenerList<ColorChooserButtonBindingListener> getColorChooserButtonBindingListeners() {
+        return colorChooserButtonBindingListeners;
     }
 }

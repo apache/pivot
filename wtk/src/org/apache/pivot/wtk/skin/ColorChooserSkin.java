@@ -19,7 +19,6 @@ package org.apache.pivot.wtk.skin;
 import java.awt.Color;
 
 import org.apache.pivot.wtk.ColorChooser;
-import org.apache.pivot.wtk.ColorChooserListener;
 import org.apache.pivot.wtk.ColorChooserSelectionListener;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.skin.ContainerSkin;
@@ -28,21 +27,16 @@ import org.apache.pivot.wtk.skin.ContainerSkin;
  * Abstract base class for color chooser skins.
  */
 public abstract class ColorChooserSkin extends ContainerSkin
-    implements ColorChooserListener, ColorChooserSelectionListener {
+    implements ColorChooserSelectionListener {
     @Override
     public void install(Component component) {
         super.install(component);
 
         ColorChooser colorChooser = (ColorChooser)component;
-        colorChooser.getColorChooserListeners().add(this);
         colorChooser.getColorChooserSelectionListeners().add(this);
     }
 
-    @Override
-    public void selectedColorKeyChanged(ColorChooser colorChooser,
-        String previousSelectedColorKey) {
-        // No-op
-    }
+    // ColorChooserSelectionListener methods
 
     @Override
     public void selectedColorChanged(ColorChooser colorChooser, Color previousSelectedColor) {
