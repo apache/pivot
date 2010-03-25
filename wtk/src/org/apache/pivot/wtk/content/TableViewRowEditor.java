@@ -26,6 +26,7 @@ import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.ApplicationContext;
+import org.apache.pivot.wtk.BindType;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.CardPane;
 import org.apache.pivot.wtk.CardPaneListener;
@@ -175,15 +176,22 @@ public class TableViewRowEditor implements TableView.RowEditor {
                     TextInput editorTextInput = new TextInput();
                     editorTextInput.setTextKey(columnName);
                     editorComponent = editorTextInput;
+
+                    // Disable the text input for read-only properties
+                    if (beanDictionary != null
+                        && beanDictionary.isReadOnly(columnName)) {
+                        editorTextInput.setTextBindType(BindType.LOAD);
+                        editorTextInput.setEnabled(false);
+                    }
                 }
 
-                // Disable the component for read-only properties. Components
-                // that are already disabled must be custom cell editor
-                // components and assumed to represent read-only properties.
-                if (!editorComponent.isEnabled()
-                    || (beanDictionary != null
-                    && beanDictionary.isReadOnly(columnName))) {
-                    editorComponent.getUserData().put(READ_ONLY_KEY, true);
+                // Record if a component is initially disabled. This is because
+                // we'll be managing the enabled state of the editor component
+                // based on column sizes, and we need to know how to restore it
+                // to its initial enabled state.
+                editorComponent.getUserData().put(DISABLED_KEY, null);
+                if (!editorComponent.isEnabled()) {
+                    editorComponent.getUserData().put(DISABLED_KEY, true);
                 }
 
                 // Add the editor component to the table pane
@@ -406,8 +414,8 @@ public class TableViewRowEditor implements TableView.RowEditor {
 
                 // Disable the editor component if necessary
                 Component editorComponent = tablePaneRow.get(i);
-                boolean isReadOnly = (editorComponent.getUserData().get(READ_ONLY_KEY) != null);
-                editorComponent.setEnabled(!isReadOnly && columnWidth > 0);
+                boolean enabled = (editorComponent.getUserData().get(DISABLED_KEY) == null);
+                editorComponent.setEnabled(enabled && columnWidth > 0);
             }
         }
 
@@ -558,12 +566,14 @@ public class TableViewRowEditor implements TableView.RowEditor {
         }
 
         @Override
-        public void selectModeChanged(TableView tableView, TableView.SelectMode previousSelectMode) {
+        public void selectModeChanged(TableView tableView,
+            TableView.SelectMode previousSelectMode) {
             // No-op
         }
 
         @Override
-        public void disabledRowFilterChanged(TableView tableView, Filter<?> previousDisabledRowFilter) {
+        public void disabledRowFilterChanged(TableView tableView,
+            Filter<?> previousDisabledRowFilter) {
             // No-op
         }
 
@@ -606,7 +616,8 @@ public class TableViewRowEditor implements TableView.RowEditor {
     private static final int IMAGE_CARD_INDEX = 0;
     private static final int EDITOR_CARD_INDEX = 1;
 
-    private static final String READ_ONLY_KEY = "readOnly";
+    private static final String DISABLED_KEY =
+        "org.apache.pivot.wtk.content.TableViewRowEditor.disabled";
 
     /**
      * Gets this row editor's cell editor dictionary. The caller may specify

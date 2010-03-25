@@ -23,10 +23,16 @@ import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 
-
 /**
  * Container that arranges components in a two-dimensional grid, optionally
- * spanning multiple rows and columns.
+ * spanning multiple rows and columns, much like an HTML <tt>&lt;table&gt;</tt>
+ * element.
+ * <p>
+ * Note that unlike an HTML <tt>&lt;table&gt;</tt>, components that span
+ * multiple rows or columns will not "push" other components out of their way.
+ * Instead, the spanning components will simply overlay the cells into which
+ * they span. This means that application developers may have to use
+ * {@link Filler filler cells} in the cells that are spanned.
  */
 public class TablePane extends Container {
     /**
