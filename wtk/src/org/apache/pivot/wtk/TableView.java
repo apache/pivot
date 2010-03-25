@@ -818,7 +818,7 @@ public class TableView extends Component {
         /**
          * Converts table data to a context value.
          *
-         * @param list
+         * @param tableData
          */
         public Object valueOf(List<?> tableData);
     }
@@ -2089,6 +2089,7 @@ public class TableView extends Component {
 
     public void setTableDataKey(String tableDataKey) {
         String previousTableDataKey = this.tableDataKey;
+
         if (previousTableDataKey != tableDataKey) {
             this.tableDataKey = tableDataKey;
             tableViewBindingListeners.tableDataKeyChanged(this, previousTableDataKey);
