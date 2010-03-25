@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="Row Editor Demo"
+<Window title="%title"
     maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:collections="org.apache.pivot.collections"
@@ -30,14 +30,14 @@ limitations under the License.
                     <view>
                         <TableView wtkx:id="tableView" selectMode="single">
                             <columns>
-                                <TableView.Column name="date" width="87" headerData="Date"/>
-                                <TableView.Column name="type" width="125" headerData="Type"/>
-                                <TableView.Column name="amount" width="75" headerData="Amount">
+                                <TableView.Column name="date" width="87" headerData="%headers.date"/>
+                                <TableView.Column name="type" width="125" headerData="%headers.type"/>
+                                <TableView.Column name="amount" width="75" headerData="%headers.amount">
                                     <cellRenderer>
-                                        <content:TableViewNumberCellRenderer numberFormat="&#36;#,##0.00"/>
+                                        <content:TableViewNumberCellRenderer numberFormat="%formats.currency"/>
                                     </cellRenderer>
                                 </TableView.Column>
-                                <TableView.Column name="description" width="1*" headerData="Description" minimumWidth="150"/>
+                                <TableView.Column name="description" width="1*" headerData="%headers.description" minimumWidth="150"/>
                             </columns>
                             <tableData>
                                 <collections:ArrayList>

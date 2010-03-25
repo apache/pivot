@@ -18,6 +18,7 @@ package org.apache.pivot.demos.roweditor;
 
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.EnumList;
+import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
@@ -41,7 +42,8 @@ public class RowEditorDemo implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        Resources resources = new Resources(getClass().getName());
+        WTKXSerializer wtkxSerializer = new WTKXSerializer(resources);
         window = (Window)wtkxSerializer.readObject(this, "demo.wtkx");
         tableView = (TableView)wtkxSerializer.get("tableView");
 
