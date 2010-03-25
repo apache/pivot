@@ -645,7 +645,10 @@ public class TerraCalendarSkin extends CalendarSkin {
         }
 
         // Show/hide last row
-        calendarTablePane.getRows().get(7).setVisible(dateButtons[5][0].isEnabled());
+        boolean visible = dateButtons[5][0].isEnabled();
+        for (Component component : calendarTablePane.getRows().get(7)) {
+            component.setVisible(visible);
+        }
 
         today = new CalendarDate();
         updateSelection(calendar.getSelectedDate());

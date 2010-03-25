@@ -190,20 +190,6 @@ public class TablePane extends Container {
             }
         }
 
-        /**
-         * Sets the visible flag for all components in the row.
-         * <p>
-         * This is a convenience method that iterates through the row, calling
-         * <tt>setVisible</tt> on all components.
-         */
-        public void setVisible(boolean visible) {
-            if (tablePane != null) {
-                for (Component component : cells) {
-                    component.setVisible(visible);
-                }
-            }
-        }
-
         @Override
         public int add(Component component) {
             int i = getLength();
@@ -451,24 +437,6 @@ public class TablePane extends Container {
 
                 if (tablePane != null) {
                     tablePane.tablePaneListeners.columnHighlightedChanged(this);
-                }
-            }
-        }
-
-        /**
-         * Sets the visible flag for all components in the column.
-         * <p>
-         * This is a convenience method that iterates through the components in
-         * the column, calling <tt>setVisible</tt> on all such components.
-         */
-        public void setVisible(boolean visible) {
-            if (tablePane != null) {
-                int columnIndex = tablePane.columns.indexOf(this);
-
-                for (Row row : tablePane.rows) {
-                    if (row.getLength() > columnIndex) {
-                        row.get(columnIndex).setVisible(visible);
-                    }
                 }
             }
         }
