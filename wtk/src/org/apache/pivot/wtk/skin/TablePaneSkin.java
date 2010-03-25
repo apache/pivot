@@ -690,19 +690,35 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
                 gridGraphics.clip(gridClip);
             }
 
+            boolean[][] occupiedCells = getOccupiedCells();
+
             if (showHorizontalGridLines
                 && verticalSpacing > 0
                 && rowCount > 1) {
                 gridGraphics.setPaint(horizontalGridColor);
 
-                int rowY = padding.top + (rowHeights[0] + verticalSpacing);
+                int rowY = padding.top;
+                int visibleRowCount = 0;
 
-                for (int i = 1; i < rowCount; i++) {
-                    int gridY = Math.max(rowY - (int)Math.ceil(verticalSpacing * 0.5f), 0);
-                    GraphicsUtilities.drawLine(gridGraphics, 0, gridY,
-                        width, Orientation.HORIZONTAL);
+                for (int i = 0; i < rowCount; i++) {
+                    boolean rowVisible = false;
 
-                    rowY += (rowHeights[i] + verticalSpacing);
+                    for (int j = 0; j < columnCount; j++) {
+                        if (occupiedCells[i][j]) {
+                            rowVisible = true;
+                            break;
+                        }
+                    }
+
+                    if (rowVisible) {
+                       if (visibleRowCount++ > 0) {
+                           int gridY = Math.max(rowY - (int)Math.ceil(verticalSpacing * 0.5f), 0);
+                           GraphicsUtilities.drawLine(gridGraphics, 0, gridY,
+                               width, Orientation.HORIZONTAL);
+                       }
+
+                       rowY += (rowHeights[i] + verticalSpacing);
+                    }
                 }
             }
 
@@ -711,14 +727,29 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
                 && columnCount > 1) {
                 gridGraphics.setPaint(verticalGridColor);
 
-                int columnX = padding.left + (columnWidths[0] + horizontalSpacing);
+                int columnX = padding.left;
+                int visibleColumnCount = 0;
 
-                for (int j = 1; j < columnCount; j++) {
-                    int gridX = Math.max(columnX - (int)Math.ceil(horizontalSpacing * 0.5), 0);
-                    GraphicsUtilities.drawLine(gridGraphics, gridX, 0,
-                        height, Orientation.VERTICAL);
+                for (int j = 0; j < columnCount; j++) {
+                    boolean columnVisible = false;
 
-                    columnX += (columnWidths[j] + horizontalSpacing);
+                    for (int i = 0; i < rowCount; i++) {
+                        if (occupiedCells[i][j]) {
+                            columnVisible = true;
+                            break;
+                        }
+                    }
+
+                    if (columnVisible) {
+                        if (visibleColumnCount++ > 0) {
+                            int gridX = Math.max(columnX -
+                                (int)Math.ceil(horizontalSpacing * 0.5), 0);
+                            GraphicsUtilities.drawLine(gridGraphics, gridX, 0,
+                                height, Orientation.VERTICAL);
+                        }
+
+                        columnX += (columnWidths[j] + horizontalSpacing);
+                    }
                 }
             }
 
