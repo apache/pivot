@@ -736,7 +736,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                 nodeX += Math.max(indent, checkboxWidth) + spacing;
             }
 
-            int nodeWidth = width - nodeX;
+            int nodeWidth = Math.max(width - nodeX, 0);
 
             // Paint the node data
             Graphics2D rendererGraphics = (Graphics2D)graphics.create(nodeX, nodeY,
