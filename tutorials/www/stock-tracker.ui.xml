@@ -23,508 +23,165 @@ limitations under the License.
 
     <body>
         <p>
-            The user interface of a Pivot application is often defined using XML markup rather than
-            Java code. The hierarchical structure of an XML document more closely parallels the
-            structure of the component hierarchy, which makes it easier to visualize the resulting
+            The user interface of a Pivot application is often defined using an XML markup language
+            called WTKX (the "WTK" in WTKX stands for "windowing toolkit" and is taken from the
+            name of the Pivot package that contains most of the user interface elements,
+            <tt>org.apache.pivot.wtk</tt>; the "X" comes from "XML"). WTKX is effectively a
+            shorthand for instantiating and configuring Java class instances. Though it can
+            actually be used to declaratively construct any type of Java object hierarchy, it is
+            most often used to define the structure of an application's user interface - the
+            hierarchical structure of an XML document closely parallels the structure of the
+            application's component hierarchy, which makes it easy to visualize the resulting
             output.
-        </p>
-
-        <p>
-            Pivot allows developers to split the definition of the user interface into multiple
-            WTKX files. This allows each piece to vary independently and makes the overall
-            structure easier to manage. The layout of the Stock Tracker application is divided into
-            two WTKX documents; <tt>stock_tracker_window.wtkx</tt>, which sets up the main structure
-            of the application, and <tt>detail_pane.wtkx</tt>, which defines the layout for the
-            quote detail.
-        </p>
-
-        <p>
-            We'll take a look at the top-level markup in
-            <tt>stock_tracker_window.wtkx</tt> first, concentrating on the main page elements,
-            <tt>StockTrackerWindow</tt>, <tt>TablePane</tt>, <tt>SplitPane</tt>, and
-            <tt>TableView</tt>. Then we'll investigate the markup for the stock quote detail, which
-            uses the <tt>Form</tt> container and lays the ground work for the data binding support
-            we'll discuss in a later section.
         </p>
 
         <h2>StockTrackerWindow</h2>
 
         <p>
+            The following is a snippet of code taken from <tt>stock_tracker_window.wtkx</tt>,
+            the WTKX file that defines the main window of the Stock Tracker application:
+        </p>
+
+        <source type="xml">
+            <![CDATA[
+            <stocktracker:StockTrackerWindow title="%stockTracker" maximized="true"
+                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns:content="org.apache.pivot.wtk.content"
+                xmlns:stocktracker="org.apache.pivot.tutorials.stocktracker"
+                xmlns="org.apache.pivot.wtk">
+                <content>
+                    <TablePane styles="{padding:8, horizontalSpacing:6, verticalSpacing:6}">
+                        <columns>
+                            <TablePane.Column width="1*" />
+                        </columns>
+
+                        <rows>
+                            ...
+
+                            <TablePane.Row height="1*">
+                                <SplitPane splitRatio="0.4">
+                                    <left>
+                                        ...
+                                    </left>
+                                    <right>
+                                        <Border styles="{padding:6, color:10}">
+                                            <content>
+                                                <wtkx:include wtkx:id="detailPane" src="detail_pane.wtkx"/>
+                                            </content>
+                                        </Border>
+                                    </right>
+                                </SplitPane>
+                            </TablePane.Row>
+
+                            <TablePane.Row height="-1">
+                                <BoxPane styles="{horizontalAlignment:'left', verticalAlignment:'center'}">
+                                    <Label text="%symbol" styles="{font:{bold:true}}" />
+                                    <TextInput wtkx:id="symbolTextInput" textSize="10"
+                                        maximumLength="8" />
+                                        ...
+                        </rows>
+                    </TablePane>
+                </content>
+            </stocktracker:StockTrackerWindow>
+            ]]>
+        </source>
+
+        <p>
+            In general, XML elements in WTKX refer either to class instances or properties of class
+            instances. Any element that begins with a capital letter represents a class instance,
+            and elements beginning with lowercase letters represent properties. The exception is
+            elements that use the "wtkx" namespace prefix, which represent processing directives to
+            the WTKX serializer. Similarly, XML attributes generally represent properties, with the
+            exception of attributes that begin with a "wtkx" prefix, which contain processing
+            information used by the serializer.
+        </p>
+
+        <p>
             The root node of the <tt>stock_tracker_window.wtkx</tt> file is a
-            <tt>stocktracker:StockTrackerWindow</tt> element. This element corresponds to an instance
-            of <tt>org.apache.pivot.tutorials.stocktracker.StockTrackerWindow</tt>. The "stocktracker"
-            namespace prefix is used to associate an element with a Java package. In this case,
-            "stocktracker" is mapped to <tt>org.apache.pivot.tutorials.stocktracker</tt>; the
-            default namespace is mapped to <tt>org.apache.pivot.wtk</tt>, the Java package that contains
-            most of Pivot's common components.
+            <tt>stocktracker:StockTrackerWindow</tt> element. This element corresponds to an
+            instance of <tt>org.apache.pivot.tutorials.stocktracker.StockTrackerWindow</tt>. In
+            WTKX, XML namespaces are used to associate a class element with a Java package. In this
+            case, "stocktracker" is mapped to <tt>org.apache.pivot.tutorials.stocktracker</tt>, and
+            "content" is mapped to <tt>org.apache.pivot.wtk.content</tt>; the default namespace is
+            mapped to <tt>org.apache.pivot.wtk</tt>, the Java package that contains most of Pivot's
+            common components.
         </p>
 
         <p>
-            <tt>StockTrackerWindow</tt> extends the base <tt>org.apache.pivot.wtk.Window</tt> class
-            that is included in the Pivot platform. Windows are the primary entry point into a the Pivot
-            UI. Most web-based Pivot applications will use an instance (or subclass of) <tt>Window</tt>,
-            which represents a basic, undecorated window; other common window types
-            include <tt>Frame</tt> and <tt>Dialog</tt>, which provide a title area and window sizing
-            controls, <tt>Sheet</tt> and <tt>Prompt</tt>, which provide a modal window that is useful
-            for collecting user input, as well as <tt>MenuPopup</tt> (used to display a context menu),
-            <tt>SuggestionPopup</tt> (used to display a popup list of auto-complete suggestions), and
-            <tt>Tooltip</tt>.
-        </p>
-
-        <h2>TablePane</h2>
-
-        <p>
-            A window's content is specified via its "content" property, represented in WTKX by the
-            <tt>&lt;content&gt;</tt> element. The content of the main Stock Tracker window is
-            a <tt>TablePane</tt> element. A table pane is a type of layout container that arranges
-            its children in a manner similar to an HTML table.
+            <tt>StockTrackerWindow</tt> is an application-specific class that extends the base
+            <tt>org.apache.pivot.wtk.Window</tt> class. Windows are the primary entry point into a
+            Pivot user interface. Windows are always direct descendants of the "display" (an
+            instance of <tt>org.apache.pivot.wtk.Display</tt> that is created by the platform). An
+            application can open any number of windows on the display, though many applications
+            will use a single primary window and a number of secondary windows (for example,
+            dialogs, sheets, menu popups, or tooltips).
         </p>
 
         <p>
-            Like HTML tables, <tt>TablePane</tt> contents are organized into rows and columns.
-            The following code snippet shows the WTKX that is used to create the layout
-            for the Stock Tracker application:
+            Note that <tt>StockTrackerWindow</tt> implements the <tt>org.apache.pivot.wtkx.Bindable</tt>
+            interface. This interface allows developers to easily map elements declared with a
+            <tt>wtkx:id</tt> attribute to Java member variables. For example,
+            <tt>StockTrackerWindow</tt> declares the following member variables:
         </p>
 
         <source type="xml">
             <![CDATA[
-            <TablePane styles="{padding:8, horizontalSpacing:6, verticalSpacing:6}">
-                <columns>
-                    <TablePane.Column width="1*" />
-                </columns>
-
-                <rows>
-                    <TablePane.Row height="-1">
-                        <Label ... />
-                    </TablePane.Row>
-
-                    <TablePane.Row height="1*">
-                        <SplitPane splitRatio="0.4">
-                        ...
-                        </SplitPane>
-                    </TablePane.Row>
-
-                    <TablePane.Row height="-1">
-                        <BoxPane ... >
-                        ...
-                        </BoxPane>
-                    </TablePane.Row>
-
-                    <TablePane.Row height="-1">
-                        <TablePane>
-                        ...
-                        </TablePane>
-                    </TablePane.Row>
-                </rows>
-            </TablePane>
+            @WTKX private TextInput symbolTextInput = null;
+            @WTKX private Button addSymbolButton = null;
+            @WTKX private Button removeSymbolsButton = null;
+            @WTKX private BoxPane detailPane = null;
+            @WTKX private Label lastUpdateLabel = null;
+            @WTKX private Button yahooFinanceButton = null;
             ]]>
         </source>
 
         <p>
-            Note that three of the rows specify a height value of "-1", while the remaining row
-            specifies a value of "1*". A value of -1 indicates that the row height should be
-            determined automatically as the maximum preferred height of all components in that row,
-            and is the default value. A row height can be explicitly set by providing any
-            non-negative value, which represents the desired row height in pixels.
+            Because <tt>StockTrackerWindow</tt> implements <tt>Bindable</tt>, these member variables
+            are automatically populated with the corresponding values declared in the WTKX file.
+            <tt>Bindable</tt> defines a single method, <tt>initialize()</tt>, that is called when
+            the root element has been fully loaded and the bound values have been processed. This
+            allows the bound class to perform any required initialization (generally event
+            registration, discussed in more detail in the
+            <a href="stock-tracker.events.html>Event Handling</a> section).
         </p>
 
         <p>
-            A number followed by an asterisk specifies a relative size; the height is determined by
-            applying a weighted percentage of the space left over after subtracting the height of
-            all automatic and explicitly-sized rows. Only one row in this example has a relative
-            size, so it will be given 100% of the available space. However, if two rows had been
-            given a size of "1*", they would each get 50% of the available space. If one row had
-            been given an height of "1*" and another "2*", the first would recieve one third of the
-            available height, and the second two thirds, and so on. The same logic applies to
-            column widths.
+            The WTKX snippet above also illustrates a couple other key aspects of WTKX markup:
+            resource resolution and includes. Resource resolution allows a developer to insert
+            "tags" in the markup that will be replaced at load time with a localized equivalent.
+            This makes it very easy to build internationalized applications in Pivot. Any attribute
+            value that begins with a "%" character is considered a resource key, and the value
+            for the attribute is obtained from a resource bundle associated with the WTKX file.
+            This is discussed in more detail in the
+            <a href="stock-tracker.localization.html>Localization</a> section.
         </p>
 
         <p>
-            The following graphic shows the resulting layout (the blue lines represent the table
-            cell boundaries):
+            WTKX also supports two other resolution operators: "@" and "$". The "at" symbol is used
+            to resolve URLs; any attribute value preceded by an "at" symbol is converted to an
+            instance of <tt>java.net.URL</tt> relative to the current WTKX file. This notation is
+            very useful for loading images from a location relative to the current file.
         </p>
 
         <p>
-            <img src="stock_tracker/table_pane.png"/>
-        </p>
-        <p class="caption">Stock Tracker table pane cells.</p>
-
-        <h3>Styles</h3>
-
-        <p>
-            Note the styles attribute of the <tt>TablePane</tt> element. Styles are used to
-            customize the appearance of a component, and are specified in WTKX as a JSON-formatted
-            collection of name/value pairs. All Pivot components support the styles attribute, but
-            each component may support a different set of styles depending on its current skin.
+            The dollar sign is a "variable dereference" operator. Though it isn't shown in this
+            example, it is possible to embed script code in a WTKX file using the
+            <tt>&lt;wtkx:script&gt;</tt> tag. Any JVM-capable scripting language is supported,
+            including JavaScript, Groovy, and Scala, among others. Any attribute value preceded by
+            a dollar sign is resolved to an instance of a script variable declared within the page.
+            This allows developers to define variables in script and then easily use them as
+            initialization paramters for class instances declared as elements. Script code can
+            also refer to any page elements identified via a <tt>wtkx:id</tt> attribute as globally
+            scoped page level variables.
         </p>
 
         <p>
-            In this example, the table pane is assigned a "padding" value of 8 and a
-            "horizontalSpacing" value of 6. Padding represents the amount of space that the table
-            pane will leave around its components, and horizontal spacing is the size of the gap
-            the table pane will leave between columns. Most Pivot containers support the
-            "padding" and "spacing" styles.
-        </p>
-
-        <h3>Table Pane Cells</h3>
-
-        <p>
-            The actual content of a table pane is specified in the <tt>&lt;rows&gt;</tt> element.
-            Each immediate child element of the <tt>&lt;rows&gt;</tt> element is an element
-            representing a complete row; each child of the <tt>&lt;TablePane.Row&gt;</tt> element
-            is considered a table cell, as shown below:
-        </p>
-
-        <source type="xml">
-            <![CDATA[
-            <TablePane.Row height="-1">
-                <Label text="%stockTracker"
-                    styles="{font:'Verdana bold 14', verticalAlignment:'center'}"/>
-            </TablePane.Row>
-            ]]>
-        </source>
-
-        <p>
-            Note the use of the percent symbol in the text attribute value. This tells the WTKX
-            component loader that the value of the label's text property should be provided by a
-            string resource with the specified name, minus the percent sign. This is discussed in
-            more detail in the Localization section.
-        </p>
-
-        <h2>SplitPane</h2>
-
-        <p>
-            The <tt>SplitPane</tt> container is used to divide an area into two resizable regions.
-            Split panes can be either vertical or horizontal (the default). Vertical split panes
-            contain top and bottom components, and horizontal split panes contain left and right
-            components, as shown below:
-        </p>
-
-        <source type="xml">
-            <![CDATA[
-            <SplitPane splitRatio="0.4">
-                <left>
-                    <Border styles="{padding:0, color:10}">
-                    ...
-                    </Border>
-                </left>
-                <right>
-                    <Border styles="{padding:6, color:10}">
-                    ...
-                    </Border>
-                </right>
-            </SplitPane>
-            ]]>
-        </source>
-
-        <p>
-            In this example, both the left and right components are instances of the
-            <tt>Border</tt> class.  Since split panes themselves don't draw any kind of divider,
-            borders are often used to delineate content boundaries. Given a split ratio value of
-            0.4, as shown, the left side of the split pane will initially be allocated 40% of the
-            split pane's width, and the right side will receive 60%.
-        </p>
-
-        <h2>TableView</h2>
-
-        <p>
-            The <tt>TableView</tt> component is used to present tabular data in a grid of rows and
-            columns. While it bears a superficial resemblance to <tt>TablePane</tt>, the purpose
-            of the two components is different: <tt>TablePane</tt> is a container whose
-            primary purpose is to lay out sub-components, and its structure is most often defined
-            at design time. <tt>TableView</tt> is a component that acts as a view on a set of
-            model data and is most often populated at run time.
-        </p>
-
-        <p>
-            <tt>TableView</tt> is used by the Stock Tracker demo to display a selectable list of
-            stock quote data. The following listing shows the markup used by the demo to create
-            the table view:
-        </p>
-
-        <source type="xml">
-            <![CDATA[
-            <TableView wtkx:id="stocksTableView" selectMode="multi"
-                styles="{showHorizontalGridLines:false}">
-                <columns>
-                    <TableView.Column name="symbol" headerData="%symbol" width="80"/>
-                    <TableView.Column name="value" headerData="%value" width="80">
-                        <cellRenderer>
-                            <content:TableViewNumberCellRenderer
-                                styles="{horizontalAlignment:'right'}"
-                                numberFormat="$$0.00"/>
-                        </cellRenderer>
-                    </TableView.Column>
-                    <TableView.Column name="change" headerData="%change" width="80">
-                        <cellRenderer>
-                            <stocktracker:ChangeCellRenderer
-                                styles="{horizontalAlignment:'right'}"
-                                numberFormat="+0.00;-0.00"/>
-                        </cellRenderer>
-                    </TableView.Column>
-                </columns>
-            </TableView>
-            ]]>
-        </source>
-
-        <p>
-            Note that the <tt>TableView</tt> element defines a <tt>wtkx:id</tt> attribute
-            with a value of "stocksTableView". The <tt>wtkx:id</tt> attribute is used to assign an
-            identifier value to an element declared in a WTKX file, similar to a variable
-            declaration in Java. In this case, the identifier will be used to associate the table
-            view with an instance of <tt>TableViewHeader</tt>, discussed in the next section.
-            However, ID values are also used to gain access to WTKX components from Java code when
-            wiring up event handlers. This is discussed in more detail in the next section,
-            <a href="stock-tracker.events.html">Event Handling</a>.
-        </p>
-
-        <h3>TableView Columns</h3>
-
-        <p>
-            The application defines three columns for the table view: one for the stock ticker
-            symbol, another for the stock's current value, and a third for the change percentage.
-            The name attribute defines the name of the column. It is not visible to the user, but
-            is used as a key to map values in each row to their appropriate place in the table
-            view; the value of the headerData attribute is what is actually shown to the user in
-            the table view header. Note that the header data for each column is specified as a
-            resource name so the header text can be localized.
-        </p>
-
-        <p>
-            The width of each column in this example is set to a relative width of "1*". This
-            means that each column will be allocated one third of the total width of the table
-            view (like <tt>TablePane</tt>, <tt>TableView</tt> columns can also be assigned an
-            absolute or an automatic pixel width).
-        </p>
-
-        <p>
-            The "value" and "change" columns define several additional attributes related to cell
-            renderers. By default, table cells are drawn using a renderer that presents the cell's
-            contents as a text string. Custom cell renderers can be used to present cell data
-            formatted as a number, date, or otherwise. The Stock Tracker demo uses the built-in
-            number cell renderer to format the value column and a custom renderer to display the
-            values in the change column using either red or green text depending on the change
-            direction. A complete discussion of cell renderers is outside the scope of this
-            tutorial, but the source code for the custom renderer is as follows:
-        </p>
-
-        <source type="java">
-            <![CDATA[
-            package pivot.tutorials.stocktracker;
-
-            import java.awt.Color;
-
-            import pivot.wtk.TableView;
-            import pivot.wtk.content.TableViewNumberCellRenderer;
-
-            public class ChangeCellRenderer extends TableViewNumberCellRenderer {
-                public static final Color UP_COLOR = new Color(0x00, 0x80, 0x00);
-                public static final Color DOWN_COLOR = new Color(0xff, 0x00, 0x00);
-
-                public void render(Object value, TableView tableView, TableView.Column column,
-                    boolean rowSelected, boolean rowHighlighted, boolean rowDisabled) {
-                    super.render(value, tableView, column, rowSelected, rowHighlighted, rowDisabled);
-
-                    if (value != null
-                        && !rowSelected) {
-                        StockQuote stockQuote = (StockQuote)value;
-                        float change = stockQuote.getChange();
-                        getStyles().put("color", change < 0 ? DOWN_COLOR : UP_COLOR);
-                    }
-                }
-            }
-            ]]>
-        </source>
-
-        <h3>TableViewHeader</h3>
-
-        <p>
-            Pivot's <tt>TableView</tt> component does not include built-in header support; rather,
-            support for column headings and resizing is provided by a separate
-            <tt>TableViewHeader</tt> component. This is because <tt>TableView</tt> (and other
-            similar components including <tt>ListView</tt> and <tt>TreeView</tt>) do not include
-            built-in support for scrolling. Scrolling is provided by the <tt>ScrollPane</tt> class,
-            discussed below.
-        </p>
-
-        <p>
-            <img src="stock_tracker/table_view.png"/>
-        </p>
-        <p class="caption">Stock Tracker table view and table view header.</p>
-
-        <p>
-            The following markup is used to declare the table view header component for the Stock
-            Tracker demo:
-        </p>
-
-        <source type="xml">
-            <![CDATA[
-            <TableViewHeader tableView="$stocksTableView" sortMode="single_column"/>
-            ]]>
-        </source>
-
-        <p>
-            The header automatically associates itself with the table view instance
-            identified by the <tt>tableView</tt> attribute - no additional markup or coding is
-            necessary.
-        </p>
-
-        <p>
-            Note that <tt>TableViewHeader</tt> does not automatically perform sorting. Sorting
-            is implemented in response to a <tt>sortChanged()</tt> event fired by the
-            <tt>TableView</tt> itself. An example is shown below:
-        </p>
-
-        <source type="java">
-            <![CDATA[
-            stocksTableView.getTableViewSortListeners().add(new TableViewSortListener.Adapter() {
-                @Override
-                @SuppressWarnings("unchecked")
-                public void sortChanged(TableView tableView) {
-                    List<Object> tableData = (List<Object>)tableView.getTableData();
-                    tableData.setComparator(new TableViewRowComparator(tableView));
-                }
-            });
-            ]]>
-        </source>
-
-        <h3>ScrollPane</h3>
-
-        <p>
-            Pivot components do not manage scrolling internally - all scrolling in Pivot is handled
-            by an instance of the <tt>Viewport</tt> class, which <tt>ScrollPane</tt> extends.
-            A viewport provides a windowed view onto another component and generally allows a user
-            to select which part of the component is shown (for example, by dragging a horizontal
-            or vertical scroll bar).
-        </p>
-
-        <p>
-            The component being scrolled is called the "view", and is specified as a child of the
-            scroll pane's <tt>&lt;view&gt;</tt> element. <tt>ScrollPane</tt> also provides support
-            for fixed row and column headers that scroll with the view but always remain visible.
-            These are defined using <tt>ScrollPane</tt>'s <tt>&lt;rowHeader&gt;</tt> and
-            <tt>&lt;columnHeader&gt;</tt> sub-elements. A <tt>TableViewHeader</tt> is often used as
-            a column header for a <tt>TableView</tt> instance, but a row or column header can be an
-            instance of any type of component - for example, an application developer might create
-            a "ruler" component to use as a header in a drawing program to help a designer
-            visualize the scale of a large scrollable image.
-        </p>
-
-        <h2>Stock Quote Detail</h2>
-
-        <p>
-            The <tt>stock_tracker_window.wtkx</tt> file defines the overall structure of the
-            user interface, and the layout of the quote detail content is defined separately in
-            <tt>detail_pane.wtkx</tt>. Yet, when the application is run, it appears as
-            though the entire application was defined by a single WTKX file. How does this work?
-            The key is the <tt>wtkx:include</tt> tag:
-        </p>
-
-        <source type="xml">
-            <![CDATA[
-            <wtkx:include namespace="detail" src="detail_pane.wtkx"/>
-            ]]>
-        </source>
-
-        <p>
-            The <tt>wtkx:include</tt> tag tells the WTKX serializer that a component should be
-            placed here, but that the component's content is not defined in this file. The location
-            of the actual content is specified by the <tt>src</tt> tag and is either absolute
-            (beginning with a slash character) or relative (no slash) to the current WTKX file.
-            Includes are generally used to help partition an application into more manageable
-            chunks. In this case, the main window layout and functionality is defined by
-            <tt>stock_tracker_window.wtkx</tt> and <tt>StockTrackerWindow</tt>, but the behavior
-            of the detail pane is encapsulated in <tt>detail_pane.wtkx</tt> and <tt>DetailPane</tt>.
-            <tt>DetailPane</tt> is discussed in more detail below.
-        </p>
-
-        <h3>Data Binding</h3>
-
-        <p>
-            The first child of the <tt>DetailPane</tt> is a <tt>Label</tt> element that is used
-            to present the company name associated with the selected stock symbol. Note that this
-            element defines a <tt>textKey</tt> attribute with a value of "companyName". A label's
-            text key specifies the name of the property from which the label will obtain its text value
-            during data binding. Specifically, it is the name of the value's key in the "bind
-            context", an instance of <tt>Dictionary&lt;String, Object&gt;</tt> that is passed to
-            a component's <tt>load()</tt> method (and recursively to the component's children when
-            the component is a container). This is discussed in more detail in the
-            <a href="stock-tracker.data-binding.html">Data Binding</a> section.
-        </p>
-
-        <source type="xml">
-            <![CDATA[
-            <Label textKey="companyName" styles="{font:{size:12, bold:true}}"/>
-            ]]>
-        </source>
-
-        <p>
-            Data binding is often used to populate the contents of a <tt>Form</tt> component
-            (discussed below). However, there is nothing inherently special about the <tt>Form</tt>
-            class itself that supports data binding - data binding is supported by all container
-            types and many component classes. This allows a Pivot developer to create a user interface
-            that best suits the needs of an application and rely on data binding to simplify the
-            process of populating that UI with data.
-        </p>
-
-        <h3>Forms</h3>
-
-        <p>
-            Though the top-level element of the detail page, <tt>DetailPane</tt>, extends
-            <tt>BoxPane</tt>, a common Pivot layout container, most of the detail pane's layout is
-            handled by the <tt>Form</tt> container. Forms arrange their children in a
-            vertical stack, prepending a text label to each field. The <tt>Form</tt> class ensures
-            that the fields and labels are neatly aligned. It also supports optional "flag messages",
-            which are useful for drawing a user's attention during form validation.
-        </p>
-
-        <p>
-            <img src="stock_tracker/form.png"/>
-        </p>
-        <p class="caption">Stock Tracker detail view using Form container.</p>
-
-        <p>
-            A form field's label is defined by a <tt>Form.label</tt> attribute attached to the child
-            element, as shown below:
-        </p>
-
-        <source type="xml">
-            <![CDATA[
-            <Form styles="{padding:0, fill:true, showFlagIcons:false, showFlagHighlight:false,
-                leftAlignLabels:true}">
-                <sections>
-                    <Form.Section>
-                        <Label wtkx:id="valueLabel" Form.label="%value"
-                            styles="{horizontalAlignment:'right'}"/>
-                        <Label wtkx:id="changeLabel" Form.label="%change"
-                            styles="{horizontalAlignment:'right'}"/>
-                        <Label wtkx:id="openingValueLabel" Form.label="%openingValue"
-                            styles="{horizontalAlignment:'right'}"/>
-                        <Label wtkx:id="highValueLabel" Form.label="%highValue"
-                            styles="{horizontalAlignment:'right'}"/>
-                        <Label wtkx:id="lowValueLabel" Form.label="%lowValue"
-                            styles="{horizontalAlignment:'right'}"/>
-                        <Label wtkx:id="volumeLabel" Form.label="%volume"
-                            styles="{horizontalAlignment:'right'}"/>
-                    </Form.Section>
-                </sections>
-            </Form>
-            ]]>
-        </source>
-
-        <p>
-            <tt>Form.label</tt> is an example of an "attached property". An attached property
-            is a property that is only relevant in a particular context. In this case, the
-            property represents the label that the form will associate with the field. Attached
-            properties allow a container to associate data with a component without requiring
-            the component to have defined the property beforehand. Other Pivot containers,
-            including <tt>TabPane</tt> and <tt>TablePane</tt>, also use attached properties.
-        </p>
-
-        <p>
-            Since the quote data is read-only, the "fields" in this example are actually
-            themselves Label instances. Their form labels are specified as string resources
-            so they can be localized.
+            Includes allow a developer to embed content defined in an external WTKX file as if it
+            was defined in the source file itself. This is useful for partitioning content into
+            manageable pieces (for example, when working on large applications or with multiple
+            developers, or when defining reusable content templates). The detail pane in the
+            Stock Tracker application is defined in an include, <tt>detail_pane.wtkx</tt>. This file
+            is included into the main window via the <tt>&lt;wtkx:include&gt;</tt> tag.
         </p>
     </body>
 </document>
