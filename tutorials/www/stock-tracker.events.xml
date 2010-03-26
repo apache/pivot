@@ -47,13 +47,15 @@ limitations under the License.
 
         <source type="java">
             <![CDATA[
-            // Set the locale
             String language = properties.get(LANGUAGE_PROPERTY_NAME);
             if (language != null) {
                 Locale.setDefault(new Locale(language));
             }
 
-            // TODO
+            Resources resources = new Resources(StockTrackerWindow.class.getName());
+            WTKXSerializer wtkxSerializer = new WTKXSerializer(resources);
+            window = (StockTrackerWindow)wtkxSerializer.readObject(this, "stock_tracker_window.wtkx");
+            window.open(display);
             ]]>
         </source>
 
@@ -66,97 +68,86 @@ limitations under the License.
                 <p>
                     Retrieves the "langauge" argument that was provided to the application context
                     when it was created - for desktop applications, this is a command-line
-                    argument; in the browser, it is either passed via an applet parameter
+                    argument; in the browser, it is passed via an applet parameter.
                 </p>
             </li>
             <li>
                 <p>
                     Sets the default locale to an instance corresponding to the language
-                    argument
+                    argument.
                 </p>
             </li>
             <li>
                 <p>
-                    Loads the application resources
+                    Loads the application resources.
                 </p>
             </li>
             <li>
                 <p>
-                    Creates an instance of <tt>WTKXSerializer</tt> and loads the WTKX source
+                    Creates an instance of <tt>WTKXSerializer</tt> and loads the WTKX source for
+                    the main window.
+                </p>
+            </li>
+            <li>
+                <p>
+                    Opens the main window, causing the application to appear on the screen.
                 </p>
             </li>
         </ul>
 
-        TODO
-
-        <p>
-            Note that the <tt>StockTrackerWindow</tt> implements the
-            <tt>org.apache.pivot.wtkx.Bindable</tt> interface. This interface allows elements
-            defined in a WTKX file to be automatically mapped to member variables in the root
-            element class. Any member variable tagged with the <tt>@WTKX</tt> annotation will be
-            automatically populated when the WTKX is loaded with the corresponding element
-            declared in the WTKX file (WTKX elements are identified via the <tt>wtkx:id</tt>
-            attribute, which behaves similar to a variable name in Java). The <tt>initialize()</tt>
-            method is called to notify the class that the WTKX file has been completely processed
-            and that the member variables are now available for event registration and other
-            application setup tasks.
-        </p>
-
-        <source type="java">
-            <![CDATA[
-            @WTKX private TableView stocksTableView;
-            @WTKX private TextInput symbolTextInput;
-            @WTKX private Button addSymbolButton;
-            @WTKX private Button removeSymbolsButton;
-            ...
-            ]]>
-        </source>
-
-        <p>
-            These annotations eliminate much of the boilerplate code required when loading WTKX
-            contents manually via an instance of <tt>WTKXSerializer</tt>. However, since they rely
-            on reflection code that may need to set private member variables, they can generally
-            only be used by trusted code, such as a locally installed application or a signed
-            applet or Web Start application.
-        </p>
-
         <h2>Adding Event Listeners</h2>
 
         <p>
-            TODO This is in initialize() now
+            At this point, the application is visible and the user can begin interacting with it.
+            Pivot applications respond to user actions by firing "events". For example, Pivot
+            components fire such events as "mouse moved", "button pressed", or "selected index
+            changed". A caller signals its interest in a particular event by implementing an
+            interface that defines an event handler method and adding itself as an event lister on
+            the event source.
+        </p>
 
-            At this point, the entire UI has been created, but it is not yet visible. Even if it
-            was, it wouldn't do much, since no event handlers have been added. The next thing
-            <tt>startup()</tt> does is add a number of event handlers:
+        <p>
+            In the following code snippet taken from <tt>StockTrackerWindow#initialize()</tt>, two
+            event handlers are created: a selection change listener on the stock quote table view
+            and a button press listener on the Yahoo! Finance link button. The first listenener
+            is called when the selection changes in the quote table view, and the second when
+            the user clicks on the link:
         </p>
 
         <source type="java">
             <![CDATA[
-            stocksTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener.Adapter() {
-                public void selectedRangesChanged(TableView tableView, Sequence&lt;Span&gt; previousSelectedRanges) {
-                    refreshDetail();
-                }
-            });
-            ...
+            @Override
+            public void initialize(Resources resources) {
+                stocksTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener.Adapter() {
+                    @Override
+                    public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges) {
+                        ...
+                    }
+                });
 
-            addSymbolButton.getButtonPressListeners().add(new ButtonPressListener() {
-                public void buttonPressed(Button button) {
-                    addSymbol();
-                }
-            });
-            ...
+                ...
+
+                addSymbolButton.setAction(addSymbolAction);
+                removeSymbolsButton.setAction(removeSymbolsAction);
+
+                ...
+
+                yahooFinanceButton.getButtonPressListeners().add(new ButtonPressListener() {
+                    @Override
+                    public void buttonPressed(Button button) {
+                        ...
+                    }
+                });
+            }
             ]]>
         </source>
 
         <p>
-            A caller signals its interest in a particular event by implementing an interface that
-            defines an event handler method and adding itself as an event lister on the event
-            source. In the example above, two event handlers are created: a selection change
-            listener on the stock quote table view and a button press listener on the "add symbol"
-            button. Some listener interfaces, such as those shown here, define only a single event
-            handler method, but others define more than one and serve as a grouping of related
-            events. Interfaces with multiple handler methods generally define an inner Adapter
-            class that can be used to simplify subclassing, as shown above.
+            Some listener interfaces, such as <tt>ButtonPressListener</tt>, define only a single
+            event handler method, but others (including <tt>TableViewSelectionListener</tt>) define
+            more than one and serve as a grouping of related events. Interfaces with multiple
+            handler methods generally define an inner <tt>Adapter</tt> class that can be used to
+            simplify subclassing, as shown above.
         </p>
 
         <p>
@@ -167,39 +158,35 @@ limitations under the License.
             <a href="scripting.html">Scripting</a> section.
         </p>
 
-        <h2>Displaying the Content</h2>
+        <h2>Actions</h2>
 
         <p>
-            TODO Move this up to the top
-
-            Finally, the window loaded from the WTKX files is opened, making the application
-            visible and allowing the user to begin interacting with it (note that the window's
-            "maximized" property is set to "true" in the WTKX file so that, when opened, the
-            window will be sized to fit the entire display area):
+            Though the "add symbol" and "remove symbol" operations could be performed in a button
+            press listener attached to their respective buttons, they have been abstracted in the
+            Stock Tracker example application into "actions". An action in Pivot is a class that
+            extends the abstract <tt>org.apache.pivot.wtk.Action</tt> class. This class defines
+            a single abstract <tt>perform()</tt> method that is called to invoke the action:
         </p>
-
-TODO This was moved to open()
 
         <source type="java">
             <![CDATA[
-            window.open();
-
-            refreshTable();
-
-            ApplicationContext.setInterval(new Runnable() {
-                public void run() {
-                    refreshTable();
+            private Action addSymbolAction = new Action(false) {
+                @Override
+                @SuppressWarnings("unchecked")
+                public void perform() {
+                    ...
                 }
-            }, REFRESH_INTERVAL);
-
-            symbolTextInput.requestFocus();
+            };
             ]]>
         </source>
 
         <p>
-            The code then calls <tt>refreshTable()</tt> to load the stock quote data and sets a
-            timer interval to reload the data every 15 seconds. Finally, it sets the focus to the
-            symbol text input, so a user can easily add a new stock to track.
+            Actions can be assigned to multiple elements within an application (for example,
+            to a toolbar button, a menu item, and to a keystroke combination). This allows the
+            same code to be executed in response to multiple user gestures without the need to
+            write redundant event listeners. Actions also support an enabled state that is mirrored
+            by any component attached to the action; this allows an application to easily manage
+            the set of allowed actions given the current application state.
         </p>
     </body>
 </document>
