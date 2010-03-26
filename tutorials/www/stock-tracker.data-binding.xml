@@ -65,7 +65,7 @@ limitations under the License.
             non-trivial layout, for example.
         </p>
 
-        <h2>Data Binding in the Stock Tracker Demo</h2>
+        <h2>Data Binding in Stock Tracker</h2>
 
         <p>
             The Stock Tracker demo isn't quite that sophisticated. It uses a single, flat bind

@@ -28,11 +28,21 @@ limitations under the License.
             name of the Pivot package that contains most of the user interface elements,
             <tt>org.apache.pivot.wtk</tt>; the "X" comes from "XML"). WTKX is effectively a
             shorthand for instantiating and configuring Java class instances. Though it can
-            actually be used to declaratively construct any type of Java object hierarchy, it is
+            be used to declaratively construct any type of Java object hierarchy, it is
             most often used to define the structure of an application's user interface - the
             hierarchical structure of an XML document closely parallels the structure of the
             application's component hierarchy, which makes it easy to visualize the resulting
             output.
+        </p>
+
+        <p>
+            In general, XML elements in WTKX refer either to class instances or properties of class
+            instances. Any element that begins with a capital letter represents a class instance,
+            and elements beginning with lowercase letters represent properties. The exception is
+            elements that use the "wtkx" namespace prefix, which represent processing directives to
+            the WTKX serializer. Similarly, XML attributes generally represent properties, with the
+            exception of attributes that begin with a "wtkx" prefix, which contain processing
+            information used by the serializer.
         </p>
 
         <h2>StockTrackerWindow</h2>
@@ -87,24 +97,15 @@ limitations under the License.
         </source>
 
         <p>
-            In general, XML elements in WTKX refer either to class instances or properties of class
-            instances. Any element that begins with a capital letter represents a class instance,
-            and elements beginning with lowercase letters represent properties. The exception is
-            elements that use the "wtkx" namespace prefix, which represent processing directives to
-            the WTKX serializer. Similarly, XML attributes generally represent properties, with the
-            exception of attributes that begin with a "wtkx" prefix, which contain processing
-            information used by the serializer.
-        </p>
-
-        <p>
-            The root node of the <tt>stock_tracker_window.wtkx</tt> file is a
+            The root node of <tt>stock_tracker_window.wtkx</tt> is a
             <tt>stocktracker:StockTrackerWindow</tt> element. This element corresponds to an
             instance of <tt>org.apache.pivot.tutorials.stocktracker.StockTrackerWindow</tt>. In
             WTKX, XML namespaces are used to associate a class element with a Java package. In this
             case, "stocktracker" is mapped to <tt>org.apache.pivot.tutorials.stocktracker</tt>, and
             "content" is mapped to <tt>org.apache.pivot.wtk.content</tt>; the default namespace is
             mapped to <tt>org.apache.pivot.wtk</tt>, the Java package that contains most of Pivot's
-            common components.
+            common components. The file also declares the "wtkx", which is specific to the
+            serializer.
         </p>
 
         <p>
@@ -117,8 +118,9 @@ limitations under the License.
             dialogs, sheets, menu popups, or tooltips).
         </p>
 
+        <h3>The Bindable Interface</h3>
         <p>
-            Note that <tt>StockTrackerWindow</tt> implements the <tt>org.apache.pivot.wtkx.Bindable</tt>
+            <tt>StockTrackerWindow</tt> implements the <tt>org.apache.pivot.wtkx.Bindable</tt>
             interface. This interface allows developers to easily map elements declared with a
             <tt>wtkx:id</tt> attribute to Java member variables. For example,
             <tt>StockTrackerWindow</tt> declares the following member variables:
@@ -145,8 +147,10 @@ limitations under the License.
             <a href="stock-tracker.events.html">Event Handling</a> section).
         </p>
 
+        <h3>Attribute Resolution and Includes</h3>
+
         <p>
-            The WTKX snippet above also illustrates a couple other key aspects of WTKX markup:
+            The WTKX snippet above also illustrates a couple other important aspects of WTKX markup:
             resource resolution and includes. Resource resolution allows a developer to insert
             "tags" in the markup that will be replaced at load time with a localized equivalent.
             This makes it very easy to build internationalized applications in Pivot. Any attribute
@@ -157,8 +161,8 @@ limitations under the License.
         </p>
 
         <p>
-            WTKX also supports two other resolution operators: "@" and "$". The "at" symbol is used
-            to resolve URLs; any attribute value preceded by an "at" symbol is converted to an
+            WTKX also supports two other attribute resolution operators: "@" and "$". The "at" symbol
+            is used to resolve URLs; any attribute value preceded by an "at" symbol is converted to an
             instance of <tt>java.net.URL</tt> relative to the current WTKX file. This notation is
             very useful for loading images from a location relative to the current file.
         </p>
