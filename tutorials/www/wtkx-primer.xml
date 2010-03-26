@@ -856,11 +856,24 @@ limitations under the License.
         <p>
             The <tt>org.apache.pivot.wtkx</tt> package includes an annotation that can be used to
             simplify the process of mapping named objects into a Java application. The
-            <tt>@WTKX</tt> annotation can be used to tag a member variable such that it will be
-            automatically mapped to a named object in a WTKX file. The <tt>bind()</tt> method of
-            <tt>WTKXSerializer</tt> is used to perform the actual mapping.
+            <tt>@WTKX</tt> annotation is used to tag a member variable so that it will be
+            automatically mapped to a named object in a WTKX file. 
         </p>
-
+        
+        <p>
+            The <tt>bind()</tt> method of <tt>WTKXSerializer</tt> is used to perform the actual 
+            mapping. However, it is often easier to use the <tt>Bindable</tt> interface. 
+            Implementing this interface ensures that <tt>bind()</tt> will be automatically called 
+            on the implementing class by the WTKX serializer.
+        </p>
+        
+        <p>
+            <tt>Bindable</tt> defines a single method, <tt>initialize()</tt>, that is called when 
+            the root element of a WTKX file has been fully loaded and the bound values have been 
+            processed. This allows the bound class to perform any required initialization (often 
+            event registration on the bound members).
+        </p>
+        
         <p>
             For example, given the following WTKX:
         </p>
@@ -878,8 +891,7 @@ limitations under the License.
 
         <p>
             a Java member variable declared as follows will be automatically populated with the
-            declared <tt>Label</tt> instance when the <tt>WTKXSerializer#bind()</tt> method is
-            called on an instance of the declaring class:
+            declared <tt>Label</tt> instance when the declaring class is bound:
         </p>
 
         <source type="java">
@@ -890,9 +902,9 @@ limitations under the License.
 
         <p>
             As a result, the <tt>@WTKX</tt> annotation can significanly simplify the process of
-            working with loaded WTKX data in Java code. However, because it relies on reflection to
-            set the member variables, it can only be used with trusted code, or to set public
-            fields.
+            working with loaded WTKX data in Java code. However, it is important to note that, 
+            because WTKX binding relies on reflection to set the member variables, it can only be 
+            used with trusted code or to set the values of public fields.
         </p>
 
         <h2>Summary</h2>
