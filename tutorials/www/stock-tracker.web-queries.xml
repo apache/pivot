@@ -155,7 +155,7 @@ limitations under the License.
         </p>
 
         <p>
-            By default, <tt>CSVSerializer</tt> creates an instance of
+            <tt>CSVSerializer</tt> will, by default, create an instance of
             <tt>org.apache.pivot.collections.HashMap&lt;String, Object&gt;</tt> for each row it
             encounters in the CSV stream. However, a caller can specify the name of a different
             class using the <tt>setItemClass()</tt> method. This avoids the performance penalty of
@@ -313,7 +313,7 @@ limitations under the License.
             <tt>pivot.util.concurrent.Task</tt> class, of which <tt>GetQuery</tt> is a subclass.
             <tt>TaskAdapter</tt> is defined in the <tt>pivot.wtk</tt> package and ensures that the
             callback occurs on the UI thread (otherwise, the listener is called in the context of
-            the background thread).
+            the background thread, which can produce non-deterministic results).
         </p>
 
         <p>
@@ -337,23 +337,48 @@ limitations under the License.
 
         <source type="java">
             <![CDATA[
+            @Override
             public void taskExecuted(Task<Object> task) {
                 if (task == getQuery) {
-                    Sequence<Span> selectedRanges = stocksTableView.getSelectedRanges();
+                    List<Object> quotes = (List<Object>)task.getResult();
 
-                    List<StockQuote> quotes = (List<StockQuote>)task.getResult();
+                    // Preserve any existing sort and selection
+                    Sequence<?> selectedStocks = stocksTableView.getSelectedRows();
+
+                    List<Object> tableData = (List<Object>)stocksTableView.getTableData();
+                    Comparator<Object> comparator = tableData.getComparator();
+                    quotes.setComparator(comparator);
+
                     stocksTableView.setTableData(quotes);
 
-                    if (selectedRanges.getLength() > 0) {
-                        stocksTableView.setSelectedRanges(selectedRanges);
+                    if (selectedStocks.getLength() > 0) {
+                        // Select current indexes of selected stocks
+                        for (int i = 0, n = selectedStocks.getLength(); i < n; i++) {
+                            Object selectedStock = selectedStocks.get(i);
+
+                            int index = 0;
+                            for (Object stock : stocksTableView.getTableData()) {
+                                String symbol = JSON.getString(stock, "symbol");
+                                String selectedSymbol = JSON.getString(selectedStock, "symbol");
+
+                                if (symbol.equals(selectedSymbol)) {
+                                    stocksTableView.addSelectedIndex(index);
+                                    break;
+                                }
+
+                                index++;
+                            }
+                        }
                     } else {
                         if (quotes.getLength() > 0) {
                             stocksTableView.setSelectedIndex(0);
                         }
                     }
 
+                    refreshDetail();
+
                     DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG,
-                    DateFormat.MEDIUM, Locale.getDefault());
+                        DateFormat.MEDIUM, Locale.getDefault());
                     lastUpdateLabel.setText(dateFormat.format(new Date()));
 
                     getQuery = null;
@@ -368,14 +393,22 @@ limitations under the License.
         </p>
 
         <ul>
-            <li><p>Caches the current selection state of the quote table view</p></li>
+            <li>
+                <p>
+                    Caches the current sort and selection state of the quote table view
+                </p>
+            </li>
             <li>
                 <p>
                     Gets the result of the query and casts it to the appropriate type
-                    (<tt>List&lt;StockQuote&gt;</tt>)
+                    (<tt>List&lt;Object&gt;</tt>)
                 </p>
             </li>
-            <li><p>Sets the list as the model data for the table view</p></li>
+            <li>
+                <p>
+                    Sets the list as the model data for the table view
+                </p>
+            </li>
             <li>
                 <p>
                     Restores any selection state (which would have been lost when the model data

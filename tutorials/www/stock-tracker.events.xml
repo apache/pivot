@@ -68,29 +68,29 @@ limitations under the License.
                 <p>
                     Retrieves the "langauge" argument that was provided to the application context
                     when it was created - for desktop applications, this is a command-line
-                    argument; in the browser, it is passed via an applet parameter.
+                    argument; in the browser, it is passed via an applet parameter
                 </p>
             </li>
             <li>
                 <p>
                     Sets the default locale to an instance corresponding to the language
-                    argument.
+                    argument
                 </p>
             </li>
             <li>
                 <p>
-                    Loads the application resources.
+                    Loads the application resources
                 </p>
             </li>
             <li>
                 <p>
                     Creates an instance of <tt>WTKXSerializer</tt> and loads the WTKX source for
-                    the main window.
+                    the main window
                 </p>
             </li>
             <li>
                 <p>
-                    Opens the main window, causing the application to appear on the screen.
+                    Opens the main window, causing the application to appear on the screen
                 </p>
             </li>
         </ul>

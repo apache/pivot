@@ -81,26 +81,39 @@ limitations under the License.
         <p class="caption">StockTracker_fr.json</p>
 
         <p>
-            As we've seen, references to these string resources can be embedded directly within a
-            WTKX file:
+            As noted in earlier sections, references to these string resources can be embedded
+            directly within a WTKX file:
         </p>
 
         <source type="xml">
             <![CDATA[
-            <Form styles="{fill:true}">
+            <Form styles="{padding:0, fill:true, showFlagIcons:false, showFlagHighlight:false,
+                leftAlignLabels:true}">
                 <sections>
                     <Form.Section>
-                        <Label Form.name="%value" textKey="value"
+                        <wtkx:define>
+                            <stocktracker:ValueMapping wtkx:id="valueMapping"/>
+                            <stocktracker:ChangeMapping wtkx:id="changeMapping"/>
+                            <stocktracker:VolumeMapping wtkx:id="volumeMapping"/>
+                        </wtkx:define>
+
+                        <Label wtkx:id="valueLabel" Form.label="%value"
+                            textKey="value" textBindMapping="$valueMapping"
                             styles="{horizontalAlignment:'right'}"/>
-                        <Label wtkx:id="changeLabel" Form.name="%change" textKey="change"
+                        <Label wtkx:id="changeLabel" Form.label="%change"
+                            textKey="change" textBindMapping="$valueMapping"
                             styles="{horizontalAlignment:'right'}"/>
-                        <Label Form.name="%openingValue" textKey="openingValue"
+                        <Label wtkx:id="openingValueLabel" Form.label="%openingValue"
+                            textKey="openingValue" textBindMapping="$valueMapping"
                             styles="{horizontalAlignment:'right'}"/>
-                        <Label Form.name="%highValue" textKey="highValue"
+                        <Label wtkx:id="highValueLabel" Form.label="%highValue"
+                            textKey="highValue" textBindMapping="$valueMapping"
                             styles="{horizontalAlignment:'right'}"/>
-                        <Label Form.name="%lowValue" textKey="lowValue"
+                        <Label wtkx:id="lowValueLabel" Form.label="%lowValue"
+                            textKey="lowValue" textBindMapping="$changeMapping"
                             styles="{horizontalAlignment:'right'}"/>
-                        <Label Form.name="%volume" textKey="volume"
+                        <Label wtkx:id="volumeLabel" Form.label="%volume"
+                            textKey="volume" textBindMapping="$volumeMapping"
                             styles="{horizontalAlignment:'right'}"/>
                     </Form.Section>
                 </sections>
