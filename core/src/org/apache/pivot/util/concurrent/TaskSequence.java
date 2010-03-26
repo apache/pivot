@@ -30,6 +30,7 @@ import org.apache.pivot.util.ImmutableIterator;
 public class TaskSequence extends Task<Void>
     implements Sequence<Task<?>>, Iterable<Task<?>> {
     private ArrayList<Task<?>> tasks = new ArrayList<Task<?>>();
+    private int complete = 0;
 
     public TaskSequence() {
         super();
@@ -40,20 +41,46 @@ public class TaskSequence extends Task<Void>
     }
 
     @Override
-    public Void execute() throws TaskExecutionException {
+    @SuppressWarnings("unchecked")
+    public synchronized Void execute() throws TaskExecutionException {
+        TaskListener<Object> taskListener = new TaskListener<Object>() {
+            @Override
+            public void taskExecuted(Task<Object> task) {
+                synchronized (TaskSequence.this) {
+                    complete++;
+                    TaskSequence.this.notify();
+                }
+            }
+
+            @Override
+            public void executeFailed(Task<Object> task) {
+                synchronized (TaskSequence.this) {
+                    complete++;
+                    TaskSequence.this.notify();
+                }
+            }
+        };
+
+        complete = 0;
         for (Task<?> task : tasks) {
             if (abort) {
                 throw new AbortException();
             }
 
-            task.execute();
+            ((Task<Object>)task).execute(taskListener);
+
+            try {
+                wait();
+            } catch (InterruptedException exception) {
+                throw new TaskExecutionException(exception);
+            }
         }
 
         return null;
     }
 
     @Override
-    public int add(Task<?> task) {
+    public synchronized int add(Task<?> task) {
         int index = tasks.getLength();
         insert(task, index);
 
@@ -61,7 +88,7 @@ public class TaskSequence extends Task<Void>
     }
 
     @Override
-    public void insert(Task<?> task, int index) {
+    public synchronized void insert(Task<?> task, int index) {
         if (isPending()) {
             throw new IllegalStateException();
         }
@@ -70,7 +97,7 @@ public class TaskSequence extends Task<Void>
     }
 
     @Override
-    public Task<?> update(int index, Task<?> task) {
+    public synchronized Task<?> update(int index, Task<?> task) {
         if (isPending()) {
             throw new IllegalStateException();
         }
@@ -79,7 +106,7 @@ public class TaskSequence extends Task<Void>
     }
 
     @Override
-    public int remove(Task<?> task) {
+    public synchronized int remove(Task<?> task) {
         int index = tasks.indexOf(task);
         if (index != -1) {
             tasks.remove(index, 1);
@@ -89,7 +116,7 @@ public class TaskSequence extends Task<Void>
     }
 
     @Override
-    public Sequence<Task<?>> remove(int index, int count) {
+    public synchronized Sequence<Task<?>> remove(int index, int count) {
         if (isPending()) {
             throw new IllegalStateException();
         }
@@ -98,17 +125,17 @@ public class TaskSequence extends Task<Void>
     }
 
     @Override
-    public Task<?> get(int index) {
+    public synchronized Task<?> get(int index) {
         return tasks.get(index);
     }
 
     @Override
-    public int indexOf(Task<?> task) {
+    public synchronized int indexOf(Task<?> task) {
         return tasks.indexOf(task);
     }
 
     @Override
-    public int getLength() {
+    public synchronized int getLength() {
         return tasks.getLength();
     }
 

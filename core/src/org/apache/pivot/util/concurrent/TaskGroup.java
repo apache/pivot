@@ -30,7 +30,6 @@ import org.apache.pivot.util.ImmutableIterator;
 public class TaskGroup extends Task<Void>
     implements Group<Task<?>>, Iterable<Task<?>> {
     private HashSet<Task<?>> tasks = new HashSet<Task<?>>();
-    private int count = 0;
     private int complete = 0;
 
     public TaskGroup() {
@@ -67,7 +66,7 @@ public class TaskGroup extends Task<Void>
             ((Task<Object>)task).execute(taskListener);
         }
 
-        while (complete < count) {
+        while (complete < getCount()) {
             try {
                 wait();
             } catch (InterruptedException exception) {
@@ -95,39 +94,29 @@ public class TaskGroup extends Task<Void>
     }
 
     @Override
-    public boolean add(Task<?> element) {
+    public synchronized boolean add(Task<?> element) {
         if (isPending()) {
             throw new IllegalStateException();
         }
 
-        boolean added = tasks.add(element);
-        if (added) {
-            count++;
-        }
-
-        return added;
+        return tasks.add(element);
     }
 
     @Override
-    public boolean remove(Task<?> element) {
+    public synchronized boolean remove(Task<?> element) {
         if (isPending()) {
             throw new IllegalStateException();
         }
 
-        boolean removed = tasks.remove(element);
-        if (removed) {
-            count--;
-        }
-
-        return removed;
+        return tasks.remove(element);
     }
 
     @Override
-    public boolean contains(Task<?> element) {
+    public synchronized boolean contains(Task<?> element) {
         return tasks.contains(element);
     }
 
-    public int getCount() {
+    public synchronized int getCount() {
         return tasks.getCount();
     }
 

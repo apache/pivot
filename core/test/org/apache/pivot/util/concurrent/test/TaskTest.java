@@ -22,7 +22,6 @@ import org.apache.pivot.util.concurrent.TaskListener;
 import org.apache.pivot.util.concurrent.TaskSequence;
 import org.junit.Test;
 
-
 public class TaskTest {
     public static class SleepTask extends Task<Void> {
         private long timeout = 0;
@@ -70,13 +69,13 @@ public class TaskTest {
 
         TaskSequence taskSequence = new TaskSequence();
 
-        SleepTask task1 = new SleepTask(2000);
+        SleepTask task1 = new SleepTask(500);
         taskSequence.add(task1);
 
-        SleepTask task2 = new SleepTask(500);
+        SleepTask task2 = new SleepTask(1000);
         taskSequence.add(task2);
 
-        SleepTask task3 = new SleepTask(1000);
+        SleepTask task3 = new SleepTask(2000);
         taskSequence.add(task3);
 
         synchronized (taskListener) {
@@ -107,13 +106,13 @@ public class TaskTest {
 
         TaskGroup taskGroup = new TaskGroup();
 
-        SleepTask task1 = new SleepTask(2000);
+        SleepTask task1 = new SleepTask(500);
         taskGroup.add(task1);
 
-        SleepTask task2 = new SleepTask(500);
+        SleepTask task2 = new SleepTask(1000);
         taskGroup.add(task2);
 
-        SleepTask task3 = new SleepTask(1000);
+        SleepTask task3 = new SleepTask(2000);
         taskGroup.add(task3);
 
         synchronized (taskListener) {
