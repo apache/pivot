@@ -142,7 +142,7 @@ limitations under the License.
             the root element has been fully loaded and the bound values have been processed. This
             allows the bound class to perform any required initialization (generally event
             registration, discussed in more detail in the
-            <a href="stock-tracker.events.html>Event Handling</a> section).
+            <a href="stock-tracker.events.html">Event Handling</a> section).
         </p>
 
         <p>
@@ -153,7 +153,7 @@ limitations under the License.
             value that begins with a "%" character is considered a resource key, and the value
             for the attribute is obtained from a resource bundle associated with the WTKX file.
             This is discussed in more detail in the
-            <a href="stock-tracker.localization.html>Localization</a> section.
+            <a href="stock-tracker.localization.html">Localization</a> section.
         </p>
 
         <p>
