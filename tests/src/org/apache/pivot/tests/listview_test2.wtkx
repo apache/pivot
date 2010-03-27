@@ -108,7 +108,7 @@ limitations under the License.
             <content>
                 <ScrollPane preferredHeight="80">
                     <view>
-                        <ListView wtkx:id="iconListView" selectMode="multi" selectedIndex="2" styles="{variableItemHeight:true}">
+                        <ListView wtkx:id="iconListView2" selectMode="multi" selectedIndex="2" styles="{variableItemHeight:true}">
                             <listData>
                                 <collections:ArrayList>
                                     <content:ListItem icon="@anchor.png" text="Anchor"/>

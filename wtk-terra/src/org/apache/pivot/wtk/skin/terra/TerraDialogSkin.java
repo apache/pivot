@@ -17,7 +17,6 @@ package org.apache.pivot.wtk.skin.terra;
 
 import java.awt.Toolkit;
 
-import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Container;
@@ -41,21 +40,26 @@ public class TerraDialogSkin extends TerraFrameSkin
     private ContainerMouseListener displayMouseListener = new ContainerMouseListener.Adapter() {
         @Override
         public boolean mouseMove(Container display, int x, int y) {
-            return isMouseOverRelative(display, x, y);
+            return isMouseOverOwner(display, x, y);
         }
 
         @Override
         public boolean mouseDown(Container display, Mouse.Button button, int x, int y) {
             boolean consumed = false;
 
-            if (isMouseOverRelative(display, x, y)) {
-                Dialog dialog = (Dialog)getComponent();
+            Dialog dialog = (Dialog)getComponent();
+            if (isMouseOverOwner(display, x, y)) {
                 Window rootOwner = dialog.getRootOwner();
                 rootOwner.moveToFront();
-                dialog.requestActive();
                 consumed = true;
 
                 Toolkit.getDefaultToolkit().beep();
+            }
+
+            int top = display.getLength() - 1;
+            int index = display.indexOf(dialog);
+            if (index == top) {
+                dialog.requestActive();
             }
 
             return consumed;
@@ -63,53 +67,24 @@ public class TerraDialogSkin extends TerraFrameSkin
 
         @Override
         public boolean mouseUp(Container display, Mouse.Button button, int x, int y) {
-            return isMouseOverRelative(display, x, y);
+            return isMouseOverOwner(display, x, y);
         }
 
         @Override
         public boolean mouseWheel(Container display, Mouse.ScrollType scrollType,
             int scrollAmount, int wheelRotation, int x, int y) {
-            return isMouseOverRelative(display, x, y);
+            return isMouseOverOwner(display, x, y);
         }
 
-        private boolean isMouseOverRelative(Container display, int x, int y) {
+        private boolean isMouseOverOwner(Container display, int x, int y) {
             boolean mouseOverOwner = false;
 
             Dialog dialog = (Dialog)getComponent();
+            Component descendant = display.getDescendantAt(x, y);
 
-            if (dialog.isModal()) {
-                Component descendant = display.getDescendantAt(x, y);
-
-                if (descendant != display) {
-                    Window window = descendant.getWindow();
-
-                    if (window != dialog) {
-                        // Compare the windows' owner paths (including the windows themselves);
-                        // the windows are relatives if they have any ancestry in common
-                        ArrayList<Window> dialogOwnerPath = new ArrayList<Window>();
-                        Window dialogOwner = dialog;
-                        while (dialogOwner != null) {
-                            dialogOwnerPath.insert(dialogOwner, 0);
-                            dialogOwner = dialogOwner.getOwner();
-                        }
-
-                        ArrayList<Window> windowOwnerPath = new ArrayList<Window>();
-                        Window windowOwner = window;
-                        while (windowOwner != null) {
-                            windowOwnerPath.insert(windowOwner, 0);
-                            windowOwner = windowOwner.getOwner();
-                        }
-
-                        int i = 0;
-                        while (i < dialogOwnerPath.getLength()
-                            && i < windowOwnerPath.getLength()
-                            && dialogOwnerPath.get(i) == windowOwnerPath.get(i)) {
-                            i++;
-                        }
-
-                        mouseOverOwner = (i > 0);
-                    }
-                }
+            if (descendant != display) {
+                Window window = descendant.getWindow();
+                mouseOverOwner = (dialog.getOwner() == window);
             }
 
             return mouseOverOwner;
@@ -167,14 +142,14 @@ public class TerraDialogSkin extends TerraFrameSkin
             Component.clearFocus();
         }
 
-        // Center the window over its owner
+        // Center the dialog over its owner
         Container ancestor = window.getOwner();
 
         if (ancestor == null) {
             ancestor = window.getDisplay();
         }
 
-        Dimensions size = getPreferredSize();
+        Dimensions size = window.getPreferredSize();
         int deltaWidth = ancestor.getWidth() - size.width;
         int deltaHeight = ancestor.getHeight() - size.height;
 

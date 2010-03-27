@@ -173,10 +173,10 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         public boolean mouseDown(Container display, Mouse.Button button, int x, int y) {
             boolean consumed = false;
 
+            Sheet sheet = (Sheet)getComponent();
             if (isMouseOverOwnerClientArea(display, x, y)) {
-                Sheet sheet = (Sheet)getComponent();
-                Window owner = sheet.getOwner();
-                owner.moveToFront();
+                Window rootOwner = sheet.getRootOwner();
+                rootOwner.moveToFront();
                 consumed = true;
 
                 Toolkit.getDefaultToolkit().beep();
@@ -197,7 +197,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         }
 
         private boolean isMouseOverOwnerClientArea(Container display, int x, int y) {
-            boolean mouseOverClientArea = false;
+            boolean mouseOverOwnerClientArea = false;
 
             Sheet sheet = (Sheet)getComponent();
             Component descendant = display.getDescendantAt(x, y);
@@ -209,11 +209,11 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
                     Bounds clientArea = window.getClientArea();
 
                     Point location = window.mapPointFromAncestor(display, x, y);
-                    mouseOverClientArea = clientArea.contains(location);
+                    mouseOverOwnerClientArea = clientArea.contains(location);
                 }
             }
 
-            return mouseOverClientArea;
+            return mouseOverOwnerClientArea;
         }
     };
 

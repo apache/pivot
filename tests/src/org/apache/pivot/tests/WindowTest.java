@@ -36,6 +36,7 @@ import org.apache.pivot.wtk.effects.ReflectionDecorator;
 
 public class WindowTest implements Application {
     private Frame window1 = new Frame();
+    private Frame dialogOwner = new Frame();
 
     @Override
     public void startup(Display display, Map<String, String> properties) {
@@ -59,12 +60,21 @@ public class WindowTest implements Application {
         window1.setContent(new Label("Hello Bar"));
         window1.open(display);
 
-        final Sheet sheet = new Sheet();
-        sheet.setContent(new Label("Hello Foo"));
         ApplicationContext.queueCallback(new Runnable() {
             @Override
             public void run() {
+                final Sheet sheet = new Sheet();
+                sheet.setPreferredSize(120, 60);
                 sheet.open(window1);
+
+                ApplicationContext.queueCallback(new Runnable() {
+                    @Override
+                    public void run() {
+                        Sheet sheet2 = new Sheet();
+                        sheet2.setPreferredSize(60, 30);
+                        sheet2.open(sheet);
+                    }
+                });
             }
         });
 
@@ -110,20 +120,29 @@ public class WindowTest implements Application {
         palette2.setPreferredSize(160, 60);
         palette2.open(window1bii);
 
-        Frame dialogOwner = new Frame();
         dialogOwner.setTitle("Dialog Owner");
-        dialogOwner.setPreferredSize(160, 60);
+        dialogOwner.setPreferredSize(320, 120);
         dialogOwner.open(display);
 
-        Dialog dialog = new Dialog();
-        dialog.setTitle("Dialog 1");
-        dialog.setPreferredSize(160, 60);
-        dialog.open(dialogOwner);
+        ApplicationContext.queueCallback(new Runnable() {
+            @Override
+            public void run() {
+                final Dialog dialog = new Dialog();
+                dialog.setTitle("Dialog 1");
+                dialog.setPreferredSize(280, 100);
+                dialog.open(dialogOwner);
 
-        Dialog dialog2 = new Dialog();
-        dialog2.setTitle("Dialog 2");
-        dialog2.setPreferredSize(160, 60);
-        dialog2.open(dialog);
+                ApplicationContext.queueCallback(new Runnable() {
+                    @Override
+                    public void run() {
+                        Dialog dialog2 = new Dialog();
+                        dialog2.setTitle("Dialog 2");
+                        dialog2.setPreferredSize(220, 80);
+                        dialog2.open(dialog);
+                    }
+                });
+            }
+        });
     }
 
     @Override
