@@ -66,6 +66,7 @@ limitations under the License.
                 <document-item id="list-buttons"/>
             </document-item>
             <document-item id="text">
+                <document-item id="suggestion-popups"/>
                 <document-item id="text-areas"/>
             </document-item>
             <document-item id="separators"/>

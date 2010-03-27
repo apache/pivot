@@ -20,9 +20,15 @@ limitations under the License.
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
     <content>
-        <BoxPane styles="{padding:4, verticalAlignment:'top'}">
-            <Label text="State:"/>
-            <TextInput wtkx:id="stateTextInput"/>
-        </BoxPane>
+        <Border>
+            <content>
+                <BoxPane orientation="vertical" styles="{padding:4, verticalAlignment:'top'}">
+                    <BoxPane styles="{verticalAlignment:'center'}">
+                        <Label text="State:"/>
+                        <TextInput wtkx:id="stateTextInput"/>
+                    </BoxPane>
+                </BoxPane>
+            </content>
+        </Border>
     </content>
 </Window>

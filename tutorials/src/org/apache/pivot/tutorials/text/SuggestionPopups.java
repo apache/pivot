@@ -121,7 +121,7 @@ public class SuggestionPopups implements Application {
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "text_inputs.wtkx");
+        window = (Window)wtkxSerializer.readObject(this, "suggestion_popups.wtkx");
         stateTextInput = (TextInput)wtkxSerializer.get("stateTextInput");
 
         stateTextInput.getTextInputCharacterListeners().add(textInputCharacterListener);

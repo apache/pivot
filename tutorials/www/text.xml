@@ -26,8 +26,7 @@ limitations under the License.
             Text input components in Pivot include <tt>TextInput</tt> and <tt>TextArea</tt>.
             <tt>TextInput</tt> allows a user to enter a single line of unformatted text; the text
             may be presented in the clear or may be masked for use as a "password" field.
-            <tt>TextArea</tt> is a rich, multi-line text component and is discussed in the next
-            section.
+            <tt>TextArea</tt> multi-line text component and is discussed in the next section.
         </p>
 
         <p>
