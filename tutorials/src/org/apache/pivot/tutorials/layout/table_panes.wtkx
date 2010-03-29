@@ -93,9 +93,9 @@ limitations under the License.
                 </Border>
             </left>
             <right>
-                <Border styles="{padding:10}">
+                <Border styles="{padding:4}">
                     <content>
-                        <Form>
+                        <Form styles="{showFlagIcons:false}">
                             <sections>
                                 <Form.Section>
                                     <Checkbox Form.label="Show horizontal grid lines" selected="true">

@@ -70,7 +70,7 @@ limitations under the License.
         </p>
 
         <application class="org.apache.pivot.tutorials.databinding.DataBinding"
-            width="420" height="280">
+            width="430" height="280">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>

@@ -23,7 +23,7 @@ limitations under the License.
         <Border styles="{padding:6}">
             <content>
                 <BoxPane orientation="vertical" styles="{spacing:10, fill:true}">
-                    <Form wtkx:id="form">
+                    <Form wtkx:id="form" styles="{showFlagIcons:false}">
                         <sections>
                             <Form.Section>
                                 <Label wtkx:id="sourceLabel" Form.label="Source" styles="{font:{italic:true}}"/>
