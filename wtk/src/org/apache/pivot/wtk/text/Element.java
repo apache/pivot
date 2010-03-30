@@ -448,21 +448,14 @@ public abstract class Element extends Node
             throw new IndexOutOfBoundsException();
         }
 
-        int index = -1;
-
-        for (int i = 0, n = nodes.getLength(); i < n; i++) {
-            Node node = nodes.get(i);
-            int nodeOffset = node.getOffset();
-            int characterCount = node.getCharacterCount();
-
-            if (offset >= nodeOffset
-                && offset < nodeOffset + characterCount) {
-                index = i;
-                break;
-            }
+        int i = 0;
+        int n = nodes.getLength();
+        while (i < n
+            && offset >= nodes.get(i).getOffset()) {
+            i++;
         }
 
-        return index;
+        return i - 1;
     }
 
     /**
