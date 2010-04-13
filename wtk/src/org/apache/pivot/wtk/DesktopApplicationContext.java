@@ -352,44 +352,47 @@ public final class DesktopApplicationContext extends ApplicationContext {
             System.err.println("Unable to retrieve startup preferences: " + exception);
         }
 
+        final String STARTUP_PROPERTY_WARNING = "\"%s\" is not a valid startup property (expected"
+            + " format is \"--name=value\").";
+
         for (int i = 1, n = args.length; i < n; i++) {
             String arg = args[i];
 
-            if (!arg.startsWith("--")) {
-                throw new IllegalArgumentException("Startup property names must begin with \"--\".");
-            }
+            if (arg.startsWith("--")) {
+                arg = arg.substring(2);
+                String[] property = arg.split("=");
 
-            arg = arg.substring(2);
-            String[] property = arg.split("=");
+                if (property.length == 2) {
+                    String key = property[0];
+                    String value = property[1];
 
-            if (property.length == 2) {
-                String key = property[0];
-                String value = property[1];
-
-                try {
-                    if (key.equals(X_ARGUMENT)) {
-                        x = Integer.parseInt(value);
-                    } else if (key.equals(Y_ARGUMENT)) {
-                        y = Integer.parseInt(value);
-                    } else if (key.equals(WIDTH_ARGUMENT)) {
-                        width = Integer.parseInt(value);
-                    } else if (key.equals(HEIGHT_ARGUMENT)) {
-                        height = Integer.parseInt(value);
-                    } else if (key.equals(CENTER_ARGUMENT)) {
-                        center = Boolean.parseBoolean(value);
-                    } else if (key.equals(RESIZABLE_ARGUMENT)) {
-                        resizable = Boolean.parseBoolean(value);
-                    } else if (key.equals(FULL_SCREEN_ARGUMENT)) {
-                        fullScreen = Boolean.parseBoolean(value);
-                    } else {
-                        properties.put(key, value);
+                    try {
+                        if (key.equals(X_ARGUMENT)) {
+                            x = Integer.parseInt(value);
+                        } else if (key.equals(Y_ARGUMENT)) {
+                            y = Integer.parseInt(value);
+                        } else if (key.equals(WIDTH_ARGUMENT)) {
+                            width = Integer.parseInt(value);
+                        } else if (key.equals(HEIGHT_ARGUMENT)) {
+                            height = Integer.parseInt(value);
+                        } else if (key.equals(CENTER_ARGUMENT)) {
+                            center = Boolean.parseBoolean(value);
+                        } else if (key.equals(RESIZABLE_ARGUMENT)) {
+                            resizable = Boolean.parseBoolean(value);
+                        } else if (key.equals(FULL_SCREEN_ARGUMENT)) {
+                            fullScreen = Boolean.parseBoolean(value);
+                        } else {
+                            properties.put(key, value);
+                        }
+                    } catch (NumberFormatException exception) {
+                        System.err.println("\"" + value + "\" is not a valid value for startup"
+                            + " property \"" + key + "\".");
                     }
-                } catch (NumberFormatException exception) {
-                    System.err.println("Warning: " + exception.getClass().getSimpleName() + ": " +
-                        exception.getLocalizedMessage());
+                } else {
+                    System.err.println(String.format(STARTUP_PROPERTY_WARNING, arg));
                 }
             } else {
-                System.err.println(arg + " is not a valid startup property.");
+                System.err.println(String.format(STARTUP_PROPERTY_WARNING, arg));
             }
         }
 
