@@ -21,7 +21,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.Toolkit;
 import java.awt.font.FontRenderContext;
@@ -320,11 +319,6 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
         // Paint the content
         FontRenderContext fontRenderContext = Platform.getFontRenderContext();
-        graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-            fontRenderContext.getAntiAliasingHint());
-        graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
-            fontRenderContext.getFractionalMetricsHint());
-
         LineMetrics lm = font.getLineMetrics("", fontRenderContext);
         float ascent = lm.getAscent();
         float textHeight = lm.getHeight();

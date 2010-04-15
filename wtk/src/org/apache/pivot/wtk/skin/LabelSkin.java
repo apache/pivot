@@ -20,7 +20,6 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.Transparency;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
@@ -306,11 +305,6 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
             graphics.setPaint(color);
 
             FontRenderContext fontRenderContext = Platform.getFontRenderContext();
-            graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-                fontRenderContext.getAntiAliasingHint());
-            graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
-                fontRenderContext.getFractionalMetricsHint());
-
             LineMetrics lm = font.getLineMetrics("", fontRenderContext);
             float ascent = lm.getAscent();
             float lineHeight = lm.getHeight();

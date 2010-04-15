@@ -156,18 +156,11 @@ public class TerraCheckboxSkin extends CheckboxSkin {
         int width = getWidth();
         int height = getHeight();
 
-        int baseline = alignToBaseline ? getBaseline(width, height) : -1;
-
         // Paint the button
-        Graphics2D buttonGraphics = (Graphics2D)graphics.create();
-        if (baseline == -1) {
-            buttonGraphics.translate(0, (height - CHECKBOX_SIZE) / 2);
-        } else {
-            buttonGraphics.translate(0, (baseline - CHECKBOX_SIZE + 3));
-        }
-
-        paintButton(buttonGraphics, checkbox.isEnabled(), checkbox.getState());
-        buttonGraphics.dispose();
+        int offset = (height - CHECKBOX_SIZE) / 2;
+        graphics.translate(0, offset);
+        paintButton(graphics, checkbox.isEnabled(), checkbox.getState());
+        graphics.translate(0, -offset);
 
         // Paint the content
         Button.DataRenderer dataRenderer = checkbox.getDataRenderer();

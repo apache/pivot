@@ -142,18 +142,11 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
         int width = getWidth();
         int height = getHeight();
 
-        int baseline = alignToBaseline ? getBaseline(width, height) : -1;
-
         // Paint the button
-        Graphics2D buttonGraphics = (Graphics2D)graphics.create();
-        if (baseline == -1) {
-            graphics.translate(0, (height - BUTTON_DIAMETER) / 2);
-        } else {
-            buttonGraphics.translate(0, (baseline - BUTTON_DIAMETER + 3));
-        }
-
-        paintButton(buttonGraphics, radioButton.isEnabled(), radioButton.isSelected());
-        buttonGraphics.dispose();
+        int offset = (height - BUTTON_DIAMETER) / 2;
+        graphics.translate(0, offset);
+        paintButton(graphics, radioButton.isEnabled(), radioButton.isSelected());
+        graphics.translate(0, -offset);
 
         // Paint the content
         Button.DataRenderer dataRenderer = radioButton.getDataRenderer();
