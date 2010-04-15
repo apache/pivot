@@ -742,7 +742,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 }
 
                 // Recalculate terminator bounds
-                LineMetrics lm = font.getLineMetrics("", 0, 0, FONT_RENDER_CONTEXT);
+                FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+                LineMetrics lm = font.getLineMetrics("", 0, 0, fontRenderContext);
                 int terminatorHeight = (int)Math.ceil(lm.getHeight());
 
                 int terminatorY;
@@ -976,6 +977,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         public void validate() {
             if (!isValid()) {
                 TextNode textNode = (TextNode)getNode();
+                FontRenderContext fontRenderContext = Platform.getFontRenderContext();
 
                 int breakWidth = getBreakWidth();
                 CharacterIterator ci = textNode.getCharacterIterator(start);
@@ -991,8 +993,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                     }
 
                     int i = ci.getIndex();
-                    Rectangle2D characterBounds = font.getStringBounds(ci, i, i + 1,
-                        FONT_RENDER_CONTEXT);
+                    Rectangle2D characterBounds = font.getStringBounds(ci, i, i + 1, fontRenderContext);
                     lineWidth += characterBounds.getWidth();
 
                     c = ci.current();
@@ -1012,7 +1013,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                     }
                 }
 
-                glyphVector = font.createGlyphVector(FONT_RENDER_CONTEXT,
+                glyphVector = font.createGlyphVector(fontRenderContext,
                     textNode.getCharacterIterator(start, end));
 
                 if (end < ci.getEndIndex()) {
@@ -1035,17 +1036,13 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             if (glyphVector != null) {
                 TextArea textArea = (TextArea)getComponent();
 
-                if (FONT_RENDER_CONTEXT.isAntiAliased()) {
-                    graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-                        Platform.getTextAntialiasingHint());
-                }
+                FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+                graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+                    fontRenderContext.getAntiAliasingHint());
+                graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
+                    fontRenderContext.getFractionalMetricsHint());
 
-                if (FONT_RENDER_CONTEXT.usesFractionalMetrics()) {
-                    graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
-                        RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-                }
-
-                LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
+                LineMetrics lm = font.getLineMetrics("", fontRenderContext);
                 float ascent = lm.getAscent();
 
                 graphics.setFont(font);
@@ -1131,7 +1128,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
         @Override
         public int getInsertionPoint(int x, int y) {
-            LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
+            FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+            LineMetrics lm = font.getLineMetrics("", fontRenderContext);
             float ascent = lm.getAscent();
 
             int n = glyphVector.getNumGlyphs();
@@ -1436,7 +1434,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     private boolean wrapText = true;
 
     private static final int PARAGRAPH_TERMINATOR_WIDTH = 4;
-    private static final FontRenderContext FONT_RENDER_CONTEXT = new FontRenderContext(null, true, true);
     private static final int SCROLL_RATE = 30;
 
     public TextAreaSkin() {
@@ -1535,7 +1532,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
     @Override
     public int getBaseline(int width, int height) {
-        LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
+        FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+        LineMetrics lm = font.getLineMetrics("", fontRenderContext);
         float ascent = lm.getAscent();
         return margin.top + Math.round(ascent);
     }

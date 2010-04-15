@@ -1743,6 +1743,12 @@ public abstract class ApplicationContext {
         displays.remove(display);
     }
 
+    protected static void invalidateDisplays() {
+        for (Display display : displays) {
+            display.invalidate();
+        }
+    }
+
     protected static void addApplication(Application application) {
         applications.add(application);
     }

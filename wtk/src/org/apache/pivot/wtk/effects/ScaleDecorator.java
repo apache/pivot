@@ -18,6 +18,7 @@ package org.apache.pivot.wtk.effects;
 
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
 
 import org.apache.pivot.wtk.Bounds;
@@ -344,8 +345,12 @@ public class ScaleDecorator implements Decorator {
     public Graphics2D prepare(Component component, Graphics2D graphics) {
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
+
+        FontRenderContext fontRenderContext = Platform.getFontRenderContext();
         graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-            Platform.getTextAntialiasingHint());
+            fontRenderContext.getAntiAliasingHint());
+        graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
+            fontRenderContext.getFractionalMetricsHint());
 
         int tx = getTranslatedX(component);
         int ty = getTranslatedY(component);

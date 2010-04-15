@@ -40,10 +40,7 @@ import org.apache.pivot.wtk.Theme;
 /**
  * Separator skin.
  */
-public class SeparatorSkin extends ComponentSkin
-    implements SeparatorListener {
-    private FontRenderContext fontRenderContext = new FontRenderContext(null, true, true);
-
+public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
     private Font font;
     private Color color;
     private Color headingColor;
@@ -76,6 +73,7 @@ public class SeparatorSkin extends ComponentSkin
 
         if (heading != null
             && heading.length() > 0) {
+            FontRenderContext fontRenderContext = Platform.getFontRenderContext();
             Rectangle2D headingBounds = font.getStringBounds(heading, fontRenderContext);
             preferredWidth = (int)Math.ceil(headingBounds.getWidth())
                 + (padding.left + padding.right);
@@ -93,6 +91,7 @@ public class SeparatorSkin extends ComponentSkin
 
         if (heading != null
             && heading.length() > 0) {
+            FontRenderContext fontRenderContext = Platform.getFontRenderContext();
             LineMetrics lm = font.getLineMetrics(heading, fontRenderContext);
             preferredHeight = Math.max((int)Math.ceil(lm.getAscent() + lm.getDescent()
                 + lm.getLeading()), preferredHeight);
@@ -124,17 +123,13 @@ public class SeparatorSkin extends ComponentSkin
 
         if (heading != null
             && heading.length() > 0) {
+            FontRenderContext fontRenderContext = Platform.getFontRenderContext();
             LineMetrics lm = font.getLineMetrics(heading, fontRenderContext);
 
-            if (fontRenderContext.isAntiAliased()) {
-                graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-                    Platform.getTextAntialiasingHint());
-            }
-
-            if (fontRenderContext.usesFractionalMetrics()) {
-                graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
-                    RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-            }
+            graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+                fontRenderContext.getAntiAliasingHint());
+            graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
+                fontRenderContext.getFractionalMetricsHint());
 
             graphics.setFont(font);
             graphics.setPaint(headingColor);

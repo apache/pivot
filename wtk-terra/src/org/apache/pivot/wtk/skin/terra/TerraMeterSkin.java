@@ -50,7 +50,6 @@ public class TerraMeterSkin extends ComponentSkin
     private Color textColor;
     private Color textFillColor;
 
-    private static final FontRenderContext FONT_RENDER_CONTEXT = new FontRenderContext(null, true, false);
     private static final int DEFAULT_WIDTH = 100;
     private static final int DEFAULT_HEIGHT = 12;
 
@@ -88,7 +87,8 @@ public class TerraMeterSkin extends ComponentSkin
 
             if (text != null
                 && text.length() > 0) {
-                Rectangle2D stringBounds = font.getStringBounds(text, FONT_RENDER_CONTEXT);
+                FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+                Rectangle2D stringBounds = font.getStringBounds(text, fontRenderContext);
                 preferredWidth = (int)Math.ceil(stringBounds.getWidth()) + 2;
             } else {
                 preferredWidth = 0;
@@ -117,7 +117,8 @@ public class TerraMeterSkin extends ComponentSkin
 
             if (text != null
                 && text.length() > 0) {
-                LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
+                FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+                LineMetrics lm = font.getLineMetrics("", fontRenderContext);
                 preferredHeight = (int)Math.ceil(lm.getHeight()) + 2;
             } else {
                 preferredHeight = 0;
@@ -140,10 +141,11 @@ public class TerraMeterSkin extends ComponentSkin
         int preferredHeight = 0;
         if (text != null
             && text.length() > 0) {
-            Rectangle2D stringBounds = font.getStringBounds(text, FONT_RENDER_CONTEXT);
+            FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+            Rectangle2D stringBounds = font.getStringBounds(text, fontRenderContext);
             preferredWidth = (int)Math.ceil(stringBounds.getWidth()) + 2;
 
-            LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
+            LineMetrics lm = font.getLineMetrics("", fontRenderContext);
             preferredHeight = (int)Math.ceil(lm.getHeight()) + 2;
         }
 
@@ -172,7 +174,8 @@ public class TerraMeterSkin extends ComponentSkin
 
             if (text != null
                 && text.length() > 0) {
-                LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
+                FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+                LineMetrics lm = font.getLineMetrics("", fontRenderContext);
                 float ascent = lm.getAscent();
                 float textHeight = lm.getHeight();
 
@@ -198,15 +201,11 @@ public class TerraMeterSkin extends ComponentSkin
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
 
-        if (FONT_RENDER_CONTEXT.isAntiAliased()) {
-            graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-                Platform.getTextAntialiasingHint());
-        }
-
-        if (FONT_RENDER_CONTEXT.usesFractionalMetrics()) {
-            graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
-                RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-        }
+        FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+        graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+            fontRenderContext.getAntiAliasingHint());
+        graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
+            fontRenderContext.getFractionalMetricsHint());
 
         if (meter.getOrientation() == Orientation.HORIZONTAL) {
             drawMeter(meter, graphics, width, height);
@@ -238,10 +237,11 @@ public class TerraMeterSkin extends ComponentSkin
         String text = meter.getText();
         if (text != null
             && text.length() > 0) {
-            LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
+            FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+            LineMetrics lm = font.getLineMetrics("", fontRenderContext);
             float ascent = lm.getAscent();
 
-            Rectangle2D stringBounds = font.getStringBounds(text, FONT_RENDER_CONTEXT);
+            Rectangle2D stringBounds = font.getStringBounds(text, fontRenderContext);
             float textWidth = (float)stringBounds.getWidth();
             float textHeight = (float)stringBounds.getHeight();
 

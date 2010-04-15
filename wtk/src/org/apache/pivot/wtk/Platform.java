@@ -18,6 +18,7 @@ package org.apache.pivot.wtk;
 
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
+import java.awt.font.FontRenderContext;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -27,7 +28,7 @@ import org.apache.pivot.wtk.Keyboard.Modifier;
  * Provides platform-specific information.
  */
 public class Platform {
-    private static Object textAntialiasingHint = null;
+    private static FontRenderContext fontRenderContext;
 
     private static final int DEFAULT_MULTI_CLICK_INTERVAL = 400;
     private static final int DEFAULT_CURSOR_BLINK_RATE = 600;
@@ -45,36 +46,46 @@ public class Platform {
             COMMAND_MODIFIER = Modifier.CTRL;
             KEYSTROKE_MODIFIER_SEPARATOR = "-";
         }
+
+        // Initialize the font render context
+        initializeFontRenderContext();
+
+        // Listen for changes to the font desktop hints property
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        toolkit.addPropertyChangeListener("awt.font.desktophints", new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent event) {
+                initializeFontRenderContext();
+                ApplicationContext.invalidateDisplays();
+            }
+        });
     }
 
-    /**
-     * Returns the system text anti-aliasing hint.
-     */
-    public static Object getTextAntialiasingHint() {
-        if (textAntialiasingHint == null) {
-            Toolkit toolkit = Toolkit.getDefaultToolkit();
-            java.util.Map<?, ?> fontDesktopHints =
-                (java.util.Map<?, ?>)toolkit.getDesktopProperty("awt.font.desktophints");
+    public static FontRenderContext getFontRenderContext() {
+        return fontRenderContext;
+    }
 
-            if (fontDesktopHints == null) {
-                textAntialiasingHint = RenderingHints.VALUE_TEXT_ANTIALIAS_ON;
-            } else {
-                textAntialiasingHint = fontDesktopHints.get(RenderingHints.KEY_TEXT_ANTIALIASING);
-                if (textAntialiasingHint.equals(RenderingHints.VALUE_TEXT_ANTIALIAS_OFF)) {
-                    textAntialiasingHint = RenderingHints.VALUE_TEXT_ANTIALIAS_ON;
-                }
+    private static void initializeFontRenderContext() {
+        Object aaHint = null;
+        Object fmHint = null;
 
-                // Listen for changes to the property
-                toolkit.addPropertyChangeListener("awt.font.desktophints", new PropertyChangeListener() {
-                    @Override
-                    public void propertyChange(PropertyChangeEvent event) {
-                        Platform.textAntialiasingHint = null;
-                    }
-                });
-            }
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        java.util.Map<?, ?> fontDesktopHints =
+            (java.util.Map<?, ?>)toolkit.getDesktopProperty("awt.font.desktophints");
+        if (fontDesktopHints != null) {
+            aaHint = fontDesktopHints.get(RenderingHints.KEY_TEXT_ANTIALIASING);
+            fmHint = fontDesktopHints.get(RenderingHints.KEY_FRACTIONALMETRICS);
         }
 
-        return textAntialiasingHint;
+        if (aaHint == null) {
+            aaHint = RenderingHints.VALUE_TEXT_ANTIALIAS_DEFAULT;
+        }
+
+        if (fmHint == null) {
+            fmHint = RenderingHints.VALUE_FRACTIONALMETRICS_DEFAULT;
+        }
+
+        fontRenderContext = new FontRenderContext(null, aaHint, fmHint);
     }
 
     /**

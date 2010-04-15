@@ -45,10 +45,7 @@ import org.apache.pivot.wtk.Theme;
  * TODO Add styles to support different border styles (e.g. inset, outset) or
  * create subclasses for these border types.
  */
-public class BorderSkin extends ContainerSkin
-    implements BorderListener {
-    private FontRenderContext fontRenderContext = new FontRenderContext(null, true, true);
-
+public class BorderSkin extends ContainerSkin implements BorderListener {
     private Font font;
     private Color color;
     private Color titleColor;
@@ -86,6 +83,7 @@ public class BorderSkin extends ContainerSkin
         String title = border.getTitle();
         if (title != null
             && title.length() > 0) {
+            FontRenderContext fontRenderContext = Platform.getFontRenderContext();
             Rectangle2D headingBounds = font.getStringBounds(title, fontRenderContext);
             preferredWidth = (int)Math.ceil(headingBounds.getWidth());
 
@@ -118,6 +116,7 @@ public class BorderSkin extends ContainerSkin
         String title = border.getTitle();
         if (title != null
             && title.length() > 0) {
+            FontRenderContext fontRenderContext = Platform.getFontRenderContext();
             LineMetrics lm = font.getLineMetrics(title, fontRenderContext);
             topThickness = Math.max((int)Math.ceil(lm.getHeight()), topThickness);
         }
@@ -156,6 +155,7 @@ public class BorderSkin extends ContainerSkin
             String title = border.getTitle();
             if (title != null
                 && title.length() > 0) {
+                FontRenderContext fontRenderContext = Platform.getFontRenderContext();
                 LineMetrics lm = font.getLineMetrics(title, fontRenderContext);
                 topThickness = Math.max((int)Math.ceil(lm.getHeight()), topThickness);
             }
@@ -187,6 +187,7 @@ public class BorderSkin extends ContainerSkin
         String title = border.getTitle();
         if (title != null
             && title.length() > 0) {
+            FontRenderContext fontRenderContext = Platform.getFontRenderContext();
             LineMetrics lm = font.getLineMetrics(title, fontRenderContext);
             topThickness = Math.max((int)Math.ceil(lm.getHeight()), topThickness);
         }
@@ -214,6 +215,7 @@ public class BorderSkin extends ContainerSkin
         String title = border.getTitle();
         if (title != null
             && title.length() > 0) {
+            FontRenderContext fontRenderContext = Platform.getFontRenderContext();
             LineMetrics lm = font.getLineMetrics(title, fontRenderContext);
             titleAscent = lm.getAscent();
             topThickness = Math.max((int)Math.ceil(lm.getHeight()), topThickness);
@@ -248,15 +250,11 @@ public class BorderSkin extends ContainerSkin
 
         // Draw the title
         if (title != null) {
-            if (fontRenderContext.isAntiAliased()) {
-                graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-                    Platform.getTextAntialiasingHint());
-            }
-
-            if (fontRenderContext.usesFractionalMetrics()) {
-                graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
-                    RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-            }
+            FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+            graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+                fontRenderContext.getAntiAliasingHint());
+            graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
+                fontRenderContext.getFractionalMetricsHint());
 
             // Note that we add one pixel to the string bounds for spacing
             Rectangle2D titleBounds = font.getStringBounds(title, fontRenderContext);

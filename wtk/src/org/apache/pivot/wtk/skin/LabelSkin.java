@@ -61,8 +61,6 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     private ArrayList<GlyphVector> glyphVectors = null;
     private float textHeight = -1;
 
-    private static final FontRenderContext FONT_RENDER_CONTEXT = new FontRenderContext(null, true, true);
-
     public LabelSkin() {
         Theme theme = Theme.getTheme();
         font = theme.getFont();
@@ -91,7 +89,8 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         int preferredWidth;
         if (text != null
             && text.length() > 0) {
-            Rectangle2D stringBounds = font.getStringBounds(text, FONT_RENDER_CONTEXT);
+            FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+            Rectangle2D stringBounds = font.getStringBounds(text, fontRenderContext);
             preferredWidth = (int)Math.ceil(stringBounds.getWidth());
         } else {
             preferredWidth = 0;
@@ -109,7 +108,8 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
         float preferredHeight;
         if (text != null) {
-            LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
+            FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+            LineMetrics lm = font.getLineMetrics("", fontRenderContext);
             float lineHeight = lm.getHeight();
 
             preferredHeight = lineHeight;
@@ -132,7 +132,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
                     }
 
                     Rectangle2D characterBounds = font.getStringBounds(text, i, i + 1,
-                        FONT_RENDER_CONTEXT);
+                        fontRenderContext);
                     lineWidth += characterBounds.getWidth();
 
                     if (lineWidth > width
@@ -162,10 +162,12 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         Label label = (Label)getComponent();
         String text = label.getText();
 
+        FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+
         int preferredWidth;
         if (text != null
             && text.length() > 0) {
-            Rectangle2D stringBounds = font.getStringBounds(text, FONT_RENDER_CONTEXT);
+            Rectangle2D stringBounds = font.getStringBounds(text, fontRenderContext);
             preferredWidth = (int)Math.ceil(stringBounds.getWidth());
         } else {
             preferredWidth = 0;
@@ -173,7 +175,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
         preferredWidth += (padding.left + padding.right);
 
-        LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
+        LineMetrics lm = font.getLineMetrics("", fontRenderContext);
         int preferredHeight = (int)Math.ceil(lm.getHeight()) + (padding.top + padding.bottom);
 
         return new Dimensions(preferredWidth, preferredHeight);
@@ -181,7 +183,8 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
     @Override
     public int getBaseline(int width, int height) {
-        LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
+        FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+        LineMetrics lm = font.getLineMetrics("", fontRenderContext);
         float ascent = lm.getAscent();
 
         float textHeight;
@@ -224,6 +227,8 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
             int n = text.length();
 
             if (n > 0) {
+                FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+
                 if (wrapText) {
                     int width = getWidth() - (padding.left + padding.right);
 
@@ -238,8 +243,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
                             lastWhitespaceIndex = i;
                         }
 
-                        Rectangle2D characterBounds = font.getStringBounds(text, i, i + 1,
-                            FONT_RENDER_CONTEXT);
+                        Rectangle2D characterBounds = font.getStringBounds(text, i, i + 1, fontRenderContext);
                         lineWidth += characterBounds.getWidth();
 
                         if (lineWidth > width
@@ -252,7 +256,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
                             // Append the current line
                             if ((i - 1) - start >= 0) {
                                 StringCharacterIterator line = new StringCharacterIterator(text, start, i, start);
-                                GlyphVector glyphVector = font.createGlyphVector(FONT_RENDER_CONTEXT, line);
+                                GlyphVector glyphVector = font.createGlyphVector(fontRenderContext, line);
                                 glyphVectors.add(glyphVector);
 
                                 Rectangle2D textBounds = glyphVector.getLogicalBounds();
@@ -268,14 +272,14 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
                     // Append the final line
                     if ((i - 1) - start >= 0) {
                         StringCharacterIterator line = new StringCharacterIterator(text, start, i, start);
-                        GlyphVector glyphVector = font.createGlyphVector(FONT_RENDER_CONTEXT, line);
+                        GlyphVector glyphVector = font.createGlyphVector(fontRenderContext, line);
                         glyphVectors.add(glyphVector);
 
                         Rectangle2D textBounds = glyphVector.getLogicalBounds();
                         textHeight += textBounds.getHeight();
                     }
                 } else {
-                    GlyphVector glyphVector = font.createGlyphVector(FONT_RENDER_CONTEXT, text);
+                    GlyphVector glyphVector = font.createGlyphVector(fontRenderContext, text);
                     glyphVectors.add(glyphVector);
 
                     Rectangle2D textBounds = glyphVector.getLogicalBounds();
@@ -301,20 +305,13 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
             graphics.setFont(font);
             graphics.setPaint(color);
 
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
+            FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+            graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+                fontRenderContext.getAntiAliasingHint());
+            graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
+                fontRenderContext.getFractionalMetricsHint());
 
-            if (FONT_RENDER_CONTEXT.isAntiAliased()) {
-                graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-                    Platform.getTextAntialiasingHint());
-            }
-
-            if (FONT_RENDER_CONTEXT.usesFractionalMetrics()) {
-                graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
-                    RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-            }
-
-            LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
+            LineMetrics lm = font.getLineMetrics("", fontRenderContext);
             float ascent = lm.getAscent();
             float lineHeight = lm.getHeight();
 

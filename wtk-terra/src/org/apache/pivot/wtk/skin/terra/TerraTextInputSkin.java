@@ -151,7 +151,6 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
     private Dimensions averageCharacterSize;
 
-    private static final FontRenderContext FONT_RENDER_CONTEXT = new FontRenderContext(null, true, false);
     private static final int SCROLL_RATE = 50;
     private static final char BULLET = 0x2022;
 
@@ -218,7 +217,8 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
     @Override
     public int getBaseline(int width, int height) {
-        LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
+        FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+        LineMetrics lm = font.getLineMetrics("", fontRenderContext);
         float ascent = lm.getAscent();
         float textHeight = lm.getHeight();
 
@@ -250,7 +250,8 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                     ci= textNode.getCharacterIterator();
                 }
 
-                glyphVector = font.createGlyphVector(FONT_RENDER_CONTEXT, ci);
+                FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+                glyphVector = font.createGlyphVector(fontRenderContext, ci);
 
                 Rectangle2D textBounds = glyphVector.getLogicalBounds();
                 int textWidth = (int)textBounds.getWidth();
@@ -318,17 +319,13 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         GraphicsUtilities.drawLine(graphics, 0, 0, width, Orientation.HORIZONTAL);
 
         // Paint the content
-        if (FONT_RENDER_CONTEXT.isAntiAliased()) {
-            graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-                Platform.getTextAntialiasingHint());
-        }
+        FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+        graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+            fontRenderContext.getAntiAliasingHint());
+        graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
+            fontRenderContext.getFractionalMetricsHint());
 
-        if (FONT_RENDER_CONTEXT.usesFractionalMetrics()) {
-            graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
-                RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-        }
-
-        LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
+        LineMetrics lm = font.getLineMetrics("", fontRenderContext);
         float ascent = lm.getAscent();
         float textHeight = lm.getHeight();
 
@@ -509,11 +506,13 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         this.font = font;
 
         int missingGlyphCode = font.getMissingGlyphCode();
-        GlyphVector missingGlyphVector = font.createGlyphVector(FONT_RENDER_CONTEXT,
+        FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+
+        GlyphVector missingGlyphVector = font.createGlyphVector(fontRenderContext,
             new int[] {missingGlyphCode});
         Rectangle2D textBounds = missingGlyphVector.getLogicalBounds();
 
-        Rectangle2D maxCharBounds = font.getMaxCharBounds(FONT_RENDER_CONTEXT);
+        Rectangle2D maxCharBounds = font.getMaxCharBounds(fontRenderContext);
         averageCharacterSize = new Dimensions((int)Math.ceil(textBounds.getWidth()),
             (int)Math.ceil(maxCharBounds.getHeight()));
 

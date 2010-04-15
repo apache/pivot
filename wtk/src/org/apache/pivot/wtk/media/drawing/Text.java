@@ -78,7 +78,6 @@ public class Text extends Shape {
     private TextListenerList textListeners = new TextListenerList();
 
     public static final Font DEFAULT_FONT = new Font("Verdana", Font.PLAIN, 11);
-    private static final FontRenderContext FONT_RENDER_CONTEXT = new FontRenderContext(null, true, true);
 
     public Text() {
         setFill(Color.BLACK);
@@ -191,24 +190,17 @@ public class Text extends Shape {
 
         // Draw the text
         if (glyphVectors.getLength() > 0) {
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
-
-            if (FONT_RENDER_CONTEXT.isAntiAliased()) {
-                graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-                    Platform.getTextAntialiasingHint());
-            }
-
-            if (FONT_RENDER_CONTEXT.usesFractionalMetrics()) {
-                graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
-                    RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-            }
+            FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+            graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+                fontRenderContext.getAntiAliasingHint());
+            graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
+                fontRenderContext.getFractionalMetricsHint());
 
             Paint fill = getFill();
             Paint stroke = getStroke();
             int strokeThickness = getStrokeThickness();
 
-            LineMetrics lm = font.getLineMetrics("", FONT_RENDER_CONTEXT);
+            LineMetrics lm = font.getLineMetrics("", fontRenderContext);
             float ascent = lm.getAscent();
 
             float y = 0;
@@ -265,6 +257,8 @@ public class Text extends Shape {
     @Override
     protected void validate() {
         if (!isValid()) {
+            FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+
             glyphVectors = new ArrayList<GlyphVector>();
 
             int width, height;
@@ -275,7 +269,7 @@ public class Text extends Shape {
                     height = 0;
                 } else {
                     // Create a single glyph vector representing the entire string
-                    GlyphVector glyphVector = font.createGlyphVector(FONT_RENDER_CONTEXT, text);
+                    GlyphVector glyphVector = font.createGlyphVector(fontRenderContext, text);
                     glyphVectors.add(glyphVector);
 
                     Rectangle2D textBounds = glyphVector.getLogicalBounds();
@@ -299,8 +293,7 @@ public class Text extends Shape {
                             lastWhitespaceIndex = i;
                         }
 
-                        Rectangle2D characterBounds = font.getStringBounds(text, i, i + 1,
-                            FONT_RENDER_CONTEXT);
+                        Rectangle2D characterBounds = font.getStringBounds(text, i, i + 1, fontRenderContext);
                         lineWidth += characterBounds.getWidth();
 
                         if (lineWidth > this.width
@@ -313,7 +306,7 @@ public class Text extends Shape {
                             // Append the current line
                             if ((i - 1) - start > 0) {
                                 StringCharacterIterator line = new StringCharacterIterator(text, start, i, start);
-                                GlyphVector glyphVector = font.createGlyphVector(FONT_RENDER_CONTEXT, line);
+                                GlyphVector glyphVector = font.createGlyphVector(fontRenderContext, line);
                                 glyphVectors.add(glyphVector);
 
                                 Rectangle2D textBounds = glyphVector.getLogicalBounds();
@@ -330,7 +323,7 @@ public class Text extends Shape {
                     // Append the final line
                     if ((i - 1) - start > 0) {
                         StringCharacterIterator line = new StringCharacterIterator(text, start, i, start);
-                        GlyphVector glyphVector = font.createGlyphVector(FONT_RENDER_CONTEXT, line);
+                        GlyphVector glyphVector = font.createGlyphVector(fontRenderContext, line);
                         glyphVectors.add(glyphVector);
 
                         Rectangle2D textBounds = glyphVector.getLogicalBounds();
