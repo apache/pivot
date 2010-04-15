@@ -62,7 +62,7 @@ public class TableViewHeader extends Component {
         /**
          * Converts table view header data to a string representation.
          *
-         * @param data
+         * @param item
          *
          * @return
          * The data's string representation, or <tt>null</tt> if the data does not

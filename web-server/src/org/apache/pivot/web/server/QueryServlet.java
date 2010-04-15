@@ -204,7 +204,7 @@ public abstract class QueryServlet extends HttpServlet {
 
     /**
      * Prepares a servlet for request execution. This method is called immediately
-     * prior to the {@link #validate(String)} method.
+     * prior to the {@link #validate(Path)} method.
      * <p>
      * The default implementation is a no-op.
      *

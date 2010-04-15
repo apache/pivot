@@ -172,9 +172,6 @@ public class Dialog extends Frame {
      * The window's owner, or <tt>null</tt> if the window has no owner. Required if the dialog
      * is modal.
      *
-     * @param modal
-     * <tt>true</tt> if the dialog should be modal; <tt>false</tt>, otherwise.
-     *
      * @param dialogCloseListener
      * A listener that will be called when the dialog is closed.
      */
