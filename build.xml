@@ -37,7 +37,7 @@ limitations under the License.
 
     <!-- Compiler properties -->
     <property name="compiler.deprecation" value="false"/>
-    <property name="compiler.debug" value="false"/>
+    <property name="compiler.debug" value="true"/>
     <property name="compiler.target" value="1.6"/>
     <property name="compiler.encoding" value="UTF-8"/>
     <property name="compiler.indexJars" value="true"/>
