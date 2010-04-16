@@ -19,7 +19,7 @@ package org.apache.pivot.wtk.effects.easing;
 /**
  * Easing operation based on a sine curve.
  */
-public class Sine {
+public class Sine implements Easing {
     public float easeIn(float time, float begin, float change, float duration) {
         return -change * (float)Math.cos(time / duration * (Math.PI/2)) + change + begin;
     }
