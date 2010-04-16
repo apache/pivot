@@ -262,6 +262,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
     private static final String HEIGHT_ARGUMENT = "height";
     private static final String CENTER_ARGUMENT = "center";
     private static final String RESIZABLE_ARGUMENT = "resizable";
+    private static final String MAXIMIZED_ARGUMENT = "maximized";
 
     private static final String FULL_SCREEN_ARGUMENT = "fullScreen";
 
@@ -295,6 +296,9 @@ public final class DesktopApplicationContext extends ApplicationContext {
                     preferences.putInt(Y_ARGUMENT, windowedHostFrame.getY());
                     preferences.putInt(WIDTH_ARGUMENT, windowedHostFrame.getWidth());
                     preferences.putInt(HEIGHT_ARGUMENT, windowedHostFrame.getHeight());
+
+                    int state = (windowedHostFrame.getExtendedState() & java.awt.Frame.MAXIMIZED_BOTH);
+                    preferences.putBoolean(MAXIMIZED_ARGUMENT, state == java.awt.Frame.MAXIMIZED_BOTH);
 
                     preferences.flush();
                 } catch (SecurityException exception) {
@@ -338,6 +342,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
         int height = 600;
         boolean center = false;
         boolean resizable = true;
+        boolean maximized = false;
         boolean fullScreen = false;
 
         try {
@@ -348,6 +353,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
             y = preferences.getInt(Y_ARGUMENT, y);
             width = preferences.getInt(WIDTH_ARGUMENT, width);
             height = preferences.getInt(HEIGHT_ARGUMENT, height);
+            maximized = preferences.getBoolean(MAXIMIZED_ARGUMENT, maximized);
         } catch (SecurityException exception) {
             System.err.println("Unable to retrieve startup preferences: " + exception);
         }
@@ -381,6 +387,8 @@ public final class DesktopApplicationContext extends ApplicationContext {
                             resizable = Boolean.parseBoolean(value);
                         } else if (key.equals(FULL_SCREEN_ARGUMENT)) {
                             fullScreen = Boolean.parseBoolean(value);
+                        } else if (key.equals(MAXIMIZED_ARGUMENT)) {
+                            maximized = Boolean.parseBoolean(value);
                         } else {
                             properties.put(key, value);
                         }
@@ -444,6 +452,10 @@ public final class DesktopApplicationContext extends ApplicationContext {
                 (screenSize.height - height) / 2);
         } else {
             windowedHostFrame.setLocation(x, y);
+        }
+
+        if (maximized) {
+            windowedHostFrame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
         }
 
         applicationContext.getDisplay().getContainerListeners().add(new ContainerListener.Adapter() {
