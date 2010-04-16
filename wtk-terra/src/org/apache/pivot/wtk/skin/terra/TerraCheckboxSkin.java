@@ -45,7 +45,6 @@ public class TerraCheckboxSkin extends CheckboxSkin {
     private Color color;
     private Color disabledColor;
     private int spacing;
-    private boolean alignToBaseline;
 
     private Color buttonColor;
     private Color buttonBorderColor;
@@ -63,7 +62,6 @@ public class TerraCheckboxSkin extends CheckboxSkin {
         color = theme.getColor(1);
         disabledColor = theme.getColor(7);
         spacing = 3;
-        alignToBaseline = true;
 
         buttonColor = theme.getColor(4);
         buttonBorderColor = theme.getColor(7);
@@ -339,14 +337,5 @@ public class TerraCheckboxSkin extends CheckboxSkin {
         }
 
         setSpacing(spacing.intValue());
-    }
-
-    public boolean getAlignToBaseline() {
-        return alignToBaseline;
-    }
-
-    public void setAlignToBaseline(boolean alignToBaseline) {
-        this.alignToBaseline = alignToBaseline;
-        repaintComponent();
     }
 }
