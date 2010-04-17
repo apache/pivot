@@ -287,25 +287,23 @@ public final class DesktopApplicationContext extends ApplicationContext {
         }
 
         if (!cancelShutdown) {
-            if (windowedHostFrame.getExtendedState() == 0) {
-                try {
-                    Preferences preferences = Preferences.userNodeForPackage(DesktopApplicationContext.class);
-                    preferences = preferences.node(applicationClassName);
+            try {
+                Preferences preferences = Preferences.userNodeForPackage(DesktopApplicationContext.class);
+                preferences = preferences.node(applicationClassName);
 
-                    preferences.putInt(X_ARGUMENT, windowedHostFrame.getX());
-                    preferences.putInt(Y_ARGUMENT, windowedHostFrame.getY());
-                    preferences.putInt(WIDTH_ARGUMENT, windowedHostFrame.getWidth());
-                    preferences.putInt(HEIGHT_ARGUMENT, windowedHostFrame.getHeight());
+                preferences.putInt(X_ARGUMENT, windowedHostFrame.getX());
+                preferences.putInt(Y_ARGUMENT, windowedHostFrame.getY());
+                preferences.putInt(WIDTH_ARGUMENT, windowedHostFrame.getWidth());
+                preferences.putInt(HEIGHT_ARGUMENT, windowedHostFrame.getHeight());
 
-                    int state = (windowedHostFrame.getExtendedState() & java.awt.Frame.MAXIMIZED_BOTH);
-                    preferences.putBoolean(MAXIMIZED_ARGUMENT, state == java.awt.Frame.MAXIMIZED_BOTH);
+                int state = (windowedHostFrame.getExtendedState() & java.awt.Frame.MAXIMIZED_BOTH);
+                preferences.putBoolean(MAXIMIZED_ARGUMENT, state > 0);
 
-                    preferences.flush();
-                } catch (SecurityException exception) {
-                    // No-op
-                } catch (BackingStoreException exception) {
-                    // No-op
-                }
+                preferences.flush();
+            } catch (SecurityException exception) {
+                // No-op
+            } catch (BackingStoreException exception) {
+                // No-op
             }
 
             windowedHostFrame.dispose();
