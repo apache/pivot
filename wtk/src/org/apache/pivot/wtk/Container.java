@@ -20,10 +20,8 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.Iterator;
 
-import org.apache.pivot.beans.BeanDictionary;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
-import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
@@ -54,13 +52,6 @@ public abstract class Container extends Component
         public void componentMoved(Container container, int from, int to) {
             for (ContainerListener listener : this) {
                 listener.componentMoved(container, from, to);
-            }
-        }
-
-        @Override
-        public void contextKeyChanged(Container container, String previousContextKey) {
-            for (ContainerListener listener : this) {
-                listener.contextKeyChanged(container, previousContextKey);
             }
         }
 
@@ -124,10 +115,8 @@ public abstract class Container extends Component
     private ArrayList<Component> components = new ArrayList<Component>();
 
     private FocusTraversalPolicy focusTraversalPolicy = null;
-    private String contextKey = null;
 
     private Component mouseOverComponent = null;
-
     private boolean mouseDown = false;
     private Component mouseDownComponent = null;
     private long mouseDownTime = 0;
@@ -586,80 +575,26 @@ public abstract class Container extends Component
     }
 
     /**
-     * Returns the container's context key.
-     *
-     * @return
-     * The context key, or <tt>null</tt> if no context key is set.
-     */
-    public String getContextKey() {
-        return contextKey;
-    }
-
-    /**
-     * Sets the component's context key.
-     *
-     * @param contextKey
-     * The context key, or <tt>null</tt> to clear the context.
-     */
-    public void setContextKey(String contextKey) {
-        String previousContextKey = this.contextKey;
-
-        if ((previousContextKey != null
-            && contextKey != null
-            && !previousContextKey.equals(contextKey))
-            || previousContextKey != contextKey) {
-            this.contextKey = contextKey;
-            containerListeners.contextKeyChanged(this, previousContextKey);
-        }
-    }
-
-    /**
-     * Propagates binding to subcomponents. If this container has a binding
-     * set, propagates the bound value as a nested context.
+     * Propagates binding to subcomponents.
      *
      * @param context
      */
     @Override
-    @SuppressWarnings("unchecked")
     public void load(Dictionary<String, ?> context) {
-        if (contextKey != null
-            && context.containsKey(contextKey)) {
-            Object value = context.get(contextKey);
-            if (value instanceof Dictionary<?, ?>) {
-                context = (Map<String, Object>)value;
-            } else {
-                context = new BeanDictionary(value);
-            }
-        }
-
         for (Component component : components) {
             component.load(context);
         }
     }
 
     /**
-     * Propagates binding to subcomponents. If this container has a binding
-     * set, propagates the bound value as a nested context.
+     * Propagates binding to subcomponents.
      *
      * @param context
      */
     @Override
-    @SuppressWarnings("unchecked")
     public void store(Dictionary<String, ?> context) {
-        if (isEnabled()) {
-            if (contextKey != null) {
-                // Bound value is expected to be a sub-context
-                Object value = context.get(contextKey);
-                if (value instanceof Dictionary<?, ?>) {
-                    context = (Map<String, Object>)value;
-                } else {
-                    context = new BeanDictionary(value);
-                }
-            }
-
-            for (Component component : components) {
-                component.store(context);
-            }
+        for (Component component : components) {
+            component.store(context);
         }
     }
 

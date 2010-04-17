@@ -230,11 +230,6 @@ public abstract class ContainerSkin extends ComponentSkin
     }
 
     @Override
-    public void contextKeyChanged(Container container, String previousContextKey) {
-        // No-op
-    }
-
-    @Override
     public void focusTraversalPolicyChanged(Container container,
         FocusTraversalPolicy previousFocusTraversalPolicy) {
         // No-op

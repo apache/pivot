@@ -31,12 +31,12 @@ limitations under the License.
                                 <Label Form.label="ID" textKey="id"/>
                                 <TextInput Form.label="Name" textKey="name"/>
 
-                                <BoxPane Form.label="Address" orientation="vertical" contextKey="address">
-                                    <TextInput textKey="street" prompt="Street"/>
+                                <BoxPane Form.label="Address" orientation="vertical">
+                                    <TextInput textKey="address.street" prompt="Street"/>
                                     <BoxPane>
-                                        <TextInput textKey="city" prompt="City"/>
-                                        <TextInput textKey="state" textSize="6" prompt="State"/>
-                                        <TextInput textKey="zip" textSize="6" prompt="Zip"/>
+                                        <TextInput textKey="address.city" prompt="City"/>
+                                        <TextInput textKey="address.state" textSize="6" prompt="State"/>
+                                        <TextInput textKey="address.zip" textSize="6" prompt="Zip"/>
                                     </BoxPane>
                                 </BoxPane>
 

@@ -39,10 +39,6 @@ public interface ContainerListener  {
         }
 
         @Override
-        public void contextKeyChanged(Container container, String previousContextKey) {
-        }
-
-        @Override
         public void focusTraversalPolicyChanged(Container container,
             FocusTraversalPolicy previousFocusTraversalPolicy) {
         }
@@ -76,14 +72,6 @@ public interface ContainerListener  {
      * @param to
      */
     public void componentMoved(Container container, int from, int to);
-
-    /**
-     * Called when a container's context key has changed.
-     *
-     * @param container
-     * @param previousContextKey
-     */
-    public void contextKeyChanged(Container container, String previousContextKey);
 
     /**
      * Called when a container's focus traversal policy has changed.

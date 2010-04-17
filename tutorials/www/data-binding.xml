@@ -53,15 +53,6 @@ limitations under the License.
         </ul>
 
         <p>
-            The <tt>Container</tt> class overrides <tt>load()</tt> and <tt>store()</tt> to
-            facilitate the use of nested contexts. When a container is assigned a context key, if
-            a value with that key exists in the context passed to <tt>Container#load()</tt> or
-            <tt>store()</tt>, that value becomes the context that is propagated to sub-components
-            in further binds. This can significantly simplify the task of binding to complex data
-            structures.
-        </p>
-
-        <p>
             The following application demonstrates data binding. It allows the user to load a form
             with address data either from a JSON file or from a JavaBean object, as well as clear
             the form. Note that binding to a JavaBean is accomplished by wrapping the bean in an
@@ -100,12 +91,12 @@ limitations under the License.
                                             <Label Form.label="ID" textKey="id"/>
                                             <TextInput Form.label="Name" textKey="name"/>
 
-                                            <BoxPane Form.label="Address" orientation="vertical" contextKey="address">
+                                            <BoxPane Form.label="Address" orientation="vertical">
                                                 <TextInput textKey="street" prompt="Street"/>
                                                 <BoxPane>
-                                                    <TextInput textKey="city" prompt="City"/>
-                                                    <TextInput textKey="state" textSize="6" prompt="State"/>
-                                                    <TextInput textKey="zip" textSize="10" prompt="Zip"/>
+                                                    <TextInput textKey="address.city" prompt="City"/>
+                                                    <TextInput textKey="address.state" textSize="6" prompt="State"/>
+                                                    <TextInput textKey="address.zip" textSize="10" prompt="Zip"/>
                                                 </BoxPane>
                                             </BoxPane>
 
@@ -135,15 +126,6 @@ limitations under the License.
             </Window>
             ]]>
         </source>
-
-        <p>
-            Note that the <tt>&lt;BoxPane&gt;</tt> for the address section defines a context key.
-            This creates a nested bind context for its sub-elements, allowing the sub-elements to
-            refer to the bound values using a relative key (e.g. "street"). However, since the
-            <tt>&lt;BoxPane&gt;</tt> for the IM account section does not define a context key, its
-            sub-elements must refer to their bound values using a path that is relative to the root
-            context (e.g. "imAccount.id").
-        </p>
 
         <p>
             The application's <tt>startup()</tt> method defines the button press listeners that

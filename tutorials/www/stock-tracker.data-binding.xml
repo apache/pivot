@@ -46,7 +46,8 @@ limitations under the License.
             bound. Each bindable property of a component can be assigned a "bind key" that
             associates the property with a value in the context. Data is imported from the context
             into the property during a load, and exported from the property to the context during
-            a store.
+            a store. Bind keys can reference nested values using JSON path syntax (e.g. "foo.bar.baz"
+            or "foo['bar'].baz").
         </p>
 
         <p>
@@ -56,23 +57,13 @@ limitations under the License.
             state of a <tt>ListView</tt> component.
         </p>
 
-        <p>
-            It is important to note that it is not possible to directly bind to a container
-            component. However, containers may act as nested bind contexts - when a bind key is
-            assigned to a container, it is assumed to point to a nested <tt>Dictionary</tt> instance
-            representing a subordinate bind context. This enables complex object graphs returned
-            from a web query to be seamlessly mapped to a set of data-bound components arranged in a
-            non-trivial layout, for example.
-        </p>
-
         <h2>Data Binding in Stock Tracker</h2>
 
         <p>
-            The Stock Tracker demo isn't quite that sophisticated. It uses a single, flat bind
-            context to populate the fields in the quote detail view. The bind context is actually
-            the row data retrieved from the web query for the selected stock. This is why the
-            application requests more data than it seems to need from the GET query: the extra
-            fields are used to fill in the data in the detail form.
+            The Stock Tracker demo uses data binding to populate the fields in the quote detail
+            view. The bind context is actually the row data retrieved from the web query for the
+            selected stock. This is why the application requests more data than it seems to need
+            from the GET query: the extra fields are used to fill in the data in the detail form.
         </p>
 
         <p>
@@ -153,21 +144,13 @@ limitations under the License.
             rather than on the parent container of the detail labels (an instance of <tt>Form</tt>).
             This is because the application also needs to bind to the label that contains the
             company name, which is not a child of the <tt>Form</tt>.
-        <p>
+        </p>
 
         <source type="xml">
             <![CDATA[
             <Label textKey="companyName" styles="{font:{size:12, bold:true}}"/>
             ]]>
         </source>
-
-        </p>
-            This example demostrates that a nested container does not automatically imply the
-            existence of a sub-context - sub-contexts are created only when a nested container is
-            assigned its own bind key. Because a bind key is not defined for it, the form simply
-            inherits the bind context that was passed to its parent, the root
-            <tt>&lt;BoxPane&gt;</tt> representing the detail pane.
-        </p>
 
         <h2>Bind Mappings</h2>
 
