@@ -27,10 +27,6 @@ import org.apache.pivot.collections.Sequence;
  * Contains utility methods for working with JSON or JSON-like data structures.
  */
 public class JSON {
-    // TODO Make this constructor private when this class is moved to org.apache.pivot.json
-    JSON() {
-    }
-
     /**
      * Returns the value at the given path.
      *
