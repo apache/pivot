@@ -16,17 +16,20 @@
  */
 package org.apache.pivot.util.concurrent;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 /**
  * Abstract base class for "tasks". A task is an asynchronous operation that
  * may optionally return a value.
  *
- * @param V
+ * @param <V>
  * The type of the value returned by the operation. May be {@link Void} to
  * indicate that the task does not return a value.
  */
 public abstract class Task<V> {
     /**
-     * Task execution callback that is posted to the dispatcher queue.
+     * Task execution callback that is posted to the executor service.
      */
     private class ExecuteCallback implements Runnable {
         @Override
@@ -61,7 +64,7 @@ public abstract class Task<V> {
         }
     }
 
-    private Dispatcher dispatcher = null;
+    private ExecutorService executorService;
 
     private V result = null;
     private Exception fault = null;
@@ -70,20 +73,22 @@ public abstract class Task<V> {
     protected volatile long timeout = Long.MAX_VALUE;
     protected volatile boolean abort = false;
 
-    private ExecuteCallback executeCallback = null;
+    public static final ExecutorService DEFAULT_EXECUTOR_SERVICE;
 
-    private static Dispatcher DEFAULT_DISPATCHER = new Dispatcher();
-
-    public Task() {
-        this(DEFAULT_DISPATCHER);
+    static {
+        DEFAULT_EXECUTOR_SERVICE = Executors.newCachedThreadPool();
     }
 
-    public Task(Dispatcher dispatcher) {
-        if (dispatcher == null) {
-            throw new IllegalArgumentException("dispatcher is null.");
+    public Task() {
+        this(DEFAULT_EXECUTOR_SERVICE);
+    }
+
+    public Task(ExecutorService executorService) {
+        if (executorService == null) {
+            throw new IllegalArgumentException("executorService is null.");
         }
 
-        this.dispatcher = dispatcher;
+        this.executorService = executorService;
     }
 
     /**
@@ -121,16 +126,16 @@ public abstract class Task<V> {
         fault = null;
         abort = false;
 
-        // Create a new execute callback and post it to the dispatcher
-        executeCallback = new ExecuteCallback();
-        dispatcher.getPendingQueue().enqueue(executeCallback);
+        // Create a new execute callback and post it to the executor service
+        ExecuteCallback executeCallback = new ExecuteCallback();
+        executorService.submit(executeCallback);
     }
 
     /**
-     * Returns the dispatcher used to execute this task.
+     * Returns the executor service used to execute this task.
      */
-    public Dispatcher getDispatcher() {
-        return dispatcher;
+    public ExecutorService getExecutorService() {
+        return executorService;
     }
 
     /**

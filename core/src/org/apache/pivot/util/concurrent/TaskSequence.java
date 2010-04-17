@@ -17,6 +17,7 @@
 package org.apache.pivot.util.concurrent;
 
 import java.util.Iterator;
+import java.util.concurrent.ExecutorService;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
@@ -33,11 +34,11 @@ public class TaskSequence extends Task<Void>
     private int complete = 0;
 
     public TaskSequence() {
-        super();
+        this(DEFAULT_EXECUTOR_SERVICE);
     }
 
-    public TaskSequence(Dispatcher dispatcher) {
-        super(dispatcher);
+    public TaskSequence(ExecutorService executorService) {
+        super(executorService);
     }
 
     @Override

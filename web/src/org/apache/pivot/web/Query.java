@@ -25,6 +25,7 @@ import java.net.MalformedURLException;
 import java.net.Proxy;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.concurrent.ExecutorService;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -34,8 +35,6 @@ import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.serialization.Serializer;
 import org.apache.pivot.util.ListenerList;
-import org.apache.pivot.util.concurrent.Dispatcher;
-
 
 /**
  * Abstract base class for web queries. A web query is an asynchronous operation
@@ -151,7 +150,6 @@ public abstract class Query<V> extends IOTask<V> {
     private QueryListenerList<V> queryListeners = new QueryListenerList<V>();
 
     public static final int DEFAULT_PORT = -1;
-    public static final Dispatcher DEFAULT_DISPATCHER = new Dispatcher();
 
     private static final String HTTP_PROTOCOL = "http";
     private static final String HTTPS_PROTOCOL = "https";
@@ -175,8 +173,9 @@ public abstract class Query<V> extends IOTask<V> {
      * @param path
      * @param secure
      */
-    public Query(String hostname, int port, String path, boolean secure) {
-        super(DEFAULT_DISPATCHER);
+    public Query(String hostname, int port, String path, boolean secure,
+        ExecutorService executorService) {
+        super(executorService);
 
         try {
             locationContext = new URL(secure ? HTTPS_PROTOCOL : HTTP_PROTOCOL,
@@ -184,7 +183,6 @@ public abstract class Query<V> extends IOTask<V> {
         } catch (MalformedURLException exception) {
             throw new IllegalArgumentException("Unable to construct context URL.", exception);
         }
-
     }
 
     public abstract Method getMethod();

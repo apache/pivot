@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.web;
 
+import java.util.concurrent.ExecutorService;
+
 /**
  * Executes an HTTP PUT operation.
  */
@@ -29,7 +31,12 @@ public class PutQuery extends Query<Boolean> {
     }
 
     public PutQuery(String hostname, int port, String path, boolean secure) {
-        super(hostname, port, path, secure);
+        this(hostname, port, path, secure, DEFAULT_EXECUTOR_SERVICE);
+    }
+
+    public PutQuery(String hostname, int port, String path, boolean secure,
+        ExecutorService executorService) {
+        super(hostname, port, path, secure, executorService);
     }
 
     @Override

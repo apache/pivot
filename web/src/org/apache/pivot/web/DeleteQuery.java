@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.web;
 
+import java.util.concurrent.ExecutorService;
+
 /**
  * Executes an HTTP DELETE operation.
  */
@@ -27,7 +29,12 @@ public class DeleteQuery extends Query<Void> {
     }
 
     public DeleteQuery(String hostname, int port, String path, boolean secure) {
-        super(hostname, port, path, secure);
+        this(hostname, port, path, secure, DEFAULT_EXECUTOR_SERVICE);
+    }
+
+    public DeleteQuery(String hostname, int port, String path, boolean secure,
+        ExecutorService executorService) {
+        super(hostname, port, path, secure, executorService);
     }
 
     @Override

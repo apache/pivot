@@ -18,6 +18,7 @@ package org.apache.pivot.web;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.ExecutorService;
 
 /**
  * Executes an HTTP POST operation.
@@ -32,7 +33,12 @@ public class PostQuery extends Query<URL> {
     }
 
     public PostQuery(String hostname, int port, String path, boolean secure) {
-        super(hostname, port, path, secure);
+        this(hostname, port, path, secure, DEFAULT_EXECUTOR_SERVICE);
+    }
+
+    public PostQuery(String hostname, int port, String path, boolean secure,
+        ExecutorService executorService) {
+        super(hostname, port, path, secure, executorService);
     }
 
     @Override

@@ -19,11 +19,10 @@ package org.apache.pivot.io;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.concurrent.ExecutorService;
 
 import org.apache.pivot.util.concurrent.AbortException;
-import org.apache.pivot.util.concurrent.Dispatcher;
 import org.apache.pivot.util.concurrent.Task;
-
 
 /**
  * Abstract base class for input/output tasks.
@@ -201,7 +200,7 @@ public abstract class IOTask<V> extends Task<V> {
         super();
     }
 
-    public IOTask(Dispatcher dispatcher) {
-        super(dispatcher);
+    public IOTask(ExecutorService executorService) {
+        super(executorService);
     }
 }

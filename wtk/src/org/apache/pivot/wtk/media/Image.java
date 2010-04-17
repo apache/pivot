@@ -21,11 +21,11 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.concurrent.ExecutorService;
 
 import org.apache.pivot.io.IOTask;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ListenerList;
-import org.apache.pivot.util.concurrent.Dispatcher;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.util.concurrent.TaskListener;
 import org.apache.pivot.wtk.Dimensions;
@@ -70,14 +70,12 @@ public abstract class Image implements Visual {
     public static class LoadTask extends IOTask<Image> {
         private URL location = null;
 
-        private static Dispatcher DEFAULT_DISPATCHER = new Dispatcher();
-
         public LoadTask(URL location) {
-            this(location, DEFAULT_DISPATCHER);
+            this(location, DEFAULT_EXECUTOR_SERVICE);
         }
 
-        public LoadTask(URL location, Dispatcher dispatcher) {
-            super(dispatcher);
+        public LoadTask(URL location, ExecutorService executorService) {
+            super(executorService);
             this.location = location;
         }
 
