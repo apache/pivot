@@ -22,7 +22,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.net.URL;
 
-import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ThreadUtilities;
 import org.apache.pivot.util.concurrent.TaskExecutionException;

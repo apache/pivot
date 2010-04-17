@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.pivot.serialization;
+package org.apache.pivot.json;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -38,14 +38,14 @@ import org.apache.pivot.collections.immutable.ImmutableList;
 import org.apache.pivot.collections.immutable.ImmutableMap;
 import org.apache.pivot.io.EchoReader;
 import org.apache.pivot.io.EchoWriter;
+import org.apache.pivot.serialization.SerializationException;
+import org.apache.pivot.serialization.Serializer;
 
 /**
  * Implementation of the {@link Serializer} interface that reads data from
  * and writes data to a JavaScript Object Notation (JSON) file.
  */
-public class JSONSerializer extends JSON implements Serializer<Object> {
-    // TODO Don't extends JSON when this class is moved to org.apache.pivot.json
-    // TODO Remove deprecated methods
+public class JSONSerializer implements Serializer<Object> {
     private Charset charset;
     private boolean immutable;
 
@@ -712,118 +712,6 @@ public class JSONSerializer extends JSON implements Serializer<Object> {
     @Override
     public String getMIMEType(Object object) {
         return MIME_TYPE + "; charset=" + charset.name();
-    }
-
-    /**
-     * @deprecated
-     * @see JSON#get(Object, String)
-     */
-    public static Object get(Object root, String path) {
-        return JSON.get(root, path);
-    }
-
-    /**
-     * @deprecated
-     * @see JSON#getString(Object, String)
-     */
-    public static String getString(Object root, String path) {
-        return JSON.getString(root, path);
-    }
-
-    /**
-     * @deprecated
-     * @see JSON#getNumber(Object, String)
-     */
-    public static Number getNumber(Object root, String path) {
-        return JSON.getNumber(root, path);
-    }
-
-    /**
-     * @deprecated
-     * @see JSON#getShort(Object, String)
-     */
-    public static Short getShort(Object root, String path) {
-        return JSON.getShort(root, path);
-    }
-
-    /**
-     * @deprecated
-     * @see JSON#getInteger(Object, String)
-     */
-    public static Integer getInteger(Object root, String path) {
-        return JSON.getInteger(root, path);
-    }
-
-    /**
-     * @deprecated
-     * @see JSON#getLong(Object, String)
-     */
-    public static Long getLong(Object root, String path) {
-        return JSON.getLong(root, path);
-    }
-
-    /**
-     * @deprecated
-     * @see JSON#getFloat(Object, String)
-     */
-    public static Float getFloat(Object root, String path) {
-        return JSON.getFloat(root, path);
-    }
-
-    /**
-     * @deprecated
-     * @see JSON#getDouble(Object, String)
-     */
-    public static Double getDouble(Object root, String path) {
-        return JSON.getDouble(root, path);
-    }
-
-    /**
-     * @deprecated
-     * @see JSON#getBoolean(Object, String)
-     */
-    public static Boolean getBoolean(Object root, String path) {
-        return JSON.getBoolean(root, path);
-    }
-
-    /**
-     * @deprecated
-     * @see JSON#getList(Object, String)
-     */
-    public static List<?> getList(Object root, String path) {
-        return JSON.getList(root, path);
-    }
-
-    /**
-     * @deprecated
-     * @see JSON#getMap(Object, String)
-     */
-    public static Map<String, ?> getMap(Object root, String path) {
-        return JSON.getMap(root, path);
-    }
-
-    /**
-     * @deprecated
-     * @see JSON#put(Object, String, Object)
-     */
-    public static Object put(Object root, String path, Object value) {
-        return JSON.put(root, path, value);
-    }
-
-    /**
-     * @deprecated
-     * @see JSON#remove(Object, String)
-     */
-    public static Object remove(Object root, String path) {
-        return JSON.remove(root, path);
-    }
-
-    /**
-     * @deprecated
-     * @see JSON#containsKey(Object, String)
-     */
-    public static boolean containsKey(Object root, String path) {
-        return JSON.containsKey(root, path);
     }
 
     /**

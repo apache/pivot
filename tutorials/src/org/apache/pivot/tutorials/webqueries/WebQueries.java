@@ -17,7 +17,7 @@
 package org.apache.pivot.tutorials.webqueries;
 
 import org.apache.pivot.collections.Map;
-import org.apache.pivot.serialization.JSON;
+import org.apache.pivot.json.JSON;
 import org.apache.pivot.util.concurrent.Task;
 import org.apache.pivot.util.concurrent.TaskListener;
 import org.apache.pivot.web.GetQuery;

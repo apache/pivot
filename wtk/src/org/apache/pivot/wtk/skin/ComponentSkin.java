@@ -18,7 +18,7 @@ package org.apache.pivot.wtk.skin;
 
 import java.awt.Font;
 
-import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;

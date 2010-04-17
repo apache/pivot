@@ -19,7 +19,7 @@ package org.apache.pivot.wtk;
 import java.awt.Color;
 
 import org.apache.pivot.collections.Dictionary;
-import org.apache.pivot.serialization.JSON;
+import org.apache.pivot.json.JSON;
 import org.apache.pivot.util.ListenerList;
 
 /**

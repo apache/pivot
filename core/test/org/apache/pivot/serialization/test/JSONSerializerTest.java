@@ -19,7 +19,7 @@ package org.apache.pivot.serialization.test;
 import static org.junit.Assert.assertEquals;
 
 import org.apache.pivot.collections.List;
-import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.junit.Test;
 

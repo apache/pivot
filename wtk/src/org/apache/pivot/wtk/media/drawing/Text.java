@@ -28,7 +28,7 @@ import java.awt.geom.Rectangle2D;
 import java.text.StringCharacterIterator;
 
 import org.apache.pivot.collections.ArrayList;
-import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.Bounds;

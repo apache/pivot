@@ -20,7 +20,7 @@ import java.io.InputStream;
 
 import org.apache.pivot.beans.BeanDictionary;
 import org.apache.pivot.collections.Map;
-import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;

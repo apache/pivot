@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.pivot.serialization;
+package org.apache.pivot.json;
 
 import org.apache.pivot.beans.BeanDictionary;
 import org.apache.pivot.collections.ArrayList;

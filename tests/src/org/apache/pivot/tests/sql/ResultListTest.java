@@ -23,7 +23,7 @@ import java.sql.Statement;
 
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
-import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.sql.ResultList;
 
 import static java.lang.System.out;

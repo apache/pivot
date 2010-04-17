@@ -19,8 +19,8 @@ package org.apache.pivot.wtk;
 import java.util.Locale;
 
 import org.apache.pivot.collections.Dictionary;
-import org.apache.pivot.serialization.JSON;
-import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.json.JSON;
+import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.CalendarDate;
 import org.apache.pivot.util.Filter;

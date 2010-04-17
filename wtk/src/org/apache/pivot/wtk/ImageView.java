@@ -22,7 +22,7 @@ import java.net.URL;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
-import org.apache.pivot.serialization.JSON;
+import org.apache.pivot.json.JSON;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.ThreadUtilities;
 import org.apache.pivot.util.concurrent.Task;

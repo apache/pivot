@@ -20,7 +20,7 @@ import java.awt.Color;
 import java.awt.Font;
 
 import org.apache.pivot.collections.Map;
-import org.apache.pivot.serialization.JSON;
+import org.apache.pivot.json.JSON;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Label;
