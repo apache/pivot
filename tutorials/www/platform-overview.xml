@@ -84,6 +84,9 @@ limitations under the License.
                 <tt>org.apache.pivot.io</tt> - Classes related to input/output operations.
             </li>
             <li>
+                <tt>org.apache.pivot.json</tt> - Classes for working with JSON data.
+            </li>
+            <li>
                 <tt>org.apache.pivot.serialization</tt> - Classes for use in data serialization.
             </li>
             <li>

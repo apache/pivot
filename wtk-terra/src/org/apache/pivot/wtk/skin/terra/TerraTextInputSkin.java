@@ -21,6 +21,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.Toolkit;
 import java.awt.font.FontRenderContext;
@@ -330,6 +331,10 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             && !textInput.isFocused()) {
             graphics.setFont(font);
             graphics.setColor(promptColor);
+            graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+                fontRenderContext.getAntiAliasingHint());
+            graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
+                fontRenderContext.getFractionalMetricsHint());
             graphics.drawString(prompt, padding.left - scrollLeft + 1,
                 (height - textHeight) / 2 + ascent);
         } else {
