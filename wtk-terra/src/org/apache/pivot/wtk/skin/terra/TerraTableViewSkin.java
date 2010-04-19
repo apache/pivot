@@ -77,7 +77,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     private boolean variableRowHeight;
 
     private ArrayList<Integer> columnWidths = null;
-    private ArrayList<Integer> rowHeights = null;
+    private ArrayList<Integer> rowBoundaries = null;
     private int fixedRowHeight = -1;
     private int defaultWidthColumnCount = 0;
 
@@ -250,17 +250,12 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         if (variableRowHeight) {
             List<Object> tableData = (List<Object>)tableView.getTableData();
 
-            rowHeights = new ArrayList<Integer>(tableData.getLength() + 1);
+            int n = tableData.getLength();
+            rowBoundaries = new ArrayList<Integer>(n);
 
-            int rowEnd = tableData.getLength() - 1;
             int rowY = 0;
-
-            for (int rowIndex = 0; rowIndex <= rowEnd; rowIndex++) {
-                Object rowData = tableData.get(rowIndex);
-                boolean rowHighlighted = (rowIndex == highlightedIndex
-                    && tableView.getSelectMode() != TableView.SelectMode.NONE);
-                boolean rowSelected = tableView.isRowSelected(rowIndex);
-                boolean rowDisabled = tableView.isRowDisabled(rowIndex);
+            for (int i = 0; i < n; i++) {
+                Object rowData = tableData.get(i);
 
                 int rowHeight = 0;
                 for (int columnIndex = 0, columnCount = columns.getLength();
@@ -271,16 +266,14 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
                     int columnWidth = columnWidths.get(columnIndex);
 
-                    cellRenderer.render(rowData, rowIndex, columnIndex, tableView, column.getName(),
-                        rowSelected, rowHighlighted, rowDisabled);
+                    cellRenderer.render(rowData, i, columnIndex, tableView, column.getName(),
+                        false, false, false);
                     rowHeight = Math.max(rowHeight, cellRenderer.getPreferredHeight(columnWidth));
                 }
 
-                rowHeights.add(rowY);
+                rowBoundaries.add(rowY);
                 rowY += rowHeight + 1;
             }
-
-            rowHeights.add(rowY);
         } else {
             fixedRowHeight = calculateFixedRowHeight(tableView);
         }
@@ -334,8 +327,9 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                 }
 
                 if (rowEnd != -1) {
-                    int lastRowBottomY = rowHeights.get(rowEnd + 1) - 1;
-                    rowEnd = getRowAt(Math.min(clipBounds.y + clipBounds.height - 1, lastRowBottomY));
+                    int clipBottom = clipBounds.y + clipBounds.height - 1;
+                    clipBottom = Math.min(clipBottom, rowBoundaries.get(rowEnd) - 1);
+                    rowEnd = getRowAt(clipBottom);
                 }
             } else {
                 rowStart = Math.max(rowStart, (int)Math.floor(clipBounds.y
@@ -497,7 +491,11 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     private int getRowY(int rowIndex) {
         int rowY;
         if (variableRowHeight) {
-            rowY = rowHeights.get(rowIndex);
+            if (rowIndex == 0) {
+                rowY = 0;
+            } else {
+                rowY = rowBoundaries.get(rowIndex - 1);
+            }
         } else {
             rowY = rowIndex * (fixedRowHeight + 1);
         }
@@ -507,7 +505,11 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     private int getRowHeight(int rowIndex) {
         int rowHeight;
         if (variableRowHeight) {
-            rowHeight = rowHeights.get(rowIndex + 1) - rowHeights.get(rowIndex);
+            rowHeight = rowBoundaries.get(rowIndex);
+
+            if (rowIndex > 0) {
+                rowHeight -= rowBoundaries.get(rowIndex - 1);
+            }
         } else {
             rowHeight = fixedRowHeight;
         }
@@ -547,9 +549,13 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
         int rowIndex;
         if (variableRowHeight) {
-            rowIndex = ArrayList.binarySearch(rowHeights, y);
-            if (rowIndex < 0) {
-                rowIndex = -rowIndex - 2;
+            if (y == 0) {
+                rowIndex = 0;
+            } else {
+                rowIndex = ArrayList.binarySearch(rowBoundaries, y);
+                if (rowIndex < 0) {
+                    rowIndex = -(rowIndex + 1);
+                }
             }
         } else {
             rowIndex = (y / (fixedRowHeight + 1));
@@ -1098,7 +1104,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
     public void setVariableRowHeight(boolean variableRowHeight) {
         this.variableRowHeight = variableRowHeight;
-        this.rowHeights = null;
+        this.rowBoundaries = null;
         this.fixedRowHeight = -1;
         invalidateComponent();
     }

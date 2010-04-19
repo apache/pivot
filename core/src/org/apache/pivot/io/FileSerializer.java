@@ -35,9 +35,35 @@ import org.apache.pivot.serialization.Serializer;
  * writes {@link java.io.File} objects.
  */
 public class FileSerializer implements Serializer<File> {
+    private File tempFileDirectory;
+
     public static final int BUFFER_SIZE = 1024;
 
     private static final MimetypesFileTypeMap MIME_TYPES_FILE_MAP = new MimetypesFileTypeMap();
+
+    /**
+     * Creates a new file serializer that will store temporary files in the default
+     * temporary file directory.
+     */
+    public FileSerializer() {
+        this(null);
+    }
+
+    /**
+     * Creates a new file serializer that will store temporary files in a specific
+     * directory.
+     *
+     * @param tempFileDirectory
+     * The directory in which to store temporary folders.
+     */
+    public FileSerializer(File tempFileDirectory) {
+        if (tempFileDirectory != null
+            && !tempFileDirectory.isDirectory()) {
+            throw new IllegalArgumentException();
+        }
+
+        this.tempFileDirectory = tempFileDirectory;
+    }
 
     /**
      * Reads a file from an input stream. The returned file is a temporary file and must be
@@ -45,7 +71,7 @@ public class FileSerializer implements Serializer<File> {
      */
     @Override
     public File readObject(InputStream inputStream) throws IOException, SerializationException {
-        File file = File.createTempFile(getClass().getName(), null);
+        File file = File.createTempFile(getClass().getName(), null, tempFileDirectory);
         OutputStream outputStream = null;
 
         try {

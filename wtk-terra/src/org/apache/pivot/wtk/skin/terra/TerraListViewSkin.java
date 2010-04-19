@@ -67,7 +67,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     private int highlightedIndex = -1;
     private int editIndex = -1;
 
-    private ArrayList<Integer> itemHeights;
+    private ArrayList<Integer> itemBoundaries = null;
     private int fixedItemHeight;
 
     private static final Checkbox CHECKBOX = new Checkbox();
@@ -210,7 +210,6 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
         if (variableItemHeight) {
             int width = getWidth();
-            int itemEnd = listData.getLength() - 1;
 
             int checkboxHeight = 0;
             if (listView.getCheckmarksEnabled()) {
@@ -218,42 +217,37 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                     + checkboxPadding.bottom);
             }
 
-            itemHeights = new ArrayList<Integer>(listData.getLength() + 1);
-            int itemY = 0;
+            int n = listData.getLength();
+            itemBoundaries = new ArrayList<Integer>(n);
 
-            for (int itemIndex = 0; itemIndex <= itemEnd; itemIndex++) {
-                Object item = listData.get(itemIndex);
-                boolean highlighted = (itemIndex == highlightedIndex
-                    && listView.getSelectMode() != ListView.SelectMode.NONE);
-                boolean selected = listView.isItemSelected(itemIndex);
-                boolean disabled = listView.isItemDisabled(itemIndex);
+            int itemY = 0;
+            for (int i = 0; i < n; i++) {
+                Object item = listData.get(i);
 
                 int itemWidth = width;
                 int itemX = 0;
 
                 boolean checked = false;
                 if (listView.getCheckmarksEnabled()) {
-                    checked = listView.isItemChecked(itemIndex);
-                    itemX = CHECKBOX.getWidth() + (checkboxPadding.left
-                            + checkboxPadding.right);
+                    checked = listView.isItemChecked(i);
+                    itemX = CHECKBOX.getWidth() + (checkboxPadding.left + checkboxPadding.right);
                     itemWidth -= itemX;
                 }
 
-                itemRenderer.render(item, itemIndex, listView, selected, checked, highlighted, disabled);
+                itemRenderer.render(item, i, listView, false, checked, false, false);
                 int itemHeight = itemRenderer.getPreferredHeight(itemWidth);
+
                 if (listView.getCheckmarksEnabled()) {
                     itemHeight = Math.max(itemHeight, checkboxHeight);
                 }
 
-                itemHeights.add(itemY);
                 itemY += itemHeight;
+                itemBoundaries.add(itemY);
             }
-
-            itemHeights.add(itemY);
         } else {
             itemRenderer.render(null, -1, listView, false, false, false, false);
-
             fixedItemHeight = itemRenderer.getPreferredHeight(-1);
+
             if (listView.getCheckmarksEnabled()) {
                 fixedItemHeight = Math.max(CHECKBOX.getHeight() + (checkboxPadding.top
                     + checkboxPadding.bottom), fixedItemHeight);
@@ -291,8 +285,9 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                 }
 
                 if (itemEnd != -1) {
-                    int lastItemBottomY = itemHeights.get(itemEnd + 1) - 1;
-                    itemEnd = getItemAt(Math.min(clipBounds.y + clipBounds.height - 1, lastItemBottomY));
+                    int clipBottom = clipBounds.y + clipBounds.height - 1;
+                    clipBottom = Math.min(clipBottom, itemBoundaries.get(itemEnd) - 1);
+                    itemEnd = getItemAt(clipBottom);
                 }
             } else {
                 itemStart = Math.max(itemStart, (int)Math.floor(clipBounds.y
@@ -386,9 +381,13 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
         int index;
         if (variableItemHeight) {
-            index = ArrayList.binarySearch(itemHeights, y);
-            if (index < 0) {
-                index = -index - 2;
+            if (y == 0) {
+                index = 0;
+            } else {
+                index = ArrayList.binarySearch(itemBoundaries, y);
+                if (index < 0) {
+                    index = -(index + 1);
+                }
             }
         } else {
             index = (y / fixedItemHeight);
@@ -421,8 +420,13 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
     private int getItemY(int index) {
         int itemY;
+
         if (variableItemHeight) {
-            itemY = itemHeights.get(index);
+            if (index == 0) {
+                itemY = 0;
+            } else {
+                itemY = itemBoundaries.get(index - 1);
+            }
         } else {
             itemY = index * fixedItemHeight;
         }
@@ -432,8 +436,13 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
     private int getItemHeight(int index) {
         int itemHeight;
+
         if (variableItemHeight) {
-            itemHeight = itemHeights.get(index + 1) - itemHeights.get(index);
+            itemHeight = itemBoundaries.get(index);
+
+            if (index > 0) {
+                itemHeight -= itemBoundaries.get(index - 1);
+            }
         } else {
             itemHeight = fixedItemHeight;
         }

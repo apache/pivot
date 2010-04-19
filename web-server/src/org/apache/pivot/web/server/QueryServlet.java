@@ -305,7 +305,7 @@ public abstract class QueryServlet extends HttpServlet {
      *
      * @throws ServletException
      */
-    protected abstract Serializer<?> createSerializer(Path path) throws ServletException;
+    protected abstract Serializer<?> createSerializer(Path path) throws QueryException;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -385,19 +385,22 @@ public abstract class QueryServlet extends HttpServlet {
         Path path = getPath(request);
 
         Object result = null;
+        Serializer<Object> serializer = null;
+
         try {
             validate(path);
             result = doGet(path);
+            serializer = (Serializer<Object>)createSerializer(path);
         } catch (QueryException exception) {
             response.setStatus(exception.getStatus());
             response.flushBuffer();
         }
 
-        if (!response.isCommitted()) {
+        if (!response.isCommitted()
+            && serializer != null) {
             response.setStatus(Query.Status.OK);
             setResponseHeaders(response);
 
-            Serializer<Object> serializer = (Serializer<Object>)createSerializer(path);
             response.setContentType(serializer.getMIMEType(result));
 
             OutputStream responseOutputStream = response.getOutputStream();
