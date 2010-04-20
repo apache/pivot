@@ -1471,7 +1471,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         // Repaint the area containing the added selection
         if (tableView.isValid()) {
             repaintComponent(0, getRowY(rangeStart),
-                getWidth(), getRowY(rangeEnd + 1) - getRowY(rangeStart));
+                getWidth(), getRowY(rangeEnd) + getRowHeight(rangeEnd));
         }
     }
 
@@ -1480,7 +1480,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         // Repaint the area containing the removed selection
         if (tableView.isValid()) {
             repaintComponent(0, getRowY(rangeStart),
-                getWidth(), getRowY(rangeStart) - getRowY(rangeEnd));
+                getWidth(), getRowY(rangeEnd) + getRowHeight(rangeEnd));
         }
     }
 
