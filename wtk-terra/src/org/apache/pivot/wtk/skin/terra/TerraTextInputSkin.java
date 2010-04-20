@@ -138,7 +138,6 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     private Color borderColor;
     private Color disabledBorderColor;
     private Insets padding;
-    private boolean strictValidation;
 
     private Color selectionColor;
     private Color selectionBackgroundColor;
@@ -168,7 +167,6 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         borderColor = theme.getColor(7);
         disabledBorderColor = theme.getColor(7);
         padding = new Insets(2);
-        strictValidation = false;
 
         selectionColor = theme.getColor(4);
         selectionBackgroundColor = theme.getColor(13);
@@ -916,14 +914,6 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         setPadding(Insets.decode(padding));
     }
 
-    public boolean getStrictValidation() {
-        return strictValidation;
-    }
-
-    public void setStrictValidation(boolean strictValidation) {
-        this.strictValidation = strictValidation;
-    }
-
     @Override
     public boolean mouseMove(Component component, int x, int y) {
         boolean consumed = super.mouseMove(component, x, y);
@@ -1062,6 +1052,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                     Toolkit.getDefaultToolkit().beep();
                 } else {
                     Validator validator = textInput.getValidator();
+                    boolean strictValidation = textInput.isStrictValidation();
 
                     if (validator != null
                         && strictValidation) {
@@ -1098,6 +1089,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 boolean backspace = (keyCode == Keyboard.KeyCode.DELETE ? false : true);
 
                 Validator validator = textInput.getValidator();
+                boolean strictValidation = textInput.isStrictValidation();
 
                 if (validator != null
                     && strictValidation) {
@@ -1349,12 +1341,17 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     @Override
-    public void textValidChanged(TextInput textInput) {
+    public void textValidatorChanged(TextInput textInput, Validator previousValidator) {
         repaintComponent();
     }
 
     @Override
-    public void textValidatorChanged(TextInput textInput, Validator previousValidator) {
+    public void strictValidationChanged(TextInput textInput) {
+        // No-op
+    }
+
+    @Override
+    public void textValidChanged(TextInput textInput) {
         repaintComponent();
     }
 

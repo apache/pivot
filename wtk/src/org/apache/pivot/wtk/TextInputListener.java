@@ -48,11 +48,15 @@ public interface TextInputListener {
         }
 
         @Override
-        public void textValidChanged(TextInput textInput) {
+        public void textValidatorChanged(TextInput textInput, Validator previousValidator) {
         }
 
         @Override
-        public void textValidatorChanged(TextInput textInput, Validator previousValidator) {
+        public void strictValidationChanged(TextInput textInput) {
+        }
+
+        @Override
+        public void textValidChanged(TextInput textInput) {
         }
     }
 
@@ -99,17 +103,24 @@ public interface TextInputListener {
     public void promptChanged(TextInput textInput, String previousPrompt);
 
     /**
-     * Called when the text changes validity.
-     *
-     * @param textInput
-     */
-    public void textValidChanged(TextInput textInput);
-
-    /**
      * Called when the validator changes.
      *
      * @param textInput
      * @param previousValidator
      */
     public void textValidatorChanged(TextInput textInput, Validator previousValidator);
+
+    /**
+     * Called when a text input's strict validation flag has changed.
+     *
+     * @param textInput
+     */
+    public void strictValidationChanged(TextInput textInput);
+
+    /**
+     * Called when the text changes validity.
+     *
+     * @param textInput
+     */
+    public void textValidChanged(TextInput textInput);
 }

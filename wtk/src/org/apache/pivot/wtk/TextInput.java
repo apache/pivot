@@ -118,16 +118,22 @@ public class TextInput extends Component {
         }
 
         @Override
-        public void textValidChanged(TextInput textInput) {
+        public void textValidatorChanged(TextInput textInput, Validator previousValidator) {
             for (TextInputListener listener : this) {
-                listener.textValidChanged(textInput);
+                listener.textValidatorChanged(textInput, previousValidator);
+            }
+        }
+
+        public void strictValidationChanged(TextInput textInput) {
+            for (TextInputListener listener : this) {
+                listener.strictValidationChanged(textInput);
             }
         }
 
         @Override
-        public void textValidatorChanged(TextInput textInput, Validator previousValidator) {
+        public void textValidChanged(TextInput textInput) {
             for (TextInputListener listener : this) {
-                listener.textValidatorChanged(textInput, previousValidator);
+                listener.textValidChanged(textInput);
             }
         }
     }
@@ -212,6 +218,8 @@ public class TextInput extends Component {
     private TextBindMapping textBindMapping = null;
 
     private Validator validator = null;
+    private boolean strictValidation = false;
+
     private boolean textValid = true;
 
     private NodeListener textNodeListener = new NodeListener() {
@@ -834,15 +842,6 @@ public class TextInput extends Component {
     }
 
     /**
-     * Tells whether or not this text input's text is currently valid as
-     * defined by its validator. If there is no validator associated with this
-     * text input, the text is assumed to always be valid.
-     */
-    public boolean isTextValid() {
-        return textValid;
-    }
-
-    /**
      * Gets the validator associated with this text input.
      */
     public Validator getValidator() {
@@ -866,12 +865,40 @@ public class TextInput extends Component {
     }
 
     /**
+     * Returns the text input's strict validation flag.
+     */
+    public boolean isStrictValidation() {
+        return strictValidation;
+    }
+
+    /**
+     * Sets the text input's strict validation flag. When enabled, only valid text will be
+     * accepted by the text input.
+     *
+     * @param strictValidation
+     */
+    public void setStrictValidation(boolean strictValidation) {
+        if (this.strictValidation != strictValidation) {
+            this.strictValidation = strictValidation;
+            textInputListeners.strictValidationChanged(this);
+        }
+    }
+
+    /**
+     * Tells whether or not this text input's text is currently valid as
+     * defined by its validator. If there is no validator associated with this
+     * text input, the text is assumed to always be valid.
+     */
+    public boolean isTextValid() {
+        return textValid;
+    }
+
+    /**
      * Updates the valid state after the text or the validator has changed.
      */
     private void validateText() {
         String text = getText();
-        boolean textValid = (validator == null
-            || text == null) ? true : validator.isValid(text);
+        boolean textValid = (validator == null || text == null) ? true : validator.isValid(text);
 
         if (textValid != this.textValid) {
             this.textValid = textValid;
