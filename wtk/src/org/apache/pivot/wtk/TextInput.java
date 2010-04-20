@@ -347,8 +347,8 @@ public class TextInput extends Component {
      * the current character count, the new text is appended to the existing
      * content.
      */
-    public void insertText(char character, int index) {
-        insertText(Character.toString(character), index);
+    public void insert(char character) {
+        insert(Character.toString(character));
     }
 
     /**
@@ -356,13 +356,8 @@ public class TextInput extends Component {
      *
      * @param text
      * The text to insert.
-     *
-     * @param index
-     * The index of the insertion point within the existing text. If equal to
-     * the current character count, the new text is appended to the existing
-     * content.
      */
-    public void insertText(String text, int index) {
+    public void insert(String text) {
         if (textNode == null) {
             throw new IllegalStateException();
         }
@@ -371,15 +366,8 @@ public class TextInput extends Component {
             throw new IllegalArgumentException("text is null.");
         }
 
-        if (index < 0
-            || index > textNode.getCharacterCount()) {
-            throw new IndexOutOfBoundsException();
-        }
-
         if (selectionLength > 0) {
-            // TODO Make this part of the undoable action (for all such
-            // actions)
-            textNode.removeRange(selectionStart, selectionLength);
+            delete(false);
         }
 
         // Insert the text
@@ -388,11 +376,11 @@ public class TextInput extends Component {
         }
 
         int length = textNode.getCharacterCount();
-        textNode.insertText(text, index);
+        textNode.insertText(text, selectionStart);
 
         // Update the selection only if a listener did not modify the text
         if (length + text.length() == textNode.getCharacterCount()) {
-            setSelection(index + text.length(), 0);
+            setSelection(selectionStart + text.length(), 0);
         }
     }
 
@@ -489,7 +477,7 @@ public class TextInput extends Component {
                     }
 
                     // Insert the clipboard contents
-                    insertText(text, selectionStart);
+                    insert(text);
                 }
             }
         }

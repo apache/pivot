@@ -2035,7 +2035,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 if (character > 0x1F
                     && character != 0x7F
                     && !Keyboard.isPressed(Keyboard.Modifier.META)) {
-                    textArea.insertText(character);
+                    textArea.insert(character);
                     showCaret(true);
                 }
             }

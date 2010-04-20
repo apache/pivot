@@ -1061,21 +1061,21 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                     && textNode.getCharacterCount() == textInput.getMaximumLength()) {
                     Toolkit.getDefaultToolkit().beep();
                 } else {
-                    int index = textInput.getSelectionStart();
                     Validator validator = textInput.getValidator();
 
                     if (validator != null
                         && strictValidation) {
                         StringBuilder buf = new StringBuilder(textNode.getText());
-                        buf.insert(index, character);
+                        int selectionStart = textInput.getSelectionStart();
+                        buf.insert(selectionStart, character);
 
                         if (validator.isValid(buf.toString())) {
-                            textInput.insertText(character, index);
+                            textInput.insert(character);
                         } else {
                             Toolkit.getDefaultToolkit().beep();
                         }
                     } else {
-                        textInput.insertText(character, index);
+                        textInput.insert(character);
                     }
                 }
             }

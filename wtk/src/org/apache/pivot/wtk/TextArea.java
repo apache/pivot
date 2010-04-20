@@ -362,13 +362,13 @@ public class TextArea extends Component {
         setDocument(document);
     }
 
-    public void insertText(char character) {
+    public void insert(char character) {
         // TODO Don't make every character undoable; break at word boundaries?
 
-        insertText(Character.toString(character));
+        insert(Character.toString(character));
     }
 
-    public void insertText(String text) {
+    public void insert(String text) {
         if (text == null) {
             throw new IllegalArgumentException("text is null.");
         }
