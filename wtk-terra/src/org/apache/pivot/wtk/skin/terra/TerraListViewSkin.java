@@ -59,7 +59,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     private Color inactiveSelectionColor;
     private Color inactiveSelectionBackgroundColor;
     private Color highlightBackgroundColor;
-    private Color alternateItemColor;
+    private Color alternateItemBackgroundColor;
     private boolean showHighlight;
     private boolean variableItemHeight;
     private Insets checkboxPadding = new Insets(2, 2, 2, 0);
@@ -87,7 +87,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         inactiveSelectionColor = theme.getColor(1);
         inactiveSelectionBackgroundColor = theme.getColor(9);
         highlightBackgroundColor = theme.getColor(10);
-        alternateItemColor = null;
+        alternateItemBackgroundColor = null;
         showHighlight = true;
     }
 
@@ -298,12 +298,12 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         }
 
         // Paint the item background
-        if (alternateItemColor != null) {
+        if (alternateItemBackgroundColor != null) {
             for (int itemIndex = itemStart; itemIndex <= itemEnd; itemIndex++) {
                 int itemY = getItemY(itemIndex);
                 int rowHeight = getItemHeight(itemIndex);
                 if (itemIndex % 2 > 0) {
-                    graphics.setPaint(alternateItemColor);
+                    graphics.setPaint(alternateItemBackgroundColor);
                     graphics.fillRect(0, itemY, width, rowHeight + 1);
                 }
             }
@@ -695,26 +695,26 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         setHighlightBackgroundColor(theme.getColor(highlightBackgroundColor));
     }
 
-    public Color getAlternateItemColor() {
-        return alternateItemColor;
+    public Color getAlternateItemBackgroundColor() {
+        return alternateItemBackgroundColor;
     }
 
-    public void setAlternateItemColor(Color alternateItemColor) {
-        this.alternateItemColor = alternateItemColor;
+    public void setAlternateItemBackgroundColor(Color alternateItemBackgroundColor) {
+        this.alternateItemBackgroundColor = alternateItemBackgroundColor;
         repaintComponent();
     }
 
-    public final void setAlternateItemColor(String alternateItemColor) {
-        if (alternateItemColor == null) {
-            throw new IllegalArgumentException("alternateItemColor is null.");
+    public final void setAlternateItemBackgroundColor(String alternateItemBackgroundColor) {
+        if (alternateItemBackgroundColor == null) {
+            throw new IllegalArgumentException("alternateItemBackgroundColor is null.");
         }
 
-        setAlternateItemColor(GraphicsUtilities.decodeColor(alternateItemColor));
+        setAlternateItemBackgroundColor(GraphicsUtilities.decodeColor(alternateItemBackgroundColor));
     }
 
-    public final void setAlternateItemColor(int alternateItemColor) {
+    public final void setAlternateItemColor(int alternateItemBackgroundColor) {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
-        setAlternateItemColor(theme.getColor(alternateItemColor));
+        setAlternateItemBackgroundColor(theme.getColor(alternateItemBackgroundColor));
     }
 
     public boolean getShowHighlight() {

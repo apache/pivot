@@ -64,7 +64,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     private Color inactiveSelectionColor;
     private Color inactiveSelectionBackgroundColor;
     private Color highlightBackgroundColor;
-    private Color alternateRowColor;
+    private Color alternateRowBackgroundColor;
     private Color columnSelectionColor;
     private Color columnSelectionHorizontalGridColor;
     private Color horizontalGridColor;
@@ -95,7 +95,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         inactiveSelectionColor = theme.getColor(1);
         inactiveSelectionBackgroundColor = theme.getColor(9);
         highlightBackgroundColor = theme.getColor(10);
-        alternateRowColor = theme.getColor(11);
+        alternateRowBackgroundColor = theme.getColor(11);
         columnSelectionColor = null;
         columnSelectionHorizontalGridColor = null;
         horizontalGridColor = theme.getColor(11);
@@ -340,12 +340,12 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         }
 
         // Paint the row background
-        if (alternateRowColor != null) {
+        if (alternateRowBackgroundColor != null) {
             for (int rowIndex = rowStart; rowIndex <= rowEnd; rowIndex++) {
                 int rowY = getRowY(rowIndex);
                 int rowHeight = getRowHeight(rowIndex);
                 if (rowIndex % 2 > 0) {
-                    graphics.setPaint(alternateRowColor);
+                    graphics.setPaint(alternateRowBackgroundColor);
                     graphics.fillRect(0, rowY, width, rowHeight + 1);
                 }
             }
@@ -931,26 +931,26 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         setHighlightBackgroundColor(theme.getColor(highlightBackgroundColor));
     }
 
-    public Color getAlternateRowColor() {
-        return alternateRowColor;
+    public Color getAlternateRowBackgroundColor() {
+        return alternateRowBackgroundColor;
     }
 
-    public void setAlternateRowColor(Color alternateRowColor) {
-        this.alternateRowColor = alternateRowColor;
+    public void setAlternateRowBackgroundColor(Color alternateRowBackgroundColor) {
+        this.alternateRowBackgroundColor = alternateRowBackgroundColor;
         repaintComponent();
     }
 
-    public final void setAlternateRowColor(String alternateRowColor) {
-        if (alternateRowColor == null) {
-            throw new IllegalArgumentException("alternateRowColor is null.");
+    public final void setAlternateRowBackgroundColor(String alternateRowBackgroundColor) {
+        if (alternateRowBackgroundColor == null) {
+            throw new IllegalArgumentException("alternateRowBackgroundColor is null.");
         }
 
-        setAlternateRowColor(GraphicsUtilities.decodeColor(alternateRowColor));
+        setAlternateRowBackgroundColor(GraphicsUtilities.decodeColor(alternateRowBackgroundColor));
     }
 
-    public final void setAlternateRowColor(int alternateRowColor) {
+    public final void setAlternateRowBackgroundColor(int alternateRowBackgroundColor) {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
-        setAlternateRowColor(theme.getColor(alternateRowColor));
+        setAlternateRowBackgroundColor(theme.getColor(alternateRowBackgroundColor));
     }
 
     public Color getColumnSelectionColor() {

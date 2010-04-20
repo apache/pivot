@@ -29,7 +29,7 @@ limitations under the License.
                         <TableView wtkx:id="primaryTableView" selectMode="multi"
                             styles="{selectionColor:'#ffffff', inactiveSelectionColor:'#ffffff',
                                 selectionBackgroundColor:'#144f8b', inactiveSelectionBackgroundColor:'#144f8b',
-                                alternateRowColor:null, showHighlight:false,
+                                alternateRowBackgroundColor:null, showHighlight:false,
                                 includeTrailingHorizontalGridLine:true,
                                 includeTrailingVerticalGridLine:true}">
                             <columns>
@@ -59,7 +59,7 @@ limitations under the License.
                         <TableView wtkx:id="fixedTableView" tableData="$tableData" selectMode="multi"
                             styles="{selectionColor:'#ffffff', inactiveSelectionColor:'#ffffff',
                                 selectionBackgroundColor:'#144f8b', inactiveSelectionBackgroundColor:'#144f8b',
-                                alternateRowColor:null, showHighlight:false,
+                                alternateRowBackgroundColor:null, showHighlight:false,
                                 includeTrailingVerticalGridLine:true,
                                 includeTrailingHorizontalGridLine:true}">
                             <columns>

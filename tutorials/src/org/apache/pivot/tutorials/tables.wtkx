@@ -32,7 +32,7 @@ limitations under the License.
                             preferredWidth="276" preferredHeight="160">
                             <view>
                                 <TableView wtkx:id="sortableTableView" selectMode="multi"
-                                    styles="{alternateRowColor:null, columnSelectionColor:11,
+                                    styles="{alternateRowBackgroundColor:null, columnSelectionColor:11,
                                             showVerticalGridLines:false}">
                                     <columns>
                                         <TableView.Column name="i" width="48"/>
