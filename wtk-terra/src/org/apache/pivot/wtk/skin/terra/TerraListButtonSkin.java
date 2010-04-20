@@ -43,6 +43,8 @@ import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.WindowStateListener;
+import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.effects.DropShadowDecorator;
 import org.apache.pivot.wtk.effects.Transition;
 import org.apache.pivot.wtk.effects.TransitionListener;
@@ -103,6 +105,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
     private Color borderColor;
     private Color disabledBorderColor;
     private Insets padding;
+    private boolean split;
     private int listSize = -1;
 
     // Derived colors
@@ -112,6 +115,9 @@ public class TerraListButtonSkin extends ListButtonSkin {
 
     private Transition closeTransition = null;
     private DropShadowDecorator dropShadowDecorator = null;
+
+    private int mouseDownX;
+    private int mouseDownY;
 
     private static final int TRIGGER_WIDTH = 14;
 
@@ -129,6 +135,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
         borderColor = theme.getColor(7);
         disabledBorderColor = theme.getColor(7);
         padding = new Insets(2, 3, 2, 3);
+        split = false;
 
         // Set the derived colors
         bevelColor = TerraTheme.brighten(backgroundColor);
@@ -533,6 +540,14 @@ public class TerraListButtonSkin extends ListButtonSkin {
         setPadding(Insets.decode(padding));
     }
 
+    public boolean isSplit() {
+        return split;
+    }
+
+    public void setSplit(boolean split) {
+        this.split = split;
+    }
+
     public int getListSize() {
         return listSize;
     }
@@ -627,6 +642,15 @@ public class TerraListButtonSkin extends ListButtonSkin {
         listView.getStyles().put("highlightBackgroundColor", listHighlightBackgroundColor);
     }
 
+    // Mouse events
+    @Override
+    public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+        boolean consumed = super.mouseDown(component, button, x, y);
+        mouseDownX = x;
+        mouseDownY = y;
+        return consumed;
+    }
+
     // Button events
     @Override
     public void buttonPressed(Button button) {
@@ -643,6 +667,14 @@ public class TerraListButtonSkin extends ListButtonSkin {
                 if (display != null) {
                     int width = getWidth();
                     int height = getHeight();
+
+                    if (split) {
+                        Bounds triggerBounds = new Bounds(Math.max(width - TRIGGER_WIDTH - 1, 0), 0,
+                            TRIGGER_WIDTH + 1, Math.max(height, 0));
+                        if (!triggerBounds.contains(mouseDownX, mouseDownY)) {
+                            return;
+                        }
+                    }
 
                     // Adjust for list size
                     if (listSize == -1) {
