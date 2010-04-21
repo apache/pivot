@@ -20,22 +20,25 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
+import org.apache.pivot.collections.MapListener;
+import org.apache.pivot.util.ListenerList;
 
 /**
- * Exposes Java bean properties of an object via the {@link Dictionary}
- * interface. A call to {@link Dictionary#get(Object)} invokes the getter for
+ * Exposes Java bean properties of an object via the {@link Map}
+ * interface. A call to {@link Map#get(Object)} invokes the getter for
  * the corresponding property, and a call to
- * {@link Dictionary#put(Object, Object)} invokes the property's setter.
+ * {@link Map#put(Object, Object)} invokes the property's setter.
  * <p>
  * Properties may provide multiple setters; the appropriate setter to invoke
  * is determined by the type of the value being set. If the value is
  * <tt>null</tt>, the return type of the getter method is used.
  */
-public class BeanAdapter implements Dictionary<String, Object>, Iterable<String> {
+public class BeanAdapter implements Map<String, Object> {
     /**
      * Property iterator. Walks the list of methods defined by the bean and
      * returns a value for each getter method.
@@ -132,6 +135,8 @@ public class BeanAdapter implements Dictionary<String, Object>, Iterable<String>
 
     private Object bean;
     private boolean ignoreReadOnlyProperties;
+
+    private MapListenerList<String, Object> mapListeners = new MapListenerList<String, Object>();
 
     public static final String GET_PREFIX = "get";
     public static final String IS_PREFIX = "is";
@@ -312,7 +317,10 @@ public class BeanAdapter implements Dictionary<String, Object>, Iterable<String>
             }
         }
 
-        return null;
+        Object previousValue = null;
+        mapListeners.valueUpdated(this, key, previousValue);
+
+        return previousValue;
     }
 
     /**
@@ -321,6 +329,15 @@ public class BeanAdapter implements Dictionary<String, Object>, Iterable<String>
      */
     @Override
     public Object remove(String key) {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * @throws UnsupportedOperationException
+     * This method is not supported.
+     */
+    @Override
+    public synchronized void clear() {
         throw new UnsupportedOperationException();
     }
 
@@ -353,6 +370,38 @@ public class BeanAdapter implements Dictionary<String, Object>, Iterable<String>
         }
 
         return containsKey;
+    }
+
+    /**
+     * @throws UnsupportedOperationException
+     * This method is not supported.
+     */
+    @Override
+    public boolean isEmpty() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * @throws UnsupportedOperationException
+     * This method is not supported.
+     */
+    @Override
+    public int getCount() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Comparator<String> getComparator() {
+        return null;
+    }
+
+    /**
+     * @throws UnsupportedOperationException
+     * This method is not supported.
+     */
+    @Override
+    public void setComparator(Comparator<String> comparator) {
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -404,6 +453,11 @@ public class BeanAdapter implements Dictionary<String, Object>, Iterable<String>
         return new PropertyIterator();
     }
 
+    @Override
+    public ListenerList<MapListener<String, Object>> getMapListeners() {
+        return mapListeners;
+    }
+
     /**
      * Returns the getter method for a property.
      *
@@ -415,6 +469,19 @@ public class BeanAdapter implements Dictionary<String, Object>, Iterable<String>
      */
     private Method getGetterMethod(String key) {
         return getGetterMethod(bean.getClass(), key);
+    }
+
+    /**
+     * Returns the setter method for a property.
+     *
+     * @param key
+     * The property name.
+     *
+     * @return
+     * The getter method, or <tt>null</tt> if the method does not exist.
+     */
+    private Method getSetterMethod(String key, Class<?> valueType) {
+        return getSetterMethod(bean.getClass(), key, valueType);
     }
 
     /**
@@ -430,19 +497,6 @@ public class BeanAdapter implements Dictionary<String, Object>, Iterable<String>
      */
     private Field getField(String fieldName) {
         return getField(bean.getClass(), fieldName);
-    }
-
-    /**
-     * Returns the setter method for a property.
-     *
-     * @param key
-     * The property name.
-     *
-     * @return
-     * The getter method, or <tt>null</tt> if the method does not exist.
-     */
-    private Method getSetterMethod(String key, Class<?> valueType) {
-        return getSetterMethod(bean.getClass(), key, valueType);
     }
 
     /**

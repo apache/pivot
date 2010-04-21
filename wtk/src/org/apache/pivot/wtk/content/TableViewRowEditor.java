@@ -126,12 +126,12 @@ public class TableViewRowEditor implements TableView.RowEditor {
             // Get the row data, represented as a Dictionary
             Object tableRow = tableView.getTableData().get(rowIndex);
             Dictionary<String, Object> rowData;
-            BeanAdapter beanDictionary = null;
+            BeanAdapter beanAdapter = null;
             if (tableRow instanceof Dictionary<?, ?>) {
                 rowData = (Dictionary<String, Object>)tableRow;
             } else {
-                beanDictionary = new BeanAdapter(tableRow);
-                rowData = beanDictionary;
+                beanAdapter = new BeanAdapter(tableRow);
+                rowData = beanAdapter;
             }
 
             // Set up the editor component hierarchy
@@ -178,8 +178,8 @@ public class TableViewRowEditor implements TableView.RowEditor {
                     editorComponent = editorTextInput;
 
                     // Disable the text input for read-only properties
-                    if (beanDictionary != null
-                        && beanDictionary.isReadOnly(columnName)) {
+                    if (beanAdapter != null
+                        && beanAdapter.isReadOnly(columnName)) {
                         editorTextInput.setTextBindType(BindType.LOAD);
                         editorTextInput.setEnabled(false);
                     }

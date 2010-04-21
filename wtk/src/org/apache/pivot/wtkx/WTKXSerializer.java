@@ -630,11 +630,11 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                     throw new SerializationException("Property elements cannot have a namespace prefix.");
                 }
 
-                BeanAdapter beanDictionary = new BeanAdapter(element.value);
+                BeanAdapter beanAdapter = new BeanAdapter(element.value);
 
-                if (beanDictionary.isReadOnly(localName)) {
+                if (beanAdapter.isReadOnly(localName)) {
                     elementType = Element.Type.READ_ONLY_PROPERTY;
-                    value = beanDictionary.get(localName);
+                    value = beanAdapter.get(localName);
                     assert (value != null) : "Read-only properties cannot be null.";
 
                     if (attributes.getLength() > 0
@@ -921,8 +921,8 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             }
 
             case WRITABLE_PROPERTY: {
-                BeanAdapter beanDictionary = new BeanAdapter(element.parent.value);
-                beanDictionary.put(localName, element.value);
+                BeanAdapter beanAdapter = new BeanAdapter(element.parent.value);
+                beanAdapter.put(localName, element.value);
                 break;
             }
 

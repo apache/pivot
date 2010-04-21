@@ -214,9 +214,9 @@ public class TableViewCellEditor implements TableView.RowEditor {
         if (tableRow instanceof Dictionary<?, ?>) {
             rowData = (Dictionary<String, Object>)tableRow;
         } else {
-            BeanAdapter beanDictionary = new BeanAdapter(tableRow);
-            isReadOnly = beanDictionary.isReadOnly(columnName);
-            rowData = beanDictionary;
+            BeanAdapter beanAdapter = new BeanAdapter(tableRow);
+            isReadOnly = beanAdapter.isReadOnly(columnName);
+            rowData = beanAdapter;
         }
 
         if (!isReadOnly) {

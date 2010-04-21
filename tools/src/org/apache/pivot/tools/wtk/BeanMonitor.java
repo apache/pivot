@@ -145,7 +145,7 @@ public class BeanMonitor {
      * events.
      */
     private void registerBeanListeners() {
-        BeanAdapter beanDictionary = new BeanAdapter(bean);
+        BeanAdapter beanAdapter = new BeanAdapter(bean);
         Method[] methods = bean.getClass().getMethods();
 
         for (int i = 0; i < methods.length; i++) {
@@ -173,7 +173,7 @@ public class BeanMonitor {
                             String propertyName = interfaceMethodName.substring(0,
                                 interfaceMethodName.length() - PROPERTY_CHANGE_SUFFIX.length());
 
-                            if (beanDictionary.containsKey(propertyName)) {
+                            if (beanAdapter.containsKey(propertyName)) {
                                 notifyingProperties.add(propertyName);
                             }
                         }

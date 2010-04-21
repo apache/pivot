@@ -60,9 +60,9 @@ class ComponentPropertyInspectorSkin extends ComponentInspectorSkin {
         beanMonitor.getPropertyChangeListeners().add(new PropertyChangeListener() {
             @Override
             public void propertyChanged(Object bean, String propertyName) {
-                BeanAdapter beanDictionary = new BeanAdapter(bean);
-                Class<?> type = beanDictionary.getType(propertyName);
-                updateControl(beanDictionary, propertyName, type);
+                BeanAdapter beanAdapter = new BeanAdapter(bean);
+                Class<?> type = beanAdapter.getType(propertyName);
+                updateControl(beanAdapter, propertyName, type);
             }
         });
 
@@ -85,10 +85,10 @@ class ComponentPropertyInspectorSkin extends ComponentInspectorSkin {
                 new HashMap<Class<?>, List<String>>(classComparator);
 
             // Partition the properties by their declaring class
-            BeanAdapter beanDictionary = new BeanAdapter(source);
-            for (String propertyName : beanDictionary) {
+            BeanAdapter beanAdapter = new BeanAdapter(source);
+            for (String propertyName : beanAdapter) {
                 if (beanMonitor.isNotifying(propertyName)
-                    && !beanDictionary.isReadOnly(propertyName)) {
+                    && !beanAdapter.isReadOnly(propertyName)) {
                     Method method = BeanAdapter.getGetterMethod(sourceType, propertyName);
                     Class<?> declaringClass = method.getDeclaringClass();
 
@@ -110,8 +110,8 @@ class ComponentPropertyInspectorSkin extends ComponentInspectorSkin {
 
                 List<String> propertyNames = declaringClassPartitions.get(declaringClass);
                 for (String propertyName : propertyNames) {
-                    Class<?> type = beanDictionary.getType(propertyName);
-                    addControl(beanDictionary, propertyName, type, section);
+                    Class<?> type = beanAdapter.getType(propertyName);
+                    addControl(beanAdapter, propertyName, type, section);
                 }
             }
         }

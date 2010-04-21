@@ -110,11 +110,6 @@ public class SynchronizedMap<K, V> implements Map<K, V> {
     }
 
     @Override
-    public synchronized boolean isEmpty() {
-        return map.isEmpty();
-    }
-
-    @Override
     public synchronized void clear() {
         if (!map.isEmpty()) {
             map.clear();
@@ -125,6 +120,11 @@ public class SynchronizedMap<K, V> implements Map<K, V> {
     @Override
     public synchronized boolean containsKey(K key) {
         return map.containsKey(key);
+    }
+
+    @Override
+    public synchronized boolean isEmpty() {
+        return map.isEmpty();
     }
 
     @Override
