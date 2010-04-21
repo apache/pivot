@@ -19,7 +19,6 @@ package org.apache.pivot.wtk;
 import java.awt.Toolkit;
 import java.io.IOException;
 
-import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.text.Element;
@@ -65,7 +64,7 @@ public class TextInput extends Component {
     public interface TextBindMapping {
         /**
          * Converts a value from the bind context to a text representation during a
-         * {@link Component#load(Dictionary)} operation.
+         * {@link Component#load(Object)} operation.
          *
          * @param value
          */
@@ -73,7 +72,7 @@ public class TextInput extends Component {
 
         /**
          * Converts a text string to a value to be stored in the bind context during a
-         * {@link Component#store(Dictionary)} operation.
+         * {@link Component#store(Object)} operation.
          *
          * @param text
          */
@@ -798,7 +797,7 @@ public class TextInput extends Component {
     }
 
     @Override
-    public void load(Dictionary<String, ?> context) {
+    public void load(Object context) {
         if (textKey != null
             && JSON.containsKey(context, textKey)
             && textBindType != BindType.STORE) {
@@ -815,7 +814,7 @@ public class TextInput extends Component {
     }
 
     @Override
-    public void store(Dictionary<String, ?> context) {
+    public void store(Object context) {
         if (textKey != null
             && textBindType != BindType.LOAD) {
             String text = getText();

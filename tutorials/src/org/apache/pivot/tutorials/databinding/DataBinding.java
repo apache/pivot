@@ -65,14 +65,13 @@ public class DataBinding implements Application {
         });
 
         loadJSONButton.getButtonPressListeners().add(new ButtonPressListener() {
-            @SuppressWarnings("unchecked")
             @Override
             public void buttonPressed(Button button) {
                 JSONSerializer serializer = new JSONSerializer();
                 InputStream inputStream = getClass().getResourceAsStream("contact.json");
 
                 try {
-                    form.load((Map<String, Object>)serializer.readObject(inputStream));
+                    form.load(serializer.readObject(inputStream));
                     sourceLabel.setText("JSON");
                 } catch(Exception exception) {
                     System.err.println(exception);

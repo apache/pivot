@@ -2236,7 +2236,7 @@ public class TableView extends Component {
 
     @Override
     @SuppressWarnings("unchecked")
-    public void load(Dictionary<String, ?> context) {
+    public void load(Object context) {
         // Bind to list data
         if (tableDataKey != null
             && tableDataBindType != BindType.STORE
@@ -2305,7 +2305,7 @@ public class TableView extends Component {
     }
 
     @Override
-    public void store(Dictionary<String, ?> context) {
+    public void store(Object context) {
         // Bind to table data
         if (tableDataKey != null
             && tableDataBindType != BindType.LOAD) {

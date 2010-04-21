@@ -19,7 +19,6 @@ package org.apache.pivot.wtk;
 import java.util.Comparator;
 
 import org.apache.pivot.collections.ArrayList;
-import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Sequence;
@@ -70,7 +69,7 @@ public class Spinner extends Container {
     public interface SpinnerDataBindMapping {
         /**
          * Converts a context value to spinner data during a
-         * {@link Component#load(Dictionary)} operation.
+         * {@link Component#load(Object)} operation.
          *
          * @param value
          */
@@ -78,7 +77,7 @@ public class Spinner extends Container {
 
         /**
          * Converts spinner data to a context value during a
-         * {@link Component#store(Dictionary)} operation.
+         * {@link Component#store(Object)} operation.
          *
          * @param spinnerData
          */
@@ -99,7 +98,7 @@ public class Spinner extends Container {
     public interface ItemBindMapping {
         /**
          * Returns the index of the item in the source list during a
-         * {@link Component#load(Dictionary)} operation.
+         * {@link Component#load(Object)} operation.
          *
          * @param spinnerData
          * The source spinner data.
@@ -115,7 +114,7 @@ public class Spinner extends Container {
 
         /**
          * Retrieves the item at the given index during a
-         * {@link Component#store(Dictionary)} operation.
+         * {@link Component#store(Object)} operation.
          *
          * @param spinnerData
          * The source spinner data.
@@ -580,7 +579,7 @@ public class Spinner extends Container {
 
     @Override
     @SuppressWarnings("unchecked")
-    public void load(Dictionary<String, ?> context) {
+    public void load(Object context) {
         // Bind to spinner data
         if (spinnerDataKey != null
             && spinnerDataBindType != BindType.STORE
@@ -615,7 +614,7 @@ public class Spinner extends Container {
     }
 
     @Override
-    public void store(Dictionary<String, ?> context) {
+    public void store(Object context) {
         // Bind to spinner data
         if (spinnerDataKey != null
             && spinnerDataBindType != BindType.LOAD) {

@@ -16,7 +16,6 @@
  */
 package org.apache.pivot.wtk;
 
-import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.util.ListenerList;
 
@@ -73,7 +72,7 @@ public abstract class Button extends Component {
     public interface SelectedBindMapping {
         /**
          * Converts a context value to a selection state during a
-         * {@link Component#load(Dictionary)} operation.
+         * {@link Component#load(Object)} operation.
          *
          * @param value
          */
@@ -81,7 +80,7 @@ public abstract class Button extends Component {
 
         /**
          * Converts a selection state to a context value during a
-         * {@link Component#store(Dictionary)} operation.
+         * {@link Component#store(Object)} operation.
          *
          * @param selected
          */
@@ -94,7 +93,7 @@ public abstract class Button extends Component {
     public interface StateBindMapping {
         /**
          * Converts a context value to a button state during a
-         * {@link Component#load(Dictionary)} operation.
+         * {@link Component#load(Object)} operation.
          *
          * @param value
          */
@@ -102,7 +101,7 @@ public abstract class Button extends Component {
 
         /**
          * Converts a button state to a context value during a
-         * {@link Component#store(Dictionary)} operation.
+         * {@link Component#store(Object)} operation.
          *
          * @param state
          */
@@ -643,7 +642,7 @@ public abstract class Button extends Component {
     }
 
     @Override
-    public void load(Dictionary<String, ?> context) {
+    public void load(Object context) {
         if (toggleButton) {
             if (triState) {
                 // Bind using state key
@@ -690,7 +689,7 @@ public abstract class Button extends Component {
     }
 
     @Override
-    public void store(Dictionary<String, ?> context) {
+    public void store(Object context) {
         if (toggleButton) {
             if (triState) {
                 // Bind using state key

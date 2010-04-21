@@ -26,11 +26,12 @@ limitations under the License.
             Data binding refers to the process of automatically populating or extracting data from
             a set of user interface elements. In Pivot, data binding is driven primarily by two
             methods of the <tt>Component</tt> class: <tt>load()</tt> and <tt>store()</tt>. Each
-            method takes an instance of <tt>Dictionary&lt;String, ?&gt;</tt> called the "context".
-            Calling <tt>load()</tt> causes data from the context to be "loaded" into the component;
-            calling <tt>store()</tt> performs the reverse operation and "stores" data from the
-            component into the context. A third method, <tt>clear()</tt> allows a caller to reset
-            any bindings.
+            method takes an <tt>Object</tt> argument called the "context". The context is either an
+            instance of a Java bean class or an instance of
+            <tt>org.apache.pivot.collections.Dictionary</tt>. Calling <tt>load()</tt> causes data
+            from the context to be "loaded" into the component; calling <tt>store()</tt> performs
+            the reverse operation and "stores" data from the component into the context. A third
+            method, <tt>clear()</tt> allows a caller to reset any bindings.
         </p>
 
         <p>
@@ -185,14 +186,13 @@ limitations under the License.
                     });
 
                     loadJSONButton.getButtonPressListeners().add(new ButtonPressListener() {
-                        @SuppressWarnings("unchecked")
                         @Override
                         public void buttonPressed(Button button) {
                             JSONSerializer serializer = new JSONSerializer();
                             InputStream inputStream = getClass().getResourceAsStream("contact.json");
 
                             try {
-                                form.load((Map<String, Object>)serializer.readObject(inputStream));
+                                form.load(serializer.readObject(inputStream));
                                 sourceLabel.setText("JSON");
                             } catch(Exception exception) {
                                 System.err.println(exception);

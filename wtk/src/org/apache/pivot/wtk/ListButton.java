@@ -17,7 +17,6 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.ArrayList;
-import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.json.JSONSerializer;
@@ -484,7 +483,7 @@ public class ListButton extends Button {
 
     @Override
     @SuppressWarnings("unchecked")
-    public void load(Dictionary<String, ?> context) {
+    public void load(Object context) {
         // Bind to list data
         if (listDataKey != null
             && listDataBindType != BindType.STORE
@@ -519,7 +518,7 @@ public class ListButton extends Button {
     }
 
     @Override
-    public void store(Dictionary<String, ?> context) {
+    public void store(Object context) {
         // Bind to list data
         if (listDataKey != null
             && listDataBindType != BindType.LOAD) {

@@ -18,7 +18,6 @@ package org.apache.pivot.wtk;
 
 import java.awt.Color;
 
-import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.content.ListButtonColorItemRenderer;
@@ -218,7 +217,7 @@ public class ColorChooserButton extends Button {
      * picker button's bind key, if one is set.
      */
     @Override
-    public void load(Dictionary<String, ?> context) {
+    public void load(Object context) {
         if (selectedColorKey != null
             && JSON.containsKey(context, selectedColorKey)
             && selectedColorBindType != BindType.STORE) {
@@ -245,7 +244,7 @@ public class ColorChooserButton extends Button {
      * picker button's bind key, if one is set.
      */
     @Override
-    public void store(Dictionary<String, ?> context) {
+    public void store(Object context) {
         if (selectedColorKey != null
             && selectedColorBindType != BindType.LOAD) {
             JSON.put(context, selectedColorKey, (selectedColorBindMapping == null) ?

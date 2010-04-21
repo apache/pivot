@@ -376,7 +376,7 @@ public class Calendar extends Container {
     }
 
     @Override
-    public void load(Dictionary<String, ?> context) {
+    public void load(Object context) {
         if (selectedDateKey != null
             && JSON.containsKey(context, selectedDateKey)
             && selectedDateBindType != BindType.STORE) {
@@ -399,7 +399,7 @@ public class Calendar extends Container {
     }
 
     @Override
-    public void store(Dictionary<String, ?> context) {
+    public void store(Object context) {
         if (selectedDateKey != null
             && selectedDateBindType != BindType.LOAD) {
             JSON.put(context, selectedDateKey, (selectedDateBindMapping == null) ?

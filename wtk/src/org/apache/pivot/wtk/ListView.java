@@ -21,7 +21,6 @@ import java.net.URL;
 import java.util.Comparator;
 
 import org.apache.pivot.collections.ArrayList;
-import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Map;
@@ -367,7 +366,7 @@ public class ListView extends Component {
     public interface ListDataBindMapping {
         /**
          * Converts a context value to list data during a
-         * {@link Component#load(Dictionary)} operation.
+         * {@link Component#load(Object)} operation.
          *
          * @param value
          */
@@ -375,7 +374,7 @@ public class ListView extends Component {
 
         /**
          * Converts list data to a context value during a
-         * {@link Component#store(Dictionary)} operation.
+         * {@link Component#store(Object)} operation.
          *
          * @param listData
          */
@@ -388,7 +387,7 @@ public class ListView extends Component {
     public interface ItemBindMapping {
         /**
          * Returns the index of the item in the source list during a
-         * {@link Component#load(Dictionary)} operation.
+         * {@link Component#load(Object)} operation.
          *
          * @param listData
          * The source list data.
@@ -404,7 +403,7 @@ public class ListView extends Component {
 
         /**
          * Retrieves the value at the given index during a
-         * {@link Component#store(Dictionary)} operation.
+         * {@link Component#store(Object)} operation.
          *
          * @param listData
          * The source list data.
@@ -1746,7 +1745,7 @@ public class ListView extends Component {
 
     @Override
     @SuppressWarnings("unchecked")
-    public void load(Dictionary<String, ?> context) {
+    public void load(Object context) {
         // Bind to list data
         if (listDataKey != null
             && listDataBindType != BindType.STORE
@@ -1840,7 +1839,7 @@ public class ListView extends Component {
     }
 
     @Override
-    public void store(Dictionary<String, ?> context) {
+    public void store(Object context) {
         // Bind to list data
         if (listDataKey != null
             && listDataBindType != BindType.LOAD) {

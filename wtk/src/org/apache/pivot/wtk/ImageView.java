@@ -20,7 +20,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 import org.apache.pivot.collections.ArrayList;
-import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.util.ListenerList;
@@ -255,7 +254,7 @@ public class ImageView extends Component {
     }
 
     @Override
-    public void load(Dictionary<String, ?> context) {
+    public void load(Object context) {
         if (imageKey != null
             && JSON.containsKey(context, imageKey)) {
             Object value = JSON.get(context, imageKey);
@@ -273,7 +272,7 @@ public class ImageView extends Component {
     }
 
     @Override
-    public void store(Dictionary<String, ?> context) {
+    public void store(Object context) {
         if (isEnabled()
             && imageKey != null) {
             JSON.put(context, imageKey, getImage());

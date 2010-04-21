@@ -21,7 +21,6 @@ import java.awt.Rectangle;
 import java.util.Iterator;
 
 import org.apache.pivot.collections.ArrayList;
-import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
@@ -580,7 +579,7 @@ public abstract class Container extends Component
      * @param context
      */
     @Override
-    public void load(Dictionary<String, ?> context) {
+    public void load(Object context) {
         for (Component component : components) {
             component.load(context);
         }
@@ -592,7 +591,7 @@ public abstract class Container extends Component
      * @param context
      */
     @Override
-    public void store(Dictionary<String, ?> context) {
+    public void store(Object context) {
         for (Component component : components) {
             component.store(context);
         }

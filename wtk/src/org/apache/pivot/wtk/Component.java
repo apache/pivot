@@ -2353,7 +2353,7 @@ public abstract class Component implements ConstrainedVisual {
      *
      * @param context
      */
-    public void load(Dictionary<String, ?> context) {
+    public void load(Object context) {
     }
 
     /**
@@ -2363,7 +2363,7 @@ public abstract class Component implements ConstrainedVisual {
      *
      * @param context
      */
-    public void store(Dictionary<String, ?> context) {
+    public void store(Object context) {
     }
 
     /**
