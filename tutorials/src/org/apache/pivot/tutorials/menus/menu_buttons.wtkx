@@ -46,7 +46,7 @@ limitations under the License.
                             </menu>
                         </MenuButton>
 
-                        <ListButton wtkx:id="colorListButton" selectedIndex="0" styles="{listSize:6}">
+                        <ListButton wtkx:id="colorListButton" listSize="6" selectedIndex="0">
                             <listData>
                                 <collections:ArrayList>
                                     <content:ColorItem color="#000000" name="Black"/>

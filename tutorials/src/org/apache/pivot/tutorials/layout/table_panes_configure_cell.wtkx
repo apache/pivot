@@ -67,9 +67,8 @@ limitations under the License.
                                                         </wtkx:script>
                                                     </spinnerSelectionListeners>
                                                 </Spinner>
-                                                <ListButton wtkx:id="backgroundColorListButton"
-                                                    Form.label="Background Color"
-                                                    styles="{listSize:6}">
+                                                <ListButton wtkx:id="backgroundColorListButton" listSize="6"
+                                                    Form.label="Background Color">
                                                     <listData>
                                                         <collections:ArrayList>
                                                             <content:ColorItem color="0x00000000" name="Transparent"/>

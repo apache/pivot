@@ -38,6 +38,14 @@ public interface ListButtonListener {
         @Override
         public void disabledItemFilterChanged(ListButton listButton, Filter<?> previousDisabledItemFilter) {
         }
+
+        @Override
+        public void listSizeChanged(ListButton listButton, int previousListSize) {
+        }
+
+        @Override
+        public void splitChanged(ListButton listButton) {
+        }
     }
 
     /**
@@ -63,4 +71,19 @@ public interface ListButtonListener {
      * @param previousDisabledItemFilter
      */
     public void disabledItemFilterChanged(ListButton listButton, Filter<?> previousDisabledItemFilter);
+
+    /**
+     * Called when a list button's list size has changed.
+     *
+     * @param listButton
+     * @param previousListSize
+     */
+    public void listSizeChanged(ListButton listButton, int previousListSize);
+
+    /**
+     * Called when a list button's split state has changed.
+     *
+     * @param listButton
+     */
+    public void splitChanged(ListButton listButton);
 }

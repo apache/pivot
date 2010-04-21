@@ -153,8 +153,7 @@ limitations under the License.
                                 </itemRenderer>
                             </ListButton>
 
-                            <ListButton Form.label="Color" selectedIndex="0"
-                                styles="{listSize:6}">
+                            <ListButton Form.label="Color" listSize="6" selectedIndex="0">
                                 <listData>
                                     <collections:ArrayList>
                                         <content:ColorItem color="#000000" name="Black"/>

@@ -55,6 +55,20 @@ public class ListButton extends Button {
                 listener.disabledItemFilterChanged(listButton, previousDisabledItemFilter);
             }
         }
+
+        @Override
+        public void listSizeChanged(ListButton listButton, int previousListSize) {
+            for (ListButtonListener listener : this) {
+                listener.listSizeChanged(listButton, previousListSize);
+            }
+        }
+
+        @Override
+        public void splitChanged(ListButton listButton) {
+            for (ListButtonListener listener : this) {
+                listener.splitChanged(listButton);
+            }
+        }
     }
 
     private static class ListButtonSelectionListenerList extends ListenerList<ListButtonSelectionListener>
@@ -117,6 +131,8 @@ public class ListButton extends Button {
     private ListView.ItemRenderer itemRenderer;
     private int selectedIndex = -1;
     private Filter<?> disabledItemFilter = null;
+    private int listSize = -1;
+    private boolean split = false;
 
     private String listDataKey = null;
     private BindType listDataBindType = BindType.BOTH;
@@ -355,6 +371,42 @@ public class ListButton extends Button {
         if (previousDisabledItemFilter != disabledItemFilter) {
             this.disabledItemFilter = disabledItemFilter;
             listButtonListeners.disabledItemFilterChanged(this, previousDisabledItemFilter);
+        }
+    }
+
+    public int getListSize() {
+        return listSize;
+    }
+
+    public void setListSize(int listSize) {
+        if (listSize < -1) {
+            throw new IllegalArgumentException("Invalid list size.");
+        }
+
+        int previousListSize = this.listSize;
+        if (previousListSize != listSize) {
+            this.listSize = listSize;
+
+        }
+    }
+
+    /**
+     * Returns the list button's split state.
+     */
+    public boolean isSplit() {
+        return split;
+    }
+
+    /**
+     * Sets the list button's split state. A split list button only shows the list view popup
+     * when the trigger part of the button is clicked.
+     *
+     * @param split
+     */
+    public void setSplit(boolean split) {
+        if (this.split != split) {
+            this.split = split;
+            listButtonListeners.splitChanged(this);
         }
     }
 

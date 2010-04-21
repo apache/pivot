@@ -105,8 +105,6 @@ public class TerraListButtonSkin extends ListButtonSkin {
     private Color borderColor;
     private Color disabledBorderColor;
     private Insets padding;
-    private boolean split;
-    private int listSize = -1;
 
     // Derived colors
     private Color bevelColor;
@@ -135,7 +133,6 @@ public class TerraListButtonSkin extends ListButtonSkin {
         borderColor = theme.getColor(7);
         disabledBorderColor = theme.getColor(7);
         padding = new Insets(2, 3, 2, 3);
-        split = false;
 
         // Set the derived colors
         bevelColor = TerraTheme.brighten(backgroundColor);
@@ -540,27 +537,6 @@ public class TerraListButtonSkin extends ListButtonSkin {
         setPadding(Insets.decode(padding));
     }
 
-    public boolean isSplit() {
-        return split;
-    }
-
-    public void setSplit(boolean split) {
-        this.split = split;
-    }
-
-    public int getListSize() {
-        return listSize;
-    }
-
-    public void setListSize(int listSize) {
-        if (listSize < -1) {
-            throw new IllegalArgumentException("Invalid list size.");
-        }
-
-        this.listSize = listSize;
-        listViewBorder.setPreferredHeight(-1);
-    }
-
     public Object getListFont() {
         return listView.getStyles().get("font");
     }
@@ -668,7 +644,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
                     int width = getWidth();
                     int height = getHeight();
 
-                    if (split) {
+                    if (listButton.isSplit()) {
                         Bounds triggerBounds = new Bounds(Math.max(width - TRIGGER_WIDTH - 1, 0), 0,
                             TRIGGER_WIDTH + 1, Math.max(height, 0));
                         if (!triggerBounds.contains(mouseDownX, mouseDownY)) {
@@ -677,6 +653,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
                     }
 
                     // Adjust for list size
+                    int listSize = listButton.getListSize();
                     if (listSize == -1) {
                         listViewBorder.setPreferredHeight(-1);
                     } else {
