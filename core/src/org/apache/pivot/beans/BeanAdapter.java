@@ -610,7 +610,7 @@ public class BeanAdapter implements Map<String, Object> {
                 field = null;
             }
         } catch (NoSuchFieldException exception) {
-            throw new RuntimeException(exception);
+            // No-op
         }
 
         return field;
@@ -636,14 +636,14 @@ public class BeanAdapter implements Map<String, Object> {
         try {
             getterMethod = beanClass.getMethod(GET_PREFIX + key, new Class<?>[] {});
         } catch (NoSuchMethodException exception) {
-            throw new RuntimeException(exception);
+            // No-op
         }
 
         if (getterMethod == null) {
             try {
                 getterMethod = beanClass.getMethod(IS_PREFIX + key, new Class<?>[] {});
             } catch (NoSuchMethodException exception) {
-                throw new RuntimeException(exception);
+                // No-op
             }
         }
 
@@ -674,7 +674,7 @@ public class BeanAdapter implements Map<String, Object> {
             try {
                 setterMethod = beanClass.getMethod(methodName, new Class<?>[] {valueType});
             } catch (NoSuchMethodException exception) {
-                throw new RuntimeException(exception);
+                // No-op
             }
 
             if (setterMethod == null) {
@@ -693,10 +693,10 @@ public class BeanAdapter implements Map<String, Object> {
                     try {
                         setterMethod = beanClass.getMethod(methodName, new Class<?>[] {primitiveValueType});
                     } catch (NoSuchMethodException exception) {
-                        throw new RuntimeException(exception);
+                        // No-op
                     }
                 } catch (NoSuchFieldException exception) {
-                    throw new RuntimeException(exception);
+                    // No-op
                 } catch (IllegalAccessException exception) {
                     throw new RuntimeException(exception);
                 }
