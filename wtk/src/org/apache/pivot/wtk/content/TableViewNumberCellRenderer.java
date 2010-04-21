@@ -19,7 +19,7 @@ package org.apache.pivot.wtk.content;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
-import org.apache.pivot.beans.BeanDictionary;
+import org.apache.pivot.beans.BeanAdapter;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Insets;
@@ -74,7 +74,7 @@ public class TableViewNumberCellRenderer extends TableViewCellRenderer {
             if (row instanceof Dictionary<?, ?>) {
                 rowData = (Dictionary<String, Object>)row;
             } else {
-                rowData = new BeanDictionary(row);
+                rowData = new BeanAdapter(row);
             }
 
             Object cellData = rowData.get(columnName);

@@ -18,7 +18,7 @@ package org.apache.pivot.tutorials.databinding;
 
 import java.io.InputStream;
 
-import org.apache.pivot.beans.BeanDictionary;
+import org.apache.pivot.beans.BeanAdapter;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.wtk.Application;
@@ -59,7 +59,7 @@ public class DataBinding implements Application {
         loadJavaButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {
-                form.load(new BeanDictionary(CONTACT));
+                form.load(new BeanAdapter(CONTACT));
                 sourceLabel.setText("Java");
             }
         });

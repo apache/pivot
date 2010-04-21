@@ -19,7 +19,7 @@ package org.apache.pivot.wtk.content;
 import java.awt.Color;
 import java.awt.Font;
 
-import org.apache.pivot.beans.BeanDictionary;
+import org.apache.pivot.beans.BeanAdapter;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Insets;
@@ -61,7 +61,7 @@ public class TableViewTextAreaCellRenderer extends TextArea
                 if (row instanceof Dictionary<?, ?>) {
                     rowData = (Dictionary<String, Object>)row;
                 } else {
-                    rowData = new BeanDictionary(row);
+                    rowData = new BeanAdapter(row);
                 }
 
                 cellData = rowData.get(columnName);
@@ -106,7 +106,7 @@ public class TableViewTextAreaCellRenderer extends TextArea
             if (row instanceof Dictionary<?, ?>) {
                 rowData = (Dictionary<String, Object>)row;
             } else {
-                rowData = new BeanDictionary(row);
+                rowData = new BeanAdapter(row);
             }
 
             cellData = rowData.get(columnName);

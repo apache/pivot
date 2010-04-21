@@ -26,7 +26,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
 
-import org.apache.pivot.beans.BeanDictionary;
+import org.apache.pivot.beans.BeanAdapter;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Sequence;
@@ -398,6 +398,6 @@ public class StockTrackerWindow extends Window implements Bindable {
             stockQuote = new StockQuote();
         }
 
-        detailPane.load(new BeanDictionary(stockQuote));
+        detailPane.load(new BeanAdapter(stockQuote));
     }
 }

@@ -47,7 +47,7 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamException;
 
-import org.apache.pivot.beans.BeanDictionary;
+import org.apache.pivot.beans.BeanAdapter;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
@@ -630,7 +630,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                     throw new SerializationException("Property elements cannot have a namespace prefix.");
                 }
 
-                BeanDictionary beanDictionary = new BeanDictionary(element.value);
+                BeanAdapter beanDictionary = new BeanAdapter(element.value);
 
                 if (beanDictionary.isReadOnly(localName)) {
                     elementType = Element.Type.READ_ONLY_PROPERTY;
@@ -758,7 +758,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                 if (element.value instanceof Dictionary<?, ?>) {
                     dictionary = (Dictionary<String, Object>)element.value;
                 } else {
-                    dictionary = new BeanDictionary(element.value);
+                    dictionary = new BeanAdapter(element.value);
                 }
 
                 for (Attribute attribute : instancePropertyAttributes) {
@@ -873,7 +873,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                         objectType, propertyType);
 
                                     if (value instanceof String) {
-                                        value = BeanDictionary.coerce((String)value, propertyType);
+                                        value = BeanAdapter.coerce((String)value, propertyType);
                                     }
                                 }
                             }
@@ -921,7 +921,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             }
 
             case WRITABLE_PROPERTY: {
-                BeanDictionary beanDictionary = new BeanDictionary(element.parent.value);
+                BeanAdapter beanDictionary = new BeanAdapter(element.parent.value);
                 beanDictionary.put(localName, element.value);
                 break;
             }
@@ -1410,7 +1410,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
 
         if (objectType != null) {
             try {
-                method = propertyClass.getMethod(BeanDictionary.GET_PREFIX
+                method = propertyClass.getMethod(BeanAdapter.GET_PREFIX
                     + propertyName, objectType);
             } catch (NoSuchMethodException exception) {
                 // No-op
@@ -1418,7 +1418,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
 
             if (method == null) {
                 try {
-                    method = propertyClass.getMethod(BeanDictionary.IS_PREFIX
+                    method = propertyClass.getMethod(BeanAdapter.IS_PREFIX
                         + propertyName, objectType);
                 } catch (NoSuchMethodException exception) {
                     // No-op
@@ -1439,7 +1439,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         Method method = null;
 
         if (objectType != null) {
-            final String methodName = BeanDictionary.SET_PREFIX + propertyName;
+            final String methodName = BeanAdapter.SET_PREFIX + propertyName;
 
             try {
                 method = propertyClass.getMethod(methodName, objectType, propertyValueType);

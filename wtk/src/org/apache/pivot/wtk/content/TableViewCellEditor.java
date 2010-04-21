@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.wtk.content;
 
-import org.apache.pivot.beans.BeanDictionary;
+import org.apache.pivot.beans.BeanAdapter;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
@@ -214,7 +214,7 @@ public class TableViewCellEditor implements TableView.RowEditor {
         if (tableRow instanceof Dictionary<?, ?>) {
             rowData = (Dictionary<String, Object>)tableRow;
         } else {
-            BeanDictionary beanDictionary = new BeanDictionary(tableRow);
+            BeanAdapter beanDictionary = new BeanAdapter(tableRow);
             isReadOnly = beanDictionary.isReadOnly(columnName);
             rowData = beanDictionary;
         }
@@ -310,7 +310,7 @@ public class TableViewCellEditor implements TableView.RowEditor {
             if (tableRow instanceof Dictionary<?, ?>) {
                 rowData = (Dictionary<String, Object>)tableRow;
             } else {
-                rowData = new BeanDictionary(tableRow);
+                rowData = new BeanAdapter(tableRow);
             }
 
             // Update the cell data

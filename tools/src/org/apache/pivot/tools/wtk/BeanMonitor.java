@@ -24,7 +24,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 
-import org.apache.pivot.beans.BeanDictionary;
+import org.apache.pivot.beans.BeanAdapter;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.HashSet;
 import org.apache.pivot.util.ListenerList;
@@ -145,7 +145,7 @@ public class BeanMonitor {
      * events.
      */
     private void registerBeanListeners() {
-        BeanDictionary beanDictionary = new BeanDictionary(bean);
+        BeanAdapter beanDictionary = new BeanAdapter(bean);
         Method[] methods = bean.getClass().getMethods();
 
         for (int i = 0; i < methods.length; i++) {

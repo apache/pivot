@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Iterator;
 
-import org.apache.pivot.beans.BeanDictionary;
+import org.apache.pivot.beans.BeanAdapter;
 import org.apache.pivot.beans.PropertyNotFoundException;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
@@ -565,7 +565,7 @@ public abstract class Component implements ConstrainedVisual {
 
     // The currently installed skin, or null if no skin is installed
     private Skin skin = null;
-    private BeanDictionary styles = null;
+    private BeanAdapter styles = null;
     private StyleDictionary styleDictionary = new StyleDictionary();
 
     // Custom style keys
@@ -713,7 +713,7 @@ public abstract class Component implements ConstrainedVisual {
         }
 
         this.skin = skin;
-        styles = new BeanDictionary(skin);
+        styles = new BeanAdapter(skin);
         skin.install(this);
 
         invalidate();

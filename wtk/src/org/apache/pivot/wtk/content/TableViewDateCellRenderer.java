@@ -21,7 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import org.apache.pivot.beans.BeanDictionary;
+import org.apache.pivot.beans.BeanAdapter;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.util.CalendarDate;
 import org.apache.pivot.wtk.TableView;
@@ -68,7 +68,7 @@ public class TableViewDateCellRenderer extends TableViewCellRenderer {
                 if (row instanceof Dictionary<?, ?>) {
                     rowData = (Dictionary<String, Object>)row;
                 } else {
-                    rowData = new BeanDictionary(row);
+                    rowData = new BeanAdapter(row);
                 }
 
                 Object cellData = rowData.get(columnName);

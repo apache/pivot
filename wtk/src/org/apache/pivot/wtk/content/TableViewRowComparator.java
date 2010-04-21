@@ -18,7 +18,7 @@ package org.apache.pivot.wtk.content;
 
 import java.util.Comparator;
 
-import org.apache.pivot.beans.BeanDictionary;
+import org.apache.pivot.beans.BeanAdapter;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.wtk.SortDirection;
 import org.apache.pivot.wtk.TableView;
@@ -57,14 +57,14 @@ public class TableViewRowComparator implements Comparator<Object> {
             if (o1 instanceof Dictionary<?, ?>) {
                 row1 = (Dictionary<String, ?>)o1;
             } else {
-                row1 = new BeanDictionary(o1);
+                row1 = new BeanAdapter(o1);
             }
 
             Dictionary<String, ?> row2;
             if (o2 instanceof Dictionary<?, ?>) {
                 row2 = (Dictionary<String, ?>)o2;
             } else {
-                row2 = new BeanDictionary(o2);
+                row2 = new BeanAdapter(o2);
             }
 
             result = 0;

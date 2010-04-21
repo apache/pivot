@@ -29,7 +29,7 @@ import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.NoSuchElementException;
 
-import org.apache.pivot.beans.BeanDictionary;
+import org.apache.pivot.beans.BeanAdapter;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
@@ -324,7 +324,7 @@ public class CSVSerializer implements Serializer<List<?>> {
                 if (item instanceof Dictionary<?, ?>) {
                     itemDictionary = (Dictionary<String, Object>)item;
                 } else {
-                    itemDictionary = new BeanDictionary(item);
+                    itemDictionary = new BeanAdapter(item);
                 }
             } catch(IllegalAccessException exception) {
                 throw new SerializationException(exception);
@@ -459,7 +459,7 @@ public class CSVSerializer implements Serializer<List<?>> {
             if (item instanceof Dictionary<?, ?>) {
                 itemDictionary = (Dictionary<String, Object>)item;
             } else {
-                itemDictionary = new BeanDictionary(item);
+                itemDictionary = new BeanAdapter(item);
             }
 
             for (int i = 0, n = keys.getLength(); i < n; i++) {

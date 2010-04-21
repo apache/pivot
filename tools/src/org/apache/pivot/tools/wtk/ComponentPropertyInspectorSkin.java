@@ -19,7 +19,7 @@ package org.apache.pivot.tools.wtk;
 import java.lang.reflect.Method;
 import java.util.Comparator;
 
-import org.apache.pivot.beans.BeanDictionary;
+import org.apache.pivot.beans.BeanAdapter;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
@@ -60,7 +60,7 @@ class ComponentPropertyInspectorSkin extends ComponentInspectorSkin {
         beanMonitor.getPropertyChangeListeners().add(new PropertyChangeListener() {
             @Override
             public void propertyChanged(Object bean, String propertyName) {
-                BeanDictionary beanDictionary = new BeanDictionary(bean);
+                BeanAdapter beanDictionary = new BeanAdapter(bean);
                 Class<?> type = beanDictionary.getType(propertyName);
                 updateControl(beanDictionary, propertyName, type);
             }
@@ -85,11 +85,11 @@ class ComponentPropertyInspectorSkin extends ComponentInspectorSkin {
                 new HashMap<Class<?>, List<String>>(classComparator);
 
             // Partition the properties by their declaring class
-            BeanDictionary beanDictionary = new BeanDictionary(source);
+            BeanAdapter beanDictionary = new BeanAdapter(source);
             for (String propertyName : beanDictionary) {
                 if (beanMonitor.isNotifying(propertyName)
                     && !beanDictionary.isReadOnly(propertyName)) {
-                    Method method = BeanDictionary.getGetterMethod(sourceType, propertyName);
+                    Method method = BeanAdapter.getGetterMethod(sourceType, propertyName);
                     Class<?> declaringClass = method.getDeclaringClass();
 
                     List<String> propertyNames = declaringClassPartitions.get(declaringClass);

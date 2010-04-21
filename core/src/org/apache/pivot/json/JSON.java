@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.json;
 
-import org.apache.pivot.beans.BeanDictionary;
+import org.apache.pivot.beans.BeanAdapter;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
@@ -68,7 +68,7 @@ public class JSON {
                     dictionary = (Dictionary<String, Object>)value;
                     value = dictionary.get(key);
                 } else {
-                    dictionary = new BeanDictionary(value);
+                    dictionary = new BeanAdapter(value);
                 }
 
                 if (dictionary.containsKey(key)) {
@@ -247,7 +247,7 @@ public class JSON {
             if (parent instanceof Dictionary<?, ?>) {
                 dictionary = (Dictionary<String, Object>)parent;
             } else {
-                dictionary = new BeanDictionary(parent);
+                dictionary = new BeanAdapter(parent);
             }
 
             previousValue = dictionary.put(key, value);
@@ -293,7 +293,7 @@ public class JSON {
             if (parent instanceof Dictionary<?, ?>) {
                 dictionary = (Dictionary<String, Object>)parent;
             } else {
-                dictionary = new BeanDictionary(parent);
+                dictionary = new BeanAdapter(parent);
             }
 
             previousValue = dictionary.remove(key);
@@ -339,7 +339,7 @@ public class JSON {
             if (parent instanceof Dictionary<?, ?>) {
                 dictionary = (Dictionary<String, Object>)parent;
             } else {
-                dictionary = new BeanDictionary(parent);
+                dictionary = new BeanAdapter(parent);
             }
 
             containsKey = dictionary.containsKey(key);

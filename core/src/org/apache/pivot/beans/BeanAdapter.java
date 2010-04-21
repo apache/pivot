@@ -35,7 +35,7 @@ import org.apache.pivot.collections.Dictionary;
  * is determined by the type of the value being set. If the value is
  * <tt>null</tt>, the return type of the getter method is used.
  */
-public class BeanDictionary implements Dictionary<String, Object>, Iterable<String> {
+public class BeanAdapter implements Dictionary<String, Object>, Iterable<String> {
     /**
      * Property iterator. Walks the list of methods defined by the bean and
      * returns a value for each getter method.
@@ -141,7 +141,7 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
     /**
      * Creates a new bean dictionary that is not associated with a bean.
      */
-    public BeanDictionary() {
+    public BeanAdapter() {
         this(null);
     }
 
@@ -151,7 +151,7 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
      * @param bean
      * The bean object to wrap.
      */
-    public BeanDictionary(Object bean) {
+    public BeanAdapter(Object bean) {
         this(bean, false);
     }
 
@@ -161,7 +161,7 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
      * @param bean
      * The bean object to wrap.
      */
-    public BeanDictionary(Object bean, boolean ignoreReadOnlyProperties) {
+    public BeanAdapter(Object bean, boolean ignoreReadOnlyProperties) {
         this.bean = bean;
         this.ignoreReadOnlyProperties = ignoreReadOnlyProperties;
     }

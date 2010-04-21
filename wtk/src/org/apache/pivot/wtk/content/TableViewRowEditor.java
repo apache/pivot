@@ -18,7 +18,7 @@ package org.apache.pivot.wtk.content;
 
 import java.awt.Graphics2D;
 
-import org.apache.pivot.beans.BeanDictionary;
+import org.apache.pivot.beans.BeanAdapter;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
@@ -126,11 +126,11 @@ public class TableViewRowEditor implements TableView.RowEditor {
             // Get the row data, represented as a Dictionary
             Object tableRow = tableView.getTableData().get(rowIndex);
             Dictionary<String, Object> rowData;
-            BeanDictionary beanDictionary = null;
+            BeanAdapter beanDictionary = null;
             if (tableRow instanceof Dictionary<?, ?>) {
                 rowData = (Dictionary<String, Object>)tableRow;
             } else {
-                beanDictionary = new BeanDictionary(tableRow);
+                beanDictionary = new BeanAdapter(tableRow);
                 rowData = beanDictionary;
             }
 
@@ -354,7 +354,7 @@ public class TableViewRowEditor implements TableView.RowEditor {
                 if (tableRow instanceof Dictionary<?, ?>) {
                     rowData = (Dictionary<String, Object>)tableRow;
                 } else {
-                    rowData = new BeanDictionary(tableRow);
+                    rowData = new BeanAdapter(tableRow);
                 }
 
                 // Update the row data using data binding
