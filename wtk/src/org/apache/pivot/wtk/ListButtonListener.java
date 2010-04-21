@@ -42,10 +42,6 @@ public interface ListButtonListener {
         @Override
         public void listSizeChanged(ListButton listButton, int previousListSize) {
         }
-
-        @Override
-        public void splitChanged(ListButton listButton) {
-        }
     }
 
     /**
@@ -79,11 +75,4 @@ public interface ListButtonListener {
      * @param previousListSize
      */
     public void listSizeChanged(ListButton listButton, int previousListSize);
-
-    /**
-     * Called when a list button's split state has changed.
-     *
-     * @param listButton
-     */
-    public void splitChanged(ListButton listButton);
 }

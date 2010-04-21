@@ -62,13 +62,6 @@ public class ListButton extends Button {
                 listener.listSizeChanged(listButton, previousListSize);
             }
         }
-
-        @Override
-        public void splitChanged(ListButton listButton) {
-            for (ListButtonListener listener : this) {
-                listener.splitChanged(listButton);
-            }
-        }
     }
 
     private static class ListButtonSelectionListenerList extends ListenerList<ListButtonSelectionListener>
@@ -132,7 +125,6 @@ public class ListButton extends Button {
     private int selectedIndex = -1;
     private Filter<?> disabledItemFilter = null;
     private int listSize = -1;
-    private boolean split = false;
 
     private String listDataKey = null;
     private BindType listDataBindType = BindType.BOTH;
@@ -387,26 +379,6 @@ public class ListButton extends Button {
         if (previousListSize != listSize) {
             this.listSize = listSize;
 
-        }
-    }
-
-    /**
-     * Returns the list button's split state.
-     */
-    public boolean isSplit() {
-        return split;
-    }
-
-    /**
-     * Sets the list button's split state. A split list button only shows the list view popup
-     * when the trigger part of the button is clicked.
-     *
-     * @param split
-     */
-    public void setSplit(boolean split) {
-        if (this.split != split) {
-            this.split = split;
-            listButtonListeners.splitChanged(this);
         }
     }
 

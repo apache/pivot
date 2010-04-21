@@ -43,8 +43,6 @@ import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.WindowStateListener;
-import org.apache.pivot.wtk.Component;
-import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.effects.DropShadowDecorator;
 import org.apache.pivot.wtk.effects.Transition;
 import org.apache.pivot.wtk.effects.TransitionListener;
@@ -113,9 +111,6 @@ public class TerraListButtonSkin extends ListButtonSkin {
 
     private Transition closeTransition = null;
     private DropShadowDecorator dropShadowDecorator = null;
-
-    private int mouseDownX;
-    private int mouseDownY;
 
     private static final int TRIGGER_WIDTH = 14;
 
@@ -618,15 +613,6 @@ public class TerraListButtonSkin extends ListButtonSkin {
         listView.getStyles().put("highlightBackgroundColor", listHighlightBackgroundColor);
     }
 
-    // Mouse events
-    @Override
-    public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
-        boolean consumed = super.mouseDown(component, button, x, y);
-        mouseDownX = x;
-        mouseDownY = y;
-        return consumed;
-    }
-
     // Button events
     @Override
     public void buttonPressed(Button button) {
@@ -644,6 +630,8 @@ public class TerraListButtonSkin extends ListButtonSkin {
                     int width = getWidth();
                     int height = getHeight();
 
+                    // TODO
+                    /*
                     if (listButton.isSplit()) {
                         Bounds triggerBounds = new Bounds(Math.max(width - TRIGGER_WIDTH - 1, 0), 0,
                             TRIGGER_WIDTH + 1, Math.max(height, 0));
@@ -651,6 +639,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
                             return;
                         }
                     }
+                    */
 
                     // Adjust for list size
                     int listSize = listButton.getListSize();

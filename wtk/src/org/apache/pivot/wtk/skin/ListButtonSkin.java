@@ -350,11 +350,6 @@ public abstract class ListButtonSkin extends ButtonSkin
         // No-op
     }
 
-    @Override
-    public void splitChanged(ListButton listButton) {
-        invalidateComponent();
-    }
-
     // List button selection events
     @Override
     public void selectedIndexChanged(ListButton listButton, int previousSelectedIndex) {
