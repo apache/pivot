@@ -172,8 +172,8 @@ limitations under the License.
         <p>
             If the item class implements the <tt>pivot.collections.Dictionary</tt> interface, the
             parsed values are <tt>put()</tt> directly into the item instance; otherwise, the item
-            is wrapped in a <tt>pivot.beans.BeanDictionary</tt> into which the values are
-            <tt>put()</tt> (<tt>BeanDictionary</tt> is a handy class that allows a caller to treat
+            is wrapped in a <tt>pivot.beans.BeanAdapter</tt> into which the values are
+            <tt>put()</tt> (<tt>BeanAdapter</tt> is a handy class that allows a caller to treat
             a JavaBean object as if it were a dictionary).
         </p>
 

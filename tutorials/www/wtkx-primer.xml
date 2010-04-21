@@ -101,12 +101,12 @@ limitations under the License.
             ]]>
         </source>
 
-        <h4>Dictionary vs. BeanDictionary</h4>
+        <h4>Dictionary vs. BeanAdapter</h4>
 
         <p>
             In general, uppercase elements in a WTKX file will represent instances of JavaBean
             classes. Internally, the WTKX serializer uses an instance of
-            <tt>org.apache.pivot.beans.BeanDictionary</tt> to wrap the instantiated class and
+            <tt>org.apache.pivot.beans.BeanAdapter</tt> to wrap the instantiated class and
             invoke its setter methods. However, if the class name represents an object that already
             implements the <tt>org.apache.pivot.collections.Dictionary</tt> interface (such as
             <tt>org.apache.pivot.collections.HashMap</tt>), it is not wrapped, and its dictionary
@@ -264,7 +264,7 @@ limitations under the License.
             <tt>char</tt>, <tt>byte</tt>, <tt>short</tt>, <tt>int</tt>, <tt>long</tt>,
             <tt>float</tt>, or <tt>double</tt>) or one of their wrapper equivalents, it is
             converted the appropriate type before invoking the setter. Whenever possible,
-            <tt>WTKXSerializer</tt> will use <tt>BeanDictionary</tt> to determine what, if any,
+            <tt>WTKXSerializer</tt> will use <tt>BeanAdapter</tt> to determine what, if any,
             type conversion needs to take place. For example, given the following simple bean class:
         </p>
 

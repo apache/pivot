@@ -57,7 +57,7 @@ limitations under the License.
             The following application demonstrates data binding. It allows the user to load a form
             with address data either from a JSON file or from a JavaBean object, as well as clear
             the form. Note that binding to a JavaBean is accomplished by wrapping the bean in an
-            instance of <tt>org.apache.pivot.beans.BeanDictionary</tt> before passing it to the
+            instance of <tt>org.apache.pivot.beans.BeanAdapter</tt> before passing it to the
             <tt>load()</tt> method:
         </p>
 
@@ -139,7 +139,7 @@ limitations under the License.
 
             import java.io.InputStream;
 
-            import org.apache.pivot.beans.BeanDictionary;
+            import org.apache.pivot.beans.BeanAdapter;
             import org.apache.pivot.collections.Map;
             import org.apache.pivot.serialization.JSONSerializer;
             import org.apache.pivot.wtk.Application;
@@ -180,7 +180,7 @@ limitations under the License.
                     loadJavaButton.getButtonPressListeners().add(new ButtonPressListener() {
                         @Override
                         public void buttonPressed(Button button) {
-                            form.load(new BeanDictionary(CONTACT));
+                            form.load(new BeanAdapter(CONTACT));
                             sourceLabel.setText("Java");
                         }
                     });

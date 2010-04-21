@@ -35,7 +35,7 @@ limitations under the License.
             <tt>Dictionary&lt;String, Object&gt;</tt>, which the default table view renders are
             capable of presenting (for example, <tt>Map&lt;String, Object&gt;</tt> values stored in
             a JSON list or instances of JavaBean classes that can be wrapped in a
-            <tt>BeanDictionary</tt>).
+            <tt>BeanAdapter</tt>).
         </p>
 
         <p>

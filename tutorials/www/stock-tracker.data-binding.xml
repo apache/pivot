@@ -134,7 +134,7 @@ limitations under the License.
                     stockQuote = new StockQuote();
                 }
 
-                detailPane.load(new BeanDictionary(stockQuote));
+                detailPane.load(new BeanAdapter(stockQuote));
             }
             ]]>
         </source>
