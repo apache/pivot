@@ -20,7 +20,6 @@ import java.lang.reflect.Method;
 import java.util.Comparator;
 
 import org.apache.pivot.beans.BeanDictionary;
-import org.apache.pivot.beans.BeanDictionaryListener;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
@@ -52,15 +51,16 @@ class ComponentPropertyInspectorSkin extends ComponentInspectorSkin {
         }
     }
 
-    private BeanDictionary beanDictionary = new BeanDictionary();
+    private BeanMonitor beanMonitor = new BeanMonitor();
 
     private static NameComparator nameComparator = new NameComparator();
     private static ClassComparator classComparator = new ClassComparator();
 
     public ComponentPropertyInspectorSkin() {
-        beanDictionary.getBeanDictionaryListeners().add(new BeanDictionaryListener.Adapter() {
+        beanMonitor.getPropertyChangeListeners().add(new PropertyChangeListener() {
             @Override
-            public void propertyChanged(BeanDictionary beanDictionary, String propertyName) {
+            public void propertyChanged(Object bean, String propertyName) {
+                BeanDictionary beanDictionary = new BeanDictionary(bean);
                 Class<?> type = beanDictionary.getType(propertyName);
                 updateControl(beanDictionary, propertyName, type);
             }
@@ -77,7 +77,7 @@ class ComponentPropertyInspectorSkin extends ComponentInspectorSkin {
         Form.SectionSequence sections = form.getSections();
         sections.remove(0, sections.getLength());
 
-        beanDictionary.setBean(source);
+        beanMonitor.setBean(source);
 
         if (source != null) {
             Class<?> sourceType = source.getClass();
@@ -85,8 +85,9 @@ class ComponentPropertyInspectorSkin extends ComponentInspectorSkin {
                 new HashMap<Class<?>, List<String>>(classComparator);
 
             // Partition the properties by their declaring class
+            BeanDictionary beanDictionary = new BeanDictionary(source);
             for (String propertyName : beanDictionary) {
-                if (beanDictionary.isNotifying(propertyName)
+                if (beanMonitor.isNotifying(propertyName)
                     && !beanDictionary.isReadOnly(propertyName)) {
                     Method method = BeanDictionary.getGetterMethod(sourceType, propertyName);
                     Class<?> declaringClass = method.getDeclaringClass();
