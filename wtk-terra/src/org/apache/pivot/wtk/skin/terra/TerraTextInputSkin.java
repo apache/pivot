@@ -53,7 +53,7 @@ import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.skin.ComponentSkin;
 import org.apache.pivot.wtk.text.TextNode;
-import org.apache.pivot.wtk.text.validation.Validator;
+import org.apache.pivot.wtk.validation.Validator;
 
 /**
  * Text input skin.

@@ -50,9 +50,9 @@ import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.skin.ContainerSkin;
-import org.apache.pivot.wtk.text.validation.DoubleValidator;
-import org.apache.pivot.wtk.text.validation.IntValidator;
-import org.apache.pivot.wtk.text.validation.FloatValidator;
+import org.apache.pivot.wtk.validation.DoubleValidator;
+import org.apache.pivot.wtk.validation.FloatValidator;
+import org.apache.pivot.wtk.validation.IntValidator;
 
 abstract class ComponentInspectorSkin extends ContainerSkin implements ComponentInspectorListener {
     // Container for the control components

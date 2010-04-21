@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.pivot.wtk.text.validation;
+package org.apache.pivot.wtk.validation;
 
 /**
  * Validation interface for text components. Allows the programmer to specify

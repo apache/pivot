@@ -18,7 +18,7 @@ package org.apache.pivot.demos.roweditor;
 
 import java.math.BigDecimal;
 
-import org.apache.pivot.wtk.text.validation.Validator;
+import org.apache.pivot.wtk.validation.Validator;
 
 
 /**

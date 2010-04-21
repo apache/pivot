@@ -26,7 +26,7 @@ import org.apache.pivot.wtk.text.Element;
 import org.apache.pivot.wtk.text.Node;
 import org.apache.pivot.wtk.text.NodeListener;
 import org.apache.pivot.wtk.text.TextNode;
-import org.apache.pivot.wtk.text.validation.Validator;
+import org.apache.pivot.wtk.validation.Validator;
 
 /**
  * A component that allows a user to enter a single line of unformatted text.

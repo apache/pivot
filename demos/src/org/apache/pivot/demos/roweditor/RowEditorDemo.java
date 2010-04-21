@@ -64,7 +64,7 @@ public class RowEditorDemo implements Application {
         // Amount uses a TextInput with strict currency validation
         TextInput amountTextInput = new TextInput();
         amountTextInput.setValidator(new CurrencyValidator());
-        amountTextInput.getStyles().put("strictValidation", true);
+        amountTextInput.setStrictValidation(true);
         amountTextInput.setTextKey("amount");
         tableViewRowEditor.getCellEditors().put("amount", amountTextInput);
 

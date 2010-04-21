@@ -11,18 +11,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.pivot.wtk.text.validation;
+package org.apache.pivot.wtk.validation;
 
 import java.util.Locale;
 
 /**
- * A validator for a double value.
+ * A validator for an int value.
  */
-public class DoubleValidator extends DecimalValidator {
-    public DoubleValidator() {
+public class IntValidator extends DecimalValidator {
+    public IntValidator() {
+        format.setParseIntegerOnly(true);
     }
 
-    public DoubleValidator(Locale locale) {
+    public IntValidator(Locale locale) {
         super(locale);
+        format.setParseIntegerOnly(true);
     }
+
 }

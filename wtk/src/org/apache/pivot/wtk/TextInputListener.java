@@ -17,7 +17,7 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.wtk.text.TextNode;
-import org.apache.pivot.wtk.text.validation.Validator;
+import org.apache.pivot.wtk.validation.Validator;
 
 /**
  * Text input listener interface.

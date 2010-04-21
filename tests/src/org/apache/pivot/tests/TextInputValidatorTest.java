@@ -22,10 +22,10 @@ import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextInputListener;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtk.text.validation.FloatRangeValidator;
-import org.apache.pivot.wtk.text.validation.IntRangeValidator;
-import org.apache.pivot.wtk.text.validation.RegexTextValidator;
-import org.apache.pivot.wtk.text.validation.Validator;
+import org.apache.pivot.wtk.validation.FloatRangeValidator;
+import org.apache.pivot.wtk.validation.IntRangeValidator;
+import org.apache.pivot.wtk.validation.RegexTextValidator;
+import org.apache.pivot.wtk.validation.Validator;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 /**
