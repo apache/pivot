@@ -98,6 +98,10 @@ public class BeanAdapter implements Map<String, Object> {
                         int propertyOffset = prefix.length();
                         nextProperty = Character.toLowerCase(methodName.charAt(propertyOffset))
                             + methodName.substring(propertyOffset + 1);
+
+                        if (nextProperty.equals("class")) {
+                            nextProperty = null;
+                        }
                     }
 
                     if (nextProperty != null
@@ -210,7 +214,7 @@ public class BeanAdapter implements Map<String, Object> {
                 try {
                     value = field.get(bean);
                 } catch (IllegalAccessException exception) {
-                    // No-op
+                    throw new RuntimeException(exception);
                 }
             }
         } else {
@@ -220,9 +224,9 @@ public class BeanAdapter implements Map<String, Object> {
                 try {
                     value = getterMethod.invoke(bean, new Object[] {});
                 } catch (IllegalAccessException exception) {
-                    // No-op
+                    throw new RuntimeException(exception);
                 } catch (InvocationTargetException exception) {
-                    // No-op
+                    throw new RuntimeException(exception);
                 }
             }
         }
@@ -606,7 +610,7 @@ public class BeanAdapter implements Map<String, Object> {
                 field = null;
             }
         } catch (NoSuchFieldException exception) {
-            // No-op
+            throw new RuntimeException(exception);
         }
 
         return field;
@@ -632,14 +636,14 @@ public class BeanAdapter implements Map<String, Object> {
         try {
             getterMethod = beanClass.getMethod(GET_PREFIX + key, new Class<?>[] {});
         } catch (NoSuchMethodException exception) {
-            // No-op
+            throw new RuntimeException(exception);
         }
 
         if (getterMethod == null) {
             try {
                 getterMethod = beanClass.getMethod(IS_PREFIX + key, new Class<?>[] {});
             } catch (NoSuchMethodException exception) {
-                // No-op
+                throw new RuntimeException(exception);
             }
         }
 
@@ -670,7 +674,7 @@ public class BeanAdapter implements Map<String, Object> {
             try {
                 setterMethod = beanClass.getMethod(methodName, new Class<?>[] {valueType});
             } catch (NoSuchMethodException exception) {
-                // No-op
+                throw new RuntimeException(exception);
             }
 
             if (setterMethod == null) {
@@ -689,12 +693,12 @@ public class BeanAdapter implements Map<String, Object> {
                     try {
                         setterMethod = beanClass.getMethod(methodName, new Class<?>[] {primitiveValueType});
                     } catch (NoSuchMethodException exception) {
-                        // No-op
+                        throw new RuntimeException(exception);
                     }
                 } catch (NoSuchFieldException exception) {
-                    // No-op; not a wrapper type
+                    throw new RuntimeException(exception);
                 } catch (IllegalAccessException exception) {
-                    // No-op
+                    throw new RuntimeException(exception);
                 }
             }
 

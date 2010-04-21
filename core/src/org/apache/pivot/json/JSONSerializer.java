@@ -30,6 +30,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 
+import org.apache.pivot.beans.BeanAdapter;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
@@ -653,8 +654,14 @@ public class JSONSerializer implements Serializer<Object> {
             }
 
             writer.append("]");
-        } else if (object instanceof Map<?, ?>) {
-            Map<String, Object> map = (Map<String, Object>)object;
+        } else {
+            Map<String, Object> map;
+            if (object instanceof Map<?, ?>) {
+                map = (Map<String, Object>)object;
+            } else {
+                map = new BeanAdapter(object);
+            }
+
             writer.append("{");
 
             int i = 0;
@@ -701,9 +708,6 @@ public class JSONSerializer implements Serializer<Object> {
             }
 
             writer.append("}");
-        } else {
-            throw new SerializationException(object.getClass()
-                + " is not a supported type.");
         }
 
         writer.flush();
