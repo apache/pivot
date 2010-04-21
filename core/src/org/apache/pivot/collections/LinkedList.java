@@ -604,20 +604,22 @@ public class LinkedList<T> implements List<T>, Serializable {
     public boolean equals(Object o) {
         boolean equals = false;
 
-        if (o instanceof LinkedList<?>) {
-            LinkedList<T> linkedList = (LinkedList<T>)o;
+        if (this == o) {
+            equals = true;
+        } else if (o instanceof List) {
+            List<T> otherList = (List) o;
 
-            if (getLength() == linkedList.getLength()) {
-                Iterator<T> iterator = iterator();
-                Iterator<T> linkedListIterator = linkedList.iterator();
+            if (length == otherList.getLength()) {
+                Iterator<T> iterator = otherList.iterator();
+                equals = true;
 
-                while (iterator.hasNext()
-                    && linkedListIterator.hasNext()
-                    && equals) {
-                    equals &= iterator.next().equals(linkedListIterator.next());
+                for (T element : this) {
+                    if (!(iterator.hasNext()
+                        && element.equals(iterator.next()))) {
+                        equals = false;
+                        break;
+                    }
                 }
-            } else {
-                equals = false;
             }
         }
 
