@@ -602,7 +602,7 @@ public class LinkedList<T> implements List<T>, Serializable {
     @Override
     @SuppressWarnings("unchecked")
     public boolean equals(Object o) {
-        boolean equals = true;
+        boolean equals = false;
 
         if (o instanceof LinkedList<?>) {
             LinkedList<T> linkedList = (LinkedList<T>)o;
