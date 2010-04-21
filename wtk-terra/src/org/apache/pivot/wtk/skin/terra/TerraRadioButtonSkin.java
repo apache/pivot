@@ -216,6 +216,9 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
             graphics.setColor(buttonSelectionColor);
             graphics.fill(buttonSelectionCircle);
         }
+
+        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+            RenderingHints.VALUE_ANTIALIAS_OFF);
     }
 
     public Font getFont() {

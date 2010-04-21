@@ -246,6 +246,9 @@ public class TerraCheckboxSkin extends CheckboxSkin {
                     Orientation.HORIZONTAL, 2);
             }
         }
+
+        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+            RenderingHints.VALUE_ANTIALIAS_OFF);
     }
 
     public Font getFont() {
