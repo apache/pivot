@@ -389,7 +389,13 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             throw new IllegalArgumentException("resourceName is null.");
         }
 
-        return readObject(baseType.getResource(resourceName));
+        URL location = baseType.getResource(resourceName);
+        if (location == null) {
+            throw new IllegalArgumentException("Could not find resource \""
+                + resourceName + "\" for class " + baseType.getName() + ".");
+        }
+
+        return readObject(location);
     }
 
     public Object readObject(URL location)
