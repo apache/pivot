@@ -17,7 +17,7 @@ limitations under the License.
 -->
 
 <BoxPane xmlns:wtkx="http://pivot.apache.org/wtkx"
-    xmlns:validation="org.apache.pivot.wtk.text.validation"
+    xmlns:validation="org.apache.pivot.wtk.validation"
     xmlns="org.apache.pivot.wtk">
     <Border styles="{padding:2}">
         <content>

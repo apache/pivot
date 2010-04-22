@@ -325,8 +325,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         String prompt = textInput.getPrompt();
 
         if (glyphVector == null
-            && prompt != null
-            && !textInput.isFocused()) {
+            && prompt != null) {
             graphics.setFont(font);
             graphics.setColor(promptColor);
             graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
@@ -393,13 +392,14 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                     selectedTextGraphics.dispose();
                 }
             }
+        }
 
-            if (selection == null
-                && caretOn
-                && textInput.isFocused()) {
-                graphics.setColor(color);
-                graphics.fill(caret);
-            }
+        // Paint the caret
+        if (selection == null
+            && caretOn
+            && textInput.isFocused()) {
+            graphics.setColor(color);
+            graphics.fill(caret);
         }
 
         // Paint the border
