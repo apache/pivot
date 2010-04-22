@@ -270,7 +270,7 @@ public abstract class ApplicationContext {
 
             try {
                 System.setProperty("sun.awt.noerasebackground", "true");
-                System.setProperty("sun.awt.erasebackgroundonresize", "true");
+                System.setProperty("sun.awt.erasebackgroundonresize", "false");
             } catch (SecurityException exception) {
                 // No-op
             }

@@ -145,13 +145,13 @@ public abstract class CalendarButtonSkin extends ButtonSkin
 
     public CalendarButtonSkin() {
         calendar = new Calendar();
-        calendar.getCalendarListeners().add(new CalendarListener.Adapter() {            
+        calendar.getCalendarListeners().add(new CalendarListener.Adapter() {
             @Override
             public void yearChanged(Calendar calendar, int previousYear) {
                 CalendarButton calendarButton = (CalendarButton)getComponent();
                 calendarButton.setYear(calendar.getYear());
             }
-            
+
             @Override
             public void monthChanged(Calendar calendar, int previousMonth) {
                 CalendarButton calendarButton = (CalendarButton)getComponent();

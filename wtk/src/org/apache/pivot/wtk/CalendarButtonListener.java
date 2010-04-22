@@ -36,7 +36,7 @@ public interface CalendarButtonListener {
         @Override
         public void monthChanged(CalendarButton calendarButton, int previousMonth) {
         }
-        
+
         @Override
         public void localeChanged(CalendarButton calendarButton, Locale previousLocale) {
         }

@@ -43,7 +43,7 @@ public class CalendarButton extends Button {
 
         @Override
         public void monthChanged(CalendarButton calendarButton, int previousMonth) {
-            for (CalendarButtonListener listener : this) { 
+            for (CalendarButtonListener listener : this) {
                 listener.monthChanged(calendarButton, previousMonth);
             }
         }
@@ -106,7 +106,7 @@ public class CalendarButton extends Button {
 
     private int year;
     private int month;
-    
+
     private CalendarDate selectedDate = null;
     private Locale locale = Locale.getDefault();
     private Filter<CalendarDate> disabledDateFilter = null;
@@ -139,7 +139,7 @@ public class CalendarButton extends Button {
     public CalendarButton(int year, int month) {
         this.year = year;
         this.month = month;
-        
+
         setDataRenderer(DEFAULT_DATA_RENDERER);
         installThemeSkin(CalendarButton.class);
 
