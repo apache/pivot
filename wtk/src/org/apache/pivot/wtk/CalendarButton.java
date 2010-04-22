@@ -32,9 +32,22 @@ import org.apache.pivot.wtk.content.CalendarButtonDataRenderer;
  * is hidden until the user pushes the button.
  */
 public class CalendarButton extends Button {
-    private static class CalendarButtonListenerList
-        extends ListenerList<CalendarButtonListener>
+    private static class CalendarButtonListenerList extends ListenerList<CalendarButtonListener>
         implements CalendarButtonListener {
+        @Override
+        public void yearChanged(CalendarButton calendarButton, int previousYear) {
+            for (CalendarButtonListener listener : this) {
+                listener.yearChanged(calendarButton, previousYear);
+            }
+        }
+
+        @Override
+        public void monthChanged(CalendarButton calendarButton, int previousMonth) {
+            for (CalendarButtonListener listener : this) { 
+                listener.monthChanged(calendarButton, previousMonth);
+            }
+        }
+
         @Override
         public void localeChanged(CalendarButton calendarButton, Locale previousLocale) {
             for (CalendarButtonListener listener : this) {
@@ -91,6 +104,9 @@ public class CalendarButton extends Button {
         }
     }
 
+    private int year;
+    private int month;
+    
     private CalendarDate selectedDate = null;
     private Locale locale = Locale.getDefault();
     private Filter<CalendarDate> disabledDateFilter = null;
@@ -113,12 +129,17 @@ public class CalendarButton extends Button {
     private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new CalendarButtonDataRenderer();
 
     public CalendarButton() {
-        this(null);
+        this(new CalendarDate());
     }
 
-    public CalendarButton(Object buttonData) {
-        super(buttonData);
+    private CalendarButton(CalendarDate calendarDate) {
+        this(calendarDate.year, calendarDate.month);
+    }
 
+    public CalendarButton(int year, int month) {
+        this.year = year;
+        this.month = month;
+        
         setDataRenderer(DEFAULT_DATA_RENDERER);
         installThemeSkin(CalendarButton.class);
 
@@ -132,6 +153,44 @@ public class CalendarButton extends Button {
     @Override
     public void setToggleButton(boolean toggleButton) {
         throw new UnsupportedOperationException("Calendar buttons cannot be toggle buttons.");
+    }
+
+    /**
+     * Gets the year to which this calendar button is currently set.
+     */
+    public int getYear() {
+        return year;
+    }
+
+    /**
+     * Sets this calendar's year.
+     */
+    public void setYear(int year) {
+        int previousYear = this.year;
+
+        if (previousYear != year) {
+            this.year = year;
+            calendarButtonListeners.yearChanged(this, previousYear);
+        }
+    }
+
+    /**
+     * Gets the month to which this calendar button is currently set.
+     */
+    public int getMonth() {
+        return month;
+    }
+
+    /**
+     * Sets this calendar's month.
+     */
+    public void setMonth(int month) {
+        int previousMonth = this.month;
+
+        if (previousMonth != month) {
+            this.month = month;
+            calendarButtonListeners.monthChanged(this, previousMonth);
+        }
     }
 
     /**

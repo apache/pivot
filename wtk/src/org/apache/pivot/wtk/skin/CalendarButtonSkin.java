@@ -24,6 +24,7 @@ import org.apache.pivot.wtk.Calendar;
 import org.apache.pivot.wtk.CalendarButton;
 import org.apache.pivot.wtk.CalendarButtonListener;
 import org.apache.pivot.wtk.CalendarButtonSelectionListener;
+import org.apache.pivot.wtk.CalendarListener;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentKeyListener;
 import org.apache.pivot.wtk.ComponentMouseButtonListener;
@@ -144,6 +145,19 @@ public abstract class CalendarButtonSkin extends ButtonSkin
 
     public CalendarButtonSkin() {
         calendar = new Calendar();
+        calendar.getCalendarListeners().add(new CalendarListener.Adapter() {            
+            @Override
+            public void yearChanged(Calendar calendar, int previousYear) {
+                CalendarButton calendarButton = (CalendarButton)getComponent();
+                calendarButton.setYear(calendar.getYear());
+            }
+            
+            @Override
+            public void monthChanged(Calendar calendar, int previousMonth) {
+                CalendarButton calendarButton = (CalendarButton)getComponent();
+                calendarButton.setMonth(calendar.getMonth());
+            }
+        });
 
         calendarPopup = new Window();
         calendarPopup.getComponentMouseButtonListeners().add(calendarPopupMouseButtonListener);
@@ -259,6 +273,16 @@ public abstract class CalendarButtonSkin extends ButtonSkin
     }
 
     // Calendar button events
+    @Override
+    public void yearChanged(CalendarButton calendarButton, int previousYear) {
+        calendar.setYear(calendarButton.getYear());
+    }
+
+    @Override
+    public void monthChanged(CalendarButton calendarButton, int previousMonth) {
+        calendar.setMonth(calendarButton.getMonth());
+    }
+
     @Override
     public void localeChanged(CalendarButton calendarButton, Locale previousLocale) {
         calendar.setLocale(calendarButton.getLocale());

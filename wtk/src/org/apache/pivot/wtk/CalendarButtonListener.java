@@ -30,6 +30,14 @@ public interface CalendarButtonListener {
      */
     public static class Adapter implements CalendarButtonListener {
         @Override
+        public void yearChanged(CalendarButton calendarButton, int previousYear) {
+        }
+
+        @Override
+        public void monthChanged(CalendarButton calendarButton, int previousMonth) {
+        }
+        
+        @Override
         public void localeChanged(CalendarButton calendarButton, Locale previousLocale) {
         }
 
@@ -38,6 +46,22 @@ public interface CalendarButtonListener {
             Filter<CalendarDate> previousDisabledDateFilter) {
         }
     }
+
+    /**
+     * Called when a calendar button's year value has changed.
+     *
+     * @param calendarButton
+     * @param previousYear
+     */
+    public void yearChanged(CalendarButton calendarButton, int previousYear);
+
+    /**
+     * Called when a calendar button's month value has changed.
+     *
+     * @param calendarButton
+     * @param previousMonth
+     */
+    public void monthChanged(CalendarButton calendarButton, int previousMonth);
 
     /**
      * Called when a calendar button's locale has changed.
