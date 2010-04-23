@@ -1284,8 +1284,14 @@ public class TreeView extends Component {
     }
 
     /**
+     * Returns the currently selected paths.
+     *
+     * @return
+     * An immutable list containing the currently selected paths. Note that the returned
+     * list is a wrapper around the actual selection, not a copy. Any changes made to the
+     * selection state will be reflected in the list, but events will not be fired.
      */
-    public Sequence<Path> getSelectedPaths() {
+    public ImmutableList<Path> getSelectedPaths() {
         return new ImmutableList<Path>(selectedPaths);
     }
 

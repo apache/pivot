@@ -175,9 +175,11 @@ public class FileBrowserSheet extends Sheet {
      * Returns the currently selected files.
      *
      * @return
-     * An immutable list of selected files.
+     * An immutable list containing the currently selected files. Note that the returned
+     * list is a wrapper around the actual selection, not a copy. Any changes made to the
+     * selection state will be reflected in the list, but events will not be fired.
      */
-    public Sequence<File> getSelectedFiles() {
+    public ImmutableList<File> getSelectedFiles() {
         return new ImmutableList<File>(selectedFiles);
     }
 

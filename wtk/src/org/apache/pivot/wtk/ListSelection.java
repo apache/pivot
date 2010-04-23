@@ -20,6 +20,7 @@ import java.util.Comparator;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.collections.immutable.ImmutableList;
 
 /**
  * Class for managing a set of indexed range selections.
@@ -260,6 +261,13 @@ class ListSelection {
      */
     public int getLength() {
         return selectedRanges.getLength();
+    }
+
+    /**
+     * Returns an immutable wrapper around the selected ranges.
+     */
+    public ImmutableList<Span> toList() {
+        return new ImmutableList<Span>(selectedRanges);
     }
 
     /**

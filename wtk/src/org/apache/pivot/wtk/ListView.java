@@ -25,6 +25,7 @@ import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.collections.immutable.ImmutableList;
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
@@ -960,10 +961,15 @@ public class ListView extends Component {
     }
 
     /**
-     * Returns the list's current selection.
+     * Returns the currently selected ranges.
+     *
+     * @return
+     * An immutable list containing the currently selected ranges. Note that the returned
+     * list is a wrapper around the actual selection, not a copy. Any changes made to the
+     * selection state will be reflected in the list, but events will not be fired.
      */
-    public Sequence<Span> getSelectedRanges() {
-        return new ListSelectionSequence(selectedRanges);
+    public ImmutableList<Span> getSelectedRanges() {
+        return selectedRanges.toList();
     }
 
     /**
@@ -1002,7 +1008,7 @@ public class ListView extends Component {
         }
 
         // Update the selection
-        ListSelectionSequence previousSelectedRanges = new ListSelectionSequence(this.selectedRanges);
+        Sequence<Span> previousSelectedRanges = this.selectedRanges.toList();
 
         ListSelection listSelection = new ListSelection();
         for (int i = 0, n = selectedRanges.getLength(); i < n; i++) {
@@ -1225,7 +1231,7 @@ public class ListView extends Component {
      */
     public void clearSelection() {
         if (selectedRanges.getLength() > 0) {
-            Sequence<Span> previousSelectedRanges = new ListSelectionSequence(selectedRanges);
+            Sequence<Span> previousSelectedRanges = selectedRanges.toList();
             selectedRanges = new ListSelection();
 
             listViewSelectionListeners.selectedRangesChanged(this,
