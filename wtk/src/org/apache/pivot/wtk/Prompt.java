@@ -194,17 +194,20 @@ public class Prompt extends Sheet {
             messageType = MessageType.INFO;
         }
 
-        if (options == null) {
-            options = new ArrayList<Object>(resources.get("defaultOption"));
-        }
-
         setMessageType(messageType);
         setMessage(message);
         setBody(body);
-        setOptions(options);
+
+        if (options != null
+            && options.getLength() > 0) {
+            for (int i = 0, n = options.getLength(); i < n; i++) {
+                optionSequence.add(options.get(i));
+            }
+
+            setSelectedOption(0);
+        }
 
         setTitle((String)resources.get("defaultTitle"));
-        setSelectedOption(0);
 
         installThemeSkin(Prompt.class);
     }
@@ -253,17 +256,13 @@ public class Prompt extends Sheet {
         return optionSequence;
     }
 
-    public void setOptions(Sequence<?> options) {
+    public void setOptions(String options) {
         optionSequence.remove(0, optionSequence.getLength());
 
-        for (int i = 0, n = options.getLength(); i < n; i++) {
-            optionSequence.add(options.get(i));
-        }
-    }
-
-    public void setOptions(String options) {
         try {
-            setOptions(JSONSerializer.parseList(options));
+            for (Object option : JSONSerializer.parseList(options)) {
+                optionSequence.add(option);
+            }
         } catch (SerializationException exception) {
             throw new IllegalArgumentException(exception);
         }
@@ -310,7 +309,8 @@ public class Prompt extends Sheet {
 
     public static void prompt(MessageType messageType, String message, Component body, Window owner,
         SheetCloseListener sheetCloseListener) {
-        Prompt prompt = new Prompt(messageType, message, null, body);
+        Prompt prompt = new Prompt(messageType, message,
+            new ArrayList<Object>(resources.get("defaultOption")), body);
         prompt.open(owner, sheetCloseListener);
     }
 }

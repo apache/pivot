@@ -20,7 +20,6 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.net.URL;
 
-import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.json.JSONSerializer;
@@ -48,17 +47,12 @@ public class TerraPromptSkin extends TerraSheetSkin
     private ImageView typeImageView = null;
     private Label messageLabel = null;
     private BoxPane messageBoxPane = null;
-
-    // TODO Rename to optionButtonBoxPane?
-    private BoxPane buttonBoxPane = null;
-
-    // TODO Do we need this?
-    private ArrayList<Button> optionButtons = new ArrayList<Button>();
+    private BoxPane optionButtonBoxPane = null;
 
     private ButtonPressListener optionButtonPressListener = new ButtonPressListener() {
         @Override
         public void buttonPressed(Button button) {
-            int optionIndex = optionButtons.indexOf(button);
+            int optionIndex = optionButtonBoxPane.indexOf(button);
 
             if (optionIndex >= 0) {
                 Prompt prompt = (Prompt)getComponent();
@@ -111,15 +105,14 @@ public class TerraPromptSkin extends TerraSheetSkin
         typeImageView = (ImageView)wtkxSerializer.get("typeImageView");
         messageLabel = (Label)wtkxSerializer.get("messageLabel");
         messageBoxPane = (BoxPane)wtkxSerializer.get("messageBoxPane");
-        buttonBoxPane = (BoxPane)wtkxSerializer.get("buttonBoxPane");
+        optionButtonBoxPane = (BoxPane)wtkxSerializer.get("optionButtonBoxPane");
 
         for (Object option : prompt.getOptions()) {
             PushButton optionButton = new PushButton(option);
             optionButton.setStyles(commandButtonStyles);
             optionButton.getButtonPressListeners().add(optionButtonPressListener);
 
-            buttonBoxPane.add(optionButton);
-            optionButtons.add(optionButton);
+            optionButtonBoxPane.add(optionButton);
         }
 
         messageTypeChanged(prompt, null);
@@ -135,7 +128,7 @@ public class TerraPromptSkin extends TerraSheetSkin
         int index = prompt.getSelectedOption();
 
         if (index >= 0) {
-            optionButtons.get(index).requestFocus();
+            optionButtonBoxPane.get(index).requestFocus();
         } else {
             window.requestFocus();
         }
@@ -172,14 +165,12 @@ public class TerraPromptSkin extends TerraSheetSkin
         optionButton.setStyles(commandButtonStyles);
         optionButton.getButtonPressListeners().add(optionButtonPressListener);
 
-        buttonBoxPane.insert(optionButton, index);
-        optionButtons.insert(optionButton, index);
+        optionButtonBoxPane.insert(optionButton, index);
     }
 
     @Override
     public void optionsRemoved(Prompt prompt, int index, Sequence<?> removed) {
-        buttonBoxPane.remove(index, removed.getLength());
-        optionButtons.remove(index, removed.getLength());
+        optionButtonBoxPane.remove(index, removed.getLength());
     }
 
     @Override
@@ -188,7 +179,7 @@ public class TerraPromptSkin extends TerraSheetSkin
 
         if (prompt.isOpen()
             && index >= 0) {
-            optionButtons.get(index).requestFocus();
+            optionButtonBoxPane.get(index).requestFocus();
         }
     }
 }

@@ -204,17 +204,20 @@ public class Alert extends Dialog {
             messageType = MessageType.INFO;
         }
 
-        if (options == null) {
-            options = new ArrayList<Object>(resources.get("defaultOption"));
-        }
-
         setMessageType(messageType);
         setMessage(message);
         setBody(body);
-        setOptions(options);
+
+        if (options != null
+            && options.getLength() > 0) {
+            for (int i = 0, n = options.getLength(); i < n; i++) {
+                optionSequence.add(options.get(i));
+            }
+
+            setSelectedOption(0);
+        }
 
         setTitle((String)resources.get("defaultTitle"));
-        setSelectedOption(0);
 
         installThemeSkin(Alert.class);
     }
@@ -263,17 +266,13 @@ public class Alert extends Dialog {
         return optionSequence;
     }
 
-    public void setOptions(Sequence<?> options) {
+    public void setOptions(String options) {
         optionSequence.remove(0, optionSequence.getLength());
 
-        for (int i = 0, n = options.getLength(); i < n; i++) {
-            optionSequence.add(options.get(i));
-        }
-    }
-
-    public void setOptions(String options) {
         try {
-            setOptions(JSONSerializer.parseList(options));
+            for (Object option : JSONSerializer.parseList(options)) {
+                optionSequence.add(option);
+            }
         } catch (SerializationException exception) {
             throw new IllegalArgumentException(exception);
         }
@@ -315,7 +314,8 @@ public class Alert extends Dialog {
 
     public static void alert(MessageType messageType, String message, Component body, Display display,
         DialogCloseListener dialogCloseListener) {
-        Alert alert = new Alert(messageType, message, null, body);
+        Alert alert = new Alert(messageType, message,
+            new ArrayList<Object>(resources.get("defaultOption")), body);
         alert.setModal(false);
         alert.open(display, dialogCloseListener);
     }
@@ -339,7 +339,8 @@ public class Alert extends Dialog {
 
     public static void alert(MessageType messageType, String message, Component body, Window owner,
         DialogCloseListener dialogCloseListener) {
-        Alert alert = new Alert(messageType, message, null, body);
+        Alert alert = new Alert(messageType, message,
+            new ArrayList<Object>(resources.get("defaultOption")), body);
         alert.open(owner.getDisplay(), owner, dialogCloseListener);
     }
 }

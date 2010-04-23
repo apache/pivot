@@ -49,7 +49,7 @@ limitations under the License.
             </Border>
         </TablePane.Row>
         <TablePane.Row height="-1">
-            <BoxPane wtkx:id="buttonBoxPane"
+            <BoxPane wtkx:id="optionButtonBoxPane"
                 styles="{horizontalAlignment:'right', fill:true}"/>
         </TablePane.Row>
     </rows>
