@@ -22,6 +22,7 @@ import java.net.URL;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Map;
+import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.wtk.Button;
@@ -30,6 +31,7 @@ import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Label;
+import org.apache.pivot.wtk.MessageType;
 import org.apache.pivot.wtk.Prompt;
 import org.apache.pivot.wtk.PromptListener;
 import org.apache.pivot.wtk.PushButton;
@@ -43,7 +45,28 @@ import org.apache.pivot.wtkx.WTKXSerializer;
 @SuppressWarnings("unchecked")
 public class TerraPromptSkin extends TerraSheetSkin
     implements PromptListener {
+    private ImageView typeImageView = null;
+    private Label messageLabel = null;
+    private BoxPane messageBoxPane = null;
+
+    // TODO Rename to optionButtonBoxPane?
+    private BoxPane buttonBoxPane = null;
+
+    // TODO Do we need this?
     private ArrayList<Button> optionButtons = new ArrayList<Button>();
+
+    private ButtonPressListener optionButtonPressListener = new ButtonPressListener() {
+        @Override
+        public void buttonPressed(Button button) {
+            int optionIndex = optionButtons.indexOf(button);
+
+            if (optionIndex >= 0) {
+                Prompt prompt = (Prompt)getComponent();
+                prompt.setSelectedOption(optionIndex);
+                prompt.close(true);
+            }
+        }
+    };
 
     private static Map<String, ?> commandButtonStyles;
 
@@ -75,8 +98,8 @@ public class TerraPromptSkin extends TerraSheetSkin
 
         // Load the prompt content
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        Component content = null;
 
+        Component content;
         try {
             content = (Component)wtkxSerializer.readObject(this, "terra_prompt_skin.wtkx");
         } catch(Exception exception) {
@@ -85,49 +108,23 @@ public class TerraPromptSkin extends TerraSheetSkin
 
         prompt.setContent(content);
 
-        // Set the type image
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        typeImageView = (ImageView)wtkxSerializer.get("typeImageView");
+        messageLabel = (Label)wtkxSerializer.get("messageLabel");
+        messageBoxPane = (BoxPane)wtkxSerializer.get("messageBoxPane");
+        buttonBoxPane = (BoxPane)wtkxSerializer.get("buttonBoxPane");
 
-        ImageView typeImageView = (ImageView)wtkxSerializer.get("typeImageView");
-        typeImageView.setImage(theme.getMessageIcon(prompt.getMessageType()));
-
-        // Set the message
-        Label messageLabel = (Label)wtkxSerializer.get("messageLabel");
-        String message = prompt.getMessage();
-        messageLabel.setText(message);
-
-        // Set the body
-        BoxPane messageBoxPane = (BoxPane)wtkxSerializer.get("messageBoxPane");
-        Component body = prompt.getBody();
-        if (body != null) {
-            messageBoxPane.add(body);
-        }
-
-        // Add the option buttons
-        BoxPane buttonBoxPane = (BoxPane)wtkxSerializer.get("buttonBoxPane");
-
-        for (int i = 0, n = prompt.getOptionCount(); i < n; i++) {
-            Object option = prompt.getOption(i);
-
+        for (Object option : prompt.getOptions()) {
             PushButton optionButton = new PushButton(option);
             optionButton.setStyles(commandButtonStyles);
-
-            optionButton.getButtonPressListeners().add(new ButtonPressListener() {
-                @Override
-                public void buttonPressed(Button button) {
-                    int optionIndex = optionButtons.indexOf(button);
-
-                    if (optionIndex >= 0) {
-                        Prompt prompt = (Prompt)getComponent();
-                        prompt.setSelectedOption(optionIndex);
-                        prompt.close(true);
-                    }
-                }
-            });
+            optionButton.getButtonPressListeners().add(optionButtonPressListener);
 
             buttonBoxPane.add(optionButton);
             optionButtons.add(optionButton);
         }
+
+        messageTypeChanged(prompt, null);
+        messageChanged(prompt, null);
+        bodyChanged(prompt, null);
     }
 
     @Override
@@ -142,6 +139,47 @@ public class TerraPromptSkin extends TerraSheetSkin
         } else {
             window.requestFocus();
         }
+    }
+
+    @Override
+    public void messageTypeChanged(Prompt prompt, MessageType previousMessageType) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        typeImageView.setImage(theme.getMessageIcon(prompt.getMessageType()));
+    }
+
+    @Override
+    public void messageChanged(Prompt prompt, String previousMessage) {
+        messageLabel.setText(prompt.getMessage());
+    }
+
+    @Override
+    public void bodyChanged(Prompt prompt, Component previousBody) {
+        if (previousBody != null) {
+            messageBoxPane.remove(previousBody);
+        }
+
+        Component body = prompt.getBody();
+        if (body != null) {
+            messageBoxPane.add(body);
+        }
+    }
+
+    @Override
+    public void optionInserted(Prompt prompt, int index) {
+        Object option = prompt.getOptions().get(index);
+
+        PushButton optionButton = new PushButton(option);
+        optionButton.setStyles(commandButtonStyles);
+        optionButton.getButtonPressListeners().add(optionButtonPressListener);
+
+        buttonBoxPane.insert(optionButton, index);
+        optionButtons.insert(optionButton, index);
+    }
+
+    @Override
+    public void optionsRemoved(Prompt prompt, int index, Sequence<?> removed) {
+        buttonBoxPane.remove(index, removed.getLength());
+        optionButtons.remove(index, removed.getLength());
     }
 
     @Override

@@ -62,7 +62,7 @@ public class Dialog extends Frame {
         }
     }
 
-    private boolean modal = false;
+    private boolean modal;
     private DialogCloseListener dialogCloseListener = null;
 
     private boolean result = false;

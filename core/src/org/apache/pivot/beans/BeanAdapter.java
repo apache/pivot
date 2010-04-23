@@ -504,7 +504,7 @@ public class BeanAdapter implements Map<String, Object> {
     }
 
     /**
-     * Tests the read-only state of a property. Note that is no such property
+     * Tests the read-only state of a property. Note that if no such property
      * exists, this method will return <tt>true</tt> (it will <u>not</u> throw
      * an exception).
      *

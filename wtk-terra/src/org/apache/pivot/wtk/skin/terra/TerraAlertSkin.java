@@ -22,6 +22,7 @@ import java.net.URL;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Map;
+import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.wtk.Alert;
@@ -32,6 +33,7 @@ import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Label;
+import org.apache.pivot.wtk.MessageType;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
@@ -43,7 +45,28 @@ import org.apache.pivot.wtkx.WTKXSerializer;
 @SuppressWarnings("unchecked")
 public class TerraAlertSkin extends TerraDialogSkin
     implements AlertListener {
+    private ImageView typeImageView = null;
+    private Label messageLabel = null;
+    private BoxPane messageBoxPane = null;
+
+    // TODO Rename to optionButtonBoxPane?
+    private BoxPane buttonBoxPane = null;
+
+    // TODO Do we need this?
     private ArrayList<Button> optionButtons = new ArrayList<Button>();
+
+    private ButtonPressListener optionButtonPressListener = new ButtonPressListener() {
+        @Override
+        public void buttonPressed(Button button) {
+            int optionIndex = optionButtons.indexOf(button);
+
+            if (optionIndex >= 0) {
+                Alert alert = (Alert)getComponent();
+                alert.setSelectedOption(optionIndex);
+                alert.close(true);
+            }
+        }
+    };
 
     private static Map<String, ?> commandButtonStyles;
 
@@ -82,8 +105,8 @@ public class TerraAlertSkin extends TerraDialogSkin
 
         // Load the alert content
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        Component content = null;
 
+        Component content;
         try {
             content = (Component)wtkxSerializer.readObject(this, "terra_alert_skin.wtkx");
         } catch(Exception exception) {
@@ -92,49 +115,23 @@ public class TerraAlertSkin extends TerraDialogSkin
 
         alert.setContent(content);
 
-        // Set the type image
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        typeImageView = (ImageView)wtkxSerializer.get("typeImageView");
+        messageLabel = (Label)wtkxSerializer.get("messageLabel");
+        messageBoxPane = (BoxPane)wtkxSerializer.get("messageBoxPane");
+        buttonBoxPane = (BoxPane)wtkxSerializer.get("buttonBoxPane");
 
-        ImageView typeImageView = (ImageView)wtkxSerializer.get("typeImageView");
-        typeImageView.setImage(theme.getMessageIcon(alert.getMessageType()));
-
-        // Set the message
-        Label messageLabel = (Label)wtkxSerializer.get("messageLabel");
-        String message = alert.getMessage();
-        messageLabel.setText(message);
-
-        // Set the body
-        BoxPane messageBoxPane = (BoxPane)wtkxSerializer.get("messageBoxPane");
-        Component body = alert.getBody();
-        if (body != null) {
-            messageBoxPane.add(body);
-        }
-
-        // Add the option buttons
-        BoxPane buttonBoxPane = (BoxPane)wtkxSerializer.get("buttonBoxPane");
-
-        for (int i = 0, n = alert.getOptionCount(); i < n; i++) {
-            Object option = alert.getOption(i);
-
+        for (Object option : alert.getOptions()) {
             PushButton optionButton = new PushButton(option);
             optionButton.setStyles(commandButtonStyles);
-
-            optionButton.getButtonPressListeners().add(new ButtonPressListener() {
-                @Override
-                public void buttonPressed(Button button) {
-                    int optionIndex = optionButtons.indexOf(button);
-
-                    if (optionIndex >= 0) {
-                        Alert alert = (Alert)getComponent();
-                        alert.setSelectedOption(optionIndex);
-                        alert.close(true);
-                    }
-                }
-            });
+            optionButton.getButtonPressListeners().add(optionButtonPressListener);
 
             buttonBoxPane.add(optionButton);
             optionButtons.add(optionButton);
         }
+
+        messageTypeChanged(alert, null);
+        messageChanged(alert, null);
+        bodyChanged(alert, null);
     }
 
     @Override
@@ -149,6 +146,47 @@ public class TerraAlertSkin extends TerraDialogSkin
         } else {
             window.requestFocus();
         }
+    }
+
+    @Override
+    public void messageTypeChanged(Alert alert, MessageType previousMessageType) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        typeImageView.setImage(theme.getMessageIcon(alert.getMessageType()));
+    }
+
+    @Override
+    public void messageChanged(Alert alert, String previousMessage) {
+        messageLabel.setText(alert.getMessage());
+    }
+
+    @Override
+    public void bodyChanged(Alert alert, Component previousBody) {
+        if (previousBody != null) {
+            messageBoxPane.remove(previousBody);
+        }
+
+        Component body = alert.getBody();
+        if (body != null) {
+            messageBoxPane.add(body);
+        }
+    }
+
+    @Override
+    public void optionInserted(Alert alert, int index) {
+        Object option = alert.getOptions().get(index);
+
+        PushButton optionButton = new PushButton(option);
+        optionButton.setStyles(commandButtonStyles);
+        optionButton.getButtonPressListeners().add(optionButtonPressListener);
+
+        buttonBoxPane.insert(optionButton, index);
+        optionButtons.insert(optionButton, index);
+    }
+
+    @Override
+    public void optionsRemoved(Alert alert, int index, Sequence<?> removed) {
+        buttonBoxPane.remove(index, removed.getLength());
+        optionButtons.remove(index, removed.getLength());
     }
 
     @Override
