@@ -526,19 +526,15 @@ public class BeanAdapter implements Map<String, Object> {
 
         if (key.startsWith(FIELD_PREFIX)) {
             Field field = getField(type, key.substring(1));
-            if (field == null) {
-                throw new PropertyNotFoundException();
+            if (field != null) {
+                isReadOnly = ((field.getModifiers() & Modifier.FINAL) != 0);
             }
-
-            isReadOnly = ((field.getModifiers() & Modifier.FINAL) != 0);
         } else {
             Method getterMethod = getGetterMethod(type, key);
-            if (getterMethod == null) {
-                throw new PropertyNotFoundException();
+            if (getterMethod != null) {
+                Method setterMethod = getSetterMethod(type, key, getType(type, key));
+                isReadOnly = (setterMethod == null);
             }
-
-            Method setterMethod = getSetterMethod(type, key, getType(type, key));
-            isReadOnly = (setterMethod == null);
         }
 
         return isReadOnly;
