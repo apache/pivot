@@ -21,25 +21,25 @@ import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.Frame;
+import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class BaselineTest implements Application {
-    private Frame frame = null;
+    private Window window = null;
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        frame = new Frame((Component)wtkxSerializer.readObject(getClass().getResource("baseline_test.wtkx")));
-        frame.setTitle("Baseline Test");
-        // frame.setPreferredSize(480, 360);
-        frame.open(display);
+        window = new Window((Component)wtkxSerializer.readObject(getClass().getResource("baseline_test.wtkx")));
+        window.setTitle("Baseline Test");
+        window.setMaximized(true);
+        window.open(display);
     }
 
     @Override
     public boolean shutdown(boolean optional) {
-        if (frame != null) {
-            frame.close();
+        if (window != null) {
+            window.close();
         }
 
         return false;
