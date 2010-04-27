@@ -19,11 +19,15 @@ package org.apache.pivot.tests;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.CalendarDate;
 import org.apache.pivot.util.Filter;
+import org.apache.pivot.util.concurrent.Task;
+import org.apache.pivot.util.concurrent.TaskListener;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Calendar;
 import org.apache.pivot.wtk.CalendarButton;
+import org.apache.pivot.wtk.CalendarButtonListener;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.TaskAdapter;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
@@ -41,7 +45,7 @@ public class CalendarTest implements Application {
         window = (Window)wtkxSerializer.readObject(this, "calendar_test.wtkx");
         wtkxSerializer.bind(this, CalendarTest.class);
 
-        Filter<CalendarDate> disabledDateFilter = new Filter<CalendarDate>() {
+        Filter<CalendarDate> todayFilter = new Filter<CalendarDate>() {
             @Override
             public boolean include(CalendarDate date) {
                 CalendarDate today = new CalendarDate();
@@ -49,8 +53,56 @@ public class CalendarTest implements Application {
             }
         };
 
-        calendar.setDisabledDateFilter(disabledDateFilter);
-        calendarButton.setDisabledDateFilter(disabledDateFilter);
+        calendar.setDisabledDateFilter(todayFilter);
+
+        calendarButton.getCalendarButtonListeners().add(new CalendarButtonListener.Adapter() {
+            @Override
+            public void yearChanged(CalendarButton calendarButton, int previousYear) {
+                disable();
+            }
+
+            @Override
+            public void monthChanged(CalendarButton calendarButton, int previousMonth) {
+                disable();
+            }
+
+            private void disable() {
+                calendarButton.setDisabledDateFilter(new Filter<CalendarDate>() {
+                    @Override
+                    public boolean include(CalendarDate date) {
+                        return true;
+                    }
+                });
+
+                Task<Void> task = new Task<Void>() {
+                    @Override
+                    public Void execute() {
+                        try {
+                            Thread.sleep(500);
+                        } catch (InterruptedException exception) {
+                        }
+
+                        return null;
+                    }
+                };
+
+                System.out.println("STARTING TASK");
+
+                task.execute(new TaskAdapter<Void>(new TaskListener<Void>() {
+                    @Override
+                    public void taskExecuted(Task<Void> task) {
+                        System.out.println("EXECUTED");
+                        calendarButton.setDisabledDateFilter(null);
+                    }
+
+                    @Override
+                    public void executeFailed(Task<Void> task) {
+                        System.out.println("FAILED");
+                        calendarButton.setDisabledDateFilter(null);
+                    }
+                }));
+            }
+        });
 
         window.open(display);
     }
