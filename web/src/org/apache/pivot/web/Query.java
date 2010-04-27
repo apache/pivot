@@ -466,7 +466,8 @@ public abstract class Query<V> extends IOTask<V> {
             }
 
             // Read the response body
-            if (method == Method.GET) {
+            if (method == Method.GET
+                && status == 200) {
                 InputStream inputStream = null;
                 try {
                     inputStream = connection.getInputStream();
