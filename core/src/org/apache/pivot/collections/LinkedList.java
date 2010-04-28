@@ -218,8 +218,6 @@ public class LinkedList<T> implements List<T>, Serializable {
             if (forward) {
                 current = current.previous;
                 index--;
-            } else {
-                current = current.next;
             }
 
             length--;

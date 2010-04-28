@@ -38,6 +38,7 @@ public class ArrayList<T> implements List<T>, Serializable {
     private class ArrayListItemIterator implements ItemIterator<T> {
         private int index = 0;
         private int modificationCount;
+        private boolean forward = true;
 
         public ArrayListItemIterator() {
             modificationCount = ArrayList.this.modificationCount;
@@ -58,6 +59,7 @@ public class ArrayList<T> implements List<T>, Serializable {
                 throw new NoSuchElementException();
             }
 
+            forward = true;
             return get(index++);
         }
 
@@ -76,6 +78,7 @@ public class ArrayList<T> implements List<T>, Serializable {
                 throw new NoSuchElementException();
             }
 
+            forward = false;
             return get(--index);
         }
 
@@ -101,13 +104,17 @@ public class ArrayList<T> implements List<T>, Serializable {
         public void update(T item) {
             indexBoundsCheck();
 
-            ArrayList.this.update(index, item);
+            ArrayList.this.update(forward ? index - 1 : index, item);
             modificationCount++;
         }
 
         @Override
         public void remove() {
             indexBoundsCheck();
+
+            if (forward) {
+                index--;
+            }
 
             ArrayList.this.remove(index, 1);
             modificationCount++;
