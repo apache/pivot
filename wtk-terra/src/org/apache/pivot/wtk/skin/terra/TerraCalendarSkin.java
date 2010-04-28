@@ -644,6 +644,13 @@ public class TerraCalendarSkin extends CalendarSkin {
             }
         }
 
+        // Show/hide last row
+        CalendarDate lastWeekStartDate = (CalendarDate)dateButtons[5][0].getButtonData();
+        boolean visible = (lastWeekStartDate.month == calendar.getMonth());
+        for (Component component : calendarTablePane.getRows().get(7)) {
+            component.setVisible(visible);
+        }
+
         today = new CalendarDate();
         updateSelection(calendar.getSelectedDate());
     }
