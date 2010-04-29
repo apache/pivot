@@ -214,7 +214,7 @@ public class BeanAdapter implements Map<String, Object> {
                 try {
                     value = field.get(bean);
                 } catch (IllegalAccessException exception) {
-                    throw new RuntimeException(exception);
+                    throw new RuntimeException("Unable to access property \"" + key + "\".", exception);
                 }
             }
         } else {
@@ -224,9 +224,9 @@ public class BeanAdapter implements Map<String, Object> {
                 try {
                     value = getterMethod.invoke(bean, new Object[] {});
                 } catch (IllegalAccessException exception) {
-                    throw new RuntimeException(exception);
+                    throw new RuntimeException("Unable to access property \"" + key + "\".", exception);
                 } catch (InvocationTargetException exception) {
-                    throw new RuntimeException(exception);
+                    throw new RuntimeException("Unable to access property \"" + key + "\".", exception.getCause());
                 }
             }
         }
@@ -280,7 +280,7 @@ public class BeanAdapter implements Map<String, Object> {
             try {
                 field.set(bean, value);
             } catch (IllegalAccessException exception) {
-                throw new RuntimeException(exception);
+                throw new RuntimeException("Unable to access property \"" + key + "\".", exception);
             }
         } else {
             Method setterMethod = null;
@@ -309,15 +309,9 @@ public class BeanAdapter implements Map<String, Object> {
             try {
                 setterMethod.invoke(bean, new Object[] {value});
             } catch (IllegalAccessException exception) {
-                throw new RuntimeException(exception);
+                throw new RuntimeException("Unable to access property \"" + key + "\".", exception);
             } catch (InvocationTargetException exception) {
-                Throwable cause = exception.getCause();
-
-                if (cause instanceof RuntimeException) {
-                    throw (RuntimeException)cause;
-                }
-
-                throw new RuntimeException(cause);
+                throw new RuntimeException("Unable to access property \"" + key + "\".", exception.getCause());
             }
         }
 
@@ -630,14 +624,14 @@ public class BeanAdapter implements Map<String, Object> {
         Method getterMethod = null;
 
         try {
-            getterMethod = beanClass.getMethod(GET_PREFIX + key, new Class<?>[] {});
+            getterMethod = beanClass.getMethod(GET_PREFIX + key);
         } catch (NoSuchMethodException exception) {
             // No-op
         }
 
         if (getterMethod == null) {
             try {
-                getterMethod = beanClass.getMethod(IS_PREFIX + key, new Class<?>[] {});
+                getterMethod = beanClass.getMethod(IS_PREFIX + key);
             } catch (NoSuchMethodException exception) {
                 // No-op
             }
@@ -668,7 +662,7 @@ public class BeanAdapter implements Map<String, Object> {
             final String methodName = SET_PREFIX + key;
 
             try {
-                setterMethod = beanClass.getMethod(methodName, new Class<?>[] {valueType});
+                setterMethod = beanClass.getMethod(methodName, valueType);
             } catch (NoSuchMethodException exception) {
                 // No-op
             }
@@ -687,14 +681,14 @@ public class BeanAdapter implements Map<String, Object> {
                     Class<?> primitiveValueType = (Class<?>)primitiveTypeField.get(null);
 
                     try {
-                        setterMethod = beanClass.getMethod(methodName, new Class<?>[] {primitiveValueType});
+                        setterMethod = beanClass.getMethod(methodName, primitiveValueType);
                     } catch (NoSuchMethodException exception) {
                         // No-op
                     }
                 } catch (NoSuchFieldException exception) {
                     // No-op
                 } catch (IllegalAccessException exception) {
-                    throw new RuntimeException(exception);
+                    throw new RuntimeException("Unable to access property \"" + key + "\".", exception);
                 }
             }
 

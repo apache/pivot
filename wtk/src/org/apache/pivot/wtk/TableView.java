@@ -2023,7 +2023,7 @@ public class TableView extends Component {
 
             Dictionary.Pair<String, SortDirection> pair =
                 new Dictionary.Pair<String, SortDirection>((String)map.get(COLUMN_NAME_KEY),
-                    SortDirection.valueOf(((String)map.get(SORT_DIRECTION_KEY)).toLowerCase()));
+                    SortDirection.valueOf(((String)map.get(SORT_DIRECTION_KEY)).toUpperCase()));
             sort.add(pair);
         }
 
