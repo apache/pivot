@@ -310,40 +310,43 @@ public class JSONSerializer implements Serializer<Object> {
         c = reader.read();
 
         while (c != -1 && c != t) {
-            if (c == '\\') {
-                c = reader.read();
+            if (!Character.isISOControl(c)) {
+                if (c == '\\') {
+                    c = reader.read();
 
-                if (c == 'b') {
-                    c = '\b';
-                } else if (c == 'f') {
-                    c = '\f';
-                } else if (c == 'n') {
-                    c = '\n';
-                } else if (c == 'r') {
-                    c = '\r';
-                } else if (c == 't') {
-                    c = '\t';
-                } else if (c == 'u') {
-                    StringBuilder unicodeBuilder = new StringBuilder();
-                    while (unicodeBuilder.length() < 4) {
-                        c = reader.read();
-                        unicodeBuilder.append((char)c);
-                    }
+                    if (c == 'b') {
+                        c = '\b';
+                    } else if (c == 'f') {
+                        c = '\f';
+                    } else if (c == 'n') {
+                        c = '\n';
+                    } else if (c == 'r') {
+                        c = '\r';
+                    } else if (c == 't') {
+                        c = '\t';
+                    } else if (c == 'u') {
+                        StringBuilder unicodeBuilder = new StringBuilder();
+                        while (unicodeBuilder.length() < 4) {
+                            c = reader.read();
+                            unicodeBuilder.append((char)c);
+                        }
 
-                    String unicode = unicodeBuilder.toString();
-                    c = (char)Integer.parseInt(unicode, 16);
-                } else {
-                    if (!(c == '\\'
-                        || c == '/'
-                        || c == '\"'
-                        || c == '\''
-                        || c == t)) {
-                        throw new SerializationException("Unsupported escape sequence in input stream.");
+                        String unicode = unicodeBuilder.toString();
+                        c = (char)Integer.parseInt(unicode, 16);
+                    } else {
+                        if (!(c == '\\'
+                            || c == '/'
+                            || c == '\"'
+                            || c == '\''
+                            || c == t)) {
+                            throw new SerializationException("Unsupported escape sequence in input stream.");
+                        }
                     }
                 }
+
+                stringBuilder.append((char)c);
             }
 
-            stringBuilder.append((char)c);
             c = reader.read();
         }
 
