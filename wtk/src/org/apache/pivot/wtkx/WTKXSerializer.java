@@ -392,7 +392,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         URL location = baseType.getResource(resourceName);
         if (location == null) {
             throw new IllegalArgumentException("Could not find resource \""
-                + resourceName + "\" for class " + baseType.getName() + ".");
+                + resourceName + "\" for class \"" + baseType.getName() + "\".");
         }
 
         return readObject(location);
