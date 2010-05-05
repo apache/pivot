@@ -44,7 +44,7 @@ import org.apache.pivot.wtk.WindowStateListener;
  * concrete subclasses.
  */
 public abstract class ListButtonSkin extends ButtonSkin
-    implements ListButtonListener, ListButtonSelectionListener {
+    implements ListButton.Skin, ListButtonListener, ListButtonSelectionListener {
     protected ListView listView;
     protected Window listViewPopup;
 
@@ -173,6 +173,12 @@ public abstract class ListButtonSkin extends ButtonSkin
         listView.setItemRenderer(listButton.getItemRenderer());
     }
 
+    // ListButton.Skin methods
+
+    public Window getListPopup() {
+        return listViewPopup;
+    }
+    
     // Component state events
     @Override
     public void enabledChanged(Component component) {

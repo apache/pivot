@@ -76,6 +76,15 @@ public class ColorChooserButton extends Button {
         }
     }
 
+    /**
+     * ColorChooserButton skin interface. ColorChooserButton skins must implement
+     * this interface to facilitate additional communication between the
+     * component and the skin.
+     */
+    public interface Skin {
+        public Window getListPopup(); 
+    }
+    
     private Color selectedColor = null;
 
     private String selectedColorKey = null;
@@ -101,6 +110,23 @@ public class ColorChooserButton extends Button {
         installThemeSkin(ColorChooserButton.class);
     }
 
+    @Override
+    protected void setSkin(org.apache.pivot.wtk.Skin skin) {
+        if (!(skin instanceof ColorChooserButton.Skin)) {
+            throw new IllegalArgumentException("Skin class must implement "
+                + ColorChooserButton.Skin.class.getName());
+        }
+
+        super.setSkin(skin);
+    }
+    
+    /**
+     * @return the popup window associated with this components skin
+     */
+    public Window getListPopup() {
+        return ((ColorChooserButton.Skin) getSkin()).getListPopup();
+    }
+    
     /**
      * @throws UnsupportedOperationException
      * This method is not supported by ColorChooserButton.

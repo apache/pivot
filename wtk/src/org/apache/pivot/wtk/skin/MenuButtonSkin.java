@@ -33,7 +33,7 @@ import org.apache.pivot.wtk.WindowStateListener;
  * Abstract base class for menu button skins.
  */
 public abstract class MenuButtonSkin extends ButtonSkin
-    implements MenuButtonListener {
+    implements MenuButton.Skin, MenuButtonListener {
     protected boolean pressed = false;
     protected MenuPopup menuPopup = new MenuPopup();
 
@@ -80,6 +80,12 @@ public abstract class MenuButtonSkin extends ButtonSkin
         menuPopup.getWindowStateListeners().add(menuPopupWindowStateListener);
     }
 
+    // MenuButton.Skin methods
+
+    public Window getListPopup() {
+        return menuPopup;
+    }
+    
     // Component state events
     @Override
     public void enabledChanged(Component component) {

@@ -48,6 +48,15 @@ public class MenuButton extends Button {
         }
     }
 
+    /**
+     * MenuButton skin interface. MenuButton skins must implement
+     * this interface to facilitate additional communication between the
+     * component and the skin.
+     */
+    public interface Skin {
+        public Window getListPopup(); 
+    }
+    
     private Menu menu = null;
     private boolean repeatable = false;
 
@@ -60,6 +69,23 @@ public class MenuButton extends Button {
         installThemeSkin(MenuButton.class);
     }
 
+    @Override
+    protected void setSkin(org.apache.pivot.wtk.Skin skin) {
+        if (!(skin instanceof MenuButton.Skin)) {
+            throw new IllegalArgumentException("Skin class must implement "
+                + MenuButton.Skin.class.getName());
+        }
+
+        super.setSkin(skin);
+    }
+    
+    /**
+     * @return the popup window associated with this components skin
+     */
+    public Window getListPopup() {
+        return ((MenuButton.Skin) getSkin()).getListPopup();
+    }
+    
     @Override
     public void setToggleButton(boolean toggleButton) {
         throw new UnsupportedOperationException("Menu buttons cannot be toggle buttons.");

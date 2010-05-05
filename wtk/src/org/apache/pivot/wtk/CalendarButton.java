@@ -104,6 +104,15 @@ public class CalendarButton extends Button {
         }
     }
 
+    /**
+     * CalendarButton skin interface. CalendarButton skins must implement
+     * this interface to facilitate additional communication between the
+     * component and the skin.
+     */
+    public interface Skin {
+        public Window getListPopup(); 
+    }
+    
     private int year;
     private int month;
 
@@ -146,6 +155,23 @@ public class CalendarButton extends Button {
         setSelectedDate(new CalendarDate());
     }
 
+    @Override
+    protected void setSkin(org.apache.pivot.wtk.Skin skin) {
+        if (!(skin instanceof CalendarButton.Skin)) {
+            throw new IllegalArgumentException("Skin class must implement "
+                + CalendarButton.Skin.class.getName());
+        }
+
+        super.setSkin(skin);
+    }
+    
+    /**
+     * @return the popup window associated with this components skin
+     */
+    public Window getListPopup() {
+        return ((CalendarButton.Skin) getSkin()).getListPopup();
+    }
+    
     /**
      * @throws UnsupportedOperationException
      * This method is not supported by CalendarButton.

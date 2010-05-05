@@ -19,7 +19,7 @@ limitations under the License.
 <BoxPane xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:collections="org.apache.pivot.collections"
     xmlns:content="org.apache.pivot.wtk.content" xmlns="org.apache.pivot.wtk">
-    <ListButton selectedIndex="0">
+    <ListButton wtkx:id="listButton" selectedIndex="0">
         <listData>
             <collections:ArrayList>
                 <content:ColorItem color="#000000" name="Black"/>

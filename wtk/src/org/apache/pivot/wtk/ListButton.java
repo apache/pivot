@@ -119,6 +119,15 @@ public class ListButton extends Button {
         }
     }
 
+    /**
+     * ListButton skin interface. ListButton skins must implement
+     * this interface to facilitate additional communication between the
+     * component and the skin.
+     */
+    public interface Skin {
+        public Window getListPopup(); 
+    }
+    
     private List<?> listData;
     private ListView.ItemRenderer itemRenderer;
     private int selectedIndex = -1;
@@ -178,6 +187,23 @@ public class ListButton extends Button {
         setListData(listData);
 
         installThemeSkin(ListButton.class);
+    }
+
+    @Override
+    protected void setSkin(org.apache.pivot.wtk.Skin skin) {
+        if (!(skin instanceof ListButton.Skin)) {
+            throw new IllegalArgumentException("Skin class must implement "
+                + ListButton.Skin.class.getName());
+        }
+
+        super.setSkin(skin);
+    }
+
+    /**
+     * @return the popup window associated with this components skin
+     */
+    public Window getListPopup() {
+        return ((ListButton.Skin) getSkin()).getListPopup();
     }
 
     /**

@@ -47,7 +47,7 @@ import org.apache.pivot.wtk.WindowStateListener;
  * concrete subclasses.
  */
 public abstract class CalendarButtonSkin extends ButtonSkin
-    implements CalendarButtonListener, CalendarButtonSelectionListener {
+    implements CalendarButton.Skin, CalendarButtonListener, CalendarButtonSelectionListener {
     protected Calendar calendar;
     protected Window calendarPopup;
 
@@ -176,6 +176,12 @@ public abstract class CalendarButtonSkin extends ButtonSkin
         calendar.setLocale(calendarButton.getLocale());
     }
 
+    // CalendarButton.Skin methods
+
+    public Window getListPopup() {
+        return calendarPopup;
+    }
+    
     // Component state events
     @Override
     public void enabledChanged(Component component) {

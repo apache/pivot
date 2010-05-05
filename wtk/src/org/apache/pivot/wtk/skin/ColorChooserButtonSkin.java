@@ -37,7 +37,7 @@ import org.apache.pivot.wtk.WindowStateListener;
  * Abstract base class for color chooser button skins.
  */
 public abstract class ColorChooserButtonSkin extends ButtonSkin
-    implements ColorChooserButtonSelectionListener {
+    implements ColorChooserButton.Skin, ColorChooserButtonSelectionListener {
     /**
      * A focusable window class used by color chooser button skins.
      */
@@ -187,6 +187,12 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin
         colorChooserButton.getColorChooserButtonSelectionListeners().add(this);
     }
 
+    // ColorChooserButton.Skin methods
+
+    public Window getListPopup() {
+        return colorChooserPopup;
+    }
+    
     // ComponentStateListener methods
 
     @Override
