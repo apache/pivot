@@ -37,6 +37,11 @@ public interface TabPaneAttributeListener {
         @Override
         public void closeableChanged(TabPane tabPane, Component component) {
         }
+        
+        @Override
+        public void tooltipTextChanged(TabPane tabPane, Component component,
+            String previousTooltipText) {
+        }
     }
 
     /**
@@ -64,4 +69,12 @@ public interface TabPaneAttributeListener {
      * @param component
      */
     public void closeableChanged(TabPane tabPane, Component component);
+    
+    /**
+     * Called when a tab's tooltipText attribute has changed.
+     *
+     * @param tabPane
+     * @param component
+     */
+    public void tooltipTextChanged(TabPane tabPane, Component component, String previousTooltipText);
 }

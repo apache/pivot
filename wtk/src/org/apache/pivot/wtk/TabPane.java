@@ -133,7 +133,8 @@ public class TabPane extends Container {
     private enum Attribute {
         LABEL,
         ICON,
-        CLOSEABLE;
+        CLOSEABLE,
+        TOOLTIP;
     }
 
     private static class TabPaneListenerList extends ListenerList<TabPaneListener>
@@ -208,6 +209,13 @@ public class TabPane extends Container {
         public void closeableChanged(TabPane tabPane, Component component) {
             for (TabPaneAttributeListener listener : this) {
                 listener.closeableChanged(tabPane, component);
+            }
+        }
+        
+        @Override
+        public void tooltipTextChanged(TabPane tabPane, Component component, String previousTooltipText) {
+            for (TabPaneAttributeListener listener : this) {
+                listener.tooltipTextChanged(tabPane, component, previousTooltipText);
             }
         }
     }
@@ -391,6 +399,36 @@ public class TabPane extends Container {
             if (parent instanceof TabPane) {
                 TabPane tabPane = (TabPane)parent;
                 tabPane.tabPaneAttributeListeners.closeableChanged(tabPane, component);
+            }
+        }
+    }
+    
+    /**
+     * Returns the tab component's tooltip text.
+     *
+     * @return
+     * The tab component's tooltip text, or <tt>null</tt> if no tooltip is
+     * specified.
+     */
+    public static String getTooltipText(Component component) {
+        return (String)component.getAttribute(Attribute.TOOLTIP);
+    }
+
+    /**
+     * Sets the tab component's tooltip text.
+     *
+     * @param tooltipText
+     * The tab component's tooltip text, or <tt>null</tt> for no tooltip.
+     */
+    public static void setTooltipText(Component component, String tooltipText) {
+        String previousTooltipText = (String)component.setAttribute(Attribute.TOOLTIP, tooltipText);
+
+        if (previousTooltipText != tooltipText) {
+            Container parent = component.getParent();
+
+            if (parent instanceof TabPane) {
+                TabPane tabPane = (TabPane)parent;
+                tabPane.tabPaneAttributeListeners.tooltipTextChanged(tabPane, component, previousTooltipText);
             }
         }
     }

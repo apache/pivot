@@ -1407,4 +1407,13 @@ public class TerraTabPaneSkin extends ContainerSkin
 
         invalidateComponent();
     }
+    
+    @Override
+    public void tooltipTextChanged(TabPane tabPane, Component component, String previousTooltipText) {
+        int i = tabPane.getTabs().indexOf(component);
+        buttonBoxPane.get(i).setTooltipText(TabPane.getTooltipText(component));
+        buttonBoxPane.get(i).invalidate();
+
+        invalidateComponent();
+    }
 }
