@@ -2227,6 +2227,28 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
                     consumed = true;
                 }
+            } else if (keyCode == Keyboard.KeyCode.HOME) {
+                // Move the caret to the beginning of the text
+                if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                    textArea.setSelection(0, textArea.getSelectionStart());
+                } else {
+                    textArea.setSelection(0, 0);
+                }
+                scrollCharacterToVisible(0);
+
+                consumed = true;
+            } else if (keyCode == Keyboard.KeyCode.END) {
+                // Move the caret to the end of the text
+                if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                    int selectionStart = textArea.getSelectionStart();
+                    textArea.setSelection(selectionStart, textArea.getCharacterCount()
+                        - selectionStart);
+                } else {
+                    textArea.setSelection(textArea.getCharacterCount() - 1, 0);
+                }
+                scrollCharacterToVisible(textArea.getCharacterCount() - 1);
+
+                consumed = true;
             } else {
                 consumed = super.keyPressed(component, keyCode, keyLocation);
             }
