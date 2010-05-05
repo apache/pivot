@@ -148,7 +148,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
                     int columnSpan = TablePane.getColumnSpan(component);
 
                     if (columnSpan > 1) {
-                        // We might need to adjust column widths to accommodate
+                        // We might need to adjust column widths to accomodate
                         // this spanning cell. First, we find out if any of the
                         // spanned cells are default width and how much space
                         // we've allocated thus far for those cells
@@ -1122,24 +1122,14 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
 
         int preferredHeight = 0;
 
-        int columnIndex = 0;
-        for (int i = 0, n = row.getLength(); i < n; i++) {
-            Component component = row.get(i);
+        for (int j = 0, n = row.getLength(), m = columns.getLength(); j < n && j < m; j++) {
+            Component component = row.get(j);
 
             if (component != null
                 && component.isVisible()
                 && TablePane.getRowSpan(component) == 1) {
-                int colSpan = TablePane.getColumnSpan(component);
-                
-                int colSpannedWidth = 0;
-                for (int j = 0; j < colSpan && (columnIndex + j) < columnWidths.length; j++) {
-                    colSpannedWidth += columnWidths[columnIndex + j];
-                }
                 preferredHeight = Math.max(preferredHeight,
-                    component.getPreferredHeight(colSpannedWidth));
-                
-                columnIndex += colSpan;
-                if (columnIndex >= columns.getLength()) break;
+                    component.getPreferredHeight(columnWidths[j]));
             }
         }
 
@@ -1249,7 +1239,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
                     int columnSpan = TablePane.getColumnSpan(component);
 
                     if (columnSpan > 1) {
-                        // We might need to adjust column widths to accommodate
+                        // We might need to adjust column widths to accomodate
                         // this spanning cell. First, we find out if any of the
                         // spanned cells are default width and how much space
                         // we've allocated thus far for those cells
