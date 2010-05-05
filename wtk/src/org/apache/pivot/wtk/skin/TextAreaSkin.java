@@ -2078,6 +2078,22 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                         selectionStart--;
                         selectionLength++;
                     }
+                } else if (Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
+                    // Move the caret to the start of the next word to our left
+                    if (selectionStart > 0) {
+                        // first, skip over any space immediately to our left
+                        while (selectionStart > 0 
+                                && Character.isWhitespace(document.getCharacterAt(selectionStart - 1))) {
+                            selectionStart--;
+                        }
+                        // then, skip over any word-letters to our left
+                        while (selectionStart > 0
+                                && !Character.isWhitespace(document.getCharacterAt(selectionStart - 1))) {
+                            selectionStart--;
+                        }
+                        
+                        selectionLength = 0;
+                    }
                 } else {
                     // Clear the selection and move the caret back by one
                     // character
@@ -2107,6 +2123,25 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
                     textArea.setSelection(selectionStart, selectionLength);
                     scrollCharacterToVisible(selectionStart + selectionLength);
+                } else if (Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
+                    // Move the caret to the start of the next word to our right
+                    if (selectionStart < document.getCharacterCount()) {
+                        // first, skip over any word-letters to our right
+                        while (selectionStart < document.getCharacterCount() - 1
+                                && !Character.isWhitespace(document.getCharacterAt(selectionStart))) {
+                            selectionStart++;
+                        }
+                        // then, skip over any space immediately to our right
+                        while (selectionStart < document.getCharacterCount() - 1
+                                && Character.isWhitespace(document.getCharacterAt(selectionStart))) {
+                            selectionStart++;
+                        }
+                        
+                        textArea.setSelection(selectionStart, 0);
+                        scrollCharacterToVisible(selectionStart);
+                        
+                        caretX = caret.x;
+                    }
                 } else {
                     // Clear the selection and move the caret forward by one
                     // character

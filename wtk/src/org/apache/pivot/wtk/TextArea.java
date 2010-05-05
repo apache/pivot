@@ -688,12 +688,21 @@ public class TextArea extends Component {
         }
 
         if (selectionLength < 0) {
-            throw new IllegalArgumentException("selectionLength is negative.");
+            throw new IllegalArgumentException("selectionLength is negative, selectionLength=" + selectionLength);
         }
 
-        if (selectionStart < 0
-            || selectionStart + selectionLength > document.getCharacterCount()) {
-            throw new IndexOutOfBoundsException();
+        if (selectionStart < 0) {
+            throw new IndexOutOfBoundsException("selectionStart < 0, selectionStart=" + selectionStart);
+        }
+        
+        if (selectionStart >= document.getCharacterCount()) {
+            throw new IndexOutOfBoundsException("selectionStart=" + selectionStart
+                + ", document.characterCount=" + document.getCharacterCount());
+        }
+        
+        if (selectionStart + selectionLength > document.getCharacterCount()) {
+            throw new IndexOutOfBoundsException("selectionStart=" + selectionStart + ", selectionLength=" + selectionLength 
+                + ", document.characterCount=" + document.getCharacterCount());
         }
 
         int previousSelectionStart = this.selectionStart;
