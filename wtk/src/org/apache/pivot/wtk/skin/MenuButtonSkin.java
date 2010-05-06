@@ -82,7 +82,7 @@ public abstract class MenuButtonSkin extends ButtonSkin
 
     // MenuButton.Skin methods
 
-    public Window getListPopup() {
+    public Window getMenuPopup() {
         return menuPopup;
     }
 

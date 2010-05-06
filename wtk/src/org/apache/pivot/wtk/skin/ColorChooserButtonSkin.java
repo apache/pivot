@@ -189,7 +189,7 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin
 
     // ColorChooserButton.Skin methods
 
-    public Window getListPopup() {
+    public Window getColorChooserPopup() {
         return colorChooserPopup;
     }
 

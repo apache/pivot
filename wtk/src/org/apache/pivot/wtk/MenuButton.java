@@ -54,7 +54,7 @@ public class MenuButton extends Button {
      * component and the skin.
      */
     public interface Skin {
-        public Window getListPopup();
+        public Window getMenuPopup();
     }
 
     private Menu menu = null;
@@ -83,7 +83,7 @@ public class MenuButton extends Button {
      * @return the popup window associated with this components skin
      */
     public Window getListPopup() {
-        return ((MenuButton.Skin) getSkin()).getListPopup();
+        return ((MenuButton.Skin) getSkin()).getMenuPopup();
     }
 
     @Override

@@ -110,7 +110,7 @@ public class CalendarButton extends Button {
      * component and the skin.
      */
     public interface Skin {
-        public Window getListPopup();
+        public Window getCalendarPopup();
     }
 
     private int year;
@@ -169,7 +169,7 @@ public class CalendarButton extends Button {
      * @return the popup window associated with this components skin
      */
     public Window getListPopup() {
-        return ((CalendarButton.Skin) getSkin()).getListPopup();
+        return ((CalendarButton.Skin) getSkin()).getCalendarPopup();
     }
 
     /**

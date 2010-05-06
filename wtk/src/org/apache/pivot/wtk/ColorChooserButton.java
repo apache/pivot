@@ -82,7 +82,7 @@ public class ColorChooserButton extends Button {
      * component and the skin.
      */
     public interface Skin {
-        public Window getListPopup();
+        public Window getColorChooserPopup();
     }
 
     private Color selectedColor = null;
@@ -124,7 +124,7 @@ public class ColorChooserButton extends Button {
      * @return the popup window associated with this components skin
      */
     public Window getListPopup() {
-        return ((ColorChooserButton.Skin) getSkin()).getListPopup();
+        return ((ColorChooserButton.Skin) getSkin()).getColorChooserPopup();
     }
 
     /**

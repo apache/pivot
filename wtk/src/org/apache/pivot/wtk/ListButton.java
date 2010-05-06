@@ -125,7 +125,7 @@ public class ListButton extends Button {
      * component and the skin.
      */
     public interface Skin {
-        public Window getListPopup();
+        public Window getListViewPopup();
     }
 
     private List<?> listData;
@@ -203,7 +203,7 @@ public class ListButton extends Button {
      * @return the popup window associated with this components skin
      */
     public Window getListPopup() {
-        return ((ListButton.Skin) getSkin()).getListPopup();
+        return ((ListButton.Skin) getSkin()).getListViewPopup();
     }
 
     /**

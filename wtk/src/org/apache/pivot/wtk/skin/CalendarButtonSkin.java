@@ -178,7 +178,7 @@ public abstract class CalendarButtonSkin extends ButtonSkin
 
     // CalendarButton.Skin methods
 
-    public Window getListPopup() {
+    public Window getCalendarPopup() {
         return calendarPopup;
     }
 
