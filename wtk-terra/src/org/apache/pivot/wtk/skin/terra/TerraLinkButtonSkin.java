@@ -147,6 +147,11 @@ public class TerraLinkButtonSkin extends LinkButtonSkin {
         setColor(GraphicsUtilities.decodeColor(color));
     }
 
+    public final void setColor(int color) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setColor(theme.getColor(color));
+    }
+
     public Color getDisabledColor() {
         return disabledColor;
     }
@@ -166,5 +171,10 @@ public class TerraLinkButtonSkin extends LinkButtonSkin {
         }
 
         setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
+    }
+
+    public final void setDisabledColor(int disabledColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setDisabledColor(theme.getColor(disabledColor));
     }
 }

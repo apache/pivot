@@ -382,6 +382,11 @@ public class TerraListButtonSkin extends ListButtonSkin {
         setColor(GraphicsUtilities.decodeColor(color));
     }
 
+    public final void setColor(int color) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setColor(theme.getColor(color));
+    }
+
     public Color getDisabledColor() {
         return disabledColor;
     }
@@ -401,6 +406,11 @@ public class TerraListButtonSkin extends ListButtonSkin {
         }
 
         setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
+    }
+
+    public final void setDisabledColor(int disabledColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setDisabledColor(theme.getColor(disabledColor));
     }
 
     public Color getBackgroundColor() {
@@ -426,6 +436,11 @@ public class TerraListButtonSkin extends ListButtonSkin {
         setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
     }
 
+    public final void setBackgroundColor(int backgroundColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setBackgroundColor(theme.getColor(backgroundColor));
+    }
+
     public Color getDisabledBackgroundColor() {
         return disabledBackgroundColor;
     }
@@ -446,6 +461,11 @@ public class TerraListButtonSkin extends ListButtonSkin {
         }
 
         setDisabledBackgroundColor(GraphicsUtilities.decodeColor(disabledBackgroundColor));
+    }
+
+    public final void setDisabledBackgroundColor(int disabledBackgroundColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setDisabledBackgroundColor(theme.getColor(disabledBackgroundColor));
     }
 
     public Color getBorderColor() {
@@ -470,6 +490,11 @@ public class TerraListButtonSkin extends ListButtonSkin {
         setBorderColor(GraphicsUtilities.decodeColor(borderColor));
     }
 
+    public final void setBorderColor(int borderColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setBorderColor(theme.getColor(borderColor));
+    }
+
     public Color getDisabledBorderColor() {
         return disabledBorderColor;
     }
@@ -489,6 +514,11 @@ public class TerraListButtonSkin extends ListButtonSkin {
         }
 
         setDisabledBorderColor(GraphicsUtilities.decodeColor(disabledBorderColor));
+    }
+
+    public final void setDisabledBorderColor(int disabledBorderColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setDisabledBorderColor(theme.getColor(disabledBorderColor));
     }
 
     public Insets getPadding() {
