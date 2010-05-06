@@ -125,9 +125,9 @@ public class ListButton extends Button {
      * component and the skin.
      */
     public interface Skin {
-        public Window getListPopup(); 
+        public Window getListPopup();
     }
-    
+
     private List<?> listData;
     private ListView.ItemRenderer itemRenderer;
     private int selectedIndex = -1;

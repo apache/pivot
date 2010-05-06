@@ -181,7 +181,7 @@ public abstract class CalendarButtonSkin extends ButtonSkin
     public Window getListPopup() {
         return calendarPopup;
     }
-    
+
     // Component state events
     @Override
     public void enabledChanged(Component component) {

@@ -110,9 +110,9 @@ public class CalendarButton extends Button {
      * component and the skin.
      */
     public interface Skin {
-        public Window getListPopup(); 
+        public Window getListPopup();
     }
-    
+
     private int year;
     private int month;
 
@@ -164,14 +164,14 @@ public class CalendarButton extends Button {
 
         super.setSkin(skin);
     }
-    
+
     /**
      * @return the popup window associated with this components skin
      */
     public Window getListPopup() {
         return ((CalendarButton.Skin) getSkin()).getListPopup();
     }
-    
+
     /**
      * @throws UnsupportedOperationException
      * This method is not supported by CalendarButton.

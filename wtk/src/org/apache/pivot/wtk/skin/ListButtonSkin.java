@@ -178,7 +178,7 @@ public abstract class ListButtonSkin extends ButtonSkin
     public Window getListPopup() {
         return listViewPopup;
     }
-    
+
     // Component state events
     @Override
     public void enabledChanged(Component component) {

@@ -29,7 +29,7 @@ import org.apache.pivot.wtkx.WTKXSerializer;
 public class ColorListButtonTest implements Application {
     private Frame frame = null;
     private ListButton listButton = null;
-    
+
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
@@ -38,7 +38,7 @@ public class ColorListButtonTest implements Application {
         listButton = (ListButton)wtkxSerializer.get("listButton");
         // test the getListPopup() method
         listButton.getListPopup().getDecorators().add(new ReflectionDecorator());
-        
+
         frame = new Frame(boxPane);
         frame.setTitle("Color List Button Test");
         frame.setPreferredSize(480, 360);

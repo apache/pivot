@@ -192,7 +192,7 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin
     public Window getListPopup() {
         return colorChooserPopup;
     }
-    
+
     // ComponentStateListener methods
 
     @Override

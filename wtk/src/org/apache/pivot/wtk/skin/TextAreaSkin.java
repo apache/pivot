@@ -2082,7 +2082,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                     // Move the caret to the start of the next word to our left
                     if (selectionStart > 0) {
                         // first, skip over any space immediately to our left
-                        while (selectionStart > 0 
+                        while (selectionStart > 0
                                 && Character.isWhitespace(document.getCharacterAt(selectionStart - 1))) {
                             selectionStart--;
                         }
@@ -2091,7 +2091,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                                 && !Character.isWhitespace(document.getCharacterAt(selectionStart - 1))) {
                             selectionStart--;
                         }
-                        
+
                         selectionLength = 0;
                     }
                 } else {
@@ -2136,10 +2136,10 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                                 && Character.isWhitespace(document.getCharacterAt(selectionStart))) {
                             selectionStart++;
                         }
-                        
+
                         textArea.setSelection(selectionStart, 0);
                         scrollCharacterToVisible(selectionStart);
-                        
+
                         caretX = caret.x;
                     }
                 } else {

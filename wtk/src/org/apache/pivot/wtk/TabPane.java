@@ -211,7 +211,7 @@ public class TabPane extends Container {
                 listener.closeableChanged(tabPane, component);
             }
         }
-        
+
         @Override
         public void tooltipTextChanged(TabPane tabPane, Component component, String previousTooltipText) {
             for (TabPaneAttributeListener listener : this) {
@@ -402,7 +402,7 @@ public class TabPane extends Container {
             }
         }
     }
-    
+
     /**
      * Returns the tab component's tooltip text.
      *

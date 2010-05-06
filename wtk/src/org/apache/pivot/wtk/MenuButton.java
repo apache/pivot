@@ -54,9 +54,9 @@ public class MenuButton extends Button {
      * component and the skin.
      */
     public interface Skin {
-        public Window getListPopup(); 
+        public Window getListPopup();
     }
-    
+
     private Menu menu = null;
     private boolean repeatable = false;
 
@@ -78,14 +78,14 @@ public class MenuButton extends Button {
 
         super.setSkin(skin);
     }
-    
+
     /**
      * @return the popup window associated with this components skin
      */
     public Window getListPopup() {
         return ((MenuButton.Skin) getSkin()).getListPopup();
     }
-    
+
     @Override
     public void setToggleButton(boolean toggleButton) {
         throw new UnsupportedOperationException("Menu buttons cannot be toggle buttons.");

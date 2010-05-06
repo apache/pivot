@@ -85,7 +85,7 @@ public abstract class MenuButtonSkin extends ButtonSkin
     public Window getListPopup() {
         return menuPopup;
     }
-    
+
     // Component state events
     @Override
     public void enabledChanged(Component component) {

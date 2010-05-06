@@ -694,14 +694,14 @@ public class TextArea extends Component {
         if (selectionStart < 0) {
             throw new IndexOutOfBoundsException("selectionStart < 0, selectionStart=" + selectionStart);
         }
-        
+
         if (selectionStart >= document.getCharacterCount()) {
             throw new IndexOutOfBoundsException("selectionStart=" + selectionStart
                 + ", document.characterCount=" + document.getCharacterCount());
         }
-        
+
         if (selectionStart + selectionLength > document.getCharacterCount()) {
-            throw new IndexOutOfBoundsException("selectionStart=" + selectionStart + ", selectionLength=" + selectionLength 
+            throw new IndexOutOfBoundsException("selectionStart=" + selectionStart + ", selectionLength=" + selectionLength
                 + ", document.characterCount=" + document.getCharacterCount());
         }
 
