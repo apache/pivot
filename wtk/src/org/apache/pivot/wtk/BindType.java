@@ -16,27 +16,25 @@
  */
 package org.apache.pivot.wtk;
 
-import org.apache.pivot.collections.Dictionary;
-
 /**
  * Defines a bind type.
  */
 public enum BindType {
     /**
-     * The binding will only be processed for {@link Component#load(Dictionary)}
+     * The binding will only be processed for {@link Component#load(Object)}
      * operations.
      */
     LOAD,
 
     /**
-     * The binding will only be processed for {@link Component#store(Dictionary)}
+     * The binding will only be processed for {@link Component#store(Object)}
      * operations.
      */
     STORE,
 
     /**
-     * The binding will be process for both {@link Component#load(Dictionary)}
-     * and {@link Component#store(Dictionary)} operations.
+     * The binding will be process for both {@link Component#load(Object)}
+     * and {@link Component#store(Object)} operations.
      */
     BOTH
 }

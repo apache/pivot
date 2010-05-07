@@ -344,22 +344,19 @@ public class TextInput extends Component {
     }
 
     /**
-     * Inserts a single character into the text input's content.
+     * Inserts a single character into the text input's content. The character
+     * replaces the current selection.
      *
      * @param character
      * The character to insert.
-     *
-     * @param index
-     * The index of the insertion point within the existing text. If equal to
-     * the current character count, the new text is appended to the existing
-     * content.
      */
     public void insert(char character) {
         insert(Character.toString(character));
     }
 
     /**
-     * Inserts text into the text input's content.
+     * Inserts text into the text input's content. The text replaces the current
+     * selection.
      *
      * @param text
      * The text to insert.
