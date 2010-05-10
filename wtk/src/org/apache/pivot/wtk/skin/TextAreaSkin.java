@@ -999,16 +999,20 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 }
 
                 int end;
-                if (lineWidth < breakWidth) {
-                    end = ci.getEndIndex();
+                if (textNode.getCharacterCount() == 0) {
+                    end = start;
                 } else {
-                    if (lastWhitespaceIndex == -1) {
-                        end = ci.getIndex() - 1;
-                        if (end <= start) {
-                            end = start + 1;
-                        }
+                    if (lineWidth < breakWidth) {
+                        end = ci.getEndIndex();
                     } else {
-                        end = lastWhitespaceIndex + 1;
+                        if (lastWhitespaceIndex == -1) {
+                            end = ci.getIndex() - 1;
+                            if (end <= start) {
+                                end = start + 1;
+                            }
+                        } else {
+                            end = lastWhitespaceIndex + 1;
+                        }
                     }
                 }
 
