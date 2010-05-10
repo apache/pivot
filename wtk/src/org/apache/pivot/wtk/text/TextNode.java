@@ -58,7 +58,8 @@ public final class TextNode extends Node {
 
         @Override
         public char next() {
-            return setIndex(index < endIndex ? index + 1 : DONE);
+            return setIndex(getCharacterCount() > 0
+                && index < endIndex ? index + 1 : DONE);
         }
 
         @Override
@@ -68,7 +69,8 @@ public final class TextNode extends Node {
 
         @Override
         public char current() {
-            return (index < endIndex) ? getCharacterAt(index) : DONE;
+            return (getCharacterCount() > 0
+                && index < endIndex) ? getCharacterAt(index) : DONE;
         }
 
         @Override
