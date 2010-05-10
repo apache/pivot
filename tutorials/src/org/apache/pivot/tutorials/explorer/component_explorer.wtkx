@@ -378,7 +378,8 @@ limitations under the License.
                                             </Border>
                                             <Border TabPane.label="%contentPane.wtkxSourceLabel">
                                                 <content>
-                                                    <ScrollPane>
+                                                    <ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
+                                                        verticalScrollBarPolicy="fill_to_capacity">
                                                         <view>
                                                             <TextArea wtkx:id="sourceTextArea"
                                                                 editable="false"
