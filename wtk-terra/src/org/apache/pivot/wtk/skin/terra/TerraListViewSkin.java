@@ -70,6 +70,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     private ArrayList<Integer> itemBoundaries = null;
     private int fixedItemHeight;
 
+    private boolean validateSelection = false;
+
     private static final Checkbox CHECKBOX = new Checkbox();
 
     static {
@@ -253,6 +255,26 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                     + checkboxPadding.bottom), fixedItemHeight);
             }
         }
+
+        if (validateSelection) {
+            // Ensure that the selection is visible
+            Sequence<Span> selectedRanges = listView.getSelectedRanges();
+
+            if (selectedRanges.getLength() > 0) {
+                int rangeStart = selectedRanges.get(0).start;
+                int rangeEnd = selectedRanges.get(selectedRanges.getLength() - 1).end;
+
+                Bounds selectionBounds = getItemBounds(rangeStart);
+                selectionBounds = selectionBounds.union(getItemBounds(rangeEnd));
+
+                Bounds visibleSelectionBounds = listView.getVisibleArea(selectionBounds);
+                if (visibleSelectionBounds.height < selectionBounds.height) {
+                    listView.scrollAreaToVisible(selectionBounds);
+                }
+            }
+        }
+
+        validateSelection = false;
     }
 
     @Override
@@ -965,8 +987,6 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                     } else {
                         listView.setSelectedIndex(index);
                     }
-
-                    listView.scrollAreaToVisible(getItemBounds(index));
                 }
 
                 consumed = true;
@@ -989,8 +1009,6 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                     } else {
                         listView.setSelectedIndex(index);
                     }
-
-                    listView.scrollAreaToVisible(getItemBounds(index));
                 }
 
                 consumed = true;
@@ -1056,7 +1074,6 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
                     if (first == character) {
                         listView.setSelectedIndex(i);
-                        listView.scrollAreaToVisible(getItemBounds(i));
                         consumed = true;
                         break;
                     }
@@ -1158,10 +1175,18 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     // List view selection detail events
     @Override
     public void selectedRangeAdded(ListView listView, int rangeStart, int rangeEnd) {
-        // Repaint the area containing the added selection
         if (listView.isValid()) {
-            repaintComponent(0, getItemY(rangeStart),
-                getWidth(), getItemY(rangeEnd) + getItemHeight(rangeEnd));
+            Bounds selectionBounds = getItemBounds(rangeStart);
+            selectionBounds = selectionBounds.union(getItemBounds(rangeEnd));
+            repaintComponent(selectionBounds);
+
+            // Ensure that the selection is visible
+            Bounds visibleSelectionBounds = listView.getVisibleArea(selectionBounds);
+            if (visibleSelectionBounds.height < selectionBounds.height) {
+                listView.scrollAreaToVisible(selectionBounds);
+            }
+        } else {
+            validateSelection = true;
         }
     }
 
@@ -1169,35 +1194,43 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     public void selectedRangeRemoved(ListView listView, int rangeStart, int rangeEnd) {
         // Repaint the area containing the removed selection
         if (listView.isValid()) {
-            repaintComponent(0, getItemY(rangeStart),
-                getWidth(), getItemY(rangeEnd) + getItemHeight(rangeEnd));
+            Bounds selectionBounds = getItemBounds(rangeStart);
+            selectionBounds = selectionBounds.union(getItemBounds(rangeEnd));
+            repaintComponent(selectionBounds);
         }
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void selectedRangesChanged(ListView listView, Sequence<Span> previousSelectedRanges) {
-        List<Object> listData = (List<Object>)listView.getListData();
-
-        // Repaint only the area that changed (intersection of previous and new selection)
-        int rangeStart = 0;
-        int rangeEnd = listData.getLength() - 1;
-        for (int i = 0; i < previousSelectedRanges.getLength(); i++) {
-            Span span = previousSelectedRanges.get(i);
-            rangeStart = Math.min(rangeStart, span.start);
-            rangeEnd = Math.max(rangeEnd, span.end);
-        }
-
-        Sequence<Span> newSelectedRanges = listView.getSelectedRanges();
-        for (int i = 0; i < newSelectedRanges.getLength(); i++) {
-            Span span = newSelectedRanges.get(i);
-            rangeStart = Math.min(rangeStart, span.start);
-            rangeEnd = Math.max(rangeEnd, span.end);
-        }
-
         if (listView.isValid()) {
-            repaintComponent(0, getItemY(rangeStart),
-                getWidth(), getItemY(rangeEnd) + getItemHeight(rangeEnd));
+            // Repaint the area occupied by the previous selection
+            if (previousSelectedRanges.getLength() > 0) {
+                int rangeStart = previousSelectedRanges.get(0).start;
+                int rangeEnd = previousSelectedRanges.get(previousSelectedRanges.getLength() - 1).end;
+
+                Bounds previousSelectionBounds = getItemBounds(rangeStart);
+                previousSelectionBounds = previousSelectionBounds.union(getItemBounds(rangeEnd));
+                repaintComponent(previousSelectionBounds);
+            }
+
+            // Repaint the area occupied by the current selection
+            Sequence<Span> selectedRanges = listView.getSelectedRanges();
+            if (selectedRanges.getLength() > 0) {
+                int rangeStart = selectedRanges.get(0).start;
+                int rangeEnd = selectedRanges.get(selectedRanges.getLength() - 1).end;
+
+                Bounds selectionBounds = getItemBounds(rangeStart);
+                selectionBounds = selectionBounds.union(getItemBounds(rangeEnd));
+                repaintComponent(selectionBounds);
+
+                // Ensure that the selection is visible
+                Bounds visibleSelectionBounds = listView.getVisibleArea(selectionBounds);
+                if (visibleSelectionBounds.height < selectionBounds.height) {
+                    listView.scrollAreaToVisible(selectionBounds);
+                }
+            }
+        } else {
+            validateSelection = true;
         }
     }
 }

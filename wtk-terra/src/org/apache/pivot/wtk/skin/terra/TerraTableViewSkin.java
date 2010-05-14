@@ -84,6 +84,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     private int highlightedIndex = -1;
     private int editIndex = -1;
 
+    private boolean validateSelection = false;
+
     public TerraTableViewSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
         font = theme.getFont();
@@ -277,6 +279,26 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         } else {
             fixedRowHeight = calculateFixedRowHeight(tableView);
         }
+
+        if (validateSelection) {
+            // Ensure that the selection is visible
+            Sequence<Span> selectedRanges = tableView.getSelectedRanges();
+
+            if (selectedRanges.getLength() > 0) {
+                int rangeStart = selectedRanges.get(0).start;
+                int rangeEnd = selectedRanges.get(selectedRanges.getLength() - 1).end;
+
+                Bounds selectionBounds = getRowBounds(rangeStart);
+                selectionBounds = selectionBounds.union(getRowBounds(rangeEnd));
+
+                Bounds visibleSelectionBounds = tableView.getVisibleArea(selectionBounds);
+                if (visibleSelectionBounds.height < selectionBounds.height) {
+                    tableView.scrollAreaToVisible(selectionBounds);
+                }
+            }
+        }
+
+        validateSelection = false;
     }
 
     /**
@@ -513,6 +535,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         } else {
             rowHeight = fixedRowHeight;
         }
+
         return rowHeight;
     }
 
@@ -1273,8 +1296,6 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                     } else {
                         tableView.setSelectedIndex(index);
                     }
-
-                    tableView.scrollAreaToVisible(getRowBounds(index));
                 }
 
                 consumed = true;
@@ -1297,8 +1318,6 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                     } else {
                         tableView.setSelectedIndex(index);
                     }
-
-                    tableView.scrollAreaToVisible(getRowBounds(index));
                 }
 
                 consumed = true;
@@ -1468,10 +1487,18 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     // Table view selection detail events
     @Override
     public void selectedRangeAdded(TableView tableView, int rangeStart, int rangeEnd) {
-        // Repaint the area containing the added selection
         if (tableView.isValid()) {
-            repaintComponent(0, getRowY(rangeStart),
-                getWidth(), getRowY(rangeEnd) + getRowHeight(rangeEnd));
+            Bounds selectionBounds = getRowBounds(rangeStart);
+            selectionBounds = selectionBounds.union(getRowBounds(rangeEnd));
+            repaintComponent(selectionBounds);
+
+            // Ensure that the selection is visible
+            Bounds visibleSelectionBounds = tableView.getVisibleArea(selectionBounds);
+            if (visibleSelectionBounds.height < selectionBounds.height) {
+                tableView.scrollAreaToVisible(selectionBounds);
+            }
+        } else {
+            validateSelection = true;
         }
     }
 
@@ -1479,35 +1506,45 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     public void selectedRangeRemoved(TableView tableView, int rangeStart, int rangeEnd) {
         // Repaint the area containing the removed selection
         if (tableView.isValid()) {
-            repaintComponent(0, getRowY(rangeStart),
-                getWidth(), getRowY(rangeEnd) + getRowHeight(rangeEnd));
+            Bounds selectionBounds = getRowBounds(rangeStart);
+            selectionBounds = selectionBounds.union(getRowBounds(rangeEnd));
+            repaintComponent(selectionBounds);
         }
     }
 
     @Override
     public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges) {
-        List<?> tableData = tableView.getTableData();
-
-        // Repaint only the area that changed (intersection of previous
-        // and new selection)
-        int rangeStart = 0;
-        int rangeEnd = tableData.getLength() - 1;
-        for (int i = 0; i < previousSelectedRanges.getLength(); i++) {
-            Span span = previousSelectedRanges.get(i);
-            rangeStart = Math.min(rangeStart, span.start);
-            rangeEnd = Math.max(rangeEnd, span.end);
-        }
-
-        Sequence<Span> newSelectedRanges = tableView.getSelectedRanges();
-        for (int i = 0; i < newSelectedRanges.getLength(); i++) {
-            Span span = newSelectedRanges.get(i);
-            rangeStart = Math.min(rangeStart, span.start);
-            rangeEnd = Math.max(rangeEnd, span.end);
-        }
-
         if (tableView.isValid()) {
-            repaintComponent(0, getRowY(rangeStart),
-                getWidth(), getRowY(rangeEnd) + getRowY(rangeEnd));
+            // Repaint the area occupied by the previous selection
+            if (previousSelectedRanges.getLength() > 0) {
+                int rangeStart = previousSelectedRanges.get(0).start;
+                int rangeEnd = previousSelectedRanges.get(previousSelectedRanges.getLength() - 1).end;
+
+                Bounds previousSelectionBounds = getRowBounds(rangeStart);
+                previousSelectionBounds = previousSelectionBounds.union(getRowBounds(rangeEnd));
+
+                repaintComponent(previousSelectionBounds);
+            }
+
+            // Repaint the area occupied by the current selection
+            Sequence<Span> selectedRanges = tableView.getSelectedRanges();
+            if (selectedRanges.getLength() > 0) {
+                int rangeStart = selectedRanges.get(0).start;
+                int rangeEnd = selectedRanges.get(selectedRanges.getLength() - 1).end;
+
+                Bounds selectionBounds = getRowBounds(rangeStart);
+                selectionBounds = selectionBounds.union(getRowBounds(rangeEnd));
+
+                repaintComponent(selectionBounds);
+
+                // Ensure that the selection is visible
+                Bounds visibleSelectionBounds = tableView.getVisibleArea(selectionBounds);
+                if (visibleSelectionBounds.height < selectionBounds.height) {
+                    tableView.scrollAreaToVisible(selectionBounds);
+                }
+            }
+        } else {
+            validateSelection = true;
         }
     }
 }
