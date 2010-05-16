@@ -19,9 +19,9 @@ package org.apache.pivot.wtk.skin.terra;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.Paint;
+import java.awt.RadialGradientPaint;
 import java.awt.RenderingHints;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
@@ -183,14 +183,15 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
 
         if (enabled) {
             /*
+            buttonPaint = new GradientPaint(BUTTON_DIAMETER / 2, 0, TerraTheme.darken(buttonColor),
+                BUTTON_DIAMETER / 2, BUTTON_DIAMETER / 2, buttonColor);
+            */
+
             buttonPaint = new RadialGradientPaint((float)buttonBackgroundCircle.getCenterX(),
                 (float)buttonBackgroundCircle.getCenterY(),
                 (float)buttonBackgroundCircle.getWidth() * 2 / 3,
                 new float[] {0f, 1f}, new Color[] {TerraTheme.darken(buttonColor), buttonColor});
-            */
 
-            buttonPaint = new GradientPaint(BUTTON_DIAMETER / 2, 0, TerraTheme.darken(buttonColor),
-                BUTTON_DIAMETER / 2, BUTTON_DIAMETER / 2, buttonColor);
             buttonBorderColor = this.buttonBorderColor;
             buttonSelectionColor = this.buttonSelectionColor;
         }
