@@ -1539,7 +1539,11 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
                 // Ensure that the selection is visible
                 Bounds visibleSelectionBounds = tableView.getVisibleArea(selectionBounds);
-                if (visibleSelectionBounds.height < selectionBounds.height) {
+                if (visibleSelectionBounds != null
+                    && visibleSelectionBounds.height < selectionBounds.height) {
+                    // TODO Repainting the entire component is a workaround for PIVOT-490
+                    repaintComponent();
+
                     tableView.scrollAreaToVisible(selectionBounds);
                 }
             }
