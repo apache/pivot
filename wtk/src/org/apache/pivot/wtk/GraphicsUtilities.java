@@ -181,35 +181,44 @@ public final class GraphicsUtilities {
 
         value = value.toLowerCase();
 
-        int rgb;
-        float alpha;
+        Color color;
         if (value.startsWith("0x")) {
             value = value.substring(2);
             if (value.length() != 8) {
                 throw new IllegalArgumentException();
             }
 
-            rgb = Integer.parseInt(value.substring(0, 6), 16);
-            alpha = Integer.parseInt(value.substring(6, 8), 16) / 255f;
+            int rgb = Integer.parseInt(value.substring(0, 6), 16);
+            float alpha = Integer.parseInt(value.substring(6, 8), 16) / 255f;
+
+            color = getColor(rgb, alpha);
         } else if (value.startsWith("#")) {
             value = value.substring(1);
             if (value.length() != 6) {
                 throw new IllegalArgumentException();
             }
 
-            rgb = Integer.parseInt(value, 16);
-            alpha = 1.0f;
+            int rgb = Integer.parseInt(value, 16);
+            float alpha = 1.0f;
+
+            color = getColor(rgb, alpha);
         } else {
-            throw new IllegalArgumentException();
+            try {
+                color = (Color)Color.class.getDeclaredField(value).get(null);
+            } catch (Exception exception) {
+                throw new IllegalArgumentException("\"" + value + "\" is not a valid color constant.");
+            }
         }
 
+        return color;
+    }
+
+    public static Color getColor(int rgb, float alpha) {
         float red = ((rgb >> 16) & 0xff) / 255f;
         float green = ((rgb >> 8) & 0xff) / 255f;
         float blue = (rgb >> 0 & 0xff) / 255f;
 
-        Color color = new Color(red, green, blue, alpha);
-
-        return color;
+        return new Color(red, green, blue, alpha);
     }
 
     public static Paint decodePaint(String value) {
