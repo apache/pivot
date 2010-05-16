@@ -16,10 +16,14 @@
  */
 package org.apache.pivot.wtk.skin.terra;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.geom.Line2D;
+import java.awt.geom.RoundRectangle2D;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
@@ -178,55 +182,76 @@ public class TerraTabPaneSkin extends ContainerSkin
             boolean active = (selectionChangeTransition != null
                 && selectionChangeTransition.tab == tab);
 
-            Color backgroundColor = (tabButton.isSelected()
-                || active) ?
-                activeTabColor : inactiveTabColor;
+            Color backgroundColor, buttonBevelColor;
+            if (tabButton.isSelected()
+                || active) {
+                backgroundColor = activeTabColor;
+                buttonBevelColor = activeButtonBevelColor;
+            } else {
+                backgroundColor = inactiveTabColor;
+                buttonBevelColor = inactiveButtonBevelColor;
+            }
 
             int width = getWidth();
             int height = getHeight();
 
             // Draw the background
-            graphics.setPaint(backgroundColor);
-            graphics.fillRect(0, 0, width, height);
-
-            // Draw the bevel
-            graphics.setPaint(new GradientPaint(width / 2f, 1, buttonBevelColor,
-                width / 2f, GRADIENT_BEVEL_THICKNESS, backgroundColor));
-
             switch(tabOrientation) {
                 case HORIZONTAL: {
-                    graphics.fillRect(1, 1, width - 2, GRADIENT_BEVEL_THICKNESS);
+                    graphics.setPaint(new GradientPaint(width / 2f, 0, buttonBevelColor,
+                        width / 2f, height / 2f, backgroundColor));
+                    graphics.fill(new RoundRectangle2D.Double(0, 0, width, height + CORNER_RADIUS,
+                        CORNER_RADIUS, CORNER_RADIUS));
                     break;
                 }
 
                 case VERTICAL: {
-                    graphics.fillRect(1, 1, width - 1, GRADIENT_BEVEL_THICKNESS);
+                    graphics.setPaint(new GradientPaint(0, width / 2f, buttonBevelColor,
+                        height / 2f, width / 2f, backgroundColor));
+                    graphics.fill(new RoundRectangle2D.Double(0, 0, width + CORNER_RADIUS, height,
+                        CORNER_RADIUS, CORNER_RADIUS));
                     break;
                 }
             }
 
             // Draw the border
             graphics.setPaint(borderColor);
+            graphics.setStroke(new BasicStroke(1));
 
-            if (tabButton.isSelected()
-                || active) {
+            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+
+            switch(tabOrientation) {
+                case HORIZONTAL: {
+                    graphics.draw(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height + CORNER_RADIUS - 1,
+                        CORNER_RADIUS, CORNER_RADIUS));
+                    break;
+                }
+
+                case VERTICAL: {
+                    graphics.draw(new RoundRectangle2D.Double(0.5, 0.5, width + CORNER_RADIUS - 1, height - 1,
+                        CORNER_RADIUS, CORNER_RADIUS));
+                    break;
+                }
+            }
+
+            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_OFF);
+
+            if (!(tabButton.isSelected()
+                || active)) {
+                // Draw divider
                 switch(tabOrientation) {
                     case HORIZONTAL: {
-                        GraphicsUtilities.drawLine(graphics, 0, 0, height, Orientation.VERTICAL);
-                        GraphicsUtilities.drawLine(graphics, 0, 0, width, Orientation.HORIZONTAL);
-                        GraphicsUtilities.drawLine(graphics, width - 1, 0, height, Orientation.VERTICAL);
+                        graphics.draw(new Line2D.Double(0.5, height - 0.5, width - 0.5, height - 0.5));
                         break;
                     }
 
                     case VERTICAL: {
-                        GraphicsUtilities.drawLine(graphics, 0, 0, width, Orientation.HORIZONTAL);
-                        GraphicsUtilities.drawLine(graphics, 0, 0, height, Orientation.VERTICAL);
-                        GraphicsUtilities.drawLine(graphics, 0, height - 1, width, Orientation.HORIZONTAL);
+                        graphics.draw(new Line2D.Double(width - 0.5, 0.5, width - 0.5, height - 0.5));
                         break;
                     }
                 }
-            } else {
-                GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
             }
 
             // Paint the content
@@ -366,7 +391,8 @@ public class TerraTabPaneSkin extends ContainerSkin
     private Color disabledButtonColor;
     private Insets buttonPadding;
 
-    private Color buttonBevelColor;
+    private Color activeButtonBevelColor;
+    private Color inactiveButtonBevelColor;
 
     private boolean collapsible = false;
     private Orientation tabOrientation = Orientation.HORIZONTAL;
@@ -386,13 +412,12 @@ public class TerraTabPaneSkin extends ContainerSkin
     private static final int SELECTION_CHANGE_DURATION = 250;
     private static final int SELECTION_CHANGE_RATE = 30;
 
-    public static final int GRADIENT_BEVEL_THICKNESS = 4;
+    public static final int CORNER_RADIUS = 4;
+    public static final int GRADIENT_BEVEL_THICKNESS = 8;
+
     private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new ButtonDataRenderer() {
         @Override
         public void render(Object data, Button button, boolean highlighted) {
-            // TODO Create a custom inner renderer class that can display
-            // the close button (and also avoid the heap allocation every
-            // time we're called to render())
             Component tab = (Component)data;
             super.render(new ButtonData(TabPane.getIcon(tab), TabPane.getLabel(tab)),
                 button, highlighted);
@@ -410,7 +435,8 @@ public class TerraTabPaneSkin extends ContainerSkin
         disabledButtonColor = theme.getColor(7);
         buttonPadding = new Insets(3, 4, 3, 4);
 
-        buttonBevelColor = TerraTheme.brighten(inactiveTabColor);
+        activeButtonBevelColor = TerraTheme.brighten(activeTabColor);
+        inactiveButtonBevelColor = TerraTheme.brighten(inactiveTabColor);
 
         buttonBoxPane.getStyles().put("fill", true);
 
@@ -884,16 +910,10 @@ public class TerraTabPaneSkin extends ContainerSkin
 
             // Draw the border
             graphics.setPaint(borderColor);
+
+            // TODO Don't use drawRect() here; use Rectangle2D
             GraphicsUtilities.drawRect(graphics, contentBounds.x, contentBounds.y,
                 contentBounds.width, contentBounds.height);
-
-            // Draw the bevel for vertical tabs
-            if (tabOrientation == Orientation.VERTICAL) {
-                graphics.setPaint(new GradientPaint(width / 2f, contentBounds.y + 1, buttonBevelColor,
-                    width / 2f, contentBounds.y + 1 + GRADIENT_BEVEL_THICKNESS, activeTabColor));
-                graphics.fillRect(contentBounds.x + 1, contentBounds.y + 1,
-                    contentBounds.width - 2, GRADIENT_BEVEL_THICKNESS);
-            }
         }
     }
 
@@ -907,6 +927,7 @@ public class TerraTabPaneSkin extends ContainerSkin
         }
 
         this.activeTabColor = activeTabColor;
+        activeButtonBevelColor = TerraTheme.brighten(activeTabColor);
         repaintComponent();
     }
 
@@ -933,7 +954,7 @@ public class TerraTabPaneSkin extends ContainerSkin
         }
 
         this.inactiveTabColor = inactiveTabColor;
-        buttonBevelColor = TerraTheme.brighten(inactiveTabColor);
+        inactiveButtonBevelColor = TerraTheme.brighten(inactiveTabColor);
         repaintComponent();
     }
 

@@ -23,7 +23,7 @@ import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
-import java.awt.geom.Rectangle2D;
+import java.awt.geom.RoundRectangle2D;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.wtk.Bounds;
@@ -58,10 +58,11 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     private float maximumAspectRatio;
     private boolean toolbar;
 
-    // Derived colors
     private Color bevelColor;
     private Color pressedBevelColor;
     private Color disabledBevelColor;
+
+    private static final int CORNER_RADIUS = 4;
 
     private WindowStateListener menuPopupWindowStateListener = new WindowStateListener.Adapter() {
         @Override
@@ -230,20 +231,14 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
             && bevelColor != null) {
             graphics.setPaint(new GradientPaint(width / 2f, 0, bevelColor,
                 width / 2f, height / 2f, backgroundColor));
-            graphics.fillRect(0, 0, width, height);
+            graphics.fill(new RoundRectangle2D.Double(0, 0, width, height,
+                CORNER_RADIUS, CORNER_RADIUS));
         }
 
-        // Paint the border
-        if (borderColor != null) {
-            graphics.setPaint(borderColor);
-            GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
-        }
-
+        // Paint the content
         Bounds contentBounds = new Bounds(padding.left + 1, padding.top + 1,
             Math.max(width - (padding.left + padding.right + spacing + TRIGGER_WIDTH + 2), 0),
             Math.max(height - (padding.top + padding.bottom + 2), 0));
-
-        // Paint the content
         Button.DataRenderer dataRenderer = menuButton.getDataRenderer();
         dataRenderer.render(menuButton.getButtonData(), menuButton, highlighted);
         dataRenderer.setSize(contentBounds.width, contentBounds.height);
@@ -254,10 +249,32 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         dataRenderer.paint(contentGraphics);
         contentGraphics.dispose();
 
-        // Paint the trigger
-        Bounds triggerBounds = new Bounds(Math.max(width - (padding.right + TRIGGER_WIDTH), 0),
-            0, TRIGGER_WIDTH, Math.max(height - (padding.top - padding.bottom), 0));
+        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+            RenderingHints.VALUE_ANTIALIAS_ON);
 
+        // Paint the border
+        if (borderColor != null) {
+            graphics.setPaint(borderColor);
+            graphics.setStroke(new BasicStroke(1));
+            graphics.draw(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height - 1,
+                CORNER_RADIUS, CORNER_RADIUS));
+        }
+
+        // Paint the focus state
+        if (menuButton.isFocused()
+            && !toolbar) {
+            BasicStroke dashStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND,
+                BasicStroke.JOIN_ROUND, 1.0f, new float[] {0.0f, 2.0f}, 0.0f);
+            graphics.setStroke(dashStroke);
+            graphics.setColor(this.borderColor);
+            graphics.draw(new RoundRectangle2D.Double(2.5, 2.5, Math.max(width - 5, 0),
+                Math.max(height - 5, 0), CORNER_RADIUS / 2, CORNER_RADIUS / 2));
+        }
+
+        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+            RenderingHints.VALUE_ANTIALIAS_OFF);
+
+        // Paint the trigger
         GeneralPath triggerIconShape = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
         triggerIconShape.moveTo(0, 0);
         triggerIconShape.lineTo(3, 3);
@@ -268,6 +285,8 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         triggerGraphics.setStroke(new BasicStroke(0));
         triggerGraphics.setPaint(color);
 
+        Bounds triggerBounds = new Bounds(Math.max(width - (padding.right + TRIGGER_WIDTH), 0),
+            0, TRIGGER_WIDTH, Math.max(height - (padding.top - padding.bottom), 0));
         int tx = triggerBounds.x + (triggerBounds.width - triggerIconShape.getBounds().width) / 2;
         int ty = triggerBounds.y + (triggerBounds.height - triggerIconShape.getBounds().height) / 2;
         triggerGraphics.translate(tx, ty);
@@ -276,22 +295,6 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         triggerGraphics.fill(triggerIconShape);
 
         triggerGraphics.dispose();
-
-        // Paint the focus state
-        if (menuButton.isFocused()
-            && !toolbar) {
-            BasicStroke dashStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND,
-                BasicStroke.JOIN_ROUND, 1.0f, new float[] {0.0f, 2.0f}, 0.0f);
-
-            graphics.setStroke(dashStroke);
-            graphics.setColor(borderColor);
-
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
-
-            graphics.draw(new Rectangle2D.Double(2.5, 2.5, Math.max(width - 5, 0),
-                Math.max(height - 5, 0)));
-        }
     }
 
     @Override

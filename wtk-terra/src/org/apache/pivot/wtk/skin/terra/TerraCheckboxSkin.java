@@ -34,7 +34,6 @@ import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.skin.CheckboxSkin;
 
-
 /**
  * Terra checkbox skin.
  * <p>

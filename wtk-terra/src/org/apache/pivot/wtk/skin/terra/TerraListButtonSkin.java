@@ -23,7 +23,8 @@ import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
-import java.awt.geom.Rectangle2D;
+import java.awt.geom.Line2D;
+import java.awt.geom.RoundRectangle2D;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
@@ -104,7 +105,6 @@ public class TerraListButtonSkin extends ListButtonSkin {
     private Color disabledBorderColor;
     private Insets padding;
 
-    // Derived colors
     private Color bevelColor;
     private Color pressedBevelColor;
     private Color disabledBevelColor;
@@ -112,6 +112,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
     private Transition closeTransition = null;
     private DropShadowDecorator dropShadowDecorator = null;
 
+    private static final int CORNER_RADIUS = 4;
     private static final int TRIGGER_WIDTH = 14;
 
     private static final int CLOSE_TRANSITION_DURATION = 250;
@@ -267,22 +268,12 @@ public class TerraListButtonSkin extends ListButtonSkin {
         // Paint the background
         graphics.setPaint(new GradientPaint(width / 2f, 0, bevelColor,
             width / 2f, height / 2f, backgroundColor));
-        graphics.fillRect(0, 0, width, height);
-
-        // Paint the border
-        graphics.setPaint(borderColor);
-
-        Bounds contentBounds = new Bounds(0, 0,
-            Math.max(width - TRIGGER_WIDTH - 1, 0), Math.max(height - 1, 0));
-        GraphicsUtilities.drawRect(graphics, contentBounds.x, contentBounds.y,
-            contentBounds.width + 1, contentBounds.height + 1);
-
-        Bounds triggerBounds = new Bounds(Math.max(width - TRIGGER_WIDTH - 1, 0), 0,
-            TRIGGER_WIDTH, Math.max(height - 1, 0));
-        GraphicsUtilities.drawRect(graphics, triggerBounds.x, triggerBounds.y,
-            triggerBounds.width + 1, triggerBounds.height + 1);
+        graphics.fill(new RoundRectangle2D.Double(0, 0, width, height,
+            CORNER_RADIUS, CORNER_RADIUS));
 
         // Paint the content
+        Bounds contentBounds = new Bounds(0, 0,
+            Math.max(width - TRIGGER_WIDTH - 1, 0), Math.max(height - 1, 0));
         Button.DataRenderer dataRenderer = listButton.getDataRenderer();
         dataRenderer.render(listButton.getButtonData(), listButton, false);
         dataRenderer.setSize(Math.max(contentBounds.width - (padding.left + padding.right + 2) + 1, 0),
@@ -294,6 +285,17 @@ public class TerraListButtonSkin extends ListButtonSkin {
         dataRenderer.paint(contentGraphics);
         contentGraphics.dispose();
 
+        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+            RenderingHints.VALUE_ANTIALIAS_ON);
+
+        // Paint the border
+        graphics.setPaint(borderColor);
+        graphics.setStroke(new BasicStroke(1));
+        graphics.draw(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height - 1,
+            CORNER_RADIUS, CORNER_RADIUS));
+        graphics.draw(new Line2D.Double(contentBounds.x + contentBounds.width, 0.5,
+            contentBounds.x + contentBounds.width, contentBounds.height));
+
         // Paint the focus state
         if (listButton.isFocused()) {
             BasicStroke dashStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND,
@@ -302,12 +304,12 @@ public class TerraListButtonSkin extends ListButtonSkin {
             graphics.setStroke(dashStroke);
             graphics.setColor(borderColor);
 
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
-
-            graphics.draw(new Rectangle2D.Double(2.5, 2.5, Math.max(contentBounds.width - 4, 0),
-                Math.max(contentBounds.height - 4, 0)));
+            graphics.draw(new RoundRectangle2D.Double(2.5, 2.5, Math.max(contentBounds.width - 4, 0),
+                Math.max(contentBounds.height - 4, 0), CORNER_RADIUS / 2, CORNER_RADIUS / 2));
         }
+
+        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+            RenderingHints.VALUE_ANTIALIAS_OFF);
 
         // Paint the trigger
         GeneralPath triggerIconShape = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
@@ -320,6 +322,8 @@ public class TerraListButtonSkin extends ListButtonSkin {
         triggerGraphics.setStroke(new BasicStroke(0));
         triggerGraphics.setPaint(color);
 
+        Bounds triggerBounds = new Bounds(Math.max(width - TRIGGER_WIDTH - 1, 0), 0,
+            TRIGGER_WIDTH, Math.max(height - 1, 0));
         int tx = triggerBounds.x + Math.round((triggerBounds.width
             - triggerIconShape.getBounds().width) / 2f);
         int ty = triggerBounds.y + Math.round((triggerBounds.height

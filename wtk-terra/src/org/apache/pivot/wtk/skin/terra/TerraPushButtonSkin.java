@@ -22,7 +22,7 @@ import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.geom.Rectangle2D;
+import java.awt.geom.RoundRectangle2D;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.wtk.Button;
@@ -51,10 +51,11 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     private float maximumAspectRatio;
     private boolean toolbar;
 
-    // Derived colors
     private Color bevelColor;
     private Color pressedBevelColor;
     private Color disabledBevelColor;
+
+    private static final int CORNER_RADIUS = 4;
 
     public TerraPushButtonSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
@@ -220,13 +221,8 @@ public class TerraPushButtonSkin extends PushButtonSkin {
             && bevelColor != null) {
             graphics.setPaint(new GradientPaint(width / 2f, 0, bevelColor,
                 width / 2f, height / 2f, backgroundColor));
-            graphics.fillRect(0, 0, width, height);
-        }
-
-        // Paint the border
-        if (borderColor != null) {
-            graphics.setPaint(borderColor);
-            GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
+            graphics.fill(new RoundRectangle2D.Double(0, 0, width, height,
+                CORNER_RADIUS, CORNER_RADIUS));
         }
 
         // Paint the content
@@ -241,20 +237,26 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         dataRenderer.paint(contentGraphics);
         contentGraphics.dispose();
 
+        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+            RenderingHints.VALUE_ANTIALIAS_ON);
+
+        // Paint the border
+        if (borderColor != null) {
+            graphics.setPaint(borderColor);
+            graphics.setStroke(new BasicStroke(1));
+            graphics.draw(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height - 1,
+                CORNER_RADIUS, CORNER_RADIUS));
+        }
+
         // Paint the focus state
         if (pushButton.isFocused()
             && !toolbar) {
             BasicStroke dashStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND,
                 BasicStroke.JOIN_ROUND, 1.0f, new float[] {0.0f, 2.0f}, 0.0f);
-
             graphics.setStroke(dashStroke);
             graphics.setColor(this.borderColor);
-
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
-
-            graphics.draw(new Rectangle2D.Double(2.5, 2.5, Math.max(width - 5, 0),
-                Math.max(height - 5, 0)));
+            graphics.draw(new RoundRectangle2D.Double(2.5, 2.5, Math.max(width - 5, 0),
+                Math.max(height - 5, 0), CORNER_RADIUS / 2, CORNER_RADIUS / 2));
         }
     }
 
