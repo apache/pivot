@@ -500,12 +500,23 @@ limitations under the License.
             ]]>
         </source>
 
+        <source type="xml">
+            <![CDATA[
+            <-- content.wtkx -->
+            <Label xmlns="org.apache.pivot.wtk"
+                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                wtkx:id="label" text="Hello, World!"/>
+            ]]>
+        </source>
+
         <p>
-            The contents of the included file are loaded using a nested instance of
-            <tt>WTKXSerializer</tt>. If the include tag is given an ID, the objects defined in the
-            included file will be accessible by name using <tt>WTKXSerializer#get()</tt>, discussed
-            in more detail below. For example, given the following WTKX, a caller can later
-            retrieve the <tt>Label</tt> instance from the serializer by the name "content.label":
+            By default, the contents of the included file are loaded using a nested instance of
+            <tt>WTKXSerializer</tt>. The nested serializer creates a separate namespace for the
+            include, which prevents naming collisions with the parent file. If the
+            <tt>&lt;wtkx:include&gt;</tt> tag itself is given an ID, the contents of the include's
+            namespace can be accessed externally via JSON path syntax. For example, given the
+            following root WTKX, the <tt>Labekl</tt> instance can be accessed via the path
+            "content.label":
         </p>
 
         <source type="xml">
@@ -520,26 +531,14 @@ limitations under the License.
             ]]>
         </source>
 
-        <source type="xml">
-            <![CDATA[
-            <-- content.wtkx -->
-            <Label xmlns="org.apache.pivot.wtk"
-                xmlns:wtkx="http://pivot.apache.org/wtkx"
-                wtkx:id="label" text="Hello, World!"/>
-            ]]>
-        </source>
-
         <p>
-            Java code:
+            However, it is sometimes useful to allow an include to inherit the namespace of the
+            parent file. The <tt>inline</tt> attribute can be used for this purpose. When set
+            to "true", the include will not be assigned a new, unique namespace but will instead
+            share the parent file's namespace.
         </p>
 
-        <source type="java">
-            <![CDATA[
-            Label label = (Label)wtkxSerializer.get("content.label");
-            ]]>
-        </source>
-
-        <h2><a name="scripting">Defines</a></h2>
+        <h2><a name="defines">Defines</a></h2>
 
         <p>
             In general, class instance elements declared in WTKX are expected to have a parent tag
@@ -847,8 +846,8 @@ limitations under the License.
         </source>
 
         <p>
-            where "content" is the ID of a <tt>&lt;wtkx:include&gt;</tt> file containing a
-            <tt>Label</tt> instance, and "label" is the ID of the label itself.
+            where "content" is the ID of the <tt>&lt;wtkx:include&gt;</tt> and "label" is the ID
+            of the label itself.
         </p>
 
         <h3>WTKX Binding</h3>
@@ -871,7 +870,9 @@ limitations under the License.
             <tt>Bindable</tt> defines a single method, <tt>initialize()</tt>, that is called when
             the root element of a WTKX file has been fully loaded and the bound values have been
             processed. This allows the bound class to perform any required initialization (often
-            event registration on the bound members).
+            event registration on the bound members). It takes a single argument of type
+            <tt>org.apache.pivot.util.Resources</tt> that contains the resources used to load the
+            file (if any).
         </p>
 
         <p>
