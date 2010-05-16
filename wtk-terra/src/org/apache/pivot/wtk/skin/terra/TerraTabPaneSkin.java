@@ -206,8 +206,8 @@ public class TerraTabPaneSkin extends ContainerSkin
                 }
 
                 case VERTICAL: {
-                    graphics.setPaint(new GradientPaint(0, width / 2f, buttonBevelColor,
-                        height / 2f, width / 2f, backgroundColor));
+                    graphics.setPaint(new GradientPaint(0, height / 2f, buttonBevelColor,
+                        width / 2f, height / 2f, backgroundColor));
                     graphics.fill(new RoundRectangle2D.Double(0, 0, width + CORNER_RADIUS, height,
                         CORNER_RADIUS, CORNER_RADIUS));
                     break;
