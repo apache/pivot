@@ -29,9 +29,6 @@ import org.apache.pivot.util.ListenerList;
  * TODO Add style properties.
  * <p>
  * TODO Add style class property.
- *
- * @deprecated
- * This class will be removed in a future release.
  */
 public abstract class Element extends Node
     implements Sequence<Node>, Iterable<Node> {

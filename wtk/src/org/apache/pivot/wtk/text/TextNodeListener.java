@@ -18,9 +18,6 @@ package org.apache.pivot.wtk.text;
 
 /**
  * Text node listener interface.
- *
- * @deprecated
- * This class will be removed in a future release.
  */
 public interface TextNodeListener {
     /**

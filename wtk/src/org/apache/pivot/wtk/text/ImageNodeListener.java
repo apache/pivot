@@ -20,9 +20,6 @@ import org.apache.pivot.wtk.media.Image;
 
 /**
  * Image node listener interface.
- *
- * @deprecated
- * This class will be removed in a future release.
  */
 public interface ImageNodeListener {
     public void imageChanged(ImageNode imageNode, Image previousImage);

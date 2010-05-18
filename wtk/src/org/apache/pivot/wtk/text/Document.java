@@ -18,9 +18,6 @@ package org.apache.pivot.wtk.text;
 
 /**
  * Node representing the root of an element hierarchy.
- *
- * @deprecated
- * This class will be removed in a future release.
  */
 public class Document extends Block {
     public Document() {

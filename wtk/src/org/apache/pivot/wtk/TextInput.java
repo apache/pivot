@@ -286,10 +286,6 @@ public class TextInput extends Component {
 
     /**
      * Returns the text node that backs the text input's content.
-     *
-     * @deprecated
-     * This method will be removed in a future release. Callers should use
-     * {@link #getText()} instead.
      */
     public TextNode getTextNode() {
         return textNode;
@@ -299,10 +295,6 @@ public class TextInput extends Component {
      * Sets the text node that backs the text input's content.
      *
      * @param textNode
-     *
-     * @deprecated
-     * This method will be removed in a future release. Callers should use
-     * {@link #setText(String)} instead.
      */
     public void setTextNode(TextNode textNode) {
         if (textNode != null

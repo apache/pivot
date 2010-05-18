@@ -22,9 +22,6 @@ import org.apache.pivot.util.ListenerList;
 
 /**
  * Node representing a sequence of characters.
- *
- * @deprecated
- * This class will be removed in a future release.
  */
 public final class TextNode extends Node {
     private class TextNodeCharacterIterator implements CharacterIterator {

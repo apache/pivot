@@ -23,9 +23,6 @@ import org.apache.pivot.collections.Sequence;
  * Element representing a paragraph.
  * <p>
  * TODO Add indent property.
- *
- * @deprecated
- * This class will be removed in a future release.
  */
 public class Paragraph extends Block {
     public Paragraph() {

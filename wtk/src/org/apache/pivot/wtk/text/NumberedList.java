@@ -18,9 +18,6 @@ package org.apache.pivot.wtk.text;
 
 /**
  * Element representing a numbered list.
- *
- * @deprecated
- * This class will be removed in a future release.
  */
 public class NumberedList extends List {
     /**

@@ -18,9 +18,6 @@ package org.apache.pivot.wtk.text;
 
 /**
  * Element representing a bulleted list.
- *
- * @deprecated
- * This class will be removed in a future release.
  */
 public class BulletedList extends List {
     /**

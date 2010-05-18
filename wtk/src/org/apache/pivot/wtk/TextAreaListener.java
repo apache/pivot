@@ -40,9 +40,6 @@ public interface TextAreaListener {
      *
      * @param textArea
      * @param previousDocument
-     *
-     * @deprecated
-     * This method will be removed in a future release.
      */
     public void documentChanged(TextArea textArea, Document previousDocument);
 

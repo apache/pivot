@@ -65,9 +65,6 @@ public interface TextInputListener {
      *
      * @param textInput
      * @param previousTextNode
-     *
-     * @deprecated
-     * This method will be removed in a future release.
      */
     public void textNodeChanged(TextInput textInput, TextNode previousTextNode);
 

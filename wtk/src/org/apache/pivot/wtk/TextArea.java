@@ -258,10 +258,6 @@ public class TextArea extends Component {
 
     /**
      * Returns the document that backs the text area.
-     *
-     * @deprecated
-     * This method will be removed in a future release. Callers should use
-     * {@link #getText()} instead.
      */
     public Document getDocument() {
         return document;
@@ -271,10 +267,6 @@ public class TextArea extends Component {
      * Sets the document that backs the text area.
      *
      * @param document
-     *
-     * @deprecated
-     * This method will be removed in a future release. Callers should use
-     * {@link #setText(String)} instead.
      */
     public void setDocument(Document document) {
         Document previousDocument = this.document;
