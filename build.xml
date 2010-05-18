@@ -36,12 +36,12 @@ limitations under the License.
     <property name="keystore.passwd" value="apache"/>
 
     <!-- Compiler properties -->
-    <property name="compiler.deprecation" value="false"/>
+    <property name="compiler.deprecation" value="true"/>
     <property name="compiler.debug" value="true"/>
     <property name="compiler.target" value="1.6"/>
     <property name="compiler.encoding" value="UTF-8"/>
     <property name="compiler.indexJars" value="true"/>
-    <property name="compiler.arg" value="-Xlint:-deprecation"/>
+    <property name="compiler.arg" value="-Xlint"/>
 
     <!-- Test properties -->
     <property name="test.verbose" value="false"/>
