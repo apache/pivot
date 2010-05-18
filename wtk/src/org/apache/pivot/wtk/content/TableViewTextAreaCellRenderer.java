@@ -26,9 +26,9 @@ import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TextArea;
 
-
 /**
- * Renders cell contents as a string using TextArea. Only really useful when the TableView is using the variableRowHeight style.
+ * Renders cell contents as a string using a text area (which supports line feeds,
+ * which the default label-based table view cell renderer does not).
  */
 public class TableViewTextAreaCellRenderer extends TextArea
     implements TableView.CellRenderer {

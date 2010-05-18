@@ -273,8 +273,9 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                     rowHeight = Math.max(rowHeight, cellRenderer.getPreferredHeight(columnWidth));
                 }
 
+                rowY += rowHeight;
                 rowBoundaries.add(rowY);
-                rowY += rowHeight + 1;
+                rowY++;
             }
         } else {
             fixedRowHeight = calculateFixedRowHeight(tableView);
@@ -545,7 +546,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         List<Object> tableData = (List<Object>)tableView.getTableData();
 
         TableView.ColumnSequence columns = tableView.getColumns();
-        Object rowData = tableData.get(0);
+        Object rowData = tableData.get(rowIndex);
 
         int rowHeight = 0;
         for (int i = 0, n = columns.getLength(); i < n; i++) {

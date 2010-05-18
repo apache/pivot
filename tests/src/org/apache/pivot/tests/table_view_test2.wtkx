@@ -22,24 +22,28 @@ limitations under the License.
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
     <content>
-        <TableView wtkx:id="tableView" styles="{variableRowHeight:true}">
-            <columns>
-                <TableView.Column name="value" width="100">
-                    <cellRenderer>
-                        <content:TableViewTextAreaCellRenderer />
-                    </cellRenderer>
-                </TableView.Column>
+        <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
+            <view>
+                <TableView wtkx:id="tableView" styles="{variableRowHeight:true, backgroundColor:'#ffeeee'}">
+                    <columns>
+                        <TableView.Column name="value" width="100">
+                            <cellRenderer>
+                                <content:TableViewCellRenderer styles="{wrapText:true}"/>
+                            </cellRenderer>
+                        </TableView.Column>
 
-                <TableView.Column width="1*"/>
-            </columns>
-            <tableData>
-                <collections:ArrayList>
-                    <collections:HashMap value="Single Line"/>
-                    <collections:HashMap value="Double&#xA;Line"/>
-                    <collections:HashMap value="Single Line"/>
-                    <collections:HashMap value="Double&#xA;Line"/>
-                </collections:ArrayList>
-            </tableData>
-        </TableView>
+                        <TableView.Column width="1*"/>
+                    </columns>
+                    <tableData>
+                        <collections:ArrayList>
+                            <collections:HashMap value="Single Line"/>
+                            <collections:HashMap value="Double&#xA;Line Line Line Line!"/>
+                            <collections:HashMap value="Single Line"/>
+                            <collections:HashMap value="Double&#xA;Line"/>
+                        </collections:ArrayList>
+                    </tableData>
+                </TableView>
+            </view>
+        </ScrollPane>
     </content>
 </Window>
