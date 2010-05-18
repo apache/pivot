@@ -17,6 +17,7 @@
 package org.apache.pivot.wtk;
 
 import java.net.URL;
+import java.io.File;
 
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
@@ -49,6 +50,13 @@ public class ScriptApplication implements Application {
 
         ClassLoader classLoader = ThreadUtilities.getClassLoader();
         URL location = classLoader.getResource(src);
+
+        if (location == null) {
+            File file = new File(src);
+            if (file.exists()) {
+               location = file.toURI().toURL();
+            }
+        }
 
         if (location == null) {
             throw new IllegalArgumentException("Cannot find source file \"" + src + "\".");
