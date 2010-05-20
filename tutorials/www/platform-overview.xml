@@ -41,7 +41,8 @@ limitations under the License.
                 buttons, lists, text input, layout, drag and drop, XML markup, etc.
             </li>
             <li>
-                <b>Web</b> - Classes to facilitate communicate with remote data services.
+                <b>Web</b> - Classes to facilitate implementation of and communication with remote
+                data services.
             </li>
             <li>
                 <b>Charts</b> - Classes for adding interactive charting capabilities to Pivot
@@ -57,7 +58,8 @@ limitations under the License.
             set of libraries:
         </p>
 
-        <h3>pivot-core-[version].jar</h3>
+        <h3>Core</h3>
+        <h4>pivot-core-[version].jar</h4>
 
         <ul>
             <li>
@@ -107,7 +109,8 @@ limitations under the License.
             </li>
         </ul>
 
-        <h3>pivot-wtk-[version].jar</h3>
+        <h3>WTK</h3>
+        <h4>pivot-wtk-[version].jar</h4>
 
         <ul>
             <li>
@@ -153,7 +156,7 @@ limitations under the License.
             </li>
         </ul>
 
-        <h3>pivot-wtk-terra-[version].jar</h3>
+        <h4>pivot-wtk-terra-[version].jar</h4>
 
         <ul>
             <li>
@@ -162,7 +165,8 @@ limitations under the License.
             </li>
         </ul>
 
-        <h3>pivot-web-[version].jar</h3>
+        <h3>Web</h3>
+        <h4>pivot-web-[version].jar</h4>
 
         <ul>
             <li>
@@ -180,7 +184,8 @@ limitations under the License.
             </li>
         </ul>
 
-        <h3>pivot-charts-[version].jar</h3>
+        <h3>Charts</h3>
+        <h4>pivot-charts-[version].jar</h4>
 
         <ul>
             <li>
@@ -192,7 +197,8 @@ limitations under the License.
             </li>
         </ul>
 
-        <h3>pivot-tools-[version].jar</h3>
+        <h3>Tools</h3>
+        <h4>pivot-tools-[version].jar</h4>
 
         <ul>
             <li>
@@ -218,7 +224,7 @@ limitations under the License.
             The design of WTK is based on the
             <a href="http://en.wikipedia.org/wiki/Model-view-controller">model-view-controller</a>
             architecture employed by many current user interface toolkits. In WTK, model data is
-            represented by the generic collection classes defined in the Core library (most
+            represented by the generic collection interfaces defined in the Core library (most
             commonly <tt>org.apache.pivot.collections.List</tt> and
             <tt>org.apache.pivot.collections.Map</tt>). The component classes discussed in the
             next section represent the controller, which acts as the intermediary between the model
@@ -381,8 +387,8 @@ limitations under the License.
         <h3>Containers</h3>
 
         <p>
-            Other Pivot containers can be loosely grouped into three categories: layout,
-            navigation, and composite.
+            Other Pivot containers can be loosely grouped into three categories: layout containers,
+            navigation containers, and composites.
         </p>
 
         <h4>Layout Containers</h4>
@@ -693,12 +699,12 @@ limitations under the License.
         <h2>Internationalization/Localization</h2>
 
         <p>
-            Pivot applications can be localized using the standard Java localization APIs,
-            including resources and resource bundles. In addition, Pivot supports localization
-            using JSON-based resource files, which are more powerful and flexible than Java's
-            standard properties files: hierarchical resource data is much more easily represented,
-            and strings can be encoded in UTF-8 rather than ISO-8859, making it easier to author
-            content for locales with characters that are not available in ISO-8859.
+            While Pivot applications can be localized using the standard Java localization APIs,
+            Pivot supports additional localization features using JSON-based resource files, which
+            are more powerful and flexible than Java's standard properties files: hierarchical
+            resource data is much more easily represented, and strings can be encoded in UTF-8
+            rather than ISO-8859, making it easier to author content for locales with characters
+            that are not available in the ISO-8859 character set.
         </p>
 
         <h2>XML Markup</h2>
@@ -706,19 +712,9 @@ limitations under the License.
         <p>
             Pivot applications can be constructed entirely in Java code, but it is often more
             efficient (and readable) to define a Pivot application using XML. Pivot supports an XML
-            markup language called WTKX to help simplify user interface development. Every
-            component has a corresponding XML element that allows a developer to create an instance
-            of it without writing any Java code. Most component properties accessible from Java are
-            also supported in XML, and, in general, the structure of a user interface can be
-            entirely defined in markup - only application logic and event handling needs to be
-            written in Java. This enables project teams to delegate user interface design and
-            development to non-technical design resources and coding tasks to developers,
-            facilitating a clean separation of responsibility.
-        </p>
-
-        <p>
-            The following is a simple WTKX example that would create two buttons, labeled "OK" and
-            "Cancel", arranged in a horizontal line:
+            markup language called WTKX that can be used to help simplify user interface
+            development. The following example demonstrates the use of WTKX to create two buttons
+            labeled "OK" and "Cancel" arranged in a horizontal line:
         </p>
 
         <source type="xml">
@@ -732,54 +728,8 @@ limitations under the License.
         </source>
 
         <p>
-            Note that the button text is specified using the "buttonData" attribute. Simple
-            string-based data such as this is often sufficient; however, some component
-            properties, including button data, cannot always be easily expressed using XML
-            attributes. For example, a designer may want to create a button containing both an
-            image and a label. WTKX supports the expression of typed data directly in XML using
-            XML namespaces, allowing developers to pass complex data types to components without
-            needing to write Java code to do so. XML namespace prefixes are translated to Java
-            package names by the loader; an instance of
-            <tt>org.apache.pivot.wtk.content.ButtonData</tt>, which defines "icon" and "text"
-            properties, is instantiated and passed as the data to each button as follows:
-        </p>
-
-        <source type="xml">
-            <![CDATA[
-            <BoxPane xmlns:wtkx="http://pivot.apache.org/wtkx"
-                xmlns:content="org.apache.pivot.wtk.content"
-                xmlns="org.apache.pivot.wtk">
-                <PushButton>
-                    <buttonData>
-                        <content:ButtonData icon="@ok.png" text="OK"/>
-                    </buttonData>
-                </PushButton>
-                <PushButton>
-                    <buttonData>
-                        <content:ButtonData icon="@cancel.png" text="Cancel"/>
-                    </buttonData>
-                </PushButton>
-            </BoxPane>
-            ]]>
-        </source>
-
-        <p>
-            The default button renderer is capable of handling this type of data and automatically
-            draws the button appropriately.
-        </p>
-
-        <p>
-            Note that the icon values are preceded by an '@' symbol. This is a directive to the
-            WTKX loader that the following string should be treated as a URL; specifically, a URL
-            that is relative to the source WTKX file. The special syntax is required because XML
-            does not natively support a URL data type. WTKX also supports similar hints for
-            embedding resource values in a WTKX file as well as referring to object instances in
-            markup. This is discussed in more detail in later sections.
-        </p>
-
-        <p>
-            For a detailed description of how WTKX works, refer to the
-            <a href="wtkx-primer.html">WTKX primer</a>.
+            A more detailed overview of WTKX can be found in the
+            <a href="wtkx-primer.html">WTKX primer</a> section.
         </p>
 
         <h2>Effects</h2>

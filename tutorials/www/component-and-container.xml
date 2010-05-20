@@ -48,15 +48,16 @@ limitations under the License.
         </p>
 
         <p>
-            A visual's size is specified in "device-independent units"; though these generally map
+            A visual's size (reported by the <tt>getWidth()</tt> and <tt>getHeight()</tt> methods)
+            is specified in "device-independent units". Though these generally map
             one-to-one to actual pixels on an output device, they are not required to do so. This
             allows Pivot applications to be written in a resolution-independent manner, supporting
             UI scaling either for accessibility purposes or for very high resolution output devices.
-            The <tt>getBaseline()</tt> method allows a visual to report a baseline offset, which
-            is used by containers that support it to align components to a common baseline.
         </p>
 
         <p>
+            The <tt>getBaseline()</tt> method allows a visual to report a baseline offset, which
+            is used by containers that support it to align components to a common baseline.
             The <tt>paint()</tt> method is called as needed to ensure that the visual's current
             state is correctly represented on-screen. For example, a component may need to be
             repainted when an internal value, such as a button's label, has changed, or when some
@@ -163,7 +164,8 @@ limitations under the License.
 
         <p>
             These methods manage a component's visibility. A component that is not visible is not
-            painted. Layout containers will also exclude non-visible components from layout.
+            painted. Layout containers will generally also exclude non-visible components from
+            layout.
         </p>
 
         <p>
@@ -296,7 +298,7 @@ limitations under the License.
         </p>
 
         <p>
-            <tt>styles="@myStyles.json"</tt><br/>
+            <tt>styles="@my_styles.json"</tt><br/>
         </p>
 
         <h2>Attributes</h2>
@@ -336,7 +338,7 @@ limitations under the License.
         </p>
 
         <p>
-            Events are often placed into groupings of events that share some common
+            Events are often placed into groups that share some common
             characteristics. For example, <tt>Component</tt> defines a set of mouse button events
             that include "mouse down", "mouse up", and "mouse click". Components maintain a list
             of listeners who have registered interest in a particular group of events, and each
@@ -451,6 +453,16 @@ limitations under the License.
             other words, the parent of a component will receive a container mouse event before the
             component does, but the component will recieve a component mouse event before its
             parent does.
+        </p>
+
+        <p>
+            Tunneling and bubbling events can be "consumed" by a listener. When a tunneling event
+            is consumed, it will not be propagated further down the component hierarchy.
+            Conversely, when a bubbling event is consumed, it will not be propagated further up
+            the hierarchy. This allows a caller to prevent a descendant from receiving a tunneling
+            event or an ancestor from receiving a bubbling event. Note, however, that it does
+            not prevent other listeners at the same level in the hierarchy from receiving the event.
+            Consuming an event only prevents it from progressing further up or down the hierarchy.
         </p>
     </body>
 </document>

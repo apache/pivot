@@ -18,9 +18,10 @@ limitations under the License.
 
 <document>
     <properties>
-        <title>Suggestion</title>
+        <title>Suggestion Popups</title>
         <description>
-            Demonstrates Pivot's SuggestionPopup by integrating it with Yahoo! search.
+            Demonstrates Pivot's <tt>SuggestionPopup</tt> class by integrating it with Yahoo!
+            search.
         </description>
     </properties>
 

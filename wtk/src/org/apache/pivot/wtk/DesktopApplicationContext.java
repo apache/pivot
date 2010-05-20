@@ -150,8 +150,8 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
                                     // Invoke the addApplicationListener() method with the proxy listener
                                     addApplicationListenerMethod.invoke(eawtApplication, new Object[] {eawtApplicationListener});
-                                } catch(Throwable throwable) {
-                                    throwable.printStackTrace(System.err);
+                                } catch (Throwable throwable) {
+                                    System.err.println("Unable to attach EAWT hooks: " + throwable);
                                 }
                             }
                         }
