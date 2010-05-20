@@ -31,7 +31,9 @@ limitations under the License.
         <p>
             Like the clipboard, drag and drop is a common metaphor for data transfer. By clicking
             and dragging with the mouse, the user can move, copy, or link data within or between
-            applications.
+            applications. It is signed to allow drag/drop integration with other applications; as
+            with the clipboard, untrusted applications can only perform local drag and drop
+            operations.
         </p>
 
         <p>
@@ -45,7 +47,7 @@ limitations under the License.
                 <td rowspan="2">
                     <application class="org.apache.pivot.wtk.ScriptApplication"
                         width="420" height="240">
-                        <libraries>
+                        <libraries signed="true">
                             <library>core</library>
                             <library>wtk</library>
                             <library>wtk-terra</library>

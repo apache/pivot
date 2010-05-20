@@ -16,8 +16,9 @@
  */
 package org.apache.pivot.util.concurrent;
 
+import java.util.concurrent.AbstractExecutorService;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Abstract base class for "tasks". A task is an asynchronous operation that
@@ -64,6 +65,42 @@ public abstract class Task<V> {
         }
     }
 
+    private static class DefaultExecutorService extends AbstractExecutorService {
+        private boolean shutdown = false;
+
+        @Override
+        public boolean awaitTermination(long timeout, TimeUnit unit) throws InterruptedException {
+            return true;
+        }
+
+        @Override
+        public void shutdown() {
+            shutdownNow();
+        }
+
+        @Override
+        public java.util.List<Runnable> shutdownNow() {
+            shutdown = true;
+            return new java.util.ArrayList<Runnable>();
+        }
+
+        @Override
+        public boolean isShutdown() {
+            return shutdown;
+        }
+
+        @Override
+        public boolean isTerminated() {
+            return isShutdown();
+        }
+
+        @Override
+        public void execute(Runnable command) {
+            Thread thread = new Thread(command);
+            thread.start();
+        }
+    }
+
     private ExecutorService executorService;
 
     private V result = null;
@@ -73,11 +110,9 @@ public abstract class Task<V> {
     protected volatile long timeout = Long.MAX_VALUE;
     protected volatile boolean abort = false;
 
-    public static final ExecutorService DEFAULT_EXECUTOR_SERVICE;
-
-    static {
-        DEFAULT_EXECUTOR_SERVICE = Executors.newCachedThreadPool();
-    }
+    // TODO This is a workaround for an issue with Executors.newCachedThreadPool(), which
+    // unpredictably throws IllegalThreadStateException when run in an applet.
+    public static final ExecutorService DEFAULT_EXECUTOR_SERVICE = new DefaultExecutorService();
 
     public Task() {
         this(DEFAULT_EXECUTOR_SERVICE);
