@@ -614,7 +614,21 @@ public class TerraScrollBarSkin extends ContainerSkin
         scrollBar.add(scrollDownButton);
         scrollBar.add(handle);
 
-        setBackgroundColor(9);
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+
+        Color backgroundColor = theme.getColor(9);
+        Color brightBackgroundColor = TerraTheme.brighten(backgroundColor);
+
+        GradientPaint backgroundPaint;
+        if (scrollBar.getOrientation() == Orientation.HORIZONTAL) {
+            backgroundPaint = new GradientPaint(0, 1, backgroundColor,
+                0, DEFAULT_THICKNESS - 2, brightBackgroundColor);
+        } else {
+            backgroundPaint = new GradientPaint(1, 0, backgroundColor,
+                DEFAULT_THICKNESS - 2, 0, brightBackgroundColor);
+        }
+
+        setBackgroundPaint(backgroundPaint);
 
         enabledChanged(scrollBar);
     }
@@ -787,24 +801,6 @@ public class TerraScrollBarSkin extends ContainerSkin
             GraphicsUtilities.drawLine(graphics, width - 1, scrollUpButtonHeight,
                 height - scrollDownButtonHeight - scrollUpButtonHeight, Orientation.VERTICAL);
         }
-    }
-
-    @Override
-    public void setBackgroundColor(Color backgroundColor) {
-        ScrollBar scrollBar = (ScrollBar)getComponent();
-
-        Color brightBackgroundColor = TerraTheme.brighten(backgroundColor);
-        GradientPaint gradientPaint;
-
-        if (scrollBar.getOrientation() == Orientation.HORIZONTAL) {
-            gradientPaint = new GradientPaint(0, 1, backgroundColor,
-                0, DEFAULT_THICKNESS - 2, brightBackgroundColor);
-        } else {
-            gradientPaint = new GradientPaint(1, 0, backgroundColor,
-                DEFAULT_THICKNESS - 2, 0, brightBackgroundColor);
-        }
-
-        setBackgroundPaint(gradientPaint);
     }
 
     public final void setBackgroundColor(int backgroundColor) {

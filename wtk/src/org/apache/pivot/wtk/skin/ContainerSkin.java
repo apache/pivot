@@ -197,11 +197,7 @@ public abstract class ContainerSkin extends ComponentSkin
     }
 
     public Color getBackgroundColor() {
-        if (backgroundPaint != null
-            && !(backgroundPaint instanceof Color)) {
-            throw new IllegalStateException("Background paint is not a Color.");
-        }
-        return (Color)backgroundPaint;
+        return (backgroundPaint instanceof Color) ? (Color)backgroundPaint : null;
     }
 
     public void setBackgroundColor(Color backgroundColor) {
