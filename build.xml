@@ -612,24 +612,29 @@ limitations under the License.
     </target>
 
     <!-- Installs JARs to local Maven repository -->
-    <target name="maven-install" depends="clean, package">
+    <target name="maven-install" depends="clean, package, package-sources">
         <artifact:install file="pom.xml">
             <artifact:pom file="pom.xml"/>
         </artifact:install>
-        <artifact:install file="lib/pivot-core-${version}.jar">
+        <artifact:install file="lib/${jar.core}">
             <artifact:pom file="core/pom.xml"/>
+			<attach file="lib/${jar.core.sources}" classifier="sources" />
         </artifact:install>
-        <artifact:install file="lib/pivot-web-${version}.jar">
+        <artifact:install file="lib/${jar.web}">
             <artifact:pom file="web/pom.xml"/>
+			<attach file="lib/${jar.web.sources}" classifier="sources" />
         </artifact:install>
-        <artifact:install file="lib/pivot-wtk-${version}.jar">
+        <artifact:install file="lib/${jar.wtk}">
             <artifact:pom file="wtk/pom.xml"/>
+			<attach file="lib/${jar.wtk.sources}" classifier="sources" />
         </artifact:install>
-        <artifact:install file="lib/pivot-wtk-terra-${version}.jar">
+        <artifact:install file="lib/${jar.wtk-terra}">
             <artifact:pom file="wtk-terra/pom.xml"/>
+			<attach file="lib/${jar.wtk-terra.sources}" classifier="sources" />
         </artifact:install>
-        <artifact:install file="lib/pivot-charts-${version}.jar">
+        <artifact:install file="lib/${jar.charts}">
             <artifact:pom file="charts/pom.xml"/>
+			<attach file="lib/${jar.charts.sources}" classifier="sources" />
         </artifact:install>
     </target>
 
