@@ -23,6 +23,7 @@ limitations under the License.
     </path>
 
     <!-- Properties that affect the directories that are created as part of the build -->
+    <property name="folder.src" value="src"/>
     <property name="folder.bin" value="ant-bin"/>
     <property name="folder.dist" value="dist"/>
     <property name="folder.doc" value="doc"/>
@@ -60,6 +61,13 @@ limitations under the License.
     <property name="jar.web-server" value="${ant.project.name}-web-server-${version}.jar" />
     <property name="jar.wtk" value="${ant.project.name}-wtk-${version}.jar" />
     <property name="jar.wtk-terra" value="${ant.project.name}-wtk-terra-${version}.jar" />
+
+    <!-- Maven Sources Jar file names -->
+    <property name="jar.charts.sources" value="${ant.project.name}-charts-${version}-sources.jar" />
+    <property name="jar.core.sources" value="${ant.project.name}-core-${version}-sources.jar" />
+    <property name="jar.web.sources" value="${ant.project.name}-web-${version}-sources.jar" />
+    <property name="jar.wtk.sources" value="${ant.project.name}-wtk-${version}-sources.jar" />
+    <property name="jar.wtk-terra.sources" value="${ant.project.name}-wtk-terra-${version}-sources.jar" />
 
     <!-- Ant version check -->
     <fail>
@@ -201,6 +209,47 @@ limitations under the License.
         </sequential>
     </macrodef>
 
+    <!-- Package-sources macro -->
+    <macrodef name="package-sources">
+        <attribute name="project"/>
+        <attribute name="jarFile"/>
+        <attribute name="title"/>
+
+        <sequential>
+            <mkdir dir="${folder.lib}"/>
+            <jar destfile="${folder.lib}/@{jarFile}" index="${compiler.indexJars}">
+                <metainf dir="${basedir}">
+                    <include name="LICENSE"/>
+                    <include name="NOTICE"/>
+                    <include name="README"/>
+                </metainf>
+                <manifest>
+                    <attribute name="Sealed" value="true"/>
+                    <attribute name="Implementation-Vendor-Id" value="org.apache"/>
+                    <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
+                    <attribute name="Implementation-Title" value="Apache Pivot @{title}"/>
+                    <attribute name="Implementation-Version" value="${version}"/>
+                </manifest>
+                <fileset dir="@{project}/src">
+                    <include name="LICENSE"/>
+                    <include name="NOTICE"/>
+                    <include name="README"/>
+                    <include name="RELEASE-NOTES"/>
+                    <include name="**/*.java"/>
+                    <include name="**/*.html"/>
+                    <include name="**/*.jsp"/>
+                    <include name="**/*.txt"/>
+                    <include name="**/*.properties"/>
+                    <include name="**/*.xml"/>
+                    <include name="**/*.wtkx"/>
+                    <include name="**/*.wtkd"/>
+                    <include name="**/*.json"/>
+                    <exclude name="**/*.class"/>
+                </fileset>
+            </jar>
+        </sequential>
+    </macrodef>
+
     <!-- Clean macro -->
     <macrodef name="clean">
         <attribute name="project"/>
@@ -233,6 +282,15 @@ limitations under the License.
         <package project="web-server" jarFile="${jar.web-server}" title="Web Queries Server"/>
         <package project="wtk" jarFile="${jar.wtk}" title="WTK"/>
         <package project="wtk-terra" jarFile="${jar.wtk-terra}" title="WTK Terra Theme Provider"/>
+    </target>
+
+    <!-- Package Maven Sources JAR files -->
+    <target name="package-sources" description="Packages all projects into JAR files" depends="trim-whitespace">
+        <package-sources project="charts" jarFile="${jar.charts.sources}" title="Charts"/>
+        <package-sources project="core" jarFile="${jar.core.sources}" title="Core"/>
+        <package-sources project="web" jarFile="${jar.web.sources}" title="Web Queries"/>
+        <package-sources project="wtk" jarFile="${jar.wtk.sources}" title="WTK"/>
+        <package-sources project="wtk-terra" jarFile="${jar.wtk-terra.sources}" title="WTK Terra Theme Provider"/>
     </target>
 
     <!-- Run unit tests -->
