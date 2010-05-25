@@ -198,15 +198,6 @@ public class TerraMeterSkin extends ComponentSkin
         int width = getWidth();
         int height = getHeight();
 
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-            RenderingHints.VALUE_ANTIALIAS_ON);
-
-        FontRenderContext fontRenderContext = Platform.getFontRenderContext();
-        graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-            fontRenderContext.getAntiAliasingHint());
-        graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
-            fontRenderContext.getFractionalMetricsHint());
-
         if (meter.getOrientation() == Orientation.HORIZONTAL) {
             drawMeter(meter, graphics, width, height);
         } else {
@@ -249,6 +240,11 @@ public class TerraMeterSkin extends ComponentSkin
             float textY = (height - textHeight) / 2;
 
             // Paint the text
+            graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+                fontRenderContext.getAntiAliasingHint());
+            graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
+                fontRenderContext.getFractionalMetricsHint());
+
             Shape clip = graphics.getClip();
             graphics.clipRect(0, 0, meterStop, height);
             graphics.setPaint(textFillColor);
