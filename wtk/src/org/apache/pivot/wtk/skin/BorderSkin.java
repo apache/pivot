@@ -225,9 +225,6 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
         // "fake" this by drawing multiple arcs
         int cornerRadius = cornerRadii.topLeft;
 
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-            RenderingHints.VALUE_ANTIALIAS_ON);
-
         int width = getWidth();
         int height = getHeight();
 
@@ -242,7 +239,13 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
             graphics.setPaint(backgroundPaint);
 
             if (cornerRadius > 0) {
+                graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_ON);
+
                 graphics.fillRoundRect(strokeX, strokeY, strokeWidth, strokeHeight, cornerRadius, cornerRadius);
+
+                graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_OFF);
             } else {
                 graphics.fillRect(strokeX, strokeY, strokeWidth, strokeHeight);
             }
@@ -277,12 +280,16 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
             graphics.setPaint(color);
 
             if (cornerRadius > 0) {
+                graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_ON);
+
                 graphics.setStroke(new BasicStroke(thickness));
                 graphics.draw(new RoundRectangle2D.Double(0.5 * thickness, 0.5 * topThickness,
                     strokeWidth, strokeHeight, cornerRadius, cornerRadius));
-            } else {
+
                 graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_OFF);
+            } else {
                 int y = (topThickness - thickness) / 2;
                 GraphicsUtilities.drawRect(graphics, 0, y, width, Math.max(height - y, 0), thickness);
             }
