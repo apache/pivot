@@ -442,6 +442,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     private Color gridColor;
     private boolean showGridLines;
 
+    private boolean validateSelection = false;
+
     private static final int BRANCH_CONTROL_IMAGE_WIDTH = 8;
     private static final int BRANCH_CONTROL_IMAGE_HEIGHT = 8;
     private static final int VERTICAL_SPACING = 1;
@@ -582,7 +584,12 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
     @Override
     public void layout() {
-        // No-op
+        if (validateSelection) {
+            // Ensure that the selection is visible
+            scrollSelectionToVisible();
+        }
+
+        validateSelection = false;
     }
 
     @Override
@@ -1507,6 +1514,35 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         });
     }
 
+    /**
+     * Scrolls the last visible (expanded) selected node into viewport
+     * visibility. If no such node exists, nothing happens.
+     * <p>
+     * This should only be called when the tree view is valid.
+     */
+    private void scrollSelectionToVisible() {
+        TreeView treeView = (TreeView)getComponent();
+
+        Sequence<Path> selectedPaths = treeView.getSelectedPaths();
+        int n = selectedPaths.getLength();
+
+        if (n > 0) {
+            Bounds nodeBounds = null;
+
+            for (int i = n - 1; i >= 0 && nodeBounds == null; i--) {
+                NodeInfo nodeInfo = getNodeInfoAt(selectedPaths.get(i));
+                nodeBounds = getNodeBounds(nodeInfo);
+            }
+
+            if (nodeBounds != null) {
+                Bounds visibleSelectionBounds = treeView.getVisibleArea(nodeBounds);
+                if (visibleSelectionBounds.height < nodeBounds.height) {
+                    treeView.scrollAreaToVisible(nodeBounds);
+                }
+            }
+        }
+    }
+
     @Override
     public boolean mouseMove(Component component, int x, int y) {
         boolean consumed = super.mouseMove(component, x, y);
@@ -2185,9 +2221,25 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
     @Override
     public void selectedPathAdded(TreeView treeView, Path path) {
+        // Update the node info
         NodeInfo nodeInfo = getNodeInfoAt(path);
-
         nodeInfo.setSelected(true);
+
+        if (treeView.isValid()) {
+            Bounds nodeBounds = getNodeBounds(nodeInfo);
+
+            if (nodeBounds != null) {
+                // Ensure that the selection is visible
+                Bounds visibleSelectionBounds = treeView.getVisibleArea(nodeBounds);
+                if (visibleSelectionBounds.height < nodeBounds.height) {
+                    treeView.scrollAreaToVisible(nodeBounds);
+                }
+            }
+        } else {
+            validateSelection = true;
+        }
+
+        // Repaint the node
         repaintNode(nodeInfo);
     }
 
@@ -2200,8 +2252,13 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     @Override
-    public void selectedPathsChanged(TreeView treeView,
-        Sequence<Path> previousSelectedPaths) {
+    public void selectedPathsChanged(TreeView treeView, Sequence<Path> previousSelectedPaths) {
+        // Ensure that the selection is visible
+        if (treeView.isValid()) {
+            scrollSelectionToVisible();
+        } else {
+            validateSelection = true;
+        }
 
         // Un-select the previous selected paths
         for (int i = 0, n = previousSelectedPaths.getLength(); i < n; i++) {
