@@ -17,7 +17,7 @@
 
 package org.apache.pivot.collections.test;
 
- import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -196,5 +196,36 @@ public class HashMapTest {
             String key = iterator.next();
             System.out.println(key);
         }
+    }
+
+    @Test
+    public void equalsTest() {
+        HashMap<String, String> map1 = new HashMap<String, String>();
+        map1.put("a", "one");
+        map1.put("b", "two");
+        map1.put("c", "three");
+
+        HashMap<String, String> map2 = new HashMap<String, String>();
+        map2.put("a", "one");
+        map2.put("b", "two");
+        map2.put("c", "three");
+
+        // Same
+        assertTrue(map1.equals(map2));
+
+        // Different values
+        map2.put("c", "four");
+        assertFalse(map1.equals(map2));
+
+        map1.put("c", null);
+        assertFalse(map1.equals(map2));
+
+        // Null comparison
+        map2.put("c", null);
+        assertTrue(map1.equals(map2));
+
+        // Different lengths
+        map2.put("d", "four");
+        assertFalse(map1.equals(map2));
     }
 }

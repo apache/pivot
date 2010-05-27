@@ -76,4 +76,29 @@ public class HashSetTest {
         }
         assertEquals(0, set.getCount());
     }
+
+    @Test
+    public void equalsTest() {
+        HashSet<String> set1 = new HashSet<String>();
+        set1.add("one");
+        set1.add("two");
+        set1.add("three");
+
+        HashSet<String> set2 = new HashSet<String>();
+        set2.add("one");
+        set2.add("two");
+        set2.add("three");
+
+        // Same
+        assertTrue(set1.equals(set2));
+
+        // Different values
+        set2.remove("three");
+        set2.add("four");
+        assertFalse(set1.equals(set2));
+
+        // Different lengths
+        set2.add("three");
+        assertFalse(set1.equals(set2));
+    }
 }
