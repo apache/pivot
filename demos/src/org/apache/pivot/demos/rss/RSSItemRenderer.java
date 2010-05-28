@@ -27,7 +27,7 @@ import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.xml.Element;
 import org.apache.pivot.xml.TextNode;
-import org.apache.pivot.xml.XMLSerializer;
+import org.apache.pivot.xml.XML;
 
 public class RSSItemRenderer extends BoxPane implements ListView.ItemRenderer {
     private Label titleLabel = new Label();
@@ -65,7 +65,7 @@ public class RSSItemRenderer extends BoxPane implements ListView.ItemRenderer {
         if (item != null) {
             Element itemElement = (Element)item;
 
-            String title = XMLSerializer.getText(itemElement, "title");
+            String title = XML.getText(itemElement, "title");
             titleLabel.setText(title);
 
             String categories = "Categories:";
@@ -84,7 +84,7 @@ public class RSSItemRenderer extends BoxPane implements ListView.ItemRenderer {
 
             categoriesLabel.setText(categories);
 
-            String submitter = XMLSerializer.getText(itemElement, "dz:submitter/dz:username");
+            String submitter = XML.getText(itemElement, "dz:submitter/dz:username");
             submitterLabel.setText("Submitter: " + submitter);
         }
 
@@ -116,6 +116,6 @@ public class RSSItemRenderer extends BoxPane implements ListView.ItemRenderer {
 
     @Override
     public String toString(Object item) {
-        return XMLSerializer.getText((Element)item, "title");
+        return XML.getText((Element)item, "title");
     }
 }

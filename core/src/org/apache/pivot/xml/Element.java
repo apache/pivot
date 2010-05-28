@@ -128,6 +128,51 @@ public class Element extends Node implements List<Node>, Dictionary<String, Stri
                 }
             }
         }
+
+        @Override
+        public boolean equals(Object o) {
+            boolean equals = false;
+
+            if (this == o) {
+                equals = true;
+            } else if (o instanceof Attribute) {
+                Attribute attribute = (Attribute)o;
+                if (namespacePrefix == null) {
+                    equals = (attribute.namespacePrefix == null);
+                } else {
+                    equals = (namespacePrefix.equals(attribute.namespacePrefix));
+                }
+
+                equals &= (localName.equals(attribute.localName)
+                    && value.equals(attribute.value));
+            }
+
+            return equals;
+        }
+
+        @Override
+        public int hashCode() {
+            int hashCode = 0;
+            if (namespacePrefix != null) {
+                hashCode += namespacePrefix.hashCode();
+            }
+
+            hashCode += localName.hashCode() + value.hashCode();
+
+            return hashCode;
+        }
+
+        @Override
+        public String toString() {
+            String string = "";
+            if (namespacePrefix != null) {
+                string += namespacePrefix + ":";
+            }
+
+            string += localName + "=\"" + value + "\"";
+
+            return string;
+        }
     }
 
     /**
@@ -915,5 +960,50 @@ public class Element extends Node implements List<Node>, Dictionary<String, Stri
                     + " for a local name.");
             }
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        boolean equals = false;
+
+        if (this == o) {
+            equals = true;
+        } else if (o instanceof Element) {
+            Element element = (Element)o;
+            if (namespacePrefix == null) {
+                equals = (element.namespacePrefix == null);
+            } else {
+                equals = (namespacePrefix.equals(element.namespacePrefix));
+            }
+
+            equals &= (attributes.equals(element.attributes)
+                && nodes.equals(element.nodes));
+        }
+
+        return equals;
+    }
+
+    @Override
+    public int hashCode() {
+        int hashCode = 0;
+        if (namespacePrefix != null) {
+            hashCode += namespacePrefix.hashCode();
+        }
+
+        hashCode += localName.hashCode() + attributes.hashCode() + nodes.hashCode();
+
+        return hashCode;
+    }
+
+    @Override
+    public String toString() {
+        String string = "<";
+        if (namespacePrefix != null) {
+            string += namespacePrefix + ":";
+        }
+
+        string += localName + ">";
+
+        return string;
     }
 }

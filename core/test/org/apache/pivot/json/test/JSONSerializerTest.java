@@ -14,11 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.pivot.serialization.test;
+package org.apache.pivot.json.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.io.IOException;
 
 import org.apache.pivot.collections.List;
+import org.apache.pivot.json.JSON;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.junit.Test;
@@ -44,5 +49,19 @@ public class JSONSerializerTest {
         JSONSerializer.toString(Double.NaN);
         JSONSerializer.toString(Double.NEGATIVE_INFINITY);
         JSONSerializer.toString(Double.POSITIVE_INFINITY);
+    }
+
+    @Test
+    public void testEquals() throws IOException, SerializationException {
+        JSONSerializer jsonSerializer = new JSONSerializer();
+        Object o1 = jsonSerializer.readObject(getClass().getResourceAsStream("sample.json"));
+        Object o2 = jsonSerializer.readObject(getClass().getResourceAsStream("sample.json"));
+
+        assertTrue(o1.equals(o2));
+
+        List<?> d = JSON.getList(o1, "d");
+        d.remove(0, 1);
+
+        assertFalse(o1.equals(o2));
     }
 }

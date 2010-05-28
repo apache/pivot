@@ -191,7 +191,9 @@ public class HashSet<E> implements Set<E>, Serializable {
     public boolean equals(Object o) {
         boolean equals = false;
 
-        if (o instanceof Set<?>) {
+        if (this == o) {
+            equals = true;
+        } else if (o instanceof Set<?>) {
             Set<E> set = (Set<E>)o;
 
             if (getCount() == set.getCount()) {

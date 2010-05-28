@@ -33,4 +33,28 @@ public class TextNode extends Node {
     public String getText() {
         return text;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        boolean equals = false;
+
+        if (this == o) {
+            equals = true;
+        } else if (o instanceof TextNode) {
+            TextNode textNode = (TextNode)o;
+            equals = (text.equals(textNode.text));
+        }
+
+        return equals;
+    }
+
+    @Override
+    public int hashCode() {
+        return text.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return text;
+    }
 }

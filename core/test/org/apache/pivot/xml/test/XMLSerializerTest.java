@@ -21,11 +21,14 @@ import java.io.IOException;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.xml.Element;
+import org.apache.pivot.xml.XML;
 import org.apache.pivot.xml.XMLSerializer;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class XMLSerializerTest {
     @Test
@@ -36,48 +39,62 @@ public class XMLSerializerTest {
 
         assertEquals(root.getName(), "root");
 
-        Element a = XMLSerializer.getElement(root, "a");
+        Element a = XML.getElement(root, "a");
         assertEquals(a.getName(), "a");
         assertEquals(a.get("id"), "x");
 
-        Element b = XMLSerializer.getElement(root, "a/b");
+        Element b = XML.getElement(root, "a/b");
         assertEquals(b.getName(), "b");
         assertEquals(b.get("id"), "y");
 
-        b = XMLSerializer.getElement(a, "b");
+        b = XML.getElement(a, "b");
         assertEquals(b.getName(), "b");
         assertEquals(b.get("id"), "y");
 
-        List<Element> cs = XMLSerializer.getElements(root, "a/b", "c");
+        List<Element> cs = XML.getElements(root, "a/b", "c");
         assertEquals(cs.getLength(), 1);
 
-        List<Element> fs = XMLSerializer.getElements(root, "d/e", "f");
+        List<Element> fs = XML.getElements(root, "d/e", "f");
         assertEquals(fs.getLength(), 4);
 
-        Element e = XMLSerializer.getElement(root, "d/e");
-        Element f = XMLSerializer.getElement(e, "f");
+        Element e = XML.getElement(root, "d/e");
+        Element f = XML.getElement(e, "f");
         assertEquals(f.getName(), "f");
 
-        Element g = XMLSerializer.getElement(e, "g");
+        Element g = XML.getElement(e, "g");
         assertEquals(g.getName(), "g");
 
-        String ft = XMLSerializer.getText(root, "d/e/f");
+        String ft = XML.getText(root, "d/e/f");
         assertEquals(ft, "1");
 
-        String gt = XMLSerializer.getText(root, "d/e/g");
+        String gt = XML.getText(root, "d/e/g");
         assertEquals(gt, "4");
 
-        assertNull(XMLSerializer.getElement(root, "a/b/n"));
-        assertNull(XMLSerializer.getText(root, "a/b/n"));
+        assertNull(XML.getElement(root, "a/b/n"));
+        assertNull(XML.getText(root, "a/b/n"));
 
-        assertEquals(XMLSerializer.getElements(root, "a/b", "n").getLength(), 0);
+        assertEquals(XML.getElements(root, "a/b", "n").getLength(), 0);
 
-        assertEquals(XMLSerializer.getText(root, "d/foo:h"), "Hello");
+        assertEquals(XML.getText(root, "d/foo:h"), "Hello");
 
-        List<Element> is = XMLSerializer.getElements(e, "is", "i");
+        List<Element> is = XML.getElements(e, "is", "i");
         assertEquals(is.getLength(), 3);
 
-        assertEquals(XMLSerializer.getText(root, "d[0]/e[0]/f[2]"), "3");
-        assertEquals(XMLSerializer.getText(root, "d[0]/e[1]"), null);
+        assertEquals(XML.getText(root, "d[0]/e[0]/f[2]"), "3");
+        assertEquals(XML.getText(root, "d[0]/e[1]"), null);
+    }
+
+    @Test
+    public void equalsTest() throws IOException, SerializationException {
+        XMLSerializer xmlSerializer = new XMLSerializer();
+        Element root1 = xmlSerializer.readObject(getClass().getResourceAsStream("sample.xml"));
+        Element root2 = xmlSerializer.readObject(getClass().getResourceAsStream("sample.xml"));
+
+        assertTrue(root1.equals(root2));
+
+        Element a = XML.getElement(root2, "a");
+        a.getAttributes().remove(0, 1);
+
+        assertFalse(root1.equals(root2));
     }
 }

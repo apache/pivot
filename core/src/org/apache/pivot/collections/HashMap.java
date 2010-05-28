@@ -431,10 +431,12 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
     public boolean equals(Object o) {
         boolean equals = false;
 
-        if (o instanceof Map<?, ?>) {
+        if (this == o) {
+            equals = true;
+        } else if (o instanceof Map<?, ?>) {
             Map<K, V> map = (Map<K, V>)o;
 
-            if (getCount() == map.getCount()) {
+            if (count == map.getCount()) {
                 for (K key : this) {
                     V value = get(key);
 
@@ -449,7 +451,6 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
                         break;
                     }
                 }
-
             }
         }
 
