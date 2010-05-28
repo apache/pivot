@@ -73,8 +73,9 @@ Release Notes for Pivot 1.5:
       change)
     * [PIVOT-480] - Add "year" and "month" properties to CalendarButton (API addition)
     * [PIVOT-483] - better exception reporting for BeanAdapter
-    * [PIVOT-493] - Add color name from java.awt.Color in styles's attribut
+    * [PIVOT-493] - Add color name from java.awt.Color in styles's attribute
     * [PIVOT-495] - Minor UE enhancements
+    * [PIVOT-504] - Move XML path accessor methods to XML class (API change)
 
 ** Bug
     * [PIVOT-350] - Dollar signs in table row editor demo don't appear correctly
