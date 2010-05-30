@@ -15,182 +15,97 @@
   limitations under the License.
 ================================================================================
 
-Release notes for Pivot 1.4:
-
-
-New Features
-------------
-
-- Complete TextArea (PIVOT-16)
-
-- Add orientation to Meter component (PIVOT-26)
-
-- Add orientation to Slider component (PIVOT-27)
-
-- Add support for Meter#text property in TerraMeterSkin (PIVOT-33)
-
-- implement a color chooser widget (PIVOT-77)
-
-- baseline alignment in layout (PIVOT-99)
-
-- Add a GridPane container (PIVOT-227)
-
-- Double-clicking on a table view header's column-resize area should size the
-  column to fit (PIVOT-248)
-
-- Add support for declaring event handlers in WTKX attributes (PIVOT-274)
-
-- DesktopApplicationContext should remember its screen location and size
-  (PIVOT-289)
-
-- Add hit detection to drawing primitives (PIVOT-295)
-
-- Make component editors fire events (PIVOT-299)
-
-- Add DisabledCheckmarkFilter to TreeView and ListView (PIVOT-303)
-
-- Add an "automationID" property to Component (PIVOT-307)
-
-- Add support for OS-specific keyboard modifiers and menu separators (PIVOT-309)
-
-- Addition of minimum and maximum width constraint for TableView columns.
-  (PIVOT-314)
-
-- Add a "variableRowHeight" style to TerraTableViewSkin (PIVOT-320)
-
-- Add a hideDisabledFiles:boolean style to TerraFileBrowserSkin &
-  TerraFileBrowserSheetSkin (PIVOT-321)
-
-- Add a org.apache.pivot.util.Time class (PIVOT-328)
-
-- Support stroke property in Text shape (PIVOT-334)
-
-- Add XPath support to XMLSerializer (PIVOT-341)
-
-- Add native XML support (PIVOT-358)
-
-- Add "showEmptyBranchControls" style to TerraTreeViewSkin (PIVOT-370)
-
-
-Improvements
-------------
-
-- Optimize LabelSkin#paint(Graphics2D) (PIVOT-103)
-
-- pivot/wtk/ApplicationContext.java:1201 ApplicationContext.resourceCache is or
-  uses a map or set of URLs, which can be a performance hog (PIVOT-132)
-
-- Add bounds checks on skin styles (PIVOT-173)
-
-- Revisit TextInput/TerraTextInputSkin implementation (PIVOT-233)
-
-- Add resizing support to TerraSheetSkin (PIVOT-234)
-
-- Complete tutorial documentation (PIVOT-235)
-
-- SplitPane's resize weight should be configurable (PIVOT-236)
-
-- Create new ButtonGroup class that implements
-  org.apache.pivot.collections.Group and Iterable<Button> (PIVOT-292)
-
-- Rename MenuPopup#isAutoClose() to isContextMenu() (PIVOT-294)
-
-- Determine a Drawing's bounds from its Canvas rather than explicit width and
-  height properties (PIVOT-296)
-
-- Refine TableView sort API (PIVOT-300)
-
-- Add a "variableItemHeight" style to TerraListViewSkin (PIVOT-301)
-
-- Renderers should be passed index/path (PIVOT-305)
-
-- QueryServlet.setSerializerClass is not very extensible (PIVOT-308)
-
-- Make CalendarDate a struct-like class (PIVOT-310)
-
-- Add new font setters to text-based skin classes that allow a caller to
-  customize the theme font (PIVOT-312)
-
-- FileBrowser sorting improvements (PIVOT-316)
-
-- WTKXSerializer get method enhancement (PIVOT-324)
-
-- Allow to use SHIFT+END/HOME to select text in TextInput (PIVOT-325)
-
-- Make ImageView bindable (PIVOT-326)
-
-- Allow ImageView to load images in the background (PIVOT-327)
-
-- Maven POMs for Pivot (submission) (PIVOT-333)
-
-- Update skins to respect height argument in getBaseline() (PIVOT-340)
-
-
-Bug Fixes
----------
-
-- Compile warnings [rawtypes] when built with JDK1.7 (PIVOT-249)
-
-- ScrollPane optimization can fail for nested scroll panes (PIVOT-254)
-
-- Column header in Stock Tracker demo shows trailing vertical grid line
-  (PIVOT-281)
-
-- Highlight state not cleared properly in nested context menus (PIVOT-290)
-
-- Table re-sorts itself incorrectly in the stock tracker tutorial (PIVOT-291)
-
-- Window.open(owner) is prone to memory leak (PIVOT-297)
-
-- Off-by-1 layout error in TerraAccordionSkin (PIVOT-298)
-
-- CSVSerializer doesn't handle special characters correctly (PIVOT-302)
-
-- Exception in Mouse.release when released outside the display host's bounds
-  (PIVOT-311)
-
-- Terra's default font cannot display all UTF-8 characters (PIVOT-315)
-
-- IllegalArgumentException causes user to be stuck in full screen mode
-  (PIVOT-319)
-
-- PushButton pressed state is not shown for focused buttons in layered windows
-  (PIVOT-323)
-
-- Native file drag & drop doesn't work in Linux (PIVOT-329)
-
-- Errors in FloatValidator (PIVOT-335)
-
-- Corner case bug in TextInput.maximumLength restriction (PIVOT-336)
-
-- FileBrowser[Sheet] doesn't allow navigation to different logical drives in
-  Windows (PIVOT-337)
-
-- TerraPushButtonSkin baseline calculation fails when button is given more than
-  its preferred height (PIVOT-338)
-
-- ImageViewSkin fill/preserveAspectRatio can yield clipping (PIVOT-339)
-
-- Cutoff text field not accepting focus (TablePane Demo) (PIVOT-349)
-
-- Bug in Sequence.Tree.pathOf (PIVOT-351)
-
-- Drag&Drop in Kitchen Sink Allows One Image to Overwrite Another (PIVOT-362)
-
-- Stock Tracker Demo: Inconsistent Selection Behavior when Adding New Ticket
-  Symbol (PIVOT-363)
-
-- Exception in StockTracker (PIVOT-364)
-
-- StockTracker Stuck Displaying Blank (PIVOT-365)
-
-- XMLViewer Doesn't Accept Tag Names with Underscores (PIVOT-366)
-
-
-Tasks Accomplished
-------------------
-
-- Add missing resources in generated jar files, for compatibility with Apache
-  Maven Repository (PIVOT-260)
-
-- Add Web Start file for some Demos (PIVOT-261)
+Release Notes for Pivot 1.5:
+
+** New Feature
+    * [PIVOT-93] - Create a pivot.sql.ResultList class
+    * [PIVOT-330] - Add a SuggestionPopup class (API change)
+    * [PIVOT-377] - Provide access to the window in popup button components
+    * [PIVOT-382] - Add Pom files for other Pivot jars
+    * [PIVOT-395] - Provide a means for decoupled, intra-application message passing
+    * [PIVOT-409] - Allow users to navigate list view content via keyboard (API change)
+    * [PIVOT-410] - Allow users to navigate menu content via keyboard
+    * [PIVOT-419] - Add Ability to Add tooltipText for Tabs in a TabPane.
+    * [PIVOT-421] - Add a FileSerializer class
+    * [PIVOT-425] - Make data binding more robust
+    * [PIVOT-426] - Add support for controlling bind direction
+    * [PIVOT-460] - Addtional maximized argument for desktop applications
+    * [PIVOT-479] - TextInput: paint prompt if focused and input is blank
+
+** Improvement
+    * [PIVOT-35] - Replace Dispatcher with ExecutorService (API change)
+    * [PIVOT-371] - Support word navigation in TextInput and TextArea
+    * [PIVOT-381] - Handle Home and End keys in TextArea, as in TextInput
+    * [PIVOT-383] - Jars for Sources in Maven Repository
+    * [PIVOT-386] - Improve user experience in TerraFormSkin (API change)
+    * [PIVOT-394] - Allow Tooltips to contain arbitrary content (API change)
+    * [PIVOT-396] - Add a Resources argument to org.apache.pivot.wtkx.Bindable#initialize() (API
+      change)
+    * [PIVOT-402] - Update QueryServlet API for consistency with client-side Query API (API change)
+    * [PIVOT-404] - Protected Component attributes methods doesn't work for custom components
+    * [PIVOT-407] - Make FileBrowserSheet WTKX-compatible. (API addition)
+    * [PIVOT-408] - Make Dialog more WTKX-friendly (API change/addition)
+    * [PIVOT-415] - Make Alert and Prompt properties mutable (API addition)
+    * [PIVOT-427] - Rename Direction enum to FocusTraversalDirection (API change)
+    * [PIVOT-428] - Add "inline" attribute to <wtkx:include> element (API change)
+    * [PIVOT-429] - Change return type of PutQuery to Boolean (API change)
+    * [PIVOT-436] - Window.setTitle() and Window.setIcon() do not change the equivalent Frame
+      properties once the Window has been opened. (DesktopApplicationContext)
+    * [PIVOT-439] - Remove the TablePane.Row.setVisible() method (API change)
+    * [PIVOT-442] - Split JSON path methods into dedicated JSON class; move to
+      org.apache.pivot.json (API change)
+    * [PIVOT-443] - Move "strictValidation" style from TerraTextInputSkin to intrinsic
+      property (API change)
+    * [PIVOT-449] - Eliminate WTKXSerializer.reset() (API change)
+    * [PIVOT-450] - Rename TextInput and TextArea insertText() to insert() (API change)
+    * [PIVOT-456] - Enhance Messages (and make them not blocking) when wrong Startup Properties are
+      given to DesktopApplicationContext
+    * [PIVOT-462] - Eliminate Container "contextKey" property (API change)
+    * [PIVOT-464] - Add a BeanMap (or BeanAdapter) class (API change)
+    * [PIVOT-465] - Eliminate MapList class (API change)
+    * [PIVOT-466] - Use Object in Component#load() and Component#store() instead of
+      Dictionary (API change)
+    * [PIVOT-467] - Allow JSONSerializer#writeObject() to write Java bean values
+    * [PIVOT-471] - Make TableView.getSelectedRanges() iterable (API change)
+    * [PIVOT-472] - Rename alternateRowColor style to alternateRowBackgroundColor (API change)
+    * [PIVOT-474] - Ensure that selection is visible in ListView, TableView, etc.
+    * [PIVOT-475] - Move TerraListViewSkin "listSize" style to intrinsic ListButton property (API
+      change)
+    * [PIVOT-480] - Add "year" and "month" properties to CalendarButton (API addition)
+    * [PIVOT-483] - better exception reporting for BeanAdapter
+    * [PIVOT-493] - Add color name from java.awt.Color in styles's attribute
+    * [PIVOT-495] - Minor UE enhancements
+    * [PIVOT-504] - Move XML path accessor methods to XML class (API change)
+
+** Bug
+    * [PIVOT-350] - Dollar signs in table row editor demo don't appear correctly
+    * [PIVOT-373] - Exception in Vertical Sliders
+    * [PIVOT-374] - Sheets may be misaligned when first opened
+    * [PIVOT-375] - Alert not showing active state correctly
+    * [PIVOT-376] - Alerts briefly show at wrong location when opened
+    * [PIVOT-379] - Strange Chars in Localization Tutorial
+    * [PIVOT-388] - Wrong parameter name  in the Hello World tutorial
+    * [PIVOT-393] - Certain UI components do not properly respect system text anti-aliasing hints
+    * [PIVOT-413] - Change default encoding for Resources to UTF-8
+    * [PIVOT-437] - Build doesn't work with Ant 1.8.0
+    * [PIVOT-417] - TerraTreeViewSkin throws  exception when its container's width is so narrow that
+      the node is mostly clipped.
+    * [PIVOT-438] - TablePane paints grid lines for hidden rows
+    * [PIVOT-446] - Dialog does not become active when clicked
+    * [PIVOT-447] - TextInput Component's selection methods throw NPE when textNode property is null
+    * [PIVOT-461] - Sine doesn't implement Easing
+    * [PIVOT-469] - TableView multi-select: ctrl-clicking doesn't repaint correctly
+    * [PIVOT-476] - Bug in equals method in ArrayList and LinkedList
+    * [PIVOT-484] - ArrayList.ItemIterator.remove() advances the iterator
+    * [PIVOT-485] - TextArea wrapText=true computes wrong preferredHeight
+    * [PIVOT-486] - TableView.setSort(String) doesn't work
+    * [PIVOT-489] - Component Explorer - Problem in  WTKX Source
+    * [PIVOT-496] - TerraTheme.darken(Color) doesn't preserve alpha channel
+    * [PIVOT-501] - org.apache.pivot.tutorials.explorer.ComponentExplorer fails to handle exception
+      thrown when 'exploring' ScrollBar
+    * [PIVOT-503] - Using ClearType, bold text in Pivot 1.5 looks very bad
+
+** Task
+    * [PIVOT-432] - Add Yahoo! suggest demo to site
+    * [PIVOT-444] - Rename org.apache.pivot.wtk.text.validation to
+      org.apache.pivot.wtk.validation (API change)

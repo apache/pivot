@@ -427,6 +427,48 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
+    public boolean equals(Object o) {
+        boolean equals = false;
+
+        if (this == o) {
+            equals = true;
+        } else if (o instanceof Map<?, ?>) {
+            Map<K, V> map = (Map<K, V>)o;
+
+            if (count == map.getCount()) {
+                for (K key : this) {
+                    V value = get(key);
+
+                    if (value == null) {
+                        equals = (map.containsKey(key)
+                            && map.get(key) == null);
+                    } else {
+                        equals = value.equals(map.get(key));
+                    }
+
+                    if (!equals) {
+                        break;
+                    }
+                }
+            }
+        }
+
+        return equals;
+    }
+
+    @Override
+    public int hashCode() {
+        int hashCode = 0;
+
+        for (K key : this) {
+            hashCode += key.hashCode();
+        }
+
+        return hashCode;
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
 

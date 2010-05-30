@@ -105,16 +105,15 @@ public class ButtonDataRenderer extends BoxPane implements Button.DataRenderer {
 
     @Override
     public String toString(Object data) {
-        if (data == null) {
-            throw new IllegalArgumentException();
-        }
+        String string = null;
 
-        String string;
         if (data instanceof ButtonData) {
             ButtonData buttonData = (ButtonData)data;
             string = buttonData.getText();
         } else {
-            string = data.toString();
+            if (data != null) {
+                string = data.toString();
+            }
         }
 
         return string;

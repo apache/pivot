@@ -66,10 +66,6 @@ public class SpinnerItemRenderer extends Label implements Spinner.ItemRenderer {
     }
 
     public String toString(Object item) {
-        if (item == null) {
-            throw new IllegalArgumentException();
-        }
-
-        return item.toString();
+        return (item == null) ? null : item.toString();
     }
 }

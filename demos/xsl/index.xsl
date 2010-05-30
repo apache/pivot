@@ -52,16 +52,9 @@ limitations under the License.
             <hr/>
         </xsl:if>
 
-        <h3><xsl:value-of select="normalize-space($document/properties/title)"/></h3>
-        <p>
-            <a href="{$id}.html">Applet</a>
-
-            <!-- JNLP translation must ignore the head, so if one exists, we skip JNLP link -->
-            <xsl:if test="not($document/head)">
-                <xsl:text> | </xsl:text>
-                <a href="{$id}.jnlp">Web Start</a>
-            </xsl:if>
-        </p>
+        <h3>
+            <a href="{$id}.html"><xsl:value-of select="normalize-space($document/properties/title)"/></a>        
+        </h3>
         <p>
             <xsl:value-of select="normalize-space($document/properties/description)"/>
         </p>

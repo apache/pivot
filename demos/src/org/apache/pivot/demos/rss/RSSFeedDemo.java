@@ -39,6 +39,7 @@ import org.apache.pivot.wtk.TaskAdapter;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtkx.WTKXSerializer;
 import org.apache.pivot.xml.Element;
+import org.apache.pivot.xml.XML;
 import org.apache.pivot.xml.XMLSerializer;
 
 public class RSSFeedDemo implements Application {
@@ -67,7 +68,7 @@ public class RSSFeedDemo implements Application {
                     && feedListView.getItemAt(y) == index) {
                     Element itemElement = (Element)feedListView.getListData().get(index);
 
-                    String link = XMLSerializer.getText(itemElement, "link");
+                    String link = XML.getText(itemElement, "link");
                     Desktop desktop = Desktop.getDesktop();
 
                     try {
@@ -93,7 +94,7 @@ public class RSSFeedDemo implements Application {
             @Override
             public void taskExecuted(Task<Object> task) {
                 Element root = (Element)task.getResult();
-                feedListView.setListData(XMLSerializer.getElements(root, "channel", "item"));
+                feedListView.setListData(XML.getElements(root, "channel", "item"));
                 cardPane.setSelectedIndex(1);
             }
 

@@ -14,5 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-{   message:"Hello Bindable!"
-}
+
+ {  a: 100,
+    b: "Hello",
+    c: false,
+    d: ["1", "2", "3"],
+    e: {f: [4, 5, 6]},
+    g: [{h:7, i:8, j:9}]
+ }

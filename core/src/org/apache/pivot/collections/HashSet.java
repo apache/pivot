@@ -187,6 +187,42 @@ public class HashSet<E> implements Set<E>, Serializable {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
+    public boolean equals(Object o) {
+        boolean equals = false;
+
+        if (this == o) {
+            equals = true;
+        } else if (o instanceof Set<?>) {
+            Set<E> set = (Set<E>)o;
+
+            if (getCount() == set.getCount()) {
+                for (E element : this) {
+                    equals = set.contains(element);
+
+                    if (!equals) {
+                        break;
+                    }
+                }
+
+            }
+        }
+
+        return equals;
+    }
+
+    @Override
+    public int hashCode() {
+        int hashCode = 0;
+
+        for (E element : this) {
+            hashCode += element.hashCode();
+        }
+
+        return hashCode;
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
