@@ -36,25 +36,32 @@ limitations under the License.
         </p>
 
         <p>
-            <tt>public void load(Dictionary&lt;String, Object&gt; context) {...}</tt><br/>
-            <tt>public void store(Dictionary&lt;String, Object&gt; context) {...}</tt><br/>
+            <tt>public void load(Object context) {...}</tt><br/>
+            <tt>public void store(Object context) {...}</tt><br/>
         </p>
 
         <p>
-            The <tt>Dictionary</tt> argument passed to these methods provides the "bind context":
-            a collection of name/value pairs representing the data to which the components are
-            bound. Each bindable property of a component can be assigned a "bind key" that
-            associates the property with a value in the context. Data is imported from the context
-            into the property during a load, and exported from the property to the context during
-            a store. Bind keys can reference nested values using JSON path syntax (e.g. "foo.bar.baz"
-            or "foo['bar'].baz").
+            The <tt>Object</tt> value passed to these methods provides the "bind context". It
+            may be either an implementation of the <tt>org.apache.pivot.collections.Dictionary</tt>
+            interface or a Java Bean value that can be wrapped in an instance of
+            <tt>org.apache.pivot.beans.BeanAdapter</tt>, which implements <tt>Dictionary</tt>.
         </p>
 
         <p>
-            Many component support data binding including text inputs, checkboxes and radio buttons,
-            list views, and table views, among others. Some components support binding to multiple
-            properties; for example, a caller can bind to both the list data as well as the selection
-            state of a <tt>ListView</tt> component.
+            The bind context is essentially a collection of name/value pairs representing the data
+            to which the components will be bound. Each bindable property of a component can be
+            assigned a "bind key" that associates the property with a value in the context. Data is
+            imported from the context into the property during a load, and exported from the
+            property to the context during a store. Bind contexts may be flat or hierarchical;
+            JSON path syntax can be used to retrieve nested values (e.g. "foo.bar.baz" or
+            "foo['bar'].baz").
+        </p>
+
+        <p>
+            Many Pivot components support data binding including text inputs, checkboxes and radio
+            buttons, list views, and table views, among others. Some components support binding to
+            multiple properties; for example, a caller can bind to both the list data as well as the
+            selection state of a <tt>ListView</tt> component.
         </p>
 
         <h2>Data Binding in Stock Tracker</h2>
