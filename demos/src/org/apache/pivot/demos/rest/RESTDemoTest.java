@@ -32,8 +32,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 public class RESTDemoTest {
     private static String hostname = null;
@@ -53,7 +53,7 @@ public class RESTDemoTest {
         Object contact = jsonSerializer.readObject(getClass().getResourceAsStream("contact.json"));
 
         // Create
-        PostQuery postQuery = new PostQuery(hostname, port, "/", secure);
+        PostQuery postQuery = new PostQuery(hostname, port, "/pivot-demos/rest_demo", secure);
         postQuery.setValue(contact);
         URL location = postQuery.execute();
 
@@ -70,15 +70,15 @@ public class RESTDemoTest {
         JSON.put(contact, "name", "Joseph User");
         PutQuery putQuery = new PutQuery(hostname, port, path, secure);
         putQuery.setValue(contact);
-        boolean updated = putQuery.execute();
+        boolean created = putQuery.execute();
 
-        assertTrue(updated);
+        assertFalse(created);
         assertEquals(contact, getQuery.execute());
 
         // Delete
         DeleteQuery deleteQuery = new DeleteQuery(hostname, port, path, secure);
         deleteQuery.execute();
 
-        assertEquals(deleteQuery.getStatus(), Query.Status.OK);
+        assertEquals(deleteQuery.getStatus(), Query.Status.NO_CONTENT);
     }
 }

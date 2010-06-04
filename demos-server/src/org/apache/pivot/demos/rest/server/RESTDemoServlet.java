@@ -84,7 +84,7 @@ public class RESTDemoServlet extends QueryServlet {
         URL location;
         try {
             location = new URL(isSecure() ? HTTPS_PROTOCOL : HTTP_PROTOCOL, getHostname(), getPort(),
-                getServletPath() + "/" + file.getName());
+                getContextPath() + getServletPath() + "/" + file.getName());
         } catch (MalformedURLException exception) {
             throw new QueryException(Query.Status.INTERNAL_SERVER_ERROR);
         }

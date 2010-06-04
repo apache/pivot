@@ -23,9 +23,19 @@ limitations under the License.
     <description>Pivot Demos</description>
     <display-name>Pivot Demos</display-name>
 
+    <servlet>
+        <servlet-name>RESTDemoServlet</servlet-name>
+        <servlet-class>org.apache.pivot.demos.rest.server.RESTDemoServlet</servlet-class>
+    </servlet>
+
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
+
+    <servlet-mapping>
+        <servlet-name>RESTDemoServlet</servlet-name>
+        <url-pattern>/rest_demo/*</url-pattern>
+    </servlet-mapping>
 
     <servlet-mapping>
         <servlet-name>jsp</servlet-name>
