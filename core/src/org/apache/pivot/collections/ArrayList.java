@@ -343,7 +343,7 @@ public class ArrayList<T> implements List<T>, Serializable {
     @SuppressWarnings("unchecked")
     @Override
     public T get(int index) {
-        verifyIndexBounds(index, 0, length);
+        verifyIndexBounds(index, 0, length - 1);
 
         return (T)items[index];
     }
