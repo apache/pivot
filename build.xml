@@ -90,6 +90,7 @@ limitations under the License.
     <!-- Compile macro -->
     <macrodef name="compile">
         <attribute name="project"/>
+        <element name="project-lib" implicit="true" optional="true"/>
 
         <sequential>
             <!-- JDK version check -->
@@ -144,6 +145,7 @@ limitations under the License.
                     <path refid="classpath.javalib"/>
                     <dirset dir="${basedir}" includes="**/${folder.bin}"/>
                     <fileset dir="@{project}" includes="lib/**/*.jar"/>
+                    <project-lib/>
                 </classpath>
             </javac>
         </sequential>
