@@ -127,6 +127,7 @@ public abstract class QueryServlet extends HttpServlet {
 
     private transient ThreadLocal<String> hostname = new ThreadLocal<String>();
     private transient ThreadLocal<Integer> port = new ThreadLocal<Integer>();
+    private transient ThreadLocal<String> contextPath = new ThreadLocal<String>();
     private transient ThreadLocal<String> servletPath = new ThreadLocal<String>();
     private transient ThreadLocal<Boolean> secure = new ThreadLocal<Boolean>();
 
@@ -155,6 +156,13 @@ public abstract class QueryServlet extends HttpServlet {
      */
     public int getPort() {
         return port.get();
+    }
+
+    /**
+     * Returns the portion of the request URL representing the context path.
+     */
+    public String getContextPath() {
+        return contextPath.get();
     }
 
     /**
@@ -316,6 +324,7 @@ public abstract class QueryServlet extends HttpServlet {
                 URL url = new URL(request.getRequestURL().toString());
                 hostname.set(url.getHost());
                 port.set(request.getLocalPort());
+                contextPath.set(request.getContextPath());
                 servletPath.set(request.getServletPath());
                 secure.set(url.getProtocol().equalsIgnoreCase(HTTPS_PROTOCOL));
             } catch (MalformedURLException exception) {
@@ -367,6 +376,7 @@ public abstract class QueryServlet extends HttpServlet {
             // Clean up thread local variables
             hostname.remove();
             port.remove();
+            contextPath.remove();
             servletPath.remove();
             secure.remove();
             parameters.remove();
