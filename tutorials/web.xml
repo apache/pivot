@@ -23,14 +23,23 @@ limitations under the License.
     <description>Pivot Tutorials</description>
     <display-name>Pivot Tutorials</display-name>
 
+    <servlet>
+        <servlet-name>ExpenseServlet</servlet-name>
+        <servlet-class>org.apache.pivot.tutorials.webqueries.server.ExpenseServlet</servlet-class>
+    </servlet>
+
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
 
     <servlet-mapping>
+        <servlet-name>ExpenseServlet</servlet-name>
+        <url-pattern>/expenses/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
         <servlet-name>jsp</servlet-name>
         <url-pattern>*.jnlp</url-pattern>
     </servlet-mapping>
-
 </web-app>

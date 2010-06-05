@@ -58,6 +58,7 @@ limitations under the License.
     <property name="jar.demos-server" value="${ant.project.name}-demos-server-${version}.jar" />
     <property name="jar.tools" value="${ant.project.name}-tools-${version}.jar" />
     <property name="jar.tutorials" value="${ant.project.name}-tutorials-${version}.jar" />
+    <property name="jar.tutorials-server" value="${ant.project.name}-tutorials-server-${version}.jar" />
     <property name="jar.web" value="${ant.project.name}-web-${version}.jar" />
     <property name="jar.web-server" value="${ant.project.name}-web-server-${version}.jar" />
     <property name="jar.wtk" value="${ant.project.name}-wtk-${version}.jar" />
@@ -272,7 +273,7 @@ limitations under the License.
 
     <!-- Compile all classes (tests included) -->
     <target name="compile" description="Compiles all projects"
-        depends="charts, core, demos, demos-server, tests, tools, tutorials, web, web-server, wtk, wtk-terra"/>
+        depends="charts, core, demos, demos-server, tests, tools, tutorials, tutorials-server, web, web-server, wtk, wtk-terra"/>
 
     <!-- Package JAR files -->
     <target name="package" description="Packages all projects into JAR files" depends="compile">
@@ -282,6 +283,7 @@ limitations under the License.
         <package project="demos-server" jarFile="${jar.demos-server}" title="Demos Server"/>
         <package project="tools" jarFile="${jar.tools}" title="Tools"/>
         <package project="tutorials" jarFile="${jar.tutorials}" title="Tutorials"/>
+        <package project="tutorials-server" jarFile="${jar.tutorials}" title="Tutorials Server"/>
         <package project="web" jarFile="${jar.web}" title="Web"/>
         <package project="web-server" jarFile="${jar.web-server}" title="Web Server"/>
         <package project="wtk" jarFile="${jar.wtk}" title="WTK"/>
@@ -312,6 +314,7 @@ limitations under the License.
         <clean project="tests"/>
         <clean project="tools"/>
         <clean project="tutorials"/>
+        <clean project="tutorials-server"/>
         <clean project="web"/>
         <clean project="web-server"/>
         <clean project="wtk"/>
@@ -374,6 +377,12 @@ limitations under the License.
 
     <target name="tutorials" depends="core, wtk, web, tools">
         <compile project="tutorials"/>
+    </target>
+
+    <target name="tutorials-server" depends="core, web, web-server">
+        <compile project="tutorials-server">
+            <fileset dir="web-server" includes="lib/**/*.jar"/>
+        </compile>
     </target>
 
     <target name="web" depends="core">
@@ -630,6 +639,17 @@ limitations under the License.
         <!-- Generate tutorials WAR -->
         <war destfile="${folder.lib}/${ant.project.name}-tutorials.war" webxml="tutorials/web.xml">
             <fileset dir="tutorials/${folder.deploy}"/>
+
+            <classes dir="tutorials-server/${folder.bin}"/>
+            <classes dir="tutorials-server/src">
+                <exclude name="**/*.java"/>
+                <exclude name="**/package.html"/>
+            </classes>
+            <lib dir="${folder.lib}">
+                <include name="${jar.core}"/>
+                <include name="${jar.web}"/>
+                <include name="${jar.web-server}"/>
+            </lib>
         </war>
     </target>
 
