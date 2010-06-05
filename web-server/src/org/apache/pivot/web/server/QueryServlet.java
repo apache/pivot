@@ -187,6 +187,21 @@ public abstract class QueryServlet extends HttpServlet {
     }
 
     /**
+     * Returns the location of this servlet.
+     */
+    public URL getLocation() {
+        URL location;
+        try {
+            location = new URL(isSecure() ? HTTPS_PROTOCOL : HTTP_PROTOCOL, getHostname(), getPort(),
+                getContextPath() + getServletPath() + "/");
+        } catch (MalformedURLException exception) {
+            throw new RuntimeException(exception);
+        }
+
+        return location;
+    }
+
+    /**
      * Returns the servlet's parameter dictionary, which holds the values
      * passed in the HTTP request query string.
      */
