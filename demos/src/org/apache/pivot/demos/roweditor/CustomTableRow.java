@@ -23,7 +23,7 @@ import org.apache.pivot.util.CalendarDate;
  */
 public class CustomTableRow {
     private CalendarDate calendarDate = null;
-    private ExpenseType type = null;
+    private String type = null;
     private double amount = 0;
     private String description = null;
 
@@ -39,16 +39,12 @@ public class CustomTableRow {
         setDate(CalendarDate.decode(calendarDate));
     }
 
-    public ExpenseType getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(ExpenseType type) {
+    public void setType(String type) {
         this.type = type;
-    }
-
-    public final void setType(String type) {
-        setType(ExpenseType.valueOf(type));
     }
 
     public double getAmount() {

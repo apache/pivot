@@ -16,13 +16,20 @@
  */
 package org.apache.pivot.demos.roweditor;
 
-/**
- * Sample enum of expense types.
- */
-public enum ExpenseType {
-    Hotel,
-    Miscellaneous,
-    Meals,
-    Parking,
-    Travel;
+import java.text.DecimalFormat;
+
+import org.apache.pivot.wtk.TextInput;
+
+public class AmountBindMapping implements TextInput.TextBindMapping {
+    public static final DecimalFormat FORMAT = new DecimalFormat("0.00");
+
+    @Override
+    public String toString(Object value) {
+        return FORMAT.format(value);
+    }
+
+    @Override
+    public Object valueOf(String text) {
+        return Float.valueOf(text);
+    }
 }

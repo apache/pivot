@@ -16,13 +16,32 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="%title"
-    maximized="true"
+<Window title="%title" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:collections="org.apache.pivot.collections"
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns:demo="org.apache.pivot.demos.roweditor"
     xmlns="org.apache.pivot.wtk">
+    <wtkx:define>
+        <Spinner wtkx:id="dateSpinner" selectedItemKey="date">
+            <spinnerData>
+                <content:CalendarDateSpinnerData/>
+            </spinnerData>
+        </Spinner>
+
+        <ListButton wtkx:id="typeListButton" listData="['Hotel', 'Miscellaneous', 'Meals', 'Parking', 'Travel']"
+            selectedItemKey="type"/>
+
+        <TextInput wtkx:id="amountTextInput" strictValidation="true" textKey="amount">
+            <validator>
+                <demo:CurrencyValidator/>
+            </validator>
+            <textBindMapping>
+                <demo:AmountBindMapping/>
+            </textBindMapping>
+        </TextInput>
+    </wtkx:define>
+
     <content>
         <Border styles="{color:7}">
             <content>
@@ -51,6 +70,11 @@ limitations under the License.
                                     <demo:CustomTableRow date="2009-04-06" type="Hotel" amount="529.90" description="Marriott reservation #DF-9982-BRN"/>
                                 </collections:ArrayList>
                             </tableData>
+                            <rowEditor>
+                                <content:TableViewRowEditor editEffect="horizontal_slide">
+                                    <cellEditors date="$dateSpinner" type="$typeListButton" amount="$amountTextInput"/>
+                                </content:TableViewRowEditor>
+                            </rowEditor>
                         </TableView>
                     </view>
                     <columnHeader>

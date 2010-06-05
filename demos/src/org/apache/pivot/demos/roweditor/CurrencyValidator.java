@@ -20,7 +20,6 @@ import java.math.BigDecimal;
 
 import org.apache.pivot.wtk.validation.Validator;
 
-
 /**
  * Validates that text represents a valid dollar value.
  */
