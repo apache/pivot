@@ -400,6 +400,9 @@ public class CSVSerializer implements Serializer<List<?>> {
             c = reader.read();
         }
 
+        // Trim the value
+        value = value.trim();
+
         return value;
     }
 

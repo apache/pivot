@@ -581,7 +581,7 @@ public class BeanAdapter implements Map<String, Object> {
     }
 
     /**
-     * Returns the public, non-static field for a property. Note that fields
+     * Returns the public, non-static fields for a property. Note that fields
      * will only be consulted for bean properties after bean methods.
      *
      * @param type
@@ -592,7 +592,7 @@ public class BeanAdapter implements Map<String, Object> {
      *
      * @return
      * The field, or <tt>null</tt> if the field does not exist, or is
-     * non-public or static
+     * non-public or static.
      */
     public static Field getField(Class<?> type, String fieldName) {
         Field field = null;
@@ -602,10 +602,9 @@ public class BeanAdapter implements Map<String, Object> {
 
             int modifiers = field.getModifiers();
 
-            // Exclude non-public, static, and final fields
+            // Exclude non-public and static fields
             if ((modifiers & Modifier.PUBLIC) == 0
-                || (modifiers & Modifier.STATIC) > 0
-                || (modifiers & Modifier.FINAL) > 0) {
+                || (modifiers & Modifier.STATIC) > 0) {
                 field = null;
             }
         } catch (NoSuchFieldException exception) {
