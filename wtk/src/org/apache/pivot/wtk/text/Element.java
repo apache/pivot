@@ -16,12 +16,18 @@
  */
 package org.apache.pivot.wtk.text;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.util.Iterator;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.json.JSONSerializer;
+import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.wtk.GraphicsUtilities;
+import org.apache.pivot.wtk.Theme;
 
 /**
  * Abstract base class for elements.
@@ -48,10 +54,32 @@ public abstract class Element extends Node
                 listener.nodesRemoved(element, index, nodes);
             }
         }
+        
+        @Override
+        public void fontChanged(Element element, Font previousFont) {
+            for (ElementListener listener : this) {
+                listener.fontChanged(element, previousFont);
+            }
+        }
+        @Override
+        public void backgroundColorChanged(Element element, Color previousBackgroundColor) {
+            for (ElementListener listener : this) {
+                listener.backgroundColorChanged(element, previousBackgroundColor);
+            }
+        }
+        @Override
+        public void foregroundColorChanged(Element element, Color previousForegroundColor) {
+            for (ElementListener listener : this) {
+                listener.foregroundColorChanged(element, previousForegroundColor);
+            }
+        }
     }
 
     private int characterCount = 0;
     private ArrayList<Node> nodes = new ArrayList<Node>();
+    private java.awt.Font font;
+    private Color foregroundColor;
+    private Color backgroundColor;
 
     private ElementListenerList elementListeners = new ElementListenerList();
 
@@ -569,7 +597,114 @@ public abstract class Element extends Node
         System.out.println();
     }
 
+    public java.awt.Font getFont() {
+        return font;
+    }
+
+    public void setFont(Font font) {
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");
+        }
+
+        Font previousFont = this.font;
+        if (previousFont != font) {
+            this.font = font;
+            elementListeners.fontChanged(this, previousFont);
+        }
+    }
+
+    public final void setFont(String font) {
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");
+        }
+
+        if (font.startsWith("{")) {
+            try {
+                setFont(Theme.deriveFont(JSONSerializer.parseMap(font)));
+            } catch (SerializationException exception) {
+                throw new IllegalArgumentException(exception);
+            }
+        } else {
+            setFont(Font.decode(font));
+        }
+    }
+    
+    /**
+     * Gets the currently foreground color, or <tt>null</tt> if no color is
+     * foreground.
+     */
+    public Color getForegroundColor() {
+        return foregroundColor;
+    }
+
+    /**
+     * Sets the currently foreground color.
+     *
+     * @param foregroundColor
+     * The foreground color, or <tt>null</tt> to specify no selection
+     */
+    public void setForegroundColor(Color foregroundColor) {
+        Color previousForegroundColor = this.foregroundColor;
+
+        if (foregroundColor != previousForegroundColor) {
+            this.foregroundColor = foregroundColor;
+            elementListeners.foregroundColorChanged(this, previousForegroundColor);
+        }
+    }
+
+    /**
+     * Sets the currently foreground color.
+     *
+     * @param foregroundColor
+     * The foreground color
+     */
+    public void setForegroundColor(String foregroundColor) {
+        if (foregroundColor == null) {
+            throw new IllegalArgumentException("foregroundColor is null.");
+        }
+
+        setForegroundColor(GraphicsUtilities.decodeColor(foregroundColor));
+    }
+    
+    /**
+     * Gets the currently background color, or <tt>null</tt> if no color is
+     * background.
+     */
+    public Color getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    /**
+     * Sets the currently background color.
+     *
+     * @param backgroundColor
+     * The background color, or <tt>null</tt> to specify no selection
+     */
+    public void setBackgroundColor(Color backgroundColor) {
+        Color previousBackgroundColor = this.backgroundColor;
+
+        if (backgroundColor != previousBackgroundColor) {
+            this.backgroundColor = backgroundColor;
+            elementListeners.backgroundColorChanged(this, previousBackgroundColor);
+        }
+    }
+
+    /**
+     * Sets the currently background color.
+     *
+     * @param backgroundColor
+     * The background color
+     */
+    public void setBackgroundColor(String backgroundColor) {
+        if (backgroundColor == null) {
+            throw new IllegalArgumentException("backgroundColor is null.");
+        }
+
+        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
+    }
+    
     public ListenerList<ElementListener> getElementListeners() {
         return elementListeners;
     }
+    
 }

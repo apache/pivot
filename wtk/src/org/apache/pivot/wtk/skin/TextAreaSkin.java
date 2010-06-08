@@ -391,6 +391,12 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
                     Graphics2D nodeViewGraphics = (Graphics2D)graphics.create();
                     nodeViewGraphics.translate(nodeViewBounds.x, nodeViewBounds.y);
 
+                    Color styledBackgroundColor = getStyledBackgroundColor();
+                    if (styledBackgroundColor != null) {
+                        nodeViewGraphics.setColor(styledBackgroundColor);
+                        nodeViewGraphics.fillRect(nodeViewBounds.x, nodeViewBounds.y, nodeViewBounds.width, nodeViewBounds.height);
+                    }
+                    
                     // NOTE We don't clip here because views should generally
                     // not overlap and clipping would impose an unnecessary
                     // performance penalty
@@ -404,6 +410,22 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
             }
         }
 
+        private Color getStyledBackgroundColor() {
+            Color backgroundColor = null;
+            Node node = getNode();
+            // run up the tree until we find a Element's style to apply
+            while (node != null) {
+                if (node instanceof Element) {
+                    backgroundColor = ((Element) node).getBackgroundColor();
+                    if (backgroundColor != null) {
+                        break;
+                    }
+                }
+                node = node.getParent();
+            }
+            return backgroundColor;
+        }
+        
         @Override
         public Bounds getCharacterBounds(int offset) {
             Bounds characterBounds = null;
@@ -442,6 +464,21 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
             invalidate();
         }
 
+        @Override
+        public void fontChanged(Element element, Font previousFont) {
+            invalidate();
+        }
+        
+        @Override
+        public void backgroundColorChanged(Element element, Color previousBackgroundColor) {
+            invalidate();
+        }
+        
+        @Override
+        public void foregroundColorChanged(Element element, Color previousForegroundColor) {
+            invalidate();
+        }
+        
         @Override
         public Iterator<NodeView> iterator() {
             return new ImmutableIterator<NodeView>(nodeViews.iterator());
@@ -1021,6 +1058,7 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
                 float lineWidth = 0;
                 int lastWhitespaceIndex = -1;
 
+                Font effectiveFont = getEffectiveFont();
                 char c = ci.first();
                 while (c != CharacterIterator.DONE
                     && lineWidth < breakWidth) {
@@ -1029,7 +1067,7 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
                     }
 
                     int i = ci.getIndex();
-                    Rectangle2D characterBounds = font.getStringBounds(ci, i, i + 1, fontRenderContext);
+                    Rectangle2D characterBounds = effectiveFont.getStringBounds(ci, i, i + 1, fontRenderContext);
                     lineWidth += characterBounds.getWidth();
 
                     c = ci.current();
@@ -1057,7 +1095,7 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
                     end = ci.getEndIndex();
                 }
 
-                glyphVector = font.createGlyphVector(fontRenderContext,
+                glyphVector = getEffectiveFont().createGlyphVector(fontRenderContext,
                     textNode.getCharacterIterator(start, end));
 
                 if (end < ci.getEndIndex()) {
@@ -1085,10 +1123,10 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
                 TextArea textArea = (TextArea)getComponent();
 
                 FontRenderContext fontRenderContext = Platform.getFontRenderContext();
-                LineMetrics lm = font.getLineMetrics("", fontRenderContext);
+                LineMetrics lm = getEffectiveFont().getLineMetrics("", fontRenderContext);
                 float ascent = lm.getAscent();
 
-                graphics.setFont(font);
+                graphics.setFont(getEffectiveFont());
 
                 int selectionStart = textArea.getSelectionStart();
                 int selectionLength = textArea.getSelectionLength();
@@ -1127,7 +1165,7 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
                     unselectedArea.subtract(new Area(selection));
 
                     Graphics2D textGraphics = (Graphics2D)graphics.create();
-                    textGraphics.setColor(color);
+                    textGraphics.setColor(getEffectiveForegroundColor());
                     textGraphics.clip(unselectedArea);
                     textGraphics.drawGlyphVector(glyphVector, 0, ascent);
                     textGraphics.dispose();
@@ -1148,7 +1186,7 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
                     selectedTextGraphics.dispose();
                 } else {
                     // Draw the text
-                    graphics.setColor(color);
+                    graphics.setColor(getEffectiveForegroundColor());
                     graphics.drawGlyphVector(glyphVector, 0, ascent);
                 }
             }
@@ -1172,7 +1210,7 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
         @Override
         public int getInsertionPoint(int x, int y) {
             FontRenderContext fontRenderContext = Platform.getFontRenderContext();
-            LineMetrics lm = font.getLineMetrics("", fontRenderContext);
+            LineMetrics lm = getEffectiveFont().getLineMetrics("", fontRenderContext);
             float ascent = lm.getAscent();
 
             int n = glyphVector.getNumGlyphs();
@@ -1199,7 +1237,47 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
 
             return i;
         }
+        
+        private Font getEffectiveFont() {
+            Font font = null;
+            Node node = getNode().getParent();
+            // run up the tree until we find a Element's style to apply
+            while (node != null) {
+                if (node instanceof Element) {
+                    font = ((Element) node).getFont();
+                    if (font != null) {
+                        break;
+                    }
+                }
+                node = node.getParent();
+            }
+            // if we find nothing, use the default font
+            if (node == null) {
+                font = TextAreaSkin.this.font;
+            }
+            return font;
+        }
 
+        private Color getEffectiveForegroundColor() {
+            Color foregroundColor = null;
+            Node node = getNode().getParent();
+            // run up the tree until we find a Element's style to apply
+            while (node != null) {
+                if (node instanceof Element) {
+                    foregroundColor = ((Element) node).getForegroundColor();
+                    if (foregroundColor != null) {
+                        break;
+                    }
+                }
+                node = node.getParent();
+            }
+            // if we find nothing, use the default color
+            if (node == null) {
+                foregroundColor = TextAreaSkin.this.color;
+            }
+            return foregroundColor;
+        }
+        
         @Override
         public int getNextInsertionPoint(int x, int from, FocusTraversalDirection direction) {
             int offset = -1;
@@ -2519,6 +2597,8 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
             nodeView = new TextNodeView((TextNode)node);
         } else if (node instanceof ImageNode) {
             nodeView = new ImageNodeView((ImageNode)node);
+        } else if (node instanceof ComponentNode) {
+            nodeView = new ComponentNodeView((ComponentNode)node);
         } else {
             throw new IllegalArgumentException("Unsupported node type: "
                 + node.getClass().getName());

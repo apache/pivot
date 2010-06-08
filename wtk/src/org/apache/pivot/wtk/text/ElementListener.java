@@ -16,12 +16,32 @@
  */
 package org.apache.pivot.wtk.text;
 
+import java.awt.Color;
+import java.awt.Font;
+
 import org.apache.pivot.collections.Sequence;
 
 /**
  * Element listener interface.
  */
 public interface ElementListener {
+    public class Adapter implements ElementListener {
+        @Override
+        public void nodeInserted(Element element, int index) {
+        }
+        @Override
+        public void nodesRemoved(Element element, int index, Sequence<Node> nodes) {
+        }
+        @Override
+        public void fontChanged(Element element, Font previousFont) {
+        }
+        @Override
+        public void backgroundColorChanged(Element element, Color previousBackgroundColor) {
+        }
+        @Override
+        public void foregroundColorChanged(Element element, Color previousForegroundColor) {
+        }
+    }
     /**
      * Called when a node has been inserted into an element.
      *
@@ -38,4 +58,30 @@ public interface ElementListener {
      * @param nodes
      */
     public void nodesRemoved(Element element, int index, Sequence<Node> nodes);
+    
+    /**
+     * Called when the font has changed.
+     *
+     * @param element
+     * @param previousFont
+     */
+    public void fontChanged(Element element, java.awt.Font previousFont);
+    
+    
+    /**
+     * Called when the background color has changed.
+     *
+     * @param element
+     * @param previousBackgroundColor
+     */
+    public void backgroundColorChanged(Element element, Color previousBackgroundColor);
+    
+    /**
+     * Called when the foreground color has changed.
+     *
+     * @param element
+     * @param previousForegroundColor
+     */
+    public void foregroundColorChanged(Element element, Color previousForegroundColor);
+    
 }

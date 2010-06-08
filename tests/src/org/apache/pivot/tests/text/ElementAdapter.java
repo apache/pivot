@@ -33,7 +33,7 @@ import org.apache.pivot.wtk.text.TextNode;
 
 
 public class ElementAdapter extends NodeAdapter implements List<NodeAdapter> {
-    private ElementListener elementListener = new ElementListener() {
+    private ElementListener elementListener = new ElementListener.Adapter() {
         @Override
         public void nodeInserted(Element element, int index) {
             // Insert/attach node
