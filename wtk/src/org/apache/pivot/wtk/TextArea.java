@@ -298,7 +298,9 @@ public class TextArea extends Container {
     }
 
     /**
-     * Sets the document that backs the text area.
+     * Sets the document that backs the text area. 
+     * Documents are not shareable across multiple TextAreas; 
+     * because a Document may contain Components, and a Component may only be in one Container at a time.
      *
      * @param document
      */
