@@ -15,9 +15,14 @@
  * limitations under the License.
  */
  {  title: "Add/Edit Expense",
+    id: "ID",
     date: "Date",
     type: "Type",
     amount: "Amount",
     description: "Description",
-    amountFormat: "0.00"
+    amountFormat: "0.00",
+    cancel: "Cancel",
+    ok: "OK",
+    typeRequired: "Expense type is required.",
+    amountRequired: "Amount is required."
 }

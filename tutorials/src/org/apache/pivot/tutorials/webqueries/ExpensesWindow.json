@@ -19,5 +19,8 @@
     type: "Type",
     amount: "Amount",
     description: "Description",
-    amountFormat: "$#,##0.00"
+    amountFormat: "$#,##0.00",
+    add: "Add",
+    edit: "Edit",
+    delete: "Delete"
 }

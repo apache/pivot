@@ -57,6 +57,8 @@ public class ExpenseServlet extends QueryServlet {
 
         try {
             expenses = (List<Expense>)csvSerializer.readObject(inputStream);
+
+            // TODO Set a comparator so expenses are sorted by date, then type
         } catch (IOException exception) {
             throw new ServletException(exception);
         } catch (SerializationException exception) {
@@ -65,7 +67,9 @@ public class ExpenseServlet extends QueryServlet {
 
         // Index the initial expenses
         for (Expense expense : expenses) {
-            expenseMap.put(nextID++, expense);
+            int id = nextID++;
+            expense.setID(id);
+            expenseMap.put(id, expense);
         }
     }
 
@@ -105,7 +109,7 @@ public class ExpenseServlet extends QueryServlet {
         int id;
         synchronized (this) {
             id = nextID++;
-
+            expense.setID(id);
             expenses.add(expense);
             expenseMap.put(id, expense);
         }
@@ -133,6 +137,7 @@ public class ExpenseServlet extends QueryServlet {
 
         // Create the new expense and bind the data to it
         Expense expense = JSON.bind(value, Expense.class);
+        expense.setID(id);
 
         // Update the list/map
         Expense previousExpense;
