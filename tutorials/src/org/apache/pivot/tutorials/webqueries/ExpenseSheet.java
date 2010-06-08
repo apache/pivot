@@ -30,6 +30,9 @@ import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtkx.Bindable;
 import org.apache.pivot.wtkx.WTKX;
 
+/**
+ * Sheet that allows a user to add or edit an expense record.
+ */
 public class ExpenseSheet extends Sheet implements Bindable {
     @WTKX private Spinner dateSpinner = null;
     @WTKX private ListButton typeListButton = null;

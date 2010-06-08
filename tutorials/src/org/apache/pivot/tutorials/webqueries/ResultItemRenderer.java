@@ -27,6 +27,9 @@ import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.Orientation;
 
+/**
+ * List item renderer for query results.
+ */
 public class ResultItemRenderer extends BoxPane implements ListView.ItemRenderer {
     private Label titleLabel = new Label();
     private Label addressLabel = new Label();

@@ -30,6 +30,9 @@ import org.apache.pivot.wtk.TaskAdapter;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
+/**
+ * Web query tutorial application.
+ */
 public class WebQueries implements Application {
     private Window window = null;
 

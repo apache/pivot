@@ -14,16 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- {  title: "Expenses",
-    date: "Date",
-    type: "Type",
-    amount: "Amount",
-    description: "Description",
-    amountFormat: "$#,##0.00",
-    add: "Add",
-    edit: "Edit",
-    delete: "Delete",
-    confirmDelete: "Are you sure you want to delete this expense?",
-    cancel: "Cancel",
-    ok: "OK"
+package org.apache.pivot.tutorials.webqueries;
+
+import java.math.BigDecimal;
+
+import org.apache.pivot.wtk.validation.Validator;
+
+/**
+ * Verifies that text represents a valid dollar value.
+ */
+public class AmountValidator implements Validator {
+    @Override
+    public boolean isValid(String text) {
+        boolean valid = true;
+
+        if (text.length() > 0) {
+            try {
+                BigDecimal numericAmount = new BigDecimal(text);
+                valid = (numericAmount.scale() <= 2 && numericAmount.signum() >= 0);
+            } catch (NumberFormatException ex) {
+                valid = false;
+            }
+        }
+
+        return valid;
+    }
 }

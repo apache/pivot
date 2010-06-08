@@ -17,24 +17,41 @@
 package org.apache.pivot.tutorials.webqueries;
 
 import java.io.IOException;
+import java.net.URL;
 
+import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.json.JSON;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.Resources;
+import org.apache.pivot.util.concurrent.Task;
+import org.apache.pivot.util.concurrent.TaskListener;
+import org.apache.pivot.web.DeleteQuery;
+import org.apache.pivot.web.GetQuery;
+import org.apache.pivot.web.PostQuery;
+import org.apache.pivot.web.PutQuery;
 import org.apache.pivot.wtk.Action;
+import org.apache.pivot.wtk.ActivityIndicator;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.MessageType;
+import org.apache.pivot.wtk.Prompt;
 import org.apache.pivot.wtk.Sheet;
 import org.apache.pivot.wtk.SheetCloseListener;
 import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TableViewSelectionListener;
+import org.apache.pivot.wtk.TaskAdapter;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtkx.Bindable;
 import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
+/**
+ * Main expense management window.
+ */
 public class ExpensesWindow extends Window implements Bindable {
     private class RefreshExpenseListAction extends Action {
         @Override
@@ -78,8 +95,11 @@ public class ExpensesWindow extends Window implements Bindable {
     private DeleteSelectedExpenseAction deleteSelectedExpenseAction = new DeleteSelectedExpenseAction();
 
     @WTKX private TableView expenseTableView = null;
+    @WTKX private ActivityIndicator activityIndicator = null;
+    @WTKX private BoxPane activityIndicatorBoxPane = null;
 
     private ExpenseSheet expenseSheet = null;
+    private Prompt deleteConfirmationPrompt = null;
 
     public static final String REFRESH_EXPENSE_LIST_ACTION_ID = "refresh_expense_list";
     public static final String ADD_EXPENSE_ACTION_ID = "add_expense";
@@ -95,17 +115,23 @@ public class ExpensesWindow extends Window implements Bindable {
     }
 
     @Override
-    public void initialize(Resources resource) {
+    @SuppressWarnings("unchecked")
+    public void initialize(Resources resources) {
         // Load the add/edit sheet
         try {
-            Resources resources = new Resources(ExpenseSheet.class.getName());
-            WTKXSerializer wtkxSerializer = new WTKXSerializer(resources);
+            WTKXSerializer wtkxSerializer = new WTKXSerializer(new Resources(ExpenseSheet.class.getName()));
             expenseSheet = (ExpenseSheet)wtkxSerializer.readObject(this, "expense_sheet.wtkx");
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         } catch (SerializationException exception) {
             throw new RuntimeException(exception);
         }
+
+        // Create the delete confirmation prompt
+        ArrayList<String> options = new ArrayList(resources.getString("cancel"),
+            resources.getString("ok"));
+        deleteConfirmationPrompt = new Prompt(MessageType.QUESTION, resources.getString("confirmDelete"),
+            options);
 
         // Attach event listener(s)
         expenseTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener.Adapter() {
@@ -127,45 +153,181 @@ public class ExpensesWindow extends Window implements Bindable {
     }
 
     private void refreshExpenseList() {
-        // TODO Show activity indicator and load expenses
+        Expenses expensesApplication = Expenses.getInstance();
+        GetQuery expenseListQuery = new GetQuery(expensesApplication.getHostname(),
+            expensesApplication.getPort(), "/pivot-tutorials/expenses",
+            expensesApplication.isSecure());
+
+        activityIndicatorBoxPane.setVisible(true);
+        activityIndicator.setActive(true);
+
+        expenseListQuery.execute(new TaskAdapter<Object>(new TaskListener<Object>() {
+            @Override
+            public void taskExecuted(Task<Object> task) {
+                activityIndicatorBoxPane.setVisible(false);
+                activityIndicator.setActive(false);
+
+                List<?> expenseData = (List<?>)task.getResult();
+                expenseTableView.setTableData(expenseData);
+            }
+
+            @Override
+            public void executeFailed(Task<Object> task) {
+                activityIndicatorBoxPane.setVisible(false);
+                activityIndicator.setActive(false);
+
+                Prompt.prompt(MessageType.ERROR, task.getFault().getMessage(), ExpensesWindow.this);
+            }
+        }));
     }
 
     @SuppressWarnings("unchecked")
     private void addExpense() {
         expenseSheet.clear();
-        expenseSheet.open(ExpensesWindow.this, new SheetCloseListener() {
+        expenseSheet.open(this, new SheetCloseListener() {
             @Override
             public void sheetClosed(Sheet sheet) {
                 if (sheet.getResult()) {
-                    // Add result to table
-                    HashMap<String, Object> expense = new HashMap<String, Object>();
+                    // Get the expense data from the sheet
+                    final HashMap<String, Object> expense = new HashMap<String, Object>();
                     expenseSheet.store(expense);
 
-                    // TODO POST expense to server and then add to table
+                    // POST expense to server and then add to table
+                    Expenses expensesApplication = Expenses.getInstance();
+                    PostQuery addExpenseQuery = new PostQuery(expensesApplication.getHostname(),
+                        expensesApplication.getPort(), "/pivot-tutorials/expenses",
+                        expensesApplication.isSecure());
+                    addExpenseQuery.setValue(expense);
 
-                    List<Object> expenses = (List<Object>)expenseTableView.getTableData();
-                    expenses.add(expense);
+                    activityIndicatorBoxPane.setVisible(true);
+                    activityIndicator.setActive(true);
+
+                    addExpenseQuery.execute(new TaskAdapter<URL>(new TaskListener<URL>() {
+                        @Override
+                        public void taskExecuted(Task<URL> task) {
+                            activityIndicatorBoxPane.setVisible(false);
+                            activityIndicator.setActive(false);
+
+                            URL location = task.getResult();
+                            String file = location.getFile();
+                            int id = Integer.parseInt(file.substring(file.lastIndexOf('/') + 1));
+                            expense.put("id", id);
+
+                            List<Object> expenses = (List<Object>)expenseTableView.getTableData();
+                            expenses.add(expense);
+                        }
+
+                        @Override
+                        public void executeFailed(Task<URL> task) {
+                            activityIndicatorBoxPane.setVisible(false);
+                            activityIndicator.setActive(false);
+
+                            Prompt.prompt(MessageType.ERROR, task.getFault().getMessage(), ExpensesWindow.this);
+                        }
+                    }));
                 }
             }
         });
     }
 
+    @SuppressWarnings("unchecked")
     private void updateSelectedExpense() {
-        expenseSheet.load(expenseTableView.getSelectedRow());
-        expenseSheet.open(ExpensesWindow.this, new SheetCloseListener() {
+        Object expense = expenseTableView.getSelectedRow();
+        final int id = JSON.getInteger(expense, "id");
+
+        expenseSheet.load(expense);
+        expenseSheet.open(this, new SheetCloseListener() {
             @Override
             public void sheetClosed(Sheet sheet) {
                 if (sheet.getResult()) {
-                    HashMap<String, Object> expense = new HashMap<String, Object>();
+                    // Get the expense data from the sheet
+                    final HashMap<String, Object> expense = new HashMap<String, Object>();
                     expenseSheet.store(expense);
 
-                    // TODO PUT expense to server and then update table
+                    // PUT expense to server and then update table
+                    Expenses expensesApplication = Expenses.getInstance();
+                    PutQuery updateExpenseQuery = new PutQuery(expensesApplication.getHostname(),
+                        expensesApplication.getPort(), "/pivot-tutorials/expenses/" + JSON.get(expense, "id"),
+                        expensesApplication.isSecure());
+                    updateExpenseQuery.setValue(expense);
+
+                    activityIndicatorBoxPane.setVisible(true);
+                    activityIndicator.setActive(true);
+
+                    updateExpenseQuery.execute(new TaskAdapter<Boolean>(new TaskListener<Boolean>() {
+                        @Override
+                        public void taskExecuted(Task<Boolean> task) {
+                            activityIndicatorBoxPane.setVisible(false);
+                            activityIndicator.setActive(false);
+
+                            // Find matching row and update
+                            List<Object> expenses = (List<Object>)expenseTableView.getTableData();
+                            for (int i = 0, n = expenses.getLength(); i < n; i++) {
+                                if (JSON.get(expenses.get(i), "id").equals(id)) {
+                                    expenses.update(i, expense);
+                                    break;
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void executeFailed(Task<Boolean> task) {
+                            activityIndicatorBoxPane.setVisible(false);
+                            activityIndicator.setActive(false);
+
+                            Prompt.prompt(MessageType.ERROR, task.getFault().getMessage(), ExpensesWindow.this);
+                        }
+                    }));
                 }
             }
         });
     }
 
+    @SuppressWarnings("unchecked")
     private void deleteSelectedExpense() {
-        // TODO DELETE expense from server and then remove from table
+        Object expense = expenseTableView.getSelectedRow();
+        final int id = JSON.getInteger(expense, "id");
+
+        deleteConfirmationPrompt.open(this, new SheetCloseListener() {
+            @Override
+            public void sheetClosed(Sheet sheet) {
+                if (sheet.getResult()
+                    && ((Prompt)sheet).getSelectedOption() == 1) {
+                    // DELETE expense from server and then remove from table
+                    Expenses expensesApplication = Expenses.getInstance();
+                    DeleteQuery deleteExpenseQuery = new DeleteQuery(expensesApplication.getHostname(),
+                        expensesApplication.getPort(), "/pivot-tutorials/expenses/" + id,
+                        expensesApplication.isSecure());
+
+                    activityIndicatorBoxPane.setVisible(true);
+                    activityIndicator.setActive(true);
+
+                    deleteExpenseQuery.execute(new TaskAdapter<Void>(new TaskListener<Void>() {
+                        @Override
+                        public void taskExecuted(Task<Void> task) {
+                            activityIndicatorBoxPane.setVisible(false);
+                            activityIndicator.setActive(false);
+
+                            // Find matching row and remove
+                            List<Object> expenses = (List<Object>)expenseTableView.getTableData();
+                            for (int i = 0, n = expenses.getLength(); i < n; i++) {
+                                if (JSON.get(expenses.get(i), "id").equals(id)) {
+                                    expenses.remove(i, 1);
+                                    break;
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void executeFailed(Task<Void> task) {
+                            activityIndicatorBoxPane.setVisible(false);
+                            activityIndicator.setActive(false);
+
+                            Prompt.prompt(MessageType.ERROR, task.getFault().getMessage(), ExpensesWindow.this);
+                        }
+                    }));
+                }
+            }
+        });
     }
 }

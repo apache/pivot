@@ -14,16 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- {  title: "Expenses",
-    date: "Date",
-    type: "Type",
-    amount: "Amount",
-    description: "Description",
-    amountFormat: "$#,##0.00",
-    add: "Add",
-    edit: "Edit",
-    delete: "Delete",
-    confirmDelete: "Are you sure you want to delete this expense?",
-    cancel: "Cancel",
-    ok: "OK"
+package org.apache.pivot.tutorials.webqueries;
+
+import org.apache.pivot.collections.List;
+import org.apache.pivot.util.CalendarDate;
+import org.apache.pivot.wtk.Spinner;
+import org.apache.pivot.wtk.content.CalendarDateSpinnerData;
+
+/**
+ * Maps string values to calendar dates and vice versa.
+ */
+public class DateBindMapping implements Spinner.ItemBindMapping {
+    public int indexOf(List<?> spinnerData, Object value) {
+        CalendarDateSpinnerData calendarDateSpinnerData = (CalendarDateSpinnerData)spinnerData;
+        return calendarDateSpinnerData.indexOf(CalendarDate.decode((String)value));
+    }
+
+    public Object get(List<?> spinnerData, int index) {
+        return spinnerData.get(index).toString();
+    }
 }

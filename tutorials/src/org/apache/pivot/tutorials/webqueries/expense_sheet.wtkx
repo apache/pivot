@@ -40,12 +40,19 @@ limitations under the License.
                             <Form>
                                 <sections>
                                     <Form.Section>
-                                        <Label Form.label="%id" textKey="id"/>
+                                        <Label Form.label="%id" textKey="id">
+                                            <textBindMapping>
+                                                <webqueries:IDBindMapping/>
+                                            </textBindMapping>
+                                        </Label>
 
                                         <Spinner wtkx:id="dateSpinner" Form.label="%date" selectedItemKey="date">
                                             <spinnerData>
                                                 <content:CalendarDateSpinnerData/>
                                             </spinnerData>
+                                            <selectedItemBindMapping>
+                                                <webqueries:DateBindMapping/>
+                                            </selectedItemBindMapping>
                                         </Spinner>
 
                                         <ListButton wtkx:id="typeListButton" Form.label="%type" listData="@types.json"
@@ -54,7 +61,7 @@ limitations under the License.
                                         <TextInput wtkx:id="amountTextInput" Form.label="%amount" strictValidation="true"
                                             textKey="amount">
                                             <validator>
-                                                <webqueries:CurrencyValidator/>
+                                                <webqueries:AmountValidator/>
                                             </validator>
                                             <textBindMapping>
                                                 <webqueries:AmountBindMapping amountFormat="%amountFormat"/>

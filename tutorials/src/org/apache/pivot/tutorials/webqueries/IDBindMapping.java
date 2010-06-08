@@ -16,27 +16,19 @@
  */
 package org.apache.pivot.tutorials.webqueries;
 
-import java.math.BigDecimal;
-
-import org.apache.pivot.wtk.validation.Validator;
+import org.apache.pivot.wtk.Label;
 
 /**
- * Validates that text represents a valid dollar value.
+ * Maps string values to ints and vice versa.
  */
-public class CurrencyValidator implements Validator {
+public class IDBindMapping implements Label.TextBindMapping {
     @Override
-    public boolean isValid(String text) {
-        boolean valid = true;
+    public String toString(Object value) {
+        return (value == null) ? null : value.toString();
+    }
 
-        if (text.length() > 0) {
-            try {
-                BigDecimal numericAmount = new BigDecimal(text);
-                valid = (numericAmount.scale() <= 2 && numericAmount.signum() >= 0);
-            } catch (NumberFormatException ex) {
-                valid = false;
-            }
-        }
-
-        return valid;
+    @Override
+    public Object valueOf(String text) {
+        return (text == null) ? null : Integer.parseInt(text);
     }
 }

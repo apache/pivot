@@ -21,6 +21,9 @@ import java.text.NumberFormat;
 
 import org.apache.pivot.wtk.TextInput;
 
+/**
+ * Maps double values to strings and vice versa.
+ */
 public class AmountBindMapping implements TextInput.TextBindMapping {
     private NumberFormat amountFormat = new DecimalFormat();
 
