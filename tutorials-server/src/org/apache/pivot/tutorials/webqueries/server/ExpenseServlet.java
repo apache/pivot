@@ -40,6 +40,8 @@ public class ExpenseServlet extends QueryServlet {
     private List<Expense> expenses = null;
     private HashMap<Integer, Expense> expenseMap = new HashMap<Integer, Expense>();
 
+    private static int nextID = 0;
+
     @Override
     @SuppressWarnings("unchecked")
     public void init() throws ServletException {
@@ -63,7 +65,7 @@ public class ExpenseServlet extends QueryServlet {
 
         // Index the initial expenses
         for (Expense expense : expenses) {
-            expenseMap.put(expense.getID(), expense);
+            expenseMap.put(nextID++, expense);
         }
     }
 
@@ -73,14 +75,20 @@ public class ExpenseServlet extends QueryServlet {
             throw new QueryException(Query.Status.BAD_REQUEST);
         }
 
+        // Get the ID of the expense to retrieve from the path
         int id = Integer.parseInt(path.get(0));
 
-        Object value = expenseMap.get(id);
-        if (value == null) {
+        // Get the expense data from the map
+        Expense expense;
+        synchronized (this) {
+            expense = expenseMap.get(id);
+        }
+
+        if (expense == null) {
             throw new QueryException(Query.Status.NOT_FOUND);
         }
 
-        return value;
+        return expense;
     }
 
     @Override
@@ -90,15 +98,22 @@ public class ExpenseServlet extends QueryServlet {
             throw new QueryException(Query.Status.BAD_REQUEST);
         }
 
+        // Create the new expense and bind the data to it
         Expense expense = JSON.bind(value, Expense.class);
 
-        expenses.add(expense);
-        expenseMap.put(expense.getID(), expense);
+        // Add the expense to the list/map
+        int id;
+        synchronized (this) {
+            id = nextID++;
 
+            expenses.add(expense);
+            expenseMap.put(id, expense);
+        }
+
+        // Return the location of the newly-created resource
         URL location = getLocation();
-
         try {
-            location = new URL(location, Integer.toString(expense.getID()));
+            location = new URL(location, Integer.toString(id));
         } catch (MalformedURLException exception) {
             throw new QueryException(Query.Status.INTERNAL_SERVER_ERROR);
         }
@@ -113,12 +128,21 @@ public class ExpenseServlet extends QueryServlet {
             throw new QueryException(Query.Status.BAD_REQUEST);
         }
 
-        // TODO IMPORTANT This method will create IDs that are never used; don't auto-assign
-        // IDs in constructor
+        // Get the ID of the expense to retrieve from the path
+        int id = Integer.parseInt(path.get(0));
 
-        // TODO Update list and map
+        // Create the new expense and bind the data to it
+        Expense expense = JSON.bind(value, Expense.class);
 
-        return false;
+        // Update the list/map
+        Expense previousExpense;
+        synchronized (this) {
+            previousExpense = expenseMap.put(id, expense);
+            expenses.remove(previousExpense);
+            expenses.add(expense);
+        }
+
+        return (previousExpense == null);
     }
 
     @Override
@@ -127,8 +151,21 @@ public class ExpenseServlet extends QueryServlet {
             throw new QueryException(Query.Status.BAD_REQUEST);
         }
 
-        // TODO
+        // Get the ID of the expense to retrieve from the path
+        int id = Integer.parseInt(path.get(0));
+
+        // Update the list/map
+        Expense expense;
+        synchronized (this) {
+            expense = expenseMap.remove(id);
+            expenses.remove(expense);
+        }
+
+        if (expense == null) {
+            throw new QueryException(Query.Status.NOT_FOUND);
+        }
     }
+
     @Override
     protected Serializer<?> createSerializer(Path path) throws QueryException {
         return new JSONSerializer();

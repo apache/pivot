@@ -408,7 +408,8 @@ limitations under the License.
             <tt>org.apache.pivot.util.CalendarDate</tt>. Components that support data binding
             provide a "bind mapping" interface to facilitate such transformations. Bind mappings
             are outside the scope of this example but are demonstrated in the
-            <a href="stock_tracker.html">Stock Tracker</a> tutorial.
+            <a href="query-servlet.html">QueryServlet</a> section as well as the
+            <a href="stock-tracker.html">Stock Tracker</a> tutorial.
         </p>
 
         <p>
