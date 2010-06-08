@@ -34,6 +34,9 @@ import org.apache.pivot.web.Query;
 import org.apache.pivot.web.QueryException;
 import org.apache.pivot.web.server.QueryServlet;
 
+/**
+ * Servlet that implements expense management web service.
+ */
 public class ExpenseServlet extends QueryServlet {
     private static final long serialVersionUID = 0;
 
@@ -57,8 +60,6 @@ public class ExpenseServlet extends QueryServlet {
 
         try {
             expenses = (List<Expense>)csvSerializer.readObject(inputStream);
-
-            // TODO Set a comparator so expenses are sorted by date, then type
         } catch (IOException exception) {
             throw new ServletException(exception);
         } catch (SerializationException exception) {
@@ -75,30 +76,30 @@ public class ExpenseServlet extends QueryServlet {
 
     @Override
     protected Object doGet(Path path) throws QueryException {
+        Object value;
+
         if (path.getLength() == 0) {
-            throw new QueryException(Query.Status.BAD_REQUEST);
+            value = expenses;
+        } else {
+            // Get the ID of the expense to retrieve from the path
+            int id = Integer.parseInt(path.get(0));
+
+            // Get the expense data from the map
+            synchronized (this) {
+                value = expenseMap.get(id);
+            }
+
+            if (value == null) {
+                throw new QueryException(Query.Status.NOT_FOUND);
+            }
         }
 
-        // Get the ID of the expense to retrieve from the path
-        int id = Integer.parseInt(path.get(0));
-
-        // Get the expense data from the map
-        Expense expense;
-        synchronized (this) {
-            expense = expenseMap.get(id);
-        }
-
-        if (expense == null) {
-            throw new QueryException(Query.Status.NOT_FOUND);
-        }
-
-        return expense;
+        return value;
     }
 
     @Override
     protected URL doPost(Path path, Object value) throws QueryException {
-        if (path.getLength() > 0
-            || value == null) {
+        if (value == null) {
             throw new QueryException(Query.Status.BAD_REQUEST);
         }
 

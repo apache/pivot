@@ -283,7 +283,7 @@ limitations under the License.
         <package project="demos-server" jarFile="${jar.demos-server}" title="Demos Server"/>
         <package project="tools" jarFile="${jar.tools}" title="Tools"/>
         <package project="tutorials" jarFile="${jar.tutorials}" title="Tutorials"/>
-        <package project="tutorials-server" jarFile="${jar.tutorials}" title="Tutorials Server"/>
+        <package project="tutorials-server" jarFile="${jar.tutorials-server}" title="Tutorials Server"/>
         <package project="web" jarFile="${jar.web}" title="Web"/>
         <package project="web-server" jarFile="${jar.web-server}" title="Web Server"/>
         <package project="wtk" jarFile="${jar.wtk}" title="WTK"/>

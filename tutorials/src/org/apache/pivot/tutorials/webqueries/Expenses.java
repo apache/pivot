@@ -23,13 +23,47 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
+/**
+ * Query servlet tutorial client application.
+ */
 public class Expenses implements Application {
+    private String hostname = "localhost";
+    private int port = -1;
+    private boolean secure = false;
+
     private ExpensesWindow expensesWindow = null;
+
+    public static final String HOSTNAME_KEY = "hostname";
+    public static final String PORT_KEY = "port";
+    public static final String SECURE_KEY = "secure";
+
+    private static Expenses instance = null;
+
+    public Expenses() {
+        if (instance != null) {
+            throw new IllegalStateException("Another instance of " + Expenses.class.getName()
+                + " is already running.");
+        }
+
+        instance = this;
+    }
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        Resources resources = new Resources(ExpensesWindow.class.getName());
-        WTKXSerializer wtkxSerializer = new WTKXSerializer(resources);
+        // Get startup properties
+        if (properties.containsKey(HOSTNAME_KEY)) {
+            hostname = properties.get(HOSTNAME_KEY);
+        }
+
+        if (properties.containsKey(PORT_KEY)) {
+            port = Integer.parseInt(properties.get(PORT_KEY));
+        }
+
+        if (properties.containsKey(SECURE_KEY)) {
+            secure = Boolean.parseBoolean(properties.get(SECURE_KEY));
+        }
+
+        WTKXSerializer wtkxSerializer = new WTKXSerializer(new Resources(ExpensesWindow.class.getName()));
         expensesWindow = (ExpensesWindow)wtkxSerializer.readObject(this, "expenses_window.wtkx");
         expensesWindow.open(display);
     }
@@ -49,6 +83,22 @@ public class Expenses implements Application {
 
     @Override
     public void resume() {
+    }
+
+    public String getHostname() {
+        return hostname;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public boolean isSecure() {
+        return secure;
+    }
+
+    public static Expenses getInstance() {
+        return instance;
     }
 
     public static void main(String[] args) {

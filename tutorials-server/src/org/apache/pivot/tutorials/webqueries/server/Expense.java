@@ -16,33 +16,38 @@
  */
 package org.apache.pivot.tutorials.webqueries.server;
 
-import org.apache.pivot.util.CalendarDate;
-
+/**
+ * Java Bean class representing an expense record.
+ */
 public class Expense {
-    private int id = -1;
-    private CalendarDate calendarDate = null;
+    private Integer id = -1;
+    private String date = null;
     private String type = null;
-    private double amount = 0;
+    private Double amount = 0d;
     private String description = null;
 
-    public int getID() {
+    public Integer getID() {
         return id;
     }
 
-    protected void setID(int id) {
+    public Integer getId() {
+        return getID();
+    }
+
+    public void setID(Integer id) {
         this.id = id;
     }
 
-    public CalendarDate getDate() {
-        return calendarDate;
+    public void setId(Integer id) {
+        setID(id);
     }
 
-    public void setDate(CalendarDate calendarDate) {
-        this.calendarDate = calendarDate;
+    public String getDate() {
+        return date;
     }
 
-    public final void setDate(String calendarDate) {
-        setDate(CalendarDate.decode(calendarDate));
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String getType() {
@@ -53,11 +58,11 @@ public class Expense {
         this.type = type;
     }
 
-    public double getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 
