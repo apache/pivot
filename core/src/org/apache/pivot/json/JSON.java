@@ -16,6 +16,10 @@
  */
 package org.apache.pivot.json;
 
+import java.lang.reflect.Array;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+
 import org.apache.pivot.beans.BeanAdapter;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
@@ -450,5 +454,140 @@ public class JSON {
         }
 
         return keys;
+    }
+
+    /**
+     * Binds a JSON value to a Java type.
+     *
+     * @param source
+     * The source value.
+     *
+     * @param type
+     * The Java class to which to which the value will be bound.
+     *
+     * @return
+     * The bound instance of the Java type.
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T bind(Object source, Class<? extends T> targetType) {
+        return (T)bind(source, (Type)targetType);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T> T bind(Object source, Type targetType) {
+        if (targetType == null) {
+            throw new IllegalArgumentException();
+        }
+
+        Object target;
+        if (source == null) {
+            target = null;
+        } else if (source instanceof Boolean
+            || source instanceof Number
+            || source instanceof String) {
+            if (!(targetType instanceof Class<?>)) {
+                throw new IllegalArgumentException(source + " cannot be bound to " + targetType + ".");
+            }
+
+            target = BeanAdapter.coerce(source, (Class<?>)targetType);
+        } else if (source instanceof List<?>) {
+            List<?> sourceList = (List<?>)source;
+
+            if (targetType instanceof ParameterizedType) {
+                // Instantiate the target sequence
+                ParameterizedType parameterizedType = (ParameterizedType)targetType;
+                Class<?> rawType = (Class<?>)parameterizedType.getRawType();
+                if (!Sequence.class.isAssignableFrom(rawType)) {
+                    throw new IllegalArgumentException(source + " cannot be bound to "
+                        + rawType.getName() + ".");
+                }
+
+                try {
+                    target = rawType.newInstance();
+                } catch (InstantiationException exception) {
+                    throw new RuntimeException(exception);
+                } catch (IllegalAccessException exception) {
+                    throw new RuntimeException(exception);
+                }
+
+                Sequence<Object> targetSequence = (Sequence<Object>)target;
+
+                // Get the target item type
+                Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+                Type targetItemType = actualTypeArguments[0];
+
+                // Populate the sequence
+                for (Object item : sourceList) {
+                    targetSequence.add(bind(item, targetItemType));
+                }
+            } else {
+                Class<?> targetClass = (Class<?>)targetType;
+                if (!targetClass.isArray()) {
+                    throw new IllegalArgumentException(source + " cannot be bound to "
+                        + targetClass.getName() + ".");
+                }
+
+                // Instantiate the target array
+                Class<?> targetComponentType = targetClass.getComponentType();
+                target = Array.newInstance(targetComponentType, sourceList.getLength());
+
+                // Populate the array
+                int i = 0;
+                for (Object item : sourceList) {
+                    Array.set(target, i++, bind(item, targetComponentType));
+                }
+            }
+        } else if (source instanceof Map<?, ?>) {
+            Map<String, ?> sourceMap = (Map<String, ?>)source;
+
+            if (targetType instanceof ParameterizedType) {
+                // Instantiate the target dictionary
+                ParameterizedType parameterizedType = (ParameterizedType)targetType;
+                Class<?> rawType = (Class<?>)parameterizedType.getRawType();
+                if (!Dictionary.class.isAssignableFrom(rawType)) {
+                    throw new IllegalArgumentException(source + " cannot be bound to "
+                        + rawType.getName() + ".");
+                }
+
+                try {
+                    target = rawType.newInstance();
+                } catch (InstantiationException exception) {
+                    throw new RuntimeException(exception);
+                } catch (IllegalAccessException exception) {
+                    throw new RuntimeException(exception);
+                }
+
+                Dictionary<String, Object> targetDictionary = (Dictionary<String, Object>)target;
+
+                // Get the target value type
+                Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+                Type targetValueType = actualTypeArguments[1];
+
+                // Populate the dictionary
+                for (String key : sourceMap) {
+                    targetDictionary.put(key, bind(sourceMap.get(key), targetValueType));
+                }
+            } else {
+                Class<?> targetClass = (Class<?>)targetType;
+
+                try {
+                    target = targetClass.newInstance();
+                } catch (InstantiationException exception) {
+                    throw new RuntimeException(exception);
+                } catch (IllegalAccessException exception) {
+                    throw new RuntimeException(exception);
+                }
+
+                BeanAdapter targetAdapter = new BeanAdapter(target);
+
+                for (String key : sourceMap) {
+                    targetAdapter.put(key, bind(sourceMap.get(key), targetAdapter.getGenericType(key)));
+                }
+            }
+        } else {
+            throw new IllegalArgumentException(source.getClass() + " is not a supported source type.");
+        }
+
+        return (T)target;
     }
 }

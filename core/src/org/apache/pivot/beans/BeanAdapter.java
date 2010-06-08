@@ -20,6 +20,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -151,13 +152,6 @@ public class BeanAdapter implements Map<String, Object> {
         "Unable to access property \"%s\" for type %s.";
 
     /**
-     * Creates a new bean dictionary that is not associated with a bean.
-     */
-    public BeanAdapter() {
-        this(null);
-    }
-
-    /**
      * Creates a new bean dictionary.
      *
      * @param bean
@@ -278,9 +272,8 @@ public class BeanAdapter implements Map<String, Object> {
 
             Class<?> fieldType = field.getType();
             Class<?> valueType = value.getClass();
-            if (fieldType != valueType
-                && valueType == String.class) {
-                value = coerce((String)value, fieldType);
+            if (!fieldType.isAssignableFrom(valueType)) {
+                value = coerce(value, fieldType);
             }
 
             try {
@@ -293,19 +286,15 @@ public class BeanAdapter implements Map<String, Object> {
             Method setterMethod = null;
 
             if (value != null) {
+                // Get the setter method for the value type
                 setterMethod = getSetterMethod(key, value.getClass());
             }
 
             if (setterMethod == null) {
+                // Get the property type and attempt to coerce the value to it
                 Class<?> propertyType = getType(key);
-
-                if (propertyType != null) {
-                    setterMethod = getSetterMethod(key, propertyType);
-
-                    if (value instanceof String) {
-                        value = coerce((String)value, propertyType);
-                    }
-                }
+                setterMethod = getSetterMethod(key, propertyType);
+                value = coerce(value, propertyType);
             }
 
             if (setterMethod == null) {
@@ -434,8 +423,8 @@ public class BeanAdapter implements Map<String, Object> {
      * @param key
      * The property name.
      *
-     * @return
-     * The type of the property.
+     * @see
+     * #getType(Class, String)
      */
     public Class<?> getType(String key) {
         if (bean == null) {
@@ -443,6 +432,23 @@ public class BeanAdapter implements Map<String, Object> {
         }
 
         return getType(bean.getClass(), key);
+    }
+
+    /**
+     * Returns the generic type of a property.
+     *
+     * @param key
+     * The property name.
+     *
+     * @see
+     * #getGenericType(Class, String)
+     */
+    public Type getGenericType(String key) {
+        if (bean == null) {
+            throw new IllegalStateException("bean is null.");
+        }
+
+        return getGenericType(bean.getClass(), key);
     }
 
     /**
@@ -578,6 +584,45 @@ public class BeanAdapter implements Map<String, Object> {
         }
 
         return type;
+    }
+
+    /**
+     * Returns the generic type of a property.
+     *
+     * @param beanClass
+     * The bean class.
+     *
+     * @param key
+     * The property name.
+     *
+     * @return
+     * The generic type of the property, or <tt>null</tt> if no such
+     * bean property exists. If the type is a generic, an instance of
+     * {@link java.lang.reflect.ParameterizedType} will be returned. Otherwise,
+     * an instance of {@link java.lang.Class} will be returned.
+     */
+    public static Type getGenericType(Class<?> beanClass, String key) {
+        if (key == null) {
+            throw new IllegalArgumentException("key is null.");
+        }
+
+        Type genericType = null;
+
+        if (key.startsWith(FIELD_PREFIX)) {
+            Field field = getField(beanClass, key.substring(1));
+
+            if (field != null) {
+                genericType = field.getGenericType();
+            }
+        } else {
+            Method getterMethod = getGetterMethod(beanClass, key);
+
+            if (getterMethod != null) {
+                genericType = getterMethod.getGenericReturnType();
+            }
+        }
+
+        return genericType;
     }
 
     /**
@@ -718,7 +763,7 @@ public class BeanAdapter implements Map<String, Object> {
     }
 
     /**
-     * Coerces a string value to a primitive type.
+     * Coerces a value to a given type.
      *
      * @param value
      * @param type
@@ -726,41 +771,80 @@ public class BeanAdapter implements Map<String, Object> {
      * @return
      * The coerced value.
      */
-    public static Object coerce(String value, Class<?> type) {
-        Object coercedValue;
-
-        if (type == Boolean.class
-            || type == Boolean.TYPE) {
-            coercedValue = Boolean.parseBoolean(value);
-        } else if (type == Character.class
-            || type == Character.TYPE) {
-            if (value.length() == 1) {
-                coercedValue = value.charAt(0);
-            } else {
-                throw new IllegalArgumentException("\"" + value + "\" is not a valid character");
-            }
-        } else if (type == Byte.class
-            || type == Byte.TYPE) {
-            coercedValue = Byte.parseByte(value);
-        } else if (type == Short.class
-            || type == Short.TYPE) {
-            coercedValue = Short.parseShort(value);
-        } else if (type == Integer.class
-            || type == Integer.TYPE) {
-            coercedValue = Integer.parseInt(value);
-        } else if (type == Long.class
-            || type == Long.TYPE) {
-            coercedValue = Long.parseLong(value);
-        } else if (type == Float.class
-            || type == Float.TYPE) {
-            coercedValue = Float.parseFloat(value);
-        } else if (type == Double.class
-            || type == Double.TYPE) {
-            coercedValue = Double.parseDouble(value);
-        } else {
-            coercedValue = value;
+    @SuppressWarnings("unchecked")
+    public static <T> T coerce(Object value, Class<? extends T> type) {
+        if (type == null) {
+            throw new IllegalArgumentException();
         }
 
-        return coercedValue;
+        Object coercedValue;
+
+        if (value == null) {
+            // Null values can only be coerced to null
+            coercedValue = null;
+        } else {
+            if (type.isAssignableFrom(value.getClass())) {
+                // Value doesn't need coercion
+                coercedValue = value;
+            } else {
+                // Coerce the value to the requested type
+                if (type == Boolean.class
+                    || type == Boolean.TYPE) {
+                    coercedValue = Boolean.parseBoolean(value.toString());
+                } else if (type == Character.class
+                    || type == Character.TYPE) {
+                    coercedValue = value.toString().charAt(0);
+                } else if (type == Byte.class
+                    || type == Byte.TYPE) {
+                    if (value instanceof Number) {
+                        coercedValue = ((Number)value).byteValue();
+                    } else {
+                        coercedValue = Byte.parseByte(value.toString());
+                    }
+                } else if (type == Short.class
+                    || type == Short.TYPE) {
+                    if (value instanceof Number) {
+                        coercedValue = ((Number)value).shortValue();
+                    } else {
+                        coercedValue = Short.parseShort(value.toString());
+                    }
+                } else if (type == Integer.class
+                    || type == Integer.TYPE) {
+                    if (value instanceof Number) {
+                        coercedValue = ((Number)value).intValue();
+                    } else {
+                        coercedValue = Integer.parseInt(value.toString());
+                    }
+                } else if (type == Long.class
+                    || type == Long.TYPE) {
+                    if (value instanceof Number) {
+                        coercedValue = ((Number)value).longValue();
+                    } else {
+                        coercedValue = Long.parseLong(value.toString());
+                    }
+                } else if (type == Float.class
+                    || type == Float.TYPE) {
+                    if (value instanceof Number) {
+                        coercedValue = ((Number)value).floatValue();
+                    } else {
+                        coercedValue = Float.parseFloat(value.toString());
+                    }
+                } else if (type == Double.class
+                    || type == Double.TYPE) {
+                    if (value instanceof Number) {
+                        coercedValue = ((Number)value).doubleValue();
+                    } else {
+                        coercedValue = Double.parseDouble(value.toString());
+                    }
+                } else if (type == String.class) {
+                    coercedValue = value.toString();
+                } else {
+                    throw new IllegalArgumentException("Unable to coerce " + value.getClass().getName()
+                        + " to " + type + ".");
+                }
+            }
+        }
+
+        return (T)coercedValue;
     }
 }
