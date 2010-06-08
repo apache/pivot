@@ -30,7 +30,6 @@ import org.apache.pivot.wtk.TextAreaCharacterListener;
 import org.apache.pivot.wtk.TextAreaSelectionListener;
 import org.apache.pivot.wtk.TreeView;
 import org.apache.pivot.wtk.TreeViewSelectionListener;
-import org.apache.pivot.wtk.text.Element;
 import org.apache.pivot.wtk.text.Node;
 import org.apache.pivot.wtk.text.NodeListener;
 import org.apache.pivot.wtkx.WTKXSerializer;
@@ -49,12 +48,7 @@ public class TextAreaTest implements Application {
     private DocumentAdapter documentAdapter = null;
     private Node selectedNode = null;
 
-    private NodeListener selectedNodeListener = new NodeListener() {
-        @Override
-        public void parentChanged(Node node, Element previousParent) {
-            // No-op
-        }
-
+    private NodeListener selectedNodeListener = new NodeListener.Adapter() {
         @Override
         public void offsetChanged(Node node, int previousOffset) {
             updateSelectedNodeData();
@@ -66,7 +60,7 @@ public class TextAreaTest implements Application {
         }
 
         @Override
-        public void rangeRemoved(Node node, int offset, int span) {
+        public void rangeRemoved(Node node, int offset, int characterCount) {
             updateSelectedNodeData();
         }
     };

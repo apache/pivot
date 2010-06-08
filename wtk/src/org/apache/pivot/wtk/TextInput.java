@@ -21,7 +21,6 @@ import java.io.IOException;
 
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.util.ListenerList;
-import org.apache.pivot.wtk.text.Element;
 import org.apache.pivot.wtk.text.Node;
 import org.apache.pivot.wtk.text.NodeListener;
 import org.apache.pivot.wtk.text.TextNode;
@@ -221,15 +220,7 @@ public class TextInput extends Component {
 
     private boolean textValid = true;
 
-    private NodeListener textNodeListener = new NodeListener() {
-        @Override
-        public void parentChanged(Node node, Element previousParent) {
-        }
-
-        @Override
-        public void offsetChanged(Node node, int previousOffset) {
-        }
-
+    private NodeListener textNodeListener = new NodeListener.Adapter() {
         @Override
         public void rangeInserted(Node node, int offset, int characterCount) {
             if (selectionStart + selectionLength > offset) {

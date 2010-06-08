@@ -339,6 +339,7 @@ public abstract class Element extends Node
 
         // Notify parent
         super.rangeInserted(node.getOffset(), nodeCharacterCount);
+        super.nodeInserted(node.getOffset());
 
         // Fire event
         elementListeners.nodeInserted(this, index);
@@ -399,6 +400,7 @@ public abstract class Element extends Node
 
             // Notify parent
             super.rangeRemoved(offset, removedCharacterCount);
+            super.nodesRemoved(removed, offset);
 
             // Fire event
             elementListeners.nodesRemoved(this, index, removed);

@@ -21,7 +21,6 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Shape;
-import java.awt.Transparency;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
 import java.awt.font.LineMetrics;
@@ -37,6 +36,7 @@ import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.ComponentListener;
 import org.apache.pivot.wtk.Cursor;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.FocusTraversalDirection;
@@ -54,6 +54,8 @@ import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Visual;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.media.ImageListener;
+import org.apache.pivot.wtk.text.ComponentNode;
+import org.apache.pivot.wtk.text.ComponentNodeListener;
 import org.apache.pivot.wtk.text.Document;
 import org.apache.pivot.wtk.text.Element;
 import org.apache.pivot.wtk.text.ElementListener;
@@ -68,8 +70,8 @@ import org.apache.pivot.wtk.text.TextNodeListener;
 /**
  * Text area skin.
  */
-public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
-    TextAreaListener, TextAreaSelectionListener {
+public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAreaListener,
+    TextAreaSelectionListener {
     /**
      * Abstract base class for node views.
      */
@@ -166,6 +168,14 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             repaint();
         }
 
+        /**
+         * This is needed by the ComponentViewNode to correctly position child Component's.
+         * 
+         * @param skinX the X coordinate in the skin's frame of reference
+         * @param skinY the Y coordinate in the skin's frame of reference
+         */
+        protected abstract void setSkinLocation(int skinX, int skinY);
+        
         public Bounds getBounds() {
             return new Bounds(x, y, width, height);
         }
@@ -252,7 +262,17 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
 
         @Override
-        public void rangeRemoved(Node node, int offset, int span) {
+        public void rangeRemoved(Node node, int offset, int characterCount) {
+            // No-op
+        }
+        
+        @Override
+        public void nodesRemoved(Node node, Sequence<Node> removed, int offset) {
+            // No-op
+        }
+        
+        @Override
+        public void nodeInserted(Node node, int offset) {
             // No-op
         }
     }
@@ -497,6 +517,13 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 setSize(width, height);
 
                 super.validate();
+            }
+        }
+        
+        @Override
+        protected void setSkinLocation(int skinX, int skinY) {
+            for (NodeView nodeView : this) {
+                nodeView.setSkinLocation(skinX, skinY + nodeView.getY());
             }
         }
 
@@ -766,6 +793,16 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             super.validate();
         }
 
+        @Override
+        protected void setSkinLocation(int skinX, int skinY) {
+            for (int i = 0, n = rows.getLength(); i < n; i++) {
+                Row row = rows.get(i);
+                for (NodeView nodeView : row.nodeViews) {
+                    nodeView.setSkinLocation(skinX + nodeView.getX(), skinY + nodeView.getY());
+                }
+            }
+        }
+        
         @Override
         public NodeView getNext() {
             return null;
@@ -1039,6 +1076,10 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
 
         @Override
+        protected void setSkinLocation(int skinX, int skinY) {
+        }
+        
+        @Override
         public void paint(Graphics2D graphics) {
             if (glyphVector != null) {
                 TextArea textArea = (TextArea)getComponent();
@@ -1271,6 +1312,10 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 super.validate();
             }
         }
+        
+        @Override
+        protected void setSkinLocation(int skinX, int skinY) {
+        }
 
         @Override
         public void paint(Graphics2D graphics) {
@@ -1341,6 +1386,121 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             // TODO Repaint the corresponding area of the component (add a repaint()
             // method to NodeView to facilitate this as well as paint-only updates
             // such as color changes)
+        }
+    }
+
+    public class ComponentNodeView extends NodeView implements ComponentNodeListener {
+        
+        private final ComponentListener myComponentListener = new ComponentListener.Adapter() {
+            @Override
+            public void sizeChanged(Component component, int previousWidth, int previousHeight) {
+                invalidate();
+            }
+        };
+        
+        public ComponentNodeView(ComponentNode componentNode) {
+            super(componentNode);
+        }
+
+        @Override
+        protected void attach() {
+            super.attach();
+
+            ComponentNode componentNode = (ComponentNode) getNode();
+            componentNode.getComponentNodeListeners().add(this);
+
+            Component component = componentNode.getComponent();
+            if (component != null) {
+                component.getComponentListeners().add(myComponentListener);
+            }
+        }
+
+        @Override
+        protected void detach() {
+            super.detach();
+
+            ComponentNode componentNode = (ComponentNode) getNode();
+            componentNode.getComponentNodeListeners().remove(this);
+        }
+
+        @Override
+        public void validate() {
+            if (!isValid()) {
+                ComponentNode componentNode = (ComponentNode) getNode();
+                Component component = componentNode.getComponent();
+
+                if (component == null) {
+                    setSize(0, 0);
+                } else {
+                    component.validate();
+                    component.setSize(component.getPreferredWidth(), component.getPreferredHeight());
+                    setSize(component.getWidth(), component.getHeight());
+                }
+
+                super.validate();
+            }
+        }
+        
+        @Override
+        protected void setSkinLocation(int skinX, int skinY) {
+            ComponentNode componentNode = (ComponentNode) getNode();
+            Component component = componentNode.getComponent();
+
+            if (component != null) {
+                // I have to un-translate the x and y coordinates because the
+                // component is painted by the Container object, and it's co-ordinates
+                // are relative to the Container object, not to the document node hierarchy.
+                component.setLocation(skinX, skinY);
+            }
+        }
+        
+        @Override
+        public void paint(Graphics2D graphics) {
+            // do nothing 
+        }
+        
+        @Override
+        public NodeView getNext() {
+            return null;
+        }
+
+        @Override
+        public int getInsertionPoint(int x, int y) {
+            return 0;
+        }
+
+        @Override
+        public int getNextInsertionPoint(int x, int from, FocusTraversalDirection direction) {
+            return (from == -1) ? 0 : -1;
+        }
+
+        @Override
+        public int getRowIndex(int offset) {
+            return -1;
+        }
+
+        @Override
+        public int getRowCount() {
+            return 0;
+        }
+
+        @Override
+        public Bounds getCharacterBounds(int offset) {
+            return new Bounds(0, 0, getWidth(), getHeight());
+        }
+
+        @Override
+        public void componentChanged(ComponentNode componentNode, Component previousComponent) {
+            invalidate();
+
+            Component component = componentNode.getComponent();
+            if (component != null) {
+                component.getComponentListeners().add(myComponentListener);
+            }
+
+            if (previousComponent != null) {
+                previousComponent.getComponentListeners().remove(myComponentListener);
+            }
         }
     }
 
@@ -1425,7 +1585,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     private Font font;
     private Color color;
     private Color inactiveColor;
-    private Color backgroundColor;
     private Color selectionColor;
     private Color selectionBackgroundColor;
     private Color inactiveSelectionColor;
@@ -1443,7 +1602,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         font = theme.getFont();
         color = Color.BLACK;
         inactiveColor = Color.GRAY;
-        backgroundColor = null;
         selectionColor = Color.LIGHT_GRAY;
         selectionBackgroundColor = Color.BLACK;
         inactiveSelectionColor = Color.LIGHT_GRAY;
@@ -1548,6 +1706,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
             documentView.setBreakWidth(Math.max(width - (margin.left + margin.right), 0));
             documentView.validate();
+            documentView.setSkinLocation(margin.left, margin.top);
 
             updateSelection();
             caretX = caret.x;
@@ -1563,14 +1722,9 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
     @Override
     public void paint(Graphics2D graphics) {
+        super.paint(graphics);
+        
         TextArea textArea = (TextArea)getComponent();
-        int width = getWidth();
-        int height = getHeight();
-
-        if (backgroundColor != null) {
-            graphics.setColor(backgroundColor);
-            graphics.fillRect(0, 0, width, height);
-        }
 
         if (documentView != null) {
             // Draw the selection highlight
@@ -1594,12 +1748,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 graphics.fill(caret);
             }
         }
-    }
-
-    @Override
-    public boolean isOpaque() {
-        return (backgroundColor != null
-            && backgroundColor.getTransparency() == Transparency.OPAQUE);
     }
 
     @Override
@@ -1729,23 +1877,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
 
         setColor(GraphicsUtilities.decodeColor(inactiveColor));
-    }
-
-    public Color getBackgroundColor() {
-        return backgroundColor;
-    }
-
-    public void setBackgroundColor(Color backgroundColor) {
-        this.backgroundColor = backgroundColor;
-        repaintComponent();
-    }
-
-    public final void setBackgroundColor(String backgroundColor) {
-        if (backgroundColor == null) {
-            throw new IllegalArgumentException("backgroundColor is null");
-        }
-
-        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
     }
 
     public Font getFont() {

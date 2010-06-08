@@ -16,10 +16,32 @@
  */
 package org.apache.pivot.wtk.text;
 
+import org.apache.pivot.collections.Sequence;
+
 /**
  * Node listener interface.
  */
 public interface NodeListener {
+    public class Adapter implements NodeListener {
+        @Override
+        public void offsetChanged(Node node, int previousOffset) {
+        }
+        @Override
+        public void parentChanged(Node node, Element previousParent) {
+        }
+        @Override
+        public void nodeInserted(Node node, int offset) {
+        }
+        @Override
+        public void nodesRemoved(Node node, Sequence<Node> removed, int offset) {
+        }
+        @Override
+        public void rangeInserted(Node node, int offset, int span) {
+        }
+        @Override
+        public void rangeRemoved(Node node, int offset, int characterCount) {
+        }
+    }
     /**
      * Called when a node's parent has changed, either as a result of being
      * added to or removed from an element.
@@ -38,7 +60,24 @@ public interface NodeListener {
     public void offsetChanged(Node node, int previousOffset);
 
     /**
-     * Called when a range has been inserted into a node.
+     * Called when a child node has been inserted into a node.
+     *
+     * @param node
+     * @param offset
+     */
+    public void nodeInserted(Node node, int offset);
+    
+    /**
+     * Called when child nodes have been removed from a node.
+     *
+     * @param node
+     * @param removed
+     * @param offset
+     */
+    public void nodesRemoved(Node node, Sequence<Node> removed, int offset);
+    
+    /**
+     * Called when a text range has been inserted into a node.
      *
      * @param node
      * @param offset
@@ -47,11 +86,11 @@ public interface NodeListener {
     public void rangeInserted(Node node, int offset, int span);
 
     /**
-     * Called when a range has been removed from a node.
+     * Called when a text range has been removed from a node.
      *
      * @param node
      * @param offset
-     * @param span
+     * @param characterCount
      */
-    public void rangeRemoved(Node node, int offset, int span);
+    public void rangeRemoved(Node node, int offset, int characterCount);
 }

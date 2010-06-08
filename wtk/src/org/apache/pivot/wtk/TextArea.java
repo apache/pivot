@@ -27,6 +27,8 @@ import org.apache.pivot.json.JSON;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.media.Image;
+import org.apache.pivot.wtk.text.ComponentNode;
+import org.apache.pivot.wtk.text.ComponentNodeListener;
 import org.apache.pivot.wtk.text.Document;
 import org.apache.pivot.wtk.text.Element;
 import org.apache.pivot.wtk.text.Node;
@@ -39,7 +41,7 @@ import org.apache.pivot.wtk.text.TextNode;
  * Component that allows a user to enter and edit multiple lines of (optionally
  * formatted) text.
  */
-public class TextArea extends Component {
+public class TextArea extends Container {
     /**
      * Text area skin interface. Text area skins are required to implement
      * this.
@@ -200,6 +202,15 @@ public class TextArea extends Component {
     private BindType textBindType = BindType.BOTH;
     private TextBindMapping textBindMapping = null;
 
+    private ComponentNodeListener componentNodeListener = new ComponentNodeListener() {
+        @Override
+        public void componentChanged(ComponentNode componentNode, Component previousComponent) {
+            // @TODO need to insert this at the correct index
+            TextArea.super.remove(previousComponent);
+            TextArea.super.add(componentNode.getComponent());
+        }
+    };
+    
     private NodeListener documentListener = new NodeListener() {
         @Override
         public void parentChanged(Node node, Element previousParent) {
@@ -207,6 +218,7 @@ public class TextArea extends Component {
 
         @Override
         public void offsetChanged(Node node, int previousOffset) {
+            // @TODO if a ComponentNode moved around, we need to change it's position in the list
         }
 
         @Override
@@ -222,6 +234,28 @@ public class TextArea extends Component {
             textAreaCharacterListeners.charactersInserted(TextArea.this, offset, characterCount);
         }
 
+        public void nodesRemoved(Node node, Sequence<Node> removed, int offset) {
+            for (int i = 0; i < removed.getLength(); i++) {
+                Node descendant = removed.get(i);
+                if (descendant instanceof ComponentNode) {
+                    ComponentNode componentNode = (ComponentNode) descendant;
+                    componentNode.getComponentNodeListeners().remove(componentNodeListener);
+                    TextArea.super.remove(componentNode.getComponent());
+                }
+            }
+        }
+        
+        @Override
+        public void nodeInserted(Node node, int offset) {
+            Node descendant = document.getDescendantAt(offset);
+            if (descendant instanceof ComponentNode) {
+                // @TODO need to insert this at the correct index
+                ComponentNode componentNode = (ComponentNode) descendant;
+                componentNode.getComponentNodeListeners().add(componentNodeListener);
+                TextArea.super.add(componentNode.getComponent());
+            }
+        }
+        
         @Override
         public void rangeRemoved(Node node, int offset, int characterCount) {
             if (selectionStart + selectionLength > offset) {
@@ -274,10 +308,12 @@ public class TextArea extends Component {
         if (previousDocument != document) {
             if (previousDocument != null) {
                 previousDocument.getNodeListeners().remove(documentListener);
+                removeComponentNodes(previousDocument);
             }
 
             if (document != null) {
                 document.getNodeListeners().add(documentListener);
+                addComponentNodes(document);
             }
 
             this.document = document;
@@ -289,6 +325,28 @@ public class TextArea extends Component {
         }
     }
 
+    private void removeComponentNodes(Element element) {
+        for (Node childNode : element) {
+            if (childNode instanceof Element) {
+                removeComponentNodes((Element) childNode);
+            }
+            if (childNode instanceof ComponentNode) {
+                remove(((ComponentNode) childNode).getComponent());
+            }
+        }
+    }
+    
+    private void addComponentNodes(Element element) {
+        for (Node childNode : element) {
+            if (childNode instanceof Element) {
+                addComponentNodes((Element) childNode);
+            }
+            if (childNode instanceof ComponentNode) {
+                add(((ComponentNode) childNode).getComponent());
+            }
+        }
+    }
+    
     public String getText() {
         String text = null;
         Document document = getDocument();

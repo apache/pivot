@@ -16,7 +16,6 @@
  */
 package org.apache.pivot.tests.text;
 
-import org.apache.pivot.wtk.text.Element;
 import org.apache.pivot.wtk.text.Node;
 import org.apache.pivot.wtk.text.NodeListener;
 
@@ -24,22 +23,7 @@ public abstract class NodeAdapter {
     private Node node;
     private ElementAdapter parent = null;
 
-    private NodeListener nodeListener = new NodeListener() {
-        @Override
-        public void offsetChanged(Node node, int previousOffset) {
-        }
-
-        @Override
-        public void parentChanged(Node node, Element previousParent) {
-        }
-
-        @Override
-        public void rangeInserted(Node node, int offset, int span) {
-        }
-
-        @Override
-        public void rangeRemoved(Node node, int offset, int span) {
-        }
+    private NodeListener nodeListener = new NodeListener.Adapter() {
     };
 
     public NodeAdapter(Node node) {

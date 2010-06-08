@@ -17,8 +17,38 @@ limitations under the License.
 -->
 
 <Document xmlns:wtkx="http://pivot.apache.org/wtkx"
+	xmlns:wtk="org.apache.pivot.wtk"
     xmlns="org.apache.pivot.wtk.text">
     <Paragraph>ABCD</Paragraph>
+    <Paragraph>
+      <ComponentNode>
+    	<component>
+	    <wtk:Label styles="{backgroundColor:'red'}">
+	        <text>Label1</text>
+	    </wtk:Label>
+	    </component>
+      </ComponentNode>xxxxxx<ComponentNode>
+    	<component>
+	    <wtk:Label styles="{backgroundColor:'yellow'}">
+	        <text>Label2</text>
+	    </wtk:Label>
+	    </component>
+      </ComponentNode>xxxxxx
+    </Paragraph>
+    <Paragraph>ABCD</Paragraph>
+    <Paragraph>ABCD</Paragraph>
+    <Paragraph>
+      <ComponentNode>
+    	<component>
+          <wtk:PushButton buttonData="Push Button"/>
+	    </component>
+      </ComponentNode> 
+      <ComponentNode>
+    	<component>
+          <wtk:Checkbox buttonData="Checkbox1"/>
+	    </component>
+      </ComponentNode>
+    </Paragraph>
     <Paragraph></Paragraph>
     <Paragraph>1234</Paragraph>
     <Paragraph>abcd</Paragraph>

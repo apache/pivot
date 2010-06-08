@@ -16,14 +16,15 @@
  */
 package org.apache.pivot.wtk.text;
 
+import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ListenerList;
 
 /**
  * Abstract base class for document nodes.
 */
 public abstract class Node {
-    private static class NodeListenerList extends ListenerList<NodeListener>
-        implements NodeListener {
+    private static class NodeListenerList extends ListenerList<NodeListener> implements
+        NodeListener {
         @Override
         public void parentChanged(Node node, Element previousParent) {
             for (NodeListener listener : this) {
@@ -39,6 +40,20 @@ public abstract class Node {
         }
 
         @Override
+        public void nodeInserted(Node node, int offset) {
+            for (NodeListener listener : this) {
+                listener.nodeInserted(node, offset);
+            }
+        }
+
+        @Override
+        public void nodesRemoved(Node node, Sequence<Node> removed, int offset) {
+            for (NodeListener listener : this) {
+                listener.nodesRemoved(node, removed, offset);
+            }
+        }
+
+        @Override
         public void rangeInserted(Node node, int offset, int span) {
             for (NodeListener listener : this) {
                 listener.rangeInserted(node, offset, span);
@@ -46,9 +61,9 @@ public abstract class Node {
         }
 
         @Override
-        public void rangeRemoved(Node node, int offset, int span) {
+        public void rangeRemoved(Node node, int offset, int characterCount) {
             for (NodeListener listener : this) {
-                listener.rangeRemoved(node, offset, span);
+                listener.rangeRemoved(node, offset, characterCount);
             }
         }
     }
@@ -202,6 +217,33 @@ public abstract class Node {
         nodeListeners.rangeRemoved(this, offset, characterCount);
     }
 
+    /**
+     * Called to notify a node that some child nodes has been removed.
+     * 
+     * @param removed
+     * @param offset
+     */
+    protected void nodesRemoved(Sequence<Node> removed, int offset) {
+        if (parent != null) {
+            parent.nodesRemoved(removed, offset + this.offset);
+        }
+
+        nodeListeners.nodesRemoved(this, removed, offset);
+    }
+
+    /**
+     * Called to notify a node that a child node has been inserted.
+     * 
+     * @param offset
+     */
+    protected void nodeInserted(int offset) {
+        if (parent != null) {
+            parent.nodeInserted(offset + this.offset);
+        }
+
+        nodeListeners.nodeInserted(this, offset);
+    }
+    
     /**
      * Returns the node listener list.
      */

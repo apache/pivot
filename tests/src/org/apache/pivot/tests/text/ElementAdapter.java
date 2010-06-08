@@ -25,6 +25,7 @@ import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.wtk.text.ComponentNode;
 import org.apache.pivot.wtk.text.Element;
 import org.apache.pivot.wtk.text.ElementListener;
 import org.apache.pivot.wtk.text.Node;
@@ -187,6 +188,8 @@ public class ElementAdapter extends NodeAdapter implements List<NodeAdapter> {
             nodeAdapter = new ElementAdapter((Element)node);
         } else if (node instanceof TextNode) {
             nodeAdapter = new TextNodeAdapter((TextNode)node);
+        } else if (node instanceof ComponentNode) {
+            nodeAdapter = new ComponentNodeAdapter((ComponentNode)node);
         } else {
             throw new IllegalArgumentException("Unsupported node type.");
         }
