@@ -16,6 +16,9 @@
  */
 package org.apache.pivot.wtk;
 
+import java.io.IOException;
+import java.net.URL;
+
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.json.JSON;
@@ -263,6 +266,29 @@ public class ListButton extends Button {
         try {
             setListData(JSONSerializer.parseList(listData));
         } catch (SerializationException exception) {
+            throw new IllegalArgumentException(exception);
+        }
+    }
+
+    /**
+     * Sets the list button's list data.
+     *
+     * @param listData
+     * A URL referring to a JSON file containing the data to be presented by
+     * the list button.
+     */
+    public void setListData(URL listData) {
+        if (listData == null) {
+            throw new IllegalArgumentException("listData is null.");
+        }
+
+        JSONSerializer jsonSerializer = new JSONSerializer();
+
+        try {
+            setListData((List<?>)jsonSerializer.readObject(listData.openStream()));
+        } catch (SerializationException exception) {
+            throw new IllegalArgumentException(exception);
+        } catch (IOException exception) {
             throw new IllegalArgumentException(exception);
         }
     }

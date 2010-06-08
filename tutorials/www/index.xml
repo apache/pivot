@@ -121,10 +121,12 @@ limitations under the License.
             <document-item id="effects">
                 <document-item id="effects.transitions"/>
             </document-item>
-            <document-item id="background-tasks"/>
-            <document-item id="web-queries"/>
             <document-item id="data-binding"/>
             <document-item id="localization"/>
+            <document-item id="background-tasks"/>
+            <document-item id="web-queries">
+                <document-item id="query-servlet"/>
+            </document-item>
             <document-item id="scripting"/>
             <document-item id="summary"/>
         </item-group>
