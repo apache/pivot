@@ -19,10 +19,19 @@ package org.apache.pivot.tutorials.webqueries.server;
 import org.apache.pivot.util.CalendarDate;
 
 public class Expense {
+    private int id = -1;
     private CalendarDate calendarDate = null;
     private String type = null;
     private double amount = 0;
     private String description = null;
+
+    public int getID() {
+        return id;
+    }
+
+    protected void setID(int id) {
+        this.id = id;
+    }
 
     public CalendarDate getDate() {
         return calendarDate;
