@@ -28,9 +28,11 @@ import org.junit.Test;
 public class BindTest {
     @Test
     public void testBind() throws IOException, SerializationException {
-        JSONSerializer jsonSerializer = new JSONSerializer();
-        Object sampleObject = jsonSerializer.readObject(getClass().getResourceAsStream("sample.json"));
-        SampleBean sampleBean = JSON.bind(sampleObject, SampleBean.class);
+        JSONSerializer objectSerializer = new JSONSerializer();
+        Object sampleObject = objectSerializer.readObject(getClass().getResourceAsStream("sample.json"));
+
+        JSONSerializer beanSerializer = new JSONSerializer(SampleBean.class);
+        SampleBean sampleBean = (SampleBean)beanSerializer.readObject(getClass().getResourceAsStream("sample.json"));
 
         assertEquals(sampleBean.getA(), JSON.get(sampleObject, "a"));
         assertEquals(sampleBean.getB(), JSON.get(sampleObject, "b"));
@@ -38,6 +40,5 @@ public class BindTest {
         assertEquals(sampleBean.getD(), JSON.get(sampleObject, "d"));
         assertEquals(sampleBean.getE(), JSON.get(sampleObject, "e"));
         assertEquals(sampleBean.getI().getA(), JSON.get(sampleObject, "i.a"));
-        assertEquals(sampleBean.getJ()[0], JSON.get(sampleObject, "j[0]"));
     }
 }

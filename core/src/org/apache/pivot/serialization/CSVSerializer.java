@@ -273,8 +273,6 @@ public class CSVSerializer implements Serializer<List<?>> {
             throw exception;
         }
 
-        lineNumberReader = null;
-
         return items;
     }
 

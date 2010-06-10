@@ -26,7 +26,6 @@ public class SampleBean {
     private ArrayList<String> d = null;
     private HashMap<String, Integer> e = null;
     private SampleBean i = null;
-    private int[] j = null;
 
     public int getA() {
         return a;
@@ -74,13 +73,5 @@ public class SampleBean {
 
     public void setI(SampleBean i) {
         this.i = i;
-    }
-
-    public int[] getJ() {
-        return j;
-    }
-
-    public void setJ(int[] j) {
-        this.j = j;
     }
 }
