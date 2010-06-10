@@ -44,8 +44,8 @@ import javax.script.SimpleBindings;
 import javax.xml.stream.Location;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
-import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 
 import org.apache.pivot.beans.BeanAdapter;
 import org.apache.pivot.collections.ArrayList;
@@ -323,7 +323,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         this(resources, null);
     }
 
-    private WTKXSerializer(Resources resources, WTKXSerializer owner) {
+    protected WTKXSerializer(Resources resources, WTKXSerializer owner) {
         this.resources = resources;
 
         if (owner == null) {
@@ -620,7 +620,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                 try {
                     Class<?> type = Class.forName(className);
                     elementType = Element.Type.INSTANCE;
-                    value = type.newInstance();
+                    value = createInstance(type, id);
                 } catch (Exception exception) {
                     throw new SerializationException(exception);
                 }
@@ -674,6 +674,28 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         }
     }
 
+    /**
+     * Serializer factory method. Subclasses can override this method to return custom
+     * serializer instances.
+     *
+     * @param resources
+     * @param owner
+     */
+    protected WTKXSerializer createSerializer(Resources resources, WTKXSerializer owner) {
+        return new WTKXSerializer(resources, owner);
+    }
+
+    /**
+     * Object factory method. Subclasses can override this method to perform custom
+     * object instantiation.
+     *
+     * @param type
+     * @param id
+     */
+    protected Object createInstance(Class<?> type, String id) throws Exception {
+        return type.newInstance();
+    }
+
     @SuppressWarnings("unchecked")
     private void processEndElement(XMLStreamReader xmlStreamReader)
         throws SerializationException, IOException {
@@ -717,12 +739,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                     }
 
                     // Read the object
-                    WTKXSerializer serializer;
-                    if (inline) {
-                        serializer = new WTKXSerializer(resources, this);
-                    } else {
-                        serializer = new WTKXSerializer(resources);
-                    }
+                    WTKXSerializer serializer = createSerializer(resources, inline ? this : null);
 
                     if (element.id != null) {
                         if (namedSerializers.containsKey(element.id)) {
