@@ -78,6 +78,10 @@ public interface ComponentListener {
         @Override
         public void menuHandlerChanged(Component component, MenuHandler previousMenuHandler) {
         }
+
+        @Override
+        public void nameChanged(Component component, String previousName) {
+        }
     }
 
     /**
@@ -192,4 +196,11 @@ public interface ComponentListener {
      * @param previousMenuHandler
      */
     public void menuHandlerChanged(Component component, MenuHandler previousMenuHandler);
+
+    /**
+     * Called when a component's name has changed.
+     * @param component
+     * @param previousName
+     */
+    public void nameChanged(Component component, String previousName);
 }

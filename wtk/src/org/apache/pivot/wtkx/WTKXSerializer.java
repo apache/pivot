@@ -757,6 +757,15 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                     }
 
                     namedObjects.put(element.id, element.value);
+
+                    // If the type has an ID property, use it
+                    Class<?> type = element.value.getClass();
+                    IDProperty idProperty = type.getAnnotation(IDProperty.class);
+
+                    if (idProperty != null) {
+                        BeanAdapter beanAdapter = new BeanAdapter(element.value);
+                        beanAdapter.put(idProperty.value(), element.id);
+                    }
                 }
 
                 // Apply instance attributes

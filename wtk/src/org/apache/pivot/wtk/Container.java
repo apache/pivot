@@ -308,6 +308,23 @@ public abstract class Container extends Component
         return component;
     }
 
+    public Component getNamedComponent(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException();
+        }
+
+        Component namedComponent = null;
+
+        for (Component component : this) {
+            if (name.equals(component.getName())) {
+                namedComponent = component;
+                break;
+            }
+        }
+
+        return namedComponent;
+    }
+
     @Override
     public void setVisible(boolean visible) {
         if (!visible

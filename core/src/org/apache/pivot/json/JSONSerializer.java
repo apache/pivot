@@ -54,8 +54,6 @@ public class JSONSerializer implements Serializer<Object> {
     private boolean alwaysDelimitMapKeys = false;
     private boolean verbose = false;
 
-    private LineNumberReader lineNumberReader = null;
-
     public static final String DEFAULT_CHARSET_NAME = "UTF-8";
     public static final String MIME_TYPE = "application/json";
     public static final int BUFFER_SIZE = 2048;
@@ -184,7 +182,7 @@ public class JSONSerializer implements Serializer<Object> {
         c = reader.read();
 
         // Read the root value
-        lineNumberReader = new LineNumberReader(reader);
+        LineNumberReader lineNumberReader = new LineNumberReader(reader);
         Object object;
 
         try {

@@ -548,6 +548,11 @@ public class TableViewRowEditor implements TableView.RowEditor {
             // No-op
         }
 
+        @Override
+        public void nameChanged(Component component, String previousName) {
+            // No-op
+        }
+
         // TableViewListener methods
 
         @Override

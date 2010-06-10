@@ -38,6 +38,7 @@ import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.ThreadUtilities;
 import org.apache.pivot.wtk.effects.Decorator;
+import org.apache.pivot.wtkx.IDProperty;
 
 /**
  * Top level abstract base class for all components. In MVC terminology, a
@@ -49,6 +50,7 @@ import org.apache.pivot.wtk.effects.Decorator;
  * TODO Add a contains() method or some equivalent that will support mouse
  * interaction with non-rectangular components.
  */
+@IDProperty("name")
 public abstract class Component implements ConstrainedVisual {
     /**
      * Style dictionary implementation.
@@ -369,6 +371,13 @@ public abstract class Component implements ConstrainedVisual {
                 listener.menuHandlerChanged(component, previousMenuHandler);
             }
         }
+
+        @Override
+        public void nameChanged(Component component, String previousName) {
+            for (ComponentListener listener : this) {
+                listener.nameChanged(component, previousName);
+            }
+        }
     }
 
     private static class ComponentStateListenerList extends
@@ -625,6 +634,9 @@ public abstract class Component implements ConstrainedVisual {
 
     // The component's menu handler
     private MenuHandler menuHandler = null;
+
+    // The component's name
+    private String name = null;
 
     // User data
     private HashMap<String, Object> userData = new HashMap<String, Object>();
@@ -2408,6 +2420,27 @@ public abstract class Component implements ConstrainedVisual {
         if (previousMenuHandler != menuHandler) {
             this.menuHandler = menuHandler;
             componentListeners.menuHandlerChanged(this, previousMenuHandler);
+        }
+    }
+
+    /**
+     * Returns the component's name.
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Sets the component's name.
+     *
+     * @param name
+     */
+    public void setName(String name) {
+        String previousName = this.name;
+
+        if (previousName != name) {
+            this.name = name;
+            componentListeners.nameChanged(this, previousName);
         }
     }
 

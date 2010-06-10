@@ -224,6 +224,11 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
         // No-op
     }
 
+    @Override
+    public void nameChanged(Component component, String previousName) {
+        // No-op
+    }
+
     // Component state events
     @Override
     public void enabledChanged(Component component) {

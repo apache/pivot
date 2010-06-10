@@ -137,8 +137,6 @@ public class CSVSerializer implements Serializer<List<?>> {
     private Class<?> itemClass = HashMap.class;
     private boolean verbose = false;
 
-    private LineNumberReader lineNumberReader = null;
-
     public static final String DEFAULT_CHARSET_NAME = "ISO-8859-1";
     public static final String MIME_TYPE = "text/csv";
     public static final int BUFFER_SIZE = 2048;
@@ -250,7 +248,7 @@ public class CSVSerializer implements Serializer<List<?>> {
         // Move to the first character
         c = reader.read();
 
-        lineNumberReader = new LineNumberReader(reader);
+        LineNumberReader lineNumberReader = new LineNumberReader(reader);
 
         try {
             while (c != -1) {
