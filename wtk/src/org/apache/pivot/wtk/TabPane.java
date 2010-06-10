@@ -27,6 +27,7 @@ import org.apache.pivot.util.ThreadUtilities;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.wtk.media.Image;
+import org.apache.pivot.wtkx.DefaultProperty;
 
 
 /**
@@ -35,6 +36,7 @@ import org.apache.pivot.wtk.media.Image;
  * <p>
  * TODO Add a getTabAt() method that delegates to the skin.
  */
+@DefaultProperty("tabs")
 public class TabPane extends Container {
     /**
      * Tab sequence implementation.

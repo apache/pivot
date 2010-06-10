@@ -19,79 +19,66 @@ limitations under the License.
 <Window title="Tab Panes" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <TablePane styles="{padding:8, horizontalSpacing:6}">
-            <columns>
-                <TablePane.Column width="1*"/>
-                <TablePane.Column/>
-            </columns>
-            <rows>
-                <TablePane.Row height="1*">
-                    <Border styles="{padding:12}">
-                        <content>
-                            <BoxPane>
-                                <TabPane wtkx:id="tabPane">
-                                    <tabs>
-                                        <BoxPane TabPane.icon="org/apache/pivot/tutorials/bell.png" TabPane.label="Bell"
-                                            styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
-                                            <Border styles="{padding:2}">
-                                                <content>
-                                                    <Label text="240x180" preferredWidth="240" preferredHeight="180"
-                                                        styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
-                                                </content>
-                                            </Border>
-                                        </BoxPane>
-
-                                        <BoxPane TabPane.icon="org/apache/pivot/tutorials/clock.png" TabPane.label="Clock"
-                                            styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
-                                            <Border styles="{padding:2}">
-                                                <content>
-                                                    <Label text="320x240" preferredWidth="320" preferredHeight="240"
-                                                        styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
-                                                </content>
-                                            </Border>
-                                        </BoxPane>
-
-                                        <BoxPane TabPane.icon="org/apache/pivot/tutorials/house.png" TabPane.label="House"
-                                            styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
-                                            <Border styles="{padding:2}">
-                                                <content>
-                                                    <Label text="480x360" preferredWidth="480" preferredHeight="360"
-                                                        styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
-                                                </content>
-                                            </Border>
-                                        </BoxPane>
-
-                                        <BoxPane TabPane.icon="org/apache/pivot/tutorials/star.png" TabPane.label="Star" enabled="false"/>
-                                    </tabs>
-                                    <corner>
-                                        <BoxPane wtkx:id="cornerBoxPane" styles="{horizontalAlignment:'right'}">
-                                            <TextInput/>
-                                        </BoxPane>
-                                    </corner>
-                                </TabPane>
+    <TablePane styles="{padding:8, horizontalSpacing:6}">
+        <columns>
+            <TablePane.Column width="1*"/>
+            <TablePane.Column/>
+        </columns>
+        <rows>
+            <TablePane.Row height="1*">
+                <Border styles="{padding:12}">
+                    <BoxPane>
+                        <TabPane wtkx:id="tabPane">
+                            <BoxPane TabPane.icon="org/apache/pivot/tutorials/bell.png" TabPane.label="Bell"
+                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                                <Border styles="{padding:2}">
+                                    <Label text="240x180" preferredWidth="240" preferredHeight="180"
+                                        styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
+                                </Border>
                             </BoxPane>
-                        </content>
-                    </Border>
 
-                    <Border styles="{padding:2}">
-                        <content>
-                            <BoxPane orientation="vertical" styles="{padding:4, spacing:6}">
-                                <Checkbox wtkx:id="collapsibleCheckbox" buttonData="Collapsible"/>
-                                <Label text="Tab orientation:"/>
-                                <wtkx:define>
-                                    <ButtonGroup wtkx:id="tabOrientation"/>
-                                </wtkx:define>
-                                <RadioButton wtkx:id="horizontalRadioButton" buttonData="Horizontal" selected="true"
-                                    buttonGroup="$tabOrientation"/>
-                                <RadioButton wtkx:id="verticalRadioButton" buttonData="Vertical"
-                                    buttonGroup="$tabOrientation"/>
+                            <BoxPane TabPane.icon="org/apache/pivot/tutorials/clock.png" TabPane.label="Clock"
+                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                                <Border styles="{padding:2}">
+                                    <Label text="320x240" preferredWidth="320" preferredHeight="240"
+                                        styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
+                                </Border>
                             </BoxPane>
-                        </content>
-                    </Border>
-                </TablePane.Row>
-            </rows>
-        </TablePane>
-    </content>
+
+                            <BoxPane TabPane.icon="org/apache/pivot/tutorials/house.png" TabPane.label="House"
+                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                                <Border styles="{padding:2}">
+                                    <Label text="480x360" preferredWidth="480" preferredHeight="360"
+                                        styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
+                                </Border>
+                            </BoxPane>
+
+                            <BoxPane TabPane.icon="org/apache/pivot/tutorials/star.png" TabPane.label="Star" enabled="false"/>
+
+                            <corner>
+                                <BoxPane wtkx:id="cornerBoxPane" styles="{horizontalAlignment:'right'}">
+                                    <TextInput/>
+                                </BoxPane>
+                            </corner>
+                        </TabPane>
+                    </BoxPane>
+                </Border>
+
+                <Border styles="{padding:2}">
+                    <BoxPane orientation="vertical" styles="{padding:4, spacing:6}">
+                        <Checkbox wtkx:id="collapsibleCheckbox" buttonData="Collapsible"/>
+                        <Label text="Tab orientation:"/>
+                        <wtkx:define>
+                            <ButtonGroup wtkx:id="tabOrientation"/>
+                        </wtkx:define>
+                        <RadioButton wtkx:id="horizontalRadioButton" buttonData="Horizontal" selected="true"
+                            buttonGroup="$tabOrientation"/>
+                        <RadioButton wtkx:id="verticalRadioButton" buttonData="Vertical"
+                            buttonGroup="$tabOrientation"/>
+                    </BoxPane>
+                </Border>
+            </TablePane.Row>
+        </rows>
+    </TablePane>
 </Window>
 

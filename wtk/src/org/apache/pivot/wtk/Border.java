@@ -18,11 +18,12 @@ package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ListenerList;
-
+import org.apache.pivot.wtkx.DefaultProperty;
 
 /**
  * Container that displays a border.
  */
+@DefaultProperty("content")
 public class Border extends Container {
     private static class BorderListenerList extends ListenerList<BorderListener>
         implements BorderListener {

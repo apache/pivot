@@ -18,12 +18,14 @@ package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.wtkx.DefaultProperty;
 
 
 /**
  * Container that provides a scrollable view of a component, with optional
  * fixed row and column headers.
  */
+@DefaultProperty("view")
 public class ScrollPane extends Viewport {
     /**
      * Enumeration defining scroll pane scroll bar policies.

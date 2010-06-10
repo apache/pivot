@@ -797,16 +797,31 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                     dictionary.put(attribute.localName, resolve(attribute.value));
                 }
 
-                // If the element's parent is a sequence or a listener list, add
-                // the element value to it
-                if (element.parent != null) {
-                    if (element.parent.value instanceof Sequence<?>) {
-                        Sequence<Object> sequence = (Sequence<Object>)element.parent.value;
-                        sequence.add(element.value);
-                    } else {
-                        if (element.parent.value instanceof ListenerList<?>) {
+                // If the element's parent has a default property, use it; otherwise, if the
+                // parent is a sequence or a listener list, add the element to it
+                if (element.parent != null
+                    && element.parent.value != null) {
+                    Class<?> parentType = element.parent.value.getClass();
+                    DefaultProperty defaultProperty = parentType.getAnnotation(DefaultProperty.class);
+
+                    if (defaultProperty == null) {
+                        if (element.parent.value instanceof Sequence<?>) {
+                            Sequence<Object> sequence = (Sequence<Object>)element.parent.value;
+                            sequence.add(element.value);
+                        } else if (element.parent.value instanceof ListenerList<?>) {
                             ListenerList<Object> listenerList = (ListenerList<Object>)element.parent.value;
                             listenerList.add(element.value);
+                        }
+                    } else {
+                        String defaultPropertyName = defaultProperty.value();
+                        BeanAdapter beanAdapter = new BeanAdapter(element.parent.value);
+                        Object defaultPropertyValue = beanAdapter.get(defaultPropertyName);
+
+                        if (defaultPropertyValue instanceof Sequence<?>) {
+                            Sequence<Object> sequence = (Sequence<Object>)defaultPropertyValue;
+                            sequence.add(element.value);
+                        } else {
+                            beanAdapter.put(defaultPropertyName, element.value);
                         }
                     }
                 }

@@ -37,11 +37,13 @@ import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.content.TableViewCellRenderer;
+import org.apache.pivot.wtkx.DefaultProperty;
 
 /**
  * Component that displays a sequence of rows partitioned into columns,
  * optionally allowing a user to select one or more rows.
  */
+@DefaultProperty("columns")
 public class TableView extends Component {
     /**
      * Contains information about a table column.

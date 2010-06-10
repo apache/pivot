@@ -26,11 +26,13 @@ import org.apache.pivot.util.ThreadUtilities;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.wtk.media.Image;
+import org.apache.pivot.wtkx.DefaultProperty;
 
 /**
  * Top-level container representing the entry point into a user interface.
  * Windows are direct descendants of the display.
  */
+@DefaultProperty("content")
 public class Window extends Container {
     /**
      * Window skin interface.

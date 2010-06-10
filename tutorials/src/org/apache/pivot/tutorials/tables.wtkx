@@ -21,84 +21,73 @@ limitations under the License.
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns:tutorials="org.apache.pivot.tutorials"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <BoxPane styles="{padding:4, spacing:8}">
-            <BoxPane orientation="vertical">
-                <Label text="Sortable" styles="{font:{bold:true}}"/>
-                <Border styles="{color:10}">
-                    <content>
-                        <ScrollPane wtkx:id="sortableScrollPane"
-                            horizontalScrollBarPolicy="fill_to_capacity"
-                            preferredWidth="276" preferredHeight="160">
-                            <view>
-                                <TableView wtkx:id="sortableTableView" selectMode="multi"
-                                    styles="{alternateRowBackgroundColor:null, columnSelectionColor:11,
-                                            showVerticalGridLines:false}">
-                                    <columns>
-                                        <TableView.Column name="i" width="48"/>
-                                        <TableView.Column name="a" width="48"/>
-                                        <TableView.Column name="b" width="48"/>
-                                        <TableView.Column name="c" width="48"/>
-                                        <TableView.Column name="d" width="48"/>
-                                        <TableView.Column name="e" width="1*"/>
-                                    </columns>
-                                </TableView>
-                            </view>
-                            <columnHeader>
-                                <TableViewHeader tableView="$sortableTableView"
-                                    sortMode="multi_column"
-                                    tooltipText="Shift-click to sort on multiple columns"/>
-                            </columnHeader>
-                        </ScrollPane>
-                    </content>
-                </Border>
+    <BoxPane styles="{padding:4, spacing:8}">
+        <BoxPane orientation="vertical">
+            <Label text="Sortable" styles="{font:{bold:true}}"/>
+            <Border styles="{color:10}">
+                <ScrollPane wtkx:id="sortableScrollPane"
+                    horizontalScrollBarPolicy="fill_to_capacity"
+                    preferredWidth="276" preferredHeight="160">
+                    <TableView wtkx:id="sortableTableView" selectMode="multi"
+                        styles="{alternateRowBackgroundColor:null, columnSelectionColor:11,
+                                showVerticalGridLines:false}">
+                        <TableView.Column name="i" width="48"/>
+                        <TableView.Column name="a" width="48"/>
+                        <TableView.Column name="b" width="48"/>
+                        <TableView.Column name="c" width="48"/>
+                        <TableView.Column name="d" width="48"/>
+                        <TableView.Column name="e" width="1*"/>
+                    </TableView>
 
-            </BoxPane>
+                    <columnHeader>
+                        <TableViewHeader tableView="$sortableTableView"
+                            sortMode="multi_column"
+                            tooltipText="Shift-click to sort on multiple columns"/>
+                    </columnHeader>
+                </ScrollPane>
+            </Border>
 
-            <BoxPane orientation="vertical">
-                <Label text="Custom Content" styles="{font:{bold:true}}"/>
-                <Border styles="{color:10}">
-                    <content>
-                        <ScrollPane horizontalScrollBarPolicy="fill_to_capacity" preferredWidth="160">
-                            <view>
-                                <TableView wtkx:id="customTableView" selectMode="multi"
-                                    styles="{showHorizontalGridLines:false}">
-                                    <columns>
-                                        <TableView.Column name="a" width="-1">
-                                            <headerData>
-                                                <content:TableViewHeaderData icon="@flag_red.png"/>
-                                            </headerData>
-
-                                            <cellRenderer>
-                                                <content:TableViewBooleanCellRenderer/>
-                                            </cellRenderer>
-                                        </TableView.Column>
-                                        <TableView.Column name="b" width="32" headerData="Icon">
-                                            <cellRenderer>
-                                                <content:TableViewImageCellRenderer/>
-                                            </cellRenderer>
-                                        </TableView.Column>
-                                        <TableView.Column name="c" width="1*" headerData="Name" minimumWidth="50"/>
-                                    </columns>
-                                    <tableData>
-                                        <collections:ArrayList>
-                                            <tutorials:CustomTableRow a="true" b="@anchor.png" c="Anchor"/>
-                                            <tutorials:CustomTableRow a="false" b="@bell.png" c="Bell"/>
-                                            <tutorials:CustomTableRow a="false" b="@clock.png" c="Clock"/>
-                                            <tutorials:CustomTableRow a="true" b="@cup.png" c="Cup"/>
-                                            <tutorials:CustomTableRow a="false" b="@house.png" c="House"/>
-                                            <tutorials:CustomTableRow a="true" b="@star.png" c="Star"/>
-                                        </collections:ArrayList>
-                                    </tableData>
-                                </TableView>
-                            </view>
-                            <columnHeader>
-                                <TableViewHeader tableView="$customTableView" styles="{headersPressable:false}"/>
-                            </columnHeader>
-                        </ScrollPane>
-                    </content>
-                </Border>
-            </BoxPane>
         </BoxPane>
-    </content>
+
+        <BoxPane orientation="vertical">
+            <Label text="Custom Content" styles="{font:{bold:true}}"/>
+            <Border styles="{color:10}">
+                <ScrollPane horizontalScrollBarPolicy="fill_to_capacity" preferredWidth="160">
+                    <TableView wtkx:id="customTableView" selectMode="multi"
+                        styles="{showHorizontalGridLines:false}">
+                        <TableView.Column name="a" width="-1">
+                            <headerData>
+                                <content:TableViewHeaderData icon="@flag_red.png"/>
+                            </headerData>
+
+                            <cellRenderer>
+                                <content:TableViewBooleanCellRenderer/>
+                            </cellRenderer>
+                        </TableView.Column>
+                        <TableView.Column name="b" width="32" headerData="Icon">
+                            <cellRenderer>
+                                <content:TableViewImageCellRenderer/>
+                            </cellRenderer>
+                        </TableView.Column>
+                        <TableView.Column name="c" width="1*" headerData="Name" minimumWidth="50"/>
+
+                        <tableData>
+                            <collections:ArrayList>
+                                <tutorials:CustomTableRow a="true" b="@anchor.png" c="Anchor"/>
+                                <tutorials:CustomTableRow a="false" b="@bell.png" c="Bell"/>
+                                <tutorials:CustomTableRow a="false" b="@clock.png" c="Clock"/>
+                                <tutorials:CustomTableRow a="true" b="@cup.png" c="Cup"/>
+                                <tutorials:CustomTableRow a="false" b="@house.png" c="House"/>
+                                <tutorials:CustomTableRow a="true" b="@star.png" c="Star"/>
+                            </collections:ArrayList>
+                        </tableData>
+                    </TableView>
+
+                    <columnHeader>
+                        <TableViewHeader tableView="$customTableView" styles="{headersPressable:false}"/>
+                    </columnHeader>
+                </ScrollPane>
+            </Border>
+        </BoxPane>
+    </BoxPane>
 </Border>
