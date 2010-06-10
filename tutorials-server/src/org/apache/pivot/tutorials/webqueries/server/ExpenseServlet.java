@@ -25,7 +25,6 @@ import javax.servlet.ServletException;
 
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
-import org.apache.pivot.json.JSON;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.CSVSerializer;
 import org.apache.pivot.serialization.SerializationException;
@@ -103,8 +102,7 @@ public class ExpenseServlet extends QueryServlet {
             throw new QueryException(Query.Status.BAD_REQUEST);
         }
 
-        // Create the new expense and bind the data to it
-        Expense expense = JSON.bind(value, Expense.class);
+        Expense expense = (Expense)value;
 
         // Add the expense to the list/map
         int id;
@@ -137,7 +135,7 @@ public class ExpenseServlet extends QueryServlet {
         int id = Integer.parseInt(path.get(0));
 
         // Create the new expense and bind the data to it
-        Expense expense = JSON.bind(value, Expense.class);
+        Expense expense = (Expense)value;
         expense.setID(id);
 
         // Update the list/map
@@ -174,6 +172,6 @@ public class ExpenseServlet extends QueryServlet {
 
     @Override
     protected Serializer<?> createSerializer(Path path) throws QueryException {
-        return new JSONSerializer();
+        return new JSONSerializer(Expense.class);
     }
 }

@@ -28,15 +28,17 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.nio.charset.Charset;
 
 import org.apache.pivot.beans.BeanAdapter;
 import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
-import org.apache.pivot.collections.immutable.ImmutableList;
-import org.apache.pivot.collections.immutable.ImmutableMap;
+import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.io.EchoReader;
 import org.apache.pivot.io.EchoWriter;
 import org.apache.pivot.serialization.SerializationException;
@@ -48,37 +50,35 @@ import org.apache.pivot.serialization.Serializer;
  */
 public class JSONSerializer implements Serializer<Object> {
     private Charset charset;
-    private boolean immutable;
+    private Class<?> type;
 
     private int c = -1;
     private boolean alwaysDelimitMapKeys = false;
     private boolean verbose = false;
-
-    private LineNumberReader lineNumberReader = null;
 
     public static final String DEFAULT_CHARSET_NAME = "UTF-8";
     public static final String MIME_TYPE = "application/json";
     public static final int BUFFER_SIZE = 2048;
 
     public JSONSerializer() {
-        this(Charset.forName(DEFAULT_CHARSET_NAME), false);
+        this(Charset.forName(DEFAULT_CHARSET_NAME), Object.class);
     }
 
     public JSONSerializer(Charset charset) {
-        this(charset, false);
+        this(charset, Object.class);
     }
 
-    public JSONSerializer(boolean immutable) {
-        this(Charset.forName(DEFAULT_CHARSET_NAME), immutable);
+    public JSONSerializer(Class<?> type) {
+        this(Charset.forName(DEFAULT_CHARSET_NAME), type);
     }
 
-    public JSONSerializer(Charset charset, boolean immutable) {
+    public JSONSerializer(Charset charset, Class<?> type) {
         if (charset == null) {
             throw new IllegalArgumentException("charset is null.");
         }
 
         this.charset = charset;
-        this.immutable = immutable;
+        this.type = type;
     }
 
     /**
@@ -89,13 +89,10 @@ public class JSONSerializer implements Serializer<Object> {
     }
 
     /**
-     * Returns the serializer's immutable flag.
-     *
-     * @return
-     * If <tt>true</tt>, all list and map values will be wrapped in an immutable equivalent.
+     * Returns the type of the object that will be returned by {@link #readObject(Reader)}.
      */
-    public boolean isImmutable() {
-        return immutable;
+    public Class<?> getType() {
+        return type;
     }
 
     /**
@@ -184,11 +181,11 @@ public class JSONSerializer implements Serializer<Object> {
         c = reader.read();
 
         // Read the root value
-        lineNumberReader = new LineNumberReader(reader);
+        LineNumberReader lineNumberReader = new LineNumberReader(reader);
         Object object;
 
         try {
-            object = readValue(lineNumberReader);
+            object = readValue(lineNumberReader, type);
         } catch (SerializationException exception) {
             System.err.println("An error occurred while processing input at line number "
                 + (lineNumberReader.getLineNumber() + 1));
@@ -196,12 +193,10 @@ public class JSONSerializer implements Serializer<Object> {
             throw exception;
         }
 
-        lineNumberReader = null;
-
         return object;
     }
 
-    private Object readValue(Reader reader)
+    private Object readValue(Reader reader, Type type)
         throws IOException, SerializationException {
         Object object = null;
 
@@ -214,15 +209,15 @@ public class JSONSerializer implements Serializer<Object> {
         if (c == 'n') {
             object = readNull(reader);
         } else if (c == '"' || c == '\'') {
-            object = readString(reader);
+            object = readString(reader, type);
         } else if (c == '+' || c == '-' || Character.isDigit(c)) {
-            object = readNumber(reader);
+            object = readNumber(reader, type);
         } else if (c == 't' || c == 'f') {
-            object = readBoolean(reader);
+            object = readBoolean(reader, type);
         } else if (c == '[') {
-            object = readList(reader);
+            object = readList(reader, type);
         } else if (c == '{') {
-            object = readMap(reader);
+            object = readMap(reader, type);
         } else {
             throw new SerializationException("Unexpected character in input stream.");
         }
@@ -299,8 +294,12 @@ public class JSONSerializer implements Serializer<Object> {
         return null;
     }
 
-    private String readString(Reader reader)
+    private Object readString(Reader reader, Type type)
         throws IOException, SerializationException {
+        if (!(type instanceof Class<?>)) {
+            throw new SerializationException("Cannot convert string to " + type + ".");
+        }
+
         StringBuilder stringBuilder = new StringBuilder();
 
         // Use the same delimiter to close the string
@@ -357,10 +356,15 @@ public class JSONSerializer implements Serializer<Object> {
         // Move to the next character after the delimiter
         c = reader.read();
 
-        return stringBuilder.toString();
+        return BeanAdapter.coerce(stringBuilder.toString(), (Class<?>)type);
     }
 
-    private Number readNumber(Reader reader) throws IOException {
+    private Object readNumber(Reader reader, Type type)
+        throws IOException, SerializationException {
+        if (!(type instanceof Class<?>)) {
+            throw new SerializationException("Cannot convert number to " + type + ".");
+        }
+
         Number number = null;
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -394,17 +398,21 @@ public class JSONSerializer implements Serializer<Object> {
             number = Double.parseDouble(stringBuilder.toString()) * (negative ? -1.0d : 1.0d);
         }
 
-        return number;
+        return BeanAdapter.coerce(number, (Class<?>)type);
     }
 
-    private Boolean readBoolean(Reader reader)
+    private Object readBoolean(Reader reader, Type type)
         throws IOException, SerializationException {
-        String booleanString = (c == 't') ? "true" : "false";
-        int n = booleanString.length();
+        if (!(type instanceof Class<?>)) {
+            throw new SerializationException("Cannot convert number to " + type + ".");
+        }
+
+        String text = (c == 't') ? "true" : "false";
+        int n = text.length();
         int i = 0;
 
         while (c != -1 && i < n) {
-            if (booleanString.charAt(i) != c) {
+            if (text.charAt(i) != c) {
                 throw new SerializationException("Unexpected character in input stream.");
             }
 
@@ -416,19 +424,47 @@ public class JSONSerializer implements Serializer<Object> {
             throw new SerializationException("Incomplete boolean value in input stream.");
         }
 
-        return Boolean.parseBoolean(booleanString);
+        return BeanAdapter.coerce(Boolean.parseBoolean(text), (Class<?>)type);
     }
 
-    private List<Object> readList(Reader reader)
+    @SuppressWarnings("unchecked")
+    private Object readList(Reader reader, Type type)
         throws IOException, SerializationException {
-        List<Object> list = new ArrayList<Object>();
+        Sequence<Object> sequence;
+        Type itemType;
+
+        if (type instanceof ParameterizedType) {
+            ParameterizedType parameterizedType = (ParameterizedType)type;
+            Class<?> rawType = (Class<?>)parameterizedType.getRawType();
+            if (!Sequence.class.isAssignableFrom(rawType)) {
+                throw new IllegalArgumentException("Cannot convert array to "
+                    + rawType.getName() + ".");
+            }
+
+            try {
+                sequence = (Sequence<Object>)rawType.newInstance();
+            } catch (InstantiationException exception) {
+                throw new RuntimeException(exception);
+            } catch (IllegalAccessException exception) {
+                throw new RuntimeException(exception);
+            }
+
+            // Get the target item type
+            Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+            itemType = actualTypeArguments[0];
+        } else if (type == Object.class) {
+            sequence = new ArrayList<Object>();
+            itemType = Object.class;
+        } else {
+            throw new IllegalArgumentException("Cannot convert array to " + type + ".");
+        }
 
         // Move to the next character after '['
         c = reader.read();
         skipWhitespaceAndComments(reader);
 
         while (c != -1 && c != ']') {
-            list.add(readValue(reader));
+            sequence.add(readValue(reader, itemType));
             skipWhitespaceAndComments(reader);
 
             if (c == ',') {
@@ -446,16 +482,50 @@ public class JSONSerializer implements Serializer<Object> {
         // Move to the next character after ']'
         c = reader.read();
 
-        if (immutable) {
-            list = new ImmutableList<Object>(list);
-        }
-
-        return list;
+        return sequence;
     }
 
-    private Map<String, Object> readMap(Reader reader)
+    @SuppressWarnings("unchecked")
+    private Object readMap(Reader reader, Type type)
         throws IOException, SerializationException {
-        Map<String, Object> map = new HashMap<String, Object>();
+        Dictionary<String, Object> dictionary;
+        Type valueType;
+
+        if (type instanceof ParameterizedType) {
+            // Instantiate the target dictionary
+            ParameterizedType parameterizedType = (ParameterizedType)type;
+            Class<?> rawType = (Class<?>)parameterizedType.getRawType();
+            if (!Dictionary.class.isAssignableFrom(rawType)) {
+                throw new IllegalArgumentException("Cannot convert object to "
+                    + rawType.getName() + ".");
+            }
+
+            try {
+                dictionary = (Dictionary<String, Object>)rawType.newInstance();
+            } catch (InstantiationException exception) {
+                throw new RuntimeException(exception);
+            } catch (IllegalAccessException exception) {
+                throw new RuntimeException(exception);
+            }
+
+            // Get the target value type
+            Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+            valueType = actualTypeArguments[1];
+        } else if (type == Object.class){
+            dictionary = new HashMap<String, Object>();
+            valueType = Object.class;
+        } else {
+            Class<?> beanType = (Class<?>)type;
+            try {
+                dictionary = new BeanAdapter(beanType.newInstance());
+            } catch (InstantiationException exception) {
+                throw new RuntimeException(exception);
+            } catch (IllegalAccessException exception) {
+                throw new RuntimeException(exception);
+            }
+
+            valueType = null;
+        }
 
         // Move to the next character after '{'
         c = reader.read();
@@ -466,7 +536,7 @@ public class JSONSerializer implements Serializer<Object> {
 
             if (c == '"' || c == '\'') {
                 // The key is a delimited string
-                key = readString(reader);
+                key = (String)readString(reader, String.class);
             } else {
                 // The key is an undelimited string; it must adhere to Java
                 // identifier syntax
@@ -506,8 +576,9 @@ public class JSONSerializer implements Serializer<Object> {
 
             // Move to the first character after ':'
             c = reader.read();
+            dictionary.put(key, readValue(reader, (valueType == null) ?
+                ((BeanAdapter)dictionary).getGenericType(key) : valueType));
 
-            map.put(key, readValue(reader));
             skipWhitespaceAndComments(reader);
 
             if (c == ',') {
@@ -525,11 +596,7 @@ public class JSONSerializer implements Serializer<Object> {
         // Move to the first character after '}'
         c = reader.read();
 
-        if (immutable) {
-            map = new ImmutableMap<String, Object>(map);
-        }
-
-        return map;
+        return (dictionary instanceof BeanAdapter) ? ((BeanAdapter)dictionary).getBean() : dictionary;
     }
 
     /**
