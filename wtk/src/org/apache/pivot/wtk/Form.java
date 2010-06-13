@@ -252,6 +252,14 @@ public class Form extends Container {
         public static final String MESSAGE_KEY = "message";
 
         /**
+         * Creates a new flag with a type of {@link MessageType.ERROR} and
+         * no message.
+         */
+        public Flag() {
+            this(MessageType.ERROR, null);
+        }
+        
+        /**
          * Creates a new flag with the given message type and no message.
          *
          * @param messageType
@@ -289,6 +297,32 @@ public class Form extends Container {
         public MessageType getMessageType() {
             return messageType;
         }
+        
+        /**
+         * Sets the flag's message type.
+         * 
+         * @param messageType
+         */
+        public void setMessageType(MessageType messageType) {
+            if (messageType == null) {
+                throw new IllegalArgumentException();
+            }
+            
+            this.messageType = messageType;
+        }
+        
+        /**
+         * Sets the flag's message type.
+         * 
+         * @param messageType
+         */
+        public void setMessageType(String messageType) {
+            if (messageType == null) {
+                throw new IllegalArgumentException();
+            }
+            
+            setMessageType(MessageType.valueOf(messageType.toUpperCase()));
+        }
 
         /**
          * Returns the flag message.
@@ -299,6 +333,17 @@ public class Form extends Container {
          */
         public String getMessage() {
             return message;
+        }
+        
+        /**
+         * Sets the flag message.
+         * 
+         * @param message
+         * The message text associated with the flag, or <tt>null</tt> if
+         * there is no message.
+         */
+        public void setMessage(String message) {
+            this.message = message;
         }
 
         public static Flag decode(String flag) {
