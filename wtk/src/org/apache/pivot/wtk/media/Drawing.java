@@ -28,11 +28,10 @@ import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.media.drawing.Canvas;
 import org.apache.pivot.wtk.media.drawing.CanvasListener;
 
-
 /**
  * Image representing a vector drawing.
  */
-@DefaultProperty("canvas")
+@DefaultProperty(value="canvas", add=false)
 public class Drawing extends Image {
     private static class DrawingListenerList extends ListenerList<DrawingListener>
         implements DrawingListener {
