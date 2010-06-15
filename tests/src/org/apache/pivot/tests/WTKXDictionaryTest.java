@@ -24,7 +24,7 @@ public class WTKXDictionaryTest {
     @SuppressWarnings("unchecked")
     public static void main(String[] args) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        HashMap<String, Object> hashMap = 
+        HashMap<String, Object> hashMap =
             (HashMap<String, Object>)wtkxSerializer.readObject(WTKXDictionaryTest.class.getResource("wtkx_dictionary_test.wtkx"));
         System.out.println(JSONSerializer.toString(hashMap));
     }

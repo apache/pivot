@@ -170,7 +170,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         public Object value;
         public final int lineNumber;
 
-        public Element(Element parent, String namespaceURI, String localName, List<Attribute> attributes, 
+        public Element(Element parent, String namespaceURI, String localName, List<Attribute> attributes,
             Type type, String id, Object value, int lineNumber) {
             this.parent = parent;
             this.namespaceURI = namespaceURI;
@@ -681,7 +681,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         }
 
         Location xmlStreamLocation = xmlStreamReader.getLocation();
-        element = new Element(element, namespaceURI, localName, attributes, elementType, 
+        element = new Element(element, namespaceURI, localName, attributes, elementType,
             id, value, xmlStreamLocation.getLineNumber());
 
         // If this is the root, set it
@@ -829,10 +829,10 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                         // Split the local name
                         String[] localNameComponents = attribute.localName.split("\\.");
                         if (localNameComponents.length != 2) {
-                            throw new SerializationException("\"" + attribute.localName 
+                            throw new SerializationException("\"" + attribute.localName
                                 + "\" is not a valid attribute name.");
                         }
-                        
+
                         // Determine the type of the attribute
                         String propertyClassName = attribute.namespaceURI + "." + localNameComponents[0];
 
@@ -868,7 +868,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                             }
 
                             // Create an invocation handler for this listener
-                            ScriptEngine scriptEngine = scriptEngineManager.getEngineByName(language);                            
+                            ScriptEngine scriptEngine = scriptEngineManager.getEngineByName(language);
                             AttributeInvocationHandler handler =
                                 new AttributeInvocationHandler(scriptEngine,
                                     localNameComponents[1],
@@ -895,7 +895,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                             }
                         } else {
                             // The attribute represents a static setter
-                            setStaticProperty(element.value, propertyClass, localNameComponents[1], 
+                            setStaticProperty(element.value, propertyClass, localNameComponents[1],
                                 resolve(attribute.value));
                         }
                     }
@@ -934,37 +934,37 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                 if (element.parent.value instanceof Dictionary) {
                     dictionary = (Dictionary<String, Object>)element.parent.value;
                 } else {
-                    dictionary = new BeanAdapter(element.parent.value);                    
+                    dictionary = new BeanAdapter(element.parent.value);
                 }
-                
+
                 if (Character.isUpperCase(element.localName.charAt(0))) {
                     if (element.parent == null
                         || element.parent.value == null) {
                         throw new SerializationException("Element does not have a parent.");
                     }
-                                        
+
                     // Set static property
                     String[] localNameComponents = element.localName.split("\\.");
                     if (localNameComponents.length != 2) {
-                        throw new SerializationException("\"" + element.localName 
+                        throw new SerializationException("\"" + element.localName
                             + "\" is not a valid attribute name.");
                     }
-                    
+
                     String propertyClassName = element.namespaceURI + "." + localNameComponents[0];
-                    
+
                     Class<?> propertyClass = null;
                     try {
                         propertyClass = Class.forName(propertyClassName);
                     } catch (ClassNotFoundException exception) {
                         throw new SerializationException(exception);
                     }
-                    
-                    setStaticProperty(element.parent.value, propertyClass, localNameComponents[1], 
-                        element.value);                    
+
+                    setStaticProperty(element.parent.value, propertyClass, localNameComponents[1],
+                        element.value);
                 } else {
                     dictionary.put(localName, element.value);
                 }
-                
+
                 break;
             }
 
@@ -1517,9 +1517,9 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
 
         return method;
     }
-    
-    private static void setStaticProperty(Object object, Class<?> propertyClass, 
-        String propertyName, Object value) 
+
+    private static void setStaticProperty(Object object, Class<?> propertyClass,
+        String propertyName, Object value)
         throws SerializationException {
         Class<?> objectType = object.getClass();
         propertyName = Character.toUpperCase(propertyName.charAt(0)) + propertyName.substring(1);
@@ -1545,7 +1545,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         }
 
         if (setterMethod == null) {
-            throw new SerializationException(propertyClass.getName() + "." + propertyName 
+            throw new SerializationException(propertyClass.getName() + "." + propertyName
                 + " is not valid static property.");
         }
 

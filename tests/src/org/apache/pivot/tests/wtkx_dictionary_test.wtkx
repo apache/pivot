@@ -24,4 +24,5 @@ limitations under the License.
     <bar>
         <wtkx:include src="wtkx_dictionary_test_include.wtkx"/>
     </bar>
+    <baz>Quux</baz>
 </HashMap>
