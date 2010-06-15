@@ -46,9 +46,6 @@ import org.apache.pivot.wtkx.IDProperty;
  * representation and acts as an intermediary between the component's data (the
  * "model") and the skin, an implementation of {@link Skin} which serves as
  * the "view".
- * <p>
- * TODO Add a contains() method or some equivalent that will support mouse
- * interaction with non-rectangular components.
  */
 @IDProperty("name")
 public abstract class Component implements ConstrainedVisual {
@@ -1506,6 +1503,25 @@ public abstract class Component implements ConstrainedVisual {
 
         return new Bounds(decoratedBounds.x + x, decoratedBounds.y + y,
             decoratedBounds.width, decoratedBounds.height);
+    }
+
+    /**
+     * Determines if the component contains a given location. This method facilitates
+     * mouse interaction with non-rectangular components.
+     *
+     * @param x
+     * @param y
+     *
+     * @return
+     * <tt>true</tt> if the component's shape contains the given location; <tt>false</tt>,
+     * otherwise.
+     *
+     * @throws UnsupportedOperationException
+     * This method is not currently implemented.
+     */
+    public boolean contains(int x, int y) {
+        // TODO
+        return false;
     }
 
     /**

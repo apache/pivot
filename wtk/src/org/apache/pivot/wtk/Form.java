@@ -254,8 +254,7 @@ public class Form extends Container {
         public static final String MESSAGE_KEY = "message";
 
         /**
-         * Creates a new flag with a type of {@link MessageType.ERROR} and
-         * no message.
+         * Creates a new flag with a type of "error" and no message.
          */
         public Flag() {
             this(MessageType.ERROR, null);
