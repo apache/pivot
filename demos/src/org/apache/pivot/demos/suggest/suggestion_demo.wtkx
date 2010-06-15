@@ -19,15 +19,11 @@ limitations under the License.
 <Window title="Suggestion Demo" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <Border>
-            <content>
-                <FlowPane styles="{padding:6, alignToBaseline:true}">
-                    <Label text="Search:"/>
-                    <TextInput wtkx:id="textInput" textSize="20"/>
-                    <ActivityIndicator wtkx:id="activityIndicator"/>
-                </FlowPane>
-            </content>
-        </Border>
-    </content>
+    <Border>
+        <FlowPane styles="{padding:6, alignToBaseline:true}">
+            <Label text="Search:"/>
+            <TextInput wtkx:id="textInput" textSize="20"/>
+            <ActivityIndicator wtkx:id="activityIndicator"/>
+        </FlowPane>
+    </Border>
 </Window>

@@ -19,32 +19,28 @@ limitations under the License.
 <Window title="Activity Indicators" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <TablePane>
-            <columns>
-                <TablePane.Column width="1*"/>
-            </columns>
-            <rows>
-                <TablePane.Row height="1*">
-                    <Border styles="{padding:2}">
-                        <content>
-                            <BoxPane styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
-                                <ActivityIndicator wtkx:id="activityIndicator1"
-                                    preferredWidth="24" preferredHeight="24"/>
-                                <ActivityIndicator wtkx:id="activityIndicator2" styles="{color:'#aa0000'}"
-                                    preferredWidth="48" preferredHeight="48"/>
-                                <ActivityIndicator wtkx:id="activityIndicator3" styles="{color:16}"
-                                    preferredWidth="96" preferredHeight="96"/>
-                            </BoxPane>
-                        </content>
-                    </Border>
-                </TablePane.Row>
-                <TablePane.Row height="-1">
-                    <BoxPane styles="{horizontalAlignment:'center', padding:6}">
-                        <PushButton wtkx:id="activityButton" styles="{minimumAspectRatio:3}"/>
-                    </BoxPane>
-                </TablePane.Row>
-            </rows>
-        </TablePane>
-    </content>
+    <TablePane>
+        <columns>
+            <TablePane.Column width="1*"/>
+        </columns>
+
+        <TablePane.Row height="1*">
+            <Border styles="{padding:2}">
+                <BoxPane styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                    <ActivityIndicator wtkx:id="activityIndicator1"
+                        preferredWidth="24" preferredHeight="24"/>
+                    <ActivityIndicator wtkx:id="activityIndicator2" styles="{color:'#aa0000'}"
+                        preferredWidth="48" preferredHeight="48"/>
+                    <ActivityIndicator wtkx:id="activityIndicator3" styles="{color:16}"
+                        preferredWidth="96" preferredHeight="96"/>
+                </BoxPane>
+            </Border>
+        </TablePane.Row>
+
+        <TablePane.Row height="-1">
+            <BoxPane styles="{horizontalAlignment:'center', padding:6}">
+                <PushButton wtkx:id="activityButton" styles="{minimumAspectRatio:3}"/>
+            </BoxPane>
+        </TablePane.Row>
+    </TablePane>
 </Window>

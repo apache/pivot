@@ -16,6 +16,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<HashMap a="456" 
+<HashMap a="456"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.collections"/>

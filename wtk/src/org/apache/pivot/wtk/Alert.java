@@ -25,11 +25,13 @@ import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Resources;
+import org.apache.pivot.wtkx.DefaultProperty;
 
 /**
  * Class representing an "alert", a dialog commonly used to facilitate simple
  * user interaction.
  */
+@DefaultProperty("body")
 public class Alert extends Dialog {
     /**
      * Option sequence implementation.

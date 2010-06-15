@@ -18,110 +18,96 @@ limitations under the License.
 
 <TablePane styles="{verticalSpacing:6}"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
-    xmlns:collections="org.apache.pivot.collections"
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns:terra="org.apache.pivot.wtk.skin.terra"
     xmlns="org.apache.pivot.wtk">
     <columns>
         <TablePane.Column width="1*"/>
     </columns>
-    <rows>
-        <TablePane.Row height="-1">
-            <!-- Toolbar -->
-            <TablePane styles="{horizontalSpacing:2}">
-                <columns>
-                    <TablePane.Column width="-1"/>
-                    <TablePane.Column width="2*"/>
-                    <TablePane.Column width="-1"/>
-                    <TablePane.Column width="1*"/>
-                    <TablePane.Column width="3*"/>
-                </columns>
-                <rows>
-                    <TablePane.Row>
-                        <ListButton wtkx:id="driveListButton" tooltipText="%selectDrive">
-                            <dataRenderer>
-                                <terra:TerraFileBrowserSkin.ListButtonDriveRenderer/>
-                            </dataRenderer>
-                            <itemRenderer>
-                                <terra:TerraFileBrowserSkin.ListViewDriveRenderer/>
-                            </itemRenderer>
-                        </ListButton>
 
-                        <ListButton wtkx:id="pathListButton" tooltipText="%goTo">
-                            <dataRenderer>
-                                <terra:TerraFileBrowserSkin.ListButtonFileRenderer/>
-                            </dataRenderer>
-                            <itemRenderer>
-                                <terra:TerraFileBrowserSkin.ListViewFileRenderer/>
-                            </itemRenderer>
-                        </ListButton>
+    <TablePane.Row height="-1">
+        <TablePane styles="{horizontalSpacing:2}">
+            <columns>
+                <TablePane.Column width="-1"/>
+                <TablePane.Column width="2*"/>
+                <TablePane.Column width="-1"/>
+                <TablePane.Column width="1*"/>
+                <TablePane.Column width="3*"/>
+            </columns>
 
-                        <BoxPane styles="{verticalAlignment:'center', spacing:0}">
-                            <PushButton wtkx:id="goUpButton" styles="{toolbar:true}" tooltipText="%goUp">
-                                <buttonData>
-                                    <content:ButtonData icon="@folder_up.png"/>
-                                </buttonData>
-                            </PushButton>
-                            <PushButton wtkx:id="newFolderButton" styles="{toolbar:true}" tooltipText="%newFolder"
-                                visible="false">
-                                <buttonData>
-                                    <content:ButtonData icon="@folder_add.png"/>
-                                </buttonData>
-                            </PushButton>
-                            <PushButton wtkx:id="goHomeButton" styles="{toolbar:true}" tooltipText="%goHome">
-                                <buttonData>
-                                    <content:ButtonData icon="@house.png"/>
-                                </buttonData>
-                            </PushButton>
-                        </BoxPane>
+            <TablePane.Row>
+                <ListButton wtkx:id="driveListButton" tooltipText="%selectDrive">
+                    <dataRenderer>
+                        <terra:TerraFileBrowserSkin.ListButtonDriveRenderer/>
+                    </dataRenderer>
+                    <itemRenderer>
+                        <terra:TerraFileBrowserSkin.ListViewDriveRenderer/>
+                    </itemRenderer>
+                </ListButton>
 
-                        <TablePane.Filler/>
+                <ListButton wtkx:id="pathListButton" tooltipText="%goTo">
+                    <dataRenderer>
+                        <terra:TerraFileBrowserSkin.ListButtonFileRenderer/>
+                    </dataRenderer>
+                    <itemRenderer>
+                        <terra:TerraFileBrowserSkin.ListViewFileRenderer/>
+                    </itemRenderer>
+                </ListButton>
 
-                        <BoxPane orientation="vertical"
-                            styles="{horizontalAlignment:'right', verticalAlignment:'center', fill:true}">
-                            <BoxPane orientation="vertical" styles="{verticalAlignment:'center', fill:true}">
-                                <TextInput wtkx:id="searchTextInput" prompt="%search" tooltipText="%searchFor"/>
-                            </BoxPane>
-                        </BoxPane>
-                    </TablePane.Row>
-                </rows>
-            </TablePane>
-        </TablePane.Row>
+                <BoxPane styles="{verticalAlignment:'center', spacing:0}">
+                    <PushButton wtkx:id="goUpButton" styles="{toolbar:true}" tooltipText="%goUp">
+                        <content:ButtonData icon="@folder_up.png"/>
+                    </PushButton>
+                    <PushButton wtkx:id="newFolderButton" styles="{toolbar:true}" tooltipText="%newFolder"
+                        visible="false">
+                        <content:ButtonData icon="@folder_add.png"/>
+                    </PushButton>
+                    <PushButton wtkx:id="goHomeButton" styles="{toolbar:true}" tooltipText="%goHome">
+                        <content:ButtonData icon="@house.png"/>
+                    </PushButton>
+                </BoxPane>
 
-        <TablePane.Row height="1*">
-            <!-- File table view -->
-            <Border styles="{color:10}">
-                <content>
-                    <ScrollPane wtkx:id="fileScrollPane"
-                        horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fill_to_capacity">
-                        <view>
-                            <TableView wtkx:id="fileTableView"
-                                styles="{showHorizontalGridLines:false, showVerticalGridLines:false}">
-                                <columns>
-                                    <TableView.Column name="name" width="3*" headerData="%fileName">
-                                        <cellRenderer>
-                                            <terra:TerraFileBrowserSkin.TableViewFileRenderer/>
-                                        </cellRenderer>
-                                    </TableView.Column>
-                                    <TableView.Column name="size" width="1*" headerData="%size">
-                                        <cellRenderer>
-                                            <terra:TerraFileBrowserSkin.TableViewFileRenderer/>
-                                        </cellRenderer>
-                                    </TableView.Column>
-                                    <TableView.Column name="lastModified" width="2*" headerData="%lastModified">
-                                        <cellRenderer>
-                                            <terra:TerraFileBrowserSkin.TableViewFileRenderer/>
-                                        </cellRenderer>
-                                    </TableView.Column>
-                                </columns>
-                            </TableView>
-                        </view>
-                        <columnHeader>
-                            <TableViewHeader tableView="$fileTableView" sortMode="single_column"/>
-                        </columnHeader>
-                    </ScrollPane>
-                </content>
-            </Border>
-        </TablePane.Row>
-    </rows>
+                <TablePane.Filler/>
+
+                <BoxPane orientation="vertical"
+                    styles="{horizontalAlignment:'right', verticalAlignment:'center', fill:true}">
+                    <BoxPane orientation="vertical" styles="{verticalAlignment:'center', fill:true}">
+                        <TextInput wtkx:id="searchTextInput" prompt="%search" tooltipText="%searchFor"/>
+                    </BoxPane>
+                </BoxPane>
+            </TablePane.Row>
+        </TablePane>
+    </TablePane.Row>
+
+    <TablePane.Row height="1*">
+        <Border styles="{color:10}">
+            <ScrollPane wtkx:id="fileScrollPane"
+                horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fill_to_capacity">
+                <TableView wtkx:id="fileTableView"
+                    styles="{showHorizontalGridLines:false, showVerticalGridLines:false}">
+                    <columns>
+                        <TableView.Column name="name" width="3*" headerData="%fileName">
+                            <cellRenderer>
+                                <terra:TerraFileBrowserSkin.TableViewFileRenderer/>
+                            </cellRenderer>
+                        </TableView.Column>
+                        <TableView.Column name="size" width="1*" headerData="%size">
+                            <cellRenderer>
+                                <terra:TerraFileBrowserSkin.TableViewFileRenderer/>
+                            </cellRenderer>
+                        </TableView.Column>
+                        <TableView.Column name="lastModified" width="2*" headerData="%lastModified">
+                            <cellRenderer>
+                                <terra:TerraFileBrowserSkin.TableViewFileRenderer/>
+                            </cellRenderer>
+                        </TableView.Column>
+                    </columns>
+                </TableView>
+
+                <columnHeader>
+                    <TableViewHeader tableView="$fileTableView" sortMode="single_column"/>
+                </columnHeader>
+            </ScrollPane>
+        </Border>
+    </TablePane.Row>
 </TablePane>

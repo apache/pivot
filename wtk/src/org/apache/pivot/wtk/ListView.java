@@ -33,12 +33,14 @@ import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.content.ListViewItemRenderer;
+import org.apache.pivot.wtkx.DefaultProperty;
 
 
 /**
  * Component that displays a sequence of items, optionally allowing a user
  * to select or check one or more items.
  */
+@DefaultProperty("listData")
 public class ListView extends Component {
     /**
      * Enumeration defining supported selection modes.

@@ -20,17 +20,13 @@ limitations under the License.
     WindowStateListener.windowOpened="java.lang.System.out.println(&quot;Hello&quot;);"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <Form>
-            <sections>
-                <Form.Section>
-                    <Label Form.label="Label" text="Hello">
-                        <Form.flag>
-                            <Form.Flag messageType="error" message="This is a sample error message."/>
-                        </Form.flag>
-                    </Label>
-                </Form.Section>
-            </sections>
-        </Form>
-    </content>
+    <Form>
+        <Form.Section>
+            <Label Form.label="Label" text="Hello">
+                <Form.flag>
+                    <Form.Flag messageType="error" message="This is a sample error message."/>
+                </Form.flag>
+            </Label>
+        </Form.Section>
+    </Form>
 </Window>

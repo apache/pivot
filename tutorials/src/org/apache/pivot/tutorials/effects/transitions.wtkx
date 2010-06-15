@@ -19,12 +19,10 @@ limitations under the License.
 <Window title="Transitions" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <BoxPane styles="{padding:4, spacing:4}">
-            <PushButton wtkx:id="button1" buttonData="One"/>
-            <PushButton wtkx:id="button2" buttonData="Two"/>
-            <PushButton wtkx:id="button3" buttonData="Three"/>
-            <PushButton wtkx:id="button4" buttonData="Four"/>
-        </BoxPane>
-    </content>
+    <BoxPane styles="{padding:4, spacing:4}">
+        <PushButton wtkx:id="button1" buttonData="One"/>
+        <PushButton wtkx:id="button2" buttonData="Two"/>
+        <PushButton wtkx:id="button3" buttonData="Three"/>
+        <PushButton wtkx:id="button4" buttonData="Four"/>
+    </BoxPane>
 </Window>

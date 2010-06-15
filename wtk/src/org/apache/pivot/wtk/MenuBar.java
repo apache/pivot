@@ -23,14 +23,17 @@ import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.content.MenuBarItemDataRenderer;
+import org.apache.pivot.wtkx.DefaultProperty;
 
 /**
  * Component representing a menu bar.
  */
+@DefaultProperty("items")
 public class MenuBar extends Container {
     /**
      * Component representing a menu bar item.
      */
+    @DefaultProperty("menu")
     public static class Item extends Button {
         private static class ItemListenerList extends ListenerList<ItemListener>
             implements ItemListener {

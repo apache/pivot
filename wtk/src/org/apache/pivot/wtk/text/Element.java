@@ -54,7 +54,7 @@ public abstract class Element extends Node
                 listener.nodesRemoved(element, index, nodes);
             }
         }
-        
+
         @Override
         public void fontChanged(Element element, Font previousFont) {
             for (ElementListener listener : this) {
@@ -628,7 +628,7 @@ public abstract class Element extends Node
             setFont(Font.decode(font));
         }
     }
-    
+
     /**
      * Gets the currently foreground color, or <tt>null</tt> if no color is
      * foreground.
@@ -665,7 +665,7 @@ public abstract class Element extends Node
 
         setForegroundColor(GraphicsUtilities.decodeColor(foregroundColor));
     }
-    
+
     /**
      * Gets the currently background color, or <tt>null</tt> if no color is
      * background.
@@ -702,9 +702,9 @@ public abstract class Element extends Node
 
         setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
     }
-    
+
     public ListenerList<ElementListener> getElementListeners() {
         return elementListeners;
     }
-    
+
 }

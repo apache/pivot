@@ -29,11 +29,13 @@ import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.ListView.ListDataBindMapping;
 import org.apache.pivot.wtk.content.ListButtonDataRenderer;
 import org.apache.pivot.wtk.content.ListViewItemRenderer;
+import org.apache.pivot.wtkx.DefaultProperty;
 
 /**
  * Component that allows a user to select one of several list options. The
  * options are hidden until the user pushes the button.
  */
+@DefaultProperty("listData")
 public class ListButton extends Button {
     private static class ListButtonListenerList extends ListenerList<ListButtonListener>
         implements ListButtonListener {

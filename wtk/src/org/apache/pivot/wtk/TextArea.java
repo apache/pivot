@@ -36,11 +36,13 @@ import org.apache.pivot.wtk.text.NodeListener;
 import org.apache.pivot.wtk.text.Paragraph;
 import org.apache.pivot.wtk.text.PlainTextSerializer;
 import org.apache.pivot.wtk.text.TextNode;
+import org.apache.pivot.wtkx.DefaultProperty;
 
 /**
  * Component that allows a user to enter and edit multiple lines of (optionally
  * formatted) text.
  */
+@DefaultProperty("document")
 public class TextArea extends Container {
     /**
      * Text area skin interface. Text area skins are required to implement
@@ -210,7 +212,7 @@ public class TextArea extends Container {
             TextArea.super.add(componentNode.getComponent());
         }
     };
-    
+
     private NodeListener documentListener = new NodeListener() {
         @Override
         public void parentChanged(Node node, Element previousParent) {
@@ -244,7 +246,7 @@ public class TextArea extends Container {
                 }
             }
         }
-        
+
         @Override
         public void nodeInserted(Node node, int offset) {
             Node descendant = document.getDescendantAt(offset);
@@ -255,7 +257,7 @@ public class TextArea extends Container {
                 TextArea.super.add(componentNode.getComponent());
             }
         }
-        
+
         @Override
         public void rangeRemoved(Node node, int offset, int characterCount) {
             if (selectionStart + selectionLength > offset) {
@@ -298,8 +300,8 @@ public class TextArea extends Container {
     }
 
     /**
-     * Sets the document that backs the text area. 
-     * Documents are not shareable across multiple TextAreas; 
+     * Sets the document that backs the text area.
+     * Documents are not shareable across multiple TextAreas;
      * because a Document may contain Components, and a Component may only be in one Container at a time.
      *
      * @param document
@@ -337,7 +339,7 @@ public class TextArea extends Container {
             }
         }
     }
-    
+
     private void addComponentNodes(Element element) {
         for (Node childNode : element) {
             if (childNode instanceof Element) {
@@ -348,7 +350,7 @@ public class TextArea extends Container {
             }
         }
     }
-    
+
     public String getText() {
         String text = null;
         Document document = getDocument();

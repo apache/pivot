@@ -20,24 +20,18 @@ limitations under the License.
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:navigation="org.apache.pivot.tutorials.navigation"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <Border styles="{color:10}">
-            <content>
-                <ScrollPane>
-                    <view>
-                        <ImageView image="org/apache/pivot/tutorials/IMG_1147.jpg"
-                            tooltipText="Pemaquid Point Lighthouse, Bristol ME"/>
-                    </view>
+    <Border styles="{color:10}">
+        <ScrollPane>
+            <ImageView image="org/apache/pivot/tutorials/IMG_1147.jpg"
+                tooltipText="Pemaquid Point Lighthouse, Bristol ME"/>
 
-                    <columnHeader>
-                        <navigation:Ruler orientation="horizontal"/>
-                    </columnHeader>
+            <columnHeader>
+                <navigation:Ruler orientation="horizontal"/>
+            </columnHeader>
 
-                    <rowHeader>
-                        <navigation:Ruler orientation="vertical"/>
-                    </rowHeader>
-                </ScrollPane>
-            </content>
-        </Border>
-    </content>
+            <rowHeader>
+                <navigation:Ruler orientation="vertical"/>
+            </rowHeader>
+        </ScrollPane>
+    </Border>
 </Window>

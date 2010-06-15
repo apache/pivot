@@ -23,29 +23,25 @@ limitations under the License.
         <ButtonGroup wtkx:id="fileBrowserSheetModeGroup"/>
     </wtkx:define>
 
-    <content>
-        <Border styles="{padding:6}">
-            <content>
-                <BoxPane orientation="vertical" styles="{spacing:6}">
-                    <Label text="Mode:" styles="{font:{bold:true}}"/>
+    <Border styles="{padding:6}">
+        <BoxPane orientation="vertical" styles="{spacing:6}">
+            <Label text="Mode:" styles="{font:{bold:true}}"/>
 
-                    <RadioButton buttonData="Open" buttonGroup="$fileBrowserSheetModeGroup" selected="true">
-                        <userData mode="open"/>
-                    </RadioButton>
-                    <RadioButton buttonData="Open Multiple" buttonGroup="$fileBrowserSheetModeGroup">
-                        <userData mode="open_multiple"/>
-                    </RadioButton>
-                    <RadioButton buttonData="Save As" buttonGroup="$fileBrowserSheetModeGroup">
-                        <userData mode="save_as"/>
-                    </RadioButton>
-                    <RadioButton buttonData="Save To" buttonGroup="$fileBrowserSheetModeGroup">
-                        <userData mode="save_to"/>
-                    </RadioButton>
+            <RadioButton buttonData="Open" buttonGroup="$fileBrowserSheetModeGroup" selected="true">
+                <userData mode="open"/>
+            </RadioButton>
+            <RadioButton buttonData="Open Multiple" buttonGroup="$fileBrowserSheetModeGroup">
+                <userData mode="open_multiple"/>
+            </RadioButton>
+            <RadioButton buttonData="Save As" buttonGroup="$fileBrowserSheetModeGroup">
+                <userData mode="save_as"/>
+            </RadioButton>
+            <RadioButton buttonData="Save To" buttonGroup="$fileBrowserSheetModeGroup">
+                <userData mode="save_to"/>
+            </RadioButton>
 
-                    <PushButton wtkx:id="openSheetButton" buttonData="Open Sheet"/>
-                </BoxPane>
-            </content>
-        </Border>
-    </content>
+            <PushButton wtkx:id="openSheetButton" buttonData="Open Sheet"/>
+        </BoxPane>
+    </Border>
 </Window>
 

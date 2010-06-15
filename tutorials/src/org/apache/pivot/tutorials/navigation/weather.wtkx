@@ -20,12 +20,15 @@ limitations under the License.
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
     <Label text="Boston, MA" styles="{font:{bold:true}}"/>
+
     <BoxPane>
         <Label text="Current: 88˚" styles="{font:{size:10}}"/>
         <Label text="High: 93˚" styles="{font:{size:10}}"/>
         <Label text="Low: 55˚" styles="{font:{size:10}}"/>
     </BoxPane>
+
     <Separator styles="{padding:2}"/>
+
     <TablePane>
         <columns>
             <TablePane.Column width="1*"/>
@@ -36,26 +39,26 @@ limitations under the License.
             <TablePane.Column width="1*"/>
             <TablePane.Column width="1*"/>
         </columns>
-        <rows>
-            <TablePane.Row>
-                <Label text="Th" styles="{horizontalAlignment:'center'}"/>
-                <Label text="F" styles="{horizontalAlignment:'center'}"/>
-                <Label text="Sa" styles="{horizontalAlignment:'center'}"/>
-                <Label text="Su" styles="{horizontalAlignment:'center'}"/>
-                <Label text="M" styles="{horizontalAlignment:'center'}"/>
-                <Label text="Tu" styles="{horizontalAlignment:'center'}"/>
-                <Label text="W" styles="{horizontalAlignment:'center'}"/>
-            </TablePane.Row>
-            <TablePane.Row height="24">
-                <ImageView image="org/apache/pivot/tutorials/weather-clear.png"/>
-                <ImageView image="org/apache/pivot/tutorials/weather-few-clouds.png"/>
-                <ImageView image="org/apache/pivot/tutorials/weather-showers-scattered.png"/>
-                <ImageView image="org/apache/pivot/tutorials/weather-showers-scattered.png"/>
-                <ImageView image="org/apache/pivot/tutorials/weather-few-clouds.png"/>
-                <ImageView image="org/apache/pivot/tutorials/weather-clear.png"/>
-                <ImageView image="org/apache/pivot/tutorials/weather-clear.png"/>
-            </TablePane.Row>
-        </rows>
+
+        <TablePane.Row>
+            <Label text="Th" styles="{horizontalAlignment:'center'}"/>
+            <Label text="F" styles="{horizontalAlignment:'center'}"/>
+            <Label text="Sa" styles="{horizontalAlignment:'center'}"/>
+            <Label text="Su" styles="{horizontalAlignment:'center'}"/>
+            <Label text="M" styles="{horizontalAlignment:'center'}"/>
+            <Label text="Tu" styles="{horizontalAlignment:'center'}"/>
+            <Label text="W" styles="{horizontalAlignment:'center'}"/>
+        </TablePane.Row>
+
+        <TablePane.Row height="24">
+            <ImageView image="org/apache/pivot/tutorials/weather-clear.png"/>
+            <ImageView image="org/apache/pivot/tutorials/weather-few-clouds.png"/>
+            <ImageView image="org/apache/pivot/tutorials/weather-showers-scattered.png"/>
+            <ImageView image="org/apache/pivot/tutorials/weather-showers-scattered.png"/>
+            <ImageView image="org/apache/pivot/tutorials/weather-few-clouds.png"/>
+            <ImageView image="org/apache/pivot/tutorials/weather-clear.png"/>
+            <ImageView image="org/apache/pivot/tutorials/weather-clear.png"/>
+        </TablePane.Row>
     </TablePane>
 </BoxPane>
 

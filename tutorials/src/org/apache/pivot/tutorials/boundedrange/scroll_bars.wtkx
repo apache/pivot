@@ -22,44 +22,39 @@ limitations under the License.
     xmlns="org.apache.pivot.wtk">
     <wtkx:script src="scroll_bars.js"/>
 
-    <content>
-        <Border>
-            <content>
-                <TablePane>
-                    <columns>
-                        <TablePane.Column width="1*"/>
-                    </columns>
-                    <rows>
-                        <TablePane.Row>
-                            <FlowPane styles="{padding:6}">
-                                <wtkx:define>
-                                    <ButtonGroup wtkx:id="ranges"
-                                        ButtonGroupListener.selectionChanged="updateRange();"/>
-                                </wtkx:define>
-                                <RadioButton wtkx:id="dayButton"
-                                    buttonGroup="$ranges" buttonData="Day"/>
-                                <RadioButton wtkx:id="weekButton"
-                                    buttonGroup="$ranges" buttonData="Week"/>
-                                <RadioButton wtkx:id="fortnightButton"
-                                    buttonGroup="$ranges" buttonData="Fortnight"/>
-                                <RadioButton wtkx:id="monthButton"
-                                    buttonGroup="$ranges" buttonData="Month"/>
-                            </FlowPane>
-                        </TablePane.Row>
-                        <TablePane.Row height="1*">
-                            <BoxPane orientation="vertical" styles="{horizontalAlignment:'center',
-                                verticalAlignment:'center'}">
-                                <Label wtkx:id="label"/>
-                            </BoxPane>
-                        </TablePane.Row>
-                        <TablePane.Row>
-                            <ScrollBar wtkx:id="scrollBar" start="0" end="60"
-                                ScrollBarListener.scopeChanged="updateLabel();"
-                                ScrollBarValueListener.valueChanged="updateLabel();"/>
-                        </TablePane.Row>
-                    </rows>
-                </TablePane>
-            </content>
-        </Border>
-    </content>
+    <Border>
+        <TablePane>
+            <columns>
+                <TablePane.Column width="1*"/>
+            </columns>
+
+            <TablePane.Row>
+                <FlowPane styles="{padding:6}">
+                    <wtkx:define>
+                        <ButtonGroup wtkx:id="ranges"
+                            ButtonGroupListener.selectionChanged="updateRange();"/>
+                    </wtkx:define>
+                    <RadioButton wtkx:id="dayButton"
+                        buttonGroup="$ranges" buttonData="Day"/>
+                    <RadioButton wtkx:id="weekButton"
+                        buttonGroup="$ranges" buttonData="Week"/>
+                    <RadioButton wtkx:id="fortnightButton"
+                        buttonGroup="$ranges" buttonData="Fortnight"/>
+                    <RadioButton wtkx:id="monthButton"
+                        buttonGroup="$ranges" buttonData="Month"/>
+                </FlowPane>
+            </TablePane.Row>
+            <TablePane.Row height="1*">
+                <BoxPane orientation="vertical" styles="{horizontalAlignment:'center',
+                    verticalAlignment:'center'}">
+                    <Label wtkx:id="label"/>
+                </BoxPane>
+            </TablePane.Row>
+            <TablePane.Row>
+                <ScrollBar wtkx:id="scrollBar" start="0" end="60"
+                    ScrollBarListener.scopeChanged="updateLabel();"
+                    ScrollBarValueListener.valueChanged="updateLabel();"/>
+            </TablePane.Row>
+        </TablePane>
+    </Border>
 </Window>

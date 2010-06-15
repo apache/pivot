@@ -219,7 +219,7 @@ public abstract class Node {
 
     /**
      * Called to notify a node that some child nodes has been removed.
-     * 
+     *
      * @param removed
      * @param offset
      */
@@ -233,7 +233,7 @@ public abstract class Node {
 
     /**
      * Called to notify a node that a child node has been inserted.
-     * 
+     *
      * @param offset
      */
     protected void nodeInserted(int offset) {
@@ -243,7 +243,7 @@ public abstract class Node {
 
         nodeListeners.nodeInserted(this, offset);
     }
-    
+
     /**
      * Returns the node listener list.
      */

@@ -20,49 +20,41 @@ limitations under the License.
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <Border>
-            <content>
-                <CardPane wtkx:id="cardPane" selectedIndex="0" styles="{selectionChangeEffect:'horizontal_slide'}">
-                    <BoxPane orientation="vertical" styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
-                        <ImageView image="org/apache/pivot/tutorials/IMG_0735_2.jpg"/>
-                        <LinkButton>
-                            <buttonData>
-                                <content:ButtonData text="Next" icon="@resultset_next.png"/>
-                            </buttonData>
+    <Border>
+        <CardPane wtkx:id="cardPane" selectedIndex="0" styles="{selectionChangeEffect:'horizontal_slide'}">
+            <BoxPane orientation="vertical" styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                <ImageView image="org/apache/pivot/tutorials/IMG_0735_2.jpg"/>
+                <LinkButton>
+                    <content:ButtonData text="Next" icon="@resultset_next.png"/>
 
-                            <buttonPressListeners>
-                                <wtkx:script>
-                                <![CDATA[
-                                function buttonPressed(button) {
-                                    cardPane.setSelectedIndex(1);
-                                }
-                                ]]>
-                                </wtkx:script>
-                            </buttonPressListeners>
-                        </LinkButton>
-                    </BoxPane>
+                    <buttonPressListeners>
+                        <wtkx:script>
+                        <![CDATA[
+                        function buttonPressed(button) {
+                            cardPane.setSelectedIndex(1);
+                        }
+                        ]]>
+                        </wtkx:script>
+                    </buttonPressListeners>
+                </LinkButton>
+            </BoxPane>
 
-                    <BoxPane orientation="vertical" styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
-                        <ImageView image="org/apache/pivot/tutorials/IMG_0767_2.jpg"/>
-                        <LinkButton>
-                            <buttonData>
-                                <content:ButtonData text="Previous" icon="@resultset_previous.png"/>
-                            </buttonData>
+            <BoxPane orientation="vertical" styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                <ImageView image="org/apache/pivot/tutorials/IMG_0767_2.jpg"/>
+                <LinkButton>
+                    <content:ButtonData text="Previous" icon="@resultset_previous.png"/>
 
-                            <buttonPressListeners>
-                                <wtkx:script>
-                                <![CDATA[
-                                function buttonPressed(button) {
-                                    cardPane.setSelectedIndex(0);
-                                }
-                                ]]>
-                                </wtkx:script>
-                            </buttonPressListeners>
-                        </LinkButton>
-                    </BoxPane>
-                </CardPane>
-            </content>
-        </Border>
-    </content>
+                    <buttonPressListeners>
+                        <wtkx:script>
+                        <![CDATA[
+                        function buttonPressed(button) {
+                            cardPane.setSelectedIndex(0);
+                        }
+                        ]]>
+                        </wtkx:script>
+                    </buttonPressListeners>
+                </LinkButton>
+            </BoxPane>
+        </CardPane>
+    </Border>
 </Window>

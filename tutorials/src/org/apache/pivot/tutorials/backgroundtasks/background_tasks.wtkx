@@ -19,17 +19,13 @@ limitations under the License.
 <Window title="Background Tasks" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <BoxPane orientation="vertical"
-            styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
-            <Border styles="{padding:2}">
-                <content>
-                    <ActivityIndicator wtkx:id="activityIndicator"/>
-                </content>
-            </Border>
+    <BoxPane orientation="vertical"
+        styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+        <Border styles="{padding:2}">
+            <ActivityIndicator wtkx:id="activityIndicator"/>
+        </Border>
 
-            <PushButton wtkx:id="executeSynchronousButton" buttonData="Execute Synchronously"/>
-            <PushButton wtkx:id="executeAsynchronousButton" buttonData="Execute Asynchronously"/>
-        </BoxPane>
-    </content>
+        <PushButton wtkx:id="executeSynchronousButton" buttonData="Execute Synchronously"/>
+        <PushButton wtkx:id="executeAsynchronousButton" buttonData="Execute Asynchronously"/>
+    </BoxPane>
 </Window>

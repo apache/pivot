@@ -19,16 +19,12 @@ limitations under the License.
 <Window title="Calendar Test" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <BoxPane>
-            <Border>
-                <content>
-                    <Calendar wtkx:id="calendar"
-                        month="2" year="2009" locale="{language:'fr', country:'ca'}"/>
-                </content>
-            </Border>
-            <CalendarButton wtkx:id="calendarButton"/>
-            <ListButton listData="['One', 'Two', 'Three']"/>
-        </BoxPane>
-    </content>
+    <BoxPane>
+        <Border>
+            <Calendar wtkx:id="calendar"
+                month="2" year="2009" locale="{language:'fr', country:'ca'}"/>
+        </Border>
+        <CalendarButton wtkx:id="calendarButton"/>
+        <ListButton listData="['One', 'Two', 'Three']"/>
+    </BoxPane>
 </Window>

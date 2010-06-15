@@ -19,40 +19,36 @@ limitations under the License.
 <Window title="Checkboxes" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <TablePane styles="{showHorizontalGridLines: true, showVerticalGridLines:true,
-            padding:4, horizontalSpacing:1, verticalSpacing:1,
-            horizontalGridColor:10, verticalGridColor:10}">
-            <columns>
-                <TablePane.Column width="-1"/>
-                <TablePane.Column width="24"/>
-            </columns>
+    <TablePane styles="{showHorizontalGridLines: true, showVerticalGridLines:true,
+        padding:4, horizontalSpacing:1, verticalSpacing:1,
+        horizontalGridColor:10, verticalGridColor:10}">
+        <columns>
+            <TablePane.Column width="-1"/>
+            <TablePane.Column width="24"/>
+        </columns>
 
-            <rows>
-                <TablePane.Row height="24">
-                    <BoxPane styles="{verticalAlignment:'center'}">
-                        <Checkbox buttonData="Bell"
-                            ButtonPressListener.buttonPressed="bellImageView.setVisible(!bellImageView.isVisible());"/>
-                    </BoxPane>
-                    <ImageView wtkx:id="bellImageView" image="org/apache/pivot/tutorials/bell.png" visible="false"/>
-                </TablePane.Row>
+        <TablePane.Row height="24">
+            <BoxPane styles="{verticalAlignment:'center'}">
+                <Checkbox buttonData="Bell"
+                    ButtonPressListener.buttonPressed="bellImageView.setVisible(!bellImageView.isVisible());"/>
+            </BoxPane>
+            <ImageView wtkx:id="bellImageView" image="org/apache/pivot/tutorials/bell.png" visible="false"/>
+        </TablePane.Row>
 
-                <TablePane.Row height="24">
-                    <BoxPane styles="{verticalAlignment:'center'}">
-                        <Checkbox buttonData="Clock"
-                            ButtonPressListener.buttonPressed="clockImageView.setVisible(!clockImageView.isVisible());"/>
-                    </BoxPane>
-                    <ImageView wtkx:id="clockImageView" image="org/apache/pivot/tutorials/clock.png" visible="false"/>
-                </TablePane.Row>
+        <TablePane.Row height="24">
+            <BoxPane styles="{verticalAlignment:'center'}">
+                <Checkbox buttonData="Clock"
+                    ButtonPressListener.buttonPressed="clockImageView.setVisible(!clockImageView.isVisible());"/>
+            </BoxPane>
+            <ImageView wtkx:id="clockImageView" image="org/apache/pivot/tutorials/clock.png" visible="false"/>
+        </TablePane.Row>
 
-                <TablePane.Row height="24">
-                    <BoxPane styles="{verticalAlignment:'center'}">
-                        <Checkbox buttonData="House"
-                            ButtonPressListener.buttonPressed="houseImageView.setVisible(!houseImageView.isVisible());"/>
-                    </BoxPane>
-                    <ImageView wtkx:id="houseImageView" image="org/apache/pivot/tutorials/house.png" visible="false"/>
-                </TablePane.Row>
-            </rows>
-        </TablePane>
-    </content>
+        <TablePane.Row height="24">
+            <BoxPane styles="{verticalAlignment:'center'}">
+                <Checkbox buttonData="House"
+                    ButtonPressListener.buttonPressed="houseImageView.setVisible(!houseImageView.isVisible());"/>
+            </BoxPane>
+            <ImageView wtkx:id="houseImageView" image="org/apache/pivot/tutorials/house.png" visible="false"/>
+        </TablePane.Row>
+    </TablePane>
 </Window>

@@ -19,36 +19,31 @@ limitations under the License.
 <Window title="Panels" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:media="org.apache.pivot.wtk.media"
-    xmlns:drawing="org.apache.pivot.wtk.media.drawing"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <StackPane>
-            <ImageView styles="{horizontalAlignment:'left', verticalAlignment:'top'}">
-                <image>
-                    <media:Drawing>
-                        <canvas>
-                            <drawing:Canvas>
-                                <drawing:Rectangle x="20" y="20" width="320" height="240"
-                                    fill="{paintType:'gradient', startX:0, startY:0, startColor:'#4444ff',
-                                        endX:320, endY:240, endColor:'#000044'}"
-                                    stroke="#0000aa" strokeThickness="4"
-                                    cornerRadius="10"/>
-                            </drawing:Canvas>
-                        </canvas>
-                    </media:Drawing>
-                </image>
-            </ImageView>
-            <Panel>
-                <PushButton buttonData="Button 1"
-                    styles="{color:'#ffffff', backgroundColor:'#000066', borderColor:'#0000dd'}"
-                    x="30" y="30" width="120" height="24"/>
-                <PushButton buttonData="Button 2"
-                    styles="{color:'#ffffff', backgroundColor:'#000066', borderColor:'#0000dd'}"
-                    x="30" y="60" width="120" height="24"/>
-                <PushButton buttonData="Button 3"
-                    styles="{color:'#ffffff', backgroundColor:'#000066', borderColor:'#0000dd'}"
-                    x="30" y="90" width="120" height="24"/>
-            </Panel>
-        </StackPane>
-    </content>
+    <StackPane>
+        <ImageView styles="{horizontalAlignment:'left', verticalAlignment:'top'}">
+            <media:Drawing xmlns="org.apache.pivot.wtk.media.drawing">
+                <Canvas>
+                    <Rectangle x="20" y="20" width="320" height="240"
+                        fill="{paintType:'gradient',
+                            startX:0, startY:0, startColor:'#4444ff',
+                            endX:320, endY:240, endColor:'#000044'}"
+                        stroke="#0000aa" strokeThickness="4"
+                        cornerRadius="10"/>
+                </Canvas>
+            </media:Drawing>
+        </ImageView>
+
+        <Panel>
+            <PushButton buttonData="Button 1"
+                styles="{color:'#ffffff', backgroundColor:'#000066', borderColor:'#0000dd'}"
+                x="30" y="30" width="120" height="24"/>
+            <PushButton buttonData="Button 2"
+                styles="{color:'#ffffff', backgroundColor:'#000066', borderColor:'#0000dd'}"
+                x="30" y="60" width="120" height="24"/>
+            <PushButton buttonData="Button 3"
+                styles="{color:'#ffffff', backgroundColor:'#000066', borderColor:'#0000dd'}"
+                x="30" y="90" width="120" height="24"/>
+        </Panel>
+    </StackPane>
 </Window>

@@ -19,33 +19,21 @@ limitations under the License.
 <Window title="Expanders" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <Border styles="{padding:6}">
-            <content>
-                <ScrollPane horizontalScrollBarPolicy="fill">
-                    <view>
-                        <BoxPane orientation="vertical" styles="{fill:true,
-                            padding:{left:2, right:2}}">
-                            <Expander wtkx:id="stocksExpander" title="Stocks">
-                                <content>
-                                    <wtkx:include src="stocks.wtkx"/>
-                                </content>
-                            </Expander>
-                            <Expander wtkx:id="weatherExpander" title="Weather" expanded="false">
-                                <content>
-                                    <wtkx:include src="weather.wtkx"/>
-                                </content>
-                            </Expander>
-                            <Expander wtkx:id="calendarExpander" title="Calendar" expanded="false">
-                                <content>
-                                    <Calendar/>
-                                </content>
-                            </Expander>
-                        </BoxPane>
-                    </view>
-                </ScrollPane>
-            </content>
-        </Border>
-    </content>
+    <Border styles="{padding:6}">
+        <ScrollPane horizontalScrollBarPolicy="fill">
+            <BoxPane orientation="vertical" styles="{fill:true,
+                padding:{left:2, right:2}}">
+                <Expander wtkx:id="stocksExpander" title="Stocks">
+                    <wtkx:include src="stocks.wtkx"/>
+                </Expander>
+                <Expander wtkx:id="weatherExpander" title="Weather" expanded="false">
+                    <wtkx:include src="weather.wtkx"/>
+                </Expander>
+                <Expander wtkx:id="calendarExpander" title="Calendar" expanded="false">
+                    <Calendar/>
+                </Expander>
+            </BoxPane>
+        </ScrollPane>
+    </Border>
 </Window>
 

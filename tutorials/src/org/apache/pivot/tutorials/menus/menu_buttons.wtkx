@@ -18,77 +18,65 @@ limitations under the License.
 
 <Window title="Menu Buttons" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
-    xmlns:collections="org.apache.pivot.collections"
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <TablePane styles="{verticalSpacing:2}">
-            <columns>
-                <TablePane.Column width="1*"/>
-            </columns>
-            <rows>
-                <TablePane.Row height="-1">
-                    <BoxPane styles="{fill:true}">
-                        <MenuButton>
-                            <buttonData>
-                                <content:ButtonData icon="@shape_square_add.png" text="New Shape"/>
-                            </buttonData>
-                            <menu>
-                                <Menu>
-                                    <sections>
-                                        <Menu.Section>
-                                            <Menu.Item buttonData="Circle" action="newCircle"/>
-                                            <Menu.Item buttonData="Square" action="newSquare"/>
-                                            <Menu.Item buttonData="Text" action="newText"/>
-                                        </Menu.Section>
-                                    </sections>
-                                </Menu>
-                            </menu>
-                        </MenuButton>
+    <TablePane styles="{verticalSpacing:2}">
+        <columns>
+            <TablePane.Column width="1*"/>
+        </columns>
 
-                        <ListButton wtkx:id="colorListButton" listSize="6" selectedIndex="0">
-                            <listData>
-                                <collections:ArrayList>
-                                    <content:ColorItem color="#000000" name="Black"/>
-                                    <content:ColorItem color="#0000AA" name="Blue"/>
-                                    <content:ColorItem color="#00AA00" name="Green"/>
-                                    <content:ColorItem color="#00AAAA" name="Cyan"/>
-                                    <content:ColorItem color="#AA0000" name="Red"/>
-                                    <content:ColorItem color="#AA00AA" name="Magenta"/>
-                                    <content:ColorItem color="#AA5500" name="Brown"/>
-                                    <content:ColorItem color="#AAAAAA" name="Light Gray"/>
-                                    <content:ColorItem color="#555555" name="Dark Gray"/>
-                                    <content:ColorItem color="#5555FF" name="Bright Blue"/>
-                                    <content:ColorItem color="#55FF55" name="Bright Green"/>
-                                    <content:ColorItem color="#55FFFF" name="Bright Cyan"/>
-                                    <content:ColorItem color="#FF5555" name="Bright Red"/>
-                                    <content:ColorItem color="#FF55FF" name="Bright Magenta"/>
-                                    <content:ColorItem color="#FFFF55" name="Bright Yellow"/>
-                                    <content:ColorItem color="#FFFFFF" name="White"/>
-                                </collections:ArrayList>
-                            </listData>
-                            <dataRenderer>
-                                <content:ListButtonColorItemRenderer/>
-                            </dataRenderer>
-                            <itemRenderer>
-                                <content:ListViewColorItemRenderer/>
-                            </itemRenderer>
-                        </ListButton>
-                    </BoxPane>
-                </TablePane.Row>
-                <TablePane.Row height="1*">
-                    <Border styles="{padding:2}">
-                        <content>
-                            <ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
-                                verticalScrollBarPolicy="fill_to_capacity">
-                                <view>
-                                    <ImageView wtkx:id="imageView"/>
-                                </view>
-                            </ScrollPane>
-                        </content>
-                    </Border>
-                </TablePane.Row>
-            </rows>
-        </TablePane>
-    </content>
+        <TablePane.Row height="-1">
+            <BoxPane styles="{fill:true}">
+                <MenuButton>
+                    <buttonData>
+                        <content:ButtonData icon="@shape_square_add.png" text="New Shape"/>
+                    </buttonData>
+
+                    <Menu>
+                        <Menu.Section>
+                            <Menu.Item buttonData="Circle" action="newCircle"/>
+                            <Menu.Item buttonData="Square" action="newSquare"/>
+                            <Menu.Item buttonData="Text" action="newText"/>
+                        </Menu.Section>
+                    </Menu>
+                </MenuButton>
+
+                <ListButton wtkx:id="colorListButton" listSize="6" selectedIndex="0">
+                    <dataRenderer>
+                        <content:ListButtonColorItemRenderer/>
+                    </dataRenderer>
+
+                    <itemRenderer>
+                        <content:ListViewColorItemRenderer/>
+                    </itemRenderer>
+
+                    <content:ColorItem color="#000000" name="Black"/>
+                    <content:ColorItem color="#0000AA" name="Blue"/>
+                    <content:ColorItem color="#00AA00" name="Green"/>
+                    <content:ColorItem color="#00AAAA" name="Cyan"/>
+                    <content:ColorItem color="#AA0000" name="Red"/>
+                    <content:ColorItem color="#AA00AA" name="Magenta"/>
+                    <content:ColorItem color="#AA5500" name="Brown"/>
+                    <content:ColorItem color="#AAAAAA" name="Light Gray"/>
+                    <content:ColorItem color="#555555" name="Dark Gray"/>
+                    <content:ColorItem color="#5555FF" name="Bright Blue"/>
+                    <content:ColorItem color="#55FF55" name="Bright Green"/>
+                    <content:ColorItem color="#55FFFF" name="Bright Cyan"/>
+                    <content:ColorItem color="#FF5555" name="Bright Red"/>
+                    <content:ColorItem color="#FF55FF" name="Bright Magenta"/>
+                    <content:ColorItem color="#FFFF55" name="Bright Yellow"/>
+                    <content:ColorItem color="#FFFFFF" name="White"/>
+                </ListButton>
+            </BoxPane>
+        </TablePane.Row>
+
+        <TablePane.Row height="1*">
+            <Border styles="{padding:2}">
+                <ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
+                    verticalScrollBarPolicy="fill_to_capacity">
+                    <ImageView wtkx:id="imageView"/>
+                </ScrollPane>
+            </Border>
+        </TablePane.Row>
+    </TablePane>
 </Window>

@@ -24,42 +24,47 @@ limitations under the License.
         <TablePane.Column width="-1"/>
         <TablePane.Column width="-1"/>
     </columns>
-    <rows>
-        <TablePane.Row>
-            <Label text="AAPL"/>
-            <Label text="124.18" styles="{horizontalAlignment:'right'}"/>
-            <Label text="-1.69" styles="{color:'#ff0000', horizontalAlignment:'right'}"/>
-        </TablePane.Row>
-        <TablePane.Row>
-            <Label text="AMZN"/>
-            <Label text="75.96" styles="{horizontalAlignment:'right'}"/>
-            <Label text="-2.01" styles="{color:'#ff0000', horizontalAlignment:'right'}"/>
-        </TablePane.Row>
-        <TablePane.Row>
-            <Label text="EBAY"/>
-            <Label text="17.15" styles="{horizontalAlignment:'right'}"/>
-            <Label text="-0.56" styles="{color:'#ff0000', horizontalAlignment:'right'}"/>
-        </TablePane.Row>
-        <TablePane.Row>
-            <Label text="GOOG"/>
-            <Label text="396.50" styles="{horizontalAlignment:'right'}"/>
-            <Label text="-0.68" styles="{color:'#ff0000', horizontalAlignment:'right'}"/>
-        </TablePane.Row>
-        <TablePane.Row>
-            <Label text="JAVA"/>
-            <Label text="9.02" styles="{horizontalAlignment:'right'}"/>
-            <Label text="+0.04" styles="{color:'#008000', horizontalAlignment:'right'}"/>
-        </TablePane.Row>
-        <TablePane.Row>
-            <Label text="MSFT"/>
-            <Label text="19.82" styles="{horizontalAlignment:'right'}"/>
-            <Label text="-0.56" styles="{color:'#ff0000', horizontalAlignment:'right'}"/>
-        </TablePane.Row>
-        <TablePane.Row>
-            <Label text="ORCL"/>
-            <Label text="18.57" styles="{horizontalAlignment:'right'}"/>
-            <Label text="-0.37" styles="{color:'#ff0000', horizontalAlignment:'right'}"/>
-        </TablePane.Row>
-    </rows>
+
+    <TablePane.Row>
+        <Label text="AAPL"/>
+        <Label text="124.18" styles="{horizontalAlignment:'right'}"/>
+        <Label text="-1.69" styles="{color:'#ff0000', horizontalAlignment:'right'}"/>
+    </TablePane.Row>
+
+    <TablePane.Row>
+        <Label text="AMZN"/>
+        <Label text="75.96" styles="{horizontalAlignment:'right'}"/>
+        <Label text="-2.01" styles="{color:'#ff0000', horizontalAlignment:'right'}"/>
+    </TablePane.Row>
+
+    <TablePane.Row>
+        <Label text="EBAY"/>
+        <Label text="17.15" styles="{horizontalAlignment:'right'}"/>
+        <Label text="-0.56" styles="{color:'#ff0000', horizontalAlignment:'right'}"/>
+    </TablePane.Row>
+
+    <TablePane.Row>
+        <Label text="GOOG"/>
+        <Label text="396.50" styles="{horizontalAlignment:'right'}"/>
+        <Label text="-0.68" styles="{color:'#ff0000', horizontalAlignment:'right'}"/>
+    </TablePane.Row>
+
+    <TablePane.Row>
+        <Label text="JAVA"/>
+        <Label text="9.02" styles="{horizontalAlignment:'right'}"/>
+        <Label text="+0.04" styles="{color:'#008000', horizontalAlignment:'right'}"/>
+    </TablePane.Row>
+
+    <TablePane.Row>
+        <Label text="MSFT"/>
+        <Label text="19.82" styles="{horizontalAlignment:'right'}"/>
+        <Label text="-0.56" styles="{color:'#ff0000', horizontalAlignment:'right'}"/>
+    </TablePane.Row>
+
+    <TablePane.Row>
+        <Label text="ORCL"/>
+        <Label text="18.57" styles="{horizontalAlignment:'right'}"/>
+        <Label text="-0.37" styles="{color:'#ff0000', horizontalAlignment:'right'}"/>
+    </TablePane.Row>
 </TablePane>
 

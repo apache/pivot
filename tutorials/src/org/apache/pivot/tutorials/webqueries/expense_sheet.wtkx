@@ -21,70 +21,62 @@ limitations under the License.
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns:webqueries="org.apache.pivot.tutorials.webqueries"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <TablePane styles="{verticalSpacing:8}">
-            <columns>
-                <TablePane.Column width="1*"/>
-            </columns>
-            <rows>
-                <TablePane.Row height="-1">
-                    <BoxPane styles="{verticalAlignment:'center'}">
-                        <ImageView image="@pencil_add.png"/>
-                        <Label text="%title" styles="{color:12, font:{bold:true, size:'120%'}}"/>
-                    </BoxPane>
-                </TablePane.Row>
+    <TablePane styles="{verticalSpacing:8}">
+        <columns>
+            <TablePane.Column width="1*"/>
+        </columns>
 
-                <TablePane.Row height="1*">
-                    <Border styles="{padding:6}">
-                        <content>
-                            <Form>
-                                <sections>
-                                    <Form.Section>
-                                        <Label Form.label="%id" textKey="id">
-                                            <textBindMapping>
-                                                <webqueries:IDBindMapping/>
-                                            </textBindMapping>
-                                        </Label>
+        <TablePane.Row height="-1">
+            <BoxPane styles="{verticalAlignment:'center'}">
+                <ImageView image="@pencil_add.png"/>
+                <Label text="%title" styles="{color:12, font:{bold:true, size:'120%'}}"/>
+            </BoxPane>
+        </TablePane.Row>
 
-                                        <Spinner wtkx:id="dateSpinner" Form.label="%date" selectedItemKey="date">
-                                            <spinnerData>
-                                                <content:CalendarDateSpinnerData/>
-                                            </spinnerData>
-                                            <selectedItemBindMapping>
-                                                <webqueries:DateBindMapping/>
-                                            </selectedItemBindMapping>
-                                        </Spinner>
+        <TablePane.Row height="1*">
+            <Border styles="{padding:6}">
+                <Form>
+                    <Form.Section>
+                        <Label Form.label="%id" textKey="id">
+                            <textBindMapping>
+                                <webqueries:IDBindMapping/>
+                            </textBindMapping>
+                        </Label>
 
-                                        <ListButton wtkx:id="typeListButton" Form.label="%type" listData="@types.json"
-                                            selectedItemKey="type"/>
+                        <Spinner wtkx:id="dateSpinner" Form.label="%date" selectedItemKey="date">
+                            <selectedItemBindMapping>
+                                <webqueries:DateBindMapping/>
+                            </selectedItemBindMapping>
 
-                                        <TextInput wtkx:id="amountTextInput" Form.label="%amount" strictValidation="true"
-                                            textKey="amount">
-                                            <validator>
-                                                <webqueries:AmountValidator/>
-                                            </validator>
-                                            <textBindMapping>
-                                                <webqueries:AmountBindMapping amountFormat="%amountFormat"/>
-                                            </textBindMapping>
-                                        </TextInput>
+                            <content:CalendarDateSpinnerData/>
+                        </Spinner>
 
-                                        <TextInput Form.label="%description" textKey="description"/>
-                                    </Form.Section>
-                                </sections>
-                            </Form>
-                        </content>
-                    </Border>
-                </TablePane.Row>
+                        <ListButton wtkx:id="typeListButton" Form.label="%type" listData="@types.json"
+                            selectedItemKey="type"/>
 
-                <TablePane.Row height="-1">
-                    <BoxPane styles="{fill:true, horizontalAlignment:'right'}">
-                        <PushButton wtkx:id="cancelButton" buttonData="%cancel"
-                            styles="org/apache/pivot/wtk/skin/terra/command_button.json"/>
-                        <PushButton wtkx:id="okButton" buttonData="%ok"
-                            styles="org/apache/pivot/wtk/skin/terra/command_button.json"/>
-                    </BoxPane>
-                </TablePane.Row>
-            </rows>
-        </TablePane>
-    </content>
+                        <TextInput wtkx:id="amountTextInput" Form.label="%amount" strictValidation="true"
+                            textKey="amount">
+                            <validator>
+                                <webqueries:AmountValidator/>
+                            </validator>
+                            <textBindMapping>
+                                <webqueries:AmountBindMapping amountFormat="%amountFormat"/>
+                            </textBindMapping>
+                        </TextInput>
+
+                        <TextInput Form.label="%description" textKey="description"/>
+                    </Form.Section>
+                </Form>
+            </Border>
+        </TablePane.Row>
+
+        <TablePane.Row height="-1">
+            <BoxPane styles="{fill:true, horizontalAlignment:'right'}">
+                <PushButton wtkx:id="cancelButton" buttonData="%cancel"
+                    styles="org/apache/pivot/wtk/skin/terra/command_button.json"/>
+                <PushButton wtkx:id="okButton" buttonData="%ok"
+                    styles="org/apache/pivot/wtk/skin/terra/command_button.json"/>
+            </BoxPane>
+        </TablePane.Row>
+    </TablePane>
 </webqueries:ExpenseSheet>

@@ -20,7 +20,5 @@ limitations under the License.
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:tests="org.apache.pivot.tests"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <Label wtkx:id="label" styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
-    </content>
+    <Label wtkx:id="label" styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
 </tests:BindableWindow>

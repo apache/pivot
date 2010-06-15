@@ -27,7 +27,7 @@ import org.apache.pivot.util.ThreadUtilities;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.wtk.media.Image;
-
+import org.apache.pivot.wtkx.DefaultProperty;
 
 /**
  * Component that provides access to a set of components via selectable headers.
@@ -35,6 +35,7 @@ import org.apache.pivot.wtk.media.Image;
  * <p>
  * TODO Add a getPanelAt() method that delegates to the skin.
  */
+@DefaultProperty("panels")
 public class Accordion extends Container {
     /**
      * Panel sequence implementation.

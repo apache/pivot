@@ -29,11 +29,13 @@ import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.content.TreeViewNodeRenderer;
+import org.apache.pivot.wtkx.DefaultProperty;
 
 /**
  * Class that displays a hierarchical data structure, allowing a user to select
  * one or more paths.
  */
+@DefaultProperty("treeData")
 public class TreeView extends Component {
     /**
      * Enumeration defining supported selection modes. <tt>TreeView</tt>

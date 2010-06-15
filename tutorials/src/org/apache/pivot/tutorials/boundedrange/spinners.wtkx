@@ -20,15 +20,11 @@ limitations under the License.
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <BoxPane styles="{verticalAlignment:'center'}">
-            <Spinner spinnerData="['One', 'Two', 'Three', 'Four', 'Five']"
-                circular="true" preferredWidth="80" selectedIndex="0"/>
-            <Spinner preferredWidth="40" selectedIndex="0">
-                <spinnerData>
-                    <content:NumericSpinnerData lowerBound="0" upperBound="9" increment="1"/>
-                </spinnerData>
-            </Spinner>
-        </BoxPane>
-    </content>
+    <BoxPane styles="{verticalAlignment:'center'}">
+        <Spinner spinnerData="['One', 'Two', 'Three', 'Four', 'Five']"
+            circular="true" preferredWidth="80" selectedIndex="0"/>
+        <Spinner preferredWidth="40" selectedIndex="0">
+            <content:NumericSpinnerData lowerBound="0" upperBound="9" increment="1"/>
+        </Spinner>
+    </BoxPane>
 </Window>

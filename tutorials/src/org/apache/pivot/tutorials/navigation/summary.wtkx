@@ -21,31 +21,34 @@ limitations under the License.
     <columns>
         <TablePane.Column width="1*"/>
     </columns>
-    <rows>
-        <TablePane.Row height="1*">
-            <BoxPane orientation="vertical" styles="{padding:6, spacing:8, fill:true}">
-                <Label text="Ship to:" styles="{textDecoration:'underline'}"/>
-                <BoxPane orientation="vertical" styles="{padding:{left:8}}">
-                    <Label text="Joe Shopper"/>
-                    <Label text="123 Main St."/>
-                    <Label text="Anytown, USA 12345"/>
-                </BoxPane>
-                <Label text="Bill to:" styles="{textDecoration:'underline'}"/>
-                <BoxPane orientation="vertical" styles="{padding:{left:8}}">
-                    <Label text="Joe Shopper"/>
-                    <Label text="123 Main St."/>
-                    <Label text="Anytown, USA 12345"/>
-                </BoxPane>
-                <BoxPane orientation="vertical"
-                    styles="{horizontalAlignment:'center', spacing:12, padding:{top:12}}">
-                    <PushButton wtkx:id="confirmOrderButton" styles="{minimumAspectRatio:3}"/>
-                    <ActivityIndicator wtkx:id="activityIndicator" styles="{color:16}"
-                        preferredWidth="48" preferredHeight="48"/>
-                    <Label wtkx:id="processingOrderLabel" text="Pretending to process order..." visible="false"
-                        styles="{font:{italic:true}}"/>
-                </BoxPane>
+
+    <TablePane.Row height="1*">
+        <BoxPane orientation="vertical" styles="{padding:6, spacing:8, fill:true}">
+            <Label text="Ship to:" styles="{textDecoration:'underline'}"/>
+
+            <BoxPane orientation="vertical" styles="{padding:{left:8}}">
+                <Label text="Joe Shopper"/>
+                <Label text="123 Main St."/>
+                <Label text="Anytown, USA 12345"/>
             </BoxPane>
-        </TablePane.Row>
-    </rows>
+
+            <Label text="Bill to:" styles="{textDecoration:'underline'}"/>
+
+            <BoxPane orientation="vertical" styles="{padding:{left:8}}">
+                <Label text="Joe Shopper"/>
+                <Label text="123 Main St."/>
+                <Label text="Anytown, USA 12345"/>
+            </BoxPane>
+
+            <BoxPane orientation="vertical"
+                styles="{horizontalAlignment:'center', spacing:12, padding:{top:12}}">
+                <PushButton wtkx:id="confirmOrderButton" styles="{minimumAspectRatio:3}"/>
+                <ActivityIndicator wtkx:id="activityIndicator" styles="{color:16}"
+                    preferredWidth="48" preferredHeight="48"/>
+                <Label wtkx:id="processingOrderLabel" text="Pretending to process order..." visible="false"
+                    styles="{font:{italic:true}}"/>
+            </BoxPane>
+        </BoxPane>
+    </TablePane.Row>
 </TablePane>
 

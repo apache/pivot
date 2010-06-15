@@ -19,26 +19,24 @@ limitations under the License.
 <Sheet wtkx:id="sheet" title="Sheet"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <BoxPane styles="{verticalAlignment:'bottom'}">
-            <TablePane>
-                <columns>
-                    <TablePane.Column width="1*"/>
-                </columns>
-                <rows>
-                    <TablePane.Row height="1*">
-                        <Label text="This is a sheet."
-                            preferredWidth="320" preferredHeight="210"
-                            styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
-                    </TablePane.Row>
-                    <TablePane.Row height="-1">
-                        <BoxPane styles="{horizontalAlignment:'right'}">
-                            <PushButton buttonData="Close"
-                                ButtonPressListener.buttonPressed="sheet.close()"/>
-                        </BoxPane>
-                    </TablePane.Row>
-                </rows>
-            </TablePane>
-        </BoxPane>
-    </content>
+    <BoxPane styles="{verticalAlignment:'bottom'}">
+        <TablePane>
+            <columns>
+                <TablePane.Column width="1*"/>
+            </columns>
+
+            <TablePane.Row height="1*">
+                <Label text="This is a sheet."
+                    preferredWidth="320" preferredHeight="210"
+                    styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
+            </TablePane.Row>
+
+            <TablePane.Row height="-1">
+                <BoxPane styles="{horizontalAlignment:'right'}">
+                    <PushButton buttonData="Close"
+                        ButtonPressListener.buttonPressed="sheet.close()"/>
+                </BoxPane>
+            </TablePane.Row>
+        </TablePane>
+    </BoxPane>
 </Sheet>

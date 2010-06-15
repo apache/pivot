@@ -17,10 +17,12 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.wtk.content.ButtonDataRenderer;
+import org.apache.pivot.wtkx.DefaultProperty;
 
 /**
  * Component representing a push button.
  */
+@DefaultProperty("buttonData")
 public class PushButton extends Button {
     private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new ButtonDataRenderer();
 

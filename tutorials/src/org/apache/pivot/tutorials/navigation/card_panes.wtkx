@@ -19,79 +19,71 @@ limitations under the License.
 <Window title="Card Panes" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <TablePane styles="{padding:8, horizontalSpacing:6}">
-            <columns>
-                <TablePane.Column width="1*"/>
-                <TablePane.Column/>
-            </columns>
-            <rows>
-                <TablePane.Row height="1*">
-                    <Border styles="{padding:12}">
-                        <content>
-                            <TablePane styles="{verticalSpacing:6}">
-                                <columns>
-                                    <TablePane.Column width="1*"/>
-                                </columns>
-                                <rows>
-                                    <TablePane.Row height="1*">
-                                        <BoxPane styles="{horizontalAlignment:'center', verticalAlignment:'center',
-                                            backgroundColor:'#cccccc'}">
-                                            <Border styles="{padding:6}">
-                                                <content>
-                                                    <CardPane wtkx:id="cardPane">
-                                                        <ImageView image="org/apache/pivot/tutorials/IMG_0725_2.jpg"/>
-                                                        <ImageView image="org/apache/pivot/tutorials/IMG_0735_2.jpg"/>
-                                                        <ImageView image="org/apache/pivot/tutorials/IMG_0767_2.jpg"/>
-                                                    </CardPane>
-                                                </content>
-                                            </Border>
-                                        </BoxPane>
-                                    </TablePane.Row>
-                                    <TablePane.Row>
-                                        <Separator/>
-                                    </TablePane.Row>
-                                    <TablePane.Row>
-                                        <BoxPane styles="{horizontalAlignment:'center'}">
-                                            <LinkButton wtkx:id="previousButton" buttonData="Previous"/>
-                                            <LinkButton wtkx:id="nextButton" buttonData="Next"/>
-                                        </BoxPane>
-                                    </TablePane.Row>
-                                </rows>
-                            </TablePane>
-                        </content>
-                    </Border>
+    <TablePane styles="{padding:8, horizontalSpacing:6}">
+        <columns>
+            <TablePane.Column width="1*"/>
+            <TablePane.Column/>
+        </columns>
 
-                    <Border styles="{padding:2}">
-                        <content>
-                            <BoxPane orientation="vertical" styles="{padding:4, spacing:6}">
-                                <Checkbox wtkx:id="sizeToSelectionCheckbox" buttonData="Size to selection"/>
-                                <Label text="Selection change effect:"/>
+        <TablePane.Row height="1*">
+            <Border styles="{padding:12}">
+                <TablePane styles="{verticalSpacing:6}">
+                    <columns>
+                        <TablePane.Column width="1*"/>
+                    </columns>
 
-                                <wtkx:define>
-                                    <ButtonGroup wtkx:id="selectionChangeEffect"/>
-                                </wtkx:define>
+                    <TablePane.Row height="1*">
+                        <BoxPane styles="{horizontalAlignment:'center', verticalAlignment:'center',
+                            backgroundColor:'#cccccc'}">
+                            <Border styles="{padding:6}">
+                                <CardPane wtkx:id="cardPane">
+                                    <ImageView image="org/apache/pivot/tutorials/IMG_0725_2.jpg"/>
+                                    <ImageView image="org/apache/pivot/tutorials/IMG_0735_2.jpg"/>
+                                    <ImageView image="org/apache/pivot/tutorials/IMG_0767_2.jpg"/>
+                                </CardPane>
+                            </Border>
+                        </BoxPane>
+                    </TablePane.Row>
 
-                                <RadioButton wtkx:id="crossfadeRadioButton" buttonData="Crossfade" selected="true"
-                                    buttonGroup="$selectionChangeEffect"/>
-                                <RadioButton wtkx:id="horizontalSlideRadioButton" buttonData="Horizontal Slide"
-                                    buttonGroup="$selectionChangeEffect"/>
-                                <RadioButton wtkx:id="verticalSlideRadioButton" buttonData="Vertical Slide"
-                                    buttonGroup="$selectionChangeEffect"/>
-                                <RadioButton wtkx:id="horizontalFlipRadioButton" buttonData="Horizontal Flip"
-                                    buttonGroup="$selectionChangeEffect"/>
-                                <RadioButton wtkx:id="verticalFlipRadioButton" buttonData="Vertical Flip"
-                                    buttonGroup="$selectionChangeEffect"/>
-                                <RadioButton wtkx:id="zoomRadioButton" buttonData="Zoom"
-                                    buttonGroup="$selectionChangeEffect"/>
-                                <RadioButton wtkx:id="noneRadioButton" buttonData="None"
-                                    buttonGroup="$selectionChangeEffect"/>
-                            </BoxPane>
-                        </content>
-                    </Border>
-                </TablePane.Row>
-            </rows>
-        </TablePane>
-    </content>
+                    <TablePane.Row>
+                        <Separator/>
+                    </TablePane.Row>
+
+                    <TablePane.Row>
+                        <BoxPane styles="{horizontalAlignment:'center'}">
+                            <LinkButton wtkx:id="previousButton" buttonData="Previous"/>
+                            <LinkButton wtkx:id="nextButton" buttonData="Next"/>
+                        </BoxPane>
+                    </TablePane.Row>
+                </TablePane>
+            </Border>
+
+            <Border styles="{padding:2}">
+                <BoxPane orientation="vertical" styles="{padding:4, spacing:6}">
+                    <Checkbox wtkx:id="sizeToSelectionCheckbox" buttonData="Size to selection"/>
+                    <Label text="Selection change effect:"/>
+
+                    <wtkx:define>
+                        <ButtonGroup wtkx:id="selectionChangeEffect"/>
+                    </wtkx:define>
+
+                    <RadioButton wtkx:id="crossfadeRadioButton" buttonData="Crossfade" selected="true"
+                        buttonGroup="$selectionChangeEffect"/>
+                    <RadioButton wtkx:id="horizontalSlideRadioButton" buttonData="Horizontal Slide"
+                        buttonGroup="$selectionChangeEffect"/>
+                    <RadioButton wtkx:id="verticalSlideRadioButton" buttonData="Vertical Slide"
+                        buttonGroup="$selectionChangeEffect"/>
+                    <RadioButton wtkx:id="horizontalFlipRadioButton" buttonData="Horizontal Flip"
+                        buttonGroup="$selectionChangeEffect"/>
+                    <RadioButton wtkx:id="verticalFlipRadioButton" buttonData="Vertical Flip"
+                        buttonGroup="$selectionChangeEffect"/>
+                    <RadioButton wtkx:id="zoomRadioButton" buttonData="Zoom"
+                        buttonGroup="$selectionChangeEffect"/>
+                    <RadioButton wtkx:id="noneRadioButton" buttonData="None"
+                        buttonGroup="$selectionChangeEffect"/>
+                </BoxPane>
+            </Border>
+        </TablePane.Row>
+    </TablePane>
 </Window>
 

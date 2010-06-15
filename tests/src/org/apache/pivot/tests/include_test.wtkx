@@ -29,7 +29,5 @@ limitations under the License.
         </wtkx:script>
     </windowStateListeners>
 
-    <content>
-        <wtkx:include src="include_test.content.wtkx" inline="true"/>
-    </content>
+    <wtkx:include src="include_test.content.wtkx" inline="true"/>
 </Window>

@@ -25,7 +25,5 @@ limitations under the License.
         <Window.ActionMapping keyStroke="SHIFT-A" action="action1"/>
     </actionMappings>
 
-    <content>
-        <PushButton wtkx:id="pushButton" buttonData="Push Button"/>
-    </content>
+    <PushButton wtkx:id="pushButton" buttonData="Push Button"/>
 </Window>

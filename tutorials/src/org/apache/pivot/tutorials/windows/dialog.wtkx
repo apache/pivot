@@ -19,24 +19,22 @@ limitations under the License.
 <Dialog wtkx:id="dialog" title="Dialog" modal="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <TablePane preferredWidth="320" preferredHeight="210">
-            <columns>
-                <TablePane.Column width="1*"/>
-            </columns>
-            <rows>
-                <TablePane.Row height="1*">
-                    <Label text="This is a dialog."
-                        preferredWidth="320" preferredHeight="210"
-                        styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
-                </TablePane.Row>
-                <TablePane.Row height="-1">
-                    <BoxPane styles="{horizontalAlignment:'right'}">
-                        <PushButton buttonData="Close"
-                            ButtonPressListener.buttonPressed="dialog.close()"/>
-                    </BoxPane>
-                </TablePane.Row>
-            </rows>
-        </TablePane>
-    </content>
+    <TablePane preferredWidth="320" preferredHeight="210">
+        <columns>
+            <TablePane.Column width="1*"/>
+        </columns>
+
+        <TablePane.Row height="1*">
+            <Label text="This is a dialog."
+                preferredWidth="320" preferredHeight="210"
+                styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
+        </TablePane.Row>
+
+        <TablePane.Row height="-1">
+            <BoxPane styles="{horizontalAlignment:'right'}">
+                <PushButton buttonData="Close"
+                    ButtonPressListener.buttonPressed="dialog.close()"/>
+            </BoxPane>
+        </TablePane.Row>
+    </TablePane>
 </Dialog>

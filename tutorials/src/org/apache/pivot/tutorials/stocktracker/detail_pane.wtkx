@@ -21,36 +21,36 @@ limitations under the License.
     xmlns:stocktracker="org.apache.pivot.tutorials.stocktracker"
     xmlns="org.apache.pivot.wtk">
     <Label textKey="companyName" styles="{font:{size:12, bold:true}}"/>
+
     <Separator/>
+
     <Form styles="{padding:0, fill:true, showFlagIcons:false, showFlagHighlight:false,
         leftAlignLabels:true}">
-        <sections>
-            <Form.Section>
-                <wtkx:define>
-                    <stocktracker:ValueMapping wtkx:id="valueMapping"/>
-                    <stocktracker:ChangeMapping wtkx:id="changeMapping"/>
-                    <stocktracker:VolumeMapping wtkx:id="volumeMapping"/>
-                </wtkx:define>
+        <Form.Section>
+            <wtkx:define>
+                <stocktracker:ValueMapping wtkx:id="valueMapping"/>
+                <stocktracker:ChangeMapping wtkx:id="changeMapping"/>
+                <stocktracker:VolumeMapping wtkx:id="volumeMapping"/>
+            </wtkx:define>
 
-                <Label wtkx:id="valueLabel" Form.label="%value"
-                    textKey="value" textBindMapping="$valueMapping"
-                    styles="{horizontalAlignment:'right'}"/>
-                <Label wtkx:id="changeLabel" Form.label="%change"
-                    textKey="change" textBindMapping="$valueMapping"
-                    styles="{horizontalAlignment:'right'}"/>
-                <Label wtkx:id="openingValueLabel" Form.label="%openingValue"
-                    textKey="openingValue" textBindMapping="$valueMapping"
-                    styles="{horizontalAlignment:'right'}"/>
-                <Label wtkx:id="highValueLabel" Form.label="%highValue"
-                    textKey="highValue" textBindMapping="$valueMapping"
-                    styles="{horizontalAlignment:'right'}"/>
-                <Label wtkx:id="lowValueLabel" Form.label="%lowValue"
-                    textKey="lowValue" textBindMapping="$changeMapping"
-                    styles="{horizontalAlignment:'right'}"/>
-                <Label wtkx:id="volumeLabel" Form.label="%volume"
-                    textKey="volume" textBindMapping="$volumeMapping"
-                    styles="{horizontalAlignment:'right'}"/>
-            </Form.Section>
-        </sections>
+            <Label wtkx:id="valueLabel" Form.label="%value"
+                textKey="value" textBindMapping="$valueMapping"
+                styles="{horizontalAlignment:'right'}"/>
+            <Label wtkx:id="changeLabel" Form.label="%change"
+                textKey="change" textBindMapping="$valueMapping"
+                styles="{horizontalAlignment:'right'}"/>
+            <Label wtkx:id="openingValueLabel" Form.label="%openingValue"
+                textKey="openingValue" textBindMapping="$valueMapping"
+                styles="{horizontalAlignment:'right'}"/>
+            <Label wtkx:id="highValueLabel" Form.label="%highValue"
+                textKey="highValue" textBindMapping="$valueMapping"
+                styles="{horizontalAlignment:'right'}"/>
+            <Label wtkx:id="lowValueLabel" Form.label="%lowValue"
+                textKey="lowValue" textBindMapping="$changeMapping"
+                styles="{horizontalAlignment:'right'}"/>
+            <Label wtkx:id="volumeLabel" Form.label="%volume"
+                textKey="volume" textBindMapping="$volumeMapping"
+                styles="{horizontalAlignment:'right'}"/>
+        </Form.Section>
     </Form>
 </BoxPane>

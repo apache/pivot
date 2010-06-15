@@ -21,23 +21,17 @@ limitations under the License.
     xmlns:effects="org.apache.pivot.wtk.effects"
     xmlns:rss="org.apache.pivot.demos.rss"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <Border styles="{color:10}">
-            <content>
-                <CardPane wtkx:id="cardPane" selectedIndex="0" styles="{selectionChangeEffect:'crossfade'}">
-                    <Label wtkx:id="statusLabel" text="Loading..."
-                        styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
-                    <ScrollPane horizontalScrollBarPolicy="fill">
-                        <view>
-                            <ListView wtkx:id="feedListView" styles="{variableItemHeight:true}">
-                                <itemRenderer>
-                                    <rss:RSSItemRenderer/>
-                                </itemRenderer>
-                            </ListView>
-                        </view>
-                    </ScrollPane>
-                </CardPane>
-            </content>
-        </Border>
-    </content>
+    <Border styles="{color:10}">
+        <CardPane wtkx:id="cardPane" selectedIndex="0" styles="{selectionChangeEffect:'crossfade'}">
+            <Label wtkx:id="statusLabel" text="Loading..."
+                styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
+            <ScrollPane horizontalScrollBarPolicy="fill">
+                <ListView wtkx:id="feedListView" styles="{variableItemHeight:true}">
+                    <itemRenderer>
+                        <rss:RSSItemRenderer/>
+                    </itemRenderer>
+                </ListView>
+            </ScrollPane>
+        </CardPane>
+    </Border>
 </Window>

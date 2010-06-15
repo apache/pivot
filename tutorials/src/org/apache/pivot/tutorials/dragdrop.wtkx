@@ -19,19 +19,13 @@ limitations under the License.
 <BoxPane xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
     <Border>
-        <content>
-            <ImageView wtkx:id="imageView1" image="@go-home.png" preferredWidth="48" preferredHeight="48"/>
-        </content>
+        <ImageView wtkx:id="imageView1" image="@go-home.png" preferredWidth="48" preferredHeight="48"/>
     </Border>
     <Border>
-        <content>
-            <ImageView wtkx:id="imageView2" image="@weather-few-clouds-32x32.png" preferredWidth="48" preferredHeight="48"/>
-        </content>
+        <ImageView wtkx:id="imageView2" image="@weather-few-clouds-32x32.png" preferredWidth="48" preferredHeight="48"/>
     </Border>
     <Border>
-        <content>
-            <ImageView wtkx:id="imageView3" preferredWidth="48" preferredHeight="48"/>
-        </content>
+        <ImageView wtkx:id="imageView3" preferredWidth="48" preferredHeight="48"/>
     </Border>
 </BoxPane>
 

@@ -22,35 +22,29 @@ limitations under the License.
     xmlns="org.apache.pivot.wtk">
     <wtkx:define>
         <Alert wtkx:id="alert" title="My Alert" message="Hello World!">
-            <body>
-                <TextArea text="This is a text area." editable="false"/>
-            </body>
-
             <options>
                 <content:ButtonData icon="@bell.png" text="Bell"/>
                 <content:ButtonData icon="@clock.png" text="Clock"/>
                 <content:ButtonData icon="@cup.png" text="Cup"/>
             </options>
+
+            <TextArea text="This is a text area." editable="false"/>
         </Alert>
 
         <Prompt wtkx:id="prompt" title="My Prompt" message="Hello World!"
             options="['One', 'Two', 'Three']">
-            <body>
-                <TextArea text="This is a text area." editable="false"/>
-            </body>
+            <TextArea text="This is a text area." editable="false"/>
         </Prompt>
     </wtkx:define>
 
-    <content>
-        <FlowPane>
-            <PushButton buttonData="Stock Alert"
-                ButtonPressListener.buttonPressed="org.apache.pivot.wtk.Alert.alert('Hello World!', window);"/>
-            <PushButton buttonData="Stock Prompt"
-                ButtonPressListener.buttonPressed="org.apache.pivot.wtk.Prompt.prompt('Hello World!', window);"/>
-            <PushButton buttonData="Custom Alert"
-                ButtonPressListener.buttonPressed="alert.open(window);"/>
-            <PushButton buttonData="Custom Prompt"
-                ButtonPressListener.buttonPressed="prompt.open(window);"/>
-        </FlowPane>
-    </content>
+    <FlowPane>
+        <PushButton buttonData="Stock Alert"
+            ButtonPressListener.buttonPressed="org.apache.pivot.wtk.Alert.alert('Hello World!', window);"/>
+        <PushButton buttonData="Stock Prompt"
+            ButtonPressListener.buttonPressed="org.apache.pivot.wtk.Prompt.prompt('Hello World!', window);"/>
+        <PushButton buttonData="Custom Alert"
+            ButtonPressListener.buttonPressed="alert.open(window);"/>
+        <PushButton buttonData="Custom Prompt"
+            ButtonPressListener.buttonPressed="prompt.open(window);"/>
+    </FlowPane>
 </Window>

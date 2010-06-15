@@ -20,41 +20,33 @@ limitations under the License.
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
     <Border styles="{padding:2}">
-        <content>
-            <BoxPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:8, right:4}}">
-                <Label text="Spinners" styles="{font:{bold:true}}"/>
-                <Form styles="{showFlagIcons:false, showFlagHighlight:false}">
-                    <sections>
-                        <Form.Section>
-                            <Spinner Form.label="Basic" preferredWidth="60"
-                                spinnerData="['One', 'Two', 'Three', 'Four', 'Five']"
-                                circular="true" selectedIndex="0"/>
-                            <Spinner wtkx:id="numericSpinner" Form.label="Numeric"
-                                preferredWidth="60"/>
-                            <Spinner wtkx:id="dateSpinner" Form.label="Date"/>
-                        </Form.Section>
-                    </sections>
-                </Form>
-            </BoxPane>
-        </content>
+        <BoxPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:8, right:4}}">
+            <Label text="Spinners" styles="{font:{bold:true}}"/>
+            <Form styles="{showFlagIcons:false, showFlagHighlight:false}">
+                <Form.Section>
+                    <Spinner Form.label="Basic" preferredWidth="60"
+                        spinnerData="['One', 'Two', 'Three', 'Four', 'Five']"
+                        circular="true" selectedIndex="0"/>
+                    <Spinner wtkx:id="numericSpinner" Form.label="Numeric"
+                        preferredWidth="60"/>
+                    <Spinner wtkx:id="dateSpinner" Form.label="Date"/>
+                </Form.Section>
+            </Form>
+        </BoxPane>
     </Border>
 
     <Border styles="{padding:2}">
-        <content>
-            <BoxPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:8, right:4}}">
-                <Label text="Sliders" styles="{font:{bold:true}}"/>
-                <Form styles="{showFlagIcons:false, showFlagHighlight:false}">
-                    <sections>
-                        <Form.Section>
-                            <Slider wtkx:id="redSlider" Form.label="Red" range="{start:0, end:255}" value="0"/>
-                            <Slider wtkx:id="greenSlider" Form.label="Green" range="{start:0, end:255}" value="0"/>
-                            <Slider wtkx:id="blueSlider" Form.label="Blue" range="{start:0, end:255}" value="0"/>
-                            <Border wtkx:id="colorBorder" Form.label="Color" preferredWidth="120" preferredHeight="30" styles="{padding:2}"/>
-                        </Form.Section>
-                    </sections>
-                </Form>
-            </BoxPane>
-        </content>
+        <BoxPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:8, right:4}}">
+            <Label text="Sliders" styles="{font:{bold:true}}"/>
+            <Form styles="{showFlagIcons:false, showFlagHighlight:false}">
+                <Form.Section>
+                    <Slider wtkx:id="redSlider" Form.label="Red" range="{start:0, end:255}" value="0"/>
+                    <Slider wtkx:id="greenSlider" Form.label="Green" range="{start:0, end:255}" value="0"/>
+                    <Slider wtkx:id="blueSlider" Form.label="Blue" range="{start:0, end:255}" value="0"/>
+                    <Border wtkx:id="colorBorder" Form.label="Color" preferredWidth="120" preferredHeight="30" styles="{padding:2}"/>
+                </Form.Section>
+            </Form>
+        </BoxPane>
     </Border>
 </BoxPane>
 

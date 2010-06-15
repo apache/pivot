@@ -20,19 +20,17 @@ limitations under the License.
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
     <Border styles="{padding:2}">
-        <content>
-            <BoxPane styles="{padding:{top:2, left:4, bottom:2, right:4}, spacing:10}">
-                <BoxPane orientation="vertical">
-                    <Label text="Color Chooser" styles="{font:{bold:true}}"/>
-                    <ColorChooser selectedColor="#7ac8ba"/>
-                </BoxPane>
-
-                <BoxPane orientation="vertical">
-                    <Label text="Color Chooser Button" styles="{font:{bold:true}}"/>
-                    <ColorChooserButton selectedColor="#7f2c64"/>
-                </BoxPane>
+        <BoxPane styles="{padding:{top:2, left:4, bottom:2, right:4}, spacing:10}">
+            <BoxPane orientation="vertical">
+                <Label text="Color Chooser" styles="{font:{bold:true}}"/>
+                <ColorChooser selectedColor="#7ac8ba"/>
             </BoxPane>
-        </content>
+
+            <BoxPane orientation="vertical">
+                <Label text="Color Chooser Button" styles="{font:{bold:true}}"/>
+                <ColorChooserButton selectedColor="#7f2c64"/>
+            </BoxPane>
+        </BoxPane>
     </Border>
 </BoxPane>
 

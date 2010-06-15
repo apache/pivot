@@ -20,53 +20,49 @@ limitations under the License.
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:terra="org.apache.pivot.wtk.skin.terra"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <TablePane styles="{verticalSpacing:6}">
-            <columns>
-                <TablePane.Column width="1*"/>
-            </columns>
-            <rows>
-                <TablePane.Row height="1*">
-                    <Border styles="{color:10}">
-                        <content>
-                            <ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
-                                verticalScrollBarPolicy="fill_to_capacity">
-                                <view>
-                                    <TableView wtkx:id="fileTableView" selectMode="multi"
-                                        styles="{showHorizontalGridLines:false}">
-                                        <columns>
-                                            <TableView.Column name="name" width="3*" headerData="File">
-                                                <cellRenderer>
-                                                    <terra:TerraFileBrowserSkin.TableViewFileRenderer/>
-                                                </cellRenderer>
-                                            </TableView.Column>
-                                            <TableView.Column name="size" width="1*" headerData="Size">
-                                                <cellRenderer>
-                                                    <terra:TerraFileBrowserSkin.TableViewFileRenderer/>
-                                                </cellRenderer>
-                                            </TableView.Column>
-                                            <TableView.Column name="lastModified" width="2*" headerData="Modified">
-                                                <cellRenderer>
-                                                    <terra:TerraFileBrowserSkin.TableViewFileRenderer/>
-                                                </cellRenderer>
-                                            </TableView.Column>
-                                        </columns>
-                                    </TableView>
-                                </view>
-                                <columnHeader>
-                                    <TableViewHeader tableView="$fileTableView" styles="{headersPressable:false}"/>
-                                </columnHeader>
-                            </ScrollPane>
-                        </content>
-                    </Border>
-                </TablePane.Row>
-                <TablePane.Row height="-1">
-                    <BoxPane styles="{horizontalAlignment:'right', verticalAlignment:'center'}">
-                        <PushButton wtkx:id="uploadButton" buttonData="Upload"
-                           enabled="false" styles="{minimumAspectRatio:3}"/>
-                    </BoxPane>
-                </TablePane.Row>
-            </rows>
-        </TablePane>
-    </content>
+    <TablePane styles="{verticalSpacing:6}">
+        <columns>
+            <TablePane.Column width="1*"/>
+        </columns>
+
+        <TablePane.Row height="1*">
+            <Border styles="{color:10}">
+                <content>
+                    <ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
+                        verticalScrollBarPolicy="fill_to_capacity">
+                        <TableView wtkx:id="fileTableView" selectMode="multi"
+                            styles="{showHorizontalGridLines:false}">
+                            <columns>
+                                <TableView.Column name="name" width="3*" headerData="File">
+                                    <cellRenderer>
+                                        <terra:TerraFileBrowserSkin.TableViewFileRenderer/>
+                                    </cellRenderer>
+                                </TableView.Column>
+                                <TableView.Column name="size" width="1*" headerData="Size">
+                                    <cellRenderer>
+                                        <terra:TerraFileBrowserSkin.TableViewFileRenderer/>
+                                    </cellRenderer>
+                                </TableView.Column>
+                                <TableView.Column name="lastModified" width="2*" headerData="Modified">
+                                    <cellRenderer>
+                                        <terra:TerraFileBrowserSkin.TableViewFileRenderer/>
+                                    </cellRenderer>
+                                </TableView.Column>
+                            </columns>
+                        </TableView>
+
+                        <columnHeader>
+                            <TableViewHeader tableView="$fileTableView" styles="{headersPressable:false}"/>
+                        </columnHeader>
+                    </ScrollPane>
+                </content>
+            </Border>
+        </TablePane.Row>
+        <TablePane.Row height="-1">
+            <BoxPane styles="{horizontalAlignment:'right', verticalAlignment:'center'}">
+                <PushButton wtkx:id="uploadButton" buttonData="Upload"
+                   enabled="false" styles="{minimumAspectRatio:3}"/>
+            </BoxPane>
+        </TablePane.Row>
+    </TablePane>
 </Window>

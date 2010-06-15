@@ -21,33 +21,28 @@ limitations under the License.
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
     <wtkx:script src="json_viewer.js"/>
-    <content>
-        <Border styles="{color:10}">
-            <content>
-                <ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
-                    verticalScrollBarPolicy="fill_to_capacity">
-                    <view>
-                        <TreeView wtkx:id="treeView" dropTarget="$treeViewDropTarget">
-                            <nodeRenderer>
-                                <content:TreeViewNodeRenderer showIcon="false"/>
-                            </nodeRenderer>
-                            <componentKeyListeners>
-                                <wtkx:script>
-                                <![CDATA[
-                                importPackage(org.apache.pivot.wtk);
-                                function keyPressed(component, keyCode, keyLocation) {
-                                    if (keyCode == Keyboard.KeyCode.V
-                                        && Keyboard.isPressed(Platform.getCommandModifier())) {
-                                        application.paste();
-                                    }
-                                }
-                                ]]>
-                                </wtkx:script>
-                            </componentKeyListeners>
-                        </TreeView>
-                    </view>
-                </ScrollPane>
-            </content>
-        </Border>
-    </content>
+
+    <Border styles="{color:10}">
+        <ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
+            verticalScrollBarPolicy="fill_to_capacity">
+            <TreeView wtkx:id="treeView" dropTarget="$treeViewDropTarget">
+                <nodeRenderer>
+                    <content:TreeViewNodeRenderer showIcon="false"/>
+                </nodeRenderer>
+                <componentKeyListeners>
+                    <wtkx:script>
+                    <![CDATA[
+                    importPackage(org.apache.pivot.wtk);
+                    function keyPressed(component, keyCode, keyLocation) {
+                        if (keyCode == Keyboard.KeyCode.V
+                            && Keyboard.isPressed(Platform.getCommandModifier())) {
+                            application.paste();
+                        }
+                    }
+                    ]]>
+                    </wtkx:script>
+                </componentKeyListeners>
+            </TreeView>
+        </ScrollPane>
+    </Border>
 </Window>

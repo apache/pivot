@@ -19,14 +19,12 @@ limitations under the License.
 <Window title="Stack Panes" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <StackPane>
-            <ImageView image="@background.png"
-                styles="{fill:true, preserveAspectRatio:false}"/>
-            <Label text="StackPane Demo"
-                styles="{font:'Helvetica bold 64', color:'#ffffff', wrapText:true,
-                    horizontalAlignment:'center', verticalAlignment:'center'}"/>
-        </StackPane>
-    </content>
+    <StackPane>
+        <ImageView image="@background.png"
+            styles="{fill:true, preserveAspectRatio:false}"/>
+        <Label text="StackPane Demo"
+            styles="{font:'Helvetica bold 64', color:'#ffffff', wrapText:true,
+                horizontalAlignment:'center', verticalAlignment:'center'}"/>
+    </StackPane>
 </Window>
 

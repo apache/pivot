@@ -32,78 +32,71 @@ limitations under the License.
         </wtkx:script>
     </windowStateListeners>
 
-    <content>
-        <TablePane styles="{horizontalSpacing:4, verticalSpacing:4}">
-            <columns>
-                <TablePane.Column width="1*"/>
-                <TablePane.Column width="1*"/>
-            </columns>
-            <rows>
-                <TablePane.Row height="1*">
-                    <Border styles="{padding:2}">
-                        <content>
-                            <CardPane wtkx:id="sourceImageCardPane" styles="{padding:4}">
-                                <ImageView image="org/apache/pivot/tutorials/IMG_0725_2.jpg"/>
-                                <ImageView image="org/apache/pivot/tutorials/IMG_0735_2.jpg"/>
-                                <ImageView image="org/apache/pivot/tutorials/IMG_0767_2.jpg"/>
-                            </CardPane>
-                        </content>
-                    </Border>
-                    <Border styles="{padding:2}">
-                        <content>
-                            <CardPane selectedIndex="0" styles="{padding:4}">
-                                <ImageView wtkx:id="destinationImageView"/>
-                            </CardPane>
-                        </content>
-                    </Border>
-                </TablePane.Row>
+    <TablePane styles="{horizontalSpacing:4, verticalSpacing:4}">
+        <columns>
+            <TablePane.Column width="1*"/>
+            <TablePane.Column width="1*"/>
+        </columns>
 
-                <TablePane.Row height="-1">
-                    <BoxPane orientation="vertical" styles="{fill:true}">
-                        <BoxPane wtkx:id="sourceImageButtonBoxPane"
-                            styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
-                            <wtkx:define>
-                                <ButtonGroup wtkx:id="sourceImageButtonGroup">
-                                    <buttonGroupListeners>
-                                        <wtkx:script>
-                                        <![CDATA[
-                                        function selectionChanged(buttonGroup, previousSelection) {
-                                            var selection = buttonGroup.getSelection();
+        <TablePane.Row height="1*">
+            <Border styles="{padding:2}">
+                <CardPane wtkx:id="sourceImageCardPane" styles="{padding:4}">
+                    <ImageView image="org/apache/pivot/tutorials/IMG_0725_2.jpg"/>
+                    <ImageView image="org/apache/pivot/tutorials/IMG_0735_2.jpg"/>
+                    <ImageView image="org/apache/pivot/tutorials/IMG_0767_2.jpg"/>
+                </CardPane>
+            </Border>
+            <Border styles="{padding:2}">
+                <CardPane selectedIndex="0" styles="{padding:4}">
+                    <ImageView wtkx:id="destinationImageView"/>
+                </CardPane>
+            </Border>
+        </TablePane.Row>
 
-                                            if (selection != null) {
-                                                var index = sourceImageButtonBoxPane.indexOf(selection);
-                                                sourceImageCardPane.setSelectedIndex(index);
-                                            }
-                                        }
-                                        ]]>
-                                        </wtkx:script>
-                                    </buttonGroupListeners>
-                                </ButtonGroup>
-                            </wtkx:define>
+        <TablePane.Row height="-1">
+            <BoxPane orientation="vertical" styles="{fill:true}">
+                <BoxPane wtkx:id="sourceImageButtonBoxPane"
+                    styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                    <wtkx:define>
+                        <ButtonGroup wtkx:id="sourceImageButtonGroup">
+                            <buttonGroupListeners>
+                                <wtkx:script>
+                                <![CDATA[
+                                function selectionChanged(buttonGroup, previousSelection) {
+                                    var selection = buttonGroup.getSelection();
 
-                            <PushButton wtkx:id="sourceImageButton1"
-                                buttonData="IMG_0725_2.jpg" toggleButton="true"
-                                buttonGroup="$sourceImageButtonGroup"/>
-                            <PushButton wtkx:id="sourceImageButton2"
-                                buttonData="IMG_0735_2.jpg" toggleButton="true"
-                                buttonGroup="$sourceImageButtonGroup"/>
-                            <PushButton wtkx:id="sourceImageButton3"
-                                buttonData="IMG_0767_2.jpg" toggleButton="true"
-                                buttonGroup="$sourceImageButtonGroup"/>
-                        </BoxPane>
+                                    if (selection != null) {
+                                        var index = sourceImageButtonBoxPane.indexOf(selection);
+                                        sourceImageCardPane.setSelectedIndex(index);
+                                    }
+                                }
+                                ]]>
+                                </wtkx:script>
+                            </buttonGroupListeners>
+                        </ButtonGroup>
+                    </wtkx:define>
 
-                        <BoxPane styles="{horizontalAlignment:'center'}">
-                            <PushButton wtkx:id="copyButton" buttonData="Copy"
-                                ButtonPressListener.buttonPressed="copy()"/>
-                        </BoxPane>
-                    </BoxPane>
+                    <PushButton wtkx:id="sourceImageButton1"
+                        buttonData="IMG_0725_2.jpg" toggleButton="true"
+                        buttonGroup="$sourceImageButtonGroup"/>
+                    <PushButton wtkx:id="sourceImageButton2"
+                        buttonData="IMG_0735_2.jpg" toggleButton="true"
+                        buttonGroup="$sourceImageButtonGroup"/>
+                    <PushButton wtkx:id="sourceImageButton3"
+                        buttonData="IMG_0767_2.jpg" toggleButton="true"
+                        buttonGroup="$sourceImageButtonGroup"/>
+                </BoxPane>
 
-                    <BoxPane styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
-                        <PushButton wtkx:id="pasteButton" buttonData="Paste"
-                            ButtonPressListener.buttonPressed="paste()"/>
-                    </BoxPane>
-                </TablePane.Row>
-            </rows>
-        </TablePane>
-    </content>
+                <BoxPane styles="{horizontalAlignment:'center'}">
+                    <PushButton wtkx:id="copyButton" buttonData="Copy"
+                        ButtonPressListener.buttonPressed="copy()"/>
+                </BoxPane>
+            </BoxPane>
+
+            <BoxPane styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                <PushButton wtkx:id="pasteButton" buttonData="Paste"
+                    ButtonPressListener.buttonPressed="paste()"/>
+            </BoxPane>
+        </TablePane.Row>
+    </TablePane>
 </Window>

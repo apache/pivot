@@ -20,61 +20,52 @@ limitations under the License.
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
-    <sections>
-        <Form.Section heading="Test Section">
-            <Label Form.label="ABCD" text="Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an AS IS BASIS..."
-                styles="{wrapText:true}"/>
-        </Form.Section>
-        <Form.Section heading="Test Section">
-            <Label Form.label="ABCD" text="Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an AS IS BASIS..."
-                styles="{wrapText:true}"/>
-        </Form.Section>
-        <Form.Section heading="Test Section">
-            <TextInput Form.label="Text Input Field"
-                Form.Flag="{messageType:'error', message:'Error message'}"
-                text="Some sample text"/>
-            <Checkbox Form.label="Checkbox" buttonData="Bell"/>
-            <LinkButton Form.label="LinkButton" buttonData="Previous"/>
-            <RadioButton Form.label="RadioButton" buttonData="Crossfade" selected="true"/>
-            <ListButton Form.label="ListButton" listData="['10e0.csv', '10e1.csv', '10e2.csv', '10e3.csv', '10e4.csv', '10e5.csv']" selectedIndex="0"/>
-            <PushButton Form.label="PushButton" buttonData="Copy"/>
-            <Spinner Form.label="Spinner" selectedIndex="0">
-                <spinnerData>
-                    <content:NumericSpinnerData lowerBound="0" upperBound="9" increment="1"/>
-                </spinnerData>
-            </Spinner>
-            <Border Form.label="ListView"
-                Form.Flag="{messageType:'error', message:'Error message'}">
-                <content>
-                    <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
-                        <view>
-                            <ListView listData="['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5']"/>
-                        </view>
-                    </ScrollPane>
-                </content>
-            </Border>
-            <FlowPane Form.label="FlowPane"
-                styles="{horizontalSpacing:4, alignToBaseline:true}">
-                <TextInput text=""/>
-                <Label text="(optional)"/>
-            </FlowPane>
-            <TablePane Form.label="TablePane"
-                styles="{padding:{top:8}, horizontalSpacing:12, verticalSpacing:6}">
-                <columns>
-                    <TablePane.Column/>
-                    <TablePane.Column width="1*"/>
-                </columns>
-                <rows>
-                    <TablePane.Row>
-                        <Label text="Left 1"/>
-                        <Label text="Right 1"/>
-                    </TablePane.Row>
-                    <TablePane.Row>
-                        <Label text="Long Left 2"/>
-                        <Label text="Right 2"/>
-                    </TablePane.Row>
-                </rows>
-            </TablePane>
-        </Form.Section>
-    </sections>
+    <Form.Section heading="Test Section">
+        <Label Form.label="ABCD" text="Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an AS IS BASIS..."
+            styles="{wrapText:true}"/>
+    </Form.Section>
+    <Form.Section heading="Test Section">
+        <Label Form.label="ABCD" text="Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an AS IS BASIS..."
+            styles="{wrapText:true}"/>
+    </Form.Section>
+    <Form.Section heading="Test Section">
+        <TextInput Form.label="Text Input Field"
+            Form.Flag="{messageType:'error', message:'Error message'}"
+            text="Some sample text"/>
+        <Checkbox Form.label="Checkbox" buttonData="Bell"/>
+        <LinkButton Form.label="LinkButton" buttonData="Previous"/>
+        <RadioButton Form.label="RadioButton" buttonData="Crossfade" selected="true"/>
+        <ListButton Form.label="ListButton" listData="['10e0.csv', '10e1.csv', '10e2.csv', '10e3.csv', '10e4.csv', '10e5.csv']" selectedIndex="0"/>
+        <PushButton Form.label="PushButton" buttonData="Copy"/>
+        <Spinner Form.label="Spinner" selectedIndex="0">
+            <content:NumericSpinnerData lowerBound="0" upperBound="9" increment="1"/>
+        </Spinner>
+        <Border Form.label="ListView"
+            Form.Flag="{messageType:'error', message:'Error message'}">
+            <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
+                <ListView listData="['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5']"/>
+            </ScrollPane>
+        </Border>
+        <FlowPane Form.label="FlowPane"
+            styles="{horizontalSpacing:4, alignToBaseline:true}">
+            <TextInput text=""/>
+            <Label text="(optional)"/>
+        </FlowPane>
+        <TablePane Form.label="TablePane"
+            styles="{padding:{top:8}, horizontalSpacing:12, verticalSpacing:6}">
+            <columns>
+                <TablePane.Column/>
+                <TablePane.Column width="1*"/>
+            </columns>
+
+            <TablePane.Row>
+                <Label text="Left 1"/>
+                <Label text="Right 1"/>
+            </TablePane.Row>
+            <TablePane.Row>
+                <Label text="Long Left 2"/>
+                <Label text="Right 2"/>
+            </TablePane.Row>
+        </TablePane>
+    </Form.Section>
 </Form>

@@ -19,8 +19,6 @@ limitations under the License.
 <Border styles="{color:'#ff0000', thickness:10, cornerRadii:1, padding:5}"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <Label text="Some very long text...fill in more here to reproduce."
-            styles="{wrapText:true, horizontalAlignment:'center', verticalAlignment:'center'}" />
-    </content>
+    <Label text="Some very long text...fill in more here to reproduce."
+        styles="{wrapText:true, horizontalAlignment:'center', verticalAlignment:'center'}" />
 </Border>

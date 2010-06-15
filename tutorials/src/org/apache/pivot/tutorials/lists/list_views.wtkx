@@ -19,30 +19,21 @@ limitations under the License.
 <Window title="List Views" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <Border>
-            <content>
-                <BoxPane styles="{padding:4, spacing:4}">
-                    <Border styles="{color:10}">
-                        <content>
-                            <ScrollPane preferredWidth="80" preferredHeight="110"
-                                horizontalScrollBarPolicy="fill"
-                                verticalScrollBarPolicy="fill_to_capacity">
-                                <view>
-                                    <ListView wtkx:id="listView" selectMode="multi"
-                                        listData="['One', 'Two', 'Three', 'Four', 'Five',
-                                            'Six', 'Seven', 'Eight', 'Nine', 'Ten']"/>
-                                </view>
-                            </ScrollPane>
-                        </content>
-                    </Border>
-                    <BoxPane orientation="vertical" preferredWidth="120" styles="{fill:true}">
-                        <Label text="You selected:"/>
-                        <Label wtkx:id="selectionLabel" styles="{wrapText:true}"/>
-                    </BoxPane>
-                </BoxPane>
-            </content>
-        </Border>
-    </content>
+    <Border>
+        <BoxPane styles="{padding:4, spacing:4}">
+            <Border styles="{color:10}">
+                <ScrollPane preferredWidth="80" preferredHeight="110"
+                    horizontalScrollBarPolicy="fill"
+                    verticalScrollBarPolicy="fill_to_capacity">
+                    <ListView wtkx:id="listView" selectMode="multi"
+                        listData="['One', 'Two', 'Three', 'Four', 'Five',
+                            'Six', 'Seven', 'Eight', 'Nine', 'Ten']"/>
+                </ScrollPane>
+            </Border>
+            <BoxPane orientation="vertical" preferredWidth="120" styles="{fill:true}">
+                <Label text="You selected:"/>
+                <Label wtkx:id="selectionLabel" styles="{wrapText:true}"/>
+            </BoxPane>
+        </BoxPane>
+    </Border>
 </Window>
-

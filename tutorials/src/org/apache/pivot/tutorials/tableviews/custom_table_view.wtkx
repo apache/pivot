@@ -18,62 +18,52 @@ limitations under the License.
 
 <Window title="Table Views" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
-    xmlns:collections="org.apache.pivot.collections"
     xmlns:content="org.apache.pivot.wtk.content"
+    xmlns:tableviews="org.apache.pivot.tutorials.tableviews"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <Border>
-            <content>
-                <ScrollPane horizontalScrollBarPolicy="fill">
-                    <view>
-                        <TableView wtkx:id="tableView">
-                            <columns>
-                                <TableView.Column name="flag" width="20">
-                                    <cellRenderer>
-                                        <content:TableViewImageCellRenderer/>
-                                    </cellRenderer>
-                                </TableView.Column>
-                                <TableView.Column name="nation" width="3*" headerData="Nation"/>
-                                <TableView.Column name="gold" width="1*" headerData="Gold"/>
-                                <TableView.Column name="silver" width="1*" headerData="Silver"/>
-                                <TableView.Column name="bronze" width="1*" headerData="Bronze"/>
-                                <TableView.Column name="total" width="1*" headerData="Total"/>
-                            </columns>
+    <Border>
+        <ScrollPane horizontalScrollBarPolicy="fill">
+            <TableView wtkx:id="tableView">
+                <columns>
+                    <TableView.Column name="flag" width="20">
+                        <cellRenderer>
+                            <content:TableViewImageCellRenderer/>
+                        </cellRenderer>
+                    </TableView.Column>
+                    <TableView.Column name="nation" width="3*" headerData="Nation"/>
+                    <TableView.Column name="gold" width="1*" headerData="Gold"/>
+                    <TableView.Column name="silver" width="1*" headerData="Silver"/>
+                    <TableView.Column name="bronze" width="1*" headerData="Bronze"/>
+                    <TableView.Column name="total" width="1*" headerData="Total"/>
+                </columns>
 
-                            <!-- Source: http://en.wikipedia.org/wiki/2008_Summer_Olympics_medal_table -->
-                            <tableData>
-                                <collections:ArrayList xmlns="org.apache.pivot.tutorials.tableviews">
-                                    <OlympicStanding nation="China" gold="51" silver="21" bronze="28" flag="@cn.png"/>
-                                    <OlympicStanding nation="United States" gold="36" silver="38" bronze="36" flag="@us.png"/>
-                                    <OlympicStanding nation="Russia" gold="23" silver="21" bronze="28" flag="@ru.png"/>
-                                    <OlympicStanding nation="Great Britain" gold="19" silver="13" bronze="15" flag="@gb.png"/>
-                                    <OlympicStanding nation="Germany" gold="16" silver="10" bronze="15" flag="@de.png"/>
-                                    <OlympicStanding nation="Australia" gold="14" silver="15" bronze="17" flag="@au.png"/>
-                                    <OlympicStanding nation="South Korea" gold="13" silver="10" bronze="8" flag="@kr.png"/>
-                                    <OlympicStanding nation="Japan" gold="9" silver="6" bronze="11" flag="@jp.png"/>
-                                    <OlympicStanding nation="Italy" gold="8" silver="10" bronze="10" flag="@it.png"/>
-                                    <OlympicStanding nation="France" gold="7" silver="16" bronze="17" flag="@fr.png"/>
-                                </collections:ArrayList>
-                            </tableData>
+                <tableViewSortListeners>
+                    <wtkx:script>
+                    <![CDATA[
+                    function sortChanged(tableView) {
+                        var tableData = tableView.getTableData();
+                        tableData.setComparator(new org.apache.pivot.wtk.content.TableViewRowComparator(tableView));
+                    }
+                    ]]>
+                    </wtkx:script>
+                </tableViewSortListeners>
 
-                            <tableViewSortListeners>
-                                <wtkx:script>
-                                <![CDATA[
-                                function sortChanged(tableView) {
-                                    var tableData = tableView.getTableData();
-                                    tableData.setComparator(new org.apache.pivot.wtk.content.TableViewRowComparator(tableView));
-                                }
-                                ]]>
-                                </wtkx:script>
-                            </tableViewSortListeners>
-                        </TableView>
-                    </view>
+                <!-- Source: http://en.wikipedia.org/wiki/2008_Summer_Olympics_medal_table -->
+                <tableviews:OlympicStanding nation="China" gold="51" silver="21" bronze="28" flag="@cn.png"/>
+                <tableviews:OlympicStanding nation="United States" gold="36" silver="38" bronze="36" flag="@us.png"/>
+                <tableviews:OlympicStanding nation="Russia" gold="23" silver="21" bronze="28" flag="@ru.png"/>
+                <tableviews:OlympicStanding nation="Great Britain" gold="19" silver="13" bronze="15" flag="@gb.png"/>
+                <tableviews:OlympicStanding nation="Germany" gold="16" silver="10" bronze="15" flag="@de.png"/>
+                <tableviews:OlympicStanding nation="Australia" gold="14" silver="15" bronze="17" flag="@au.png"/>
+                <tableviews:OlympicStanding nation="South Korea" gold="13" silver="10" bronze="8" flag="@kr.png"/>
+                <tableviews:OlympicStanding nation="Japan" gold="9" silver="6" bronze="11" flag="@jp.png"/>
+                <tableviews:OlympicStanding nation="Italy" gold="8" silver="10" bronze="10" flag="@it.png"/>
+                <tableviews:OlympicStanding nation="France" gold="7" silver="16" bronze="17" flag="@fr.png"/>
+            </TableView>
 
-                    <columnHeader>
-                        <TableViewHeader tableView="$tableView" sortMode="single_column"/>
-                    </columnHeader>
-                </ScrollPane>
-            </content>
-        </Border>
-    </content>
+            <columnHeader>
+                <TableViewHeader tableView="$tableView" sortMode="single_column"/>
+            </columnHeader>
+        </ScrollPane>
+    </Border>
 </Window>

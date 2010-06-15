@@ -20,50 +20,45 @@ limitations under the License.
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:effects="org.apache.pivot.wtk.effects"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <SplitPane splitRatio="0.75">
-            <left>
-                <Border styles="{padding:4}">
-                    <content>
-                        <BoxPane orientation="vertical" styles="{fill:true}">
-                            <FlowPane wtkx:id="flowPane" styles="{padding:2}">
-                                <decorators>
-                                    <effects:BaselineDecorator/>
-                                </decorators>
+    <SplitPane splitRatio="0.75">
+        <left>
+            <Border styles="{padding:4}">
+                <BoxPane orientation="vertical" styles="{fill:true}">
+                    <FlowPane wtkx:id="flowPane" styles="{padding:2}">
+                        <decorators>
+                            <effects:BaselineDecorator/>
+                        </decorators>
 
-                                <PushButton buttonData="0" styles="{minimumAspectRatio:1.5}"/>
-                                <PushButton buttonData="1" styles="{minimumAspectRatio:1.5}"/>
-                                <PushButton buttonData="2" styles="{minimumAspectRatio:1.5}"/>
-                                <PushButton buttonData="3" preferredWidth="20" preferredHeight="20"/>
-                                <PushButton buttonData="4" preferredWidth="30" preferredHeight="30"/>
-                                <PushButton buttonData="5" preferredWidth="40" preferredHeight="40"/>
-                                <PushButton buttonData="6" styles="{minimumAspectRatio:1.5}"/>
-                                <PushButton buttonData="7" styles="{minimumAspectRatio:1.5}"/>
-                            </FlowPane>
-                        </BoxPane>
-                    </content>
-                </Border>
-            </left>
-            <right>
-                <Border styles="{padding:{top:2, left:6}}">
-                    <content>
-                        <BoxPane orientation="vertical">
-                            <Label text="Alignment" styles="{font:{bold:true}}"/>
+                        <PushButton buttonData="0" styles="{minimumAspectRatio:1.5}"/>
+                        <PushButton buttonData="1" styles="{minimumAspectRatio:1.5}"/>
+                        <PushButton buttonData="2" styles="{minimumAspectRatio:1.5}"/>
+                        <PushButton buttonData="3" preferredWidth="20" preferredHeight="20"/>
+                        <PushButton buttonData="4" preferredWidth="30" preferredHeight="30"/>
+                        <PushButton buttonData="5" preferredWidth="40" preferredHeight="40"/>
+                        <PushButton buttonData="6" styles="{minimumAspectRatio:1.5}"/>
+                        <PushButton buttonData="7" styles="{minimumAspectRatio:1.5}"/>
+                    </FlowPane>
+                </BoxPane>
+            </Border>
+        </left>
 
-                            <wtkx:define>
-                                <ButtonGroup wtkx:id="alignment"/>
-                            </wtkx:define>
-                            <RadioButton wtkx:id="leftRadioButton" buttonData="Left" buttonGroup="$alignment" selected="true"/>
-                            <RadioButton wtkx:id="rightRadioButton" buttonData="Right" buttonGroup="$alignment"/>
-                            <RadioButton wtkx:id="centerRadioButton" buttonData="Center" buttonGroup="$alignment"/>
+        <right>
+            <Border styles="{padding:{top:2, left:6}}">
+                <BoxPane orientation="vertical">
+                    <Label text="Alignment" styles="{font:{bold:true}}"/>
 
-                            <BoxPane styles="{padding:{top:6}}">
-                                <Checkbox wtkx:id="alignToBaselineCheckbox" buttonData="Align to baseline"/>
-                            </BoxPane>
-                        </BoxPane>
-                    </content>
-                </Border>
-            </right>
-        </SplitPane>
-    </content>
+                    <wtkx:define>
+                        <ButtonGroup wtkx:id="alignment"/>
+                    </wtkx:define>
+                    <RadioButton wtkx:id="leftRadioButton" buttonData="Left" buttonGroup="$alignment" selected="true"/>
+                    <RadioButton wtkx:id="rightRadioButton" buttonData="Right" buttonGroup="$alignment"/>
+                    <RadioButton wtkx:id="centerRadioButton" buttonData="Center" buttonGroup="$alignment"/>
+
+                    <BoxPane styles="{padding:{top:6}}">
+                        <Checkbox wtkx:id="alignToBaselineCheckbox" buttonData="Align to baseline"/>
+                    </BoxPane>
+                </BoxPane>
+        </Border>
+        </right>
+    </SplitPane>
 </Window>

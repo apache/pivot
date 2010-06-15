@@ -19,14 +19,10 @@ limitations under the License.
 <Frame title="Accordion Test"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <Accordion>
-            <panels>
-                <Label Accordion.label="A" text="Hello"/>
-                <Label Accordion.label="B" text="World"/>
-                <Label Accordion.label="C" text="From" enabled="false"/>
-                <Label Accordion.label="D" text="Pivot"/>
-            </panels>
-        </Accordion>
-    </content>
+    <Accordion>
+        <Label Accordion.label="A" text="Hello"/>
+        <Label Accordion.label="B" text="World"/>
+        <Label Accordion.label="C" text="From" enabled="false"/>
+        <Label Accordion.label="D" text="Pivot"/>
+    </Accordion>
 </Frame>

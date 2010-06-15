@@ -20,21 +20,15 @@ limitations under the License.
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:media="org.apache.pivot.wtk.media"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <ImageView>
-            <image>
-                <media:Drawing>
-                    <canvas>
-                        <Canvas xmlns="org.apache.pivot.wtk.media.drawing">
-                            <Ellipse x="0" y="0" width="240" height="240" stroke="" fill="#ffff00"/>
-                            <Ellipse x="70" y="60" width="30" height="40" fill="#000000"/>
-                            <Ellipse x="140" y="60" width="30" height="40" fill="#000000"/>
-                            <Arc x="60" y="120" width="120" height="70"
-                                start="190" extent="160" type="open" strokeThickness="8"/>
-                        </Canvas>
-                    </canvas>
-                </media:Drawing>
-            </image>
-        </ImageView>
-    </content>
+    <ImageView>
+        <media:Drawing>
+            <Canvas xmlns="org.apache.pivot.wtk.media.drawing">
+                <Ellipse x="0" y="0" width="240" height="240" stroke="" fill="#ffff00"/>
+                <Ellipse x="70" y="60" width="30" height="40" fill="#000000"/>
+                <Ellipse x="140" y="60" width="30" height="40" fill="#000000"/>
+                <Arc x="60" y="120" width="120" height="70"
+                    start="190" extent="160" type="open" strokeThickness="8"/>
+            </Canvas>
+        </media:Drawing>
+    </ImageView>
 </Window>

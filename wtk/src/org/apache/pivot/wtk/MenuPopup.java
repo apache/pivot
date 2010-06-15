@@ -18,10 +18,12 @@ package org.apache.pivot.wtk;
 
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Vote;
+import org.apache.pivot.wtkx.DefaultProperty;
 
 /**
  * Popup class that displays a cascading menu.
  */
+@DefaultProperty("menu")
 public class MenuPopup extends Window {
     private static class MenuPopupListenerList extends ListenerList<MenuPopupListener>
         implements MenuPopupListener {

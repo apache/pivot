@@ -30,16 +30,12 @@ limitations under the License.
 
         <Menu.Section wtkx:id="helpSection">
             <Menu.Item buttonData="Help">
-                <menu>
-                    <Menu>
-                        <sections>
-                            <Menu.Section>
-                                <Menu.Item buttonData="About"/>
-                                <Menu.Item buttonData="Provide Feedback"/>
-                            </Menu.Section>
-                        </sections>
-                    </Menu>
-                </menu>
+                <Menu>
+                    <Menu.Section>
+                        <Menu.Item buttonData="About"/>
+                        <Menu.Item buttonData="Provide Feedback"/>
+                    </Menu.Section>
+                </Menu>
             </Menu.Item>
         </Menu.Section>
 
@@ -48,8 +44,6 @@ limitations under the License.
         </Menu.Section>
     </wtkx:define>
 
-    <content>
-        <Label text="Right click to bring up the context menu"
-            styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
-    </content>
+    <Label text="Right click to bring up the context menu"
+        styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
 </Window>

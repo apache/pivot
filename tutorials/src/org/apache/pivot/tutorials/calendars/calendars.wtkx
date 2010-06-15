@@ -19,26 +19,18 @@ limitations under the License.
 <Window title="Calendars" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <Border styles="{padding:8}">
-            <content>
-                <Form>
-                    <sections>
-                        <Form.Section>
-                            <Border Form.label="Calendar" styles="{color:10}">
-                                <content>
-                                    <Calendar wtkx:id="calendar"/>
-                                </content>
-                            </Border>
-                            <CalendarButton wtkx:id="calendarButton" Form.label="Calendar button"/>
-                        </Form.Section>
-                        <Form.Section>
-                            <Label wtkx:id="selectedDateLabel" Form.label="Selected date"/>
-                        </Form.Section>
-                    </sections>
-                </Form>
-            </content>
-        </Border>
-    </content>
+    <Border styles="{padding:8}">
+        <Form>
+            <Form.Section>
+                <Border Form.label="Calendar" styles="{color:10}">
+                    <Calendar wtkx:id="calendar"/>
+                </Border>
+                <CalendarButton wtkx:id="calendarButton" Form.label="Calendar button"/>
+            </Form.Section>
+            <Form.Section>
+                <Label wtkx:id="selectedDateLabel" Form.label="Selected date"/>
+            </Form.Section>
+        </Form>
+    </Border>
 </Window>
 

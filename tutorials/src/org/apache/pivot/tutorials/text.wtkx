@@ -20,71 +20,58 @@ limitations under the License.
     xmlns:validation="org.apache.pivot.wtk.validation"
     xmlns="org.apache.pivot.wtk">
     <Border styles="{padding:2}">
-        <content>
-            <BoxPane orientation="vertical" styles="{fill:true,
-                padding:{top:2, left:4, bottom:12, right:4}}">
-                <Label text="Text Input" styles="{font:{bold:true}}"/>
-                <Form styles="{showFlagIcons:false, showFlagHighlight:false, padding:0}">
-                    <sections>
-                        <Form.Section>
-                            <TextInput Form.label="Basic" text="Pivot" textSize="12"/>
-                            <TextInput Form.label="Prompt" prompt="Name" textSize="12"/>
-                            <TextInput Form.label="Password"
-                                Form.flag="{messageType:'info', message:'This field has a maximum length of 12 characters.'}"
-                                password="true" text="pivot" textSize="12" maximumLength="12" />
-                            <TextInput Form.label="Validating" Form.flag="{messageType:'info', message:'This field only accepts numeric values from 0 through 9.'}"
-                                text="5" textSize="12" maximumLength="6">
-                                <validator>
-                                    <validation:RegexTextValidator>
-                                        <pattern><![CDATA[[0-9]]]></pattern>
-                                    </validation:RegexTextValidator>
-                                </validator>
-                            </TextInput>
-                        </Form.Section>
-                    </sections>
-                </Form>
-            </BoxPane>
-        </content>
+        <BoxPane orientation="vertical" styles="{fill:true,
+            padding:{top:2, left:4, bottom:12, right:4}}">
+            <Label text="Text Input" styles="{font:{bold:true}}"/>
+            <Form styles="{showFlagIcons:false, showFlagHighlight:false, padding:0}">
+                <Form.Section>
+                    <TextInput Form.label="Basic" text="Pivot" textSize="12"/>
+                    <TextInput Form.label="Prompt" prompt="Name" textSize="12"/>
+                    <TextInput Form.label="Password"
+                        Form.flag="{messageType:'info', message:'This field has a maximum length of 12 characters.'}"
+                        password="true" text="pivot" textSize="12" maximumLength="12" />
+                    <TextInput Form.label="Validating" Form.flag="{messageType:'info', message:'This field only accepts numeric values from 0 through 9.'}"
+                        text="5" textSize="12" maximumLength="6">
+                        <validator>
+                            <validation:RegexTextValidator>
+                                <pattern><![CDATA[[0-9]]]></pattern>
+                            </validation:RegexTextValidator>
+                        </validator>
+                    </TextInput>
+                </Form.Section>
+            </Form>
+        </BoxPane>
     </Border>
 
     <SplitPane preferredWidth="472" preferredHeight="180" splitRatio="0.6">
         <left>
             <Border styles="{padding:2}">
-                <content>
-                    <TablePane styles="{padding:{top:2, left:4, bottom:8, right:4}, verticalSpacing:4}">
-                        <columns>
-                            <TablePane.Column width="1*"/>
-                        </columns>
-                        <rows>
-                            <TablePane.Row height="-1">
-                                <Label text="Text Area" styles="{font:{bold:true}}"/>
-                            </TablePane.Row>
-                            <TablePane.Row height="1*">
-                                <Border styles="{color:10}">
-                                    <content>
-                                        <ScrollPane horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fill_to_capacity">
-                                            <view>
-                                                <TextArea text="@text_area.txt"/>
-                                            </view>
-                                        </ScrollPane>
-                                    </content>
-                                </Border>
-                            </TablePane.Row>
-                        </rows>
-                    </TablePane>
-                </content>
+                <TablePane styles="{padding:{top:2, left:4, bottom:8, right:4}, verticalSpacing:4}">
+                    <columns>
+                        <TablePane.Column width="1*"/>
+                    </columns>
+
+                    <TablePane.Row height="-1">
+                        <Label text="Text Area" styles="{font:{bold:true}}"/>
+                    </TablePane.Row>
+                    <TablePane.Row height="1*">
+                        <Border styles="{color:10}">
+                            <ScrollPane horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fill_to_capacity">
+                                <TextArea text="@text_area.txt"/>
+                            </ScrollPane>
+                        </Border>
+                    </TablePane.Row>
+                </TablePane>
             </Border>
         </left>
         <right>
             <Border styles="{padding:2}">
-                <content>
-                    <BoxPane orientation="vertical" styles="{fill:true,
-                        padding:{top:2, left:4, bottom:8, right:4}}">
-                        <Label text="Label Wrapping" styles="{font:{bold:true}}"/>
-                        <Label text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
-                            styles="{wrapText:true}"/>
-                    </BoxPane>
-                </content>
+                <BoxPane orientation="vertical" styles="{fill:true,
+                    padding:{top:2, left:4, bottom:8, right:4}}">
+                    <Label text="Label Wrapping" styles="{font:{bold:true}}"/>
+                    <Label text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+                        styles="{wrapText:true}"/>
+                </BoxPane>
             </Border>
         </right>
     </SplitPane>

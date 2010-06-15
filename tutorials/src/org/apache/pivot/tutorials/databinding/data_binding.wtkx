@@ -19,48 +19,42 @@ limitations under the License.
 <Window title="Data Binding" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <Border styles="{padding:6}">
-            <content>
-                <BoxPane orientation="vertical" styles="{spacing:10, fill:true}">
-                    <Form wtkx:id="form" styles="{showFlagIcons:false}">
-                        <sections>
-                            <Form.Section>
-                                <Label wtkx:id="sourceLabel" Form.label="Source" styles="{font:{italic:true}}"/>
+    <Border styles="{padding:6}">
+        <BoxPane orientation="vertical" styles="{spacing:10, fill:true}">
+            <Form wtkx:id="form" styles="{showFlagIcons:false}">
+                <Form.Section>
+                    <Label wtkx:id="sourceLabel" Form.label="Source" styles="{font:{italic:true}}"/>
 
-                                <Label Form.label="ID" textKey="id"/>
-                                <TextInput Form.label="Name" textKey="name"/>
+                    <Label Form.label="ID" textKey="id"/>
+                    <TextInput Form.label="Name" textKey="name"/>
 
-                                <BoxPane Form.label="Address" orientation="vertical">
-                                    <TextInput textKey="address.street" prompt="Street"/>
-                                    <BoxPane>
-                                        <TextInput textKey="address.city" prompt="City"/>
-                                        <TextInput textKey="address.state" textSize="6" prompt="State"/>
-                                        <TextInput textKey="address.zip" textSize="6" prompt="Zip"/>
-                                    </BoxPane>
-                                </BoxPane>
-
-                                <TextInput Form.label="Phone" textKey="phoneNumber"/>
-                                <TextInput Form.label="Email" textKey="emailAddress"/>
-
-                                <BoxPane Form.label="IM">
-                                    <TextInput textKey="imAccount.id"/>
-                                    <ListButton selectedItemKey="imAccount.type"
-                                        listData="['AIM', 'Jabber', 'Yahoo']"/>
-                                </BoxPane>
-                            </Form.Section>
-                        </sections>
-                    </Form>
-
-                    <Separator/>
-
-                    <BoxPane styles="{horizontalAlignment:'right'}">
-                        <PushButton wtkx:id="loadJSONButton" buttonData="Load JSON"/>
-                        <PushButton wtkx:id="loadJavaButton" buttonData="Load Java"/>
-                        <PushButton wtkx:id="clearButton" buttonData="Clear"/>
+                    <BoxPane Form.label="Address" orientation="vertical">
+                        <TextInput textKey="address.street" prompt="Street"/>
+                        <BoxPane>
+                            <TextInput textKey="address.city" prompt="City"/>
+                            <TextInput textKey="address.state" textSize="6" prompt="State"/>
+                            <TextInput textKey="address.zip" textSize="6" prompt="Zip"/>
+                        </BoxPane>
                     </BoxPane>
-                </BoxPane>
-            </content>
-        </Border>
-    </content>
+
+                    <TextInput Form.label="Phone" textKey="phoneNumber"/>
+                    <TextInput Form.label="Email" textKey="emailAddress"/>
+
+                    <BoxPane Form.label="IM">
+                        <TextInput textKey="imAccount.id"/>
+                        <ListButton selectedItemKey="imAccount.type"
+                            listData="['AIM', 'Jabber', 'Yahoo']"/>
+                    </BoxPane>
+                </Form.Section>
+            </Form>
+
+            <Separator/>
+
+            <BoxPane styles="{horizontalAlignment:'right'}">
+                <PushButton wtkx:id="loadJSONButton" buttonData="Load JSON"/>
+                <PushButton wtkx:id="loadJavaButton" buttonData="Load Java"/>
+                <PushButton wtkx:id="clearButton" buttonData="Clear"/>
+            </BoxPane>
+        </BoxPane>
+    </Border>
 </Window>

@@ -18,6 +18,7 @@ package org.apache.pivot.wtk;
 
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.content.ButtonDataRenderer;
+import org.apache.pivot.wtkx.DefaultProperty;
 
 
 /**
@@ -30,6 +31,7 @@ import org.apache.pivot.wtk.content.ButtonDataRenderer;
  * selection events for the selected item. Pressing the right half of the
  * button continues to fire button press events and display the menu.
  */
+@DefaultProperty("menu")
 public class MenuButton extends Button {
     private static class MenuButtonListenerList extends ListenerList<MenuButtonListener>
         implements MenuButtonListener {

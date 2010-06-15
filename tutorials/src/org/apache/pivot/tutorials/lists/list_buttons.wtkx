@@ -19,24 +19,21 @@ limitations under the License.
 <Window title="List Buttons" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <TablePane styles="{showHorizontalGridLines: true, showVerticalGridLines:true,
-            horizontalSpacing:1, verticalSpacing:1}">
-            <columns>
-                <TablePane.Column width="-1"/>
-                <TablePane.Column width="1*"/>
-            </columns>
-            <rows>
-                <TablePane.Row height="340">
-                    <BoxPane orientation="vertical" styles="{verticalAlignment:'top', padding: 4}">
-                        <Label text="Picture:"/>
-                        <ListButton wtkx:id="listButton"
-                            listData="['IMG_0725_2.jpg', 'IMG_0735_2.jpg', 'IMG_0767_2.jpg']"/>
-                    </BoxPane>
+    <TablePane styles="{showHorizontalGridLines: true, showVerticalGridLines:true,
+        horizontalSpacing:1, verticalSpacing:1}">
+        <columns>
+            <TablePane.Column width="-1"/>
+            <TablePane.Column width="1*"/>
+        </columns>
 
-                    <ImageView wtkx:id="imageView" styles="{backgroundColor:'#404040'}"/>
-                </TablePane.Row>
-            </rows>
-        </TablePane>
-    </content>
+        <TablePane.Row height="340">
+            <BoxPane orientation="vertical" styles="{verticalAlignment:'top', padding: 4}">
+                <Label text="Picture:"/>
+                <ListButton wtkx:id="listButton"
+                    listData="['IMG_0725_2.jpg', 'IMG_0735_2.jpg', 'IMG_0767_2.jpg']"/>
+            </BoxPane>
+
+            <ImageView wtkx:id="imageView" styles="{backgroundColor:'#404040'}"/>
+        </TablePane.Row>
+    </TablePane>
 </Window>

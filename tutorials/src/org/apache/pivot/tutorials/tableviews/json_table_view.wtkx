@@ -19,40 +19,34 @@ limitations under the License.
 <Window title="Table Views" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <Border>
-            <content>
-                <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
-                    <view>
-                        <TableView wtkx:id="tableView" tableData="@standings.json"
-                            styles="{includeTrailingVerticalGridLine:true}">
-                            <columns>
-                                <TableView.Column name="nation" width="180" headerData="Nation"/>
-                                <TableView.Column name="gold" width="60" headerData="Gold"/>
-                                <TableView.Column name="silver" width="60" headerData="Silver"/>
-                                <TableView.Column name="bronze" width="60" headerData="Bronze"/>
-                                <TableView.Column name="total" width="60" headerData="Total"/>
-                            </columns>
+    <Border>
+        <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
+            <TableView wtkx:id="tableView" tableData="@standings.json"
+                styles="{includeTrailingVerticalGridLine:true}">
+                <columns>
+                    <TableView.Column name="nation" width="180" headerData="Nation"/>
+                    <TableView.Column name="gold" width="60" headerData="Gold"/>
+                    <TableView.Column name="silver" width="60" headerData="Silver"/>
+                    <TableView.Column name="bronze" width="60" headerData="Bronze"/>
+                    <TableView.Column name="total" width="60" headerData="Total"/>
+                </columns>
 
-                            <tableViewSortListeners>
-                                <wtkx:script>
-                                <![CDATA[
-                                function sortChanged(tableView) {
-                                    var tableData = tableView.getTableData();
-                                    tableData.setComparator(new org.apache.pivot.wtk.content.TableViewRowComparator(tableView));
-                                }
-                                ]]>
-                                </wtkx:script>
-                            </tableViewSortListeners>
-                        </TableView>
-                    </view>
+                <tableViewSortListeners>
+                    <wtkx:script>
+                    <![CDATA[
+                    function sortChanged(tableView) {
+                        var tableData = tableView.getTableData();
+                        tableData.setComparator(new org.apache.pivot.wtk.content.TableViewRowComparator(tableView));
+                    }
+                    ]]>
+                    </wtkx:script>
+                </tableViewSortListeners>
+            </TableView>
 
-                    <columnHeader>
-                        <TableViewHeader tableView="$tableView" sortMode="single_column"
-                            styles="{includeTrailingVerticalGridLine:true}"/>
-                    </columnHeader>
-                </ScrollPane>
-            </content>
-        </Border>
-    </content>
+            <columnHeader>
+                <TableViewHeader tableView="$tableView" sortMode="single_column"
+                    styles="{includeTrailingVerticalGridLine:true}"/>
+            </columnHeader>
+        </ScrollPane>
+    </Border>
 </Window>

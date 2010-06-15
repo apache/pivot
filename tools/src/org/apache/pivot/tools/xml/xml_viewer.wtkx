@@ -21,109 +21,96 @@ limitations under the License.
     xmlns:tools.xml="org.apache.pivot.tools.xml"
     xmlns="org.apache.pivot.wtk">
     <wtkx:script src="xml_viewer.js"/>
-    <content>
-        <Border styles="{padding:4}">
-            <content>
-                <SplitPane splitRatio="0.6">
-                    <left>
-                        <Border styles="{color:10}">
-                            <content>
-                                <ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
-                                    verticalScrollBarPolicy="fill_to_capacity">
-                                    <view>
-                                        <TreeView wtkx:id="treeView" dropTarget="$treeViewDropTarget">
-                                            <nodeRenderer>
-                                                <tools.xml:NodeRenderer/>
-                                            </nodeRenderer>
-                                            <componentKeyListeners>
-                                                <wtkx:script>
-                                                <![CDATA[
-                                                importPackage(org.apache.pivot.wtk);
-                                                function keyPressed(component, keyCode, keyLocation) {
-                                                    if (keyCode == Keyboard.KeyCode.V
-                                                        && Keyboard.isPressed(Platform.getCommandModifier())) {
-                                                        application.paste();
-                                                    }
-                                                }
-                                                ]]>
-                                                </wtkx:script>
-                                            </componentKeyListeners>
-                                            <treeViewSelectionListeners>
-                                                <wtkx:script>
-                                                <![CDATA[
-                                                function selectedPathsChanged(treeView, previousSelectedPaths) {
-                                                    application.updateProperties();
-                                                }
-                                                ]]>
-                                                </wtkx:script>
-                                            </treeViewSelectionListeners>
-                                        </TreeView>
-                                    </view>
-                                </ScrollPane>
-                            </content>
-                        </Border>
-                    </left>
-                    <right>
-                        <CardPane wtkx:id="propertiesCardPane">
-                            <SplitPane orientation="vertical" splitRatio="0.2">
-                                <top>
-                                    <Border styles="{color:10}">
-                                        <content>
-                                            <ScrollPane horizontalScrollBarPolicy="fill"
-                                                verticalScrollBarPolicy="fill_to_capacity">
-                                                <view>
-                                                    <TableView wtkx:id="namespacesTableView" selectMode="none">
-                                                        <columns>
-                                                            <TableView.Column name="prefix" width="1*" headerData="Prefix"/>
-                                                            <TableView.Column name="uri" width="2*" headerData="URI"/>
-                                                        </columns>
-                                                    </TableView>
-                                                </view>
-                                                <columnHeader>
-                                                    <TableViewHeader tableView="$namespacesTableView"
-                                                        styles="{headersPressable:false}"/>
-                                                </columnHeader>
-                                            </ScrollPane>
-                                        </content>
-                                    </Border>
-                                </top>
-                                <bottom>
-                                    <Border styles="{color:10}">
-                                        <content>
-                                            <ScrollPane horizontalScrollBarPolicy="fill"
-                                                verticalScrollBarPolicy="fill_to_capacity">
-                                                <view>
-                                                    <TableView wtkx:id="attributesTableView" selectMode="none">
-                                                        <columns>
-                                                            <TableView.Column name="name" width="1*" headerData="Name"/>
-                                                            <TableView.Column name="value" width="1*" headerData="Value"/>
-                                                        </columns>
-                                                    </TableView>
-                                                </view>
-                                                <columnHeader>
-                                                    <TableViewHeader tableView="$attributesTableView"
-                                                        styles="{headersPressable:false}"/>
-                                                </columnHeader>
-                                            </ScrollPane>
-                                        </content>
-                                    </Border>
-                                </bottom>
-                            </SplitPane>
 
+    <Border styles="{padding:4}">
+        <SplitPane splitRatio="0.6">
+            <left>
+                <Border styles="{color:10}">
+                    <ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
+                        verticalScrollBarPolicy="fill_to_capacity">
+                        <TreeView wtkx:id="treeView" dropTarget="$treeViewDropTarget">
+                            <nodeRenderer>
+                                <tools.xml:NodeRenderer/>
+                            </nodeRenderer>
+
+                            <componentKeyListeners>
+                                <wtkx:script>
+                                <![CDATA[
+                                importPackage(org.apache.pivot.wtk);
+                                function keyPressed(component, keyCode, keyLocation) {
+                                    if (keyCode == Keyboard.KeyCode.V
+                                        && Keyboard.isPressed(Platform.getCommandModifier())) {
+                                        application.paste();
+                                    }
+                                }
+                                ]]>
+                                </wtkx:script>
+                            </componentKeyListeners>
+
+                            <treeViewSelectionListeners>
+                                <wtkx:script>
+                                <![CDATA[
+                                function selectedPathsChanged(treeView, previousSelectedPaths) {
+                                    application.updateProperties();
+                                }
+                                ]]>
+                                </wtkx:script>
+                            </treeViewSelectionListeners>
+                        </TreeView>
+                    </ScrollPane>
+                </Border>
+            </left>
+
+            <right>
+                <CardPane wtkx:id="propertiesCardPane">
+                    <SplitPane orientation="vertical" splitRatio="0.2">
+                        <top>
                             <Border styles="{color:10}">
-                                <content>
-                                    <ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
-                                        verticalScrollBarPolicy="fill_to_capacity">
-                                        <view>
-                                            <TextArea wtkx:id="textArea" editable="false" styles="{wrapText:false}"/>
-                                        </view>
-                                    </ScrollPane>
-                                </content>
+                                <ScrollPane horizontalScrollBarPolicy="fill"
+                                    verticalScrollBarPolicy="fill_to_capacity">
+                                    <TableView wtkx:id="namespacesTableView" selectMode="none">
+                                        <columns>
+                                            <TableView.Column name="prefix" width="1*" headerData="Prefix"/>
+                                            <TableView.Column name="uri" width="2*" headerData="URI"/>
+                                        </columns>
+                                    </TableView>
+
+                                    <columnHeader>
+                                        <TableViewHeader tableView="$namespacesTableView"
+                                            styles="{headersPressable:false}"/>
+                                    </columnHeader>
+                                </ScrollPane>
                             </Border>
-                        </CardPane>
-                    </right>
-                </SplitPane>
-            </content>
-        </Border>
-    </content>
+                        </top>
+
+                        <bottom>
+                            <Border styles="{color:10}">
+                                <ScrollPane horizontalScrollBarPolicy="fill"
+                                    verticalScrollBarPolicy="fill_to_capacity">
+                                    <TableView wtkx:id="attributesTableView" selectMode="none">
+                                        <columns>
+                                            <TableView.Column name="name" width="1*" headerData="Name"/>
+                                            <TableView.Column name="value" width="1*" headerData="Value"/>
+                                        </columns>
+                                    </TableView>
+
+                                    <columnHeader>
+                                        <TableViewHeader tableView="$attributesTableView"
+                                            styles="{headersPressable:false}"/>
+                                    </columnHeader>
+                                </ScrollPane>
+                            </Border>
+                        </bottom>
+                    </SplitPane>
+
+                    <Border styles="{color:10}">
+                        <ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
+                            verticalScrollBarPolicy="fill_to_capacity">
+                            <TextArea wtkx:id="textArea" editable="false" styles="{wrapText:false}"/>
+                        </ScrollPane>
+                    </Border>
+                </CardPane>
+            </right>
+        </SplitPane>
+    </Border>
 </Window>

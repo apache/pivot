@@ -24,14 +24,17 @@ import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.content.MenuItemDataRenderer;
+import org.apache.pivot.wtkx.DefaultProperty;
 
 /**
  * Component that presents a cascading menu.
  */
+@DefaultProperty("sections")
 public class Menu extends Container {
     /**
      * Component representing a menu item.
      */
+    @DefaultProperty("menu")
     public static class Item extends Button {
         private static class ItemListenerList extends ListenerList<ItemListener>
             implements ItemListener {

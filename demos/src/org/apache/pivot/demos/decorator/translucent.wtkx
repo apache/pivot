@@ -19,15 +19,11 @@ limitations under the License.
 <Frame title="Translucent Window" x="80" y="80"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <BoxPane orientation="vertical" styles="{fill:true}">
-            <Label text="A Translucent Window"/>
-            <Border styles="{color:13}">
-                <content>
-                    <ListView listData="['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5']"/>
-                </content>
-            </Border>
-        </BoxPane>
-    </content>
+    <BoxPane orientation="vertical" styles="{fill:true}">
+        <Label text="A Translucent Window"/>
+        <Border styles="{color:13}">
+            <ListView listData="['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5']"/>
+        </Border>
+    </BoxPane>
 </Frame>
 

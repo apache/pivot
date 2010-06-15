@@ -19,98 +19,96 @@ limitations under the License.
 <Drawing background="#ffffff"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk.media">
-    <canvas>
-        <Canvas xmlns="org.apache.pivot.wtk.media.drawing">
-            <Rectangle width="256" height="256"/>
-            <Group>
+    <Canvas xmlns="org.apache.pivot.wtk.media.drawing">
+        <Rectangle width="256" height="256"/>
+        <Group>
+            <transforms>
+                <Shape.Translate x="128" y="128"/>
+            </transforms>
+
+            <Rectangle x="0" y="-4" width="64" height="8" fill="0xaaaaaadd" stroke="">
                 <transforms>
-                    <Shape.Translate x="128" y="128"/>
+                    <Shape.Rotate angle="0"/>
+                    <Shape.Translate x="64"/>
                 </transforms>
+            </Rectangle>
 
-                <Rectangle x="0" y="-4" width="64" height="8" fill="0xaaaaaadd" stroke="">
-                    <transforms>
-                        <Shape.Rotate angle="0"/>
-                        <Shape.Translate x="64"/>
-                    </transforms>
-                </Rectangle>
+            <Rectangle x="0" y="-4" width="64" height="8" fill="0xaaaaaacc" stroke="">
+                <transforms>
+                    <Shape.Rotate angle="30"/>
+                    <Shape.Translate x="64"/>
+                </transforms>
+            </Rectangle>
 
-                <Rectangle x="0" y="-4" width="64" height="8" fill="0xaaaaaacc" stroke="">
-                    <transforms>
-                        <Shape.Rotate angle="30"/>
-                        <Shape.Translate x="64"/>
-                    </transforms>
-                </Rectangle>
+            <Rectangle x="0" y="-4" width="64" height="8" fill="0xaaaaaabb" stroke="">
+                <transforms>
+                    <Shape.Rotate angle="60"/>
+                    <Shape.Translate x="64"/>
+                </transforms>
+            </Rectangle>
 
-                <Rectangle x="0" y="-4" width="64" height="8" fill="0xaaaaaabb" stroke="">
-                    <transforms>
-                        <Shape.Rotate angle="60"/>
-                        <Shape.Translate x="64"/>
-                    </transforms>
-                </Rectangle>
+            <Rectangle x="0" y="-4" width="64" height="8" fill="0xaaaaaaaa" stroke="">
+                <transforms>
+                    <Shape.Rotate angle="90"/>
+                    <Shape.Translate x="64"/>
+                </transforms>
+            </Rectangle>
 
-                <Rectangle x="0" y="-4" width="64" height="8" fill="0xaaaaaaaa" stroke="">
-                    <transforms>
-                        <Shape.Rotate angle="90"/>
-                        <Shape.Translate x="64"/>
-                    </transforms>
-                </Rectangle>
+            <Rectangle x="0" y="-4" width="64" height="8" fill="0xaaaaaa99" stroke="">
+                <transforms>
+                    <Shape.Rotate angle="120"/>
+                    <Shape.Translate x="64"/>
+                </transforms>
+            </Rectangle>
 
-                <Rectangle x="0" y="-4" width="64" height="8" fill="0xaaaaaa99" stroke="">
-                    <transforms>
-                        <Shape.Rotate angle="120"/>
-                        <Shape.Translate x="64"/>
-                    </transforms>
-                </Rectangle>
+            <Rectangle x="0" y="-4" width="64" height="8" fill="0xaaaaaa88" stroke="">
+                <transforms>
+                    <Shape.Rotate angle="150"/>
+                    <Shape.Translate x="64"/>
+                </transforms>
+            </Rectangle>
 
-                <Rectangle x="0" y="-4" width="64" height="8" fill="0xaaaaaa88" stroke="">
-                    <transforms>
-                        <Shape.Rotate angle="150"/>
-                        <Shape.Translate x="64"/>
-                    </transforms>
-                </Rectangle>
+            <Rectangle x="0" y="-4" width="64" height="8" fill="0xaaaaaa77" stroke="">
+                <transforms>
+                    <Shape.Rotate angle="180"/>
+                    <Shape.Translate x="64"/>
+                </transforms>
+            </Rectangle>
 
-                <Rectangle x="0" y="-4" width="64" height="8" fill="0xaaaaaa77" stroke="">
-                    <transforms>
-                        <Shape.Rotate angle="180"/>
-                        <Shape.Translate x="64"/>
-                    </transforms>
-                </Rectangle>
+            <Rectangle x="0" y="-4" width="64" height="8" fill="0xaaaaaa66" stroke="">
+                <transforms>
+                    <Shape.Rotate angle="210"/>
+                    <Shape.Translate x="64"/>
+                </transforms>
+            </Rectangle>
 
-                <Rectangle x="0" y="-4" width="64" height="8" fill="0xaaaaaa66" stroke="">
-                    <transforms>
-                        <Shape.Rotate angle="210"/>
-                        <Shape.Translate x="64"/>
-                    </transforms>
-                </Rectangle>
+            <Rectangle x="0" y="-4" width="64" height="8" fill="0xaaaaaa55" stroke="">
+                <transforms>
+                    <Shape.Rotate angle="240"/>
+                    <Shape.Translate x="64"/>
+                </transforms>
+            </Rectangle>
 
-                <Rectangle x="0" y="-4" width="64" height="8" fill="0xaaaaaa55" stroke="">
-                    <transforms>
-                        <Shape.Rotate angle="240"/>
-                        <Shape.Translate x="64"/>
-                    </transforms>
-                </Rectangle>
+            <Rectangle x="0" y="-4" width="64" height="8" fill="0xaaaaaa44" stroke="">
+                <transforms>
+                    <Shape.Rotate angle="270"/>
+                    <Shape.Translate x="64"/>
+                </transforms>
+            </Rectangle>
 
-                <Rectangle x="0" y="-4" width="64" height="8" fill="0xaaaaaa44" stroke="">
-                    <transforms>
-                        <Shape.Rotate angle="270"/>
-                        <Shape.Translate x="64"/>
-                    </transforms>
-                </Rectangle>
+            <Rectangle x="0" y="-4" width="64" height="8" fill="0xaaaaaa33" stroke="">
+                <transforms>
+                    <Shape.Rotate angle="300"/>
+                    <Shape.Translate x="64"/>
+                </transforms>
+            </Rectangle>
 
-                <Rectangle x="0" y="-4" width="64" height="8" fill="0xaaaaaa33" stroke="">
-                    <transforms>
-                        <Shape.Rotate angle="300"/>
-                        <Shape.Translate x="64"/>
-                    </transforms>
-                </Rectangle>
-
-                <Rectangle x="0" y="-4" width="64" height="8" fill="0xaaaaaa22" stroke="">
-                    <transforms>
-                        <Shape.Rotate angle="330"/>
-                        <Shape.Translate x="64"/>
-                    </transforms>
-                </Rectangle>
-            </Group>
-        </Canvas>
-    </canvas>
+            <Rectangle x="0" y="-4" width="64" height="8" fill="0xaaaaaa22" stroke="">
+                <transforms>
+                    <Shape.Rotate angle="330"/>
+                    <Shape.Translate x="64"/>
+                </transforms>
+            </Rectangle>
+        </Group>
+    </Canvas>
 </Drawing>

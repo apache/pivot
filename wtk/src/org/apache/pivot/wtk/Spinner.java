@@ -27,10 +27,12 @@ import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.content.SpinnerItemRenderer;
+import org.apache.pivot.wtkx.DefaultProperty;
 
 /**
  * Component that presents a means of cycling through a list of items.
  */
+@DefaultProperty("spinnerData")
 public class Spinner extends Container {
     /**
      * Spinner renderer interface.

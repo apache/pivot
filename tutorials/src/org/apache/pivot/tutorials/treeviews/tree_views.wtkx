@@ -19,19 +19,11 @@ limitations under the License.
 <Window title="Tree Views" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <Border>
-            <content>
-                <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
-                    <view>
-                        <TreeView>
-                            <treeData>
-                                <wtkx:include src="tree_data.wtkx"/>
-                            </treeData>
-                        </TreeView>
-                    </view>
-                </ScrollPane>
-            </content>
-        </Border>
-    </content>
+    <Border>
+        <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
+            <TreeView>
+                <wtkx:include src="tree_data.wtkx"/>
+            </TreeView>
+        </ScrollPane>
+    </Border>
 </Window>

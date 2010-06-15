@@ -20,23 +20,18 @@ limitations under the License.
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:webqueries="org.apache.pivot.tutorials.webqueries"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <Border styles="{color:10}">
-            <content>
-                <StackPane>
-                    <ScrollPane horizontalScrollBarPolicy="fill">
-                        <view>
-                            <ListView wtkx:id="listView">
-                                <itemRenderer>
-                                    <webqueries:ResultItemRenderer/>
-                                </itemRenderer>
-                            </ListView>
-                        </view>
-                    </ScrollPane>
-                    <Label wtkx:id="loadingLabel" text="Loading..."
-                        styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
-                </StackPane>
-            </content>
-        </Border>
-    </content>
+    <Border styles="{color:10}">
+        <StackPane>
+            <ScrollPane horizontalScrollBarPolicy="fill">
+                <ListView wtkx:id="listView">
+                    <itemRenderer>
+                        <webqueries:ResultItemRenderer/>
+                    </itemRenderer>
+                </ListView>
+            </ScrollPane>
+
+            <Label wtkx:id="loadingLabel" text="Loading..."
+                styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
+        </StackPane>
+    </Border>
 </Window>

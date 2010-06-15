@@ -20,29 +20,26 @@ limitations under the License.
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
     <Border styles="{padding:2}">
-        <content>
-            <TablePane styles="{backgroundColor:'#404040'}">
-                <columns>
-                    <TablePane.Column width="1*" />
-                </columns>
-                <rows>
-                    <TablePane.Row height="-1">
-                        <wtkx:include wtkx:id="menuBar" src="menu_bar.wtkx"/>
-                    </TablePane.Row>
-                    <TablePane.Row height="-1">
-                        <Separator styles="{padding:0}" />
-                    </TablePane.Row>
-                    <TablePane.Row height="1*">
-                        <ImageView wtkx:id="menuImageView"
-                            preferredWidth="480" preferredHeight="360"/>
-                    </TablePane.Row>
-                    <TablePane.Row height="-1">
-                        <Label wtkx:id="label" text="Right-click to see options"
-                            styles="{color:'#ffffff', horizontalAlignment:'center', verticalAlignment:'center', padding:4}" />
-                    </TablePane.Row>
-                </rows>
-            </TablePane>
-        </content>
+        <TablePane styles="{backgroundColor:'#404040'}">
+            <columns>
+                <TablePane.Column width="1*" />
+            </columns>
+
+            <TablePane.Row height="-1">
+                <wtkx:include wtkx:id="menuBar" src="menu_bar.wtkx"/>
+            </TablePane.Row>
+            <TablePane.Row height="-1">
+                <Separator styles="{padding:0}" />
+            </TablePane.Row>
+            <TablePane.Row height="1*">
+                <ImageView wtkx:id="menuImageView"
+                    preferredWidth="480" preferredHeight="360"/>
+            </TablePane.Row>
+            <TablePane.Row height="-1">
+                <Label wtkx:id="label" text="Right-click to see options"
+                    styles="{color:'#ffffff', horizontalAlignment:'center', verticalAlignment:'center', padding:4}" />
+            </TablePane.Row>
+        </TablePane>
     </Border>
 
     <wtkx:include src="menu_buttons.wtkx"/>

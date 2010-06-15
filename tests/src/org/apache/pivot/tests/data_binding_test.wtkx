@@ -28,37 +28,36 @@ limitations under the License.
             <HashMap id="4" text="D"/>
         </ArrayList>
     </wtkx:define>
-    <content>
-        <BoxPane orientation="vertical">
-            <ListView listData="$list" selectedItemKey="id1">
-                <itemRenderer>
-                    <tests:DataBindingTest.TestListViewItemRenderer/>
-                </itemRenderer>
-                <selectedItemBindMapping>
-                    <tests:DataBindingTest.TestBindMapping/>
-                </selectedItemBindMapping>
-            </ListView>
 
-            <ListButton listData="$list" selectedItemKey="id2">
-                <dataRenderer>
-                    <tests:DataBindingTest.TestListButtonDataRenderer/>
-                </dataRenderer>
-                <itemRenderer>
-                    <tests:DataBindingTest.TestListViewItemRenderer/>
-                </itemRenderer>
-                <selectedItemBindMapping>
-                    <tests:DataBindingTest.TestBindMapping/>
-                </selectedItemBindMapping>
-            </ListButton>
+    <BoxPane orientation="vertical">
+        <ListView listData="$list" selectedItemKey="id1">
+            <itemRenderer>
+                <tests:DataBindingTest.TestListViewItemRenderer/>
+            </itemRenderer>
+            <selectedItemBindMapping>
+                <tests:DataBindingTest.TestBindMapping/>
+            </selectedItemBindMapping>
+        </ListView>
 
-            <Spinner spinnerData="$list" selectedItemKey="id3">
-                <itemRenderer>
-                    <tests:DataBindingTest.TestSpinnerItemRenderer/>
-                </itemRenderer>
-                <selectedItemBindMapping>
-                    <tests:DataBindingTest.TestBindMapping/>
-                </selectedItemBindMapping>
-            </Spinner>
-        </BoxPane>
-    </content>
+        <ListButton listData="$list" selectedItemKey="id2">
+            <dataRenderer>
+                <tests:DataBindingTest.TestListButtonDataRenderer/>
+            </dataRenderer>
+            <itemRenderer>
+                <tests:DataBindingTest.TestListViewItemRenderer/>
+            </itemRenderer>
+            <selectedItemBindMapping>
+                <tests:DataBindingTest.TestBindMapping/>
+            </selectedItemBindMapping>
+        </ListButton>
+
+        <Spinner spinnerData="$list" selectedItemKey="id3">
+            <itemRenderer>
+                <tests:DataBindingTest.TestSpinnerItemRenderer/>
+            </itemRenderer>
+            <selectedItemBindMapping>
+                <tests:DataBindingTest.TestBindMapping/>
+            </selectedItemBindMapping>
+        </Spinner>
+    </BoxPane>
 </Window>

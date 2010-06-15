@@ -25,34 +25,27 @@ limitations under the License.
             <columns>
                 <TablePane.Column width="1*"/>
             </columns>
-            <rows>
-                <TablePane.Row height="1*">
-                    <Border>
-                        <content>
-                            <ScrollPane wtkx:id="textAreaScrollPane" horizontalScrollBarPolicy="fill_to_capacity"
-                                verticalScrollBarPolicy="fill_to_capacity">
-                                <view>
-                                    <TextArea wtkx:id="textArea" styles="{margin:10, wrapText:false}">
-                                       <document>
-                                           <wtkx:include src="document.wtkx"/>
-                                       </document>
-                                    </TextArea>
-                                </view>
-                            </ScrollPane>
-                        </content>
-                    </Border>
-                </TablePane.Row>
-                <TablePane.Row height="-1">
-                    <BoxPane>
-                        <Label>
-                            <text><![CDATA[Selection:]]></text>
-                        </Label>
-                        <Label wtkx:id="selectionStartLabel"/>
-                        <Label text=":"/>
-                        <Label wtkx:id="selectionLengthLabel"/>
-                    </BoxPane>
-                </TablePane.Row>
-            </rows>
+
+            <TablePane.Row height="1*">
+                <Border>
+                    <ScrollPane wtkx:id="textAreaScrollPane" horizontalScrollBarPolicy="fill_to_capacity"
+                        verticalScrollBarPolicy="fill_to_capacity">
+                        <TextArea wtkx:id="textArea" styles="{margin:10, wrapText:false}">
+                           <wtkx:include src="document.wtkx"/>
+                        </TextArea>
+                    </ScrollPane>
+                </Border>
+            </TablePane.Row>
+            <TablePane.Row height="-1">
+                <BoxPane>
+                    <Label>
+                        <text><![CDATA[Selection:]]></text>
+                    </Label>
+                    <Label wtkx:id="selectionStartLabel"/>
+                    <Label text=":"/>
+                    <Label wtkx:id="selectionLengthLabel"/>
+                </BoxPane>
+            </TablePane.Row>
         </TablePane>
     </left>
 
@@ -61,56 +54,49 @@ limitations under the License.
             <columns>
                 <TablePane.Column width="1*"/>
             </columns>
-            <rows>
-                <TablePane.Row height="1*">
-                    <Border>
-                        <content>
-                            <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
-                                <view>
-                                    <TreeView wtkx:id="treeView">
-                                        <nodeRenderer>
-                                            <test:NodeAdapterRenderer/>
-                                        </nodeRenderer>
-                                    </TreeView>
-                                </view>
-                            </ScrollPane>
-                        </content>
-                    </Border>
-                </TablePane.Row>
-                <TablePane.Row height="-1">
-                    <Checkbox buttonData="Wrap Text">
-                        <buttonStateListeners>
-                            <wtkx:script>
-                                <![CDATA[
-                                importClass(org.apache.pivot.wtk.ScrollPane);
-                                function stateChanged(button, previousState) {
-                                    textArea.getStyles().put("wrapText", button.isSelected());
 
-                                    var horizontalScrollBarPolicy;
-                                    if (button.isSelected()) {
-                                        horizontalScrollBarPolicy = ScrollPane.ScrollBarPolicy.FILL;
-                                    } else {
-                                        horizontalScrollBarPolicy = ScrollPane.ScrollBarPolicy.FILL_TO_CAPACITY;
-                                    }
+            <TablePane.Row height="1*">
+                <Border>
+                    <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
+                        <TreeView wtkx:id="treeView">
+                            <nodeRenderer>
+                                <test:NodeAdapterRenderer/>
+                            </nodeRenderer>
+                        </TreeView>
+                    </ScrollPane>
+                </Border>
+            </TablePane.Row>
+            <TablePane.Row height="-1">
+                <Checkbox buttonData="Wrap Text">
+                    <buttonStateListeners>
+                        <wtkx:script>
+                        <![CDATA[
+                        importClass(org.apache.pivot.wtk.ScrollPane);
+                        function stateChanged(button, previousState) {
+                            textArea.getStyles().put("wrapText", button.isSelected());
 
-                                    textAreaScrollPane.setHorizontalScrollBarPolicy(horizontalScrollBarPolicy);
-                                }
-                                ]]>
-                            </wtkx:script>
-                        </buttonStateListeners>
-                    </Checkbox>
-                </TablePane.Row>
-                <TablePane.Row height="-1">
-                    <Form styles="{verticalSpacing:2}">
-                        <sections>
-                            <Form.Section>
-                                <Label wtkx:id="offsetLabel" Form.label="Offset"/>
-                                <Label wtkx:id="charactersLabel" Form.label="Characters"/>
-                            </Form.Section>
-                        </sections>
-                    </Form>
-                </TablePane.Row>
-            </rows>
+                            var horizontalScrollBarPolicy;
+                            if (button.isSelected()) {
+                                horizontalScrollBarPolicy = ScrollPane.ScrollBarPolicy.FILL;
+                            } else {
+                                horizontalScrollBarPolicy = ScrollPane.ScrollBarPolicy.FILL_TO_CAPACITY;
+                            }
+
+                            textAreaScrollPane.setHorizontalScrollBarPolicy(horizontalScrollBarPolicy);
+                        }
+                        ]]>
+                        </wtkx:script>
+                    </buttonStateListeners>
+                </Checkbox>
+            </TablePane.Row>
+            <TablePane.Row height="-1">
+                <Form styles="{verticalSpacing:2}">
+                    <Form.Section>
+                        <Label wtkx:id="offsetLabel" Form.label="Offset"/>
+                        <Label wtkx:id="charactersLabel" Form.label="Characters"/>
+                    </Form.Section>
+                </Form>
+            </TablePane.Row>
         </TablePane>
     </right>
 </SplitPane>

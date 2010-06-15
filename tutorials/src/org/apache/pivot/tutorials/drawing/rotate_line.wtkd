@@ -18,15 +18,13 @@ limitations under the License.
 
 <Drawing xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk.media">
-    <canvas>
-        <Canvas xmlns="org.apache.pivot.wtk.media.drawing">
-            <Ellipse width="320" height="320" stroke="" fill="#eeeeee"/>
-            <Line x1="0" y1="0" x2="0" y2="-160" strokeThickness="4">
-                <transforms>
-                    <Shape.Translate x="160" y="160"/>
-                    <Shape.Rotate wtkx:id="rotation"/>
-                </transforms>
-            </Line>
-        </Canvas>
-    </canvas>
+    <Canvas xmlns="org.apache.pivot.wtk.media.drawing">
+        <Ellipse width="320" height="320" stroke="" fill="#eeeeee"/>
+        <Line x1="0" y1="0" x2="0" y2="-160" strokeThickness="4">
+            <transforms>
+                <Shape.Translate x="160" y="160"/>
+                <Shape.Rotate wtkx:id="rotation"/>
+            </transforms>
+        </Line>
+    </Canvas>
 </Drawing>

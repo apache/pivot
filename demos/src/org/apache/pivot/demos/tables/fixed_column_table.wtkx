@@ -18,61 +18,57 @@ limitations under the License.
 
 <Window title="Fixed Column Table Demo" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
-    xmlns:collections="org.apache.pivot.collections"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <Border styles="{color:7}">
-            <content>
-                <ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
-                    verticalScrollBarPolicy="fill_to_capacity">
-                    <view>
-                        <TableView wtkx:id="primaryTableView" selectMode="multi"
-                            styles="{selectionColor:'#ffffff', inactiveSelectionColor:'#ffffff',
-                                selectionBackgroundColor:'#144f8b', inactiveSelectionBackgroundColor:'#144f8b',
-                                alternateRowBackgroundColor:null, showHighlight:false,
-                                includeTrailingHorizontalGridLine:true,
-                                includeTrailingVerticalGridLine:true}">
-                            <columns>
-                                <TableView.Column name="colA" headerData="Column A"/>
-                                <TableView.Column name="colB" headerData="Column B"/>
-                                <TableView.Column name="colC" headerData="Column C"/>
-                            </columns>
-                            <tableData>
-                                <collections:ArrayList wtkx:id="tableData">
-                                    <collections:HashMap name="User 1" colA="1.A" colB="1.B" colC="1.C" />
-                                    <collections:HashMap name="User 2" colA="2.A" colB="2.B" colC="2.C" />
-                                    <collections:HashMap name="User 3" colA="3.A" colB="3.B" colC="3.C" />
-                                    <collections:HashMap name="User 4" colA="4.A" colB="4.B" colC="4.C" />
-                                    <collections:HashMap name="User 5" colA="5.A" colB="5.B" colC="5.C" />
-                                    <collections:HashMap name="User 6" colA="6.A" colB="6.B" colC="6.C" />
-                                    <collections:HashMap name="User 7" colA="7.A" colB="7.B" colC="7.C" />
-                                    <collections:HashMap name="User 8" colA="8.A" colB="8.B" colC="8.C" />
-                                </collections:ArrayList>
-                            </tableData>
-                        </TableView>
-                    </view>
-                    <columnHeader>
-                        <TableViewHeader tableView="$primaryTableView" sortMode="single_column"
-                            styles="{includeTrailingVerticalGridLine:true}"/>
-                    </columnHeader>
-                    <rowHeader>
-                        <TableView wtkx:id="fixedTableView" tableData="$tableData" selectMode="multi"
-                            styles="{selectionColor:'#ffffff', inactiveSelectionColor:'#ffffff',
-                                selectionBackgroundColor:'#144f8b', inactiveSelectionBackgroundColor:'#144f8b',
-                                alternateRowBackgroundColor:null, showHighlight:false,
-                                includeTrailingVerticalGridLine:true,
-                                includeTrailingHorizontalGridLine:true}">
-                            <columns>
-                                <TableView.Column name="name" headerData="Name"/>
-                            </columns>
-                        </TableView>
-                    </rowHeader>
-                    <corner>
-                        <TableViewHeader tableView="$fixedTableView" sortMode="single_column"
-                            styles="{includeTrailingVerticalGridLine:true}"/>
-                    </corner>
-                </ScrollPane>
-            </content>
-        </Border>
-    </content>
+    <wtkx:define xmlns="org.apache.pivot.collections">
+        <ArrayList wtkx:id="tableData">
+            <HashMap name="User 1" colA="1.A" colB="1.B" colC="1.C" />
+            <HashMap name="User 2" colA="2.A" colB="2.B" colC="2.C" />
+            <HashMap name="User 3" colA="3.A" colB="3.B" colC="3.C" />
+            <HashMap name="User 4" colA="4.A" colB="4.B" colC="4.C" />
+            <HashMap name="User 5" colA="5.A" colB="5.B" colC="5.C" />
+            <HashMap name="User 6" colA="6.A" colB="6.B" colC="6.C" />
+            <HashMap name="User 7" colA="7.A" colB="7.B" colC="7.C" />
+            <HashMap name="User 8" colA="8.A" colB="8.B" colC="8.C" />
+        </ArrayList>
+    </wtkx:define>
+
+    <Border styles="{color:7}">
+        <ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
+            verticalScrollBarPolicy="fill_to_capacity">
+            <TableView wtkx:id="primaryTableView" tableData="$tableData" selectMode="multi"
+                styles="{selectionColor:'#ffffff', inactiveSelectionColor:'#ffffff',
+                    selectionBackgroundColor:'#144f8b', inactiveSelectionBackgroundColor:'#144f8b',
+                    alternateRowBackgroundColor:null, showHighlight:false,
+                    includeTrailingHorizontalGridLine:true,
+                    includeTrailingVerticalGridLine:true}">
+                <columns>
+                    <TableView.Column name="colA" headerData="Column A"/>
+                    <TableView.Column name="colB" headerData="Column B"/>
+                    <TableView.Column name="colC" headerData="Column C"/>
+                </columns>
+            </TableView>
+
+            <columnHeader>
+                <TableViewHeader tableView="$primaryTableView" sortMode="single_column"
+                    styles="{includeTrailingVerticalGridLine:true}"/>
+            </columnHeader>
+
+            <rowHeader>
+                <TableView wtkx:id="fixedTableView" tableData="$tableData" selectMode="multi"
+                    styles="{selectionColor:'#ffffff', inactiveSelectionColor:'#ffffff',
+                        selectionBackgroundColor:'#144f8b', inactiveSelectionBackgroundColor:'#144f8b',
+                        alternateRowBackgroundColor:null, showHighlight:false,
+                        includeTrailingVerticalGridLine:true,
+                        includeTrailingHorizontalGridLine:true}">
+                    <columns>
+                        <TableView.Column name="name" headerData="Name"/>
+                    </columns>
+                </TableView>
+            </rowHeader>
+            <corner>
+                <TableViewHeader tableView="$fixedTableView" sortMode="single_column"
+                    styles="{includeTrailingVerticalGridLine:true}"/>
+            </corner>
+        </ScrollPane>
+    </Border>
 </Window>

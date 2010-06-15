@@ -25,19 +25,13 @@ limitations under the License.
     </wtkx:define>
 
     <RadioButton buttonGroup="$icons" selected="true">
-        <buttonData>
-            <content:ButtonData text="Bell" icon="@bell.png"/>
-        </buttonData>
+        <content:ButtonData text="Bell" icon="@bell.png"/>
     </RadioButton>
     <RadioButton buttonGroup="$icons" selected="true">
-        <buttonData>
-            <content:ButtonData text="Clock" icon="@clock.png"/>
-        </buttonData>
+        <content:ButtonData text="Clock" icon="@clock.png"/>
     </RadioButton>
     <RadioButton buttonGroup="$icons" selected="true">
-        <buttonData>
-            <content:ButtonData text="House" icon="@house.png"/>
-        </buttonData>
+        <content:ButtonData text="House" icon="@house.png"/>
     </RadioButton>
 </BoxPane>
 

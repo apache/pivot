@@ -19,11 +19,7 @@ limitations under the License.
 <Window title="List Selection Test" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <ScrollPane horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fill_to_capacity">
-            <view>
-                <ListView listData="[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]" selectMode="multi"/>
-            </view>
-        </ScrollPane>
-    </content>
+    <ScrollPane horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fill_to_capacity">
+        <ListView listData="[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]" selectMode="multi"/>
+    </ScrollPane>
 </Window>

@@ -19,51 +19,46 @@ limitations under the License.
 <Window title="Box Panes" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <TablePane>
-            <columns>
-                <TablePane.Column width="300"/>
-                <TablePane.Column width="-1"/>
-            </columns>
+    <TablePane>
+        <columns>
+            <TablePane.Column width="300"/>
+            <TablePane.Column width="-1"/>
+        </columns>
 
-            <rows>
-                <TablePane.Row height="-1">
-                    <Border styles="{padding:6, color:'#999999'}">
-                        <content>
-                            <BoxPane wtkx:id="boxPane">
-                                <PushButton buttonData="One"/>
-                                <PushButton buttonData="Two"/>
-                                <PushButton buttonData="Three"/>
-                            </BoxPane>
-                        </content>
-                    </Border>
-                    <BoxPane orientation="vertical" styles="{padding:6, spacing:8, fill:true}">
-                        <wtkx:define>
-                            <ButtonGroup wtkx:id="orientation"/>
-                            <ButtonGroup wtkx:id="horizontalAlignment"/>
-                            <ButtonGroup wtkx:id="verticalAlignment"/>
-                        </wtkx:define>
+        <TablePane.Row height="-1">
+            <Border styles="{padding:6, color:'#999999'}">
+                <BoxPane wtkx:id="boxPane">
+                    <PushButton buttonData="One"/>
+                    <PushButton buttonData="Two"/>
+                    <PushButton buttonData="Three"/>
+                </BoxPane>
+            </Border>
 
-                        <Label text="Orientation" styles="{font:{bold:true}}"/>
-                        <RadioButton wtkx:id="horizontalOrientationButton" buttonData="Horizontal" buttonGroup="$orientation" selected="true"/>
-                        <RadioButton wtkx:id="verticalOrientationButton" buttonData="Vertical" buttonGroup="$orientation"/>
+            <BoxPane orientation="vertical" styles="{padding:6, spacing:8, fill:true}">
+                <wtkx:define>
+                    <ButtonGroup wtkx:id="orientation"/>
+                    <ButtonGroup wtkx:id="horizontalAlignment"/>
+                    <ButtonGroup wtkx:id="verticalAlignment"/>
+                </wtkx:define>
 
-                        <Label text="Horizontal Alignment" styles="{font:{bold:true}}"/>
-                        <RadioButton wtkx:id="horizontalAlignmentLeftButton" buttonData="Left" buttonGroup="$horizontalAlignment" selected="true"/>
-                        <RadioButton wtkx:id="horizontalAlignmentRightButton" buttonData="Right" buttonGroup="$horizontalAlignment"/>
-                        <RadioButton wtkx:id="horizontalAlignmentCenterButton" buttonData="Center" buttonGroup="$horizontalAlignment"/>
+                <Label text="Orientation" styles="{font:{bold:true}}"/>
+                <RadioButton wtkx:id="horizontalOrientationButton" buttonData="Horizontal" buttonGroup="$orientation" selected="true"/>
+                <RadioButton wtkx:id="verticalOrientationButton" buttonData="Vertical" buttonGroup="$orientation"/>
 
-                        <Label text="Vertical Alignment" styles="{font:{bold:true}}"/>
-                        <RadioButton wtkx:id="verticalAlignmentTopButton" buttonData="Top" buttonGroup="$verticalAlignment" selected="true"/>
-                        <RadioButton wtkx:id="verticalAlignmentBottomButton" buttonData="Bottom" buttonGroup="$verticalAlignment"/>
-                        <RadioButton wtkx:id="verticalAlignmentCenterButton" buttonData="Center" buttonGroup="$verticalAlignment"/>
+                <Label text="Horizontal Alignment" styles="{font:{bold:true}}"/>
+                <RadioButton wtkx:id="horizontalAlignmentLeftButton" buttonData="Left" buttonGroup="$horizontalAlignment" selected="true"/>
+                <RadioButton wtkx:id="horizontalAlignmentRightButton" buttonData="Right" buttonGroup="$horizontalAlignment"/>
+                <RadioButton wtkx:id="horizontalAlignmentCenterButton" buttonData="Center" buttonGroup="$horizontalAlignment"/>
 
-                        <BoxPane styles="{padding:{top:8}}">
-                            <Checkbox wtkx:id="fillCheckbox" buttonData="Fill"/>
-                        </BoxPane>
-                    </BoxPane>
-                </TablePane.Row>
-            </rows>
-        </TablePane>
-    </content>
+                <Label text="Vertical Alignment" styles="{font:{bold:true}}"/>
+                <RadioButton wtkx:id="verticalAlignmentTopButton" buttonData="Top" buttonGroup="$verticalAlignment" selected="true"/>
+                <RadioButton wtkx:id="verticalAlignmentBottomButton" buttonData="Bottom" buttonGroup="$verticalAlignment"/>
+                <RadioButton wtkx:id="verticalAlignmentCenterButton" buttonData="Center" buttonGroup="$verticalAlignment"/>
+
+                <BoxPane styles="{padding:{top:8}}">
+                    <Checkbox wtkx:id="fillCheckbox" buttonData="Fill"/>
+                </BoxPane>
+            </BoxPane>
+        </TablePane.Row>
+    </TablePane>
 </Window>

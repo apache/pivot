@@ -22,54 +22,41 @@ limitations under the License.
     xmlns="org.apache.pivot.wtk">
     <wtkx:script src="color_choosers.js"/>
 
-    <content>
-        <Border>
-            <content>
-                <BoxPane styles="{padding:4, spacing:12}">
-                    <Border styles="{color:10}">
-                        <content>
-                            <ColorChooser wtkx:id="colorChooser"
-                                ColorChooserSelectionListener.selectedColorChanged="onColorChange()">
-                            </ColorChooser>
-                        </content>
+    <Border>
+        <BoxPane styles="{padding:4, spacing:12}">
+            <Border styles="{color:10}">
+                <ColorChooser wtkx:id="colorChooser"
+                    ColorChooserSelectionListener.selectedColorChanged="onColorChange()"/>
+            </Border>
+            <Form>
+                <Form.Section>
+                    <Border Form.label="Selected Color" styles="{padding:1}">
+                        <Border wtkx:id="sampleBorder" preferredWidth="100"
+                            preferredHeight="14" styles="{thickness:0}">
+                            <Label/>
+                        </Border>
                     </Border>
-                    <Form>
-                        <sections>
-                            <Form.Section>
-                                <Border Form.label="Selected Color" styles="{padding:1}">
-                                    <content>
-                                        <Border wtkx:id="sampleBorder" preferredWidth="100"
-                                            preferredHeight="14" styles="{thickness:0}">
-                                            <content>
-                                                <Label/>
-                                            </content>
-                                        </Border>
-                                    </content>
-                                </Border>
-                                <TextInput wtkx:id="hexInput" Form.label="HTML Notation"
-                                    textSize="6"
-                                    ComponentStateListener.focusedChanged="onInputFocusChange()">
-                                    <componentKeyListeners>
-                                        <wtkx:script>
-                                            <![CDATA[
-                                            importClass(org.apache.pivot.wtk.Component);
-                                            importClass(org.apache.pivot.wtk.Keyboard);
 
-                                            function keyPressed(component, keyCode, keyLocation) {
-                                                if (keyCode == Keyboard.KeyCode.TAB ||
-                                                    keyCode == Keyboard.KeyCode.ENTER) {
-                                                    Component.clearFocus();
-                                                }
-                                            }
-                                            ]]>
-                                        </wtkx:script>
-                                    </componentKeyListeners>
-                                </TextInput>
-                            </Form.Section>
-                        </sections>
-                    </Form>
-                </BoxPane>
-            </content>
-        </Border>
-    </content>
+                    <TextInput wtkx:id="hexInput" Form.label="HTML Notation" textSize="6"
+                        ComponentStateListener.focusedChanged="onInputFocusChange()">
+                        <componentKeyListeners>
+                            <wtkx:script>
+                                <![CDATA[
+                                importClass(org.apache.pivot.wtk.Component);
+                                importClass(org.apache.pivot.wtk.Keyboard);
+
+                                function keyPressed(component, keyCode, keyLocation) {
+                                    if (keyCode == Keyboard.KeyCode.TAB ||
+                                        keyCode == Keyboard.KeyCode.ENTER) {
+                                        Component.clearFocus();
+                                    }
+                                }
+                                ]]>
+                            </wtkx:script>
+                        </componentKeyListeners>
+                    </TextInput>
+                </Form.Section>
+            </Form>
+        </BoxPane>
+    </Border>
 </Window>

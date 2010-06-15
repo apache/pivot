@@ -19,12 +19,13 @@ package org.apache.pivot.wtk;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Vote;
-
+import org.apache.pivot.wtkx.DefaultProperty;
 
 /**
  * Navigation container that allows a user to expand and collapse a content
  * component.
  */
+@DefaultProperty("content")
 public class Expander extends Container {
     private static class ExpanderListenerList extends ListenerList<ExpanderListener>
     implements ExpanderListener {

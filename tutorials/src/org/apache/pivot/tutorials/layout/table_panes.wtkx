@@ -36,146 +36,142 @@ limitations under the License.
         </Menu.Section>
     </wtkx:define>
 
-    <content>
-        <SplitPane splitRatio="0.6">
-            <left>
-                <Border>
-                    <content>
-                        <TablePane wtkx:id="tablePane" styles="{verticalSpacing:21, showHorizontalGridLines:true,
-                            horizontalSpacing:21, showVerticalGridLines:true, padding:10}">
-                            <columns>
-                                <TablePane.Column width="-1"/>
-                                <TablePane.Column width="50"/>
-                                <TablePane.Column width="-1"/>
-                                <TablePane.Column width="1*"/>
-                                <TablePane.Column width="2*"/>
-                            </columns>
+    <SplitPane splitRatio="0.6">
+        <left>
+            <Border>
+                <TablePane wtkx:id="tablePane" styles="{verticalSpacing:21, showHorizontalGridLines:true,
+                    horizontalSpacing:21, showVerticalGridLines:true, padding:10}">
+                    <columns>
+                        <TablePane.Column width="-1"/>
+                        <TablePane.Column width="50"/>
+                        <TablePane.Column width="-1"/>
+                        <TablePane.Column width="1*"/>
+                        <TablePane.Column width="2*"/>
+                    </columns>
 
-                            <rows>
-                                <TablePane.Row height="-1">
-                                    <TablePane.Filler/>
-                                    <Label text="50" styles="{horizontalAlignment:'center'}"/>
-                                    <Label text="-1" styles="{horizontalAlignment:'center'}"/>
-                                    <Label text="1*" styles="{horizontalAlignment:'center'}"/>
-                                    <Label text="2*" styles="{horizontalAlignment:'center'}"/>
-                                </TablePane.Row>
-                                <TablePane.Row height="50">
-                                    <Label text="50" styles="{verticalAlignment:'center'}"/>
-                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
-                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
-                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
-                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
-                                </TablePane.Row>
-                                <TablePane.Row height="-1">
-                                    <Label text="-1" styles="{verticalAlignment:'center'}"/>
-                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
-                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
-                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
-                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
-                                </TablePane.Row>
-                                <TablePane.Row height="1*">
-                                    <Label text="1*" styles="{verticalAlignment:'center'}"/>
-                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
-                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
-                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
-                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
-                                </TablePane.Row>
-                                <TablePane.Row height="2*">
-                                    <Label text="2*" styles="{verticalAlignment:'center'}"/>
-                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
-                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
-                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
-                                    <Panel styles="{backgroundColor:'#dddcd5'}"/>
-                                </TablePane.Row>
-                            </rows>
-                        </TablePane>
-                    </content>
-                </Border>
-            </left>
-            <right>
-                <Border styles="{padding:4}">
-                    <content>
-                        <Form styles="{showFlagIcons:false}">
-                            <sections>
-                                <Form.Section>
-                                    <Checkbox Form.label="Show horizontal grid lines" selected="true">
-                                        <buttonStateListeners>
-                                            <wtkx:script>
-                                            <![CDATA[
-                                            function stateChanged(button, previousState) {
-                                                tablePane.getStyles().put("showHorizontalGridLines",
-                                                    button.isSelected());
-                                            }
-                                            ]]>
-                                            </wtkx:script>
-                                        </buttonStateListeners>
-                                    </Checkbox>
-                                    <Checkbox Form.label="Show vertical grid lines" selected="true">
-                                        <buttonStateListeners>
-                                            <wtkx:script>
-                                            <![CDATA[
-                                            function stateChanged(button, previousState) {
-                                                tablePane.getStyles().put("showVerticalGridLines",
-                                                    button.isSelected());
-                                            }
-                                            ]]>
-                                            </wtkx:script>
-                                        </buttonStateListeners>
-                                    </Checkbox>
-                                    <Spinner Form.label="Horizontal spacing" selectedIndex="21"
-                                        styles="{sizeToContent:true}">
-                                        <spinnerData>
-                                            <content:NumericSpinnerData lowerBound="0" upperBound="50"/>
-                                        </spinnerData>
-                                        <spinnerSelectionListeners>
-                                            <wtkx:script>
-                                            <![CDATA[
-                                            function selectedIndexChanged(spinner, previousSelectedIndex) {
-                                                tablePane.getStyles().put("horizontalSpacing",
-                                                    spinner.getSelectedItem());
-                                            }
-                                            ]]>
-                                            </wtkx:script>
-                                        </spinnerSelectionListeners>
-                                    </Spinner>
-                                    <Spinner Form.label="Vertical spacing" selectedIndex="21"
-                                        styles="{sizeToContent:true}">
-                                        <spinnerData>
-                                            <content:NumericSpinnerData lowerBound="0" upperBound="50"/>
-                                        </spinnerData>
-                                        <spinnerSelectionListeners>
-                                            <wtkx:script>
-                                            <![CDATA[
-                                            function selectedIndexChanged(spinner, previousSelectedIndex) {
-                                                tablePane.getStyles().put("verticalSpacing",
-                                                    spinner.getSelectedItem());
-                                            }
-                                            ]]>
-                                            </wtkx:script>
-                                        </spinnerSelectionListeners>
-                                    </Spinner>
-                                    <Spinner Form.label="Padding" selectedIndex="10"
-                                        styles="{sizeToContent:true}">
-                                        <spinnerData>
-                                            <content:NumericSpinnerData lowerBound="0" upperBound="25"/>
-                                        </spinnerData>
-                                        <spinnerSelectionListeners>
-                                            <wtkx:script>
-                                            <![CDATA[
-                                            function selectedIndexChanged(spinner, previousSelectedIndex) {
-                                                tablePane.getStyles().put("padding",
-                                                    spinner.getSelectedItem());
-                                            }
-                                            ]]>
-                                            </wtkx:script>
-                                        </spinnerSelectionListeners>
-                                    </Spinner>
-                                </Form.Section>
-                            </sections>
-                        </Form>
-                    </content>
-                </Border>
-            </right>
-        </SplitPane>
-    </content>
+                    <TablePane.Row height="-1">
+                        <TablePane.Filler/>
+                        <Label text="50" styles="{horizontalAlignment:'center'}"/>
+                        <Label text="-1" styles="{horizontalAlignment:'center'}"/>
+                        <Label text="1*" styles="{horizontalAlignment:'center'}"/>
+                        <Label text="2*" styles="{horizontalAlignment:'center'}"/>
+                    </TablePane.Row>
+
+                    <TablePane.Row height="50">
+                        <Label text="50" styles="{verticalAlignment:'center'}"/>
+                        <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                        <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                        <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                        <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                    </TablePane.Row>
+
+                    <TablePane.Row height="-1">
+                        <Label text="-1" styles="{verticalAlignment:'center'}"/>
+                        <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                        <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                        <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                        <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                    </TablePane.Row>
+
+                    <TablePane.Row height="1*">
+                        <Label text="1*" styles="{verticalAlignment:'center'}"/>
+                        <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                        <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                        <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                        <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                    </TablePane.Row>
+
+                    <TablePane.Row height="2*">
+                        <Label text="2*" styles="{verticalAlignment:'center'}"/>
+                        <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                        <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                        <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                        <Panel styles="{backgroundColor:'#dddcd5'}"/>
+                    </TablePane.Row>
+                </TablePane>
+            </Border>
+        </left>
+
+        <right>
+            <Border styles="{padding:4}">
+                <Form styles="{showFlagIcons:false}">
+                    <Form.Section>
+                        <Checkbox Form.label="Show horizontal grid lines" selected="true">
+                            <buttonStateListeners>
+                                <wtkx:script>
+                                <![CDATA[
+                                function stateChanged(button, previousState) {
+                                    tablePane.getStyles().put("showHorizontalGridLines",
+                                        button.isSelected());
+                                }
+                                ]]>
+                                </wtkx:script>
+                            </buttonStateListeners>
+                        </Checkbox>
+
+                        <Checkbox Form.label="Show vertical grid lines" selected="true">
+                            <buttonStateListeners>
+                                <wtkx:script>
+                                <![CDATA[
+                                function stateChanged(button, previousState) {
+                                    tablePane.getStyles().put("showVerticalGridLines",
+                                        button.isSelected());
+                                }
+                                ]]>
+                                </wtkx:script>
+                            </buttonStateListeners>
+                        </Checkbox>
+
+                        <Spinner Form.label="Horizontal spacing" selectedIndex="21"
+                            styles="{sizeToContent:true}">
+                            <content:NumericSpinnerData lowerBound="0" upperBound="50"/>
+
+                            <spinnerSelectionListeners>
+                                <wtkx:script>
+                                <![CDATA[
+                                function selectedIndexChanged(spinner, previousSelectedIndex) {
+                                    tablePane.getStyles().put("horizontalSpacing",
+                                        spinner.getSelectedItem());
+                                }
+                                ]]>
+                                </wtkx:script>
+                            </spinnerSelectionListeners>
+                        </Spinner>
+
+                        <Spinner Form.label="Vertical spacing" selectedIndex="21"
+                            styles="{sizeToContent:true}">
+                            <content:NumericSpinnerData lowerBound="0" upperBound="50"/>
+
+                            <spinnerSelectionListeners>
+                                <wtkx:script>
+                                <![CDATA[
+                                function selectedIndexChanged(spinner, previousSelectedIndex) {
+                                    tablePane.getStyles().put("verticalSpacing",
+                                        spinner.getSelectedItem());
+                                }
+                                ]]>
+                                </wtkx:script>
+                            </spinnerSelectionListeners>
+                        </Spinner>
+
+                        <Spinner Form.label="Padding" selectedIndex="10"
+                            styles="{sizeToContent:true}">
+                            <content:NumericSpinnerData lowerBound="0" upperBound="25"/>
+
+                            <spinnerSelectionListeners>
+                                <wtkx:script>
+                                <![CDATA[
+                                function selectedIndexChanged(spinner, previousSelectedIndex) {
+                                    tablePane.getStyles().put("padding",
+                                        spinner.getSelectedItem());
+                                }
+                                ]]>
+                                </wtkx:script>
+                            </spinnerSelectionListeners>
+                        </Spinner>
+                    </Form.Section>
+                </Form>
+            </Border>
+        </right>
+    </SplitPane>
 </Window>

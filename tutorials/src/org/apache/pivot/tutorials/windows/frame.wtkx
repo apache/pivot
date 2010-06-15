@@ -30,77 +30,75 @@ limitations under the License.
     var palette = null;
     </wtkx:script>
 
-    <content>
-        <BoxPane orientation="vertical">
-            <PushButton buttonData="Show Alert">
-                <buttonPressListeners>
-                    <wtkx:script>
-                    <![CDATA[
-                    importPackage(org.apache.pivot.wtk);
-                    function buttonPressed(button) {
-                        Alert.alert("This is an Alert.", frame);
-                    }
-                    ]]>
-                    </wtkx:script>
-                </buttonPressListeners>
-            </PushButton>
+    <BoxPane orientation="vertical">
+        <PushButton buttonData="Show Alert">
+            <buttonPressListeners>
+                <wtkx:script>
+                <![CDATA[
+                importPackage(org.apache.pivot.wtk);
+                function buttonPressed(button) {
+                    Alert.alert("This is an Alert.", frame);
+                }
+                ]]>
+                </wtkx:script>
+            </buttonPressListeners>
+        </PushButton>
 
-            <PushButton buttonData="Show Prompt">
-                <buttonPressListeners>
-                    <wtkx:script>
-                    <![CDATA[
-                    importPackage(org.apache.pivot.wtk);
-                    function buttonPressed(button) {
-                        Prompt.prompt("This is a Prompt.", frame);
-                    }
-                    ]]>
-                    </wtkx:script>
-                </buttonPressListeners>
-            </PushButton>
+        <PushButton buttonData="Show Prompt">
+            <buttonPressListeners>
+                <wtkx:script>
+                <![CDATA[
+                importPackage(org.apache.pivot.wtk);
+                function buttonPressed(button) {
+                    Prompt.prompt("This is a Prompt.", frame);
+                }
+                ]]>
+                </wtkx:script>
+            </buttonPressListeners>
+        </PushButton>
 
-            <PushButton buttonData="Show Dialog">
-                <buttonPressListeners>
-                    <wtkx:script>
-                    <![CDATA[
-                    importPackage(org.apache.pivot.wtk);
-                    function buttonPressed(button) {
-                        dialog.open(frame, null);
-                    }
-                    ]]>
-                    </wtkx:script>
-                </buttonPressListeners>
-            </PushButton>
+        <PushButton buttonData="Show Dialog">
+            <buttonPressListeners>
+                <wtkx:script>
+                <![CDATA[
+                importPackage(org.apache.pivot.wtk);
+                function buttonPressed(button) {
+                    dialog.open(frame, null);
+                }
+                ]]>
+                </wtkx:script>
+            </buttonPressListeners>
+        </PushButton>
 
-            <PushButton buttonData="Show Sheet">
-                <buttonPressListeners>
-                    <wtkx:script>
-                    <![CDATA[
-                    importPackage(org.apache.pivot.wtk);
-                    function buttonPressed(button) {
-                        sheet.open(frame, null);
-                    }
-                    ]]>
-                    </wtkx:script>
-                </buttonPressListeners>
-            </PushButton>
+        <PushButton buttonData="Show Sheet">
+            <buttonPressListeners>
+                <wtkx:script>
+                <![CDATA[
+                importPackage(org.apache.pivot.wtk);
+                function buttonPressed(button) {
+                    sheet.open(frame, null);
+                }
+                ]]>
+                </wtkx:script>
+            </buttonPressListeners>
+        </PushButton>
 
-            <PushButton buttonData="Show Palette">
-                <buttonPressListeners>
-                    <wtkx:script>
-                    <![CDATA[
-                    importPackage(org.apache.pivot.wtk);
-                    function buttonPressed(button) {
-                        if (palette == null) {
-                            palette = application.load("palette.wtkx");
-                            palette.setLocation(frame.getX() + frame.getWidth() + 20, frame.getY() + 20);
-                        }
-
-                        palette.open(frame);
+        <PushButton buttonData="Show Palette">
+            <buttonPressListeners>
+                <wtkx:script>
+                <![CDATA[
+                importPackage(org.apache.pivot.wtk);
+                function buttonPressed(button) {
+                    if (palette == null) {
+                        palette = application.load("palette.wtkx");
+                        palette.setLocation(frame.getX() + frame.getWidth() + 20, frame.getY() + 20);
                     }
-                    ]]>
-                    </wtkx:script>
-                </buttonPressListeners>
-            </PushButton>
-        </BoxPane>
-    </content>
+
+                    palette.open(frame);
+                }
+                ]]>
+                </wtkx:script>
+            </buttonPressListeners>
+        </PushButton>
+    </BoxPane>
 </Frame>

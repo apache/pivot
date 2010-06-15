@@ -19,15 +19,13 @@ limitations under the License.
 <Window title="Advanced Baseline Test"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <FlowPane styles="{padding:20, horizontalSpacing:10, alignToBaseline:true}">
-            <Label text="Hello world"/>
-            <Label text="Hickory dickory dock"
-                preferredHeight="100"
-                styles="{verticalAlignment:'center'}"/>
-            <Label text="The cow jumped over the moon"
-                preferredWidth="50" preferredHeight="100"
-                styles="{wrapText:true, verticalAlignment:'center'}"/>
-        </FlowPane>
-    </content>
+    <FlowPane styles="{padding:20, horizontalSpacing:10, alignToBaseline:true}">
+        <Label text="Hello world"/>
+        <Label text="Hickory dickory dock"
+            preferredHeight="100"
+            styles="{verticalAlignment:'center'}"/>
+        <Label text="The cow jumped over the moon"
+            preferredWidth="50" preferredHeight="100"
+            styles="{wrapText:true, verticalAlignment:'center'}"/>
+    </FlowPane>
 </Window>

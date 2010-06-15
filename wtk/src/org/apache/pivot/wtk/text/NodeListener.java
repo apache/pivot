@@ -66,7 +66,7 @@ public interface NodeListener {
      * @param offset
      */
     public void nodeInserted(Node node, int offset);
-    
+
     /**
      * Called when child nodes have been removed from a node.
      *
@@ -75,7 +75,7 @@ public interface NodeListener {
      * @param offset
      */
     public void nodesRemoved(Node node, Sequence<Node> removed, int offset);
-    
+
     /**
      * Called when a text range has been inserted into a node.
      *

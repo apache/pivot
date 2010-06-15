@@ -20,11 +20,10 @@ limitations under the License.
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:effects="org.apache.pivot.wtk.effects"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <ImageView image="@IMG_0767_2.jpg"/>
-    </content>
     <decorators>
         <effects:ReflectionDecorator/>
     </decorators>
+
+    <ImageView image="@IMG_0767_2.jpg"/>
 </Window>
 

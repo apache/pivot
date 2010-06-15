@@ -17,10 +17,12 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.wtk.content.LinkButtonDataRenderer;
+import org.apache.pivot.wtkx.DefaultProperty;
 
 /**
  * Button component that resembles an HTML hyperlink.
  */
+@DefaultProperty("buttonData")
 public class LinkButton extends Button {
     private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new LinkButtonDataRenderer();
 

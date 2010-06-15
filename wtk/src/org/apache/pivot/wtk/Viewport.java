@@ -18,6 +18,7 @@ package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.wtkx.DefaultProperty;
 
 
 /**
@@ -25,6 +26,7 @@ import org.apache.pivot.util.ListenerList;
  * view on a component (called the "view") that is too large to fit within a
  * given area. They are generally scrollable.
  */
+@DefaultProperty("view")
 public abstract class Viewport extends Container {
     /**
      * Viewport skin interface. Viewport skins must implement this.

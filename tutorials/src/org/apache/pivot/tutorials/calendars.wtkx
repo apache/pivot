@@ -20,43 +20,34 @@ limitations under the License.
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
     <Border styles="{padding:2}">
-        <content>
-            <BoxPane styles="{padding:{top:2, left:4, bottom:8, right:4}, spacing:10}">
-                <BoxPane orientation="vertical">
-                    <Label text="English (US)" styles="{font:{bold:true}}"/>
-                    <Border>
-                        <content>
-                            <Calendar locale="{language:'en', country:'us'}"/>
-                        </content>
-                    </Border>
-                </BoxPane>
-
-                <BoxPane orientation="vertical">
-                    <Label text="Français (FR)" styles="{font:{bold:true}}"/>
-                    <Border>
-                        <content>
-                            <Calendar locale="{language:'fr', country:'fr'}"/>
-                        </content>
-                    </Border>
-                </BoxPane>
-
-                <BoxPane orientation="vertical">
-                    <Label text="Calendar Buttons" styles="{font:{bold:true}}"/>
-                    <Form styles="{showFlagIcons:false, padding:0}">
-                        <sections>
-                            <Form.Section>
-                                <CalendarButton Form.label="English (US)" locale="{language:'en', country:'us'}"/>
-                                <CalendarButton Form.label="Españole (US)" locale="{language:'es', country:'us'}"/>
-                                <CalendarButton Form.label="Españole (ES)" locale="{language:'es', country:'es'}"/>
-                                <CalendarButton Form.label="Français (FR)" locale="{language:'fr', country:'fr'}"/>
-                                <CalendarButton Form.label="Français (CA)" locale="{language:'fr', country:'ca'}"/>
-                            </Form.Section>
-                        </sections>
-                    </Form>
-                </BoxPane>
-
+        <BoxPane styles="{padding:{top:2, left:4, bottom:8, right:4}, spacing:10}">
+            <BoxPane orientation="vertical">
+                <Label text="English (US)" styles="{font:{bold:true}}"/>
+                <Border>
+                    <Calendar locale="{language:'en', country:'us'}"/>
+                </Border>
             </BoxPane>
-        </content>
+
+            <BoxPane orientation="vertical">
+                <Label text="Français (FR)" styles="{font:{bold:true}}"/>
+                <Border>
+                    <Calendar locale="{language:'fr', country:'fr'}"/>
+                </Border>
+            </BoxPane>
+
+            <BoxPane orientation="vertical">
+                <Label text="Calendar Buttons" styles="{font:{bold:true}}"/>
+                <Form styles="{showFlagIcons:false, padding:0}">
+                    <Form.Section>
+                        <CalendarButton Form.label="English (US)" locale="{language:'en', country:'us'}"/>
+                        <CalendarButton Form.label="Españole (US)" locale="{language:'es', country:'us'}"/>
+                        <CalendarButton Form.label="Españole (ES)" locale="{language:'es', country:'es'}"/>
+                        <CalendarButton Form.label="Français (FR)" locale="{language:'fr', country:'fr'}"/>
+                        <CalendarButton Form.label="Français (CA)" locale="{language:'fr', country:'ca'}"/>
+                    </Form.Section>
+                </Form>
+            </BoxPane>
+        </BoxPane>
     </Border>
 </BoxPane>
 

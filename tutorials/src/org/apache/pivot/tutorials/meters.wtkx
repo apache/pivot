@@ -19,44 +19,42 @@ limitations under the License.
 <Border styles="{padding:2}"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <BoxPane>
-            <BoxPane orientation="vertical" styles="{padding:6, spacing:8}">
-                <Label text="Meters" styles="{font:{bold:true}}"/>
-                <BoxPane styles="{spacing:6}">
-                    <Meter percentage="0.5" text="50%" styles="{gridFrequency:1}"/>
-                    <Label text="50%"/>
-                </BoxPane>
-                <BoxPane styles="{spacing:6}">
-                    <Meter percentage="0.4" styles="{gridFrequency:0.1}"/>
-                    <Label text="40%"/>
-                </BoxPane>
-                <BoxPane styles="{spacing:6}">
-                    <Meter percentage="0.75"/>
-                    <Label text="75%"/>
-                </BoxPane>
-                <BoxPane styles="{spacing:6}">
-                    <Meter percentage="0.75" text="75%" styles="{gridFrequency:1}"/>
-                    <Label text="75%"/>
-                </BoxPane>
-                <BoxPane styles="{spacing:6}">
-                    <Meter percentage="0.95" styles="{color:'#aa0000', gridColor:'#aaaaaa'}"/>
-                    <Label text="Danger: 95%!"/>
-                </BoxPane>
+    <BoxPane>
+        <BoxPane orientation="vertical" styles="{padding:6, spacing:8}">
+            <Label text="Meters" styles="{font:{bold:true}}"/>
+            <BoxPane styles="{spacing:6}">
+                <Meter percentage="0.5" text="50%" styles="{gridFrequency:1}"/>
+                <Label text="50%"/>
             </BoxPane>
-
-            <BoxPane orientation="vertical" styles="{padding:6, spacing:8}">
-                <Label text="Activity Indicators" styles="{font:{bold:true}}"/>
-                <BoxPane>
-                    <ActivityIndicator wtkx:id="activityIndicator1"
-                        preferredWidth="24" preferredHeight="24"/>
-                    <ActivityIndicator wtkx:id="activityIndicator2" styles="{color:'#aa0000'}"
-                        preferredWidth="48" preferredHeight="48"/>
-                    <ActivityIndicator wtkx:id="activityIndicator3" styles="{color:16}"
-                        preferredWidth="96" preferredHeight="96"/>
-                </BoxPane>
+            <BoxPane styles="{spacing:6}">
+                <Meter percentage="0.4" styles="{gridFrequency:0.1}"/>
+                <Label text="40%"/>
+            </BoxPane>
+            <BoxPane styles="{spacing:6}">
+                <Meter percentage="0.75"/>
+                <Label text="75%"/>
+            </BoxPane>
+            <BoxPane styles="{spacing:6}">
+                <Meter percentage="0.75" text="75%" styles="{gridFrequency:1}"/>
+                <Label text="75%"/>
+            </BoxPane>
+            <BoxPane styles="{spacing:6}">
+                <Meter percentage="0.95" styles="{color:'#aa0000', gridColor:'#aaaaaa'}"/>
+                <Label text="Danger: 95%!"/>
             </BoxPane>
         </BoxPane>
-    </content>
+
+        <BoxPane orientation="vertical" styles="{padding:6, spacing:8}">
+            <Label text="Activity Indicators" styles="{font:{bold:true}}"/>
+            <BoxPane>
+                <ActivityIndicator wtkx:id="activityIndicator1"
+                    preferredWidth="24" preferredHeight="24"/>
+                <ActivityIndicator wtkx:id="activityIndicator2" styles="{color:'#aa0000'}"
+                    preferredWidth="48" preferredHeight="48"/>
+                <ActivityIndicator wtkx:id="activityIndicator3" styles="{color:16}"
+                    preferredWidth="96" preferredHeight="96"/>
+            </BoxPane>
+        </BoxPane>
+    </BoxPane>
 </Border>
 

@@ -19,9 +19,7 @@ limitations under the License.
 <Window title="中文标题 (Chinese window title)" maximized="false"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <BoxPane preferredWidth="800" preferredHeight="600">
-            <PushButton buttonData="中文按钮 (Chinese button title)"/>
-        </BoxPane>
-    </content>
+    <BoxPane preferredWidth="800" preferredHeight="600">
+        <PushButton buttonData="中文按钮 (Chinese button title)"/>
+    </BoxPane>
 </Window>

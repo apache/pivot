@@ -22,10 +22,12 @@ import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.wtkx.DefaultProperty;
 
 /**
  * Container that arranges components in a two-dimensional grid, where every cell is the same size.
  */
+@DefaultProperty("rows")
 public class GridPane extends Container {
     /**
      * Represents a grid pane row.

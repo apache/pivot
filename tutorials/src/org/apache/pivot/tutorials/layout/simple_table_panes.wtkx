@@ -19,42 +19,40 @@ limitations under the License.
 <Window wtkx:id="window" title="Table Panes" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <Border>
-            <content>
-                <TablePane wtkx:id="tablePane" styles="{verticalSpacing:1, showHorizontalGridLines:true,
-                    horizontalSpacing:1, showVerticalGridLines:true}">
-                    <columns>
-                        <TablePane.Column width="-1"/>
-                        <TablePane.Column width="50"/>
-                        <TablePane.Column width="-1"/>
-                        <TablePane.Column width="1*"/>
-                        <TablePane.Column width="2*"/>
-                    </columns>
+    <Border>
+        <TablePane wtkx:id="tablePane" styles="{verticalSpacing:1, showHorizontalGridLines:true,
+            horizontalSpacing:1, showVerticalGridLines:true}">
+            <columns>
+                <TablePane.Column width="-1"/>
+                <TablePane.Column width="50"/>
+                <TablePane.Column width="-1"/>
+                <TablePane.Column width="1*"/>
+                <TablePane.Column width="2*"/>
+            </columns>
 
-                    <rows>
-                        <TablePane.Row height="-1">
-                            <TablePane.Filler/>
-                            <Label text="50" styles="{horizontalAlignment:'center'}"/>
-                            <Label text="-1" styles="{horizontalAlignment:'center'}"/>
-                            <Label text="1*" styles="{horizontalAlignment:'center'}"/>
-                            <Label text="2*" styles="{horizontalAlignment:'center'}"/>
-                        </TablePane.Row>
-                        <TablePane.Row height="50">
-                            <Label text="50" styles="{verticalAlignment:'center'}"/>
-                        </TablePane.Row>
-                        <TablePane.Row height="-1">
-                            <Label text="-1" styles="{verticalAlignment:'center'}"/>
-                        </TablePane.Row>
-                        <TablePane.Row height="1*">
-                            <Label text="1*" styles="{verticalAlignment:'center'}"/>
-                        </TablePane.Row>
-                        <TablePane.Row height="2*">
-                            <Label text="2*" styles="{verticalAlignment:'center'}"/>
-                        </TablePane.Row>
-                    </rows>
-                </TablePane>
-            </content>
-        </Border>
-    </content>
+            <TablePane.Row height="-1">
+                <TablePane.Filler/>
+                <Label text="50" styles="{horizontalAlignment:'center'}"/>
+                <Label text="-1" styles="{horizontalAlignment:'center'}"/>
+                <Label text="1*" styles="{horizontalAlignment:'center'}"/>
+                <Label text="2*" styles="{horizontalAlignment:'center'}"/>
+            </TablePane.Row>
+
+            <TablePane.Row height="50">
+                <Label text="50" styles="{verticalAlignment:'center'}"/>
+            </TablePane.Row>
+
+            <TablePane.Row height="-1">
+                <Label text="-1" styles="{verticalAlignment:'center'}"/>
+            </TablePane.Row>
+
+            <TablePane.Row height="1*">
+                <Label text="1*" styles="{verticalAlignment:'center'}"/>
+            </TablePane.Row>
+
+            <TablePane.Row height="2*">
+                <Label text="2*" styles="{verticalAlignment:'center'}"/>
+            </TablePane.Row>
+        </TablePane>
+    </Border>
 </Window>

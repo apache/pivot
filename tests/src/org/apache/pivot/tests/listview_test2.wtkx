@@ -17,35 +17,27 @@ limitations under the License.
 -->
 
 <BoxPane xmlns:wtkx="http://pivot.apache.org/wtkx"
-    xmlns:collections="org.apache.pivot.collections"
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk"
     styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:12}">
     <Border styles="{color:10}">
-        <content>
-            <ScrollPane preferredHeight="80">
-                <view>
-                    <ListView wtkx:id="iconListView2" selectMode="multi" selectedIndex="2" styles="{variableItemHeight:true}">
-                        <listData>
-                            <collections:ArrayList>
-                                <content:ListItem icon="@anchor.png" text="Anchor"/>
-                                <content:ListItem icon="@weather-few-clouds-32x32.png" text="Bell"/>
-                                <content:ListItem icon="@clock.png" text="Clock"/>
-                                <content:ListItem icon="@cup.png" text="Cup"/>
-                                <content:ListItem icon="@house.png" text="House"/>
-                                <content:ListItem icon="@star.png" text="Star"/>
-                            </collections:ArrayList>
-                        </listData>
-                        <itemRenderer>
-                            <content:ListViewItemRenderer iconWidth="-1" iconHeight="-1"
-                                showIcon="true"/>
-                        </itemRenderer>
-                        <itemEditor>
-                            <content:ListViewItemEditor/>
-                        </itemEditor>
-                    </ListView>
-                </view>
-            </ScrollPane>
-        </content>
+        <ScrollPane preferredHeight="80">
+            <ListView wtkx:id="iconListView2" selectMode="multi" selectedIndex="2" styles="{variableItemHeight:true}">
+                <itemRenderer>
+                    <content:ListViewItemRenderer iconWidth="-1" iconHeight="-1"
+                        showIcon="true"/>
+                </itemRenderer>
+                <itemEditor>
+                    <content:ListViewItemEditor/>
+                </itemEditor>
+
+                <content:ListItem icon="@anchor.png" text="Anchor"/>
+                <content:ListItem icon="@weather-few-clouds-32x32.png" text="Bell"/>
+                <content:ListItem icon="@clock.png" text="Clock"/>
+                <content:ListItem icon="@cup.png" text="Cup"/>
+                <content:ListItem icon="@house.png" text="House"/>
+                <content:ListItem icon="@star.png" text="Star"/>
+            </ListView>
+        </ScrollPane>
     </Border>
 </BoxPane>

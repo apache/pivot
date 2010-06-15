@@ -29,24 +29,18 @@ limitations under the License.
         </wtkx:script>
     </windowStateListeners>
 
-    <content>
-        <Border styles="{padding:6}">
-            <content>
-                <Form>
-                    <sections>
-                        <Form.Section>
-                            <TextInput Form.label="%firstName"/>
-                            <TextInput Form.label="%lastName"/>
-                            <TextInput Form.label="%street"/>
-                            <TextInput Form.label="%city"/>
-                            <TextInput Form.label="%state" textSize="4"/>
-                            <TextInput Form.label="%postalCode"/>
-                            <TextInput Form.label="%country"/>
-                        </Form.Section>
-                    </sections>
-                </Form>
-            </content>
-        </Border>
-    </content>
+    <Border styles="{padding:6}">
+        <Form>
+            <Form.Section>
+                <TextInput Form.label="%firstName"/>
+                <TextInput Form.label="%lastName"/>
+                <TextInput Form.label="%street"/>
+                <TextInput Form.label="%city"/>
+                <TextInput Form.label="%state" textSize="4"/>
+                <TextInput Form.label="%postalCode"/>
+                <TextInput Form.label="%country"/>
+            </Form.Section>
+        </Form>
+    </Border>
 </Window>
 

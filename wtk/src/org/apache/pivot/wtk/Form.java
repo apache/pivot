@@ -25,6 +25,7 @@ import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.wtkx.DefaultProperty;
 
 /**
  * A container that arranges field components in a form layout. Each field has
@@ -32,6 +33,7 @@ import org.apache.pivot.util.ListenerList;
  * attention using one of several flag types and an optional flag message (for
  * use during form validation, for example).
  */
+@DefaultProperty("sections")
 public class Form extends Container {
     /**
      * Class representing a form section. A section is a grouping of components
@@ -258,7 +260,7 @@ public class Form extends Container {
         public Flag() {
             this(MessageType.ERROR, null);
         }
-        
+
         /**
          * Creates a new flag with the given message type and no message.
          *
@@ -297,30 +299,30 @@ public class Form extends Container {
         public MessageType getMessageType() {
             return messageType;
         }
-        
+
         /**
          * Sets the flag's message type.
-         * 
+         *
          * @param messageType
          */
         public void setMessageType(MessageType messageType) {
             if (messageType == null) {
                 throw new IllegalArgumentException();
             }
-            
+
             this.messageType = messageType;
         }
-        
+
         /**
          * Sets the flag's message type.
-         * 
+         *
          * @param messageType
          */
         public void setMessageType(String messageType) {
             if (messageType == null) {
                 throw new IllegalArgumentException();
             }
-            
+
             setMessageType(MessageType.valueOf(messageType.toUpperCase()));
         }
 
@@ -334,10 +336,10 @@ public class Form extends Container {
         public String getMessage() {
             return message;
         }
-        
+
         /**
          * Sets the flag message.
-         * 
+         *
          * @param message
          * The message text associated with the flag, or <tt>null</tt> if
          * there is no message.

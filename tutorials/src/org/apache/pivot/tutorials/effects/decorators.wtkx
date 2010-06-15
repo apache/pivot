@@ -31,79 +31,74 @@ limitations under the License.
             font="Arial BOLD 24" opacity="0.33"/>
     </wtkx:define>
 
-    <content>
-        <TablePane>
-            <columns>
-                <TablePane.Column width="1*"/>
-                <TablePane.Column width="-1"/>
-            </columns>
-            <rows>
-                <TablePane.Row>
-                    <Border styles="{padding:2}">
-                        <content>
-                            <BoxPane preferredWidth="480" preferredHeight="480"
-                                styles="{horizontalAlignment:'center', verticalAlignment:'top', padding:6}">
-                                <ImageView wtkx:id="imageView" image="org/apache/pivot/tutorials/IMG_0725_2.jpg"/>
-                            </BoxPane>
-                        </content>
-                    </Border>
+    <TablePane>
+        <columns>
+            <TablePane.Column width="1*"/>
+            <TablePane.Column width="-1"/>
+        </columns>
 
-                    <BoxPane orientation="vertical" styles="{padding:6, spacing:6}">
-                        <wtkx:define>
-                            <ButtonGroup wtkx:id="decoratorButtonGroup">
-                                <buttonGroupListeners>
-                                <wtkx:script>
-                                <![CDATA[
-                                function selectionChanged(buttonGroup) {
-                                    var selection = buttonGroup.getSelection();
+        <TablePane.Row>
+            <Border styles="{padding:2}">
+                <BoxPane preferredWidth="480" preferredHeight="480"
+                    styles="{horizontalAlignment:'center', verticalAlignment:'top', padding:6}">
+                    <ImageView wtkx:id="imageView" image="org/apache/pivot/tutorials/IMG_0725_2.jpg"/>
+                </BoxPane>
+            </Border>
 
-                                    if (selection != null) {
-                                        var decorator = selection.getUserData().get("decorator");
-                                        imageView.getDecorators().removeAll();
+            <BoxPane orientation="vertical" styles="{padding:6, spacing:6}">
+                <wtkx:define>
+                    <ButtonGroup wtkx:id="decoratorButtonGroup">
+                        <buttonGroupListeners>
+                            <wtkx:script>
+                            <![CDATA[
+                            function selectionChanged(buttonGroup) {
+                                var selection = buttonGroup.getSelection();
 
-                                        if (decorator != null) {
-                                            imageView.getDecorators().add(decorator);
-                                        }
+                                if (selection != null) {
+                                    var decorator = selection.getUserData().get("decorator");
+                                    imageView.getDecorators().removeAll();
+
+                                    if (decorator != null) {
+                                        imageView.getDecorators().add(decorator);
                                     }
                                 }
-                                ]]>
-                                </wtkx:script>
-                                </buttonGroupListeners>
-                            </ButtonGroup>
-                        </wtkx:define>
+                            }
+                            ]]>
+                            </wtkx:script>
+                        </buttonGroupListeners>
+                    </ButtonGroup>
+                </wtkx:define>
 
-                        <RadioButton buttonData="None" buttonGroup="$decoratorButtonGroup" selected="true"/>
+                <RadioButton buttonData="None" buttonGroup="$decoratorButtonGroup" selected="true"/>
 
-                        <RadioButton buttonData="Blur" buttonGroup="$decoratorButtonGroup">
-                            <userData decorator="$blurDecorator"/>
-                        </RadioButton>
+                <RadioButton buttonData="Blur" buttonGroup="$decoratorButtonGroup">
+                    <userData decorator="$blurDecorator"/>
+                </RadioButton>
 
-                        <RadioButton buttonData="Fade" buttonGroup="$decoratorButtonGroup">
-                            <userData decorator="$fadeDecorator"/>
-                        </RadioButton>
+                <RadioButton buttonData="Fade" buttonGroup="$decoratorButtonGroup">
+                    <userData decorator="$fadeDecorator"/>
+                </RadioButton>
 
-                        <RadioButton buttonData="Grayscale" buttonGroup="$decoratorButtonGroup">
-                            <userData decorator="$grayscaleDecorator"/>
-                        </RadioButton>
+                <RadioButton buttonData="Grayscale" buttonGroup="$decoratorButtonGroup">
+                    <userData decorator="$grayscaleDecorator"/>
+                </RadioButton>
 
-                        <RadioButton buttonData="Reflection" buttonGroup="$decoratorButtonGroup">
-                            <userData decorator="$reflectionDecorator"/>
-                        </RadioButton>
+                <RadioButton buttonData="Reflection" buttonGroup="$decoratorButtonGroup">
+                    <userData decorator="$reflectionDecorator"/>
+                </RadioButton>
 
-                        <RadioButton buttonData="Saturation" buttonGroup="$decoratorButtonGroup">
-                            <userData decorator="$saturationDecorator"/>
-                        </RadioButton>
+                <RadioButton buttonData="Saturation" buttonGroup="$decoratorButtonGroup">
+                    <userData decorator="$saturationDecorator"/>
+                </RadioButton>
 
-                        <RadioButton buttonData="Shade" buttonGroup="$decoratorButtonGroup">
-                            <userData decorator="$shadeDecorator"/>
-                        </RadioButton>
+                <RadioButton buttonData="Shade" buttonGroup="$decoratorButtonGroup">
+                    <userData decorator="$shadeDecorator"/>
+                </RadioButton>
 
-                        <RadioButton buttonData="Watermark" buttonGroup="$decoratorButtonGroup">
-                            <userData decorator="$watermarkDecorator"/>
-                        </RadioButton>
-                    </BoxPane>
-                </TablePane.Row>
-            </rows>
-        </TablePane>
-    </content>
+                <RadioButton buttonData="Watermark" buttonGroup="$decoratorButtonGroup">
+                    <userData decorator="$watermarkDecorator"/>
+                </RadioButton>
+            </BoxPane>
+        </TablePane.Row>
+    </TablePane>
 </Window>

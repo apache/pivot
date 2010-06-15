@@ -28,10 +28,12 @@ import org.apache.pivot.util.concurrent.Task;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.util.concurrent.TaskListener;
 import org.apache.pivot.wtk.media.Image;
+import org.apache.pivot.wtkx.DefaultProperty;
 
 /**
  * Component that displays an image.
  */
+@DefaultProperty("image")
 public class ImageView extends Component {
     private static class ImageViewListenerList extends ListenerList<ImageViewListener>
         implements ImageViewListener {

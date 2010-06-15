@@ -170,12 +170,12 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
 
         /**
          * This is needed by the ComponentViewNode to correctly position child Component's.
-         * 
+         *
          * @param skinX the X coordinate in the skin's frame of reference
          * @param skinY the Y coordinate in the skin's frame of reference
          */
         protected abstract void setSkinLocation(int skinX, int skinY);
-        
+
         public Bounds getBounds() {
             return new Bounds(x, y, width, height);
         }
@@ -265,12 +265,12 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
         public void rangeRemoved(Node node, int offset, int characterCount) {
             // No-op
         }
-        
+
         @Override
         public void nodesRemoved(Node node, Sequence<Node> removed, int offset) {
             // No-op
         }
-        
+
         @Override
         public void nodeInserted(Node node, int offset) {
             // No-op
@@ -396,7 +396,7 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
                         nodeViewGraphics.setColor(styledBackgroundColor);
                         nodeViewGraphics.fillRect(nodeViewBounds.x, nodeViewBounds.y, nodeViewBounds.width, nodeViewBounds.height);
                     }
-                    
+
                     // NOTE We don't clip here because views should generally
                     // not overlap and clipping would impose an unnecessary
                     // performance penalty
@@ -425,7 +425,7 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
             }
             return backgroundColor;
         }
-        
+
         @Override
         public Bounds getCharacterBounds(int offset) {
             Bounds characterBounds = null;
@@ -468,17 +468,17 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
         public void fontChanged(Element element, Font previousFont) {
             invalidate();
         }
-        
+
         @Override
         public void backgroundColorChanged(Element element, Color previousBackgroundColor) {
             invalidate();
         }
-        
+
         @Override
         public void foregroundColorChanged(Element element, Color previousForegroundColor) {
             invalidate();
         }
-        
+
         @Override
         public Iterator<NodeView> iterator() {
             return new ImmutableIterator<NodeView>(nodeViews.iterator());
@@ -556,7 +556,7 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
                 super.validate();
             }
         }
-        
+
         @Override
         protected void setSkinLocation(int skinX, int skinY) {
             for (NodeView nodeView : this) {
@@ -839,7 +839,7 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
                 }
             }
         }
-        
+
         @Override
         public NodeView getNext() {
             return null;
@@ -1116,7 +1116,7 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
         @Override
         protected void setSkinLocation(int skinX, int skinY) {
         }
-        
+
         @Override
         public void paint(Graphics2D graphics) {
             if (glyphVector != null) {
@@ -1237,7 +1237,7 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
 
             return i;
         }
-        
+
         private Font getEffectiveFont() {
             Font font = null;
             Node node = getNode().getParent();
@@ -1277,7 +1277,7 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
             }
             return foregroundColor;
         }
-        
+
         @Override
         public int getNextInsertionPoint(int x, int from, FocusTraversalDirection direction) {
             int offset = -1;
@@ -1390,7 +1390,7 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
                 super.validate();
             }
         }
-        
+
         @Override
         protected void setSkinLocation(int skinX, int skinY) {
         }
@@ -1468,14 +1468,14 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
     }
 
     public class ComponentNodeView extends NodeView implements ComponentNodeListener {
-        
+
         private final ComponentListener myComponentListener = new ComponentListener.Adapter() {
             @Override
             public void sizeChanged(Component component, int previousWidth, int previousHeight) {
                 invalidate();
             }
         };
-        
+
         public ComponentNodeView(ComponentNode componentNode) {
             super(componentNode);
         }
@@ -1518,7 +1518,7 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
                 super.validate();
             }
         }
-        
+
         @Override
         protected void setSkinLocation(int skinX, int skinY) {
             ComponentNode componentNode = (ComponentNode) getNode();
@@ -1531,12 +1531,12 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
                 component.setLocation(skinX, skinY);
             }
         }
-        
+
         @Override
         public void paint(Graphics2D graphics) {
-            // do nothing 
+            // do nothing
         }
-        
+
         @Override
         public NodeView getNext() {
             return null;
@@ -1801,7 +1801,7 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
     @Override
     public void paint(Graphics2D graphics) {
         super.paint(graphics);
-        
+
         TextArea textArea = (TextArea)getComponent();
 
         if (documentView != null) {

@@ -18,11 +18,13 @@ package org.apache.pivot.wtk;
 
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.media.Movie;
+import org.apache.pivot.wtkx.DefaultProperty;
 
 
 /**
  * Component that plays a movie.
  */
+@DefaultProperty("movie")
 public class MovieView extends Component {
     private static class MovieViewListenerList extends ListenerList<MovieViewListener>
         implements MovieViewListener {

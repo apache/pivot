@@ -19,16 +19,10 @@ limitations under the License.
 <Window title="Panoramas" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <Border styles="{color:10}">
-            <content>
-                <Panorama styles="{buttonColor:'0xffffffff', buttonBackgroundColor:'0x00000044'}">
-                    <view>
-                        <ImageView image="org/apache/pivot/tutorials/IMG_1147.jpg"
-                            tooltipText="Pemaquid Point Lighthouse, Bristol ME"/>
-                    </view>
-                </Panorama>
-            </content>
-        </Border>
-    </content>
+    <Border styles="{color:10}">
+        <Panorama styles="{buttonColor:'0xffffffff', buttonBackgroundColor:'0x00000044'}">
+            <ImageView image="org/apache/pivot/tutorials/IMG_1147.jpg"
+                tooltipText="Pemaquid Point Lighthouse, Bristol ME"/>
+        </Panorama>
+    </Border>
 </Window>

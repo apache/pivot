@@ -19,8 +19,5 @@ limitations under the License.
 <Window title="Font Test" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <Label text="Hello, World!"
-            styles="{size:24, bold:true, italic:true}}"/>
-    </content>
+    <Label text="Hello, World!" styles="{size:24, bold:true, italic:true}}"/>
 </Window>

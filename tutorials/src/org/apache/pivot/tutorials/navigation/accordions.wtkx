@@ -19,14 +19,10 @@ limitations under the License.
 <Window title="Accordions" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <Accordion wtkx:id="accordion" styles="{padding:0}">
-            <panels>
-                <wtkx:include wtkx:id="shippingPanel" src="shipping.wtkx" Accordion.label="Shipping Information"/>
-                <wtkx:include wtkx:id="paymentPanel" src="payment.wtkx" Accordion.label="Payment Information"/>
-                <wtkx:include wtkx:id="summaryPanel" src="summary.wtkx" Accordion.label="Summary &amp; Confirmation"/>
-            </panels>
-        </Accordion>
-    </content>
+    <Accordion wtkx:id="accordion" styles="{padding:0}">
+        <wtkx:include wtkx:id="shippingPanel" src="shipping.wtkx" Accordion.label="Shipping Information"/>
+        <wtkx:include wtkx:id="paymentPanel" src="payment.wtkx" Accordion.label="Payment Information"/>
+        <wtkx:include wtkx:id="summaryPanel" src="summary.wtkx" Accordion.label="Summary &amp; Confirmation"/>
+    </Accordion>
 </Window>
 

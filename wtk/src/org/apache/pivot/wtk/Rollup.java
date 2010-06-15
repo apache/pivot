@@ -19,6 +19,7 @@ package org.apache.pivot.wtk;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Vote;
+import org.apache.pivot.wtkx.DefaultProperty;
 
 /**
  * Container that can be expanded or collapsed to respectively show or hide its
@@ -26,6 +27,7 @@ import org.apache.pivot.util.Vote;
  * the user expands the rollup, its content component will be shown beneath the
  * heading.
  */
+@DefaultProperty("content")
 public class Rollup extends Container {
     private static class RollupListenerList extends ListenerList<RollupListener>
         implements RollupListener {

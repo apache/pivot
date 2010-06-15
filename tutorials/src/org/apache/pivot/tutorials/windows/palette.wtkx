@@ -19,14 +19,12 @@ limitations under the License.
 <Palette title="Palette" preferredWidth="60" preferredHeight="120"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <FlowPane styles="{padding:1}">
-            <PushButton buttonData="1" styles="{toolbar:true, minimumAspectRatio:1, maximumAspectRatio:1}"/>
-            <PushButton buttonData="2" styles="{toolbar:true, minimumAspectRatio:1, maximumAspectRatio:1}"/>
-            <PushButton buttonData="3" styles="{toolbar:true, minimumAspectRatio:1, maximumAspectRatio:1}"/>
-            <PushButton buttonData="4" styles="{toolbar:true, minimumAspectRatio:1, maximumAspectRatio:1}"/>
-            <PushButton buttonData="5" styles="{toolbar:true, minimumAspectRatio:1, maximumAspectRatio:1}"/>
-            <PushButton buttonData="6" styles="{toolbar:true, minimumAspectRatio:1, maximumAspectRatio:1}"/>
-        </FlowPane>
-    </content>
+    <FlowPane styles="{padding:1}">
+        <PushButton buttonData="1" styles="{toolbar:true, minimumAspectRatio:1, maximumAspectRatio:1}"/>
+        <PushButton buttonData="2" styles="{toolbar:true, minimumAspectRatio:1, maximumAspectRatio:1}"/>
+        <PushButton buttonData="3" styles="{toolbar:true, minimumAspectRatio:1, maximumAspectRatio:1}"/>
+        <PushButton buttonData="4" styles="{toolbar:true, minimumAspectRatio:1, maximumAspectRatio:1}"/>
+        <PushButton buttonData="5" styles="{toolbar:true, minimumAspectRatio:1, maximumAspectRatio:1}"/>
+        <PushButton buttonData="6" styles="{toolbar:true, minimumAspectRatio:1, maximumAspectRatio:1}"/>
+    </FlowPane>
 </Palette>

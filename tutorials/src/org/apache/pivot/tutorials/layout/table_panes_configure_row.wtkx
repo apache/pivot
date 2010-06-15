@@ -17,7 +17,6 @@ limitations under the License.
 -->
 
 <Sheet wtkx:id="sheet" preferredWidth="350" styles="{padding:0}"
-    xmlns:collections="org.apache.pivot.collections"
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
@@ -57,88 +56,78 @@ limitations under the License.
     ]]>
     </wtkx:script>
 
-    <content>
-        <BoxPane orientation="vertical" styles="{fill:true, verticalAlignment:'bottom'}">
-            <TablePane styles="{padding:8, verticalSpacing:8}">
-                <columns>
-                    <TablePane.Column width="1*"/>
-                </columns>
-                <rows>
-                    <TablePane.Row height="1*">
-                        <Border styles="{padding:10}">
-                            <content>
-                                <!-- Payload -->
-                                <Form wtkx:id="form">
-                                    <sections>
-                                        <Form.Section>
-                                            <TablePane Form.label="Row Height"
-                                                styles="{horizontalSpacing:8, verticalSpacing:4}">
-                                                <columns>
-                                                    <TablePane.Column width="-1"/>
-                                                    <TablePane.Column width="1*"/>
-                                                </columns>
-                                                <rows>
-                                                    <TablePane.Row height="1*">
-                                                        <RadioButton wtkx:id="defaultHeightButton"
-                                                            buttonData="Default" buttonGroup="$rowHeightGroup"/>
-                                                    </TablePane.Row>
-                                                    <TablePane.Row height="1*">
-                                                        <RadioButton wtkx:id="relativeHeightButton"
-                                                            buttonData="Relative" buttonGroup="$rowHeightGroup"/>
-                                                        <Spinner wtkx:id="relativeHeightSpinner" styles="{sizeToContent:true}">
-                                                            <spinnerData>
-                                                                <content:NumericSpinnerData lowerBound="1"
-                                                                    upperBound="256"/>
-                                                            </spinnerData>
-                                                            <spinnerSelectionListeners>
-                                                                <wtkx:script>
-                                                                <![CDATA[
-                                                                function selectedIndexChanged(spinner, previousSelectedIndex) {
-                                                                    setRowHeight();
-                                                                }
-                                                                ]]>
-                                                                </wtkx:script>
-                                                            </spinnerSelectionListeners>
-                                                        </Spinner>
-                                                    </TablePane.Row>
-                                                    <TablePane.Row height="1*">
-                                                        <RadioButton wtkx:id="absoluteHeightButton"
-                                                            buttonData="Absolute" buttonGroup="$rowHeightGroup"/>
-                                                        <Spinner wtkx:id="absoluteHeightSpinner" styles="{sizeToContent:true}">
-                                                            <spinnerData>
-                                                                <content:NumericSpinnerData lowerBound="50"
-                                                                    upperBound="300"/>
-                                                            </spinnerData>
-                                                            <spinnerSelectionListeners>
-                                                                <wtkx:script>
-                                                                <![CDATA[
-                                                                function selectedIndexChanged(spinner, previousSelectedIndex) {
-                                                                    setRowHeight();
-                                                                }
-                                                                ]]>
-                                                                </wtkx:script>
-                                                            </spinnerSelectionListeners>
-                                                        </Spinner>
-                                                    </TablePane.Row>
-                                                </rows>
-                                            </TablePane>
-                                        </Form.Section>
-                                    </sections>
-                                </Form>
-                            </content>
-                        </Border>
-                    </TablePane.Row>
-                    <TablePane.Row height="24">
-                        <BoxPane styles="{spacing:6,horizontalAlignment:'right'}">
-                            <PushButton wtkx:id="okButton" buttonData="OK"
-                                styles="org/apache/pivot/wtk/skin/terra/command_button.json"
-                                ButtonPressListener.buttonPressed="sheet.close(true)"/>
-                        </BoxPane>
-                    </TablePane.Row>
-                </rows>
-            </TablePane>
-        </BoxPane>
-    </content>
+    <BoxPane orientation="vertical" styles="{fill:true, verticalAlignment:'bottom'}">
+        <TablePane styles="{padding:8, verticalSpacing:8}">
+            <columns>
+                <TablePane.Column width="1*"/>
+            </columns>
+
+            <TablePane.Row height="1*">
+                <Border styles="{padding:10}">
+                    <Form wtkx:id="form">
+                        <Form.Section>
+                            <TablePane Form.label="Row Height"
+                                styles="{horizontalSpacing:8, verticalSpacing:4}">
+                                <columns>
+                                    <TablePane.Column width="-1"/>
+                                    <TablePane.Column width="1*"/>
+                                </columns>
+
+                                <TablePane.Row height="1*">
+                                    <RadioButton wtkx:id="defaultHeightButton"
+                                        buttonData="Default" buttonGroup="$rowHeightGroup"/>
+                                </TablePane.Row>
+
+                                <TablePane.Row height="1*">
+                                    <RadioButton wtkx:id="relativeHeightButton"
+                                        buttonData="Relative" buttonGroup="$rowHeightGroup"/>
+                                    <Spinner wtkx:id="relativeHeightSpinner" styles="{sizeToContent:true}">
+                                        <content:NumericSpinnerData lowerBound="1" upperBound="256"/>
+
+                                        <spinnerSelectionListeners>
+                                            <wtkx:script>
+                                            <![CDATA[
+                                            function selectedIndexChanged(spinner, previousSelectedIndex) {
+                                                setRowHeight();
+                                            }
+                                            ]]>
+                                            </wtkx:script>
+                                        </spinnerSelectionListeners>
+                                    </Spinner>
+                                </TablePane.Row>
+
+                                <TablePane.Row height="1*">
+                                    <RadioButton wtkx:id="absoluteHeightButton"
+                                        buttonData="Absolute" buttonGroup="$rowHeightGroup"/>
+                                    <Spinner wtkx:id="absoluteHeightSpinner" styles="{sizeToContent:true}">
+                                        <content:NumericSpinnerData lowerBound="50" upperBound="300"/>
+
+                                        <spinnerSelectionListeners>
+                                            <wtkx:script>
+                                            <![CDATA[
+                                            function selectedIndexChanged(spinner, previousSelectedIndex) {
+                                                setRowHeight();
+                                            }
+                                            ]]>
+                                            </wtkx:script>
+                                        </spinnerSelectionListeners>
+                                    </Spinner>
+                                </TablePane.Row>
+                            </TablePane>
+                        </Form.Section>
+                    </Form>
+                </Border>
+            </TablePane.Row>
+
+            <TablePane.Row height="24">
+                <BoxPane styles="{spacing:6,horizontalAlignment:'right'}">
+                    <PushButton wtkx:id="okButton" buttonData="OK"
+                        styles="org/apache/pivot/wtk/skin/terra/command_button.json"
+                        ButtonPressListener.buttonPressed="sheet.close(true)"/>
+                </BoxPane>
+            </TablePane.Row>
+        </TablePane>
+    </BoxPane>
 
     <wtkx:script>
     <![CDATA[

@@ -41,33 +41,27 @@ limitations under the License.
 
     <wtkx:script src="example.js"/>
 
-    <content>
-        <Border styles="{padding:2}">
-            <content>
-                <BoxPane orientation="vertical" styles="{padding:6}">
-                    <PushButton buttonData="Click Me!">
-                        <buttonPressListeners>
-                            <wtkx:script>
-                            <![CDATA[
-                            importPackage(org.apache.pivot.wtk);
-                            function buttonPressed(button) {
-                                Prompt.prompt("x = " + x, button.getWindow());
-                            }
-                            ]]>
-                            </wtkx:script>
-                        </buttonPressListeners>
-                    </PushButton>
+    <Border styles="{padding:2}">
+        <BoxPane orientation="vertical" styles="{padding:6}">
+            <PushButton buttonData="Click Me!">
+                <buttonPressListeners>
+                    <wtkx:script>
+                    <![CDATA[
+                    importPackage(org.apache.pivot.wtk);
+                    function buttonPressed(button) {
+                        Prompt.prompt("x = " + x, button.getWindow());
+                    }
+                    ]]>
+                    </wtkx:script>
+                </buttonPressListeners>
+            </PushButton>
 
-                    <PushButton buttonData="No, Click Me!"
-                        ButtonPressListener.buttonPressed="buttonClicked(arguments[0])"/>
+            <PushButton buttonData="No, Click Me!"
+                ButtonPressListener.buttonPressed="buttonClicked(arguments[0])"/>
 
-                    <Border styles="{color:10}">
-                        <content>
-                            <ListView listData="$listData" selectedIndex="0"/>
-                        </content>
-                    </Border>
-                </BoxPane>
-            </content>
-        </Border>
-    </content>
+            <Border styles="{color:10}">
+                <ListView listData="$listData" selectedIndex="0"/>
+            </Border>
+        </BoxPane>
+    </Border>
 </Window>

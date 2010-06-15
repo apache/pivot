@@ -19,9 +19,7 @@ limitations under the License.
 <Window title="Color Chooser Test" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <BoxPane orientation="vertical" styles="{padding:10}">
-            <ColorChooser selectedColor="#915200"/>
-        </BoxPane>
-    </content>
+    <BoxPane orientation="vertical" styles="{padding:10}">
+        <ColorChooser selectedColor="#915200"/>
+    </BoxPane>
 </Window>

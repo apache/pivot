@@ -21,44 +21,42 @@ limitations under the License.
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns:effects="org.apache.pivot.wtk.effects"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <FlowPane styles="{alignment:'left', padding:4}">
-            <!--
-            <PushButton buttonData="0" styles="{minimumAspectRatio:15}"/>
-            <PushButton buttonData="1" styles="{minimumAspectRatio:1.5}"/>
-            <PushButton buttonData="2" visible="false" styles="{minimumAspectRatio:1.5}"/>
-            <PushButton buttonData="3" styles="{minimumAspectRatio:1.5}"/>
-            <PushButton buttonData="4" styles="{minimumAspectRatio:1.5}"/>
-            <PushButton buttonData="5" styles="{minimumAspectRatio:1.5}"/>
-            <PushButton buttonData="6" styles="{minimumAspectRatio:1.5}"/>
-            <PushButton buttonData="7" preferredHeight="40" styles="{minimumAspectRatio:1.5}"/>
-            <PushButton buttonData="8" preferredHeight="50" styles="{minimumAspectRatio:1.5}"/>
-            <PushButton buttonData="9" preferredHeight="60" styles="{minimumAspectRatio:1.5}"/>
-            <PushButton buttonData="0" styles="{minimumAspectRatio:1.5}"/>
-            <PushButton buttonData="A" styles="{minimumAspectRatio:1.5}"/>
-            <PushButton buttonData="B" visible="false" styles="{minimumAspectRatio:1.5}"/>
-            <PushButton buttonData="C" styles="{minimumAspectRatio:1.5}"/>
-            <PushButton buttonData="D" styles="{minimumAspectRatio:1.5}"/>
-            <PushButton buttonData="E" styles="{minimumAspectRatio:1.5}"/>
-            <PushButton buttonData="F" styles="{minimumAspectRatio:1.5}"/>
-            -->
-            <PushButton buttonData="Hello" preferredHeight="80">
-                <decorators>
-                    <effects:BaselineDecorator/>
-                </decorators>
-                <dataRenderer>
-                    <content:ButtonDataRenderer styles="{verticalAlignment:'bottom'}"/>
-                </dataRenderer>
-            </PushButton>
+    <FlowPane styles="{alignment:'left', padding:4}">
+        <!--
+        <PushButton buttonData="0" styles="{minimumAspectRatio:15}"/>
+        <PushButton buttonData="1" styles="{minimumAspectRatio:1.5}"/>
+        <PushButton buttonData="2" visible="false" styles="{minimumAspectRatio:1.5}"/>
+        <PushButton buttonData="3" styles="{minimumAspectRatio:1.5}"/>
+        <PushButton buttonData="4" styles="{minimumAspectRatio:1.5}"/>
+        <PushButton buttonData="5" styles="{minimumAspectRatio:1.5}"/>
+        <PushButton buttonData="6" styles="{minimumAspectRatio:1.5}"/>
+        <PushButton buttonData="7" preferredHeight="40" styles="{minimumAspectRatio:1.5}"/>
+        <PushButton buttonData="8" preferredHeight="50" styles="{minimumAspectRatio:1.5}"/>
+        <PushButton buttonData="9" preferredHeight="60" styles="{minimumAspectRatio:1.5}"/>
+        <PushButton buttonData="0" styles="{minimumAspectRatio:1.5}"/>
+        <PushButton buttonData="A" styles="{minimumAspectRatio:1.5}"/>
+        <PushButton buttonData="B" visible="false" styles="{minimumAspectRatio:1.5}"/>
+        <PushButton buttonData="C" styles="{minimumAspectRatio:1.5}"/>
+        <PushButton buttonData="D" styles="{minimumAspectRatio:1.5}"/>
+        <PushButton buttonData="E" styles="{minimumAspectRatio:1.5}"/>
+        <PushButton buttonData="F" styles="{minimumAspectRatio:1.5}"/>
+        -->
+        <PushButton buttonData="Hello" preferredHeight="80">
+            <decorators>
+                <effects:BaselineDecorator/>
+            </decorators>
+            <dataRenderer>
+                <content:ButtonDataRenderer styles="{verticalAlignment:'bottom'}"/>
+            </dataRenderer>
+        </PushButton>
 
-            <PushButton buttonData="World" preferredHeight="80">
-                <decorators>
-                    <effects:BaselineDecorator/>
-                </decorators>
-                <dataRenderer>
-                    <content:ButtonDataRenderer styles="{verticalAlignment:'top'}"/>
-                </dataRenderer>
-            </PushButton>
-        </FlowPane>
-    </content>
+        <PushButton buttonData="World" preferredHeight="80">
+            <decorators>
+                <effects:BaselineDecorator/>
+            </decorators>
+            <dataRenderer>
+                <content:ButtonDataRenderer styles="{verticalAlignment:'top'}"/>
+            </dataRenderer>
+        </PushButton>
+    </FlowPane>
 </Frame>

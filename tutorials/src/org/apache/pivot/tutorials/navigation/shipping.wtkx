@@ -21,20 +21,19 @@ limitations under the License.
     <columns>
         <TablePane.Column width="1*"/>
     </columns>
-    <rows>
-        <TablePane.Row height="1*">
-            <BoxPane orientation="vertical" styles="{padding:6, spacing:8}">
-                <Label text="Ship to:" styles="{font:{bold:true}}"/>
-                <wtkx:include src="address.wtkx"/>
-            </BoxPane>
-        </TablePane.Row>
-        <TablePane.Row height="-1">
-            <BoxPane styles="{horizontalAlignment:'right', backgroundColor:11,
-                padding:4}">
-                <PushButton wtkx:id="nextButton" buttonData="Next"
-                    styles="{minimumAspectRatio:3}"/>
-            </BoxPane>
-        </TablePane.Row>
-    </rows>
+
+    <TablePane.Row height="1*">
+        <BoxPane orientation="vertical" styles="{padding:6, spacing:8}">
+            <Label text="Ship to:" styles="{font:{bold:true}}"/>
+            <wtkx:include src="address.wtkx"/>
+        </BoxPane>
+    </TablePane.Row>
+
+    <TablePane.Row height="-1">
+        <BoxPane styles="{horizontalAlignment:'right', backgroundColor:11, padding:4}">
+            <PushButton wtkx:id="nextButton" buttonData="Next"
+                styles="{minimumAspectRatio:3}"/>
+        </BoxPane>
+    </TablePane.Row>
 </TablePane>
 

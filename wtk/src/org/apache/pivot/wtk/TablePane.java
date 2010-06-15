@@ -22,6 +22,7 @@ import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.wtkx.DefaultProperty;
 
 /**
  * Container that arranges components in a two-dimensional grid, optionally
@@ -34,6 +35,7 @@ import org.apache.pivot.util.ListenerList;
  * they span. This means that application developers may have to use
  * {@link Filler filler cells} in the cells that are spanned.
  */
+@DefaultProperty("rows")
 public class TablePane extends Container {
     /**
      * Represents a table pane row.

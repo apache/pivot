@@ -19,19 +19,17 @@ limitations under the License.
 <Window title="Application Handler Test" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <BoxPane>
-            <PushButton buttonData="Throw Exception">
-                <buttonPressListeners>
-                    <wtkx:script>
-                    <![CDATA[
-                    function buttonPressed(button) {
-                        throw new java.lang.RuntimeException("Button pressed");
-                    }
-                    ]]>
-                    </wtkx:script>
-                </buttonPressListeners>
-            </PushButton>
-        </BoxPane>
-    </content>
+    <BoxPane>
+        <PushButton buttonData="Throw Exception">
+            <buttonPressListeners>
+                <wtkx:script>
+                <![CDATA[
+                function buttonPressed(button) {
+                    throw new java.lang.RuntimeException("Button pressed");
+                }
+                ]]>
+                </wtkx:script>
+            </buttonPressListeners>
+        </PushButton>
+    </BoxPane>
 </Window>
