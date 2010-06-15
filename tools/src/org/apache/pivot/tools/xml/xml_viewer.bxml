@@ -17,10 +17,10 @@ limitations under the License.
 -->
 
 <Window maximized="true"
-    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns:tools.xml="org.apache.pivot.tools.xml"
     xmlns="org.apache.pivot.wtk">
-    <wtkx:script src="xml_viewer.js"/>
+    <bxml:script src="xml_viewer.js"/>
 
     <Border styles="{padding:4}">
         <SplitPane splitRatio="0.6">
@@ -28,13 +28,13 @@ limitations under the License.
                 <Border styles="{color:10}">
                     <ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
                         verticalScrollBarPolicy="fill_to_capacity">
-                        <TreeView wtkx:id="treeView" dropTarget="$treeViewDropTarget">
+                        <TreeView bxml:id="treeView" dropTarget="$treeViewDropTarget">
                             <nodeRenderer>
                                 <tools.xml:NodeRenderer/>
                             </nodeRenderer>
 
                             <componentKeyListeners>
-                                <wtkx:script>
+                                <bxml:script>
                                 <![CDATA[
                                 importPackage(org.apache.pivot.wtk);
                                 function keyPressed(component, keyCode, keyLocation) {
@@ -44,17 +44,17 @@ limitations under the License.
                                     }
                                 }
                                 ]]>
-                                </wtkx:script>
+                                </bxml:script>
                             </componentKeyListeners>
 
                             <treeViewSelectionListeners>
-                                <wtkx:script>
+                                <bxml:script>
                                 <![CDATA[
                                 function selectedPathsChanged(treeView, previousSelectedPaths) {
                                     application.updateProperties();
                                 }
                                 ]]>
-                                </wtkx:script>
+                                </bxml:script>
                             </treeViewSelectionListeners>
                         </TreeView>
                     </ScrollPane>
@@ -62,13 +62,13 @@ limitations under the License.
             </left>
 
             <right>
-                <CardPane wtkx:id="propertiesCardPane">
+                <CardPane bxml:id="propertiesCardPane">
                     <SplitPane orientation="vertical" splitRatio="0.2">
                         <top>
                             <Border styles="{color:10}">
                                 <ScrollPane horizontalScrollBarPolicy="fill"
                                     verticalScrollBarPolicy="fill_to_capacity">
-                                    <TableView wtkx:id="namespacesTableView" selectMode="none">
+                                    <TableView bxml:id="namespacesTableView" selectMode="none">
                                         <columns>
                                             <TableView.Column name="prefix" width="1*" headerData="Prefix"/>
                                             <TableView.Column name="uri" width="2*" headerData="URI"/>
@@ -87,7 +87,7 @@ limitations under the License.
                             <Border styles="{color:10}">
                                 <ScrollPane horizontalScrollBarPolicy="fill"
                                     verticalScrollBarPolicy="fill_to_capacity">
-                                    <TableView wtkx:id="attributesTableView" selectMode="none">
+                                    <TableView bxml:id="attributesTableView" selectMode="none">
                                         <columns>
                                             <TableView.Column name="name" width="1*" headerData="Name"/>
                                             <TableView.Column name="value" width="1*" headerData="Value"/>
@@ -106,7 +106,7 @@ limitations under the License.
                     <Border styles="{color:10}">
                         <ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
                             verticalScrollBarPolicy="fill_to_capacity">
-                            <TextArea wtkx:id="textArea" editable="false" styles="{wrapText:false}"/>
+                            <TextArea bxml:id="textArea" editable="false" styles="{wrapText:false}"/>
                         </ScrollPane>
                     </Border>
                 </CardPane>

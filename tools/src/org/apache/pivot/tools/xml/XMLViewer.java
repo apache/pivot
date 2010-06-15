@@ -70,11 +70,11 @@ public class XMLViewer implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        wtkxSerializer.put(APPLICATION_KEY, this);
+        BeanSerializer beanSerializer = new BeanSerializer();
+        beanSerializer.put(APPLICATION_KEY, this);
 
-        window = (Window)wtkxSerializer.readObject(this, "xml_viewer.wtkx");
-        wtkxSerializer.bind(this);
+        window = (Window)beanSerializer.readObject(this, "xml_viewer.bxml");
+        beanSerializer.bind(this);
 
         Label prompt = new Label("Drag or paste XML here");
         prompt.getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);

@@ -17,20 +17,20 @@ limitations under the License.
 -->
 
 <Window maximized="true"
-    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
-    <wtkx:script src="json_viewer.js"/>
+    <bxml:script src="json_viewer.js"/>
 
     <Border styles="{color:10}">
         <ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
             verticalScrollBarPolicy="fill_to_capacity">
-            <TreeView wtkx:id="treeView" dropTarget="$treeViewDropTarget">
+            <TreeView bxml:id="treeView" dropTarget="$treeViewDropTarget">
                 <nodeRenderer>
                     <content:TreeViewNodeRenderer showIcon="false"/>
                 </nodeRenderer>
                 <componentKeyListeners>
-                    <wtkx:script>
+                    <bxml:script>
                     <![CDATA[
                     importPackage(org.apache.pivot.wtk);
                     function keyPressed(component, keyCode, keyLocation) {
@@ -40,7 +40,7 @@ limitations under the License.
                         }
                     }
                     ]]>
-                    </wtkx:script>
+                    </bxml:script>
                 </componentKeyListeners>
             </TreeView>
         </ScrollPane>
